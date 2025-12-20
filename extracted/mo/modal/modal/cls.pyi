@@ -179,8 +179,6 @@ class _Obj:
     async def _aenter(self): ...
     def __getattr__(self, k): ...
 
-SUPERSELF = typing.TypeVar("SUPERSELF", covariant=True)
-
 class Obj:
     """An instance of a `Cls`, i.e. `Cls("foo", 42)` returns an `Obj`.
 
@@ -203,7 +201,7 @@ class Obj:
     def _get_parameter_values(self) -> dict[str, typing.Any]: ...
     def _new_user_cls_instance(self): ...
 
-    class __update_autoscaler_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __update_autoscaler_spec(typing_extensions.Protocol):
         def __call__(
             self,
             /,
@@ -274,9 +272,9 @@ class Obj:
             """
             ...
 
-    update_autoscaler: __update_autoscaler_spec[typing_extensions.Self]
+    update_autoscaler: __update_autoscaler_spec
 
-    class __keep_warm_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __keep_warm_spec(typing_extensions.Protocol):
         def __call__(self, /, warm_pool_size: int) -> None:
             """mdmd:hidden
             Set the warm pool size for the class containers
@@ -315,7 +313,7 @@ class Obj:
             """
             ...
 
-    keep_warm: __keep_warm_spec[typing_extensions.Self]
+    keep_warm: __keep_warm_spec
 
     def _cached_user_cls_instance(self):
         """Get or construct the local object
@@ -509,7 +507,7 @@ class Cls(modal.object.Object):
     def _get_class_service_function(self) -> modal.functions.Function: ...
     def _get_method_names(self) -> collections.abc.Collection[str]: ...
 
-    class ___experimental_get_flash_urls_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___experimental_get_flash_urls_spec(typing_extensions.Protocol):
         def __call__(self, /) -> typing.Optional[list[str]]:
             """URL of the flash service for the class."""
             ...
@@ -518,7 +516,7 @@ class Cls(modal.object.Object):
             """URL of the flash service for the class."""
             ...
 
-    _experimental_get_flash_urls: ___experimental_get_flash_urls_spec[typing_extensions.Self]
+    _experimental_get_flash_urls: ___experimental_get_flash_urls_spec
 
     def _hydrate_metadata(self, metadata: google.protobuf.message.Message): ...
     @staticmethod

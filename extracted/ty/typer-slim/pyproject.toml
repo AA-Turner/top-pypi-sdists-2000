@@ -6,6 +6,10 @@ build-backend = "pdm.backend"
 
 [project]
 name = "typer-slim"
+license = "MIT"
+license-files = [
+    "LICENSE",
+]
 dynamic = []
 description = "Typer, build great CLIs. Easy to code. Based on Python type hints."
 authors = [
@@ -33,14 +37,13 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
-    "License :: OSI Approved :: MIT License",
 ]
 dependencies = [
     "click >= 8.0.0",
     "typing-extensions >= 3.7.4.3",
 ]
 readme = "README.md"
-version = "0.20.0"
+version = "0.20.1"
 
 [project.urls]
 Homepage = "https://github.com/fastapi/typer"
@@ -246,3 +249,6 @@ banned-module-level-imports = [
 
 [tool.ruff.lint.flake8-tidy-imports.banned-api.rich]
 msg = "Use 'typer.rich_utils' instead of importing from 'rich' directly."
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api."shellingham.detect_shell"]
+msg = "Use 'typer._completion_shared._get_shell_name' instead of using 'shellingham.detect_shell' directly.\n"

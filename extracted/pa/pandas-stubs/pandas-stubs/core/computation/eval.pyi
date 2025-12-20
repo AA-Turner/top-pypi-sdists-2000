@@ -1,4 +1,7 @@
-from collections.abc import Mapping
+from collections.abc import (
+    Mapping,
+    MutableSequence,
+)
 from typing import (
     Any,
     Literal,
@@ -18,10 +21,10 @@ from pandas._typing import (
 def eval(
     expr: str | BinOp,
     parser: Literal["pandas", "python"] = "pandas",
-    engine: Literal["python", "numexpr"] | None = ...,
+    engine: Literal["python", "numexpr"] | None = None,
     local_dict: dict[str, Any] | None = None,
     global_dict: dict[str, Any] | None = None,
-    resolvers: list[Mapping] | None = ...,
+    resolvers: MutableSequence[Mapping[Any, Any]] | None = ...,
     level: int = 0,
     target: object | None = None,
     inplace: bool = False,

@@ -22,7 +22,6 @@ from typing import (
     SupportsIndex,
     TypeAlias,
     TypedDict,
-    Union,
     overload,
 )
 
@@ -53,6 +52,7 @@ from pandas._libs.tslibs import (
     Timedelta,
     Timestamp,
 )
+from pandas._libs.tslibs.nattype import NaTType
 
 from pandas.core.dtypes.dtypes import (
     CategoricalDtype,
@@ -135,6 +135,7 @@ _IndexIterScalar: TypeAlias = (
 Scalar: TypeAlias = (
     _IndexIterScalar | complex | np.integer | np.floating | np.complexfloating
 )
+ScalarOrNA: TypeAlias = Scalar | NAType | NaTType | None
 IntStrT = TypeVar("IntStrT", int, str)
 
 # timestamp and timedelta convertible types
@@ -183,7 +184,7 @@ Level: TypeAlias = Hashable
 Shape: TypeAlias = tuple[int, ...]
 Suffixes: TypeAlias = tuple[str | None, str | None] | list[str | None]
 Ordered: TypeAlias = bool | None
-JSONSerializable: TypeAlias = PythonScalar | list | dict
+JSONSerializable: TypeAlias = PythonScalar | list[Any] | dict[str, Any]
 Frequency: TypeAlias = str | BaseOffset
 PeriodFrequency: TypeAlias = (
     str
@@ -596,18 +597,25 @@ IndexKeyFunc: TypeAlias = Callable[[Index], Index | AnyArrayLike] | None
 
 # types of `func` kwarg for DataFrame.aggregate and Series.aggregate
 # More specific than what is in pandas
-# following Union is here to make it ty compliant https://github.com/astral-sh/ty/issues/591
-AggFuncTypeBase: TypeAlias = Union[Callable, str, np.ufunc]  # noqa: UP007
-AggFuncTypeDictSeries: TypeAlias = Mapping[HashableT, AggFuncTypeBase]
+AggFuncTypeBase: TypeAlias = Callable[P, Any] | str | np.ufunc
+AggFuncTypeDictSeries: TypeAlias = Mapping[HashableT, AggFuncTypeBase[P]]
 AggFuncTypeDictFrame: TypeAlias = Mapping[
-    HashableT, AggFuncTypeBase | list[AggFuncTypeBase]
+    HashableT, AggFuncTypeBase[P] | Sequence[AggFuncTypeBase[P]]
 ]
-AggFuncTypeSeriesToFrame: TypeAlias = list[AggFuncTypeBase] | AggFuncTypeDictSeries
-AggFuncTypeFrame: TypeAlias = (
-    AggFuncTypeBase | list[AggFuncTypeBase] | AggFuncTypeDictFrame
+AggFuncTypeSeriesToFrame: TypeAlias = (
+    Sequence[AggFuncTypeBase[P]] | AggFuncTypeDictSeries[HashableT, P]
 )
-AggFuncTypeDict: TypeAlias = AggFuncTypeDictSeries | AggFuncTypeDictFrame
-AggFuncType: TypeAlias = AggFuncTypeBase | list[AggFuncTypeBase] | AggFuncTypeDict
+AggFuncTypeFrame: TypeAlias = (
+    AggFuncTypeBase[P]
+    | Sequence[AggFuncTypeBase[P]]
+    | AggFuncTypeDictFrame[HashableT, P]
+)
+AggFuncTypeDict: TypeAlias = (
+    AggFuncTypeDictSeries[HashableT, P] | AggFuncTypeDictFrame[HashableT, P]
+)
+AggFuncType: TypeAlias = (
+    AggFuncTypeBase[P] | Sequence[AggFuncTypeBase[P]] | AggFuncTypeDict[HashableT, P]
+)
 
 # Not used in stubs
 # AggObjType = Union[
@@ -694,7 +702,9 @@ CompressionOptions: TypeAlias = (
 
 # types in DataFrameFormatter
 FormattersType: TypeAlias = (
-    list[Callable] | tuple[Callable, ...] | Mapping[str | int, Callable]
+    list[Callable[..., Any]]
+    | tuple[Callable[..., Any], ...]
+    | Mapping[str | int, Callable[..., Any]]
 )
 # ColspaceType = Mapping[Hashable, Union[str, int]] not used in stubs
 FloatFormatType: TypeAlias = str | Callable[[float], str] | EngFormatter
@@ -943,6 +953,7 @@ np_1darray_complex: TypeAlias = np_1darray[np.complexfloating]
 np_1darray_object: TypeAlias = np_1darray[np.object_]
 np_1darray_bool: TypeAlias = np_1darray[np.bool]
 np_1darray_intp: TypeAlias = np_1darray[np.intp]
+np_1darray_int8: TypeAlias = np_1darray[np.int8]
 np_1darray_int64: TypeAlias = np_1darray[np.int64]
 np_1darray_anyint: TypeAlias = np_1darray[np.integer]
 np_1darray_float: TypeAlias = np_1darray[np.floating]
@@ -950,13 +961,18 @@ np_1darray_dt: TypeAlias = np_1darray[np.datetime64]
 np_1darray_td: TypeAlias = np_1darray[np.timedelta64]
 np_2darray: TypeAlias = np.ndarray[tuple[int, int], np.dtype[GenericT]]
 
+if sys.version_info >= (3, 11):
+    NDArrayT = TypeVar("NDArrayT", bound=np.ndarray)
+else:
+    NDArrayT = TypeVar("NDArrayT", bound=np.ndarray[Any, Any])
+
 DtypeNp = TypeVar("DtypeNp", bound=np.dtype[np.generic])
 KeysArgType: TypeAlias = Any
 ListLikeT = TypeVar("ListLikeT", bound=ListLike)
 ListLikeExceptSeriesAndStr: TypeAlias = (
     MutableSequence[Any] | np_1darray | tuple[Any, ...] | Index
 )
-ListLikeU: TypeAlias = Sequence | np_1darray | Series | Index
+ListLikeU: TypeAlias = Sequence[Any] | np_1darray | Series | Index
 ListLikeHashable: TypeAlias = (
     MutableSequence[HashableT] | np_1darray | tuple[HashableT, ...] | range
 )
@@ -1078,7 +1094,7 @@ if TYPE_CHECKING:  # noqa: PYI002
         | Interval[int | float | Timestamp | Timedelta],
     )
 GroupByObjectNonScalar: TypeAlias = (
-    tuple
+    tuple[_HashableTa, ...]
     | list[_HashableTa]
     | Function
     | list[Function]

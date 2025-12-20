@@ -213,7 +213,7 @@ class QueueManager:
             """
             ...
 
-    create: __create_spec
+    create: typing.ClassVar[__create_spec]
 
     class __list_spec(typing_extensions.Protocol):
         def __call__(
@@ -286,7 +286,7 @@ class QueueManager:
             """
             ...
 
-    list: __list_spec
+    list: typing.ClassVar[__list_spec]
 
     class __delete_spec(typing_extensions.Protocol):
         def __call__(
@@ -349,7 +349,7 @@ class QueueManager:
             """
             ...
 
-    delete: __delete_spec
+    delete: typing.ClassVar[__delete_spec]
 
 class _Queue(modal._object._Object):
     """Distributed, FIFO queue for data flow in Modal apps.
@@ -611,8 +611,6 @@ class _Queue(modal._object._Object):
         """
         ...
 
-SUPERSELF = typing.TypeVar("SUPERSELF", covariant=True)
-
 class Queue(modal.object.Object):
     """Distributed, FIFO queue for data flow in Modal apps.
 
@@ -700,29 +698,57 @@ class Queue(modal.object.Object):
     def _get_metadata(self) -> modal_proto.api_pb2.QueueMetadata: ...
     @staticmethod
     def validate_partition_key(partition: typing.Optional[str]) -> bytes: ...
-    @classmethod
-    def ephemeral(
-        cls: type[Queue],
-        client: typing.Optional[modal.client.Client] = None,
-        environment_name: typing.Optional[str] = None,
-        _heartbeat_sleep: float = 300,
-    ) -> synchronicity.combined_types.AsyncAndBlockingContextManager[Queue]:
-        """Creates a new ephemeral queue within a context manager:
 
-        Usage:
-        ```python
-        from modal import Queue
+    class __ephemeral_spec(typing_extensions.Protocol):
+        def __call__(
+            self,
+            /,
+            client: typing.Optional[modal.client.Client] = None,
+            environment_name: typing.Optional[str] = None,
+            _heartbeat_sleep: float = 300,
+        ) -> synchronicity.combined_types.AsyncAndBlockingContextManager[Queue]:
+            """Creates a new ephemeral queue within a context manager:
 
-        with Queue.ephemeral() as q:
-            q.put(123)
-        ```
+            Usage:
+            ```python
+            from modal import Queue
 
-        ```python notest
-        async with Queue.ephemeral() as q:
-            await q.put.aio(123)
-        ```
-        """
-        ...
+            with Queue.ephemeral() as q:
+                q.put(123)
+            ```
+
+            ```python notest
+            async with Queue.ephemeral() as q:
+                await q.put.aio(123)
+            ```
+            """
+            ...
+
+        def aio(
+            self,
+            /,
+            client: typing.Optional[modal.client.Client] = None,
+            environment_name: typing.Optional[str] = None,
+            _heartbeat_sleep: float = 300,
+        ) -> typing.AsyncContextManager[Queue]:
+            """Creates a new ephemeral queue within a context manager:
+
+            Usage:
+            ```python
+            from modal import Queue
+
+            with Queue.ephemeral() as q:
+                q.put(123)
+            ```
+
+            ```python notest
+            async with Queue.ephemeral() as q:
+                await q.put.aio(123)
+            ```
+            """
+            ...
+
+    ephemeral: typing.ClassVar[__ephemeral_spec]
 
     @staticmethod
     def from_name(
@@ -783,9 +809,9 @@ class Queue(modal.object.Object):
             """
             ...
 
-    delete: __delete_spec
+    delete: typing.ClassVar[__delete_spec]
 
-    class __info_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __info_spec(typing_extensions.Protocol):
         def __call__(self, /) -> QueueInfo:
             """Return information about the Queue object."""
             ...
@@ -794,15 +820,15 @@ class Queue(modal.object.Object):
             """Return information about the Queue object."""
             ...
 
-    info: __info_spec[typing_extensions.Self]
+    info: __info_spec
 
-    class ___get_nonblocking_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___get_nonblocking_spec(typing_extensions.Protocol):
         def __call__(self, /, partition: typing.Optional[str], n_values: int) -> list[typing.Any]: ...
         async def aio(self, /, partition: typing.Optional[str], n_values: int) -> list[typing.Any]: ...
 
-    _get_nonblocking: ___get_nonblocking_spec[typing_extensions.Self]
+    _get_nonblocking: ___get_nonblocking_spec
 
-    class ___get_blocking_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___get_blocking_spec(typing_extensions.Protocol):
         def __call__(
             self, /, partition: typing.Optional[str], timeout: typing.Optional[float], n_values: int
         ) -> list[typing.Any]: ...
@@ -810,9 +836,9 @@ class Queue(modal.object.Object):
             self, /, partition: typing.Optional[str], timeout: typing.Optional[float], n_values: int
         ) -> list[typing.Any]: ...
 
-    _get_blocking: ___get_blocking_spec[typing_extensions.Self]
+    _get_blocking: ___get_blocking_spec
 
-    class __clear_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __clear_spec(typing_extensions.Protocol):
         def __call__(self, /, *, partition: typing.Optional[str] = None, all: bool = False) -> None:
             """Clear the contents of a single partition or all partitions."""
             ...
@@ -821,9 +847,9 @@ class Queue(modal.object.Object):
             """Clear the contents of a single partition or all partitions."""
             ...
 
-    clear: __clear_spec[typing_extensions.Self]
+    clear: __clear_spec
 
-    class __get_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __get_spec(typing_extensions.Protocol):
         def __call__(
             self,
             /,
@@ -862,9 +888,9 @@ class Queue(modal.object.Object):
             """
             ...
 
-    get: __get_spec[typing_extensions.Self]
+    get: __get_spec
 
-    class __get_many_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __get_many_spec(typing_extensions.Protocol):
         def __call__(
             self,
             /,
@@ -909,9 +935,9 @@ class Queue(modal.object.Object):
             """
             ...
 
-    get_many: __get_many_spec[typing_extensions.Self]
+    get_many: __get_many_spec
 
-    class __put_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __put_spec(typing_extensions.Protocol):
         def __call__(
             self,
             /,
@@ -954,9 +980,9 @@ class Queue(modal.object.Object):
             """
             ...
 
-    put: __put_spec[typing_extensions.Self]
+    put: __put_spec
 
-    class __put_many_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __put_many_spec(typing_extensions.Protocol):
         def __call__(
             self,
             /,
@@ -999,9 +1025,9 @@ class Queue(modal.object.Object):
             """
             ...
 
-    put_many: __put_many_spec[typing_extensions.Self]
+    put_many: __put_many_spec
 
-    class ___put_many_blocking_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___put_many_blocking_spec(typing_extensions.Protocol):
         def __call__(
             self,
             /,
@@ -1019,15 +1045,15 @@ class Queue(modal.object.Object):
             timeout: typing.Optional[float] = None,
         ): ...
 
-    _put_many_blocking: ___put_many_blocking_spec[typing_extensions.Self]
+    _put_many_blocking: ___put_many_blocking_spec
 
-    class ___put_many_nonblocking_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___put_many_nonblocking_spec(typing_extensions.Protocol):
         def __call__(self, /, partition: typing.Optional[str], partition_ttl: int, vs: list[typing.Any]): ...
         async def aio(self, /, partition: typing.Optional[str], partition_ttl: int, vs: list[typing.Any]): ...
 
-    _put_many_nonblocking: ___put_many_nonblocking_spec[typing_extensions.Self]
+    _put_many_nonblocking: ___put_many_nonblocking_spec
 
-    class __len_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __len_spec(typing_extensions.Protocol):
         def __call__(self, /, *, partition: typing.Optional[str] = None, total: bool = False) -> int:
             """Return the number of objects in the queue partition."""
             ...
@@ -1036,9 +1062,9 @@ class Queue(modal.object.Object):
             """Return the number of objects in the queue partition."""
             ...
 
-    len: __len_spec[typing_extensions.Self]
+    len: __len_spec
 
-    class __iterate_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __iterate_spec(typing_extensions.Protocol):
         def __call__(
             self, /, *, partition: typing.Optional[str] = None, item_poll_timeout: float = 0.0
         ) -> typing.Generator[typing.Any, None, None]:
@@ -1057,4 +1083,4 @@ class Queue(modal.object.Object):
             """
             ...
 
-    iterate: __iterate_spec[typing_extensions.Self]
+    iterate: __iterate_spec

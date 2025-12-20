@@ -491,7 +491,7 @@ class _App:
         enable_memory_snapshot: bool = False,
         block_network: bool = False,
         restrict_modal_access: bool = False,
-        max_inputs: typing.Optional[int] = None,
+        single_use_containers: bool = False,
         i6pn: typing.Optional[bool] = None,
         include_source: typing.Optional[bool] = None,
         experimental_options: typing.Optional[dict[str, typing.Any]] = None,
@@ -502,6 +502,7 @@ class _App:
         concurrency_limit: typing.Optional[int] = None,
         container_idle_timeout: typing.Optional[int] = None,
         allow_concurrent_inputs: typing.Optional[int] = None,
+        max_inputs: typing.Optional[int] = None,
         _experimental_buffer_containers: typing.Optional[int] = None,
         _experimental_scheduler_placement: typing.Optional[modal.scheduler_placement.SchedulerPlacement] = None,
     ) -> _FunctionDecoratorType:
@@ -545,7 +546,7 @@ class _App:
         enable_memory_snapshot: bool = False,
         block_network: bool = False,
         restrict_modal_access: bool = False,
-        max_inputs: typing.Optional[int] = None,
+        single_use_containers: bool = False,
         i6pn: typing.Optional[bool] = None,
         include_source: typing.Optional[bool] = None,
         experimental_options: typing.Optional[dict[str, typing.Any]] = None,
@@ -556,6 +557,7 @@ class _App:
         concurrency_limit: typing.Optional[int] = None,
         container_idle_timeout: typing.Optional[int] = None,
         allow_concurrent_inputs: typing.Optional[int] = None,
+        max_inputs: typing.Optional[int] = None,
         _experimental_buffer_containers: typing.Optional[int] = None,
         _experimental_scheduler_placement: typing.Optional[modal.scheduler_placement.SchedulerPlacement] = None,
     ) -> collections.abc.Callable[[typing.Union[CLS_T, modal._partial_function._PartialFunction]], CLS_T]:
@@ -768,7 +770,7 @@ class App:
             """
             ...
 
-    lookup: __lookup_spec
+    lookup: typing.ClassVar[__lookup_spec]
 
     def set_description(self, description: str):
         """mdmd:hidden
@@ -796,7 +798,7 @@ class App:
 
     def _uncreate_all_objects(self): ...
 
-    class ___set_local_app_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___set_local_app_spec(typing_extensions.Protocol):
         def __call__(
             self, /, client: modal.client.Client, running_app: modal.running_app.RunningApp
         ) -> synchronicity.combined_types.AsyncAndBlockingContextManager[None]: ...
@@ -804,9 +806,9 @@ class App:
             self, /, client: modal.client.Client, running_app: modal.running_app.RunningApp
         ) -> typing.AsyncContextManager[None]: ...
 
-    _set_local_app: ___set_local_app_spec[typing_extensions.Self]
+    _set_local_app: ___set_local_app_spec
 
-    class __run_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __run_spec(typing_extensions.Protocol):
         def __call__(
             self,
             /,
@@ -905,7 +907,7 @@ class App:
             """
             ...
 
-    run: __run_spec[typing_extensions.Self]
+    run: __run_spec
 
     class __deploy_spec(typing_extensions.Protocol[SUPERSELF]):
         def __call__(
@@ -1154,7 +1156,7 @@ class App:
         enable_memory_snapshot: bool = False,
         block_network: bool = False,
         restrict_modal_access: bool = False,
-        max_inputs: typing.Optional[int] = None,
+        single_use_containers: bool = False,
         i6pn: typing.Optional[bool] = None,
         include_source: typing.Optional[bool] = None,
         experimental_options: typing.Optional[dict[str, typing.Any]] = None,
@@ -1165,6 +1167,7 @@ class App:
         concurrency_limit: typing.Optional[int] = None,
         container_idle_timeout: typing.Optional[int] = None,
         allow_concurrent_inputs: typing.Optional[int] = None,
+        max_inputs: typing.Optional[int] = None,
         _experimental_buffer_containers: typing.Optional[int] = None,
         _experimental_scheduler_placement: typing.Optional[modal.scheduler_placement.SchedulerPlacement] = None,
     ) -> _FunctionDecoratorType:
@@ -1208,7 +1211,7 @@ class App:
         enable_memory_snapshot: bool = False,
         block_network: bool = False,
         restrict_modal_access: bool = False,
-        max_inputs: typing.Optional[int] = None,
+        single_use_containers: bool = False,
         i6pn: typing.Optional[bool] = None,
         include_source: typing.Optional[bool] = None,
         experimental_options: typing.Optional[dict[str, typing.Any]] = None,
@@ -1219,6 +1222,7 @@ class App:
         concurrency_limit: typing.Optional[int] = None,
         container_idle_timeout: typing.Optional[int] = None,
         allow_concurrent_inputs: typing.Optional[int] = None,
+        max_inputs: typing.Optional[int] = None,
         _experimental_buffer_containers: typing.Optional[int] = None,
         _experimental_scheduler_placement: typing.Optional[modal.scheduler_placement.SchedulerPlacement] = None,
     ) -> collections.abc.Callable[[typing.Union[CLS_T, modal.partial_function.PartialFunction]], CLS_T]:
@@ -1254,7 +1258,7 @@ class App:
         """
         ...
 
-    class __set_tags_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __set_tags_spec(typing_extensions.Protocol):
         def __call__(
             self, /, tags: collections.abc.Mapping[str, str], *, client: typing.Optional[modal.client.Client] = None
         ) -> None:
@@ -1283,9 +1287,9 @@ class App:
             """
             ...
 
-    set_tags: __set_tags_spec[typing_extensions.Self]
+    set_tags: __set_tags_spec
 
-    class __get_tags_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __get_tags_spec(typing_extensions.Protocol):
         def __call__(self, /, *, client: typing.Optional[modal.client.Client] = None) -> dict[str, str]:
             """Get the tags that are currently attached to the App."""
             ...
@@ -1294,9 +1298,9 @@ class App:
             """Get the tags that are currently attached to the App."""
             ...
 
-    get_tags: __get_tags_spec[typing_extensions.Self]
+    get_tags: __get_tags_spec
 
-    class ___logs_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___logs_spec(typing_extensions.Protocol):
         def __call__(self, /, client: typing.Optional[modal.client.Client] = None) -> typing.Generator[str, None, None]:
             """Stream logs from the app.
 
@@ -1313,7 +1317,7 @@ class App:
             """
             ...
 
-    _logs: ___logs_spec[typing_extensions.Self]
+    _logs: ___logs_spec
 
     @classmethod
     def _get_container_app(cls) -> typing.Optional[App]:

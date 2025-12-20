@@ -22,6 +22,7 @@ import modal.stream_type
 import modal.volume
 import modal_proto.api_pb2
 import os
+import pathlib
 import typing
 import typing_extensions
 
@@ -254,6 +255,18 @@ class _Sandbox(modal._object._Object):
         """
         ...
 
+    async def _experimental_mount_image(
+        self, path: typing.Union[pathlib.PurePosixPath, str], image: typing.Optional[modal.image._Image]
+    ):
+        """Mount an Image at a path in the Sandbox filesystem."""
+        ...
+
+    async def _experimental_snapshot_directory(
+        self, path: typing.Union[pathlib.PurePosixPath, str]
+    ) -> modal.image._Image:
+        """Snapshot local changes to a previously mounted Image, creating a new Image."""
+        ...
+
     async def wait(self, raise_on_termination: bool = True):
         """Wait for the Sandbox to finish running."""
         ...
@@ -463,8 +476,6 @@ class _Sandbox(modal._object._Object):
         """
         ...
 
-SUPERSELF = typing.TypeVar("SUPERSELF", covariant=True)
-
 class Sandbox(modal.object.Object):
     """A `Sandbox` object lets you interact with a running sandbox. This API is similar to Python's
     [asyncio.subprocess.Process](https://docs.python.org/3/library/asyncio-subprocess.html#asyncio.subprocess.Process).
@@ -628,7 +639,7 @@ class Sandbox(modal.object.Object):
             """
             ...
 
-    create: __create_spec
+    create: typing.ClassVar[__create_spec]
 
     class ___create_spec(typing_extensions.Protocol):
         def __call__(
@@ -723,7 +734,7 @@ class Sandbox(modal.object.Object):
             """
             ...
 
-    _create: ___create_spec
+    _create: typing.ClassVar[___create_spec]
 
     def _hydrate_metadata(self, handle_metadata: typing.Optional[google.protobuf.message.Message]): ...
 
@@ -760,7 +771,7 @@ class Sandbox(modal.object.Object):
             """
             ...
 
-    from_name: __from_name_spec
+    from_name: typing.ClassVar[__from_name_spec]
 
     class __from_id_spec(typing_extensions.Protocol):
         def __call__(self, /, sandbox_id: str, client: typing.Optional[modal.client.Client] = None) -> Sandbox:
@@ -777,9 +788,9 @@ class Sandbox(modal.object.Object):
             """
             ...
 
-    from_id: __from_id_spec
+    from_id: typing.ClassVar[__from_id_spec]
 
-    class __get_tags_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __get_tags_spec(typing_extensions.Protocol):
         def __call__(self, /) -> dict[str, str]:
             """Fetches any tags (key-value pairs) currently attached to this Sandbox from the server."""
             ...
@@ -788,9 +799,9 @@ class Sandbox(modal.object.Object):
             """Fetches any tags (key-value pairs) currently attached to this Sandbox from the server."""
             ...
 
-    get_tags: __get_tags_spec[typing_extensions.Self]
+    get_tags: __get_tags_spec
 
-    class __set_tags_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __set_tags_spec(typing_extensions.Protocol):
         def __call__(self, /, tags: dict[str, str], *, client: typing.Optional[modal.client.Client] = None) -> None:
             """Set tags (key-value pairs) on the Sandbox. Tags can be used to filter results in `Sandbox.list`."""
             ...
@@ -799,9 +810,9 @@ class Sandbox(modal.object.Object):
             """Set tags (key-value pairs) on the Sandbox. Tags can be used to filter results in `Sandbox.list`."""
             ...
 
-    set_tags: __set_tags_spec[typing_extensions.Self]
+    set_tags: __set_tags_spec
 
-    class __snapshot_filesystem_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __snapshot_filesystem_spec(typing_extensions.Protocol):
         def __call__(self, /, timeout: int = 55) -> modal.image.Image:
             """Snapshot the filesystem of the Sandbox.
 
@@ -818,9 +829,35 @@ class Sandbox(modal.object.Object):
             """
             ...
 
-    snapshot_filesystem: __snapshot_filesystem_spec[typing_extensions.Self]
+    snapshot_filesystem: __snapshot_filesystem_spec
 
-    class __wait_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___experimental_mount_image_spec(typing_extensions.Protocol):
+        def __call__(
+            self, /, path: typing.Union[pathlib.PurePosixPath, str], image: typing.Optional[modal.image.Image]
+        ):
+            """Mount an Image at a path in the Sandbox filesystem."""
+            ...
+
+        async def aio(
+            self, /, path: typing.Union[pathlib.PurePosixPath, str], image: typing.Optional[modal.image.Image]
+        ):
+            """Mount an Image at a path in the Sandbox filesystem."""
+            ...
+
+    _experimental_mount_image: ___experimental_mount_image_spec
+
+    class ___experimental_snapshot_directory_spec(typing_extensions.Protocol):
+        def __call__(self, /, path: typing.Union[pathlib.PurePosixPath, str]) -> modal.image.Image:
+            """Snapshot local changes to a previously mounted Image, creating a new Image."""
+            ...
+
+        async def aio(self, /, path: typing.Union[pathlib.PurePosixPath, str]) -> modal.image.Image:
+            """Snapshot local changes to a previously mounted Image, creating a new Image."""
+            ...
+
+    _experimental_snapshot_directory: ___experimental_snapshot_directory_spec
+
+    class __wait_spec(typing_extensions.Protocol):
         def __call__(self, /, raise_on_termination: bool = True):
             """Wait for the Sandbox to finish running."""
             ...
@@ -829,9 +866,9 @@ class Sandbox(modal.object.Object):
             """Wait for the Sandbox to finish running."""
             ...
 
-    wait: __wait_spec[typing_extensions.Self]
+    wait: __wait_spec
 
-    class __tunnels_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __tunnels_spec(typing_extensions.Protocol):
         def __call__(self, /, timeout: int = 50) -> dict[int, modal._tunnel.Tunnel]:
             """Get Tunnel metadata for the sandbox.
 
@@ -856,9 +893,9 @@ class Sandbox(modal.object.Object):
             """
             ...
 
-    tunnels: __tunnels_spec[typing_extensions.Self]
+    tunnels: __tunnels_spec
 
-    class __create_connect_token_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __create_connect_token_spec(typing_extensions.Protocol):
         def __call__(
             self, /, user_metadata: typing.Union[str, dict[str, typing.Any], None] = None
         ) -> SandboxConnectCredentials:
@@ -879,9 +916,9 @@ class Sandbox(modal.object.Object):
             """
             ...
 
-    create_connect_token: __create_connect_token_spec[typing_extensions.Self]
+    create_connect_token: __create_connect_token_spec
 
-    class __reload_volumes_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __reload_volumes_spec(typing_extensions.Protocol):
         def __call__(self, /) -> None:
             """Reload all Volumes mounted in the Sandbox.
 
@@ -896,9 +933,9 @@ class Sandbox(modal.object.Object):
             """
             ...
 
-    reload_volumes: __reload_volumes_spec[typing_extensions.Self]
+    reload_volumes: __reload_volumes_spec
 
-    class __terminate_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __terminate_spec(typing_extensions.Protocol):
         def __call__(self, /) -> None:
             """Terminate Sandbox execution.
 
@@ -913,9 +950,9 @@ class Sandbox(modal.object.Object):
             """
             ...
 
-    terminate: __terminate_spec[typing_extensions.Self]
+    terminate: __terminate_spec
 
-    class __poll_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __poll_spec(typing_extensions.Protocol):
         def __call__(self, /) -> typing.Optional[int]:
             """Check if the Sandbox has finished running.
 
@@ -930,15 +967,15 @@ class Sandbox(modal.object.Object):
             """
             ...
 
-    poll: __poll_spec[typing_extensions.Self]
+    poll: __poll_spec
 
-    class ___get_task_id_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___get_task_id_spec(typing_extensions.Protocol):
         def __call__(self, /) -> str: ...
         async def aio(self, /) -> str: ...
 
-    _get_task_id: ___get_task_id_spec[typing_extensions.Self]
+    _get_task_id: ___get_task_id_spec
 
-    class ___get_command_router_client_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___get_command_router_client_spec(typing_extensions.Protocol):
         def __call__(
             self, /, task_id: str
         ) -> typing.Optional[modal._utils.task_command_router_client.TaskCommandRouterClient]: ...
@@ -946,9 +983,9 @@ class Sandbox(modal.object.Object):
             self, /, task_id: str
         ) -> typing.Optional[modal._utils.task_command_router_client.TaskCommandRouterClient]: ...
 
-    _get_command_router_client: ___get_command_router_client_spec[typing_extensions.Self]
+    _get_command_router_client: ___get_command_router_client_spec
 
-    class __exec_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __exec_spec(typing_extensions.Protocol):
         @typing.overload
         def __call__(
             self,
@@ -1018,9 +1055,9 @@ class Sandbox(modal.object.Object):
             _pty_info: typing.Optional[modal_proto.api_pb2.PTYInfo] = None,
         ) -> modal.container_process.ContainerProcess[bytes]: ...
 
-    exec: __exec_spec[typing_extensions.Self]
+    exec: __exec_spec
 
-    class ___exec_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___exec_spec(typing_extensions.Protocol):
         def __call__(
             self,
             /,
@@ -1065,9 +1102,9 @@ class Sandbox(modal.object.Object):
             """
             ...
 
-    _exec: ___exec_spec[typing_extensions.Self]
+    _exec: ___exec_spec
 
-    class ___exec_through_server_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___exec_through_server_spec(typing_extensions.Protocol):
         def __call__(
             self,
             /,
@@ -1108,9 +1145,9 @@ class Sandbox(modal.object.Object):
             """Execute a command through the Modal server."""
             ...
 
-    _exec_through_server: ___exec_through_server_spec[typing_extensions.Self]
+    _exec_through_server: ___exec_through_server_spec
 
-    class ___exec_through_command_router_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___exec_through_command_router_spec(typing_extensions.Protocol):
         def __call__(
             self,
             /,
@@ -1153,13 +1190,13 @@ class Sandbox(modal.object.Object):
             """Execute a command through a task command router running on the Modal worker."""
             ...
 
-    _exec_through_command_router: ___exec_through_command_router_spec[typing_extensions.Self]
+    _exec_through_command_router: ___exec_through_command_router_spec
 
-    class ___experimental_snapshot_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___experimental_snapshot_spec(typing_extensions.Protocol):
         def __call__(self, /) -> modal.snapshot.SandboxSnapshot: ...
         async def aio(self, /) -> modal.snapshot.SandboxSnapshot: ...
 
-    _experimental_snapshot: ___experimental_snapshot_spec[typing_extensions.Self]
+    _experimental_snapshot: ___experimental_snapshot_spec
 
     class ___experimental_from_snapshot_spec(typing_extensions.Protocol):
         def __call__(
@@ -1179,9 +1216,9 @@ class Sandbox(modal.object.Object):
             name: typing.Optional[str] = _DEFAULT_SANDBOX_NAME_OVERRIDE,
         ): ...
 
-    _experimental_from_snapshot: ___experimental_from_snapshot_spec
+    _experimental_from_snapshot: typing.ClassVar[___experimental_from_snapshot_spec]
 
-    class __open_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __open_spec(typing_extensions.Protocol):
         @typing.overload
         def __call__(self, /, path: str, mode: _typeshed.OpenTextMode) -> modal.file_io.FileIO[str]: ...
         @typing.overload
@@ -1191,9 +1228,9 @@ class Sandbox(modal.object.Object):
         @typing.overload
         async def aio(self, /, path: str, mode: _typeshed.OpenBinaryMode) -> modal.file_io.FileIO[bytes]: ...
 
-    open: __open_spec[typing_extensions.Self]
+    open: __open_spec
 
-    class __ls_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __ls_spec(typing_extensions.Protocol):
         def __call__(self, /, path: str) -> list[str]:
             """[Alpha] List the contents of a directory in the Sandbox."""
             ...
@@ -1202,9 +1239,9 @@ class Sandbox(modal.object.Object):
             """[Alpha] List the contents of a directory in the Sandbox."""
             ...
 
-    ls: __ls_spec[typing_extensions.Self]
+    ls: __ls_spec
 
-    class __mkdir_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __mkdir_spec(typing_extensions.Protocol):
         def __call__(self, /, path: str, parents: bool = False) -> None:
             """[Alpha] Create a new directory in the Sandbox."""
             ...
@@ -1213,9 +1250,9 @@ class Sandbox(modal.object.Object):
             """[Alpha] Create a new directory in the Sandbox."""
             ...
 
-    mkdir: __mkdir_spec[typing_extensions.Self]
+    mkdir: __mkdir_spec
 
-    class __rm_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __rm_spec(typing_extensions.Protocol):
         def __call__(self, /, path: str, recursive: bool = False) -> None:
             """[Alpha] Remove a file or directory in the Sandbox."""
             ...
@@ -1224,9 +1261,9 @@ class Sandbox(modal.object.Object):
             """[Alpha] Remove a file or directory in the Sandbox."""
             ...
 
-    rm: __rm_spec[typing_extensions.Self]
+    rm: __rm_spec
 
-    class __watch_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __watch_spec(typing_extensions.Protocol):
         def __call__(
             self,
             /,
@@ -1249,7 +1286,7 @@ class Sandbox(modal.object.Object):
             """[Alpha] Watch a file or directory in the Sandbox for changes."""
             ...
 
-    watch: __watch_spec[typing_extensions.Self]
+    watch: __watch_spec
 
     @property
     def stdout(self) -> modal.io_streams.StreamReader[str]:
@@ -1304,6 +1341,6 @@ class Sandbox(modal.object.Object):
             """
             ...
 
-    list: __list_spec
+    list: typing.ClassVar[__list_spec]
 
 _default_image: modal.image._Image

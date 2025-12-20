@@ -1,6 +1,6 @@
 Metadata-Version: 2.2
 Name: datasets
-Version: 4.4.1
+Version: 4.4.2
 Summary: HuggingFace community-driven open-source library of datasets
 Home-page: https://github.com/huggingface/datasets
 Download-URL: https://github.com/huggingface/datasets/tags
@@ -169,6 +169,7 @@ Provides-Extra: pdfs
 Requires-Dist: pdfplumber>=0.11.4; extra == "pdfs"
 Provides-Extra: nibabel
 Requires-Dist: nibabel>=5.3.2; extra == "nibabel"
+Requires-Dist: ipyniivue==2.4.2; extra == "nibabel"
 Dynamic: author
 Dynamic: author-email
 Dynamic: classifier
@@ -321,7 +322,7 @@ If you're a dataset owner and wish to update any part of it (description, citati
 
 ## BibTeX
 
-If you want to cite our 🤗 Datasets library, you can use our [paper](https://arxiv.org/abs/2109.02846):
+If you want to cite our 🤗 Datasets library, you can use our [paper](https://huggingface.co/papers/2109.02846):
 
 ```bibtex
 @inproceedings{lhoest-etal-2021-datasets,

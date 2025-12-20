@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: optimum
-Version: 2.0.0
+Version: 2.1.0
 Summary: Optimum Library is an extension of the Hugging Face Transformers library, providing a framework to integrate third-party libraries from Hardware Partners and interface with their specific functionality.
 Home-page: https://github.com/huggingface/optimum
 Author: HuggingFace Inc. Special Ops Team
@@ -42,14 +42,14 @@ Provides-Extra: nncf
 Requires-Dist: optimum-intel[nncf]>=1.23.0; extra == "nncf"
 Provides-Extra: neural-compressor
 Requires-Dist: optimum-intel[neural-compressor]>=1.23.0; extra == "neural-compressor"
-Provides-Extra: openvino
-Requires-Dist: optimum-intel[openvino]>=1.23.0; extra == "openvino"
 Provides-Extra: onnx
 Requires-Dist: optimum-onnx; extra == "onnx"
 Provides-Extra: onnxruntime
 Requires-Dist: optimum-onnx[onnxruntime]; extra == "onnxruntime"
 Provides-Extra: onnxruntime-gpu
 Requires-Dist: optimum-onnx[onnxruntime-gpu]; extra == "onnxruntime-gpu"
+Provides-Extra: openvino
+Requires-Dist: optimum-intel[openvino]>=1.23.0; extra == "openvino"
 Provides-Extra: quanto
 Requires-Dist: optimum-quanto>=0.2.4; extra == "quanto"
 Provides-Extra: dev

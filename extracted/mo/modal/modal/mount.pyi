@@ -250,8 +250,6 @@ class _Mount(modal._object._Object):
     ) -> None: ...
     def _get_metadata(self) -> modal_proto.api_pb2.MountHandleMetadata: ...
 
-SUPERSELF = typing.TypeVar("SUPERSELF", covariant=True)
-
 class Mount(modal.object.Object):
     """**Deprecated**: Mounts should not be used explicitly anymore, use `Image.add_local_*` commands instead.
 
@@ -347,9 +345,9 @@ class Mount(modal.object.Object):
             self, /, entries: list[_MountEntry]
         ) -> collections.abc.AsyncGenerator[modal._utils.blob_utils.FileUploadSpec, None]: ...
 
-    _get_files: ___get_files_spec
+    _get_files: typing.ClassVar[___get_files_spec]
 
-    class ___load_mount_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___load_mount_spec(typing_extensions.Protocol):
         def __call__(
             self,
             /,
@@ -365,7 +363,7 @@ class Mount(modal.object.Object):
             existing_object_id: typing.Optional[str],
         ): ...
 
-    _load_mount: ___load_mount_spec[typing_extensions.Self]
+    _load_mount: ___load_mount_spec
 
     @staticmethod
     def _from_local_python_packages(
@@ -385,7 +383,7 @@ class Mount(modal.object.Object):
         """mdmd:hidden"""
         ...
 
-    class ___deploy_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___deploy_spec(typing_extensions.Protocol):
         def __call__(
             self,
             /,
@@ -407,7 +405,7 @@ class Mount(modal.object.Object):
             client: typing.Optional[modal.client.Client] = None,
         ) -> None: ...
 
-    _deploy: ___deploy_spec[typing_extensions.Self]
+    _deploy: ___deploy_spec
 
     def _get_metadata(self) -> modal_proto.api_pb2.MountHandleMetadata: ...
 
@@ -428,7 +426,7 @@ async def _create_single_client_dependency_mount(
 ): ...
 async def _create_client_dependency_mounts(
     client=None,
-    python_versions: list[str] = ["3.9", "3.10", "3.11", "3.12", "3.13"],
+    python_versions: list[str] = ["3.10", "3.11", "3.12", "3.13", "3.14"],
     builder_versions: list[str] = ["2025.06"],
     check_if_exists=True,
     dry_run=False,
@@ -439,7 +437,7 @@ class __create_client_dependency_mounts_spec(typing_extensions.Protocol):
         self,
         /,
         client=None,
-        python_versions: list[str] = ["3.9", "3.10", "3.11", "3.12", "3.13"],
+        python_versions: list[str] = ["3.10", "3.11", "3.12", "3.13", "3.14"],
         builder_versions: list[str] = ["2025.06"],
         check_if_exists=True,
         dry_run=False,
@@ -448,7 +446,7 @@ class __create_client_dependency_mounts_spec(typing_extensions.Protocol):
         self,
         /,
         client=None,
-        python_versions: list[str] = ["3.9", "3.10", "3.11", "3.12", "3.13"],
+        python_versions: list[str] = ["3.10", "3.11", "3.12", "3.13", "3.14"],
         builder_versions: list[str] = ["2025.06"],
         check_if_exists=True,
         dry_run=False,

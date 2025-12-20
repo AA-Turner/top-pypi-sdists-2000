@@ -208,7 +208,7 @@ DOCS_REQUIRE = [
 
 PDFS_REQUIRE = ["pdfplumber>=0.11.4"]
 
-NIBABEL_REQUIRE = ["nibabel>=5.3.2"]
+NIBABEL_REQUIRE = ["nibabel>=5.3.2", "ipyniivue==2.4.2"]
 
 EXTRAS_REQUIRE = {
     "audio": AUDIO_REQUIRE,
@@ -232,7 +232,7 @@ EXTRAS_REQUIRE = {
 
 setup(
     name="datasets",
-    version="4.4.1",  # expected format is one of x.y.z.dev0, or x.y.z.rc1 or x.y.z (no to dashes, yes to dots)
+    version="4.4.2",  # expected format is one of x.y.z.dev0, or x.y.z.rc1 or x.y.z (no to dashes, yes to dots)
     description="HuggingFace community-driven open-source library of datasets",
     long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",

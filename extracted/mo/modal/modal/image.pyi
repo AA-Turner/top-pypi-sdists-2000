@@ -124,6 +124,8 @@ async def _image_await_build_result(
     image_id: str, client: modal.client._Client
 ) -> modal_proto.api_pb2.ImageJoinStreamingResponse: ...
 
+SUPERSELF = typing.TypeVar("SUPERSELF", covariant=True)
+
 class _Image(modal._object._Object):
     """Base class for container images to run functions in.
 
@@ -311,13 +313,17 @@ class _Image(modal._object._Object):
         """
         ...
 
-    @staticmethod
-    async def from_id(image_id: str, client: typing.Optional[modal.client._Client] = None) -> _Image:
-        """Construct an Image from an id and look up the Image result.
+    class __from_id_spec(typing_extensions.Protocol[SUPERSELF]):
+        def __call__(self, /, image_id: str, client: typing.Optional[modal.client.Client] = None) -> SUPERSELF:
+            """Construct an Image from an id and look up the Image result.
 
-        The ID of an Image object can be accessed using `.object_id`.
-        """
-        ...
+            The ID of an Image object can be accessed using `.object_id`.
+            """
+            ...
+
+        async def aio(self, /, image_id: str, client: typing.Optional[modal.client.Client] = None): ...
+
+    from_id: typing.ClassVar[__from_id_spec[typing_extensions.Self]]
 
     async def build(self, app: modal.app._App) -> _Image:
         """Eagerly build an image.
@@ -1035,8 +1041,6 @@ class _Image(modal._object._Object):
         """mdmd:hidden"""
         ...
 
-SUPERSELF = typing.TypeVar("SUPERSELF", covariant=True)
-
 class Image(modal.object.Object):
     """Base class for container images to run functions in.
 
@@ -1228,24 +1232,19 @@ class Image(modal.object.Object):
         """
         ...
 
-    class __from_id_spec(typing_extensions.Protocol):
-        def __call__(self, /, image_id: str, client: typing.Optional[modal.client.Client] = None) -> Image:
+    class __from_id_spec(typing_extensions.Protocol[SUPERSELF]):
+        def __call__(self, /, image_id: str, client: typing.Optional[modal.client.Client] = None) -> SUPERSELF:
             """Construct an Image from an id and look up the Image result.
 
             The ID of an Image object can be accessed using `.object_id`.
             """
             ...
 
-        async def aio(self, /, image_id: str, client: typing.Optional[modal.client.Client] = None) -> Image:
-            """Construct an Image from an id and look up the Image result.
+        async def aio(self, /, image_id: str, client: typing.Optional[modal.client.Client] = None): ...
 
-            The ID of an Image object can be accessed using `.object_id`.
-            """
-            ...
+    from_id: typing.ClassVar[__from_id_spec[typing_extensions.Self]]
 
-    from_id: __from_id_spec
-
-    class __build_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __build_spec(typing_extensions.Protocol):
         def __call__(self, /, app: modal.app.App) -> Image:
             """Eagerly build an image.
 
@@ -1352,7 +1351,7 @@ class Image(modal.object.Object):
             """
             ...
 
-    build: __build_spec[typing_extensions.Self]
+    build: __build_spec
 
     def pip_install(
         self,
@@ -2006,7 +2005,7 @@ class Image(modal.object.Object):
         """
         ...
 
-    class ___logs_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___logs_spec(typing_extensions.Protocol):
         def __call__(self, /) -> typing.Generator[str, None, None]:
             """Streams logs from an image, or returns logs from an already completed image.
 
@@ -2021,7 +2020,7 @@ class Image(modal.object.Object):
             """
             ...
 
-    _logs: ___logs_spec[typing_extensions.Self]
+    _logs: ___logs_spec
 
     class __hydrate_spec(typing_extensions.Protocol[SUPERSELF]):
         def __call__(self, /, client: typing.Optional[modal.client.Client] = None) -> SUPERSELF:

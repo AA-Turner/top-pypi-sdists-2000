@@ -46,8 +46,8 @@ def test_flush_spans_before_writer_recreate():
     long_running_span = tracer.trace("long_running_operation")
 
     writer = tracer._span_aggregator.writer
-    # Enable appsec to trigger the recreation of the agent writer
-    tracer.configure(appsec_enabled=True)
+    # Enable compute stats to trigger the recreation of the agent writer
+    tracer._recreate(reset_buffer=False)
     assert tracer._span_aggregator.writer is not writer, "Writer should be recreated"
     # Finish the long running span after the writer has been recreated
     long_running_span.finish()
@@ -352,3 +352,22 @@ def test_encode_span_with_large_unicode_string_attributes(encoding):
     with override_global_config(dict(_trace_api=encoding)):
         with tracer.trace(name="á" * 25000, resource="â" * 25001) as span:
             span.set_tag(key="å" * 25001, value="ä" * 2000)
+
+
+@pytest.mark.snapshot
+@pytest.mark.subprocess(env={"DD_TRACE_PARTIAL_FLUSH_ENABLED": "true", "DD_TRACE_PARTIAL_FLUSH_MIN_SPANS": "1"})
+def test_aggregator_partial_flush_finished_counter_out_of_sync():
+    """Regression test for IndexError when num_finished counter is out of sync with finished spans."""
+    from ddtrace import tracer
+
+    span1 = tracer.start_span("span1")
+    span2 = tracer.start_span("span2", child_of=span1)
+    # Manually set duration_ns before calling finish() to trigger the race condition
+    # where trace.num_finished == 1 but len(trace.spans) == 0 after span1.finish().
+    # In this scenario, span1.finish() does NOT trigger encoding, both span1 and span2
+    # are encoded during span2.finish(). This occurs because _Trace.remove_finished()
+    # removes all spans that have a duration (end state). This test ensures that calling
+    # span1.finish() in this state does not cause unexpected behavior or crash trace encoding.
+    span1.duration_ns = 1
+    span2.finish()
+    span1.finish()

@@ -2,6 +2,7 @@ import os
 from os import environ, getenv
 from typing import TYPE_CHECKING, Annotated, Literal, TypeVar, cast
 
+import structlog
 from pydantic.functional_validators import AfterValidator
 from starlette.config import Config, undefined
 from starlette.datastructures import CommaSeparatedStrings
@@ -28,6 +29,8 @@ if TYPE_CHECKING:
 # env
 
 env = Config()
+
+logger = structlog.stdlib.get_logger(__name__)
 
 
 TD = TypeVar("TD")
@@ -167,6 +170,13 @@ BG_JOB_SHUTDOWN_GRACE_PERIOD_SECS = env(
     cast=int,
     default=180,  # 3 minutes
 )
+# We set the default termination grace period to 60 minutes for hosts so that's the max we could allow here
+if BG_JOB_SHUTDOWN_GRACE_PERIOD_SECS > 3600:
+    logger.warning(
+        f"BG_JOB_SHUTDOWN_GRACE_PERIOD_SECS was set to greater than the default termination grace period of 3600 seconds. If you are running on cloud, this may cause the pod to be terminated before the workers finish. If you are running on self-hosted, make sure to set the termination grace period to a value greater than {BG_JOB_SHUTDOWN_GRACE_PERIOD_SECS} seconds",
+        BG_JOB_SHUTDOWN_GRACE_PERIOD_SECS=BG_JOB_SHUTDOWN_GRACE_PERIOD_SECS,
+    )
+
 MAX_STREAM_CHUNK_SIZE_BYTES = env(
     "MAX_STREAM_CHUNK_SIZE_BYTES", cast=int, default=1024 * 1024 * 128
 )

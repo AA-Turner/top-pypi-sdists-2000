@@ -19,7 +19,6 @@ from pandas.core.series import Series
 
 from pandas._typing import (
     T_EXTENSION_ARRAY,
-    AnyArrayLike,
     GenericT,
     IntervalT,
     TakeIndexer,
@@ -70,32 +69,24 @@ def unique(values: T_EXTENSION_ARRAY) -> T_EXTENSION_ARRAY: ...
 @overload
 def factorize(
     values: npt.NDArray[GenericT],
-    sort: bool = ...,
-    use_na_sentinel: bool = ...,
-    size_hint: int | None = ...,
+    sort: bool = False,
+    use_na_sentinel: bool = True,
+    size_hint: int | None = None,
 ) -> tuple[np_1darray_int64, np_1darray[GenericT]]: ...
 @overload
 def factorize(
     values: Index | Series,
-    sort: bool = ...,
-    use_na_sentinel: bool = ...,
-    size_hint: int | None = ...,
+    sort: bool = False,
+    use_na_sentinel: bool = True,
+    size_hint: int | None = None,
 ) -> tuple[np_1darray_int64, Index]: ...
 @overload
 def factorize(
     values: Categorical,
-    sort: bool = ...,
-    use_na_sentinel: bool = ...,
-    size_hint: int | None = ...,
+    sort: bool = False,
+    use_na_sentinel: bool = True,
+    size_hint: int | None = None,
 ) -> tuple[np_1darray_int64, Categorical]: ...
-def value_counts(
-    values: AnyArrayLike | list | tuple,
-    sort: bool = True,
-    ascending: bool = False,
-    normalize: bool = False,
-    bins: int | None = None,
-    dropna: bool = True,
-) -> Series: ...
 def take(
     arr: np_ndarray[Any] | ExtensionArray | Index | Series,
     indices: TakeIndexer,

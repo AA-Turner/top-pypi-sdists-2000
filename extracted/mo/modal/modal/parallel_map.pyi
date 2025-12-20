@@ -19,31 +19,29 @@ class _SynchronizedQueue:
     async def put(self, item): ...
     async def get(self): ...
 
-SUPERSELF = typing.TypeVar("SUPERSELF", covariant=True)
-
 class SynchronizedQueue:
     """mdmd:hidden"""
     def __init__(self, /, *args, **kwargs):
         """Initialize self.  See help(type(self)) for accurate signature."""
         ...
 
-    class __init_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __init_spec(typing_extensions.Protocol):
         def __call__(self, /): ...
         async def aio(self, /): ...
 
-    init: __init_spec[typing_extensions.Self]
+    init: __init_spec
 
-    class __put_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __put_spec(typing_extensions.Protocol):
         def __call__(self, /, item): ...
         async def aio(self, /, item): ...
 
-    put: __put_spec[typing_extensions.Self]
+    put: __put_spec
 
-    class __get_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __get_spec(typing_extensions.Protocol):
         def __call__(self, /): ...
         async def aio(self, /): ...
 
-    get: __get_spec[typing_extensions.Self]
+    get: __get_spec
 
 class _OutputValue:
     """_OutputValue(value: Any)"""

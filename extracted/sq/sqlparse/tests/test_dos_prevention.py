@@ -2,6 +2,7 @@
 
 import pytest
 import sqlparse
+from sqlparse.exceptions import SQLParseError
 import time
 
 
@@ -9,41 +10,35 @@ class TestDoSPrevention:
     """Test cases to ensure sqlparse is protected against DoS attacks."""
 
     def test_large_tuple_list_performance(self):
-        """Test that parsing a large list of tuples doesn't cause DoS."""
+        """Test that parsing a large list of tuples raises SQLParseError."""
         # Generate SQL with many tuples (like Django composite primary key queries)
         sql = '''
         SELECT "composite_pk_comment"."tenant_id", "composite_pk_comment"."comment_id"
         FROM "composite_pk_comment"
         WHERE ("composite_pk_comment"."tenant_id", "composite_pk_comment"."comment_id") IN ('''
 
-        # Generate 5000 tuples - this would previously cause a hang
+        # Generate 5000 tuples - this should trigger MAX_GROUPING_TOKENS
         tuples = []
         for i in range(1, 5001):
             tuples.append(f"(1, {i})")
 
         sql += ", ".join(tuples) + ")"
 
-        # Test should complete quickly (under 5 seconds)
-        start_time = time.time()
-        result = sqlparse.format(sql, reindent=True, keyword_case="upper")
-        execution_time = time.time() - start_time
-
-        assert execution_time < 5.0, f"Parsing took too long: {execution_time:.2f}s"
-        assert len(result) > 0, "Result should not be empty"
-        assert "SELECT" in result.upper(), "SQL should be properly formatted"
+        # Should raise SQLParseError due to token limit
+        with pytest.raises(SQLParseError, match="Maximum number of tokens exceeded"):
+            sqlparse.format(sql, reindent=True, keyword_case="upper")
 
     def test_deeply_nested_groups_limited(self):
-        """Test that deeply nested groups don't cause stack overflow."""
+        """Test that deeply nested groups raise SQLParseError."""
         # Create deeply nested parentheses
         sql = "SELECT " + "(" * 200 + "1" + ")" * 200
 
-        # Should not raise RecursionError
-        result = sqlparse.format(sql, reindent=True)
-        assert "SELECT" in result
-        assert "1" in result
+        # Should raise SQLParseError due to depth limit
+        with pytest.raises(SQLParseError, match="Maximum grouping depth exceeded"):
+            sqlparse.format(sql, reindent=True)
 
     def test_very_large_token_list_limited(self):
-        """Test that very large token lists are handled gracefully."""
+        """Test that very large token lists raise SQLParseError."""
         # Create a SQL with many identifiers
         identifiers = []
         for i in range(15000):  # More than MAX_GROUPING_TOKENS
@@ -51,14 +46,9 @@ class TestDoSPrevention:
 
         sql = f"SELECT {', '.join(identifiers)} FROM table1"
 
-        # Should complete without hanging
-        start_time = time.time()
-        result = sqlparse.format(sql, reindent=True)
-        execution_time = time.time() - start_time
-
-        assert execution_time < 10.0, f"Parsing took too long: {execution_time:.2f}s"
-        assert "SELECT" in result
-        assert "FROM" in result
+        # Should raise SQLParseError due to token limit
+        with pytest.raises(SQLParseError, match="Maximum number of tokens exceeded"):
+            sqlparse.format(sql, reindent=True)
 
     def test_normal_sql_still_works(self):
         """Test that normal SQL still works correctly after DoS protections."""

@@ -53,7 +53,6 @@ class PartialFunction(
     ) -> modal.functions.Function[
         modal._partial_function.P, modal._partial_function.ReturnType, modal._partial_function.OriginalReturnType
     ]: ...
-    def __del__(self): ...
 
 def method(
     _warn_parentheses_missing=None, *, is_generator: typing.Optional[bool] = None

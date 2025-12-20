@@ -254,3 +254,33 @@ END;"""
     stmts = sqlparse.split(sql)
     assert len(stmts) == 1
     assert 'CREATE OR REPLACE PROCEDURE' in stmts[0]
+
+
+def test_split_begin_transaction():  # issue826
+    # BEGIN TRANSACTION should not be treated as a block start
+    sql = """BEGIN TRANSACTION;
+DELETE FROM "schema"."table_a" USING "table_a_temp" WHERE "schema"."table_a"."id" = "table_a_temp"."id";
+INSERT INTO "schema"."table_a" SELECT * FROM "table_a_temp";
+END TRANSACTION;"""
+    stmts = sqlparse.split(sql)
+    assert len(stmts) == 4
+    assert stmts[0] == 'BEGIN TRANSACTION;'
+    assert stmts[1].startswith('DELETE')
+    assert stmts[2].startswith('INSERT')
+    assert stmts[3] == 'END TRANSACTION;'
+
+
+def test_split_begin_transaction_formatted():  # issue826
+    # Test with formatted SQL (newlines between BEGIN and TRANSACTION)
+    sql = """BEGIN
+TRANSACTION;
+DELETE FROM "schema"."table_a" USING "table_a_temp" WHERE "schema"."table_a"."id" = "table_a_temp"."id";
+INSERT INTO "schema"."table_a" SELECT * FROM "table_a_temp";
+END
+TRANSACTION;"""
+    stmts = sqlparse.split(sql)
+    assert len(stmts) == 4
+    assert stmts[0] == 'BEGIN\nTRANSACTION;'
+    assert stmts[1].startswith('DELETE')
+    assert stmts[2].startswith('INSERT')
+    assert stmts[3] == 'END\nTRANSACTION;'

@@ -31,8 +31,6 @@ class _FlashManager:
     async def stop(self): ...
     async def close(self): ...
 
-SUPERSELF = typing.TypeVar("SUPERSELF", covariant=True)
-
 class FlashManager:
     def __init__(
         self,
@@ -45,7 +43,7 @@ class FlashManager:
         h2_enabled: bool = False,
     ): ...
 
-    class __is_port_connection_healthy_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __is_port_connection_healthy_spec(typing_extensions.Protocol):
         def __call__(
             self, /, process: typing.Optional[subprocess.Popen], timeout: float = 0.5
         ) -> tuple[bool, typing.Optional[Exception]]: ...
@@ -53,15 +51,15 @@ class FlashManager:
             self, /, process: typing.Optional[subprocess.Popen], timeout: float = 0.5
         ) -> tuple[bool, typing.Optional[Exception]]: ...
 
-    is_port_connection_healthy: __is_port_connection_healthy_spec[typing_extensions.Self]
+    is_port_connection_healthy: __is_port_connection_healthy_spec
 
-    class ___start_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___start_spec(typing_extensions.Protocol):
         def __call__(self, /): ...
         async def aio(self, /): ...
 
-    _start: ___start_spec[typing_extensions.Self]
+    _start: ___start_spec
 
-    class ___drain_container_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___drain_container_spec(typing_extensions.Protocol):
         def __call__(self, /):
             """Background task that checks if we've encountered too many failures and drains the container if so."""
             ...
@@ -70,27 +68,27 @@ class FlashManager:
             """Background task that checks if we've encountered too many failures and drains the container if so."""
             ...
 
-    _drain_container: ___drain_container_spec[typing_extensions.Self]
+    _drain_container: ___drain_container_spec
 
-    class ___run_heartbeat_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___run_heartbeat_spec(typing_extensions.Protocol):
         def __call__(self, /, host: str, port: int): ...
         async def aio(self, /, host: str, port: int): ...
 
-    _run_heartbeat: ___run_heartbeat_spec[typing_extensions.Self]
+    _run_heartbeat: ___run_heartbeat_spec
 
     def get_container_url(self): ...
 
-    class __stop_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __stop_spec(typing_extensions.Protocol):
         def __call__(self, /): ...
         async def aio(self, /): ...
 
-    stop: __stop_spec[typing_extensions.Self]
+    stop: __stop_spec
 
-    class __close_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __close_spec(typing_extensions.Protocol):
         def __call__(self, /): ...
         async def aio(self, /): ...
 
-    close: __close_spec[typing_extensions.Self]
+    close: __close_spec
 
 class __flash_forward_spec(typing_extensions.Protocol):
     def __call__(
@@ -221,19 +219,19 @@ class FlashPrometheusAutoscaler:
         autoscaling_interval_seconds: int,
     ): ...
 
-    class __start_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __start_spec(typing_extensions.Protocol):
         def __call__(self, /): ...
         async def aio(self, /): ...
 
-    start: __start_spec[typing_extensions.Self]
+    start: __start_spec
 
-    class ___run_autoscaler_loop_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___run_autoscaler_loop_spec(typing_extensions.Protocol):
         def __call__(self, /): ...
         async def aio(self, /): ...
 
-    _run_autoscaler_loop: ___run_autoscaler_loop_spec[typing_extensions.Self]
+    _run_autoscaler_loop: ___run_autoscaler_loop_spec
 
-    class ___compute_target_containers_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___compute_target_containers_spec(typing_extensions.Protocol):
         def __call__(self, /, current_replicas: int) -> int:
             """Gets metrics from container to autoscale up or down."""
             ...
@@ -242,7 +240,7 @@ class FlashPrometheusAutoscaler:
             """Gets metrics from container to autoscale up or down."""
             ...
 
-    _compute_target_containers: ___compute_target_containers_spec[typing_extensions.Self]
+    _compute_target_containers: ___compute_target_containers_spec
 
     def _calculate_desired_replicas(
         self,
@@ -255,7 +253,7 @@ class FlashPrometheusAutoscaler:
         """Calculate the desired number of replicas to autoscale to."""
         ...
 
-    class ___get_scaling_info_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___get_scaling_info_spec(typing_extensions.Protocol):
         def __call__(self, /, containers) -> tuple[float, int]:
             """Get metrics using container exposed metrics endpoints."""
             ...
@@ -264,25 +262,25 @@ class FlashPrometheusAutoscaler:
             """Get metrics using container exposed metrics endpoints."""
             ...
 
-    _get_scaling_info: ___get_scaling_info_spec[typing_extensions.Self]
+    _get_scaling_info: ___get_scaling_info_spec
 
-    class ___get_metrics_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___get_metrics_spec(typing_extensions.Protocol):
         def __call__(self, /, url: str) -> typing.Optional[dict[str, list[typing.Any]]]: ...
         async def aio(self, /, url: str) -> typing.Optional[dict[str, list[typing.Any]]]: ...
 
-    _get_metrics: ___get_metrics_spec[typing_extensions.Self]
+    _get_metrics: ___get_metrics_spec
 
-    class ___get_all_containers_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___get_all_containers_spec(typing_extensions.Protocol):
         def __call__(self, /): ...
         async def aio(self, /): ...
 
-    _get_all_containers: ___get_all_containers_spec[typing_extensions.Self]
+    _get_all_containers: ___get_all_containers_spec
 
-    class ___set_target_slots_spec(typing_extensions.Protocol[SUPERSELF]):
+    class ___set_target_slots_spec(typing_extensions.Protocol):
         def __call__(self, /, target_slots: int): ...
         async def aio(self, /, target_slots: int): ...
 
-    _set_target_slots: ___set_target_slots_spec[typing_extensions.Self]
+    _set_target_slots: ___set_target_slots_spec
 
     def _make_scaling_decision(
         self,
@@ -312,11 +310,11 @@ class FlashPrometheusAutoscaler:
         """
         ...
 
-    class __stop_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __stop_spec(typing_extensions.Protocol):
         def __call__(self, /): ...
         async def aio(self, /): ...
 
-    stop: __stop_spec[typing_extensions.Self]
+    stop: __stop_spec
 
 class __flash_prometheus_autoscaler_spec(typing_extensions.Protocol):
     def __call__(

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: ddtrace
-Version: 4.0.1
+Version: 4.1.0
 Summary: Datadog APM client library
 Author-email: "Datadog, Inc." <dev@datadoghq.com>
 License: LICENSE.BSD3
@@ -13,14 +13,13 @@ Classifier: Development Status :: 5 - Production/Stable
 Classifier: Programming Language :: Python :: Implementation :: CPython
 Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 3 :: Only
-Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
 Classifier: Programming Language :: Python :: 3.14
-Requires-Python: >=3.9
+Requires-Python: <3.15,>=3.9
 Description-Content-Type: text/markdown
 License-File: LICENSE
 License-File: LICENSE.Apache

@@ -78,7 +78,7 @@ class SeriesGroupBy(GroupBy[Series[S2]], Generic[S2, ByT]):
     @overload
     def aggregate(
         self,
-        func: list[AggFuncTypeBase],
+        func: list[AggFuncTypeBase[...]],
         /,
         *args: Any,
         engine: WindowingEngine = ...,
@@ -88,7 +88,7 @@ class SeriesGroupBy(GroupBy[Series[S2]], Generic[S2, ByT]):
     @overload
     def aggregate(
         self,
-        func: AggFuncTypeBase | None = ...,
+        func: AggFuncTypeBase[...] | None = ...,
         /,
         *args: Any,
         engine: WindowingEngine = ...,
@@ -109,16 +109,20 @@ class SeriesGroupBy(GroupBy[Series[S2]], Generic[S2, ByT]):
     @overload
     def transform(
         self,
-        func: Callable,
-        *args: Any,
-        **kwargs: Any,
+        func: Callable[Concatenate[Series, P], Any],
+        *args: P.args,
+        **kwargs: P.kwargs,
     ) -> Series: ...
     @overload
     def transform(
         self, func: TransformReductionListType, *args: Any, **kwargs: Any
     ) -> Series: ...
     def filter(
-        self, func: Callable | str, dropna: bool = ..., *args: Any, **kwargs: Any
+        self,
+        func: Callable[Concatenate[Series, P], Any] | str,
+        dropna: bool = ...,
+        *args: P.args,
+        **kwargs: P.kwargs,
     ) -> Series: ...
     def nunique(self, dropna: bool = ...) -> Series[int]: ...
     # describe delegates to super() method but here it has keyword-only parameters
@@ -205,25 +209,26 @@ class SeriesGroupBy(GroupBy[Series[S2]], Generic[S2, ByT]):
     # Overrides that provide more precise return types over the GroupBy class
     @final  # type: ignore[misc]
     # pyrefly: ignore  # bad-override
-    def __iter__(  # pyright: ignore[reportIncompatibleMethodOverride]  # ty: ignore[override-of-final-method]
+    def __iter__(  # pyright: ignore[reportIncompatibleMethodOverride] # ty: ignore[override-of-final-method]
         self,
     ) -> Iterator[tuple[ByT, Series[S2]]]: ...
 
 _TT = TypeVar("_TT", bound=Literal[True, False])
 
-# ty ignore needed because of https://github.com/astral-sh/ty/issues/157#issuecomment-3017337945
-class DFCallable1(Protocol[P]):  # ty: ignore[invalid-argument-type]
+class DFCallable1(Protocol[P]):
     def __call__(
         self, df: DataFrame, /, *args: P.args, **kwargs: P.kwargs
-    ) -> Scalar | list | dict: ...
+    ) -> Scalar | list[Any] | dict[Hashable, Any]: ...
 
-class DFCallable2(Protocol[P]):  # ty: ignore[invalid-argument-type]
+class DFCallable2(Protocol[P]):
     def __call__(
         self, df: DataFrame, /, *args: P.args, **kwargs: P.kwargs
     ) -> DataFrame | Series: ...
 
-class DFCallable3(Protocol[P]):  # ty: ignore[invalid-argument-type]
-    def __call__(self, df: Iterable, /, *args: P.args, **kwargs: P.kwargs) -> float: ...
+class DFCallable3(Protocol[P]):
+    def __call__(
+        self, df: Iterable[Any], /, *args: P.args, **kwargs: P.kwargs
+    ) -> float: ...
 
 class DataFrameGroupBy(GroupBy[DataFrame], Generic[ByT, _TT]):
     # error: Overload 3 for "apply" will never be used because its parameters overlap overload 1
@@ -257,7 +262,7 @@ class DataFrameGroupBy(GroupBy[DataFrame], Generic[ByT, _TT]):
     @overload
     def aggregate(
         self,
-        func: AggFuncTypeFrame | None = ...,
+        func: AggFuncTypeFrame[..., Any] | None = ...,
         *args: Any,
         engine: WindowingEngine = ...,
         engine_kwargs: WindowingEngineKwargs = ...,
@@ -266,7 +271,7 @@ class DataFrameGroupBy(GroupBy[DataFrame], Generic[ByT, _TT]):
     @overload
     def aggregate(
         self,
-        func: AggFuncTypeFrame | None = None,
+        func: AggFuncTypeFrame[..., Any] | None = None,
         /,
         **kwargs: Any,
     ) -> DataFrame: ...
@@ -283,21 +288,25 @@ class DataFrameGroupBy(GroupBy[DataFrame], Generic[ByT, _TT]):
     @overload
     def transform(
         self,
-        func: Callable,
-        *args: Any,
-        **kwargs: Any,
+        func: Callable[Concatenate[DataFrame, P], Any],
+        *args: P.args,
+        **kwargs: P.kwargs,
     ) -> DataFrame: ...
     @overload
     def transform(
         self, func: TransformReductionListType, *args: Any, **kwargs: Any
     ) -> DataFrame: ...
     def filter(
-        self, func: Callable, dropna: bool = ..., *args: Any, **kwargs: Any
+        self,
+        func: Callable[Concatenate[DataFrame, P], Any],
+        dropna: bool = ...,
+        *args: P.args,
+        **kwargs: P.kwargs,
     ) -> DataFrame: ...
     @overload
     def __getitem__(self, key: Scalar) -> SeriesGroupBy[Any, ByT]: ...  # type: ignore[overload-overlap] # pyright: ignore[reportOverlappingOverload]
     @overload
-    def __getitem__(  # pyright: ignore[reportIncompatibleMethodOverride]  # ty: ignore[invalid-method-override]
+    def __getitem__(  # pyright: ignore[reportIncompatibleMethodOverride] # ty: ignore[invalid-method-override]
         self, key: Iterable[Hashable]
     ) -> DataFrameGroupBy[ByT, _TT]: ...
     def nunique(self, dropna: bool = True) -> DataFrame: ...
@@ -315,48 +324,48 @@ class DataFrameGroupBy(GroupBy[DataFrame], Generic[ByT, _TT]):
     def boxplot(
         self,
         subplots: Literal[True] = True,
-        column: IndexLabel | None = ...,
-        fontsize: float | str | None = ...,
-        rot: float = ...,
-        grid: bool = ...,
-        ax: PlotAxes | None = ...,
-        figsize: tuple[float, float] | None = ...,
-        layout: tuple[int, int] | None = ...,
-        sharex: bool = ...,
-        sharey: bool = ...,
-        backend: str | None = ...,
+        column: IndexLabel | None = None,
+        fontsize: float | str | None = None,
+        rot: float = 0,
+        grid: bool = True,
+        ax: PlotAxes | None = None,
+        figsize: tuple[float, float] | None = None,
+        layout: tuple[int, int] | None = None,
+        sharex: bool = False,
+        sharey: bool = True,
+        backend: str | None = None,
         **kwargs: Any,
     ) -> Series: ...  # Series[PlotAxes] but this is not allowed
     @overload
     def boxplot(
         self,
         subplots: Literal[False],
-        column: IndexLabel | None = ...,
-        fontsize: float | str | None = ...,
-        rot: float = ...,
-        grid: bool = ...,
-        ax: PlotAxes | None = ...,
-        figsize: tuple[float, float] | None = ...,
-        layout: tuple[int, int] | None = ...,
-        sharex: bool = ...,
-        sharey: bool = ...,
-        backend: str | None = ...,
+        column: IndexLabel | None = None,
+        fontsize: float | str | None = None,
+        rot: float = 0,
+        grid: bool = True,
+        ax: PlotAxes | None = None,
+        figsize: tuple[float, float] | None = None,
+        layout: tuple[int, int] | None = None,
+        sharex: bool = False,
+        sharey: bool = True,
+        backend: str | None = None,
         **kwargs: Any,
     ) -> PlotAxes: ...
     @overload
     def boxplot(
         self,
         subplots: bool,
-        column: IndexLabel | None = ...,
-        fontsize: float | str | None = ...,
-        rot: float = ...,
-        grid: bool = ...,
-        ax: PlotAxes | None = ...,
-        figsize: tuple[float, float] | None = ...,
-        layout: tuple[int, int] | None = ...,
-        sharex: bool = ...,
-        sharey: bool = ...,
-        backend: str | None = ...,
+        column: IndexLabel | None = None,
+        fontsize: float | str | None = None,
+        rot: float = 0,
+        grid: bool = True,
+        ax: PlotAxes | None = None,
+        figsize: tuple[float, float] | None = None,
+        layout: tuple[int, int] | None = None,
+        sharex: bool = False,
+        sharey: bool = True,
+        backend: str | None = None,
         **kwargs: Any,
     ) -> PlotAxes | Series: ...  # Series[PlotAxes]
     @overload
@@ -450,12 +459,11 @@ class DataFrameGroupBy(GroupBy[DataFrame], Generic[ByT, _TT]):
     @property
     def dtypes(self) -> Series: ...
     def __getattr__(
-        self, name: str
+        self, attr: str
     ) -> SeriesGroupBy[Any, ByT]: ...  # ty: ignore[invalid-method-override]
     # Overrides that provide more precise return types over the GroupBy class
     @final  # type: ignore[misc]
-    # pyrefly: ignore  # bad-override
-    def __iter__(  # pyright: ignore[reportIncompatibleMethodOverride]  # ty: ignore[override-of-final-method]
+    def __iter__(  # pyright: ignore[reportIncompatibleMethodOverride] # ty: ignore[override-of-final-method] # pyrefly: ignore[bad-override]
         self,
     ) -> Iterator[tuple[ByT, DataFrame]]: ...
     @overload

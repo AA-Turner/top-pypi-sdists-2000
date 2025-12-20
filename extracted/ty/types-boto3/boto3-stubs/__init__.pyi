@@ -436,6 +436,7 @@ from types_boto3_waf.client import WAFClient
 from types_boto3_waf_regional.client import WAFRegionalClient
 from types_boto3_wafv2.client import WAFV2Client
 from types_boto3_wellarchitected.client import WellArchitectedClient
+from types_boto3_wickr.client import WickrAdminAPIClient
 from types_boto3_wisdom.client import ConnectWisdomServiceClient
 from types_boto3_workdocs.client import WorkDocsClient
 from types_boto3_workmail.client import WorkMailClient
@@ -7761,6 +7762,24 @@ def client(
 ) -> WellArchitectedClient:
     """
     Create client for WellArchitected service.
+    """
+
+@overload
+def client(
+    service_name: Literal["wickr"],
+    region_name: str | None = ...,
+    api_version: str | None = ...,
+    use_ssl: bool | None = ...,
+    verify: bool | str | None = ...,
+    endpoint_url: str | None = ...,
+    aws_access_key_id: str | None = ...,
+    aws_secret_access_key: str | None = ...,
+    aws_session_token: str | None = ...,
+    config: Config | None = ...,
+    aws_account_id: str | None = ...,
+) -> WickrAdminAPIClient:
+    """
+    Create client for WickrAdminAPI service.
     """
 
 @overload

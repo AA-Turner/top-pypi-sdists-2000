@@ -366,8 +366,6 @@ class _StreamWriter:
 
 T_INNER = typing.TypeVar("T_INNER", covariant=True)
 
-SUPERSELF = typing.TypeVar("SUPERSELF", covariant=True)
-
 class StreamReader(typing.Generic[T]):
     """Retrieve logs from a stream (`stdout` or `stderr`).
 
@@ -405,7 +403,7 @@ class StreamReader(typing.Generic[T]):
         """Possible values are `1` for stdout and `2` for stderr."""
         ...
 
-    class __read_spec(typing_extensions.Protocol[T_INNER, SUPERSELF]):
+    class __read_spec(typing_extensions.Protocol[T_INNER]):
         def __call__(self, /) -> T_INNER:
             """Fetch the entire contents of the stream until EOF."""
             ...
@@ -414,7 +412,7 @@ class StreamReader(typing.Generic[T]):
             """Fetch the entire contents of the stream until EOF."""
             ...
 
-    read: __read_spec[T, typing_extensions.Self]
+    read: __read_spec[T]
 
     def __iter__(self) -> typing.Generator[T, None, None]: ...
     def __aiter__(self) -> collections.abc.AsyncGenerator[T, None]: ...
@@ -486,7 +484,7 @@ class StreamWriter:
         """
         ...
 
-    class __drain_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __drain_spec(typing_extensions.Protocol):
         def __call__(self, /) -> None:
             """Flush the write buffer and send data to the running process.
 
@@ -529,4 +527,4 @@ class StreamWriter:
             """
             ...
 
-    drain: __drain_spec[typing_extensions.Self]
+    drain: __drain_spec

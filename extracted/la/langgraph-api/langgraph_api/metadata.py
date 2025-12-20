@@ -123,6 +123,9 @@ async def metadata_loop() -> None:
     except ImportError:
         __version__ = None
     if not LANGGRAPH_CLOUD_LICENSE_KEY and not LANGSMITH_CONTROL_PLANE_API_KEY:
+        logger.info(
+            "No license key or control plane API key set, skipping metadata loop"
+        )
         return
     lg_version = langgraph.version.__version__
 
@@ -134,7 +137,7 @@ async def metadata_loop() -> None:
         logger.info("Running in air-gapped mode, skipping metadata loop")
         return
 
-    logger.info("Starting metadata loop")
+    logger.info("Starting metadata loop", endpoint=LANGCHAIN_METADATA_ENDPOINT)
 
     global RUN_COUNTER, NODE_COUNTER, FROM_TIMESTAMP
     base_tags = _ensure_strings(
@@ -200,7 +203,11 @@ async def metadata_loop() -> None:
                     body=orjson.dumps(beacon_payload),
                     headers={"Content-Type": "application/json"},
                 )
-                await logger.ainfo("Successfully submitted metadata to beacon endpoint")
+                await logger.ainfo(
+                    "Successfully submitted metadata to beacon endpoint",
+                    n_runs=runs,
+                    n_nodes=nodes,
+                )
             except Exception as e:
                 submissions_failed.append("beacon")
                 await logger.awarning(
@@ -221,7 +228,11 @@ async def metadata_loop() -> None:
                     body=orjson.dumps(langchain_payload),
                     headers={"Content-Type": "application/json"},
                 )
-                logger.info("Successfully submitted metadata to LangSmith instance")
+                logger.info(
+                    "Successfully submitted metadata to LangSmith instance",
+                    n_runs=runs,
+                    n_nodes=nodes,
+                )
             except Exception as e:
                 submissions_failed.append("langchain")
                 await logger.awarning(

@@ -1,7 +1,7 @@
 Metadata-Version: 2.4
 Name: prek
-Version: 0.2.22
-Classifier: Development Status :: 2 - Pre-Alpha
+Version: 0.2.23
+Classifier: Development Status :: 4 - Beta
 Classifier: Environment :: Console
 Classifier: Intended Audience :: Developers
 Classifier: Operating System :: OS Independent
@@ -45,7 +45,7 @@ while also providing some additional long-requested features.
 <!-- description:end -->
 
 > [!NOTE]
-> Although prek is pretty new, it’s already powering real‑world projects like [Apache Airflow](https://github.com/apache/airflow), and more projects are picking it up—see [Who is using prek?](#who-is-using-prek). If you’re looking for an alternative to `pre-commit`, please give it a try—we’d love your feedback!
+> Although prek is pretty new, it’s already powering real‑world projects like [Apache Airflow](https://github.com/apache/airflow), [FastAPI](https://github.com/fastapi/fastapi), and more projects are picking it up—see [Who is using prek?](#who-is-using-prek). If you’re looking for an alternative to `pre-commit`, please give it a try—we’d love your feedback!
 >
 > Please note that some subcommands and languages are still missing for full drop‑in parity with `pre-commit`. Track the remaining gaps here: [TODO](https://prek.j178.dev/todo/).
 
@@ -80,7 +80,7 @@ On Linux and macOS:
 
 <!-- linux-standalone-install:start -->
 ```bash
-curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.2.22/prek-installer.sh | sh
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.2.23/prek-installer.sh | sh
 ```
 <!-- linux-standalone-install:end -->
 
@@ -88,7 +88,7 @@ On Windows:
 
 <!-- windows-standalone-install:start -->
 ```powershell
-powershell -ExecutionPolicy ByPass -c "irm https://github.com/j178/prek/releases/download/v0.2.22/prek-installer.ps1 | iex"
+powershell -ExecutionPolicy ByPass -c "irm https://github.com/j178/prek/releases/download/v0.2.23/prek-installer.ps1 | iex"
 ```
 <!-- windows-standalone-install:end -->
 
@@ -106,6 +106,9 @@ uv tool install prek
 
 # Using uvx (install and run in one command)
 uvx prek
+
+# Adding prek to the project dev-dependencies
+uv add --dev prek
 
 # Using pip
 pip install prek
@@ -281,6 +284,8 @@ jobs:
 ```
 
 This action installs prek and runs `prek run --all-files` on your repository.
+
+prek is also available via [`taiki-e/install-action`](https://github.com/taiki-e/install-action) for installing various tools.
 <!-- github-actions:end -->
 </details>
 
@@ -305,6 +310,7 @@ prek self update
 - It is [multiple times faster](https://prek.j178.dev/benchmark/) than `pre-commit` and takes up half the disk space.
 - It redesigned how hook environments and toolchains are managed, they are all shared between hooks, which reduces the disk space usage and speeds up the installation process.
 - Repositories are cloned in parallel, and hooks are installed in parallel if their dependencies are disjoint.
+- Hooks can run in parallel by priority (hooks with the same [`priority`](https://prek.j178.dev/configuration/#priority) may run concurrently), reducing end-to-end runtime.
 - It uses [`uv`](https://github.com/astral-sh/uv) for creating Python virtualenvs and installing dependencies, which is known for its speed and efficiency.
 - It implements some common hooks in Rust, [built in prek](https://prek.j178.dev/builtin/), which are faster than their Python counterparts.
 - It supports `repo: builtin` for offline, zero-setup hooks, which is not available in `pre-commit`.
@@ -330,6 +336,7 @@ prek is pretty new, but it is already being used or recommend by some projects a
 
 - [Apache Airflow](https://github.com/apache/airflow/issues/44995)
 - [PDM](https://github.com/pdm-project/pdm/pull/3593)
+- [FastAPI](https://github.com/fastapi/fastapi/pull/14572)
 - [basedpyright](https://github.com/DetachHead/basedpyright/pull/1413)
 - [OpenLineage](https://github.com/OpenLineage/OpenLineage/pull/3965)
 - [Authlib](https://github.com/authlib/authlib/pull/804)

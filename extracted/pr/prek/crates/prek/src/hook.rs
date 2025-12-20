@@ -1,3 +1,4 @@
+use std::borrow::Cow;
 use std::ffi::OsStr;
 use std::fmt::{Display, Formatter};
 use std::ops::Deref;
@@ -11,7 +12,7 @@ use rustc_hash::{FxBuildHasher, FxHashMap, FxHashSet};
 use serde::{Deserialize, Serialize};
 use tempfile::TempDir;
 use thiserror::Error;
-use tracing::{error, trace};
+use tracing::trace;
 
 use crate::config::{
     self, BuiltinHook, Config, HookOptions, Language, LocalHook, ManifestHook, MetaHook,
@@ -291,6 +292,10 @@ impl HookBuilder {
             None => Stages::All,
         };
 
+        let priority = options
+            .priority
+            .unwrap_or(u32::try_from(self.idx).expect("idx too large"));
+
         let mut hook = Hook {
             entry,
             stages,
@@ -318,6 +323,7 @@ impl HookBuilder {
             require_serial: options.require_serial.expect("require_serial not set"),
             verbose: options.verbose.expect("verbose not set"),
             minimum_prek_version: options.minimum_prek_version,
+            priority,
         };
 
         if let Err(err) = extract_metadata_from_entry(&mut hook).await {
@@ -435,6 +441,7 @@ pub(crate) struct Hook {
     pub stages: Stages,
     pub verbose: bool,
     pub minimum_prek_version: Option<String>,
+    pub priority: u32,
 }
 
 impl Display for Hook {
@@ -479,7 +486,11 @@ impl Hook {
         matches!(&*self.repo, Repo::Remote { .. })
     }
 
-    pub(crate) fn dependencies(&self) -> &FxHashSet<String> {
+    /// Dependencies used to identify whether an existing hook environment can be reused.
+    ///
+    /// For remote hooks, the repo URL is included to avoid reusing an environment created
+    /// from a different remote repository.
+    pub(crate) fn env_key_dependencies(&self) -> &FxHashSet<String> {
         if !self.is_remote() {
             return &self.additional_dependencies;
         }
@@ -493,6 +504,20 @@ impl Hook {
             deps.insert(self.repo.to_string());
             deps
         })
+    }
+
+    /// Dependencies to pass to language dependency installers.
+    ///
+    /// For remote hooks, this includes the local path to the cloned repository so that
+    /// installers can install the hook's package/project itself.
+    pub(crate) fn install_dependencies(&self) -> Cow<'_, FxHashSet<String>> {
+        if let Some(repo_path) = self.repo_path() {
+            let mut deps = self.additional_dependencies.clone();
+            deps.insert(repo_path.to_string_lossy().to_string());
+            Cow::Owned(deps)
+        } else {
+            Cow::Borrowed(&self.additional_dependencies)
+        }
     }
 }
 
@@ -645,7 +670,7 @@ impl InstallInfo {
 
     pub(crate) fn matches(&self, hook: &Hook) -> bool {
         self.language == hook.language
-            && &self.dependencies == hook.dependencies()
+            && &self.dependencies == hook.env_key_dependencies()
             && hook.language_request.satisfied_by(self)
     }
 }

@@ -7,7 +7,7 @@ use prek_consts::env_vars::EnvVars;
 use tokio::io::AsyncWriteExt;
 use tracing::debug;
 
-use crate::cli::reporter::HookInstallReporter;
+use crate::cli::reporter::{HookInstallReporter, HookRunReporter};
 use crate::hook::{Hook, InstallInfo, InstalledHook};
 use crate::languages::LanguageImpl;
 use crate::languages::python::{Uv, python_exec, query_python_info};
@@ -156,7 +156,7 @@ impl LanguageImpl for Pygrep {
 
         let mut info = InstallInfo::new(
             hook.language,
-            hook.dependencies().clone(),
+            hook.env_key_dependencies().clone(),
             &store.hooks_dir(),
         )?;
         info.with_toolchain(python);
@@ -184,7 +184,10 @@ impl LanguageImpl for Pygrep {
         hook: &InstalledHook,
         filenames: &[&Path],
         store: &Store,
+        reporter: &HookRunReporter,
     ) -> Result<(i32, Vec<u8>)> {
+        let progress = reporter.on_run_start(hook, filenames.len());
+
         let info = hook.install_info().expect("Pygrep hook must be installed");
 
         let cache = store.cache_path(CacheBucket::Python);
@@ -229,6 +232,8 @@ impl LanguageImpl for Pygrep {
             .await
             .context("Failed to wait for command output")?;
         write_task.await.context("Failed to write stdin")??;
+
+        reporter.on_run_complete(progress);
 
         if output.status.success() {
             // When successful, the Python script writes status code JSON to stderr

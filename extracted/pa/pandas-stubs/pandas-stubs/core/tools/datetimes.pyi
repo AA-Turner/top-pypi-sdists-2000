@@ -4,6 +4,7 @@ from datetime import (
     datetime,
 )
 from typing import (
+    Any,
     Literal,
     TypeAlias,
     TypedDict,
@@ -23,7 +24,6 @@ from pandas._libs.tslibs import NaTType
 from pandas._typing import (
     AnyArrayLike,
     DictConvertible,
-    IgnoreRaise,
     RaiseCoerce,
     TimestampConvertibleTypes,
     np_ndarray_dt,
@@ -31,7 +31,7 @@ from pandas._typing import (
     np_ndarray_str,
 )
 
-ArrayConvertible: TypeAlias = list | tuple | AnyArrayLike
+ArrayConvertible: TypeAlias = list[Any] | tuple[Any, ...] | AnyArrayLike
 Scalar: TypeAlias = float | str
 DatetimeScalar: TypeAlias = Scalar | datetime | np.datetime64 | date
 
@@ -60,41 +60,41 @@ class FulldatetimeDict(YearMonthDayDict, total=False):
 @overload
 def to_datetime(
     arg: DatetimeScalar,
-    errors: IgnoreRaise = ...,
-    dayfirst: bool = ...,
-    yearfirst: bool = ...,
-    utc: bool = ...,
-    format: str | None = ...,
-    exact: bool = ...,
-    unit: str | None = ...,
-    origin: Literal["julian", "unix"] | TimestampConvertibleTypes = ...,
-    cache: bool = ...,
+    errors: Literal["raise"] = "raise",
+    dayfirst: bool = False,
+    yearfirst: bool = False,
+    utc: bool = False,
+    format: str | None = None,
+    exact: bool = True,
+    unit: Literal["D", "s", "ms", "us", "ns"] | None = None,
+    origin: Literal["julian", "unix"] | TimestampConvertibleTypes = "unix",
+    cache: bool = True,
 ) -> Timestamp: ...
 @overload
 def to_datetime(
     arg: DatetimeScalar,
     errors: Literal["coerce"],
-    dayfirst: bool = ...,
-    yearfirst: bool = ...,
-    utc: bool = ...,
-    format: str | None = ...,
-    exact: bool = ...,
-    unit: str | None = ...,
-    origin: Literal["julian", "unix"] | TimestampConvertibleTypes = ...,
-    cache: bool = ...,
+    dayfirst: bool = False,
+    yearfirst: bool = False,
+    utc: bool = False,
+    format: str | None = None,
+    exact: bool = True,
+    unit: Literal["D", "s", "ms", "us", "ns"] | None = None,
+    origin: Literal["julian", "unix"] | TimestampConvertibleTypes = "unix",
+    cache: bool = True,
 ) -> Timestamp | NaTType: ...
 @overload
 def to_datetime(
     arg: Series | DictConvertible,
-    errors: RaiseCoerce = ...,
-    dayfirst: bool = ...,
-    yearfirst: bool = ...,
-    utc: bool = ...,
-    format: str | None = ...,
-    exact: bool = ...,
-    unit: str | None = ...,
-    origin: Literal["julian", "unix"] | TimestampConvertibleTypes = ...,
-    cache: bool = ...,
+    errors: RaiseCoerce = "raise",
+    dayfirst: bool = False,
+    yearfirst: bool = False,
+    utc: bool = False,
+    format: str | None = None,
+    exact: bool = True,
+    unit: Literal["D", "s", "ms", "us", "ns"] | None = None,
+    origin: Literal["julian", "unix"] | TimestampConvertibleTypes = "unix",
+    cache: bool = True,
 ) -> Series[Timestamp]: ...
 @overload
 def to_datetime(
@@ -108,13 +108,13 @@ def to_datetime(
         | Index
         | ExtensionArray
     ),
-    errors: RaiseCoerce = ...,
-    dayfirst: bool = ...,
-    yearfirst: bool = ...,
-    utc: bool = ...,
-    format: str | None = ...,
-    exact: bool = ...,
-    unit: str | None = ...,
-    origin: Literal["julian", "unix"] | TimestampConvertibleTypes = ...,
-    cache: bool = ...,
+    errors: RaiseCoerce = "raise",
+    dayfirst: bool = False,
+    yearfirst: bool = False,
+    utc: bool = False,
+    format: str | None = None,
+    exact: bool = True,
+    unit: Literal["D", "s", "ms", "us", "ns"] | None = None,
+    origin: Literal["julian", "unix"] | TimestampConvertibleTypes = "unix",
+    cache: bool = True,
 ) -> DatetimeIndex: ...

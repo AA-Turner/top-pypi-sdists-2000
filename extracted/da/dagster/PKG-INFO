@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: dagster
-Version: 1.12.6
+Version: 1.12.7
 Summary: Dagster is an orchestration platform for the development, production, and observation of data assets.
 Author: Dagster Labs
 Author-email: hello@dagsterlabs.com
@@ -59,13 +59,12 @@ Requires-Dist: universal_pathlib; python_version < "3.12"
 Requires-Dist: universal_pathlib>=0.2.0; python_version >= "3.12"
 Requires-Dist: rich
 Requires-Dist: filelock
-Requires-Dist: dagster-pipes==1.12.6
-Requires-Dist: dagster-shared==1.12.6
+Requires-Dist: dagster-pipes==1.12.7
+Requires-Dist: dagster-shared==1.12.7
 Requires-Dist: antlr4-python3-runtime
 Provides-Extra: docker
 Requires-Dist: docker; extra == "docker"
 Provides-Extra: test
-Requires-Dist: buildkite-test-collector; extra == "test"
 Requires-Dist: docker; extra == "test"
 Requires-Dist: grpcio-tools>=1.44.0; extra == "test"
 Requires-Dist: mypy-protobuf; extra == "test"
@@ -199,7 +198,7 @@ Dagster is built to be used at every stage of the data development lifecycle - l
 
 If you're new to Dagster, we recommend checking out the [docs](https://docs.dagster.io) or following the hands-on [tutorial](https://docs.dagster.io/etl-pipeline-tutorial/).
 
-Dagster is available on PyPI and officially supports Python 3.9 through Python 3.13.
+Dagster is available on PyPI and officially supports Python 3.9 through Python 3.14.
 
 ```bash
 pip install dagster dagster-webserver

@@ -220,7 +220,7 @@ class SecretManager:
             """
             ...
 
-    create: __create_spec
+    create: typing.ClassVar[__create_spec]
 
     class __list_spec(typing_extensions.Protocol):
         def __call__(
@@ -293,7 +293,7 @@ class SecretManager:
             """
             ...
 
-    list: __list_spec
+    list: typing.ClassVar[__list_spec]
 
     class __delete_spec(typing_extensions.Protocol):
         def __call__(
@@ -354,7 +354,7 @@ class SecretManager:
             """
             ...
 
-    delete: __delete_spec
+    delete: typing.ClassVar[__delete_spec]
 
 async def _load_from_env_dict(
     instance: _Secret, load_context: modal._load_context.LoadContext, env_dict: dict[str, str]
@@ -481,8 +481,6 @@ class _Secret(modal._object._Object):
         """Return information about the Secret object."""
         ...
 
-SUPERSELF = typing.TypeVar("SUPERSELF", covariant=True)
-
 class Secret(modal.object.Object):
     """Secrets provide a dictionary of environment variables for images.
 
@@ -605,7 +603,7 @@ class Secret(modal.object.Object):
             """mdmd:hidden"""
             ...
 
-    create_deployed: __create_deployed_spec
+    create_deployed: typing.ClassVar[__create_deployed_spec]
 
     class ___create_deployed_spec(typing_extensions.Protocol):
         def __call__(
@@ -634,9 +632,9 @@ class Secret(modal.object.Object):
             """mdmd:hidden"""
             ...
 
-    _create_deployed: ___create_deployed_spec
+    _create_deployed: typing.ClassVar[___create_deployed_spec]
 
-    class __info_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __info_spec(typing_extensions.Protocol):
         def __call__(self, /) -> SecretInfo:
             """Return information about the Secret object."""
             ...
@@ -645,4 +643,4 @@ class Secret(modal.object.Object):
             """Return information about the Secret object."""
             ...
 
-    info: __info_spec[typing_extensions.Self]
+    info: __info_spec

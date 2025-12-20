@@ -181,8 +181,6 @@ class _ContainerProcess(typing.Generic[T]):
         """mdmd:hidden"""
         ...
 
-SUPERSELF = typing.TypeVar("SUPERSELF", covariant=True)
-
 class ContainerProcess(typing.Generic[T]):
     """Represents a running process in a container."""
     def __init__(
@@ -216,7 +214,7 @@ class ContainerProcess(typing.Generic[T]):
     @property
     def returncode(self) -> int: ...
 
-    class __poll_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __poll_spec(typing_extensions.Protocol):
         def __call__(self, /) -> typing.Optional[int]:
             """Check if the container process has finished running.
 
@@ -231,9 +229,9 @@ class ContainerProcess(typing.Generic[T]):
             """
             ...
 
-    poll: __poll_spec[typing_extensions.Self]
+    poll: __poll_spec
 
-    class __wait_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __wait_spec(typing_extensions.Protocol):
         def __call__(self, /) -> int:
             """Wait for the container process to finish running. Returns the exit code."""
             ...
@@ -242,9 +240,9 @@ class ContainerProcess(typing.Generic[T]):
             """Wait for the container process to finish running. Returns the exit code."""
             ...
 
-    wait: __wait_spec[typing_extensions.Self]
+    wait: __wait_spec
 
-    class __attach_spec(typing_extensions.Protocol[SUPERSELF]):
+    class __attach_spec(typing_extensions.Protocol):
         def __call__(self, /):
             """mdmd:hidden"""
             ...
@@ -253,4 +251,4 @@ class ContainerProcess(typing.Generic[T]):
             """mdmd:hidden"""
             ...
 
-    attach: __attach_spec[typing_extensions.Self]
+    attach: __attach_spec

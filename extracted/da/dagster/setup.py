@@ -111,14 +111,13 @@ setup(
         "universal_pathlib>=0.2.0; python_version>='3.12'",
         "rich",
         "filelock",
-        "dagster-pipes==1.12.6",
-        "dagster-shared==1.12.6",
+        "dagster-pipes==1.12.7",
+        "dagster-shared==1.12.7",
         "antlr4-python3-runtime",
     ],
     extras_require={
         "docker": ["docker"],
         "test": [
-            "buildkite-test-collector",
             "docker",
             f"grpcio-tools>={GRPC_VERSION_FLOOR}",
             "mypy-protobuf",

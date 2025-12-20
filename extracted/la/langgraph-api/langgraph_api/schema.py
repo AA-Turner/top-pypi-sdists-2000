@@ -354,6 +354,9 @@ ASSISTANT_ENCRYPTION_FIELDS = ["metadata", "config", "context"]
 # payload is a nested blob - its subfields are decrypted automatically by the middleware
 CRON_ENCRYPTION_FIELDS = ["metadata", "payload"]
 
+# Store encryption - only the value field contains user data
+STORE_ENCRYPTION_FIELDS = ["value"]
+
 # The middleware automatically decrypts these subfields when decrypting the parent field.
 # This is recursive: if a subfield is also in NESTED_ENCRYPTED_SUBFIELDS, its subfields
 # are decrypted too (e.g., run.kwargs.config.configurable).

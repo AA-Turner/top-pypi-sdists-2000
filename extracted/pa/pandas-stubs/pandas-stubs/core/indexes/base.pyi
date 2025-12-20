@@ -10,6 +10,7 @@ from datetime import (
     timedelta,
 )
 from pathlib import Path
+import sys
 from typing import (
     Any,
     ClassVar,
@@ -39,9 +40,9 @@ from pandas.core.base import (
     IndexOpsMixin,
     IndexReal,
     ScalarArrayIndexComplex,
-    ScalarArrayIndexIntNoBool,
     ScalarArrayIndexJustComplex,
     ScalarArrayIndexJustFloat,
+    ScalarArrayIndexJustInt,
     ScalarArrayIndexReal,
     ScalarArrayIndexTimedelta,
     Supports_ProtoAdd,
@@ -102,7 +103,11 @@ from pandas._typing import (
     Level,
     MaskType,
     NaPosition,
+    NDArrayT,
     NumpyFloatNot16DtypeArg,
+    NumpyNotTimeDtypeArg,
+    NumpyTimedeltaDtypeArg,
+    NumpyTimestampDtypeArg,
     PandasAstypeFloatDtypeArg,
     PandasFloatDtypeArg,
     PyArrowFloatDtypeArg,
@@ -142,7 +147,7 @@ FloatNotNumpy16DtypeArg: TypeAlias = (
 class InvalidIndexError(Exception): ...
 
 class Index(IndexOpsMixin[S1], ElementOpsMixin[S1]):
-    __hash__: ClassVar[None]  # type: ignore[assignment]  # pyright: ignore[reportIncompatibleMethodOverride]
+    __hash__: ClassVar[None]  # type: ignore[assignment] # pyright: ignore[reportIncompatibleMethodOverride]
     # overloads with additional dtypes
     @overload
     def __new__(  # pyright: ignore[reportOverlappingOverload]
@@ -367,14 +372,28 @@ class Index(IndexOpsMixin[S1], ElementOpsMixin[S1]):
     @final
     def is_(self, other: Any) -> bool: ...
     def __len__(self) -> int: ...
-    def __array__(
-        self, dtype: _str | np.dtype = ..., copy: bool | None = ...
-    ) -> np_1darray: ...
+    if sys.version_info >= (3, 11):
+        def __array__(
+            self, dtype: _str | np.dtype = ..., copy: bool | None = ...
+        ) -> np_1darray: ...
+    else:
+        def __array__(
+            self, dtype: _str | np.dtype[Any] = ..., copy: bool | None = ...
+        ) -> np_1darray: ...
+
     @property
     def dtype(self) -> DtypeObj: ...
     @final
     def ravel(self, order: _str = "C") -> Self: ...
-    def view(self, cls=...): ...
+    @overload
+    def view(self, cls: None = None) -> Self: ...
+    @overload
+    def view(self, cls: type[NDArrayT]) -> NDArrayT: ...
+    @overload
+    def view(
+        self,
+        cls: NumpyNotTimeDtypeArg | NumpyTimedeltaDtypeArg | NumpyTimestampDtypeArg,
+    ) -> np_1darray: ...
     @overload
     def astype(
         self,
@@ -396,7 +415,10 @@ class Index(IndexOpsMixin[S1], ElementOpsMixin[S1]):
     ) -> Self: ...
     def copy(self, name: Hashable = ..., deep: bool = False) -> Self: ...
     def format(
-        self, name: bool = ..., formatter: Callable | None = ..., na_rep: _str = ...
+        self,
+        name: bool = ...,
+        formatter: Callable[..., Any] | None = ...,
+        na_rep: _str = ...,
     ) -> list[_str]: ...
     def to_series(
         self, index: Index | None = None, name: Hashable | None = None
@@ -462,7 +484,7 @@ class Index(IndexOpsMixin[S1], ElementOpsMixin[S1]):
     def intersection(
         self, other: list[S1] | Self, sort: bool | None = False
     ) -> Self: ...
-    def difference(self, other: list | Self, sort: bool | None = None) -> Self: ...
+    def difference(self, other: list[Any] | Self, sort: bool | None = None) -> Self: ...
     def symmetric_difference(
         self,
         other: list[S1] | Self,
@@ -596,7 +618,11 @@ class Index(IndexOpsMixin[S1], ElementOpsMixin[S1]):
     def insert(self, loc: int, item: S1) -> Self: ...
     @overload
     def insert(self, loc: int, item: object) -> Index: ...
-    def drop(self, labels, errors: IgnoreRaise = "raise") -> Self: ...
+    def drop(
+        self,
+        labels: IndexOpsMixin | np_ndarray | Iterable[Hashable],
+        errors: IgnoreRaise = "raise",
+    ) -> Self: ...
     @property
     def shape(self) -> tuple[int, ...]: ...
     # Extra methods from old stubs
@@ -607,7 +633,7 @@ class Index(IndexOpsMixin[S1], ElementOpsMixin[S1]):
     def __lt__(self, other: Self | S1) -> np_1darray_bool: ...  # type: ignore[override] # pyright: ignore[reportIncompatibleMethodOverride]
     def __gt__(self, other: Self | S1) -> np_1darray_bool: ...  # type: ignore[override] # pyright: ignore[reportIncompatibleMethodOverride]
     @overload
-    def __add__(self: Index[Never], other: _str) -> Never: ...
+    def __add__(self: Index[Never], other: _str) -> Index[_str]: ...
     @overload
     def __add__(
         self: Index[Never], other: complex | ArrayLike | SequenceNotStr[S1] | Index
@@ -661,7 +687,7 @@ class Index(IndexOpsMixin[S1], ElementOpsMixin[S1]):
         self: Index[_str], other: np_ndarray_str | Index[_str]
     ) -> Index[_str]: ...
     @overload
-    def __radd__(self: Index[Never], other: _str) -> Never: ...
+    def __radd__(self: Index[Never], other: _str) -> Index[_str]: ...
     @overload
     def __radd__(
         self: Index[Never], other: complex | ArrayLike | SequenceNotStr[S1] | Index
@@ -1012,7 +1038,7 @@ class Index(IndexOpsMixin[S1], ElementOpsMixin[S1]):
     ) -> Index[float]: ...
     @overload
     def __truediv__(
-        self: Index[bool] | Index[int], other: ScalarArrayIndexIntNoBool
+        self: Index[bool] | Index[int], other: ScalarArrayIndexJustInt
     ) -> Index[float]: ...
     @overload
     def __truediv__(
@@ -1063,7 +1089,7 @@ class Index(IndexOpsMixin[S1], ElementOpsMixin[S1]):
     ) -> Index[float]: ...
     @overload
     def __rtruediv__(
-        self: Index[bool] | Index[int], other: ScalarArrayIndexIntNoBool
+        self: Index[bool] | Index[int], other: ScalarArrayIndexJustInt
     ) -> Index[float]: ...
     @overload
     def __rtruediv__(  # type: ignore[misc]

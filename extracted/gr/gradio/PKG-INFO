@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: gradio
-Version: 6.1.0
+Version: 6.2.0
 Summary: Python library for easily interacting with trained machine learning models
 Project-URL: Homepage, https://github.com/gradio-app/gradio
 Author-email: Abubakar Abid <gradio-team@huggingface.co>, Ali Abid <gradio-team@huggingface.co>, Ali Abdalla <gradio-team@huggingface.co>, Dawood Khan <gradio-team@huggingface.co>, Ahsen Khaliq <gradio-team@huggingface.co>, Pete Allen <gradio-team@huggingface.co>, Ömer Faruk Özdemir <gradio-team@huggingface.co>, Freddy A Boulton <gradio-team@huggingface.co>, Hannah Blair <gradio-team@huggingface.co>
@@ -25,7 +25,7 @@ Requires-Dist: audioop-lts<1.0; python_version >= '3.13'
 Requires-Dist: brotli>=1.1.0
 Requires-Dist: fastapi<1.0,>=0.115.2
 Requires-Dist: ffmpy
-Requires-Dist: gradio-client==2.0.1
+Requires-Dist: gradio-client==2.0.2
 Requires-Dist: groovy~=0.1
 Requires-Dist: httpx<1.0,>=0.24.1
 Requires-Dist: huggingface-hub<2.0,>=0.33.5
@@ -36,7 +36,7 @@ Requires-Dist: orjson~=3.0
 Requires-Dist: packaging
 Requires-Dist: pandas<3.0,>=1.0
 Requires-Dist: pillow<13.0,>=8.0
-Requires-Dist: pydantic<=2.12.4,>=2.11.10
+Requires-Dist: pydantic<=3.0,>=2.0
 Requires-Dist: pydub
 Requires-Dist: python-multipart>=0.0.18
 Requires-Dist: pyyaml<7.0,>=5.0
@@ -49,7 +49,7 @@ Requires-Dist: typing-extensions~=4.0
 Requires-Dist: uvicorn>=0.14.0
 Provides-Extra: mcp
 Requires-Dist: mcp<2.0.0,>=1.21.0; extra == 'mcp'
-Requires-Dist: pydantic>=2.11; extra == 'mcp'
+Requires-Dist: pydantic<=2.12.5,>=2.11.10; extra == 'mcp'
 Provides-Extra: oauth
 Requires-Dist: authlib; extra == 'oauth'
 Requires-Dist: itsdangerous; extra == 'oauth'

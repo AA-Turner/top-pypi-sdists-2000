@@ -51,10 +51,10 @@ EXTRAS_REQUIRE = {
     "ipex": "optimum-intel[ipex]>=1.23.0",
     "nncf": "optimum-intel[nncf]>=1.23.0",
     "neural-compressor": "optimum-intel[neural-compressor]>=1.23.0",
-    "openvino": "optimum-intel[openvino]>=1.23.0",
     "onnx": "optimum-onnx",
     "onnxruntime": "optimum-onnx[onnxruntime]",
     "onnxruntime-gpu": "optimum-onnx[onnxruntime-gpu]",
+    "openvino": "optimum-intel[openvino]>=1.23.0",
     "quanto": "optimum-quanto>=0.2.4",
     ###########################################################################
     "dev": TESTS_REQUIRE + QUALITY_REQUIRE,

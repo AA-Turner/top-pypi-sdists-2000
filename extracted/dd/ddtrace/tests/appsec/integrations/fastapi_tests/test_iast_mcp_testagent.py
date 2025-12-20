@@ -6,6 +6,7 @@ management and taint tracking.
 
 Includes both in-memory MCP connections and HTTP/SSE-based streaming tests.
 """
+
 from contextlib import asynccontextmanager
 import json
 import sys
@@ -27,7 +28,7 @@ from tests.appsec.integrations.utils_testagent import _get_span
 
 # Common environment configuration for MCP IAST tests
 MCP_IAST_ENV = {
-    "_DD_IAST_PATCH_MODULES": ("benchmarks.," "tests.appsec.," "tests.appsec.integrations.fastapi_tests.mcp_app."),
+    "_DD_IAST_PATCH_MODULES": ("benchmarks.,tests.appsec.,tests.appsec.integrations.fastapi_tests.mcp_app."),
 }
 
 
@@ -650,18 +651,18 @@ async def test_iast_mcp_sse_streaming_stress_test_hundreds(iast_test_token):
 
                     expected_result = i + (i * 2)
                     actual_result = json.loads(result.content[0].text)["result"]
-                    assert (
-                        actual_result == expected_result
-                    ), f"Wrong result at iteration {i}: expected {expected_result}, got {actual_result}"
+                    assert actual_result == expected_result, (
+                        f"Wrong result at iteration {i}: expected {expected_result}, got {actual_result}"
+                    )
 
                     successful_calls += 1
                 except Exception as e:
                     errors.append((i, str(e)))
 
             # Assert that most calls succeeded (allow for some transient failures)
-            assert (
-                successful_calls >= NUM_ITERATIONS * 0.95
-            ), f"Too many failures: {len(errors)}/{NUM_ITERATIONS}. Errors: {errors[:10]}"
+            assert successful_calls >= NUM_ITERATIONS * 0.95, (
+                f"Too many failures: {len(errors)}/{NUM_ITERATIONS}. Errors: {errors[:10]}"
+            )
             assert len(errors) == 0, f"Errors occurred during stress test: {errors}"
 
     response_tracer = _get_span(iast_test_token)
