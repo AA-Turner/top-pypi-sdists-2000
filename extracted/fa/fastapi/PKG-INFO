@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: fastapi
-Version: 0.125.0
+Version: 0.126.0
 Summary: FastAPI framework, high performance, easy to learn, fast to code, ready for production
 Author-Email: =?utf-8?q?Sebasti=C3=A1n_Ram=C3=ADrez?= <tiangolo@gmail.com>
 License-Expression: MIT
@@ -21,7 +21,6 @@ Classifier: Environment :: Web Environment
 Classifier: Framework :: AsyncIO
 Classifier: Framework :: FastAPI
 Classifier: Framework :: Pydantic
-Classifier: Framework :: Pydantic :: 1
 Classifier: Framework :: Pydantic :: 2
 Classifier: Intended Audience :: Developers
 Classifier: Programming Language :: Python :: 3 :: Only
@@ -40,7 +39,7 @@ Project-URL: Issues, https://github.com/fastapi/fastapi/issues
 Project-URL: Changelog, https://fastapi.tiangolo.com/release-notes/
 Requires-Python: >=3.9
 Requires-Dist: starlette<0.51.0,>=0.40.0
-Requires-Dist: pydantic!=1.8,!=1.8.1,!=2.0.0,!=2.0.1,!=2.1.0,<3.0.0,>=1.7.4
+Requires-Dist: pydantic>=2.7.0
 Requires-Dist: typing-extensions>=4.8.0
 Requires-Dist: annotated-doc>=0.0.2
 Provides-Extra: standard
@@ -50,6 +49,8 @@ Requires-Dist: jinja2>=3.1.5; extra == "standard"
 Requires-Dist: python-multipart>=0.0.18; extra == "standard"
 Requires-Dist: email-validator>=2.0.0; extra == "standard"
 Requires-Dist: uvicorn[standard]>=0.12.0; extra == "standard"
+Requires-Dist: pydantic-settings>=2.0.0; extra == "standard"
+Requires-Dist: pydantic-extra-types>=2.0.0; extra == "standard"
 Provides-Extra: standard-no-fastapi-cloud-cli
 Requires-Dist: fastapi-cli[standard-no-fastapi-cloud-cli]>=0.0.8; extra == "standard-no-fastapi-cloud-cli"
 Requires-Dist: httpx<1.0.0,>=0.23.0; extra == "standard-no-fastapi-cloud-cli"
@@ -57,6 +58,8 @@ Requires-Dist: jinja2>=3.1.5; extra == "standard-no-fastapi-cloud-cli"
 Requires-Dist: python-multipart>=0.0.18; extra == "standard-no-fastapi-cloud-cli"
 Requires-Dist: email-validator>=2.0.0; extra == "standard-no-fastapi-cloud-cli"
 Requires-Dist: uvicorn[standard]>=0.12.0; extra == "standard-no-fastapi-cloud-cli"
+Requires-Dist: pydantic-settings>=2.0.0; extra == "standard-no-fastapi-cloud-cli"
+Requires-Dist: pydantic-extra-types>=2.0.0; extra == "standard-no-fastapi-cloud-cli"
 Provides-Extra: all
 Requires-Dist: fastapi-cli[standard]>=0.0.8; extra == "all"
 Requires-Dist: httpx<1.0.0,>=0.23.0; extra == "all"

@@ -34,7 +34,6 @@ classifiers = [
     "Framework :: AsyncIO",
     "Framework :: FastAPI",
     "Framework :: Pydantic",
-    "Framework :: Pydantic :: 1",
     "Framework :: Pydantic :: 2",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3 :: Only",
@@ -49,11 +48,11 @@ classifiers = [
 ]
 dependencies = [
     "starlette>=0.40.0,<0.51.0",
-    "pydantic>=1.7.4,!=1.8,!=1.8.1,!=2.0.0,!=2.0.1,!=2.1.0,<3.0.0",
+    "pydantic>=2.7.0",
     "typing-extensions>=4.8.0",
     "annotated-doc>=0.0.2",
 ]
-version = "0.125.0"
+version = "0.126.0"
 
 [project.urls]
 Homepage = "https://github.com/fastapi/fastapi"
@@ -70,6 +69,8 @@ standard = [
     "python-multipart >=0.0.18",
     "email-validator >=2.0.0",
     "uvicorn[standard] >=0.12.0",
+    "pydantic-settings >=2.0.0",
+    "pydantic-extra-types >=2.0.0",
 ]
 standard-no-fastapi-cloud-cli = [
     "fastapi-cli[standard-no-fastapi-cloud-cli] >=0.0.8",
@@ -78,6 +79,8 @@ standard-no-fastapi-cloud-cli = [
     "python-multipart >=0.0.18",
     "email-validator >=2.0.0",
     "uvicorn[standard] >=0.12.0",
+    "pydantic-settings >=2.0.0",
+    "pydantic-extra-types >=2.0.0",
 ]
 all = [
     "fastapi-cli[standard] >=0.0.8",
@@ -152,7 +155,6 @@ filterwarnings = [
     "ignore:You seem to already have a custom.*:RuntimeWarning:trio",
     "ignore:datetime\\.datetime\\.utcfromtimestamp\\(\\) is deprecated and scheduled for removal in a future version\\..*:DeprecationWarning:sqlalchemy",
     "ignore:The `hash` argument is deprecated*:DeprecationWarning:trio",
-    "ignore:Exception ignored in. <sqlite3\\.Connection object.*:pytest.PytestUnraisableExceptionWarning",
 ]
 
 [tool.coverage.run]

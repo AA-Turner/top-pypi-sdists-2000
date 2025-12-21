@@ -430,7 +430,7 @@ async def collect_graphs_from_env(register: bool = False) -> None:
 def _handle_exception(task: asyncio.Task) -> None:
     try:
         task.result()
-    except asyncio.CancelledError:
+    except (asyncio.CancelledError, SystemExit):
         pass
     except Exception as e:
         logger.exception("Task failed", exc_info=e)

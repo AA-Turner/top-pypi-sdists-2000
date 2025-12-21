@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: datamodel-code-generator
-Version: 0.45.0
+Version: 0.46.0
 Summary: Datamodel Code Generator
 Project-URL: Homepage, https://github.com/koxudaxi/datamodel-code-generator
 Project-URL: Source, https://github.com/koxudaxi/datamodel-code-generator
@@ -11,14 +11,13 @@ Classifier: Development Status :: 4 - Beta
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Natural Language :: English
 Classifier: Programming Language :: Python :: 3 :: Only
-Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
 Classifier: Programming Language :: Python :: 3.14
 Classifier: Programming Language :: Python :: Implementation :: CPython
-Requires-Python: >=3.9
+Requires-Python: >=3.10
 Requires-Dist: argcomplete<4,>=2.10.1
 Requires-Dist: black>=19.10b0
 Requires-Dist: genson<2,>=1.2.1
@@ -89,13 +88,18 @@ Description-Content-Type: text/markdown
 ## 📦 Installation
 
 ```bash
-pip install datamodel-code-generator
+uv tool install datamodel-code-generator
 ```
 
 <details>
 <summary>Other installation methods</summary>
 
-**uv:**
+**pip:**
+```bash
+pip install datamodel-code-generator
+```
+
+**uv (add to project):**
 ```bash
 uv add datamodel-code-generator
 ```

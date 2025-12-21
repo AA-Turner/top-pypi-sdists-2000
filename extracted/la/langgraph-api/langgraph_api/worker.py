@@ -116,11 +116,12 @@ async def worker(
     resumable = run["kwargs"].get("resumable", False)
     run_created_at_dt = run["created_at"]
     run_created_at = run["created_at"].isoformat()
+    thread_id = str(run.get("thread_id"))
     lg_logging.set_logging_context(
         {
             "run_id": str(run_id),
             "run_attempt": attempt,
-            "thread_id": str(run.get("thread_id")),
+            "thread_id": thread_id,
             "assistant_id": str(run.get("assistant_id")),
             "graph_id": str(_get_graph_id(run)),
             "request_id": str(_get_request_id(run)),
@@ -165,6 +166,8 @@ async def worker(
             if not isinstance(e, UserRollback | UserInterrupt):
                 logger.exception(
                     f"Run encountered an error in graph: {type(e)}({e})",
+                    run_id=str(run_id),
+                    thread_id=thread_id,
                 )
             # TimeoutError is a special case where we rely on asyncio.wait_for to timeout runs
             # Convert user TimeoutErrors to a custom class so we can distinguish and later convert back

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: humanize
-Version: 4.14.0
+Version: 4.15.0
 Summary: Python humanize utilities
 Project-URL: Documentation, https://humanize.readthedocs.io/
 Project-URL: Funding, https://tidelift.com/subscription/pkg/pypi-humanize?utm_source=pypi-humanize&utm_medium=pypi
@@ -23,6 +23,7 @@ Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
 Classifier: Programming Language :: Python :: 3.14
+Classifier: Programming Language :: Python :: 3.15
 Classifier: Programming Language :: Python :: Implementation :: CPython
 Classifier: Programming Language :: Python :: Implementation :: PyPy
 Classifier: Topic :: Text Processing

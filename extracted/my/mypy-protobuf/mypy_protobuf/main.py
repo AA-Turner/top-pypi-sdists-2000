@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import ast
+import enum
 import sys
 from collections import defaultdict
 from contextlib import contextmanager
@@ -26,7 +27,7 @@ from google.protobuf.internal.well_known_types import WKTBASES
 
 from . import extensions_pb2
 
-__version__ = "3.7.0"
+__version__ = "4.0.0"
 
 # SourceCodeLocation is defined by `message Location` here
 # https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/descriptor.proto
@@ -87,11 +88,6 @@ PROTO_ENUM_RESERVED = {
 }
 
 
-def _build_typevar_name(service_name: str, method_name: str) -> str:
-    # Prefix with underscore to avoid public api error: https://stackoverflow.com/a/78871465
-    return f"_{service_name}{method_name}Type"
-
-
 def _mangle_global_identifier(name: str) -> str:
     """
     Module level identifiers are mangled and aliased so that they can be disambiguated
@@ -119,9 +115,9 @@ class Descriptors(object):
             prefix: str,
             _fd: d.FileDescriptorProto,
         ) -> None:
-            for enum in enums:
-                self.message_to_fd[prefix + enum.name] = _fd
-                self.message_to_fd[prefix + enum.name + ".ValueType"] = _fd
+            for enum_proto in enums:
+                self.message_to_fd[prefix + enum_proto.name] = _fd
+                self.message_to_fd[prefix + enum_proto.name + ".ValueType"] = _fd
 
         def _add_messages(
             messages: "RepeatedCompositeFieldContainer[d.DescriptorProto]",
@@ -141,6 +137,34 @@ class Descriptors(object):
             _add_enums(fd.enum_type, start_prefix, fd)
 
 
+class GRPCType(enum.Enum):
+    SYNC = "SYNC"
+    ASYNC = "ASYNC"
+    BOTH = "BOTH"
+
+    @classmethod
+    def from_parameter(cls, parameter: str) -> GRPCType:
+        has_sync = "only_sync" in parameter
+        has_async = "only_async" in parameter
+
+        if has_sync and has_async:
+            raise ValueError("Cannot specify both only_sync and only_async")
+        elif has_sync:
+            return GRPCType.SYNC
+        elif has_async:
+            return GRPCType.ASYNC
+        else:
+            return GRPCType.BOTH
+
+    @property
+    def supports_sync(self) -> bool:
+        return self in (GRPCType.SYNC, GRPCType.BOTH)
+
+    @property
+    def supports_async(self) -> bool:
+        return self in (GRPCType.ASYNC, GRPCType.BOTH)
+
+
 class PkgWriter(object):
     """Writes a single pyi file"""
 
@@ -151,14 +175,18 @@ class PkgWriter(object):
         readable_stubs: bool,
         relax_strict_optional_primitives: bool,
         use_default_deprecation_warnings: bool,
+        generate_concrete_servicer_stubs: bool,
         grpc: bool,
+        grpc_type: GRPCType = GRPCType.BOTH,
     ) -> None:
         self.fd = fd
         self.descriptors = descriptors
         self.readable_stubs = readable_stubs
         self.relax_strict_optional_primitives = relax_strict_optional_primitives
         self.use_default_depreaction_warnings = use_default_deprecation_warnings
+        self.generate_concrete_servicer_stubs = generate_concrete_servicer_stubs
         self.grpc = grpc
+        self.grpc_type = grpc_type
         self.lines: List[str] = []
         self.indent = ""
 
@@ -178,7 +206,7 @@ class PkgWriter(object):
         eg. self._import("typing", "Literal") -> "Literal"
         """
         if path == "typing_extensions":
-            stabilization = {"TypeAlias": (3, 10), "TypeVar": (3, 13)}
+            stabilization = {"TypeAlias": (3, 10), "TypeVar": (3, 13), "type_check_only": (3, 12)}
             assert name in stabilization
             if not self.typing_extensions_min or self.typing_extensions_min < stabilization[name]:
                 self.typing_extensions_min = stabilization[name]
@@ -383,12 +411,12 @@ class PkgWriter(object):
         scl_prefix: SourceCodeLocation,
     ) -> None:
         wl = self._write_line
-        for i, enum in enumerate(enums):
-            class_name = enum.name if enum.name not in PYTHON_RESERVED else "_r_" + enum.name
+        for i, enum_proto in enumerate(enums):
+            class_name = enum_proto.name if enum_proto.name not in PYTHON_RESERVED else "_r_" + enum_proto.name
             value_type_fq = prefix + class_name + ".ValueType"
-            enum_helper_class = "_" + enum.name
+            enum_helper_class = "_" + enum_proto.name
             value_type_helper_fq = prefix + enum_helper_class + ".ValueType"
-            etw_helper_class = "_" + enum.name + "EnumTypeWrapper"
+            etw_helper_class = "_" + enum_proto.name + "EnumTypeWrapper"
             scl = scl_prefix + [i]
 
             wl(f"class {enum_helper_class}:")
@@ -412,13 +440,13 @@ class PkgWriter(object):
                 ed = self._import("google.protobuf.descriptor", "EnumDescriptor")
                 wl(f"DESCRIPTOR: {ed}")
                 self.write_enum_values(
-                    [(i, v) for i, v in enumerate(enum.value) if v.name not in PROTO_ENUM_RESERVED],
+                    [(i, v) for i, v in enumerate(enum_proto.value) if v.name not in PROTO_ENUM_RESERVED],
                     value_type_helper_fq,
                     scl + [d.EnumDescriptorProto.VALUE_FIELD_NUMBER],
                 )
             wl("")
 
-            if enum.options.deprecated:
+            if enum_proto.options.deprecated:
                 self._write_deprecation_warning(
                     scl + [d.EnumDescriptorProto.OPTIONS_FIELD_NUMBER] + [d.EnumOptions.DEPRECATED_FIELD_NUMBER],
                     "This enum has been marked as deprecated using proto enum options.",
@@ -434,7 +462,7 @@ class PkgWriter(object):
                     wl("")
 
             self.write_enum_values(
-                enumerate(enum.value),
+                enumerate(enum_proto.value),
                 value_type_fq,
                 scl + [d.EnumDescriptorProto.VALUE_FIELD_NUMBER],
             )
@@ -447,6 +475,7 @@ class PkgWriter(object):
         messages: Iterable[d.DescriptorProto],
         prefix: str,
         scl_prefix: SourceCodeLocation,
+        file_field_presence: d.FeatureSet.FieldPresence.ValueType = d.FeatureSet.FieldPresence.FIELD_PRESENCE_UNKNOWN,
     ) -> None:
         wl = self._write_line
 
@@ -490,11 +519,7 @@ class PkgWriter(object):
                     qualified_name + ".",
                     scl + [d.DescriptorProto.ENUM_TYPE_FIELD_NUMBER],
                 )
-                self.write_messages(
-                    desc.nested_type,
-                    qualified_name + ".",
-                    scl + [d.DescriptorProto.NESTED_TYPE_FIELD_NUMBER],
-                )
+                self.write_messages(desc.nested_type, qualified_name + ".", scl + [d.DescriptorProto.NESTED_TYPE_FIELD_NUMBER], file_field_presence=file_field_presence)
 
                 # integer constants  for field numbers
                 for f in desc.field:
@@ -540,28 +565,36 @@ class PkgWriter(object):
                         # See https://github.com/nipunn1313/mypy-protobuf/issues/71
                         wl("*,")
                     for field in constructor_fields:
+                        implicit_presence = self.get_field_presence(file_field_presence, field.options.features) == d.FeatureSet.FieldPresence.IMPLICIT
                         field_type = self.python_type(field, generic_container=True)
-                        if self.fd.syntax == "proto3" and is_scalar(field) and field.label != d.FieldDescriptorProto.LABEL_REPEATED and not self.relax_strict_optional_primitives and not field.proto3_optional:
+                        if (implicit_presence and self.fd.syntax == "editions") or (self.fd.syntax == "proto3" and is_scalar(field) and field.label != d.FieldDescriptorProto.LABEL_REPEATED and not self.relax_strict_optional_primitives and not field.proto3_optional):
                             wl(f"{field.name}: {field_type} = ...,")
                         else:
                             wl(f"{field.name}: {field_type} | None = ...,")
                 wl(") -> None: ...")
 
-                self.write_stringly_typed_fields(desc)
+                self.write_stringly_typed_fields(desc, file_field_presence)
 
             if prefix == "" and not self.readable_stubs:
                 wl("")
                 wl(f"{_mangle_global_identifier(class_name)}: {self._import('typing_extensions', 'TypeAlias')} = {class_name}")
             wl("")
 
-    def write_stringly_typed_fields(self, desc: d.DescriptorProto) -> None:
+    @staticmethod
+    def get_field_presence(file_field_presence: d.FeatureSet.FieldPresence.ValueType, field_feature_set: d.FeatureSet) -> d.FeatureSet.FieldPresence.ValueType:
+        presence = file_field_presence
+        if field_feature_set.HasField("field_presence"):
+            presence = field_feature_set.field_presence
+        return presence
+
+    def write_stringly_typed_fields(self, desc: d.DescriptorProto, file_field_presence: d.FeatureSet.FieldPresence.ValueType) -> None:
         """Type the stringly-typed methods as a Union[Literal, Literal ...]"""
         wl = self._write_line
         # HasField, ClearField, WhichOneof accepts both bytes/str
         # HasField only supports singular. ClearField supports repeated as well
         # In proto3, HasField only supports message fields and optional fields
         # HasField always supports oneof fields
-        hf_fields = [f.name for f in desc.field if f.HasField("oneof_index") or (f.label != d.FieldDescriptorProto.LABEL_REPEATED and (self.fd.syntax != "proto3" or f.type == d.FieldDescriptorProto.TYPE_MESSAGE or f.proto3_optional))]
+        hf_fields = [f.name for f in desc.field if f.HasField("oneof_index") or (self.fd.syntax == "editions" and self.get_field_presence(file_field_presence, f.options.features) != d.FeatureSet.FieldPresence.IMPLICIT) or (f.label != d.FieldDescriptorProto.LABEL_REPEATED and (self.fd.syntax in ("proto2", "") or f.type == d.FieldDescriptorProto.TYPE_MESSAGE or f.proto3_optional))]
         cf_fields = [f.name for f in desc.field]
         wo_fields = {oneof.name: [f.name for f in desc.field if f.HasField("oneof_index") and f.oneof_index == idx] for idx, oneof in enumerate(desc.oneof_decl)}
 
@@ -575,30 +608,42 @@ class PkgWriter(object):
             return
 
         if hf_fields:
+            wl("_HasFieldArgType: {} = {}[{}]", self._import("typing_extensions", "TypeAlias"), self._import("typing", "Literal"), hf_fields_text)
             wl(
-                "def HasField(self, field_name: {}[{}]) -> {}: ...",
-                self._import("typing", "Literal"),
-                hf_fields_text,
+                "def HasField(self, field_name: _HasFieldArgType) -> {}: ...",
                 self._builtin("bool"),
             )
         if cf_fields:
+            wl("_ClearFieldArgType: {} = {}[{}]", self._import("typing_extensions", "TypeAlias"), self._import("typing", "Literal"), cf_fields_text)
             wl(
-                "def ClearField(self, field_name: {}[{}]) -> None: ...",
-                self._import("typing", "Literal"),
-                cf_fields_text,
+                "def ClearField(self, field_name: _ClearFieldArgType) -> None: ...",
             )
 
+        # Write type aliases first so overloads are not interrupted
         for wo_field, members in sorted(wo_fields.items()):
-            if len(wo_fields) > 1:
-                wl("@{}", self._import("typing", "overload"))
             wl(
-                "def WhichOneof(self, oneof_group: {}[{}]) -> {}[{}] | None: ...",
-                self._import("typing", "Literal"),
-                # Accepts both str and bytes
-                f'"{wo_field}", b"{wo_field}"',
+                "_WhichOneofReturnType_{}: {} = {}[{}]",
+                wo_field,
+                self._import("typing_extensions", "TypeAlias"),
                 self._import("typing", "Literal"),
                 # Returns `str`
                 ", ".join(f'"{m}"' for m in members),
+            )
+            wl(
+                "_WhichOneofArgType_{}: {} = {}[{}]",
+                wo_field,
+                self._import("typing_extensions", "TypeAlias"),
+                self._import("typing", "Literal"),
+                # Accepts both str and bytes
+                f'"{wo_field}", b"{wo_field}"',
+            )
+        for wo_field, _ in sorted(wo_fields.items()):
+            if len(wo_fields) > 1:
+                wl("@{}", self._import("typing", "overload"))
+            wl(
+                "def WhichOneof(self, oneof_group: {}) -> {} | None: ...",
+                f"_WhichOneofArgType_{wo_field}",
+                f"_WhichOneofReturnType_{wo_field}",
             )
 
     def write_extensions(
@@ -688,6 +733,7 @@ class PkgWriter(object):
                 self._import("google.protobuf.service", "Service"),
                 self._import("abc", "ABCMeta"),
             )
+            # The servicer interface
             with self._indent():
                 if self._write_comments(scl):
                     wl("")
@@ -751,8 +797,13 @@ class PkgWriter(object):
     def _servicer_input_type(self, method: d.MethodDescriptorProto) -> str:
         result = self._import_message(method.input_type)
         if method.client_streaming:
-            # See write_grpc_async_hacks().
-            result = f"_MaybeAsyncIterator[{result}]"
+            # See write_grpc_iterator_type().
+            if self.grpc_type == GRPCType.SYNC:
+                result = f'{self._import("collections.abc", "Iterator")}[{result}]'
+            elif self.grpc_type == GRPCType.ASYNC:
+                result = f'{self._import("collections.abc", "AsyncIterator")}[{result}]'
+            else:
+                result = f"_MaybeAsyncIterator[{result}]"
         return result
 
     def _output_type(self, method: d.MethodDescriptorProto) -> str:
@@ -764,33 +815,64 @@ class PkgWriter(object):
         if method.server_streaming:
             # Union[Iterator[Resp], AsyncIterator[Resp]] is subtyped by Iterator[Resp] and AsyncIterator[Resp].
             # So both can be used in the covariant function return position.
-            iterator = f"{self._import('collections.abc', 'Iterator')}[{result}]"
-            aiterator = f"{self._import('collections.abc', 'AsyncIterator')}[{result}]"
-            result = f"{self._import('typing', 'Union')}[{iterator}, {aiterator}]"
+            sync = f"{self._import('collections.abc', 'Iterator')}[{result}]"
+            a_sync = f"{self._import('collections.abc', 'AsyncIterator')}[{result}]"
+            result = f"{self._import('typing', 'Union')}[{sync}, {a_sync}]"
         else:
             # Union[Resp, Awaitable[Resp]] is subtyped by Resp and Awaitable[Resp].
             # So both can be used in the covariant function return position.
             # Awaitable[Resp] is equivalent to async def.
-            awaitable = f"{self._import('collections.abc', 'Awaitable')}[{result}]"
-            result = f"{self._import('typing', 'Union')}[{result}, {awaitable}]"
-        return result
+            sync = result
+            a_sync = f"{self._import('collections.abc', 'Awaitable')}[{result}]"
+            result = f"{self._import('typing', 'Union')}[{sync}, {a_sync}]"
 
-    def write_grpc_async_hacks(self) -> None:
+        if self.grpc_type == GRPCType.SYNC:
+            return sync
+        elif self.grpc_type == GRPCType.ASYNC:
+            return a_sync
+        else:
+            return result
+
+    def write_grpc_iterator_type(self) -> None:
         wl = self._write_line
-        # _MaybeAsyncIterator[Req] is supertyped by Iterator[Req] and AsyncIterator[Req].
-        # So both can be used in the contravariant function parameter position.
-        wl('_T = {}("_T")', self._import("typing", "TypeVar"))
-        wl("")
-        wl(
-            "class _MaybeAsyncIterator({}[_T], {}[_T], metaclass={}): ...",
-            self._import("collections.abc", "AsyncIterator"),
-            self._import("collections.abc", "Iterator"),
-            self._import("abc", "ABCMeta"),
-        )
+
+        if self.grpc_type == GRPCType.SYNC:
+            self._import("collections.abc", "Iterator")
+        elif self.grpc_type == GRPCType.ASYNC:
+            self._import("collections.abc", "AsyncIterator")
+        else:
+            # _MaybeAsyncIterator[Req] is supertyped by Iterator[Req] and AsyncIterator[Req].
+            # So both can be used in the contravariant function parameter position.
+            wl('_T = {}("_T")', self._import("typing", "TypeVar"))
+            wl("")
+            wl(
+                "class _MaybeAsyncIterator({}[_T], {}[_T], metaclass={}): ...",
+                self._import("collections.abc", "AsyncIterator"),
+                self._import("collections.abc", "Iterator"),
+                self._import("abc", "ABCMeta"),
+            )
         wl("")
 
-        # _ServicerContext is supertyped by grpc.ServicerContext and grpc.aio.ServicerContext
-        # So both can be used in the contravariant function parameter position.
+    def get_servicer_context_type(self, input_: str, output: str) -> str:
+        """Get the type to use for the context parameter in servicer methods."""
+        if self.grpc_type == GRPCType.ASYNC:
+            return self._import("grpc.aio", f"ServicerContext[{input_}, {output}]")
+        elif self.grpc_type == GRPCType.SYNC:
+            return self._import("grpc", "ServicerContext")
+        else:
+            # BOTH mode uses _ServicerContext union class
+            return "_ServicerContext"
+
+    def write_grpc_servicer_context(self) -> None:
+        """Write _ServicerContext class only for BOTH mode (union type needed)."""
+        wl = self._write_line
+
+        if self.grpc_type != GRPCType.BOTH:
+            return
+
+        # BOTH mode: _ServicerContext is a union class that's supertyped by both
+        # grpc.ServicerContext and grpc.aio.ServicerContext, so both can be used
+        # in the contravariant function parameter position.
         wl(
             "class _ServicerContext({}, {}):  # type: ignore[misc, type-arg]",
             self._import("grpc", "ServicerContext"),
@@ -800,45 +882,28 @@ class PkgWriter(object):
             wl("...")
         wl("")
 
-    def write_grpc_type_vars(self, service: d.ServiceDescriptorProto) -> None:
+    def write_grpc_stub_methods(self, service: d.ServiceDescriptorProto, scl_prefix: SourceCodeLocation, *, is_async: bool, both: bool = False, ignore_assignment_errors: bool = False) -> None:
         wl = self._write_line
         methods = [(i, m) for i, m in enumerate(service.method) if m.name not in PYTHON_RESERVED]
         if not methods:
             return
-        for _, method in methods:
-            wl("{} = {}(", _build_typevar_name(service.name, method.name), self._import("typing_extensions", "TypeVar"))
-            with self._indent():
-                wl("'{}',", _build_typevar_name(service.name, method.name))
-                wl("{}[", self._callable_type(method, is_async=False))
-                with self._indent():
-                    wl("{},", self._input_type(method))
-                    wl("{},", self._output_type(method))
-                wl("],")
-                wl("{}[", self._callable_type(method, is_async=True))
-                with self._indent():
-                    wl("{},", self._input_type(method))
-                    wl("{},", self._output_type(method))
-                wl("],")
-                wl("default={}[", self._callable_type(method, is_async=False))
-                with self._indent():
-                    wl("{},", self._input_type(method))
-                    wl("{},", self._output_type(method))
-                wl("],")
-            wl(")")
-            wl("")
 
-    def write_self_types(self, service: d.ServiceDescriptorProto, is_async: bool) -> None:
-        wl = self._write_line
-        methods = [(i, m) for i, m in enumerate(service.method) if m.name not in PYTHON_RESERVED]
-        if not methods:
-            return
-        for _, method in methods:
-            with self._indent():
-                wl("{}[", self._callable_type(method, is_async=is_async))
-                with self._indent():
-                    wl("{},", self._input_type(method))
-                    wl("{},", self._output_type(method))
-                wl("],")
+        def type_str(method: d.MethodDescriptorProto, is_async: bool) -> str:
+            return f"{self._callable_type(method, is_async=is_async)}[{self._input_type(method)}, {self._output_type(method)}]"
+
+        for i, method in methods:
+            scl = scl_prefix + [d.ServiceDescriptorProto.METHOD_FIELD_NUMBER, i]
+            if both:
+                wl(
+                    "{}: {}[{}, {}]",
+                    method.name,
+                    self._import("typing", "Union"),
+                    type_str(method, is_async=False),
+                    type_str(method, is_async=True),
+                )
+            else:
+                wl("{}: {}{}", method.name, type_str(method, is_async=is_async), "" if not ignore_assignment_errors else "  # type: ignore[assignment]")
+            self._write_comments(scl)
 
     def write_grpc_methods(self, service: d.ServiceDescriptorProto, scl_prefix: SourceCodeLocation) -> None:
         wl = self._write_line
@@ -848,18 +913,20 @@ class PkgWriter(object):
             wl("")
         for i, method in methods:
             scl = scl_prefix + [d.ServiceDescriptorProto.METHOD_FIELD_NUMBER, i]
+            input_type = self._servicer_input_type(method)
+            output_type = self._servicer_output_type(method)
 
-            wl("@{}", self._import("abc", "abstractmethod"))
+            if self.generate_concrete_servicer_stubs is False:
+                wl("@{}", self._import("abc", "abstractmethod"))
             wl("def {}(", method.name)
             with self._indent():
                 wl("self,")
                 input_name = "request_iterator" if method.client_streaming else "request"
-                input_type = self._servicer_input_type(method)
                 wl(f"{input_name}: {input_type},")
-                wl("context: _ServicerContext,")
+                wl("context: {},", self.get_servicer_context_type(input_type, output_type))
             wl(
                 ") -> {}:{}",
-                self._servicer_output_type(method),
+                output_type,
                 " ..." if not self._has_comments(scl) else "",
             )
             if self._has_comments(scl):
@@ -868,18 +935,18 @@ class PkgWriter(object):
                         wl("...")
             wl("")
 
-    def write_grpc_stub_methods(self, service: d.ServiceDescriptorProto, scl_prefix: SourceCodeLocation, is_async: bool = False) -> None:
-        wl = self._write_line
-        methods = [(i, m) for i, m in enumerate(service.method) if m.name not in PYTHON_RESERVED]
-        if not methods:
-            wl("...")
-            wl("")
-        for i, method in methods:
-            scl = scl_prefix + [d.ServiceDescriptorProto.METHOD_FIELD_NUMBER, i]
+    def make_server_type(self) -> str:
+        server = self._import("grpc", "Server")
+        aserver = self._import("grpc.aio", "Server")
 
-            wl("{}: {}", method.name, f"{_build_typevar_name(service.name, method.name)}")
-            self._write_comments(scl)
-            wl("")
+        if self.grpc_type == GRPCType.BOTH:
+            return f"{self._import('typing', 'Union')}[{server}, {aserver}]"
+        elif self.grpc_type == GRPCType.ASYNC:
+            return aserver
+        elif self.grpc_type == GRPCType.SYNC:
+            return server
+        else:
+            raise RuntimeError(f"Impossible, {self.grpc_type=}")
 
     def write_grpc_services(
         self,
@@ -889,59 +956,80 @@ class PkgWriter(object):
         wl = self._write_line
         wl("GRPC_GENERATED_VERSION: str")
         wl("GRPC_VERSION: str")
+        wl("")
         for i, service in enumerate(services):
             if service.name in PYTHON_RESERVED:
                 continue
 
             scl = scl_prefix + [i]
 
-            # Type vars
-            self.write_grpc_type_vars(service)
+            class_name = f"{service.name}Stub"
+            async_class_alias = f"{service.name}AsyncStub"
 
             # The stub client
-            if service.options.deprecated:
-                self._write_deprecation_warning(
-                    scl + [d.ServiceDescriptorProto.OPTIONS_FIELD_NUMBER] + [d.ServiceOptions.DEPRECATED_FIELD_NUMBER],
-                    "This stub has been marked as deprecated using proto service options.",
+            if self.grpc_type.supports_sync:
+                if service.options.deprecated:
+                    self._write_deprecation_warning(
+                        scl + [d.ServiceDescriptorProto.OPTIONS_FIELD_NUMBER] + [d.ServiceOptions.DEPRECATED_FIELD_NUMBER],
+                        "This stub has been marked as deprecated using proto service options.",
+                    )
+                wl(
+                    "class {}:",
+                    class_name,
                 )
-            class_name = f"{service.name}Stub"
-            wl(
-                "class {}({}[{}]):",
-                class_name,
-                self._import("typing", "Generic"),
-                ", ".join(f"{_build_typevar_name(service.name, method.name)}" for method in service.method),
-            )
-            with self._indent():
-                if self._write_comments(scl):
+                with self._indent():
+                    if self._write_comments(scl):
+                        wl("")
+
+                    if self.grpc_type == GRPCType.BOTH:
+                        # Write sync overload
+                        wl("@{}", self._import("typing", "overload"))
+                        wl(
+                            "def __new__(cls, channel: {}) -> {}: ...",
+                            self._import("grpc", "Channel"),
+                            class_name,
+                        )
+
+                        # Write async overload
+                        wl("@{}", self._import("typing", "overload"))
+                        wl(
+                            "def __new__(cls, channel: {}) -> {}: ...",
+                            self._import("grpc.aio", "Channel"),
+                            async_class_alias,
+                        )
+                    else:
+                        # SYNC only - simple __init__
+                        wl("def __init__(self, channel: {}) -> None: ...", self._import("grpc", "Channel"))
+
+                    self.write_grpc_stub_methods(service, scl, is_async=False)
                     wl("")
 
-                # Write sync overload
-                wl("@{}", self._import("typing", "overload"))
-                wl("def __init__(self: {}[", class_name)
-                self.write_self_types(service, False)
-                wl(
-                    "], channel: {}) -> None: ...",
-                    self._import("grpc", "Channel"),
-                )
+            # Write AsyncStub
+            if self.grpc_type.supports_async:
+                if service.options.deprecated:
+                    self._write_deprecation_warning(
+                        scl + [d.ServiceDescriptorProto.OPTIONS_FIELD_NUMBER] + [d.ServiceOptions.DEPRECATED_FIELD_NUMBER],
+                        "This stub has been marked as deprecated using proto service options.",
+                    )
+
+                if self.grpc_type == GRPCType.BOTH:
+                    # BOTH mode: AsyncStub inherits from Stub
+                    wl("@{}", self._import("typing", "type_check_only"))
+                    wl("class {}({}):", async_class_alias, class_name)
+                    with self._indent():
+                        if self._write_comments(scl):
+                            wl("")
+                        wl("def __init__(self, channel: {}) -> None: ...", self._import("grpc.aio", "Channel"))
+                        self.write_grpc_stub_methods(service, scl, is_async=True, ignore_assignment_errors=True)
+                else:
+                    # ASYNC only - use Stub name (not AsyncStub) since there's only one type
+                    wl("class {}:", class_name)
+                    with self._indent():
+                        if self._write_comments(scl):
+                            wl("")
+                        wl("def __init__(self, channel: {}) -> None: ...", self._import("grpc.aio", "Channel"))
+                        self.write_grpc_stub_methods(service, scl, is_async=True)
                 wl("")
-
-                # Write async overload
-                wl("@{}", self._import("typing", "overload"))
-                wl("def __init__(self: {}[", class_name)
-                self.write_self_types(service, True)
-                wl(
-                    "], channel: {}) -> None: ...",
-                    self._import("grpc.aio", "Channel"),
-                )
-                wl("")
-
-                self.write_grpc_stub_methods(service, scl)
-
-            # Write AsyncStub alias
-            wl("{}AsyncStub: {} = {}[", service.name, self._import("typing_extensions", "TypeAlias"), class_name)
-            self.write_self_types(service, True)
-            wl("]")
-            wl("")
 
             # The service definition interface
             if service.options.deprecated:
@@ -949,27 +1037,32 @@ class PkgWriter(object):
                     scl + [d.ServiceDescriptorProto.OPTIONS_FIELD_NUMBER] + [d.ServiceOptions.DEPRECATED_FIELD_NUMBER],
                     "This servicer has been marked as deprecated using proto service options.",
                 )
-            wl(
-                "class {}Servicer(metaclass={}):",
-                service.name,
-                self._import("abc", "ABCMeta"),
-            )
+            if self.generate_concrete_servicer_stubs is False:
+                wl(
+                    "class {}Servicer(metaclass={}):",
+                    service.name,
+                    self._import("abc", "ABCMeta"),
+                )
+            else:
+                wl(
+                    "class {}Servicer:",
+                    service.name,
+                )
             with self._indent():
                 if self._write_comments(scl):
                     wl("")
                 self.write_grpc_methods(service, scl)
-            server = self._import("grpc", "Server")
-            aserver = self._import("grpc.aio", "Server")
             if service.options.deprecated:
                 self._write_deprecation_warning(
                     scl + [d.ServiceDescriptorProto.OPTIONS_FIELD_NUMBER] + [d.ServiceOptions.DEPRECATED_FIELD_NUMBER],
                     "This servicer has been marked as deprecated using proto service options.",
                 )
+
             wl(
                 "def add_{}Servicer_to_server(servicer: {}Servicer, server: {}) -> None: ...",
                 service.name,
                 service.name,
-                f"{self._import('typing', 'Union')}[{server}, {aserver}]",
+                self.make_server_type(),
             )
             wl("")
 
@@ -1073,8 +1166,6 @@ class PkgWriter(object):
             reexport_fd = self.descriptors.files[reexport_file]
             reexport_imp = reexport_file[:-6].replace("-", "_").replace("/", ".") + "_pb2"
             names = [m.name for m in reexport_fd.message_type] + [m.name for m in reexport_fd.enum_type] + [v.name for m in reexport_fd.enum_type for v in m.value] + [m.name for m in reexport_fd.extension]
-            if reexport_fd.options.py_generic_services:
-                names.extend(m.name for m in reexport_fd.service)
 
             if names:
                 # n,n to force a reexport (from x import y as y)
@@ -1127,6 +1218,7 @@ def generate_mypy_stubs(
     readable_stubs: bool,
     relax_strict_optional_primitives: bool,
     use_default_deprecation_warnings: bool,
+    generate_concrete_servicer_stubs: bool,
 ) -> None:
     for name, fd in descriptors.to_generate.items():
         pkg_writer = PkgWriter(
@@ -1135,15 +1227,14 @@ def generate_mypy_stubs(
             readable_stubs,
             relax_strict_optional_primitives,
             use_default_deprecation_warnings,
+            generate_concrete_servicer_stubs,
             grpc=False,
         )
 
         pkg_writer.write_module_attributes()
         pkg_writer.write_enums(fd.enum_type, "", [d.FileDescriptorProto.ENUM_TYPE_FIELD_NUMBER])
-        pkg_writer.write_messages(fd.message_type, "", [d.FileDescriptorProto.MESSAGE_TYPE_FIELD_NUMBER])
+        pkg_writer.write_messages(fd.message_type, "", [d.FileDescriptorProto.MESSAGE_TYPE_FIELD_NUMBER], fd.options.features.field_presence)
         pkg_writer.write_extensions(fd.extension, [d.FileDescriptorProto.EXTENSION_FIELD_NUMBER])
-        if fd.options.py_generic_services:
-            pkg_writer.write_services(fd.service, [d.FileDescriptorProto.SERVICE_FIELD_NUMBER])
 
         assert name == fd.name
         assert fd.name.endswith(".proto")
@@ -1161,6 +1252,8 @@ def generate_mypy_grpc_stubs(
     readable_stubs: bool,
     relax_strict_optional_primitives: bool,
     use_default_deprecation_warnings: bool,
+    generate_concrete_servicer_stubs: bool,
+    grpc_type: GRPCType,
 ) -> None:
     for name, fd in descriptors.to_generate.items():
         pkg_writer = PkgWriter(
@@ -1169,9 +1262,12 @@ def generate_mypy_grpc_stubs(
             readable_stubs,
             relax_strict_optional_primitives,
             use_default_deprecation_warnings,
+            generate_concrete_servicer_stubs,
             grpc=True,
+            grpc_type=grpc_type,
         )
-        pkg_writer.write_grpc_async_hacks()
+        pkg_writer.write_grpc_iterator_type()
+        pkg_writer.write_grpc_servicer_context()
         pkg_writer.write_grpc_services(fd.service, [d.FileDescriptorProto.SERVICE_FIELD_NUMBER])
 
         assert name == fd.name
@@ -1201,6 +1297,10 @@ def code_generation() -> Iterator[Tuple[plugin_pb2.CodeGeneratorRequest, plugin_
 
     # Declare support for optional proto3 fields
     response.supported_features |= plugin_pb2.CodeGeneratorResponse.FEATURE_PROTO3_OPTIONAL
+    response.supported_features |= plugin_pb2.CodeGeneratorResponse.FEATURE_SUPPORTS_EDITIONS
+
+    response.minimum_edition = d.EDITION_LEGACY
+    response.maximum_edition = d.EDITION_2024
 
     yield request, response
 
@@ -1221,6 +1321,7 @@ def main() -> None:
             "readable_stubs" in request.parameter,
             "relax_strict_optional_primitives" in request.parameter,
             "use_default_deprecation_warnings" in request.parameter,
+            "generate_concrete_servicer_stubs" in request.parameter,
         )
 
 
@@ -1234,6 +1335,8 @@ def grpc() -> None:
             "readable_stubs" in request.parameter,
             "relax_strict_optional_primitives" in request.parameter,
             "use_default_deprecation_warnings" in request.parameter,
+            "generate_concrete_servicer_stubs" in request.parameter,
+            GRPCType.from_parameter(request.parameter),
         )
 
 
