@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Collection, Mapping
+from dataclasses import is_dataclass
 from datetime import date, datetime
 from typing import (
     TYPE_CHECKING,
@@ -33,8 +34,8 @@ except ImportError as e:
     raise MissingDependencyException(msg) from e
 
 if TYPE_CHECKING:
-    from sqlalchemy.ext.asyncio import AsyncSession
-    from sqlalchemy.orm import Session
+    from sqlalchemy.ext.asyncio import AsyncSession, async_scoped_session
+    from sqlalchemy.orm import Session, scoped_session
     from sqlalchemy.sql.type_api import TypeEngine
     from typing_extensions import TypeGuard
 
@@ -101,8 +102,10 @@ class SQLAlchemyFactory(Generic[T], BaseFactory[T]):
     __set_association_proxy__: ClassVar[bool] = True
     """Configuration to consider AssociationProxy property as a model field or not."""
 
-    __session__: ClassVar[Session | _SessionMaker[Session] | None] = None
-    __async_session__: ClassVar[AsyncSession | _SessionMaker[AsyncSession] | None] = None
+    __session__: ClassVar[Session | _SessionMaker[Session] | scoped_session[Session] | None] = None
+    __async_session__: ClassVar[
+        AsyncSession | _SessionMaker[AsyncSession] | async_scoped_session[AsyncSession] | None
+    ] = None
 
     __config_keys__ = (
         *BaseFactory.__config_keys__,
@@ -174,7 +177,21 @@ class SQLAlchemyFactory(Generic[T], BaseFactory[T]):
         if not cls.__set_primary_key__ and column.primary_key:
             return False
 
+        if not cls.should_dataclass_init_field(column.name):
+            return False
+
         return bool(cls.__set_foreign_keys__ or not column.foreign_keys)
+
+    @classmethod
+    def should_dataclass_init_field(cls, field_name: str) -> bool:
+        if not is_dataclass(cls.__model__):
+            return True
+
+        dataclass_fields = cls.__model__.__dataclass_fields__
+        try:
+            return dataclass_fields[field_name].init
+        except KeyError:
+            return True
 
     @classmethod
     def _get_type_from_type_engine(cls, type_engine: TypeEngine) -> type:
@@ -285,6 +302,9 @@ class SQLAlchemyFactory(Generic[T], BaseFactory[T]):
         )
         if cls.__set_relationships__:
             for name, relationship in table.relationships.items():
+                if not cls.should_dataclass_init_field(name):
+                    continue
+
                 annotation = cls._get_relationship_type(relationship)
                 fields_meta.append(
                     FieldMeta.from_type(
@@ -295,6 +315,9 @@ class SQLAlchemyFactory(Generic[T], BaseFactory[T]):
         if cls.__set_association_proxy__:
             for name, attr in table.all_orm_descriptors.items():
                 if isinstance(attr, AssociationProxy):
+                    if not cls.should_dataclass_init_field(name):
+                        continue
+
                     # Read-only proxies derive from the underlying relationship and shouldn't be set directly.
                     if not getattr(attr, "creator", None):
                         continue

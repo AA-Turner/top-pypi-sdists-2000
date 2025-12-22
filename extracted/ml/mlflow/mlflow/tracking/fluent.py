@@ -54,7 +54,6 @@ from mlflow.tracing.provider import _get_trace_exporter
 from mlflow.tracking._tracking_service.client import TrackingServiceClient
 from mlflow.tracking._tracking_service.utils import _resolve_tracking_uri
 from mlflow.utils import get_results_from_paginated_fn
-from mlflow.utils.annotations import experimental
 from mlflow.utils.async_logging.run_operations import RunOperations
 from mlflow.utils.autologging_utils import (
     AUTOLOGGING_CONF_KEY_IS_GLOBALLY_CONFIGURED,
@@ -870,8 +869,7 @@ def _shut_down_async_logging() -> None:
 def flush_artifact_async_logging() -> None:
     """Flush all pending artifact async logging."""
     run_id = _get_or_start_run().info.run_id
-    _artifact_repo = _get_artifact_repo(run_id)
-    if _artifact_repo:
+    if _artifact_repo := _get_artifact_repo(run_id):
         _artifact_repo.flush_async_logging()
 
 
@@ -2227,7 +2225,6 @@ def delete_experiment(experiment_id: str) -> None:
     MlflowClient().delete_experiment(experiment_id)
 
 
-@experimental(version="3.0.0")
 def initialize_logged_model(
     name: str | None = None,
     source_run_id: str | None = None,
@@ -2416,7 +2413,6 @@ def _create_logged_model(
     )
 
 
-@experimental(version="3.0.0")
 def log_model_params(params: dict[str, str], model_id: str | None = None) -> None:
     """
     Log params to the specified logged model.
@@ -2448,7 +2444,6 @@ def log_model_params(params: dict[str, str], model_id: str | None = None) -> Non
     MlflowClient().log_model_params(model_id, params)
 
 
-@experimental(version="3.0.0")
 def finalize_logged_model(
     model_id: str, status: Literal["READY", "FAILED"] | LoggedModelStatus
 ) -> LoggedModel:
@@ -2481,7 +2476,6 @@ def finalize_logged_model(
     return MlflowClient().finalize_logged_model(model_id, status)
 
 
-@experimental(version="3.0.0")
 def get_logged_model(model_id: str) -> LoggedModel:
     """
     Get a logged model by ID.
@@ -2513,7 +2507,6 @@ def get_logged_model(model_id: str) -> LoggedModel:
     return MlflowClient().get_logged_model(model_id)
 
 
-@experimental(version="3.0.0")
 def last_logged_model() -> LoggedModel | None:
     """
     Fetches the most recent logged model in the current session.
@@ -2565,7 +2558,6 @@ def search_logged_models(
 ) -> list[LoggedModel]: ...
 
 
-@experimental(version="3.0.0")
 def search_logged_models(
     experiment_ids: list[str] | None = None,
     filter_string: str | None = None,
@@ -2709,7 +2701,6 @@ def search_logged_models(
         )
 
 
-@experimental(version="3.0.0")
 def log_outputs(models: list[LoggedModelOutput] | None = None):
     """
     Log outputs, such as models, to the active run. If there is no active run, a new run will be
@@ -2994,8 +2985,7 @@ def search_runs(
         experiments = []
         for n in experiment_names:
             if n is not None:
-                experiment_by_name = get_experiment_by_name(n)
-                if experiment_by_name:
+                if experiment_by_name := get_experiment_by_name(n):
                     experiments.append(experiment_by_name)
                 else:
                     _logger.warning("Cannot retrieve experiment by name %s", n)
@@ -3113,8 +3103,7 @@ def _get_experiment_id_from_env():
     experiment_name = MLFLOW_EXPERIMENT_NAME.get()
     experiment_id = MLFLOW_EXPERIMENT_ID.get()
     if experiment_name is not None:
-        exp = MlflowClient().get_experiment_by_name(experiment_name)
-        if exp:
+        if exp := MlflowClient().get_experiment_by_name(experiment_name):
             if experiment_id and experiment_id != exp.experiment_id:
                 raise MlflowException(
                     message=f"The provided {MLFLOW_EXPERIMENT_ID} environment variable "

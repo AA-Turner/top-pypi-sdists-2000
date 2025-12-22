@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: polyfactory
-Version: 3.1.0
+Version: 3.2.0
 Summary: Mock data generation factories
 Project-URL: Issue Tracker, https://github.com/litestar-org/polyfactory/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc
 Project-URL: Changelog, https://github.com/litestar-org/polyfactory/releases/
@@ -12,7 +12,7 @@ Project-URL: homepage, https://github.com/litestar-org/polyfactory
 Project-URL: repository, https://github.com/litestar-org/polyfactory
 Project-URL: documentation, https://github.com/litestar-org/polyfactory
 Author-email: Na'aman Hirschfeld <nhirschfeld@gmail.com>
-Maintainer-email: Visakh Unnikrishnan <guacs@litestar.dev>, Cody Fincher <cody@litestar.dev>, Janek Nouvertné <janek@litestar.dev>, Jacob Coffee <jacob@litestar.dev>, Peter Schutt <peter@litestar.dev>, Alc <alc@litestar.dev>, Andy <adh.truong@gmail.com>
+Maintainer-email: Cody Fincher <cody@litestar.dev>, Janek Nouvertné <janek@litestar.dev>, Jacob Coffee <jacob@litestar.dev>, Peter Schutt <peter@litestar.dev>, Alc <alc@litestar.dev>, Andy <adh.truong@gmail.com>
 License: MIT
 License-File: LICENSE
 Keywords: attrs,dataclasses,msgspec,pydantic,sqlalchemy
@@ -24,12 +24,12 @@ Classifier: License :: OSI Approved :: MIT License
 Classifier: Natural Language :: English
 Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python
-Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
 Classifier: Topic :: Software Development
 Classifier: Topic :: Software Development :: Libraries
 Classifier: Topic :: Software Development :: Testing

@@ -33,7 +33,7 @@ import os
 import shutil
 import sys
 from threading import RLock
-from typing import Callable
+from collections.abc import Callable
 
 
 class FakeShutilModule:

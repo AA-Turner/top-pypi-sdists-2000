@@ -11,15 +11,17 @@ import time
 import uuid
 from collections import defaultdict
 from functools import reduce
-from typing import Any, TypedDict
+from typing import Any, TypedDict, TypeVar
+
+_T = TypeVar("_T")
 
 import sqlalchemy
 import sqlalchemy.orm
 import sqlalchemy.sql.expression as sql
-from sqlalchemy import and_, case, exists, func, or_, sql, text
+from sqlalchemy import and_, case, exists, func, or_, sql
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.future import select
-from sqlalchemy.orm import aliased, joinedload
+from sqlalchemy.orm import Session, aliased, joinedload
 
 import mlflow.store.db.utils
 from mlflow.entities import (
@@ -87,6 +89,7 @@ from mlflow.store.tracking.dbmodels.models import (
     SqlEvaluationDatasetTag,
     SqlExperiment,
     SqlExperimentTag,
+    SqlGatewayEndpointBinding,
     SqlInput,
     SqlInputTag,
     SqlLatestMetric,
@@ -105,6 +108,7 @@ from mlflow.store.tracking.dbmodels.models import (
     SqlTraceMetadata,
     SqlTraceTag,
 )
+from mlflow.store.tracking.gateway.sqlalchemy_mixin import SqlAlchemyGatewayStoreMixin
 from mlflow.tracing.analysis import TraceFilterCorrelationResult
 from mlflow.tracing.constant import (
     SpanAttributeKey,
@@ -185,7 +189,7 @@ class DatasetFilter(TypedDict, total=False):
     dataset_digest: str
 
 
-class SqlAlchemyStore(AbstractStore):
+class SqlAlchemyStore(SqlAlchemyGatewayStoreMixin, AbstractStore):
     """
     SQLAlchemy compliant backend store for tracking meta data for MLflow entities. MLflow
     supports the database dialects ``mysql``, ``mssql``, ``sqlite``, and ``postgresql``.
@@ -213,8 +217,19 @@ class SqlAlchemyStore(AbstractStore):
     TRACE_FOLDER_NAME = "traces"
     DEFAULT_EXPERIMENT_ID = "0"
     EVALUATION_DATASET_ID_PREFIX = "d-"
-    _db_uri_sql_alchemy_engine_map = {}
-    _db_uri_sql_alchemy_engine_map_lock = threading.Lock()
+    _engine_map: dict[str, sqlalchemy.engine.Engine] = {}
+    _engine_map_lock = threading.Lock()
+
+    @classmethod
+    def _get_or_create_engine(cls, db_uri: str) -> sqlalchemy.engine.Engine:
+        """Get a cached engine or create a new one for the given database URI."""
+        if db_uri not in cls._engine_map:
+            with cls._engine_map_lock:
+                if db_uri not in cls._engine_map:
+                    cls._engine_map[db_uri] = (
+                        mlflow.store.db.utils.create_sqlalchemy_engine_with_retry(db_uri)
+                    )
+        return cls._engine_map[db_uri]
 
     def __init__(self, db_uri, default_artifact_root):
         """
@@ -233,19 +248,7 @@ class SqlAlchemyStore(AbstractStore):
         self.db_uri = db_uri
         self.db_type = extract_db_type_from_uri(db_uri)
         self.artifact_root_uri = resolve_uri_if_local(default_artifact_root)
-        # Quick check to see if the respective SQLAlchemy database engine has already been created.
-        if db_uri not in SqlAlchemyStore._db_uri_sql_alchemy_engine_map:
-            with SqlAlchemyStore._db_uri_sql_alchemy_engine_map_lock:
-                # Repeat check to prevent race conditions where one thread checks for an existing
-                # engine while another is creating the respective one, resulting in multiple
-                # engines being created. It isn't combined with the above check to prevent
-                # inefficiency from multiple threads waiting for the lock to check for engine
-                # existence if it has already been created.
-                if db_uri not in SqlAlchemyStore._db_uri_sql_alchemy_engine_map:
-                    SqlAlchemyStore._db_uri_sql_alchemy_engine_map[db_uri] = (
-                        mlflow.store.db.utils.create_sqlalchemy_engine_with_retry(db_uri)
-                    )
-        self.engine = SqlAlchemyStore._db_uri_sql_alchemy_engine_map[db_uri]
+        self.engine = self._get_or_create_engine(db_uri)
         # On a completely fresh MLflow installation against an empty database (verify database
         # emptiness by checking that 'experiments' etc aren't in the list of table names), run all
         # DB migrations
@@ -1546,12 +1549,10 @@ class SqlAlchemyStore(AbstractStore):
             ) = _get_sqlalchemy_filter_clauses(parsed_filters, session, self._get_dialect())
             for non_attr_filter in non_attribute_filters:
                 stmt = stmt.join(non_attr_filter)
-            for idx, dataset_filter in enumerate(dataset_filters):
-                # need to reference the anon table in the join condition
-                anon_table_name = f"anon_{idx + 1}"
+            for dataset_filter in dataset_filters:
                 stmt = stmt.join(
                     dataset_filter,
-                    text(f"runs.run_uuid = {anon_table_name}.destination_id"),
+                    SqlRun.run_uuid == dataset_filter.c.destination_id,
                 )
             # using an outer join is necessary here because we want to be able to sort
             # on a column (tag, metric or param) without removing the lines that
@@ -1626,8 +1627,7 @@ class SqlAlchemyStore(AbstractStore):
         with self.ManagedSessionMaker() as session:
             run = self._get_run(run_uuid=run_id, session=session)
             self._check_run_is_active(run)
-            previous_tag = [t for t in run.tags if t.key == MLFLOW_LOGGED_MODELS]
-            if previous_tag:
+            if previous_tag := [t for t in run.tags if t.key == MLFLOW_LOGGED_MODELS]:
                 value = json.dumps(json.loads(previous_tag[0].value) + [model_dict])
             else:
                 value = json.dumps([model_dict])
@@ -1777,14 +1777,14 @@ class SqlAlchemyStore(AbstractStore):
                         )
                     )
                     # add input tags to objs_to_write
-                    for input_tag in dataset_input.tags:
-                        objs_to_write.append(
-                            SqlInputTag(
-                                input_uuid=new_input_uuid,
-                                name=input_tag.key,
-                                value=input_tag.value,
-                            )
+                    objs_to_write.extend(
+                        SqlInputTag(
+                            input_uuid=new_input_uuid,
+                            name=input_tag.key,
+                            value=input_tag.value,
                         )
+                        for input_tag in dataset_input.tags
+                    )
 
             if models:
                 for model in models:
@@ -2167,11 +2167,9 @@ class SqlAlchemyStore(AbstractStore):
                 .all()
             )
 
-            scorers = []
-            for sql_scorer_version in sql_scorer_versions:
-                scorers.append(sql_scorer_version.to_mlflow_entity())
-
-            return scorers
+            return [
+                sql_scorer_version.to_mlflow_entity() for sql_scorer_version in sql_scorer_versions
+            ]
 
     def get_scorer(self, experiment_id, name, version=None) -> ScorerVersion:
         """
@@ -2352,11 +2350,9 @@ class SqlAlchemyStore(AbstractStore):
                 )
 
             # Convert to mlflow.entities.scorer.ScorerVersion objects
-            scorers = []
-            for sql_scorer_version in sql_scorer_versions:
-                scorers.append(sql_scorer_version.to_mlflow_entity())
-
-            return scorers
+            return [
+                sql_scorer_version.to_mlflow_entity() for sql_scorer_version in sql_scorer_versions
+            ]
 
     def _apply_order_by_search_logged_models(
         self,
@@ -3482,14 +3478,19 @@ class SqlAlchemyStore(AbstractStore):
                     update_dict[SqlTraceInfo.status] = root_span_status
 
             aggregated_token_usage = {}
+            session_id = None
             for span in spans:
                 span_dict = translate_span_when_storing(span)
-                if span_token_usage := span_dict.get("attributes", {}).get(
-                    SpanAttributeKey.CHAT_USAGE
-                ):
-                    aggregated_token_usage = update_token_usage(
-                        aggregated_token_usage, span_token_usage
-                    )
+                if span_attributes := span_dict.get("attributes", {}):
+                    if span_token_usage := span_attributes.get(SpanAttributeKey.CHAT_USAGE):
+                        aggregated_token_usage = update_token_usage(
+                            aggregated_token_usage, span_token_usage
+                        )
+                    # session id used by OTel semantic conventions: https://opentelemetry.io/docs/specs/semconv/registry/attributes/session/#session-id
+                    if session_id is None and (
+                        span_session_id := span_attributes.get("session.id")
+                    ):
+                        session_id = span_session_id
 
                 content_json = json.dumps(span_dict, cls=TraceJSONEncoder)
 
@@ -3533,6 +3534,23 @@ class SqlAlchemyStore(AbstractStore):
                         value=json.dumps(trace_token_usage),
                     )
                 )
+            if session_id:
+                existing_session_id = (
+                    session.query(SqlTraceMetadata)
+                    .filter(
+                        SqlTraceMetadata.request_id == trace_id,
+                        SqlTraceMetadata.key == TraceMetadataKey.TRACE_SESSION,
+                    )
+                    .one_or_none()
+                )
+                if not existing_session_id:
+                    session.merge(
+                        SqlTraceMetadata(
+                            request_id=trace_id,
+                            key=TraceMetadataKey.TRACE_SESSION,
+                            value=session_id,
+                        )
+                    )
 
             session.query(SqlTraceInfo).filter(SqlTraceInfo.request_id == trace_id).update(
                 update_dict,
@@ -4081,10 +4099,7 @@ class SqlAlchemyStore(AbstractStore):
                 sql_datasets = sql_datasets[:max_results]
                 next_page_token = SearchUtils.create_page_token(offset + max_results)
 
-            datasets = []
-            for sql_dataset in sql_datasets:
-                dataset = sql_dataset.to_mlflow_entity()
-                datasets.append(dataset)
+            datasets = [sql_dataset.to_mlflow_entity() for sql_dataset in sql_datasets]
 
             return PagedList(datasets, next_page_token)
 
@@ -4568,18 +4583,17 @@ class SqlAlchemyStore(AbstractStore):
 
             existing_exp_ids = {assoc.destination_id for assoc in existing_associations}
 
-            new_associations = []
-            for exp_id in experiment_ids:
-                if str(exp_id) not in existing_exp_ids:
-                    new_associations.append(
-                        SqlEntityAssociation(
-                            association_id=uuid.uuid4().hex,
-                            source_id=dataset_id,
-                            source_type=EntityAssociationType.EVALUATION_DATASET,
-                            destination_id=str(exp_id),
-                            destination_type=EntityAssociationType.EXPERIMENT,
-                        )
-                    )
+            new_associations = [
+                SqlEntityAssociation(
+                    association_id=uuid.uuid4().hex,
+                    source_id=dataset_id,
+                    source_type=EntityAssociationType.EVALUATION_DATASET,
+                    destination_id=str(exp_id),
+                    destination_type=EntityAssociationType.EXPERIMENT,
+                )
+                for exp_id in experiment_ids
+                if str(exp_id) not in existing_exp_ids
+            ]
 
             if new_associations:
                 session.bulk_save_objects(new_associations)
@@ -4639,6 +4653,57 @@ class SqlAlchemyStore(AbstractStore):
             session.commit()
 
             return dataset.to_mlflow_entity()
+
+    # ===================================================================================
+    # Helper Methods for Secrets & Endpoints
+    # ===================================================================================
+
+    def _get_entity_or_raise(
+        self,
+        session: Session,
+        model_class: type[_T],
+        filters: dict[str, Any],
+        entity_name: str,
+    ) -> _T:
+        """
+        Get entity or raise RESOURCE_DOES_NOT_EXIST with descriptive message.
+
+        Args:
+            session: Database session.
+            model_class: SQLAlchemy model class (e.g., SqlExperiment, SqlRun).
+            filters: Dict of filter conditions (e.g., {"experiment_id": "123"}).
+            entity_name: Human-readable entity name for error message (e.g., "Experiment").
+
+        Returns:
+            The entity object.
+
+        Raises:
+            MlflowException: If entity not found (RESOURCE_DOES_NOT_EXIST).
+        """
+        obj = session.query(model_class).filter_by(**filters).first()
+        if not obj:
+            filter_str = ", ".join(f"{k}='{v}'" for k, v in filters.items())
+            raise MlflowException(
+                f"{entity_name} not found ({filter_str})",
+                error_code=RESOURCE_DOES_NOT_EXIST,
+            )
+        return obj
+
+    def _cleanup_endpoint_bindings(self, session, resource_type: str, resource_id: str):
+        """
+        Delete all endpoint bindings for a resource.
+
+        This should be called before deleting any resource that may have endpoint bindings
+        to ensure orphaned bindings are cleaned up.
+
+        Args:
+            session: Database session.
+            resource_type: Type of resource (e.g., "scorer", "experiment").
+            resource_id: ID of the resource being deleted.
+        """
+        session.query(SqlGatewayEndpointBinding).filter_by(
+            resource_type=resource_type, resource_id=resource_id
+        ).delete()
 
 
 def _get_sqlalchemy_filter_clauses(parsed, session, dialect):
@@ -5023,7 +5088,7 @@ def _get_filter_clauses_for_search_traces(filter_string, session, dialect):
 
                 # Handle span.attributes.<attribute> format
                 if key_name.startswith("attributes."):
-                    attr_name = key_name[len("attributes.") :]
+                    attr_name = SearchTraceUtils._trim_backticks(key_name[len("attributes.") :])
                     # Search within the content JSON for the specific attribute
                     # TODO: we should improve this by saving only the attributes into the table.
                     if comparator == "RLIKE":

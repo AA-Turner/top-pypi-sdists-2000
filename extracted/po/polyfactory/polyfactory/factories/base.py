@@ -37,6 +37,7 @@ from typing import (
     overload,
 )
 from uuid import UUID
+from zoneinfo import ZoneInfo
 
 from faker import Faker
 from typing_extensions import Self, get_args, get_origin, get_original_bases
@@ -556,6 +557,7 @@ class BaseFactory(ABC, Generic[T]):
             date: cls.__faker__.date_this_decade,
             time: cls.__faker__.time_object,
             timedelta: cls.__faker__.time_delta,
+            ZoneInfo: cls.__faker__.pytimezone,
             # ip addresses
             IPv4Address: lambda: ip_address(cls.__faker__.ipv4()),
             IPv4Interface: lambda: ip_interface(cls.__faker__.ipv4()),
@@ -608,7 +610,7 @@ class BaseFactory(ABC, Generic[T]):
         """
         if model is None:
             try:
-                model = cls.__model__  # pyright: ignore[reportAssignmentType]
+                model = cls.__model__  # type: ignore[assignment]  # pyright: ignore[reportAssignmentType]
             except AttributeError as ex:
                 msg = "A 'model' argument is required when creating a new factory from a base one"
                 raise TypeError(msg) from ex
@@ -616,7 +618,7 @@ class BaseFactory(ABC, Generic[T]):
         return cast(
             "type[Self]",
             type(
-                f"{model.__name__}Factory",  # pyright: ignore[reportOptionalMemberAccess]
+                f"{model.__name__}Factory",  # type: ignore[union-attr]  # pyright: ignore[reportOptionalMemberAccess]
                 (*(bases or ()), cls),
                 {"__model__": model, **kwargs},
             ),
@@ -1163,7 +1165,7 @@ class BaseFactory(ABC, Generic[T]):
         :returns: An instance of type T.
 
         """
-        return cast("T", cls.__model__(**cls.process_kwargs(**kwargs)))
+        return cls.__model__(**cls.process_kwargs(**kwargs))
 
     @classmethod
     def batch(cls, size: int, **kwargs: Any) -> list[T]:
@@ -1188,7 +1190,7 @@ class BaseFactory(ABC, Generic[T]):
         """
         for data in cls.process_kwargs_coverage(**kwargs):
             instance = cls.__model__(**data)
-            yield cast("T", instance)
+            yield instance
 
     @classmethod
     def create_sync(cls, **kwargs: Any) -> T:
