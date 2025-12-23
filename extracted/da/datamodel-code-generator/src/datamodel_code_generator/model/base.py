@@ -10,13 +10,12 @@ import re
 from abc import ABC, abstractmethod
 from collections import defaultdict
 from copy import deepcopy
-from dataclasses import dataclass
 from functools import cached_property, lru_cache
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, ClassVar, Optional, TypeVar, Union
 from warnings import warn
 
-from jinja2 import Environment, FileSystemLoader, Template
+from jinja2 import ChoiceLoader, Environment, FileSystemLoader, Template, select_autoescape
 from pydantic import Field
 from typing_extensions import Self
 
@@ -26,6 +25,7 @@ from datamodel_code_generator.imports import (
     IMPORT_UNION,
     Import,
 )
+from datamodel_code_generator.model._types import WrappedDefault
 from datamodel_code_generator.reference import Reference, _BaseModel
 from datamodel_code_generator.types import (
     ANY,
@@ -39,6 +39,8 @@ from datamodel_code_generator.types import (
 )
 from datamodel_code_generator.util import PYDANTIC_V2, ConfigDict
 
+__all__ = ["WrappedDefault"]
+
 if TYPE_CHECKING:
     from collections.abc import Iterator
 
@@ -47,6 +49,8 @@ if TYPE_CHECKING:
 TEMPLATE_DIR: Path = Path(__file__).parents[0] / "template"
 
 ALL_MODEL: str = "#all#"
+GENERIC_BASE_CLASS_PATH: str = "#/__datamodel_code_generator__/generic_base_class__"
+GENERIC_BASE_CLASS_NAME: str = "__generic_base_class__"
 
 
 def repr_set_sorted(value: set[Any]) -> str:
@@ -113,18 +117,6 @@ class ConstraintsBase(_BaseModel):
         })
 
 
-@dataclass(repr=False)
-class WrappedDefault:
-    """Represents a default value wrapped with its type constructor."""
-
-    value: Any
-    type_name: str
-
-    def __repr__(self) -> str:
-        """Return type constructor representation, e.g., 'CountType(10)'."""
-        return f"{self.type_name}({self.value!r})"
-
-
 class DataModelFieldBase(_BaseModel):
     """Base class for model field representation and rendering."""
 
@@ -166,6 +158,7 @@ class DataModelFieldBase(_BaseModel):
     read_only: bool = False
     write_only: bool = False
     use_frozen_field: bool = False
+    use_default_factory_for_optional_nested_models: bool = False
 
     if not TYPE_CHECKING:
         if not PYDANTIC_V2:
@@ -229,6 +222,15 @@ class DataModelFieldBase(_BaseModel):
             return f"Union[{', '.join(parts)}]"
         return None  # pragma: no cover
 
+    def _build_base_union_type_hint(self) -> str | None:  # pragma: no cover
+        """Build Union[] base type hint from data_type.data_types if forward reference requires it."""
+        if not (self._use_union_operator != self.data_type.use_union_operator and self.data_type.is_union):
+            return None
+        parts = [dt.base_type_hint for dt in self.data_type.data_types if dt.base_type_hint]
+        if len(parts) > 1:
+            return f"Union[{', '.join(parts)}]"
+        return None
+
     @property
     def type_hint(self) -> str:  # noqa: PLR0911
         """Get the type hint string for this field, including nullability."""
@@ -249,6 +251,33 @@ class DataModelFieldBase(_BaseModel):
         if self.fall_back_to_nullable:
             return get_optional_type(type_hint, self._use_union_operator)
         return type_hint
+
+    @property
+    def base_type_hint(self) -> str:
+        """Get the base type hint without constrained type kwargs.
+
+        This returns the type without kwargs (e.g., 'str' instead of 'constr(pattern=...)').
+        Used in RootModel generics when regex_engine config is needed for lookaround patterns.
+        """
+        base_hint = self._build_base_union_type_hint() or self.data_type.base_type_hint
+
+        if not base_hint:  # pragma: no cover
+            return NONE
+
+        needs_optional = (
+            (self.nullable is True)
+            or (self.required and self.type_has_null)
+            or (self.nullable is None and not self.required and self.fall_back_to_nullable)
+        )
+        skip_optional = (
+            self.has_default_factory
+            or (self.data_type.is_optional and self.data_type.type != ANY)
+            or (self.nullable is False)
+        )
+
+        if needs_optional and not skip_optional:  # pragma: no cover
+            return get_optional_type(base_hint, self._use_union_operator)
+        return base_hint
 
     @property
     def imports(self) -> tuple[Import, ...]:
@@ -370,15 +399,67 @@ class DataModelFieldBase(_BaseModel):
 
 
 @lru_cache
-def get_template(template_file_path: Path) -> Template:
-    """Load and cache a Jinja2 template from the template directory."""
-    loader = FileSystemLoader(str(TEMPLATE_DIR / template_file_path.parent))
-    environment: Environment = Environment(loader=loader)  # noqa: S701
+def _get_template_with_custom_dir(template_file_path: Path, custom_template_dir: Path | None) -> Template:
+    """Load and cache a Jinja2 template with optional custom directory support.
+
+    When custom_template_dir is provided, templates are searched in this order:
+    1. custom_template_dir/<template_subdir>/
+    2. TEMPLATE_DIR/<template_subdir>/ (fallback)
+
+    This allows users to override individual templates (including included ones)
+    while keeping other templates from the default directory.
+    """
+    template_subdir = template_file_path.parent
+    loaders: list[FileSystemLoader] = []
+
+    if custom_template_dir is not None:
+        custom_dir = custom_template_dir / template_subdir
+        if custom_dir.exists():
+            loaders.append(FileSystemLoader(str(custom_dir)))
+
+    loaders.append(FileSystemLoader(str(TEMPLATE_DIR / template_subdir)))
+
+    loader: ChoiceLoader | FileSystemLoader = ChoiceLoader(loaders) if len(loaders) > 1 else loaders[0]
+    environment: Environment = Environment(
+        loader=loader,
+        autoescape=select_autoescape(["html", "xml"]),
+    )
     return environment.get_template(template_file_path.name)
 
 
-def sanitize_module_name(name: str, *, treat_dot_as_module: bool) -> str:
-    """Sanitize a module name by replacing invalid characters."""
+@lru_cache
+def _get_template_with_absolute_path(absolute_template_path: Path, builtin_subdir: Path) -> Template:
+    """Load a Jinja2 template from an absolute path with fallback to built-in directory.
+
+    This handles backward compatibility for custom templates found at absolute paths.
+    Includes are searched in this order:
+    1. The directory containing the absolute template path
+    2. TEMPLATE_DIR/<builtin_subdir>/ (fallback for includes not in custom dir)
+    """
+    loaders: list[FileSystemLoader] = [
+        FileSystemLoader(str(absolute_template_path.parent)),
+        FileSystemLoader(str(TEMPLATE_DIR / builtin_subdir)),
+    ]
+    loader = ChoiceLoader(loaders)
+    environment: Environment = Environment(
+        loader=loader,
+        autoescape=select_autoescape(["html", "xml"]),
+    )
+    return environment.get_template(absolute_template_path.name)
+
+
+@lru_cache
+def get_template(template_file_path: Path) -> Template:
+    """Load and cache a Jinja2 template from the template directory."""
+    return _get_template_with_custom_dir(template_file_path, None)
+
+
+def sanitize_module_name(name: str, *, treat_dot_as_module: bool | None) -> str:
+    """Sanitize a module name by replacing invalid characters.
+
+    If treat_dot_as_module is True, dots are preserved in the name.
+    If treat_dot_as_module is False or None (default), dots are replaced with underscores.
+    """
     pattern = r"[^0-9a-zA-Z_.]" if treat_dot_as_module else r"[^0-9a-zA-Z_]"
     sanitized = re.sub(pattern, "_", name)
     if sanitized and sanitized[0].isdigit():
@@ -386,19 +467,28 @@ def sanitize_module_name(name: str, *, treat_dot_as_module: bool) -> str:
     return sanitized
 
 
-def get_module_path(name: str, file_path: Path | None, *, treat_dot_as_module: bool) -> list[str]:
-    """Get the module path components from a name and file path."""
+def get_module_path(name: str, file_path: Path | None, *, treat_dot_as_module: bool | None) -> list[str]:
+    """Get the module path components from a name and file path.
+
+    The treat_dot_as_module flag controls behavior:
+    - None (default): Split names on dots (backward compat), but sanitize file names (replace dots)
+    - True: Split names on dots AND keep dots in file names (for modular output)
+    - False: Don't split names on dots AND sanitize file names (new feature for flat output)
+    """
+    should_split_names = treat_dot_as_module is not False
+    should_keep_dots_in_files = treat_dot_as_module is True
     if file_path:
-        sanitized_stem = sanitize_module_name(file_path.stem, treat_dot_as_module=treat_dot_as_module)
+        sanitized_stem = sanitize_module_name(file_path.stem, treat_dot_as_module=should_keep_dots_in_files)
+        module_parts = name.split(".")[:-1] if should_split_names else []
         return [
             *file_path.parts[:-1],
             sanitized_stem,
-            *name.split(".")[:-1],
+            *module_parts,
         ]
-    return name.split(".")[:-1]
+    return name.split(".")[:-1] if should_split_names else []
 
 
-def get_module_name(name: str, file_path: Path | None, *, treat_dot_as_module: bool) -> str:
+def get_module_name(name: str, file_path: Path | None, *, treat_dot_as_module: bool | None) -> str:
     """Get the full module name from a name and file path."""
     return ".".join(get_module_path(name, file_path, treat_dot_as_module=treat_dot_as_module))
 
@@ -447,7 +537,12 @@ class DataModel(TemplateBase, Nullable, ABC):  # noqa: PLR0904
     TEMPLATE_FILE_PATH: ClassVar[str] = ""
     BASE_CLASS: ClassVar[str] = ""
     DEFAULT_IMPORTS: ClassVar[tuple[Import, ...]] = ()
-    IS_ALIAS: bool = False
+    IS_ALIAS: ClassVar[bool] = False
+    SUPPORTS_GENERIC_BASE_CLASS: ClassVar[bool] = True
+    SUPPORTS_DISCRIMINATOR: ClassVar[bool] = False
+    SUPPORTS_FIELD_RENAMING: ClassVar[bool] = False
+    SUPPORTS_WRAPPED_DEFAULT: ClassVar[bool] = False
+    SUPPORTS_KW_ONLY: ClassVar[bool] = False
     has_forward_reference: bool = False
 
     def __init__(  # noqa: PLR0913
@@ -467,7 +562,7 @@ class DataModel(TemplateBase, Nullable, ABC):  # noqa: PLR0904
         nullable: bool = False,
         keyword_only: bool = False,
         frozen: bool = False,
-        treat_dot_as_module: bool = False,
+        treat_dot_as_module: bool | None = None,
         dataclass_arguments: DataclassArguments | None = None,
     ) -> None:
         """Initialize a data model with fields, base classes, and configuration."""
@@ -527,7 +622,7 @@ class DataModel(TemplateBase, Nullable, ABC):  # noqa: PLR0904
         self._additional_imports.extend(self.DEFAULT_IMPORTS)
         self.default: Any = default
         self._nullable: bool = nullable
-        self._treat_dot_as_module: bool = treat_dot_as_module
+        self._treat_dot_as_module: bool | None = treat_dot_as_module
 
     def _validate_fields(self, fields: list[DataModelFieldBase]) -> list[DataModelFieldBase]:
         names: set[str] = set()
@@ -604,6 +699,14 @@ class DataModel(TemplateBase, Nullable, ABC):  # noqa: PLR0904
                 return custom_template_file_path
         return template_file_path
 
+    @cached_property
+    def template(self) -> Template:
+        """Get the Jinja2 template with custom directory support for includes."""
+        resolved_path = self.template_file_path
+        if resolved_path.is_absolute():
+            return _get_template_with_absolute_path(resolved_path, Path(self.TEMPLATE_FILE_PATH).parent)
+        return _get_template_with_custom_dir(Path(self.TEMPLATE_FILE_PATH), self._custom_template_dir)
+
     @property
     def imports(self) -> tuple[Import, ...]:
         """Get all imports required by this model and its fields."""
@@ -679,6 +782,22 @@ class DataModel(TemplateBase, Nullable, ABC):  # noqa: PLR0904
     def is_alias(self) -> bool:
         """Whether is a type alias (i.e. not an instance of BaseModel/RootModel)."""
         return self.IS_ALIAS
+
+    @classmethod
+    def create_base_class_model(
+        cls,
+        config: dict[str, Any],  # noqa: ARG003
+        reference: Reference,  # noqa: ARG003
+        custom_template_dir: Path | None = None,  # noqa: ARG003
+        keyword_only: bool = False,  # noqa: ARG003, FBT001, FBT002
+        treat_dot_as_module: bool | None = None,  # noqa: ARG003, FBT001
+    ) -> DataModel | None:
+        """Create a shared base class model for DRY configuration.
+
+        Returns the base model or None if not supported. Updates reference in place.
+        Each model type should override this to provide appropriate implementation.
+        """
+        return None
 
     @property
     def nullable(self) -> bool:

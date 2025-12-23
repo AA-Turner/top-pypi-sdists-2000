@@ -271,6 +271,64 @@ def test_main_openapi_discriminator_allof_no_subtypes(output_file: Path) -> None
     )
 
 
+def test_main_openapi_discriminator_short_mapping_names(output_file: Path) -> None:
+    """Test OpenAPI generation with discriminator using short mapping names.
+
+    Per OpenAPI spec, mapping values can be short names like "FooItem" instead
+    of full refs like "#/components/schemas/FooItem". This tests that short
+    names are normalized correctly.
+    """
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "discriminator_short_mapping_names.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file=EXPECTED_OPENAPI_PATH / "discriminator" / "short_mapping_names.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+        ],
+    )
+
+
+def test_main_openapi_discriminator_no_mapping(output_file: Path) -> None:
+    """Test OpenAPI generation with discriminator without mapping.
+
+    This tests the case where a discriminator has only propertyName but no mapping.
+    The subtypes are discovered via allOf inheritance.
+    """
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "discriminator_no_mapping.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file=EXPECTED_OPENAPI_PATH / "discriminator" / "no_mapping.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+        ],
+    )
+
+
+def test_main_openapi_discriminator_no_mapping_no_subtypes(output_file: Path) -> None:
+    """Test OpenAPI generation with discriminator without mapping and no allOf subtypes.
+
+    This tests the edge case where a discriminator has no mapping and no schemas
+    inherit from it using allOf.
+    """
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "discriminator_no_mapping_no_subtypes.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file=EXPECTED_OPENAPI_PATH / "discriminator" / "no_mapping_no_subtypes.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+        ],
+    )
+
+
 def test_main_openapi_allof_with_oneof_ref(output_file: Path) -> None:
     """Test OpenAPI generation with allOf referencing a oneOf schema.
 
@@ -1228,6 +1286,8 @@ def test_main_original_field_name_delimiter_without_snake_case_field(
         ("pydantic.BaseModel", "datetime.py", "AwareDatetime"),
         ("pydantic_v2.BaseModel", "datetime_pydantic_v2.py", "AwareDatetime"),
         ("pydantic_v2.BaseModel", "datetime_pydantic_v2_datetime.py", "datetime"),
+        ("pydantic_v2.BaseModel", "datetime_pydantic_v2_past_datetime.py", "PastDatetime"),
+        ("pydantic_v2.BaseModel", "datetime_pydantic_v2_future_datetime.py", "FutureDatetime"),
         ("dataclasses.dataclass", "datetime_dataclass.py", "datetime"),
         ("msgspec.Struct", "datetime_msgspec.py", "datetime"),
     ],
@@ -1279,6 +1339,37 @@ def test_main_openapi_datetime(output_model: str, expected_output: str, output_f
         assert_func=assert_file_content,
         expected_file=expected_output,
         extra_args=["--output-model-type", output_model],
+    )
+
+
+@pytest.mark.parametrize(
+    ("date_class", "expected_output"),
+    [
+        ("PastDate", "date_class_past_date.py"),
+        ("FutureDate", "date_class_future_date.py"),
+    ],
+)
+@pytest.mark.cli_doc(
+    options=["--output-date-class"],
+    input_schema="openapi/date_class.yaml",
+    cli_args=["--output-date-class", "PastDate"],
+    golden_output="openapi/date_class_past_date.py",
+)
+@freeze_time(TIMESTAMP)
+def test_main_openapi_date_class(date_class: str, expected_output: str, output_file: Path) -> None:
+    """Specify date class type for date schema fields.
+
+    The `--output-date-class` flag controls which date type to use for fields
+    with date format. Options include 'PastDate' for past dates only
+    or 'FutureDate' for future dates only. This is a Pydantic v2 only feature.
+    """
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "date_class.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file=expected_output,
+        extra_args=["--output-date-class", date_class, "--output-model-type", "pydantic_v2.BaseModel"],
     )
 
 
@@ -1420,11 +1511,16 @@ def test_main_openapi_nullable(output_file: Path) -> None:
     input_schema="openapi/nullable.yaml",
     cli_args=["--strict-nullable"],
     golden_output="openapi/nullable_strict_nullable.py",
+    related_options=["--use-default"],
 )
 def test_main_openapi_nullable_strict_nullable(output_file: Path) -> None:
-    """Strictly handle nullable types in OpenAPI schemas.
+    """Treat default field as a non-nullable field.
 
-    The `--strict-nullable` flag configures the code generation behavior.
+    The `--strict-nullable` flag ensures that fields with default values are generated
+    with their exact schema type (non-nullable), rather than being made nullable.
+
+    This is particularly useful when combined with `--use-default` to generate models
+    where optional fields have defaults but cannot accept `None` values.
     """
     run_main_and_assert(
         input_path=OPEN_API_DATA_PATH / "nullable.yaml",
@@ -3242,6 +3338,18 @@ def test_main_openapi_referenced_default_use_annotated(output_file: Path) -> Non
     )
 
 
+def test_main_openapi_root_model_default_primitive(output_file: Path) -> None:
+    """Test RootModel with primitive default value in union type."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "root_model_default_primitive.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="root_model_default_primitive.py",
+        extra_args=["--output-model-type", "pydantic_v2.BaseModel"],
+    )
+
+
 @pytest.mark.cli_doc(
     options=["--parent-scoped-naming"],
     input_schema="openapi/duplicate_models2.yaml",
@@ -3453,6 +3561,26 @@ def test_main_openapi_type_alias_recursive(output_file: Path) -> None:
         assert_func=assert_file_content,
         expected_file="type_alias_recursive.py",
         extra_args=["--use-type-alias"],
+    )
+
+
+def test_main_openapi_type_alias_recursive_pydantic_v2(output_file: Path) -> None:
+    """Test recursive RootModel with forward references in Pydantic v2.
+
+    Without --use-type-alias, recursive schemas generate RootModel classes.
+    Forward references in the generic parameter must be quoted to avoid
+    NameError at class definition time.
+    """
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "type_alias_recursive.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="type_alias_recursive_pydantic_v2.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+        ],
     )
 
 
@@ -4278,4 +4406,30 @@ def test_main_openapi_use_status_code_in_response_name(output_file: Path) -> Non
         assert_func=assert_file_content,
         expected_file="use_status_code_in_response_name.py",
         extra_args=["--use-status-code-in-response-name", "--openapi-scopes", "schemas", "paths"],
+    )
+
+
+@freeze_time(TIMESTAMP)
+def test_main_openapi_request_bodies_scope(output_file: Path) -> None:
+    """Test generating models from components/requestBodies using requestbodies scope."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "request_bodies_scope.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="request_bodies_scope.py",
+        extra_args=["--openapi-scopes", "requestbodies", "--output-model-type", "pydantic_v2.BaseModel"],
+    )
+
+
+@freeze_time(TIMESTAMP)
+def test_main_openapi_request_bodies_scope_with_ref(output_file: Path) -> None:
+    """Test generating models from components/requestBodies with $ref at requestBody level."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "request_bodies_scope_with_ref.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="request_bodies_scope_with_ref.py",
+        extra_args=["--openapi-scopes", "requestbodies", "--output-model-type", "pydantic_v2.BaseModel"],
     )

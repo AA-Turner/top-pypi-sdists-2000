@@ -18,6 +18,7 @@ from datamodel_code_generator import (
     AllOfMergeMode,
     DataclassArguments,
     DefaultPutDict,
+    FieldTypeCollisionStrategy,
     LiteralType,
     PythonVersion,
     PythonVersionMin,
@@ -25,7 +26,7 @@ from datamodel_code_generator import (
     ReuseScope,
     snooper_to_methods,
 )
-from datamodel_code_generator.format import DEFAULT_FORMATTERS, DatetimeClassType, Formatter
+from datamodel_code_generator.format import DEFAULT_FORMATTERS, DateClassType, DatetimeClassType, Formatter
 from datamodel_code_generator.model import DataModel, DataModelFieldBase
 from datamodel_code_generator.model import pydantic as pydantic_model
 from datamodel_code_generator.model.dataclass import DataClass
@@ -119,6 +120,7 @@ class GraphQLParser(Parser):
         apply_default_values_for_required_fields: bool = False,
         allow_extra_fields: bool = False,
         extra_fields: str | None = None,
+        use_generic_base_class: bool = False,
         force_optional_for_required_fields: bool = False,
         class_name: str | None = None,
         use_standard_collections: bool = False,
@@ -163,6 +165,7 @@ class GraphQLParser(Parser):
         use_union_operator: bool = False,
         allow_responses_without_content: bool = False,
         collapse_root_models: bool = False,
+        collapse_reuse_models: bool = False,
         skip_root_model: bool = False,
         use_type_alias: bool = False,
         special_field_name_prefix: str | None = None,
@@ -175,11 +178,13 @@ class GraphQLParser(Parser):
         custom_formatters: list[str] | None = None,
         custom_formatters_kwargs: dict[str, Any] | None = None,
         use_pendulum: bool = False,
+        use_standard_primitive_types: bool = False,
         http_query_parameters: Sequence[tuple[str, str]] | None = None,
-        treat_dot_as_module: bool = False,
+        treat_dot_as_module: bool | None = None,
         use_exact_imports: bool = False,
         default_field_extras: dict[str, Any] | None = None,
         target_datetime_class: DatetimeClassType = DatetimeClassType.Datetime,
+        target_date_class: DateClassType | None = None,
         keyword_only: bool = False,
         frozen_dataclasses: bool = False,
         no_alias: bool = False,
@@ -190,6 +195,8 @@ class GraphQLParser(Parser):
         read_only_write_only_model_type: ReadOnlyWriteOnlyModelType | None = None,
         use_serialize_as_any: bool = False,
         use_frozen_field: bool = False,
+        use_default_factory_for_optional_nested_models: bool = False,
+        field_type_collision_strategy: FieldTypeCollisionStrategy | None = None,
     ) -> None:
         """Initialize the GraphQL parser with configuration options."""
         super().__init__(
@@ -212,6 +219,7 @@ class GraphQLParser(Parser):
             allow_population_by_field_name=allow_population_by_field_name,
             allow_extra_fields=allow_extra_fields,
             extra_fields=extra_fields,
+            use_generic_base_class=use_generic_base_class,
             apply_default_values_for_required_fields=apply_default_values_for_required_fields,
             force_optional_for_required_fields=force_optional_for_required_fields,
             class_name=class_name,
@@ -259,6 +267,7 @@ class GraphQLParser(Parser):
             use_union_operator=use_union_operator,
             allow_responses_without_content=allow_responses_without_content,
             collapse_root_models=collapse_root_models,
+            collapse_reuse_models=collapse_reuse_models,
             skip_root_model=skip_root_model,
             use_type_alias=use_type_alias,
             special_field_name_prefix=special_field_name_prefix,
@@ -269,11 +278,13 @@ class GraphQLParser(Parser):
             custom_formatters=custom_formatters,
             custom_formatters_kwargs=custom_formatters_kwargs,
             use_pendulum=use_pendulum,
+            use_standard_primitive_types=use_standard_primitive_types,
             http_query_parameters=http_query_parameters,
             treat_dot_as_module=treat_dot_as_module,
             use_exact_imports=use_exact_imports,
             default_field_extras=default_field_extras,
             target_datetime_class=target_datetime_class,
+            target_date_class=target_date_class,
             keyword_only=keyword_only,
             frozen_dataclasses=frozen_dataclasses,
             no_alias=no_alias,
@@ -284,6 +295,8 @@ class GraphQLParser(Parser):
             read_only_write_only_model_type=read_only_write_only_model_type,
             use_serialize_as_any=use_serialize_as_any,
             use_frozen_field=use_frozen_field,
+            use_default_factory_for_optional_nested_models=use_default_factory_for_optional_nested_models,
+            field_type_collision_strategy=field_type_collision_strategy,
         )
 
         self.data_model_scalar_type = data_model_scalar_type

@@ -1,17 +1,13 @@
 """Tests to track CLI documentation coverage.
 
-These tests verify that options intended to be documented have:
-1. A cli_doc marker in tests
-2. An entry in CLI_OPTION_META
+These tests verify that all CLI options (defined in arguments.py) have
+a cli_doc marker in tests (unless in MANUAL_DOCS).
 
-The DOCUMENTED_OPTIONS set defines which options should be documented.
-This allows gradual expansion of documentation coverage.
+This ensures that every CLI option has corresponding test documentation.
 """
 
 from __future__ import annotations
 
-import json
-from pathlib import Path
 from typing import Any
 
 import pytest
@@ -23,85 +19,54 @@ from datamodel_code_generator.cli_options import (
     get_canonical_option,
 )
 
-COLLECTION_PATH = Path(__file__).parent / ".cli_doc_collection.json"
-
-# Options that should be documented (gradually expand this set)
-# Options in this set MUST have:
-#   1. A cli_doc marker in tests
-#   2. An entry in CLI_OPTION_META
-DOCUMENTED_OPTIONS: frozenset[str] = frozenset({
-    "--frozen-dataclasses",
-    # Add more as cli_doc markers are added to tests...
-})
-
 
 @pytest.fixture(scope="module")
-def collection_data() -> dict[str, Any]:  # pragma: no cover
-    """Load the CLI doc collection data."""
-    if not COLLECTION_PATH.exists():
-        pytest.skip(f"CLI doc collection not found at {COLLECTION_PATH}. Run: pytest --collect-cli-docs -p no:xdist")
+def collected_options(request: pytest.FixtureRequest) -> set[str]:  # pragma: no cover
+    """Extract canonical options from collected cli_doc markers.
 
-    with Path(COLLECTION_PATH).open(encoding="utf-8") as f:
-        return json.load(f)
-
-
-@pytest.fixture(scope="module")
-def collected_options(collection_data: dict[str, Any]) -> set[str]:  # pragma: no cover
-    """Extract canonical options from collection data."""
+    Uses config._cli_doc_items populated by conftest.py during test collection.
+    """
+    items: list[dict[str, Any]] = getattr(request.config, "_cli_doc_items", [])
     options: set[str] = set()
-    for item in collection_data.get("items", []):
-        options.update(get_canonical_option(opt) for opt in item["marker_kwargs"].get("options", []))
+    for item in items:
+        marker_options = item.get("marker_kwargs", {}).get("options", [])
+        if not isinstance(marker_options, list):
+            continue
+        options.update(get_canonical_option(opt) for opt in marker_options if isinstance(opt, str))
     return options
 
 
 class TestCLIDocCoverage:  # pragma: no cover
     """Documentation coverage tests."""
 
-    def test_documented_options_have_cli_doc_markers(  # noqa: PLR6301
-        self, collected_options: set[str]
-    ) -> None:
-        """Verify that DOCUMENTED_OPTIONS have cli_doc markers in tests."""
-        missing = DOCUMENTED_OPTIONS - collected_options
+    def test_all_options_have_cli_doc_markers(self, collected_options: set[str]) -> None:
+        """Verify that all CLI options (except MANUAL_DOCS) have cli_doc markers."""
+        all_options = get_all_canonical_options()
+        documentable_options = all_options - MANUAL_DOCS
+        missing = documentable_options - collected_options
         if missing:
             pytest.fail(
-                "Options in DOCUMENTED_OPTIONS but missing cli_doc marker:\n"
+                "CLI options missing cli_doc marker:\n"
                 + "\n".join(f"  - {opt}" for opt in sorted(missing))
                 + "\n\nAdd @pytest.mark.cli_doc(...) to tests for these options."
             )
 
-    def test_documented_options_have_meta(self) -> None:  # noqa: PLR6301
-        """Verify that DOCUMENTED_OPTIONS have CLI_OPTION_META entries."""
-        missing = DOCUMENTED_OPTIONS - set(CLI_OPTION_META.keys())
-        if missing:
-            pytest.fail(
-                "Options in DOCUMENTED_OPTIONS but missing CLI_OPTION_META:\n"
-                + "\n".join(f"  - {opt}" for opt in sorted(missing))
-                + "\n\nAdd entries to CLI_OPTION_META in cli_options.py."
-            )
-
-    def test_documented_options_not_manual(self) -> None:  # noqa: PLR6301
-        """Verify that DOCUMENTED_OPTIONS are not in MANUAL_DOCS."""
-        overlap = DOCUMENTED_OPTIONS & MANUAL_DOCS
+    def test_meta_options_not_manual(self) -> None:
+        """Verify that CLI_OPTION_META options are not in MANUAL_DOCS."""
+        meta_options = set(CLI_OPTION_META.keys())
+        overlap = meta_options & MANUAL_DOCS
         if overlap:
             pytest.fail(
-                "Options in both DOCUMENTED_OPTIONS and MANUAL_DOCS:\n"
+                "Options in both CLI_OPTION_META and MANUAL_DOCS:\n"
                 + "\n".join(f"  - {opt}" for opt in sorted(overlap))
             )
-
-    def test_collection_schema_version(  # noqa: PLR6301
-        self, collection_data: dict[str, Any]
-    ) -> None:
-        """Verify that collection data has expected schema version."""
-        version = collection_data.get("schema_version")
-        assert version is not None, "Collection data missing 'schema_version'"
-        assert version == 1, f"Unexpected schema version: {version}"
 
 
 class TestCoverageStats:  # pragma: no cover
     """Informational tests for coverage statistics."""
 
     @pytest.mark.skip(reason="Informational: run with -v --no-skip to see stats")
-    def test_show_coverage_stats(self, collected_options: set[str]) -> None:  # noqa: PLR6301
+    def test_show_coverage_stats(self, collected_options: set[str]) -> None:
         """Display documentation coverage statistics."""
         all_options = get_all_canonical_options()
         documentable = all_options - MANUAL_DOCS
@@ -112,9 +77,7 @@ class TestCoverageStats:  # pragma: no cover
             print(f"  {opt}")  # noqa: T201
 
     @pytest.mark.skip(reason="Informational: run with -v --no-skip to see stats")
-    def test_show_documented_options(  # noqa: PLR6301
-        self, collected_options: set[str]
-    ) -> None:
+    def test_show_documented_options(self, collected_options: set[str]) -> None:
         """Display currently documented options."""
         print(f"\nDocumented options ({len(collected_options)}):")  # noqa: T201
         for opt in sorted(collected_options):

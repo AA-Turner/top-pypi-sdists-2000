@@ -8,6 +8,7 @@ from mistral_common.audio import Audio
 from mistral_common.exceptions import (
     InvalidAssistantMessageException,
     InvalidMessageStructureException,
+    InvalidRequestException,
     TokenizerException,
 )
 from mistral_common.protocol.fim.request import FIMRequest
@@ -31,8 +32,8 @@ from mistral_common.protocol.instruct.messages import (
 )
 from mistral_common.protocol.instruct.request import InstructRequest
 from mistral_common.protocol.instruct.tool_calls import Tool, ToolCall
-from mistral_common.protocol.transcription.request import TranscriptionRequest
-from mistral_common.tokens.tokenizers.audio import AudioEncoder
+from mistral_common.protocol.transcription.request import StreamingMode, TranscriptionRequest
+from mistral_common.tokens.tokenizers.audio import AudioEncoder, AudioSpectrogramConfig, TranscriptionFormat
 from mistral_common.tokens.tokenizers.base import (
     FIMRequestType,
     InstructRequestType,
@@ -401,16 +402,16 @@ class InstructTokenizerV2(
             audio_encoder: The audio encoder to use.
         """
         super().__init__(tokenizer, image_encoder, audio_encoder)
-        self.BEGIN_INST = self.tokenizer.get_control_token(SpecialTokens.begin_inst.value)
-        self.END_INST = self.tokenizer.get_control_token(SpecialTokens.end_inst.value)
-        self.BEGIN_AVAILABLE_TOOLS = self.tokenizer.get_control_token(SpecialTokens.begin_tools.value)
-        self.END_AVAILABLE_TOOLS = self.tokenizer.get_control_token(SpecialTokens.end_tools.value)
-        self.BEGIN_TOOL_RESULTS = self.tokenizer.get_control_token(SpecialTokens.begin_tool_results.value)
-        self.END_TOOL_RESULTS = self.tokenizer.get_control_token(SpecialTokens.end_tool_results.value)
-        self.TOOL_CALLS = self.tokenizer.get_control_token(SpecialTokens.tool_calls.value)
-        self.BOS = self.tokenizer.get_control_token(SpecialTokens.bos.value)
-        self.PREFIX = self.tokenizer.get_control_token(SpecialTokens.prefix.value)
-        self.SUFFIX = self.tokenizer.get_control_token(SpecialTokens.suffix.value)
+        self.BEGIN_INST = self.tokenizer.get_special_token(SpecialTokens.begin_inst.value)
+        self.END_INST = self.tokenizer.get_special_token(SpecialTokens.end_inst.value)
+        self.BEGIN_AVAILABLE_TOOLS = self.tokenizer.get_special_token(SpecialTokens.begin_tools.value)
+        self.END_AVAILABLE_TOOLS = self.tokenizer.get_special_token(SpecialTokens.end_tools.value)
+        self.BEGIN_TOOL_RESULTS = self.tokenizer.get_special_token(SpecialTokens.begin_tool_results.value)
+        self.END_TOOL_RESULTS = self.tokenizer.get_special_token(SpecialTokens.end_tool_results.value)
+        self.TOOL_CALLS = self.tokenizer.get_special_token(SpecialTokens.tool_calls.value)
+        self.BOS = self.tokenizer.get_special_token(SpecialTokens.bos.value)
+        self.PREFIX = self.tokenizer.get_special_token(SpecialTokens.prefix.value)
+        self.SUFFIX = self.tokenizer.get_special_token(SpecialTokens.suffix.value)
 
     def encode_user_message(
         self,
@@ -468,11 +469,16 @@ class InstructTokenizerV2(
         except json.JSONDecodeError:
             return content
 
+    def _parse_tool_content(self, content: str | list[TextChunk]) -> Any:
+        if isinstance(content, list):
+            content = "".join(chunk.text for chunk in content)
+        return self._parse_json_content(content)
+
     def _prepare_tool_result(self, tool_message: ToolMessage) -> dict[str, Any]:
         r"""Bit of a hack due to the way tool results are tokenized."""
         return {
             "name": tool_message.name,
-            "content": self._parse_json_content(tool_message.content),
+            "content": self._parse_tool_content(tool_message.content),
         }
 
     def encode_tool_message(self, message: ToolMessage, is_before_last_user_message: bool) -> list[int]:
@@ -623,7 +629,7 @@ class InstructTokenizerV3(
         assert tool_message.tool_call_id is not None, "Tool message has to have the tool call id defined in v3"
 
         return {
-            "content": self._parse_json_content(tool_message.content),
+            "content": self._parse_tool_content(tool_message.content),
             "call_id": tool_message.tool_call_id,
         }
 
@@ -793,13 +799,16 @@ class InstructTokenizerV7(InstructTokenizerV3):
         """
 
         super().__init__(tokenizer, image_encoder, audio_encoder)
-        self.BEGIN_SYSTEM = self.tokenizer.get_control_token(SpecialTokens.begin_system.value)
-        self.END_SYSTEM = self.tokenizer.get_control_token(SpecialTokens.end_system.value)
-        self.BEGIN_TOOL_CONTENT = self.tokenizer.get_control_token(SpecialTokens.begin_tool_content.value)
+        self.BEGIN_SYSTEM = self.tokenizer.get_special_token(SpecialTokens.begin_system.value)
+        self.END_SYSTEM = self.tokenizer.get_special_token(SpecialTokens.end_system.value)
+        self.BEGIN_TOOL_CONTENT = self.tokenizer.get_special_token(SpecialTokens.begin_tool_content.value)
 
         self.TRANSCRIBE = None
         if audio_encoder is not None:
-            self.TRANSCRIBE = self.tokenizer.get_control_token(SpecialTokens.transcribe.value)
+            if audio_encoder.audio_config.is_streaming:
+                self.STREAMING_PAD = self.tokenizer.get_special_token(SpecialTokens.streaming_pad.value)
+            else:
+                self.TRANSCRIBE = self.tokenizer.get_special_token(SpecialTokens.transcribe.value)
 
     def _truncate_for_max_tokens(
         self,
@@ -939,7 +948,21 @@ class InstructTokenizerV7(InstructTokenizerV3):
         Returns:
             Tokenized: The tokenized representation of the audio data, including processed audio and tokens
         """
+        assert self.audio_encoder is not None, f"Audio encoder must be defined, got {self.audio_encoder=}"
+        if self.audio_encoder.audio_config.transcription_format == TranscriptionFormat.INSTRUCT:
+            return self._encode_instruct_transcription(request)
+        elif self.audio_encoder.audio_config.transcription_format == TranscriptionFormat.STREAMING:
+            return self._encode_streaming_transcription(request)
 
+        raise InvalidRequestException(
+            "Transcription format should be one of 'instruct', 'streaming', got "
+            f"{self.audio_encoder.audio_config.transcription_format=}."
+        )
+
+    def _encode_instruct_transcription(self, request: TranscriptionRequest) -> Tokenized:
+        assert request.streaming == StreamingMode.DISABLED, (
+            f"Request must not be in streaming mode, got {request.streaming=}"
+        )
         assert self.TRANSCRIBE is not None, f"{self.__class__.__name__} needs to have a TRANSCRIBE token"
         prefix = self.start()
         tokens, _, audio = self.encode_user_message(
@@ -957,6 +980,43 @@ class InstructTokenizerV7(InstructTokenizerV3):
 
         tokens.append(self.TRANSCRIBE)
         return Tokenized(tokens=tokens, text=self.tokenizer._to_string(tokens), audios=audio)
+
+    def _encode_audio(self, audio: str | bytes, is_online_streaming: bool) -> Tokenized:
+        assert self.audio_encoder is not None, (
+            f"Audio encoder must be defined to encode audio, got {self.audio_encoder=}"
+        )
+        _audio = Audio.from_base64(audio) if isinstance(audio, str) else Audio.from_bytes(audio)
+        audio_enc = self.audio_encoder.encode_audio(_audio, is_online_streaming=is_online_streaming)
+
+        return Tokenized(
+            tokens=audio_enc.tokens,
+            audios=[audio_enc.audio],
+        )
+
+    def _encode_streaming_transcription(self, request: TranscriptionRequest) -> Tokenized:
+        assert request.streaming != StreamingMode.DISABLED, (
+            f"Request must be in streaming mode, got {request.streaming=}"
+        )
+
+        tokenized_audio = self._encode_audio(
+            request.audio.data, is_online_streaming=request.streaming == StreamingMode.ONLINE
+        )
+
+        assert isinstance(self.audio_encoder, AudioEncoder), f"Audio encoder must be defined, got {self.audio_encoder=}"
+        assert isinstance(self.audio_encoder.audio_config.encoding_config, AudioSpectrogramConfig), (
+            f"Audio encoder must be spectrogram encoder, got {self.audio_encoder=}"
+        )
+        assert self.audio_encoder.audio_config.transcription_delay_ms is not None
+
+        # streaming pad tokens
+        tokens = self.start() + [self.STREAMING_PAD] * self.audio_encoder.audio_config.num_delay_tokens
+
+        tokenized = Tokenized(
+            tokens=tokens,
+            text=self.decode(tokens, special_token_policy=SpecialTokenPolicy.KEEP),
+            audios=tokenized_audio.audios,
+        )
+        return tokenized
 
     @classmethod
     def validate_messages(cls, messages: list[UATS]) -> None:
@@ -1054,8 +1114,8 @@ class InstructTokenizerV11(InstructTokenizerV7):
         audio_encoder: AudioEncoder | None = None,
     ) -> None:
         super().__init__(tokenizer, image_encoder, audio_encoder)
-        self.ARGS = self.tokenizer.get_control_token(SpecialTokens.args.value)
-        self.CALL_ID = self.tokenizer.get_control_token(SpecialTokens.call_id.value)
+        self.ARGS = self.tokenizer.get_special_token(SpecialTokens.args.value)
+        self.CALL_ID = self.tokenizer.get_special_token(SpecialTokens.call_id.value)
 
     def _encode_tool_calls_in_assistant_message(self, message: AssistantMessageType) -> list[int]:
         assert message.tool_calls, f"Assistant message must have tool calls. Got {message}"
@@ -1099,8 +1159,8 @@ class InstructTokenizerV13(InstructTokenizerV11):
             SpecialTokens.begin_think.value in tokenizer._special_tokens_reverse_vocab
             and SpecialTokens.end_think.value in tokenizer._special_tokens_reverse_vocab
         ):
-            self.BEGIN_THINK: int | None = tokenizer.get_control_token(SpecialTokens.begin_think.value)
-            self.END_THINK: int | None = tokenizer.get_control_token(SpecialTokens.end_think.value)
+            self.BEGIN_THINK: int | None = tokenizer.get_special_token(SpecialTokens.begin_think.value)
+            self.END_THINK: int | None = tokenizer.get_special_token(SpecialTokens.end_think.value)
         else:
             self.BEGIN_THINK = None
             self.END_THINK = None
@@ -1131,7 +1191,11 @@ class InstructTokenizerV13(InstructTokenizerV11):
         """
         assert message.tool_call_id is not None, "Tool call id must be provided for tokenizer >= v13"
 
-        tokens = self.tokenizer.encode(message.content, bos=False, eos=False)
+        content = message.content
+        if not isinstance(content, str):
+            content = "".join(chunk.text for chunk in content)
+
+        tokens = self.tokenizer.encode(content, bos=False, eos=False)
         curr_tokens = [
             self.BEGIN_TOOL_RESULTS,
             *tokens,

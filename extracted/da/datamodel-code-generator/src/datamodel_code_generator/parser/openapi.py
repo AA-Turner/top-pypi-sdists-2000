@@ -22,6 +22,7 @@ from datamodel_code_generator import (
     AllOfMergeMode,
     DataclassArguments,
     Error,
+    FieldTypeCollisionStrategy,
     LiteralType,
     OpenAPIScope,
     PythonVersion,
@@ -32,7 +33,7 @@ from datamodel_code_generator import (
     load_yaml_dict,
     snooper_to_methods,
 )
-from datamodel_code_generator.format import DEFAULT_FORMATTERS, DatetimeClassType, Formatter
+from datamodel_code_generator.format import DEFAULT_FORMATTERS, DateClassType, DatetimeClassType, Formatter
 from datamodel_code_generator.model import DataModel, DataModelFieldBase
 from datamodel_code_generator.model import pydantic as pydantic_model
 from datamodel_code_generator.parser.base import get_special_path
@@ -199,6 +200,7 @@ class OpenAPIParser(JsonSchemaParser):
         allow_population_by_field_name: bool = False,
         allow_extra_fields: bool = False,
         extra_fields: str | None = None,
+        use_generic_base_class: bool = False,
         apply_default_values_for_required_fields: bool = False,
         force_optional_for_required_fields: bool = False,
         class_name: str | None = None,
@@ -249,6 +251,7 @@ class OpenAPIParser(JsonSchemaParser):
         use_union_operator: bool = False,
         allow_responses_without_content: bool = False,
         collapse_root_models: bool = False,
+        collapse_reuse_models: bool = False,
         skip_root_model: bool = False,
         use_type_alias: bool = False,
         special_field_name_prefix: str | None = None,
@@ -259,11 +262,13 @@ class OpenAPIParser(JsonSchemaParser):
         custom_formatters: list[str] | None = None,
         custom_formatters_kwargs: dict[str, Any] | None = None,
         use_pendulum: bool = False,
+        use_standard_primitive_types: bool = False,
         http_query_parameters: Sequence[tuple[str, str]] | None = None,
-        treat_dot_as_module: bool = False,
+        treat_dot_as_module: bool | None = None,
         use_exact_imports: bool = False,
         default_field_extras: dict[str, Any] | None = None,
         target_datetime_class: DatetimeClassType | None = None,
+        target_date_class: DateClassType | None = None,
         keyword_only: bool = False,
         frozen_dataclasses: bool = False,
         no_alias: bool = False,
@@ -273,7 +278,9 @@ class OpenAPIParser(JsonSchemaParser):
         type_mappings: list[str] | None = None,
         read_only_write_only_model_type: ReadOnlyWriteOnlyModelType | None = None,
         use_frozen_field: bool = False,
+        use_default_factory_for_optional_nested_models: bool = False,
         use_status_code_in_response_name: bool = False,
+        field_type_collision_strategy: FieldTypeCollisionStrategy | None = None,
     ) -> None:
         """Initialize the OpenAPI parser with extensive configuration options."""
         target_datetime_class = target_datetime_class or DatetimeClassType.Awaredatetime
@@ -297,6 +304,7 @@ class OpenAPIParser(JsonSchemaParser):
             allow_population_by_field_name=allow_population_by_field_name,
             allow_extra_fields=allow_extra_fields,
             extra_fields=extra_fields,
+            use_generic_base_class=use_generic_base_class,
             apply_default_values_for_required_fields=apply_default_values_for_required_fields,
             force_optional_for_required_fields=force_optional_for_required_fields,
             class_name=class_name,
@@ -345,6 +353,7 @@ class OpenAPIParser(JsonSchemaParser):
             use_union_operator=use_union_operator,
             allow_responses_without_content=allow_responses_without_content,
             collapse_root_models=collapse_root_models,
+            collapse_reuse_models=collapse_reuse_models,
             skip_root_model=skip_root_model,
             use_type_alias=use_type_alias,
             special_field_name_prefix=special_field_name_prefix,
@@ -355,11 +364,13 @@ class OpenAPIParser(JsonSchemaParser):
             custom_formatters=custom_formatters,
             custom_formatters_kwargs=custom_formatters_kwargs,
             use_pendulum=use_pendulum,
+            use_standard_primitive_types=use_standard_primitive_types,
             http_query_parameters=http_query_parameters,
             treat_dot_as_module=treat_dot_as_module,
             use_exact_imports=use_exact_imports,
             default_field_extras=default_field_extras,
             target_datetime_class=target_datetime_class,
+            target_date_class=target_date_class,
             keyword_only=keyword_only,
             frozen_dataclasses=frozen_dataclasses,
             no_alias=no_alias,
@@ -369,6 +380,8 @@ class OpenAPIParser(JsonSchemaParser):
             type_mappings=type_mappings,
             read_only_write_only_model_type=read_only_write_only_model_type,
             use_frozen_field=use_frozen_field,
+            use_default_factory_for_optional_nested_models=use_default_factory_for_optional_nested_models,
+            field_type_collision_strategy=field_type_collision_strategy,
         )
         self.open_api_scopes: list[OpenAPIScope] = openapi_scopes or [OpenAPIScope.Schemas]
         self.include_path_parameters: bool = include_path_parameters
@@ -393,9 +406,53 @@ class OpenAPIParser(JsonSchemaParser):
 
         return super().get_data_type(obj)
 
+    def _normalize_discriminator_mapping_ref(self, mapping_value: str) -> str:  # noqa: PLR6301
+        """Normalize a discriminator mapping value to a full $ref path.
+
+        Per OpenAPI spec, mapping values can be either:
+        - Full refs: "#/components/schemas/Pet" or "./other.yaml#/components/schemas/Pet"
+        - Short names: "Pet" or "Pet.V1" (relative to #/components/schemas/)
+        - Relative paths: "schemas/Pet" or "./other.yaml"
+
+        Values containing "/" or "#" are treated as paths/refs and passed through.
+        All other values (including those with dots like "Pet.V1") are treated as
+        short schema names and normalized to full refs.
+
+        Note: Bare file references without path separators (e.g., "other.yaml") will be
+        treated as schema names. Use "./other.yaml" format for file references.
+
+        Note: This could be a staticmethod, but @snooper_to_methods() decorator
+        converts staticmethods to regular functions when pysnooper is installed.
+        """
+        if "/" in mapping_value or "#" in mapping_value:
+            return mapping_value
+        return f"#/components/schemas/{mapping_value}"
+
+    def _normalize_discriminator(self, discriminator: dict[str, Any]) -> dict[str, Any]:
+        """Return a copy of the discriminator dict with normalized mapping refs."""
+        result = discriminator.copy()
+        mapping = discriminator.get("mapping")
+        if mapping:
+            result["mapping"] = {
+                k: self._normalize_discriminator_mapping_ref(v) for k, v in mapping.items() if isinstance(v, str)
+            }
+        return result
+
     def _get_discriminator_union_type(self, ref: str) -> DataType | None:
-        """Create a union type for discriminator subtypes if available."""
+        """Create a union type for discriminator subtypes if available.
+
+        First tries to use allOf subtypes. If none found, falls back to using
+        the discriminator mapping to create the union type. This handles cases
+        where schemas don't use allOf inheritance but have explicit discriminator mappings.
+        """
         subtypes = self._discriminator_subtypes.get(ref, [])
+        if not subtypes:
+            discriminator = self._discriminator_schemas[ref]
+            mapping = discriminator.get("mapping", {})
+            if mapping:
+                subtypes = [
+                    self._normalize_discriminator_mapping_ref(v) for v in mapping.values() if isinstance(v, str)
+                ]
         if not subtypes:
             return None
         refs = map(self.model_resolver.add_ref, subtypes)
@@ -428,10 +485,11 @@ class OpenAPIParser(JsonSchemaParser):
                 and (discriminator := self._discriminator_schemas.get(field.ref))
             ):
                 new_field_type = self._get_discriminator_union_type(field.ref) or field_obj.data_type
+                normalized_discriminator = self._normalize_discriminator(discriminator)
                 field_obj = self.data_model_field_type(**{  # noqa: PLW2901
                     **field_obj.__dict__,
                     "data_type": new_field_type,
-                    "extras": {**field_obj.extras, "discriminator": discriminator},
+                    "extras": {**field_obj.extras, "discriminator": normalized_discriminator},
                 })
             result_fields.append(field_obj)
 
@@ -671,8 +729,14 @@ class OpenAPIParser(JsonSchemaParser):
                         if object_schema and self.is_constraints_field(object_schema)
                         else None,
                         nullable=object_schema.nullable
-                        if object_schema and self.strict_nullable and (object_schema.has_default or parameter.required)
-                        else None,
+                        if object_schema and self.strict_nullable and object_schema.nullable is not None
+                        else (
+                            False
+                            if object_schema
+                            and self.strict_nullable
+                            and (object_schema.has_default or parameter.required)
+                            else None
+                        ),
                         strip_default_none=self.strip_default_none,
                         extras=self.get_field_extras(object_schema) if object_schema else {},
                         use_annotated=self.use_annotated,
@@ -810,6 +874,29 @@ class OpenAPIParser(JsonSchemaParser):
             if OpenAPIScope.Webhooks in self.open_api_scopes:
                 webhooks: dict[str, dict[str, Any]] = specification.get("webhooks", {})
                 self._process_path_items(webhooks, path_parts, "webhooks", [], security, strip_leading_slash=False)
+
+            if OpenAPIScope.RequestBodies in self.open_api_scopes:
+                request_bodies: dict[str, Any] = specification.get("components", {}).get("requestBodies", {})
+                for body_name, raw_body in request_bodies.items():
+                    resolved_body = self.get_ref_model(raw_body["$ref"]) if "$ref" in raw_body else raw_body
+                    content = resolved_body.get("content", {})
+                    for media_type, media_obj in content.items():
+                        schema = media_obj.get("schema")
+                        if not schema:
+                            continue
+                        self.parse_raw_obj(
+                            body_name,
+                            schema,
+                            [
+                                *path_parts,
+                                "#/components",
+                                "requestBodies",
+                                body_name,
+                                "content",
+                                media_type,
+                                "schema",
+                            ],
+                        )
 
         self._resolve_unparsed_json_pointer()
 

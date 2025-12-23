@@ -333,6 +333,18 @@ def test_convert_tool_call() -> None:
     assert ToolCall.from_openai(typeddict_openai) == tool_call
 
 
+def test_tool_call_from_openai_ignores_index() -> None:
+    openai_tool_call = {
+        "id": "call_123",
+        "index": 0,
+        "type": "function",
+        "function": {"name": "foo", "arguments": "{}"},
+    }
+    assert ToolCall.from_openai(openai_tool_call) == ToolCall(
+        id="call_123", function=FunctionCall(name="foo", arguments="{}")
+    )
+
+
 def test_convert_think_chunk() -> None:
     chunk = ThinkChunk(thinking="Hello", closed=False)
     text_openai = chunk.to_openai()
@@ -424,6 +436,14 @@ def test_convert_think_chunk() -> None:
         (
             OpenAIToolMessage(role="tool", content="22", tool_call_id="VvvODy9mT"),
             ToolMessage(tool_call_id="VvvODy9mT", content="22"),
+        ),
+        (
+            OpenAIToolMessage(
+                role="tool",
+                content=[{"type": "text", "text": "22"}, {"type": "text", "text": "23"}],
+                tool_call_id="VvvODy9mT",
+            ),
+            ToolMessage(tool_call_id="VvvODy9mT", content=[TextChunk(text="22"), TextChunk(text="23")]),
         ),
         (
             OpenAISystemMessage(role="system", content="You are a helpful assistant."),

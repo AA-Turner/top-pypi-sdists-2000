@@ -4,7 +4,7 @@ requires = ["setuptools>=77.0.3"]
 
 [project]
 name = "types-setuptools"
-version = "80.9.0.20251221"
+version = "80.9.0.20251223"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 description = "Typing stubs for setuptools"
@@ -31,7 +31,7 @@ This package was tested with the following type checkers:
 * [pyright](https://github.com/microsoft/pyright) 1.1.407
 
 It was generated from typeshed commit
-[`d8d989280c3f550a864815c4b6a28683d228531f`](https://github.com/python/typeshed/commit/d8d989280c3f550a864815c4b6a28683d228531f).
+[`132230480e055302824dc1ea8fd402e46559c9b7`](https://github.com/python/typeshed/commit/132230480e055302824dc1ea8fd402e46559c9b7).
 """, content-type = "text/markdown" }
 classifiers = [
   "Programming Language :: Python :: 3",

@@ -28,6 +28,7 @@ from datamodel_code_generator import (
     DataclassArguments,
     DataModelType,
     Error,
+    FieldTypeCollisionStrategy,
     InputFileType,
     InvalidClassNameError,
     ModuleSplitMode,
@@ -40,6 +41,7 @@ from datamodel_code_generator import (
 from datamodel_code_generator.arguments import DEFAULT_ENCODING, arg_parser, namespace
 from datamodel_code_generator.format import (
     DEFAULT_FORMATTERS,
+    DateClassType,
     DatetimeClassType,
     Formatter,
     PythonVersion,
@@ -391,6 +393,7 @@ class Config(BaseModel):
     allow_population_by_field_name: bool = False
     allow_extra_fields: bool = False
     extra_fields: Optional[str] = None  # noqa: UP045
+    use_generic_base_class: bool = False
     use_default: bool = False
     force_optional: bool = False
     class_name: Optional[str] = None  # noqa: UP045
@@ -438,6 +441,7 @@ class Config(BaseModel):
     original_field_name_delimiter: Optional[str] = None  # noqa: UP045
     use_double_quotes: bool = False
     collapse_root_models: bool = False
+    collapse_reuse_models: bool = False
     skip_root_model: bool = False
     use_type_alias: bool = False
     special_field_name_prefix: Optional[str] = None  # noqa: UP045
@@ -449,16 +453,19 @@ class Config(BaseModel):
     custom_formatters: Optional[list[str]] = None  # noqa: UP045
     custom_formatters_kwargs: Optional[TextIOBase] = None  # noqa: UP045
     use_pendulum: bool = False
+    use_standard_primitive_types: bool = False
     http_query_parameters: Optional[Sequence[tuple[str, str]]] = None  # noqa: UP045
-    treat_dot_as_module: bool = False
+    treat_dot_as_module: Optional[bool] = None  # noqa: UP045
     use_exact_imports: bool = False
     union_mode: Optional[UnionMode] = None  # noqa: UP045
     output_datetime_class: Optional[DatetimeClassType] = None  # noqa: UP045
+    output_date_class: Optional[DateClassType] = None  # noqa: UP045
     keyword_only: bool = False
     frozen_dataclasses: bool = False
     dataclass_arguments: Optional[DataclassArguments] = None  # noqa: UP045
     no_alias: bool = False
     use_frozen_field: bool = False
+    use_default_factory_for_optional_nested_models: bool = False
     formatters: list[Formatter] = DEFAULT_FORMATTERS
     parent_scoped_naming: bool = False
     disable_future_imports: bool = False
@@ -467,6 +474,7 @@ class Config(BaseModel):
     use_status_code_in_response_name: bool = False
     all_exports_scope: Optional[AllExportsScope] = None  # noqa: UP045
     all_exports_collision_strategy: Optional[AllExportsCollisionStrategy] = None  # noqa: UP045
+    field_type_collision_strategy: Optional[FieldTypeCollisionStrategy] = None  # noqa: UP045
     module_split_mode: Optional[ModuleSplitMode] = None  # noqa: UP045
     watch: bool = False
     watch_delay: float = 0.5
@@ -695,6 +703,7 @@ def run_generate_from_config(  # noqa: PLR0913, PLR0917
         allow_population_by_field_name=config.allow_population_by_field_name,
         allow_extra_fields=config.allow_extra_fields,
         extra_fields=config.extra_fields,
+        use_generic_base_class=config.use_generic_base_class,
         apply_default_values_for_required_fields=config.use_default,
         force_optional_for_required_fields=config.force_optional,
         class_name=config.class_name,
@@ -740,6 +749,7 @@ def run_generate_from_config(  # noqa: PLR0913, PLR0917
         original_field_name_delimiter=config.original_field_name_delimiter,
         use_double_quotes=config.use_double_quotes,
         collapse_root_models=config.collapse_root_models,
+        collapse_reuse_models=config.collapse_reuse_models,
         skip_root_model=config.skip_root_model,
         use_type_alias=config.use_type_alias,
         use_union_operator=config.use_union_operator,
@@ -752,15 +762,18 @@ def run_generate_from_config(  # noqa: PLR0913, PLR0917
         custom_formatters=config.custom_formatters,
         custom_formatters_kwargs=custom_formatters_kwargs,
         use_pendulum=config.use_pendulum,
+        use_standard_primitive_types=config.use_standard_primitive_types,
         http_query_parameters=config.http_query_parameters,
         treat_dot_as_module=config.treat_dot_as_module,
         use_exact_imports=config.use_exact_imports,
         union_mode=config.union_mode,
         output_datetime_class=config.output_datetime_class,
+        output_date_class=config.output_date_class,
         keyword_only=config.keyword_only,
         frozen_dataclasses=config.frozen_dataclasses,
         no_alias=config.no_alias,
         use_frozen_field=config.use_frozen_field,
+        use_default_factory_for_optional_nested_models=config.use_default_factory_for_optional_nested_models,
         formatters=config.formatters,
         settings_path=settings_path,
         parent_scoped_naming=config.parent_scoped_naming,
@@ -771,6 +784,7 @@ def run_generate_from_config(  # noqa: PLR0913, PLR0917
         use_status_code_in_response_name=config.use_status_code_in_response_name,
         all_exports_scope=config.all_exports_scope,
         all_exports_collision_strategy=config.all_exports_collision_strategy,
+        field_type_collision_strategy=config.field_type_collision_strategy,
         module_split_mode=config.module_split_mode,
     )
 

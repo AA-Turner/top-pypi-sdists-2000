@@ -27,6 +27,7 @@ from tests.conftest import assert_directory_content, freeze_time
 from tests.main.conftest import (
     ALIASES_DATA_PATH,
     DATA_PATH,
+    EXPECTED_MAIN_PATH,
     JSON_SCHEMA_DATA_PATH,
     LEGACY_BLACK_SKIP,
     MSGSPEC_LEGACY_BLACK_SKIP,
@@ -136,6 +137,13 @@ def test_main_keep_model_order_field_references(output_file: Path) -> None:
     'from __future__ import annotations' to the output. This is useful when
     you need compatibility with tools or environments that don't support
     postponed evaluation of annotations (PEP 563).
+
+    **Python 3.13+ Deprecation Warning:** When using `from __future__ import annotations`
+    with older versions of Pydantic v1 (before 1.10.18), Python 3.13 may raise
+    deprecation warnings related to `typing._eval_type()`. To avoid these warnings:
+
+    - Upgrade to Pydantic v1 >= 1.10.18 or Pydantic v2 (recommended)
+    - Use this `--disable-future-imports` flag as a workaround
     """
     run_main_and_assert(
         input_path=JSON_SCHEMA_DATA_PATH / "keep_model_order_field_references.json",
@@ -314,7 +322,7 @@ def test_main_jsonschema_dataclass_arguments_with_pydantic(output_file: Path) ->
 @pytest.mark.cli_doc(
     options=["--keyword-only"],
     input_schema="jsonschema/person.json",
-    cli_args=["--output-model-type", "dataclasses.dataclass", "--frozen", "--keyword-only"],
+    cli_args=["--output-model-type", "dataclasses.dataclass", "--frozen-dataclasses", "--keyword-only"],
     golden_output="main/jsonschema/general_dataclass_frozen_kw_only.py",
     related_options=["--frozen-dataclasses", "--output-model-type"],
 )
@@ -323,7 +331,7 @@ def test_main_jsonschema_dataclass_frozen_keyword_only(output_file: Path) -> Non
 
     The `--keyword-only` flag generates all dataclass fields as keyword-only,
     requiring explicit parameter names when instantiating models. Combined with
-    `--frozen`, creates immutable models with keyword-only constructors.
+    `--frozen-dataclasses`, creates immutable models with keyword-only constructors.
     """
     run_main_and_assert(
         input_path=JSON_SCHEMA_DATA_PATH / "person.json",
@@ -334,7 +342,7 @@ def test_main_jsonschema_dataclass_frozen_keyword_only(output_file: Path) -> Non
         extra_args=[
             "--output-model-type",
             "dataclasses.dataclass",
-            "--frozen",
+            "--frozen-dataclasses",
             "--keyword-only",
             "--target-python-version",
             "3.10",
@@ -469,11 +477,27 @@ def test_main_null_and_array(output_model: str, expected_output: str, output_fil
     input_schema="jsonschema/use_default_with_const.json",
     cli_args=["--output-model-type", "pydantic_v2.BaseModel", "--use-default"],
     golden_output="jsonschema/use_default_with_const.py",
+    related_options=["--strict-nullable"],
 )
 def test_use_default_pydantic_v2_with_json_schema_const(output_file: Path) -> None:
     """Use default values from schema in generated models.
 
-    The `--use-default` flag configures the code generation behavior.
+    The `--use-default` flag allows required fields with default values to be generated
+    with their defaults, making them optional to provide when instantiating the model.
+
+    !!! warning "Fields with defaults become nullable"
+        When using `--use-default`, fields with default values are generated as nullable
+        types (e.g., `str | None` instead of `str`), even if the schema does not allow
+        null values.
+
+        If you want fields to strictly follow the schema's type definition (non-nullable),
+        use `--strict-nullable` together with `--use-default`.
+
+    !!! note "Future behavior change"
+        In a future major version, the default behavior of `--use-default` may change to
+        generate non-nullable types that match the schema definition (equivalent to using
+        `--strict-nullable`). If you rely on the current nullable behavior, consider
+        explicitly handling this in your code.
     """
     run_main_and_assert(
         input_path=JSON_SCHEMA_DATA_PATH / "use_default_with_const.json",
@@ -1675,6 +1699,66 @@ def test_main_strict_types_all_with_field_constraints(output_file: Path) -> None
     )
 
 
+def test_main_hostname_field_constraints_pydantic_v2(output_file: Path) -> None:
+    """Test hostname format uses Field(pattern=) instead of constr with --field-constraints."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "hostname_field_constraints.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="hostname_field_constraints_pydantic_v2.py",
+        extra_args=["--output-model-type", "pydantic_v2.BaseModel", "--field-constraints"],
+    )
+
+
+def test_main_hostname_field_constraints_pydantic_v1(output_file: Path) -> None:
+    """Test hostname format uses Field(regex=) instead of constr with --field-constraints for v1."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "hostname_field_constraints.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="hostname_field_constraints_pydantic_v1.py",
+        extra_args=["--output-model-type", "pydantic.BaseModel", "--field-constraints"],
+    )
+
+
+def test_main_hostname_field_constraints_strict_pydantic_v1(output_file: Path) -> None:
+    """Test hostname format uses StrictStr with --field-constraints and --strict-types."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "hostname_field_constraints.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="hostname_field_constraints_strict_pydantic_v1.py",
+        extra_args=["--output-model-type", "pydantic.BaseModel", "--field-constraints", "--strict-types", "str"],
+    )
+
+
+def test_main_hostname_root_type_pydantic_v2(output_file: Path) -> None:
+    """Test hostname format in root type uses Field(pattern=) with --field-constraints."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "hostname_root_type.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="hostname_root_type_pydantic_v2.py",
+        extra_args=["--output-model-type", "pydantic_v2.BaseModel", "--field-constraints"],
+    )
+
+
+def test_main_hostname_multiple_types_pydantic_v2(output_file: Path) -> None:
+    """Test hostname format with multiple types uses Field(pattern=) with --field-constraints."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "hostname_multiple_types.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="hostname_multiple_types_pydantic_v2.py",
+        extra_args=["--output-model-type", "pydantic_v2.BaseModel", "--field-constraints"],
+    )
+
+
 def test_main_jsonschema_special_enum(output_file: Path) -> None:
     """Test special enum handling."""
     run_main_and_assert(
@@ -2292,15 +2376,20 @@ def test_main_use_union_operator(output_dir: Path) -> None:
     )
 
 
-@pytest.mark.parametrize("as_module", [True, False])
-def test_treat_dot_as_module(as_module: bool, output_dir: Path) -> None:
+@pytest.mark.parametrize(
+    ("extra_args", "expected_suffix"),
+    [
+        (["--treat-dot-as-module"], "treat_dot_as_module"),
+        (None, "treat_dot_not_as_module"),
+        (["--no-treat-dot-as-module"], "treat_dot_not_as_module"),
+    ],
+)
+def test_treat_dot_as_module(extra_args: list[str] | None, expected_suffix: str, output_dir: Path) -> None:
     """Test dot notation as module separator."""
-    path_extension = "treat_dot_as_module" if as_module else "treat_dot_not_as_module"
-    extra_args = ["--treat-dot-as-module"] if as_module else None
     run_main_and_assert(
         input_path=JSON_SCHEMA_DATA_PATH / "treat_dot_as_module",
         output_path=output_dir,
-        expected_directory=EXPECTED_JSON_SCHEMA_PATH / path_extension,
+        expected_directory=EXPECTED_JSON_SCHEMA_PATH / expected_suffix,
         extra_args=extra_args,
     )
 
@@ -2321,6 +2410,64 @@ def test_treat_dot_as_module_single_file(output_dir: Path) -> None:
         output_path=output_dir,
         expected_directory=EXPECTED_JSON_SCHEMA_PATH / "treat_dot_as_module_single",
         extra_args=["--treat-dot-as-module"],
+    )
+
+
+@pytest.mark.cli_doc(
+    options=["--no-treat-dot-as-module"],
+    input_schema="jsonschema/treat_dot_as_module_single",
+    cli_args=["--no-treat-dot-as-module"],
+    golden_output="jsonschema/treat_dot_as_module_single_no_treat/",
+    primary=True,
+)
+def test_no_treat_dot_as_module_single_file(output_dir: Path) -> None:
+    """Keep dots in schema names as underscores for flat output.
+
+    The `--no-treat-dot-as-module` flag prevents splitting dotted schema names.
+    """
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "treat_dot_as_module_single",
+        output_path=output_dir,
+        expected_directory=EXPECTED_JSON_SCHEMA_PATH / "treat_dot_as_module_single_no_treat",
+        extra_args=["--no-treat-dot-as-module"],
+    )
+
+
+@pytest.mark.parametrize(
+    ("extra_args", "expected_suffix"),
+    [
+        (["--treat-dot-as-module"], "treat_dot_single"),
+        (None, "no_treat_dot_single"),
+        (["--no-treat-dot-as-module"], "no_treat_dot_single"),
+    ],
+)
+def test_treat_dot_as_module_version_style(
+    extra_args: list[str] | None, expected_suffix: str, output_dir: Path
+) -> None:
+    """Test dotted version-style schema names (e.g., v0.0.39.job.json)."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "no_treat_dot_single",
+        output_path=output_dir,
+        expected_directory=EXPECTED_JSON_SCHEMA_PATH / expected_suffix,
+        extra_args=extra_args,
+    )
+
+
+@pytest.mark.parametrize(
+    ("extra_args", "expected_suffix"),
+    [
+        (["--treat-dot-as-module"], "treat_dot_complex_treat"),
+        (None, "treat_dot_complex_no_treat"),
+        (["--no-treat-dot-as-module"], "treat_dot_complex_no_treat"),
+    ],
+)
+def test_treat_dot_as_module_complex_refs(extra_args: list[str] | None, expected_suffix: str, output_dir: Path) -> None:
+    """Test dotted schema names with cross-file references."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "treat_dot_complex",
+        output_path=output_dir,
+        expected_directory=EXPECTED_JSON_SCHEMA_PATH / expected_suffix,
+        extra_args=extra_args,
     )
 
 
@@ -3511,6 +3658,73 @@ def test_main_jsonschema_field_has_same_name(output_model: str, expected_output:
     )
 
 
+def test_main_jsonschema_field_has_same_name_rename_type(output_file: Path) -> None:
+    """Test field type collision with rename-type strategy."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "field_has_same_name.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="field_has_same_name_rename_type.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--field-type-collision-strategy",
+            "rename-type",
+        ],
+    )
+
+
+@pytest.mark.cli_doc(
+    options=["--field-type-collision-strategy"],
+    input_schema="jsonschema/field_has_same_name.json",
+    cli_args=[
+        "--output-model-type",
+        "pydantic_v2.BaseModel",
+        "--field-type-collision-strategy",
+        "rename-type",
+    ],
+    golden_output="jsonschema/field_has_same_name_rename_type.py",
+)
+def test_main_jsonschema_field_has_same_name_rename_type_cli_doc(output_file: Path) -> None:
+    """Rename type class instead of field when names collide (Pydantic v2 only).
+
+    The `--field-type-collision-strategy` flag controls how field name and type name
+    collisions are resolved. With `rename-type`, the type class is renamed with a suffix
+    to preserve the original field name, instead of renaming the field and adding an alias.
+    """
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "field_has_same_name.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="field_has_same_name_rename_type.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--field-type-collision-strategy",
+            "rename-type",
+        ],
+    )
+
+
+def test_main_jsonschema_field_type_collision_rename_type_double(output_file: Path) -> None:
+    """Test field type collision with rename-type strategy when schema has existing _1 suffix."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "field_type_collision_rename_type_double.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="field_type_collision_rename_type_double.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--field-type-collision-strategy",
+            "rename-type",
+        ],
+    )
+
+
 @pytest.mark.benchmark
 def test_main_jsonschema_required_and_any_of_required(output_file: Path) -> None:
     """Test required field with anyOf required."""
@@ -3649,6 +3863,265 @@ def test_main_extra_fields(extra_fields: str, output_model: str, expected_output
         assert_func=assert_file_content,
         expected_file=expected_output,
         extra_args=["--extra-fields", extra_fields, "--output-model-type", output_model],
+    )
+
+
+@pytest.mark.cli_doc(
+    options=["--use-generic-base-class"],
+    input_schema="jsonschema/extra_fields.json",
+    cli_args=["--extra-fields", "forbid", "--output-model-type", "pydantic_v2.BaseModel", "--use-generic-base-class"],
+    golden_output="jsonschema/use_generic_base_class.py",
+)
+def test_main_use_generic_base_class(output_file: Path) -> None:
+    """Generate a shared base class with model configuration to avoid repetition (DRY)."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "extra_fields.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="use_generic_base_class.py",
+        extra_args=[
+            "--extra-fields",
+            "forbid",
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-generic-base-class",
+        ],
+    )
+
+
+def test_main_use_generic_base_class_populate_by_name(output_file: Path) -> None:
+    """Test --use-generic-base-class with --allow-population-by-field-name."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "use_generic_base_class_simple.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="use_generic_base_class_populate_by_name.py",
+        extra_args=[
+            "--allow-population-by-field-name",
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-generic-base-class",
+        ],
+    )
+
+
+def test_main_use_generic_base_class_allow_extra(output_file: Path) -> None:
+    """Test --use-generic-base-class with --allow-extra-fields."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "use_generic_base_class_simple.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="use_generic_base_class_allow_extra.py",
+        extra_args=[
+            "--allow-extra-fields",
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-generic-base-class",
+        ],
+    )
+
+
+def test_main_use_generic_base_class_frozen(output_file: Path) -> None:
+    """Test --use-generic-base-class with --enable-faux-immutability."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "use_generic_base_class_simple.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="use_generic_base_class_frozen.py",
+        extra_args=[
+            "--enable-faux-immutability",
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-generic-base-class",
+        ],
+    )
+
+
+def test_main_use_generic_base_class_attr_docstrings(output_file: Path) -> None:
+    """Test --use-generic-base-class with --use-attribute-docstrings."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "use_generic_base_class_simple.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="use_generic_base_class_attr_docstrings.py",
+        extra_args=[
+            "--use-attribute-docstrings",
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-generic-base-class",
+        ],
+    )
+
+
+def test_main_use_generic_base_class_dataclass(output_file: Path) -> None:
+    """Test --use-generic-base-class with dataclasses (no effect)."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "use_generic_base_class_simple.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="use_generic_base_class_dataclass.py",
+        extra_args=[
+            "--extra-fields",
+            "forbid",
+            "--output-model-type",
+            "dataclasses.dataclass",
+            "--use-generic-base-class",
+        ],
+    )
+
+
+def test_main_use_generic_base_class_enum_only(output_file: Path) -> None:
+    """Test --use-generic-base-class with enum-only schema (no ProjectBaseModel)."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "use_generic_base_class_enum_only.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="use_generic_base_class_enum_only.py",
+        extra_args=[
+            "--extra-fields",
+            "forbid",
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-generic-base-class",
+        ],
+    )
+
+
+def test_main_use_generic_base_class_with_inheritance(output_file: Path) -> None:
+    """Test --use-generic-base-class preserves schema inheritance (allOf)."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "use_generic_base_class_with_inheritance.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="use_generic_base_class_with_inheritance.py",
+        extra_args=[
+            "--extra-fields",
+            "forbid",
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-generic-base-class",
+        ],
+    )
+
+
+def test_main_use_generic_base_class_module_split(output_dir: Path) -> None:
+    """Test --use-generic-base-class with module split mode (cross-module inheritance)."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "use_generic_base_class_with_inheritance.json",
+        output_path=output_dir,
+        input_file_type="jsonschema",
+        extra_args=[
+            "--extra-fields",
+            "forbid",
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-generic-base-class",
+            "--module-split-mode",
+            "single",
+        ],
+        expected_directory=EXPECTED_MAIN_PATH / "jsonschema" / "use_generic_base_class_module_split",
+    )
+
+
+def test_main_use_generic_base_class_deep_inheritance(output_dir: Path) -> None:
+    """Test --use-generic-base-class with deep inheritance chain across modules."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "use_generic_base_class_deep_inheritance.json",
+        output_path=output_dir,
+        input_file_type="jsonschema",
+        extra_args=[
+            "--extra-fields",
+            "forbid",
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-generic-base-class",
+            "--module-split-mode",
+            "single",
+        ],
+        expected_directory=EXPECTED_MAIN_PATH / "jsonschema" / "use_generic_base_class_deep_inheritance",
+    )
+
+
+def test_main_use_generic_base_class_multi_root(output_dir: Path) -> None:
+    """Test --use-generic-base-class with multiple independent inheritance trees."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "use_generic_base_class_multi_root.json",
+        output_path=output_dir,
+        input_file_type="jsonschema",
+        extra_args=[
+            "--extra-fields",
+            "forbid",
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-generic-base-class",
+            "--module-split-mode",
+            "single",
+        ],
+        expected_directory=EXPECTED_MAIN_PATH / "jsonschema" / "use_generic_base_class_multi_root",
+    )
+
+
+def test_main_use_generic_base_class_circular(output_dir: Path) -> None:
+    """Test --use-generic-base-class with circular references (uses _internal.py pattern)."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "use_generic_base_class_circular.json",
+        output_path=output_dir,
+        input_file_type="jsonschema",
+        extra_args=[
+            "--extra-fields",
+            "forbid",
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-generic-base-class",
+            "--module-split-mode",
+            "single",
+        ],
+        expected_directory=EXPECTED_MAIN_PATH / "jsonschema" / "use_generic_base_class_circular",
+    )
+
+
+def test_main_use_generic_base_class_msgspec(output_file: Path) -> None:
+    """Test --use-generic-base-class with msgspec.Struct."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "use_generic_base_class_simple.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="use_generic_base_class_msgspec.py",
+        extra_args=[
+            "--allow-population-by-field-name",
+            "--enable-faux-immutability",
+            "--output-model-type",
+            "msgspec.Struct",
+            "--use-generic-base-class",
+        ],
+    )
+
+
+def test_main_use_generic_base_class_msgspec_forbid(output_file: Path) -> None:
+    """Test --use-generic-base-class with msgspec.Struct and --extra-fields forbid."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "use_generic_base_class_simple.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="use_generic_base_class_msgspec_forbid.py",
+        extra_args=[
+            "--enable-faux-immutability",
+            "--extra-fields",
+            "forbid",
+            "--output-model-type",
+            "msgspec.Struct",
+            "--use-generic-base-class",
+        ],
     )
 
 
@@ -4005,7 +4478,7 @@ def test_main_jsonschema_reuse_scope_tree_dataclass_frozen(output_dir: Path) -> 
             "tree",
             "--output-model-type",
             "dataclasses.dataclass",
-            "--frozen",
+            "--frozen-dataclasses",
         ],
     )
 
@@ -4466,6 +4939,79 @@ def test_main_use_frozen_field_no_readonly(output_file: Path) -> None:
     )
 
 
+@pytest.mark.parametrize(
+    ("output_model", "expected_file"),
+    [
+        ("dataclasses.dataclass", "default_factory_nested_model_dataclass.py"),
+        ("pydantic_v2.BaseModel", "default_factory_nested_model_pydantic_v2.py"),
+        ("msgspec.Struct", "default_factory_nested_model_msgspec.py"),
+    ],
+)
+@pytest.mark.cli_doc(
+    options=["--use-default-factory-for-optional-nested-models"],
+    input_schema="jsonschema/default_factory_nested_model.json",
+    cli_args=["--use-default-factory-for-optional-nested-models"],
+    model_outputs={
+        "dataclass": "main/jsonschema/default_factory_nested_model_dataclass.py",
+        "pydantic_v2": "main/jsonschema/default_factory_nested_model_pydantic_v2.py",
+        "msgspec": "main/jsonschema/default_factory_nested_model_msgspec.py",
+    },
+)
+@pytest.mark.benchmark
+@LEGACY_BLACK_SKIP
+def test_main_use_default_factory_for_optional_nested_models(
+    output_model: str, expected_file: str, output_file: Path
+) -> None:
+    """Generate default_factory for optional nested model fields.
+
+    The `--use-default-factory-for-optional-nested-models` flag generates default_factory
+    for optional nested model fields instead of None default:
+    - Dataclasses: `field: Model | None = field(default_factory=Model)`
+    - Pydantic: `field: Model | None = Field(default_factory=Model)`
+    - msgspec: `field: Model | UnsetType = field(default_factory=Model)`
+    """
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "default_factory_nested_model.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file=expected_file,
+        extra_args=[
+            "--output-model-type",
+            output_model,
+            "--use-default-factory-for-optional-nested-models",
+        ],
+    )
+
+
+@pytest.mark.parametrize(
+    ("output_model", "expected_file"),
+    [
+        ("dataclasses.dataclass", "default_factory_nested_model_with_dict_dataclass.py"),
+        ("pydantic_v2.BaseModel", "default_factory_nested_model_with_dict_pydantic_v2.py"),
+        ("msgspec.Struct", "default_factory_nested_model_with_dict_msgspec.py"),
+    ],
+)
+@pytest.mark.benchmark
+@LEGACY_BLACK_SKIP
+def test_main_use_default_factory_for_optional_nested_models_with_dict(
+    output_model: str, expected_file: str, output_file: Path
+) -> None:
+    """Test --use-default-factory-for-optional-nested-models with dict union skips dict types."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "default_factory_nested_model_with_dict.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file=expected_file,
+        extra_args=[
+            "--output-model-type",
+            output_model,
+            "--use-default-factory-for-optional-nested-models",
+        ],
+    )
+
+
 @pytest.mark.benchmark
 def test_main_field_name_shadows_class_name(output_file: Path) -> None:
     """Test field name shadowing class name is renamed with alias for Pydantic v2."""
@@ -4517,4 +5063,281 @@ def test_main_allof_root_model_constraints_none(output_file: Path) -> None:
         assert_func=assert_file_content,
         expected_file="allof_root_model_constraints.py",
         extra_args=["--allof-merge-mode", "none"],
+    )
+
+
+@pytest.mark.benchmark
+def test_main_allof_root_model_constraints_merge_pydantic_v2(output_file: Path) -> None:
+    """Test allOf with root model constraints in Pydantic v2 (issue #2232).
+
+    When merging pattern constraints that use lookaround assertions,
+    the generated RootModel should use the base type in the generic
+    (e.g., RootModel[str]) rather than the constrained type
+    (e.g., RootModel[constr(pattern=...)]) to avoid regex evaluation
+    before model_config with regex_engine='python-re' is processed.
+    """
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "allof_root_model_constraints.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="allof_root_model_constraints_merge_pydantic_v2.py",
+        extra_args=[
+            "--allof-merge-mode",
+            "constraints",
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+        ],
+    )
+
+
+@pytest.mark.benchmark
+def test_main_nested_lookaround_array_pydantic_v2(output_file: Path) -> None:
+    """Test nested lookaround pattern detection in array items (issue #2232).
+
+    When array items have patterns with lookaround assertions, the lookaround
+    should be detected in nested types and regex_engine='python-re' should be
+    added. The RootModel generic should use the base type (list[str]) rather
+    than the constrained type (list[constr(pattern=...)]).
+    """
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "nested_lookaround_array.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="nested_lookaround_array_pydantic_v2.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+        ],
+    )
+
+
+@pytest.mark.benchmark
+def test_main_lookaround_anyof_nullable_pydantic_v2(output_file: Path) -> None:
+    """Test lookaround pattern with anyOf null for union/optional path."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "lookaround_anyof_nullable.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="lookaround_anyof_nullable_pydantic_v2.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+        ],
+    )
+
+
+@LEGACY_BLACK_SKIP
+@pytest.mark.benchmark
+def test_main_lookaround_mixed_constraints_pydantic_v2(output_file: Path) -> None:
+    """Test lookaround pattern with union of constr and conint to test base_type_hint fallback for non-constr types."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "lookaround_mixed_constraints.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="lookaround_mixed_constraints_pydantic_v2.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+        ],
+    )
+
+
+@pytest.mark.benchmark
+def test_main_lookaround_dict_pydantic_v2(output_file: Path) -> None:
+    """Test lookaround pattern in dict values for base_type_hint dict path."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "lookaround_dict.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="lookaround_dict_pydantic_v2.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+        ],
+    )
+
+
+@pytest.mark.benchmark
+def test_main_lookaround_union_types_pydantic_v2(output_file: Path) -> None:
+    """Test lookaround pattern in union for base_type_hint union path."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "lookaround_union_types.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="lookaround_union_types_pydantic_v2.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+        ],
+    )
+
+
+@pytest.mark.benchmark
+def test_main_nested_lookaround_array_generic_container(output_file: Path) -> None:
+    """Test lookaround pattern with --use-generic-container-types for Sequence path."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "nested_lookaround_array.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="nested_lookaround_array_generic_container.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-generic-container-types",
+        ],
+    )
+
+
+@pytest.mark.benchmark
+def test_main_lookaround_dict_generic_container(output_file: Path) -> None:
+    """Test lookaround dict pattern with --use-generic-container-types for Mapping path."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "lookaround_dict.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="lookaround_dict_generic_container.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-generic-container-types",
+        ],
+    )
+
+
+@pytest.mark.benchmark
+def test_main_nested_lookaround_array_standard_collections(output_file: Path) -> None:
+    """Test lookaround pattern with --use-standard-collections for list path."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "nested_lookaround_array.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="nested_lookaround_array_standard_collections.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-standard-collections",
+        ],
+    )
+
+
+@pytest.mark.benchmark
+def test_main_lookaround_dict_standard_collections(output_file: Path) -> None:
+    """Test lookaround dict pattern with --use-standard-collections for dict path."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "lookaround_dict.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="lookaround_dict_standard_collections.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-standard-collections",
+        ],
+    )
+
+
+@pytest.mark.benchmark
+def test_main_lookaround_dict_key_pydantic_v2(output_file: Path) -> None:
+    """Test lookaround pattern on dict key for dict_key.all_data_types path."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "lookaround_dict_key.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="lookaround_dict_key_pydantic_v2.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+        ],
+    )
+
+
+@pytest.mark.benchmark
+def test_main_nullable_array_items_strict_nullable(output_file: Path) -> None:
+    """Test nullable array items with strict-nullable flag (issue #1815)."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "nullable_array_items.yaml",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="nullable_array_items_strict_nullable.py",
+        extra_args=[
+            "--strict-nullable",
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+        ],
+    )
+
+
+@pytest.mark.benchmark
+def test_main_builtin_field_names(output_file: Path) -> None:
+    """Test that builtin type names as field names don't break code generation (issue #2431).
+
+    When a field has a name that matches a Python builtin (int, float, bool, str),
+    the generated code should still use the builtin type directly without aliasing,
+    since builtin types don't require imports.
+    """
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "builtin_field_names.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="builtin_field_names.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+        ],
+    )
+
+
+@pytest.mark.benchmark
+def test_main_root_model_config_populate_by_name(output_file: Path) -> None:
+    """Test that RootModel subclasses don't get populate_by_name config (issue #2483).
+
+    The populate_by_name config is meaningless for RootModel because it only has
+    a single 'root' field. Only BaseModel subclasses should have this config.
+    """
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "root_model_config.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="root_model_config_populate_by_name.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--allow-population-by-field-name",
+        ],
+    )
+
+
+@pytest.mark.benchmark
+def test_main_root_model_config_frozen(output_file: Path) -> None:
+    """Test that RootModel subclasses DO get frozen config (issue #2483).
+
+    Unlike populate_by_name, the frozen config is meaningful for RootModel
+    because it prevents mutation of the root value. Both BaseModel and RootModel
+    subclasses should have this config when --enable-faux-immutability is used.
+    """
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "root_model_config.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="root_model_config_frozen.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--enable-faux-immutability",
+        ],
     )

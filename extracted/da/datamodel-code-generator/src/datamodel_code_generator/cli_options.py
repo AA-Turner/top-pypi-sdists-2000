@@ -78,6 +78,7 @@ CLI_OPTION_META: dict[str, CLIOptionMeta] = {
     "--reuse-model": CLIOptionMeta(name="--reuse-model", category=OptionCategory.MODEL),
     "--reuse-scope": CLIOptionMeta(name="--reuse-scope", category=OptionCategory.MODEL),
     "--collapse-root-models": CLIOptionMeta(name="--collapse-root-models", category=OptionCategory.MODEL),
+    "--collapse-reuse-models": CLIOptionMeta(name="--collapse-reuse-models", category=OptionCategory.MODEL),
     "--keep-model-order": CLIOptionMeta(name="--keep-model-order", category=OptionCategory.MODEL),
     "--allow-extra-fields": CLIOptionMeta(name="--allow-extra-fields", category=OptionCategory.MODEL),
     "--allow-population-by-field-name": CLIOptionMeta(
@@ -92,11 +93,15 @@ CLI_OPTION_META: dict[str, CLIOptionMeta] = {
     "--strip-default-none": CLIOptionMeta(name="--strip-default-none", category=OptionCategory.MODEL),
     "--dataclass-arguments": CLIOptionMeta(name="--dataclass-arguments", category=OptionCategory.MODEL),
     "--use-frozen-field": CLIOptionMeta(name="--use-frozen-field", category=OptionCategory.MODEL),
+    "--use-default-factory-for-optional-nested-models": CLIOptionMeta(
+        name="--use-default-factory-for-optional-nested-models", category=OptionCategory.MODEL
+    ),
     "--union-mode": CLIOptionMeta(name="--union-mode", category=OptionCategory.MODEL),
     "--parent-scoped-naming": CLIOptionMeta(name="--parent-scoped-naming", category=OptionCategory.MODEL),
     "--use-one-literal-as-default": CLIOptionMeta(name="--use-one-literal-as-default", category=OptionCategory.MODEL),
     "--use-serialize-as-any": CLIOptionMeta(name="--use-serialize-as-any", category=OptionCategory.MODEL),
     "--skip-root-model": CLIOptionMeta(name="--skip-root-model", category=OptionCategory.MODEL),
+    "--use-generic-base-class": CLIOptionMeta(name="--use-generic-base-class", category=OptionCategory.MODEL),
     # ==========================================================================
     # Field Customization
     # ==========================================================================
@@ -130,6 +135,9 @@ CLI_OPTION_META: dict[str, CLIOptionMeta] = {
     "--use-enum-values-in-discriminator": CLIOptionMeta(
         name="--use-enum-values-in-discriminator", category=OptionCategory.FIELD
     ),
+    "--field-type-collision-strategy": CLIOptionMeta(
+        name="--field-type-collision-strategy", category=OptionCategory.FIELD
+    ),
     # ==========================================================================
     # Typing Customization
     # ==========================================================================
@@ -147,7 +155,11 @@ CLI_OPTION_META: dict[str, CLIOptionMeta] = {
     "--ignore-enum-constraints": CLIOptionMeta(name="--ignore-enum-constraints", category=OptionCategory.TYPING),
     "--disable-future-imports": CLIOptionMeta(name="--disable-future-imports", category=OptionCategory.TYPING),
     "--use-pendulum": CLIOptionMeta(name="--use-pendulum", category=OptionCategory.TYPING),
+    "--use-standard-primitive-types": CLIOptionMeta(
+        name="--use-standard-primitive-types", category=OptionCategory.TYPING
+    ),
     "--output-datetime-class": CLIOptionMeta(name="--output-datetime-class", category=OptionCategory.TYPING),
+    "--output-date-class": CLIOptionMeta(name="--output-date-class", category=OptionCategory.TYPING),
     "--use-decimal-for-multiple-of": CLIOptionMeta(
         name="--use-decimal-for-multiple-of", category=OptionCategory.TYPING
     ),
@@ -172,7 +184,7 @@ CLI_OPTION_META: dict[str, CLIOptionMeta] = {
     "--disable-appending-item-suffix": CLIOptionMeta(
         name="--disable-appending-item-suffix", category=OptionCategory.TEMPLATE
     ),
-    "--treat-dot-as-module": CLIOptionMeta(name="--treat-dot-as-module", category=OptionCategory.TEMPLATE),
+    "--no-treat-dot-as-module": CLIOptionMeta(name="--no-treat-dot-as-module", category=OptionCategory.TEMPLATE),
     "--disable-timestamp": CLIOptionMeta(name="--disable-timestamp", category=OptionCategory.TEMPLATE),
     "--enable-version-header": CLIOptionMeta(name="--enable-version-header", category=OptionCategory.TEMPLATE),
     "--enable-command-header": CLIOptionMeta(name="--enable-command-header", category=OptionCategory.TEMPLATE),

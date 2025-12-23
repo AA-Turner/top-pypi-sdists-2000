@@ -25,6 +25,7 @@ from datamodel_code_generator import (
     DEFAULT_SHARED_MODULE_NAME,
     AllOfMergeMode,
     DataclassArguments,
+    FieldTypeCollisionStrategy,
     InvalidClassNameError,
     ReadOnlyWriteOnlyModelType,
     ReuseScope,
@@ -36,6 +37,7 @@ from datamodel_code_generator import (
 )
 from datamodel_code_generator.format import (
     DEFAULT_FORMATTERS,
+    DateClassType,
     DatetimeClassType,
     Formatter,
     PythonVersion,
@@ -124,6 +126,7 @@ json_schema_data_formats: dict[str, dict[str, Types]] = {
         "default": Types.integer,
         "date-time": Types.date_time,
         "unix-time": Types.int64,
+        "unixtime": Types.int64,
     },
     "number": {
         "float": Types.float,
@@ -133,6 +136,7 @@ json_schema_data_formats: dict[str, dict[str, Types]] = {
         "time": Types.time,
         "time-delta": Types.timedelta,
         "default": Types.number,
+        "unixtime": Types.int64,
     },
     "string": {
         "default": Types.string,
@@ -140,8 +144,10 @@ json_schema_data_formats: dict[str, dict[str, Types]] = {
         "binary": Types.binary,
         "date": Types.date,
         "date-time": Types.date_time,
+        "date-time-local": Types.date_time_local,
         "duration": Types.timedelta,
         "time": Types.time,
+        "time-local": Types.time_local,
         "password": Types.password,
         "path": Types.path,
         "email": Types.email,
@@ -161,6 +167,7 @@ json_schema_data_formats: dict[str, dict[str, Types]] = {
         "ipv6-network": Types.ipv6_network,
         "decimal": Types.decimal,
         "integer": Types.integer,
+        "unixtime": Types.int64,
     },
     "boolean": {"default": Types.boolean},
     "object": {"default": Types.object},
@@ -335,7 +342,7 @@ class JsonSchemaObject(BaseModel):
     properties: Optional[dict[str, Union[JsonSchemaObject, bool]]] = None  # noqa: UP007, UP045
     required: list[str] = []  # noqa: RUF012
     ref: Optional[str] = Field(default=None, alias="$ref")  # noqa: UP045
-    nullable: Optional[bool] = False  # noqa: UP045
+    nullable: Optional[bool] = None  # noqa: UP045
     x_enum_varnames: list[str] = Field(default_factory=list, alias="x-enum-varnames")
     x_enum_names: list[str] = Field(default_factory=list, alias="x-enumNames")
     description: Optional[str] = None  # noqa: UP045
@@ -531,6 +538,7 @@ class JsonSchemaParser(Parser):
         apply_default_values_for_required_fields: bool = False,
         allow_extra_fields: bool = False,
         extra_fields: str | None = None,
+        use_generic_base_class: bool = False,
         force_optional_for_required_fields: bool = False,
         class_name: str | None = None,
         use_standard_collections: bool = False,
@@ -578,6 +586,7 @@ class JsonSchemaParser(Parser):
         use_union_operator: bool = False,
         allow_responses_without_content: bool = False,
         collapse_root_models: bool = False,
+        collapse_reuse_models: bool = False,
         skip_root_model: bool = False,
         use_type_alias: bool = False,
         special_field_name_prefix: str | None = None,
@@ -588,20 +597,24 @@ class JsonSchemaParser(Parser):
         custom_formatters: list[str] | None = None,
         custom_formatters_kwargs: dict[str, Any] | None = None,
         use_pendulum: bool = False,
+        use_standard_primitive_types: bool = False,
         http_query_parameters: Sequence[tuple[str, str]] | None = None,
-        treat_dot_as_module: bool = False,
+        treat_dot_as_module: bool | None = None,
         use_exact_imports: bool = False,
         default_field_extras: dict[str, Any] | None = None,
         target_datetime_class: DatetimeClassType | None = None,
+        target_date_class: DateClassType | None = None,
         keyword_only: bool = False,
         frozen_dataclasses: bool = False,
         no_alias: bool = False,
         use_frozen_field: bool = False,
+        use_default_factory_for_optional_nested_models: bool = False,
         formatters: list[Formatter] = DEFAULT_FORMATTERS,
         parent_scoped_naming: bool = False,
         dataclass_arguments: DataclassArguments | None = None,
         type_mappings: list[str] | None = None,
         read_only_write_only_model_type: ReadOnlyWriteOnlyModelType | None = None,
+        field_type_collision_strategy: FieldTypeCollisionStrategy | None = None,
     ) -> None:
         """Initialize the JSON Schema parser with configuration options."""
         target_datetime_class = target_datetime_class or DatetimeClassType.Awaredatetime
@@ -625,6 +638,7 @@ class JsonSchemaParser(Parser):
             allow_population_by_field_name=allow_population_by_field_name,
             allow_extra_fields=allow_extra_fields,
             extra_fields=extra_fields,
+            use_generic_base_class=use_generic_base_class,
             apply_default_values_for_required_fields=apply_default_values_for_required_fields,
             force_optional_for_required_fields=force_optional_for_required_fields,
             class_name=class_name,
@@ -673,6 +687,7 @@ class JsonSchemaParser(Parser):
             use_union_operator=use_union_operator,
             allow_responses_without_content=allow_responses_without_content,
             collapse_root_models=collapse_root_models,
+            collapse_reuse_models=collapse_reuse_models,
             skip_root_model=skip_root_model,
             use_type_alias=use_type_alias,
             special_field_name_prefix=special_field_name_prefix,
@@ -683,20 +698,24 @@ class JsonSchemaParser(Parser):
             custom_formatters=custom_formatters,
             custom_formatters_kwargs=custom_formatters_kwargs,
             use_pendulum=use_pendulum,
+            use_standard_primitive_types=use_standard_primitive_types,
             http_query_parameters=http_query_parameters,
             treat_dot_as_module=treat_dot_as_module,
             use_exact_imports=use_exact_imports,
             default_field_extras=default_field_extras,
             target_datetime_class=target_datetime_class,
+            target_date_class=target_date_class,
             keyword_only=keyword_only,
             frozen_dataclasses=frozen_dataclasses,
             no_alias=no_alias,
             use_frozen_field=use_frozen_field,
+            use_default_factory_for_optional_nested_models=use_default_factory_for_optional_nested_models,
             formatters=formatters,
             parent_scoped_naming=parent_scoped_naming,
             dataclass_arguments=dataclass_arguments,
             type_mappings=type_mappings,
             read_only_write_only_model_type=read_only_write_only_model_type,
+            field_type_collision_strategy=field_type_collision_strategy,
         )
 
         self.remote_object_cache: DefaultPutDict[str, dict[str, YamlValue]] = DefaultPutDict()
@@ -1016,6 +1035,8 @@ class JsonSchemaParser(Parser):
     ) -> DataModelFieldBase:
         """Create a data model field from a JSON Schema object field."""
         constraints = field.dict() if self.is_constraints_field(field) else None
+        if constraints is not None and self.field_constraints and field.format == "hostname":
+            constraints["pattern"] = self.data_type_manager.HOSTNAME_REGEX
         # Suppress minItems/maxItems for fixed-length tuples
         if (
             constraints
@@ -1032,7 +1053,9 @@ class JsonSchemaParser(Parser):
             required=required,
             alias=alias,
             constraints=constraints,
-            nullable=field.nullable if self.strict_nullable and (field.has_default or required) else None,
+            nullable=field.nullable
+            if self.strict_nullable and field.nullable is not None
+            else (False if self.strict_nullable and (field.has_default or required) else None),
             strip_default_none=self.strip_default_none,
             extras=self.get_field_extras(field),
             use_annotated=self.use_annotated,
@@ -1046,6 +1069,7 @@ class JsonSchemaParser(Parser):
             read_only=self._resolve_field_flag(field, "readOnly"),
             write_only=self._resolve_field_flag(field, "writeOnly"),
             use_frozen_field=self.use_frozen_field,
+            use_default_factory_for_optional_nested_models=self.use_default_factory_for_optional_nested_models,
         )
 
     def get_data_type(self, obj: JsonSchemaObject) -> DataType:
@@ -1060,6 +1084,7 @@ class JsonSchemaParser(Parser):
         def _get_data_type(type_: str, format__: str) -> DataType:
             return self.data_type_manager.get_data_type(
                 self._get_type_with_mappings(type_, format__),
+                field_constraints=self.field_constraints,
                 **obj.dict() if not self.field_constraints else {},
             )
 
@@ -1068,14 +1093,19 @@ class JsonSchemaParser(Parser):
                 data_types=[_get_data_type(t, obj.format or "default") for t in obj.type if t != "null"],
                 is_optional="null" in obj.type,
             )
-        return _get_data_type(obj.type, obj.format or "default")
+        data_type = _get_data_type(obj.type, obj.format or "default")
+        if self.strict_nullable and obj.nullable:
+            return self.data_type(data_types=[data_type], is_optional=True)
+        return data_type
 
     def get_ref_data_type(self, ref: str) -> DataType:
         """Get a data type from a reference string."""
         reference = self.model_resolver.add_ref(ref)
         ref_schema = self._load_ref_schema_object(ref)
         is_optional = (
-            ref_schema.type_has_null or ref_schema.type == "null" or (self.strict_nullable and ref_schema.nullable)
+            ref_schema.type_has_null
+            or ref_schema.type == "null"
+            or (self.strict_nullable and ref_schema.nullable is True)
         )
         return self.data_type(reference=reference, is_optional=is_optional)
 
@@ -2568,6 +2598,9 @@ class JsonSchemaParser(Parser):
         if not reference:
             reference = self.model_resolver.add(path, name, loaded=True, class_name=True)
         self._set_schema_metadata(reference.path, obj)
+        constraints = obj.dict() if self.field_constraints else {}
+        if self.field_constraints and obj.format == "hostname":
+            constraints["pattern"] = self.data_type_manager.HOSTNAME_REGEX
         data_model_root_type = self.data_model_root_type(
             reference=reference,
             fields=[
@@ -2575,8 +2608,10 @@ class JsonSchemaParser(Parser):
                     data_type=data_type,
                     default=obj.default,
                     required=required,
-                    constraints=obj.dict() if self.field_constraints else {},
-                    nullable=obj.nullable if self.strict_nullable else None,
+                    constraints=constraints,
+                    nullable=obj.nullable
+                    if self.strict_nullable and obj.nullable is not None
+                    else (False if self.strict_nullable and obj.has_default else None),
                     strip_default_none=self.strip_default_none,
                     extras=self.get_field_extras(obj),
                     use_annotated=self.use_annotated,
@@ -2628,6 +2663,9 @@ class JsonSchemaParser(Parser):
         reference = self.model_resolver.add(path, name, loaded=True, class_name=True)
         self._set_schema_metadata(reference.path, obj)
 
+        constraints = obj.dict() if self.field_constraints else {}
+        if self.field_constraints and obj.format == "hostname":
+            constraints["pattern"] = self.data_type_manager.HOSTNAME_REGEX
         data_model_root_type = self.data_model_root_type(
             reference=reference,
             fields=[
@@ -2635,7 +2673,7 @@ class JsonSchemaParser(Parser):
                     data_type=self.data_type(data_types=data_types),
                     default=obj.default,
                     required=required,
-                    constraints=obj.dict() if self.field_constraints else {},
+                    constraints=constraints,
                     nullable=obj.type_has_null if self.strict_nullable else None,
                     strip_default_none=self.strip_default_none,
                     extras=self.get_field_extras(obj),

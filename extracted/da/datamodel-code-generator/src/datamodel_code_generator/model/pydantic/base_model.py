@@ -17,6 +17,7 @@ from datamodel_code_generator.model import (
     DataModel,
     DataModelFieldBase,
 )
+from datamodel_code_generator.model._types import WrappedDefault
 from datamodel_code_generator.model.base import UNDEFINED
 from datamodel_code_generator.model.pydantic.imports import (
     IMPORT_ANYURL,
@@ -122,6 +123,8 @@ class DataModelField(DataModelFieldBase):
         return int(value)
 
     def _get_default_as_pydantic_model(self) -> str | None:
+        if isinstance(self.default, WrappedDefault):
+            return f"lambda :{self.default!r}"
         for data_type in self.data_type.data_types or (self.data_type,):
             # TODO: Check nested data_types
             if data_type.is_dict:
@@ -141,15 +144,31 @@ class DataModelField(DataModelFieldBase):
                         f"{self._PARSE_METHOD}(v) for v in {self.default!r}]"
                     )
             elif data_type.reference and isinstance(data_type.reference.source, BaseModelBase):
+                source = data_type.reference.source
+                is_root_model = hasattr(source, "BASE_CLASS") and source.BASE_CLASS == "pydantic.RootModel"
                 if self.data_type.is_union:
                     if not isinstance(self.default, (dict, list)):
+                        if not is_root_model:
+                            continue
+                    elif isinstance(self.default, dict) and any(dt.is_dict for dt in self.data_type.data_types):
                         continue
-                    if isinstance(self.default, dict) and any(dt.is_dict for dt in self.data_type.data_types):
-                        continue
-                return (
-                    f"lambda :{data_type.alias or data_type.reference.source.class_name}."
-                    f"{self._PARSE_METHOD}({self.default!r})"
-                )
+                class_name = data_type.alias or source.class_name
+                if is_root_model:
+                    return f"lambda :{class_name}({self.default!r})"
+                return f"lambda :{class_name}.{self._PARSE_METHOD}({self.default!r})"
+        return None
+
+    def _get_default_factory_for_optional_nested_model(self) -> str | None:
+        """Get default_factory for optional nested Pydantic model fields.
+
+        Returns the class name if the field type references a BaseModel,
+        otherwise returns None.
+        """
+        for data_type in self.data_type.data_types or (self.data_type,):
+            if data_type.is_dict:
+                continue
+            if data_type.reference and isinstance(data_type.reference.source, BaseModelBase):
+                return data_type.alias or data_type.reference.source.class_name
         return None
 
     def _process_data_in_str(self, data: dict[str, Any]) -> None:
@@ -203,6 +222,14 @@ class DataModelField(DataModelFieldBase):
             default_factory = self._get_default_as_pydantic_model()
         else:
             default_factory = data.pop("default_factory", None)
+
+        if (
+            default_factory is None
+            and self.use_default_factory_for_optional_nested_models
+            and not self.required
+            and (self.default is None or self.default is UNDEFINED)
+        ):
+            default_factory = self._get_default_factory_for_optional_nested_model()
 
         self.__dict__["_computed_default_factory"] = default_factory
 
@@ -261,7 +288,7 @@ class BaseModelBase(DataModel, ABC):
         default: Any = UNDEFINED,
         nullable: bool = False,
         keyword_only: bool = False,
-        treat_dot_as_module: bool = False,
+        treat_dot_as_module: bool | None = None,
     ) -> None:
         """Initialize the BaseModel with fields and configuration."""
         methods: list[str] = [field.method for field in fields if field.method]
@@ -301,6 +328,7 @@ class BaseModel(BaseModelBase):
 
     TEMPLATE_FILE_PATH: ClassVar[str] = "pydantic/BaseModel.jinja2"
     BASE_CLASS: ClassVar[str] = "pydantic.BaseModel"
+    SUPPORTS_DISCRIMINATOR: ClassVar[bool] = True
 
     def __init__(  # noqa: PLR0912, PLR0913
         self,
@@ -317,7 +345,7 @@ class BaseModel(BaseModelBase):
         default: Any = UNDEFINED,
         nullable: bool = False,
         keyword_only: bool = False,
-        treat_dot_as_module: bool = False,
+        treat_dot_as_module: bool | None = None,
     ) -> None:
         """Initialize the BaseModel with Config and extra fields support."""
         super().__init__(

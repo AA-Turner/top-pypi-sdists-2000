@@ -37,13 +37,13 @@ from mistral_common.tokens.tokenizers.instruct import (
 )
 from mistral_common.tokens.tokenizers.mistral import MistralTokenizer
 from mistral_common.tokens.tokenizers.tekken import Tekkenizer
-from tests.test_tekken import _quick_vocab, get_special_tokens
+from tests.test_tekken import get_special_tokens, quick_vocab
 
 
-def _get_tekkenizer_with_audio() -> InstructTokenizerV7:
+def get_tekkenizer_with_audio() -> InstructTokenizerV7:
     special_tokens = get_special_tokens(tokenizer_version=TokenizerVersion.v7, add_audio=True)
     tokenizer = Tekkenizer(
-        _quick_vocab([b"a", b"b", b"c", b"f", b"de"]),
+        quick_vocab([b"a", b"b", b"c", b"f", b"de"]),
         special_tokens,
         pattern=r".+",  # single token, whole string
         vocab_size=256 + 100,
@@ -61,8 +61,8 @@ def _get_tekkenizer_with_audio() -> InstructTokenizerV7:
         ),
     )
     special_audio_ids = SpecialAudioIDs(
-        audio=tokenizer.get_control_token(SpecialTokens.audio.value),
-        begin_audio=tokenizer.get_control_token(SpecialTokens.begin_audio.value),
+        audio=tokenizer.get_special_token(SpecialTokens.audio.value),
+        begin_audio=tokenizer.get_special_token(SpecialTokens.begin_audio.value),
     )
     audio_encoder = AudioEncoder(audio_config, special_audio_ids)
 
@@ -71,7 +71,7 @@ def _get_tekkenizer_with_audio() -> InstructTokenizerV7:
 
 @pytest.fixture(scope="session")
 def tekkenizer() -> InstructTokenizerV7:
-    return _get_tekkenizer_with_audio()
+    return get_tekkenizer_with_audio()
 
 
 def sin_wave(sampling_rate: int, duration: float) -> np.ndarray:
@@ -149,13 +149,13 @@ def _get_audio_chunk(duration: float) -> AudioChunk:
 
 
 def _get_specials(tekkenizer: InstructTokenizerV7) -> tuple[int, ...]:
-    BOS = tekkenizer.tokenizer.get_control_token(SpecialTokens.bos.value)
-    EOS = tekkenizer.tokenizer.get_control_token(SpecialTokens.eos.value)
-    BEGIN_INST = tekkenizer.tokenizer.get_control_token(SpecialTokens.begin_inst.value)
-    END_INST = tekkenizer.tokenizer.get_control_token(SpecialTokens.end_inst.value)
-    AUDIO = tekkenizer.tokenizer.get_control_token(SpecialTokens.audio.value)
-    BEGIN_AUDIO = tekkenizer.tokenizer.get_control_token(SpecialTokens.begin_audio.value)
-    TRANSCRIBE = tekkenizer.tokenizer.get_control_token(SpecialTokens.transcribe.value)
+    BOS = tekkenizer.tokenizer.get_special_token(SpecialTokens.bos.value)
+    EOS = tekkenizer.tokenizer.get_special_token(SpecialTokens.eos.value)
+    BEGIN_INST = tekkenizer.tokenizer.get_special_token(SpecialTokens.begin_inst.value)
+    END_INST = tekkenizer.tokenizer.get_special_token(SpecialTokens.end_inst.value)
+    AUDIO = tekkenizer.tokenizer.get_special_token(SpecialTokens.audio.value)
+    BEGIN_AUDIO = tekkenizer.tokenizer.get_special_token(SpecialTokens.begin_audio.value)
+    TRANSCRIBE = tekkenizer.tokenizer.get_special_token(SpecialTokens.transcribe.value)
     return BOS, EOS, BEGIN_INST, END_INST, AUDIO, BEGIN_AUDIO, TRANSCRIBE
 
 

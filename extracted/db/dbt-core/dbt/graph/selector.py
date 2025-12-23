@@ -175,6 +175,9 @@ class NodeSelector(MethodManager):
             return source.config.enabled
         elif unique_id in self.manifest.exposures:
             return True
+        elif unique_id in self.manifest.functions:
+            function = self.manifest.functions[unique_id]
+            return function.config.enabled
         elif unique_id in self.manifest.metrics:
             metric = self.manifest.metrics[unique_id]
             return metric.config.enabled
@@ -215,6 +218,8 @@ class NodeSelector(MethodManager):
             node = self.manifest.sources[unique_id]
         elif unique_id in self.manifest.exposures:
             node = self.manifest.exposures[unique_id]
+        elif unique_id in self.manifest.functions:
+            node = self.manifest.functions[unique_id]
         elif unique_id in self.manifest.metrics:
             node = self.manifest.metrics[unique_id]
         elif unique_id in self.manifest.semantic_models:

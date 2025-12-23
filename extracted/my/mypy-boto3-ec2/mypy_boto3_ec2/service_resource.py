@@ -3876,6 +3876,7 @@ class PlacementGroup(ServiceResource):
     tags: list[TagTypeDef]
     group_arn: str
     spread_level: SpreadLevelType
+    linked_group_id: str
     meta: EC2ResourceMeta  # type: ignore[override]
 
     def get_available_subresources(self) -> Sequence[str]:

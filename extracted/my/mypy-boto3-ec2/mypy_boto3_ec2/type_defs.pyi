@@ -9366,6 +9366,7 @@ class PlacementGroupTypeDef(TypedDict):
     Tags: NotRequired[list[TagTypeDef]]
     GroupArn: NotRequired[str]
     SpreadLevel: NotRequired[SpreadLevelType]
+    LinkedGroupId: NotRequired[str]
 
 class RegisteredInstanceTypeDef(TypedDict):
     InstanceId: NotRequired[str]
@@ -18199,6 +18200,7 @@ class CreatePlacementGroupRequestServiceResourceCreatePlacementGroupTypeDef(Type
     PartitionCount: NotRequired[int]
     TagSpecifications: NotRequired[Sequence[TagSpecificationUnionTypeDef]]
     SpreadLevel: NotRequired[SpreadLevelType]
+    LinkedGroupId: NotRequired[str]
     DryRun: NotRequired[bool]
     GroupName: NotRequired[str]
     Strategy: NotRequired[PlacementStrategyType]
@@ -18207,6 +18209,7 @@ class CreatePlacementGroupRequestTypeDef(TypedDict):
     PartitionCount: NotRequired[int]
     TagSpecifications: NotRequired[Sequence[TagSpecificationUnionTypeDef]]
     SpreadLevel: NotRequired[SpreadLevelType]
+    LinkedGroupId: NotRequired[str]
     DryRun: NotRequired[bool]
     GroupName: NotRequired[str]
     Strategy: NotRequired[PlacementStrategyType]

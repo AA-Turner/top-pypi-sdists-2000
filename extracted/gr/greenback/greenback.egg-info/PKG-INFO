@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: greenback
-Version: 1.2.1
+Version: 1.3.0
 Summary: Reenter an async event loop from synchronous code
 Home-page: https://github.com/oremanj/greenback
 Author: Joshua Oreman
@@ -25,6 +25,17 @@ License-File: LICENSE.MIT
 Requires-Dist: greenlet!=0.4.17
 Requires-Dist: sniffio
 Requires-Dist: outcome
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: home-page
+Dynamic: keywords
+Dynamic: license
+Dynamic: license-file
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
 
 greenback: reenter an asyncio or Trio event loop from synchronous code
 ======================================================================

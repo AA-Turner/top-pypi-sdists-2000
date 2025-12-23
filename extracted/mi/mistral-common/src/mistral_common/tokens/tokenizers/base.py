@@ -92,6 +92,8 @@ class SpecialTokens(str, Enum):
     transcribe = "[TRANSCRIBE]"
     begin_think = "[THINK]"
     end_think = "[/THINK]"
+    streaming_pad = "[STREAMING_PAD]"
+    streaming_word = "[STREAMING_WORD]"
 
 
 class SpecialTokenPolicy(int, Enum):
@@ -241,8 +243,12 @@ class Tokenizer(ABC):
         """
 
     @abstractmethod
-    def get_control_token(self, s: str) -> int:
+    def get_special_token(self, s: str) -> int:
         r"""Get the id of a control token."""
+
+    @abstractmethod
+    def is_special(self, token: int | np.integer | str) -> bool:
+        r"""Check if token id or token str is a special token."""
 
     @property
     @abstractmethod

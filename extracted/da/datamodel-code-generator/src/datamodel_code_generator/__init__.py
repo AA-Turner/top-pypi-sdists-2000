@@ -32,6 +32,7 @@ from typing_extensions import TypeAliasType, TypedDict
 import datamodel_code_generator.pydantic_patch  # noqa: F401
 from datamodel_code_generator.format import (
     DEFAULT_FORMATTERS,
+    DateClassType,
     DatetimeClassType,
     Formatter,
     PythonVersion,
@@ -243,6 +244,7 @@ class OpenAPIScope(Enum):
     Tags = "tags"
     Parameters = "parameters"
     Webhooks = "webhooks"
+    RequestBodies = "requestbodies"
 
 
 class AllExportsScope(Enum):
@@ -267,6 +269,17 @@ class AllExportsCollisionStrategy(Enum):
     Error = "error"
     MinimalPrefix = "minimal-prefix"
     FullPrefix = "full-prefix"
+
+
+class FieldTypeCollisionStrategy(Enum):
+    """Strategy for handling field name and type name collisions.
+
+    rename_field: Rename the field with a suffix and add alias (default).
+    rename_type: Rename the type class with a suffix to preserve field name.
+    """
+
+    RenameField = "rename-field"
+    RenameType = "rename-type"
 
 
 class AllOfMergeMode(Enum):
@@ -402,6 +415,7 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
     allow_population_by_field_name: bool = False,
     allow_extra_fields: bool = False,
     extra_fields: str | None = None,
+    use_generic_base_class: bool = False,
     apply_default_values_for_required_fields: bool = False,
     force_optional_for_required_fields: bool = False,
     class_name: str | None = None,
@@ -450,6 +464,7 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
     use_double_quotes: bool = False,
     use_union_operator: bool = True,
     collapse_root_models: bool = False,
+    collapse_reuse_models: bool = False,
     skip_root_model: bool = False,
     use_type_alias: bool = False,
     special_field_name_prefix: str | None = None,
@@ -461,15 +476,18 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
     custom_formatters: list[str] | None = None,
     custom_formatters_kwargs: dict[str, Any] | None = None,
     use_pendulum: bool = False,
+    use_standard_primitive_types: bool = False,
     http_query_parameters: Sequence[tuple[str, str]] | None = None,
-    treat_dot_as_module: bool = False,
+    treat_dot_as_module: bool | None = None,
     use_exact_imports: bool = False,
     union_mode: UnionMode | None = None,
     output_datetime_class: DatetimeClassType | None = None,
+    output_date_class: DateClassType | None = None,
     keyword_only: bool = False,
     frozen_dataclasses: bool = False,
     no_alias: bool = False,
     use_frozen_field: bool = False,
+    use_default_factory_for_optional_nested_models: bool = False,
     formatters: list[Formatter] = DEFAULT_FORMATTERS,
     settings_path: Path | None = None,
     parent_scoped_naming: bool = False,
@@ -480,6 +498,7 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
     use_status_code_in_response_name: bool = False,
     all_exports_scope: AllExportsScope | None = None,
     all_exports_collision_strategy: AllExportsCollisionStrategy | None = None,
+    field_type_collision_strategy: FieldTypeCollisionStrategy | None = None,
     module_split_mode: ModuleSplitMode | None = None,
 ) -> None:
     """Generate Python data models from schema definitions or structured data.
@@ -648,6 +667,7 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
         allow_population_by_field_name=allow_population_by_field_name,
         allow_extra_fields=allow_extra_fields,
         extra_fields=extra_fields,
+        use_generic_base_class=use_generic_base_class,
         apply_default_values_for_required_fields=apply_default_values_for_required_fields,
         force_optional_for_required_fields=force_optional_for_required_fields,
         class_name=class_name,
@@ -698,6 +718,7 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
         use_double_quotes=use_double_quotes,
         use_union_operator=use_union_operator,
         collapse_root_models=collapse_root_models,
+        collapse_reuse_models=collapse_reuse_models,
         skip_root_model=skip_root_model,
         use_type_alias=use_type_alias,
         special_field_name_prefix=special_field_name_prefix,
@@ -708,21 +729,25 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
         custom_formatters=custom_formatters,
         custom_formatters_kwargs=custom_formatters_kwargs,
         use_pendulum=use_pendulum,
+        use_standard_primitive_types=use_standard_primitive_types,
         http_query_parameters=http_query_parameters,
         treat_dot_as_module=treat_dot_as_module,
         use_exact_imports=use_exact_imports,
         default_field_extras=default_field_extras,
         target_datetime_class=output_datetime_class,
+        target_date_class=output_date_class,
         keyword_only=keyword_only,
         frozen_dataclasses=frozen_dataclasses,
         no_alias=no_alias,
         use_frozen_field=use_frozen_field,
+        use_default_factory_for_optional_nested_models=use_default_factory_for_optional_nested_models,
         formatters=formatters,
         encoding=encoding,
         parent_scoped_naming=parent_scoped_naming,
         dataclass_arguments=dataclass_arguments,
         type_mappings=type_mappings,
         read_only_write_only_model_type=read_only_write_only_model_type,
+        field_type_collision_strategy=field_type_collision_strategy,
         **kwargs,
     )
 
@@ -866,6 +891,7 @@ __all__ = [
     "MIN_VERSION",
     "AllExportsCollisionStrategy",
     "AllExportsScope",
+    "DateClassType",
     "DatetimeClassType",
     "DefaultPutDict",
     "Error",

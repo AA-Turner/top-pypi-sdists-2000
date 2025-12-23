@@ -21,13 +21,14 @@ from datamodel_code_generator import (
     AllOfMergeMode,
     DataclassArguments,
     DataModelType,
+    FieldTypeCollisionStrategy,
     InputFileType,
     ModuleSplitMode,
     OpenAPIScope,
     ReadOnlyWriteOnlyModelType,
     ReuseScope,
 )
-from datamodel_code_generator.format import DatetimeClassType, Formatter, PythonVersion
+from datamodel_code_generator.format import DateClassType, DatetimeClassType, Formatter, PythonVersion
 from datamodel_code_generator.model.pydantic_v2 import UnionMode
 from datamodel_code_generator.parser import LiteralType
 from datamodel_code_generator.types import StrictTypes
@@ -170,6 +171,13 @@ model_options.add_argument(
     help="Models generated with a root-type field will be merged into the models using that root-type model",
 )
 model_options.add_argument(
+    "--collapse-reuse-models",
+    action="store_true",
+    default=None,
+    help="When used with --reuse-model, collapse duplicate models by replacing references instead of creating "
+    "empty inheritance subclasses. This eliminates 'class Foo(Bar): pass' patterns",
+)
+model_options.add_argument(
     "--skip-root-model",
     action="store_true",
     default=None,
@@ -265,7 +273,15 @@ model_options.add_argument(
 )
 model_options.add_argument(
     "--treat-dot-as-module",
-    help="treat dotted module names as modules",
+    help="Treat dotted schema names as module paths, creating nested directory structures (e.g., 'foo.bar.Model' "
+    "becomes 'foo/bar.py'). Use --no-treat-dot-as-module to keep dots in names as underscores for single-file output.",
+    action=BooleanOptionalAction,
+    default=None,
+)
+model_options.add_argument(
+    "--use-generic-base-class",
+    help="Generate a shared base class with model configuration (e.g., extra='forbid') "
+    "instead of repeating the configuration in each model. Keeps code DRY.",
     action="store_true",
     default=None,
 )
@@ -288,6 +304,14 @@ model_options.add_argument(
     default=None,
 )
 model_options.add_argument(
+    "--use-standard-primitive-types",
+    help="Use Python standard library types for string formats (UUID, IPv4Address, etc.) "
+    "instead of str. Affects dataclass, msgspec, TypedDict output. "
+    "Pydantic already uses these types by default.",
+    action="store_true",
+    default=None,
+)
+model_options.add_argument(
     "--use-exact-imports",
     help='import exact types instead of modules, for example: "from .foo import Bar" instead of '
     '"from . import foo" with "foo.Bar"',
@@ -296,9 +320,16 @@ model_options.add_argument(
 )
 model_options.add_argument(
     "--output-datetime-class",
-    help="Choose Datetime class between AwareDatetime, NaiveDatetime or datetime. "
+    help="Choose Datetime class between AwareDatetime, NaiveDatetime, PastDatetime, FutureDatetime or datetime. "
     "Each output model has its default mapping (for example pydantic: datetime, dataclass: str, ...)",
     choices=[i.value for i in DatetimeClassType],
+    default=None,
+)
+model_options.add_argument(
+    "--output-date-class",
+    help="Choose Date class between PastDate, FutureDate or date. (Pydantic v2 only) "
+    "Each output model has its default mapping.",
+    choices=[i.value for i in DateClassType],
     default=None,
 )
 model_options.add_argument(
@@ -540,6 +571,12 @@ field_options.add_argument(
     default=None,
 )
 field_options.add_argument(
+    "--strict-nullable",
+    help="Treat default field as a non-nullable field",
+    action="store_true",
+    default=None,
+)
+field_options.add_argument(
     "--strip-default-none",
     help="Strip default None on fields",
     action="store_true",
@@ -592,6 +629,21 @@ field_options.add_argument(
     "--use-frozen-field",
     help="Use Field(frozen=True) for readOnly fields (Pydantic v2) or Field(allow_mutation=False) (Pydantic v1)",
     action="store_true",
+    default=None,
+)
+field_options.add_argument(
+    "--use-default-factory-for-optional-nested-models",
+    help="Use default_factory for optional nested model fields instead of None default. "
+    "E.g., `field: Model | None = Field(default_factory=Model)` instead of `field: Model | None = None`",
+    action="store_true",
+    default=None,
+)
+field_options.add_argument(
+    "--field-type-collision-strategy",
+    help="Strategy for handling field name and type name collisions (Pydantic v2 only). "
+    "'rename-field': rename field with suffix and add alias (default). "
+    "'rename-type': rename type class with suffix to preserve field name.",
+    choices=[s.value for s in FieldTypeCollisionStrategy],
     default=None,
 )
 
@@ -685,12 +737,6 @@ openapi_options.add_argument(
     help="Scopes of OpenAPI model generation (default: schemas)",
     choices=[o.value for o in OpenAPIScope],
     nargs="+",
-    default=None,
-)
-openapi_options.add_argument(
-    "--strict-nullable",
-    help="Treat default field as a non-nullable field (Only OpenAPI)",
-    action="store_true",
     default=None,
 )
 openapi_options.add_argument(

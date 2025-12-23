@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: python-arango
-Version: 8.2.4
+Version: 8.2.5
 Summary: Python Driver for ArangoDB
 Author-email: Joohwan Oh <joohwan.oh@outlook.com>
 Maintainer-email: Joohwan Oh <joohwan.oh@outlook.com>, Alexandru Petenchea <alex.petenchea@gmail.com>, Anthony Mahanna <anthony.mahanna@arangodb.com>
@@ -61,6 +61,7 @@ Requires-Dist: pytest-cov>=3.0.0; extra == "dev"
 Requires-Dist: sphinx; extra == "dev"
 Requires-Dist: sphinx_rtd_theme; extra == "dev"
 Requires-Dist: types-requests; extra == "dev"
+Requires-Dist: allure-pytest>=2.15; extra == "dev"
 Requires-Dist: types-setuptools; extra == "dev"
 Dynamic: license-file
 

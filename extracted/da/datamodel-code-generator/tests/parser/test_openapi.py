@@ -946,3 +946,91 @@ def test_parse_responses_return(
         for content_type, expected_type_hint in expected_content_types.items():
             assert content_type in result[status_code]
             assert result[status_code][content_type].type_hint == expected_type_hint
+
+
+def test_parse_all_parameters_strict_nullable() -> None:
+    """Test that strict_nullable exposes nullable for optional parameters without default."""
+    parser = OpenAPIParser(
+        data_model_field_type=DataModelField,
+        source="",
+        openapi_scopes=[OpenAPIScope.Parameters],
+        strict_nullable=True,
+    )
+    parameters_data = [
+        {"name": "nullable_param", "in": "query", "required": False, "schema": {"type": "string", "nullable": True}},
+        {
+            "name": "non_nullable_param",
+            "in": "query",
+            "required": False,
+            "schema": {"type": "string", "nullable": False},
+        },
+    ]
+    result = parser.parse_all_parameters(
+        "TestParametersQuery",
+        [ParameterObject.parse_obj(param_data) for param_data in parameters_data],
+        ["test", "path"],
+    )
+    assert result is not None
+    fields = parser.results[0].fields
+    assert len(fields) == 2
+    assert fields[0].nullable is True
+    assert fields[1].nullable is False
+
+
+def test_openapi_parser_with_request_bodies_scope() -> None:
+    """Test parsing OpenAPI with requestBodies scope generates models from components/requestBodies."""
+    parser = OpenAPIParser(
+        data_model_field_type=DataModelFieldBase,
+        source=Path(DATA_PATH / "request_bodies_scope.yaml"),
+        openapi_scopes=[OpenAPIScope.RequestBodies],
+    )
+    result = parser.parse()
+    assert "CreatePet" in result
+    assert "name: Optional[str]" in result
+    assert "age: Optional[int]" in result
+
+
+def test_openapi_parser_with_request_bodies_scope_ref() -> None:
+    """Test parsing OpenAPI with requestBodies scope handles $ref in schema."""
+    parser = OpenAPIParser(
+        data_model_field_type=DataModelFieldBase,
+        source=Path(DATA_PATH / "request_bodies_scope.yaml"),
+        openapi_scopes=[OpenAPIScope.RequestBodies, OpenAPIScope.Schemas],
+    )
+    result = parser.parse()
+    assert "UpdatePet" in result
+    assert "PetUpdate" in result
+
+
+def test_openapi_parser_with_request_bodies_scope_empty() -> None:
+    """Test parsing OpenAPI with requestBodies scope when requestBodies is empty."""
+    parser = OpenAPIParser(
+        data_model_field_type=DataModelFieldBase,
+        source=Path(DATA_PATH / "request_bodies_scope_empty.yaml"),
+        openapi_scopes=[OpenAPIScope.RequestBodies],
+    )
+    result = parser.parse()
+    assert result in ({}, "")
+
+
+def test_openapi_parser_with_request_bodies_scope_no_schema() -> None:
+    """Test parsing OpenAPI with requestBodies scope skips content without schema."""
+    parser = OpenAPIParser(
+        data_model_field_type=DataModelFieldBase,
+        source=Path(DATA_PATH / "request_bodies_scope.yaml"),
+        openapi_scopes=[OpenAPIScope.RequestBodies],
+    )
+    result = parser.parse()
+    assert "EmptyContent" not in result
+
+
+def test_openapi_parser_with_request_bodies_scope_body_ref() -> None:
+    """Test parsing OpenAPI with requestBodies scope handles $ref at requestBody level."""
+    parser = OpenAPIParser(
+        data_model_field_type=DataModelFieldBase,
+        source=Path(DATA_PATH / "request_bodies_scope_with_ref.yaml"),
+        openapi_scopes=[OpenAPIScope.RequestBodies],
+    )
+    result = parser.parse()
+    assert "CreatePet" in result or "BasePet" in result
+    assert "name: Optional[str]" in result

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: openapi-core
-Version: 0.21.0
+Version: 0.22.0
 Summary: client-side and server-side support for the OpenAPI Specification v3
 License: BSD-3-Clause
 License-File: LICENSE

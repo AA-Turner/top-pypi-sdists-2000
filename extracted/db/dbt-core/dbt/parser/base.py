@@ -30,6 +30,9 @@ from dbt.parser.common import resource_types_to_schema_file_keys
 from dbt.parser.search import FileBlock
 from dbt_common.clients._jinja_blocks import ExtractWarning
 from dbt_common.dataclass_schema import ValidationError
+from dbt_common.events.base_types import EventLevel
+from dbt_common.events.functions import fire_event
+from dbt_common.events.types import Note
 from dbt_common.utils import deep_merge
 
 # internally, the parser may store a less-restrictive type that will be
@@ -249,6 +252,12 @@ class ConfiguredParser(
         }
         dct.update(kwargs)
 
+        # TODO: we're doing this becaus return type is _required_ for the FunctionNode
+        # but we don't get the return type until we patch the node with the yml definition
+        # so we need to set it to a default value here.
+        if self.resource_type == NodeType.Function:
+            dct["returns"] = {"data_type": "INVALID_TYPE"}
+
         try:
             return self.parse_from_dict(dct, validate=True)
         except ValidationError as exc:
@@ -296,6 +305,14 @@ class ConfiguredParser(
         # These call the RelationUpdate callable to go through generate_name macros
         self._update_node_database(parsed_node, config_dict.get("database"))
         self._update_node_schema(parsed_node, config_dict.get("schema"))
+        if parsed_node.schema is None:
+            fire_event(
+                Note(
+                    msg=f"Node schema set to None from generate_schema_name call for node '{parsed_node.unique_id}'."
+                ),
+                level=EventLevel.DEBUG,
+            )
+
         self._update_node_alias(parsed_node, config_dict.get("alias"))
 
         # Snapshot nodes use special "target_database" and "target_schema" fields

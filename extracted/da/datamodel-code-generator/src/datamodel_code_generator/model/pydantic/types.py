@@ -8,7 +8,7 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import TYPE_CHECKING, Any, ClassVar
 
-from datamodel_code_generator.format import DatetimeClassType, PythonVersion, PythonVersionMin
+from datamodel_code_generator.format import DateClassType, DatetimeClassType, PythonVersion, PythonVersionMin
 from datamodel_code_generator.imports import (
     IMPORT_ANY,
     IMPORT_DATE,
@@ -86,6 +86,8 @@ def type_map_factory(
         Types.binary: data_type(type="bytes"),
         Types.date: data_type.from_import(IMPORT_DATE),
         Types.date_time: data_type.from_import(IMPORT_DATETIME),
+        Types.date_time_local: data_type.from_import(IMPORT_DATETIME),
+        Types.time_local: data_type.from_import(IMPORT_TIME),
         Types.timedelta: data_type.from_import(IMPORT_TIMEDELTA),
         Types.path: data_type.from_import(IMPORT_PATH),
         Types.password: data_type.from_import(IMPORT_SECRET_STR),
@@ -158,11 +160,17 @@ escape_characters = str.maketrans({
     "\t": r"\t",
 })
 
+HOSTNAME_REGEX = (  # Pydantic v1 requires \Z anchor (not $) to avoid matching trailing newline
+    r"^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])\.)*"
+    r"([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]{0,61}[A-Za-z0-9])\Z"
+)
+
 
 class DataTypeManager(_DataTypeManager):
     """Manage data type mappings for Pydantic v1 models."""
 
     PATTERN_KEY: ClassVar[str] = "regex"
+    HOSTNAME_REGEX: ClassVar[str] = HOSTNAME_REGEX
 
     def __init__(  # noqa: PLR0913, PLR0917
         self,
@@ -174,23 +182,25 @@ class DataTypeManager(_DataTypeManager):
         use_decimal_for_multiple_of: bool = False,  # noqa: FBT001, FBT002
         use_union_operator: bool = False,  # noqa: FBT001, FBT002
         use_pendulum: bool = False,  # noqa: FBT001, FBT002
+        use_standard_primitive_types: bool = False,  # noqa: FBT001, FBT002, ARG002
         target_datetime_class: DatetimeClassType | None = None,
-        treat_dot_as_module: bool = False,  # noqa: FBT001, FBT002
+        target_date_class: DateClassType | None = None,  # noqa: ARG002
+        treat_dot_as_module: bool | None = None,  # noqa: FBT001
         use_serialize_as_any: bool = False,  # noqa: FBT001, FBT002
     ) -> None:
         """Initialize the DataTypeManager with Pydantic v1 type mappings."""
         super().__init__(
-            python_version,
-            use_standard_collections,
-            use_generic_container_types,
-            strict_types,
-            use_non_positive_negative_number_constrained_types,
-            use_decimal_for_multiple_of,
-            use_union_operator,
-            use_pendulum,
-            target_datetime_class,
-            treat_dot_as_module,
-            use_serialize_as_any,
+            python_version=python_version,
+            use_standard_collections=use_standard_collections,
+            use_generic_container_types=use_generic_container_types,
+            strict_types=strict_types,
+            use_non_positive_negative_number_constrained_types=use_non_positive_negative_number_constrained_types,
+            use_decimal_for_multiple_of=use_decimal_for_multiple_of,
+            use_union_operator=use_union_operator,
+            use_pendulum=use_pendulum,
+            target_datetime_class=target_datetime_class,
+            treat_dot_as_module=treat_dot_as_module,
+            use_serialize_as_any=use_serialize_as_any,
         )
 
         self.type_map: dict[Types, DataType] = self.type_map_factory(
@@ -334,6 +344,8 @@ class DataTypeManager(_DataTypeManager):
     def get_data_type(  # noqa: PLR0911
         self,
         types: Types,
+        *,
+        field_constraints: bool = False,
         **kwargs: Any,
     ) -> DataType:
         """Get data type with appropriate constraints for the given type."""
@@ -349,5 +361,10 @@ class DataTypeManager(_DataTypeManager):
             return self.get_data_bytes_type(types, **kwargs)
         if types == Types.boolean and StrictTypes.bool in self.strict_types:
             return self.strict_type_map[StrictTypes.bool]
+        if types == Types.hostname and field_constraints:
+            strict = StrictTypes.str in self.strict_types
+            if strict:
+                return self.strict_type_map[StrictTypes.str]
+            return self.data_type(type="str")
 
         return self.type_map[types]
