@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: aiosqlite
-Version: 0.22.0
+Version: 0.22.1
 Summary: asyncio bridge to the standard sqlite3 module
 Author-email: Amethyst Reese <amethyst@n7.gg>
 Requires-Python: >=3.9

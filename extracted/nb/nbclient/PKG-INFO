@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: nbclient
-Version: 0.10.3
+Version: 0.10.4
 Summary: A client library for executing notebooks. Formerly nbconvert's ExecutePreprocessor.
 Project-URL: Documentation, https://nbclient.readthedocs.io
 Project-URL: Funding, https://numfocus.org/

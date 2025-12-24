@@ -220,6 +220,7 @@ class DataModelType(Enum):
 
     PydanticBaseModel = "pydantic.BaseModel"
     PydanticV2BaseModel = "pydantic_v2.BaseModel"
+    PydanticV2Dataclass = "pydantic_v2.dataclass"
     DataclassesDataclass = "dataclasses.dataclass"
     TypingTypedDict = "typing.TypedDict"
     MsgspecStruct = "msgspec.Struct"
@@ -282,6 +283,21 @@ class FieldTypeCollisionStrategy(Enum):
     RenameType = "rename-type"
 
 
+class NamingStrategy(Enum):
+    """Strategy for generating unique model names when duplicates occur.
+
+    numbered: Append numeric suffix (Address1, Address2) [default].
+    parent_prefixed: Prefix with parent model name (CustomerAddress, UserAddress).
+    full_path: Use full schema path for unique names (OrdersItemsAddress).
+    primary_first: Prioritize primary schema definitions, others get suffix.
+    """
+
+    Numbered = "numbered"
+    ParentPrefixed = "parent-prefixed"
+    FullPath = "full-path"
+    PrimaryFirst = "primary-first"
+
+
 class AllOfMergeMode(Enum):
     """Mode for field merging in allOf schemas.
 
@@ -321,6 +337,17 @@ class ModuleSplitMode(Enum):
     Single = "single"
 
 
+class TargetPydanticVersion(Enum):
+    """Target Pydantic version for generated code.
+
+    V2: Generate code compatible with Pydantic 2.0+ (uses populate_by_name).
+    V2_11: Generate code for Pydantic 2.11+ (uses validate_by_name).
+    """
+
+    V2 = "2"
+    V2_11 = "2.11"
+
+
 class Error(Exception):
     """Base exception for datamodel-code-generator errors."""
 
@@ -340,6 +367,25 @@ class InvalidClassNameError(Error):
         """Initialize with class name."""
         self.class_name = class_name
         message = f"title={class_name!r} is invalid class name."
+        super().__init__(message=message)
+
+
+class InvalidFileFormatError(Error):
+    """Raised when the input file format is invalid or cannot be parsed."""
+
+    def __init__(
+        self,
+        original_error: Exception,
+        input_file_type: InputFileType | None = None,
+    ) -> None:
+        """Initialize with original error and optional input file type."""
+        self.original_error = original_error
+        self.input_file_type = input_file_type
+        error_detail = f"{type(original_error).__name__}: {original_error}"
+        if input_file_type is not None:
+            message = f"Invalid file format for {input_file_type.value}: {error_detail}"
+        else:
+            message = f"Invalid file format: {error_detail}"
         super().__init__(message=message)
 
 
@@ -399,8 +445,11 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
     output: Path | None = None,
     output_model_type: DataModelType = DataModelType.PydanticBaseModel,
     target_python_version: PythonVersion = PythonVersionMin,
+    target_pydantic_version: TargetPydanticVersion | None = None,
     base_class: str = "",
+    base_class_map: dict[str, str] | None = None,
     additional_imports: list[str] | None = None,
+    class_decorators: list[str] | None = None,
     custom_template_dir: Path | None = None,
     extra_template_data: defaultdict[str, dict[str, Any]] | None = None,
     validation: bool = False,
@@ -453,6 +502,7 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
     use_title_as_name: bool = False,
     use_operation_id_as_name: bool = False,
     use_unique_items_as_set: bool = False,
+    use_tuple_for_fixed_items: bool = False,
     allof_merge_mode: AllOfMergeMode = AllOfMergeMode.Constraints,
     http_headers: Sequence[tuple[str, str]] | None = None,
     http_ignore_tls: bool = False,
@@ -467,6 +517,7 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
     collapse_reuse_models: bool = False,
     skip_root_model: bool = False,
     use_type_alias: bool = False,
+    use_root_model_type_alias: bool = False,
     special_field_name_prefix: str | None = None,
     remove_special_field_name_prefix: bool = False,
     capitalise_enum_members: bool = False,
@@ -491,9 +542,12 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
     formatters: list[Formatter] = DEFAULT_FORMATTERS,
     settings_path: Path | None = None,
     parent_scoped_naming: bool = False,
+    naming_strategy: NamingStrategy | None = None,
+    duplicate_name_suffix: dict[str, str] | None = None,
     dataclass_arguments: DataclassArguments | None = None,
     disable_future_imports: bool = False,
     type_mappings: list[str] | None = None,
+    type_overrides: dict[str, str] | None = None,
     read_only_write_only_model_type: ReadOnlyWriteOnlyModelType | None = None,
     use_status_code_in_response_name: bool = False,
     all_exports_scope: AllExportsScope | None = None,
@@ -542,8 +596,7 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
             assert isinstance(input_text_, str)
             input_file_type = infer_input_type(input_text_)
         except Exception as exc:
-            msg = "Invalid file format"
-            raise Error(msg) from exc
+            raise InvalidFileFormatError(exc) from exc
         else:
             print(  # noqa: T201
                 inferred_message.format(input_file_type.value),
@@ -614,9 +667,10 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
                 else:  # pragma: no cover
                     msg = f"Unsupported input file type: {input_file_type}"
                     raise Error(msg)  # noqa: TRY301
+            except Error:
+                raise
             except Exception as exc:
-                msg = "Invalid file format"
-                raise Error(msg) from exc
+                raise InvalidFileFormatError(exc, input_file_type) from exc
 
             from genson import SchemaBuilder  # noqa: PLC0415
 
@@ -638,7 +692,12 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
 
     from datamodel_code_generator.model import get_data_model_types  # noqa: PLC0415
 
-    data_model_types = get_data_model_types(output_model_type, target_python_version, use_type_alias=use_type_alias)
+    data_model_types = get_data_model_types(
+        output_model_type,
+        target_python_version,
+        use_type_alias=use_type_alias,
+        use_root_model_type_alias=use_root_model_type_alias,
+    )
 
     # Add GraphQL-specific model types if needed
     if input_file_type == InputFileType.GraphQL:
@@ -654,7 +713,9 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
         data_model_field_type=data_model_types.field_model,
         data_type_manager_type=data_model_types.data_type_manager,
         base_class=base_class,
+        base_class_map=base_class_map,
         additional_imports=additional_imports,
+        class_decorators=class_decorators,
         custom_template_dir=custom_template_dir,
         extra_template_data=extra_template_data,
         target_python_version=target_python_version,
@@ -707,6 +768,7 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
         use_title_as_name=use_title_as_name,
         use_operation_id_as_name=use_operation_id_as_name,
         use_unique_items_as_set=use_unique_items_as_set,
+        use_tuple_for_fixed_items=use_tuple_for_fixed_items,
         allof_merge_mode=allof_merge_mode,
         http_headers=http_headers,
         http_ignore_tls=http_ignore_tls,
@@ -744,10 +806,14 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
         formatters=formatters,
         encoding=encoding,
         parent_scoped_naming=parent_scoped_naming,
+        naming_strategy=naming_strategy,
+        duplicate_name_suffix=duplicate_name_suffix,
         dataclass_arguments=dataclass_arguments,
         type_mappings=type_mappings,
+        type_overrides=type_overrides,
         read_only_write_only_model_type=read_only_write_only_model_type,
         field_type_collision_strategy=field_type_collision_strategy,
+        target_pydantic_version=target_pydantic_version,
         **kwargs,
     )
 
@@ -897,9 +963,12 @@ __all__ = [
     "Error",
     "InputFileType",
     "InvalidClassNameError",
+    "InvalidFileFormatError",
     "LiteralType",
     "ModuleSplitMode",
+    "NamingStrategy",
     "PythonVersion",
     "ReadOnlyWriteOnlyModelType",
+    "TargetPydanticVersion",
     "generate",
 ]

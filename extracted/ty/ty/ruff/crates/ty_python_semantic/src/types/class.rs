@@ -8,7 +8,6 @@ use super::{
     SpecialFormType, SubclassOfType, Truthiness, Type, TypeQualifiers, class_base::ClassBase,
     function::FunctionType,
 };
-use crate::module_resolver::KnownModule;
 use crate::place::TypeOrigin;
 use crate::semantic_index::definition::{Definition, DefinitionState};
 use crate::semantic_index::scope::{NodeWithScopeKind, Scope, ScopeKind};
@@ -36,17 +35,16 @@ use crate::types::tuple::{TupleSpec, TupleType};
 use crate::types::typed_dict::typed_dict_params_from_class_def;
 use crate::types::visitor::{TypeCollector, TypeVisitor, walk_type_with_recursion_guard};
 use crate::types::{
-    ApplyTypeMappingVisitor, Binding, BoundSuperType, CallableType, CallableTypeKind,
-    CallableTypes, DATACLASS_FLAGS, DataclassFlags, DataclassParams, DeprecatedInstance,
-    FindLegacyTypeVarsVisitor, HasRelationToVisitor, IsDisjointVisitor, IsEquivalentVisitor,
-    KnownInstanceType, ManualPEP695TypeAliasType, MaterializationKind, NormalizedVisitor,
-    PropertyInstanceType, StringLiteralType, TypeAliasType, TypeContext, TypeMapping, TypeRelation,
-    TypedDictParams, UnionBuilder, VarianceInferable, binding_type, declaration_type,
-    determine_upper_bound,
+    ApplyTypeMappingVisitor, Binding, BindingContext, BoundSuperType, CallableType,
+    CallableTypeKind, CallableTypes, DATACLASS_FLAGS, DataclassFlags, DataclassParams,
+    DeprecatedInstance, FindLegacyTypeVarsVisitor, HasRelationToVisitor, IsDisjointVisitor,
+    IsEquivalentVisitor, KnownInstanceType, ManualPEP695TypeAliasType, MaterializationKind,
+    NormalizedVisitor, PropertyInstanceType, StringLiteralType, TypeAliasType, TypeContext,
+    TypeMapping, TypeRelation, TypedDictParams, UnionBuilder, VarianceInferable, binding_type,
+    declaration_type, determine_upper_bound,
 };
 use crate::{
     Db, FxIndexMap, FxIndexSet, FxOrderSet, Program,
-    module_resolver::file_to_module,
     place::{
         Definedness, LookupError, LookupResult, Place, PlaceAndQualifiers, known_module_symbol,
         place_from_bindings, place_from_declarations,
@@ -72,6 +70,7 @@ use ruff_python_ast::name::Name;
 use ruff_python_ast::{self as ast, PythonVersion};
 use ruff_text_size::{Ranged, TextRange};
 use rustc_hash::FxHashSet;
+use ty_module_resolver::{KnownModule, file_to_module};
 
 fn explicit_bases_cycle_initial<'db>(
     _db: &'db dyn Db,
@@ -2508,7 +2507,8 @@ impl<'db> ClassLiteral<'db> {
                     }
                 }
 
-                let is_kw_only = name == "__replace__" || kw_only.unwrap_or(false);
+                let is_kw_only =
+                    matches!(name, "__replace__" | "_replace") || kw_only.unwrap_or(false);
 
                 // Use the alias name if provided, otherwise use the field name
                 let parameter_name =
@@ -2521,7 +2521,7 @@ impl<'db> ClassLiteral<'db> {
                 }
                 .with_annotated_type(field_ty);
 
-                if name == "__replace__" {
+                if matches!(name, "__replace__" | "_replace") {
                     // When replacing, we know there is a default value for the field
                     // (the value that is currently assigned to the field)
                     // assume this to be the declared type of the field
@@ -2563,6 +2563,33 @@ impl<'db> ClassLiteral<'db> {
                 let cls_parameter = Parameter::positional_or_keyword(Name::new_static("cls"))
                     .with_annotated_type(KnownClass::Type.to_instance(db));
                 signature_from_fields(vec![cls_parameter], Some(Type::none(db)))
+            }
+            (CodeGeneratorKind::NamedTuple, "_replace" | "__replace__") => {
+                if name == "__replace__"
+                    && Program::get(db).python_version(db) < PythonVersion::PY313
+                {
+                    return None;
+                }
+                // Use `Self` type variable as return type so that subclasses get the correct
+                // return type when calling `_replace`. For example, if `IntBox` inherits from
+                // `Box[int]` (a NamedTuple), then `IntBox(1)._replace(content=42)` should return
+                // `IntBox`, not `Box[int]`.
+                let self_ty = Type::TypeVar(BoundTypeVarInstance::synthetic_self(
+                    db,
+                    instance_ty,
+                    BindingContext::Synthetic,
+                ));
+                let self_parameter = Parameter::positional_or_keyword(Name::new_static("self"))
+                    .with_annotated_type(self_ty);
+                signature_from_fields(vec![self_parameter], Some(self_ty))
+            }
+            (CodeGeneratorKind::NamedTuple, "_fields") => {
+                // Synthesize a precise tuple type for _fields using literal string types.
+                // For example, a NamedTuple with `name` and `age` fields gets
+                // `tuple[Literal["name"], Literal["age"]]`.
+                let fields = self.fields(db, specialization, field_policy);
+                let field_types = fields.keys().map(|name| Type::string_literal(db, name));
+                Some(Type::heterogeneous_tuple(db, field_types))
             }
             (CodeGeneratorKind::DataclassLike(_), "__lt__" | "__le__" | "__gt__" | "__ge__") => {
                 if !has_dataclass_param(DataclassFlags::ORDER) {
@@ -4175,7 +4202,7 @@ pub(super) enum DisjointBaseKind {
 ///
 /// Feel free to expand this enum if you ever find yourself using the same class in multiple
 /// places.
-/// Note: good candidates are any classes in `[crate::module_resolver::module::KnownModule]`
+/// Note: good candidates are any classes in `[ty_module_resolver::module::KnownModule]`
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, get_size2::GetSize)]
 #[cfg_attr(test, derive(strum_macros::EnumIter))]
 pub enum KnownClass {
@@ -5999,10 +6026,10 @@ impl SlotsKind {
 mod tests {
     use super::*;
     use crate::db::tests::setup_db;
-    use crate::module_resolver::resolve_module_confident;
     use crate::{PythonVersionSource, PythonVersionWithSource};
     use salsa::Setter;
     use strum::IntoEnumIterator;
+    use ty_module_resolver::resolve_module_confident;
 
     #[test]
     fn known_class_roundtrip_from_str() {

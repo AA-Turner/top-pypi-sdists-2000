@@ -1557,3 +1557,113 @@ def test_target_python_version_outputs(output_file: Path) -> None:
         expected_file=EXPECTED_MAIN_KR_PATH / "target_python_version" / "py310.py",
         extra_args=["--target-python-version", "3.10", "--use-standard-collections"],
     )
+
+
+@pytest.mark.cli_doc(
+    options=["--target-pydantic-version"],
+    input_schema="jsonschema/person.json",
+    cli_args=[
+        "--target-pydantic-version",
+        "2.11",
+        "--allow-population-by-field-name",
+        "--output-model-type",
+        "pydantic_v2.BaseModel",
+    ],
+    golden_output="main_kr/target_pydantic_version/v2_11.py",
+    primary=True,
+)
+@freeze_time("2019-07-26")
+def test_target_pydantic_version(output_file: Path) -> None:
+    """Target Pydantic version for generated code compatibility.
+
+    The `--target-pydantic-version` flag controls Pydantic version-specific config:
+
+    - **2**: Uses `populate_by_name=True` (compatible with Pydantic 2.0-2.10)
+    - **2.11**: Uses `validate_by_name=True` (for Pydantic 2.11+)
+
+    This prevents breaking changes when generated code is used on older Pydantic versions.
+    """
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "person.json",
+        output_path=output_file,
+        assert_func=assert_file_content,
+        expected_file=EXPECTED_MAIN_KR_PATH / "target_pydantic_version" / "v2_11.py",
+        extra_args=[
+            "--target-pydantic-version",
+            "2.11",
+            "--allow-population-by-field-name",
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+        ],
+    )
+
+
+def test_generate_prompt_basic(capsys: pytest.CaptureFixture[str]) -> None:
+    """Generate a prompt for consulting LLMs about CLI options.
+
+    The `--generate-prompt` flag outputs a formatted prompt containing:
+    - Current CLI options
+    - Options organized by category with descriptions
+    - Full help text
+
+    This prompt can be copied to ChatGPT, Claude, or other LLMs to get
+    recommendations for appropriate CLI options.
+    """
+    return_code = main(["--generate-prompt"])
+    assert return_code == Exit.OK
+    captured = capsys.readouterr()
+
+    # Verify structure
+    assert "# datamodel-code-generator CLI Options Consultation" in captured.out
+    assert "## Current CLI Options" in captured.out
+    assert "## Options by Category" in captured.out
+    assert "## All Available Options (Full Help)" in captured.out
+    assert "## Instructions" in captured.out
+    assert "(No options specified)" in captured.out
+
+
+def test_generate_prompt_with_question(capsys: pytest.CaptureFixture[str]) -> None:
+    """Test --generate-prompt with a question argument."""
+    question = "How do I convert enums to Literal types?"
+    return_code = main(["--generate-prompt", question])
+    assert return_code == Exit.OK
+    captured = capsys.readouterr()
+
+    assert "## Your Question" in captured.out
+    assert question in captured.out
+
+
+def test_generate_prompt_with_options(capsys: pytest.CaptureFixture[str]) -> None:
+    """Test --generate-prompt with other CLI options set."""
+    return_code = main([
+        "--input",
+        "schema.json",
+        "--output-model-type",
+        "pydantic_v2.BaseModel",
+        "--snake-case-field",
+        "--generate-prompt",
+        "What other options should I use?",
+    ])
+    assert return_code == Exit.OK
+    captured = capsys.readouterr()
+
+    # Verify options are shown
+    assert "--input schema.json" in captured.out
+    assert "--output-model-type pydantic_v2.BaseModel" in captured.out
+    assert "--snake-case-field" in captured.out
+    assert "What other options should I use?" in captured.out
+
+
+def test_generate_prompt_with_list_options(capsys: pytest.CaptureFixture[str]) -> None:
+    """Test --generate-prompt with list options (e.g., --strict-types)."""
+    return_code = main([
+        "--strict-types",
+        "str",
+        "int",
+        "--generate-prompt",
+    ])
+    assert return_code == Exit.OK
+    captured = capsys.readouterr()
+
+    # Verify list options are formatted correctly
+    assert "--strict-types str int" in captured.out

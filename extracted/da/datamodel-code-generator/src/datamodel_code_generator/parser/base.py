@@ -30,8 +30,10 @@ from datamodel_code_generator import (
     Error,
     FieldTypeCollisionStrategy,
     ModuleSplitMode,
+    NamingStrategy,
     ReadOnlyWriteOnlyModelType,
     ReuseScope,
+    TargetPydanticVersion,
 )
 from datamodel_code_generator.format import (
     DEFAULT_FORMATTERS,
@@ -72,7 +74,7 @@ from datamodel_code_generator.parser._graph import stable_toposort
 from datamodel_code_generator.parser._scc import find_circular_sccs, strongly_connected_components
 from datamodel_code_generator.reference import ModelResolver, ModelType, Reference
 from datamodel_code_generator.types import DataType, DataTypeManager, StrictTypes
-from datamodel_code_generator.util import camel_to_snake
+from datamodel_code_generator.util import camel_to_snake, model_copy, model_dump
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Iterator, Mapping, Sequence
@@ -325,7 +327,7 @@ def to_hashable(item: Any) -> HashableComparable:  # noqa: PLR0911
     if isinstance(item, set):  # pragma: no cover
         return frozenset(to_hashable(i) for i in item)  # type: ignore[return-value]
     if isinstance(item, BaseModel):
-        return to_hashable(item.dict())
+        return to_hashable(model_dump(item))
     if item is None:
         return ""
     return item  # type: ignore[return-value]
@@ -395,7 +397,7 @@ def sort_data_models(  # noqa: PLR0912, PLR0915
             sorted_data_models[model.path] = model
             add_model_path_to_list(require_update_action_models, model)
         elif (
-            not model.reference_classes - {model.path} - set(sorted_data_models)
+            not model.reference_classes - {model.path} - sorted_data_models.keys()
         ):  # reference classes have been resolved
             sorted_data_models[model.path] = model
             if model.path in model.reference_classes:
@@ -417,20 +419,21 @@ def sort_data_models(  # noqa: PLR0912, PLR0915
         # sort on base_class dependency
         while True:
             ordered_models: list[tuple[int, DataModel]] = []
-            unresolved_reference_model_names = [m.path for m in unresolved_references]
+            # Build lookup dict for O(1) index access instead of O(n) list.index()
+            path_to_index = {m.path: idx for idx, m in enumerate(unresolved_references)}
             for model in unresolved_references:
                 if isinstance(model, pydantic_model_v2.RootModel):
                     indexes = [
-                        unresolved_reference_model_names.index(ref_path)
+                        path_to_index[ref_path]
                         for f in model.fields
                         for t in f.data_type.all_data_types
-                        if t.reference and (ref_path := t.reference.path) in unresolved_reference_model_names
+                        if t.reference and (ref_path := t.reference.path) in path_to_index
                     ]
                 else:
                     indexes = [
-                        unresolved_reference_model_names.index(b.reference.path)
+                        path_to_index[b.reference.path]
                         for b in model.base_classes
-                        if b.reference and b.reference.path in unresolved_reference_model_names
+                        if b.reference and b.reference.path in path_to_index
                     ]
                 if indexes:
                     ordered_models.append((
@@ -448,9 +451,9 @@ def sort_data_models(  # noqa: PLR0912, PLR0915
             unresolved_references = sorted_unresolved_models
 
         # circular reference
-        unsorted_data_model_names = set(unresolved_reference_model_names)
+        unsorted_data_model_names = set(path_to_index.keys())
         for model in unresolved_references:
-            unresolved_model = model.reference_classes - {model.path} - set(sorted_data_models)
+            unresolved_model = model.reference_classes - {model.path} - sorted_data_models.keys()
             base_models = [getattr(s.reference, "path", None) for s in model.base_classes]
             update_action_parent = set(require_update_action_models).intersection(base_models)
             if not unresolved_model:
@@ -637,11 +640,11 @@ def _copy_data_types(data_types: list[DataType]) -> list[DataType]:
         if data_type_.reference:
             copied_data_types.append(data_type_.__class__(reference=data_type_.reference))
         elif data_type_.data_types:  # pragma: no cover
-            copied_data_type = data_type_.copy()
+            copied_data_type = model_copy(data_type_)
             copied_data_type.data_types = _copy_data_types(data_type_.data_types)
             copied_data_types.append(copied_data_type)
         else:
-            copied_data_types.append(data_type_.copy())
+            copied_data_types.append(model_copy(data_type_))
     return copied_data_types
 
 
@@ -684,7 +687,9 @@ class Parser(ABC):
         data_type_manager_type: type[DataTypeManager] = pydantic_model.DataTypeManager,
         data_model_field_type: type[DataModelFieldBase] = pydantic_model.DataModelField,
         base_class: str | None = None,
+        base_class_map: dict[str, str] | None = None,
         additional_imports: list[str] | None = None,
+        class_decorators: list[str] | None = None,
         custom_template_dir: Path | None = None,
         extra_template_data: defaultdict[str, dict[str, Any]] | None = None,
         target_python_version: PythonVersion = PythonVersionMin,
@@ -732,6 +737,7 @@ class Parser(ABC):
         use_title_as_name: bool = False,
         use_operation_id_as_name: bool = False,
         use_unique_items_as_set: bool = False,
+        use_tuple_for_fixed_items: bool = False,
         allof_merge_mode: AllOfMergeMode = AllOfMergeMode.Constraints,
         http_headers: Sequence[tuple[str, str]] | None = None,
         http_ignore_tls: bool = False,
@@ -771,13 +777,18 @@ class Parser(ABC):
         use_default_factory_for_optional_nested_models: bool = False,
         formatters: list[Formatter] = DEFAULT_FORMATTERS,
         parent_scoped_naming: bool = False,
+        naming_strategy: NamingStrategy | None = None,
+        duplicate_name_suffix: dict[str, str] | None = None,
         dataclass_arguments: DataclassArguments | None = None,
         type_mappings: list[str] | None = None,
+        type_overrides: dict[str, str] | None = None,
         read_only_write_only_model_type: ReadOnlyWriteOnlyModelType | None = None,
         field_type_collision_strategy: FieldTypeCollisionStrategy | None = None,
+        target_pydantic_version: TargetPydanticVersion | None = None,
     ) -> None:
         """Initialize the Parser with configuration options."""
         self.keyword_only = keyword_only
+        self.target_pydantic_version = target_pydantic_version
         self.frozen_dataclasses = frozen_dataclasses
         self.data_type_manager: DataTypeManager = data_type_manager_type(
             python_version=target_python_version,
@@ -801,8 +812,10 @@ class Parser(ABC):
         self.imports: Imports = Imports(use_exact_imports)
         self.use_exact_imports: bool = use_exact_imports
         self._append_additional_imports(additional_imports=additional_imports)
+        self.class_decorators: list[str] = class_decorators or []
 
         self.base_class: str | None = base_class
+        self.base_class_map: dict[str, str] | None = base_class_map
         self.target_python_version: PythonVersion = target_python_version
         self.results: list[DataModel] = []
         self.dump_resolve_reference_action: Callable[[Iterable[str]], str] | None = dump_resolve_reference_action
@@ -839,6 +852,7 @@ class Parser(ABC):
         self.use_title_as_name: bool = use_title_as_name
         self.use_operation_id_as_name: bool = use_operation_id_as_name
         self.use_unique_items_as_set: bool = use_unique_items_as_set
+        self.use_tuple_for_fixed_items: bool = use_tuple_for_fixed_items
         self.allof_merge_mode: AllOfMergeMode = allof_merge_mode
         self.dataclass_arguments = dataclass_arguments
 
@@ -886,6 +900,12 @@ class Parser(ABC):
             else:
                 self.extra_template_data[ALL_MODEL]["use_attribute_docstrings"] = True
 
+        if target_pydantic_version:
+            if use_generic_base_class:
+                self.generic_base_class_config["target_pydantic_version"] = target_pydantic_version
+            else:
+                self.extra_template_data[ALL_MODEL]["target_pydantic_version"] = target_pydantic_version
+
         self.model_resolver = ModelResolver(
             base_url=source.geturl() if isinstance(source, ParseResult) else None,
             singular_name_suffix="" if disable_appending_item_suffix else None,
@@ -901,6 +921,8 @@ class Parser(ABC):
             no_alias=no_alias,
             parent_scoped_naming=parent_scoped_naming,
             treat_dot_as_module=treat_dot_as_module,
+            naming_strategy=naming_strategy,
+            duplicate_name_suffix_map=duplicate_name_suffix,
         )
         self.class_name: str | None = class_name
         self.wrap_string_literal: bool | None = wrap_string_literal
@@ -930,6 +952,10 @@ class Parser(ABC):
         self.default_field_extras: dict[str, Any] | None = default_field_extras
         self.formatters: list[Formatter] = formatters
         self.type_mappings: dict[tuple[str, str], str] = Parser._parse_type_mappings(type_mappings)
+        self.type_overrides: dict[str, str] = type_overrides or {}
+        self._type_override_imports: dict[str, Import] = {
+            key: Import.from_full_path(value) for key, value in self.type_overrides.items()
+        }
         self.read_only_write_only_model_type: ReadOnlyWriteOnlyModelType | None = read_only_write_only_model_type
         self.use_frozen_field: bool = use_frozen_field
         self.use_default_factory_for_optional_nested_models: bool = use_default_factory_for_optional_nested_models
@@ -1015,6 +1041,12 @@ class Parser(ABC):
             new_import = Import.from_full_path(additional_import_string)
             self.imports.append(new_import)
 
+    def _resolve_base_class(self, class_name: str, custom_base_path: str | None = None) -> str | None:
+        """Resolve base class with priority: base_class_map > customBasePath > base_class."""
+        if self.base_class_map and class_name in self.base_class_map:
+            return self.base_class_map[class_name]
+        return custom_base_path or self.base_class
+
     def _get_text_from_url(self, url: str) -> str:
         from datamodel_code_generator.http import get_body  # noqa: PLC0415
 
@@ -1051,8 +1083,9 @@ class Parser(ABC):
         replacement: DataModel,
     ) -> None:
         """Replace model at its position in list."""
-        models.insert(models.index(original), replacement)
-        models.remove(original)
+        # Use direct assignment instead of insert+remove for O(n) instead of O(2n)
+        idx = models.index(original)
+        models[idx] = replacement
 
     def __delete_duplicate_models(self, models: list[DataModel]) -> None:
         model_class_names: dict[str, DataModel] = {}
@@ -1103,11 +1136,11 @@ class Parser(ABC):
                     )
                 models.remove(duplicate_model)
 
-    @classmethod
-    def __replace_duplicate_name_in_module(cls, models: list[DataModel]) -> None:
+    def __replace_duplicate_name_in_module(self, models: list[DataModel]) -> None:
         scoped_model_resolver = ModelResolver(
             exclude_names={i.alias or i.import_ for m in models for i in m.imports},
             duplicate_name_suffix="Model",
+            custom_class_name_generator=(lambda name: name) if self.custom_class_name_generator else None,
         )
 
         model_names: dict[str, DataModel] = {}
@@ -1438,7 +1471,7 @@ class Parser(ABC):
     @classmethod
     def _create_set_from_list(cls, data_type: DataType) -> DataType | None:
         if data_type.is_list:
-            new_data_type = data_type.copy()
+            new_data_type = model_copy(data_type)
             new_data_type.is_list = False
             new_data_type.is_set = True
             for data_type_ in new_data_type.data_types:
@@ -1658,7 +1691,7 @@ class Parser(ABC):
                         continue
 
                     # set copied data_type
-                    copied_data_type = root_type_field.data_type.copy()
+                    copied_data_type = model_copy(root_type_field.data_type)
                     if isinstance(data_type.parent, self.data_model_field_type):
                         # for field
                         # override empty field by root-type field
@@ -1815,18 +1848,18 @@ class Parser(ABC):
                 if not original_field:  # pragma: no cover
                     model.fields.remove(model_field)
                     continue
-                copied_original_field = original_field.copy()
+                copied_original_field = model_copy(original_field)
                 if original_field.data_type.reference:
                     data_type = self.data_type_manager.data_type(
                         reference=original_field.data_type.reference,
                     )
                 elif original_field.data_type.data_types:
-                    data_type = original_field.data_type.copy()
+                    data_type = model_copy(original_field.data_type)
                     data_type.data_types = _copy_data_types(original_field.data_type.data_types)
                     for data_type_ in data_type.data_types:
                         data_type_.parent = data_type
                 else:
-                    data_type = original_field.data_type.copy()
+                    data_type = model_copy(original_field.data_type)
                 data_type.parent = copied_original_field
                 copied_original_field.data_type = data_type
                 copied_original_field.parent = model
@@ -1964,6 +1997,57 @@ class Parser(ABC):
             and field.extras.get("init") is not False
             and not dataclass_model.has_field_assignment(field)
         )
+
+    def __remove_overridden_models(self, models: list[DataModel]) -> list[DataModel]:
+        """Remove models that are being overridden by custom types (model-level only).
+
+        Only model-level overrides (keys without dots) cause model removal.
+        Scoped overrides (ClassName.field) only affect specific fields.
+        """
+        if not self.type_overrides:
+            return models
+        # Only model-level overrides (no dot) cause model removal
+        model_level_overrides = {k for k in self.type_overrides if "." not in k}
+        return [m for m in models if m.class_name not in model_level_overrides]
+
+    def __apply_type_overrides(self, models: list[DataModel]) -> None:
+        """Replace field type references with custom import types.
+
+        Supports two key formats:
+        - Model-level: {"CustomType": "my_app.Type"} - applies to all references
+        - Scoped: {"User.field": "my_app.Type"} - applies to specific field only
+
+        Scoped overrides take priority over model-level overrides.
+        """
+        if not self._type_override_imports:
+            return
+        for model in models:
+            for field in model.fields:
+                # Check scoped override first: "ClassName.field_name"
+                scoped_key = f"{model.class_name}.{field.name}"
+                if scoped_key in self._type_override_imports:
+                    self._apply_override_to_field(field, self._type_override_imports[scoped_key])
+                else:
+                    # Apply model-level overrides to nested types
+                    self._apply_override_to_data_type(field.data_type)
+
+    def _apply_override_to_field(self, field: DataModelFieldBase, override_import: Import) -> None:  # noqa: PLR6301
+        """Apply override to entire field's data_type."""
+        field.data_type.import_ = override_import
+        field.data_type.alias = override_import.import_
+        field.data_type.reference = None
+        field.data_type.data_types = []  # Clear nested types
+
+    def _apply_override_to_data_type(self, data_type: DataType) -> None:
+        """Recursively apply model-level overrides to a DataType."""
+        if data_type.reference and data_type.reference.name in self._type_override_imports:
+            override_import = self._type_override_imports[data_type.reference.name]
+            data_type.import_ = override_import
+            data_type.alias = override_import.import_
+            data_type.reference = None
+        # Handle nested types (List[CustomType], Optional[CustomType], etc.)
+        for nested in data_type.data_types:
+            self._apply_override_to_data_type(nested)
 
     @classmethod
     def __update_type_aliases(cls, models: list[DataModel]) -> None:
@@ -2753,6 +2837,8 @@ class Parser(ABC):
         self.__apply_discriminator_type(models, imports)
         self.__set_one_literal_on_default(models)
         self.__fix_dataclass_field_ordering(models)
+        models = self.__remove_overridden_models(models)
+        self.__apply_type_overrides(models)
         self.__update_type_aliases(models)
 
         return ModuleContext(module, module_, models, is_init, imports, scoped_model_resolver)

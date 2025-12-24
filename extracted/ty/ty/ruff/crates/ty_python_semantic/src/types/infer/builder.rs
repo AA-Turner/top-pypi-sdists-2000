@@ -13,6 +13,10 @@ use ruff_python_stdlib::builtins::version_builtin_was_added;
 use ruff_text_size::{Ranged, TextRange};
 use rustc_hash::{FxHashMap, FxHashSet};
 use smallvec::SmallVec;
+use ty_module_resolver::{
+    KnownModule, ModuleName, ModuleNameResolutionError, ModuleResolveMode, file_to_module,
+    resolve_module, search_paths,
+};
 
 use super::{
     DefinitionInference, DefinitionInferenceExtra, ExpressionInference, ExpressionInferenceExtra,
@@ -21,10 +25,6 @@ use super::{
     infer_unpack_types,
 };
 use crate::diagnostic::format_enumeration;
-use crate::module_name::{ModuleName, ModuleNameResolutionError};
-use crate::module_resolver::{
-    KnownModule, ModuleResolveMode, file_to_module, resolve_module, search_paths,
-};
 use crate::node_key::NodeKey;
 use crate::place::{
     ConsideredDefinitions, Definedness, LookupError, Place, PlaceAndQualifiers, TypeOrigin,
@@ -4283,7 +4283,7 @@ impl<'db, 'ast> TypeInferenceBuilder<'db, 'ast> {
                                         )
                                     })
                                     .and_then(|module| module.search_path(db))
-                                    .is_some_and(crate::SearchPath::is_first_party)
+                                    .is_some_and(ty_module_resolver::SearchPath::is_first_party)
                                 {
                                     diagnostic.help(format_args!(
                                         "Consider adding a `__setitem__` method to `{}`.",
@@ -4963,7 +4963,16 @@ impl<'db, 'ast> TypeInferenceBuilder<'db, 'ast> {
             }
 
             Type::ModuleLiteral(module) => {
-                if let Place::Defined(attr_ty, _, _) = module.static_member(db, attribute).place {
+                let sym = if module
+                    .module(db)
+                    .known(db)
+                    .is_some_and(KnownModule::is_builtins)
+                {
+                    builtins_symbol(db, attribute)
+                } else {
+                    module.static_member(db, attribute)
+                };
+                if let Place::Defined(attr_ty, _, _) = sym.place {
                     let value_ty = infer_value_ty(self, TypeContext::new(Some(attr_ty)));
 
                     let assignable = value_ty.is_assignable_to(db, attr_ty);
@@ -7594,7 +7603,7 @@ impl<'db, 'ast> TypeInferenceBuilder<'db, 'ast> {
                                     range: _,
                                     node_index: _,
                                     expression,
-                                    debug_text: _,
+                                    debug_text,
                                     conversion,
                                     format_spec,
                                 } = expression;
@@ -7613,7 +7622,10 @@ impl<'db, 'ast> TypeInferenceBuilder<'db, 'ast> {
                                 // (`Type::format`?) that handles the `__format__` method.
                                 // Conversion flags should be handled before calling `__format__`.
                                 // https://docs.python.org/3/library/string.html#format-string-syntax
-                                if !conversion.is_none() || format_spec.is_some() {
+                                if debug_text.is_some()
+                                    || !conversion.is_none()
+                                    || format_spec.is_some()
+                                {
                                     collector.add_expression();
                                 } else {
                                     if let Type::StringLiteral(literal) = ty.str(self.db()) {

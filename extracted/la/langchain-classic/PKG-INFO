@@ -1,19 +1,20 @@
 Metadata-Version: 2.4
 Name: langchain-classic
-Version: 1.0.0
+Version: 1.0.1
 Summary: Building applications with LLMs through composability
-Project-URL: homepage, https://docs.langchain.com/
-Project-URL: repository, https://github.com/langchain-ai/langchain/tree/master/libs/langchain
-Project-URL: changelog, https://github.com/langchain-ai/langchain/releases?q=tag%3A%22langchain-classic%3D%3D1%22
-Project-URL: twitter, https://x.com/LangChainAI
-Project-URL: slack, https://www.langchain.com/join-community
-Project-URL: reddit, https://www.reddit.com/r/LangChain/
+Project-URL: Homepage, https://docs.langchain.com/
+Project-URL: Documentation, https://reference.langchain.com/python/langchain_classic/
+Project-URL: Source, https://github.com/langchain-ai/langchain/tree/master/libs/langchain
+Project-URL: Changelog, https://github.com/langchain-ai/langchain/releases?q=tag%3A%22langchain-classic%3D%3D1%22
+Project-URL: Twitter, https://x.com/LangChainAI
+Project-URL: Slack, https://www.langchain.com/join-community
+Project-URL: Reddit, https://www.reddit.com/r/LangChain/
 License: MIT
 License-File: LICENSE
 Requires-Python: <4.0.0,>=3.10.0
 Requires-Dist: async-timeout<5.0.0,>=4.0.0; python_version < '3.11'
-Requires-Dist: langchain-core<2.0.0,>=1.0.0
-Requires-Dist: langchain-text-splitters<2.0.0,>=1.0.0
+Requires-Dist: langchain-core<2.0.0,>=1.2.5
+Requires-Dist: langchain-text-splitters<2.0.0,>=1.1.0
 Requires-Dist: langsmith<1.0.0,>=0.1.17
 Requires-Dist: pydantic<3.0.0,>=2.7.4
 Requires-Dist: pyyaml<7.0.0,>=5.3.0
@@ -33,6 +34,8 @@ Provides-Extra: google-vertexai
 Requires-Dist: langchain-google-vertexai; extra == 'google-vertexai'
 Provides-Extra: groq
 Requires-Dist: langchain-groq; extra == 'groq'
+Provides-Extra: huggingface
+Requires-Dist: langchain-huggingface; extra == 'huggingface'
 Provides-Extra: mistralai
 Requires-Dist: langchain-mistralai; extra == 'mistralai'
 Provides-Extra: ollama
@@ -73,7 +76,7 @@ In most cases, you should be using the main [`langchain`](https://pypi.org/proje
 
 ## 📖 Documentation
 
-For full documentation, see the [API reference](https://reference.langchain.com/python/langchain_classic).
+For full documentation, see the [API reference](https://reference.langchain.com/python/langchain_classic). For conceptual guides, tutorials, and examples on using LangChain, see the [LangChain Docs](https://docs.langchain.com/oss/python/langchain/overview).
 
 ## 📕 Releases & Versioning
 

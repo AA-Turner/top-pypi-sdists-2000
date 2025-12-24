@@ -24,11 +24,13 @@ from datamodel_code_generator import (
     Error,
     FieldTypeCollisionStrategy,
     LiteralType,
+    NamingStrategy,
     OpenAPIScope,
     PythonVersion,
     PythonVersionMin,
     ReadOnlyWriteOnlyModelType,
     ReuseScope,
+    TargetPydanticVersion,
     YamlValue,
     load_yaml_dict,
     snooper_to_methods,
@@ -49,7 +51,7 @@ from datamodel_code_generator.types import (
     EmptyDataType,
     StrictTypes,
 )
-from datamodel_code_generator.util import BaseModel
+from datamodel_code_generator.util import BaseModel, model_dump, model_validate
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable, Mapping, Sequence
@@ -187,7 +189,9 @@ class OpenAPIParser(JsonSchemaParser):
         data_type_manager_type: type[DataTypeManager] = pydantic_model.DataTypeManager,
         data_model_field_type: type[DataModelFieldBase] = pydantic_model.DataModelField,
         base_class: str | None = None,
+        base_class_map: dict[str, str] | None = None,
         additional_imports: list[str] | None = None,
+        class_decorators: list[str] | None = None,
         custom_template_dir: Path | None = None,
         extra_template_data: defaultdict[str, dict[str, Any]] | None = None,
         target_python_version: PythonVersion = PythonVersionMin,
@@ -239,6 +243,7 @@ class OpenAPIParser(JsonSchemaParser):
         use_title_as_name: bool = False,
         use_operation_id_as_name: bool = False,
         use_unique_items_as_set: bool = False,
+        use_tuple_for_fixed_items: bool = False,
         allof_merge_mode: AllOfMergeMode = AllOfMergeMode.Constraints,
         http_headers: Sequence[tuple[str, str]] | None = None,
         http_ignore_tls: bool = False,
@@ -274,13 +279,17 @@ class OpenAPIParser(JsonSchemaParser):
         no_alias: bool = False,
         formatters: list[Formatter] = DEFAULT_FORMATTERS,
         parent_scoped_naming: bool = False,
+        naming_strategy: NamingStrategy | None = None,
+        duplicate_name_suffix: dict[str, str] | None = None,
         dataclass_arguments: DataclassArguments | None = None,
         type_mappings: list[str] | None = None,
+        type_overrides: dict[str, str] | None = None,
         read_only_write_only_model_type: ReadOnlyWriteOnlyModelType | None = None,
         use_frozen_field: bool = False,
         use_default_factory_for_optional_nested_models: bool = False,
         use_status_code_in_response_name: bool = False,
         field_type_collision_strategy: FieldTypeCollisionStrategy | None = None,
+        target_pydantic_version: TargetPydanticVersion | None = None,
     ) -> None:
         """Initialize the OpenAPI parser with extensive configuration options."""
         target_datetime_class = target_datetime_class or DatetimeClassType.Awaredatetime
@@ -291,7 +300,9 @@ class OpenAPIParser(JsonSchemaParser):
             data_type_manager_type=data_type_manager_type,
             data_model_field_type=data_model_field_type,
             base_class=base_class,
+            base_class_map=base_class_map,
             additional_imports=additional_imports,
+            class_decorators=class_decorators,
             custom_template_dir=custom_template_dir,
             extra_template_data=extra_template_data,
             target_python_version=target_python_version,
@@ -341,6 +352,7 @@ class OpenAPIParser(JsonSchemaParser):
             use_title_as_name=use_title_as_name,
             use_operation_id_as_name=use_operation_id_as_name,
             use_unique_items_as_set=use_unique_items_as_set,
+            use_tuple_for_fixed_items=use_tuple_for_fixed_items,
             allof_merge_mode=allof_merge_mode,
             http_headers=http_headers,
             http_ignore_tls=http_ignore_tls,
@@ -376,12 +388,16 @@ class OpenAPIParser(JsonSchemaParser):
             no_alias=no_alias,
             formatters=formatters,
             parent_scoped_naming=parent_scoped_naming,
+            naming_strategy=naming_strategy,
+            duplicate_name_suffix=duplicate_name_suffix,
             dataclass_arguments=dataclass_arguments,
             type_mappings=type_mappings,
+            type_overrides=type_overrides,
             read_only_write_only_model_type=read_only_write_only_model_type,
             use_frozen_field=use_frozen_field,
             use_default_factory_for_optional_nested_models=use_default_factory_for_optional_nested_models,
             field_type_collision_strategy=field_type_collision_strategy,
+            target_pydantic_version=target_pydantic_version,
         )
         self.open_api_scopes: list[OpenAPIScope] = openapi_scopes or [OpenAPIScope.Schemas]
         self.include_path_parameters: bool = include_path_parameters
@@ -499,7 +515,7 @@ class OpenAPIParser(JsonSchemaParser):
         """Resolve a reference object to its actual type or return the object as-is."""
         if isinstance(obj, ReferenceObject):
             ref_obj = self.get_ref_model(obj.ref)
-            return object_type.parse_obj(ref_obj)
+            return model_validate(object_type, ref_obj)
         return obj
 
     def _parse_schema_or_ref(
@@ -618,7 +634,7 @@ class OpenAPIParser(JsonSchemaParser):
                 if not detail.ref:  # pragma: no cover
                     continue
                 ref_model = self.get_ref_model(detail.ref)
-                content = {k: MediaObject.parse_obj(v) for k, v in ref_model.get("content", {}).items()}
+                content = {k: model_validate(MediaObject, v) for k, v in ref_model.get("content", {}).items()}
             else:
                 content = detail.content
 
@@ -725,7 +741,7 @@ class OpenAPIParser(JsonSchemaParser):
                         data_type=data_type,
                         required=parameter.required,
                         alias=alias,
-                        constraints=object_schema.dict()
+                        constraints=model_dump(object_schema)
                         if object_schema and self.is_constraints_field(object_schema)
                         else None,
                         nullable=object_schema.nullable
@@ -757,7 +773,7 @@ class OpenAPIParser(JsonSchemaParser):
                 self._create_data_model(
                     fields=fields,
                     reference=reference,
-                    custom_base_class=self.base_class,
+                    custom_base_class=self._resolve_base_class(name),
                     custom_template_dir=self.custom_template_dir,
                     keyword_only=self.keyword_only,
                     treat_dot_as_module=self.treat_dot_as_module,
@@ -774,7 +790,7 @@ class OpenAPIParser(JsonSchemaParser):
         path: list[str],
     ) -> None:
         """Parse an OpenAPI operation including parameters, request body, and responses."""
-        operation = Operation.parse_obj(raw_operation)
+        operation = model_validate(Operation, raw_operation)
         path_name, method = path[-2:]
         if self.use_operation_id_as_name:
             if not operation.operationId:
@@ -795,7 +811,7 @@ class OpenAPIParser(JsonSchemaParser):
         if operation.requestBody:
             if isinstance(operation.requestBody, ReferenceObject):
                 ref_model = self.get_ref_model(operation.requestBody.ref)
-                request_body = RequestBodyObject.parse_obj(ref_model)
+                request_body = model_validate(RequestBodyObject, ref_model)
             else:
                 request_body = operation.requestBody
             self.parse_request_body(

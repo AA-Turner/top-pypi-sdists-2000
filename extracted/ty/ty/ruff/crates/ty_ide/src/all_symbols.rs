@@ -1,6 +1,6 @@
 use ruff_db::files::File;
+use ty_module_resolver::{Module, ModuleName, all_modules, resolve_real_shadowable_module};
 use ty_project::Db;
-use ty_python_semantic::{Module, ModuleName, all_modules, resolve_real_shadowable_module};
 
 use crate::{
     SymbolKind,
@@ -21,7 +21,7 @@ pub fn all_symbols<'db>(
         return Vec::new();
     }
 
-    let typing_extensions = ModuleName::new("typing_extensions").unwrap();
+    let typing_extensions = ModuleName::new_static("typing_extensions").unwrap();
     let is_typing_extensions_available = importing_from.is_stub(db)
         || resolve_real_shadowable_module(db, importing_from, &typing_extensions).is_some();
 

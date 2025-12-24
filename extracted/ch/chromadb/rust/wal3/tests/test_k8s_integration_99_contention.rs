@@ -6,12 +6,21 @@ use std::time::Duration;
 
 use chroma_storage::s3_client_for_test_with_new_bucket;
 
-use wal3::{Error, LogWriter, LogWriterOptions, Manifest};
+use wal3::{
+    create_factories, Error, LogReaderOptions, LogWriter, LogWriterOptions, Manifest,
+    ManifestManagerFactory, S3ManifestManagerFactory,
+};
 
 pub mod common;
 
+type DefaultLogWriter = LogWriter<
+    (wal3::FragmentSeqNo, wal3::LogPosition),
+    wal3::S3FragmentManagerFactory,
+    wal3::S3ManifestManagerFactory,
+>;
+
 async fn writer_thread(
-    writer: Arc<LogWriter>,
+    writer: Arc<DefaultLogWriter>,
     running: Arc<AtomicUsize>,
     num_writes: Arc<AtomicUsize>,
     total_writes: usize,
@@ -21,7 +30,7 @@ async fn writer_thread(
     let mut contention_errors = 0;
     println!(
         "writer {thread_id} also known as {:?}",
-        &*writer as *const LogWriter
+        &*writer as *const DefaultLogWriter
     );
 
     while num_writes.load(Ordering::Relaxed) < total_writes {
@@ -60,31 +69,63 @@ async fn test_k8s_integration_99_ping_pong_contention() {
     let writer_name = "init";
 
     // Initialize the log
-    Manifest::initialize(&LogWriterOptions::default(), &storage, prefix, writer_name)
+    let init_factory = S3ManifestManagerFactory {
+        write: LogWriterOptions::default(),
+        read: LogReaderOptions::default(),
+        storage: Arc::clone(&storage),
+        prefix: prefix.to_string(),
+        writer: writer_name.to_string(),
+        mark_dirty: Arc::new(()),
+        snapshot_cache: Arc::new(()),
+    };
+    init_factory
+        .init_manifest(&Manifest::new_empty(writer_name))
         .await
         .unwrap();
 
     // Create two writers that will contend with each other
+    let options1 = LogWriterOptions::default();
+    let (fragment_factory1, manifest_factory1) = create_factories(
+        options1.clone(),
+        LogReaderOptions::default(),
+        Arc::clone(&storage),
+        prefix.to_string(),
+        "writer1".to_string(),
+        Arc::new(()),
+        Arc::new(()),
+    );
     let writer1 = Arc::new(
         LogWriter::open(
-            LogWriterOptions::default(),
+            options1,
             Arc::clone(&storage),
             prefix,
             "writer1",
-            (),
+            fragment_factory1,
+            manifest_factory1,
             None,
         )
         .await
         .unwrap(),
     );
 
+    let options2 = LogWriterOptions::default();
+    let (fragment_factory2, manifest_factory2) = create_factories(
+        options2.clone(),
+        LogReaderOptions::default(),
+        Arc::clone(&storage),
+        prefix.to_string(),
+        "writer2".to_string(),
+        Arc::new(()),
+        Arc::new(()),
+    );
     let writer2 = Arc::new(
         LogWriter::open(
-            LogWriterOptions::default(),
+            options2,
             Arc::clone(&storage),
             prefix,
             "writer2",
-            (),
+            fragment_factory2,
+            manifest_factory2,
             None,
         )
         .await

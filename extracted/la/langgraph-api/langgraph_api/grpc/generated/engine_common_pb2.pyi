@@ -275,10 +275,12 @@ class EngineRunnableConfig(_message.Message):
     def __init__(self, tags: _Optional[_Iterable[str]] = ..., metadata_json: _Optional[_Mapping[str, bytes]] = ..., run_name: _Optional[str] = ..., max_concurrency: _Optional[int] = ..., recursion_limit: _Optional[int] = ..., run_id: _Optional[str] = ..., extra_configurable_json: _Optional[_Mapping[str, bytes]] = ..., extra_json: _Optional[_Mapping[str, bytes]] = ..., runtime: _Optional[_Union[Runtime, _Mapping]] = ..., resuming: bool = ..., task_id: _Optional[str] = ..., thread_id: _Optional[str] = ..., checkpoint_map: _Optional[_Mapping[str, str]] = ..., checkpoint_id: _Optional[str] = ..., checkpoint_ns: _Optional[str] = ..., durability: _Optional[_Union[_enum_durability_pb2.Durability, str]] = ..., resume_map: _Optional[_Mapping[str, SerializedValue]] = ..., graph_id: _Optional[str] = ..., root_stream_modes: _Optional[_Iterable[str]] = ..., run_attempt: _Optional[int] = ..., server_run_id: _Optional[str] = ...) -> None: ...
 
 class Runtime(_message.Message):
-    __slots__ = ("langgraph_context_json",)
+    __slots__ = ("langgraph_context_json", "previous")
     LANGGRAPH_CONTEXT_JSON_FIELD_NUMBER: _ClassVar[int]
+    PREVIOUS_FIELD_NUMBER: _ClassVar[int]
     langgraph_context_json: bytes
-    def __init__(self, langgraph_context_json: _Optional[bytes] = ...) -> None: ...
+    previous: ChannelValue
+    def __init__(self, langgraph_context_json: _Optional[bytes] = ..., previous: _Optional[_Union[ChannelValue, _Mapping]] = ...) -> None: ...
 
 class Task(_message.Message):
     __slots__ = ("name", "writes", "config", "triggers", "id", "task_path", "pending_writes", "stream_subgraphs", "has_subgraphs")

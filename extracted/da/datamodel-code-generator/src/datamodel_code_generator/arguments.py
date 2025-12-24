@@ -24,9 +24,11 @@ from datamodel_code_generator import (
     FieldTypeCollisionStrategy,
     InputFileType,
     ModuleSplitMode,
+    NamingStrategy,
     OpenAPIScope,
     ReadOnlyWriteOnlyModelType,
     ReuseScope,
+    TargetPydanticVersion,
 )
 from datamodel_code_generator.format import DateClassType, DatetimeClassType, Formatter, PythonVersion
 from datamodel_code_generator.model.pydantic_v2 import UnionMode
@@ -127,7 +129,11 @@ base_options.add_argument(
 )
 base_options.add_argument(
     "--input-file-type",
-    help="Input file type (default: auto)",
+    help=(
+        "Input file type (default: auto). "
+        "Use 'jsonschema', 'openapi', or 'graphql' for schema definitions. "
+        "Use 'json', 'yaml', or 'csv' for raw sample data to infer a schema automatically."
+    ),
     choices=[i.value for i in InputFileType],
 )
 base_options.add_argument(
@@ -272,6 +278,14 @@ model_options.add_argument(
     choices=[v.value for v in PythonVersion],
 )
 model_options.add_argument(
+    "--target-pydantic-version",
+    help="Target Pydantic version for generated code. "
+    "'2': Pydantic 2.0+ compatible (default, uses populate_by_name). "
+    "'2.11': Pydantic 2.11+ (uses validate_by_name).",
+    choices=[v.value for v in TargetPydanticVersion],
+    default=None,
+)
+model_options.add_argument(
     "--treat-dot-as-module",
     help="Treat dotted schema names as module paths, creating nested directory structures (e.g., 'foo.bar.Model' "
     "becomes 'foo/bar.py'). Use --no-treat-dot-as-module to keep dots in names as underscores for single-file output.",
@@ -334,8 +348,31 @@ model_options.add_argument(
 )
 model_options.add_argument(
     "--parent-scoped-naming",
-    help="Set name of models defined inline from the parent model",
+    help="[Deprecated: use --naming-strategy parent-prefixed] Set name of models defined inline from the parent model",
     action="store_true",
+    default=None,
+)
+model_options.add_argument(
+    "--naming-strategy",
+    help="Strategy for generating unique model names when duplicates occur. "
+    "'numbered' (default): Append numeric suffix (Address, Address1, Address2). "
+    "Simple but names don't indicate context. "
+    "'parent-prefixed': Prefix with parent model name using underscore "
+    "(Company_Address, Company_Employee_Address for nested). Names show hierarchy. "
+    "'full-path': Similar to parent-prefixed but joins with CamelCase "
+    "(CompanyAddress, CompanyEmployeeAddress). More readable for deep nesting. "
+    "'primary-first': Keep clean names for primary definitions (in /definitions/ or "
+    "/components/schemas/), only add suffix to inline/nested duplicates.",
+    choices=[s.value for s in NamingStrategy],
+    default=None,
+)
+model_options.add_argument(
+    "--duplicate-name-suffix",
+    help="JSON mapping of type to suffix for resolving duplicate name conflicts. "
+    'Example: \'{"model": "Schema"}\' changes Address1 to AddressSchema. '
+    "Keys: 'model' (for classes), 'enum' (for enums), 'default' (fallback). "
+    "When not specified, uses numeric suffix (Address1, Address2).",
+    type=str,
     default=None,
 )
 model_options.add_argument(
@@ -369,6 +406,14 @@ typing_options.add_argument(
     "--base-class",
     help="Base Class (default: pydantic.BaseModel)",
     type=str,
+)
+typing_options.add_argument(
+    "--base-class-map",
+    help="Model-specific base class mapping (JSON). "
+    'Example: \'{"MyModel": "custom.BaseA", "OtherModel": "custom.BaseB"}\'. '
+    "Priority: base-class-map > customBasePath (in schema) > base-class.",
+    type=json.loads,
+    default=None,
 )
 typing_options.add_argument(
     "--enum-field-as-literal",
@@ -478,6 +523,12 @@ typing_options.add_argument(
     default=None,
 )
 typing_options.add_argument(
+    "--use-tuple-for-fixed-items",
+    help="Generate tuple types for arrays with items array syntax when minItems equals maxItems equals items length",
+    action="store_true",
+    default=None,
+)
+typing_options.add_argument(
     "--allof-merge-mode",
     help="Mode for field merging in allOf schemas. "
     "'constraints': merge only constraints (minItems, maxItems, pattern, etc.) from parent (default). "
@@ -489,6 +540,13 @@ typing_options.add_argument(
 typing_options.add_argument(
     "--use-type-alias",
     help="Use TypeAlias instead of root models (experimental)",
+    action="store_true",
+    default=None,
+)
+typing_options.add_argument(
+    "--use-root-model-type-alias",
+    help="Use type alias format for RootModel (e.g., Foo = RootModel[Bar]) "
+    "instead of class inheritance (Pydantic v2 only)",
     action="store_true",
     default=None,
 )
@@ -506,6 +564,15 @@ typing_options.add_argument(
     "Can be specified multiple times.",
     nargs="+",
     type=str,
+    default=None,
+)
+typing_options.add_argument(
+    "--type-overrides",
+    help="Replace schema model types with custom Python types. "
+    "Format: JSON object mapping model names to Python import paths. "
+    'Model-level: \'{"CustomType": "my_app.types.MyType"}\' replaces all references. '
+    'Scoped: \'{"User.field": "my_app.Type"}\' replaces specific field only.',
+    type=json.loads,
     default=None,
 )
 
@@ -711,6 +778,14 @@ base_options.add_argument(
     default=None,
 )
 base_options.add_argument(
+    "--class-decorators",
+    help="Custom decorators for generated model classes (delimited list input). "
+    'For example "@dataclass_json(letter_case=LetterCase.CAMEL)". '
+    'The "@" prefix is optional and will be added automatically if missing.',
+    type=str,
+    default=None,
+)
+base_options.add_argument(
     "--formatters",
     help="Formatters for output (default: [black, isort])",
     choices=[f.value for f in Formatter],
@@ -820,6 +895,20 @@ general_options.add_argument(
     action="store_true",
     default=None,
     help="Generate CLI command from pyproject.toml configuration and exit",
+)
+general_options.add_argument(
+    "--generate-prompt",
+    type=str,
+    nargs="?",
+    const="",
+    default=None,
+    metavar="QUESTION",
+    help=(
+        "Generate a prompt for consulting LLMs about CLI options. "
+        "Optionally provide your question as an argument. "
+        "Pipe to CLI tools (e.g., `| claude -p`, `| codex exec`) "
+        "or copy to clipboard (e.g., `| pbcopy`, `| xclip`) for web LLM chats."
+    ),
 )
 general_options.add_argument(
     "--ignore-pyproject",

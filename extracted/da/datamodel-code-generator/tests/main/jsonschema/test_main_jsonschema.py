@@ -1324,6 +1324,191 @@ def test_main_generate_non_pydantic_output(tmp_path: Path) -> None:
     assert_file_content(output_file, "generate_non_pydantic_output.py")
 
 
+def test_main_generate_pydantic_v2_dataclass(tmp_path: Path) -> None:
+    """Test generation with pydantic_v2.dataclass output model."""
+    output_file: Path = tmp_path / "output.py"
+    input_ = (JSON_SCHEMA_DATA_PATH / "simple_string.json").relative_to(Path.cwd())
+    assert not input_.is_absolute()
+    generate(
+        input_=input_,
+        input_file_type=InputFileType.JsonSchema,
+        output=output_file,
+        output_model_type=DataModelType.PydanticV2Dataclass,
+    )
+
+    assert_file_content(output_file, "generate_pydantic_v2_dataclass.py")
+
+
+def test_main_generate_pydantic_v2_dataclass_with_config(tmp_path: Path) -> None:
+    """Test pydantic_v2.dataclass with ConfigDict from additionalProperties."""
+    output_file: Path = tmp_path / "output.py"
+    input_ = (JSON_SCHEMA_DATA_PATH / "pydantic_v2_dataclass_config.json").relative_to(Path.cwd())
+    assert not input_.is_absolute()
+    generate(
+        input_=input_,
+        input_file_type=InputFileType.JsonSchema,
+        output=output_file,
+        output_model_type=DataModelType.PydanticV2Dataclass,
+    )
+
+    assert_file_content(output_file, "pydantic_v2_dataclass_config.py")
+
+
+def test_main_generate_pydantic_v2_dataclass_additional_props_true(tmp_path: Path) -> None:
+    """Test pydantic_v2.dataclass with additionalProperties: true."""
+    output_file: Path = tmp_path / "output.py"
+    input_ = (JSON_SCHEMA_DATA_PATH / "pydantic_v2_dataclass_additional_props_true.json").relative_to(Path.cwd())
+    assert not input_.is_absolute()
+    generate(
+        input_=input_,
+        input_file_type=InputFileType.JsonSchema,
+        output=output_file,
+        output_model_type=DataModelType.PydanticV2Dataclass,
+    )
+
+    assert_file_content(output_file, "pydantic_v2_dataclass_additional_props_true.py")
+
+
+def test_main_generate_pydantic_v2_dataclass_use_attribute_docstrings(tmp_path: Path) -> None:
+    """Test pydantic_v2.dataclass with use_attribute_docstrings."""
+    output_file: Path = tmp_path / "output.py"
+    input_ = (JSON_SCHEMA_DATA_PATH / "simple_string.json").relative_to(Path.cwd())
+    assert not input_.is_absolute()
+    generate(
+        input_=input_,
+        input_file_type=InputFileType.JsonSchema,
+        output=output_file,
+        output_model_type=DataModelType.PydanticV2Dataclass,
+        use_attribute_docstrings=True,
+    )
+
+    assert_file_content(output_file, "pydantic_v2_dataclass_use_attribute_docstrings.py")
+
+
+def test_main_generate_pydantic_v2_dataclass_extra_allow(tmp_path: Path) -> None:
+    """Test pydantic_v2.dataclass with extra='allow'."""
+    output_file: Path = tmp_path / "output.py"
+    input_ = (JSON_SCHEMA_DATA_PATH / "simple_string.json").relative_to(Path.cwd())
+    assert not input_.is_absolute()
+    generate(
+        input_=input_,
+        input_file_type=InputFileType.JsonSchema,
+        output=output_file,
+        output_model_type=DataModelType.PydanticV2Dataclass,
+        extra_fields="allow",
+    )
+
+    assert_file_content(output_file, "pydantic_v2_dataclass_extra_allow.py")
+
+
+def test_main_generate_pydantic_v2_dataclass_extra_forbid(tmp_path: Path) -> None:
+    """Test pydantic_v2.dataclass with extra='forbid'."""
+    output_file: Path = tmp_path / "output.py"
+    input_ = (JSON_SCHEMA_DATA_PATH / "simple_string.json").relative_to(Path.cwd())
+    assert not input_.is_absolute()
+    generate(
+        input_=input_,
+        input_file_type=InputFileType.JsonSchema,
+        output=output_file,
+        output_model_type=DataModelType.PydanticV2Dataclass,
+        extra_fields="forbid",
+    )
+
+    assert_file_content(output_file, "pydantic_v2_dataclass_extra_forbid.py")
+
+
+def test_main_generate_pydantic_v2_dataclass_extra_ignore(tmp_path: Path) -> None:
+    """Test pydantic_v2.dataclass with extra='ignore'."""
+    output_file: Path = tmp_path / "output.py"
+    input_ = (JSON_SCHEMA_DATA_PATH / "simple_string.json").relative_to(Path.cwd())
+    assert not input_.is_absolute()
+    generate(
+        input_=input_,
+        input_file_type=InputFileType.JsonSchema,
+        output=output_file,
+        output_model_type=DataModelType.PydanticV2Dataclass,
+        extra_fields="ignore",
+    )
+
+    assert_file_content(output_file, "pydantic_v2_dataclass_extra_ignore.py")
+
+
+def test_main_generate_pydantic_v2_dataclass_nested(tmp_path: Path) -> None:
+    """Test pydantic_v2.dataclass with nested models."""
+    output_file: Path = tmp_path / "output.py"
+    input_ = (JSON_SCHEMA_DATA_PATH / "pydantic_v2_dataclass_nested.json").relative_to(Path.cwd())
+    assert not input_.is_absolute()
+    generate(
+        input_=input_,
+        input_file_type=InputFileType.JsonSchema,
+        output=output_file,
+        output_model_type=DataModelType.PydanticV2Dataclass,
+    )
+
+    assert_file_content(output_file, "pydantic_v2_dataclass_nested.py")
+
+
+def test_main_generate_pydantic_v2_dataclass_constraints(tmp_path: Path) -> None:
+    """Test pydantic_v2.dataclass with field constraints."""
+    output_file: Path = tmp_path / "output.py"
+    input_ = (JSON_SCHEMA_DATA_PATH / "pydantic_v2_dataclass_constraints.json").relative_to(Path.cwd())
+    assert not input_.is_absolute()
+    generate(
+        input_=input_,
+        input_file_type=InputFileType.JsonSchema,
+        output=output_file,
+        output_model_type=DataModelType.PydanticV2Dataclass,
+    )
+
+    assert_file_content(output_file, "pydantic_v2_dataclass_constraints.py")
+
+
+def test_main_generate_pydantic_v2_dataclass_nested_frozen(tmp_path: Path) -> None:
+    """Test pydantic_v2.dataclass with nested models and frozen=True."""
+    output_file: Path = tmp_path / "output.py"
+    input_ = (JSON_SCHEMA_DATA_PATH / "pydantic_v2_dataclass_nested.json").relative_to(Path.cwd())
+    assert not input_.is_absolute()
+    generate(
+        input_=input_,
+        input_file_type=InputFileType.JsonSchema,
+        output=output_file,
+        output_model_type=DataModelType.PydanticV2Dataclass,
+        frozen_dataclasses=True,
+    )
+
+    assert_file_content(output_file, "pydantic_v2_dataclass_nested_frozen.py")
+
+
+def test_main_generate_pydantic_v2_dataclass_field(tmp_path: Path) -> None:
+    """Test pydantic_v2.dataclass with Field constraints and defaults."""
+    output_file: Path = tmp_path / "output.py"
+    input_ = (JSON_SCHEMA_DATA_PATH / "pydantic_v2_dataclass_field.json").relative_to(Path.cwd())
+    assert not input_.is_absolute()
+    generate(
+        input_=input_,
+        input_file_type=InputFileType.JsonSchema,
+        output=output_file,
+        output_model_type=DataModelType.PydanticV2Dataclass,
+    )
+
+    assert_file_content(output_file, "pydantic_v2_dataclass_field.py")
+
+
+def test_main_generate_pydantic_v2_dataclass_enum(tmp_path: Path) -> None:
+    """Test pydantic_v2.dataclass with enum types."""
+    output_file: Path = tmp_path / "output.py"
+    input_ = (JSON_SCHEMA_DATA_PATH / "pydantic_v2_dataclass_enum.json").relative_to(Path.cwd())
+    assert not input_.is_absolute()
+    generate(
+        input_=input_,
+        input_file_type=InputFileType.JsonSchema,
+        output=output_file,
+        output_model_type=DataModelType.PydanticV2Dataclass,
+    )
+
+    assert_file_content(output_file, "pydantic_v2_dataclass_enum.py")
+
+
 def test_main_generate_from_directory(tmp_path: Path) -> None:
     """Test generation from directory input."""
     input_ = (JSON_SCHEMA_DATA_PATH / "external_files_in_directory").relative_to(Path.cwd())
@@ -1379,6 +1564,25 @@ def test_main_generate_custom_class_name_generator_additional_properties(tmp_pat
     )
 
     assert_file_content(output_file, "root_model_with_additional_properties_custom_class_name.py")
+
+
+def test_main_generate_custom_class_name_generator_keep_underscores(tmp_path: Path) -> None:
+    """Test custom_class_name_generator preserves underscores in class names (Issue #1315)."""
+    output_file: Path = tmp_path / "output.py"
+    input_ = (JSON_SCHEMA_DATA_PATH / "underscore_title.json").relative_to(Path.cwd())
+    assert not input_.is_absolute()
+
+    def keep_underscores(name: str) -> str:
+        return name
+
+    generate(
+        input_=input_,
+        input_file_type=InputFileType.JsonSchema,
+        output=output_file,
+        custom_class_name_generator=keep_underscores,
+    )
+
+    assert_file_content(output_file, "underscore_title.py")
 
 
 def test_main_http_jsonschema(mocker: MockerFixture, output_file: Path) -> None:
@@ -2095,7 +2299,7 @@ def test_main_jsonschema_field_include_all_keys(output_file: Path) -> None:
 def test_main_jsonschema_field_extras_field_include_all_keys(
     output_model: str, expected_output: str, output_file: Path
 ) -> None:
-    """Include specified schema extension keys in Field() without requiring 'x-' prefix.
+    """Include schema extension keys in Field() without requiring 'x-' prefix.
 
     The --field-extra-keys-without-x-prefix option allows you to specify custom
     schema extension keys that should be included in Pydantic Field() extras without
@@ -2198,6 +2402,31 @@ def test_main_jsonschema_custom_base_path(output_file: Path) -> None:
         input_file_type="jsonschema",
         assert_func=assert_file_content,
         expected_file="custom_base_path.py",
+    )
+
+
+@pytest.mark.cli_doc(
+    options=["--base-class-map"],
+    input_schema="jsonschema/base_class_map.json",
+    cli_args=[
+        "--base-class-map",
+        '{"Person": "custom.bases.PersonBase", "Animal": "custom.bases.AnimalBase"}',
+    ],
+    golden_output="base_class_map.py",
+    related_options=["--base-class"],
+)
+def test_main_jsonschema_base_class_map(output_file: Path) -> None:
+    """Test --base-class-map option for model-specific base classes."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "base_class_map.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="base_class_map.py",
+        extra_args=[
+            "--base-class-map",
+            '{"Person": "custom.bases.PersonBase", "Animal": "custom.bases.AnimalBase"}',
+        ],
     )
 
 
@@ -2821,6 +3050,51 @@ def test_main_jsonschema_copy_deep_pattern_properties(output_file: Path) -> None
     )
 
 
+def test_main_jsonschema_pattern_properties_boolean(output_file: Path) -> None:
+    """Test patternProperties with boolean values (true/false) as allowed in JSON Schema 2020-12."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "pattern_properties_boolean.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="pattern_properties_boolean.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+        ],
+    )
+
+
+def test_main_jsonschema_pattern_properties_merge(output_file: Path) -> None:
+    """Test merging multiple patternProperties with same value type into single regex pattern."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "pattern_properties_merge.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="pattern_properties_merge.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+        ],
+    )
+
+
+def test_main_jsonschema_pattern_properties_all_false(output_file: Path) -> None:
+    """Test patternProperties with all false values are ignored."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "pattern_properties_all_false.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="pattern_properties_all_false.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+        ],
+    )
+
+
 def test_main_dataclass_field(output_file: Path) -> None:
     """Test dataclass field generation."""
     run_main_and_assert(
@@ -3175,6 +3449,39 @@ def test_main_jsonschema_prefix_items_no_tuple(min_version: str, output_file: Pa
         assert_func=assert_file_content,
         expected_file="prefix_items_no_tuple.py",
         extra_args=["--output-model-type", "pydantic_v2.BaseModel", "--target-python-version", min_version],
+    )
+
+
+@freeze_time("2019-07-26")
+@pytest.mark.skipif(
+    int(black.__version__.split(".")[0]) < 24,
+    reason="Installed black doesn't support the new style",
+)
+@pytest.mark.cli_doc(
+    options=["--use-tuple-for-fixed-items"],
+    input_schema="jsonschema/items_array_tuple.json",
+    cli_args=["--use-tuple-for-fixed-items"],
+    golden_output="jsonschema/items_array_tuple.py",
+)
+def test_main_jsonschema_items_array_tuple(min_version: str, output_file: Path) -> None:
+    """Generate tuple types for arrays with items array syntax.
+
+    When `--use-tuple-for-fixed-items` is enabled and an array has `items` as an array
+    with `minItems == maxItems == len(items)`, generate a tuple type instead of a list.
+    """
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "items_array_tuple.json",
+        output_path=output_file,
+        input_file_type=None,
+        assert_func=assert_file_content,
+        expected_file="items_array_tuple.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--target-python-version",
+            min_version,
+            "--use-tuple-for-fixed-items",
+        ],
     )
 
 
@@ -3903,6 +4210,40 @@ def test_main_use_generic_base_class_populate_by_name(output_file: Path) -> None
             "--output-model-type",
             "pydantic_v2.BaseModel",
             "--use-generic-base-class",
+        ],
+    )
+
+
+def test_main_use_generic_base_class_target_pydantic_v2_11(output_file: Path) -> None:
+    """Test --use-generic-base-class with --target-pydantic-version 2.11."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "use_generic_base_class_simple.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="use_generic_base_class_target_pydantic_v2_11.py",
+        extra_args=[
+            "--allow-population-by-field-name",
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-generic-base-class",
+            "--target-pydantic-version",
+            "2.11",
+        ],
+    )
+
+
+def test_main_allof_list_any_inheritance(output_file: Path) -> None:
+    """Test allOf with List[Any] type inheritance from parent."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "allof_list_any_inheritance.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="allof_list_any_inheritance.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
         ],
     )
 
@@ -5339,5 +5680,264 @@ def test_main_root_model_config_frozen(output_file: Path) -> None:
             "--output-model-type",
             "pydantic_v2.BaseModel",
             "--enable-faux-immutability",
+        ],
+    )
+
+
+@pytest.mark.cli_doc(
+    options=["--naming-strategy"],
+    input_schema="jsonschema/naming_strategy/input.json",
+    cli_args=["--naming-strategy", "parent-prefixed"],
+    golden_output="main/jsonschema/naming_strategy/parent_prefixed/output.py",
+    related_options=["--duplicate-name-suffix", "--parent-scoped-naming"],
+)
+@freeze_time("2019-07-26")
+def test_main_naming_strategy_parent_prefixed(output_file: Path) -> None:
+    """Use parent-prefixed naming strategy for duplicate model names.
+
+    The `--naming-strategy parent-prefixed` flag prefixes model names with their
+    parent model name when duplicates occur. For example, if both `Order` and
+    `Cart` have an inline `Item` definition, they become `OrderItem` and `CartItem`.
+    """
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "naming_strategy" / "input.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="naming_strategy/parent_prefixed/output.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--naming-strategy",
+            "parent-prefixed",
+        ],
+    )
+
+
+@freeze_time("2019-07-26")
+def test_main_naming_strategy_full_path(output_file: Path) -> None:
+    """Use full-path naming strategy for duplicate model names.
+
+    The `--naming-strategy full-path` flag uses the full schema path
+    to generate unique names by concatenating ancestor names.
+    """
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "naming_strategy" / "input.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="naming_strategy/full_path/output.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--naming-strategy",
+            "full-path",
+        ],
+    )
+
+
+@pytest.mark.cli_doc(
+    options=["--duplicate-name-suffix"],
+    input_schema="jsonschema/naming_strategy/input.json",
+    cli_args=["--duplicate-name-suffix", '{"model": "Schema"}'],
+    golden_output="main/jsonschema/naming_strategy/duplicate_name_suffix/output.py",
+    related_options=["--naming-strategy"],
+)
+@freeze_time("2019-07-26")
+def test_main_duplicate_name_suffix(output_file: Path) -> None:
+    """Customize suffix for duplicate model names.
+
+    The `--duplicate-name-suffix` flag allows specifying custom suffixes for
+    resolving duplicate names by type. The value is a JSON mapping where keys
+    are type names ('model', 'enum', 'default') and values are suffix strings.
+    For example, `{"model": "Schema"}` changes `Item1` to `ItemSchema`.
+    """
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "naming_strategy" / "input.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="naming_strategy/duplicate_name_suffix/output.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--duplicate-name-suffix",
+            '{"model": "Schema"}',
+        ],
+    )
+
+
+@freeze_time("2019-07-26")
+def test_main_naming_strategy_complex_numbered(output_file: Path) -> None:
+    """Test numbered strategy with complex nested schema and multiple duplicates.
+
+    Tests deeply nested structures (Company > employees > employee > address)
+    and multiple models with same name (4 different Address definitions).
+    Expected: Address, Address1, Address2, Address3.
+    """
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "naming_strategy" / "complex_input.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="naming_strategy/complex_numbered/output.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+        ],
+    )
+
+
+@freeze_time("2019-07-26")
+def test_main_naming_strategy_complex_parent_prefixed(output_file: Path) -> None:
+    """Test parent-prefixed strategy with complex nested schema.
+
+    Tests deeply nested structures where each Address gets a unique name
+    based on its parent hierarchy.
+    Expected: ModelCompanyAddress, ModelCompanyEmployeeAddress,
+    ModelCustomerAddress, ModelWarehouseAddress.
+    """
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "naming_strategy" / "complex_input.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="naming_strategy/complex_parent_prefixed/output.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--naming-strategy",
+            "parent-prefixed",
+        ],
+    )
+
+
+@freeze_time("2019-07-26")
+def test_main_naming_strategy_complex_duplicate_suffix(output_file: Path) -> None:
+    """Test duplicate-name-suffix with complex schema having multiple duplicates.
+
+    Tests that custom suffix is applied consistently across multiple duplicates.
+    Expected: Address, AddressSchema, AddressSchema1, AddressSchema2.
+    """
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "naming_strategy" / "complex_input.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="naming_strategy/complex_duplicate_suffix/output.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--duplicate-name-suffix",
+            '{"model": "Schema"}',
+        ],
+    )
+
+
+@freeze_time("2019-07-26")
+@pytest.mark.cli_doc(
+    options=["--naming-strategy"],
+    input_schema="jsonschema/naming_strategy/primary_first_input.json",
+    cli_args=["--naming-strategy", "primary-first"],
+    golden_output="jsonschema/naming_strategy/complex_primary_first/output.py",
+)
+def test_main_naming_strategy_primary_first(output_file: Path) -> None:
+    """Test primary-first strategy keeps clean names for primary definitions.
+
+    Primary definitions (directly under #/definitions/, #/components/schemas/, #/$defs/)
+    keep their clean names. Inline/nested definitions get numeric suffixes.
+    """
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "naming_strategy" / "primary_first_input.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="naming_strategy/complex_primary_first/output.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--naming-strategy",
+            "primary-first",
+        ],
+    )
+
+
+@freeze_time("2019-07-26")
+def test_main_naming_strategy_primary_first_multi_file(output_file: Path) -> None:
+    """Test primary-first strategy with multiple files having same-named definitions.
+
+    When multiple JSON schema files have definitions with the same name,
+    the primary input file's definition should keep the clean name,
+    while external references get numeric suffixes.
+
+    This fixes GitHub issue #1300.
+    """
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "naming_strategy" / "primary_first_multi_file" / "main.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="naming_strategy/primary_first_multi_file/output.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--naming-strategy",
+            "primary-first",
+        ],
+    )
+
+
+def test_main_duplicate_name_suffix_invalid_json(output_file: Path) -> None:
+    """Test that invalid JSON in --duplicate-name-suffix raises an error."""
+    run_main_with_args(
+        [
+            "--input",
+            str(JSON_SCHEMA_DATA_PATH / "naming_strategy" / "input.json"),
+            "--output",
+            str(output_file),
+            "--duplicate-name-suffix",
+            "invalid json",
+        ],
+        expected_exit=Exit.ERROR,
+    )
+
+
+@freeze_time("2019-07-26")
+def test_main_parent_scoped_naming_backward_compat(output_file: Path) -> None:
+    """Test --parent-scoped-naming backward compatibility (deprecated flag)."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "naming_strategy" / "input.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="naming_strategy/parent_prefixed/output.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--parent-scoped-naming",
+        ],
+    )
+
+
+@pytest.mark.cli_doc(
+    options=["--use-root-model-type-alias"],
+    input_schema="jsonschema/root_model_type_alias.json",
+    cli_args=["--use-root-model-type-alias", "--output-model-type", "pydantic_v2.BaseModel"],
+    golden_output="jsonschema/root_model_type_alias.py",
+)
+def test_main_use_root_model_type_alias(output_file: Path) -> None:
+    """Generate RootModel as type alias format for better mypy support (issue #1903)."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "root_model_type_alias.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="root_model_type_alias.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-root-model-type-alias",
+            "--target-python-version",
+            "3.10",
         ],
     )

@@ -9,11 +9,12 @@ import warnings
 from collections.abc import AsyncIterator, Callable
 from contextlib import asynccontextmanager
 from itertools import filterfalse
-from typing import TYPE_CHECKING, Any, NamedTuple, TypeGuard, cast
+from typing import Any, NamedTuple, TypeGuard, cast
 from uuid import UUID, uuid5
 
 import orjson
 import structlog
+from langchain_core.embeddings import Embeddings  # noqa: TC002
 from langgraph.checkpoint.base import BaseCheckpointSaver
 from langgraph.constants import CONFIG_KEY_CHECKPOINTER
 from langgraph.graph import StateGraph
@@ -29,9 +30,6 @@ from langgraph_api.schema import Config
 from langgraph_api.timing import profiled_import
 from langgraph_api.utils.config import run_in_executor, var_child_runnable_config
 from langgraph_api.utils.errors import GraphLoadError
-
-if TYPE_CHECKING:
-    from langchain_core.embeddings import Embeddings
 
 logger = structlog.stdlib.get_logger(__name__)
 
@@ -699,6 +697,8 @@ def resolve_embeddings(index_config: dict) -> "Embeddings":
                 " or specify 'embed' as a path to a "
                 "variable in a Python file instead."
             )
+        if isinstance(embed, Embeddings):
+            return embed
         # Capture warnings
         with warnings.catch_warnings():
             warnings.filterwarnings(

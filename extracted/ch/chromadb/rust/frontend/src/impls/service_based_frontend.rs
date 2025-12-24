@@ -1271,7 +1271,7 @@ impl ServiceBasedFrontend {
                 .collections_with_segments_cache
                 .clone();
             async move {
-                let res = self_clone.retryable_delete(request_clone).await;
+                let res = Box::pin(self_clone.retryable_delete(request_clone)).await;
                 match res {
                     Ok(res) => Ok(res),
                     Err(e) => {
@@ -1287,20 +1287,22 @@ impl ServiceBasedFrontend {
                 }
             }
         };
-        let res = delete_to_retry
-            .retry(self.collections_with_segments_provider.get_retry_backoff())
-            // NOTE: Transport level errors will manifest as unknown errors, and they should also be retried
-            .when(|e| matches!(e.code(), ErrorCodes::NotFound | ErrorCodes::Unknown))
-            .notify(|_, _| {
-                let retried = retries.fetch_add(1, Ordering::Relaxed);
-                if retried > 0 {
-                    tracing::info!(
-                        "Retrying delete() request for collection {}",
-                        request.collection_id
-                    );
-                }
-            })
-            .await;
+        let res = Box::pin(
+            delete_to_retry
+                .retry(self.collections_with_segments_provider.get_retry_backoff())
+                // NOTE: Transport level errors will manifest as unknown errors, and they should also be retried
+                .when(|e| matches!(e.code(), ErrorCodes::NotFound | ErrorCodes::Unknown))
+                .notify(|_, _| {
+                    let retried = retries.fetch_add(1, Ordering::Relaxed);
+                    if retried > 0 {
+                        tracing::info!(
+                            "Retrying delete() request for collection {}",
+                            request.collection_id
+                        );
+                    }
+                }),
+        )
+        .await;
         self.metrics
             .delete_retries_counter
             .add(retries.load(Ordering::Relaxed) as u64, &[]);
@@ -1523,7 +1525,7 @@ impl ServiceBasedFrontend {
                 .collections_with_segments_cache
                 .clone();
             async move {
-                let res = self_clone.retryable_get(request_clone).await;
+                let res = Box::pin(self_clone.retryable_get(request_clone)).await;
                 match res {
                     Ok(res) => Ok(res),
                     Err(e) => {
@@ -1539,20 +1541,22 @@ impl ServiceBasedFrontend {
                 }
             }
         };
-        let res = get_to_retry
-            .retry(self.collections_with_segments_provider.get_retry_backoff())
-            // NOTE: Transport level errors will manifest as unknown errors, and they should also be retried
-            .when(|e| matches!(e.code(), ErrorCodes::NotFound | ErrorCodes::Unknown))
-            .notify(|_, _| {
-                let retried = retries.fetch_add(1, Ordering::Relaxed);
-                if retried > 0 {
-                    tracing::info!(
-                        "Retrying get() request for collection {}",
-                        request.collection_id
-                    );
-                }
-            })
-            .await;
+        let res = Box::pin(
+            get_to_retry
+                .retry(self.collections_with_segments_provider.get_retry_backoff())
+                // NOTE: Transport level errors will manifest as unknown errors, and they should also be retried
+                .when(|e| matches!(e.code(), ErrorCodes::NotFound | ErrorCodes::Unknown))
+                .notify(|_, _| {
+                    let retried = retries.fetch_add(1, Ordering::Relaxed);
+                    if retried > 0 {
+                        tracing::info!(
+                            "Retrying get() request for collection {}",
+                            request.collection_id
+                        );
+                    }
+                }),
+        )
+        .await;
         self.metrics
             .get_retries_counter
             .add(retries.load(Ordering::Relaxed) as u64, &[]);
@@ -1942,11 +1946,23 @@ impl ServiceBasedFrontend {
             .await?;
 
         // Step 3: Create output collection and set is_ready = true
+        // Generate a default HNSW schema for the output collection with the attached function ID
+        let mut output_schema = Schema::new_default(KnnIndex::Hnsw);
+        output_schema.source_attached_function_id = Some(attached_function_id.0.to_string());
+        let output_schema_str = serde_json::to_string(&output_schema).map_err(|e| {
+            chroma_types::AttachFunctionError::Internal(Box::new(chroma_error::TonicError(
+                tonic::Status::internal(format!(
+                    "Failed to serialize output collection schema: {}",
+                    e
+                )),
+            )))
+        })?;
+
         // The returned `created` flag from finish is for idempotency at this layer,
         // but we already handle it via the initial create call's `created` flag
         let _finish_created = self
             .sysdb_client
-            .finish_create_attached_function(attached_function_id)
+            .finish_create_attached_function(attached_function_id, output_schema_str)
             .await
             .map_err(|e| match e {
                 chroma_types::FinishCreateAttachedFunctionError::OutputCollectionExists => {
@@ -2017,9 +2033,19 @@ impl ServiceBasedFrontend {
             })?);
 
         // Get the attached function by name
-        self.sysdb_client
-            .get_attached_function_by_name(collection_uuid, function_name)
-            .await
+        let attached_functions = self
+            .sysdb_client
+            .get_attached_functions(
+                None,
+                Some(function_name.clone()),
+                Some(collection_uuid),
+                true,
+            )
+            .await?;
+        attached_functions
+            .into_iter()
+            .next()
+            .ok_or_else(|| chroma_sysdb::GetAttachedFunctionError::NotFound)
     }
 
     pub async fn detach_function(
@@ -2089,7 +2115,9 @@ impl Configurable<(FrontendConfig, System)> for ServiceBasedFrontend {
             LocalSegmentManager::try_from_config(segment_manager_conf, registry).await?;
         };
 
-        let sysdb = SysDb::try_from_config(&config.sysdb, registry).await?;
+        let sysdb =
+            SysDb::try_from_config(&(config.sysdb.clone(), config.mcmr_sysdb.clone()), registry)
+                .await?;
         let mut log = Log::try_from_config(&(config.log.clone(), system.clone()), registry).await?;
         let max_batch_size = log.get_max_batch_size().await?;
 
@@ -2207,7 +2235,7 @@ mod tests {
             port: 50051,
             ..Default::default()
         });
-        let mut sysdb = SysDb::try_from_config(&sysdb_config, &registry)
+        let mut sysdb = SysDb::try_from_config(&(sysdb_config, None), &registry)
             .await
             .unwrap();
         let segments = sysdb
@@ -2258,7 +2286,7 @@ mod tests {
             port: 50051,
             ..Default::default()
         });
-        let mut sysdb = SysDb::try_from_config(&sysdb_config, &registry)
+        let mut sysdb = SysDb::try_from_config(&(sysdb_config, None), &registry)
             .await
             .unwrap();
 

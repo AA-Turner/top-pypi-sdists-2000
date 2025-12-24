@@ -22,15 +22,15 @@ from elastic_transport import ObjectApiResponse
 from ._base import NamespacedClient
 from .utils import (
     Stability,
+    _availability_warning,
     _rewrite_parameters,
-    _stability_warning,
 )
 
 
 class ProjectClient(NamespacedClient):
 
     @_rewrite_parameters()
-    @_stability_warning(Stability.EXPERIMENTAL)
+    @_availability_warning(Stability.EXPERIMENTAL)
     async def tags(
         self,
         *,
@@ -42,7 +42,8 @@ class ProjectClient(NamespacedClient):
         """
         .. raw:: html
 
-          <p>Return tags defined for the project</p>
+          <p>Get tags.</p>
+          <p>Get the tags that are defined for the project.</p>
 
         """
         __path_parts: t.Dict[str, str] = {}
