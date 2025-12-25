@@ -859,7 +859,8 @@ impl<'db> FmtDetailed<'db> for DisplayRepresentation<'db> {
                 f.with_type(KnownClass::MethodWrapperType.to_class_literal(self.db))
                     .write_str("method-wrapper")?;
                 f.write_str(" '")?;
-                if let Place::Defined(member_ty, _, _) = class_ty.member(self.db, member_name).place
+                if let Place::Defined(member_ty, _, _, _) =
+                    class_ty.member(self.db, member_name).place
                 {
                     f.with_type(member_ty).write_str(member_name)?;
                 } else {
@@ -979,11 +980,14 @@ impl<'db> FmtDetailed<'db> for DisplayRepresentation<'db> {
                 }
                 f.write_str("]")
             }
-            Type::TypedDict(TypedDictType::Class(defining_class)) => defining_class
-                .class_literal(self.db)
-                .0
-                .display_with(self.db, self.settings.clone())
-                .fmt_detailed(f),
+            Type::TypedDict(TypedDictType::Class(defining_class)) => match defining_class {
+                ClassType::NonGeneric(class) => class
+                    .display_with(self.db, self.settings.clone())
+                    .fmt_detailed(f),
+                ClassType::Generic(alias) => alias
+                    .display_with(self.db, self.settings.clone())
+                    .fmt_detailed(f),
+            },
             Type::TypedDict(TypedDictType::Synthesized(synthesized)) => {
                 f.set_invalid_type_annotation();
                 f.write_char('<')?;
@@ -1572,6 +1576,7 @@ impl<'db> CallableType<'db> {
         DisplayCallableType {
             signatures: self.signatures(db),
             kind: self.kind(db),
+            is_top_materialization: self.is_top_materialization(db),
             db,
             settings,
         }
@@ -1581,23 +1586,31 @@ impl<'db> CallableType<'db> {
 pub(crate) struct DisplayCallableType<'a, 'db> {
     signatures: &'a CallableSignature<'db>,
     kind: CallableTypeKind,
+    is_top_materialization: bool,
     db: &'db dyn Db,
     settings: DisplaySettings<'db>,
 }
 
 impl<'db> FmtDetailed<'db> for DisplayCallableType<'_, 'db> {
     fn fmt_detailed(&self, f: &mut TypeWriter<'_, '_, 'db>) -> fmt::Result {
+        // If this callable is a top materialization, wrap it in Top[...]
+        if self.is_top_materialization {
+            f.with_type(Type::SpecialForm(SpecialFormType::Top))
+                .write_str("Top")?;
+            f.write_char('[')?;
+        }
+
         match self.signatures.overloads.as_slice() {
             [signature] => {
                 if matches!(self.kind, CallableTypeKind::ParamSpecValue) {
                     signature
                         .parameters()
                         .display_with(self.db, self.settings.clone())
-                        .fmt_detailed(f)
+                        .fmt_detailed(f)?;
                 } else {
                     signature
                         .display_with(self.db, self.settings.clone())
-                        .fmt_detailed(f)
+                        .fmt_detailed(f)?;
                 }
             }
             signatures => {
@@ -1617,9 +1630,13 @@ impl<'db> FmtDetailed<'db> for DisplayCallableType<'_, 'db> {
                 if !self.settings.multiline {
                     f.write_char(']')?;
                 }
-                Ok(())
             }
         }
+
+        if self.is_top_materialization {
+            f.write_char(']')?;
+        }
+        Ok(())
     }
 }
 
@@ -2227,8 +2244,12 @@ impl<'db> FmtDetailed<'db> for DisplayMaybeParenthesizedType<'db> {
             f.write_char(')')
         };
         match self.ty {
-            Type::Callable(_)
-            | Type::KnownBoundMethod(_)
+            // Callable types with a top materialization are displayed as `Top[(...) -> T]`,
+            // which is already unambiguous and doesn't need additional parentheses.
+            Type::Callable(callable) if !callable.is_top_materialization(self.db) => {
+                write_parentheses(f)
+            }
+            Type::KnownBoundMethod(_)
             | Type::FunctionLiteral(_)
             | Type::BoundMethod(_)
             | Type::Union(_) => write_parentheses(f),

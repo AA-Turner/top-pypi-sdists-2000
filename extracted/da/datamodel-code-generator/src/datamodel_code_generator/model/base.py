@@ -149,6 +149,7 @@ class DataModelFieldBase(_BaseModel):
     use_serialize_as_any: bool = False
     has_default: bool = False
     use_field_description: bool = False
+    use_field_description_example: bool = False
     use_inline_field_description: bool = False
     const: bool = False
     original_name: Optional[str] = None  # noqa: UP045
@@ -306,16 +307,38 @@ class DataModelFieldBase(_BaseModel):
 
     @property
     def docstring(self) -> str | None:
-        """Get the docstring for this field from its description."""
+        """Get the docstring for this field from its description and/or example."""
+        parts = []
+
         if self.use_field_description:
-            description = self.extras.get("description", None)
+            description = self.extras.get("description")
             if description is not None:
-                return f"{description}"
-        elif self.use_inline_field_description:
-            # For inline mode, only use multi-line docstring format for multi-line descriptions
-            description = self.extras.get("description", None)
+                parts.append(description)
+        elif self.use_inline_field_description and self.use_field_description_example:
+            description = self.extras.get("description")
             if description is not None and "\n" in description:
-                return f"{description}"
+                parts.append(description)
+
+        if self.use_field_description_example:
+            example = self.extras.get("example")
+            examples = self.extras.get("examples")
+
+            if examples and isinstance(examples, list) and len(examples) > 1:
+                examples_str = "\n".join(f"- {e!r}" for e in examples)
+                parts.append(f"Examples:\n{examples_str}")
+            elif example is not None:
+                parts.append(f"Example: {example!r}")
+            elif examples and isinstance(examples, list) and len(examples) == 1:
+                parts.append(f"Example: {examples[0]!r}")
+
+        if parts:
+            return "\n\n".join(parts)
+
+        if self.use_inline_field_description:
+            description = self.extras.get("description")
+            if description is not None and "\n" in description:
+                return description
+
         return None
 
     @property
@@ -401,6 +424,25 @@ class DataModelFieldBase(_BaseModel):
             new_data_type.parent = self
 
 
+@lru_cache(maxsize=16)
+def _get_environment(template_subdir: Path, custom_template_dir: Path | None) -> Environment:
+    """Get or create a cached Jinja2 Environment for the given directories."""
+    loaders: list[FileSystemLoader] = []
+
+    if custom_template_dir is not None:
+        custom_dir = custom_template_dir / template_subdir
+        if custom_dir.exists():
+            loaders.append(FileSystemLoader(str(custom_dir)))
+
+    loaders.append(FileSystemLoader(str(TEMPLATE_DIR / template_subdir)))
+
+    loader: ChoiceLoader | FileSystemLoader = ChoiceLoader(loaders) if len(loaders) > 1 else loaders[0]
+    return Environment(
+        loader=loader,
+        autoescape=select_autoescape(["html", "xml"]),
+    )
+
+
 @lru_cache
 def _get_template_with_custom_dir(template_file_path: Path, custom_template_dir: Path | None) -> Template:
     """Load and cache a Jinja2 template with optional custom directory support.
@@ -413,21 +455,21 @@ def _get_template_with_custom_dir(template_file_path: Path, custom_template_dir:
     while keeping other templates from the default directory.
     """
     template_subdir = template_file_path.parent
-    loaders: list[FileSystemLoader] = []
+    environment = _get_environment(template_subdir, custom_template_dir)
+    return environment.get_template(template_file_path.name)
 
-    if custom_template_dir is not None:
-        custom_dir = custom_template_dir / template_subdir
-        if custom_dir.exists():
-            loaders.append(FileSystemLoader(str(custom_dir)))
 
-    loaders.append(FileSystemLoader(str(TEMPLATE_DIR / template_subdir)))
-
-    loader: ChoiceLoader | FileSystemLoader = ChoiceLoader(loaders) if len(loaders) > 1 else loaders[0]
-    environment: Environment = Environment(
-        loader=loader,
+@lru_cache(maxsize=16)
+def _get_environment_with_absolute_path(absolute_template_dir: Path, builtin_subdir: Path) -> Environment:
+    """Get or create a cached Jinja2 Environment for absolute path templates."""
+    loaders: list[FileSystemLoader] = [
+        FileSystemLoader(str(absolute_template_dir)),
+        FileSystemLoader(str(TEMPLATE_DIR / builtin_subdir)),
+    ]
+    return Environment(
+        loader=ChoiceLoader(loaders),
         autoescape=select_autoescape(["html", "xml"]),
     )
-    return environment.get_template(template_file_path.name)
 
 
 @lru_cache
@@ -439,15 +481,7 @@ def _get_template_with_absolute_path(absolute_template_path: Path, builtin_subdi
     1. The directory containing the absolute template path
     2. TEMPLATE_DIR/<builtin_subdir>/ (fallback for includes not in custom dir)
     """
-    loaders: list[FileSystemLoader] = [
-        FileSystemLoader(str(absolute_template_path.parent)),
-        FileSystemLoader(str(TEMPLATE_DIR / builtin_subdir)),
-    ]
-    loader = ChoiceLoader(loaders)
-    environment: Environment = Environment(
-        loader=loader,
-        autoescape=select_autoescape(["html", "xml"]),
-    )
+    environment = _get_environment_with_absolute_path(absolute_template_path.parent, builtin_subdir)
     return environment.get_template(absolute_template_path.name)
 
 

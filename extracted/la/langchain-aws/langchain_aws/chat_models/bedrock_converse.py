@@ -290,7 +290,7 @@ class ChatBedrockConverse(BaseChatModel):
         }
 
         model = ChatBedrockConverse(
-            model="us.anthropic.claude-3-7-sonnet-20250219-v1:0",
+            model="us.anthropic.claude-sonnet-4-5-20250929-v1:0",
             max_tokens=5000,
             region_name="us-west-2",
             additional_model_request_fields=thinking_params,
@@ -499,6 +499,9 @@ class ChatBedrockConverse(BaseChatModel):
     endpoint_url: Optional[str] = Field(default=None, alias="base_url")
     """Needed if you don't want to default to us-east-1 endpoint"""
 
+    default_headers: Mapping[str, str] | None = None
+    """Headers to pass to the Anthropic clients, will be used for every API call."""
+
     config: Any = None
     """An optional botocore.config.Config instance to pass to the client."""
 
@@ -540,6 +543,22 @@ class ChatBedrockConverse(BaseChatModel):
         Example:
             performance_config={'latency': 'optimized'}
         If not provided, defaults to standard latency.
+        """,
+    )
+
+    service_tier: Optional[Literal["priority", "default", "flex", "reserved"]] = Field(
+        default=None,
+        description="""Service tier for model invocation.
+
+        Specifies the processing tier type used for serving the request.
+        Supported values are 'priority', 'default', 'flex', and 'reserved'.
+
+        - 'priority': Prioritized processing for lower latency
+        - 'default': Standard processing tier
+        - 'flex': Flexible processing tier with lower cost
+        - 'reserved': Reserved capacity for consistent performance
+
+        If not provided, AWS uses the default tier.
         """,
     )
 
@@ -778,6 +797,22 @@ class ChatBedrockConverse(BaseChatModel):
                 endpoint_url=self.endpoint_url,
                 config=self.config,
                 service_name="bedrock",
+            )
+
+        if self.default_headers is not None:
+
+            def _add_custom_headers(request: Any, **kwargs: Any) -> None:
+                if self.default_headers is not None:
+                    for key, value in self.default_headers.items():
+                        request.headers[key] = value
+
+            self.client.meta.events.register(
+                "before-send.bedrock-runtime.Converse",
+                _add_custom_headers,
+            )
+            self.client.meta.events.register(
+                "before-send.bedrock-runtime.ConverseStream",
+                _add_custom_headers,
             )
 
         # For AIPs, pull base model ID via GetInferenceProfile API call
@@ -1199,6 +1234,9 @@ class ChatBedrockConverse(BaseChatModel):
         additionalModelResponseFieldPaths: Optional[List[str]] = None,
         guardrailConfig: Optional[dict] = None,
         performanceConfig: Optional[Mapping[str, Any]] = None,
+        serviceTier: Optional[
+            Literal["priority", "default", "flex", "reserved"]
+        ] = None,
         requestMetadata: Optional[dict] = None,
         stream: Optional[bool] = True,
     ) -> Dict[str, Any]:
@@ -1213,6 +1251,7 @@ class ChatBedrockConverse(BaseChatModel):
             toolChoice = _format_tool_choice(toolChoice) if toolChoice else None
             toolConfig = {"tools": _format_tools(tools), "toolChoice": toolChoice}
 
+        tier = serviceTier or self.service_tier
         return _drop_none(
             {
                 "modelId": modelId or self.model_id,
@@ -1227,6 +1266,7 @@ class ChatBedrockConverse(BaseChatModel):
                 ),
                 "guardrailConfig": guardrailConfig or self.guardrail_config,
                 "performanceConfig": performanceConfig or self.performance_config,
+                "serviceTier": {"type": tier} if tier else None,
                 "requestMetadata": requestMetadata or self.request_metadata,
             }
         )

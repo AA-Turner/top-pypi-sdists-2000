@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "lakefs_sdk"
-version = "1.74.2"
+version = "1.74.4"
 description = "lakeFS API"
 authors = ["Treeverse <services@treeverse.io>"]
 license = "Apache 2.0"
