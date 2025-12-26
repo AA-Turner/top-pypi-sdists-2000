@@ -151,9 +151,17 @@ class SchemaGenerator(BaseSchemaGenerator):
         for endpoint in endpoints_info:
             try:
                 parsed = self.parse_docstring(endpoint.func)
-            except AssertionError:
-                logger.warning("Could not parse docstrings for route %s", endpoint.path)
-                parsed = {}
+            except Exception as exc:
+                docstring = getattr(endpoint.func, "__doc__", None) or ""
+                logger.warning(
+                    "Unable to parse docstring from OpenAPI schema for route %s (%s): %s\n\nUsing as description",
+                    endpoint.path,
+                    endpoint.func.__qualname__,
+                    exc,
+                    exc_info=exc,
+                    docstring=docstring,
+                )
+                parsed = {"description": docstring}
 
             if endpoint.path not in schema["paths"]:
                 schema["paths"][endpoint.path] = {}

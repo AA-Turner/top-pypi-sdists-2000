@@ -15,7 +15,7 @@ description = "Typer, build great CLIs. Easy to code. Based on Python type hints
 authors = [
     { name = "Sebastián Ramírez", email = "tiangolo@gmail.com" },
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 classifiers = [
     "Intended Audience :: Information Technology",
     "Intended Audience :: System Administrators",
@@ -30,7 +30,6 @@ classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -45,7 +44,7 @@ dependencies = [
     "rich >=10.11.0",
 ]
 readme = "README.md"
-version = "0.20.1"
+version = "0.21.0"
 
 [project.urls]
 Homepage = "https://github.com/fastapi/typer"
@@ -135,6 +134,34 @@ source = [
 ]
 omit = [
     "typer/_typing.py",
+    "docs_src/app_dir/tutorial001_py39.py",
+    "docs_src/arguments/optional/tutorial000_py39.py",
+    "docs_src/launch/tutorial001_py39.py",
+    "docs_src/launch/tutorial002_py39.py",
+    "docs_src/options/callback/tutorial002_*.py",
+    "docs_src/options/help/tutorial004_*.py",
+    "docs_src/options/password/tutorial001_*.py",
+    "docs_src/options/password/tutorial002_*.py",
+    "docs_src/options/version/tutorial001_*.py",
+    "docs_src/options/version/tutorial002_*.py",
+    "docs_src/options_autocompletion/tutorial001_*.py",
+    "docs_src/options_autocompletion/tutorial005_*.py",
+    "docs_src/options_autocompletion/tutorial006_*.py",
+    "docs_src/printing/tutorial001_py39.py",
+    "docs_src/printing/tutorial002_py39.py",
+    "docs_src/printing/tutorial003_py39.py",
+    "docs_src/printing/tutorial004_py39.py",
+    "docs_src/printing/tutorial005_py39.py",
+    "docs_src/printing/tutorial006_py39.py",
+    "docs_src/progressbar/tutorial001_py39.py",
+    "docs_src/progressbar/tutorial002_py39.py",
+    "docs_src/progressbar/tutorial003_py39.py",
+    "docs_src/progressbar/tutorial004_py39.py",
+    "docs_src/progressbar/tutorial005_py39.py",
+    "docs_src/progressbar/tutorial006_py39.py",
+    "docs_src/prompt/tutorial004_py39.py",
+    "docs_src/using_click/tutorial001_py39.py",
+    "docs_src/using_click/tutorial002_py39.py",
 ]
 context = "${CONTEXT}"
 relative_files = true
@@ -183,44 +210,44 @@ ignore = [
 "typer/rich_utils.py" = [
     "TID251",
 ]
-"docs_src/progressbar/tutorial004.py" = [
+"docs_src/progressbar/tutorial004_py39.py" = [
     "UP028",
     "B007",
 ]
-"docs_src/options_autocompletion/tutorial006_an.py" = [
+"docs_src/options_autocompletion/tutorial006_an_py39.py" = [
     "B006",
 ]
-"docs_src/multiple_values/multiple_options/tutorial002_an.py" = [
+"docs_src/multiple_values/multiple_options/tutorial002_an_py39.py" = [
     "B006",
 ]
-"docs_src/options_autocompletion/tutorial007_an.py" = [
+"docs_src/options_autocompletion/tutorial007_an_py39.py" = [
     "B006",
 ]
-"docs_src/options_autocompletion/tutorial008_an.py" = [
+"docs_src/options_autocompletion/tutorial008_an_py39.py" = [
     "B006",
 ]
-"docs_src/options_autocompletion/tutorial009_an.py" = [
+"docs_src/options_autocompletion/tutorial009_an_py39.py" = [
     "B006",
 ]
-"docs_src/parameter_types/enum/tutorial003_an.py" = [
+"docs_src/parameter_types/enum/tutorial003_an_py39.py" = [
     "B006",
 ]
-"docs_src/progressbar/tutorial001.py" = [
+"docs_src/progressbar/tutorial001_py39.py" = [
     "B007",
 ]
-"docs_src/progressbar/tutorial003.py" = [
+"docs_src/progressbar/tutorial003_py39.py" = [
     "B007",
 ]
-"docs_src/progressbar/tutorial005.py" = [
+"docs_src/progressbar/tutorial005_py39.py" = [
     "B007",
 ]
-"docs_src/progressbar/tutorial006.py" = [
+"docs_src/progressbar/tutorial006_py39.py" = [
     "B007",
 ]
-"docs_src/prompt/tutorial003.py" = [
+"docs_src/prompt/tutorial003_py39.py" = [
     "F841",
 ]
-"docs_src/using_click/tutorial001.py" = [
+"docs_src/using_click/tutorial001_py39.py" = [
     "B007",
 ]
 "docs_src/*" = [
