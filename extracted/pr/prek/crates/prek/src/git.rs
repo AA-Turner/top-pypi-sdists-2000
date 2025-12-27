@@ -354,7 +354,7 @@ pub(crate) async fn init_repo(url: &str, path: &Path) -> Result<(), Error> {
         .arg("init")
         .arg("--template=")
         .arg(path)
-        .remove_git_env()
+        .remove_git_envs()
         .check(true)
         .output()
         .await?;
@@ -365,7 +365,7 @@ pub(crate) async fn init_repo(url: &str, path: &Path) -> Result<(), Error> {
         .arg("add")
         .arg("origin")
         .arg(&*url)
-        .remove_git_env()
+        .remove_git_envs()
         .check(true)
         .output()
         .await?;
@@ -385,7 +385,7 @@ async fn shallow_clone(rev: &str, path: &Path) -> Result<(), Error> {
         // Disable interactive prompts in the terminal, as they'll be erased by the progress bar
         // animation and the process will "hang".
         .env(EnvVars::GIT_TERMINAL_PROMPT, "0")
-        .remove_git_env()
+        .remove_git_envs()
         .check(true)
         .output()
         .await?;
@@ -394,7 +394,7 @@ async fn shallow_clone(rev: &str, path: &Path) -> Result<(), Error> {
         .current_dir(path)
         .arg("checkout")
         .arg("FETCH_HEAD")
-        .remove_git_env()
+        .remove_git_envs()
         .env(EnvVars::PREK_INTERNAL__SKIP_POST_CHECKOUT, "1")
         .check(true)
         .output()
@@ -410,7 +410,7 @@ async fn shallow_clone(rev: &str, path: &Path) -> Result<(), Error> {
         .arg("--recursive")
         .arg("--depth=1")
         .env(EnvVars::GIT_TERMINAL_PROMPT, "0")
-        .remove_git_env()
+        .remove_git_envs()
         .check(true)
         .output()
         .await?;
@@ -425,7 +425,7 @@ async fn full_clone(rev: &str, path: &Path) -> Result<(), Error> {
         .arg("origin")
         .arg("--tags")
         .env(EnvVars::GIT_TERMINAL_PROMPT, "0")
-        .remove_git_env()
+        .remove_git_envs()
         .check(true)
         .output()
         .await?;
@@ -435,7 +435,7 @@ async fn full_clone(rev: &str, path: &Path) -> Result<(), Error> {
         .arg("checkout")
         .arg(rev)
         .env(EnvVars::PREK_INTERNAL__SKIP_POST_CHECKOUT, "1")
-        .remove_git_env()
+        .remove_git_envs()
         .check(true)
         .output()
         .await?;
@@ -447,7 +447,7 @@ async fn full_clone(rev: &str, path: &Path) -> Result<(), Error> {
         .arg("--init")
         .arg("--recursive")
         .env(EnvVars::GIT_TERMINAL_PROMPT, "0")
-        .remove_git_env()
+        .remove_git_envs()
         .check(true)
         .output()
         .await?;
@@ -544,9 +544,10 @@ pub(crate) async fn get_lfs_files(paths: &[&Path]) -> Result<FxHashSet<PathBuf>,
 
 /// Check if a git revision exists
 pub(crate) async fn rev_exists(rev: &str) -> Result<bool, Error> {
-    let output = git_cmd("check if revision exists")?
-        .arg("rev-list")
-        .arg("--quiet")
+    let output = git_cmd("git cat-file")?
+        .arg("cat-file")
+        // Exit with zero status if <object> exists and is a valid object.
+        .arg("-e")
         .arg(rev)
         .check(false)
         .output()
@@ -569,7 +570,7 @@ pub(crate) async fn get_ancestors_not_in_remote(
         .check(true)
         .output()
         .await?;
-    Ok(String::from_utf8_lossy(&output.stdout)
+    Ok(str::from_utf8(&output.stdout)?
         .trim_ascii()
         .lines()
         .map(ToString::to_string)
@@ -585,7 +586,7 @@ pub(crate) async fn get_root_commits(local_sha: &str) -> Result<FxHashSet<String
         .check(true)
         .output()
         .await?;
-    Ok(String::from_utf8_lossy(&output.stdout)
+    Ok(str::from_utf8(&output.stdout)?
         .trim_ascii()
         .lines()
         .map(ToString::to_string)
@@ -602,9 +603,7 @@ pub(crate) async fn get_parent_commit(commit: &str) -> Result<Option<String>, Er
         .await?;
     if output.status.success() {
         Ok(Some(
-            String::from_utf8_lossy(&output.stdout)
-                .trim_ascii()
-                .to_string(),
+            str::from_utf8(&output.stdout)?.trim_ascii().to_string(),
         ))
     } else {
         Ok(None)

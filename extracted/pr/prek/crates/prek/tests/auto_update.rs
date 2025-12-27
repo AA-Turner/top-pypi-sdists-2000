@@ -269,6 +269,56 @@ fn auto_update_multiple_repos_mixed() -> Result<()> {
     Ok(())
 }
 
+/// Test that `auto-update` ignores the `GIT_DIR` environment variable.
+#[test]
+fn test_resolve_revision_ignores_git_dir_env_var() -> Result<()> {
+    let context = TestContext::new();
+    context.init_project();
+
+    let repo_path = create_local_git_repo(&context, "target-repo", &["v0.1.0", "v0.2.0"])?;
+    let external_repo_path = create_local_git_repo(&context, "external-repo", &["v9.9.9"])?;
+
+    context.write_pre_commit_config(&indoc::formatdoc! {r"
+        repos:
+          - repo: {}
+            rev: v0.1.0
+            hooks:
+              - id: test-hook
+    ", repo_path});
+    context.git_add(".");
+
+    let filters = context.filters();
+
+    let mut cmd = context.auto_update();
+    cmd.arg("--cooldown-days")
+        .arg("0")
+        .env("GIT_DIR", ChildPath::new(&external_repo_path).join(".git"));
+
+    cmd_snapshot!(filters.clone(), cmd, @r#"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+    [[HOME]/test-repos/target-repo] updating v0.1.0 -> v0.2.0
+
+    ----- stderr -----
+    "#);
+
+    insta::with_settings!(
+        { filters => filters.clone() },
+        {
+            assert_snapshot!(context.read(CONFIG_FILE), @r#"
+            repos:
+              - repo: [HOME]/test-repos/target-repo
+                rev: v0.2.0
+                hooks:
+                  - id: test-hook
+            "#);
+        }
+    );
+
+    Ok(())
+}
+
 #[test]
 fn auto_update_specific_repos() -> Result<()> {
     let context = TestContext::new();
@@ -1018,6 +1068,32 @@ fn quoting_float_like_version_number() -> Result<()> {
             ");
         }
     );
+
+    Ok(())
+}
+
+#[test]
+fn auto_update_with_invalid_config_file() -> Result<()> {
+    let context = TestContext::new();
+    context.init_project();
+
+    // Write an invalid config file
+    context
+        .work_dir()
+        .child(CONFIG_FILE)
+        .write_str("invalid_yaml: [unclosed_list")?;
+
+    let filters = context.filters();
+
+    cmd_snapshot!(filters.clone(), context.auto_update(), @r"
+    success: false
+    exit_code: 2
+    ----- stdout -----
+
+    ----- stderr -----
+    error: Failed to parse `.pre-commit-config.yaml`
+      caused by: did not find expected ',' or ']' at line 2 column 1, while parsing a flow sequence at line 1 column 15
+    ");
 
     Ok(())
 }
