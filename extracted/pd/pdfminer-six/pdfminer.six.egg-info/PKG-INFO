@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pdfminer.six
-Version: 20251107
+Version: 20251227
 Summary: PDF parser and analyzer
 Author: Yusuke Shinyama, Pieter Marsman
 Author-email: Philippe Guglielmetti <pdfminer@goulu.net>
@@ -13,13 +13,13 @@ Classifier: Intended Audience :: Developers
 Classifier: Intended Audience :: Science/Research
 Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 3 :: Only
-Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
 Classifier: Topic :: Text Processing
-Requires-Python: >=3.9
+Requires-Python: >=3.10
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: charset-normalizer>=2.0.0
@@ -78,7 +78,7 @@ Features
 How to use
 ----------
 
-* Install Python 3.9 or newer.
+* Install Python 3.10 or newer.
 * Install pdfminer.six.
   ```bash
   pip install pdfminer.six

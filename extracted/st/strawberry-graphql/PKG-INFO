@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: strawberry-graphql
-Version: 0.287.3
+Version: 0.287.4
 Summary: A library for creating GraphQL APIs
 License: MIT
 License-File: LICENSE
@@ -35,10 +35,10 @@ Requires-Dist: asgiref (>=3.2,<4.0) ; extra == "channels"
 Requires-Dist: asgiref (>=3.2,<4.0) ; extra == "django"
 Requires-Dist: chalice (>=1.22,<2.0) ; extra == "chalice"
 Requires-Dist: channels (>=3.0.5) ; extra == "channels"
+Requires-Dist: cross-web (>=0.4.0)
 Requires-Dist: fastapi (>=0.65.2) ; extra == "fastapi"
 Requires-Dist: flask (>=1.1) ; extra == "flask"
 Requires-Dist: graphql-core (>=3.2.0,<3.4.0)
-Requires-Dist: lia-web (>=0.2.1)
 Requires-Dist: libcst ; extra == "cli"
 Requires-Dist: libcst ; extra == "debug"
 Requires-Dist: libcst ; extra == "debug-server"

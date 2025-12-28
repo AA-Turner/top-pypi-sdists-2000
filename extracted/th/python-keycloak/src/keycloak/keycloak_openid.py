@@ -87,7 +87,8 @@ class KeycloakOpenID:
         Either a path to an SSL certificate file, or two-tuple of
         (certificate file, key file).
     :param max_retries: The total number of times to retry HTTP requests.
-    :type max_retries: int
+    :param pool_maxsize: The maximum number of connections to save in the pool.
+    :type pool_maxsize: int
     """
 
     def __init__(
@@ -102,6 +103,7 @@ class KeycloakOpenID:
         timeout: int = 60,
         cert: str | tuple | None = None,
         max_retries: int = 1,
+        pool_maxsize: int | None = None,
     ) -> None:
         """
         Init method.
@@ -129,6 +131,8 @@ class KeycloakOpenID:
         :type cert: Union[str,Tuple[str,str]]
         :param max_retries: The total number of times to retry HTTP requests.
         :type max_retries: int
+        :param pool_maxsize: The maximum number of connections to save in the pool.
+        :type pool_maxsize: int
         """
         self.client_id = client_id
         self.client_secret_key = client_secret_key
@@ -142,6 +146,7 @@ class KeycloakOpenID:
             proxies=proxies,
             cert=cert,
             max_retries=max_retries,
+            pool_maxsize=pool_maxsize,
         )
 
         self.authorization = Authorization()
@@ -282,6 +287,8 @@ class KeycloakOpenID:
         scope: str = "email",
         state: str = "",
         nonce: str = "",
+        code_challenge: str | None = None,
+        code_challenge_method: str | None = None,
     ) -> str:
         """
         Get authorization URL endpoint.
@@ -294,6 +301,10 @@ class KeycloakOpenID:
         :type state: str
         :param nonce: Associates a Client session with an ID Token to mitigate replay attacks
         :type nonce: str
+        :param code_challenge: PKCE code challenge
+        :type code_challenge: str
+        :param code_challenge_method: PKCE code challenge method
+        :type code_challenge_method: str
         :returns: Authorization URL Full Build
         :rtype: str
         """
@@ -305,7 +316,12 @@ class KeycloakOpenID:
             "state": state,
             "nonce": nonce,
         }
-        return URL_AUTH.format(**params_path)
+        url = URL_AUTH.format(**params_path)
+        if code_challenge:
+            url += f"&code_challenge={code_challenge}"
+        if code_challenge_method:
+            url += f"&code_challenge_method={code_challenge_method}"
+        return url
 
     def token(
         self,
@@ -316,6 +332,7 @@ class KeycloakOpenID:
         redirect_uri: str = "",
         totp: int | None = None,
         scope: str = "openid",
+        code_verifier: str | None = None,
         **extra: dict,
     ) -> dict:
         """
@@ -342,6 +359,8 @@ class KeycloakOpenID:
         :type totp: int
         :param scope: Scope, defaults to openid
         :type scope: str
+        :param code_verifier: PKCE code verifier
+        :type code_verifier: str
         :param extra: Additional extra arguments
         :type extra: dict
         :returns: Keycloak token
@@ -357,6 +376,8 @@ class KeycloakOpenID:
             "redirect_uri": redirect_uri,
             "scope": scope,
         }
+        if code_verifier:
+            payload["code_verifier"] = code_verifier
         if extra:
             payload.update(extra)
 
@@ -790,7 +811,7 @@ class KeycloakOpenID:
 
         return list(set(permissions))
 
-    def uma_permissions(self, token: str, permissions: str = "", **extra_payload: dict) -> dict:
+    def uma_permissions(self, token: str, permissions: str = "", **extra_payload: dict) -> list:
         """
         Get UMA permissions by user token with requested permissions.
 
@@ -806,7 +827,7 @@ class KeycloakOpenID:
         :param extra_payload: Additional payload data
         :type extra_payload: dict
         :returns: Keycloak server response
-        :rtype: dict
+        :rtype: list
         """
         permission = build_permission_param(permissions)
 
@@ -1028,6 +1049,8 @@ class KeycloakOpenID:
         scope: str = "email",
         state: str = "",
         nonce: str = "",
+        code_challenge: str | None = None,
+        code_challenge_method: str | None = None,
     ) -> str:
         """
         Get authorization URL endpoint asynchronously.
@@ -1040,6 +1063,10 @@ class KeycloakOpenID:
         :type state: str
         :param nonce: Associates a Client session with an ID Token to mitigate replay attacks
         :type nonce: str
+        :param code_challenge: PKCE code challenge
+        :type code_challenge: str
+        :param code_challenge_method: PKCE code challenge method
+        :type code_challenge_method: str
         :returns: Authorization URL Full Build
         :rtype: str
         """
@@ -1051,7 +1078,12 @@ class KeycloakOpenID:
             "state": state,
             "nonce": nonce,
         }
-        return URL_AUTH.format(**params_path)
+        url = URL_AUTH.format(**params_path)
+        if code_challenge:
+            url += f"&code_challenge={code_challenge}"
+        if code_challenge_method:
+            url += f"&code_challenge_method={code_challenge_method}"
+        return url
 
     async def a_token(
         self,
@@ -1062,6 +1094,7 @@ class KeycloakOpenID:
         redirect_uri: str = "",
         totp: int | None = None,
         scope: str = "openid",
+        code_verifier: str | None = None,
         **extra: dict,
     ) -> dict:
         """
@@ -1088,6 +1121,8 @@ class KeycloakOpenID:
         :type totp: int
         :param scope: Scope, defaults to openid
         :type scope: str
+        :param code_verifier: PKCE code verifier
+        :type code_verifier: str
         :param extra: Additional extra arguments
         :type extra: dict
         :returns: Keycloak token
@@ -1103,6 +1138,8 @@ class KeycloakOpenID:
             "redirect_uri": redirect_uri,
             "scope": scope,
         }
+        if code_verifier:
+            payload["code_verifier"] = code_verifier
         if extra:
             payload.update(extra)
 
@@ -1516,7 +1553,7 @@ class KeycloakOpenID:
         token: str,
         permissions: str = "",
         **extra_payload: dict,
-    ) -> dict:
+    ) -> list:
         """
         Get UMA permissions by user token with requested permissions asynchronously.
 
@@ -1532,7 +1569,7 @@ class KeycloakOpenID:
         :param extra_payload: Additional payload data
         :type extra_payload: dict
         :returns: Keycloak server response
-        :rtype: dict
+        :rtype: list
         """
         permission = build_permission_param(permissions)
 
