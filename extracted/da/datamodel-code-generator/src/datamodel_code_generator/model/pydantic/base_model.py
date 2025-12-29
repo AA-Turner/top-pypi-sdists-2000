@@ -12,6 +12,7 @@ from typing import TYPE_CHECKING, Any, ClassVar, Optional
 
 from pydantic import Field
 
+from datamodel_code_generator import cached_path_exists
 from datamodel_code_generator.model import (
     ConstraintsBase,
     DataModel,
@@ -266,6 +267,10 @@ class DataModelField(DataModelFieldBase):
     @property
     def imports(self) -> tuple[Import, ...]:
         """Get all required imports including Field if needed."""
+        # Fast path: skip expensive self.field check for simple required fields
+        if self.required and not self.nullable and not self.alias and self.constraints is None and not self.extras:
+            return super().imports
+
         if self.field:
             return chain_as_tuple(super().imports, (IMPORT_FIELD,))
         return super().imports
@@ -319,7 +324,7 @@ class BaseModelBase(DataModel, ABC):
         # But, Future version will support only '{custom_template_dir}/pydantic/BaseModel.jinja'
         if self._custom_template_dir is not None:
             custom_template_file_path = self._custom_template_dir / Path(self.TEMPLATE_FILE_PATH).name
-            if custom_template_file_path.exists():
+            if cached_path_exists(custom_template_file_path):
                 return custom_template_file_path
         return super().template_file_path
 
@@ -367,10 +372,16 @@ class BaseModel(BaseModelBase):
         config_parameters: dict[str, Any] = {}
 
         additional_properties = self.extra_template_data.get("additionalProperties")
+        unevaluated_properties = self.extra_template_data.get("unevaluatedProperties")
         allow_extra_fields = self.extra_template_data.get("allow_extra_fields")
         extra_fields = self.extra_template_data.get("extra_fields")
 
-        if allow_extra_fields or extra_fields or additional_properties is not None:
+        if (
+            allow_extra_fields
+            or extra_fields
+            or additional_properties is not None
+            or unevaluated_properties is not None
+        ):
             self._additional_imports.append(IMPORT_EXTRA)
 
         if allow_extra_fields:
@@ -380,6 +391,10 @@ class BaseModel(BaseModelBase):
         elif additional_properties is True:
             config_parameters["extra"] = "Extra.allow"
         elif additional_properties is False:
+            config_parameters["extra"] = "Extra.forbid"
+        elif unevaluated_properties is True:
+            config_parameters["extra"] = "Extra.allow"
+        elif unevaluated_properties is False:
             config_parameters["extra"] = "Extra.forbid"
 
         for config_attribute in "allow_population_by_field_name", "allow_mutation":

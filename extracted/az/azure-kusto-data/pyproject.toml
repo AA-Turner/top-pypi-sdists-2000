@@ -1,6 +1,6 @@
 [project]
 name = "azure-kusto-data"
-version = "6.0.0"
+version = "6.0.1"
 description = "Kusto Data Client"
 authors = [
     { name = "Microsoft Corporation", email = "kustalk@microsoft.com" },
@@ -33,7 +33,7 @@ classifiers = [
 pandas = [
     "pandas>=2.3.1",
 ]
-async = [
+aio = [
     "aiohttp>=3.12.15",
     "asgiref>=3.9.1",
 ]

@@ -14,6 +14,8 @@ from unittest import mock
 import pytest
 
 import coverage
+import coverage.config
+import coverage.tomlconfig
 from coverage import Coverage, env
 from coverage.config import CoverageConfig, HandyConfigParser
 from coverage.exceptions import ConfigError, CoverageWarning
@@ -1070,7 +1072,7 @@ class ConfigFileTest(UsingModulesMixin, CoverageTest):
             timid = true
             data_file = ".toml-data.dat"
             branch = true
-            
+
             [report]
             precision = 2
             """,
@@ -1091,7 +1093,7 @@ class ConfigFileTest(UsingModulesMixin, CoverageTest):
             timid = true
             data_file = "should-be-ignored.dat"
             branch = true
-            
+
             [tool.coverage.run]
             data_file = "correct-data.dat"
             """,

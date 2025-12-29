@@ -14,6 +14,7 @@ from tests.coveragetest import CoverageTest
 from tests.helpers import assert_count_equal
 
 import coverage
+import coverage.python
 from coverage import env
 from coverage.data import sorted_lines
 from coverage.files import abs_file

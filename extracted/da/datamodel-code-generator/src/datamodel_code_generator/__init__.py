@@ -11,13 +11,12 @@ import os
 import sys
 from collections.abc import Callable, Iterator, Mapping, Sequence
 from datetime import datetime, timezone
-from enum import Enum
+from functools import lru_cache as _lru_cache
 from pathlib import Path
 from typing import (
     IO,
     TYPE_CHECKING,
     Any,
-    Final,
     TextIO,
     TypeAlias,
     TypeVar,
@@ -25,11 +24,28 @@ from typing import (
 )
 from urllib.parse import ParseResult
 
-import yaml
-import yaml.parser
-from typing_extensions import TypeAliasType, TypedDict
+from typing_extensions import TypeAliasType
 
-import datamodel_code_generator.pydantic_patch  # noqa: F401
+from datamodel_code_generator.enums import (
+    DEFAULT_SHARED_MODULE_NAME,
+    MAX_VERSION,
+    MIN_VERSION,
+    AllExportsCollisionStrategy,
+    AllExportsScope,
+    AllOfMergeMode,
+    CollapseRootModelsNameStrategy,
+    DataclassArguments,
+    DataModelType,
+    FieldTypeCollisionStrategy,
+    GraphQLScope,
+    InputFileType,
+    ModuleSplitMode,
+    NamingStrategy,
+    OpenAPIScope,
+    ReadOnlyWriteOnlyModelType,
+    ReuseScope,
+    TargetPydanticVersion,
+)
 from datamodel_code_generator.format import (
     DEFAULT_FORMATTERS,
     CodeFormatter,
@@ -40,7 +56,6 @@ from datamodel_code_generator.format import (
     PythonVersionMin,
 )
 from datamodel_code_generator.parser import DefaultPutDict, LiteralType
-from datamodel_code_generator.util import PYDANTIC_V2, SafeLoader
 
 if TYPE_CHECKING:
     from collections import defaultdict
@@ -52,35 +67,19 @@ if TYPE_CHECKING:
     YamlScalar: TypeAlias = str | int | float | bool | None
     YamlValue = TypeAliasType("YamlValue", "dict[str, YamlValue] | list[YamlValue] | YamlScalar")
 
-MIN_VERSION: Final[int] = 10
-MAX_VERSION: Final[int] = 13
-DEFAULT_SHARED_MODULE_NAME: Final[str] = "shared"
-
 T = TypeVar("T")
 
+# Import is_pydantic_v2 here for module-level YamlValue type definition
+from datamodel_code_generator.util import is_pydantic_v2  # noqa: E402
 
-class DataclassArguments(TypedDict, total=False):
-    """Arguments for @dataclass decorator."""
-
-    init: bool
-    repr: bool
-    eq: bool
-    order: bool
-    unsafe_hash: bool
-    frozen: bool
-    match_args: bool
-    kw_only: bool
-    slots: bool
-    weakref_slot: bool
-
-
-if not TYPE_CHECKING:
+if not TYPE_CHECKING:  # pragma: no branch
     YamlScalar: TypeAlias = str | int | float | bool | None
-    if PYDANTIC_V2:
+    if is_pydantic_v2():
         YamlValue = TypeAliasType("YamlValue", "dict[str, YamlValue] | list[YamlValue] | YamlScalar")
     else:
         # Pydantic v1 cannot handle TypeAliasType, use Any for recursive parts
         YamlValue: TypeAlias = dict[str, Any] | list[Any] | YamlScalar
+
 
 GeneratedModules: TypeAlias = dict[tuple[str, ...], str]
 """Type alias for multiple generated modules.
@@ -89,18 +88,15 @@ Maps module path tuples (e.g., ("models", "user.py")) to generated code strings.
 Returned by generate() when output=None and multiple modules are generated.
 """
 
-try:
-    import pysnooper
-
-    pysnooper.tracer.DISABLED = True
-except ImportError:  # pragma: no cover
-    pysnooper = None
-
 DEFAULT_BASE_CLASS: str = "pydantic.BaseModel"
 
 
 def load_yaml(stream: str | TextIO) -> YamlValue:
     """Load YAML content from a string or file-like object."""
+    import yaml  # noqa: PLC0415
+
+    from datamodel_code_generator.util import SafeLoader  # noqa: PLC0415
+
     return yaml.load(stream, Loader=SafeLoader)  # noqa: S506
 
 
@@ -114,9 +110,81 @@ def load_yaml_dict(stream: str | TextIO) -> dict[str, YamlValue]:
 
 
 def load_yaml_dict_from_path(path: Path, encoding: str) -> dict[str, YamlValue]:
-    """Load YAML and return as dict from a file path."""
+    """Load YAML and return as dict from a file path.
+
+    Uses LRU cache with (path, mtime) as key for performance optimization.
+    This avoids re-reading the same file multiple times during $ref resolution.
+    """
+    return _load_yaml_dict_from_path_cached(path, path.stat().st_mtime, encoding)
+
+
+@_lru_cache(maxsize=128)
+def _load_yaml_dict_from_path_cached(
+    path: Path,
+    mtime: float,  # noqa: ARG001  # Used as cache key for invalidation
+    encoding: str,
+) -> dict[str, YamlValue]:
+    """Load YAML dict from path with caching (internal implementation)."""
     with path.open(encoding=encoding) as f:
         return load_yaml_dict(f)
+
+
+def _is_json_text(text: str) -> bool:
+    """Check if text likely contains JSON by examining the first non-whitespace character.
+
+    Skips BOM, spaces, tabs, carriage returns, and newlines.
+    Returns True if the first significant character is '{' or '['.
+    """
+    for ch in text:
+        if ch in {"\ufeff", " ", "\t", "\r", "\n"}:
+            continue
+        return ch in {"{", "["}
+    return False
+
+
+def load_data(text: str) -> dict[str, YamlValue]:
+    """Load text as JSON or YAML based on content.
+
+    For stdin/string input: tries JSON first if content looks like JSON,
+    falls back to YAML on failure.
+    """
+    import json  # noqa: PLC0415
+
+    if _is_json_text(text):
+        with contextlib.suppress(json.JSONDecodeError):
+            result = json.loads(text)
+            if isinstance(result, dict):
+                return result
+    return load_yaml_dict(text)
+
+
+def load_data_from_path(path: Path, encoding: str) -> dict[str, YamlValue]:
+    """Load file as JSON or YAML based on file extension.
+
+    For file input: tries json.load() for .json files (more efficient than
+    read_text + json.loads), falls back to YAML if JSON parsing fails
+    (e.g., trailing commas) or if content is not a dict. Uses YAML for all other extensions.
+    """
+    import json  # noqa: PLC0415
+
+    if path.suffix.lower() == ".json":
+        with contextlib.suppress(json.JSONDecodeError), path.open(encoding=encoding) as f:
+            result = json.load(f)
+            if isinstance(result, dict):
+                return result
+    return load_yaml_dict_from_path(path, encoding)
+
+
+@_lru_cache(maxsize=256)
+def cached_path_exists(path: Path) -> bool:
+    """Check if a path exists with LRU caching.
+
+    Caches the result of Path.exists() to reduce filesystem I/O
+    when checking the same path multiple times (e.g., custom template directories).
+
+    Note: This cache is safe for CLI usage where files don't change during execution.
+    """
+    return path.exists()
 
 
 def get_version() -> str:
@@ -130,22 +198,38 @@ def get_version() -> str:
 
 def enable_debug_message() -> None:  # pragma: no cover
     """Enable debug tracing with pysnooper."""
-    if not pysnooper:
-        msg = "Please run `$pip install 'datamodel-code-generator[debug]'` to use debug option"
-        raise Exception(msg)  # noqa: TRY002
+    global _pysnooper_default_state_set  # noqa: PLW0603
+    try:
+        import pysnooper  # noqa: PLC0415
 
-    pysnooper.tracer.DISABLED = False
+        pysnooper.tracer.DISABLED = False
+        _pysnooper_default_state_set = True
+    except ImportError as err:
+        msg = "Please run `$pip install 'datamodel-code-generator[debug]'` to use debug option"
+        raise Exception(msg) from err  # noqa: TRY002
 
 
 DEFAULT_MAX_VARIABLE_LENGTH: int = 100
+
+
+_pysnooper_default_state_set: bool = False
 
 
 def snooper_to_methods() -> Callable[..., Any]:
     """Class decorator to add pysnooper tracing to all methods."""
 
     def inner(cls: type[T]) -> type[T]:
-        if not pysnooper:
+        global _pysnooper_default_state_set  # noqa: PLW0603
+        try:
+            import pysnooper  # noqa: PLC0415
+        except ImportError:
             return cls
+
+        # Ensure tracing is disabled by default (only enabled via --debug flag)
+        if not _pysnooper_default_state_set:
+            pysnooper.tracer.DISABLED = True
+            _pysnooper_default_state_set = True
+
         import inspect  # noqa: PLC0415
 
         methods = inspect.getmembers(cls, predicate=inspect.isfunction)
@@ -201,19 +285,6 @@ def is_schema(data: dict) -> bool:
     return isinstance(data.get("properties"), dict)
 
 
-class InputFileType(Enum):
-    """Supported input file types for schema parsing."""
-
-    Auto = "auto"
-    OpenAPI = "openapi"
-    JsonSchema = "jsonschema"
-    Json = "json"
-    Yaml = "yaml"
-    Dict = "dict"
-    CSV = "csv"
-    GraphQL = "graphql"
-
-
 RAW_DATA_TYPES: list[InputFileType] = [
     InputFileType.Json,
     InputFileType.Yaml,
@@ -221,150 +292,6 @@ RAW_DATA_TYPES: list[InputFileType] = [
     InputFileType.CSV,
     InputFileType.GraphQL,
 ]
-
-
-class DataModelType(Enum):
-    """Supported output data model types."""
-
-    PydanticBaseModel = "pydantic.BaseModel"
-    PydanticV2BaseModel = "pydantic_v2.BaseModel"
-    PydanticV2Dataclass = "pydantic_v2.dataclass"
-    DataclassesDataclass = "dataclasses.dataclass"
-    TypingTypedDict = "typing.TypedDict"
-    MsgspecStruct = "msgspec.Struct"
-
-
-class ReuseScope(Enum):
-    """Scope for model reuse deduplication.
-
-    module: Deduplicate identical models within each module (default).
-    tree: Deduplicate identical models across all modules, placing shared models in shared.py.
-    """
-
-    Module = "module"
-    Tree = "tree"
-
-
-class OpenAPIScope(Enum):
-    """Scopes for OpenAPI model generation."""
-
-    Schemas = "schemas"
-    Paths = "paths"
-    Tags = "tags"
-    Parameters = "parameters"
-    Webhooks = "webhooks"
-    RequestBodies = "requestbodies"
-
-
-class AllExportsScope(Enum):
-    """Scope for __all__ exports in __init__.py.
-
-    children: Export models from direct child modules only.
-    recursive: Export models from all descendant modules recursively.
-    """
-
-    Children = "children"
-    Recursive = "recursive"
-
-
-class AllExportsCollisionStrategy(Enum):
-    """Strategy for handling name collisions in recursive exports.
-
-    error: Raise an error when name collision is detected.
-    minimal_prefix: Add module prefix only to colliding names.
-    full_prefix: Add full module path prefix to all colliding names.
-    """
-
-    Error = "error"
-    MinimalPrefix = "minimal-prefix"
-    FullPrefix = "full-prefix"
-
-
-class FieldTypeCollisionStrategy(Enum):
-    """Strategy for handling field name and type name collisions.
-
-    rename_field: Rename the field with a suffix and add alias (default).
-    rename_type: Rename the type class with a suffix to preserve field name.
-    """
-
-    RenameField = "rename-field"
-    RenameType = "rename-type"
-
-
-class NamingStrategy(Enum):
-    """Strategy for generating unique model names when duplicates occur.
-
-    numbered: Append numeric suffix (Address1, Address2) [default].
-    parent_prefixed: Prefix with parent model name (CustomerAddress, UserAddress).
-    full_path: Use full schema path for unique names (OrdersItemsAddress).
-    primary_first: Prioritize primary schema definitions, others get suffix.
-    """
-
-    Numbered = "numbered"
-    ParentPrefixed = "parent-prefixed"
-    FullPath = "full-path"
-    PrimaryFirst = "primary-first"
-
-
-class CollapseRootModelsNameStrategy(Enum):
-    """Strategy for naming when collapsing root models with object references.
-
-    child: Keep the inner (child) model's name, remove the wrapper.
-    parent: Rename inner model to wrapper's name, remove the wrapper.
-    """
-
-    Child = "child"
-    Parent = "parent"
-
-
-class AllOfMergeMode(Enum):
-    """Mode for field merging in allOf schemas.
-
-    constraints: Merge only constraint fields (minItems, maxItems, pattern, etc.) from parent.
-    all: Merge constraints plus annotation fields (default, examples) from parent.
-    none: Do not merge any fields from parent properties.
-    """
-
-    Constraints = "constraints"
-    All = "all"
-    NoMerge = "none"
-
-
-class GraphQLScope(Enum):
-    """Scopes for GraphQL model generation."""
-
-    Schema = "schema"
-
-
-class ReadOnlyWriteOnlyModelType(Enum):
-    """Model generation strategy for readOnly/writeOnly fields.
-
-    RequestResponse: Generate only Request/Response model variants (no base model).
-    All: Generate Base, Request, and Response models.
-    """
-
-    RequestResponse = "request-response"
-    All = "all"
-
-
-class ModuleSplitMode(Enum):
-    """Mode for splitting generated models into separate files.
-
-    Single: Generate one file per model class.
-    """
-
-    Single = "single"
-
-
-class TargetPydanticVersion(Enum):
-    """Target Pydantic version for generated code.
-
-    V2: Generate code compatible with Pydantic 2.0+ (uses populate_by_name).
-    V2_11: Generate code for Pydantic 2.11+ (uses validate_by_name).
-    """
-
-    V2 = "2"
-    V2_11 = "2.11"
 
 
 class Error(Exception):
@@ -563,6 +490,7 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
     shared_module_name: str = DEFAULT_SHARED_MODULE_NAME,
     encoding: str = "utf-8",
     enum_field_as_literal: LiteralType | None = None,
+    enum_field_as_literal_map: dict[str, str] | None = None,
     ignore_enum_constraints: bool = False,
     use_one_literal_as_default: bool = False,
     use_enum_values_in_discriminator: bool = False,
@@ -579,6 +507,8 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
     field_extra_keys: set[str] | None = None,
     field_include_all_keys: bool = False,
     field_extra_keys_without_x_prefix: set[str] | None = None,
+    model_extra_keys: set[str] | None = None,
+    model_extra_keys_without_x_prefix: set[str] | None = None,
     openapi_scopes: list[OpenAPIScope] | None = None,
     include_path_parameters: bool = False,
     graphql_scopes: list[GraphQLScope] | None = None,  # noqa: ARG001
@@ -678,6 +608,29 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
 
     if isinstance(input_, Path) and not input_.is_absolute():
         input_ = input_.expanduser().resolve()
+    if input_file_type == InputFileType.Auto and isinstance(input_, Mapping):
+        msg = (
+            "input_file_type=Auto is not supported for dict input. "
+            "Please specify input_file_type explicitly (e.g., InputFileType.JsonSchema)."
+        )
+        raise Error(msg)
+
+    if isinstance(input_, Mapping) and input_file_type == InputFileType.GraphQL:
+        msg = "Dict input is not supported for GraphQL. GraphQL requires text input (SDL format)."
+        raise Error(msg)
+
+    if isinstance(input_, Mapping) and input_file_type in {
+        InputFileType.Json,
+        InputFileType.Yaml,
+        InputFileType.CSV,
+    }:
+        msg = (
+            f"Dict input is not supported for {input_file_type.value}. "
+            f"Use InputFileType.Dict to generate schema from dict data, "
+            f"or provide text/file input for {input_file_type.value} format."
+        )
+        raise Error(msg)
+
     if input_file_type == InputFileType.Auto:
         try:
             input_text_ = (
@@ -803,8 +756,11 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
         kwargs["data_model_scalar_type"] = data_model_types.scalar_model
         kwargs["data_model_union_type"] = data_model_types.union_model
 
-    source = input_text or input_
-    assert not isinstance(source, Mapping)
+    if isinstance(input_, Mapping) and input_file_type not in RAW_DATA_TYPES:
+        source = dict(input_)
+    else:
+        source = input_text or input_
+        assert not isinstance(source, Mapping)
 
     defer_formatting = output is not None and not output.suffix
 
@@ -848,6 +804,7 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
         enum_field_as_literal=enum_field_as_literal
         if enum_field_as_literal is not None
         else (LiteralType.All if output_model_type == DataModelType.TypingTypedDict else None),
+        enum_field_as_literal_map=enum_field_as_literal_map,
         ignore_enum_constraints=ignore_enum_constraints,
         use_one_literal_as_default=use_one_literal_as_default,
         use_enum_values_in_discriminator=use_enum_values_in_discriminator,
@@ -867,6 +824,8 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
         field_extra_keys=field_extra_keys,
         field_include_all_keys=field_include_all_keys,
         field_extra_keys_without_x_prefix=field_extra_keys_without_x_prefix,
+        model_extra_keys=model_extra_keys,
+        model_extra_keys_without_x_prefix=model_extra_keys_without_x_prefix,
         wrap_string_literal=wrap_string_literal,
         use_title_as_name=use_title_as_name,
         use_operation_id_as_name=use_operation_id_as_name,
@@ -1061,6 +1020,8 @@ def generate(  # noqa: PLR0912, PLR0913, PLR0914, PLR0915
 
 def infer_input_type(text: str) -> InputFileType:
     """Automatically detect the input file type from text content."""
+    import yaml.parser  # noqa: PLC0415
+
     try:
         data = load_yaml(text)
     except yaml.parser.ParserError:

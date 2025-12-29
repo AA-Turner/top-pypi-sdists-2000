@@ -19,9 +19,9 @@ import sys
 import textwrap
 import warnings
 
+from collections.abc import Callable, Iterable, Iterator
 from pathlib import Path
-from typing import Any, Callable, NoReturn, TypeVar, cast
-from collections.abc import Iterable, Iterator
+from typing import Any, NoReturn, TypeVar, cast
 
 from coverage import env
 from coverage.debug import DebugControl

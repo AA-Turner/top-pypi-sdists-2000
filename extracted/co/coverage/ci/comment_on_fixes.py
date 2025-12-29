@@ -28,7 +28,7 @@ print(f"Comment will be:\n\n{comment}\n")
 
 repo_owner = sys.argv[1]
 url_matches = re.finditer(rf"https://github.com/{repo_owner}/(issues|pull)/(\d+)", text)
-urls = set((m[0], m[1], m[2]) for m in url_matches)
+urls = {(m[0], m[1], m[2]) for m in url_matches}
 
 for url, kind, number in urls:
     do_comment = False

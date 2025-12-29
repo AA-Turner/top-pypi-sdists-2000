@@ -281,6 +281,24 @@ def test_main_use_schema_description(output_file: Path) -> None:
     )
 
 
+@freeze_time("2019-07-26")
+def test_main_docstring_special_chars(output_file: Path) -> None:
+    """Escape special characters in docstrings.
+
+    Backslashes and triple quotes in schema descriptions must be escaped
+    to prevent Python syntax errors and type checker warnings. See GitHub
+    issue #1808.
+    """
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "docstring_special_chars.yaml",
+        output_path=output_file,
+        input_file_type=None,
+        assert_func=assert_file_content,
+        expected_file=EXPECTED_MAIN_KR_PATH / "main_docstring_special_chars" / "output.py",
+        extra_args=["--use-schema-description", "--use-field-description"],
+    )
+
+
 @pytest.mark.cli_doc(
     options=["--use-field-description"],
     input_schema="openapi/api_multiline_docstrings.yaml",
@@ -1393,9 +1411,7 @@ def test_encoding_option(output_file: Path) -> None:
     The `--encoding` flag sets the character encoding used when reading
     the schema file and writing the generated Python code. This is useful
     for schemas containing non-ASCII characters (e.g., Japanese, Chinese).
-    Default is the system's preferred encoding (via `locale.getpreferredencoding()`),
-    which is typically UTF-8 on Linux/macOS but may differ on Windows (e.g., cp1252).
-    For consistent cross-platform behavior, explicitly specify `--encoding utf-8`.
+    Default is UTF-8, which is the standard encoding for JSON and most modern text files.
     """
     run_main_and_assert(
         input_path=JSON_SCHEMA_DATA_PATH / "encoding_test.json",

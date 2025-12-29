@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pdfminer.six
-Version: 20251227
+Version: 20251228
 Summary: PDF parser and analyzer
 Author: Yusuke Shinyama, Pieter Marsman
 Author-email: Philippe Guglielmetti <pdfminer@goulu.net>

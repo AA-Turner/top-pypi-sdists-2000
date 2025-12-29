@@ -94,7 +94,7 @@ def make_pth_file() -> None:
         code = f.read()
 
     code = re.sub(r"\s*#.*\n", "\n", code)
-    code = code.replace("    ", " ")
+    code = code.replace("    ", " ").strip()
 
     # `import sys` is needed because .pth files are executed only if they start
     # with `import `.

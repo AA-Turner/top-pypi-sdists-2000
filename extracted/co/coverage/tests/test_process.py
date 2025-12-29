@@ -26,6 +26,7 @@ import coverage
 from coverage import env
 from coverage.data import line_counts
 from coverage.files import abs_file, python_reported_file
+from coverage.sqldata import good_filename_match
 
 from tests import testenv
 from tests.coveragetest import CoverageTest, TESTS_DIR
@@ -441,9 +442,9 @@ class ProcessTest(CoverageTest):
         # end of the file name.
         self.assert_file_count(".coverage.*", 2)
         data_files = glob.glob(".coverage.*")
-        filepids = {int(name.split(".")[-2]) for name in data_files}
+        filepids = {int(good_filename_match(name)["pid"]) for name in data_files}
         assert filepids == set(pids.values())
-        suffixes = {name.split(".")[-1] for name in data_files}
+        suffixes = {good_filename_match(name)["random"] for name in data_files}
         assert len(suffixes) == 2, f"Same random suffix: {data_files}"
 
         # Each data file should have a subset of the lines.

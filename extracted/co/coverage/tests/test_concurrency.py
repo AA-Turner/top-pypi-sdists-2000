@@ -26,6 +26,7 @@ from coverage.data import line_counts
 from coverage.exceptions import ConfigError
 from coverage.files import abs_file
 from coverage.misc import import_local_file
+from coverage.sqldata import SUFFIX_PATTERN
 
 from tests import testenv
 from tests.coveragetest import CoverageTest
@@ -192,7 +193,7 @@ def cant_trace_msg(concurrency: str, the_module: ModuleType | None) -> str | Non
         expected_out = None
     else:
         expected_out = (
-            f"Can't support concurrency={concurrency} with {testenv.REQUESTED_TRACER_CLASS}, "
+            f"Can't support concurrency={concurrency} with {testenv.TRACER_CLASS}, "
             + "only threads are supported."
         )
     return expected_out
@@ -363,7 +364,7 @@ class ConcurrencyTest(CoverageTest):
             assert out == (
                 "Can't support concurrency=gevent with PyTracer, only threads are supported.\n"
             )
-            pytest.skip(f"Can't run gevent with {testenv.REQUESTED_TRACER_CLASS}.")
+            pytest.skip(f"Can't run gevent with {testenv.TRACER_CLASS}.")
 
         assert out == "done\n"
 
@@ -472,7 +473,7 @@ class MultiprocessingTest(CoverageTest):
         self,
         code: str,
         expected_out: str | None,
-        the_module: ModuleType,
+        the_module: ModuleType | None,
         nprocs: int,
         start_method: str,
         concurrency: str = "multiprocessing",
@@ -505,7 +506,7 @@ class MultiprocessingTest(CoverageTest):
             assert len(out_lines) == nprocs + 1
             assert all(
                 re.fullmatch(
-                    r"(Combined data file|Skipping duplicate data) \.coverage\..*\.\d+\.X\w{6}x",
+                    rf"(Combined data file|Skipping duplicate data) \.coverage{SUFFIX_PATTERN}",
                     line,
                 )
                 for line in out_lines

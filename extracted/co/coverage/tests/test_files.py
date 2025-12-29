@@ -10,7 +10,7 @@ import os
 import os.path
 import re
 
-from typing import Any, Protocol
+from typing import Any
 from collections.abc import Iterable
 from unittest import mock
 
@@ -29,6 +29,7 @@ from coverage.files import (
     flat_rootname,
     globs_to_regex,
 )
+from coverage.types import TMatcher
 
 from tests.coveragetest import CoverageTest
 from tests.helpers import os_sep
@@ -359,13 +360,6 @@ def test_invalid_globs(pattern: str, bad_word: str) -> None:
     msg = f"File pattern can't include {bad_word!r}"
     with pytest.raises(ConfigError, match=re.escape(msg)):
         globs_to_regex([pattern])
-
-
-class TMatcher(Protocol):
-    """The shape all Matchers have."""
-
-    def match(self, s: str) -> bool:
-        """Does this string match?"""
 
 
 class MatcherTest(CoverageTest):

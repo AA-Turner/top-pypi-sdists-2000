@@ -16,6 +16,7 @@ from xml.etree import ElementTree
 import pytest
 
 import coverage
+import coverage.files
 from coverage import Coverage, env
 from coverage.exceptions import NoDataError
 from coverage.files import abs_file

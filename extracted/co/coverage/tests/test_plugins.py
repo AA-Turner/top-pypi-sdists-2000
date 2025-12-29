@@ -10,7 +10,8 @@ import io
 import math
 import os.path
 
-from typing import Any, Iterable
+from collections.abc import Iterable
+from typing import Any
 from xml.etree import ElementTree
 
 import pytest

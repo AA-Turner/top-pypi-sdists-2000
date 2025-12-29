@@ -226,24 +226,46 @@ def run_tests_with_coverage(core, *runner_args):
     return status
 
 
+class CombiningMessageFilter:
+    """Coverage.combine() is all-or-nothing on messages. Summarize them."""
+
+    def __init__(self) -> None:
+        self.combined = 0
+        self.skipped = 0
+
+    def message(self, msg: str) -> None:
+        """All messages come through here, keep the data we want."""
+        if re.match(r"Combined data file", msg):
+            self.combined += 1
+        elif re.match(r"Skipping duplicate data", msg):
+            self.skipped += 1
+        else:
+            print(msg)
+
+    def combining_summary(self) -> None:
+        """Show the final combination total"""
+        print(f"Combined {self.combined} files, skipped {self.skipped}")
+
+
 def do_combine_html():
     """Combine data from a meta-coverage run, and make the HTML report."""
     import coverage
 
     os.environ["COVERAGE_HOME"] = os.getcwd()
-    cov = coverage.Coverage(config_file="metacov.ini")
-    cov.load()
-    cov.combine()
-    cov.save()
-    # A new Coverage to turn on messages. Better would be to have tighter
-    # control over message verbosity...
+    # Get all messages but filter them ourselves. Better would be to have
+    # tighter control over message verbosity...
     cov = coverage.Coverage(config_file="metacov.ini", messages=True)
-    cov.load()
+    message_filter = CombiningMessageFilter()
+    cov._message = message_filter.message
+    cov.combine()
+    message_filter.combining_summary()
+    cov.save()
     show_contexts = bool(
         os.getenv("COVERAGE_DYNCTX") or os.getenv("COVERAGE_CONTEXT"),
     )
     total = cov.html_report(show_contexts=show_contexts)
     print(f"Total: {total:.3f}%")
+    cov.json_report()
 
 
 def do_test_with_core(core, *runner_args):
