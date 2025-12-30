@@ -912,8 +912,10 @@ impl<'db> ClassType<'db> {
                             TupleSpec::Fixed(fixed_length_tuple) => {
                                 let tuple_length = fixed_length_tuple.len();
 
-                                for (index, ty) in fixed_length_tuple.elements().enumerate() {
-                                    let entry = element_type_to_indices.entry(*ty).or_default();
+                                for (index, ty) in
+                                    fixed_length_tuple.iter_all_elements().enumerate()
+                                {
+                                    let entry = element_type_to_indices.entry(ty).or_default();
                                     if let Ok(index) = i64::try_from(index) {
                                         entry.push(index);
                                     }
@@ -933,7 +935,9 @@ impl<'db> ClassType<'db> {
                             //    __getitem__(self, index: Literal[-3], /) -> float | str
                             //
                             TupleSpec::Variable(variable_length_tuple) => {
-                                for (index, ty) in variable_length_tuple.prefix.iter().enumerate() {
+                                for (index, ty) in
+                                    variable_length_tuple.prefix_elements().iter().enumerate()
+                                {
                                     if let Ok(index) = i64::try_from(index) {
                                         element_type_to_indices.entry(*ty).or_default().push(index);
                                     }
@@ -941,18 +945,18 @@ impl<'db> ClassType<'db> {
                                     let one_based_index = index + 1;
 
                                     if let Ok(i) = i64::try_from(
-                                        variable_length_tuple.suffix.len() + one_based_index,
+                                        variable_length_tuple.suffix_elements().len()
+                                            + one_based_index,
                                     ) {
                                         let overload_return = UnionType::from_elements(
                                             db,
-                                            std::iter::once(variable_length_tuple.variable).chain(
-                                                variable_length_tuple
-                                                    .prefix
-                                                    .iter()
-                                                    .rev()
-                                                    .take(one_based_index)
-                                                    .copied(),
-                                            ),
+                                            std::iter::once(variable_length_tuple.variable())
+                                                .chain(
+                                                    variable_length_tuple
+                                                        .iter_prefix_elements()
+                                                        .rev()
+                                                        .take(one_based_index),
+                                                ),
                                         );
                                         element_type_to_indices
                                             .entry(overload_return)
@@ -961,30 +965,31 @@ impl<'db> ClassType<'db> {
                                     }
                                 }
 
-                                for (index, ty) in
-                                    variable_length_tuple.suffix.iter().rev().enumerate()
+                                for (index, ty) in variable_length_tuple
+                                    .iter_suffix_elements()
+                                    .rev()
+                                    .enumerate()
                                 {
                                     if let Some(index) =
                                         index.checked_add(1).and_then(|i| i64::try_from(i).ok())
                                     {
                                         element_type_to_indices
-                                            .entry(*ty)
+                                            .entry(ty)
                                             .or_default()
                                             .push(0 - index);
                                     }
 
-                                    if let Ok(i) =
-                                        i64::try_from(variable_length_tuple.prefix.len() + index)
-                                    {
+                                    if let Ok(i) = i64::try_from(
+                                        variable_length_tuple.prefix_elements().len() + index,
+                                    ) {
                                         let overload_return = UnionType::from_elements(
                                             db,
-                                            std::iter::once(variable_length_tuple.variable).chain(
-                                                variable_length_tuple
-                                                    .suffix
-                                                    .iter()
-                                                    .take(index + 1)
-                                                    .copied(),
-                                            ),
+                                            std::iter::once(variable_length_tuple.variable())
+                                                .chain(
+                                                    variable_length_tuple
+                                                        .iter_suffix_elements()
+                                                        .take(index + 1),
+                                                ),
                                         );
                                         element_type_to_indices
                                             .entry(overload_return)
@@ -1051,7 +1056,6 @@ impl<'db> ClassType<'db> {
                             db,
                             getitem_signature,
                             CallableTypeKind::FunctionLike,
-                            false,
                         ));
                         Member::definitely_declared(getitem_type)
                     })
@@ -1080,10 +1084,10 @@ impl<'db> ClassType<'db> {
                         if tuple_len.minimum() == 0 && tuple_len.maximum().is_none() {
                             // If the tuple has no length restrictions,
                             // any iterable is allowed as long as the iterable has the correct element type.
-                            let mut tuple_elements = tuple.all_elements();
+                            let mut tuple_elements = tuple.iter_all_elements();
                             iterable_parameter = iterable_parameter.with_annotated_type(
                                 KnownClass::Iterable
-                                    .to_specialized_instance(db, [*tuple_elements.next().unwrap()]),
+                                    .to_specialized_instance(db, [tuple_elements.next().unwrap()]),
                             );
                             assert_eq!(
                                 tuple_elements.next(),
@@ -1218,8 +1222,7 @@ impl<'db> ClassType<'db> {
             let dunder_new_bound_method = CallableType::new(
                 db,
                 dunder_new_signature.bind_self(db, Some(instance_ty)),
-                CallableTypeKind::FunctionLike,
-                false,
+                CallableTypeKind::Regular,
             );
 
             if returns_non_subclass {
@@ -1289,8 +1292,7 @@ impl<'db> ClassType<'db> {
                 Some(CallableType::new(
                     db,
                     synthesized_dunder_init_signature,
-                    CallableTypeKind::FunctionLike,
-                    false,
+                    CallableTypeKind::Regular,
                 ))
             } else {
                 None
@@ -2123,7 +2125,6 @@ impl<'db> ClassLiteral<'db> {
                     db,
                     callable_ty.signatures(db),
                     CallableTypeKind::FunctionLike,
-                    callable_ty.is_top_materialization(db),
                 )),
                 Type::Union(union) => {
                     union.map(db, |element| into_function_like_callable(db, *element))
@@ -2768,7 +2769,6 @@ impl<'db> ClassLiteral<'db> {
                             Some(Type::none(db)),
                         )),
                         CallableTypeKind::FunctionLike,
-                        false,
                     )));
                 }
 
@@ -2795,7 +2795,6 @@ impl<'db> ClassLiteral<'db> {
                     db,
                     CallableSignature::from_overloads(overloads),
                     CallableTypeKind::FunctionLike,
-                    false,
                 )))
             }
             (CodeGeneratorKind::TypedDict, "__getitem__") => {
@@ -2823,7 +2822,6 @@ impl<'db> ClassLiteral<'db> {
                     db,
                     CallableSignature::from_overloads(overloads),
                     CallableTypeKind::FunctionLike,
-                    false,
                 )))
             }
             (CodeGeneratorKind::TypedDict, "__delitem__") => {
@@ -2855,7 +2853,6 @@ impl<'db> ClassLiteral<'db> {
                             Some(Type::none(db)),
                         )),
                         CallableTypeKind::FunctionLike,
-                        false,
                     )));
                 }
 
@@ -2881,7 +2878,6 @@ impl<'db> ClassLiteral<'db> {
                     db,
                     CallableSignature::from_overloads(overloads),
                     CallableTypeKind::FunctionLike,
-                    false,
                 )))
             }
             (CodeGeneratorKind::TypedDict, "get") => {
@@ -2989,7 +2985,6 @@ impl<'db> ClassLiteral<'db> {
                     db,
                     CallableSignature::from_overloads(overloads),
                     CallableTypeKind::FunctionLike,
-                    false,
                 )))
             }
             (CodeGeneratorKind::TypedDict, "pop") => {
@@ -3049,7 +3044,6 @@ impl<'db> ClassLiteral<'db> {
                     db,
                     CallableSignature::from_overloads(overloads),
                     CallableTypeKind::FunctionLike,
-                    false,
                 )))
             }
             (CodeGeneratorKind::TypedDict, "setdefault") => {
@@ -3078,7 +3072,6 @@ impl<'db> ClassLiteral<'db> {
                     db,
                     CallableSignature::from_overloads(overloads),
                     CallableTypeKind::FunctionLike,
-                    false,
                 )))
             }
             (CodeGeneratorKind::TypedDict, "update") => {
@@ -5124,27 +5117,46 @@ impl KnownClass {
         db: &'db dyn Db,
         specialization: impl IntoIterator<Item = Type<'db>>,
     ) -> Option<ClassType<'db>> {
+        fn to_specialized_class_type_impl<'db>(
+            db: &'db dyn Db,
+            class: KnownClass,
+            class_literal: ClassLiteral<'db>,
+            specialization: Box<[Type<'db>]>,
+            generic_context: GenericContext<'db>,
+        ) -> ClassType<'db> {
+            if specialization.len() != generic_context.len(db) {
+                // a cache of the `KnownClass`es that we have already seen mismatched-arity
+                // specializations for (and therefore that we've already logged a warning for)
+                static MESSAGES: LazyLock<Mutex<FxHashSet<KnownClass>>> =
+                    LazyLock::new(Mutex::default);
+                if MESSAGES.lock().unwrap().insert(class) {
+                    tracing::info!(
+                        "Wrong number of types when specializing {}. \
+                     Falling back to default specialization for the symbol instead.",
+                        class.display(db)
+                    );
+                }
+                return class_literal.default_specialization(db);
+            }
+
+            class_literal
+                .apply_specialization(db, |_| generic_context.specialize(db, specialization))
+        }
+
         let Type::ClassLiteral(class_literal) = self.to_class_literal(db) else {
             return None;
         };
+
         let generic_context = class_literal.generic_context(db)?;
-
         let types = specialization.into_iter().collect::<Box<[_]>>();
-        if types.len() != generic_context.len(db) {
-            // a cache of the `KnownClass`es that we have already seen mismatched-arity
-            // specializations for (and therefore that we've already logged a warning for)
-            static MESSAGES: LazyLock<Mutex<FxHashSet<KnownClass>>> = LazyLock::new(Mutex::default);
-            if MESSAGES.lock().unwrap().insert(self) {
-                tracing::info!(
-                    "Wrong number of types when specializing {}. \
-                     Falling back to default specialization for the symbol instead.",
-                    self.display(db)
-                );
-            }
-            return Some(class_literal.default_specialization(db));
-        }
 
-        Some(class_literal.apply_specialization(db, |_| generic_context.specialize(db, types)))
+        Some(to_specialized_class_type_impl(
+            db,
+            self,
+            class_literal,
+            types,
+            generic_context,
+        ))
     }
 
     /// Lookup a [`KnownClass`] in typeshed and return a [`Type`]

@@ -14,7 +14,7 @@ use std::borrow::Cow;
 use std::collections::HashSet;
 use std::fmt;
 
-use itertools::{Either, Itertools};
+use itertools::Itertools;
 use ruff_db::parsed::parsed_module;
 use ruff_python_ast::name::Name;
 use rustc_hash::{FxHashMap, FxHashSet};
@@ -1622,21 +1622,6 @@ impl<'db> CallableBinding<'db> {
         )
         .entered();
 
-        // If the callable is a top materialization (e.g., `Top[Callable[..., object]]`), any call
-        // should fail because we don't know the actual signature. The type IS callable (it passes
-        // `callable()`), but it represents an infinite union of all possible callable types, so
-        // there's no valid set of arguments.
-        if let Type::Callable(callable) = self.signature_type
-            && callable.is_top_materialization(db)
-        {
-            for overload in &mut self.overloads {
-                overload
-                    .errors
-                    .push(BindingError::CalledTopCallable(self.signature_type));
-            }
-            return None;
-        }
-
         tracing::trace!(
             target: "ty_python_semantic::types::call::bind",
             matching_overload_index = ?self.matching_overload_index(),
@@ -2754,24 +2739,19 @@ impl<'a, 'db> ArgumentMatcher<'a, 'db> {
             None => VariadicArgumentType::None,
         };
 
-        let (mut argument_types, length, variable_element) = match &variadic_type {
-            VariadicArgumentType::ParamSpec(paramspec) => (
-                Either::Right(std::iter::empty()),
-                TupleLength::unknown(),
-                Some(*paramspec),
-            ),
+        let (argument_types, length, variable_element) = match &variadic_type {
+            VariadicArgumentType::ParamSpec(paramspec) => {
+                ([].as_slice(), TupleLength::unknown(), Some(*paramspec))
+            }
             VariadicArgumentType::Other(tuple) => (
-                Either::Left(tuple.all_elements().copied()),
+                tuple.all_elements(),
                 tuple.len(),
                 tuple.variable_element().copied(),
             ),
-            VariadicArgumentType::None => (
-                Either::Right(std::iter::empty()),
-                TupleLength::unknown(),
-                None,
-            ),
+            VariadicArgumentType::None => ([].as_slice(), TupleLength::unknown(), None),
         };
 
+        let mut argument_types = argument_types.iter().copied();
         let is_variable = length.is_variable();
 
         // We must be able to match up the fixed-length portion of the argument with positional
@@ -3721,6 +3701,11 @@ impl<'db> Binding<'db> {
             self.return_ty,
             &mut self.errors,
         );
+        if self.signature.parameters().is_top() {
+            self.errors
+                .push(BindingError::CalledTopCallable(self.signature_type));
+            return;
+        }
 
         // If this overload is generic, first see if we can infer a specialization of the function
         // from the arguments that were passed in.
@@ -4746,6 +4731,5 @@ fn asynccontextmanager_return_type<'db>(db: &'db dyn Db, func_ty: Type<'db>) -> 
         db,
         CallableSignature::single(new_signature),
         CallableTypeKind::FunctionLike,
-        false,
     )))
 }

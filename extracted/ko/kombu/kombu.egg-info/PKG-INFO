@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: kombu
-Version: 5.6.1
+Version: 5.6.2
 Summary: Messaging library for Python.
 Home-page: https://kombu.readthedocs.io
 Author: Ask Solem
@@ -30,7 +30,7 @@ Requires-Python: >=3.9
 License-File: LICENSE
 Requires-Dist: amqp<6.0.0,>=5.1.1
 Requires-Dist: vine==5.1.0
-Requires-Dist: tzdata>=2025.2; python_version >= "3.9"
+Requires-Dist: tzdata>=2025.2
 Requires-Dist: packaging
 Provides-Extra: msgpack
 Requires-Dist: msgpack==1.1.2; extra == "msgpack"

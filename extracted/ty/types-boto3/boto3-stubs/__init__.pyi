@@ -160,7 +160,6 @@ from types_boto3_eks.client import EKSClient
 from types_boto3_eks_auth.client import EKSAuthClient
 from types_boto3_elasticache.client import ElastiCacheClient
 from types_boto3_elasticbeanstalk.client import ElasticBeanstalkClient
-from types_boto3_elastictranscoder.client import ElasticTranscoderClient
 from types_boto3_elb.client import ElasticLoadBalancingClient
 from types_boto3_elbv2.client import ElasticLoadBalancingv2Client
 from types_boto3_emr.client import EMRClient
@@ -2992,24 +2991,6 @@ def client(
 ) -> ElasticBeanstalkClient:
     """
     Create client for ElasticBeanstalk service.
-    """
-
-@overload
-def client(
-    service_name: Literal["elastictranscoder"],
-    region_name: str | None = ...,
-    api_version: str | None = ...,
-    use_ssl: bool | None = ...,
-    verify: bool | str | None = ...,
-    endpoint_url: str | None = ...,
-    aws_access_key_id: str | None = ...,
-    aws_secret_access_key: str | None = ...,
-    aws_session_token: str | None = ...,
-    config: Config | None = ...,
-    aws_account_id: str | None = ...,
-) -> ElasticTranscoderClient:
-    """
-    Create client for ElasticTranscoder service.
     """
 
 @overload

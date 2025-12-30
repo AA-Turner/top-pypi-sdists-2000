@@ -222,6 +222,10 @@ FT.__str__ = FT.__html__
 
 # %% ../nbs/09_xml.ipynb
 @patch
+def _repr_html_(self:FT): return self.__html__()
+
+# %% ../nbs/09_xml.ipynb
+@patch
 def __eq__(self:FT, other):
     if not isinstance(other, FT): return False
     return self.tag==other.tag and self.attrs==other.attrs and self.children==other.children

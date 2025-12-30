@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pdfminer.six
-Version: 20251228
+Version: 20251229
 Summary: PDF parser and analyzer
 Author: Yusuke Shinyama, Pieter Marsman
 Author-email: Philippe Guglielmetti <pdfminer@goulu.net>
@@ -24,15 +24,6 @@ Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: charset-normalizer>=2.0.0
 Requires-Dist: cryptography>=36.0.0
-Provides-Extra: dev
-Requires-Dist: atheris; python_version < "3.12" and extra == "dev"
-Requires-Dist: black; extra == "dev"
-Requires-Dist: mypy==0.931; extra == "dev"
-Requires-Dist: nox; extra == "dev"
-Requires-Dist: pytest; extra == "dev"
-Provides-Extra: docs
-Requires-Dist: sphinx; extra == "docs"
-Requires-Dist: sphinx-argparse; extra == "docs"
 Provides-Extra: image
 Requires-Dist: Pillow; extra == "image"
 Dynamic: license-file
@@ -93,7 +84,7 @@ How to use
   ```bash
   pdf2txt.py example.pdf
 
-* Or use it with Python. 
+* Or use it with Python.
   ```python
   from pdfminer.high_level import extract_text
 
@@ -104,7 +95,14 @@ How to use
 Contributing
 ------------
 
-Be sure to read the [contribution guidelines](https://github.com/pdfminer/pdfminer.six/blob/master/CONTRIBUTING.md). 
+We welcome contributions! Whether you want to fix a bug, add a feature, or improve documentation, your help is appreciated.
+
+Please note that as a community-maintained project with limited maintainer availability, the best way to get an issue resolved is to submit a pull request yourself.
+
+To get started:
+1. Read [CONTRIBUTING.md](CONTRIBUTING.md) for setup instructions and coding standards
+2. Check out the [open issues](https://github.com/pdfminer/pdfminer.six/issues) to find something to work on
+3. Join the discussion on [Gitter](https://gitter.im/pdfminer-six/Lobby) if you have questions
 
 Acknowledgement
 ---------------

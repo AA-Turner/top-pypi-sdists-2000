@@ -94,7 +94,7 @@ pub(crate) fn register_lints(registry: &mut LintRegistryBuilder) {
     registry.register_lint(&INVALID_TYPE_VARIABLE_CONSTRAINTS);
     registry.register_lint(&MISSING_ARGUMENT);
     registry.register_lint(&NO_MATCHING_OVERLOAD);
-    registry.register_lint(&NON_SUBSCRIPTABLE);
+    registry.register_lint(&NOT_SUBSCRIPTABLE);
     registry.register_lint(&NOT_ITERABLE);
     registry.register_lint(&UNSUPPORTED_BOOL_CONVERSION);
     registry.register_lint(&PARAMETER_ALREADY_ASSIGNED);
@@ -1461,7 +1461,7 @@ declare_lint! {
     /// ```python
     /// 4[1]  # TypeError: 'int' object is not subscriptable
     /// ```
-    pub(crate) static NON_SUBSCRIPTABLE = {
+    pub(crate) static NOT_SUBSCRIPTABLE = {
         summary: "detects subscripting objects that do not support subscripting",
         status: LintStatus::stable("0.0.1-alpha.1"),
         default_level: Level::Error,
@@ -2402,24 +2402,24 @@ pub(super) fn report_index_out_of_bounds(
 }
 
 /// Emit a diagnostic declaring that a type does not support subscripting.
-pub(super) fn report_non_subscriptable(
+pub(super) fn report_not_subscriptable(
     context: &InferContext,
     node: &ast::ExprSubscript,
-    non_subscriptable_ty: Type,
+    not_subscriptable_ty: Type,
     method: &str,
 ) {
-    let Some(builder) = context.report_lint(&NON_SUBSCRIPTABLE, node) else {
+    let Some(builder) = context.report_lint(&NOT_SUBSCRIPTABLE, node) else {
         return;
     };
     if method == "__delitem__" {
         builder.into_diagnostic(format_args!(
             "Cannot delete subscript on object of type `{}` with no `{method}` method",
-            non_subscriptable_ty.display(context.db())
+            not_subscriptable_ty.display(context.db())
         ));
     } else {
         builder.into_diagnostic(format_args!(
             "Cannot subscript object of type `{}` with no `{method}` method",
-            non_subscriptable_ty.display(context.db())
+            not_subscriptable_ty.display(context.db())
         ));
     }
 }
@@ -2452,29 +2452,25 @@ fn report_invalid_assignment_with_message<'db, 'ctx: 'db, T: Ranged>(
     message: std::fmt::Arguments,
 ) -> Option<LintDiagnosticGuard<'db, 'ctx>> {
     let builder = context.report_lint(&INVALID_ASSIGNMENT, node)?;
+
+    let mut diag = builder.into_diagnostic(message);
+
     match target_ty {
         Type::ClassLiteral(class) => {
-            let mut diag = builder.into_diagnostic(format_args!(
-                "Implicit shadowing of class `{}`",
+            diag.info(format_args!(
+                "Implicit shadowing of class `{}`, add an annotation to make it explicit if this is intentional",
                 class.name(context.db()),
             ));
-            diag.info("Annotate to make it explicit if this is intentional");
-            Some(diag)
         }
         Type::FunctionLiteral(function) => {
-            let mut diag = builder.into_diagnostic(format_args!(
-                "Implicit shadowing of function `{}`",
+            diag.info(format_args!(
+                "Implicit shadowing of function `{}`, add an annotation to make it explicit if this is intentional",
                 function.name(context.db()),
             ));
-            diag.info("Annotate to make it explicit if this is intentional");
-            Some(diag)
         }
-
-        _ => {
-            let diag = builder.into_diagnostic(message);
-            Some(diag)
-        }
+        _ => {}
     }
+    Some(diag)
 }
 
 pub(super) fn report_invalid_assignment<'db>(
@@ -3532,7 +3528,7 @@ fn report_unsupported_base(
         base_type.display(db)
     ));
     diagnostic.info(format_args!(
-        "ty cannot resolve a consistent MRO for class `{}` due to this base",
+        "ty cannot resolve a consistent method resolution order (MRO) for class `{}` due to this base",
         class.name(db)
     ));
     diagnostic.info("Only class objects or `Any` are supported as class bases");
@@ -4350,8 +4346,9 @@ pub(super) fn report_unsupported_comparison<'db>(
             && let Some(TupleSpec::Fixed(rhs_spec)) = right_ty.tuple_instance_spec(db).as_deref()
             && lhs_spec.len() == rhs_spec.len()
             && let Some(position) = lhs_spec
-                .elements()
-                .zip(rhs_spec.elements())
+                .all_elements()
+                .iter()
+                .zip(rhs_spec.all_elements())
                 .position(|tup| tup == (&error.left_ty, &error.right_ty))
         {
             if error.left_ty == error.right_ty {
