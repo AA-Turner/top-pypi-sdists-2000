@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "diff_cover"
-version = "10.0.0"
+version = "10.1.0"
 description = "Run coverage and linting reports on diffs"
 authors = ["See Contributors"]
 homepage = "https://github.com/Bachmann1234/diff-cover"
@@ -40,7 +40,7 @@ diff-cover = 'diff_cover.diff_cover_tool:main'
 diff-quality = 'diff_cover.diff_quality_tool:main'
 
 [tool.poetry.dependencies]
-python = ">=3.9"
+python = ">=3.10"
 Pygments = "^2.19.1"
 Jinja2 = ">=2.7.1"
 pluggy = ">=0.13.1,<2"

@@ -84,6 +84,30 @@ options:
       - Only supported with REST, requires ONTAP 9.15.1 or later.
     type: str
     version_added: 23.2.0
+  lambda_config:
+    description:
+      - Configuration parameters for AWS Lambda proxy functionality.
+      - These option and suboptions are only supported with REST.
+    type: dict
+    version_added: 23.3.0
+    suboptions:
+      function_name:
+        description:
+          - The name of the AWS Lambda function to invoke.
+        type: str
+        required: true
+      aws_region:
+        description:
+          - The name of the AWS region.
+        type: str
+        required: true
+      aws_profile:
+        description:
+          - The name of the AWS profile to use for authentication.
+        type: str
+
+notes:
+  - Supports AWS Lambda proxy functionality when using REST. See the README file for examples.
 '''
 EXAMPLES = """
 - name: Create SnapShot
@@ -153,8 +177,13 @@ class NetAppOntapSnapshot:
             expiry_time=dict(required=False, type="str"),
             snaplock_expiry_time=dict(required=False, type="str"),
         ))
+        self.argument_spec.update(netapp_utils.na_ontap_lambda_argument_spec())
+
         self.module = AnsibleModule(
             argument_spec=self.argument_spec,
+            required_if=[
+                ['use_lambda', True, ('lambda_config',)]
+            ],
             supports_check_mode=True
         )
 
@@ -168,6 +197,8 @@ class NetAppOntapSnapshot:
         self.use_rest = self.rest_api.is_rest_supported_properties(self.parameters, unsupported_rest_properties, partially_supported_rest_properties)
 
         if not self.use_rest:
+            if self.parameters.get('use_lambda'):
+                self.module.fail_json(msg="Error: AWS Lambda proxy for ONTAP APIs is only supported with REST.")
             if self.parameters.get('expiry_time'):
                 self.module.fail_json(msg="expiry_time is currently only supported with REST on Ontap 9.6 or higher")
             if self.parameters.get('snaplock_expiry_time'):

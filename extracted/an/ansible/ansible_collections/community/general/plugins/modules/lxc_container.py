@@ -86,6 +86,12 @@ options:
   container_command:
     description:
       - Run a command within a container.
+      - The O(container_command) can be used with any state except V(absent). If used with state V(stopped) the container
+        is V(started), the command executed, and then the container V(stopped) again. Likewise if O(state=stopped) and the
+        container does not exist it is first created, V(started), the command executed, and then V(stopped). If you use a
+        C(|) in the variable you can use common script formatting within the variable itself. The O(container_command) option
+        always execute as C(bash). When using O(container_command), a log file is created in the C(/tmp/) directory which
+        contains both RV(ignore:stdout) and RV(ignore:stderr) of any command executed.
     type: str
   lxc_path:
     description:
@@ -125,8 +131,8 @@ options:
     default: false
   archive:
     description:
-      - Create an archive of a container.
-      - This creates a tarball of the running container.
+      - When set to V(true) the system attempts to create a compressed tarball of the running container. The O(archive) option
+        supports LVM backed containers and creates a snapshot of the running container when creating the archive.
     type: bool
     default: false
   archive_path:
@@ -170,14 +176,6 @@ requirements:
 notes:
   - Containers must have a unique name. If you attempt to create a container with a name that already exists in the users
     namespace the module simply returns as "unchanged".
-  - The O(container_command) can be used with any state except V(absent). If used with state V(stopped) the container is V(started),
-    the command executed, and then the container V(stopped) again. Likewise if O(state=stopped) and the container does not
-    exist it is first created, V(started), the command executed, and then V(stopped). If you use a C(|) in the variable you
-    can use common script formatting within the variable itself. The O(container_command) option always execute as C(bash).
-    When using O(container_command), a log file is created in the C(/tmp/) directory which contains both RV(ignore:stdout) and RV(ignore:stderr)
-    of any command executed.
-  - If O(archive=true) the system attempts to create a compressed tarball of the running container. The O(archive) option
-    supports LVM backed containers and creates a snapshot of the running container when creating the archive.
   - If your distro does not have a package for C(python3-lxc), which is a requirement for this module, it can be installed
     from source at U(https://github.com/lxc/python3-lxc) or installed using C(pip install lxc).
 """
@@ -409,10 +407,7 @@ lxc_container:
 """
 
 import os
-import os.path
 import re
-import shutil
-import subprocess
 import tempfile
 import time
 import shlex
@@ -428,6 +423,7 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.parsing.convert_bool import BOOLEANS_FALSE
 from ansible.module_utils.common.text.converters import to_text, to_bytes
 
+from ansible_collections.community.general.plugins.module_utils._lxc import create_script
 
 # LXC_COMPRESSION_MAP is a map of available compression types when creating
 # an archive of a container.
@@ -506,64 +502,6 @@ LXC_ANSIBLE_STATES = {
     "frozen": "_frozen",
     "clone": "_clone",
 }
-
-
-# This is used to attach to a running container and execute commands from
-# within the container on the host.  This will provide local access to a
-# container without using SSH.  The template will attempt to work within the
-# home directory of the user that was attached to the container and source
-# that users environment variables by default.
-ATTACH_TEMPLATE = """#!/usr/bin/env bash
-pushd "$(getent passwd $(whoami)|cut -f6 -d':')"
-    if [[ -f ".bashrc" ]];then
-        source .bashrc
-        unset HOSTNAME
-    fi
-popd
-
-# User defined command
-%(container_command)s
-"""
-
-
-def create_script(command):
-    """Write out a script onto a target.
-
-    This method should be backward compatible with Python when executing
-    from within the container.
-
-    :param command: command to run, this can be a script and can use spacing
-                    with newlines as separation.
-    :type command: ``str``
-    """
-
-    (fd, script_file) = tempfile.mkstemp(prefix="lxc-attach-script")
-    f = os.fdopen(fd, "wb")
-    try:
-        f.write(to_bytes(ATTACH_TEMPLATE % {"container_command": command}, errors="surrogate_or_strict"))
-        f.flush()
-    finally:
-        f.close()
-
-    # Ensure the script is executable.
-    os.chmod(script_file, int("0700", 8))
-
-    # Output log file.
-    stdout_file = os.fdopen(tempfile.mkstemp(prefix="lxc-attach-script-log")[0], "ab")
-
-    # Error log file.
-    stderr_file = os.fdopen(tempfile.mkstemp(prefix="lxc-attach-script-err")[0], "ab")
-
-    # Execute the script command.
-    try:
-        subprocess.Popen([script_file], stdout=stdout_file, stderr=stderr_file).communicate()
-    finally:
-        # Close the log files.
-        stderr_file.close()
-        stdout_file.close()
-
-        # Remove the script file upon completion of execution.
-        os.remove(script_file)
 
 
 class LxcContainerManagement:
@@ -869,7 +807,7 @@ class LxcContainerManagement:
             elif container_state == "stopped":
                 self._container_startup()
 
-            self.container.attach_wait(create_script, container_command)
+            self.container.attach_wait(create_script, (container_command, self.module))
             self.state_change = True
 
     def _container_startup(self, timeout=60):
@@ -1351,82 +1289,77 @@ class LxcContainerManagement:
             * Clean up
         """
 
-        # Create a temp dir
-        temp_dir = tempfile.mkdtemp()
+        with tempfile.TemporaryDirectory() as temp_dir:
+            # Set the name of the working dir, temp + container_name
+            work_dir = os.path.join(temp_dir, self.container_name)
 
-        # Set the name of the working dir, temp + container_name
-        work_dir = os.path.join(temp_dir, self.container_name)
+            # LXC container rootfs
+            lxc_rootfs = self.container.get_config_item("lxc.rootfs")
 
-        # LXC container rootfs
-        lxc_rootfs = self.container.get_config_item("lxc.rootfs")
+            # Test if the containers rootfs is a block device
+            block_backed = lxc_rootfs.startswith(os.path.join(os.sep, "dev"))
 
-        # Test if the containers rootfs is a block device
-        block_backed = lxc_rootfs.startswith(os.path.join(os.sep, "dev"))
+            # Test if the container is using overlayfs
+            overlayfs_backed = lxc_rootfs.startswith("overlayfs")
 
-        # Test if the container is using overlayfs
-        overlayfs_backed = lxc_rootfs.startswith("overlayfs")
+            mount_point = os.path.join(work_dir, "rootfs")
 
-        mount_point = os.path.join(work_dir, "rootfs")
+            # Set the snapshot name if needed
+            snapshot_name = f"{self.container_name}_lxc_snapshot"
 
-        # Set the snapshot name if needed
-        snapshot_name = f"{self.container_name}_lxc_snapshot"
+            container_state = self._get_state()
+            try:
+                # Ensure the original container is stopped or frozen
+                if container_state not in ["stopped", "frozen"]:
+                    if container_state == "running":
+                        self.container.freeze()
+                    else:
+                        self.container.stop()
 
-        container_state = self._get_state()
-        try:
-            # Ensure the original container is stopped or frozen
-            if container_state not in ["stopped", "frozen"]:
+                # Sync the container data from the container_path to work_dir
+                self._rsync_data(lxc_rootfs, temp_dir)
+
+                if block_backed:
+                    if snapshot_name not in self._lvm_lv_list():
+                        if not os.path.exists(mount_point):
+                            os.makedirs(mount_point)
+
+                        # Take snapshot
+                        size, measurement = self._get_lv_size(lv_name=self.container_name)
+                        self._lvm_snapshot_create(
+                            source_lv=self.container_name, snapshot_name=snapshot_name, snapshot_size_gb=size
+                        )
+
+                        # Mount snapshot
+                        self._lvm_lv_mount(lv_name=snapshot_name, mount_point=mount_point)
+                    else:
+                        self.failure(
+                            err=f"snapshot [ {snapshot_name} ] already exists",
+                            rc=1,
+                            msg=f"The snapshot [ {snapshot_name} ] already exists. Please clean up old snapshot of containers before continuing.",
+                        )
+                elif overlayfs_backed:
+                    lowerdir, upperdir = lxc_rootfs.split(":")[1:]
+                    self._overlayfs_mount(lowerdir=lowerdir, upperdir=upperdir, mount_point=mount_point)
+
+                # Set the state as changed and set a new fact
+                self.state_change = True
+                return self._create_tar(source_dir=work_dir)
+            finally:
+                if block_backed or overlayfs_backed:
+                    # unmount snapshot
+                    self._unmount(mount_point)
+
+                if block_backed:
+                    # Remove snapshot
+                    self._lvm_lv_remove(snapshot_name)
+
+                # Restore original state of container
                 if container_state == "running":
-                    self.container.freeze()
-                else:
-                    self.container.stop()
-
-            # Sync the container data from the container_path to work_dir
-            self._rsync_data(lxc_rootfs, temp_dir)
-
-            if block_backed:
-                if snapshot_name not in self._lvm_lv_list():
-                    if not os.path.exists(mount_point):
-                        os.makedirs(mount_point)
-
-                    # Take snapshot
-                    size, measurement = self._get_lv_size(lv_name=self.container_name)
-                    self._lvm_snapshot_create(
-                        source_lv=self.container_name, snapshot_name=snapshot_name, snapshot_size_gb=size
-                    )
-
-                    # Mount snapshot
-                    self._lvm_lv_mount(lv_name=snapshot_name, mount_point=mount_point)
-                else:
-                    self.failure(
-                        err=f"snapshot [ {snapshot_name} ] already exists",
-                        rc=1,
-                        msg=f"The snapshot [ {snapshot_name} ] already exists. Please clean up old snapshot of containers before continuing.",
-                    )
-            elif overlayfs_backed:
-                lowerdir, upperdir = lxc_rootfs.split(":")[1:]
-                self._overlayfs_mount(lowerdir=lowerdir, upperdir=upperdir, mount_point=mount_point)
-
-            # Set the state as changed and set a new fact
-            self.state_change = True
-            return self._create_tar(source_dir=work_dir)
-        finally:
-            if block_backed or overlayfs_backed:
-                # unmount snapshot
-                self._unmount(mount_point)
-
-            if block_backed:
-                # Remove snapshot
-                self._lvm_lv_remove(snapshot_name)
-
-            # Restore original state of container
-            if container_state == "running":
-                if self._get_state() == "frozen":
-                    self.container.unfreeze()
-                else:
-                    self.container.start()
-
-            # Remove tmpdir
-            shutil.rmtree(temp_dir)
+                    if self._get_state() == "frozen":
+                        self.container.unfreeze()
+                    else:
+                        self.container.start()
 
     def check_count(self, count, method):
         if count > 1:

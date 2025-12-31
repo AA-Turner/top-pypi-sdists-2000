@@ -160,6 +160,50 @@ options:
                       - Validation to ensure the attribute matches one of the provided options.
                     type: dict
 
+                  integer:
+                    description:
+                      - The integer validation for the attribute.
+                    type: dict
+                    version_added: 12.2.0
+
+                  double:
+                    description:
+                      - The double validation for the attribute.
+                    type: dict
+                    version_added: 12.2.0
+
+                  iso_date:
+                    description:
+                      - The iso-date validation for the attribute.
+                    type: dict
+                    aliases:
+                      - isoDate
+                    version_added: 12.2.0
+
+                  local_date:
+                    description:
+                      - The local-date validation for the attribute.
+                    type: dict
+                    aliases:
+                      - localDate
+                    version_added: 12.2.0
+
+                  multivalued:
+                    description:
+                      - The multivalued validation for the attribute.
+                    type: dict
+                    suboptions:
+                      min:
+                        description:
+                          - The minimum amount of values of the attribute.
+                        type: int
+                      max:
+                        description:
+                          - The maximum amount of values of the attribute.
+                        type: int
+                        required: true
+                    version_added: 12.2.0
+
               annotations:
                 description:
                   - Annotations for the attribute.
@@ -214,6 +258,18 @@ options:
                     elements: str
                     default:
                       - user
+
+              selector:
+                description:
+                  - Selector when the attribute should be added.
+                type: dict
+                version_added: 12.2.0
+                suboptions:
+                  scopes:
+                    description:
+                      - Scopes to which the attribute should be added.
+                    type: list
+                    elements: str
 
           groups:
             description:
@@ -331,6 +387,22 @@ EXAMPLES = r"""
                 length:
                   max: 255
                 person_name_prohibited_characters: {}
+              annotations: {}
+              required:
+                roles:
+                  - user
+              permissions:
+                view:
+                  - admin
+                  - user
+                edit: []
+              multivalued: false
+            - name: testAttribute
+              displayName: ${testAttribute}
+              validations:
+                integer:
+                  min: 0
+                  max: 255
               annotations: {}
               required:
                 roles:
@@ -488,6 +560,17 @@ def main():
                                         "uri": dict(type="dict"),
                                         "pattern": dict(type="dict"),
                                         "options": dict(type="dict"),
+                                        "integer": dict(type="dict"),
+                                        "double": dict(type="dict"),
+                                        "iso_date": dict(type="dict", aliases=["isoDate"]),
+                                        "local_date": dict(type="dict", aliases=["localDate"]),
+                                        "multivalued": dict(
+                                            type="dict",
+                                            options={
+                                                "min": dict(type="int", required=False),
+                                                "max": dict(type="int", required=True),
+                                            },
+                                        ),
                                     },
                                 ),
                                 "annotations": dict(type="dict"),
@@ -503,6 +586,7 @@ def main():
                                 "required": dict(
                                     type="dict", options={"roles": dict(type="list", elements="str", default=["user"])}
                                 ),
+                                "selector": dict(type="dict", options={"scopes": dict(type="list", elements="str")}),
                             },
                         ),
                         "groups": dict(
@@ -610,6 +694,12 @@ def main():
                                         attribute["validations"]["person-name-prohibited-characters"] = attribute[
                                             "validations"
                                         ].pop("personNameProhibitedCharacters")
+                                    if "isoDate" in attribute["validations"]:
+                                        attribute["validations"]["iso-date"] = attribute["validations"].pop("isoDate")
+                                    if "localDate" in attribute["validations"]:
+                                        attribute["validations"]["local-date"] = attribute["validations"].pop(
+                                            "localDate"
+                                        )
                         changeset[camel(component_param)][config_param].append(kc_user_profile_config[0])
                 # usual camelCase parameters
                 else:

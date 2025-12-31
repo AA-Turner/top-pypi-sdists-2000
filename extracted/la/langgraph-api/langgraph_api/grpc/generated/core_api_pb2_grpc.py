@@ -534,11 +534,6 @@ class ThreadsStub(object):
                 request_serializer=core__api__pb2.SetThreadJointStatusRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 _registered_method=True)
-        self.JointRollback = channel.unary_unary(
-                '/coreApi.Threads/JointRollback',
-                request_serializer=core__api__pb2.JointRollbackRequest.SerializeToString,
-                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-                _registered_method=True)
         self.SweepTTL = channel.unary_unary(
                 '/coreApi.Threads/SweepTTL',
                 request_serializer=core__api__pb2.SweepThreadsTTLRequest.SerializeToString,
@@ -611,13 +606,6 @@ class ThreadsServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def JointRollback(self, request, context):
-        """Roll back a run and update a thread's status atomically.
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
     def SweepTTL(self, request, context):
         """Delete expired threads (based on TTL configurations).
         """
@@ -676,11 +664,6 @@ def add_ThreadsServicer_to_server(servicer, server):
             'SetJointStatus': grpc.unary_unary_rpc_method_handler(
                     servicer.SetJointStatus,
                     request_deserializer=core__api__pb2.SetThreadJointStatusRequest.FromString,
-                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-            ),
-            'JointRollback': grpc.unary_unary_rpc_method_handler(
-                    servicer.JointRollback,
-                    request_deserializer=core__api__pb2.JointRollbackRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'SweepTTL': grpc.unary_unary_rpc_method_handler(
@@ -970,33 +953,6 @@ class Threads(object):
             _registered_method=True)
 
     @staticmethod
-    def JointRollback(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(
-            request,
-            target,
-            '/coreApi.Threads/JointRollback',
-            core__api__pb2.JointRollbackRequest.SerializeToString,
-            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
-
-    @staticmethod
     def SweepTTL(request,
             target,
             options=(),
@@ -1068,10 +1024,20 @@ class RunsStub(object):
                 request_serializer=core__api__pb2.StreamRunRequest.SerializeToString,
                 response_deserializer=core__api__pb2.StreamEvent.FromString,
                 _registered_method=True)
+        self.Enter = channel.unary_stream(
+                '/coreApi.Runs/Enter',
+                request_serializer=core__api__pb2.EnterRunRequest.SerializeToString,
+                response_deserializer=core__api__pb2.ControlEvent.FromString,
+                _registered_method=True)
+        self.MarkDone = channel.unary_unary(
+                '/coreApi.Runs/MarkDone',
+                request_serializer=core__api__pb2.MarkRunDoneRequest.SerializeToString,
+                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                _registered_method=True)
         self.Stats = channel.unary_unary(
                 '/coreApi.Runs/Stats',
                 request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-                response_deserializer=core__api__pb2.QueueStats.FromString,
+                response_deserializer=core__api__pb2.RunStats.FromString,
                 _registered_method=True)
         self.Next = channel.unary_unary(
                 '/coreApi.Runs/Next',
@@ -1131,8 +1097,23 @@ class RunsServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def Enter(self, request, context):
+        """Enter a run - starts heartbeat and streams control signals (internal worker method)
+        Returns a stream of interrupt/rollback signals for the specified run
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def MarkDone(self, request, context):
+        """Mark a run as done (internal worker method)
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def Stats(self, request, context):
-        """Get run queue statistics (internal method)
+        """Get run statistics (internal method)
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -1191,10 +1172,20 @@ def add_RunsServicer_to_server(servicer, server):
                     request_deserializer=core__api__pb2.StreamRunRequest.FromString,
                     response_serializer=core__api__pb2.StreamEvent.SerializeToString,
             ),
+            'Enter': grpc.unary_stream_rpc_method_handler(
+                    servicer.Enter,
+                    request_deserializer=core__api__pb2.EnterRunRequest.FromString,
+                    response_serializer=core__api__pb2.ControlEvent.SerializeToString,
+            ),
+            'MarkDone': grpc.unary_unary_rpc_method_handler(
+                    servicer.MarkDone,
+                    request_deserializer=core__api__pb2.MarkRunDoneRequest.FromString,
+                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            ),
             'Stats': grpc.unary_unary_rpc_method_handler(
                     servicer.Stats,
                     request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
-                    response_serializer=core__api__pb2.QueueStats.SerializeToString,
+                    response_serializer=core__api__pb2.RunStats.SerializeToString,
             ),
             'Next': grpc.unary_unary_rpc_method_handler(
                     servicer.Next,
@@ -1407,6 +1398,60 @@ class Runs(object):
             _registered_method=True)
 
     @staticmethod
+    def Enter(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(
+            request,
+            target,
+            '/coreApi.Runs/Enter',
+            core__api__pb2.EnterRunRequest.SerializeToString,
+            core__api__pb2.ControlEvent.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def MarkDone(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/coreApi.Runs/MarkDone',
+            core__api__pb2.MarkRunDoneRequest.SerializeToString,
+            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
     def Stats(request,
             target,
             options=(),
@@ -1422,7 +1467,7 @@ class Runs(object):
             target,
             '/coreApi.Runs/Stats',
             google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-            core__api__pb2.QueueStats.FromString,
+            core__api__pb2.RunStats.FromString,
             options,
             channel_credentials,
             insecure,

@@ -144,6 +144,7 @@ class Prepare:
             autoID=fields.auto_id,
             description=coll_description,
             enable_dynamic_field=fields.enable_dynamic_field,
+            enable_namespace=fields.enable_namespace,
         )
         for f in fields.fields:
             field_schema = schema_types.FieldSchema(
@@ -242,16 +243,7 @@ class Prepare:
             schema.struct_array_fields.append(struct_schema)
 
         for f in fields.functions:
-            function_schema = schema_types.FunctionSchema(
-                name=f.name,
-                description=f.description,
-                type=f.type,
-                input_field_names=f.input_field_names,
-                output_field_names=f.output_field_names,
-            )
-            for k, v in f.params.items():
-                kv_pair = common_types.KeyValuePair(key=str(k), value=str(v))
-                function_schema.params.append(kv_pair)
+            function_schema = cls.convert_function_to_function_schema(f)
             schema.functions.append(function_schema)
 
         return schema
@@ -345,11 +337,16 @@ class Prepare:
         if "enable_dynamic_field" in fields:
             enable_dynamic_field = fields["enable_dynamic_field"]
 
+        enable_namespace = kwargs.get("enable_namespace", False)
+        if "enable_namespace" in fields:
+            enable_namespace = fields["enable_namespace"]
+
         schema = schema_types.CollectionSchema(
             name=collection_name,
             autoID=False,
             description=fields.get("description", ""),
             enable_dynamic_field=enable_dynamic_field,
+            enable_namespace=enable_namespace,
         )
 
         primary_field, auto_id_field = None, None
@@ -363,6 +360,34 @@ class Prepare:
     @classmethod
     def drop_collection_request(cls, collection_name: str) -> milvus_types.DropCollectionRequest:
         return milvus_types.DropCollectionRequest(collection_name=collection_name)
+
+    @classmethod
+    def drop_collection_function_request(
+        cls, collection_name: str, function_name: str
+    ) -> milvus_types.DropCollectionFunctionRequest:
+        return milvus_types.DropCollectionFunctionRequest(
+            collection_name=collection_name, function_name=function_name
+        )
+
+    @classmethod
+    def add_collection_function_request(
+        cls, collection_name: str, f: Function
+    ) -> milvus_types.AddCollectionFunctionRequest:
+        function_schema = cls.convert_function_to_function_schema(f)
+        return milvus_types.AddCollectionFunctionRequest(
+            collection_name=collection_name, functionSchema=function_schema
+        )
+
+    @classmethod
+    def alter_collection_function_request(
+        cls, collection_name: str, function_name: str, f: Function
+    ) -> milvus_types.AlterCollectionFunctionRequest:
+        function_schema = cls.convert_function_to_function_schema(f)
+        return milvus_types.AlterCollectionFunctionRequest(
+            collection_name=collection_name,
+            function_name=function_name,
+            functionSchema=function_schema,
+        )
 
     @classmethod
     def add_collection_field_request(
@@ -1015,6 +1040,7 @@ class Prepare:
         struct_fields_info: Optional[Dict] = None,
         schema_timestamp: int = 0,
         enable_dynamic: bool = False,
+        namespace: Optional[str] = None,
     ):
         if not fields_info:
             raise ParamError(message="Missing collection meta to validate entities")
@@ -1026,6 +1052,7 @@ class Prepare:
             partition_name=p_name,
             num_rows=len(entities),
             schema_timestamp=schema_timestamp,
+            namespace=namespace,
         )
 
         return cls._parse_row_request(
@@ -1362,10 +1389,11 @@ class Prepare:
     def search_requests_with_expr(
         cls,
         collection_name: str,
-        data: Union[List, utils.SparseMatrixInputType],
         anns_field: str,
         param: Dict,
         limit: int,
+        data: Optional[Union[List[List[float]], utils.SparseMatrixInputType]] = None,
+        ids: Optional[Union[List[int], List[str], str, int]] = None,
         expr: Optional[str] = None,
         partition_names: Optional[List[str]] = None,
         output_fields: Optional[List[str]] = None,
@@ -1497,25 +1525,39 @@ class Prepare:
             for key, value in search_params.items()
         ]
 
-        is_embedding_list = kwargs.get(IS_EMBEDDING_LIST, False)
-        nq = entity_helper.get_input_num_rows(data)
-        plg_str = cls._prepare_placeholder_str(data, is_embedding_list)
-
-        request = milvus_types.SearchRequest(
-            collection_name=collection_name,
-            partition_names=partition_names,
-            output_fields=output_fields,
-            guarantee_timestamp=kwargs.get("guarantee_timestamp", 0),
-            use_default_consistency=use_default_consistency,
-            consistency_level=kwargs.get("consistency_level", 0),
-            nq=nq,
-            placeholder_group=plg_str,
-            dsl_type=common_types.DslType.BoolExprV1,
-            search_params=req_params,
-            expr_template_values=cls.prepare_expression_template(
-                {} if kwargs.get("expr_params") is None else kwargs.get("expr_params")
+        expr_params = kwargs.get("expr_params")
+        request_kwargs = {
+            "collection_name": collection_name,
+            "partition_names": partition_names,
+            "output_fields": output_fields,
+            "guarantee_timestamp": kwargs.get("guarantee_timestamp", 0),
+            "use_default_consistency": use_default_consistency,
+            "consistency_level": kwargs.get("consistency_level", 0),
+            "dsl_type": common_types.DslType.BoolExprV1,
+            "search_params": req_params,
+            "expr_template_values": cls.prepare_expression_template(
+                {} if expr_params is None else expr_params
             ),
-        )
+            "namespace": kwargs.get("namespace"),
+        }
+
+        is_embedding_list = kwargs.get(IS_EMBEDDING_LIST, False)
+        if data is not None:
+            request_kwargs.update(
+                nq=entity_helper.get_input_num_rows(data),
+                placeholder_group=cls._prepare_placeholder_str(data, is_embedding_list),
+            )
+        elif ids is not None:
+            request_kwargs.update(
+                nq=len(ids),
+                ids=cls._build_ids_proto(ids),
+            )
+        else:
+            err_msg = "Either data or ids must be provided"
+            raise ValueError(err_msg)
+
+        request = milvus_types.SearchRequest(**request_kwargs)
+
         if expr is not None:
             request.dsl = expr
 
@@ -1530,6 +1572,26 @@ class Prepare:
             request.highlighter.CopyFrom(Prepare.highlighter_schema(highlighter))
 
         return request
+
+    @staticmethod
+    def _build_ids_proto(ids: List[Union[int, np.integer, str]]) -> schema_types.IDs:
+        if not ids:
+            raise ParamError(message="ids must not be empty")
+
+        first = ids[0]
+
+        if isinstance(first, (bool, np.bool_)):
+            raise ParamError(message="ids must not contain boolean values")
+
+        if isinstance(first, (int, np.integer)):
+            return schema_types.IDs(
+                int_id=schema_types.LongArray(data=[int(value) for value in ids])
+            )
+
+        if isinstance(first, str):
+            return schema_types.IDs(str_id=schema_types.StringArray(data=list(ids)))
+
+        raise ParamError(message=f"Unsupported id type: {type(first)}")
 
     @classmethod
     def hybrid_search_request_with_ranker(
@@ -1561,6 +1623,7 @@ class Prepare:
             guarantee_timestamp=kwargs.get("guarantee_timestamp", 0),
             use_default_consistency=use_default_consistency,
             consistency_level=kwargs.get("consistency_level", 0),
+            namespace=kwargs.get("namespace"),
         )
 
         request.rank_params.extend(
@@ -1710,7 +1773,7 @@ class Prepare:
             for tk, tv in params.items():
                 if tk == "dim" and (not tv or not isinstance(tv, int)):
                     raise ParamError(message="dim must be of int!")
-                if tv:
+                if tv is not None:
                     kv_pair = common_types.KeyValuePair(key=str(tk), value=utils.dumps(tv))
                     index_params.extra_params.append(kv_pair)
 
@@ -1931,6 +1994,7 @@ class Prepare:
             use_default_consistency=use_default_consistency,
             consistency_level=kwargs.get("consistency_level", 0),
             expr_template_values=cls.prepare_expression_template(kwargs.get("expr_params", {})),
+            namespace=kwargs.get("namespace"),
         )
         collection_id = kwargs.get(COLLECTION_ID)
         if collection_id is not None:
@@ -2447,3 +2511,17 @@ class Prepare:
         return milvus_types.UpdateReplicateConfigurationRequest(
             replicate_configuration=replicate_configuration
         )
+
+    @staticmethod
+    def convert_function_to_function_schema(f: Function) -> schema_types.FunctionSchema:
+        function_schema = schema_types.FunctionSchema(
+            name=f.name,
+            description=f.description,
+            type=f.type,
+            input_field_names=f.input_field_names,
+            output_field_names=f.output_field_names,
+        )
+        for k, v in f.params.items():
+            kv_pair = common_types.KeyValuePair(key=str(k), value=str(v))
+            function_schema.params.append(kv_pair)
+        return function_schema

@@ -627,16 +627,18 @@ class ChatMessage(_message.Message):
     def __init__(self, id: _Optional[str] = ..., name: _Optional[str] = ..., type: _Optional[str] = ..., content: _Optional[_Union[Content, _Mapping]] = ..., additional_kwargs: _Optional[_Mapping[str, bytes]] = ..., ai: _Optional[_Union[AIFields, _Mapping]] = ..., tool: _Optional[_Union[ToolFields, _Mapping]] = ..., human: _Optional[_Union[HumanFields, _Mapping]] = ..., extensions: _Optional[_Mapping[str, bytes]] = ...) -> None: ...
 
 class ChatMessageEnvelope(_message.Message):
-    __slots__ = ("is_streaming_chunk", "namespace", "message", "metadata")
+    __slots__ = ("is_streaming_chunk", "namespace", "message", "metadata", "node_name")
     IS_STREAMING_CHUNK_FIELD_NUMBER: _ClassVar[int]
     NAMESPACE_FIELD_NUMBER: _ClassVar[int]
     MESSAGE_FIELD_NUMBER: _ClassVar[int]
     METADATA_FIELD_NUMBER: _ClassVar[int]
+    NODE_NAME_FIELD_NUMBER: _ClassVar[int]
     is_streaming_chunk: bool
     namespace: _containers.RepeatedScalarFieldContainer[str]
     message: ChatMessage
     metadata: bytes
-    def __init__(self, is_streaming_chunk: bool = ..., namespace: _Optional[_Iterable[str]] = ..., message: _Optional[_Union[ChatMessage, _Mapping]] = ..., metadata: _Optional[bytes] = ...) -> None: ...
+    node_name: str
+    def __init__(self, is_streaming_chunk: bool = ..., namespace: _Optional[_Iterable[str]] = ..., message: _Optional[_Union[ChatMessage, _Mapping]] = ..., metadata: _Optional[bytes] = ..., node_name: _Optional[str] = ...) -> None: ...
 
 class StateSnapshot(_message.Message):
     __slots__ = ("values_json", "next", "config", "metadata", "created_at", "parent_config", "tasks", "interrupts")

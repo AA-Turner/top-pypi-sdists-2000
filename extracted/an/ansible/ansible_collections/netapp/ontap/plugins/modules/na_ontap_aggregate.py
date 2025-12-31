@@ -253,7 +253,7 @@ options:
 notes:
   - Supports check_mode.
   - Supports both ZAPI and REST.
-  - Supports AWS Lambda proxy functionality when using REST.
+  - Supports AWS Lambda proxy functionality when using REST. See README for example usage.
 
 '''
 
@@ -415,12 +415,12 @@ class NetAppOntapAggregate:
         partially_supported_rest_properties = [['service_state', (9, 11, 1)], ['tags', (9, 13, 1)]]
         self.use_rest = self.rest_api.is_rest_supported_properties(self.parameters, unsupported_rest_properties, partially_supported_rest_properties)
         if not self.use_rest:
+            if self.parameters.get('use_lambda'):
+                self.module.fail_json(msg="Error: AWS Lambda proxy for ONTAP APIs is only supported with REST.")
             if not netapp_utils.has_netapp_lib():
                 self.module.fail_json(msg=netapp_utils.netapp_lib_is_required())
             if 'tags' in self.parameters:
                 self.module.fail_json(msg="Error: tags only supported with REST.")
-            if self.parameters.get('use_lambda'):
-                self.module.fail_json(msg="Error: AWS Lambda proxy for ONTAP APIs is only supported with REST.")
             self.server = netapp_utils.setup_na_ontap_zapi(module=self.module)
 
         if self.parameters['state'] == 'present':
@@ -763,6 +763,8 @@ class NetAppOntapAggregate:
             self.aggregate_offline()
         if modify.get('raid_type'):
             self.patch_aggr_rest('modify', {'block_storage': {'primary': {'raid_type': modify['raid_type']}}})
+        if modify.get('encryption') is not None:
+            self.patch_aggr_rest('modify encryption for', {'data_encryption': {'software_encryption_enabled': modify['encryption']}})
 
     def attach_object_store_to_aggr(self):
         """
@@ -1018,8 +1020,8 @@ class NetAppOntapAggregate:
             block_storage['mirror'] = mirror
         if block_storage:
             body['block_storage'] = block_storage
-        if self.parameters.get('encryption'):
-            body['data_encryption'] = {'software_encryption_enabled': True}
+        if self.parameters.get('encryption') is not None:
+            body['data_encryption'] = {'software_encryption_enabled': self.parameters['encryption']}
         if self.parameters.get('snaplock_type'):
             body['snaplock_type'] = self.parameters['snaplock_type']
         if self.parameters.get('tags') is not None:

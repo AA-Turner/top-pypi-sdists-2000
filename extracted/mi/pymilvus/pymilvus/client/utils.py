@@ -185,6 +185,9 @@ def len_of(field_data: Any) -> int:
         raise MilvusException(message="Unsupported scalar type")
 
     if field_data.HasField("vectors"):
+        if len(field_data.valid_data) > 0:
+            return len(field_data.valid_data)
+
         dim = field_data.vectors.dim
         if field_data.vectors.HasField("float_vector"):
             total_len = len(field_data.vectors.float_vector.data)
@@ -312,7 +315,11 @@ def get_server_type(host: str):
 
 
 def dumps(v: Union[dict, str]) -> str:
-    return orjson.dumps(v).decode(Config.EncodeProtocol) if isinstance(v, dict) else str(v)
+    # Use JSON serialization for dicts to ensure proper formatting
+    # For other types (strings, numbers, booleans), use str() to maintain compatibility
+    if isinstance(v, dict):
+        return orjson.dumps(v).decode(Config.EncodeProtocol)
+    return str(v)
 
 
 class SciPyHelper:

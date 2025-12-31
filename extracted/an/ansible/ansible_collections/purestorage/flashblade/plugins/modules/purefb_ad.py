@@ -39,8 +39,10 @@ options:
   state:
     description:
     - Define whether the AD sccount is deleted or not
+    - Test state will perform a test against the suppied account name
+    - Rotate will force a keytab rotation for the specified account
     default: present
-    choices: [ absent, present ]
+    choices: [ absent, present, test, rotate ]
     type: str
   computer:
     description:
@@ -64,8 +66,8 @@ options:
     - The encryption types that will be supported for use by clients for Kerberos authentication
     type: list
     elements: str
-    choices: [ aes256-sha1, aes128-sha1, arcfour-hmac]
-    default: aes256-sha1
+    choices: [ aes256-cts-hmac-sha1-96, aes128-cts-hmac-sha1-96, arcfour-hma ]
+    default: aes256-cts-hmac-sha1-96
   join_ou:
     description:
     - Location where the Computer account will be created. e.g. OU=Arrays,OU=Storage.
@@ -94,7 +96,7 @@ options:
     elements: str
   service_principals:
     description:
-    - A list of either FQDNs or SPNs for registering services with the domain.
+    - A list of SPNs for registering services with the domain.
     - If not specified B(Computer Name.Domain) is used
     type: list
     elements: str
@@ -118,6 +120,12 @@ options:
     elements: str
     choices: ['nfs', 'cifs', 'HOST', '']
     default: ''
+  server:
+    description:
+    - Name of the local array server into which the AD account is added
+    - Do not provide if the AD account is to connect to the default server
+    version_added: "1.23.0"
+    type: str
   local_only:
     description:
     - Do a local-only delete of an active directory account
@@ -131,6 +139,7 @@ EXAMPLES = r"""
 - name: Create new AD account
   purestorage.flashblade.purefb_ad:
     name: ad_account
+    server: local_server
     computer: FLASHBLADE
     domain: acme.com
     username: Administrator
@@ -169,6 +178,7 @@ EXAMPLES = r"""
 - name: Update existing AD account
   purestorage.flashblade.purefb_ad:
     name: ad_account
+    server: local_server
     encryption:
     - aes256-cts-hmac-sha1-96
     kerberos_servers:
@@ -192,6 +202,20 @@ EXAMPLES = r"""
     name: ad_account
     fb_url: 10.10.10.2
     api_token: T-55a68eb5-c785-4720-a2ca-8b03903bf641
+
+- name: Test AD account
+  purestorage.flashblade.purefb_ad:
+    name: ad_account
+    state: test
+    fb_url: 10.10.10.2
+    api_token: T-55a68eb5-c785-4720-a2ca-8b03903bf641
+
+- name: Rotate AD account keytabs
+  purestorage.flashblade.purefb_ad:
+    name: ad_account
+    state: rotate
+    fb_url: 10.10.10.2
+    api_token: T-55a68eb5-c785-4720-a2ca-8b03903bf641
 """
 
 RETURN = r"""
@@ -199,7 +223,12 @@ RETURN = r"""
 
 HAS_PURESTORAGE = True
 try:
-    from pypureclient.flashblade import ActiveDirectoryPost, ActiveDirectoryPatch
+    from pypureclient.flashblade import (
+        ActiveDirectoryPost,
+        ActiveDirectoryPatch,
+        Reference,
+        KeytabPost,
+    )
 except ImportError:
     HAS_PURESTORAGE = False
 
@@ -210,6 +239,7 @@ from ansible_collections.purestorage.flashblade.plugins.module_utils.purefb impo
 )
 
 GC_SERVERS_API_VERSION = "2.12"
+SERVERS_API_VERSION = "2.16"
 
 
 def delete_account(module, blade):
@@ -238,7 +268,7 @@ def create_account(module, blade):
                 kerberos_servers=module.params["kerberos_servers"],
                 domain=module.params["domain"],
                 encryption_types=module.params["encryption"],
-                fqdns=module.params["service_principals"],
+                service_principal_names=module.params["service_principals"],
                 join_ou=module.params["join_ou"],
                 user=module.params["username"],
                 password=module.params["password"],
@@ -251,7 +281,7 @@ def create_account(module, blade):
                 kerberos_servers=module.params["kerberos_servers"],
                 domain=module.params["domain"],
                 encryption_types=module.params["encryption"],
-                fqdns=module.params["service_principals"],
+                service_principal_names=module.params["service_principals"],
                 join_ou=module.params["join_ou"],
                 user=module.params["username"],
                 password=module.params["password"],
@@ -337,19 +367,11 @@ def update_account(module, blade):
     if sorted(module.params["encryption"]) != sorted(current_ad.encryption_types):
         attr["encryption_types"] = module.params["encryption"]
         mod_ad = True
-    if len(module.params["service"]) > 1 or module.params["service"] != "":
-        module.warn(
-            "Please incorporate the service parameter into the "
+    if module.params["service"] and module.params["service"] != [""]:
+        module.fail_json(
+            msg="Please incorporate the service parameter into the "
             "service_principals parameter for better security control."
         )
-    elif module.params["service_principals"]:
-        for sprin in range(len(module.params["service_principals"])):
-            if "/" not in module.params["service_principals"][sprin]:
-                module.params["service_principals"][sprin] = (
-                    module.params["service"]
-                    + "/"
-                    + module.params["service_principals"][sprin]
-                )
     if module.params["service_principals"]:
         if current_ad.service_principal_names:
             if sorted(module.params["service_principals"]) != sorted(
@@ -383,11 +405,59 @@ def update_account(module, blade):
     module.exit_json(changed=changed)
 
 
+def test_account(module, blade):
+    """Test AD account configuration"""
+    test_response = []
+    response = list(
+        blade.get_active_directory_test(names=[module.params["name"]]).items
+    )
+    for component in range(len(response)):
+        if response[component].enabled:
+            enabled = "true"
+        else:
+            enabled = "false"
+        if response[component].success:
+            success = "true"
+        else:
+            success = "false"
+        test_response.append(
+            {
+                "component_name": response[component].component_name,
+                "description": response[component].description,
+                "destination": response[component].destination,
+                "enabled": enabled,
+                "success": success,
+                "test_type": response[component].test_type,
+                "resource_name": response[component].resource.name,
+            }
+        )
+    module.exit_json(changed=False, test_response=test_response)
+
+
+def rotate_account(module, blade):
+    """Rotate AD account keytabs"""
+    account = Reference(name=module.params["name"], resource_type="active-directory")
+    keytab = KeytabPost(source=account)
+    if not module.check_mode:
+        res = blade.post_keytabs(keytab=keytab)
+        if res.status_code != 200:
+            module.fail_json(
+                msg="Keytab rotation failed for account {0}. Error: {1}".format(
+                    module.params["name"], res.errors[0].message
+                )
+            )
+    module.exit_json(changed=True)
+
+
 def main():
     argument_spec = purefb_argument_spec()
     argument_spec.update(
         dict(
-            state=dict(type="str", default="present", choices=["absent", "present"]),
+            state=dict(
+                type="str",
+                default="present",
+                choices=["absent", "present", "test", "rotate"],
+            ),
             username=dict(type="str"),
             password=dict(type="str", no_log=True),
             name=dict(type="str", required=True),
@@ -402,6 +472,7 @@ def main():
             local_only=dict(type="bool", default=False),
             domain=dict(type="str"),
             join_ou=dict(type="str"),
+            server=dict(type="str"),
             directory_servers=dict(type="list", elements="str"),
             kerberos_servers=dict(type="list", elements="str"),
             service_principals=dict(type="list", elements="str"),
@@ -409,8 +480,12 @@ def main():
             encryption=dict(
                 type="list",
                 elements="str",
-                choices=["aes256-sha1", "aes128-sha1", "arcfour-hmac"],
-                default=["aes256-sha1"],
+                choices=[
+                    "aes256-cts-hmac-sha1-96",
+                    "aes128-cts-hmac-sha1-96",
+                    "arcfour-hma",
+                ],
+                default=["aes256-cts-hmac-sha1-96"],
             ),
         )
     )
@@ -421,21 +496,22 @@ def main():
         module.fail_json(msg="py-pure-client sdk is required for this module")
 
     blade = get_system(module)
-    module.params["encryption"] = [
-        crypt.replace("aes256-sha1", "aes256-cts-hmac-sha1-96").replace(
-            "aes128-sha1", "aes128-cts-hmac-sha1-96"
-        )
-        for crypt in module.params["encryption"]
-    ]
     state = module.params["state"]
-    exists = bool(blade.get_active_directory().total_item_count == 1)
-
-    # TODO: Check SMB mode.
-    # If mode is SMB adapter only allow nfs
-    # Only allow cifs or HOST is SMB mode is native
+    exists = bool(
+        blade.get_active_directory(names=[module.params["name"]]).status_code == 200
+    )
 
     if not module.params["computer"]:
         module.params["computer"] = module.params["name"].replace("_", "-")
+    api_version = list(blade.get_versions().items)
+    if SERVERS_API_VERSION in api_version and module.params["server"]:
+        if blade.get_servers(names=[module.params["server"]]).status_code != 200:
+            module.fail_json(
+                msg="Server {0} does not exist on this FlashBlade.".format(
+                    module.params["server"]
+                )
+            )
+        module.params["name"] = module.params["server"] + module.params["name"]
     if module.params["kerberos_servers"]:
         module.params["kerberos_servers"] = module.params["kerberos_servers"][0:5]
     if module.params["directory_servers"]:
@@ -445,6 +521,10 @@ def main():
         create_account(module, blade)
     elif exists and state == "present":
         update_account(module, blade)
+    elif exists and state == "test":
+        test_account(module, blade)
+    elif exists and state == "rotate":
+        rotate_account(module, blade)
     elif exists and state == "absent":
         delete_account(module, blade)
 

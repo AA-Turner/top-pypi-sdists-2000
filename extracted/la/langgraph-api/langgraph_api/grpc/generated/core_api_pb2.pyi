@@ -10,6 +10,7 @@ from . import enum_stream_mode_pb2 as _enum_stream_mode_pb2
 from . import enum_cancel_run_action_pb2 as _enum_cancel_run_action_pb2
 from . import enum_thread_status_pb2 as _enum_thread_status_pb2
 from . import enum_thread_stream_mode_pb2 as _enum_thread_stream_mode_pb2
+from . import enum_control_signal_pb2 as _enum_control_signal_pb2
 from google.protobuf.internal import containers as _containers
 from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
@@ -576,18 +577,16 @@ class SweepThreadsTTLRequest(_message.Message):
     def __init__(self, batch_size: _Optional[int] = ..., limit: _Optional[int] = ...) -> None: ...
 
 class SetThreadStatusRequest(_message.Message):
-    __slots__ = ("thread_id", "status", "checkpoint", "exception_json", "expected_status")
+    __slots__ = ("thread_id", "checkpoint", "exception_json", "expected_status")
     THREAD_ID_FIELD_NUMBER: _ClassVar[int]
-    STATUS_FIELD_NUMBER: _ClassVar[int]
     CHECKPOINT_FIELD_NUMBER: _ClassVar[int]
     EXCEPTION_JSON_FIELD_NUMBER: _ClassVar[int]
     EXPECTED_STATUS_FIELD_NUMBER: _ClassVar[int]
     thread_id: UUID
-    status: _enum_thread_status_pb2.ThreadStatus
     checkpoint: CheckpointPayload
     exception_json: bytes
     expected_status: _containers.RepeatedScalarFieldContainer[_enum_thread_status_pb2.ThreadStatus]
-    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., status: _Optional[_Union[_enum_thread_status_pb2.ThreadStatus, str]] = ..., checkpoint: _Optional[_Union[CheckpointPayload, _Mapping]] = ..., exception_json: _Optional[bytes] = ..., expected_status: _Optional[_Iterable[_Union[_enum_thread_status_pb2.ThreadStatus, str]]] = ...) -> None: ...
+    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., checkpoint: _Optional[_Union[CheckpointPayload, _Mapping]] = ..., exception_json: _Optional[bytes] = ..., expected_status: _Optional[_Iterable[_Union[_enum_thread_status_pb2.ThreadStatus, str]]] = ...) -> None: ...
 
 class SetThreadJointStatusRequest(_message.Message):
     __slots__ = ("thread_id", "run_id", "run_status", "graph_id", "checkpoint", "exception_json")
@@ -604,20 +603,6 @@ class SetThreadJointStatusRequest(_message.Message):
     checkpoint: CheckpointPayload
     exception_json: bytes
     def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., run_id: _Optional[_Union[UUID, _Mapping]] = ..., run_status: _Optional[str] = ..., graph_id: _Optional[str] = ..., checkpoint: _Optional[_Union[CheckpointPayload, _Mapping]] = ..., exception_json: _Optional[bytes] = ...) -> None: ...
-
-class JointRollbackRequest(_message.Message):
-    __slots__ = ("thread_id", "run_id", "graph_id", "checkpoint", "exception_json")
-    THREAD_ID_FIELD_NUMBER: _ClassVar[int]
-    RUN_ID_FIELD_NUMBER: _ClassVar[int]
-    GRAPH_ID_FIELD_NUMBER: _ClassVar[int]
-    CHECKPOINT_FIELD_NUMBER: _ClassVar[int]
-    EXCEPTION_JSON_FIELD_NUMBER: _ClassVar[int]
-    thread_id: UUID
-    run_id: UUID
-    graph_id: str
-    checkpoint: CheckpointPayload
-    exception_json: bytes
-    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., run_id: _Optional[_Union[UUID, _Mapping]] = ..., graph_id: _Optional[str] = ..., checkpoint: _Optional[_Union[CheckpointPayload, _Mapping]] = ..., exception_json: _Optional[bytes] = ...) -> None: ...
 
 class StreamThreadRequest(_message.Message):
     __slots__ = ("thread_id", "filters", "last_event_id", "stream_modes")
@@ -685,17 +670,19 @@ class Run(_message.Message):
     multitask_strategy: _enum_multitask_strategy_pb2.MultitaskStrategy
     def __init__(self, run_id: _Optional[_Union[UUID, _Mapping]] = ..., thread_id: _Optional[_Union[UUID, _Mapping]] = ..., assistant_id: _Optional[_Union[UUID, _Mapping]] = ..., created_at: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ..., updated_at: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ..., status: _Optional[_Union[_enum_run_status_pb2.RunStatus, str]] = ..., metadata: _Optional[_Union[Fragment, _Mapping]] = ..., kwargs: _Optional[_Union[RunKwargs, _Mapping]] = ..., multitask_strategy: _Optional[_Union[_enum_multitask_strategy_pb2.MultitaskStrategy, str]] = ...) -> None: ...
 
-class QueueStats(_message.Message):
-    __slots__ = ("n_pending", "n_running", "pending_runs_wait_time_max_secs", "pending_runs_wait_time_med_secs")
+class RunStats(_message.Message):
+    __slots__ = ("n_pending", "n_running", "pending_runs_wait_time_max_secs", "pending_runs_wait_time_med_secs", "pending_unblocked_runs_wait_time_max_secs")
     N_PENDING_FIELD_NUMBER: _ClassVar[int]
     N_RUNNING_FIELD_NUMBER: _ClassVar[int]
     PENDING_RUNS_WAIT_TIME_MAX_SECS_FIELD_NUMBER: _ClassVar[int]
     PENDING_RUNS_WAIT_TIME_MED_SECS_FIELD_NUMBER: _ClassVar[int]
+    PENDING_UNBLOCKED_RUNS_WAIT_TIME_MAX_SECS_FIELD_NUMBER: _ClassVar[int]
     n_pending: int
     n_running: int
     pending_runs_wait_time_max_secs: float
     pending_runs_wait_time_med_secs: float
-    def __init__(self, n_pending: _Optional[int] = ..., n_running: _Optional[int] = ..., pending_runs_wait_time_max_secs: _Optional[float] = ..., pending_runs_wait_time_med_secs: _Optional[float] = ...) -> None: ...
+    pending_unblocked_runs_wait_time_max_secs: float
+    def __init__(self, n_pending: _Optional[int] = ..., n_running: _Optional[int] = ..., pending_runs_wait_time_max_secs: _Optional[float] = ..., pending_runs_wait_time_med_secs: _Optional[float] = ..., pending_unblocked_runs_wait_time_max_secs: _Optional[float] = ...) -> None: ...
 
 class NextRunRequest(_message.Message):
     __slots__ = ("wait", "limit")
@@ -720,10 +707,11 @@ class NextRunResponse(_message.Message):
     def __init__(self, runs: _Optional[_Iterable[_Union[RunWithAttempt, _Mapping]]] = ...) -> None: ...
 
 class CreateRunRequest(_message.Message):
-    __slots__ = ("assistant_id", "kwargs_json", "filters", "thread_id", "user_id", "run_id", "status", "metadata_json", "prevent_insert_if_inflight", "multitask_strategy", "if_not_exists", "after_seconds", "thread_ttl")
+    __slots__ = ("assistant_id", "kwargs_json", "thread_filters", "assistant_filters", "thread_id", "user_id", "run_id", "status", "metadata_json", "prevent_insert_if_inflight", "multitask_strategy", "if_not_exists", "after_seconds", "thread_ttl")
     ASSISTANT_ID_FIELD_NUMBER: _ClassVar[int]
     KWARGS_JSON_FIELD_NUMBER: _ClassVar[int]
-    FILTERS_FIELD_NUMBER: _ClassVar[int]
+    THREAD_FILTERS_FIELD_NUMBER: _ClassVar[int]
+    ASSISTANT_FILTERS_FIELD_NUMBER: _ClassVar[int]
     THREAD_ID_FIELD_NUMBER: _ClassVar[int]
     USER_ID_FIELD_NUMBER: _ClassVar[int]
     RUN_ID_FIELD_NUMBER: _ClassVar[int]
@@ -736,7 +724,8 @@ class CreateRunRequest(_message.Message):
     THREAD_TTL_FIELD_NUMBER: _ClassVar[int]
     assistant_id: UUID
     kwargs_json: bytes
-    filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
+    thread_filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
+    assistant_filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
     thread_id: UUID
     user_id: str
     run_id: UUID
@@ -747,7 +736,7 @@ class CreateRunRequest(_message.Message):
     if_not_exists: CreateRunBehavior
     after_seconds: int
     thread_ttl: ThreadTTLConfig
-    def __init__(self, assistant_id: _Optional[_Union[UUID, _Mapping]] = ..., kwargs_json: _Optional[bytes] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., thread_id: _Optional[_Union[UUID, _Mapping]] = ..., user_id: _Optional[str] = ..., run_id: _Optional[_Union[UUID, _Mapping]] = ..., status: _Optional[_Union[_enum_run_status_pb2.RunStatus, str]] = ..., metadata_json: _Optional[bytes] = ..., prevent_insert_if_inflight: bool = ..., multitask_strategy: _Optional[_Union[_enum_multitask_strategy_pb2.MultitaskStrategy, str]] = ..., if_not_exists: _Optional[_Union[CreateRunBehavior, str]] = ..., after_seconds: _Optional[int] = ..., thread_ttl: _Optional[_Union[ThreadTTLConfig, _Mapping]] = ...) -> None: ...
+    def __init__(self, assistant_id: _Optional[_Union[UUID, _Mapping]] = ..., kwargs_json: _Optional[bytes] = ..., thread_filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., assistant_filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., thread_id: _Optional[_Union[UUID, _Mapping]] = ..., user_id: _Optional[str] = ..., run_id: _Optional[_Union[UUID, _Mapping]] = ..., status: _Optional[_Union[_enum_run_status_pb2.RunStatus, str]] = ..., metadata_json: _Optional[bytes] = ..., prevent_insert_if_inflight: bool = ..., multitask_strategy: _Optional[_Union[_enum_multitask_strategy_pb2.MultitaskStrategy, str]] = ..., if_not_exists: _Optional[_Union[CreateRunBehavior, str]] = ..., after_seconds: _Optional[int] = ..., thread_ttl: _Optional[_Union[ThreadTTLConfig, _Mapping]] = ...) -> None: ...
 
 class GetRunRequest(_message.Message):
     __slots__ = ("run_id", "thread_id", "filters")
@@ -848,3 +837,29 @@ class StreamRunRequest(_message.Message):
     ignore_run_not_found: bool
     cancel_on_disconnect: bool
     def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., run_id: _Optional[_Union[UUID, _Mapping]] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., last_event_id: _Optional[str] = ..., stream_modes: _Optional[_Iterable[_Union[_enum_stream_mode_pb2.StreamMode, str]]] = ..., ignore_run_not_found: bool = ..., cancel_on_disconnect: bool = ...) -> None: ...
+
+class EnterRunRequest(_message.Message):
+    __slots__ = ("run_id", "thread_id", "resumable")
+    RUN_ID_FIELD_NUMBER: _ClassVar[int]
+    THREAD_ID_FIELD_NUMBER: _ClassVar[int]
+    RESUMABLE_FIELD_NUMBER: _ClassVar[int]
+    run_id: UUID
+    thread_id: UUID
+    resumable: bool
+    def __init__(self, run_id: _Optional[_Union[UUID, _Mapping]] = ..., thread_id: _Optional[_Union[UUID, _Mapping]] = ..., resumable: bool = ...) -> None: ...
+
+class MarkRunDoneRequest(_message.Message):
+    __slots__ = ("run_id", "thread_id", "resumable")
+    RUN_ID_FIELD_NUMBER: _ClassVar[int]
+    THREAD_ID_FIELD_NUMBER: _ClassVar[int]
+    RESUMABLE_FIELD_NUMBER: _ClassVar[int]
+    run_id: UUID
+    thread_id: UUID
+    resumable: bool
+    def __init__(self, run_id: _Optional[_Union[UUID, _Mapping]] = ..., thread_id: _Optional[_Union[UUID, _Mapping]] = ..., resumable: bool = ...) -> None: ...
+
+class ControlEvent(_message.Message):
+    __slots__ = ("action",)
+    ACTION_FIELD_NUMBER: _ClassVar[int]
+    action: _enum_control_signal_pb2.ControlSignal
+    def __init__(self, action: _Optional[_Union[_enum_control_signal_pb2.ControlSignal, str]] = ...) -> None: ...

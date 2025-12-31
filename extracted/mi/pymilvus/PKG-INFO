@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pymilvus
-Version: 2.6.5
+Version: 2.6.6
 Summary: Python Sdk for Milvus
 Author-email: Milvus Team <milvus-team@zilliz.com>
 Project-URL: repository, https://github.com/milvus-io/pymilvus
@@ -41,6 +41,7 @@ Requires-Dist: pytest>=5.3.4; extra == "dev"
 Requires-Dist: pytest-cov>=5.0.0; extra == "dev"
 Requires-Dist: pytest-timeout>=1.3.4; extra == "dev"
 Requires-Dist: pytest-asyncio; extra == "dev"
+Requires-Dist: Cython>=3.0.0; extra == "dev"
 Requires-Dist: ruff<1,>=0.12.9; extra == "dev"
 Requires-Dist: black; extra == "dev"
 Requires-Dist: requests; extra == "dev"
@@ -49,6 +50,10 @@ Requires-Dist: pyarrow>=12.0.0; extra == "dev"
 Requires-Dist: azure-storage-blob; extra == "dev"
 Requires-Dist: urllib3; extra == "dev"
 Requires-Dist: scipy; extra == "dev"
+Requires-Dist: py-spy; extra == "dev"
+Requires-Dist: memray; sys_platform != "win32" and extra == "dev"
+Requires-Dist: pytest-benchmark[histogram]; extra == "dev"
+Requires-Dist: ml_dtypes; extra == "dev"
 Dynamic: license-file
 
 # Milvus Python SDK
