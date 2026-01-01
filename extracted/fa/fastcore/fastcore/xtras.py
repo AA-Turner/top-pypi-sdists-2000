@@ -466,6 +466,12 @@ def ls(self:Path, n_max=None, file_type=None, file_exts=None):
 
 # %% ../nbs/03_xtras.ipynb
 @patch
+def normpath(self:Path):
+    "Normalize path, eliminating double slashes, etc."
+    return Path(os.path.normpath(self))
+
+# %% ../nbs/03_xtras.ipynb
+@patch
 def __repr__(self:Path):
     b = getattr(Path, 'BASE_PATH', None)
     if b:
@@ -623,8 +629,9 @@ def get_source_link(func):
     mod = inspect.getmodule(func)
     module = mod.__name__.replace('.', '/') + '.py'
     try:
-        nbdev_mod = import_module(mod.__package__.split('.')[0] + '._nbdev')
-        return f"{nbdev_mod.git_url}{module}#L{line}"
+        nbdev_mod = import_module(mod.__package__.split('.')[0] + '._modidx')
+        ghurl = nested_idx(nbdev_mod.d, 'settings', 'git_url')
+        return f"{ghurl}{module}#L{line}"
     except: return f"{module}#L{line}"
 
 # %% ../nbs/03_xtras.ipynb

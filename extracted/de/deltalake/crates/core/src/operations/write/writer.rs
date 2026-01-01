@@ -11,8 +11,8 @@ use futures::{StreamExt, TryStreamExt};
 use indexmap::IndexMap;
 use object_store::buffered::BufWriter;
 use object_store::path::Path;
-use parquet::arrow::async_writer::ParquetObjectWriter;
 use parquet::arrow::AsyncArrowWriter;
+use parquet::arrow::async_writer::ParquetObjectWriter;
 use parquet::basic::Compression;
 use parquet::file::properties::WriterProperties;
 use tokio::task::JoinSet;
@@ -23,13 +23,13 @@ use crate::crate_version;
 use crate::errors::{DeltaResult, DeltaTableError};
 use crate::kernel::{Add, PartitionsExt};
 use crate::logstore::ObjectStoreRef;
-use crate::writer::record_batch::{divide_by_partition_values, PartitionResult};
+use crate::writer::record_batch::{PartitionResult, divide_by_partition_values};
 use crate::writer::stats::create_add;
 use crate::writer::utils::{
     arrow_schema_without_partitions, next_data_path, record_batch_without_partitions,
 };
 
-use parquet::format::FileMetaData;
+use parquet::file::metadata::ParquetMetaData;
 
 // TODO databricks often suggests a file size of 100mb, should we set this default?
 const DEFAULT_TARGET_FILE_SIZE: usize = 104_857_600;
@@ -75,10 +75,10 @@ fn get_max_concurrency_tasks() -> usize {
 async fn upload_parquet_file(
     mut arrow_writer: AsyncArrowWriter<ParquetObjectWriter>,
     path: Path,
-) -> DeltaResult<(Path, usize, FileMetaData)> {
+) -> DeltaResult<(Path, usize, ParquetMetaData)> {
     let metadata = arrow_writer.finish().await?;
     let file_size = arrow_writer.bytes_written();
-    Span::current().record("rows", metadata.num_rows);
+    Span::current().record("rows", metadata.file_metadata().num_rows());
     Span::current().record("size", file_size);
     debug!("multipart upload completed successfully");
 
@@ -399,7 +399,7 @@ pub struct PartitionWriter {
     num_indexed_cols: DataSkippingNumIndexedCols,
     /// Stats columns, specific columns to collect stats from, takes precedence over num_indexed_cols
     stats_columns: Option<Vec<String>>,
-    in_flight_writers: JoinSet<DeltaResult<(Path, usize, FileMetaData)>>,
+    in_flight_writers: JoinSet<DeltaResult<(Path, usize, ParquetMetaData)>>,
 }
 
 impl PartitionWriter {
@@ -508,7 +508,7 @@ impl PartitionWriter {
                 Err(e) => {
                     return Err(DeltaTableError::GenericError {
                         source: Box::new(e),
-                    })
+                    });
                 }
             }
         }
@@ -537,10 +537,10 @@ impl PartitionWriter {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::DeltaTableBuilder;
     use crate::logstore::tests::flatten_list_stream as list;
     use crate::table::config::DEFAULT_NUM_INDEX_COLS;
     use crate::writer::test_utils::*;
-    use crate::DeltaTableBuilder;
     use arrow::array::{Int32Array, StringArray};
     use arrow::datatypes::{DataType, Field, Schema as ArrowSchema};
     use std::sync::Arc;
@@ -591,7 +591,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_write_partition() {
-        let log_store = DeltaTableBuilder::from_uri(url::Url::parse("memory:///").unwrap())
+        let log_store = DeltaTableBuilder::from_url(url::Url::parse("memory:///").unwrap())
             .unwrap()
             .build_storage()
             .unwrap();
@@ -624,7 +624,7 @@ mod tests {
         ]));
         let batch = RecordBatch::try_new(schema, vec![base_str, base_int]).unwrap();
 
-        let object_store = DeltaTableBuilder::from_uri(url::Url::parse("memory:///").unwrap())
+        let object_store = DeltaTableBuilder::from_url(url::Url::parse("memory:///").unwrap())
             .unwrap()
             .build_storage()
             .unwrap()
@@ -656,7 +656,7 @@ mod tests {
         ]));
         let batch = RecordBatch::try_new(schema, vec![base_str, base_int]).unwrap();
 
-        let object_store = DeltaTableBuilder::from_uri(url::Url::parse("memory:///").unwrap())
+        let object_store = DeltaTableBuilder::from_url(url::Url::parse("memory:///").unwrap())
             .unwrap()
             .build_storage()
             .unwrap()
@@ -684,7 +684,7 @@ mod tests {
         ]));
         let batch = RecordBatch::try_new(schema, vec![base_str, base_int]).unwrap();
 
-        let object_store = DeltaTableBuilder::from_uri(url::Url::parse("memory:///").unwrap())
+        let object_store = DeltaTableBuilder::from_url(url::Url::parse("memory:///").unwrap())
             .unwrap()
             .build_storage()
             .unwrap()
@@ -700,7 +700,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_write_mismatched_schema() {
-        let log_store = DeltaTableBuilder::from_uri(url::Url::parse("memory:///").unwrap())
+        let log_store = DeltaTableBuilder::from_url(url::Url::parse("memory:///").unwrap())
             .unwrap()
             .build_storage()
             .unwrap();

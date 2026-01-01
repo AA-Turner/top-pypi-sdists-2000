@@ -15,9 +15,9 @@ if TYPE_CHECKING:
     from minio import Minio
 
 # NOTE: make sure to run these in release mode with
-# MATURIN_EXTRA_ARGS=--release make develop
+# PROFILE=python-release make develop
 # When profiling, use:
-# MATURIN_EXTRA_ARGS="--profile release-with-debug" make develop
+# PROFILE=profiling make develop
 
 
 @pytest.fixture()
@@ -40,7 +40,7 @@ def test_benchmark_write(benchmark, sample_table: Table, tmp_path: Path):
     def func(table_path: str) -> None:
         write_deltalake(table_path, sample_table)
 
-    benchmark.pedantic(func, setup=setup, rounds=5)
+    benchmark.pedantic(func, setup=setup, rounds=5, warmup_rounds=3)
 
     # TODO: figure out why this assert is failing
     # dt = DeltaTable(str(tmp_path))
@@ -70,7 +70,7 @@ def test_benchmark_write_minio(
     def func(table_path: str) -> None:
         write_deltalake(table_path, sample_table, storage_options=storage_options)
 
-    benchmark.pedantic(func, setup=setup, rounds=5)
+    benchmark.pedantic(func, setup=setup, rounds=5, warmup_rounds=3)
 
 
 @pytest.mark.pyarrow
@@ -120,7 +120,7 @@ def test_benchmark_optimize(
 
     dt = DeltaTable(tmp_path)
 
-    assert len(dt.files()) == files_per_part * len(parts)
+    assert len(dt.file_uris()) == files_per_part * len(parts)
     initial_version = dt.version()
 
     def setup():
@@ -146,7 +146,7 @@ def test_benchmark_optimize(
         )
 
     # We need to recreate the table for each benchmark run
-    results = benchmark.pedantic(func, setup=setup, rounds=5)
+    results = benchmark.pedantic(func, setup=setup, rounds=5, warmup_rounds=3)
 
     assert results["numFilesRemoved"] == 50
     assert results["numFilesAdded"] == 5
@@ -186,7 +186,7 @@ def test_benchmark_optimize_minio(
 
     dt = DeltaTable(table_path, storage_options=storage_options)
 
-    assert len(dt.files()) == files_per_part * len(parts)
+    assert len(dt.file_uris()) == files_per_part * len(parts)
     initial_version = dt.version()
 
     def setup():
@@ -207,7 +207,7 @@ def test_benchmark_optimize_minio(
             max_concurrent_tasks=max_concurrent_tasks, target_size=1024 * 1024 * 1024
         )
 
-    results = benchmark.pedantic(func, setup=setup, rounds=5)
+    results = benchmark.pedantic(func, setup=setup, rounds=5, warmup_rounds=3)
 
     assert results["numFilesRemoved"] == 50
     assert results["numFilesAdded"] == 5

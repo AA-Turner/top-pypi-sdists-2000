@@ -35,7 +35,16 @@ fn inner_to_py_err(err: DeltaTableError) -> PyErr {
         DeltaTableError::Transaction { source } => CommitFailedError::new_err(source.to_string()),
 
         // python exceptions
-        DeltaTableError::ObjectStore { source } => object_store_to_py(source),
+        DeltaTableError::ObjectStore { source } => object_store_to_py(source, None),
+        DeltaTableError::Kernel { source } => match source {
+            deltalake::kernel::Error::ObjectStore(e) => object_store_to_py(e, Some("Kernel error")),
+            other => DeltaError::new_err(DeltaTableError::Kernel { source: other }.to_string()),
+        },
+        // delta-kernel-rs error propagation
+        DeltaTableError::KernelError(source) => match source {
+            delta_kernel::Error::ObjectStore(e) => object_store_to_py(e, Some("Kernel error")),
+            other => DeltaError::new_err(DeltaTableError::KernelError(other).to_string()),
+        },
         DeltaTableError::Io { source } => PyIOError::new_err(source.to_string()),
 
         DeltaTableError::Arrow { source } => arrow_to_py(source),
@@ -91,27 +100,36 @@ impl<T: Error + 'static> Display for DisplaySourceChain<T> {
     }
 }
 
-fn object_store_to_py(err: ObjectStoreError) -> PyErr {
+fn object_store_to_py(err: ObjectStoreError, source_error_name: Option<&str>) -> PyErr {
     match err {
-        ObjectStoreError::NotFound { .. } => PyFileNotFoundError::new_err(
-            DisplaySourceChain {
+        ObjectStoreError::NotFound { .. } => {
+            let mut error = DisplaySourceChain {
                 err,
                 error_name: "FileNotFoundError".to_string(),
             }
-            .to_string(),
-        ),
+            .to_string();
+            if let Some(source_error_name) = source_error_name {
+                error = format!("{} -> {}", source_error_name, error)
+            }
+            PyFileNotFoundError::new_err(error)
+        }
+
         ObjectStoreError::Generic { source, .. }
             if source.to_string().contains("AWS_S3_ALLOW_UNSAFE_RENAME") =>
         {
             DeltaProtocolError::new_err(source.to_string())
         }
-        _ => PyIOError::new_err(
-            DisplaySourceChain {
+        _ => {
+            let mut error = DisplaySourceChain {
                 err,
                 error_name: "IOError".to_string(),
             }
-            .to_string(),
-        ),
+            .to_string();
+            if let Some(source_error_name) = source_error_name {
+                error = format!("{} -> {}", source_error_name, error)
+            }
+            PyIOError::new_err(error)
+        }
     }
 }
 
@@ -154,7 +172,7 @@ impl From<PythonError> for pyo3::PyErr {
     fn from(value: PythonError) -> Self {
         match value {
             PythonError::DeltaTable(err) => inner_to_py_err(err),
-            PythonError::ObjectStore(err) => object_store_to_py(err),
+            PythonError::ObjectStore(err) => object_store_to_py(err, None),
             PythonError::Arrow(err) => arrow_to_py(err),
             PythonError::DataFusion(err) => datafusion_to_py(err),
             PythonError::ThreadingError(err) => PyRuntimeError::new_err(err),

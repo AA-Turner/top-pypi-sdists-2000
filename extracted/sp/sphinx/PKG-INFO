@@ -1,9 +1,9 @@
 Metadata-Version: 2.4
 Name: Sphinx
-Version: 9.0.4
+Version: 9.1.0
 Summary: Python documentation generator
 Author-email: Adam Turner <aa-turner@users.noreply.github.com>, Georg Brandl <georg@python.org>
-Requires-Python: >=3.11
+Requires-Python: >=3.12
 Description-Content-Type: text/x-rst
 License-Expression: BSD-2-Clause
 Classifier: Development Status :: 5 - Production/Stable
@@ -20,7 +20,6 @@ Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 3
 Classifier: Programming Language :: Python :: 3 :: Only
-Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
 Classifier: Programming Language :: Python :: 3.14
@@ -60,7 +59,7 @@ Requires-Dist: sphinxcontrib-qthelp>=1.0.6
 Requires-Dist: sphinxcontrib-serializinghtml>=1.1.9
 Requires-Dist: Jinja2>=3.1
 Requires-Dist: Pygments>=2.17
-Requires-Dist: docutils>=0.20,<0.23
+Requires-Dist: docutils>=0.21,<0.23
 Requires-Dist: snowballstemmer>=2.2
 Requires-Dist: babel>=2.13
 Requires-Dist: alabaster>=0.7.14

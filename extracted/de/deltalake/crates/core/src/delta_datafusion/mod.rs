@@ -29,10 +29,10 @@ use std::sync::Arc;
 use arrow::array::types::UInt16Type;
 use arrow::array::{Array, DictionaryArray, RecordBatch, StringArray, TypedDictionaryArray};
 use arrow_cast::display::array_value_to_string;
-use arrow_cast::{cast_with_options, CastOptions};
+use arrow_cast::{CastOptions, cast_with_options};
 use arrow_schema::{
-    DataType as ArrowDataType, Field, Schema as ArrowSchema, SchemaRef,
-    SchemaRef as ArrowSchemaRef, TimeUnit,
+    DataType as ArrowDataType, Schema as ArrowSchema, SchemaRef, SchemaRef as ArrowSchemaRef,
+    TimeUnit,
 };
 use datafusion::catalog::{Session, TableProviderFactory};
 use datafusion::common::scalar::ScalarValue;
@@ -41,14 +41,13 @@ use datafusion::common::{
 };
 use datafusion::datasource::physical_plan::wrap_partition_type_in_dict;
 use datafusion::datasource::{MemTable, TableProvider};
+use datafusion::execution::TaskContext;
 use datafusion::execution::context::SessionContext;
 use datafusion::execution::runtime_env::RuntimeEnv;
-use datafusion::execution::FunctionRegistry;
 use datafusion::logical_expr::logical_plan::CreateExternalTable;
 use datafusion::logical_expr::utils::conjunction;
 use datafusion::logical_expr::{Expr, Extension, LogicalPlan};
 use datafusion::physical_optimizer::pruning::PruningPredicate;
-use datafusion::physical_plan::metrics::ExecutionPlanMetricsSet;
 use datafusion::physical_plan::{ExecutionPlan, Statistics};
 use datafusion_proto::logical_plan::LogicalExtensionCodec;
 use datafusion_proto::physical_plan::PhysicalExtensionCodec;
@@ -68,9 +67,13 @@ use crate::logstore::{LogStore, LogStoreRef};
 use crate::table::config::TablePropertiesExt as _;
 use crate::table::state::DeltaTableState;
 use crate::table::{Constraint, GeneratedColumn};
-use crate::{open_table, open_table_with_storage_options, DeltaTable};
+use crate::{DeltaTable, open_table, open_table_with_storage_options};
 
-pub use self::session::*;
+pub(crate) use self::session::session_state_from_session;
+pub use self::session::{
+    DeltaParserOptions, DeltaRuntimeEnvBuilder, DeltaSessionConfig, DeltaSessionContext,
+    create_session,
+};
 pub(crate) use find_files::*;
 
 pub(crate) const PATH_COLUMN: &str = "__delta_rs_path";
@@ -307,47 +310,6 @@ pub(crate) fn register_store(store: LogStoreRef, env: &RuntimeEnv) {
     let object_store_url = store.object_store_url();
     let url: &Url = object_store_url.as_ref();
     env.register_object_store(url, store.object_store(None));
-}
-
-/// The logical schema for a Deltatable is different from the protocol level schema since partition
-/// columns must appear at the end of the schema. This is to align with how partition are handled
-/// at the physical level
-pub(crate) fn df_logical_schema(
-    snapshot: &EagerSnapshot,
-    file_column_name: &Option<String>,
-    schema: Option<ArrowSchemaRef>,
-) -> DeltaResult<SchemaRef> {
-    let input_schema = match schema {
-        Some(schema) => schema,
-        None => snapshot.input_schema(),
-    };
-    let table_partition_cols = snapshot.metadata().partition_columns();
-
-    let mut fields: Vec<Arc<Field>> = input_schema
-        .fields()
-        .iter()
-        .filter(|f| !table_partition_cols.contains(f.name()))
-        .cloned()
-        .collect();
-
-    for partition_col in table_partition_cols.iter() {
-        fields.push(Arc::new(
-            input_schema
-                .field_with_name(partition_col)
-                .unwrap()
-                .to_owned(),
-        ));
-    }
-
-    if let Some(file_column_name) = file_column_name {
-        fields.push(Arc::new(Field::new(
-            file_column_name,
-            ArrowDataType::Utf8,
-            true,
-        )));
-    }
-
-    Ok(Arc::new(ArrowSchema::new(fields)))
 }
 
 pub(crate) fn get_null_of_arrow_type(t: &ArrowDataType) -> DeltaResult<ScalarValue> {
@@ -597,7 +559,7 @@ impl DeltaDataChecker {
 
     /// Return true if all the nullability checks are valid
     fn check_nullability(&self, record_batch: &RecordBatch) -> Result<bool, DeltaTableError> {
-        let mut violations = Vec::new();
+        let mut violations = Vec::with_capacity(self.non_nullable_columns.len());
         for col in self.non_nullable_columns.iter() {
             if let Some(arr) = record_batch.column_by_name(col) {
                 if arr.null_count() > 0 {
@@ -633,7 +595,7 @@ impl DeltaDataChecker {
         let table_name: String = uuid::Uuid::new_v4().to_string();
         self.ctx.register_table(&table_name, Arc::new(table))?;
 
-        let mut violations: Vec<String> = Vec::new();
+        let mut violations: Vec<String> = Vec::with_capacity(checks.len());
 
         for check in checks {
             if check.get_name().contains('.') {
@@ -688,17 +650,16 @@ impl PhysicalExtensionCodec for DeltaPhysicalCodec {
         &self,
         buf: &[u8],
         inputs: &[Arc<dyn ExecutionPlan>],
-        _registry: &dyn FunctionRegistry,
+        _registry: &TaskContext,
     ) -> Result<Arc<dyn ExecutionPlan>, DataFusionError> {
         let wire: DeltaScanWire = serde_json::from_reader(buf)
             .map_err(|_| DataFusionError::Internal("Unable to decode DeltaScan".to_string()))?;
-        let delta_scan = DeltaScan {
-            table_uri: wire.table_uri,
-            parquet_scan: (*inputs)[0].clone(),
-            config: wire.config,
-            logical_schema: wire.logical_schema,
-            metrics: ExecutionPlanMetricsSet::new(),
-        };
+        let delta_scan = DeltaScan::new(
+            &wire.table_url,
+            wire.config,
+            (*inputs)[0].clone(),
+            wire.logical_schema,
+        );
         Ok(Arc::new(delta_scan))
     }
 
@@ -712,11 +673,7 @@ impl PhysicalExtensionCodec for DeltaPhysicalCodec {
             .downcast_ref::<DeltaScan>()
             .ok_or_else(|| DataFusionError::Internal("Not a delta scan!".to_string()))?;
 
-        let wire = DeltaScanWire {
-            table_uri: delta_scan.table_uri.to_owned(),
-            config: delta_scan.config.clone(),
-            logical_schema: delta_scan.logical_schema.clone(),
-        };
+        let wire = DeltaScanWire::from(delta_scan);
         serde_json::to_writer(buf, &wire)
             .map_err(|_| DataFusionError::Internal("Unable to encode delta scan!".to_string()))?;
         Ok(())
@@ -732,7 +689,7 @@ impl LogicalExtensionCodec for DeltaLogicalCodec {
         &self,
         _buf: &[u8],
         _inputs: &[LogicalPlan],
-        _ctx: &SessionContext,
+        _ctx: &TaskContext,
     ) -> Result<Extension, DataFusionError> {
         todo!("DeltaLogicalCodec")
     }
@@ -746,7 +703,7 @@ impl LogicalExtensionCodec for DeltaLogicalCodec {
         buf: &[u8],
         _table_ref: &TableReference,
         _schema: SchemaRef,
-        _ctx: &SessionContext,
+        _ctx: &TaskContext,
     ) -> Result<Arc<dyn TableProvider>, DataFusionError> {
         let provider: DeltaTable = serde_json::from_slice(buf)
             .map_err(|_| DataFusionError::Internal("Error encoding delta table".to_string()))?;
@@ -839,8 +796,8 @@ impl From<Column> for DeltaColumn {
 
 #[cfg(test)]
 mod tests {
-    use crate::logstore::default_logstore::DefaultLogStore;
     use crate::logstore::ObjectStoreRef;
+    use crate::logstore::default_logstore::DefaultLogStore;
     use crate::operations::write::SchemaMode;
     use crate::writer::test_utils::get_delta_schema;
     use arrow::array::StructArray;
@@ -853,22 +810,22 @@ mod tests {
     use datafusion::datasource::source::DataSourceExec;
     use datafusion::logical_expr::lit;
     use datafusion::physical_plan::empty::EmptyExec;
-    use datafusion::physical_plan::{visit_execution_plan, ExecutionPlanVisitor, PhysicalExpr};
-    use datafusion::prelude::{col, SessionConfig};
+    use datafusion::physical_plan::{ExecutionPlanVisitor, PhysicalExpr, visit_execution_plan};
+    use datafusion::prelude::{SessionConfig, col};
     use datafusion_proto::physical_plan::AsExecutionPlan;
     use datafusion_proto::protobuf;
     use delta_kernel::path::{LogPathFileType, ParsedLogPath};
     use delta_kernel::schema::ArrayType;
-    use futures::{stream::BoxStream, StreamExt};
+    use futures::{StreamExt, stream::BoxStream};
     use object_store::ObjectMeta;
     use object_store::{
-        path::Path, GetOptions, GetResult, ListResult, MultipartUpload, ObjectStore,
-        PutMultipartOptions, PutOptions, PutPayload, PutResult,
+        GetOptions, GetResult, ListResult, MultipartUpload, ObjectStore, PutMultipartOptions,
+        PutOptions, PutPayload, PutResult, path::Path,
     };
     use serde_json::json;
     use std::fmt::{self, Debug, Display, Formatter};
-    use std::ops::{Deref, Range};
-    use tokio::sync::mpsc::{unbounded_channel, UnboundedReceiver, UnboundedSender};
+    use std::ops::Range;
+    use tokio::sync::mpsc::{UnboundedReceiver, UnboundedSender, unbounded_channel};
 
     use super::*;
 
@@ -962,20 +919,24 @@ mod tests {
         .unwrap();
         // Empty invariants is okay
         let invariants: Vec<Invariant> = vec![];
-        assert!(DeltaDataChecker::new_with_invariants(invariants)
-            .check_batch(&batch)
-            .await
-            .is_ok());
+        assert!(
+            DeltaDataChecker::new_with_invariants(invariants)
+                .check_batch(&batch)
+                .await
+                .is_ok()
+        );
 
         // Valid invariants return Ok(())
         let invariants = vec![
             Invariant::new("a", "a is not null"),
             Invariant::new("b", "b < 1000"),
         ];
-        assert!(DeltaDataChecker::new_with_invariants(invariants)
-            .check_batch(&batch)
-            .await
-            .is_ok());
+        assert!(
+            DeltaDataChecker::new_with_invariants(invariants)
+                .check_batch(&batch)
+                .await
+                .is_ok()
+        );
 
         // Violated invariants returns an error with list of violations
         let invariants = vec![
@@ -1032,20 +993,24 @@ mod tests {
         .unwrap();
         // Empty constraints is okay
         let constraints: Vec<Constraint> = vec![];
-        assert!(DeltaDataChecker::new_with_constraints(constraints)
-            .check_batch(&batch)
-            .await
-            .is_ok());
+        assert!(
+            DeltaDataChecker::new_with_constraints(constraints)
+                .check_batch(&batch)
+                .await
+                .is_ok()
+        );
 
         // Valid invariants return Ok(())
         let constraints = vec![
             Constraint::new("custom_a", "a is not null"),
             Constraint::new("custom_b", "b < 1000"),
         ];
-        assert!(DeltaDataChecker::new_with_constraints(constraints)
-            .check_batch(&batch)
-            .await
-            .is_ok());
+        assert!(
+            DeltaDataChecker::new_with_constraints(constraints)
+                .check_batch(&batch)
+                .await
+                .is_ok()
+        );
 
         // Violated invariants returns an error with list of violations
         let constraints = vec![
@@ -1093,10 +1058,12 @@ mod tests {
             Constraint::new("custom a", "a is not null"),
             Constraint::new("custom_b", "`b bop` < 1000"),
         ];
-        assert!(DeltaDataChecker::new_with_constraints(constraints)
-            .check_batch(&batch)
-            .await
-            .is_ok());
+        assert!(
+            DeltaDataChecker::new_with_constraints(constraints)
+                .check_batch(&batch)
+                .await
+                .is_ok()
+        );
 
         // Violated invariants returns an error with list of violations
         let constraints = vec![
@@ -1130,20 +1097,19 @@ mod tests {
             Field::new("a", ArrowDataType::Utf8, false),
             Field::new("b", ArrowDataType::Int32, false),
         ]));
-        let exec_plan = Arc::from(DeltaScan {
-            table_uri: "s3://my_bucket/this/is/some/path".to_string(),
-            parquet_scan: Arc::from(EmptyExec::new(schema.clone())),
-            config: DeltaScanConfig::default(),
-            logical_schema: schema.clone(),
-            metrics: ExecutionPlanMetricsSet::new(),
-        });
+        let exec_plan = Arc::from(DeltaScan::new(
+            &Url::parse("s3://my_bucket/this/is/some/path").unwrap(),
+            DeltaScanConfig::default(),
+            Arc::from(EmptyExec::new(schema.clone())),
+            schema.clone(),
+        ));
         let proto: protobuf::PhysicalPlanNode =
             protobuf::PhysicalPlanNode::try_from_physical_plan(exec_plan.clone(), &codec)
                 .expect("to proto");
 
-        let runtime = ctx.runtime_env();
+        let task_ctx = ctx.task_ctx();
         let result_exec_plan: Arc<dyn ExecutionPlan> = proto
-            .try_into_physical_plan(&ctx, runtime.deref(), &codec)
+            .try_into_physical_plan(&task_ctx, &codec)
             .expect("from proto");
         assert_eq!(format!("{exec_plan:?}"), format!("{result_exec_plan:?}"));
     }
@@ -1172,15 +1138,15 @@ mod tests {
 
         let df = ctx.sql("select * from test").await.unwrap();
         let actual = df.collect().await.unwrap();
-        let expected = vec! [
-                "+----+----+----+-------------------------------------------------------------------------------+",
-                "| c3 | c1 | c2 | file_source                                                                   |",
-                "+----+----+----+-------------------------------------------------------------------------------+",
-                "| 4  | 6  | a  | c1=6/c2=a/part-00011-10619b10-b691-4fd0-acc4-2a9608499d7c.c000.snappy.parquet |",
-                "| 5  | 4  | c  | c1=4/c2=c/part-00003-f525f459-34f9-46f5-82d6-d42121d883fd.c000.snappy.parquet |",
-                "| 6  | 5  | b  | c1=5/c2=b/part-00007-4e73fa3b-2c88-424a-8051-f8b54328ffdb.c000.snappy.parquet |",
-                "+----+----+----+-------------------------------------------------------------------------------+",
-            ];
+        let expected = vec![
+            "+----+----+----+-------------------------------------------------------------------------------+",
+            "| c3 | c1 | c2 | file_source                                                                   |",
+            "+----+----+----+-------------------------------------------------------------------------------+",
+            "| 4  | 6  | a  | c1=6/c2=a/part-00011-10619b10-b691-4fd0-acc4-2a9608499d7c.c000.snappy.parquet |",
+            "| 5  | 4  | c  | c1=4/c2=c/part-00003-f525f459-34f9-46f5-82d6-d42121d883fd.c000.snappy.parquet |",
+            "| 6  | 5  | b  | c1=5/c2=b/part-00007-4e73fa3b-2c88-424a-8051-f8b54328ffdb.c000.snappy.parquet |",
+            "+----+----+----+-------------------------------------------------------------------------------+",
+        ];
         assert_batches_sorted_eq!(&expected, &actual);
     }
 
@@ -1194,7 +1160,7 @@ mod tests {
             Field::new("value", ArrowDataType::Int32, true),
         ]));
 
-        let table = crate::DeltaOps::new_in_memory()
+        let table = DeltaTable::new_in_memory()
             .create()
             .with_columns(get_delta_schema().fields().cloned())
             .with_partition_columns(["modified", "id"])
@@ -1217,7 +1183,7 @@ mod tests {
         )
         .unwrap();
         // write some data
-        let table = crate::DeltaOps(table)
+        let table = table
             .write(vec![batch.clone()])
             .with_save_mode(crate::protocol::SaveMode::Append)
             .await
@@ -1284,7 +1250,7 @@ mod tests {
         )
         .unwrap();
         // write some data
-        let table = crate::DeltaOps::new_in_memory()
+        let table = DeltaTable::new_in_memory()
             .write(vec![batch.clone()])
             .with_save_mode(crate::protocol::SaveMode::Append)
             .await
@@ -1370,13 +1336,13 @@ mod tests {
         )
         .unwrap();
 
-        let table = crate::DeltaOps::new_in_memory()
+        let table = DeltaTable::new_in_memory()
             .write(vec![batch2])
             .with_save_mode(crate::protocol::SaveMode::Append)
             .await
             .unwrap();
 
-        let table = crate::DeltaOps(table)
+        let table = table
             .write(vec![batch1])
             .with_schema_mode(SchemaMode::Merge)
             .with_save_mode(crate::protocol::SaveMode::Append)
@@ -1434,7 +1400,7 @@ mod tests {
         )
         .unwrap();
 
-        let table = crate::DeltaOps::new_in_memory()
+        let table = DeltaTable::new_in_memory()
             .write(vec![batch])
             .with_save_mode(crate::protocol::SaveMode::Append)
             .await
@@ -1524,13 +1490,13 @@ mod tests {
         )
         .unwrap();
 
-        let table = crate::DeltaOps::new_in_memory()
+        let table = DeltaTable::new_in_memory()
             .write(vec![batch1])
             .with_save_mode(crate::protocol::SaveMode::Append)
             .await
             .unwrap();
 
-        let table = crate::DeltaOps(table)
+        let table = table
             .write(vec![batch2])
             .with_schema_mode(SchemaMode::Merge)
             .with_save_mode(crate::protocol::SaveMode::Append)
@@ -1591,7 +1557,7 @@ mod tests {
         )
         .unwrap();
         // write some data
-        let table = crate::DeltaOps::new_in_memory()
+        let table = DeltaTable::new_in_memory()
             .write(vec![batch.clone()])
             .with_save_mode(crate::protocol::SaveMode::Append)
             .await
@@ -1614,7 +1580,7 @@ mod tests {
     async fn test_delta_scan_builder_no_scan_config() {
         let arr: Arc<dyn Array> = Arc::new(arrow::array::StringArray::from(vec!["s"]));
         let batch = RecordBatch::try_from_iter_with_nullable(vec![("a", arr, false)]).unwrap();
-        let table = crate::DeltaOps::new_in_memory()
+        let table = DeltaTable::new_in_memory()
             .write(vec![batch])
             .with_save_mode(crate::protocol::SaveMode::Append)
             .await
@@ -1642,7 +1608,7 @@ mod tests {
     async fn test_delta_scan_builder_scan_config_disable_pushdown() {
         let arr: Arc<dyn Array> = Arc::new(arrow::array::StringArray::from(vec!["s"]));
         let batch = RecordBatch::try_from_iter_with_nullable(vec![("a", arr, false)]).unwrap();
-        let table = crate::DeltaOps::new_in_memory()
+        let table = DeltaTable::new_in_memory()
             .write(vec![batch])
             .with_save_mode(crate::protocol::SaveMode::Append)
             .await
@@ -1673,7 +1639,7 @@ mod tests {
     async fn test_delta_scan_applies_parquet_options() {
         let arr: Arc<dyn Array> = Arc::new(arrow::array::StringArray::from(vec!["s"]));
         let batch = RecordBatch::try_from_iter_with_nullable(vec![("a", arr, false)]).unwrap();
-        let table = crate::DeltaOps::new_in_memory()
+        let table = DeltaTable::new_in_memory()
             .write(vec![batch])
             .with_save_mode(crate::protocol::SaveMode::Append)
             .await
@@ -1794,11 +1760,11 @@ mod tests {
     #[tokio::test]
     async fn test_delta_scan_uses_parquet_column_pruning() {
         let small: Arc<dyn Array> = Arc::new(arrow::array::StringArray::from(vec!["a"]));
-        let large: Arc<dyn Array> = Arc::new(arrow::array::StringArray::from(vec!["b"
-            .repeat(1024)
-            .as_str()]));
+        let large: Arc<dyn Array> = Arc::new(arrow::array::StringArray::from(vec![
+            "b".repeat(1024).as_str(),
+        ]));
         let batch = RecordBatch::try_from_iter(vec![("small", small), ("large", large)]).unwrap();
-        let table = crate::DeltaOps::new_in_memory()
+        let table = DeltaTable::new_in_memory()
             .write(vec![batch])
             .with_save_mode(crate::protocol::SaveMode::Append)
             .await
@@ -1855,7 +1821,7 @@ mod tests {
     async fn test_push_down_filter_panic_2602() -> DeltaResult<()> {
         use crate::kernel::schema::{DataType, PrimitiveType};
         let ctx = SessionContext::new();
-        let table = crate::DeltaOps::new_in_memory()
+        let table = DeltaTable::new_in_memory()
             .create()
             .with_column("id", DataType::Primitive(PrimitiveType::Long), true, None)
             .with_column(
@@ -1938,10 +1904,10 @@ mod tests {
         fn from(value: &Path) -> Self {
             let dummy_url = Url::parse("dummy:///").unwrap();
             let parsed = ParsedLogPath::try_from(dummy_url.join(value.as_ref()).unwrap()).unwrap();
-            if let Some(parsed) = parsed {
-                if matches!(parsed.file_type, LogPathFileType::Commit) {
-                    return LocationType::Commit;
-                }
+            if let Some(parsed) = parsed
+                && matches!(parsed.file_type, LogPathFileType::Commit)
+            {
+                return LocationType::Commit;
             }
             if value.to_string().starts_with("part-") {
                 LocationType::Data

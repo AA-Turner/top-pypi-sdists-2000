@@ -5,10 +5,12 @@ import pathlib
 from datetime import date, datetime, timezone
 from decimal import Decimal
 from typing import TYPE_CHECKING
+from urllib.request import urlopen
 
 import pytest
 from arro3.core import Array, ChunkedArray, DataType, RecordBatchReader, Table
 from arro3.core import Field as ArrowField
+from arro3.core import Schema as ArrowSchema
 
 from deltalake import CommitProperties, DeltaTable, Transaction, write_deltalake
 from deltalake._internal import (
@@ -825,7 +827,7 @@ def get_add_actions(table: DeltaTable) -> list[str]:
 
     actions = []
 
-    for line in open(log_path).readlines():
+    for line in urlopen(log_path).readlines():
         log_entry = json.loads(line)
 
         if "add" in log_entry:
@@ -955,7 +957,7 @@ def test_try_get_table_and_table_uri(tmp_path: pathlib.Path):
     ) == _normalize_path(
         (
             delta_table,
-            str(tmp_path / "delta_table") + "/",
+            "file://" + str(tmp_path / "delta_table") + "/",
         )
     )
 
@@ -1567,10 +1569,10 @@ def test_partition_large_arrow_types(tmp_path: pathlib.Path):
     write_deltalake(tmp_path, table, partition_by=["foo"])
 
     dt = DeltaTable(tmp_path)
-    files = dt.files()
+    files = dt.file_uris()
     expected = ["foo=1", "foo=2"]
 
-    result = sorted([file.split("/")[0] for file in files])
+    result = sorted([abs_path.split(os.path.sep)[-2] for abs_path in files])
     assert expected == result
 
 
@@ -1970,7 +1972,7 @@ def test_roundtrip_cdc_evolution(tmp_path: pathlib.Path):
     approximately, that CDC files are being written
     """
     raw_commit = r"""{"metaData":{"id":"bb0fdeb2-76dd-4f5e-b1ea-845ecec8fa7e","format":{"provider":"parquet","options":{}},"schemaString":"{\"type\":\"struct\",\"fields\":[{\"name\":\"id\",\"type\":\"integer\",\"nullable\":true,\"metadata\":{}}]}","partitionColumns":[],"configuration":{"delta.enableChangeDataFeed":"true"},"createdTime":1713110303902}}
-{"protocol":{"minReaderVersion":1,"minWriterVersion":4,"writerFeatures":["changeDataFeed"]}}
+{"protocol":{"minReaderVersion":1,"minWriterVersion":7,"writerFeatures":["changeDataFeed"]}}
 """
     # timestampNtz looks like it might be an unnecessary requirement to write from Python
     os.mkdir(os.path.join(tmp_path, "_delta_log"))
@@ -2557,3 +2559,35 @@ def test_dots_in_column_names_2624(tmp_path: pathlib.Path):
     # Sorting just to make sure the equivalency matches up
     actual = dt.to_pyarrow_table().sort_by("Product.Id")
     assert expected == actual
+
+
+def test_url_encoding(tmp_path):
+    """issue ref: https://github.com/delta-io/delta-rs/issues/3939"""
+    batch_1 = Table.from_pydict(
+        {
+            "id": Array(["1 2", "2 3", "3 5", "44", "55"], DataType.string()),
+            "price": Array(list(range(5)), DataType.int64()),
+        },
+        schema=ArrowSchema(
+            fields=[
+                ArrowField("id", type=DataType.string(), nullable=True),
+                ArrowField("price", type=DataType.int64(), nullable=True),
+            ]
+        ),
+    )
+    write_deltalake(tmp_path, batch_1, partition_by="id")
+
+    batch_2 = Table.from_pydict(
+        {
+            "id": Array(["1 2"], DataType.string()),
+            "price": Array([10], DataType.int64()),
+        },
+        schema=ArrowSchema(
+            fields=[
+                ArrowField("id", type=DataType.string(), nullable=True),
+                ArrowField("price", type=DataType.int64(), nullable=True),
+            ]
+        ),
+    )
+
+    write_deltalake(tmp_path, batch_2, mode="overwrite", predicate="id = '1 2'")

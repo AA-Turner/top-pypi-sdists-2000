@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: fastmcp
-Version: 2.14.1
+Version: 2.14.2
 Summary: The fast, Pythonic way to build MCP servers and clients.
 Project-URL: Homepage, https://gofastmcp.com
 Project-URL: Repository, https://github.com/jlowin/fastmcp
@@ -23,12 +23,12 @@ Requires-Dist: cyclopts>=4.0.0
 Requires-Dist: exceptiongroup>=1.2.2
 Requires-Dist: httpx>=0.28.1
 Requires-Dist: jsonschema-path>=0.3.4
-Requires-Dist: mcp>=1.24.0
+Requires-Dist: mcp<2.0,>=1.24.0
 Requires-Dist: openapi-pydantic>=0.5.1
 Requires-Dist: platformdirs>=4.0.0
 Requires-Dist: py-key-value-aio[disk,keyring,memory]<0.4.0,>=0.3.0
 Requires-Dist: pydantic[email]>=2.11.7
-Requires-Dist: pydocket>=0.15.5
+Requires-Dist: pydocket>=0.16.3
 Requires-Dist: pyperclip>=1.9.0
 Requires-Dist: python-dotenv>=1.1.0
 Requires-Dist: rich>=13.9.4
@@ -74,6 +74,9 @@ Description-Content-Type: text/markdown
 > **This is FastMCP 2.0** — the actively maintained, production-ready framework that extends far beyond basic protocol implementation. While the SDK provides core functionality, FastMCP 2.0 delivers everything needed for production: advanced MCP patterns (server composition, proxying, OpenAPI/FastAPI generation, tool transformation), enterprise auth (Google, GitHub, WorkOS, Azure, Auth0, and more), deployment tools, testing utilities, and comprehensive client libraries.
 >
 > **For production MCP applications, install FastMCP:** `pip install fastmcp`
+
+> [!Important]
+> FastMCP 3.0 is in development and may include breaking changes. To avoid unexpected issues, pin your dependency to v2: `fastmcp<3`
 
 ---
 

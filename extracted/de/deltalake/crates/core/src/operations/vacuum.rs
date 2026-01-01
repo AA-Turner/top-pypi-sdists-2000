@@ -26,16 +26,16 @@ use std::fmt::Debug;
 use std::sync::Arc;
 
 use chrono::{Duration, Utc};
-use futures::future::{ready, BoxFuture};
+use futures::future::{BoxFuture, ready};
 use futures::{StreamExt, TryStreamExt};
-use object_store::{path::Path, Error, ObjectStore};
+use object_store::{Error, ObjectStore, path::Path};
 use serde::Serialize;
 use tracing::*;
 
 use super::{CustomExecuteHandler, Operation};
 use crate::errors::{DeltaResult, DeltaTableError};
 use crate::kernel::transaction::{CommitBuilder, CommitProperties};
-use crate::kernel::{resolve_snapshot, EagerSnapshot};
+use crate::kernel::{EagerSnapshot, resolve_snapshot};
 use crate::logstore::{LogStore, LogStoreRef};
 use crate::protocol::DeltaOperation;
 use crate::table::config::TablePropertiesExt as _;
@@ -226,7 +226,9 @@ impl VacuumBuilder {
         snapshot: &EagerSnapshot,
     ) -> Result<VacuumPlan, VacuumError> {
         if self.mode == VacuumMode::Full {
-            info!("Vacuum configured to run with 'VacuumMode::Full'. It will scan for orphaned parquet files in the Delta table directory and remove those as well!");
+            info!(
+                "Vacuum configured to run with 'VacuumMode::Full'. It will scan for orphaned parquet files in the Delta table directory and remove those as well!"
+            );
         }
 
         let min_retention = Duration::milliseconds(
@@ -264,7 +266,9 @@ impl VacuumBuilder {
                 for version in sorted_versions {
                     state.update(&self.log_store, Some(version)).await?;
                     let files: Vec<String> = state
-                        .file_paths_iter()
+                        .log_data()
+                        .into_iter()
+                        .map(|add| add.object_store_path())
                         .map(|path| path.to_string())
                         .collect();
                     debug!("keep version:{version}\n, {files:#?}");
@@ -277,7 +281,7 @@ impl VacuumBuilder {
         };
 
         let expired_tombstones =
-            get_stale_files(&snapshot, retention_period, now_millis, &self.log_store).await?;
+            get_stale_files(snapshot, retention_period, now_millis, &self.log_store).await?;
         let valid_files: HashSet<_> = snapshot
             .file_views(self.log_store.as_ref(), None)
             .map_ok(|f| f.object_store_path())
@@ -329,10 +333,16 @@ impl VacuumBuilder {
                     continue;
                 }
                 if self.mode == VacuumMode::Lite {
-                    debug!("The file {:?} was not referenced in a log file, but VacuumMode::Lite means it will not be vacuumed", &obj_meta.location);
+                    debug!(
+                        "The file {:?} was not referenced in a log file, but VacuumMode::Lite means it will not be vacuumed",
+                        &obj_meta.location
+                    );
                     continue;
                 } else {
-                    debug!("The file {:?} was not referenced in a log file, but VacuumMode::Full means it *will be vacuumed*", &obj_meta.location);
+                    debug!(
+                        "The file {:?} was not referenced in a log file, but VacuumMode::Full means it *will be vacuumed*",
+                        &obj_meta.location
+                    );
                 }
             }
 
@@ -362,7 +372,8 @@ impl std::future::IntoFuture for VacuumBuilder {
     fn into_future(self) -> Self::IntoFuture {
         let this = self;
         Box::pin(async move {
-            let snapshot = resolve_snapshot(&this.log_store, this.snapshot.clone(), true).await?;
+            let snapshot =
+                resolve_snapshot(&this.log_store, this.snapshot.clone(), true, None).await?;
             let plan = this.create_vacuum_plan(&snapshot).await?;
 
             if this.dry_run {
@@ -542,10 +553,10 @@ async fn get_stale_files(
 
 #[cfg(test)]
 mod tests {
-    use object_store::{local::LocalFileSystem, memory::InMemory, PutPayload};
+    use object_store::{PutPayload, local::LocalFileSystem, memory::InMemory};
 
     use super::*;
-    use crate::{checkpoints::create_checkpoint, ensure_table_uri, open_table};
+    use crate::{ensure_table_uri, open_table};
     use std::path::Path;
     use std::{io::Read, time::SystemTime};
     use url::Url;
@@ -713,7 +724,7 @@ mod tests {
         }
 
         let table_url = url::Url::parse("memory:///").unwrap();
-        let mut table = crate::DeltaTableBuilder::from_uri(table_url.clone())
+        let mut table = crate::DeltaTableBuilder::from_url(table_url.clone())
             .unwrap()
             .with_storage_backend(Arc::new(store), table_url)
             .build()
@@ -734,7 +745,9 @@ mod tests {
         assert_ne!(32, result.files_deleted.len());
 
         // Can we checkpoint it?
-        create_checkpoint(&table, None).await.unwrap();
+        crate::checkpoints::create_checkpoint(&table, None)
+            .await
+            .unwrap();
         table.load().await.unwrap();
         assert_eq!(Some(6), table.version());
 
@@ -838,7 +851,7 @@ mod tests {
     /// This tests the fix for the race condition where concurrent writer's files could be deleted
     #[tokio::test]
     async fn test_vacuum_full_protects_recent_uncommitted_files() -> DeltaResult<()> {
-        use chrono::{DateTime, Utc};
+        use chrono::DateTime;
         use object_store::GetResultPayload;
 
         let store = InMemory::new();
@@ -871,7 +884,7 @@ mod tests {
             .unwrap();
 
         let table_url = url::Url::parse("memory:///").unwrap();
-        let mut table = crate::DeltaTableBuilder::from_uri(table_url.clone())
+        let mut table = crate::DeltaTableBuilder::from_url(table_url.clone())
             .unwrap()
             .with_storage_backend(Arc::new(store), table_url)
             .build()
