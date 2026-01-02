@@ -3,9 +3,12 @@ import base64
 import subprocess
 import typing
 from enum import Enum
+from typing import overload
+
+from typing_extensions import Required
 
 try:
-    import websockets
+    from websockets.asyncio.client import connect as websocket_connect
 except ImportError:
     raise ImportError(
         "The websockets package is required for realtime speech-to-text. "
@@ -17,10 +20,13 @@ from .connection import RealtimeConnection
 
 class AudioFormat(str, Enum):
     """Audio format options for realtime transcription"""
+    PCM_8000 = "pcm_8000"
     PCM_16000 = "pcm_16000"
     PCM_22050 = "pcm_22050"
     PCM_24000 = "pcm_24000"
     PCM_44100 = "pcm_44100"
+    PCM_48000 = "pcm_48000"
+    ULAW_8000 = "ulaw_8000"
 
 
 class CommitStrategy(str, Enum):
@@ -28,7 +34,7 @@ class CommitStrategy(str, Enum):
     Strategy for committing transcription results.
 
     VAD: Voice Activity Detection - automatically commits when speech ends
-    MANUAL: Manual commit - requires calling commit() to finalize transcription
+    MANUAL: Manual commit - requires calling commit() to commit the segment
     """
     VAD = "vad"
     MANUAL = "manual"
@@ -48,16 +54,18 @@ class RealtimeAudioOptions(typing.TypedDict, total=False):
         min_speech_duration_ms: Minimum speech duration in milliseconds (must be between 50 and 2000)
         min_silence_duration_ms: Minimum silence duration in milliseconds (must be between 50 and 2000)
         language_code: An ISO-639-1 or ISO-639-3 language_code corresponding to the language of the audio file. Can sometimes improve transcription performance if known beforehand.
+        include_timestamps: Whether to receive the committed_transcript_with_timestamps event after committing the segment (optional, defaults to False)
     """
-    model_id: str
-    audio_format: AudioFormat
-    sample_rate: int
+    model_id: Required[str]
+    audio_format: Required[AudioFormat]
+    sample_rate: Required[int]
     commit_strategy: CommitStrategy
     vad_silence_threshold_secs: float
     vad_threshold: float
     min_speech_duration_ms: int
     min_silence_duration_ms: int
     language_code: str
+    include_timestamps: bool
 
 
 class RealtimeUrlOptions(typing.TypedDict, total=False):
@@ -72,16 +80,18 @@ class RealtimeUrlOptions(typing.TypedDict, total=False):
         vad_threshold: Threshold for voice activity detection (must be between 0.1 and 0.9)
         min_speech_duration_ms: Minimum speech duration in milliseconds (must be between 50 and 2000)
         min_silence_duration_ms: Minimum silence duration in milliseconds (must be between 50 and 2000)
-        An ISO-639-1 or ISO-639-3 language_code corresponding to the language of the audio file. Can sometimes improve transcription performance if known beforehand.
+        language_code: An ISO-639-1 or ISO-639-3 language_code corresponding to the language of the audio file. Can sometimes improve transcription performance if known beforehand.
+        include_timestamps: Whether to receive the committed_transcript_with_timestamps event after committing the segment (optional, defaults to False)
     """
-    model_id: str
-    url: str
+    model_id: Required[str]
+    url: Required[str]
     commit_strategy: CommitStrategy
     vad_silence_threshold_secs: float
     vad_threshold: float
     min_speech_duration_ms: int
     min_silence_duration_ms: int
     language_code: str
+    include_timestamps: bool
 
 
 class ScribeRealtime:
@@ -95,7 +105,7 @@ class ScribeRealtime:
     Example (URL-based):
         ```python
         connection = await elevenlabs.speech_to_text.realtime.connect({
-            "model_id": "scribe_realtime_v2",
+            "model_id": "scribe_v2_realtime",
             "url": "https://stream.example.com/audio.mp3"
         })
         ```
@@ -103,7 +113,7 @@ class ScribeRealtime:
     Example (Manual chunks):
         ```python
         connection = await elevenlabs.speech_to_text.realtime.connect({
-            "model_id": "scribe_realtime_v2",
+            "model_id": "scribe_v2_realtime",
             "audio_format": AudioFormat.PCM_16000,
             "sample_rate": 16000
         })
@@ -116,6 +126,18 @@ class ScribeRealtime:
     def __init__(self, api_key: str, base_url: str = "wss://api.elevenlabs.io"):
         self.api_key = api_key
         self.base_url = base_url
+
+    @overload
+    async def connect(
+        self,
+        options: RealtimeAudioOptions
+    ) -> RealtimeConnection: ...
+
+    @overload
+    async def connect(
+        self,
+        options: RealtimeUrlOptions
+    ) -> RealtimeConnection: ...
 
     async def connect(
         self,
@@ -138,13 +160,13 @@ class ScribeRealtime:
             ```python
             # URL-based streaming
             connection = await elevenlabs.speech_to_text.realtime.connect({
-                "model_id": "scribe_realtime_v2",
+                "model_id": "scribe_v2_realtime",
                 "url": "https://stream.example.com/audio.mp3",
             })
 
             # Manual chunks
             connection = await elevenlabs.speech_to_text.realtime.connect({
-                "model_id": "scribe_realtime_v2",
+                "model_id": "scribe_v2_realtime",
                 "audio_format": AudioFormat.PCM_16000,
                 "sample_rate": 16000,
                 "commit_strategy": CommitStrategy.MANUAL
@@ -173,6 +195,7 @@ class ScribeRealtime:
         min_speech_duration_ms = options.get("min_speech_duration_ms")
         min_silence_duration_ms = options.get("min_silence_duration_ms")
         language_code = options.get("language_code")
+        include_timestamps = options.get("include_timestamps", False)
 
         if not audio_format or not sample_rate:
             raise ValueError("audio_format and sample_rate are required for manual audio mode")
@@ -180,18 +203,18 @@ class ScribeRealtime:
         # Build WebSocket URL with query parameters
         ws_url = self._build_websocket_url(
             model_id=model_id,
-            encoding=audio_format.value,
-            sample_rate=sample_rate,
+            audio_format=audio_format.value,
             commit_strategy=commit_strategy.value,
             vad_silence_threshold_secs=vad_silence_threshold_secs,
             vad_threshold=vad_threshold,
             min_speech_duration_ms=min_speech_duration_ms,
             min_silence_duration_ms=min_silence_duration_ms,
             language_code=language_code,
+            include_timestamps=include_timestamps,
         )
 
         # Connect to WebSocket
-        websocket = await websockets.connect(
+        websocket = await websocket_connect(
             ws_url,
             additional_headers={"xi-api-key": self.api_key}
         )
@@ -219,29 +242,30 @@ class ScribeRealtime:
         min_speech_duration_ms = options.get("min_speech_duration_ms")
         min_silence_duration_ms = options.get("min_silence_duration_ms")
         language_code = options.get("language_code")
+        include_timestamps = options.get("include_timestamps", False)
 
         if not url:
             raise ValueError("url is required for URL mode")
 
         # Default to 16kHz for URL streaming
         sample_rate = 16000
-        encoding = "pcm_16000"
+        audio_format = AudioFormat.PCM_16000
 
         # Build WebSocket URL
         ws_url = self._build_websocket_url(
             model_id=model_id,
-            encoding=encoding,
-            sample_rate=sample_rate,
+            audio_format=audio_format,
             commit_strategy=commit_strategy.value,
             vad_silence_threshold_secs=vad_silence_threshold_secs,
             vad_threshold=vad_threshold,
             min_speech_duration_ms=min_speech_duration_ms,
             min_silence_duration_ms=min_silence_duration_ms,
             language_code=language_code,
+            include_timestamps=include_timestamps,
         )
 
         # Connect to WebSocket
-        websocket = await websockets.connect(
+        websocket = await websocket_connect(
             ws_url,
             additional_headers={"xi-api-key": self.api_key}
         )
@@ -262,7 +286,7 @@ class ScribeRealtime:
                 bufsize=0
             )
         except FileNotFoundError:
-            await websocket.close()
+            await websocket.close(1011, "ffmpeg not found")
             raise RuntimeError(
                 "ffmpeg is required for URL-based audio streaming. "
                 "Please install ffmpeg: https://ffmpeg.org/download.html"
@@ -333,14 +357,14 @@ class ScribeRealtime:
     def _build_websocket_url(
         self,
         model_id: str,
-        encoding: str,
-        sample_rate: int,
+        audio_format: str,
         commit_strategy: str,
         vad_silence_threshold_secs: typing.Optional[float] = None,
         vad_threshold: typing.Optional[float] = None,
         min_speech_duration_ms: typing.Optional[int] = None,
         min_silence_duration_ms: typing.Optional[int] = None,
-        language_code: typing.Optional[str] = None
+        language_code: typing.Optional[str] = None,
+        include_timestamps: typing.Optional[bool] = None
     ) -> str:
         """Build the WebSocket URL with query parameters"""
         # Extract base domain
@@ -349,8 +373,7 @@ class ScribeRealtime:
         # Build query parameters
         params = [
             f"model_id={model_id}",
-            f"encoding={encoding}",
-            f"sample_rate={sample_rate}",
+            f"audio_format={audio_format}",
             f"commit_strategy={commit_strategy}"
         ]
 
@@ -365,7 +388,9 @@ class ScribeRealtime:
             params.append(f"min_silence_duration_ms={min_silence_duration_ms}")
         if language_code is not None:
             params.append(f"language_code={language_code}")
+        if include_timestamps is not None:
+            params.append(f"include_timestamps={include_timestamps}")
 
         query_string = "&".join(params)
-        return f"{base}/v1/speech-to-text/realtime-beta?{query_string}"
+        return f"{base}/v1/speech-to-text/realtime?{query_string}"
 

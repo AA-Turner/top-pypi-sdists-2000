@@ -9,6 +9,7 @@ from .llm import Llm
 
 
 class BackupLlmOverride(UncheckedBaseModel):
+    preference: typing.Optional[typing.Literal["override"]] = None
     order: typing.List[Llm]
 
     if IS_PYDANTIC_V2:

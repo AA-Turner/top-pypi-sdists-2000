@@ -27,6 +27,8 @@ from .....schema_classes import DocumentationClass
 from .....schema_classes import DocumentationAssociationClass
 from .....schema_classes import EdgeClass
 from .....schema_classes import EmbedClass
+from .....schema_classes import EmbeddingChunkClass
+from .....schema_classes import EmbeddingModelDataClass
 from .....schema_classes import FabricTypeClass
 from .....schema_classes import FieldFormPromptAssociationClass
 from .....schema_classes import FormAssociationClass
@@ -61,6 +63,7 @@ from .....schema_classes import OwnershipSourceClass
 from .....schema_classes import OwnershipSourceTypeClass
 from .....schema_classes import OwnershipTypeClass
 from .....schema_classes import RoleAssociationClass
+from .....schema_classes import SemanticContentClass
 from .....schema_classes import SerializedValueClass
 from .....schema_classes import SerializedValueContentTypeClass
 from .....schema_classes import SerializedValueSchemaTypeClass
@@ -94,6 +97,8 @@ Documentation = DocumentationClass
 DocumentationAssociation = DocumentationAssociationClass
 Edge = EdgeClass
 Embed = EmbedClass
+EmbeddingChunk = EmbeddingChunkClass
+EmbeddingModelData = EmbeddingModelDataClass
 FabricType = FabricTypeClass
 FieldFormPromptAssociation = FieldFormPromptAssociationClass
 FormAssociation = FormAssociationClass
@@ -128,6 +133,7 @@ OwnershipSource = OwnershipSourceClass
 OwnershipSourceType = OwnershipSourceTypeClass
 OwnershipType = OwnershipTypeClass
 RoleAssociation = RoleAssociationClass
+SemanticContent = SemanticContentClass
 SerializedValue = SerializedValueClass
 SerializedValueContentType = SerializedValueContentTypeClass
 SerializedValueSchemaType = SerializedValueSchemaTypeClass

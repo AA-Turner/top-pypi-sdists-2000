@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: PyNaCl
-Version: 1.6.1
+Version: 1.6.2
 Summary: Python binding to the Networking and Cryptography (NaCl) library
 Home-page: https://github.com/pyca/pynacl/
 Author-email: The PyNaCl developers <cryptography-dev@python.org>
@@ -22,6 +22,7 @@ Classifier: Programming Language :: Python :: 3.13
 Classifier: Programming Language :: Python :: 3.14
 Requires-Python: >=3.8
 License-File: LICENSE
+License-File: licenses/LICENSE.libsodium.txt
 Requires-Dist: cffi>=1.4.1; platform_python_implementation != "PyPy" and python_version < "3.9"
 Requires-Dist: cffi>=2.0.0; platform_python_implementation != "PyPy" and python_version >= "3.9"
 Provides-Extra: tests
@@ -127,6 +128,11 @@ set the binary to use by setting the ``MAKE`` environment variable:
 
 Changelog
 =========
+
+1.6.2 (2026-01-01)
+------------------
+* Updated ``libsodium`` to 1.0.20-stable (2025-12-31 build) to resolve
+  ``CVE-2025-69277``.
 
 1.6.1 (2025-11-10)
 ------------------

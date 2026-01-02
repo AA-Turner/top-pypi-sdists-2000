@@ -4,6 +4,9 @@ import subprocess
 import typing
 from enum import Enum
 
+if typing.TYPE_CHECKING:
+    from websockets.asyncio.client import ClientConnection
+
 
 class RealtimeEvents(str, Enum):
     """Events emitted by the RealtimeConnection"""
@@ -11,9 +14,22 @@ class RealtimeEvents(str, Enum):
     CLOSE = "close"
     SESSION_STARTED = "session_started"
     PARTIAL_TRANSCRIPT = "partial_transcript"
-    FINAL_TRANSCRIPT = "final_transcript"
-    FINAL_TRANSCRIPT_WITH_TIMESTAMPS = "final_transcript_with_timestamps"
+    COMMITTED_TRANSCRIPT = "committed_transcript"
+    COMMITTED_TRANSCRIPT_WITH_TIMESTAMPS = "committed_transcript_with_timestamps"
     ERROR = "error"
+    AUTH_ERROR = "auth_error"
+    QUOTA_EXCEEDED = "quota_exceeded"
+    COMMIT_THROTTLED = "commit_throttled"
+    TRANSCRIBER_ERROR = "transcriber_error"
+    UNACCEPTED_TERMS_ERROR = "unaccepted_terms_error"
+    RATE_LIMITED = "rate_limited"
+    INPUT_ERROR = "input_error"
+    QUEUE_OVERFLOW = "queue_overflow"
+    RESOURCE_EXHAUSTED = "resource_exhausted"
+    SESSION_TIME_LIMIT_EXCEEDED = "session_time_limit_exceeded"
+    CHUNK_SIZE_EXCEEDED = "chunk_size_exceeded"
+    INSUFFICIENT_AUDIO_ACTIVITY = "insufficient_audio_activity"
+
 
 
 class RealtimeConnection:
@@ -31,7 +47,7 @@ class RealtimeConnection:
         })
 
         connection.on(RealtimeEvents.PARTIAL_TRANSCRIPT, lambda data: print(data))
-        connection.on(RealtimeEvents.FINAL_TRANSCRIPT, lambda data: print(data))
+        connection.on(RealtimeEvents.COMMITTED_TRANSCRIPT, lambda data: print(data))
 
         # Send audio
         connection.send({"audioBase64": audio_chunk})
@@ -42,7 +58,7 @@ class RealtimeConnection:
         ```
     """
 
-    def __init__(self, websocket, current_sample_rate: int, ffmpeg_process: typing.Optional[subprocess.Popen] = None):
+    def __init__(self, websocket: "ClientConnection", current_sample_rate: int, ffmpeg_process: typing.Optional[subprocess.Popen] = None):
         self.websocket = websocket
         self.current_sample_rate = current_sample_rate
         self.ffmpeg_process = ffmpeg_process
@@ -90,6 +106,24 @@ class RealtimeConnection:
                     try:
                         event = RealtimeEvents(message_type)
                         self._emit(event, data)
+
+                        # Also emit generic ERROR event for specific error types
+                        error_events = {
+                            RealtimeEvents.AUTH_ERROR,
+                            RealtimeEvents.QUOTA_EXCEEDED,
+                            RealtimeEvents.COMMIT_THROTTLED,
+                            RealtimeEvents.TRANSCRIBER_ERROR,
+                            RealtimeEvents.UNACCEPTED_TERMS_ERROR,
+                            RealtimeEvents.RATE_LIMITED,
+                            RealtimeEvents.INPUT_ERROR,
+                            RealtimeEvents.QUEUE_OVERFLOW,
+                            RealtimeEvents.RESOURCE_EXHAUSTED,
+                            RealtimeEvents.SESSION_TIME_LIMIT_EXCEEDED,
+                            RealtimeEvents.CHUNK_SIZE_EXCEEDED,
+                            RealtimeEvents.INSUFFICIENT_AUDIO_ACTIVITY,
+                        }
+                        if event in error_events:
+                            self._emit(RealtimeEvents.ERROR, data)
                     except ValueError:
                         # Unknown message type, ignore
                         pass
@@ -105,7 +139,10 @@ class RealtimeConnection:
         Send an audio chunk to the server for transcription.
 
         Args:
-            data: Dictionary containing audio_base_64 key with base64-encoded audio
+            data: Dictionary containing the following keys:
+                - audio_base_64 (str): Base64-encoded audio data to transcribe
+                - previous_text (str, optional): Previous transcript text to provide context
+                  for more accurate transcription
 
         Raises:
             RuntimeError: If the WebSocket connection is not open
@@ -115,6 +152,12 @@ class RealtimeConnection:
             # Send audio chunk
             connection.send({
                 "audio_base_64": base64_encoded_audio
+            })
+
+            # Send audio chunk with context - can only be sent with the first chunk of audio
+            connection.send({
+                "audio_base_64": base64_encoded_audio,
+                "previous_text": "Previously transcribed text for context"
             })
             ```
         """
@@ -126,14 +169,15 @@ class RealtimeConnection:
             "audio_base_64": data.get("audio_base_64", ""),
             "commit": False,
             "sample_rate": self.current_sample_rate,
+            "previous_text": data.get("previous_text"),
         }
 
         await self.websocket.send(json.dumps(message))
 
     async def commit(self) -> None:
         """
-        Commits the transcription, signaling that all audio has been sent.
-        This finalizes the transcription and triggers a FINAL_TRANSCRIPT event.
+        Commits the segment, triggering a COMMITTED_TRANSCRIPT event and clearing the buffer.
+        It's recommend to commit often when using CommitStrategy.MANUAL to keep latency low.
 
         Raises:
             RuntimeError: If the WebSocket connection is not open
@@ -148,7 +192,7 @@ class RealtimeConnection:
             for chunk in audio_chunks:
                 connection.send({"audioBase64": chunk})
 
-            # Finalize the transcription
+            # Commit the audio segment
             await connection.commit()
             ```
         """
@@ -175,15 +219,15 @@ class RealtimeConnection:
 
         Example:
             ```python
-            connection.on(RealtimeEvents.FINAL_TRANSCRIPT, async lambda data: (
-                print("Final:", data["transcript"]),
+            connection.on(RealtimeEvents.COMMITTED_TRANSCRIPT, async lambda data: (
+                print("Committed:", data["transcript"]),
                 await connection.close()
             ))
             ```
         """
         await self._cleanup()
         if self.websocket:
-            await self.websocket.close()
+            await self.websocket.close(1000, "User ended conversation")
         if self._message_task and not self._message_task.done():
             self._message_task.cancel()
             try:

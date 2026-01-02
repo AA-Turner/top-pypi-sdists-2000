@@ -14,9 +14,12 @@
 #include <Python.h>
 
 /* Sanity check on the Python version. */
-#if PY_VERSION_HEX < 0x03090000
-#error "This version of PyQt5.sip requires Python v3.9 or later"
+#if PY_VERSION_HEX < 0x030a0000
+#error "This version of PyQt5.sip requires Python v3.10 or later"
 #endif
+
+
+#include <stdbool.h>
 
 
 #ifdef __cplusplus
@@ -36,7 +39,7 @@ extern "C" {
 /* The version of the ABI. */
 #define SIP_ABI_MAJOR_VERSION       12
 #define SIP_ABI_MINOR_VERSION       17
-#define SIP_MODULE_PATCH_VERSION    1
+#define SIP_MODULE_PATCH_VERSION    2
 
 
 /*
@@ -84,8 +87,8 @@ extern "C" {
 
 
 /* The version of the code generator. */
-#define SIP_VERSION                 0x60d00
-#define SIP_VERSION_STR             "6.13.0"
+#define SIP_VERSION                 0x60f00
+#define SIP_VERSION_STR             "6.15.0"
 
 /* These are all dependent on the user-specified name of the sip module. */
 #define _SIP_MODULE_FQ_NAME         "PyQt5.sip"

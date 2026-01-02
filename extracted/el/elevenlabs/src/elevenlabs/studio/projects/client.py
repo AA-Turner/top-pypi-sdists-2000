@@ -104,6 +104,7 @@ class ProjectsClient:
         auto_convert: typing.Optional[bool] = OMIT,
         auto_assign_voices: typing.Optional[bool] = OMIT,
         source_type: typing.Optional[ProjectsCreateRequestSourceType] = OMIT,
+        voice_settings: typing.Optional[typing.List[str]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AddProjectResponseModel:
         """
@@ -181,7 +182,7 @@ class ProjectsClient:
             When the Studio project is downloaded, should the returned audio have postprocessing in order to make it compliant with audiobook normalized volume requirements
 
         pronunciation_dictionary_locators : typing.Optional[typing.List[str]]
-            A list of pronunciation dictionary locators (pronunciation_dictionary_id, version_id) encoded as a list of JSON strings for pronunciation dictionaries to be applied to the text. A list of json encoded strings is required as adding projects may occur through formData as opposed to jsonBody. To specify multiple dictionaries use multiple --form lines in your curl, such as --form 'pronunciation_dictionary_locators="{\"pronunciation_dictionary_id\":\"Vmd4Zor6fplcA7WrINey\",\"version_id\":\"hRPaxjlTdR7wFMhV4w0b\"}"' --form 'pronunciation_dictionary_locators="{\"pronunciation_dictionary_id\":\"JzWtcGQMJ6bnlWwyMo7e\",\"version_id\":\"lbmwxiLu4q6txYxgdZqn\"}"'.
+            A list of pronunciation dictionary locators (pronunciation_dictionary_id, version_id) encoded as a list of JSON strings for pronunciation dictionaries to be applied to the text. A list of json encoded strings is required as adding projects may occur through formData as opposed to jsonBody. To specify multiple dictionaries use multiple --form lines in your curl, such as --form 'pronunciation_dictionary_locators="{\\"pronunciation_dictionary_id\\":\\"Vmd4Zor6fplcA7WrINey\\",\\"version_id\\":\\"hRPaxjlTdR7wFMhV4w0b\\"}"' --form 'pronunciation_dictionary_locators="{\\"pronunciation_dictionary_id\\":\\"JzWtcGQMJ6bnlWwyMo7e\\",\\"version_id\\":\\"lbmwxiLu4q6txYxgdZqn\\"}"'.
 
         callback_url : typing.Optional[str]
 
@@ -260,6 +261,13 @@ class ProjectsClient:
         source_type : typing.Optional[ProjectsCreateRequestSourceType]
             The type of Studio project to create.
 
+        voice_settings : typing.Optional[typing.List[str]]
+                Optional voice settings overrides for the project, encoded as a list of JSON strings.
+
+                Example:
+                ["{\\"voice_id\\": \\"21m00Tcm4TlvDq8ikWAM\\", \\"stability\\": 0.7, \\"similarity_boost\\": 0.8, \\"style\\": 0.5, \\"speed\\": 1.0, \\"use_speaker_boost\\": true}"]
+
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -307,6 +315,7 @@ class ProjectsClient:
             auto_convert=auto_convert,
             auto_assign_voices=auto_assign_voices,
             source_type=source_type,
+            voice_settings=voice_settings,
             request_options=request_options,
         )
         return _response.data
@@ -612,6 +621,7 @@ class AsyncProjectsClient:
         auto_convert: typing.Optional[bool] = OMIT,
         auto_assign_voices: typing.Optional[bool] = OMIT,
         source_type: typing.Optional[ProjectsCreateRequestSourceType] = OMIT,
+        voice_settings: typing.Optional[typing.List[str]] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AddProjectResponseModel:
         """
@@ -689,7 +699,7 @@ class AsyncProjectsClient:
             When the Studio project is downloaded, should the returned audio have postprocessing in order to make it compliant with audiobook normalized volume requirements
 
         pronunciation_dictionary_locators : typing.Optional[typing.List[str]]
-            A list of pronunciation dictionary locators (pronunciation_dictionary_id, version_id) encoded as a list of JSON strings for pronunciation dictionaries to be applied to the text. A list of json encoded strings is required as adding projects may occur through formData as opposed to jsonBody. To specify multiple dictionaries use multiple --form lines in your curl, such as --form 'pronunciation_dictionary_locators="{\"pronunciation_dictionary_id\":\"Vmd4Zor6fplcA7WrINey\",\"version_id\":\"hRPaxjlTdR7wFMhV4w0b\"}"' --form 'pronunciation_dictionary_locators="{\"pronunciation_dictionary_id\":\"JzWtcGQMJ6bnlWwyMo7e\",\"version_id\":\"lbmwxiLu4q6txYxgdZqn\"}"'.
+            A list of pronunciation dictionary locators (pronunciation_dictionary_id, version_id) encoded as a list of JSON strings for pronunciation dictionaries to be applied to the text. A list of json encoded strings is required as adding projects may occur through formData as opposed to jsonBody. To specify multiple dictionaries use multiple --form lines in your curl, such as --form 'pronunciation_dictionary_locators="{\\"pronunciation_dictionary_id\\":\\"Vmd4Zor6fplcA7WrINey\\",\\"version_id\\":\\"hRPaxjlTdR7wFMhV4w0b\\"}"' --form 'pronunciation_dictionary_locators="{\\"pronunciation_dictionary_id\\":\\"JzWtcGQMJ6bnlWwyMo7e\\",\\"version_id\\":\\"lbmwxiLu4q6txYxgdZqn\\"}"'.
 
         callback_url : typing.Optional[str]
 
@@ -768,6 +778,13 @@ class AsyncProjectsClient:
         source_type : typing.Optional[ProjectsCreateRequestSourceType]
             The type of Studio project to create.
 
+        voice_settings : typing.Optional[typing.List[str]]
+                Optional voice settings overrides for the project, encoded as a list of JSON strings.
+
+                Example:
+                ["{\\"voice_id\\": \\"21m00Tcm4TlvDq8ikWAM\\", \\"stability\\": 0.7, \\"similarity_boost\\": 0.8, \\"style\\": 0.5, \\"speed\\": 1.0, \\"use_speaker_boost\\": true}"]
+
+
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
 
@@ -823,6 +840,7 @@ class AsyncProjectsClient:
             auto_convert=auto_convert,
             auto_assign_voices=auto_assign_voices,
             source_type=source_type,
+            voice_settings=voice_settings,
             request_options=request_options,
         )
         return _response.data

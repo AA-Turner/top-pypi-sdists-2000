@@ -12,6 +12,9 @@ from .document_usage_mode_enum import DocumentUsageModeEnum
 from .get_knowledge_base_summary_file_response_model_dependent_agents_item import (
     GetKnowledgeBaseSummaryFileResponseModelDependentAgentsItem,
 )
+from .get_knowledge_base_summary_folder_response_model_dependent_agents_item import (
+    GetKnowledgeBaseSummaryFolderResponseModelDependentAgentsItem,
+)
 from .get_knowledge_base_summary_text_response_model_dependent_agents_item import (
     GetKnowledgeBaseSummaryTextResponseModelDependentAgentsItem,
 )
@@ -29,7 +32,29 @@ class GetKnowledgeBaseListResponseModelDocumentsItem_File(UncheckedBaseModel):
     metadata: KnowledgeBaseDocumentMetadataResponseModel
     supported_usages: typing.List[DocumentUsageModeEnum]
     access_info: ResourceAccessInfo
+    folder_parent_id: typing.Optional[str] = None
     dependent_agents: typing.List[GetKnowledgeBaseSummaryFileResponseModelDependentAgentsItem]
+
+    if IS_PYDANTIC_V2:
+        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
+    else:
+
+        class Config:
+            frozen = True
+            smart_union = True
+            extra = pydantic.Extra.allow
+
+
+class GetKnowledgeBaseListResponseModelDocumentsItem_Folder(UncheckedBaseModel):
+    type: typing.Literal["folder"] = "folder"
+    id: str
+    name: str
+    metadata: KnowledgeBaseDocumentMetadataResponseModel
+    supported_usages: typing.List[DocumentUsageModeEnum]
+    access_info: ResourceAccessInfo
+    folder_parent_id: typing.Optional[str] = None
+    dependent_agents: typing.List[GetKnowledgeBaseSummaryFolderResponseModelDependentAgentsItem]
+    children_count: int
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -48,6 +73,7 @@ class GetKnowledgeBaseListResponseModelDocumentsItem_Text(UncheckedBaseModel):
     metadata: KnowledgeBaseDocumentMetadataResponseModel
     supported_usages: typing.List[DocumentUsageModeEnum]
     access_info: ResourceAccessInfo
+    folder_parent_id: typing.Optional[str] = None
     dependent_agents: typing.List[GetKnowledgeBaseSummaryTextResponseModelDependentAgentsItem]
 
     if IS_PYDANTIC_V2:
@@ -67,6 +93,7 @@ class GetKnowledgeBaseListResponseModelDocumentsItem_Url(UncheckedBaseModel):
     metadata: KnowledgeBaseDocumentMetadataResponseModel
     supported_usages: typing.List[DocumentUsageModeEnum]
     access_info: ResourceAccessInfo
+    folder_parent_id: typing.Optional[str] = None
     dependent_agents: typing.List[GetKnowledgeBaseSummaryUrlResponseModelDependentAgentsItem]
     url: str
 
@@ -83,6 +110,7 @@ class GetKnowledgeBaseListResponseModelDocumentsItem_Url(UncheckedBaseModel):
 GetKnowledgeBaseListResponseModelDocumentsItem = typing_extensions.Annotated[
     typing.Union[
         GetKnowledgeBaseListResponseModelDocumentsItem_File,
+        GetKnowledgeBaseListResponseModelDocumentsItem_Folder,
         GetKnowledgeBaseListResponseModelDocumentsItem_Text,
         GetKnowledgeBaseListResponseModelDocumentsItem_Url,
     ],

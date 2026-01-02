@@ -11,7 +11,7 @@ from .telephony_provider import TelephonyProvider
 
 class BatchCallResponse(UncheckedBaseModel):
     id: str
-    phone_number_id: str
+    phone_number_id: typing.Optional[str] = None
     phone_provider: typing.Optional[TelephonyProvider] = None
     name: str
     agent_id: str
@@ -21,6 +21,7 @@ class BatchCallResponse(UncheckedBaseModel):
     total_calls_scheduled: int
     last_updated_at_unix: int
     status: BatchCallStatus
+    retry_count: typing.Optional[int] = None
     agent_name: str
 
     if IS_PYDANTIC_V2:

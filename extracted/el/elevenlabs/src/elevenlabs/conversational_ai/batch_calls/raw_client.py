@@ -30,9 +30,9 @@ class RawBatchCallsClient:
         *,
         call_name: str,
         agent_id: str,
-        agent_phone_number_id: str,
         recipients: typing.Sequence[OutboundCallRecipient],
         scheduled_time_unix: typing.Optional[int] = OMIT,
+        agent_phone_number_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> HttpResponse[BatchCallResponse]:
         """
@@ -44,11 +44,11 @@ class RawBatchCallsClient:
 
         agent_id : str
 
-        agent_phone_number_id : str
-
         recipients : typing.Sequence[OutboundCallRecipient]
 
         scheduled_time_unix : typing.Optional[int]
+
+        agent_phone_number_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -64,11 +64,11 @@ class RawBatchCallsClient:
             json={
                 "call_name": call_name,
                 "agent_id": agent_id,
-                "agent_phone_number_id": agent_phone_number_id,
                 "recipients": convert_and_respect_annotation_metadata(
                     object_=recipients, annotation=typing.Sequence[OutboundCallRecipient], direction="write"
                 ),
                 "scheduled_time_unix": scheduled_time_unix,
+                "agent_phone_number_id": agent_phone_number_id,
             },
             headers={
                 "content-type": "application/json",
@@ -318,9 +318,9 @@ class AsyncRawBatchCallsClient:
         *,
         call_name: str,
         agent_id: str,
-        agent_phone_number_id: str,
         recipients: typing.Sequence[OutboundCallRecipient],
         scheduled_time_unix: typing.Optional[int] = OMIT,
+        agent_phone_number_id: typing.Optional[str] = OMIT,
         request_options: typing.Optional[RequestOptions] = None,
     ) -> AsyncHttpResponse[BatchCallResponse]:
         """
@@ -332,11 +332,11 @@ class AsyncRawBatchCallsClient:
 
         agent_id : str
 
-        agent_phone_number_id : str
-
         recipients : typing.Sequence[OutboundCallRecipient]
 
         scheduled_time_unix : typing.Optional[int]
+
+        agent_phone_number_id : typing.Optional[str]
 
         request_options : typing.Optional[RequestOptions]
             Request-specific configuration.
@@ -352,11 +352,11 @@ class AsyncRawBatchCallsClient:
             json={
                 "call_name": call_name,
                 "agent_id": agent_id,
-                "agent_phone_number_id": agent_phone_number_id,
                 "recipients": convert_and_respect_annotation_metadata(
                     object_=recipients, annotation=typing.Sequence[OutboundCallRecipient], direction="write"
                 ),
                 "scheduled_time_unix": scheduled_time_unix,
+                "agent_phone_number_id": agent_phone_number_id,
             },
             headers={
                 "content-type": "application/json",

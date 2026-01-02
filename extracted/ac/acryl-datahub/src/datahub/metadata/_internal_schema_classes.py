@@ -4606,6 +4606,198 @@ class EmbedClass(_Aspect):
         self._inner_dict['renderUrl'] = value
     
     
+class EmbeddingChunkClass(DictWrapper):
+    """A single chunk of text with its embedding vector.
+    
+    Chunks enable semantic search over long documents by breaking them
+    into smaller, semantically coherent pieces that fit within model
+    context windows."""
+    
+    RECORD_SCHEMA = get_schema_type("com.linkedin.pegasus2avro.common.EmbeddingChunk")
+    def __init__(self,
+        position: int,
+        vector: List[float],
+        characterOffset: Union[None, int]=None,
+        characterLength: Union[None, int]=None,
+        tokenCount: Union[None, int]=None,
+        text: Union[None, str]=None,
+    ):
+        super().__init__()
+        
+        self.position = position
+        self.vector = vector
+        self.characterOffset = characterOffset
+        self.characterLength = characterLength
+        self.tokenCount = tokenCount
+        self.text = text
+    
+    def _restore_defaults(self) -> None:
+        self.position = int()
+        self.vector = list()
+        self.characterOffset = self.RECORD_SCHEMA.fields_dict["characterOffset"].default
+        self.characterLength = self.RECORD_SCHEMA.fields_dict["characterLength"].default
+        self.tokenCount = self.RECORD_SCHEMA.fields_dict["tokenCount"].default
+        self.text = self.RECORD_SCHEMA.fields_dict["text"].default
+    
+    
+    @property
+    def position(self) -> int:
+        """Zero-based position/index of this chunk within the document."""
+        return self._inner_dict.get('position')  # type: ignore
+    
+    @position.setter
+    def position(self, value: int) -> None:
+        self._inner_dict['position'] = value
+    
+    
+    @property
+    def vector(self) -> List[float]:
+        """The embedding vector for this chunk.
+    Dimensionality depends on the model (e.g., 1024 for Cohere v3)."""
+        return self._inner_dict.get('vector')  # type: ignore
+    
+    @vector.setter
+    def vector(self, value: List[float]) -> None:
+        self._inner_dict['vector'] = value
+    
+    
+    @property
+    def characterOffset(self) -> Union[None, int]:
+        """Character offset from start of source text.
+    Used for highlighting and navigation. Optional for privacy."""
+        return self._inner_dict.get('characterOffset')  # type: ignore
+    
+    @characterOffset.setter
+    def characterOffset(self, value: Union[None, int]) -> None:
+        self._inner_dict['characterOffset'] = value
+    
+    
+    @property
+    def characterLength(self) -> Union[None, int]:
+        """Character length of the chunk in source text.
+    Optional for privacy-sensitive use cases."""
+        return self._inner_dict.get('characterLength')  # type: ignore
+    
+    @characterLength.setter
+    def characterLength(self, value: Union[None, int]) -> None:
+        self._inner_dict['characterLength'] = value
+    
+    
+    @property
+    def tokenCount(self) -> Union[None, int]:
+        """Estimated token count for this chunk."""
+        return self._inner_dict.get('tokenCount')  # type: ignore
+    
+    @tokenCount.setter
+    def tokenCount(self, value: Union[None, int]) -> None:
+        self._inner_dict['tokenCount'] = value
+    
+    
+    @property
+    def text(self) -> Union[None, str]:
+        """Original text of this chunk.
+    OPTIONAL: May be omitted for privacy-sensitive data sources
+    where only embeddings should be stored, not source text."""
+        return self._inner_dict.get('text')  # type: ignore
+    
+    @text.setter
+    def text(self, value: Union[None, str]) -> None:
+        self._inner_dict['text'] = value
+    
+    
+class EmbeddingModelDataClass(DictWrapper):
+    """Embedding data for a specific model.
+    Contains metadata about the embedding generation and the chunked vectors."""
+    
+    RECORD_SCHEMA = get_schema_type("com.linkedin.pegasus2avro.common.EmbeddingModelData")
+    def __init__(self,
+        modelVersion: str,
+        generatedAt: int,
+        totalChunks: int,
+        chunks: List["EmbeddingChunkClass"],
+        chunkingStrategy: Union[None, str]=None,
+        totalTokens: Union[None, int]=None,
+    ):
+        super().__init__()
+        
+        self.modelVersion = modelVersion
+        self.generatedAt = generatedAt
+        self.chunkingStrategy = chunkingStrategy
+        self.totalChunks = totalChunks
+        self.totalTokens = totalTokens
+        self.chunks = chunks
+    
+    def _restore_defaults(self) -> None:
+        self.modelVersion = str()
+        self.generatedAt = int()
+        self.chunkingStrategy = self.RECORD_SCHEMA.fields_dict["chunkingStrategy"].default
+        self.totalChunks = int()
+        self.totalTokens = self.RECORD_SCHEMA.fields_dict["totalTokens"].default
+        self.chunks = list()
+    
+    
+    @property
+    def modelVersion(self) -> str:
+        """Full model identifier including provider.
+    Examples: bedrock/cohere.embed-english-v3, openai/text-embedding-ada-002"""
+        return self._inner_dict.get('modelVersion')  # type: ignore
+    
+    @modelVersion.setter
+    def modelVersion(self, value: str) -> None:
+        self._inner_dict['modelVersion'] = value
+    
+    
+    @property
+    def generatedAt(self) -> int:
+        """Timestamp when embeddings were generated (milliseconds since epoch)."""
+        return self._inner_dict.get('generatedAt')  # type: ignore
+    
+    @generatedAt.setter
+    def generatedAt(self, value: int) -> None:
+        self._inner_dict['generatedAt'] = value
+    
+    
+    @property
+    def chunkingStrategy(self) -> Union[None, str]:
+        """Description of the chunking strategy used.
+    Examples: sentence_boundary_400t, fixed_512_chars, paragraph"""
+        return self._inner_dict.get('chunkingStrategy')  # type: ignore
+    
+    @chunkingStrategy.setter
+    def chunkingStrategy(self, value: Union[None, str]) -> None:
+        self._inner_dict['chunkingStrategy'] = value
+    
+    
+    @property
+    def totalChunks(self) -> int:
+        """Total number of chunks."""
+        return self._inner_dict.get('totalChunks')  # type: ignore
+    
+    @totalChunks.setter
+    def totalChunks(self, value: int) -> None:
+        self._inner_dict['totalChunks'] = value
+    
+    
+    @property
+    def totalTokens(self) -> Union[None, int]:
+        """Estimated total token count across all chunks."""
+        return self._inner_dict.get('totalTokens')  # type: ignore
+    
+    @totalTokens.setter
+    def totalTokens(self, value: Union[None, int]) -> None:
+        self._inner_dict['totalTokens'] = value
+    
+    
+    @property
+    def chunks(self) -> List["EmbeddingChunkClass"]:
+        """Individual chunks with their embedding vectors."""
+        return self._inner_dict.get('chunks')  # type: ignore
+    
+    @chunks.setter
+    def chunks(self, value: List["EmbeddingChunkClass"]) -> None:
+        self._inner_dict['chunks'] = value
+    
+    
 class FabricTypeClass(object):
     """Fabric group type"""
     
@@ -6243,6 +6435,46 @@ class RoleAssociationClass(DictWrapper):
     @urn.setter
     def urn(self, value: str) -> None:
         self._inner_dict['urn'] = value
+    
+    
+class SemanticContentClass(_Aspect):
+    """Semantic content for enabling vector similarity search.
+    
+    This aspect stores chunked text and embedding vectors for any entity that supports semantic search. Generation of the data for this aspect should be built in tight collaboration with the embedding generator during semantic search query processing. Chunk determination and generation can happen somewhat independently
+    The data in this aspect is directly passed along to the semantic search index.
+    
+    Design notes:
+    - Supports multiple embedding models (e.g., different providers or versions)
+    - Supports chunked content for long documents
+    - Text field is optional to support privacy-sensitive use cases where
+      only embeddings (not source text) are shared with DataHub"""
+
+
+    ASPECT_NAME = 'semanticContent'
+    ASPECT_INFO = {}
+    RECORD_SCHEMA = get_schema_type("com.linkedin.pegasus2avro.common.SemanticContent")
+
+    def __init__(self,
+        embeddings: Dict[str, "EmbeddingModelDataClass"],
+    ):
+        super().__init__()
+        
+        self.embeddings = embeddings
+    
+    def _restore_defaults(self) -> None:
+        self.embeddings = dict()
+    
+    
+    @property
+    def embeddings(self) -> Dict[str, "EmbeddingModelDataClass"]:
+        """Map of embedding model name to embedding data.
+    Key is the model identifier (e.g., cohere_embed_v3, openai_ada_002).
+    Allows storing embeddings from multiple models simultaneously."""
+        return self._inner_dict.get('embeddings')  # type: ignore
+    
+    @embeddings.setter
+    def embeddings(self, value: Dict[str, "EmbeddingModelDataClass"]) -> None:
+        self._inner_dict['embeddings'] = value
     
     
 class SerializedValueClass(DictWrapper):
@@ -13320,6 +13552,9 @@ class FileUploadScenarioClass(object):
     ASSET_DOCUMENTATION = "ASSET_DOCUMENTATION"
     """File uploaded for entity documentation"""
     
+    ASSET_DOCUMENTATION_LINKS = "ASSET_DOCUMENTATION_LINKS"
+    """Upload for asset documentation links."""
+    
     
     
 class DynamicFormAssignmentClass(_Aspect):
@@ -15591,7 +15826,6 @@ class DocumentInfoClass(_Aspect):
         relatedAssets: Union[None, List["RelatedAssetClass"]]=None,
         relatedDocuments: Union[None, List["RelatedDocumentClass"]]=None,
         parentDocument: Union[None, "ParentDocumentClass"]=None,
-        draftOf: Union[None, "DraftOfClass"]=None,
     ):
         super().__init__()
         
@@ -15609,7 +15843,6 @@ class DocumentInfoClass(_Aspect):
         self.relatedAssets = relatedAssets
         self.relatedDocuments = relatedDocuments
         self.parentDocument = parentDocument
-        self.draftOf = draftOf
     
     def _restore_defaults(self) -> None:
         self.customProperties = dict()
@@ -15622,7 +15855,6 @@ class DocumentInfoClass(_Aspect):
         self.relatedAssets = self.RECORD_SCHEMA.fields_dict["relatedAssets"].default
         self.relatedDocuments = self.RECORD_SCHEMA.fields_dict["relatedDocuments"].default
         self.parentDocument = self.RECORD_SCHEMA.fields_dict["parentDocument"].default
-        self.draftOf = self.RECORD_SCHEMA.fields_dict["draftOf"].default
     
     
     @property
@@ -15658,7 +15890,7 @@ class DocumentInfoClass(_Aspect):
     
     @property
     def status(self) -> "DocumentStatusClass":
-        """Visibility status of the document (published, unpublished.)"""
+        """Status of the document (published, unpublished.)"""
         return self._inner_dict.get('status')  # type: ignore
     
     @status.setter
@@ -15726,16 +15958,52 @@ class DocumentInfoClass(_Aspect):
         self._inner_dict['parentDocument'] = value
     
     
-    @property
-    def draftOf(self) -> Union[None, "DraftOfClass"]:
-        """If this document is a draft, the document it is a draft of.
-    When set, this document should be hidden from normal knowledge base browsing and search.
-    Only the published document (draftOf target) should be visible to end users."""
-        return self._inner_dict.get('draftOf')  # type: ignore
+class DocumentSettingsClass(_Aspect):
+    """Settings specific to a document entity"""
+
+
+    ASPECT_NAME = 'documentSettings'
+    ASPECT_INFO = {}
+    RECORD_SCHEMA = get_schema_type("com.linkedin.pegasus2avro.knowledge.DocumentSettings")
+
+    def __init__(self,
+        showInGlobalContext: Optional[bool]=None,
+        lastModified: Union[None, "AuditStampClass"]=None,
+    ):
+        super().__init__()
+        
+        if showInGlobalContext is None:
+            # default: True
+            self.showInGlobalContext = self.RECORD_SCHEMA.fields_dict["showInGlobalContext"].default
+        else:
+            self.showInGlobalContext = showInGlobalContext
+        self.lastModified = lastModified
     
-    @draftOf.setter
-    def draftOf(self, value: Union[None, "DraftOfClass"]) -> None:
-        self._inner_dict['draftOf'] = value
+    def _restore_defaults(self) -> None:
+        self.showInGlobalContext = self.RECORD_SCHEMA.fields_dict["showInGlobalContext"].default
+        self.lastModified = self.RECORD_SCHEMA.fields_dict["lastModified"].default
+    
+    
+    @property
+    def showInGlobalContext(self) -> bool:
+        """Whether or not this document should be visible in the global context (e.g., global navigation, knowledge base search).
+    When false, the document is "private" and accessible primarily through the assets it is related to.
+    When true, the document appears in the global documents space accessible to all users."""
+        return self._inner_dict.get('showInGlobalContext')  # type: ignore
+    
+    @showInGlobalContext.setter
+    def showInGlobalContext(self, value: bool) -> None:
+        self._inner_dict['showInGlobalContext'] = value
+    
+    
+    @property
+    def lastModified(self) -> Union[None, "AuditStampClass"]:
+        """Last Modified Audit stamp"""
+        return self._inner_dict.get('lastModified')  # type: ignore
+    
+    @lastModified.setter
+    def lastModified(self, value: Union[None, "AuditStampClass"]) -> None:
+        self._inner_dict['lastModified'] = value
     
     
 class DocumentSourceClass(DictWrapper):
@@ -15806,10 +16074,10 @@ class DocumentStateClass(object):
     """The state of a document"""
     
     PUBLISHED = "PUBLISHED"
-    """Document is published and visible to users"""
+    """Document is published and visible to others."""
     
     UNPUBLISHED = "UNPUBLISHED"
-    """Document is not published publically. """
+    """Document is not published to be consumed by others."""
     
     
     
@@ -15836,34 +16104,6 @@ class DocumentStatusClass(DictWrapper):
     @state.setter
     def state(self, value: Union[str, "DocumentStateClass"]) -> None:
         self._inner_dict['state'] = value
-    
-    
-class DraftOfClass(DictWrapper):
-    """Indicates this document is a draft of another document.
-    Used to separate draft/versioning relationships from hierarchical parent/child relationships."""
-    
-    RECORD_SCHEMA = get_schema_type("com.linkedin.pegasus2avro.knowledge.DraftOf")
-    def __init__(self,
-        document: str,
-    ):
-        super().__init__()
-        
-        self.document = document
-    
-    def _restore_defaults(self) -> None:
-        self.document = str()
-    
-    
-    @property
-    def document(self) -> str:
-        """The document that this document is a draft of.
-    When set, this document is a draft/proposed version of the referenced document.
-    Draft documents should have UNPUBLISHED status and not appear in normal knowledge base browsing."""
-        return self._inner_dict.get('document')  # type: ignore
-    
-    @document.setter
-    def document(self, value: str) -> None:
-        self._inner_dict['document'] = value
     
     
 class ParentDocumentClass(DictWrapper):
@@ -16347,7 +16587,7 @@ class DataHubFileKeyClass(_Aspect):
 
 
     ASPECT_NAME = 'dataHubFileKey'
-    ASPECT_INFO = {'keyForEntity': 'dataHubFile', 'entityCategory': 'core', 'entityAspects': ['dataHubFileInfo']}
+    ASPECT_INFO = {'keyForEntity': 'dataHubFile', 'entityCategory': 'core', 'entityAspects': ['dataHubFileInfo', 'status']}
     RECORD_SCHEMA = get_schema_type("com.linkedin.pegasus2avro.metadata.key.DataHubFileKey")
 
     def __init__(self,
@@ -16990,7 +17230,7 @@ class DocumentKeyClass(_Aspect):
 
 
     ASPECT_NAME = 'documentKey'
-    ASPECT_INFO = {'keyForEntity': 'document', 'entityCategory': 'core', 'entityAspects': ['documentInfo', 'status', 'ownership', 'domains', 'structuredProperties', 'subTypes', 'dataPlatformInstance', 'browsePathsV2', 'globalTags', 'glossaryTerms']}
+    ASPECT_INFO = {'keyForEntity': 'document', 'entityCategory': 'core', 'entityAspects': ['documentInfo', 'documentSettings', 'status', 'ownership', 'domains', 'structuredProperties', 'subTypes', 'dataPlatformInstance', 'browsePathsV2', 'globalTags', 'glossaryTerms', 'semanticContent']}
     RECORD_SCHEMA = get_schema_type("com.linkedin.pegasus2avro.metadata.key.DocumentKey")
 
     def __init__(self,
@@ -20918,6 +21158,12 @@ class DataHubPageModuleTypeClass(object):
     
     PLATFORMS = "PLATFORMS"
     """Module displaying the platforms in an instance"""
+    
+    LINEAGE = "LINEAGE"
+    """Module displaying the lineage of an asset"""
+    
+    COLUMNS = "COLUMNS"
+    """Module displaying the columns of a dataset"""
     
     UNKNOWN = "UNKNOWN"
     """Unknown module type - this can occur with corrupted data or rolling back to versions without new modules"""
@@ -28304,6 +28550,8 @@ __SCHEMA_TYPES = {
     'com.linkedin.pegasus2avro.common.DocumentationAssociation': DocumentationAssociationClass,
     'com.linkedin.pegasus2avro.common.Edge': EdgeClass,
     'com.linkedin.pegasus2avro.common.Embed': EmbedClass,
+    'com.linkedin.pegasus2avro.common.EmbeddingChunk': EmbeddingChunkClass,
+    'com.linkedin.pegasus2avro.common.EmbeddingModelData': EmbeddingModelDataClass,
     'com.linkedin.pegasus2avro.common.FabricType': FabricTypeClass,
     'com.linkedin.pegasus2avro.common.FieldFormPromptAssociation': FieldFormPromptAssociationClass,
     'com.linkedin.pegasus2avro.common.FormAssociation': FormAssociationClass,
@@ -28338,6 +28586,7 @@ __SCHEMA_TYPES = {
     'com.linkedin.pegasus2avro.common.OwnershipSourceType': OwnershipSourceTypeClass,
     'com.linkedin.pegasus2avro.common.OwnershipType': OwnershipTypeClass,
     'com.linkedin.pegasus2avro.common.RoleAssociation': RoleAssociationClass,
+    'com.linkedin.pegasus2avro.common.SemanticContent': SemanticContentClass,
     'com.linkedin.pegasus2avro.common.SerializedValue': SerializedValueClass,
     'com.linkedin.pegasus2avro.common.SerializedValueContentType': SerializedValueContentTypeClass,
     'com.linkedin.pegasus2avro.common.SerializedValueSchemaType': SerializedValueSchemaTypeClass,
@@ -28485,11 +28734,11 @@ __SCHEMA_TYPES = {
     'com.linkedin.pegasus2avro.ingestion.DataHubIngestionSourceSourceType': DataHubIngestionSourceSourceTypeClass,
     'com.linkedin.pegasus2avro.knowledge.DocumentContents': DocumentContentsClass,
     'com.linkedin.pegasus2avro.knowledge.DocumentInfo': DocumentInfoClass,
+    'com.linkedin.pegasus2avro.knowledge.DocumentSettings': DocumentSettingsClass,
     'com.linkedin.pegasus2avro.knowledge.DocumentSource': DocumentSourceClass,
     'com.linkedin.pegasus2avro.knowledge.DocumentSourceType': DocumentSourceTypeClass,
     'com.linkedin.pegasus2avro.knowledge.DocumentState': DocumentStateClass,
     'com.linkedin.pegasus2avro.knowledge.DocumentStatus': DocumentStatusClass,
-    'com.linkedin.pegasus2avro.knowledge.DraftOf': DraftOfClass,
     'com.linkedin.pegasus2avro.knowledge.ParentDocument': ParentDocumentClass,
     'com.linkedin.pegasus2avro.knowledge.RelatedAsset': RelatedAssetClass,
     'com.linkedin.pegasus2avro.knowledge.RelatedDocument': RelatedDocumentClass,
@@ -28842,6 +29091,8 @@ __SCHEMA_TYPES = {
     'DocumentationAssociation': DocumentationAssociationClass,
     'Edge': EdgeClass,
     'Embed': EmbedClass,
+    'EmbeddingChunk': EmbeddingChunkClass,
+    'EmbeddingModelData': EmbeddingModelDataClass,
     'FabricType': FabricTypeClass,
     'FieldFormPromptAssociation': FieldFormPromptAssociationClass,
     'FormAssociation': FormAssociationClass,
@@ -28876,6 +29127,7 @@ __SCHEMA_TYPES = {
     'OwnershipSourceType': OwnershipSourceTypeClass,
     'OwnershipType': OwnershipTypeClass,
     'RoleAssociation': RoleAssociationClass,
+    'SemanticContent': SemanticContentClass,
     'SerializedValue': SerializedValueClass,
     'SerializedValueContentType': SerializedValueContentTypeClass,
     'SerializedValueSchemaType': SerializedValueSchemaTypeClass,
@@ -29023,11 +29275,11 @@ __SCHEMA_TYPES = {
     'DataHubIngestionSourceSourceType': DataHubIngestionSourceSourceTypeClass,
     'DocumentContents': DocumentContentsClass,
     'DocumentInfo': DocumentInfoClass,
+    'DocumentSettings': DocumentSettingsClass,
     'DocumentSource': DocumentSourceClass,
     'DocumentSourceType': DocumentSourceTypeClass,
     'DocumentState': DocumentStateClass,
     'DocumentStatus': DocumentStatusClass,
-    'DraftOf': DraftOfClass,
     'ParentDocument': ParentDocumentClass,
     'RelatedAsset': RelatedAssetClass,
     'RelatedDocument': RelatedDocumentClass,
@@ -29494,6 +29746,7 @@ ASPECT_CLASSES: List[Type[_Aspect]] = [
     AccessClass,
     DataTransformLogicClass,
     GlobalTagsClass,
+    SemanticContentClass,
     SiblingsClass,
     IncidentsSummaryClass,
     GlobalSettingsInfoClass,
@@ -29504,6 +29757,7 @@ ASPECT_CLASSES: List[Type[_Aspect]] = [
     GlossaryNodeInfoClass,
     GlossaryRelatedTermsClass,
     GlossaryTermInfoClass,
+    DocumentSettingsClass,
     DocumentInfoClass,
     EditableERModelRelationshipPropertiesClass,
     ERModelRelationshipPropertiesClass,
@@ -29732,6 +29986,7 @@ class AspectBag(TypedDict, total=False):
     access: AccessClass
     dataTransformLogic: DataTransformLogicClass
     globalTags: GlobalTagsClass
+    semanticContent: SemanticContentClass
     siblings: SiblingsClass
     incidentsSummary: IncidentsSummaryClass
     globalSettingsInfo: GlobalSettingsInfoClass
@@ -29742,6 +29997,7 @@ class AspectBag(TypedDict, total=False):
     glossaryNodeInfo: GlossaryNodeInfoClass
     glossaryRelatedTerms: GlossaryRelatedTermsClass
     glossaryTermInfo: GlossaryTermInfoClass
+    documentSettings: DocumentSettingsClass
     documentInfo: DocumentInfoClass
     editableERModelRelationshipProperties: EditableERModelRelationshipPropertiesClass
     erModelRelationshipProperties: ERModelRelationshipPropertiesClass

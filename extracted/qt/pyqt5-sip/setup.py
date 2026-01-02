@@ -16,8 +16,8 @@ module = Extension('PyQt5.sip', module_src)
 # Do the setup.
 setup(
         name='PyQt5_sip',
-        version='12.17.1',
+        version='12.17.2',
         license='BSD-2-Clause',
-        python_requires='>=3.9',
+        python_requires='>=3.10',
         ext_modules=[module]
      )

@@ -8,7 +8,9 @@ import pydantic
 import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.unchecked_base_model import UncheckedBaseModel, UnionMetadata
-from .conversation_history_transcript_tool_call_common_model import ConversationHistoryTranscriptToolCallCommonModel
+from .conversation_history_transcript_tool_call_common_model_output import (
+    ConversationHistoryTranscriptToolCallCommonModelOutput,
+)
 
 
 class WorkflowToolResponseModelOutputStepsItem_Edge(UncheckedBaseModel):
@@ -46,7 +48,7 @@ class WorkflowToolResponseModelOutputStepsItem_NestedTools(UncheckedBaseModel):
     type: typing.Literal["nested_tools"] = "nested_tools"
     step_latency_secs: float
     node_id: str
-    requests: typing.List[ConversationHistoryTranscriptToolCallCommonModel]
+    requests: typing.List[ConversationHistoryTranscriptToolCallCommonModelOutput]
     results: typing.List["WorkflowToolNestedToolsStepModelOutputResultsItem"]
     is_successful: bool
 
@@ -68,6 +70,12 @@ WorkflowToolResponseModelOutputStepsItem = typing_extensions.Annotated[
     ],
     UnionMetadata(discriminant="type"),
 ]
+from .conversation_history_transcript_workflow_tools_result_common_model_output import (
+    ConversationHistoryTranscriptWorkflowToolsResultCommonModelOutput,
+)  # noqa: E402, I001
 from .workflow_tool_nested_tools_step_model_output_results_item import WorkflowToolNestedToolsStepModelOutputResultsItem  # noqa: E402, I001
 
-update_forward_refs(WorkflowToolResponseModelOutputStepsItem_NestedTools)
+update_forward_refs(
+    WorkflowToolResponseModelOutputStepsItem_NestedTools,
+    ConversationHistoryTranscriptWorkflowToolsResultCommonModelOutput=ConversationHistoryTranscriptWorkflowToolsResultCommonModelOutput,
+)

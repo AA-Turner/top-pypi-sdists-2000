@@ -46,19 +46,6 @@ class ToolResponseModelToolConfig_Client(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
-class ToolResponseModelToolConfig_Mcp(UncheckedBaseModel):
-    value: typing.Optional[typing.Any] = None
-    type: typing.Literal["mcp"] = "mcp"
-
-    if IS_PYDANTIC_V2:
-        model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(frozen=True)  # type: ignore # Pydantic v2
-    else:
-
-        class Config:
-            frozen = True
-            smart_union = True
-
-
 class ToolResponseModelToolConfig_System(UncheckedBaseModel):
     """
     The type of tool
@@ -99,9 +86,9 @@ class ToolResponseModelToolConfig_Webhook(UncheckedBaseModel):
     assignments: typing.Optional[typing.List[DynamicVariableAssignment]] = None
     tool_call_sound: typing.Optional[ToolCallSoundType] = None
     tool_call_sound_behavior: typing.Optional[ToolCallSoundBehavior] = None
-    api_schema: WebhookToolApiSchemaConfigOutput
     dynamic_variables: typing.Optional[DynamicVariablesConfig] = None
     execution_mode: typing.Optional[ToolExecutionMode] = None
+    api_schema: WebhookToolApiSchemaConfigOutput
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
@@ -117,10 +104,7 @@ from .object_json_schema_property_output import ObjectJsonSchemaPropertyOutput  
 
 ToolResponseModelToolConfig = typing_extensions.Annotated[
     typing.Union[
-        ToolResponseModelToolConfig_Client,
-        ToolResponseModelToolConfig_Mcp,
-        ToolResponseModelToolConfig_System,
-        ToolResponseModelToolConfig_Webhook,
+        ToolResponseModelToolConfig_Client, ToolResponseModelToolConfig_System, ToolResponseModelToolConfig_Webhook
     ],
     UnionMetadata(discriminant="type"),
 ]

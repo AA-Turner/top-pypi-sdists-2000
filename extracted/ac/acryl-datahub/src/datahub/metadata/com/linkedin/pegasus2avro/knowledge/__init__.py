@@ -9,11 +9,11 @@
 # isort: skip_file
 from .....schema_classes import DocumentContentsClass
 from .....schema_classes import DocumentInfoClass
+from .....schema_classes import DocumentSettingsClass
 from .....schema_classes import DocumentSourceClass
 from .....schema_classes import DocumentSourceTypeClass
 from .....schema_classes import DocumentStateClass
 from .....schema_classes import DocumentStatusClass
-from .....schema_classes import DraftOfClass
 from .....schema_classes import ParentDocumentClass
 from .....schema_classes import RelatedAssetClass
 from .....schema_classes import RelatedDocumentClass
@@ -21,11 +21,11 @@ from .....schema_classes import RelatedDocumentClass
 
 DocumentContents = DocumentContentsClass
 DocumentInfo = DocumentInfoClass
+DocumentSettings = DocumentSettingsClass
 DocumentSource = DocumentSourceClass
 DocumentSourceType = DocumentSourceTypeClass
 DocumentState = DocumentStateClass
 DocumentStatus = DocumentStatusClass
-DraftOf = DraftOfClass
 ParentDocument = ParentDocumentClass
 RelatedAsset = RelatedAssetClass
 RelatedDocument = RelatedDocumentClass

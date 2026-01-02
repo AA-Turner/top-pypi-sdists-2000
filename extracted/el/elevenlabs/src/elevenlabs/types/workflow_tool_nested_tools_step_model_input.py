@@ -7,13 +7,15 @@ import typing
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2, update_forward_refs
 from ..core.unchecked_base_model import UncheckedBaseModel
-from .conversation_history_transcript_tool_call_common_model import ConversationHistoryTranscriptToolCallCommonModel
+from .conversation_history_transcript_tool_call_common_model_input import (
+    ConversationHistoryTranscriptToolCallCommonModelInput,
+)
 
 
 class WorkflowToolNestedToolsStepModelInput(UncheckedBaseModel):
     step_latency_secs: float
     node_id: str
-    requests: typing.List[ConversationHistoryTranscriptToolCallCommonModel]
+    requests: typing.List[ConversationHistoryTranscriptToolCallCommonModelInput]
     results: typing.List["WorkflowToolNestedToolsStepModelInputResultsItem"]
     is_successful: bool
 
@@ -27,6 +29,12 @@ class WorkflowToolNestedToolsStepModelInput(UncheckedBaseModel):
             extra = pydantic.Extra.allow
 
 
+from .conversation_history_transcript_workflow_tools_result_common_model_input import (
+    ConversationHistoryTranscriptWorkflowToolsResultCommonModelInput,
+)  # noqa: E402, I001
 from .workflow_tool_nested_tools_step_model_input_results_item import WorkflowToolNestedToolsStepModelInputResultsItem  # noqa: E402, I001
 
-update_forward_refs(WorkflowToolNestedToolsStepModelInput)
+update_forward_refs(
+    WorkflowToolNestedToolsStepModelInput,
+    ConversationHistoryTranscriptWorkflowToolsResultCommonModelInput=ConversationHistoryTranscriptWorkflowToolsResultCommonModelInput,
+)

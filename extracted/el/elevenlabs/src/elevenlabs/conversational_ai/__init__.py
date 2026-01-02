@@ -8,6 +8,7 @@ from importlib import import_module
 if typing.TYPE_CHECKING:
     from . import (
         agents,
+        analytics,
         batch_calls,
         conversations,
         dashboard,
@@ -23,6 +24,11 @@ if typing.TYPE_CHECKING:
         twilio,
     )
     from .conversations import ConversationsListRequestSummaryMode
+    from .knowledge_base import (
+        KnowledgeBaseGetOrCreateRagIndexesResponseValue,
+        KnowledgeBaseGetOrCreateRagIndexesResponseValue_Failure,
+        KnowledgeBaseGetOrCreateRagIndexesResponseValue_Success,
+    )
     from .mcp_servers import McpServerConfigUpdateRequestModelRequestHeadersValue
     from .phone_numbers import (
         PhoneNumbersCreateRequestBody,
@@ -39,9 +45,14 @@ if typing.TYPE_CHECKING:
         PhoneNumbersUpdateResponse_Twilio,
     )
     from .tests import CreateUnitTestRequestDynamicVariablesValue, UpdateUnitTestRequestDynamicVariablesValue
+    from .twilio import BodyRegisterATwilioCallAndReturnTwiMlV1ConvaiTwilioRegisterCallPostDirection
 _dynamic_imports: typing.Dict[str, str] = {
+    "BodyRegisterATwilioCallAndReturnTwiMlV1ConvaiTwilioRegisterCallPostDirection": ".twilio",
     "ConversationsListRequestSummaryMode": ".conversations",
     "CreateUnitTestRequestDynamicVariablesValue": ".tests",
+    "KnowledgeBaseGetOrCreateRagIndexesResponseValue": ".knowledge_base",
+    "KnowledgeBaseGetOrCreateRagIndexesResponseValue_Failure": ".knowledge_base",
+    "KnowledgeBaseGetOrCreateRagIndexesResponseValue_Success": ".knowledge_base",
     "McpServerConfigUpdateRequestModelRequestHeadersValue": ".mcp_servers",
     "PhoneNumbersCreateRequestBody": ".phone_numbers",
     "PhoneNumbersCreateRequestBody_SipTrunk": ".phone_numbers",
@@ -57,6 +68,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "PhoneNumbersUpdateResponse_Twilio": ".phone_numbers",
     "UpdateUnitTestRequestDynamicVariablesValue": ".tests",
     "agents": ".agents",
+    "analytics": ".analytics",
     "batch_calls": ".batch_calls",
     "conversations": ".conversations",
     "dashboard": ".dashboard",
@@ -95,8 +107,12 @@ def __dir__():
 
 
 __all__ = [
+    "BodyRegisterATwilioCallAndReturnTwiMlV1ConvaiTwilioRegisterCallPostDirection",
     "ConversationsListRequestSummaryMode",
     "CreateUnitTestRequestDynamicVariablesValue",
+    "KnowledgeBaseGetOrCreateRagIndexesResponseValue",
+    "KnowledgeBaseGetOrCreateRagIndexesResponseValue_Failure",
+    "KnowledgeBaseGetOrCreateRagIndexesResponseValue_Success",
     "McpServerConfigUpdateRequestModelRequestHeadersValue",
     "PhoneNumbersCreateRequestBody",
     "PhoneNumbersCreateRequestBody_SipTrunk",
@@ -112,6 +128,7 @@ __all__ = [
     "PhoneNumbersUpdateResponse_Twilio",
     "UpdateUnitTestRequestDynamicVariablesValue",
     "agents",
+    "analytics",
     "batch_calls",
     "conversations",
     "dashboard",

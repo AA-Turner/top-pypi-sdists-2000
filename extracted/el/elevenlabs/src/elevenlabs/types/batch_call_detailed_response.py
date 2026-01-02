@@ -16,7 +16,7 @@ class BatchCallDetailedResponse(UncheckedBaseModel):
     """
 
     id: str
-    phone_number_id: str
+    phone_number_id: typing.Optional[str] = None
     phone_provider: typing.Optional[TelephonyProvider] = None
     name: str
     agent_id: str
@@ -26,6 +26,7 @@ class BatchCallDetailedResponse(UncheckedBaseModel):
     total_calls_scheduled: int
     last_updated_at_unix: int
     status: BatchCallStatus
+    retry_count: typing.Optional[int] = None
     agent_name: str
     recipients: typing.List[OutboundCallRecipientResponseModel]
 

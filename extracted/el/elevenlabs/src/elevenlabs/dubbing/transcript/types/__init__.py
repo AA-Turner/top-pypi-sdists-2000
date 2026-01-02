@@ -7,8 +7,10 @@ from importlib import import_module
 
 if typing.TYPE_CHECKING:
     from .transcript_get_transcript_for_dub_request_format_type import TranscriptGetTranscriptForDubRequestFormatType
+    from .transcript_get_transcript_for_dub_response import TranscriptGetTranscriptForDubResponse
 _dynamic_imports: typing.Dict[str, str] = {
-    "TranscriptGetTranscriptForDubRequestFormatType": ".transcript_get_transcript_for_dub_request_format_type"
+    "TranscriptGetTranscriptForDubRequestFormatType": ".transcript_get_transcript_for_dub_request_format_type",
+    "TranscriptGetTranscriptForDubResponse": ".transcript_get_transcript_for_dub_response",
 }
 
 
@@ -33,4 +35,4 @@ def __dir__():
     return sorted(lazy_attrs)
 
 
-__all__ = ["TranscriptGetTranscriptForDubRequestFormatType"]
+__all__ = ["TranscriptGetTranscriptForDubRequestFormatType", "TranscriptGetTranscriptForDubResponse"]
