@@ -35,6 +35,7 @@ from tests.main.conftest import (
     BLACK_PY313_SKIP,
     BLACK_PY314_SKIP,
     DATA_PATH,
+    DEFAULT_VALUES_DATA_PATH,
     LEGACY_BLACK_SKIP,
     MSGSPEC_LEGACY_BLACK_SKIP,
     OPEN_API_DATA_PATH,
@@ -46,6 +47,11 @@ from tests.main.openapi.conftest import EXPECTED_OPENAPI_PATH, assert_file_conte
 
 if TYPE_CHECKING:
     from pytest_mock import MockerFixture
+
+SKIP_PYDANTIC_V1 = pytest.mark.skipif(
+    pydantic.VERSION < "2.0.0",
+    reason="This test requires Pydantic v2",
+)
 
 
 @pytest.mark.benchmark
@@ -2579,26 +2585,24 @@ def test_main_openapi_discriminator(input_: str, output: str, output_file: Path)
 
 @freeze_time("2023-07-27")
 @pytest.mark.parametrize(
-    ("kind", "option", "expected"),
+    ("kind", "option", "output_model", "expected"),
     [
-        (
-            "anyOf",
-            "--collapse-root-models",
-            "in_array_collapse_root_models.py",
-        ),
-        (
-            "oneOf",
-            "--collapse-root-models",
-            "in_array_collapse_root_models.py",
-        ),
-        ("anyOf", None, "in_array.py"),
-        ("oneOf", None, "in_array.py"),
+        ("anyOf", "--collapse-root-models", None, "in_array_collapse_root_models.py"),
+        ("oneOf", "--collapse-root-models", None, "in_array_collapse_root_models.py"),
+        ("anyOf", None, None, "in_array.py"),
+        ("oneOf", None, None, "in_array.py"),
+        ("anyOf", "--collapse-root-models", "pydantic_v2.BaseModel", "in_array_collapse_root_models_pydantic_v2.py"),
+        ("oneOf", "--collapse-root-models", "pydantic_v2.BaseModel", "in_array_collapse_root_models_pydantic_v2.py"),
     ],
 )
-def test_main_openapi_discriminator_in_array(kind: str, option: str | None, expected: str, output_file: Path) -> None:
+def test_main_openapi_discriminator_in_array(
+    kind: str, option: str | None, output_model: str | None, expected: str, output_file: Path
+) -> None:
     """Test OpenAPI generation with discriminator in array."""
     input_file = f"discriminator_in_array_{kind.lower()}.yaml"
     extra_args = [option] if option else []
+    if output_model:
+        extra_args.extend(["--output-model-type", output_model])
     run_main_and_assert(
         input_path=OPEN_API_DATA_PATH / input_file,
         output_path=output_file,
@@ -2607,6 +2611,20 @@ def test_main_openapi_discriminator_in_array(kind: str, option: str | None, expe
         expected_file=f"discriminator/{expected}",
         extra_args=extra_args,
         transform=lambda s: s.replace(input_file, "discriminator_in_array.yaml"),
+    )
+
+
+@freeze_time("2023-07-27")
+@SKIP_PYDANTIC_V1
+def test_main_openapi_discriminator_in_array_underscore(output_file: Path) -> None:
+    """Test discriminator with underscore property name generates valid Pydantic v2 code."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "discriminator_in_array_underscore.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="discriminator/in_array_underscore_pydantic_v2.py",
+        extra_args=["--output-model-type", "pydantic_v2.BaseModel", "--collapse-root-models"],
     )
 
 
@@ -4474,6 +4492,25 @@ def test_main_allof_enum_ref(output_file: Path) -> None:
     version.parse(pydantic.VERSION) < version.parse("2.0.0"),
     reason="Require Pydantic version 2.0.0 or later",
 )
+def test_main_openapi_allof_single_ref_inline(output_file: Path) -> None:
+    """Test that single $ref in allOf inline property does not create wrapper class."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "allof_single_ref_inline.yaml",
+        output_path=output_file,
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--enum-field-as-literal",
+            "all",
+        ],
+        assert_func=assert_file_content,
+    )
+
+
+@pytest.mark.skipif(
+    version.parse(pydantic.VERSION) < version.parse("2.0.0"),
+    reason="Require Pydantic version 2.0.0 or later",
+)
 def test_main_openapi_module_class_name_collision_pydantic_v2(output_dir: Path) -> None:
     """Test Issue #1994: module and class name collision (e.g., A.A schema)."""
     run_main_and_assert(
@@ -4687,3 +4724,82 @@ def test_query_parameters_with_model_config(output_file: Path) -> None:
             "--allow-population-by-field-name",
         ],
     )
+
+
+def test_main_openapi_use_default_with_default_values_parameters(output_file: Path) -> None:
+    """Test --use-default combined with --default-values on required OpenAPI parameters."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "default_values_parameters.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="default_values_parameters_use_default.py",
+        extra_args=[
+            "--use-default",
+            "--default-values",
+            str(DEFAULT_VALUES_DATA_PATH / "openapi_params_defaults.json"),
+            "--openapi-scopes",
+            "paths",
+            "parameters",
+        ],
+    )
+
+
+@pytest.mark.cli_doc(
+    options=["--openapi-include-paths"],
+    option_description="""Filter OpenAPI paths to include in model generation.
+
+The `--openapi-include-paths` flag allows filtering which paths are processed.""",
+    input_schema="openapi/body_and_parameters.yaml",
+    cli_args=["--openapi-scopes", "paths", "schemas", "--openapi-include-paths", "/pets*"],
+    golden_output="openapi/openapi_include_paths/pets_only.py",
+)
+def test_main_openapi_include_paths(output_file: Path) -> None:
+    """Filter OpenAPI paths to include in model generation.
+
+    The `--openapi-include-paths` flag allows filtering which paths are processed.
+    """
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "body_and_parameters.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file=EXPECTED_OPENAPI_PATH / "openapi_include_paths" / "pets_only.py",
+        extra_args=["--openapi-scopes", "paths", "schemas", "--openapi-include-paths", "/pets*"],
+    )
+
+
+def test_main_openapi_include_paths_without_leading_slash(output_file: Path) -> None:
+    """Test path pattern matching works without leading slash."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "body_and_parameters.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file=EXPECTED_OPENAPI_PATH / "openapi_include_paths" / "pets_only.py",
+        extra_args=["--openapi-scopes", "paths", "schemas", "--openapi-include-paths", "pets*"],
+    )
+
+
+def test_main_openapi_include_paths_warning_without_paths_scope() -> None:
+    """Warn when --openapi-include-paths used without paths scope."""
+    import warnings
+
+    from datamodel_code_generator.__main__ import main
+
+    with warnings.catch_warnings(record=True) as w:
+        warnings.simplefilter("always")
+        main([
+            "--input",
+            str(OPEN_API_DATA_PATH / "body_and_parameters.yaml"),
+            "--input-file-type",
+            "openapi",
+            "--openapi-scopes",
+            "schemas",
+            "--openapi-include-paths",
+            "/pets*",
+        ])
+        warning_messages = [str(warning.message) for warning in w]
+        assert any(
+            "--openapi-include-paths has no effect without --openapi-scopes paths" in msg for msg in warning_messages
+        )

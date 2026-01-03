@@ -12,13 +12,16 @@ from textwrap import dedent, indent
 from types import EllipsisType, FrameType, FunctionType, ModuleType, NotImplementedType, TracebackType
 from typing import (  # noqa: UP035
     IO,
+    Annotated,
     Any,
     AnyStr,
     Dict,
     Generic,
     List,
     NewType,
+    NotRequired,
     Optional,
+    Required,
     Tuple,
     Type,
     TypeVar,
@@ -75,7 +78,7 @@ class A:
     class Inner: ...
 
 
-class B(Generic[T]):
+class B[T]:
     name = "Foo"  # This is set to make sure the correct class name ("B") is picked up
 
 
@@ -394,6 +397,9 @@ _CASES = [
         r":py:data:`~typing.Tuple`\ \[:py:class:`int`, :py:data:`...<Ellipsis>`]",
         id="Tuple-p-Ellipsis",
     ),
+    pytest.param(Annotated[int, "metadata"], r":py:class:`int`", id="Annotated-metadata"),
+    pytest.param(Required[int], r":py:class:`~typing.Required`\ \[:py:class:`int`]", id="Required"),
+    pytest.param(NotRequired[int], r":py:class:`~typing.NotRequired`\ \[:py:class:`int`]", id="NotRequired"),
 ]
 
 

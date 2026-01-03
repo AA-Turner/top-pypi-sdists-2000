@@ -3,7 +3,7 @@ Type annotations for s3 service literal definitions.
 
 [Documentation](https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3/literals/)
 
-Copyright 2025 Vlad Emelianov
+Copyright 2026 Vlad Emelianov
 
 Usage::
 
@@ -217,6 +217,7 @@ InventoryOptionalFieldType = Literal[
     "IntelligentTieringAccessTier",
     "IsMultipartUploaded",
     "LastModifiedDate",
+    "LifecycleExpirationDate",
     "ObjectAccessControlList",
     "ObjectLockLegalHoldStatus",
     "ObjectLockMode",
@@ -458,7 +459,6 @@ ServiceName = Literal[
     "eks-auth",
     "elasticache",
     "elasticbeanstalk",
-    "elastictranscoder",
     "elb",
     "elbv2",
     "emr",
@@ -723,6 +723,7 @@ ServiceName = Literal[
     "waf-regional",
     "wafv2",
     "wellarchitected",
+    "wickr",
     "wisdom",
     "workdocs",
     "workmail",

@@ -1,7 +1,7 @@
 """
 Type annotations for boto3.session module.
 
-Copyright 2025 Vlad Emelianov
+Copyright 2026 Vlad Emelianov
 """
 
 import sys

@@ -1,7 +1,7 @@
 """
 Source of truth for version.
 
-Copyright 2025 Vlad Emelianov
+Copyright 2026 Vlad Emelianov
 """
 
-__version__ = "3.0.0"
+__version__ = "3.1.0"

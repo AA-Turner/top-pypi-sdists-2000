@@ -158,7 +158,6 @@ from types_aiobotocore_eks.client import EKSClient
 from types_aiobotocore_eks_auth.client import EKSAuthClient
 from types_aiobotocore_elasticache.client import ElastiCacheClient
 from types_aiobotocore_elasticbeanstalk.client import ElasticBeanstalkClient
-from types_aiobotocore_elastictranscoder.client import ElasticTranscoderClient
 from types_aiobotocore_elb.client import ElasticLoadBalancingClient
 from types_aiobotocore_elbv2.client import ElasticLoadBalancingv2Client
 from types_aiobotocore_emr.client import EMRClient
@@ -433,6 +432,7 @@ from types_aiobotocore_waf.client import WAFClient
 from types_aiobotocore_waf_regional.client import WAFRegionalClient
 from types_aiobotocore_wafv2.client import WAFV2Client
 from types_aiobotocore_wellarchitected.client import WellArchitectedClient
+from types_aiobotocore_wickr.client import WickrAdminAPIClient
 from types_aiobotocore_wisdom.client import ConnectWisdomServiceClient
 from types_aiobotocore_workdocs.client import WorkDocsClient
 from types_aiobotocore_workmail.client import WorkMailClient
@@ -3149,25 +3149,6 @@ class AioSession(BotocoreSession):
     ) -> ClientCreatorContext[ElasticBeanstalkClient]:
         """
         Create client for ElasticBeanstalk service.
-        """
-
-    @overload  # type: ignore[override]
-    def create_client(  # type: ignore[override]
-        self,
-        service_name: Literal["elastictranscoder"],
-        region_name: str | None = ...,
-        api_version: str | None = ...,
-        use_ssl: bool | None = ...,
-        verify: bool | str | None = ...,
-        endpoint_url: str | None = ...,
-        aws_access_key_id: str | None = ...,
-        aws_secret_access_key: str | None = ...,
-        aws_session_token: str | None = ...,
-        config: AioConfig | None = ...,
-        aws_account_id: str | None = ...,
-    ) -> ClientCreatorContext[ElasticTranscoderClient]:
-        """
-        Create client for ElasticTranscoder service.
         """
 
     @overload  # type: ignore[override]
@@ -8184,6 +8165,25 @@ class AioSession(BotocoreSession):
     ) -> ClientCreatorContext[WellArchitectedClient]:
         """
         Create client for WellArchitected service.
+        """
+
+    @overload  # type: ignore[override]
+    def create_client(  # type: ignore[override]
+        self,
+        service_name: Literal["wickr"],
+        region_name: str | None = ...,
+        api_version: str | None = ...,
+        use_ssl: bool | None = ...,
+        verify: bool | str | None = ...,
+        endpoint_url: str | None = ...,
+        aws_access_key_id: str | None = ...,
+        aws_secret_access_key: str | None = ...,
+        aws_session_token: str | None = ...,
+        config: AioConfig | None = ...,
+        aws_account_id: str | None = ...,
+    ) -> ClientCreatorContext[WickrAdminAPIClient]:
+        """
+        Create client for WickrAdminAPI service.
         """
 
     @overload  # type: ignore[override]

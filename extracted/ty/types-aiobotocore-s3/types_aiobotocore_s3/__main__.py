@@ -1,7 +1,7 @@
 """
 Main CLI entrypoint.
 
-Copyright 2025 Vlad Emelianov
+Copyright 2026 Vlad Emelianov
 """
 
 import sys
@@ -12,8 +12,8 @@ def print_info() -> None:
     Print package info to stdout.
     """
     sys.stdout.write(
-        "Type annotations for aiobotocore S3 3.0.0\n"
-        "Version:         3.0.0\n"
+        "Type annotations for aiobotocore S3 3.1.0\n"
+        "Version:         3.1.0\n"
         "Builder version: 8.12.0\n"
         "Docs:            https://youtype.github.io/types_aiobotocore_docs/types_aiobotocore_s3//\n"
         "Boto3 docs:      https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#s3\n"
@@ -26,7 +26,7 @@ def print_version() -> None:
     """
     Print package version to stdout.
     """
-    sys.stdout.write("3.0.0\n")
+    sys.stdout.write("3.1.0\n")
 
 
 def main() -> None:
