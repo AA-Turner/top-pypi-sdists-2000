@@ -520,8 +520,9 @@ typing_options.add_argument(
 )
 typing_options.add_argument(
     "--use-annotated",
-    help="Use typing.Annotated for Field(). Also, `--field-constraints` option will be enabled.",
-    action="store_true",
+    help="Use typing.Annotated for Field(). Also, `--field-constraints` option will be enabled. "
+    "Will become default for Pydantic v2 in a future version.",
+    action=BooleanOptionalAction,
     default=None,
 )
 typing_options.add_argument(
@@ -874,6 +875,12 @@ template_options.add_argument(
     "apply the template data to multiple objects with the same name. "
     "If you are using another input file type (e.g. GraphQL), the key is the name of the object. "
     "The value is a dictionary of the template data to add.",
+    type=Path,
+)
+template_options.add_argument(
+    "--validators",
+    help="Validators configuration file (JSON). Defines field validators for Pydantic v2 models. "
+    "Keys are model names, values contain validator definitions with field, function, and mode.",
     type=Path,
 )
 template_options.add_argument(

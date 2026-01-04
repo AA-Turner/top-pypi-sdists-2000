@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: aiohttp
-Version: 3.13.2
+Version: 3.13.3
 Summary: Async http client/server framework (asyncio)
 Maintainer-email: aiohttp team <team@aiohttp.org>
 License: Apache-2.0 AND MIT
@@ -42,8 +42,8 @@ Requires-Dist: propcache>=0.2.0
 Requires-Dist: yarl<2.0,>=1.17.0
 Provides-Extra: speedups
 Requires-Dist: aiodns>=3.3.0; extra == "speedups"
-Requires-Dist: Brotli; platform_python_implementation == "CPython" and extra == "speedups"
-Requires-Dist: brotlicffi; platform_python_implementation != "CPython" and extra == "speedups"
+Requires-Dist: Brotli>=1.2; platform_python_implementation == "CPython" and extra == "speedups"
+Requires-Dist: brotlicffi>=1.2; platform_python_implementation != "CPython" and extra == "speedups"
 Requires-Dist: backports.zstd; (platform_python_implementation == "CPython" and python_version < "3.14") and extra == "speedups"
 Dynamic: license-file
 

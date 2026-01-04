@@ -13,9 +13,10 @@ leads to an inferred FrozenSet:
 
 from __future__ import annotations
 
+import sys
 from collections.abc import Generator, Iterator
 from functools import cached_property
-from typing import Any, Literal, NoReturn, TypeVar
+from typing import Any, Literal, NoReturn
 
 from astroid import bases, util
 from astroid.context import InferenceContext
@@ -30,7 +31,10 @@ from astroid.manager import AstroidManager
 from astroid.nodes import node_classes, scoped_nodes
 from astroid.typing import InferenceResult, SuccessfulInferenceResult
 
-_T = TypeVar("_T")
+if sys.version_info >= (3, 11):
+    from typing import Self
+else:
+    from typing_extensions import Self
 
 
 class FrozenSet(node_classes.BaseContainer):
@@ -355,6 +359,6 @@ class Property(scoped_nodes.FunctionDef):
         raise InferenceError("Properties are not callable")
 
     def _infer(
-        self: _T, context: InferenceContext | None = None, **kwargs: Any
-    ) -> Generator[_T]:
+        self, context: InferenceContext | None = None, **kwargs: Any
+    ) -> Generator[Self]:
         yield self
