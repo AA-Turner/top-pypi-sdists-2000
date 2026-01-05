@@ -1,6 +1,6 @@
 [project]
 name = "marshmallow"
-version = "4.1.2"
+version = "4.2.0"
 description = "A lightweight library for converting complex datatypes to and from native Python datatypes."
 readme = "README.rst"
 license = { file = "LICENSE" }
@@ -37,7 +37,7 @@ Tidelift = "https://tidelift.com/subscription/pkg/pypi-marshmallow?utm_source=py
 [project.optional-dependencies]
 docs = [
   "autodocsumm==0.2.14",
-  "furo==2025.9.25",
+  "furo==2025.12.19",
   "sphinx-copybutton==0.5.2",
   "sphinx-issues==5.0.1",
   "sphinx==8.2.3",
@@ -125,7 +125,7 @@ ignore = [
 [tool.mypy]
 files = ["src", "tests", "examples"]
 ignore_missing_imports = true
-warn_unreachable = true
+warn_unreachable = false
 warn_unused_ignores = true
 warn_redundant_casts = true
 no_implicit_optional = true

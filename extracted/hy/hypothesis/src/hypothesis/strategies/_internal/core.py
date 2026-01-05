@@ -45,7 +45,6 @@ from typing import (
 )
 from uuid import UUID
 
-from hypothesis._settings import note_deprecation
 from hypothesis.control import (
     cleanup,
     current_build_context,
@@ -138,6 +137,7 @@ from hypothesis.strategies._internal.strings import (
 )
 from hypothesis.strategies._internal.utils import cacheable, defines_strategy
 from hypothesis.utils.conventions import not_set
+from hypothesis.utils.deprecation import note_deprecation
 from hypothesis.vendor.pretty import RepresentationPrinter
 
 
@@ -1348,6 +1348,16 @@ def _from_type(thing: type[Ex]) -> SearchStrategy[Ex]:
             if strategy is not NotImplemented:
                 return strategy
         return _from_type(thing.__value__)  # type: ignore
+    if types.is_a_type_alias_type(origin := get_origin(thing)):  # pragma: no cover
+        # Handle parametrized type aliases like `type A[T] = list[T]; thing = A[int]`.
+        # In this case, `thing` is a GenericAlias whose origin is a TypeAliasType.
+        #
+        # covered by 3.12+ tests.
+        if origin in types._global_type_lookup:
+            strategy = as_strategy(types._global_type_lookup[origin], thing)
+            if strategy is not NotImplemented:
+                return strategy
+        return _from_type(types.evaluate_type_alias_type(thing))
     if types.is_a_union(thing):
         args = sorted(thing.__args__, key=types.type_sorting_key)  # type: ignore
         return one_of([_from_type(t) for t in args])
@@ -1397,9 +1407,9 @@ def _from_type(thing: type[Ex]) -> SearchStrategy[Ex]:
                 return strategy
         elif (
             isinstance(thing, GenericAlias)
-            and (to := get_origin(thing)) in types._global_type_lookup
+            and (origin := get_origin(thing)) in types._global_type_lookup
         ):
-            strategy = as_strategy(types._global_type_lookup[to], thing)
+            strategy = as_strategy(types._global_type_lookup[origin], thing)
             if strategy is not NotImplemented:
                 return strategy
     except TypeError:  # pragma: no cover

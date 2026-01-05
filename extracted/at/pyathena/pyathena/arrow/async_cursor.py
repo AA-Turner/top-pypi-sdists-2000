@@ -38,22 +38,25 @@ class AsyncArrowCursor(AsyncCursor):
         arraysize: Number of rows to fetch per batch (configurable).
 
     Example:
-        >>> import asyncio
         >>> from pyathena.arrow.async_cursor import AsyncArrowCursor
         >>>
         >>> cursor = connection.cursor(AsyncArrowCursor, unload=True)
         >>> query_id, future = cursor.execute("SELECT * FROM large_table")
         >>>
         >>> # Get result when ready
-        >>> result_set = await future
+        >>> result_set = future.result()
         >>> arrow_table = result_set.as_arrow()
         >>>
         >>> # Convert to pandas if needed
         >>> df = arrow_table.to_pandas()
+        >>>
+        >>> # Convert to Polars if needed (requires polars)
+        >>> polars_df = result_set.as_polars()
 
     Note:
         Requires pyarrow to be installed. UNLOAD operations generate
-        Parquet files in S3 for optimal Arrow compatibility.
+        Parquet files in S3 for optimal Arrow compatibility. For Polars
+        interoperability, polars must be installed separately.
     """
 
     def __init__(

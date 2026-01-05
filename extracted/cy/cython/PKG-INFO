@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: Cython
-Version: 3.2.3
+Version: 3.2.4
 Summary: The Cython compiler for writing C extensions in the Python language.
 Home-page: https://cython.org/
 Author: Robert Bradshaw, Stefan Behnel, David Woods, Greg Ewing, et al.
@@ -65,32 +65,94 @@ to install an uncompiled (slower) version of Cython with::
 
 .. _Pyrex: https://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/
 
-3.2.3 (2025-12-14)
+3.2.4 (2026-01-04)
 ==================
 
 Features added
 --------------
 
-* The C-API declarations were updated to include the new ``PyList_*()`` functions.
-  (Github issue https://github.com/cython/cython/issues/7291)
+* In preparation of Cython 3.3, a new decorator ``@collection_type(tname)`` can be used
+  to advertise an extension type as being a ``'sequence'`` or ``'mapping'``.  This currently
+  only has the effect of setting the ``Py_TPFLAGS_SEQUENCE`` flag on the type or not, but
+  is provided for convenience to allow using the new decorator already in Cython 3.2 code.
 
-* The ``Py_mod_gil`` module setting can now be changed with a C macro, overriding
-  the ``freethreading_compatible`` directive setting.
-  (Github issue https://github.com/cython/cython/issues/7404)
+* Several C++ exception declarations were added to ``libcpp.exceptions``.
+  (Github issue https://github.com/cython/cython/issues/7389)
 
 Bugs fixed
 ----------
 
-* t-strings lost the last element when compiled for the Limited API.
-  (Github issue https://github.com/cython/cython/issues/7381)
+* Pseudo-literal default values of function arguments like ``arg=str()`` could generate
+  invalid C code when internally converted into a real literal.
+  (Github issue https://github.com/cython/cython/issues/6192)
 
-* The ``array.data`` property of the ``cpython.array`` declarations generated a
-  useless exception check that degraded its use in ``nogil`` code.
-  (Github issue https://github.com/cython/cython/issues/7408)
+* The pickle serialisation of extension types using the ``auto_pickle`` feature was
+  larger than necessary since 3.2.0 for types without Python object attributes.
+  It is now back to the state before 3.2.0 again.
+  (Github issue https://github.com/cython/cython/issues/7443)
 
-* Parallel builds with the ``cythonize`` command could request more processes
-  than allowed by the platform, thus failing the build.
-  (Github issue https://github.com/cython/cython/issues/7384)
+* Constants are now only made immortal on freethreading Python if they are not shared.
+  (Github issue https://github.com/cython/cython/issues/7439)
 
-* A minor thread sanitizer issue was resolved.
-  (Github issue https://github.com/cython/cython/issues/7383)
+* ``PyDict_SetDefaultRef()`` is now used when available to avoid temporary borrowed references.
+  (Github issue https://github.com/cython/cython/issues/7347)
+
+* Includes all fixes as of Cython 3.1.8.
+
+3.1.8 (2026-01-03):
+
+* Assignment expressions used in comprehensions could look at the wrong scope,
+  thus using different variables and different data.
+  (Github issue https://github.com/cython/cython/issues/6547)
+
+* Some internal C symbols were not declared as ``static``, preventing static linking
+  of multiple modules.
+  Patch by Yury Popov.  (Github issue https://github.com/cython/cython/issues/7310)
+
+* Accidentally using ``except +`` in C mode did not raise a compile error but generated
+  invalid C code leading to obscure error messages.
+  Patch by user202729.  (Github issue https://github.com/cython/cython/issues/6560)
+
+3.1.7 (2025-11-12):
+
+* Unicode characters formatted from C integers with padding, as in ``f"{value:XXc}"``,
+  could result in invalid Python string objects since Cython 3.1.0.
+  Also, lone surrogates failed to format in this way.
+  (Github issue https://github.com/cython/cython/issues/7298)
+
+* Assigning nested structs from a list of structs (item by item) could crash Cython.
+  (Github issue https://github.com/cython/cython/issues/7308)
+
+* Cython incorrectly called ``PyList_GetItemRef()`` in PyPy and GraalPython before Py3.13.
+  (Github issue https://github.com/cython/cython/issues/7269)
+
+* Trying to instantiate internal types used by Cython is now prohibited.
+  (Github issue https://github.com/cython/cython/issues/7263)
+
+3.1.6 (2025-10-23):
+
+* Unicode characters formatted from C integers with ``f"{value:c}"`` could result in
+  invalid Python string objects since Cython 3.1.0.
+  (Github issue https://github.com/cython/cython/issues/7240)
+
+* ``cythonize`` (program and function) now uses ``concurrent.futures.ProcessPoolExecutor``
+  instead of ``multiprocessing.Pool`` to fix a hang on build failures in parallel builds.
+  A possible work-around is to disable parallel builds.
+  Patch by Sviatoslav Sydorenko.  (Github issue https://github.com/cython/cython/issues/7183)
+
+3.1.5 (2025-10-20):
+
+* Conversion from C++ strings longer than ``PY_SSIZE_T_MAX`` did not validate the length.
+
+* Some non-Limited API code was incorrectly used in generated header files.
+  (Github issue https://github.com/cython/cython/issues/7157)
+
+* Optimised unpacking of Python integers in expressions uses a slightly safer scheme.
+  (Github issue https://github.com/cython/cython/issues/7134)
+
+* Empty return statements were not always reported when tracing.
+  (Github issue https://github.com/cython/cython/issues/7022)
+
+* Value conversion errors when tracing C return statements no longer fail the trace
+  but fall back to reporting ``None`` returns instead.
+  (Github issue https://github.com/cython/cython/issues/6503)

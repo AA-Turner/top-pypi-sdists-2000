@@ -15,6 +15,7 @@ from pyathena.model import AthenaCompression, AthenaFileFormat, AthenaQueryExecu
 from pyathena.result_set import WithResultSet
 
 if TYPE_CHECKING:
+    import polars as pl
     from pyarrow import Table
 
 _logger = logging.getLogger(__name__)  # type: ignore
@@ -316,3 +317,27 @@ class ArrowCursor(BaseCursor, CursorIterator, WithResultSet):
             raise ProgrammingError("No result set.")
         result_set = cast(AthenaArrowResultSet, self.result_set)
         return result_set.as_arrow()
+
+    def as_polars(self) -> "pl.DataFrame":
+        """Return query results as a Polars DataFrame.
+
+        Converts the Apache Arrow Table to a Polars DataFrame for
+        interoperability with the Polars data processing library.
+
+        Returns:
+            Polars DataFrame containing all query results.
+
+        Raises:
+            ProgrammingError: If no query has been executed or no results are available.
+            ImportError: If polars is not installed.
+
+        Example:
+            >>> cursor = connection.cursor(ArrowCursor)
+            >>> cursor.execute("SELECT * FROM my_table")
+            >>> df = cursor.as_polars()
+            >>> print(f"DataFrame has {df.height} rows and {df.width} columns")
+        """
+        if not self.has_result_set:
+            raise ProgrammingError("No result set.")
+        result_set = cast(AthenaArrowResultSet, self.result_set)
+        return result_set.as_polars()
