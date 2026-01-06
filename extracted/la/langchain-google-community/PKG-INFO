@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: langchain-google-community
-Version: 3.0.2
+Version: 3.0.3
 Summary: An integration package connecting miscellaneous Google's products and LangChain
 Project-URL: Homepage, https://docs.langchain.com/oss/python/integrations/providers/google
 Project-URL: Documentation, https://reference.langchain.com/python/integrations/langchain_google_community/
@@ -18,7 +18,7 @@ Requires-Dist: google-cloud-core<3.0.0,>=2.4.3
 Requires-Dist: google-cloud-modelarmor<1.0.0,>=0.2.8
 Requires-Dist: grpcio<2.0.0,>=1.74.0
 Requires-Dist: langchain-community<2.0.0,>=0.4.0
-Requires-Dist: langchain-core<2.0.0,>=1.0.0
+Requires-Dist: langchain-core<2.0.0,>=1.2.5
 Provides-Extra: calendar
 Requires-Dist: google-auth-oauthlib<2.0.0,>=1.2.0; extra == 'calendar'
 Requires-Dist: google-auth<3.0.0,>=2.36.0; extra == 'calendar'

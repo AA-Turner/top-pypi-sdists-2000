@@ -126,6 +126,17 @@ class DeprecatedInterrupt(TypedDict, total=False):
     """When the interrupt occurred, always "during"."""
 
 
+class ThreadTTLInfo(TypedDict, total=False):
+    """TTL information for a thread. Only present when ?include=ttl is passed."""
+
+    strategy: Literal["delete", "keep_latest"]
+    """The TTL strategy."""
+    ttl_minutes: float
+    """The TTL in minutes."""
+    expires_at: datetime
+    """When the thread will expire."""
+
+
 class Thread(TypedDict):
     thread_id: UUID
     """The ID of the thread."""
@@ -145,6 +156,8 @@ class Thread(TypedDict):
     """The current state of the thread."""
     interrupts: dict[str, list[Interrupt]]
     """The current interrupts of the thread, a map of task_id to list of interrupts."""
+    ttl: NotRequired[ThreadTTLInfo]
+    """TTL information if set for this thread. Only present when ?include=ttl is passed."""
 
 
 class ThreadTask(TypedDict):

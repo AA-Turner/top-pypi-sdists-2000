@@ -106,12 +106,19 @@ class HttpConfig(TypedDict, total=False):
 
 
 class ThreadTTLConfig(TypedDict, total=False):
-    strategy: Literal["delete"]
-    """Action taken when a thread exceeds its TTL. Currently only "delete" is supported."""
+    strategy: Literal["delete", "keep_latest"]
+    """Action taken when a thread exceeds its TTL.
+
+    - "delete": Remove the thread and all its data entirely.
+    - "keep_latest": Prune old checkpoints but keep the thread and its latest state.
+      Requires core API (FF_USE_CORE_API=true).
+    """
     default_ttl: float | None
     """Default thread TTL in minutes; threads past this age are subject to the `strategy`."""
     sweep_interval_minutes: int | None
     """How often to scan for expired threads, in minutes."""
+    sweep_limit: int | None
+    """Maximum number of threads to process per sweep iteration. Defaults to 1000."""
 
 
 class IndexConfig(TypedDict, total=False):

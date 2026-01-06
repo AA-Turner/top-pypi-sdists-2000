@@ -43,7 +43,7 @@ class DataClass(DataModel):
         fields: list[DataModelFieldBase],
         decorators: list[str] | None = None,
         base_classes: list[Reference] | None = None,
-        custom_base_class: str | None = None,
+        custom_base_class: str | list[str] | None = None,
         custom_template_dir: Path | None = None,
         extra_template_data: defaultdict[str, dict[str, Any]] | None = None,
         methods: list[str] | None = None,
@@ -151,7 +151,7 @@ class DataModelField(DataModelFieldV2):
     Inherits pydantic v2 Field() constraint handling from DataModelFieldV2.
     """
 
-    constraints: Constraints | None = None  # pyright: ignore[reportIncompatibleVariableOverride]
+    constraints: Constraints | None = None  # ty: ignore
 
     def process_const(self) -> None:
         """Process const field constraint using literal type."""

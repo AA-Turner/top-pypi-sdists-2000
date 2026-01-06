@@ -243,6 +243,7 @@ class Attention(nn.Module):
         self.key_attn_dim = key_dim * num_heads
         self.val_dim = int(attn_ratio * key_dim)
         self.val_attn_dim = int(attn_ratio * key_dim) * num_heads
+        self.resolution = resolution
 
         self.qkv = ln_layer(dim, self.val_attn_dim + self.key_attn_dim * 2, **dd)
         self.proj = nn.Sequential(OrderedDict([
@@ -250,21 +251,46 @@ class Attention(nn.Module):
             ('ln', ln_layer(self.val_attn_dim, dim, bn_weight_init=0, **dd))
         ]))
 
-        self.attention_biases = nn.Parameter(torch.zeros(num_heads, resolution[0] * resolution[1], **dd))
-        pos = torch.stack(ndgrid(
-            torch.arange(resolution[0], device=device, dtype=torch.long),
-            torch.arange(resolution[1], device=device, dtype=torch.long),
-        )).flatten(1)
-        rel_pos = (pos[..., :, None] - pos[..., None, :]).abs()
-        rel_pos = (rel_pos[0] * resolution[1]) + rel_pos[1]
-        self.register_buffer('attention_bias_idxs', rel_pos, persistent=False)
+        N = resolution[0] * resolution[1]
+        self.attention_biases = nn.Parameter(torch.empty(num_heads, N, **dd))
+        self.register_buffer(
+            'attention_bias_idxs', torch.empty((N, N), device=device, dtype=torch.long), persistent=False)
         self.attention_bias_cache = {}
+
+        if not self.attention_biases.is_meta:
+            self.reset_parameters()
 
     @torch.no_grad()
     def train(self, mode=True):
         super().train(mode)
         if mode and self.attention_bias_cache:
             self.attention_bias_cache = {}  # clear ab cache
+
+    def reset_parameters(self) -> None:
+        """Initialize parameters and buffers."""
+        nn.init.zeros_(self.attention_biases)
+        self._init_buffers()
+
+    def _compute_attention_bias_idxs(self, device=None):
+        """Compute relative position indices for attention bias."""
+        pos = torch.stack(ndgrid(
+            torch.arange(self.resolution[0], device=device, dtype=torch.long),
+            torch.arange(self.resolution[1], device=device, dtype=torch.long),
+        )).flatten(1)
+        rel_pos = (pos[..., :, None] - pos[..., None, :]).abs()
+        rel_pos = (rel_pos[0] * self.resolution[1]) + rel_pos[1]
+        return rel_pos
+
+    def _init_buffers(self) -> None:
+        """Compute and fill non-persistent buffer values."""
+        self.attention_bias_idxs.copy_(
+            self._compute_attention_bias_idxs(device=self.attention_bias_idxs.device)
+        )
+        self.attention_bias_cache = {}
+
+    def init_non_persistent_buffers(self) -> None:
+        """Initialize non-persistent buffers."""
+        self._init_buffers()
 
     def get_attention_biases(self, device: torch.device) -> torch.Tensor:
         if torch.jit.is_tracing() or self.training:
@@ -352,26 +378,50 @@ class AttentionDownsample(nn.Module):
             ('ln', ln_layer(self.val_attn_dim, out_dim, **dd))
         ]))
 
-        self.attention_biases = nn.Parameter(torch.zeros(num_heads, resolution[0] * resolution[1], **dd))
-        k_pos = torch.stack(ndgrid(
-            torch.arange(resolution[0], device=device, dtype=torch.long),
-            torch.arange(resolution[1], device=device, dtype=torch.long),
-        )).flatten(1)
-        q_pos = torch.stack(ndgrid(
-            torch.arange(0, resolution[0], step=stride, device=device, dtype=torch.long),
-            torch.arange(0, resolution[1], step=stride, device=device, dtype=torch.long),
-        )).flatten(1)
-        rel_pos = (q_pos[..., :, None] - k_pos[..., None, :]).abs()
-        rel_pos = (rel_pos[0] * resolution[1]) + rel_pos[1]
-        self.register_buffer('attention_bias_idxs', rel_pos, persistent=False)
+        N_k = resolution[0] * resolution[1]
+        N_q = -(-resolution[0] // stride) * -(-resolution[1] // stride)  # ceiling division
+        self.attention_biases = nn.Parameter(torch.empty(num_heads, N_k, **dd))
+        self.register_buffer('attention_bias_idxs', torch.empty((N_q, N_k), device=device, dtype=torch.long), persistent=False)
+        self.attention_bias_cache = {}
 
-        self.attention_bias_cache = {}  # per-device attention_biases cache
+        if not self.attention_biases.is_meta:
+            self.reset_parameters()
 
     @torch.no_grad()
     def train(self, mode=True):
         super().train(mode)
         if mode and self.attention_bias_cache:
             self.attention_bias_cache = {}  # clear ab cache
+
+    def reset_parameters(self) -> None:
+        """Initialize parameters and buffers."""
+        nn.init.zeros_(self.attention_biases)
+        self._init_buffers()
+
+    def _compute_attention_bias_idxs(self, device=None):
+        """Compute relative position indices for attention bias."""
+        k_pos = torch.stack(ndgrid(
+            torch.arange(self.resolution[0], device=device, dtype=torch.long),
+            torch.arange(self.resolution[1], device=device, dtype=torch.long),
+        )).flatten(1)
+        q_pos = torch.stack(ndgrid(
+            torch.arange(0, self.resolution[0], step=self.stride, device=device, dtype=torch.long),
+            torch.arange(0, self.resolution[1], step=self.stride, device=device, dtype=torch.long),
+        )).flatten(1)
+        rel_pos = (q_pos[..., :, None] - k_pos[..., None, :]).abs()
+        rel_pos = (rel_pos[0] * self.resolution[1]) + rel_pos[1]
+        return rel_pos
+
+    def _init_buffers(self) -> None:
+        """Compute and fill non-persistent buffer values."""
+        self.attention_bias_idxs.copy_(
+            self._compute_attention_bias_idxs(device=self.attention_bias_idxs.device)
+        )
+        self.attention_bias_cache = {}
+
+    def init_non_persistent_buffers(self) -> None:
+        """Initialize non-persistent buffers."""
+        self._init_buffers()
 
     def get_attention_biases(self, device: torch.device) -> torch.Tensor:
         if torch.jit.is_tracing() or self.training:
@@ -695,6 +745,16 @@ class Levit(nn.Module):
 
         # Classifier head
         self.head = NormLinear(embed_dim[-1], num_classes, drop=drop_rate, **dd) if num_classes > 0 else nn.Identity()
+
+        if not self.stem.conv1.linear.weight.is_meta:
+            self.init_weights(needs_reset=False)
+
+    def init_weights(self, needs_reset: bool = True):
+        self.apply(partial(self._init_weights, needs_reset=needs_reset))
+
+    def _init_weights(self, m: nn.Module, needs_reset: bool = True) -> None:
+        if needs_reset and hasattr(m, 'reset_parameters'):
+            m.reset_parameters()
 
     @torch.jit.ignore
     def no_weight_decay(self):

@@ -696,7 +696,7 @@ class Parser(ABC, Generic[ParserConfigT]):
     """
 
     @classmethod
-    def _create_default_config(cls, options: ParserConfigDict) -> ParserConfigT:
+    def _create_default_config(cls, options: ParserConfigDict) -> ParserConfigT:  # ty: ignore
         """Create a default config from options.
 
         Subclasses should override this to return their own config type.
@@ -723,7 +723,7 @@ class Parser(ABC, Generic[ParserConfigT]):
             DataTypeManager=types_module.DataTypeManager,
         )
         defaults = {name: field.default for name, field in ParserConfig.__fields__.items()}
-        defaults.update(options)
+        defaults.update(options)  # ty: ignore
         return ParserConfig.construct(**defaults)  # type: ignore[return-value]
 
     def __init__(  # noqa: PLR0912, PLR0915
@@ -748,7 +748,7 @@ class Parser(ABC, Generic[ParserConfigT]):
             raise ValueError(msg)
 
         if config is None:
-            config = self._create_default_config(options)
+            config = self._create_default_config(options)  # ty: ignore
 
         self.config = config
 
@@ -780,7 +780,7 @@ class Parser(ABC, Generic[ParserConfigT]):
         self.class_decorators: list[str] = config.class_decorators or []
 
         self.base_class: str | None = config.base_class
-        self.base_class_map: dict[str, str] | None = config.base_class_map
+        self.base_class_map: dict[str, str | list[str]] | None = config.base_class_map
         self.target_python_version: PythonVersion = config.target_python_version
         self.results: list[DataModel] = []
         self.dump_resolve_reference_action: Callable[[Iterable[str]], str] | None = config.dump_resolve_reference_action
@@ -1033,11 +1033,27 @@ class Parser(ABC, Generic[ParserConfigT]):
             new_import = Import.from_full_path(additional_import_string)
             self.imports.append(new_import)
 
-    def _resolve_base_class(self, class_name: str, custom_base_path: str | None = None) -> str | None:
-        """Resolve base class with priority: base_class_map > customBasePath > base_class."""
+    def _resolve_base_class(
+        self, class_name: str, custom_base_path: str | list[str] | None = None
+    ) -> str | list[str] | None:
+        """Resolve base class(es) with priority: base_class_map > customBasePath > base_class."""
+
+        def normalize(value: str | list[str] | None) -> str | list[str] | None:
+            if value is None:  # pragma: no cover
+                return None
+            if isinstance(value, list):
+                seen: set[str] = set()
+                result = [v for v in value if isinstance(v, str) and v and v not in seen and not seen.add(v)]  # type: ignore[func-returns-value]
+                if not result:
+                    return None
+                return result[0] if len(result) == 1 else result
+            return value or None
+
         if self.base_class_map and class_name in self.base_class_map:
-            return self.base_class_map[class_name]
-        return custom_base_path or self.base_class
+            return normalize(self.base_class_map[class_name])
+        if custom_base_path:
+            return normalize(custom_base_path)
+        return self.base_class or None
 
     def _get_text_from_url(self, url: str) -> str:
         from datamodel_code_generator.http import DEFAULT_HTTP_TIMEOUT, get_body  # noqa: PLC0415
@@ -1054,7 +1070,7 @@ class Parser(ABC, Generic[ParserConfigT]):
     def get_url_path_parts(cls, url: ParseResult) -> list[str]:
         """Split URL into scheme/host and path components."""
         return [
-            f"{url.scheme}://{url.hostname}",
+            f"{url.scheme}://{url.netloc}",
             *url.path.split("/")[1:],
         ]
 
@@ -1380,12 +1396,12 @@ class Parser(ABC, Generic[ParserConfigT]):
                     if not type_names:
                         # Check the main discriminator model path
                         if mapping:
-                            check_paths(discriminator_model, mapping)  # pyright: ignore[reportArgumentType]
+                            check_paths(discriminator_model, mapping)  # ty: ignore
 
                             # Check the base_classes if they exist
                             if len(type_names) == 0:
                                 for base_class in discriminator_model.base_classes:
-                                    check_paths(base_class.reference, mapping)  # pyright: ignore[reportArgumentType]
+                                    check_paths(base_class.reference, mapping)  # ty: ignore
                         else:
                             for discriminator_field in discriminator_model.fields:
                                 if field_name not in {discriminator_field.original_name, discriminator_field.name}:
@@ -1547,6 +1563,32 @@ class Parser(ABC, Generic[ParserConfigT]):
                             continue
                         model_field.default = converted_default
                     model_field.replace_data_type(set_data_type)
+
+    @classmethod
+    def __collect_set_item_references(cls, models: list[DataModel]) -> set[str]:
+        """Collect reference paths of all types used as set/frozenset items."""
+        references: set[str] = set()
+        for model in models:
+            for field in model.fields:
+                for data_type in field.data_type.all_data_types:
+                    if data_type.is_set or data_type.is_frozen_set:
+                        for item_type in data_type.data_types:
+                            references.update(
+                                nested.reference.path for nested in item_type.all_data_types if nested.reference
+                            )
+        return references
+
+    @classmethod
+    def __mark_set_item_models_hashable(cls, models: list[DataModel]) -> None:
+        """Mark models used as set/frozenset items with hash flag for __hash__ generation."""
+        set_item_references = cls.__collect_set_item_references(models)
+
+        for model in models:
+            if model.reference.path in set_item_references:
+                if isinstance(model, Enum):
+                    continue
+                class_body_lines = model.extra_template_data.setdefault("class_body_lines", [])
+                class_body_lines.append("__hash__ = object.__hash__")
 
     @classmethod
     def __set_reference_default_value_to_field(cls, models: list[DataModel]) -> None:
@@ -1911,7 +1953,7 @@ class Parser(ABC, Generic[ParserConfigT]):
                 if data_type.alias:
                     if isinstance(enum_member, list):
                         for enum_member_ in enum_member:
-                            enum_member_.alias = data_type.alias
+                            enum_member_.alias = data_type.alias  # ty: ignore
                     else:
                         enum_member.alias = data_type.alias
 
@@ -2026,7 +2068,7 @@ class Parser(ABC, Generic[ParserConfigT]):
                     )
                     source = cast("DataModel", colliding_reference.source)
                     resolver.exclude_names.add(cast("str", filed_name))
-                    new_class_name = resolver.add(["type"], cast("str", source.class_name)).name
+                    new_class_name = resolver.add(["type"], cast("str", source.class_name)).name  # ty: ignore
                     source.class_name = new_class_name
                     all_class_names.add(new_class_name)
                 elif not rename_type:
@@ -2965,6 +3007,8 @@ class Parser(ABC, Generic[ParserConfigT]):
         module_to_import: dict[ModulePath, Imports],
     ) -> None:
         """Finalize module processing: apply generic base class and remove unused imports."""
+        all_models = [model for ctx in contexts for model in ctx.models]
+        self.__mark_set_item_models_hashable(all_models)
         self.__apply_generic_base_class(contexts)
 
         for ctx in contexts:

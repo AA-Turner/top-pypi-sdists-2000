@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: google-auth
-Version: 2.45.0
+Version: 2.46.0
 Summary: Google Authentication Library
 Home-page: https://github.com/googleapis/google-auth-library-python
 Author: Google Cloud Platform
@@ -54,7 +54,6 @@ Provides-Extra: testing
 Requires-Dist: grpcio; extra == "testing"
 Requires-Dist: flask; extra == "testing"
 Requires-Dist: freezegun; extra == "testing"
-Requires-Dist: mock; extra == "testing"
 Requires-Dist: oauth2client; extra == "testing"
 Requires-Dist: pyjwt>=2.0; extra == "testing"
 Requires-Dist: cryptography>=38.0.3; extra == "testing"

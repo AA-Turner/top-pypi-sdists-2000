@@ -8,6 +8,7 @@ from grpc import aio  # type: ignore[import]
 
 from langgraph_api import config
 
+from .generated.checkpointer_pb2_grpc import CheckpointerStub
 from .generated.core_api_pb2_grpc import AdminStub, AssistantsStub, ThreadsStub
 
 logger = structlog.stdlib.get_logger(__name__)
@@ -36,6 +37,7 @@ class GrpcClient:
         self._assistants_stub: AssistantsStub | None = None
         self._threads_stub: ThreadsStub | None = None
         self._admin_stub: AdminStub | None = None
+        self._checkpointer_stub: CheckpointerStub | None = None
 
     async def __aenter__(self):
         """Async context manager entry."""
@@ -61,6 +63,7 @@ class GrpcClient:
         self._assistants_stub = AssistantsStub(self._channel)
         self._threads_stub = ThreadsStub(self._channel)
         self._admin_stub = AdminStub(self._channel)
+        self._checkpointer_stub = CheckpointerStub(self._channel)
 
         await logger.adebug(
             "Connected to gRPC server", server_address=self.server_address
@@ -74,6 +77,7 @@ class GrpcClient:
             self._assistants_stub = None
             self._threads_stub = None
             self._admin_stub = None
+            self._checkpointer_stub = None
             await logger.adebug("Closed gRPC connection")
 
     @property
@@ -102,6 +106,15 @@ class GrpcClient:
                 "Client not connected. Use async context manager or call connect() first."
             )
         return self._admin_stub
+
+    @property
+    def checkpointer(self) -> CheckpointerStub:
+        """Get the checkpointer service stub."""
+        if self._checkpointer_stub is None:
+            raise RuntimeError(
+                "Client not connected. Use async context manager or call connect() first."
+            )
+        return self._checkpointer_stub
 
 
 class GrpcClientPool:

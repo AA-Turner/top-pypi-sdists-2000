@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: confluent-kafka
-Version: 2.12.2
+Version: 2.13.0
 Summary: Confluent's Python client for Apache Kafka
 Author-email: "Confluent Inc." <support@confluent.io>
 Project-URL: Homepage, https://github.com/confluentinc/confluent-kafka-python
@@ -45,8 +45,8 @@ Requires-Dist: certifi; extra == "rules"
 Requires-Dist: httpx>=0.26; extra == "rules"
 Requires-Dist: authlib>=1.0.0; extra == "rules"
 Provides-Extra: avro
-Requires-Dist: fastavro<1.8.0; python_version == "3.7" and extra == "avro"
-Requires-Dist: fastavro<2; python_version > "3.7" and extra == "avro"
+Requires-Dist: fastavro<1.8.0,>=1.5.4; python_version == "3.7" and extra == "avro"
+Requires-Dist: fastavro<2,>=1.5.4; python_version > "3.7" and extra == "avro"
 Requires-Dist: requests; extra == "avro"
 Requires-Dist: avro<2,>=1.11.1; extra == "avro"
 Requires-Dist: attrs>=21.2.0; extra == "avro"
@@ -85,8 +85,8 @@ Requires-Dist: attrs; extra == "dev"
 Requires-Dist: cachetools; extra == "dev"
 Requires-Dist: httpx>=0.26; extra == "dev"
 Requires-Dist: authlib>=1.0.0; extra == "dev"
-Requires-Dist: fastavro<1.8.0; python_version == "3.7" and extra == "dev"
-Requires-Dist: fastavro<2; python_version > "3.7" and extra == "dev"
+Requires-Dist: fastavro<1.8.0,>=1.5.4; python_version == "3.7" and extra == "dev"
+Requires-Dist: fastavro<2,>=1.5.4; python_version > "3.7" and extra == "dev"
 Requires-Dist: requests; extra == "dev"
 Requires-Dist: avro<2,>=1.11.1; extra == "dev"
 Requires-Dist: pyrsistent; extra == "dev"
@@ -108,6 +108,10 @@ Requires-Dist: pyyaml>=6.0.0; extra == "dev"
 Requires-Dist: tink; extra == "dev"
 Requires-Dist: urllib3<3; extra == "dev"
 Requires-Dist: flake8; extra == "dev"
+Requires-Dist: mypy; extra == "dev"
+Requires-Dist: attrs; extra == "dev"
+Requires-Dist: types-cachetools; extra == "dev"
+Requires-Dist: types-requests; extra == "dev"
 Requires-Dist: orjson; extra == "dev"
 Requires-Dist: pytest; extra == "dev"
 Requires-Dist: pytest-timeout; extra == "dev"
@@ -117,6 +121,8 @@ Requires-Dist: pytest_cov; extra == "dev"
 Requires-Dist: pluggy<1.6.0; extra == "dev"
 Requires-Dist: pytest-asyncio; extra == "dev"
 Requires-Dist: async-timeout; extra == "dev"
+Requires-Dist: black>=24.0.0; extra == "dev"
+Requires-Dist: isort>=5.13.0; extra == "dev"
 Requires-Dist: attrs>=21.2.0; extra == "dev"
 Requires-Dist: cachetools>=5.5.0; extra == "dev"
 Requires-Dist: certifi; extra == "dev"
@@ -135,8 +141,8 @@ Requires-Dist: hvac; extra == "dev"
 Requires-Dist: jsonata-python; extra == "dev"
 Requires-Dist: pyyaml>=6.0.0; extra == "dev"
 Requires-Dist: tink; extra == "dev"
-Requires-Dist: fastavro<1.8.0; python_version == "3.7" and extra == "dev"
-Requires-Dist: fastavro<2; python_version > "3.7" and extra == "dev"
+Requires-Dist: fastavro<1.8.0,>=1.5.4; python_version == "3.7" and extra == "dev"
+Requires-Dist: fastavro<2,>=1.5.4; python_version > "3.7" and extra == "dev"
 Requires-Dist: requests; extra == "dev"
 Requires-Dist: avro<2,>=1.11.1; extra == "dev"
 Requires-Dist: pyrsistent; extra == "dev"
@@ -167,8 +173,8 @@ Requires-Dist: hvac; extra == "docs"
 Requires-Dist: jsonata-python; extra == "docs"
 Requires-Dist: pyyaml>=6.0.0; extra == "docs"
 Requires-Dist: tink; extra == "docs"
-Requires-Dist: fastavro<1.8.0; python_version == "3.7" and extra == "docs"
-Requires-Dist: fastavro<2; python_version > "3.7" and extra == "docs"
+Requires-Dist: fastavro<1.8.0,>=1.5.4; python_version == "3.7" and extra == "docs"
+Requires-Dist: fastavro<2,>=1.5.4; python_version > "3.7" and extra == "docs"
 Requires-Dist: requests; extra == "docs"
 Requires-Dist: avro<2,>=1.11.1; extra == "docs"
 Requires-Dist: pyrsistent; extra == "docs"
@@ -179,6 +185,10 @@ Requires-Dist: protobuf; extra == "docs"
 Provides-Extra: tests
 Requires-Dist: urllib3<3; extra == "tests"
 Requires-Dist: flake8; extra == "tests"
+Requires-Dist: mypy; extra == "tests"
+Requires-Dist: attrs; extra == "tests"
+Requires-Dist: types-cachetools; extra == "tests"
+Requires-Dist: types-requests; extra == "tests"
 Requires-Dist: orjson; extra == "tests"
 Requires-Dist: pytest; extra == "tests"
 Requires-Dist: pytest-timeout; extra == "tests"
@@ -188,6 +198,8 @@ Requires-Dist: pytest_cov; extra == "tests"
 Requires-Dist: pluggy<1.6.0; extra == "tests"
 Requires-Dist: pytest-asyncio; extra == "tests"
 Requires-Dist: async-timeout; extra == "tests"
+Requires-Dist: black>=24.0.0; extra == "tests"
+Requires-Dist: isort>=5.13.0; extra == "tests"
 Requires-Dist: attrs>=21.2.0; extra == "tests"
 Requires-Dist: cachetools>=5.5.0; extra == "tests"
 Requires-Dist: certifi; extra == "tests"
@@ -206,8 +218,8 @@ Requires-Dist: hvac; extra == "tests"
 Requires-Dist: jsonata-python; extra == "tests"
 Requires-Dist: pyyaml>=6.0.0; extra == "tests"
 Requires-Dist: tink; extra == "tests"
-Requires-Dist: fastavro<1.8.0; python_version == "3.7" and extra == "tests"
-Requires-Dist: fastavro<2; python_version > "3.7" and extra == "tests"
+Requires-Dist: fastavro<1.8.0,>=1.5.4; python_version == "3.7" and extra == "tests"
+Requires-Dist: fastavro<2,>=1.5.4; python_version > "3.7" and extra == "tests"
 Requires-Dist: requests; extra == "tests"
 Requires-Dist: avro<2,>=1.11.1; extra == "tests"
 Requires-Dist: pyrsistent; extra == "tests"
@@ -225,8 +237,8 @@ Requires-Dist: attrs; extra == "examples"
 Requires-Dist: cachetools; extra == "examples"
 Requires-Dist: httpx>=0.26; extra == "examples"
 Requires-Dist: authlib>=1.0.0; extra == "examples"
-Requires-Dist: fastavro<1.8.0; python_version == "3.7" and extra == "examples"
-Requires-Dist: fastavro<2; python_version > "3.7" and extra == "examples"
+Requires-Dist: fastavro<1.8.0,>=1.5.4; python_version == "3.7" and extra == "examples"
+Requires-Dist: fastavro<2,>=1.5.4; python_version > "3.7" and extra == "examples"
 Requires-Dist: requests; extra == "examples"
 Requires-Dist: avro<2,>=1.11.1; extra == "examples"
 Requires-Dist: pyrsistent; extra == "examples"
@@ -267,8 +279,8 @@ Requires-Dist: attrs; extra == "all"
 Requires-Dist: cachetools; extra == "all"
 Requires-Dist: httpx>=0.26; extra == "all"
 Requires-Dist: authlib>=1.0.0; extra == "all"
-Requires-Dist: fastavro<1.8.0; python_version == "3.7" and extra == "all"
-Requires-Dist: fastavro<2; python_version > "3.7" and extra == "all"
+Requires-Dist: fastavro<1.8.0,>=1.5.4; python_version == "3.7" and extra == "all"
+Requires-Dist: fastavro<2,>=1.5.4; python_version > "3.7" and extra == "all"
 Requires-Dist: requests; extra == "all"
 Requires-Dist: avro<2,>=1.11.1; extra == "all"
 Requires-Dist: pyrsistent; extra == "all"
@@ -290,6 +302,10 @@ Requires-Dist: pyyaml>=6.0.0; extra == "all"
 Requires-Dist: tink; extra == "all"
 Requires-Dist: urllib3<3; extra == "all"
 Requires-Dist: flake8; extra == "all"
+Requires-Dist: mypy; extra == "all"
+Requires-Dist: attrs; extra == "all"
+Requires-Dist: types-cachetools; extra == "all"
+Requires-Dist: types-requests; extra == "all"
 Requires-Dist: orjson; extra == "all"
 Requires-Dist: pytest; extra == "all"
 Requires-Dist: pytest-timeout; extra == "all"
@@ -299,6 +315,8 @@ Requires-Dist: pytest_cov; extra == "all"
 Requires-Dist: pluggy<1.6.0; extra == "all"
 Requires-Dist: pytest-asyncio; extra == "all"
 Requires-Dist: async-timeout; extra == "all"
+Requires-Dist: black>=24.0.0; extra == "all"
+Requires-Dist: isort>=5.13.0; extra == "all"
 Requires-Dist: attrs>=21.2.0; extra == "all"
 Requires-Dist: cachetools>=5.5.0; extra == "all"
 Requires-Dist: certifi; extra == "all"
@@ -317,8 +335,8 @@ Requires-Dist: hvac; extra == "all"
 Requires-Dist: jsonata-python; extra == "all"
 Requires-Dist: pyyaml>=6.0.0; extra == "all"
 Requires-Dist: tink; extra == "all"
-Requires-Dist: fastavro<1.8.0; python_version == "3.7" and extra == "all"
-Requires-Dist: fastavro<2; python_version > "3.7" and extra == "all"
+Requires-Dist: fastavro<1.8.0,>=1.5.4; python_version == "3.7" and extra == "all"
+Requires-Dist: fastavro<2,>=1.5.4; python_version > "3.7" and extra == "all"
 Requires-Dist: requests; extra == "all"
 Requires-Dist: avro<2,>=1.11.1; extra == "all"
 Requires-Dist: pyrsistent; extra == "all"
@@ -357,7 +375,7 @@ Unlike the basic Apache Kafka Python client, `confluent-kafka-python` provides:
 
 - **High Performance & Reliability**: Built on [`librdkafka`](https://github.com/confluentinc/librdkafka), the battle-tested C client for Apache Kafka, ensuring maximum throughput, low latency, and stability. The client is supported by Confluent and is trusted in mission-critical production environments.
 - **Comprehensive Kafka Support**: Full support for the Kafka protocol, transactions, and administration APIs.
-- **Experimental; AsyncIO Producer**: An experimental fully asynchronous producer (`AIOProducer`) for seamless integration with modern Python applications using `asyncio`.
+- **AsyncIO Producer**: A fully asynchronous producer (`AIOProducer`) for seamless integration with modern Python applications using `asyncio`.
 - **Seamless Schema Registry Integration**: Synchronous and asynchronous clients for Confluent Schema Registry to handle schema management and serialization (Avro, Protobuf, JSON Schema).
 - **Improved Error Handling**: Detailed, context-aware error messages and exceptions to speed up debugging and troubleshooting.
 - **[Confluent Cloud] Automatic Zone Detection**: Producers automatically connect to brokers in the same availability zone, reducing latency and data transfer costs without requiring manual configuration.
@@ -384,13 +402,13 @@ Additional examples can be found in the [examples](examples) directory or the [c
 Also see the [Python client docs](https://docs.confluent.io/kafka-clients/python/current/overview.html) and the [API reference](https://docs.confluent.io/kafka-clients/python/current/).
 
 Finally, the [tests](tests) are useful as a reference for example usage.
-### AsyncIO Producer (experimental)
+### AsyncIO Producer
 
 Use the AsyncIO `Producer` inside async applications to avoid blocking the event loop.
 
 ```python
 import asyncio
-from confluent_kafka.experimental.aio import AIOProducer
+from confluent_kafka.aio import AIOProducer
 
 async def main():
     p = AIOProducer({"bootstrap.servers": "mybroker"})
@@ -492,13 +510,12 @@ avro_serializer = AvroSerializer(schema_registry_client,
 # 3. Configure Producer
 producer_conf = {
     'bootstrap.servers': 'localhost:9092',
-    'key.serializer': StringSerializer('utf_8'),
-    'value.serializer': avro_serializer
 }
 producer = Producer(producer_conf)
 
 # 4. Produce messages
-producer.produce('my-topic', key='user1', value=some_user_object)
+serialized_value = avro_serializer(some_user_object)
+producer.produce('my-topic', key='user1', value=serialized_value)
 producer.flush()
 ```
 
@@ -507,7 +524,7 @@ producer.flush()
 Use the `AsyncSchemaRegistryClient` and `Async` serializers with `AIOProducer` and `AIOConsumer`. The configuration is the same as the synchronous client.
 
 ```python
-from confluent_kafka.experimental.aio import AIOProducer
+from confluent_kafka.aio import AIOProducer
 from confluent_kafka.schema_registry import AsyncSchemaRegistryClient
 from confluent_kafka.schema_registry._async.avro import AsyncAvroSerializer
 
@@ -606,7 +623,7 @@ pip install confluent-kafka
 
 # With Schema Registry support
 pip install "confluent-kafka[avro,schemaregistry]"     # Avro
-pip install "confluent-kafka[json,schemaregistry]"     # JSON Schema  
+pip install "confluent-kafka[json,schemaregistry]"     # JSON Schema
 pip install "confluent-kafka[protobuf,schemaregistry]" # Protobuf
 
 # With Data Contract rules (includes CSFLE support)

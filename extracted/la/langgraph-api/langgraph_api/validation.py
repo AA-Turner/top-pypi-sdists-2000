@@ -52,6 +52,9 @@ ThreadCreate = jsonschema_rs.validator_for(
 ThreadPatch = jsonschema_rs.validator_for(
     openapi["components"]["schemas"]["ThreadPatch"]
 )
+ThreadPruneRequest = jsonschema_rs.validator_for(
+    openapi["components"]["schemas"]["ThreadPruneRequest"]
+)
 ThreadStateUpdate = jsonschema_rs.validator_for(
     {
         **openapi["components"]["schemas"]["ThreadStateUpdate"],

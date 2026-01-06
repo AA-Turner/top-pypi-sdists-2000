@@ -3,7 +3,6 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-# pylint: disable=import-error
 import os
 import sys
 from collections.abc import Sequence
@@ -69,6 +68,14 @@ html_css_files = [
     "custom.css",
 ]
 
+html_context = {
+    "display_github": True,
+    "github_user": "scrapy",
+    "github_repo": "scrapy",
+    "github_version": "master",
+    "conf_py_path": "/docs/",
+}
+
 # Set canonical URL from the Read the Docs Domain
 html_baseurl = os.environ.get("READTHEDOCS_CANONICAL_URL", "")
 
@@ -119,7 +126,7 @@ coverage_ignore_pyobjects = [
     # The interface methods of duplicate request filtering classes are already
     # covered in the interface documentation part of the DUPEFILTER_CLASS
     # setting documentation.
-    r"^scrapy\.dupefilters\.[A-Z]\w*?\.(from_settings|request_seen|open|close|log)$",
+    r"^scrapy\.dupefilters\.[A-Z]\w*?\.(from_crawler|request_seen|open|close|log)$",
     # Private exception used by the command-line interface implementation.
     r"^scrapy\.exceptions\.UsageError",
     # Methods of BaseItemExporter subclasses are only documented in

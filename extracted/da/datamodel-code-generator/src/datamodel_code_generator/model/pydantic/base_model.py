@@ -286,7 +286,7 @@ class BaseModelBase(DataModel, ABC):
         fields: list[DataModelFieldBase],
         decorators: list[str] | None = None,
         base_classes: list[Reference] | None = None,
-        custom_base_class: str | None = None,
+        custom_base_class: str | list[str] | None = None,
         custom_template_dir: Path | None = None,
         extra_template_data: defaultdict[str, Any] | None = None,
         path: Path | None = None,
@@ -343,7 +343,7 @@ class BaseModel(BaseModelBase):
         fields: list[DataModelFieldBase],
         decorators: list[str] | None = None,
         base_classes: list[Reference] | None = None,
-        custom_base_class: str | None = None,
+        custom_base_class: str | list[str] | None = None,
         custom_template_dir: Path | None = None,
         extra_template_data: defaultdict[str, Any] | None = None,
         path: Path | None = None,
@@ -418,4 +418,4 @@ class BaseModel(BaseModelBase):
         if config_parameters:
             from datamodel_code_generator.model.pydantic import Config  # noqa: PLC0415
 
-            self.extra_template_data["config"] = model_validate(Config, config_parameters)  # pyright: ignore[reportArgumentType]
+            self.extra_template_data["config"] = model_validate(Config, config_parameters)  # ty: ignore

@@ -260,6 +260,15 @@ WEBHOOKS_CONFIG = env(
 # license
 
 LANGGRAPH_CLOUD_LICENSE_KEY = env("LANGGRAPH_CLOUD_LICENSE_KEY", cast=str, default="")
+
+# Products that are built on top of langgraph-api can be configured
+# to check for additional claims in the LangSmith license key. By default,
+# no additional claims are checked. The `lgp_enabled` claim is always
+# checked.
+LANGSMITH_LICENSE_REQUIRED_CLAIMS = env(
+    "LANGSMITH_LICENSE_REQUIRED_CLAIMS", cast=CommaSeparatedStrings, default=[]
+)
+
 LANGSMITH_API_KEY = env(
     "LANGSMITH_API_KEY", cast=str, default=getenv("LANGCHAIN_API_KEY", "")
 )

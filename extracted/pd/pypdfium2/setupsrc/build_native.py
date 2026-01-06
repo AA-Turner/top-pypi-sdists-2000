@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-# SPDX-FileCopyrightText: 2025 geisserml <geisserml@gmail.com>
+# SPDX-FileCopyrightText: 2026 geisserml <geisserml@gmail.com>
 # SPDX-License-Identifier: Apache-2.0 OR BSD-3-Clause
 # Related work: https://github.com/tiran/libpdfium and https://aur.archlinux.org/packages/libpdfium-nojs
 
@@ -12,8 +12,6 @@ from enum import Enum
 from pathlib import Path
 
 from base import *  # local
-
-IS_CIBUILDWHEEL = bool(int( os.environ.get("CIBUILDWHEEL", 0) ))
 
 PDFIUM_URL = "https://pdfium.googlesource.com/pdfium"
 _CR_PREFIX = "https://chromium.googlesource.com/"
@@ -39,6 +37,7 @@ DEPS_URLS = dict(
 )
 SOURCES_DIR = ProjectDir / "sbuild" / "native"
 PDFIUM_DIR = SOURCES_DIR / "pdfium"
+PDFIUM_DIR_build = PDFIUM_DIR / "build"
 PDFIUM_3RDPARTY = PDFIUM_DIR / "third_party"
 
 Compiler = Enum("Compiler", "gcc clang")
@@ -124,197 +123,6 @@ class _DeferredInfo:
         return result
 
 
-def _fetch_dep(info, name, target_dir, reset=False):
-    # parse out DEPS revisions only when we actually need them
-    return _get_repo(DEPS_URLS[name], lambda: info.deps[name], target_dir, reset=reset)
-
-
-def autopatch(file, pattern, repl, is_regex, exp_count=None):
-    log(f"Patch {pattern!r} -> {repl!r} (is_regex={is_regex}) on {file}")
-    content = file.read_text()
-    if is_regex:
-        content, n_subs = re.subn(pattern, repl, content)
-    else:
-        n_subs = content.count(pattern)
-        content = content.replace(pattern, repl)
-    if exp_count is not None:
-        assert n_subs == exp_count
-    file.write_text(content)
-
-def autopatch_dir(dir, globexpr, pattern, repl, is_regex, exp_count=None):
-    for file in dir.glob(globexpr):
-        autopatch(file, pattern, repl, is_regex, exp_count)
-
-
-def get_sources(deps_info, short_ver, with_tests, compiler, clang_ver, clang_path, no_libclang_rt, reset, vendor_deps):
-    
-    assert not IGNORE_FULLVER
-    full_ver, pdfium_rev, chromium_rev = handle_sbuild_vers(short_ver)
-    
-    # pass through reset only for the repositories we actually patch
-    do_patches = _get_repo(PDFIUM_URL, pdfium_rev, PDFIUM_DIR, reset=reset)
-    if do_patches:
-        autopatch_dir(
-            PDFIUM_DIR/"public"/"cpp", "*.h",
-            r'"public/(.+)"', r'"../\1"',
-            is_regex=True, exp_count=None,
-        )
-        # don't build the test fonts (needed for embedder tests only)
-        autopatch(
-            PDFIUM_DIR/"testing"/"BUILD.gn",
-            r'(\s*)("//third_party/test_fonts")', r"\1# \2",
-            is_regex=True, exp_count=1,
-        )
-        # bundle dependencies (e.g. abseil) into the pdfium DLL
-        autopatch(
-            PDFIUM_DIR/"BUILD.gn",
-            'component("pdfium")',
-            'shared_library("pdfium")',
-            is_regex=False, exp_count=1,
-        )
-        autopatch(
-            PDFIUM_DIR/"public"/"fpdfview.h",
-            "#if defined(COMPONENT_BUILD)",
-            "#if 1  // defined(COMPONENT_BUILD)",
-            is_regex=False, exp_count=1,
-        )
-        if sys.byteorder == "big":
-            git_apply_patch(PatchDir/"bigendian.patch", cwd=PDFIUM_DIR)
-            if with_tests:
-                git_apply_patch(PatchDir/"bigendian_test.patch", cwd=PDFIUM_DIR)
-    
-    do_patches = _fetch_dep(deps_info, "build", PDFIUM_DIR/"build", reset=reset)
-    if do_patches:
-        # legacy_gn.patch: Work around error about path_exists() being undefined. This happens with older versions of GN.
-        # Recent GN binaries can be obtained from https://chrome-infra-packages.appspot.com/p/gn/gn
-        # Note that merely calling depot_tools `gn` is not sufficient, as it is only a wrapper script looking for vendored GN in the target repository, and if not present (as in this case), falls back to system GN.
-        git_apply_patch(PatchDir/"legacy_gn.patch", cwd=PDFIUM_DIR/"build")
-        if IS_ANDROID:
-            # fix linkage step
-            git_apply_patch(PatchDir/"android_build.patch", cwd=PDFIUM_DIR/"build")
-        if IS_CIBUILDWHEEL:
-            # compatibility patch for older system libraries from container
-            git_apply_patch(PatchDir/"cibuildwheel.patch", cwd=PDFIUM_DIR)
-        if compiler is Compiler.gcc:
-            # https://crbug.com/402282789
-            git_apply_patch(PatchDir/"ffp_contract.patch", cwd=PDFIUM_DIR/"build")
-        elif compiler is Compiler.clang:
-            # https://crbug.com/410883044
-            if "libc++" not in vendor_deps:
-                git_apply_patch(PatchDir/"system_libcxx_with_clang.patch", cwd=PDFIUM_DIR/"build")
-            if clang_ver < 21:  # guessed
-                git_apply_patch(PatchDir/"avoid_new_clang_flags.patch", cwd=PDFIUM_DIR/"build")
-            # TODO should we handle other OSes here?
-            # see also https://groups.google.com/g/llvm-dev/c/k3q_ATl-K_0/m/MjEb6gsCCAAJ
-            lld_path = clang_path/"bin"/"ld.lld"
-            autopatch(
-                PDFIUM_DIR/"build"/"config"/"compiler"/"BUILD.gn",
-                'ldflags += [ "-fuse-ld=lld" ]',
-                f'ldflags += [ "-fuse-ld={lld_path}" ]',
-                is_regex=False, exp_count=1,
-            )
-            if no_libclang_rt:
-                git_apply_patch(PatchDir/"no_libclang_rt.patch", cwd=PDFIUM_DIR/"build")
-    
-    do_patches = _fetch_dep(deps_info, "abseil", PDFIUM_3RDPARTY/"abseil-cpp", reset=reset)
-    if do_patches and (Host._raw_machine, Host._libc_name) == ("ppc64le", "musl"):
-        git_apply_patch(PatchDir/"abseil_ppc64le_musl.patch", cwd=PDFIUM_3RDPARTY/"abseil-cpp")
-    
-    _fetch_dep(deps_info, "fast_float", PDFIUM_3RDPARTY/"fast_float"/"src")
-    if IS_ANDROID:
-        _fetch_dep(deps_info, "catapult", PDFIUM_3RDPARTY/"catapult")
-    
-    if "libc++" in vendor_deps:
-        _fetch_dep(deps_info, "buildtools", PDFIUM_DIR/"buildtools")
-        _fetch_dep(deps_info, "libcxx", PDFIUM_3RDPARTY/"libc++"/"src")
-        _fetch_dep(deps_info, "libcxxabi", PDFIUM_3RDPARTY/"libc++abi"/"src")
-        _fetch_dep(deps_info, "llvm_libc", PDFIUM_3RDPARTY/"llvm-libc"/"src")
-    if "icu" in vendor_deps:
-        _fetch_dep(deps_info, "icu", PDFIUM_3RDPARTY/"icu")
-    if "freetype" in vendor_deps:
-        _fetch_dep(deps_info, "freetype", PDFIUM_3RDPARTY/"freetype"/"src")
-    if "libjpeg" in vendor_deps:
-        _fetch_dep(deps_info, "jpeg_turbo", PDFIUM_3RDPARTY/"libjpeg_turbo")
-        _fetch_dep(deps_info, "nasm_source", PDFIUM_3RDPARTY/"nasm")
-    if "libpng" in vendor_deps:
-        _fetch_dep(deps_info, "libpng", PDFIUM_3RDPARTY/"libpng")
-    if "zlib" in vendor_deps:
-        _fetch_dep(deps_info, "zlib", PDFIUM_3RDPARTY/"zlib")
-    
-    if with_tests:
-        _fetch_dep(deps_info, "gtest", PDFIUM_3RDPARTY/"googletest"/"src")
-        _fetch_dep(deps_info, "test_fonts", PDFIUM_3RDPARTY/"test_fonts")
-    
-    get_shimheaders_tool(PDFIUM_DIR, rev=chromium_rev)
-    
-    return full_ver
-
-
-def prepare(config_dict, build_dir, vendor_deps):
-    # Create an empty gclient config
-    (PDFIUM_DIR/"build"/"config"/"gclient_args.gni").touch(exist_ok=True)
-    if "icu" not in vendor_deps:
-        # Unbundle ICU
-        # alternatively, we could call build/linux/unbundle/replace_gn_files.py --system-libraries icu
-        (PDFIUM_3RDPARTY/"icu").mkdir(exist_ok=True)
-        shutil.copyfile(
-            PDFIUM_DIR/"build"/"linux"/"unbundle"/"icu.gn",
-            PDFIUM_3RDPARTY/"icu"/"BUILD.gn"
-        )
-    # Create target dir (or reuse existing) and write build config
-    mkdir(build_dir)
-    # Remove existing libraries from the build dir, to avoid packing unnecessary DLLs when a single-lib build is done after a separate-libs build. This also ensures we really built a new DLL in the end.
-    # Leave the object files in place to reuse as much as possible, though.
-    for lib in build_dir.glob(Host.libname_glob):
-        lib.unlink()
-    config_str = serialize_gn_config(config_dict)
-    (build_dir/"args.gn").write_text(config_str)
-
-
-def build(with_tests, build_dir, n_jobs):
-    
-    ninja_args = []
-    if n_jobs is not None:
-        ninja_args.extend(["-j", str(n_jobs)])
-    
-    targets = ["pdfium"]
-    if with_tests:
-        targets.append("pdfium_unittests")
-    
-    build_dir_rel = build_dir.relative_to(PDFIUM_DIR)
-    run_cmd(["gn", "gen", str(build_dir_rel)], cwd=PDFIUM_DIR)
-    run_cmd(["ninja", *ninja_args, "-C", str(build_dir_rel), *targets], cwd=PDFIUM_DIR)
-
-
-def test(build_dir):
-    # FlateModule.Encode may fail with older zlib (generates different results)
-    os.environ["GTEST_FILTER"] = "*-FlateModule.Encode"
-    run_cmd([build_dir/"pdfium_unittests"], cwd=PDFIUM_DIR, check=False)
-
-
-def _get_clang_ver(clang_path):
-    from packaging.version import Version
-    output = run_cmd([str(clang_path/"bin"/"clang"), "--version"], capture=True, cwd=None)
-    log(output)
-    version = re.search(r"version ([\d\.]+)", output).group(1)
-    version = Version(version).major
-    log(f"Determined clang version {version!r}")
-    return version
-
-def setup_compiler(config, compiler, clang_ver, clang_path):
-    if compiler is Compiler.gcc:
-        config["is_clang"] = False
-    elif compiler is Compiler.clang:
-        assert clang_path, "Clang path must be set"
-        config.update({
-            "is_clang": True,
-            "clang_base_path": str(clang_path),  # without trailing slash
-            "clang_version": clang_ver,
-        })
-    else:
-        assert False, f"Unhandled compiler {compiler}"
-
-
 def handle_deps(config, vendor_deps, with_tests):
     
     deps_fields = ["build", "abseil", "fast_float"]
@@ -366,7 +174,165 @@ def handle_deps(config, vendor_deps, with_tests):
 VendorableDeps = ("libc++", "icu", "freetype", "libjpeg", "libpng", "zlib", "lcms2", "openjpeg", "libtiff")
 
 
-def main(build_ver=None, with_tests=False, n_jobs=None, compiler=None, clang_path=None, no_libclang_rt=False, reset=False, vendor_deps=None):
+def _fetch_dep(info, name, target_dir, reset=False):
+    # parse out DEPS revisions only when we actually need them
+    return _get_repo(DEPS_URLS[name], lambda: info.deps[name], target_dir, reset=reset)
+
+
+def get_sources(deps_info, short_ver, with_tests, compiler, clang_ver, clang_path, no_libclang_rt, reset, vendor_deps, compat):
+    
+    assert not IGNORE_FULLVER
+    full_ver, pdfium_rev, chromium_rev = handle_sbuild_vers(short_ver)
+    
+    # pass through reset only for the repositories we actually patch
+    do_patches = _get_repo(PDFIUM_URL, pdfium_rev, PDFIUM_DIR, reset=reset)
+    if do_patches:
+        shared_autopatches(PDFIUM_DIR)
+        autopatch(
+            PDFIUM_DIR/"testing"/"BUILD.gn",
+            r'(\s*)("//third_party/test_fonts")', r"\1# \2",
+            is_regex=True, exp_count=1,
+        )
+        if compat and not vendor_deps.issuperset(("openjpeg", "freetype")):
+            # compatibility patch for older system libraries from container
+            git_apply_patch(PatchDir/"legacy_libs_compat.patch", cwd=PDFIUM_DIR)
+        if sys.byteorder == "big":
+            git_apply_patch(PatchDir/"bigendian.patch", cwd=PDFIUM_DIR)
+            if with_tests:
+                git_apply_patch(PatchDir/"bigendian_test.patch", cwd=PDFIUM_DIR)
+    
+    do_patches = _fetch_dep(deps_info, "build", PDFIUM_DIR_build, reset=reset)
+    if do_patches:
+        # legacy_gn.patch: Work around error about path_exists() being undefined. This happens with older versions of GN.
+        # Recent GN binaries can be obtained from https://chrome-infra-packages.appspot.com/p/gn/gn
+        # Note that merely calling depot_tools `gn` is not sufficient, as it is only a wrapper script looking for vendored GN in the target repository, and if not present (as in this case), falls back to system GN.
+        git_apply_patch(PatchDir/"legacy_gn.patch", cwd=PDFIUM_DIR_build)
+        if IS_ANDROID:
+            # fix linkage step
+            git_apply_patch(PatchDir/"android_build.patch", cwd=PDFIUM_DIR_build)
+        if compiler is Compiler.gcc:
+            # https://crbug.com/402282789
+            git_apply_patch(PatchDir/"ffp_contract.patch", cwd=PDFIUM_DIR_build)
+        elif compiler is Compiler.clang:
+            # https://crbug.com/410883044
+            if "libc++" not in vendor_deps:
+                git_apply_patch(PatchDir/"system_libcxx_with_clang.patch", cwd=PDFIUM_DIR_build)
+            if clang_ver < 21:  # guessed
+                git_apply_patch(PatchDir/"avoid_new_clang_flags.patch", cwd=PDFIUM_DIR_build)
+            # TODO should we handle other OSes here?
+            # see also https://groups.google.com/g/llvm-dev/c/k3q_ATl-K_0/m/MjEb6gsCCAAJ
+            lld_path = clang_path/"bin"/"ld.lld"
+            autopatch(
+                PDFIUM_DIR_build/"config"/"compiler"/"BUILD.gn",
+                'ldflags += [ "-fuse-ld=lld" ]',
+                f'ldflags += [ "-fuse-ld={lld_path}" ]',
+                is_regex=False, exp_count=1,
+            )
+            if no_libclang_rt:
+                git_apply_patch(PatchDir/"no_libclang_rt.patch", cwd=PDFIUM_DIR_build)
+        # Create an empty gclient config
+        (PDFIUM_DIR_build/"config"/"gclient_args.gni").touch(exist_ok=True)
+    
+    do_patches = _fetch_dep(deps_info, "abseil", PDFIUM_3RDPARTY/"abseil-cpp", reset=reset)
+    if do_patches and (Host._raw_machine, Host._libc_name) == ("ppc64le", "musl"):
+        git_apply_patch(PatchDir/"abseil_ppc64le_musl.patch", cwd=PDFIUM_3RDPARTY/"abseil-cpp")
+    
+    _fetch_dep(deps_info, "fast_float", PDFIUM_3RDPARTY/"fast_float"/"src")
+    if IS_ANDROID:
+        _fetch_dep(deps_info, "catapult", PDFIUM_3RDPARTY/"catapult")
+    
+    if "libc++" in vendor_deps:
+        _fetch_dep(deps_info, "buildtools", PDFIUM_DIR/"buildtools")
+        _fetch_dep(deps_info, "libcxx", PDFIUM_3RDPARTY/"libc++"/"src")
+        _fetch_dep(deps_info, "libcxxabi", PDFIUM_3RDPARTY/"libc++abi"/"src")
+        _fetch_dep(deps_info, "llvm_libc", PDFIUM_3RDPARTY/"llvm-libc"/"src")
+    
+    if "icu" in vendor_deps:
+        _fetch_dep(deps_info, "icu", PDFIUM_3RDPARTY/"icu")
+    else:
+        # unbundle (alternatively, we could call build/linux/unbundle/replace_gn_files.py --system-libraries icu)
+        (PDFIUM_3RDPARTY/"icu").mkdir(exist_ok=True)
+        shutil.copyfile(
+            PDFIUM_DIR_build/"linux"/"unbundle"/"icu.gn",
+            PDFIUM_3RDPARTY/"icu"/"BUILD.gn"
+        )
+    
+    if "freetype" in vendor_deps:
+        _fetch_dep(deps_info, "freetype", PDFIUM_3RDPARTY/"freetype"/"src")
+    if "libjpeg" in vendor_deps:
+        _fetch_dep(deps_info, "jpeg_turbo", PDFIUM_3RDPARTY/"libjpeg_turbo")
+        _fetch_dep(deps_info, "nasm_source", PDFIUM_3RDPARTY/"nasm")
+    if "libpng" in vendor_deps:
+        _fetch_dep(deps_info, "libpng", PDFIUM_3RDPARTY/"libpng")
+    if "zlib" in vendor_deps:
+        _fetch_dep(deps_info, "zlib", PDFIUM_3RDPARTY/"zlib")
+    
+    if with_tests:
+        _fetch_dep(deps_info, "gtest", PDFIUM_3RDPARTY/"googletest"/"src")
+        _fetch_dep(deps_info, "test_fonts", PDFIUM_3RDPARTY/"test_fonts")
+    
+    get_shimheaders_tool(PDFIUM_DIR, rev=chromium_rev)
+    
+    return full_ver
+
+
+def _get_clang_ver(clang_path):
+    from packaging.version import Version
+    output = run_cmd([str(clang_path/"bin"/"clang"), "--version"], capture=True, cwd=None)
+    log(output)
+    version = re.search(r"version ([\d\.]+)", output).group(1)
+    version = Version(version).major
+    log(f"Determined clang version {version!r}")
+    return version
+
+def setup_compiler(config, compiler, clang_ver, clang_path):
+    if compiler is Compiler.gcc:
+        config["is_clang"] = False
+    elif compiler is Compiler.clang:
+        assert clang_path, "Clang path must be set"
+        config.update({
+            "is_clang": True,
+            "clang_base_path": str(clang_path),  # without trailing slash
+            "clang_version": clang_ver,
+        })
+    else:
+        assert False, f"Unhandled compiler {compiler}"
+
+
+def build(build_dir, config_dict, with_tests, n_jobs):
+    
+    # Create target dir (or reuse existing) and write build config
+    mkdir(build_dir)
+    
+    # Remove existing libraries from the build dir, to avoid packing unnecessary DLLs when a single-lib build is done after a separate-libs build. This also ensures we really built a new DLL in the end.
+    # Leave the object files in place to reuse as much as possible, though.
+    for lib in build_dir.glob(Host.libname_glob):
+        lib.unlink()
+    
+    # Write GN config
+    config_str = serialize_gn_config(config_dict)
+    (build_dir/"args.gn").write_text(config_str)
+    
+    ninja_args = []
+    if n_jobs is not None:
+        ninja_args.extend(["-j", str(n_jobs)])
+    
+    targets = ["pdfium"]
+    if with_tests:
+        targets.append("pdfium_unittests")
+    
+    build_dir_rel = build_dir.relative_to(PDFIUM_DIR)
+    run_cmd(["gn", "gen", str(build_dir_rel)], cwd=PDFIUM_DIR)
+    run_cmd(["ninja", *ninja_args, "-C", str(build_dir_rel), *targets], cwd=PDFIUM_DIR)
+
+
+def test(build_dir):
+    # FlateModule.Encode may fail with older zlib (generates different results)
+    os.environ["GTEST_FILTER"] = "*-FlateModule.Encode"
+    run_cmd([build_dir/"pdfium_unittests"], cwd=PDFIUM_DIR, check=False)
+
+
+def main(build_ver=None, with_tests=False, n_jobs=None, compiler=None, clang_path=None, no_libclang_rt=False, reset=False, vendor_deps=None, compat=False):
     
     if build_ver is None:
         build_ver = SBUILD_NATIVE_PIN
@@ -393,10 +359,9 @@ def main(build_ver=None, with_tests=False, n_jobs=None, compiler=None, clang_pat
     deps_info = handle_deps(config, vendor_deps, with_tests)
     
     mkdir(SOURCES_DIR)
-    full_ver = get_sources(deps_info, build_ver, with_tests, compiler, clang_ver, clang_path, no_libclang_rt, reset, vendor_deps)
+    full_ver = get_sources(deps_info, build_ver, with_tests, compiler, clang_ver, clang_path, no_libclang_rt, reset, vendor_deps, compat)
     setup_compiler(config, compiler, clang_ver, clang_path)
-    prepare(config, build_dir, vendor_deps)
-    build(with_tests, build_dir, n_jobs)
+    build(build_dir, config, with_tests, n_jobs)
     if with_tests:
         test(build_dir)
     
@@ -404,11 +369,13 @@ def main(build_ver=None, with_tests=False, n_jobs=None, compiler=None, clang_pat
 
 
 def parse_args(argv):
+    
     parser = argparse.ArgumentParser(
         description = "Build PDFium from source natively with system tools/libraries. This does not use Google's binary toolchain, so it should be portable across different Linux architectures. Whether this might also work on other OSes depends on PDFium's build system and the availability of a Linux-like system library environment.",
     )
     if ExtendAction is not None:  # from base.py
         parser.register("action", "extend", ExtendAction)
+    
     parser.add_argument(
         "--version",
         dest = "build_ver",
@@ -463,9 +430,17 @@ def parse_args(argv):
         action = "extend",
         help = "Dependencies not to vendor. Overrides --vendor.",
     )
+    parser.add_argument(
+        "--compat",
+        action = "store_true",
+        help = "Whether to apply a compatibility patch for older system libraries (openjpeg/freetype).",
+    )
+    
     args = parser.parse_args(argv)
+    
     if args.compiler:
         args.compiler = Compiler[args.compiler]
+    
     if args.vendor_deps:
         if args.vendor_deps == ["all"]:
             args.vendor_deps = VendorableDeps
@@ -473,6 +448,7 @@ def parse_args(argv):
         if args.no_vendor:
             args.vendor_deps -= set(args.no_vendor)
     del args.no_vendor
+    
     return args
 
 

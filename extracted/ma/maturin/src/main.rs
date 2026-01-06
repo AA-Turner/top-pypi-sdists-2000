@@ -3,29 +3,30 @@
 //!
 //! Run with --help for usage information
 
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result, bail};
 use cargo_options::heading;
 #[cfg(feature = "zig")]
 use cargo_zigbuild::Zig;
 #[cfg(feature = "cli-completion")]
 use clap::CommandFactory;
 use clap::{Parser, Subcommand};
-#[cfg(feature = "scaffolding")]
-use maturin::{ci::GenerateCI, init_project, new_project, GenerateProjectOptions};
+use ignore::overrides::Override;
 use maturin::{
-    develop, find_path_deps, write_dist_info, BridgeModel, BuildOptions, CargoOptions,
-    DevelopOptions, PathWriter, PythonInterpreter, Target, TargetTriple,
+    BridgeModel, BuildOptions, CargoOptions, DevelopOptions, PathWriter, PythonInterpreter, Target,
+    TargetTriple, VirtualWriter, develop, find_path_deps, write_dist_info,
 };
 #[cfg(feature = "schemars")]
-use maturin::{generate_json_schema, GenerateJsonSchemaOptions};
+use maturin::{GenerateJsonSchemaOptions, generate_json_schema};
+#[cfg(feature = "scaffolding")]
+use maturin::{GenerateProjectOptions, ci::GenerateCI, init_project, new_project};
 #[cfg(feature = "upload")]
-use maturin::{upload_ui, PublishOpt};
+use maturin::{PublishOpt, upload_ui};
 use std::env;
 use std::path::PathBuf;
 use std::str::FromStr;
 use tracing::{debug, instrument};
 use tracing_subscriber::filter::Directive;
-use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, EnvFilter, Layer};
+use tracing_subscriber::{EnvFilter, Layer, layer::SubscriberExt, util::SubscriberInitExt};
 
 #[derive(Debug, Parser)]
 #[command(
@@ -54,7 +55,6 @@ struct Opt {
 }
 
 #[derive(Debug, Parser)]
-#[allow(clippy::large_enum_variant)]
 /// Build and publish crates with pyo3, cffi and uniffi bindings as well
 /// as rust binaries as python packages
 enum Command {
@@ -284,14 +284,16 @@ fn pep517(subcommand: Pep517Command) -> Result<()> {
                 context.cargo_options.profile = Some("release".to_string());
             }
 
-            let mut writer = PathWriter::from_path(metadata_directory);
-            write_dist_info(
+            let mut writer =
+                VirtualWriter::new(PathWriter::from_path(metadata_directory), Override::empty());
+            let dist_info_dir = write_dist_info(
                 &mut writer,
                 &context.project_layout.project_root,
                 &context.metadata24,
                 &context.tags_from_bridge()?,
             )?;
-            println!("{}", context.metadata24.get_dist_info_dir().display());
+            writer.finish()?;
+            println!("{}", dist_info_dir.display());
         }
         Pep517Command::BuildWheel {
             build_options,

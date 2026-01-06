@@ -48,7 +48,7 @@ class _DataTypeScalarBase(DataModel):
         fields: list[DataModelFieldBase],
         decorators: list[str] | None = None,
         base_classes: list[Reference] | None = None,
-        custom_base_class: str | None = None,
+        custom_base_class: str | list[str] | None = None,
         custom_template_dir: Path | None = None,
         extra_template_data: defaultdict[str, dict[str, Any]] | None = None,
         methods: list[str] | None = None,
@@ -67,9 +67,9 @@ class _DataTypeScalarBase(DataModel):
             extra_template_data[scalar_name] = defaultdict(dict)
 
         # py_type
-        py_type = extra_template_data[scalar_name].get(
+        py_type = extra_template_data[reference.original_name].get(
             "py_type",
-            DEFAULT_GRAPHQL_SCALAR_TYPES.get(reference.name, DEFAULT_GRAPHQL_SCALAR_TYPE),
+            DEFAULT_GRAPHQL_SCALAR_TYPES.get(reference.original_name, DEFAULT_GRAPHQL_SCALAR_TYPE),
         )
         extra_template_data[scalar_name]["py_type"] = py_type
 

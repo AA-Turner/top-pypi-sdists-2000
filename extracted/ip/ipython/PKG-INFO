@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: ipython
-Version: 9.8.0
+Version: 9.9.0
 Summary: IPython: Productive Interactive Computing
 Author: The IPython Development Team
 Author-email: ipython-dev@python.org
@@ -70,7 +70,8 @@ Requires-Dist: trio>=0.1.0; extra == "test-extra"
 Provides-Extra: matplotlib
 Requires-Dist: matplotlib>3.9; extra == "matplotlib"
 Provides-Extra: all
-Requires-Dist: ipython[doc,matplotlib,test,test_extra]; extra == "all"
+Requires-Dist: ipython[doc,matplotlib,terminal,test,test_extra]; extra == "all"
+Requires-Dist: argcomplete>=3.0; extra == "all"
 Dynamic: author
 Dynamic: author-email
 Dynamic: license-file

@@ -47,21 +47,29 @@ class BlurPool2d(nn.Module):
         self.pad_mode = pad_mode
         self.padding = [get_padding(filt_size, stride, dilation=1)] * 4
 
+        # Register empty buffer with correct shape
+        filt_shape = (channels or 1, 1, filt_size, filt_size)
+        self.register_buffer('filt', torch.empty(filt_shape, device=device, dtype=dtype), persistent=False)
+
+        if not self.filt.is_meta:
+            self.reset_parameters()
+
+    def reset_parameters(self) -> None:
+        """Initialize buffers."""
+        self._init_buffers()
+
+    def _init_buffers(self) -> None:
+        """Compute and fill non-persistent buffer values."""
         # (0.5 + 0.5 x)^N => coefficients = C(N,k) / 2^N,  k = 0..N
         coeffs = torch.tensor(
-            [comb(filt_size - 1, k) for k in range(filt_size)],
+            [comb(self.filt_size - 1, k) for k in range(self.filt_size)],
             device='cpu',
             dtype=torch.float32,
-        ) / (2 ** (filt_size - 1))  # normalise so coefficients sum to 1
+        ) / (2 ** (self.filt_size - 1))  # normalise so coefficients sum to 1
         blur_filter = (coeffs[:, None] * coeffs[None, :])[None, None, :, :]
-        if channels is not None:
+        if self.channels is not None:
             blur_filter = blur_filter.repeat(self.channels, 1, 1, 1)
-
-        self.register_buffer(
-            'filt',
-            blur_filter.to(device=device, dtype=dtype),
-            persistent=False,
-        )
+        self.filt.copy_(blur_filter)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = F.pad(x, self.padding, mode=self.pad_mode)
@@ -72,6 +80,10 @@ class BlurPool2d(nn.Module):
             channels = self.channels
             weight = self.filt
         return F.conv2d(x, weight, stride=self.stride, groups=channels)
+
+    def init_non_persistent_buffers(self) -> None:
+        """Initialize non-persistent buffers."""
+        self._init_buffers()
 
 
 def _normalize_aa_layer(aa_layer: LayerType) -> Callable[..., nn.Module]:

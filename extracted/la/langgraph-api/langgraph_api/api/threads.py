@@ -32,6 +32,7 @@ from langgraph_api.validation import (
     ThreadCountRequest,
     ThreadCreate,
     ThreadPatch,
+    ThreadPruneRequest,
     ThreadSearchRequest,
     ThreadStateCheckpointRequest,
     ThreadStateSearch,
@@ -52,6 +53,14 @@ async def create_thread(
     payload = await request.json(ThreadCreate)
     if thread_id := payload.get("thread_id"):
         validate_uuid(thread_id, "Invalid thread ID: must be a UUID")
+
+    # Validate keep_latest TTL requires core API
+    ttl = payload.get("ttl")
+    if ttl and ttl.get("strategy") == "keep_latest" and not FF_USE_CORE_API:
+        raise HTTPException(
+            status_code=422,
+            detail="keep_latest TTL strategy requires FF_USE_CORE_API=true",
+        )
 
     # Encrypt metadata before storing
     encrypted_payload = await encrypt_request(
@@ -313,8 +322,14 @@ async def get_thread(
     """Get a thread by ID."""
     thread_id = request.path_params["thread_id"]
     validate_uuid(thread_id, "Invalid thread ID: must be a UUID")
+
+    # Parse include parameter for optional fields (e.g., ttl)
+    include_param = request.query_params.get("include", "")
+    include_fields = [f.strip() for f in include_param.split(",") if f.strip()]
+    include_ttl = "ttl" in include_fields
+
     async with connect() as conn:
-        thread = await CrudThreads.get(conn, thread_id)
+        thread = await CrudThreads.get(conn, thread_id, include_ttl=include_ttl)
 
     # Decrypt metadata, values, interrupts, and error in response
     thread_data = await fetchone(thread)
@@ -334,6 +349,14 @@ async def patch_thread(
     thread_id = request.path_params["thread_id"]
     validate_uuid(thread_id, "Invalid thread ID: must be a UUID")
     payload = await request.json(ThreadPatch)
+
+    # Validate keep_latest TTL requires core API
+    ttl = payload.get("ttl")
+    if ttl and ttl.get("strategy") == "keep_latest" and not FF_USE_CORE_API:
+        raise HTTPException(
+            status_code=422,
+            detail="keep_latest TTL strategy requires FF_USE_CORE_API=true",
+        )
 
     # Encrypt metadata before storing
     encrypted_payload = await encrypt_request(
@@ -368,6 +391,42 @@ async def delete_thread(request: ApiRequest):
         tid = await CrudThreads.delete(conn, thread_id)
     await fetchone(tid)
     return Response(status_code=204)
+
+
+@retry_db
+async def prune_threads(request: ApiRequest):
+    """Prune threads by ID."""
+    payload = await request.json(ThreadPruneRequest)
+    thread_ids = payload.get("thread_ids", [])
+    strategy = payload.get("strategy", "delete")
+
+    # Validate each thread_id is a valid UUID
+    for tid in thread_ids:
+        validate_uuid(tid, "Invalid thread ID: must be a UUID")
+
+    # Validate strategy
+    if strategy not in ("delete", "keep_latest"):
+        raise HTTPException(
+            status_code=422,
+            detail=f"Invalid strategy: {strategy}. Expected 'delete' or 'keep_latest'.",
+        )
+
+    # Empty list is a no-op, return early
+    if not thread_ids:
+        return ApiResponse({"pruned_count": 0})
+
+    if not FF_USE_CORE_API:
+        raise HTTPException(
+            status_code=422,
+            detail="Thread prune requires FF_USE_CORE_API=true",
+        )
+
+    pruned_count = await CrudThreads.prune(
+        thread_ids=thread_ids,
+        strategy=strategy,
+    )
+
+    return ApiResponse({"pruned_count": pruned_count})
 
 
 @retry_db
@@ -427,6 +486,7 @@ threads_routes: list[BaseRoute] = [
     ApiRoute("/threads", endpoint=create_thread, methods=["POST"]),
     ApiRoute("/threads/search", endpoint=search_threads, methods=["POST"]),
     ApiRoute("/threads/count", endpoint=count_threads, methods=["POST"]),
+    ApiRoute("/threads/prune", endpoint=prune_threads, methods=["POST"]),
     ApiRoute("/threads/{thread_id}", endpoint=get_thread, methods=["GET"]),
     ApiRoute("/threads/{thread_id}", endpoint=patch_thread, methods=["PATCH"]),
     ApiRoute("/threads/{thread_id}", endpoint=delete_thread, methods=["DELETE"]),

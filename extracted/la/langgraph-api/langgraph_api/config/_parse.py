@@ -35,6 +35,16 @@ def parse_schema(
 
 
 def parse_thread_ttl(value: str | None) -> ThreadTTLConfig | None:
+    """Parse LANGGRAPH_THREAD_TTL environment variable.
+
+    Accepts either:
+    - A simple number (TTL in minutes): "60"
+    - A JSON object: '{"strategy": "keep_latest", "default_ttl": 60, "sweep_limit": 500}'
+
+    Supported strategies:
+    - "delete": Remove the thread and all its data entirely
+    - "keep_latest": Prune old checkpoints but keep the thread and latest state
+    """
     if not value:
         return None
     if str(value).strip().startswith("{"):
@@ -44,4 +54,5 @@ def parse_thread_ttl(value: str | None) -> ThreadTTLConfig | None:
         # We permit float values mainly for testing purposes
         "default_ttl": float(value),
         "sweep_interval_minutes": 5.1,
+        "sweep_limit": 1000,  # Default max threads per sweep iteration
     }

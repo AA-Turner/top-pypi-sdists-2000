@@ -15,6 +15,8 @@ from scrapy.utils._compression import (
     _unbrotli,
     _unzstd,
 )
+from scrapy.utils.decorators import _warn_spider_arg
+from scrapy.utils.deprecate import warn_on_deprecated_spider_attribute
 from scrapy.utils.gz import gunzip
 
 if TYPE_CHECKING:
@@ -30,7 +32,10 @@ logger = getLogger(__name__)
 ACCEPTED_ENCODINGS: list[bytes] = [b"gzip", b"deflate"]
 
 try:
-    import brotli
+    try:
+        import brotli
+    except ImportError:
+        import brotlicffi as brotli
 except ImportError:
     pass
 else:
@@ -39,8 +44,8 @@ else:
     except AttributeError:  # pragma: no cover
         warnings.warn(
             "You have brotli installed. But 'br' encoding support now requires "
-            "brotli version >= 1.2.0. Please upgrade brotli version to make Scrapy "
-            "decode 'br' encoded responses.",
+            "brotli's or brotlicffi's version >= 1.2.0. Please upgrade "
+            "brotli/brotlicffi to make Scrapy decode 'br' encoded responses.",
         )
     else:
         ACCEPTED_ENCODINGS.append(b"br")
@@ -81,18 +86,24 @@ class HttpCompressionMiddleware:
 
     def open_spider(self, spider: Spider) -> None:
         if hasattr(spider, "download_maxsize"):
+            warn_on_deprecated_spider_attribute("download_maxsize", "DOWNLOAD_MAXSIZE")
             self._max_size = spider.download_maxsize
         if hasattr(spider, "download_warnsize"):
+            warn_on_deprecated_spider_attribute(
+                "download_warnsize", "DOWNLOAD_WARNSIZE"
+            )
             self._warn_size = spider.download_warnsize
 
+    @_warn_spider_arg
     def process_request(
-        self, request: Request, spider: Spider
+        self, request: Request, spider: Spider | None = None
     ) -> Request | Response | None:
         request.headers.setdefault("Accept-Encoding", b", ".join(ACCEPTED_ENCODINGS))
         return None
 
+    @_warn_spider_arg
     def process_response(
-        self, request: Request, response: Response, spider: Spider
+        self, request: Request, response: Response, spider: Spider | None = None
     ) -> Request | Response:
         if request.method == "HEAD":
             return response
@@ -125,11 +136,8 @@ class HttpCompressionMiddleware:
                     self.stats.inc_value(
                         "httpcompression/response_bytes",
                         len(decoded_body),
-                        spider=spider,
                     )
-                    self.stats.inc_value(
-                        "httpcompression/response_count", spider=spider
-                    )
+                    self.stats.inc_value("httpcompression/response_count")
                 respcls = responsetypes.from_args(
                     headers=response.headers, url=response.url, body=decoded_body
                 )
@@ -194,7 +202,7 @@ class HttpCompressionMiddleware:
             f"from unsupported encoding(s) '{encodings_str}'."
         )
         if b"br" in encodings:
-            msg += " You need to install brotli >= 1.2.0 to decode 'br'."
+            msg += " You need to install brotli or brotlicffi >= 1.2.0 to decode 'br'."
         if b"zstd" in encodings:
             msg += " You need to install zstandard to decode 'zstd'."
         logger.warning(msg)

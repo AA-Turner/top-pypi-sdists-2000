@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: dataclass-wizard
-Version: 0.39.0
+Version: 0.39.1
 Summary: A wizard-like JSON serialization library for Python dataclasses
 Author-email: Ritvik Nag <me@ritviknag.com>
 License: Apache Software License 2.0
@@ -59,6 +59,7 @@ Provides-Extra: yaml
 Requires-Dist: PyYAML<7,>=6; extra == "yaml"
 Provides-Extra: dev
 Requires-Dist: tzdata>=2024.1; platform_system == "Windows" and extra == "dev"
+Requires-Dist: mypy<2,>=1.19; extra == "dev"
 Requires-Dist: flake8>=3; extra == "dev"
 Requires-Dist: tox==4.23.2; extra == "dev"
 Requires-Dist: pytimeparse==1.1.8; extra == "dev"
@@ -91,10 +92,10 @@ Requires-Dist: pytest-benchmark[histogram]; extra == "bench"
 Requires-Dist: dataclasses-json==0.6.7; extra == "bench"
 Requires-Dist: jsons==1.6.3; extra == "bench"
 Requires-Dist: dataclass-factory==2.16; extra == "bench"
-Requires-Dist: dacite==1.8.1; extra == "bench"
+Requires-Dist: dacite==1.9.2; extra == "bench"
 Requires-Dist: mashumaro==3.17; extra == "bench"
-Requires-Dist: pydantic==2.10.3; python_version < "3.14" and extra == "bench"
-Requires-Dist: attrs==24.3.0; extra == "bench"
+Requires-Dist: pydantic==2.12.5; extra == "bench"
+Requires-Dist: attrs==25.4.0; extra == "bench"
 Provides-Extra: all
 Requires-Dist: python-dotenv<2,>=1; extra == "all"
 Requires-Dist: pytimeparse>=1.1.7; extra == "all"
@@ -103,6 +104,7 @@ Requires-Dist: tomli<3,>=2; python_version == "3.10" and extra == "all"
 Requires-Dist: tomli-w<2,>=1; extra == "all"
 Requires-Dist: PyYAML<7,>=6; extra == "all"
 Requires-Dist: tzdata>=2024.1; platform_system == "Windows" and extra == "all"
+Requires-Dist: mypy<2,>=1.19; extra == "all"
 Requires-Dist: flake8>=3; extra == "all"
 Requires-Dist: tox==4.23.2; extra == "all"
 Requires-Dist: pytimeparse==1.1.8; extra == "all"
@@ -125,10 +127,10 @@ Requires-Dist: pytest-benchmark[histogram]; extra == "all"
 Requires-Dist: dataclasses-json==0.6.7; extra == "all"
 Requires-Dist: jsons==1.6.3; extra == "all"
 Requires-Dist: dataclass-factory==2.16; extra == "all"
-Requires-Dist: dacite==1.8.1; extra == "all"
+Requires-Dist: dacite==1.9.2; extra == "all"
 Requires-Dist: mashumaro==3.17; extra == "all"
-Requires-Dist: pydantic==2.10.3; python_version < "3.14" and extra == "all"
-Requires-Dist: attrs==24.3.0; extra == "all"
+Requires-Dist: pydantic==2.12.5; extra == "all"
+Requires-Dist: attrs==25.4.0; extra == "all"
 Dynamic: license-file
 
 

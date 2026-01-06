@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pypdfium2
-Version: 5.2.0
+Version: 5.3.0
 Summary: Python bindings to PDFium
 Home-page: https://github.com/pypdfium2-team/pypdfium2
 Author: pypdfium2-team
@@ -30,7 +30,7 @@ Dynamic: license-file
 Dynamic: requires-python
 Dynamic: summary
 
-<!-- SPDX-FileCopyrightText: 2025 geisserml <geisserml@gmail.com> -->
+<!-- SPDX-FileCopyrightText: 2026 geisserml <geisserml@gmail.com> -->
 <!-- SPDX-License-Identifier: CC-BY-4.0 -->
 
 # pypdfium2
@@ -179,7 +179,7 @@ This project comes with two scripts to automate the build process: `build_toolch
 > [!TIP]
 > The native sourcebuild can either use system libraries, or pdfium's vendored libraries.
 > When invoked directly, by default, system libraries need to be installed. However, when invoked through fallback setup (`PDFIUM_PLATFORM=fallback`), vendored libraries will be used.<br>
-> Use the `--vendor ...` and `--no-vendor ...` options to control vendoring on a per-library basis. See `build_native.py --help` for details.
+> The `--vendor ...` and `--no-vendor ...` options can be used to control vendoring on a per-library basis. See `build_native.py --help` for details.
 
 You can also set `PDFIUM_PLATFORM` to `sourcebuild-native` or `sourcebuild-toolchained` to trigger either build script through setup, and pass command-line flags with `$BUILD_PARAMS`.
 However, for simplicity, both scripts/subtargets share just `sourcebuild` as staging directory.
@@ -317,7 +317,7 @@ For other ways of installing Docker, refer to the cibuildwheel docs ([Setup](htt
 > pdfium itself has first-class cross-compilation support.
 > In particular, for Linux architectures supported by upstream's toolchain but not available natively on CI, we recommend to forego cibuildwheel, and instead cross-build pdfium using its own toolchain, e.g.:
 > ```bash
-> # assuming gcc cross-compilation packages are installed
+> # assuming cross-compilation dependencies are installed
 > python setupsrc/build_toolchained.py --target-cpu arm
 > PDFIUM_PLATFORM=sourcebuild CROSS_TAG="manylinux_2_17_armv7l" python -m build -wxn
 > ```
@@ -1166,7 +1166,7 @@ This results in pypdfium2 being part of a large dependency tree.
 * [Tim Head](https://github.com/betatim): Original idea for Python bindings to PDFium with ctypesgen in `wowpng`.
 * [Adam Huganir](https://github.com/adam-huganir): Help with maintenance and development decisions since the beginning of the project.
 * [Christian Heimes](https://github.com/tiran): RPM packaging for pdfium. Showing how to build pdfium natively without Google's toolchain.
-* [Marvin Gießing](https://github.com/mgiessing): Investigation on building PDFium for an unhandled Linux architecture (ppc64le).
+* [Marvin Gießing](https://github.com/mgiessing): Investigation on building PDFium for a then unhandled Linux architecture (ppc64le).
 * [wojiushixiaobai](https://github.com/wojiushixiaobai): Helpful pointers and draft workflow for cibuildwheel. Supporting exotic architectures via emulation (pulling in dependencies with auditwheel).
 * [kobaltcore](https://github.com/kobaltcore): Bug fix for `PdfDocument.save()`.
 * [Anderson Bravalheri](https://github.com/abravalheri): Help with PEP 517/518 compliance. Hint to use an environment variable rather than separate setup files.

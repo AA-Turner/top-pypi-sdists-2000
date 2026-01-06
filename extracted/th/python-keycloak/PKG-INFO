@@ -1,13 +1,13 @@
 Metadata-Version: 2.4
 Name: python-keycloak
-Version: 7.0.0
+Version: 7.0.1
 Summary: python-keycloak is a Python package providing access to the Keycloak API.
 License: MIT
 License-File: LICENSE
 Keywords: keycloak,openid,oidc
 Author: Marcos Pereira
 Author-email: marcospereira.mpj@gmail.com
-Requires-Python: >=3.9,<=3.14
+Requires-Python: >=3.9,<4
 Classifier: Development Status :: 3 - Alpha
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: MacOS

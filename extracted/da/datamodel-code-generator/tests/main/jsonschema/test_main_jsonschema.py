@@ -2931,7 +2931,20 @@ def test_main_jsonschema_custom_base_path(output_file: Path) -> None:
     option_description="""Specify different base classes for specific models via JSON mapping.
 
 The `--base-class-map` option allows you to assign different base classes
-to specific models. Priority: base-class-map > customBasePath > base-class.""",
+to specific models. This is useful when you want selective base class inheritance,
+for example, applying custom base classes only to specific models while leaving
+others with the default `BaseModel`.
+
+Priority: `--base-class-map` > `customBasePath` (schema extension) > `--base-class`
+
+You can specify either a single base class as a string, or multiple base classes
+(mixins) as a list:
+
+- Single: `{"Person": "custom.bases.PersonBase"}`
+- Multiple: `{"User": ["mixins.AuditMixin", "mixins.TimestampMixin"]}`
+
+When using multiple base classes, the specified classes are used directly without
+adding `BaseModel`. Ensure your mixins inherit from `BaseModel` if needed.""",
     input_schema="jsonschema/base_class_map.json",
     cli_args=[
         "--base-class-map",
@@ -2955,6 +2968,47 @@ def test_main_jsonschema_base_class_map(output_file: Path) -> None:
         extra_args=[
             "--base-class-map",
             '{"Person": "custom.bases.PersonBase", "Animal": "custom.bases.AnimalBase"}',
+        ],
+    )
+
+
+def test_main_jsonschema_custom_base_paths_list(output_file: Path) -> None:
+    """Test customBasePath with list of base classes."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "custom_base_paths_list.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="custom_base_paths_list.py",
+    )
+
+
+def test_main_jsonschema_base_class_map_list(output_file: Path) -> None:
+    """Test base_class_map with list values for multiple inheritance."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "base_class_map_list.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="base_class_map_list.py",
+        extra_args=[
+            "--base-class-map",
+            '{"User": ["mixins.AuditMixin", "mixins.TimestampMixin"], "Admin": "admin.AdminBase"}',
+        ],
+    )
+
+
+def test_main_jsonschema_base_class_map_empty_list(output_file: Path) -> None:
+    """Test base_class_map with empty strings list (falls back to default)."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "base_class_map_empty_list.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="base_class_map_empty_list.py",
+        extra_args=[
+            "--base-class-map",
+            '{"User": ["", ""]}',
         ],
     )
 
@@ -4201,6 +4255,48 @@ def test_main_typed_dict_enum_field_as_literal_all(output_file: Path) -> None:
             "all",
             "--target-python-version",
             "3.11",
+        ],
+    )
+
+
+@pytest.mark.skipif(
+    black.__version__.split(".")[0] == "22",
+    reason="Installed black doesn't support Python version 3.10",
+)
+def test_main_typed_dict_closed(output_file: Path) -> None:
+    """Test TypedDict with additionalProperties: false generates closed=True (PEP 728)."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "typed_dict_closed.json",
+        output_path=output_file,
+        input_file_type=None,
+        assert_func=assert_file_content,
+        expected_file="typed_dict_closed.py",
+        extra_args=[
+            "--output-model-type",
+            "typing.TypedDict",
+            "--target-python-version",
+            "3.10",
+        ],
+    )
+
+
+@pytest.mark.skipif(
+    black.__version__.split(".")[0] == "22",
+    reason="Installed black doesn't support Python version 3.10",
+)
+def test_main_typed_dict_extra_items(output_file: Path) -> None:
+    """Test TypedDict with additionalProperties type generates extra_items (PEP 728)."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "typed_dict_extra_items.json",
+        output_path=output_file,
+        input_file_type=None,
+        assert_func=assert_file_content,
+        expected_file="typed_dict_extra_items.py",
+        extra_args=[
+            "--output-model-type",
+            "typing.TypedDict",
+            "--target-python-version",
+            "3.10",
         ],
     )
 
@@ -7902,4 +7998,22 @@ def test_validators_requires_pydantic_v2(output_file: Path, tmp_path: Path, caps
         ],
         capsys=capsys,
         expected_stderr_contains="--validators option requires Pydantic v2",
+    )
+
+
+@PYDANTIC_V2_SKIP
+def test_unique_items_enum_set(output_file: Path) -> None:
+    """Test set with enum items does not add __hash__ to enum (already hashable)."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "unique_items_enum_set.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="unique_items_enum_set.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-unique-items-as-set",
+            "--use-standard-collections",
+        ],
     )

@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, TypedDict
 
-from typing_extensions import NotRequired
+from typing_extensions import NotRequired, TypedDict
 
 if TYPE_CHECKING:
     from collections import defaultdict
@@ -38,7 +38,7 @@ if TYPE_CHECKING:
     from datamodel_code_generator.validators import ModelValidators, ValidatorMode
 
 
-class GenerateConfigDict(TypedDict):
+class GenerateConfigDict(TypedDict, closed=True):
     input_filename: NotRequired[str | None]
     input_file_type: NotRequired[InputFileType]
     output: NotRequired[Path | None]
@@ -46,7 +46,7 @@ class GenerateConfigDict(TypedDict):
     target_python_version: NotRequired[PythonVersion]
     target_pydantic_version: NotRequired[TargetPydanticVersion | None]
     base_class: NotRequired[str]
-    base_class_map: NotRequired[dict[str, str] | None]
+    base_class_map: NotRequired[dict[str, str | list[str]] | None]
     additional_imports: NotRequired[list[str] | None]
     class_decorators: NotRequired[list[str] | None]
     custom_template_dir: NotRequired[Path | None]

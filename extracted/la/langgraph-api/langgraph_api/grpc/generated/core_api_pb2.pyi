@@ -42,6 +42,7 @@ class AssistantsSortBy(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
 class ThreadTTLStrategy(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
     THREAD_TTL_STRATEGY_DELETE: _ClassVar[ThreadTTLStrategy]
+    THREAD_TTL_STRATEGY_KEEP_LATEST: _ClassVar[ThreadTTLStrategy]
 
 class CheckpointSource(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
@@ -80,6 +81,7 @@ NAME: AssistantsSortBy
 CREATED_AT: AssistantsSortBy
 UPDATED_AT: AssistantsSortBy
 THREAD_TTL_STRATEGY_DELETE: ThreadTTLStrategy
+THREAD_TTL_STRATEGY_KEEP_LATEST: ThreadTTLStrategy
 CHECKPOINT_SOURCE_UNSPECIFIED: CheckpointSource
 CHECKPOINT_SOURCE_INPUT: CheckpointSource
 CHECKPOINT_SOURCE_LOOP: CheckpointSource

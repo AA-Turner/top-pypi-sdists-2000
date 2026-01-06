@@ -2,7 +2,7 @@ pub use self::config::InterpreterConfig;
 use crate::auditwheel::PlatformTag;
 use crate::target::Arch;
 use crate::{BridgeModel, BuildContext, Target};
-use anyhow::{bail, ensure, format_err, Context, Result};
+use anyhow::{Context, Result, bail, ensure, format_err};
 use pep440_rs::{Version, VersionSpecifiers};
 use regex::Regex;
 use serde::Deserialize;
@@ -329,7 +329,9 @@ fn fun_with_abiflags(
                 Ok("".to_string())
             }
         } else {
-            bail!("A python 3 interpreter on Windows does not define abiflags in its sysconfig before Python 3.14 ಠ_ಠ")
+            bail!(
+                "A python 3 interpreter on Windows does not define abiflags in its sysconfig before Python 3.14 ಠ_ಠ"
+            )
         }
     } else if let Some(ref abiflags) = message.abiflags {
         if message.minor >= 8 {
@@ -781,6 +783,7 @@ impl PythonInterpreter {
         bridge: &BridgeModel,
     ) -> Result<Vec<PythonInterpreter>> {
         let mut available_versions = Vec::new();
+        let mut missing = Vec::new();
         for executable in executables {
             if let Some(version) = PythonInterpreter::check_executable(executable, target, bridge)
                 .context(format!(
@@ -789,11 +792,20 @@ impl PythonInterpreter {
             ))? {
                 available_versions.push(version);
             } else {
-                bail!(
-                    "Python interpreter `{}` doesn't exist",
-                    executable.display()
-                );
+                missing.push(executable);
             }
+        }
+
+        if !missing.is_empty() {
+            let missing_str = missing
+                .iter()
+                .map(|p| format!("`{}`", p.display()))
+                .collect::<Vec<_>>()
+                .join(", ");
+            bail!(
+                "The following Python interpreters could not be found: {}",
+                missing_str
+            );
         }
 
         Ok(available_versions)
@@ -957,10 +969,10 @@ fn calculate_abi_tag(ext_suffix: &str) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
     use crate::bridge::{PyO3, PyO3Crate};
     use expect_test::expect;
-
-    use super::*;
+    use insta::assert_snapshot;
 
     #[test]
     fn test_find_interpreter_by_target() {
@@ -1260,5 +1272,30 @@ mod tests {
                 soabi: None,
             }
         );
+    }
+
+    #[test]
+    fn test_check_executables_single_missing() {
+        let target = Target::from_resolved_target_triple("x86_64-unknown-linux-gnu").unwrap();
+        let bridge = BridgeModel::Bin(None);
+        let executables = vec![PathBuf::from("nonexistent-python-1")];
+
+        let result = PythonInterpreter::check_executables(&executables, &target, &bridge);
+        let err_msg = result.unwrap_err().to_string();
+        assert_snapshot!(err_msg, @"The following Python interpreters could not be found: `nonexistent-python-1`");
+    }
+
+    #[test]
+    fn test_check_executables_multiple_missing() {
+        let target = Target::from_resolved_target_triple("x86_64-unknown-linux-gnu").unwrap();
+        let bridge = BridgeModel::Bin(None);
+        let executables = vec![
+            PathBuf::from("nonexistent-python-1"),
+            PathBuf::from("nonexistent-python-2"),
+        ];
+
+        let result = PythonInterpreter::check_executables(&executables, &target, &bridge);
+        let err_msg = result.unwrap_err().to_string();
+        assert_snapshot!(err_msg, @"The following Python interpreters could not be found: `nonexistent-python-1`, `nonexistent-python-2`");
     }
 }

@@ -1,34 +1,22 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: huey
-Version: 2.5.5
-Summary: huey, a little task queue
-Home-page: http://github.com/coleifer/huey/
-Author: Charles Leifer
-Author-email: coleifer@gmail.com
-Project-URL: Documentation, https://huey.readthedocs.io
+Version: 2.6.0
+Summary: a little task queue
+Author-email: Charles Leifer <coleifer@gmail.com>
+License-Expression: MIT
+Project-URL: Repository, https://github.com/coleifer/huey
+Project-URL: Documentation, https://huey.readthedocs.io/
 Project-URL: Changelog, https://github.com/coleifer/huey/blob/master/CHANGELOG.md
-Classifier: Development Status :: 5 - Production/Stable
-Classifier: Intended Audience :: Developers
-Classifier: License :: OSI Approved :: MIT License
-Classifier: Operating System :: OS Independent
-Classifier: Programming Language :: Python
-Classifier: Programming Language :: Python :: 2.7
-Classifier: Programming Language :: Python :: 3.4
-Classifier: Programming Language :: Python :: 3.5
-Classifier: Programming Language :: Python :: 3.6
-Classifier: Programming Language :: Python :: 3.7
-Classifier: Programming Language :: Python :: 3.8
-Classifier: Programming Language :: Python :: 3.9
-Classifier: Programming Language :: Python :: 3.10
-Classifier: Programming Language :: Python :: 3.11
-Classifier: Programming Language :: Python :: 3.12
-Classifier: Programming Language :: Python :: 3.13
-Classifier: Programming Language :: Python :: 3.14
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 3
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
-Provides-Extra: backends
-Provides-Extra: redis
+Description-Content-Type: text/x-rst
 License-File: LICENSE
+Provides-Extra: backends
+Requires-Dist: redis>=3.0.0; extra == "backends"
+Dynamic: license-file
 
+.. image:: http://media.charlesleifer.com/blog/photos/huey2-logo.png
 
 *a lightweight alternative*.
 
@@ -53,6 +41,7 @@ huey supports:
 * task locking
 * task pipelines and chains
 
+.. image:: http://i.imgur.com/2EpRs.jpg
 
 At a glance
 -----------
@@ -151,4 +140,6 @@ Project page
 `See source code and issue tracker on Github <https://github.com/coleifer/huey/>`_.
 
 Huey is named in honor of my cat:
+
+.. image:: http://m.charlesleifer.com/t/800x-/blog/photos/p1473037658.76.jpg?key=mD9_qMaKBAuGPi95KzXYqg
 

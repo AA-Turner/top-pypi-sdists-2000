@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2025 geisserml <geisserml@gmail.com>
+# SPDX-FileCopyrightText: 2026 geisserml <geisserml@gmail.com>
 # SPDX-License-Identifier: Apache-2.0 OR BSD-3-Clause
 
 import os
@@ -119,6 +119,7 @@ class PlatNames:
     linux_x86        = SysNames.linux   + "_x86"
     linux_arm64      = SysNames.linux   + "_arm64"
     linux_arm32      = SysNames.linux   + "_arm32"
+    linux_ppc64le    = SysNames.linux   + "_ppc64le"
     linux_musl_x64   = SysNames.linux   + "_musl_x64"
     linux_musl_x86   = SysNames.linux   + "_musl_x86"
     linux_musl_arm64 = SysNames.linux   + "_musl_arm64"
@@ -141,6 +142,7 @@ PdfiumBinariesMap = {
     PlatNames.linux_x86:     "linux-x86",
     PlatNames.linux_arm64:   "linux-arm64",
     PlatNames.linux_arm32:   "linux-arm",
+    PlatNames.linux_ppc64le: "linux-ppc64",
     PlatNames.android_arm64: "android-arm64",
     PlatNames.android_arm32: "android-arm",
 }
@@ -431,6 +433,10 @@ def _android_api():
         return None
 
 
+class UnhandledPlatformError (RuntimeError):
+    pass
+
+
 class _host_platform:
     
     def __init__(self):
@@ -451,7 +457,7 @@ class _host_platform:
     def platform(self):
         try:
             return self._get_platform()
-        except Exception as e:
+        except (UnhandledPlatformError, AttributeError) as e:
             self._exc = e
             return None
     
@@ -496,17 +502,19 @@ class _host_platform:
             info += f", {self._libc_name} {self._libc_ver}"
         return f"<Host: {info}>"
     
-    def _handle_linux(self, archid):
+    def _handle_linux(self, archid, musl_ok=True):
         if self._libc_name == "glibc":
             return getattr(PlatNames, f"linux_{archid}")
         elif self._libc_name == "musl":
+            if not musl_ok:
+                raise UnhandledPlatformError(f"{archid} musl not supported with pdfium-binaries on setup. Please check PyPI for wheels.")
             return getattr(PlatNames, f"linux_musl_{archid}")
         elif _android_api():  # seems to imply self._libc_name == "libc"
             log("Android prior to PEP 738 (e.g. Termux)")
             self._system = SysNames.android
             return getattr(PlatNames, f"android_{archid}")
         else:
-            raise RuntimeError(f"Linux with unhandled libc {self._libc_name!r}")
+            raise UnhandledPlatformError(f"Linux with unhandled libc {self._libc_name!r}")
     
     def _get_platform(self):
         
@@ -541,9 +549,9 @@ class _host_platform:
             elif self._raw_machine == "aarch64":
                 return self._handle_linux("arm64")
             elif self._raw_machine == "armv7l":
-                if self._libc_name == "musl":
-                    raise RuntimeError(f"armv7l: musl not supported at this time")
-                return self._handle_linux("arm32")
+                return self._handle_linux("arm32", musl_ok=False)
+            elif self._raw_machine == "ppc64le":
+                return self._handle_linux("ppc64le", musl_ok=False)
         
         elif self._raw_system == "android":  # PEP 738
             # The PEP isn't too explicit about the machine names, but based on related CPython PRs, it looks like platform.machine() retains the raw uname values as on Linux, whereas sysconfig.get_platform() will map to the wheel tags
@@ -572,7 +580,7 @@ class _host_platform:
         else:
             self._system = None
         
-        raise RuntimeError(f"Unhandled platform: {self!r}")
+        raise UnhandledPlatformError(f"Unhandled platform: {self!r}")
 
 Host = _host_platform()
 
@@ -608,6 +616,8 @@ def get_wheel_tag(pl_name):
         return _manylinux_tag("aarch64")
     elif pl_name == PlatNames.linux_arm32:
         return _manylinux_tag("armv7l")
+    elif pl_name == PlatNames.linux_ppc64le:
+        return _manylinux_tag("ppc64le")
     
     # pdfium-binaries statically link musl, so we can declare the lowest possible requirement.
     # The builds have been confirmed to work in a musllinux_1_1 container, as of Nov 2025.
@@ -1031,3 +1041,40 @@ def bootstrap_buildtools():
     log("Bootstrapping build tools...")
     bootstrap_ninja()
     bootstrap_gn()
+
+
+def autopatch(file, pattern, repl, is_regex, exp_count=None):
+    log(f"Patch {pattern!r} -> {repl!r} (is_regex={is_regex}) on {file}")
+    content = file.read_text()
+    if is_regex:
+        content, n_subs = re.subn(pattern, repl, content)
+    else:
+        n_subs = content.count(pattern)
+        content = content.replace(pattern, repl)
+    if exp_count is not None:
+        assert n_subs == exp_count
+    file.write_text(content)
+
+def autopatch_dir(dir, globexpr, pattern, repl, is_regex, exp_count=None):
+    for file in dir.glob(globexpr):
+        autopatch(file, pattern, repl, is_regex, exp_count)
+
+def shared_autopatches(pdfium_dir):
+    autopatch_dir(
+        pdfium_dir/"public"/"cpp", "*.h",
+        r'"public/(.+)"', r'"../\1"',
+        is_regex=True, exp_count=None,
+    )
+    # bundle dependencies (e.g. abseil) into the pdfium DLL
+    autopatch(
+        pdfium_dir/"BUILD.gn",
+        'component("pdfium")',
+        'shared_library("pdfium")',
+        is_regex=False, exp_count=1,
+    )
+    autopatch(
+        pdfium_dir/"public"/"fpdfview.h",
+        "#if defined(COMPONENT_BUILD)",
+        "#if 1  // defined(COMPONENT_BUILD)",
+        is_regex=False, exp_count=1,
+    )

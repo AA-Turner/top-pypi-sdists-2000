@@ -2,16 +2,21 @@
 
 from __future__ import annotations
 
+import asyncio
 from datetime import UTC
 from http import HTTPStatus
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Literal
 from uuid import UUID
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 import orjson
 import structlog
 from starlette.exceptions import HTTPException
 
 from langgraph_api.grpc.client import get_shared_client
+from langgraph_api.grpc.generated import checkpointer_pb2
 from langgraph_api.grpc.generated import core_api_pb2 as pb
 from langgraph_api.grpc.generated import enum_thread_status_pb2 as enum_thread_status
 from langgraph_api.grpc.ops import (
@@ -51,7 +56,10 @@ THREAD_SORT_BY_MAP = {
     "status": pb.ThreadsSortBy.THREADS_SORT_BY_STATUS,
 }
 
-THREAD_TTL_STRATEGY_MAP = {"delete": pb.ThreadTTLStrategy.THREAD_TTL_STRATEGY_DELETE}
+THREAD_TTL_STRATEGY_MAP = {
+    "delete": pb.ThreadTTLStrategy.THREAD_TTL_STRATEGY_DELETE,
+    "keep_latest": pb.ThreadTTLStrategy.THREAD_TTL_STRATEGY_KEEP_LATEST,
+}
 
 
 def _map_thread_status(
@@ -81,7 +89,7 @@ def _map_thread_ttl(ttl: dict[str, Any] | None) -> pb.ThreadTTLConfig | None:
         if mapped_strategy is None:
             raise HTTPException(
                 status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
-                detail=f"Invalid thread TTL strategy: {strategy}. Expected one of ['delete']",
+                detail=f"Invalid thread TTL strategy: {strategy}. Expected one of {list(THREAD_TTL_STRATEGY_MAP.keys())}",
             )
         config.strategy = mapped_strategy
 
@@ -92,6 +100,9 @@ def _map_thread_ttl(ttl: dict[str, Any] | None) -> pb.ThreadTTLConfig | None:
     sweep_interval = ttl.get("sweep_interval_minutes")
     if sweep_interval is not None:
         config.sweep_interval_minutes = int(sweep_interval)
+
+    # Note: sweep_limit is a server-side configuration for the TTL sweep loop,
+    # not a per-thread setting, so we don't send it via gRPC
 
     return config
 
@@ -343,7 +354,16 @@ class Threads(Authenticated):
         conn,  # Not used
         thread_id: UUID | str,
         ctx: Any = None,
+        include_ttl: bool = False,
     ) -> AsyncIterator[Thread]:  # type: ignore[return-value]
+        """Get a thread by ID.
+
+        Args:
+            conn: Not used (required for interface compatibility)
+            thread_id: Thread ID
+            ctx: Auth context
+            include_ttl: Not yet supported in gRPC - parameter ignored.
+        """
         auth_filters = await Threads.handle_event(
             ctx, "read", {"thread_id": str(thread_id)}
         )
@@ -471,6 +491,73 @@ class Threads(Authenticated):
             yield deleted_id
 
         return generate_result()
+
+    @staticmethod
+    async def prune(
+        thread_ids: Sequence[str] | Sequence[UUID],
+        strategy: Literal["delete", "keep_latest"] = "delete",
+        batch_size: int = 100,
+        ctx: Any = None,
+    ) -> int:
+        """Prune threads via gRPC.
+
+        Args:
+            thread_ids: List of thread IDs to prune
+            strategy: "delete" to remove entirely, "keep_latest" to prune checkpoints
+            batch_size: Batch size for operations
+            ctx: Auth context for permission checks
+
+        Returns:
+            Number of threads successfully pruned
+        """
+
+        if not thread_ids:
+            return 0
+
+        str_ids = [str(tid) for tid in thread_ids]
+        client = await get_shared_client()
+
+        # Validate delete authorization for all threads before pruning.
+        # Auth filters are based on user/action, so we only need to get them once.
+        auth_filters = await Threads.handle_event(
+            ctx,
+            "delete",
+            {"thread_ids": str_ids},
+        )
+
+        # Only validate access if auth filters are present
+        if auth_filters:
+
+            async def validate_thread_access(thread_id: str) -> None:
+                request = pb.GetThreadRequest(
+                    thread_id=pb.UUID(value=_normalize_uuid(thread_id)),
+                    filters=auth_filters,
+                )
+                await client.threads.Get(request)
+
+            await asyncio.gather(*[validate_thread_access(tid) for tid in str_ids])
+
+        if strategy == "delete":
+            strategy_proto = checkpointer_pb2.PruneRequest.PruneStrategy.DELETE_ALL
+        else:
+            strategy_proto = checkpointer_pb2.PruneRequest.PruneStrategy.KEEP_LATEST
+        stub = client.checkpointer
+
+        processed = 0
+        for i in range(0, len(str_ids), batch_size):
+            batch = str_ids[i : i + batch_size]
+            try:
+                request = checkpointer_pb2.PruneRequest(
+                    thread_ids=batch,
+                    strategy=strategy_proto,
+                )
+                await stub.Prune(request)
+                processed += len(batch)
+            except Exception:
+                await logger.aexception("Failed to prune thread. Skipping batch.")
+                pass
+
+        return processed
 
     @staticmethod
     async def copy(

@@ -104,7 +104,7 @@ class ConstraintsBase(_BaseModel):
     unique_items: Optional[bool] = Field(None, alias="uniqueItems")  # noqa: UP045
     _exclude_fields: ClassVar[set[str]] = {"has_constraints"}
     if is_pydantic_v2():
-        model_config = ConfigDict(  # pyright: ignore[reportAssignmentType]
+        model_config = ConfigDict(  # ty: ignore
             arbitrary_types_allowed=True, ignored_types=(cached_property,)
         )
     else:
@@ -152,7 +152,7 @@ class DataModelFieldBase(_BaseModel):
     """Base class for model field representation and rendering."""
 
     if is_pydantic_v2():
-        model_config = ConfigDict(  # pyright: ignore[reportAssignmentType]
+        model_config = ConfigDict(  # ty: ignore
             arbitrary_types_allowed=True,
             defer_build=True,
         )
@@ -643,7 +643,7 @@ class DataModel(TemplateBase, Nullable, ABC):  # noqa: PLR0904
         fields: list[DataModelFieldBase],
         decorators: list[str] | None = None,
         base_classes: list[Reference] | None = None,
-        custom_base_class: str | None = None,
+        custom_base_class: str | list[str] | None = None,
         custom_template_dir: Path | None = None,
         extra_template_data: defaultdict[str, dict[str, Any]] | None = None,
         methods: list[str] | None = None,
@@ -678,6 +678,7 @@ class DataModel(TemplateBase, Nullable, ABC):  # noqa: PLR0904
 
         self.reference.source = self
 
+        self.extra_template_data: dict[str, Any]
         if extra_template_data is not None:
             # The supplied defaultdict will either create a new entry,
             # or already contain a predefined entry for this type
@@ -781,14 +782,24 @@ class DataModel(TemplateBase, Nullable, ABC):  # noqa: PLR0904
                 child.replace_reference(new_ref)
 
     def set_base_class(self) -> None:
-        """Set up the base class for this model."""
-        base_class = self.custom_base_class or self.BASE_CLASS
-        if not base_class:
+        """Set up the base class(es) for this model."""
+        if self.custom_base_class is None:
+            base_class_list = [self.BASE_CLASS] if self.BASE_CLASS else []
+        elif isinstance(self.custom_base_class, list):
+            base_class_list = self.custom_base_class
+        else:
+            base_class_list = [self.custom_base_class]
+
+        if not base_class_list:
             self.base_classes = []
             return
-        base_class_import = Import.from_full_path(base_class)
-        self._additional_imports.append(base_class_import)
-        self.base_classes = [BaseClassDataType.from_import(base_class_import)]
+
+        result = []
+        for base_class in base_class_list:
+            base_class_import = Import.from_full_path(base_class)
+            self._additional_imports.append(base_class_import)
+            result.append(BaseClassDataType.from_import(base_class_import))
+        self.base_classes = result
 
     @cached_property
     def template_file_path(self) -> Path:
