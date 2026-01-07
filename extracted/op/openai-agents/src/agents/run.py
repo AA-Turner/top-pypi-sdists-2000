@@ -64,7 +64,7 @@ from .model_settings import ModelSettings
 from .models.interface import Model, ModelProvider
 from .models.multi_provider import MultiProvider
 from .result import RunResult, RunResultStreaming
-from .run_context import RunContextWrapper, TContext
+from .run_context import AgentHookContext, RunContextWrapper, TContext
 from .stream_events import (
     AgentUpdatedStreamEvent,
     RawResponsesStreamEvent,
@@ -73,7 +73,7 @@ from .stream_events import (
 )
 from .tool import Tool, dispose_resolved_computers
 from .tool_guardrails import ToolInputGuardrailResult, ToolOutputGuardrailResult
-from .tracing import Span, SpanError, agent_span, get_current_trace, trace
+from .tracing import Span, SpanError, TracingConfig, agent_span, get_current_trace, trace
 from .tracing.span_data import AgentSpanData
 from .usage import Usage
 from .util import _coro, _error_tracing
@@ -225,6 +225,9 @@ class RunConfig:
     tracing_disabled: bool = False
     """Whether tracing is disabled for the agent run. If disabled, we will not trace the agent run.
     """
+
+    tracing: TracingConfig | None = None
+    """Tracing configuration for this run."""
 
     trace_include_sensitive_data: bool = field(
         default_factory=_default_trace_include_sensitive_data
@@ -575,6 +578,7 @@ class AgentRunner:
             trace_id=run_config.trace_id,
             group_id=run_config.group_id,
             metadata=run_config.trace_metadata,
+            tracing=run_config.tracing,
             disabled=run_config.tracing_disabled,
         ):
             current_turn = 0
@@ -902,6 +906,7 @@ class AgentRunner:
                 trace_id=run_config.trace_id,
                 group_id=run_config.group_id,
                 metadata=run_config.trace_metadata,
+                tracing=run_config.tracing,
                 disabled=run_config.tracing_disabled,
             )
         )
@@ -1367,10 +1372,15 @@ class AgentRunner:
         emitted_reasoning_item_ids: set[str] = set()
 
         if should_run_agent_start_hooks:
+            agent_hook_context = AgentHookContext(
+                context=context_wrapper.context,
+                usage=context_wrapper.usage,
+                turn_input=ItemHelpers.input_to_new_input_list(streamed_result.input),
+            )
             await asyncio.gather(
-                hooks.on_agent_start(context_wrapper, agent),
+                hooks.on_agent_start(agent_hook_context, agent),
                 (
-                    agent.hooks.on_start(context_wrapper, agent)
+                    agent.hooks.on_start(agent_hook_context, agent)
                     if agent.hooks
                     else _coro.noop_coroutine()
                 ),
@@ -1591,10 +1601,15 @@ class AgentRunner:
     ) -> SingleStepResult:
         # Ensure we run the hooks before anything else
         if should_run_agent_start_hooks:
+            agent_hook_context = AgentHookContext(
+                context=context_wrapper.context,
+                usage=context_wrapper.usage,
+                turn_input=ItemHelpers.input_to_new_input_list(original_input),
+            )
             await asyncio.gather(
-                hooks.on_agent_start(context_wrapper, agent),
+                hooks.on_agent_start(agent_hook_context, agent),
                 (
-                    agent.hooks.on_start(context_wrapper, agent)
+                    agent.hooks.on_start(agent_hook_context, agent)
                     if agent.hooks
                     else _coro.noop_coroutine()
                 ),

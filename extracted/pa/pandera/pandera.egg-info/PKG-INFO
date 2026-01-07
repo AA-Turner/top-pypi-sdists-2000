@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pandera
-Version: 0.27.1
+Version: 0.28.0
 Summary: A light-weight and flexible data validation and testing tool for statistical data objects.
 Author-email: Niels Bantilan <niels.bantilan@gmail.com>
 License: MIT License
@@ -58,8 +58,8 @@ Provides-Extra: hypotheses
 Requires-Dist: scipy; extra == "hypotheses"
 Provides-Extra: io
 Requires-Dist: pyyaml>=5.1; extra == "io"
-Requires-Dist: black; extra == "io"
-Requires-Dist: frictionless<=4.40.8; extra == "io"
+Provides-Extra: frictionless
+Requires-Dist: frictionless<=4.40.8; extra == "frictionless"
 Provides-Extra: mypy
 Requires-Dist: pandas-stubs; extra == "mypy"
 Requires-Dist: scipy-stubs; python_version >= "3.10" and extra == "mypy"
@@ -69,7 +69,7 @@ Provides-Extra: geopandas
 Requires-Dist: geopandas<1.1.0; extra == "geopandas"
 Requires-Dist: shapely; extra == "geopandas"
 Provides-Extra: pyspark
-Requires-Dist: pyspark[connect]<4.0.0,>=3.2.0; extra == "pyspark"
+Requires-Dist: pyspark[connect]>=3.2.0; extra == "pyspark"
 Provides-Extra: modin
 Requires-Dist: modin; extra == "modin"
 Requires-Dist: ray; extra == "modin"
@@ -96,7 +96,7 @@ Requires-Dist: scipy-stubs; python_version >= "3.10" and extra == "all"
 Requires-Dist: pyyaml>=5.1; extra == "all"
 Requires-Dist: black; extra == "all"
 Requires-Dist: frictionless<=4.40.8; extra == "all"
-Requires-Dist: pyspark[connect]<4.0.0,>=3.2.0; extra == "all"
+Requires-Dist: pyspark[connect]>=3.2.0; extra == "all"
 Requires-Dist: modin; extra == "all"
 Requires-Dist: ray; extra == "all"
 Requires-Dist: dask[dataframe]; extra == "all"

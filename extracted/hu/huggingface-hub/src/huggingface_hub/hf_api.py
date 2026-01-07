@@ -3801,7 +3801,7 @@ class HfApi:
                     self.repo_info(repo_id=repo_id, repo_type=repo_type, token=token)
                     if repo_type is None or repo_type == constants.REPO_TYPE_MODEL:
                         return RepoUrl(f"{self.endpoint}/{repo_id}")
-                    return RepoUrl(f"{self.endpoint}/{repo_type}/{repo_id}")
+                    return RepoUrl(f"{self.endpoint}/{constants.REPO_TYPES_URL_PREFIXES[repo_type]}{repo_id}")
                 except HfHubHTTPError:
                     raise err
             else:
@@ -10093,7 +10093,7 @@ class HfApi:
             timeout=timeout,
         )
         response = get_session().post(
-            f"https://huggingface.co/api/jobs/{namespace}",
+            f"{self.endpoint}/api/jobs/{namespace}",
             json=job_spec,
             headers=self._build_hf_headers(token=token),
         )
@@ -10156,7 +10156,7 @@ class HfApi:
             try:
                 with get_session().stream(
                     "GET",
-                    f"https://huggingface.co/api/jobs/{namespace}/{job_id}/logs",
+                    f"{self.endpoint}/api/jobs/{namespace}/{job_id}/logs",
                     headers=self._build_hf_headers(token=token),
                     timeout=120,
                 ) as response:
@@ -10184,7 +10184,7 @@ class HfApi:
             job_status = (
                 get_session()
                 .get(
-                    f"https://huggingface.co/api/jobs/{namespace}/{job_id}",
+                    f"{self.endpoint}/api/jobs/{namespace}/{job_id}",
                     headers=self._build_hf_headers(token=token),
                 )
                 .json()
@@ -10524,7 +10524,7 @@ class HfApi:
         if suspend is not None:
             input_json["suspend"] = suspend
         response = get_session().post(
-            f"https://huggingface.co/api/scheduled-jobs/{namespace}",
+            f"{self.endpoint}/api/scheduled-jobs/{namespace}",
             json=input_json,
             headers=self._build_hf_headers(token=token),
         )

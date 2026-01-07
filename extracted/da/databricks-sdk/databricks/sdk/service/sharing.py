@@ -2005,9 +2005,26 @@ class SharedDataObject:
     """Array of partitions for the shared data."""
 
     shared_as: Optional[str] = None
-    """A user-provided new name for the data object within the share. If this new name is not provided,
-    the object's original name will be used as the `shared_as` name. The `shared_as` name must be
-    unique within a share. For tables, the new name must follow the format of `<schema>.<table>`."""
+    """A user-provided alias name for table-like data objects within the share.
+    
+    Use this field for table-like objects (for example: TABLE, VIEW, MATERIALIZED_VIEW,
+    STREAMING_TABLE, FOREIGN_TABLE). For non-table objects (for example: VOLUME, MODEL,
+    NOTEBOOK_FILE, FUNCTION), use `string_shared_as` instead.
+    
+    Important: For non-table objects, this field must be omitted entirely.
+    
+    Format: Must be a 2-part name `<schema_name>.<table_name>` (e.g., "sales_schema.orders_table") -
+    Both schema and table names must contain only alphanumeric characters and underscores - No
+    periods, spaces, forward slashes, or control characters are allowed within each part - Do not
+    include the catalog name (use 2 parts, not 3)
+    
+    Behavior: - If not provided, the service automatically generates the alias as `<schema>.<table>`
+    from the object's original name - If you don't want to specify this field, omit it entirely from
+    the request (do not pass an empty string) - The `shared_as` name must be unique within the share
+    
+    Examples: - Valid: "analytics_schema.customer_view" - Invalid:
+    "catalog.analytics_schema.customer_view" (3 parts not allowed) - Invalid:
+    "analytics-schema.customer-view" (hyphens not allowed)"""
 
     start_version: Optional[int] = None
     """The start version associated with the object. This allows data providers to control the lowest
@@ -2021,10 +2038,30 @@ class SharedDataObject:
     """One of: **ACTIVE**, **PERMISSION_DENIED**."""
 
     string_shared_as: Optional[str] = None
-    """A user-provided new name for the shared object within the share. If this new name is not not
-    provided, the object's original name will be used as the `string_shared_as` name. The
-    `string_shared_as` name must be unique for objects of the same type within a Share. For
-    notebooks, the new name should be the new notebook file name."""
+    """A user-provided alias name for non-table data objects within the share.
+    
+    Use this field for non-table objects (for example: VOLUME, MODEL, NOTEBOOK_FILE, FUNCTION). For
+    table-like objects (for example: TABLE, VIEW, MATERIALIZED_VIEW, STREAMING_TABLE,
+    FOREIGN_TABLE), use `shared_as` instead.
+    
+    Important: For table-like objects, this field must be omitted entirely.
+    
+    Format: - For VOLUME: Must be a 2-part name `<schema_name>.<volume_name>` (e.g.,
+    "data_schema.ml_models") - For FUNCTION: Must be a 2-part name `<schema_name>.<function_name>`
+    (e.g., "udf_schema.calculate_tax") - For MODEL: Must be a 2-part name
+    `<schema_name>.<model_name>` (e.g., "models.prediction_model") - For NOTEBOOK_FILE: Should be
+    the notebook file name (e.g., "analysis_notebook.py") - All names must contain only alphanumeric
+    characters and underscores - No periods, spaces, forward slashes, or control characters are
+    allowed within each part
+    
+    Behavior: - If not provided, the service automatically generates the alias from the object's
+    original name - If you don't want to specify this field, omit it entirely from the request (do
+    not pass an empty string) - The `string_shared_as` name must be unique for objects of the same
+    type within the share
+    
+    Examples: - Valid for VOLUME: "data_schema.training_data" - Valid for FUNCTION:
+    "analytics.calculate_revenue" - Invalid: "catalog.data_schema.training_data" (3 parts not
+    allowed for volumes) - Invalid: "data-schema.training-data" (hyphens not allowed)"""
 
     def as_dict(self) -> dict:
         """Serializes the SharedDataObject into a dictionary suitable for use as a JSON request body."""
@@ -2190,6 +2227,10 @@ class SharedSecurableKind(Enum):
 
 @dataclass
 class Table:
+    access_modes: Optional[List[str]] = None
+    """The access modes supported for this table (e.g., "url", "dir"). Used for open sharing to
+    indicate how the table can be accessed."""
+
     comment: Optional[str] = None
     """The comment of the table."""
 
@@ -2217,12 +2258,17 @@ class Table:
     share_id: Optional[str] = None
     """The id of the share that the table belongs to."""
 
+    storage_location: Optional[str] = None
+    """The cloud storage location of the table for open sharing."""
+
     tags: Optional[List[catalog.TagKeyValue]] = None
     """The Tags of the table."""
 
     def as_dict(self) -> dict:
         """Serializes the Table into a dictionary suitable for use as a JSON request body."""
         body = {}
+        if self.access_modes:
+            body["access_modes"] = [v for v in self.access_modes]
         if self.comment is not None:
             body["comment"] = self.comment
         if self.id is not None:
@@ -2241,6 +2287,8 @@ class Table:
             body["share"] = self.share
         if self.share_id is not None:
             body["share_id"] = self.share_id
+        if self.storage_location is not None:
+            body["storage_location"] = self.storage_location
         if self.tags:
             body["tags"] = [v.as_dict() for v in self.tags]
         return body
@@ -2248,6 +2296,8 @@ class Table:
     def as_shallow_dict(self) -> dict:
         """Serializes the Table into a shallow dictionary of its immediate attributes."""
         body = {}
+        if self.access_modes:
+            body["access_modes"] = self.access_modes
         if self.comment is not None:
             body["comment"] = self.comment
         if self.id is not None:
@@ -2266,6 +2316,8 @@ class Table:
             body["share"] = self.share
         if self.share_id is not None:
             body["share_id"] = self.share_id
+        if self.storage_location is not None:
+            body["storage_location"] = self.storage_location
         if self.tags:
             body["tags"] = self.tags
         return body
@@ -2274,6 +2326,7 @@ class Table:
     def from_dict(cls, d: Dict[str, Any]) -> Table:
         """Deserializes the Table from a dictionary."""
         return cls(
+            access_modes=d.get("access_modes", None),
             comment=d.get("comment", None),
             id=d.get("id", None),
             internal_attributes=_from_dict(d, "internal_attributes", TableInternalAttributes),
@@ -2283,6 +2336,7 @@ class Table:
             schema=d.get("schema", None),
             share=d.get("share", None),
             share_id=d.get("share_id", None),
+            storage_location=d.get("storage_location", None),
             tags=_repeated_dict(d, "tags", catalog.TagKeyValue),
         )
 

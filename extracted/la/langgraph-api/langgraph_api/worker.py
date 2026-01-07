@@ -13,7 +13,7 @@ from typing_extensions import TypedDict
 import langgraph_api.logging as lg_logging
 from langgraph_api.api.encryption_middleware import (
     decrypt_response,
-    extract_encryption_context_from_data,
+    extract_blob_encryption_context,
 )
 from langgraph_api.auth.custom import SimpleUser, normalize_user
 from langgraph_api.config import (
@@ -79,9 +79,7 @@ async def worker(
         incr_runs()
 
     # Extract and set encryption context BEFORE decryption (decrypt_response strips this key)
-    encryption_context = extract_encryption_context_from_data(
-        run["kwargs"].get("config")
-    )
+    encryption_context = extract_blob_encryption_context(run["kwargs"].get("config"))
     if encryption_context:
         set_encryption_context(encryption_context)
 

@@ -15,6 +15,8 @@ from langgraph_api.api.encryption_middleware import (
     encrypt_request,
 )
 from langgraph_api.asyncio import ValueEvent
+from langgraph_api.feature_flags import FF_USE_CORE_API
+from langgraph_api.grpc.ops import Runs as GrpcRuns
 from langgraph_api.models.run import create_valid_run
 from langgraph_api.route import ApiRequest, ApiResponse, ApiRoute
 from langgraph_api.schema import (
@@ -48,6 +50,8 @@ from langgraph_license.validation import plus_features_enabled
 from langgraph_runtime.database import connect
 from langgraph_runtime.ops import Crons, Runs, StreamHandler, Threads
 from langgraph_runtime.retry import retry_db
+
+CrudRuns = GrpcRuns if FF_USE_CORE_API else Runs
 
 logger = structlog.stdlib.get_logger(__name__)
 
@@ -439,7 +443,7 @@ async def list_runs(
     async with connect() as conn, conn.pipeline():
         thread, runs = await asyncio.gather(
             Threads.get(conn, thread_id),
-            Runs.search(
+            CrudRuns.search(
                 conn,
                 thread_id,
                 limit=limit,
@@ -468,7 +472,7 @@ async def get_run(request: ApiRequest):
     async with connect() as conn, conn.pipeline():
         thread, run = await asyncio.gather(
             Threads.get(conn, thread_id),
-            Runs.get(
+            CrudRuns.get(
                 conn,
                 run_id,
                 thread_id=thread_id,
@@ -564,7 +568,7 @@ async def cancel_run(
     sub = await Runs.Stream.subscribe(run_id, thread_id) if wait else None
     try:
         async with connect() as conn:
-            await Runs.cancel(
+            await CrudRuns.cancel(
                 conn,
                 [run_id],
                 action=action,
@@ -628,7 +632,7 @@ async def cancel_runs(
     )
 
     async with connect() as conn:
-        await Runs.cancel(
+        await CrudRuns.cancel(
             conn,
             run_ids,
             action=action,
@@ -647,7 +651,7 @@ async def delete_run(request: ApiRequest):
     validate_uuid(run_id, "Invalid run ID: must be a UUID")
 
     async with connect() as conn:
-        rid = await Runs.delete(
+        rid = await CrudRuns.delete(
             conn,
             run_id,
             thread_id=thread_id,

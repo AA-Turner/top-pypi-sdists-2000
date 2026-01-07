@@ -306,6 +306,7 @@ async def get_assistant_graph(
         config,
         checkpointer=Checkpointer(),
         store=(await api_store.get_store()),
+        is_for_execution=False,
     ) as graph:
         xray: bool | int = False
         xray_query = request.query_params.get("xray")
@@ -363,6 +364,7 @@ async def get_assistant_subgraphs(
         config,
         checkpointer=Checkpointer(),
         store=(await api_store.get_store()),
+        is_for_execution=False,
     ) as graph:
         namespace = request.path_params.get("namespace")
 
@@ -411,6 +413,7 @@ async def get_assistant_schemas(
         config,
         checkpointer=Checkpointer(),
         store=(await api_store.get_store()),
+        is_for_execution=False,
     ) as graph:
         if isinstance(graph, BaseRemotePregel):
             schemas = await graph.fetch_state_schema()

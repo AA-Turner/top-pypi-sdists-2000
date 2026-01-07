@@ -46,7 +46,9 @@ class DataType(dtypes.DataType):
                 regex = r"(\(\))"
                 subst = ""
                 # You can manually specify the number of replacements by changing the 4th argument
-                dtype = re.sub(regex, subst, dtype, 0, re.MULTILINE)
+                dtype = re.sub(
+                    regex, subst, dtype, count=0, flags=re.MULTILINE
+                )
                 dtype = getattr(sys.modules["pyspark.sql.types"], dtype)()
         except AttributeError:  # pragma: no cover
             pass
@@ -84,7 +86,7 @@ class DataType(dtypes.DataType):
 
     def coerce(self, data_container: PysparkObject) -> PysparkObject:
         """Pure coerce without catching exceptions."""
-        coerced = data_container.astype(self.type)
+        coerced = data_container.astype(self.type)  # type: ignore[operator]
         return coerced
 
     def try_coerce(self, data_container: PysparkObject) -> PysparkObject:
@@ -118,7 +120,9 @@ class Engine(
                 regex = r"(\(\d.*?\b\))"
                 subst = ""
                 # You can manually specify the number of replacements by changing the 4th argument
-                data_type = re.sub(regex, subst, data_type, 0, re.MULTILINE)
+                data_type = re.sub(
+                    regex, subst, data_type, count=0, flags=re.MULTILINE
+                )
             return engine.Engine.dtype(cls, data_type)
         except TypeError:  # pragma: no cover
             raise

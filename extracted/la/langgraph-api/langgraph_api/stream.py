@@ -163,6 +163,7 @@ async def astream_state(
             config,
             store=(await api_store.get_store()),
             checkpointer=None if temporary else Checkpointer(),
+            is_for_execution=True,
         )
     )
 

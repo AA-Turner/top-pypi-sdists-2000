@@ -24,24 +24,43 @@ _LOG = logging.getLogger("databricks.sdk")
 @dataclass
 class AccessRequestDestinations:
     securable: Securable
-    """The securable for which the access request destinations are being retrieved."""
+    """The securable for which the access request destinations are being modified or read."""
 
     are_any_destinations_hidden: Optional[bool] = None
     """Indicates whether any destinations are hidden from the caller due to a lack of permissions. This
     value is true if the caller does not have permission to see all destinations."""
 
+    destination_source_securable: Optional[Securable] = None
+    """The source securable from which the destinations are inherited. Either the same value as
+    securable (if destination is set directly on the securable) or the nearest parent securable with
+    destinations set."""
+
     destinations: Optional[List[NotificationDestination]] = None
     """The access request destinations for the securable."""
+
+    full_name: Optional[str] = None
+    """The full name of the securable. Redundant with the name in the securable object, but necessary
+    for Terraform integration"""
+
+    securable_type: Optional[str] = None
+    """The type of the securable. Redundant with the type in the securable object, but necessary for
+    Terraform integration"""
 
     def as_dict(self) -> dict:
         """Serializes the AccessRequestDestinations into a dictionary suitable for use as a JSON request body."""
         body = {}
         if self.are_any_destinations_hidden is not None:
             body["are_any_destinations_hidden"] = self.are_any_destinations_hidden
+        if self.destination_source_securable:
+            body["destination_source_securable"] = self.destination_source_securable.as_dict()
         if self.destinations:
             body["destinations"] = [v.as_dict() for v in self.destinations]
+        if self.full_name is not None:
+            body["full_name"] = self.full_name
         if self.securable:
             body["securable"] = self.securable.as_dict()
+        if self.securable_type is not None:
+            body["securable_type"] = self.securable_type
         return body
 
     def as_shallow_dict(self) -> dict:
@@ -49,10 +68,16 @@ class AccessRequestDestinations:
         body = {}
         if self.are_any_destinations_hidden is not None:
             body["are_any_destinations_hidden"] = self.are_any_destinations_hidden
+        if self.destination_source_securable:
+            body["destination_source_securable"] = self.destination_source_securable
         if self.destinations:
             body["destinations"] = self.destinations
+        if self.full_name is not None:
+            body["full_name"] = self.full_name
         if self.securable:
             body["securable"] = self.securable
+        if self.securable_type is not None:
+            body["securable_type"] = self.securable_type
         return body
 
     @classmethod
@@ -60,8 +85,11 @@ class AccessRequestDestinations:
         """Deserializes the AccessRequestDestinations from a dictionary."""
         return cls(
             are_any_destinations_hidden=d.get("are_any_destinations_hidden", None),
+            destination_source_securable=_from_dict(d, "destination_source_securable", Securable),
             destinations=_repeated_dict(d, "destinations", NotificationDestination),
+            full_name=d.get("full_name", None),
             securable=_from_dict(d, "securable", Securable),
+            securable_type=d.get("securable_type", None),
         )
 
 
@@ -1740,7 +1768,7 @@ class ConnectionInfo:
 
 
 class ConnectionType(Enum):
-    """Next Id: 52"""
+    """Next Id: 53"""
 
     BIGQUERY = "BIGQUERY"
     DATABRICKS = "DATABRICKS"
@@ -8543,7 +8571,7 @@ class RowFilterOptions:
 
 @dataclass
 class SchemaInfo:
-    """Next ID: 43"""
+    """Next ID: 44"""
 
     browse_only: Optional[bool] = None
     """Indicates whether the principal is limited to retrieving metadata for the associated object
@@ -8756,7 +8784,7 @@ class Securable:
 
 
 class SecurableKind(Enum):
-    """Latest kind: CONNECTION_GOOGLE_ADS_OAUTH_U2M_WITH_DT = 284; Next id:285"""
+    """Latest kind: CONNECTION_ONELAKE = 289; Next id:290"""
 
     TABLE_DB_STORAGE = "TABLE_DB_STORAGE"
     TABLE_DELTA = "TABLE_DELTA"
@@ -9421,7 +9449,8 @@ class TableInfo:
     """View dependencies (when table_type == **VIEW** or **MATERIALIZED_VIEW**, **STREAMING_TABLE**) -
     when DependencyList is None, the dependency is not provided; - when DependencyList is an empty
     list, the dependency is provided but is empty; - when DependencyList is not an empty list,
-    dependencies are provided and recorded."""
+    dependencies are provided and recorded. Note: this field is not set in the output of the
+    __listTables__ API."""
 
     def as_dict(self) -> dict:
         """Serializes the TableInfo into a dictionary suitable for use as a JSON request body."""
@@ -15704,6 +15733,8 @@ class TablesAPI:
         latter case, the caller must also be the owner or have the **USE_CATALOG** privilege on the parent
         catalog and the **USE_SCHEMA** privilege on the parent schema. There is no guarantee of a specific
         ordering of the elements in the array.
+
+        NOTE: **view_dependencies** and **table_constraints** are not returned by ListTables queries.
 
         NOTE: we recommend using max_results=0 to use the paginated version of this API. Unpaginated calls
         will be deprecated soon.

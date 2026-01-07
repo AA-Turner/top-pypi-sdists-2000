@@ -13,6 +13,7 @@ from polars.datatypes import (
     Categorical,
     Date,
     Datetime,
+    Decimal,
     Duration,
     Float32,
     Float64,
@@ -129,7 +130,6 @@ class BaseClass:
         fail_case_data,
         data_types,
         function_args,
-        function_kwargs={},
         fail_on_init=False,
         init_exception_cls=None,
     ):
@@ -138,20 +138,16 @@ class BaseClass:
         """
         if fail_on_init:
             with pytest.raises(init_exception_cls):
-                check_fn(*function_args, **function_kwargs)
+                check_fn(*function_args)
             return
 
         schema = DataFrameSchema(
             {
                 "product": Column(Utf8()),
                 "code": (
-                    Column(
-                        data_types, check_fn(*function_args, **function_kwargs)
-                    )
+                    Column(data_types, check_fn(*function_args))
                     if isinstance(function_args, tuple)
-                    else Column(
-                        data_types, check_fn(function_args, **function_kwargs)
-                    )
+                    else Column(data_types, check_fn(function_args))
                 ),
             }
         )
@@ -264,6 +260,12 @@ class TestEqualToCheck(BaseClass):
                     "datatype": Float64,
                     "data": self.convert_data(
                         self.sample_numeric_data, "float64"
+                    ),
+                },
+                {
+                    "datatype": Decimal(precision=38, scale=10),
+                    "data": self.convert_data(
+                        self.sample_numeric_data, "decimal"
                     ),
                 },
                 {
@@ -436,6 +438,12 @@ class TestNotEqualToCheck(BaseClass):
                     ),
                 },
                 {
+                    "datatype": Decimal(precision=38, scale=10),
+                    "data": self.convert_data(
+                        self.sample_numeric_data, "decimal"
+                    ),
+                },
+                {
                     "datatype": Date,
                     "data": self.convert_data(
                         self.sample_datetime_data, "date"
@@ -547,6 +555,12 @@ class TestGreaterThanCheck(BaseClass):
                     ),
                 },
                 {
+                    "datatype": Decimal(precision=38, scale=10),
+                    "data": self.convert_data(
+                        self.sample_numeric_data, "decimal"
+                    ),
+                },
+                {
                     "datatype": Date,
                     "data": self.convert_data(
                         self.sample_datetime_data, "date"
@@ -650,6 +664,12 @@ class TestGreaterThanEqualToCheck(BaseClass):
                     "datatype": Float64,
                     "data": self.convert_data(
                         self.sample_numeric_data, "float64"
+                    ),
+                },
+                {
+                    "datatype": Decimal(precision=38, scale=10),
+                    "data": self.convert_data(
+                        self.sample_numeric_data, "decimal"
                     ),
                 },
                 {
@@ -763,6 +783,12 @@ class TestLessThanCheck(BaseClass):
                     ),
                 },
                 {
+                    "datatype": Decimal(precision=38, scale=10),
+                    "data": self.convert_data(
+                        self.sample_numeric_data, "decimal"
+                    ),
+                },
+                {
                     "datatype": Date,
                     "data": self.convert_data(
                         self.sample_datetime_data, "date"
@@ -866,6 +892,12 @@ class TestLessThanEqualToCheck(BaseClass):
                     "datatype": Float64,
                     "data": self.convert_data(
                         self.sample_numeric_data, "float64"
+                    ),
+                },
+                {
+                    "datatype": Decimal(precision=38, scale=10),
+                    "data": self.convert_data(
+                        self.sample_numeric_data, "decimal"
                     ),
                 },
                 {
@@ -990,6 +1022,13 @@ class TestIsInCheck(BaseClass):
                         self.sample_numeric_data, "float64"
                     ),
                 },
+                # FIXME(deepyaman): pandera.errors.SchemaError: InvalidOperationError("'is_in' cannot check for List(Decimal(38, 0)) values in Decimal(38, 10) data
+                # {
+                #     "datatype": Decimal(precision=38, scale=10),
+                #     "data": self.convert_data(
+                #         self.sample_numeric_data, "decimal"
+                #     ),
+                # },
                 {
                     "datatype": Date,
                     "data": self.convert_data(
@@ -1115,6 +1154,13 @@ class TestNotInCheck(BaseClass):
                         self.sample_numeric_data, "float64"
                     ),
                 },
+                # FIXME(deepyaman): pandera.errors.SchemaError: InvalidOperationError("'is_in' cannot check for List(Decimal(38, 0)) values in Decimal(38, 10) data
+                # {
+                #     "datatype": Decimal(precision=38, scale=10),
+                #     "data": self.convert_data(
+                #         self.sample_numeric_data, "decimal"
+                #     ),
+                # },
                 {
                     "datatype": Date,
                     "data": self.convert_data(
@@ -1211,71 +1257,17 @@ class TestStringType(BaseClass):
         )
 
     @pytest.mark.parametrize(
-        "check_value_args, check_value_kwargs, pass_data, fail_data",
-        [
-            (
-                (),
-                {"min_value": 3, "max_value": None},
-                [("Bal", "Bat"), ("Bal", "Batt")],
-                [("Bal", "Cs"), ("Bal", "BamBam")],
-            ),
-            (
-                (),
-                {"min_value": None, "max_value": 4},
-                [("Bal", "Bat"), ("Bal", "Batt")],
-                [("Bal", "Cs"), ("Bal", "BamBam")],
-            ),
-            (
-                (),
-                {"min_value": 3, "max_value": 7},
-                [("Bal", "Bat"), ("Bal", "Batt")],
-                [("Bal", "Cs"), ("Bal", "BamBam")],
-            ),
-            (
-                (),
-                {"min_value": 1, "max_value": 4},
-                [("Bal", "Bat"), ("Bal", "Batt")],
-                [("Bal", "Cs"), ("Bal", "BamBam")],
-            ),
-            (
-                (),
-                {"min_value": 3, "max_value": 4},
-                [("Bal", "Bat"), ("Bal", "Batt")],
-                [("Bal", "Cs"), ("Bal", "BamBam")],
-            ),
-            ((), {"value": 3}, [("Bal", "Bat")], [("Bal", "Cs")]),
-            ((3,), {}, [("Bal", "Bat")], [("Bal", "Cs")]),
-            ((), {"min_value": None, "max_value": None}, None, None),
-            (
-                (),
-                {"value": None, "min_value": None, "max_value": None},
-                None,
-                None,
-            ),
-            ((3,), {"min_value": 3, "max_value": None}, None, None),
-        ],
+        "check_value",
+        [(3, None), (None, 4), (3, 7), (1, 4), (3, 4), (None, None)],
     )
-    def test_str_length_check(
-        self, check_value_args, check_value_kwargs, pass_data, fail_data
-    ) -> None:
+    def test_str_length_check(self, check_value) -> None:
         """Test the Check to see if length of strings is within a specified range."""
         check_func = pa.Check.str_length
 
-        if (
-            check_value_args == ()
-            and check_value_kwargs.get("value", None) is None
-            and check_value_kwargs.get("min_value", None) is None
-            and check_value_kwargs.get("max_value", None) is None
-        ) or (
-            (
-                check_value_args != ()
-                or check_value_kwargs.get("value", None) is not None
-            )
-            and (
-                check_value_kwargs.get("min_value", None) is not None
-                or check_value_kwargs.get("max_value", None) is not None
-            )
-        ):
+        pass_data = [("Bal", "Bat"), ("Bal", "Batt")]
+        fail_data = [("Bal", "Cs"), ("Bal", "BamBam")]
+
+        if check_value == (None, None):
             fail_on_init = True
             init_exception_cls = ValueError
         else:
@@ -1287,10 +1279,32 @@ class TestStringType(BaseClass):
             pass_data,
             fail_data,
             Utf8(),
-            check_value_args,
-            check_value_kwargs,
+            check_value,
             fail_on_init=fail_on_init,
             init_exception_cls=init_exception_cls,
+        )
+
+    @pytest.mark.parametrize(
+        "check_value",
+        [3, 4],  # exact length values
+    )
+    def test_str_length_exact_check(self, check_value) -> None:
+        """Test the Check to see if length of strings is exactly a specified value."""
+        check_func = pa.Check.str_length
+
+        if check_value == 3:
+            pass_data = [("Bal", "Bat"), ("Bal", "Bam")]
+            fail_data = [("Bal", "Batt"), ("Bal", "BamBam")]
+        else:  # check_value == 4
+            pass_data = [("Bal", "Batt"), ("Bal", "Bamm")]
+            fail_data = [("Bal", "Bat"), ("Bal", "BamBam")]
+
+        self.check_function(
+            check_func,
+            pass_data,
+            fail_data,
+            Utf8(),
+            (check_value,),  # single arg tuple to be unpacked
         )
 
 
@@ -1371,6 +1385,10 @@ class TestInRangeCheck(BaseClass):
             {
                 "datatype": Float64,
                 "data": self.convert_data(self.sample_numeric_data, "float64"),
+            },
+            {
+                "datatype": Decimal(precision=38, scale=10),
+                "data": self.convert_data(self.sample_numeric_data, "decimal"),
             },
             {
                 "datatype": Date,
@@ -1542,6 +1560,12 @@ class TestUniqueValuesEqCheck(BaseClass):
                     "datatype": Float64,
                     "data": self.convert_data(
                         self.sample_numeric_data, "float64"
+                    ),
+                },
+                {
+                    "datatype": Decimal(precision=38, scale=10),
+                    "data": self.convert_data(
+                        self.sample_numeric_data, "decimal"
                     ),
                 },
                 {

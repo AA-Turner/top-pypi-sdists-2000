@@ -9,7 +9,12 @@ from grpc import aio  # type: ignore[import]
 from langgraph_api import config
 
 from .generated.checkpointer_pb2_grpc import CheckpointerStub
-from .generated.core_api_pb2_grpc import AdminStub, AssistantsStub, ThreadsStub
+from .generated.core_api_pb2_grpc import (
+    AdminStub,
+    AssistantsStub,
+    RunsStub,
+    ThreadsStub,
+)
 
 logger = structlog.stdlib.get_logger(__name__)
 
@@ -35,6 +40,7 @@ class GrpcClient:
         )
         self._channel: aio.Channel | None = None
         self._assistants_stub: AssistantsStub | None = None
+        self._runs_stub: RunsStub | None = None
         self._threads_stub: ThreadsStub | None = None
         self._admin_stub: AdminStub | None = None
         self._checkpointer_stub: CheckpointerStub | None = None
@@ -61,6 +67,7 @@ class GrpcClient:
         self._channel = aio.insecure_channel(self.server_address, options=options)
 
         self._assistants_stub = AssistantsStub(self._channel)
+        self._runs_stub = RunsStub(self._channel)
         self._threads_stub = ThreadsStub(self._channel)
         self._admin_stub = AdminStub(self._channel)
         self._checkpointer_stub = CheckpointerStub(self._channel)
@@ -75,6 +82,7 @@ class GrpcClient:
             await self._channel.close()
             self._channel = None
             self._assistants_stub = None
+            self._runs_stub = None
             self._threads_stub = None
             self._admin_stub = None
             self._checkpointer_stub = None
@@ -97,6 +105,15 @@ class GrpcClient:
                 "Client not connected. Use async context manager or call connect() first."
             )
         return self._threads_stub
+
+    @property
+    def runs(self) -> RunsStub:
+        """Get the runs service stub."""
+        if self._runs_stub is None:
+            raise RuntimeError(
+                "Client not connected. Use async context manager or call connect() first."
+            )
+        return self._runs_stub
 
     @property
     def admin(self) -> AdminStub:
@@ -198,6 +215,7 @@ async def get_shared_client() -> GrpcClient:
 async def close_shared_client():
     """Close the shared gRPC client pool."""
     global _client_pool
+
     if _client_pool is not None:
         await _client_pool.close()
         _client_pool = None

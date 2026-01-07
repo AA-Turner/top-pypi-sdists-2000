@@ -3,8 +3,10 @@ import functools
 import glob
 import importlib.util
 import inspect
+import logging
 import os
 import sys
+import time
 import warnings
 from collections.abc import AsyncIterator, Callable
 from contextlib import asynccontextmanager
@@ -90,19 +92,56 @@ async def register_graph(
         await register_graph_db()
 
 
+def _log_slow_graph_generation(
+    start: float,
+    value_type: str,
+    graph_id: str,
+    warn_threshold_ms: float = 100,
+    error_threshold_ms: float = 250,
+) -> None:
+    """Log warning/error if graph generation was slow."""
+    elapsed_secs = time.perf_counter() - start
+    elapsed_ms = elapsed_secs * 1000
+    elapsed_ms_rounded = round(elapsed_ms, 2)
+    log_level = None
+    if elapsed_ms > error_threshold_ms:
+        log_level = logging.ERROR
+    elif elapsed_ms > warn_threshold_ms:
+        log_level = logging.WARNING
+    if log_level is not None:
+        logger.log(
+            log_level,
+            f"Slow graph load. Accessing graph '{graph_id}' took {elapsed_ms_rounded}ms."
+            " Move expensive initialization (API clients, DB connections, model loading)"
+            " from graph factory if you are seeing API slowness.",
+            elapsed_ms=elapsed_ms_rounded,
+            value_type=value_type,
+            graph_id=graph_id,
+        )
+
+
 @asynccontextmanager
-async def _generate_graph(value: Any) -> AsyncIterator[Any]:
-    """Yield a graph object regardless of its type."""
+async def _generate_graph(value: Any, graph_id: str) -> AsyncIterator[Any]:
+    """Yield a graph object regardless of its type.
+
+    Logs a warning if graph generation takes >100ms, error if >250ms.
+    """
+    start = time.perf_counter()
+    value_type = type(value).__name__
     if isinstance(value, Pregel | BaseRemotePregel):
         yield value
     elif hasattr(value, "__aenter__") and hasattr(value, "__aexit__"):
         async with value as ctx_value:
+            _log_slow_graph_generation(start, value_type, graph_id)
             yield ctx_value
     elif hasattr(value, "__enter__") and hasattr(value, "__exit__"):
         with value as ctx_value:
+            _log_slow_graph_generation(start, value_type, graph_id)
             yield ctx_value
     elif asyncio.iscoroutine(value):
-        yield await value
+        result = await value
+        _log_slow_graph_generation(start, value_type, graph_id)
+        yield result
     else:
         yield value
 
@@ -131,6 +170,7 @@ async def get_graph(
     *,
     checkpointer: BaseCheckpointSaver | None = None,
     store: BaseStore | None = None,
+    is_for_execution: bool = True,
 ) -> AsyncIterator[Pregel]:
     """Return the runnable."""
     from langgraph_api.utils import config as lg_config
@@ -139,6 +179,7 @@ async def get_graph(
     value = GRAPHS[graph_id]
     if is_factory(value, graph_id):
         config = lg_config.ensure_config(config)
+        config["configurable"]["__is_for_execution__"] = is_for_execution
 
         if store is not None:
             if USE_RUNTIME_CONTEXT_API:
@@ -169,7 +210,7 @@ async def get_graph(
         var_child_runnable_config.set(config)
         value = value(config) if factory_accepts_config(value, graph_id) else value()
     try:
-        async with _generate_graph(value) as graph_obj:
+        async with _generate_graph(value, graph_id) as graph_obj:
             if isinstance(graph_obj, StateGraph):
                 graph_obj = graph_obj.compile()
             if not isinstance(graph_obj, Pregel | BaseRemotePregel):

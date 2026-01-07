@@ -280,37 +280,29 @@ def str_endswith(data: IbisData, string: str) -> ibis.Table:
     return _across(data.table, data.key, _.endswith(string))
 
 
-@register_builtin_check(
-    error="str_length({length})",
-)
+@register_builtin_check()
 def str_length(
     data: IbisData,
-    value: int | None = None,
-    *,
     min_value: int | None = None,
     max_value: int | None = None,
+    exact_value: int | None = None,
 ) -> ibis.Table:
     """Ensure that the length of strings is within a specified range.
 
     :param data: NamedTuple IbisData contains the table and column name for the check. The key
         to access the table is "table", and the key to access the column name is "key".
-    :param value: Absolute length of strings (inclusive). (default: no absolute)
     :param min_value: Minimum length of strings (inclusive). (default: no minimum)
     :param max_value: Maximum length of strings (inclusive). (default: no maximum)
+    :param exact_value: Exact length of strings. (default: no exact value)
     """
-    if value is None and min_value is None and max_value is None:
-        raise ValueError(
-            "At least an absolute or a minimum or a maximum need to be specified. Got "
-            "None."
-        )
+    if exact_value is not None:
+        func = _.length() == exact_value
+        return _across(data.table, data.key, func)
 
-    if value is not None and (min_value is not None or max_value is not None):
+    if min_value is None and max_value is None:
         raise ValueError(
-            "A minimum or a maximum cannot be specified when absolute is specified."
+            "Must provide at least one of 'min_value' and 'max_value'"
         )
-
-    if value is not None:
-        func = _.length() == value
     elif min_value is None:
         func = _.length() <= max_value
     elif max_value is None:

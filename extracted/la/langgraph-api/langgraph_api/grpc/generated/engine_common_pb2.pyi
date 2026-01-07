@@ -282,8 +282,14 @@ class Runtime(_message.Message):
     previous: ChannelValue
     def __init__(self, langgraph_context_json: _Optional[bytes] = ..., previous: _Optional[_Union[ChannelValue, _Mapping]] = ...) -> None: ...
 
+class Subgraph(_message.Message):
+    __slots__ = ("name",)
+    NAME_FIELD_NUMBER: _ClassVar[int]
+    name: str
+    def __init__(self, name: _Optional[str] = ...) -> None: ...
+
 class Task(_message.Message):
-    __slots__ = ("name", "writes", "config", "triggers", "id", "task_path", "pending_writes", "stream_subgraphs", "has_subgraphs")
+    __slots__ = ("name", "writes", "config", "triggers", "id", "task_path", "pending_writes", "stream_subgraphs", "subgraph")
     NAME_FIELD_NUMBER: _ClassVar[int]
     WRITES_FIELD_NUMBER: _ClassVar[int]
     CONFIG_FIELD_NUMBER: _ClassVar[int]
@@ -292,7 +298,7 @@ class Task(_message.Message):
     TASK_PATH_FIELD_NUMBER: _ClassVar[int]
     PENDING_WRITES_FIELD_NUMBER: _ClassVar[int]
     STREAM_SUBGRAPHS_FIELD_NUMBER: _ClassVar[int]
-    HAS_SUBGRAPHS_FIELD_NUMBER: _ClassVar[int]
+    SUBGRAPH_FIELD_NUMBER: _ClassVar[int]
     name: str
     writes: _containers.RepeatedCompositeFieldContainer[Write]
     config: EngineRunnableConfig
@@ -301,8 +307,8 @@ class Task(_message.Message):
     task_path: _containers.RepeatedCompositeFieldContainer[PathSegment]
     pending_writes: _containers.RepeatedCompositeFieldContainer[PendingWrite]
     stream_subgraphs: bool
-    has_subgraphs: bool
-    def __init__(self, name: _Optional[str] = ..., writes: _Optional[_Iterable[_Union[Write, _Mapping]]] = ..., config: _Optional[_Union[EngineRunnableConfig, _Mapping]] = ..., triggers: _Optional[_Iterable[str]] = ..., id: _Optional[str] = ..., task_path: _Optional[_Iterable[_Union[PathSegment, _Mapping]]] = ..., pending_writes: _Optional[_Iterable[_Union[PendingWrite, _Mapping]]] = ..., stream_subgraphs: bool = ..., has_subgraphs: bool = ...) -> None: ...
+    subgraph: Subgraph
+    def __init__(self, name: _Optional[str] = ..., writes: _Optional[_Iterable[_Union[Write, _Mapping]]] = ..., config: _Optional[_Union[EngineRunnableConfig, _Mapping]] = ..., triggers: _Optional[_Iterable[str]] = ..., id: _Optional[str] = ..., task_path: _Optional[_Iterable[_Union[PathSegment, _Mapping]]] = ..., pending_writes: _Optional[_Iterable[_Union[PendingWrite, _Mapping]]] = ..., stream_subgraphs: bool = ..., subgraph: _Optional[_Union[Subgraph, _Mapping]] = ...) -> None: ...
 
 class TaskResult(_message.Message):
     __slots__ = ("user_error", "interrupts", "bubble_up", "writes")
@@ -316,7 +322,7 @@ class TaskResult(_message.Message):
     writes: _containers.RepeatedCompositeFieldContainer[Write]
     def __init__(self, user_error: _Optional[_Union[_errors_pb2.UserCodeExecutionError, _Mapping]] = ..., interrupts: _Optional[_Union[WrappedInterrupts, _Mapping]] = ..., bubble_up: _Optional[_Union[GraphBubbleUp, _Mapping]] = ..., writes: _Optional[_Iterable[_Union[Write, _Mapping]]] = ...) -> None: ...
 
-class TaskStateSnapshot(_message.Message):
+class CheckpointRef(_message.Message):
     __slots__ = ("checkpoint_id", "thread_id", "checkpoint_ns", "checkpoint_map")
     class CheckpointMapEntry(_message.Message):
         __slots__ = ("key", "value")
@@ -336,22 +342,24 @@ class TaskStateSnapshot(_message.Message):
     def __init__(self, checkpoint_id: _Optional[str] = ..., thread_id: _Optional[str] = ..., checkpoint_ns: _Optional[str] = ..., checkpoint_map: _Optional[_Mapping[str, str]] = ...) -> None: ...
 
 class PregelTaskSnapshot(_message.Message):
-    __slots__ = ("id", "name", "path", "interrupts", "state", "result_json", "error")
+    __slots__ = ("id", "name", "path", "interrupts", "result_json", "error", "checkpoint_ref", "state_snapshot")
     ID_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
     PATH_FIELD_NUMBER: _ClassVar[int]
     INTERRUPTS_FIELD_NUMBER: _ClassVar[int]
-    STATE_FIELD_NUMBER: _ClassVar[int]
     RESULT_JSON_FIELD_NUMBER: _ClassVar[int]
     ERROR_FIELD_NUMBER: _ClassVar[int]
+    CHECKPOINT_REF_FIELD_NUMBER: _ClassVar[int]
+    STATE_SNAPSHOT_FIELD_NUMBER: _ClassVar[int]
     id: str
     name: str
     path: _containers.RepeatedCompositeFieldContainer[PathSegment]
     interrupts: _containers.RepeatedCompositeFieldContainer[Interrupt]
-    state: TaskStateSnapshot
     result_json: bytes
     error: SerializedValue
-    def __init__(self, id: _Optional[str] = ..., name: _Optional[str] = ..., path: _Optional[_Iterable[_Union[PathSegment, _Mapping]]] = ..., interrupts: _Optional[_Iterable[_Union[Interrupt, _Mapping]]] = ..., state: _Optional[_Union[TaskStateSnapshot, _Mapping]] = ..., result_json: _Optional[bytes] = ..., error: _Optional[_Union[SerializedValue, _Mapping]] = ...) -> None: ...
+    checkpoint_ref: CheckpointRef
+    state_snapshot: StateSnapshot
+    def __init__(self, id: _Optional[str] = ..., name: _Optional[str] = ..., path: _Optional[_Iterable[_Union[PathSegment, _Mapping]]] = ..., interrupts: _Optional[_Iterable[_Union[Interrupt, _Mapping]]] = ..., result_json: _Optional[bytes] = ..., error: _Optional[_Union[SerializedValue, _Mapping]] = ..., checkpoint_ref: _Optional[_Union[CheckpointRef, _Mapping]] = ..., state_snapshot: _Optional[_Union[StateSnapshot, _Mapping]] = ...) -> None: ...
 
 class Checkpoint(_message.Message):
     __slots__ = ("v", "id", "channel_values", "channel_versions", "versions_seen", "ts", "updated_channels")

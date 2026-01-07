@@ -24,7 +24,7 @@ from langgraph_api.utils import get_auth_ctx
 if TYPE_CHECKING:
     from langgraph_api.schema import Context
 
-__all__ = ["Assistants", "Threads"]
+__all__ = ["Assistants", "Runs", "Threads"]
 
 logger = structlog.stdlib.get_logger(__name__)
 
@@ -316,4 +316,5 @@ def grpc_error_guard(cls):
 
 # Import at the end to avoid circular imports
 from .assistants import Assistants  # noqa: E402
+from .runs import Runs  # noqa: E402
 from .threads import Threads  # noqa: E402

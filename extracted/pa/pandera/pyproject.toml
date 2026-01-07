@@ -56,7 +56,8 @@ hypotheses = [
 ]
 io = [
     "pyyaml >= 5.1",
-    "black",
+]
+frictionless = [
     "frictionless <= 4.40.8",
 ]
 mypy = [
@@ -68,7 +69,7 @@ geopandas = [
     "geopandas < 1.1.0",
     "shapely",
 ]
-pyspark = ["pyspark[connect] >= 3.2.0, < 4.0.0"]
+pyspark = ["pyspark[connect] >= 3.2.0"]
 modin = [
     "modin",
     "ray",
@@ -97,7 +98,7 @@ all = [
     "pyyaml >= 5.1",
     "black",
     "frictionless <= 4.40.8",
-    "pyspark[connect] >= 3.2.0, < 4.0.0",
+    "pyspark[connect] >= 3.2.0",
     "modin",
     "ray",
     "dask[dataframe]",
@@ -112,6 +113,8 @@ all = [
 
 [dependency-groups]
 dev = [
+    "black",
+    "frictionless <= 4.40.8",
     "duckdb",
     "hypothesis >= 6.92.7",
     "ipdb",
@@ -161,6 +164,7 @@ packages = ["pandera"]
 package-data = {"pandera" = ["py.typed"]}
 
 [tool.pyright]
+typeCheckingMode = "basic"
 include = ["pandera", "tests"]
 exclude = [".nox/**", ".nox-*/**"]
 

@@ -50,6 +50,7 @@ THREAD_STATUS_TO_PB = {
 THREAD_STATUS_FROM_PB = {v: k for k, v in THREAD_STATUS_TO_PB.items()}
 
 THREAD_SORT_BY_MAP = {
+    "unspecified": pb.ThreadsSortBy.THREADS_SORT_BY_UNSPECIFIED,  # for enum completeness, never sent
     "thread_id": pb.ThreadsSortBy.THREADS_SORT_BY_THREAD_ID,
     "created_at": pb.ThreadsSortBy.THREADS_SORT_BY_CREATED_AT,
     "updated_at": pb.ThreadsSortBy.THREADS_SORT_BY_UPDATED_AT,
@@ -71,7 +72,7 @@ def _map_thread_status(
 
 
 def _map_threads_sort_by(sort_by: str | None) -> pb.ThreadsSortBy:
-    if not sort_by:
+    if not sort_by or sort_by.lower() == "unspecified":
         return pb.ThreadsSortBy.THREADS_SORT_BY_CREATED_AT
     return THREAD_SORT_BY_MAP.get(
         sort_by.lower(), pb.ThreadsSortBy.THREADS_SORT_BY_CREATED_AT

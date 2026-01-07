@@ -4,6 +4,7 @@ import pytest
 from langchain_core.language_models import ModelProfile
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.messages import AIMessage, AnyMessage, HumanMessage, RemoveMessage, ToolMessage
+from langchain_core.messages.utils import count_tokens_approximately, get_buffer_string
 from langchain_core.outputs import ChatGeneration, ChatResult
 from langgraph.graph.message import REMOVE_ALL_MESSAGES
 
@@ -31,7 +32,7 @@ class ProfileChatModel(BaseChatModel):
     def _generate(self, messages, **kwargs):  # type: ignore[no-untyped-def]
         return ChatResult(generations=[ChatGeneration(message=AIMessage(content="Summary"))])
 
-    profile: ModelProfile | None = {"max_input_tokens": 1000}
+    profile: ModelProfile | None = ModelProfile(max_input_tokens=1000)
 
     @property
     def _llm_type(self) -> str:
@@ -54,7 +55,11 @@ def test_summarization_middleware_initialization() -> None:
     assert middleware.summary_prompt == "Custom prompt: {messages}"
     assert middleware.trim_tokens_to_summarize == 4000
 
-    with pytest.raises(ValueError):
+    with pytest.raises(
+        ValueError,
+        match="Model profile information is required to use fractional token limits, "
+        "and is unavailable for the specified model",
+    ):
         SummarizationMiddleware(model=model, keep=("fraction", 0.5))  # no model profile
 
     # Test with string model
@@ -164,7 +169,7 @@ def test_summarization_middleware_trim_limit_none_keeps_all_messages() -> None:
         model=MockChatModel(),
         trim_tokens_to_summarize=None,
     )
-    middleware.token_counter = lambda msgs: len(msgs)
+    middleware.token_counter = len
 
     trimmed = middleware._trim_messages_for_summary(messages)
     assert trimmed is messages
@@ -346,7 +351,7 @@ def test_summarization_middleware_missing_profile() -> None:
 
 def test_summarization_middleware_full_workflow() -> None:
     """Test SummarizationMiddleware complete summarization workflow."""
-    with pytest.warns(DeprecationWarning):
+    with pytest.warns(DeprecationWarning, match="messages_to_keep is deprecated"):
         # keep test for functionality
         middleware = SummarizationMiddleware(
             model=MockChatModel(), max_tokens_before_summary=1000, messages_to_keep=2
@@ -753,14 +758,14 @@ def test_summarization_middleware_cutoff_at_boundary() -> None:
 def test_summarization_middleware_deprecated_parameters_with_defaults() -> None:
     """Test that deprecated parameters work correctly with default values."""
     # Test that deprecated max_tokens_before_summary is ignored when trigger is set
-    with pytest.warns(DeprecationWarning):
+    with pytest.warns(DeprecationWarning, match="max_tokens_before_summary is deprecated"):
         middleware = SummarizationMiddleware(
             model=MockChatModel(), trigger=("tokens", 2000), max_tokens_before_summary=1000
         )
     assert middleware.trigger == ("tokens", 2000)
 
     # Test that messages_to_keep is ignored when keep is not default
-    with pytest.warns(DeprecationWarning):
+    with pytest.warns(DeprecationWarning, match="messages_to_keep is deprecated"):
         middleware = SummarizationMiddleware(
             model=MockChatModel(), keep=("messages", 5), messages_to_keep=10
         )
@@ -887,3 +892,58 @@ def test_summarization_middleware_cutoff_at_start_of_tool_sequence() -> None:
     # Index 2 is an AIMessage (safe cutoff point), so no adjustment needed
     cutoff = middleware._find_safe_cutoff(messages, messages_to_keep=4)
     assert cutoff == 2
+
+
+def test_create_summary_uses_get_buffer_string_format() -> None:
+    """Test that `_create_summary` formats messages using `get_buffer_string`.
+
+    Ensures that messages are formatted efficiently for the summary prompt, avoiding
+    token inflation from metadata when `str()` is called on message objects.
+
+    This ensures the token count of the formatted prompt stays below what
+    `count_tokens_approximately` estimates for the raw messages.
+    """
+    # Create messages with metadata that would inflate str() representation
+    messages: list[AnyMessage] = [
+        HumanMessage(content="What is the weather in NYC?"),
+        AIMessage(
+            content="Let me check the weather for you.",
+            tool_calls=[{"name": "get_weather", "args": {"city": "NYC"}, "id": "call_123"}],
+            usage_metadata={"input_tokens": 50, "output_tokens": 30, "total_tokens": 80},
+            response_metadata={"model": "gpt-4", "finish_reason": "tool_calls"},
+        ),
+        ToolMessage(
+            content="72F and sunny",
+            tool_call_id="call_123",
+            name="get_weather",
+        ),
+        AIMessage(
+            content="It is 72F and sunny in NYC!",
+            usage_metadata={
+                "input_tokens": 100,
+                "output_tokens": 25,
+                "total_tokens": 125,
+            },
+            response_metadata={"model": "gpt-4", "finish_reason": "stop"},
+        ),
+    ]
+
+    # Verify the token ratio is favorable (get_buffer_string < str)
+    approx_tokens = count_tokens_approximately(messages)
+    buffer_string = get_buffer_string(messages)
+    buffer_tokens_estimate = len(buffer_string) / 4  # ~4 chars per token
+
+    # The ratio should be less than 1.0 (buffer_string uses fewer tokens than counted)
+    ratio = buffer_tokens_estimate / approx_tokens
+    assert ratio < 1.0, (
+        f"get_buffer_string should produce fewer tokens than count_tokens_approximately. "
+        f"Got ratio {ratio:.2f}x (expected < 1.0)"
+    )
+
+    # Verify str() would have been worse
+    str_tokens_estimate = len(str(messages)) / 4
+    str_ratio = str_tokens_estimate / approx_tokens
+    assert str_ratio > 1.5, (
+        f"str(messages) should produce significantly more tokens. "
+        f"Got ratio {str_ratio:.2f}x (expected > 1.5)"
+    )

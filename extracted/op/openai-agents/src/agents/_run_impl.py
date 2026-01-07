@@ -75,7 +75,7 @@ from .lifecycle import RunHooks
 from .logger import logger
 from .model_settings import ModelSettings
 from .models.interface import ModelTracing
-from .run_context import RunContextWrapper, TContext
+from .run_context import AgentHookContext, RunContextWrapper, TContext
 from .stream_events import RunItemStreamEvent, StreamEvent
 from .tool import (
     ApplyPatchTool,
@@ -107,6 +107,7 @@ from .tool_guardrails import (
 from .tracing import (
     SpanError,
     Trace,
+    TracingConfig,
     function_span,
     get_current_trace,
     guardrail_span,
@@ -1358,7 +1359,9 @@ class RunImpl:
         tool_output_guardrail_results: list[ToolOutputGuardrailResult],
     ) -> SingleStepResult:
         # Run the on_end hooks
-        await cls.run_final_output_hooks(agent, hooks, context_wrapper, final_output)
+        await cls.run_final_output_hooks(
+            agent, hooks, context_wrapper, original_input, final_output
+        )
 
         return SingleStepResult(
             original_input=original_input,
@@ -1376,11 +1379,17 @@ class RunImpl:
         agent: Agent[TContext],
         hooks: RunHooks[TContext],
         context_wrapper: RunContextWrapper[TContext],
+        original_input: str | list[TResponseInputItem],
         final_output: Any,
     ):
+        agent_hook_context = AgentHookContext(
+            context=context_wrapper.context,
+            usage=context_wrapper.usage,
+            turn_input=ItemHelpers.input_to_new_input_list(original_input),
+        )
         await asyncio.gather(
-            hooks.on_agent_end(context_wrapper, agent, final_output),
-            agent.hooks.on_end(context_wrapper, agent, final_output)
+            hooks.on_agent_end(agent_hook_context, agent, final_output),
+            agent.hooks.on_end(agent_hook_context, agent, final_output)
             if agent.hooks
             else _coro.noop_coroutine(),
         )
@@ -1507,6 +1516,7 @@ class TraceCtxManager:
         group_id: str | None,
         metadata: dict[str, Any] | None,
         disabled: bool,
+        tracing: TracingConfig | None = None,
     ):
         self.trace: Trace | None = None
         self.workflow_name = workflow_name
@@ -1514,6 +1524,7 @@ class TraceCtxManager:
         self.group_id = group_id
         self.metadata = metadata
         self.disabled = disabled
+        self.tracing = tracing
 
     def __enter__(self) -> TraceCtxManager:
         current_trace = get_current_trace()
@@ -1523,6 +1534,7 @@ class TraceCtxManager:
                 trace_id=self.trace_id,
                 group_id=self.group_id,
                 metadata=self.metadata,
+                tracing=self.tracing,
                 disabled=self.disabled,
             )
             self.trace.start(mark_as_current=True)

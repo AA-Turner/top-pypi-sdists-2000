@@ -524,49 +524,68 @@ class Check(BaseCheck):
     @classmethod
     def str_length(
         cls,
-        value: int | None = None,
-        *,
+        *args,
         min_value: int | None = None,
         max_value: int | None = None,
+        exact_value: int | None = None,
         **kwargs,
     ) -> "Check":
         """Ensure that the length of strings is within a specified range.
 
-        :param value: Absolute length of strings (default: no absolute)
+        This method supports multiple calling conventions:
+
+        .. code-block:: python
+
+            Check.str_length(5)  # exact length of 5
+            Check.str_length(1, 5)  # length between 1 and 5 (inclusive)
+            Check.str_length(min_value=1, max_value=5)  # same as above
+            Check.str_length(min_value=1)  # length >= 1
+            Check.str_length(max_value=5)  # length <= 5
+
+        :param args: Positional arguments. If one value is provided, it
+            represents the exact length. If two values are provided, they
+            represent min_value and max_value respectively.
         :param min_value: Minimum length of strings (default: no minimum)
         :param max_value: Maximum length of strings (default: no maximum)
+        :param exact_value: Exact length of strings. (default: no exact value)
+        :param kwargs: key-word arguments passed into the `Check` initializer.
         """
-
-        if value is None and min_value is None and max_value is None:
+        if len(args) == 1:
+            # Single positional arg means exact length
+            exact_value = args[0]
+        elif len(args) == 2:
+            # Two positional args means min and max
+            min_value = args[0]
+            max_value = args[1]
+        elif len(args) > 2:
             raise ValueError(
-                "At least an absolute or a minimum or a maximum need to be specified. Got "
+                "str_length accepts at most 2 positional arguments "
+                f"(min_value, max_value), got {len(args)}"
+            )
+
+        if exact_value is not None:
+            return cls.from_builtin_check_name(
+                "str_length",
+                kwargs,
+                error=f"str_length({exact_value})",
+                defaults={"determined_by_unique": True},
+                exact_value=exact_value,
+            )
+
+        if min_value is None and max_value is None:
+            raise ValueError(
+                "At least a minimum or a maximum need to be specified. Got "
                 "None."
             )
-
-        if value is not None and (
-            min_value is not None or max_value is not None
-        ):
-            raise ValueError(
-                "A minimum or a maximum cannot be specified when absolute is specified."
-            )
-
-        if value is not None:
-            return cls.from_builtin_check_name(
-                "str_length",
-                kwargs,
-                error=f"str_length({value})",
-                defaults={"determined_by_unique": True},
-                value=value,
-            )
-        else:
-            return cls.from_builtin_check_name(
-                "str_length",
-                kwargs,
-                error=f"str_length({min_value}, {max_value})",
-                defaults={"determined_by_unique": True},
-                min_value=min_value,
-                max_value=max_value,
-            )
+        return cls.from_builtin_check_name(
+            "str_length",
+            kwargs,
+            error=f"str_length({min_value}, {max_value})",
+            defaults={"determined_by_unique": True},
+            min_value=min_value,
+            max_value=max_value,
+            exact_value=exact_value,
+        )
 
     @classmethod
     def unique_values_eq(cls, values: Iterable, **kwargs) -> "Check":

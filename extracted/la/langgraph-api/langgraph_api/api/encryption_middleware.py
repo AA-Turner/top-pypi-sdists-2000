@@ -42,6 +42,14 @@ if LANGGRAPH_ENCRYPTION:
 logger = structlog.stdlib.get_logger(__name__)
 
 ENCRYPTION_CONTEXT_KEY = "__encryption_context__"
+BLOB_ENCRYPTION_CONTEXT_KEY = "__blob_encryption_context__"
+
+# Reserved keys that should never appear in user-facing responses
+_RESERVED_ENCRYPTION_KEYS = {ENCRYPTION_CONTEXT_KEY, BLOB_ENCRYPTION_CONTEXT_KEY}
+
+
+def _strip_encryption_metadata(data: dict[str, Any]) -> dict[str, Any]:
+    return {k: v for k, v in data.items() if k not in _RESERVED_ENCRYPTION_KEYS}
 
 
 def _serialize_user_for_encryption(user: BaseUser) -> dict[str, Any]:
@@ -171,6 +179,14 @@ class DoubleEncryptionError(Exception):
     """
 
 
+class DecryptorMissingError(Exception):
+    """Raised when data has encryption marker but no decryptor is configured.
+
+    This indicates a server misconfiguration where encrypted data exists in storage
+    but the decryption function is not available or not configured for the data type.
+    """
+
+
 async def encrypt_json_if_needed(
     data: dict[str, Any] | None,
     encryption_instance: Encryption | None,
@@ -207,6 +223,12 @@ async def encrypt_json_if_needed(
 
     encryptor = encryption_instance.get_json_encryptor(model_type)
     if encryptor is None:
+        # No JSON encryption configured, but store context for blob encryption
+        # This allows the worker to extract context even when JSON encryption is disabled
+        context_dict = get_encryption_context()
+        if context_dict and isinstance(data, dict):
+            data = dict(data)  # shallow copy to avoid mutating input
+            data[BLOB_ENCRYPTION_CONTEXT_KEY] = context_dict
         return data
 
     # Prepare data for encryption by serializing non-JSON-serializable objects
@@ -248,13 +270,16 @@ async def encrypt_json_if_needed(
     return encrypted
 
 
-def extract_encryption_context_from_data(
+def extract_blob_encryption_context(
     data: dict[str, Any] | None,
 ) -> dict[str, Any] | None:
-    """Extract and parse the encryption context from a data dict.
+    """Extract blob encryption context from a data dict.
 
-    Use this to extract the encryption context BEFORE calling decrypt_response,
-    since decrypt_response strips the context key from the data.
+    This is used by the worker to extract the encryption context needed for
+    blob encryption during checkpoint serialization.
+
+    Checks both __blob_encryption_context__ (for blob-only encryption) and
+    __encryption_context__ (from JSON encryption, backward compatibility).
 
     Args:
         data: The data dict that may contain an encryption context
@@ -265,7 +290,9 @@ def extract_encryption_context_from_data(
     if data is None:
         return None
 
-    return data.get(ENCRYPTION_CONTEXT_KEY)
+    # Prefer __blob_encryption_context__ (explicit blob context)
+    # Fall back to __encryption_context__ (from JSON encryption, backward compat)
+    return data.get(BLOB_ENCRYPTION_CONTEXT_KEY) or data.get(ENCRYPTION_CONTEXT_KEY)
 
 
 async def decrypt_json_if_needed(
@@ -289,29 +316,32 @@ async def decrypt_json_if_needed(
 
     Returns:
         Decrypted data dict (without reserved key), or original if not encrypted
+
+    Raises:
+        DecryptorMissingError: If data has encryption marker but no decryptor is configured
     """
     if data is None or encryption_instance is None:
         return data
 
-    # Only decrypt if data was actually encrypted (has the context marker)
+    # Only decrypt if data was actually encrypted (has the JSON encryption marker)
     if ENCRYPTION_CONTEXT_KEY not in data:
-        return data
+        # No JSON encryption was used - just strip metadata and return
+        return _strip_encryption_metadata(data)
 
     decryptor = encryption_instance.get_json_decryptor(model_type)
     if decryptor is None:
-        return data
+        # Data has encryption marker but no decryptor configured - this is an error
+        raise DecryptorMissingError(
+            f"Data contains JSON encryption marker but no decryptor is configured for {model_type}.{field}"
+        )
 
     context_dict = data[ENCRYPTION_CONTEXT_KEY]
-    # Remove key before passing to user's decryptor to avoid duplication
-    # (context is already passed via ctx.metadata)
-    data = {k: v for k, v in data.items() if k != ENCRYPTION_CONTEXT_KEY}
+    data = _strip_encryption_metadata(data)
 
     ctx = EncryptionContext(model=model_type, field=field, metadata=context_dict)
     decrypted = await decryptor(ctx, data)
 
-    # Ensure reserved key is removed from output (in case decryptor didn't handle it)
-    if ENCRYPTION_CONTEXT_KEY in decrypted:
-        decrypted = {k: v for k, v in decrypted.items() if k != ENCRYPTION_CONTEXT_KEY}
+    decrypted = _strip_encryption_metadata(decrypted)
 
     await logger.adebug(
         "Decrypted JSON data",

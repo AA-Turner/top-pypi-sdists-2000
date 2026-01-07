@@ -3,12 +3,16 @@ import structlog
 from starlette.responses import JSONResponse, PlainTextResponse
 
 from langgraph_api import __version__, config, metadata
+from langgraph_api.feature_flags import FF_USE_CORE_API
+from langgraph_api.grpc.ops import Runs as GrpcRuns
 from langgraph_api.http_metrics import HTTP_METRICS_COLLECTOR
 from langgraph_api.route import ApiRequest
 from langgraph_license.validation import plus_features_enabled
 from langgraph_runtime.database import connect, pool_stats
 from langgraph_runtime.metrics import get_metrics
 from langgraph_runtime.ops import Runs
+
+CrudRuns = GrpcRuns if FF_USE_CORE_API else Runs
 
 METRICS_FORMATS = {"prometheus", "json"}
 
@@ -66,7 +70,7 @@ async def meta_metrics(request: ApiRequest):
         async with connect() as conn:
             resp = {
                 **pg_redis_stats,
-                "queue": await Runs.stats(conn),
+                "queue": await CrudRuns.stats(conn),
                 **http_metrics,
             }
             if config.N_JOBS_PER_WORKER > 0:
@@ -76,7 +80,7 @@ async def meta_metrics(request: ApiRequest):
         metrics = []
         try:
             async with connect() as conn:
-                queue_stats = await Runs.stats(conn)
+                queue_stats = await CrudRuns.stats(conn)
 
                 metrics.extend(
                     [
