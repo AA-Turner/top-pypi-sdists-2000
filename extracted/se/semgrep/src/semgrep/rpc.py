@@ -28,9 +28,7 @@ from datetime import datetime
 from types import TracebackType
 from typing import IO
 from typing import List
-from typing import Literal
 from typing import Optional
-from typing import Sequence
 from typing import Type
 from typing import TypeVar
 
@@ -135,7 +133,7 @@ def _parse_function_result(packet: str) -> Optional[out.FunctionReturn]:
 T = TypeVar("T")
 
 
-def _cmd(action: Literal["-rpc"]) -> Sequence[str]:
+def _cmd() -> List[str]:
     """
     Return the base command to run an RPC call or start an RPC server.
     """
@@ -148,7 +146,7 @@ def _cmd(action: Literal["-rpc"]) -> Sequence[str]:
     cmd: List[str] = []
 
     cmd.append(str(semgrep_core_path))
-    cmd.append(action)
+    cmd.append("-rpc")
 
     if simple_profiling_module.enabled_simple_profiling:
         cmd.append("-simple_profiling")
@@ -162,10 +160,21 @@ def _cmd(action: Literal["-rpc"]) -> Sequence[str]:
 
 @simple_profiling
 def rpc_call(call: out.FunctionCall, cls: Type[T]) -> Optional[T]:
+    from semgrep.state import get_state
+
     start = datetime.now()
 
+    cmd = _cmd()
+
+    state = get_state()
+    if state.traces.enabled:
+        cmd.append("-trace")
+        if state.traces.trace_endpoint is not None:
+            cmd.extend(["-trace_endpoint", state.traces.trace_endpoint])
+        state.traces.inject()
+
     with subprocess.Popen(
-        _cmd("-rpc"),
+        cmd,
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         text=False,
@@ -258,7 +267,7 @@ class RpcSession:
         This defaults to using the pro executable if available.
         """
         server = subprocess.Popen(
-            _cmd("-rpc"),
+            _cmd(),
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             text=False,

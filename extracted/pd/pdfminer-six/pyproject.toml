@@ -57,8 +57,7 @@ docs = [
     "sphinx-argparse",
 ]
 fuzz = [
-    # Atheris supports up to Python 3.11
-    "atheris; python_version < '3.12'",
+    "atheris",
 ]
 
 
@@ -89,6 +88,7 @@ extend-select = [
     "SIM",  # flake8-simplify
     "C4",  # flake8-comprehensions
     "RUF",  # Ruff-specific rules
+    "G",  # flake8-logging-format
 ]
 extend-ignore = [
     # UP007: Union to | syntax breaks mypy 0.931 in TypeAlias definitions

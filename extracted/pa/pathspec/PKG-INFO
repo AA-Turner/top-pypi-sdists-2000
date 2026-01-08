@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pathspec
-Version: 1.0.1
+Version: 1.0.2
 Summary: Utility library for gitignore style pattern matching of file paths.
 Author-email: "Caleb P. Burns" <cpburnz@gmail.com>
 Requires-Python: >=3.9
@@ -262,6 +262,14 @@ a `Ruby gem`_.
 
 Change History
 ==============
+
+
+1.0.2 (2026-01-07)
+------------------
+
+Bug fixes:
+
+- Type hint `collections.abc.Callable` does not properly replace `typing.Callable` until Python 3.9.2.
 
 
 1.0.1 (2026-01-06)

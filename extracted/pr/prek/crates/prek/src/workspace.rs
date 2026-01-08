@@ -21,6 +21,7 @@ use crate::config::{self, Config, ManifestHook, read_config};
 use crate::fs::Simplified;
 use crate::git::GIT_ROOT;
 use crate::hook::{self, Hook, HookBuilder, Repo};
+use crate::run::CONCURRENCY;
 use crate::store::{CacheBucket, Store};
 use crate::{git, store, warn_user};
 
@@ -689,6 +690,20 @@ impl Workspace {
                     if !file_type.is_dir() {
                         return WalkState::Continue;
                     }
+
+                    // Skip cookiecutter template directories
+                    if entry.file_name().to_str().is_some_and(|filename| {
+                        filename.starts_with("{{")
+                            && filename.ends_with("}}")
+                            && filename.contains("cookiecutter")
+                    }) {
+                        trace!(
+                            path = %entry.path().user_display(),
+                            "Skipping cookiecutter template directory"
+                        );
+                        return WalkState::Skip;
+                    }
+
                     // Skip git submodules
                     if submodules
                         .iter()
@@ -824,7 +839,7 @@ impl Workspace {
 
                     Ok::<(), Error>(())
                 })
-                .buffer_unordered(5);
+                .buffer_unordered(*CONCURRENCY);
 
             while let Some(result) = tasks.next().await {
                 result?;

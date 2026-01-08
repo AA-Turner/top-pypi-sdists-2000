@@ -34,6 +34,7 @@ from opentelemetry.attributes import BoundedAttributes
 from opentelemetry.exporter.otlp.proto.http._log_exporter import OTLPLogExporter
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
+from opentelemetry.instrumentation.threading import ThreadingInstrumentor
 from opentelemetry.sdk._logs import LogData
 from opentelemetry.sdk._logs import LoggerProvider
 from opentelemetry.sdk._logs import LoggingHandler
@@ -61,20 +62,31 @@ TRACER = otrace.get_tracer(__name__)
 TOP_LEVEL_SPAN_KIND = SpanKind.CLIENT
 # Coupling: these constants need to be kept in sync with Tracing.ml
 
-PYRO_CAML_TAGS = "PYRO_CAML_TAGS"
-PYRO_CAML_SERVICE_NAME = "PYRO_CAML_SERVICE_NAME"
+_PYRO_CAML_TAGS = "PYRO_CAML_TAGS"
+_PYRO_CAML_SERVICE_NAME = "PYRO_CAML_SERVICE_NAME"
+_PYRO_CAML_SERVER_ADDRESS = "PYRO_CAML_SERVER_ADDRESS"
 _SEMGREP_TRACE_PARENT_TRACE_ID = "SEMGREP_TRACE_PARENT_TRACE_ID"
 _SEMGREP_TRACE_PARENT_SPAN_ID = "SEMGREP_TRACE_PARENT_SPAN_ID"
 
-_DEFAULT_ENDPOINT = "https://telemetry.semgrep.dev"
-_DEV_ENDPOINT = "https://telemetry.dev2.semgrep.dev"
-_LOCAL_ENDPOINT = "http://localhost:4318"
+_DEFAULT_OTEL_ENDPOINT = "https://telemetry.semgrep.dev"
+_DEV_OTEL_ENDPOINT = "https://telemetry.dev2.semgrep.dev"
+_LOCAL_DEV_OTEL_ENDPOINT = "http://localhost:4318"
 
-_ENDPOINT_ALIASES = {
-    "semgrep-prod": _DEFAULT_ENDPOINT,
-    "semgrep-dev": _DEV_ENDPOINT,
-    "semgrep-local": _LOCAL_ENDPOINT,
+_OTEL_ENDPOINT_ALIASES = {
+    "semgrep-prod": _DEFAULT_OTEL_ENDPOINT,
+    "semgrep-dev": _DEV_OTEL_ENDPOINT,
+    "semgrep-local": _LOCAL_DEV_OTEL_ENDPOINT,
 }
+
+_DEFAULT_PYROSCOPE_ENDPOINT = "https://pyroscope-receive.private.semgrep.dev"
+_DEV_PYROSCOPE_ENDPOINT = "https://pyroscope-receive.dev2.semgrep.dev"
+_LOCAL_DEV_OTEL_ENDPOINT = "http://localhost:4040"
+_PYROSCOPE_ENDPOINT_ALIASES = {
+    "semgrep-prod": _DEFAULT_PYROSCOPE_ENDPOINT,
+    "semgrep-dev": _DEV_PYROSCOPE_ENDPOINT,
+    "semgrep-local": _LOCAL_DEV_OTEL_ENDPOINT,
+}
+
 
 _ENV_ALIASES = {
     "semgrep-prod": "prod",
@@ -147,6 +159,7 @@ class Traces:
     enabled: bool = False
     scan_info_span_processor = ScanInfoSpanProcessor()
     scan_info_log_processor: Optional[ScanInfoLogProcessor] = None
+    trace_endpoint: Optional[str] = None
 
     def configure(
         self,
@@ -162,8 +175,12 @@ class Traces:
         if not self.enabled:
             return
 
+        self.trace_endpoint = trace_endpoint
+
         env_name = _ENV_ALIASES.get(
-            _DEFAULT_ENDPOINT if trace_endpoint is None else trace_endpoint
+            _DEFAULT_OTEL_ENDPOINT
+            if self.trace_endpoint is None
+            else self.trace_endpoint
         )
         # See https://github.com/docker/cli/issues/4958 for why we don't use just OTEL_RESOURCE_ATTRIBUTES
         docker_otel_resource_attributes = os.environ.get(
@@ -204,15 +221,15 @@ class Traces:
         set_logger_provider(logger_provider)
         otrace.set_tracer_provider(tracer_provider)
 
-        endpoint = (
-            _ENDPOINT_ALIASES.get(trace_endpoint, trace_endpoint)
-            if trace_endpoint
-            else _DEFAULT_ENDPOINT
+        otel_endpoint = (
+            _OTEL_ENDPOINT_ALIASES.get(self.trace_endpoint, self.trace_endpoint)
+            if self.trace_endpoint
+            else _DEFAULT_OTEL_ENDPOINT
         )
         # See https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/#otel_exporter_otlp_endpoint
         # for specs on this
-        exporter_spans = OTLPSpanExporter(endpoint + "/v1/traces")
-        exporter_logs = OTLPLogExporter(endpoint + "/v1/logs")
+        exporter_spans = OTLPSpanExporter(otel_endpoint + "/v1/traces")
+        exporter_logs = OTLPLogExporter(otel_endpoint + "/v1/logs")
 
         span_processor = BatchSpanProcessor(exporter_spans)
         log_processor = ScanInfoLogProcessor(BatchLogRecordProcessor(exporter_logs))
@@ -241,6 +258,7 @@ class Traces:
             logging.getLogger().addHandler(logging_handler)
 
         RequestsInstrumentor().instrument()
+        ThreadingInstrumentor().instrument()
         self.extract()
 
     def extract(self) -> None:
@@ -271,10 +289,16 @@ class Traces:
             scan_info_kv
             + ([base_resource_attributes] if base_resource_attributes else [])
         )
-        os.environ[PYRO_CAML_TAGS] = f"version={__VERSION__}" + (
+        os.environ[_PYRO_CAML_TAGS] = f"version={__VERSION__}" + (
             f",{resource_attributes}" if resource_attributes else ""
         )
-        os.environ[PYRO_CAML_SERVICE_NAME] = "semgrep-core"
+        os.environ[_PYRO_CAML_SERVICE_NAME] = "semgrep-core"
+        os.environ[_PYRO_CAML_SERVER_ADDRESS] = (
+            _PYROSCOPE_ENDPOINT_ALIASES.get(self.trace_endpoint, self.trace_endpoint)
+            if self.trace_endpoint
+            and self.trace_endpoint in _PYROSCOPE_ENDPOINT_ALIASES.keys()
+            else _DEFAULT_PYROSCOPE_ENDPOINT
+        )
 
         if not self.enabled:
             return

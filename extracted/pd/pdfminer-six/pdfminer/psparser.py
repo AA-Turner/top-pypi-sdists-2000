@@ -174,23 +174,9 @@ class PSBaseParser:
     def flush(self) -> None:
         pass
 
-    def close(self) -> None:
-        self.flush()
-
-    def tell(self) -> int:
-        return self.bufpos + self.charpos
-
-    def poll(self, pos: int | None = None, n: int = 80) -> None:
-        pos0 = self.fp.tell()
-        if not pos:
-            pos = self.bufpos + self.charpos
-        self.fp.seek(pos)
-        log.debug(f"poll({pos}): {self.fp.read(n)!r}")
-        self.fp.seek(pos0)
-
     def seek(self, pos: int) -> None:
         """Seeks the parser to the given position."""
-        log.debug(f"seek: {pos!r}")
+        log.debug("seek: %r", pos)
         self.fp.seek(pos)
         # reset the status for nextline()
         self.bufpos = pos
@@ -239,7 +225,7 @@ class PSBaseParser:
             else:
                 linebuf += self.buf[self.charpos :]
                 self.charpos = len(self.buf)
-        log.debug(f"nextline: {linepos!r}, {linebuf!r}")
+        log.debug("nextline: %r, %r", linepos, linebuf)
 
         return (linepos, linebuf)
 
@@ -516,7 +502,7 @@ class PSBaseParser:
                 if not self._tokens:
                     raise
         token = self._tokens.pop(0)
-        log.debug(f"nexttoken: {token!r}")
+        log.debug("nexttoken: %r", token)
         return token
 
 
@@ -563,7 +549,7 @@ class PSStackParser(PSBaseParser, Generic[ExtraT]):
 
     def add_results(self, *objs: PSStackEntry[ExtraT]) -> None:
         try:
-            log.debug(f"add_results: {objs!r}")
+            log.debug("add_results: %r", objs)
         except Exception:
             log.debug("add_results: (unprintable object)")
         self.results.extend(objs)
@@ -571,14 +557,14 @@ class PSStackParser(PSBaseParser, Generic[ExtraT]):
     def start_type(self, pos: int, type: str) -> None:
         self.context.append((pos, self.curtype, self.curstack))
         (self.curtype, self.curstack) = (type, [])
-        log.debug(f"start_type: pos={pos!r}, type={type!r}")
+        log.debug("start_type: pos=%r, type=%r", pos, type)
 
     def end_type(self, type: str) -> tuple[int, list[PSStackType[ExtraT]]]:
         if self.curtype != type:
             raise PSTypeError(f"Type mismatch: {self.curtype!r} != {type!r}")
         objs = [obj for (_, obj) in self.curstack]
         (pos, self.curtype, self.curstack) = self.context.pop()
-        log.debug(f"end_type: pos={pos!r}, type={type!r}, objs={objs!r}")
+        log.debug("end_type: pos=%r, type=%r, objs=%r", pos, type, objs)
         return (pos, objs)
 
     def do_keyword(self, pos: int, token: PSKeyword) -> None:
@@ -638,13 +624,18 @@ class PSStackParser(PSBaseParser, Generic[ExtraT]):
                         raise
             elif isinstance(token, PSKeyword):
                 log.debug(
-                    f"do_keyword: pos={pos!r}, token={token!r}, stack={self.curstack!r}"
+                    "do_keyword: pos=%r, token=%r, stack=%r",
+                    pos,
+                    token,
+                    self.curstack,
                 )
                 self.do_keyword(pos, token)
             else:
                 log.error(
-                    f"unknown token: pos={pos!r}, "
-                    f"token={token!r}, stack={self.curstack!r}"
+                    "unknown token: pos=%r, token=%r, stack=%r",
+                    pos,
+                    token,
+                    self.curstack,
                 )
                 self.do_keyword(pos, token)
                 raise PSException
@@ -654,7 +645,7 @@ class PSStackParser(PSBaseParser, Generic[ExtraT]):
                 self.flush()
         obj = self.results.pop(0)
         try:
-            log.debug(f"nextobject: {obj!r}")
+            log.debug("nextobject: %r", obj)
         except Exception:
             log.debug("nextobject: (unprintable object)")
         return obj

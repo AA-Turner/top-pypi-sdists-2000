@@ -1,12 +1,13 @@
 Metadata-Version: 2.4
 Name: langgraph-api
-Version: 0.6.22
+Version: 0.6.24
 Author-email: Will Fu-Hinthorn <will@langchain.dev>, Josh Rogers <josh@langchain.dev>, Parker Rule <parker@langchain.dev>
 License: Elastic-2.0
 License-File: LICENSE
 Requires-Python: >=3.11
 Requires-Dist: cloudpickle>=3.0.0
 Requires-Dist: cryptography<47.0,>=42.0.0
+Requires-Dist: grpcio-health-checking<2.0.0,>=1.75.0
 Requires-Dist: grpcio-tools==1.75.1
 Requires-Dist: grpcio<2.0.0,>=1.75.0
 Requires-Dist: httpx>=0.25.0

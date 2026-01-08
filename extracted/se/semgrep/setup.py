@@ -132,6 +132,7 @@ install_requires = [
     "opentelemetry-sdk~=1.37.0",
     "opentelemetry-exporter-otlp-proto-http~=1.37.0",
     "opentelemetry-instrumentation-requests~=0.58b0",
+    "opentelemetry-instrumentation-threading~=0.58b0",
     "packaging>=21.0",
     "peewee~=3.14",
     "requests~=2.22",
@@ -148,7 +149,7 @@ install_requires = [
 
 setuptools.setup(
     name="semgrep",
-    version="1.146.0",
+    version="1.147.0",
     author="Semgrep Inc.",
     author_email="support@semgrep.com",
     description="Lightweight static analysis for many languages. Find bug variants with patterns that look like source code.",

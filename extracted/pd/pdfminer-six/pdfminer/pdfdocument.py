@@ -170,8 +170,11 @@ class PDFXRef(PDFBaseXRef):
                     self.offsets[objid] = (None, pos_i, genno_i)
                 else:
                     log.warning(
-                        f"Not adding object {objid} to xref because position {pos_b!r} "
-                        f"or generation number {genno_b!r} cannot be parsed as an int"
+                        "Not adding object %s to xref because position %r "
+                        "or generation number %r cannot be parsed as an int",
+                        objid,
+                        pos_b,
+                        genno_b,
                     )
 
         log.debug("xref objects: %r", self.offsets)
@@ -959,12 +962,16 @@ class PDFDocument:
                 log.debug("xref found: pos=%r", prev)
 
                 if not prev.isdigit():
-                    raise PDFNoValidXRef(f"Invalid xref position: {prev!r}")
+                    raise PDFNoValidXRef(f"Invalid xref position, no digit: {prev!r}")
 
                 start = int(prev)
 
                 if not start >= 0:
-                    raise PDFNoValidXRef(f"Invalid negative xref position: {start}")
+                    raise PDFNoValidXRef(f"Invalid xref position, negative: {start}")
+
+                # The xref start needs to fit in a C ssize_t to be a proper file offset
+                if start >= 2**31:
+                    raise PDFNoValidXRef(f"Invalid xref position, too large: {start!r}")
 
                 return start
 

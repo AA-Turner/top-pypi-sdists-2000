@@ -1,35 +1,27 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: peewee
-Version: 3.18.3
+Version: 3.19.0
 Summary: a little orm
-Home-page: https://github.com/coleifer/peewee/
-Author: Charles Leifer
-Author-email: coleifer@gmail.com
-License: MIT License
-Project-URL: Documentation, http://docs.peewee-orm.com
-Project-URL: Source, https://github.com/coleifer/peewee
-Platform: any
+Author-email: Charles Leifer <coleifer@gmail.com>
+Project-URL: Repository, https://github.com/coleifer/peewee
+Project-URL: Documentation, https://docs.peewee-orm.com/
+Project-URL: Changelog, https://github.com/coleifer/peewee/blob/master/CHANGELOG.md
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Intended Audience :: Developers
-Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
-Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 2
-Classifier: Programming Language :: Python :: 2.7
 Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.4
-Classifier: Programming Language :: Python :: 3.5
-Classifier: Programming Language :: Python :: 3.6
-Classifier: Programming Language :: Python :: 3.7
-Classifier: Programming Language :: Python :: 3.8
-Classifier: Programming Language :: Python :: 3.9
-Classifier: Programming Language :: Python :: 3.10
-Classifier: Programming Language :: Python :: 3.11
-Classifier: Programming Language :: Python :: 3.12
-Classifier: Programming Language :: Python :: 3.13
 Classifier: Topic :: Database
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Description-Content-Type: text/x-rst
 License-File: LICENSE
+Provides-Extra: mysql
+Requires-Dist: pymysql; extra == "mysql"
+Provides-Extra: postgres
+Requires-Dist: psycopg2-binary; extra == "postgres"
+Provides-Extra: psycopg3
+Requires-Dist: psycopg[binary]; extra == "psycopg3"
+Dynamic: license-file
 
 .. image:: https://media.charlesleifer.com/blog/photos/peewee3-logo.png
 

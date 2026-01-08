@@ -96,6 +96,13 @@ GRPC_CLIENT_MAX_SEND_MSG_BYTES = env(
     "GRPC_CLIENT_MAX_SEND_MSG_BYTES", cast=int, default=300 * 1024 * 1024
 )
 
+# If enabled:
+#   * /ok will ping the core-api gRPC server; the healthcheck will fail only if the ping succeeds
+#   * during lifespan initialization, the core-api gRPC server will be pinged to ensure it is ready;
+#     if it is not ready, the lifespan initialization will fail.
+# Only takes effect if FF_USE_CORE_API is enabled.
+PROBE_CORE_API_SERVER = env("PROBE_CORE_API_SERVER", cast=bool, default=True)
+
 # Minimum payload size to use the dedicated thread pool for JSON parsing.
 # (Otherwise, the payload is parsed directly in the event loop.)
 JSON_THREAD_POOL_MINIMUM_SIZE_BYTES = 100 * 1024  # 100 KB

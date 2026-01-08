@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: snowflake-connector-python
-Version: 4.1.1
+Version: 4.2.0
 Summary: Snowflake Connector for Python
 Home-page: https://www.snowflake.com/
 Author: Snowflake, Inc
@@ -68,6 +68,7 @@ Requires-Dist: numpy<=2.2.4; extra == "development"
 Requires-Dist: pendulum!=2.1.1; extra == "development"
 Requires-Dist: pexpect; extra == "development"
 Requires-Dist: pytest<7.5.0; extra == "development"
+Requires-Dist: pytest-asyncio; extra == "development"
 Requires-Dist: pytest-cov; extra == "development"
 Requires-Dist: pytest-rerunfailures<16.0; extra == "development"
 Requires-Dist: pytest-timeout; extra == "development"
@@ -92,7 +93,12 @@ https://docs.snowflake.com/
 Source code is also available at: https://github.com/snowflakedb/snowflake-connector-python
 
 # Release Notes
-- v4.1.1(TBD)
+- v4.2.0(January 07,2026)
+  - Added `SnowflakeCursor.stats` property to expose granular DML statistics (rows inserted, deleted, updated, and duplicates) for operations like CTAS where `rowcount` is insufficient.
+  - Added support for injecting SPCS service identifier token (`SPCS_TOKEN`) into login requests when present in SPCS containers.
+  - Introduced shared library for extended telemetry to identify and prepare testing platform for native rust extensions.
+
+- v4.1.1(December 12,2025)
   - Relaxed pandas dependency requirements for Python below 3.12.
   - Changed CRL cache cleanup background task to daemon to avoid blocking main thread.
   - Fixed NO_PROXY issues with PUT operations

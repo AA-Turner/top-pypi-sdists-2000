@@ -6,6 +6,7 @@ import os
 
 import structlog
 from starlette.applications import Starlette
+from starlette.exceptions import HTTPException
 from starlette.middleware import Middleware
 from starlette.requests import Request
 from starlette.responses import HTMLResponse, JSONResponse, Response
@@ -29,8 +30,11 @@ from langgraph_api.config import (
     LANGGRAPH_ENCRYPTION,
     MIGRATIONS_PATH,
     MOUNT_PREFIX,
+    PROBE_CORE_API_SERVER,
 )
+from langgraph_api.feature_flags import FF_USE_CORE_API
 from langgraph_api.graph import js_bg_tasks
+from langgraph_api.grpc.client import get_shared_client
 from langgraph_api.js.base import is_js_path
 from langgraph_api.timing import profiled_import
 from langgraph_api.validation import DOCS_HTML
@@ -39,18 +43,44 @@ from langgraph_runtime.database import connect, healthcheck
 logger = structlog.stdlib.get_logger(__name__)
 
 
+async def grpc_healthcheck():
+    """Check the health of the gRPC server (used when FF_USE_CORE_API is enabled)."""
+    try:
+        client = await get_shared_client()
+        await client.healthcheck()
+    except Exception as exc:
+        logger.warning(
+            "gRPC health check failed. Either the gRPC server is not running or is not responding.",
+            error=exc,
+        )
+        raise HTTPException(
+            status_code=500,
+            detail="gRPC health check failed. Either the gRPC server is not running or is not responding.",
+        ) from exc
+
+
 async def ok(request: Request, *, disabled: bool = False):
     if disabled:
         # We still expose an /ok endpoint even if disable_meta is set so that
         # the operator knows the server started up.
         return JSONResponse({"ok": True})
     check_db = int(request.query_params.get("check_db", "0"))  # must be "0" or "1"
+
+    healthcheck_coroutines = []
+
     if check_db:
-        await healthcheck()
+        healthcheck_coroutines.append(healthcheck())
+
     if js_bg_tasks:
         from langgraph_api.js.remote import js_healthcheck
 
-        await js_healthcheck()
+        healthcheck_coroutines.append(js_healthcheck())
+
+    if FF_USE_CORE_API and PROBE_CORE_API_SERVER:
+        healthcheck_coroutines.append(grpc_healthcheck())
+
+    await asyncio.gather(*healthcheck_coroutines)
+
     return JSONResponse({"ok": True})
 
 

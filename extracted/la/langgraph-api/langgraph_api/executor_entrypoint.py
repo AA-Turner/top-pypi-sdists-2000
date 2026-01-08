@@ -20,6 +20,7 @@ async def main(grpc_port: int = 50051):
     from langgraph_api import config
 
     config.IS_EXECUTOR_ENTRYPOINT = True
+    config.PROBE_CORE_API_SERVER = False
     await queue_main(grpc_port=grpc_port, entrypoint_name="python-executor")
 
 

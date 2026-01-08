@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: prek
-Version: 0.2.25
+Version: 0.2.27
 Classifier: Development Status :: 4 - Beta
 Classifier: Environment :: Console
 Classifier: Intended Audience :: Developers
@@ -15,10 +15,10 @@ Home-Page: https://prek.j178.dev/
 Author-email: j178 <hi@j178.dev>
 Requires-Python: >=3.8
 Description-Content-Type: text/markdown; charset=UTF-8; variant=GFM
-Project-URL: Repository, https://github.com/j178/prek
 Project-URL: Changelog, https://github.com/j178/prek/blob/master/CHANGELOG.md
-Project-URL: Releases, https://github.com/j178/prek/releases
 Project-URL: Homepage, https://prek.j178.dev/
+Project-URL: Releases, https://github.com/j178/prek/releases
+Project-URL: Repository, https://github.com/j178/prek
 
 <div align="center">
 
@@ -80,7 +80,7 @@ On Linux and macOS:
 
 <!-- linux-standalone-install:start -->
 ```bash
-curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.2.25/prek-installer.sh | sh
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.2.27/prek-installer.sh | sh
 ```
 <!-- linux-standalone-install:end -->
 
@@ -88,7 +88,7 @@ On Windows:
 
 <!-- windows-standalone-install:start -->
 ```powershell
-powershell -ExecutionPolicy ByPass -c "irm https://github.com/j178/prek/releases/download/v0.2.25/prek-installer.ps1 | iex"
+powershell -ExecutionPolicy ByPass -c "irm https://github.com/j178/prek/releases/download/v0.2.27/prek-installer.ps1 | iex"
 ```
 <!-- windows-standalone-install:end -->
 
@@ -335,6 +335,7 @@ For more detailed improvements prek offers, take a look at [Difference from pre-
 prek is pretty new, but it is already being used or recommend by some projects and organizations:
 
 - [apache/airflow](https://github.com/apache/airflow/issues/44995)
+- [python/cpython](https://github.com/python/cpython/issues/143148)
 - [pdm-project/pdm](https://github.com/pdm-project/pdm/pull/3593)
 - [fastapi/fastapi](https://github.com/fastapi/fastapi/pull/14572)
 - [fastapi/typer](https://github.com/fastapi/typer/pull/1453)
@@ -351,6 +352,8 @@ prek is pretty new, but it is already being used or recommend by some projects a
 - [apache/iceberg-python](https://github.com/apache/iceberg-python/pull/2533)
 - [jcrist/msgspec](https://github.com/jcrist/msgspec/pull/918)
 - [python-humanize/humanize](https://github.com/python-humanize/humanize/pull/276)
+- [MoonshotAI/kimi-cli](https://github.com/MoonshotAI/kimi-cli/pull/535)
+- [ZhuoZhuoCrayon/throttled-py](https://github.com/ZhuoZhuoCrayon/throttled-py/pull/119)
 
 <!-- why:end -->
 

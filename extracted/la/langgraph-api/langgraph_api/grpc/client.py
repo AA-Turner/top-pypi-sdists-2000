@@ -2,9 +2,11 @@
 
 import asyncio
 import os
+import time
 
 import structlog
 from grpc import aio  # type: ignore[import]
+from grpc_health.v1 import health_pb2, health_pb2_grpc  # type: ignore[import]
 
 from langgraph_api import config
 
@@ -21,6 +23,11 @@ logger = structlog.stdlib.get_logger(__name__)
 
 # Shared global client pool
 _client_pool: "GrpcClientPool | None" = None
+
+
+GRPC_HEALTHCHECK_TIMEOUT = 5.0
+GRPC_INIT_TIMEOUT = 10.0
+GRPC_INIT_PROBE_INTERVAL = 0.5
 
 
 class GrpcClient:
@@ -44,6 +51,7 @@ class GrpcClient:
         self._threads_stub: ThreadsStub | None = None
         self._admin_stub: AdminStub | None = None
         self._checkpointer_stub: CheckpointerStub | None = None
+        self._health_stub: health_pb2_grpc.HealthStub | None = None
 
     async def __aenter__(self):
         """Async context manager entry."""
@@ -71,6 +79,7 @@ class GrpcClient:
         self._threads_stub = ThreadsStub(self._channel)
         self._admin_stub = AdminStub(self._channel)
         self._checkpointer_stub = CheckpointerStub(self._channel)
+        self._health_stub = health_pb2_grpc.HealthStub(self._channel)
 
         await logger.adebug(
             "Connected to gRPC server", server_address=self.server_address
@@ -86,7 +95,32 @@ class GrpcClient:
             self._threads_stub = None
             self._admin_stub = None
             self._checkpointer_stub = None
+            self._health_stub = None
             await logger.adebug("Closed gRPC connection")
+
+    async def healthcheck(self) -> bool:
+        """Check if the gRPC server is healthy.
+
+        Returns:
+            True if the server is healthy and serving.
+
+        Raises:
+            RuntimeError: If the client is not connected or the server is unhealthy.
+        """
+        if self._health_stub is None:
+            raise RuntimeError(
+                "Client not connected. Use async context manager or call connect() first."
+            )
+
+        request = health_pb2.HealthCheckRequest(service="")
+        response = await self._health_stub.Check(
+            request, timeout=GRPC_HEALTHCHECK_TIMEOUT
+        )
+
+        if response.status != health_pb2.HealthCheckResponse.SERVING:
+            raise RuntimeError(f"gRPC server is not healthy. Status: {response.status}")
+
+        return True
 
     @property
     def assistants(self) -> AssistantsStub:
@@ -210,6 +244,51 @@ async def get_shared_client() -> GrpcClient:
         )
 
     return await _client_pool.get_client()
+
+
+async def wait_until_grpc_ready(
+    timeout_seconds: float = GRPC_INIT_TIMEOUT,
+    interval_seconds: float = GRPC_INIT_PROBE_INTERVAL,
+):
+    """Wait for the gRPC server to be ready with retries during startup.
+
+    Args:
+        timeout_seconds: Maximum time to wait for the server to be ready.
+        interval_seconds: Time to wait between health check attempts.
+    Raises:
+        RuntimeError: If the server is not ready within the timeout period.
+    """
+    client = await get_shared_client()
+    max_attempts = int(timeout_seconds / interval_seconds)
+
+    await logger.ainfo(
+        "Waiting for gRPC server to be ready",
+        timeout_seconds=timeout_seconds,
+        interval_seconds=interval_seconds,
+        max_attempts=max_attempts,
+    )
+    start_time = time.time()
+    for attempt in range(max_attempts):
+        try:
+            await client.healthcheck()
+            await logger.ainfo(
+                "gRPC server is ready",
+                attempt=attempt + 1,
+                elapsed_seconds=round(time.time() - start_time, 3),
+            )
+            return
+        except Exception as exc:
+            if attempt >= max_attempts - 1:
+                raise RuntimeError(
+                    f"gRPC server not ready after {timeout_seconds}s (reached max attempts: {max_attempts})"
+                ) from exc
+            else:
+                await logger.adebug(
+                    "Waiting for gRPC server to be ready",
+                    attempt=attempt + 1,
+                    max_attempts=max_attempts,
+                )
+                await asyncio.sleep(interval_seconds)
 
 
 async def close_shared_client():
