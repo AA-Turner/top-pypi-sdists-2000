@@ -3990,6 +3990,7 @@ class CfnLogGroup(
         id: builtins.str,
         *,
         data_protection_policy: typing.Any = None,
+        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         field_index_policies: typing.Optional[typing.Union[typing.Sequence[typing.Any], "_IResolvable_da3f097b"]] = None,
         kms_key_id: typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]] = None,
         log_group_class: typing.Optional[builtins.str] = None,
@@ -4003,6 +4004,7 @@ class CfnLogGroup(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param data_protection_policy: Creates a data protection policy and assigns it to the log group. A data protection policy can help safeguard sensitive data that's ingested by the log group by auditing and masking the sensitive log data. When a user who does not have permission to view masked data views a log event that includes masked data, the sensitive data is replaced by asterisks.
+        :param deletion_protection_enabled: Indicates whether deletion protection is enabled for this log group. When enabled, deletion protection blocks all deletion operations until it is explicitly disabled. Default: - false
         :param field_index_policies: Creates or updates a *field index policy* for the specified log group. Only log groups in the Standard log class support field index policies. For more information about log classes, see `Log classes <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch_Logs_Log_Classes.html>`_ . You can use field index policies to create *field indexes* on fields found in log events in the log group. Creating field indexes lowers the costs for CloudWatch Logs Insights queries that reference those field indexes, because these queries attempt to skip the processing of log events that are known to not match the indexed field. Good fields to index are fields that you often need to query for and fields that have high cardinality of values Common examples of indexes include request ID, session ID, userID, and instance IDs. For more information, see `Create field indexes to improve query performance and reduce costs <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatchLogs-Field-Indexing.html>`_ . Currently, this array supports only one field index policy object.
         :param kms_key_id: The Amazon Resource Name (ARN) of the AWS key to use when encrypting log data. To associate an AWS key with the log group, specify the ARN of that KMS key here. If you do so, ingested data is encrypted using this key. This association is stored as long as the data encrypted with the KMS key is still within CloudWatch Logs . This enables CloudWatch Logs to decrypt this data whenever it is requested. If you attempt to associate a KMS key with the log group but the KMS key doesn't exist or is deactivated, you will receive an ``InvalidParameterException`` error. Log group data is always encrypted in CloudWatch Logs . If you omit this key, the encryption does not use AWS . For more information, see `Encrypt log data in CloudWatch Logs using AWS Key Management Service <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/encrypt-log-data-kms.html>`_
         :param log_group_class: Specifies the log group class for this log group. There are two classes:. - The ``Standard`` log class supports all CloudWatch Logs features. - The ``Infrequent Access`` log class supports a subset of CloudWatch Logs features and incurs lower costs. For details about the features supported by each class, see `Log classes <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch_Logs_Log_Classes.html>`_ Default: - "STANDARD"
@@ -4017,6 +4019,7 @@ class CfnLogGroup(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnLogGroupProps(
             data_protection_policy=data_protection_policy,
+            deletion_protection_enabled=deletion_protection_enabled,
             field_index_policies=field_index_policies,
             kms_key_id=kms_key_id,
             log_group_class=log_group_class,
@@ -4163,6 +4166,24 @@ class CfnLogGroup(
         jsii.set(self, "dataProtectionPolicy", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="deletionProtectionEnabled")
+    def deletion_protection_enabled(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
+        '''Indicates whether deletion protection is enabled for this log group.'''
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "deletionProtectionEnabled"))
+
+    @deletion_protection_enabled.setter
+    def deletion_protection_enabled(
+        self,
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__13969217315e0a8e985b28ac55ec8f407bfc6e503c91b1fb51f95be45264501c)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "deletionProtectionEnabled", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="fieldIndexPolicies")
     def field_index_policies(
         self,
@@ -4267,6 +4288,7 @@ class CfnLogGroup(
     jsii_struct_bases=[],
     name_mapping={
         "data_protection_policy": "dataProtectionPolicy",
+        "deletion_protection_enabled": "deletionProtectionEnabled",
         "field_index_policies": "fieldIndexPolicies",
         "kms_key_id": "kmsKeyId",
         "log_group_class": "logGroupClass",
@@ -4281,6 +4303,7 @@ class CfnLogGroupProps:
         self,
         *,
         data_protection_policy: typing.Any = None,
+        deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         field_index_policies: typing.Optional[typing.Union[typing.Sequence[typing.Any], "_IResolvable_da3f097b"]] = None,
         kms_key_id: typing.Optional[typing.Union[builtins.str, "_IKeyRef_d4fc6ef3"]] = None,
         log_group_class: typing.Optional[builtins.str] = None,
@@ -4292,6 +4315,7 @@ class CfnLogGroupProps:
         '''Properties for defining a ``CfnLogGroup``.
 
         :param data_protection_policy: Creates a data protection policy and assigns it to the log group. A data protection policy can help safeguard sensitive data that's ingested by the log group by auditing and masking the sensitive log data. When a user who does not have permission to view masked data views a log event that includes masked data, the sensitive data is replaced by asterisks.
+        :param deletion_protection_enabled: Indicates whether deletion protection is enabled for this log group. When enabled, deletion protection blocks all deletion operations until it is explicitly disabled. Default: - false
         :param field_index_policies: Creates or updates a *field index policy* for the specified log group. Only log groups in the Standard log class support field index policies. For more information about log classes, see `Log classes <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch_Logs_Log_Classes.html>`_ . You can use field index policies to create *field indexes* on fields found in log events in the log group. Creating field indexes lowers the costs for CloudWatch Logs Insights queries that reference those field indexes, because these queries attempt to skip the processing of log events that are known to not match the indexed field. Good fields to index are fields that you often need to query for and fields that have high cardinality of values Common examples of indexes include request ID, session ID, userID, and instance IDs. For more information, see `Create field indexes to improve query performance and reduce costs <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatchLogs-Field-Indexing.html>`_ . Currently, this array supports only one field index policy object.
         :param kms_key_id: The Amazon Resource Name (ARN) of the AWS key to use when encrypting log data. To associate an AWS key with the log group, specify the ARN of that KMS key here. If you do so, ingested data is encrypted using this key. This association is stored as long as the data encrypted with the KMS key is still within CloudWatch Logs . This enables CloudWatch Logs to decrypt this data whenever it is requested. If you attempt to associate a KMS key with the log group but the KMS key doesn't exist or is deactivated, you will receive an ``InvalidParameterException`` error. Log group data is always encrypted in CloudWatch Logs . If you omit this key, the encryption does not use AWS . For more information, see `Encrypt log data in CloudWatch Logs using AWS Key Management Service <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/encrypt-log-data-kms.html>`_
         :param log_group_class: Specifies the log group class for this log group. There are two classes:. - The ``Standard`` log class supports all CloudWatch Logs features. - The ``Infrequent Access`` log class supports a subset of CloudWatch Logs features and incurs lower costs. For details about the features supported by each class, see `Log classes <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch_Logs_Log_Classes.html>`_ Default: - "STANDARD"
@@ -4316,6 +4340,7 @@ class CfnLogGroupProps:
             
             cfn_log_group_props = logs.CfnLogGroupProps(
                 data_protection_policy=data_protection_policy,
+                deletion_protection_enabled=False,
                 field_index_policies=[field_index_policies],
                 kms_key_id="kmsKeyId",
                 log_group_class="logGroupClass",
@@ -4331,6 +4356,7 @@ class CfnLogGroupProps:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__1a2ba122502a64b05bea3e56f15389c84f127761b660b1d06de3ea638b95f816)
             check_type(argname="argument data_protection_policy", value=data_protection_policy, expected_type=type_hints["data_protection_policy"])
+            check_type(argname="argument deletion_protection_enabled", value=deletion_protection_enabled, expected_type=type_hints["deletion_protection_enabled"])
             check_type(argname="argument field_index_policies", value=field_index_policies, expected_type=type_hints["field_index_policies"])
             check_type(argname="argument kms_key_id", value=kms_key_id, expected_type=type_hints["kms_key_id"])
             check_type(argname="argument log_group_class", value=log_group_class, expected_type=type_hints["log_group_class"])
@@ -4341,6 +4367,8 @@ class CfnLogGroupProps:
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if data_protection_policy is not None:
             self._values["data_protection_policy"] = data_protection_policy
+        if deletion_protection_enabled is not None:
+            self._values["deletion_protection_enabled"] = deletion_protection_enabled
         if field_index_policies is not None:
             self._values["field_index_policies"] = field_index_policies
         if kms_key_id is not None:
@@ -4366,6 +4394,21 @@ class CfnLogGroupProps:
         '''
         result = self._values.get("data_protection_policy")
         return typing.cast(typing.Any, result)
+
+    @builtins.property
+    def deletion_protection_enabled(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
+        '''Indicates whether deletion protection is enabled for this log group.
+
+        When enabled, deletion protection blocks all deletion operations until it is explicitly disabled.
+
+        :default: - false
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loggroup.html#cfn-logs-loggroup-deletionprotectionenabled
+        '''
+        result = self._values.get("deletion_protection_enabled")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def field_index_policies(
@@ -8195,7 +8238,7 @@ class CfnTransformer(
 
             :param event_source: Specify the service or process that produces the log events that will be converted with this processor.
             :param ocsf_version: Specify which version of the OCSF schema to use for the transformed log events.
-            :param mapping_version: 
+            :param mapping_version: The version of the OCSF mapping to use for parsing log data.
             :param source: The path to the field in the log event that you want to parse. If you omit this value, the whole log message is parsed.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-parsetoocsf.html
@@ -8253,7 +8296,8 @@ class CfnTransformer(
 
         @builtins.property
         def mapping_version(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The version of the OCSF mapping to use for parsing log data.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-transformer-parsetoocsf.html#cfn-logs-transformer-parsetoocsf-mappingversion
             '''
             result = self._values.get("mapping_version")
@@ -19392,6 +19436,7 @@ def _typecheckingstub__8e283e76ec168d67513d106f9413697672f161b29f03fa9b13486e96b
     id: builtins.str,
     *,
     data_protection_policy: typing.Any = None,
+    deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     field_index_policies: typing.Optional[typing.Union[typing.Sequence[typing.Any], _IResolvable_da3f097b]] = None,
     kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     log_group_class: typing.Optional[builtins.str] = None,
@@ -19449,6 +19494,12 @@ def _typecheckingstub__427539e290b46019fba84ec8aa72f953c2d26dfe978de85330819964c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__13969217315e0a8e985b28ac55ec8f407bfc6e503c91b1fb51f95be45264501c(
+    value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__0b4f37a255340908d68ce2d6149f1bb01ab5104c15a9b60474e51dde5b10d526(
     value: typing.Optional[typing.Union[typing.List[typing.Any], _IResolvable_da3f097b]],
 ) -> None:
@@ -19494,6 +19545,7 @@ def _typecheckingstub__9ea9a0a37724d334e68ee325d75e901df12c6765b4c229366a1cef403
 def _typecheckingstub__1a2ba122502a64b05bea3e56f15389c84f127761b660b1d06de3ea638b95f816(
     *,
     data_protection_policy: typing.Any = None,
+    deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     field_index_policies: typing.Optional[typing.Union[typing.Sequence[typing.Any], _IResolvable_da3f097b]] = None,
     kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     log_group_class: typing.Optional[builtins.str] = None,

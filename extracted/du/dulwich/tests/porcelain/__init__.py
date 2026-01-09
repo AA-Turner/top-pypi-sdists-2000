@@ -633,21 +633,40 @@ class CommitSignTests(PorcelainGpgTestCase):
         commit = self.repo.get_object(sha)
         assert isinstance(commit, Commit)
         # GPG Signatures aren't deterministic, so we can't do a static assertion.
-        commit.verify()
-        commit.verify(keyids=[PorcelainGpgTestCase.DEFAULT_KEY_ID])
+        from dulwich.signature import (
+            BadSignature,
+            UntrustedSignature,
+            get_signature_vendor_for_signature,
+        )
+
+        self.assertIsNotNone(commit.gpgsig)
+        vendor = get_signature_vendor_for_signature(commit.gpgsig)
+        vendor.verify(commit.raw_without_sig(), commit.gpgsig)
+        # Verify with specific keyid
+        vendor_with_keyid = get_signature_vendor_for_signature(
+            commit.gpgsig, keyids=[PorcelainGpgTestCase.DEFAULT_KEY_ID]
+        )
+        vendor_with_keyid.verify(commit.raw_without_sig(), commit.gpgsig)
 
         self.import_non_default_key()
+        # Verify with wrong keyid - should raise UntrustedSignature
+        vendor_wrong_keyid = get_signature_vendor_for_signature(
+            commit.gpgsig, keyids=[PorcelainGpgTestCase.NON_DEFAULT_KEY_ID]
+        )
         self.assertRaises(
-            gpg.errors.MissingSignatures,
-            commit.verify,
-            keyids=[PorcelainGpgTestCase.NON_DEFAULT_KEY_ID],
+            UntrustedSignature,
+            vendor_wrong_keyid.verify,
+            commit.raw_without_sig(),
+            commit.gpgsig,
         )
 
         assert isinstance(commit, Commit)
         commit.committer = b"Alice <alice@example.com>"
         self.assertRaises(
-            gpg.errors.BadSignatures,
-            commit.verify,
+            BadSignature,
+            vendor.verify,
+            commit.raw_without_sig(),
+            commit.gpgsig,
         )
 
     def test_non_default_key(self) -> None:
@@ -664,7 +683,7 @@ class CommitSignTests(PorcelainGpgTestCase):
             message="Some message",
             author="Joe <joe@example.com>",
             committer="Bob <bob@example.com>",
-            signoff=PorcelainGpgTestCase.NON_DEFAULT_KEY_ID,
+            sign=PorcelainGpgTestCase.NON_DEFAULT_KEY_ID,
         )
         self.assertIsInstance(sha, bytes)
         self.assertEqual(len(sha), 40)
@@ -672,7 +691,11 @@ class CommitSignTests(PorcelainGpgTestCase):
         commit = self.repo.get_object(sha)
         assert isinstance(commit, Commit)
         # GPG Signatures aren't deterministic, so we can't do a static assertion.
-        commit.verify()
+        from dulwich.signature import get_signature_vendor_for_signature
+
+        self.assertIsNotNone(commit.gpgsig)
+        vendor = get_signature_vendor_for_signature(commit.gpgsig)
+        vendor.verify(commit.raw_without_sig(), commit.gpgsig)
 
     def test_sign_uses_config_signingkey(self) -> None:
         """Test that sign=True uses user.signingKey from config."""
@@ -703,8 +726,16 @@ class CommitSignTests(PorcelainGpgTestCase):
         commit = self.repo.get_object(sha)
         assert isinstance(commit, Commit)
         # Verify the commit is signed with the configured key
-        commit.verify()
-        commit.verify(keyids=[PorcelainGpgTestCase.DEFAULT_KEY_ID])
+        from dulwich.signature import get_signature_vendor_for_signature
+
+        self.assertIsNotNone(commit.gpgsig)
+        vendor = get_signature_vendor_for_signature(commit.gpgsig)
+        vendor.verify(commit.raw_without_sig(), commit.gpgsig)
+        # Verify with specific keyid
+        vendor_with_keyid = get_signature_vendor_for_signature(
+            commit.gpgsig, keyids=[PorcelainGpgTestCase.DEFAULT_KEY_ID]
+        )
+        vendor_with_keyid.verify(commit.raw_without_sig(), commit.gpgsig)
 
     def test_commit_gpg_sign_config_enabled(self) -> None:
         """Test that commit.gpgSign=true automatically signs commits."""
@@ -736,8 +767,16 @@ class CommitSignTests(PorcelainGpgTestCase):
         commit = self.repo.get_object(sha)
         assert isinstance(commit, Commit)
         # Verify the commit is signed due to config
-        commit.verify()
-        commit.verify(keyids=[PorcelainGpgTestCase.DEFAULT_KEY_ID])
+        from dulwich.signature import get_signature_vendor_for_signature
+
+        self.assertIsNotNone(commit.gpgsig)
+        vendor = get_signature_vendor_for_signature(commit.gpgsig)
+        vendor.verify(commit.raw_without_sig(), commit.gpgsig)
+        # Verify with specific keyid
+        vendor_with_keyid = get_signature_vendor_for_signature(
+            commit.gpgsig, keyids=[PorcelainGpgTestCase.DEFAULT_KEY_ID]
+        )
+        vendor_with_keyid.verify(commit.raw_without_sig(), commit.gpgsig)
 
     def test_commit_gpg_sign_config_disabled(self) -> None:
         """Test that commit.gpgSign=false does not sign commits."""
@@ -800,7 +839,11 @@ class CommitSignTests(PorcelainGpgTestCase):
         commit = self.repo.get_object(sha)
         assert isinstance(commit, Commit)
         # Verify the commit is signed with default key
-        commit.verify()
+        from dulwich.signature import get_signature_vendor_for_signature
+
+        self.assertIsNotNone(commit.gpgsig)
+        vendor = get_signature_vendor_for_signature(commit.gpgsig)
+        vendor.verify(commit.raw_without_sig(), commit.gpgsig)
 
     def test_explicit_signoff_overrides_config(self) -> None:
         """Test that explicit signoff parameter overrides commit.gpgSign config."""
@@ -832,8 +875,16 @@ class CommitSignTests(PorcelainGpgTestCase):
         commit = self.repo.get_object(sha)
         assert isinstance(commit, Commit)
         # Verify the commit is signed despite config=false
-        commit.verify()
-        commit.verify(keyids=[PorcelainGpgTestCase.DEFAULT_KEY_ID])
+        from dulwich.signature import get_signature_vendor_for_signature
+
+        self.assertIsNotNone(commit.gpgsig)
+        vendor = get_signature_vendor_for_signature(commit.gpgsig)
+        vendor.verify(commit.raw_without_sig(), commit.gpgsig)
+        # Verify with specific keyid
+        vendor_with_keyid = get_signature_vendor_for_signature(
+            commit.gpgsig, keyids=[PorcelainGpgTestCase.DEFAULT_KEY_ID]
+        )
+        vendor_with_keyid.verify(commit.raw_without_sig(), commit.gpgsig)
 
     def test_explicit_false_disables_signing(self) -> None:
         """Test that explicit signoff=False disables signing even with config=true."""
@@ -900,7 +951,9 @@ class VerifyCommitTests(PorcelainGpgTestCase):
         )
 
     def test_verify_commit_with_wrong_key(self) -> None:
-        """Test that verifying with wrong keyid raises MissingSignatures."""
+        """Test that verifying with wrong keyid raises UntrustedSignature."""
+        from dulwich.signature import UntrustedSignature
+
         _c1, _c2, c3 = build_commit_graph(
             self.repo.object_store, [[1], [2, 1], [3, 1, 2]]
         )
@@ -920,7 +973,7 @@ class VerifyCommitTests(PorcelainGpgTestCase):
 
         self.import_non_default_key()
         self.assertRaises(
-            gpg.errors.MissingSignatures,
+            UntrustedSignature,
             porcelain.verify_commit,
             self.repo.path,
             sha,
@@ -979,7 +1032,9 @@ class VerifyTagTests(PorcelainGpgTestCase):
         )
 
     def test_verify_tag_with_wrong_key(self) -> None:
-        """Test that verifying with wrong keyid raises MissingSignatures."""
+        """Test that verifying with wrong keyid raises UntrustedSignature."""
+        from dulwich.signature import UntrustedSignature
+
         _c1, _c2, c3 = build_commit_graph(
             self.repo.object_store, [[1], [2, 1], [3, 1, 2]]
         )
@@ -1000,7 +1055,7 @@ class VerifyTagTests(PorcelainGpgTestCase):
 
         self.import_non_default_key()
         self.assertRaises(
-            gpg.errors.MissingSignatures,
+            UntrustedSignature,
             porcelain.verify_tag,
             self.repo.path,
             b"signed-tag",
@@ -3246,21 +3301,40 @@ class TagCreateSignTests(PorcelainGpgTestCase):
         tag = self.repo[b"refs/tags/tryme"]
         assert isinstance(tag, Tag)
         # GPG Signatures aren't deterministic, so we can't do a static assertion.
-        tag.verify()
-        tag.verify(keyids=[PorcelainGpgTestCase.DEFAULT_KEY_ID])
+        from dulwich.signature import (
+            BadSignature,
+            UntrustedSignature,
+            get_signature_vendor_for_signature,
+        )
+
+        self.assertIsNotNone(tag.signature)
+        vendor = get_signature_vendor_for_signature(tag.signature)
+        vendor.verify(tag.raw_without_sig(), tag.signature)
+        # Verify with specific keyid
+        vendor_with_keyid = get_signature_vendor_for_signature(
+            tag.signature, keyids=[PorcelainGpgTestCase.DEFAULT_KEY_ID]
+        )
+        vendor_with_keyid.verify(tag.raw_without_sig(), tag.signature)
 
         self.import_non_default_key()
+        # Verify with wrong keyid - should raise UntrustedSignature
+        vendor_wrong_keyid = get_signature_vendor_for_signature(
+            tag.signature, keyids=[PorcelainGpgTestCase.NON_DEFAULT_KEY_ID]
+        )
         self.assertRaises(
-            gpg.errors.MissingSignatures,
-            tag.verify,
-            keyids=[PorcelainGpgTestCase.NON_DEFAULT_KEY_ID],
+            UntrustedSignature,
+            vendor_wrong_keyid.verify,
+            tag.raw_without_sig(),
+            tag.signature,
         )
 
         assert tag.signature is not None
         tag._chunked_text = [b"bad data", tag.signature]
         self.assertRaises(
-            gpg.errors.BadSignatures,
-            tag.verify,
+            BadSignature,
+            vendor.verify,
+            tag.raw_without_sig(),
+            tag.signature,
         )
 
     def test_non_default_key(self) -> None:
@@ -3291,7 +3365,11 @@ class TagCreateSignTests(PorcelainGpgTestCase):
         tag = self.repo[b"refs/tags/tryme"]
         assert isinstance(tag, Tag)
         # GPG Signatures aren't deterministic, so we can't do a static assertion.
-        tag.verify()
+        from dulwich.signature import get_signature_vendor_for_signature
+
+        self.assertIsNotNone(tag.signature)
+        vendor = get_signature_vendor_for_signature(tag.signature)
+        vendor.verify(tag.raw_without_sig(), tag.signature)
 
     def test_sign_uses_config_signingkey(self) -> None:
         """Test that sign=True uses user.signingKey from config."""
@@ -3323,8 +3401,16 @@ class TagCreateSignTests(PorcelainGpgTestCase):
         self.assertIsInstance(tag, Tag)
 
         # Verify the tag is signed with the configured key
-        tag.verify()
-        tag.verify(keyids=[PorcelainGpgTestCase.DEFAULT_KEY_ID])
+        from dulwich.signature import get_signature_vendor_for_signature
+
+        self.assertIsNotNone(tag.signature)
+        vendor = get_signature_vendor_for_signature(tag.signature)
+        vendor.verify(tag.raw_without_sig(), tag.signature)
+        # Verify with specific keyid
+        vendor_with_keyid = get_signature_vendor_for_signature(
+            tag.signature, keyids=[PorcelainGpgTestCase.DEFAULT_KEY_ID]
+        )
+        vendor_with_keyid.verify(tag.raw_without_sig(), tag.signature)
 
     def test_tag_gpg_sign_config_enabled(self) -> None:
         """Test that tag.gpgSign=true automatically signs tags."""
@@ -3357,8 +3443,16 @@ class TagCreateSignTests(PorcelainGpgTestCase):
         self.assertIsInstance(tag, Tag)
 
         # Verify the tag is signed due to config
-        tag.verify()
-        tag.verify(keyids=[PorcelainGpgTestCase.DEFAULT_KEY_ID])
+        from dulwich.signature import get_signature_vendor_for_signature
+
+        self.assertIsNotNone(tag.signature)
+        vendor = get_signature_vendor_for_signature(tag.signature)
+        vendor.verify(tag.raw_without_sig(), tag.signature)
+        # Verify with specific keyid
+        vendor_with_keyid = get_signature_vendor_for_signature(
+            tag.signature, keyids=[PorcelainGpgTestCase.DEFAULT_KEY_ID]
+        )
+        vendor_with_keyid.verify(tag.raw_without_sig(), tag.signature)
 
     def test_tag_gpg_sign_config_disabled(self) -> None:
         """Test that tag.gpgSign=false does not sign tags."""
@@ -3423,7 +3517,11 @@ class TagCreateSignTests(PorcelainGpgTestCase):
         self.assertIsInstance(tag, Tag)
 
         # Verify the tag is signed with default key
-        tag.verify()
+        from dulwich.signature import get_signature_vendor_for_signature
+
+        self.assertIsNotNone(tag.signature)
+        vendor = get_signature_vendor_for_signature(tag.signature)
+        vendor.verify(tag.raw_without_sig(), tag.signature)
 
     def test_explicit_sign_overrides_config(self) -> None:
         """Test that explicit sign parameter overrides tag.gpgSign config."""
@@ -3456,8 +3554,16 @@ class TagCreateSignTests(PorcelainGpgTestCase):
         self.assertIsInstance(tag, Tag)
 
         # Verify the tag is signed despite config=false
-        tag.verify()
-        tag.verify(keyids=[PorcelainGpgTestCase.DEFAULT_KEY_ID])
+        from dulwich.signature import get_signature_vendor_for_signature
+
+        self.assertIsNotNone(tag.signature)
+        vendor = get_signature_vendor_for_signature(tag.signature)
+        vendor.verify(tag.raw_without_sig(), tag.signature)
+        # Verify with specific keyid
+        vendor_with_keyid = get_signature_vendor_for_signature(
+            tag.signature, keyids=[PorcelainGpgTestCase.DEFAULT_KEY_ID]
+        )
+        vendor_with_keyid.verify(tag.raw_without_sig(), tag.signature)
 
     def test_explicit_false_disables_tag_signing(self) -> None:
         """Test that explicit sign=False disables signing even with config=true."""
@@ -4297,12 +4403,16 @@ class CheckoutTests(PorcelainTestCase):
             f.write("new message\n")
 
         status = list(porcelain.status(self.repo))
-        self.assertEqual([{"add": [], "delete": [], "modify": []}, [], ["neu"]], status)
+        self.assertEqual(
+            [{"add": [], "delete": [], "modify": []}, [], [os.fsencode("neu")]], status
+        )
 
         porcelain.checkout(self.repo, b"uni")
 
         status = list(porcelain.status(self.repo))
-        self.assertEqual([{"add": [], "delete": [], "modify": []}, [], ["neu"]], status)
+        self.assertEqual(
+            [{"add": [], "delete": [], "modify": []}, [], [os.fsencode("neu")]], status
+        )
 
     def test_checkout_to_branch_with_new_files(self) -> None:
         porcelain.checkout(self.repo, b"uni")
@@ -5993,8 +6103,8 @@ class StatusTests(PorcelainTestCase):
 
         results = porcelain.status(self.repo)
 
-        self.assertEqual(results.staged["add"][0], filename_add.encode("ascii"))
-        self.assertEqual(results.unstaged, [b"foo"])
+        self.assertEqual(results.staged["add"][0], os.fsencode(filename_add))
+        self.assertEqual(results.unstaged, [os.fsencode("foo")])
 
     def test_status_with_core_preloadindex(self) -> None:
         """Test status with core.preloadIndex enabled."""
@@ -6033,7 +6143,7 @@ class StatusTests(PorcelainTestCase):
 
         # Check that we detected the correct unstaged changes
         unstaged_sorted = sorted(results.unstaged)
-        expected_sorted = sorted([f.encode("ascii") for f in modified_files])
+        expected_sorted = sorted([os.fsencode(f) for f in modified_files])
         self.assertEqual(unstaged_sorted, expected_sorted)
 
     def test_status_all(self) -> None:
@@ -6069,10 +6179,14 @@ class StatusTests(PorcelainTestCase):
             f.write("origstuff")
         results = porcelain.status(self.repo.path)
         self.assertDictEqual(
-            {"add": [b"baz"], "delete": [b"foo"], "modify": [b"bar"]},
+            {
+                "add": [os.fsencode("baz")],
+                "delete": [os.fsencode("foo")],
+                "modify": [os.fsencode("bar")],
+            },
             results.staged,
         )
-        self.assertListEqual(results.unstaged, [b"blye"])
+        self.assertListEqual(results.unstaged, [os.fsencode("blye")])
         results_no_untracked = porcelain.status(self.repo.path, untracked_files="no")
         self.assertListEqual(results_no_untracked.untracked, [])
 
@@ -6088,7 +6202,9 @@ class StatusTests(PorcelainTestCase):
             fh.write("untracked")
 
         _, _, untracked = porcelain.status(self.repo.path, untracked_files="all")
-        self.assertEqual(untracked, ["untracked_dir/untracked_file"])
+        self.assertEqual(
+            untracked, [os.fsencode(os.path.join("untracked_dir", "untracked_file"))]
+        )
 
     def test_status_untracked_path_normal(self) -> None:
         # Create an untracked directory with multiple files
@@ -6110,16 +6226,16 @@ class StatusTests(PorcelainTestCase):
 
         # Test "normal" mode - should only show the directory, not individual files
         _, _, untracked = porcelain.status(self.repo.path, untracked_files="normal")
-        self.assertEqual(untracked, ["untracked_dir/"])
+        self.assertEqual(untracked, [os.fsencode("untracked_dir" + os.sep)])
 
         # Test "all" mode - should show all files
         _, _, untracked_all = porcelain.status(self.repo.path, untracked_files="all")
         self.assertEqual(
             sorted(untracked_all),
             [
-                "untracked_dir/file1",
-                "untracked_dir/file2",
-                "untracked_dir/nested/file3",
+                os.fsencode(os.path.join("untracked_dir", "file1")),
+                os.fsencode(os.path.join("untracked_dir", "file2")),
+                os.fsencode(os.path.join("untracked_dir", "nested", "file3")),
             ],
         )
 
@@ -6147,11 +6263,15 @@ class StatusTests(PorcelainTestCase):
 
         # In "normal" mode, should show individual untracked files in mixed dirs
         _, _, untracked = porcelain.status(self.repo.path, untracked_files="normal")
-        self.assertEqual(untracked, ["mixed_dir/untracked.txt"])
+        self.assertEqual(
+            untracked, [os.fsencode(os.path.join("mixed_dir", "untracked.txt"))]
+        )
 
         # In "all" mode, should be the same for mixed directories
         _, _, untracked_all = porcelain.status(self.repo.path, untracked_files="all")
-        self.assertEqual(untracked_all, ["mixed_dir/untracked.txt"])
+        self.assertEqual(
+            untracked_all, [os.fsencode(os.path.join("mixed_dir", "untracked.txt"))]
+        )
 
     def test_status_crlf_mismatch(self) -> None:
         # First make a commit as if the file has been added on a Linux system
@@ -6174,7 +6294,7 @@ class StatusTests(PorcelainTestCase):
 
         results = porcelain.status(self.repo)
         self.assertDictEqual({"add": [], "delete": [], "modify": []}, results.staged)
-        self.assertListEqual(results.unstaged, [b"crlf"])
+        self.assertListEqual(results.unstaged, [os.fsencode("crlf")])
         self.assertListEqual(results.untracked, [])
 
     def test_status_autocrlf_true(self) -> None:
@@ -6242,7 +6362,8 @@ class StatusTests(PorcelainTestCase):
 
         results = porcelain.status(self.repo)
         self.assertDictEqual(
-            {"add": [b"crlf-new"], "delete": [], "modify": []}, results.staged
+            {"add": [os.fsencode("crlf-new")], "delete": [], "modify": []},
+            results.staged,
         )
         # File committed with CRLF before autocrlf=input was enabled
         # will NOT appear as unstaged because stat matching optimization
@@ -6276,7 +6397,7 @@ class StatusTests(PorcelainTestCase):
 
         results = porcelain.status(self.repo)
         # Modified file should be detected as unstaged
-        self.assertListEqual(results.unstaged, [b"crlf-file.txt"])
+        self.assertListEqual(results.unstaged, [os.fsencode("crlf-file.txt")])
 
     def test_status_autocrlf_input_binary(self) -> None:
         """Test that binary files are not affected by autocrlf=input."""
@@ -6448,11 +6569,16 @@ class StatusTests(PorcelainTestCase):
             ),
         )
         self.assertEqual(
-            {".gitignore", "notignored", "link"},
+            {os.fsencode(".gitignore"), os.fsencode("notignored"), os.fsencode("link")},
             set(porcelain.status(self.repo).untracked),
         )
         self.assertEqual(
-            {".gitignore", "notignored", "ignored", "link"},
+            {
+                os.fsencode(".gitignore"),
+                os.fsencode("notignored"),
+                os.fsencode("ignored"),
+                os.fsencode("link"),
+            },
             set(porcelain.status(self.repo, ignored=True).untracked),
         )
 
@@ -6573,14 +6699,16 @@ class StatusTests(PorcelainTestCase):
 
         # Test status() which uses exclude_ignored=True by default
         status = porcelain.status(self.repo)
-        self.assertEqual(["untracked.txt"], status.untracked)
+        self.assertEqual([os.fsencode("untracked.txt")], status.untracked)
 
         # Test status() with ignored=True which uses exclude_ignored=False
         status_with_ignored = porcelain.status(self.repo, ignored=True)
         # Should include cache directories
-        self.assertIn("untracked.txt", status_with_ignored.untracked)
+        self.assertIn(os.fsencode("untracked.txt"), status_with_ignored.untracked)
         for cache_dir in cache_dirs:
-            self.assertIn(cache_dir + "/", status_with_ignored.untracked)
+            self.assertIn(
+                os.fsencode(cache_dir + os.sep), status_with_ignored.untracked
+            )
 
     def test_get_untracked_paths_mixed_directory(self) -> None:
         """Test directory with both ignored and non-ignored files."""
@@ -6826,7 +6954,7 @@ class StatusTests(PorcelainTestCase):
         _, _, untracked = porcelain.status(
             repo=self.repo.path, untracked_files="normal"
         )
-        self.assertEqual(untracked, ["untracked_dir/"])
+        self.assertEqual(untracked, [os.fsencode("untracked_dir" + os.sep)])
 
     def test_get_untracked_paths_top_level_issue_1247(self) -> None:
         """Test for issue #1247: ensure top-level untracked files are detected."""
@@ -6849,7 +6977,7 @@ class StatusTests(PorcelainTestCase):
         # Test via status
         status = porcelain.status(self.repo)
         self.assertIn(
-            "sample.txt",
+            os.fsencode("sample.txt"),
             status.untracked,
             "Top-level file 'sample.txt' should be in status.untracked",
         )

@@ -128,40 +128,25 @@ def transform_to_gemini_prompt(
     return messages_gemini
 
 
-def verify_no_unions(obj: dict[str, Any]) -> bool:
+def verify_no_unions(obj: dict[str, Any]) -> bool:  # noqa: ARG001
     """
     Verify that the object does not contain any Union types (except Optional and Decimal).
     Optional[T] is allowed as it becomes Union[T, None].
     Decimal types are allowed as Union[str, float] or Union[float, str].
+
+    Note: As of December 2024, Google GenAI now supports Union types
+    (see https://github.com/googleapis/python-genai/issues/447).
+    This function is kept for backward compatibility but now returns True
+    for all schemas. The validation is no longer necessary.
+
+    Args:
+        obj: The schema object to verify (kept for backward compatibility).
+
+    Returns:
+        Always returns True since Union types are now supported.
     """
-    for prop_value in obj["properties"].values():
-        if "anyOf" in prop_value:
-            any_of_list = prop_value["anyOf"]
-            if not isinstance(any_of_list, list) or len(any_of_list) != 2:
-                return False
-
-            # Extract the types from the anyOf list
-            types_in_union = []
-            for item in any_of_list:
-                if isinstance(item, dict) and "type" in item:
-                    types_in_union.append(item["type"])
-
-            # Check if this is an Optional type (Union with None/null)
-            if "null" in types_in_union:
-                # This is Optional[T] - allow it
-                continue
-
-            # Check if this is a Decimal type (Union of string and number)
-            if set(types_in_union) == {"string", "number"}:
-                # This is a Decimal type (string | number) - allow it
-                continue
-
-            # This is some other Union type - reject it
-            return False
-
-        if "properties" in prop_value and not verify_no_unions(prop_value):
-            return False
-
+    # Google GenAI now supports Union types, so we no longer need to validate.
+    # See: https://github.com/instructor-ai/instructor/issues/1964
     return True
 
 
@@ -172,7 +157,7 @@ def map_to_gemini_function_schema(obj: dict[str, Any]) -> dict[str, Any]:
     Transforms a standard JSON schema to Gemini's expected format:
     - Adds 'format': 'enum' for enum fields
     - Converts Optional[T] (anyOf with null) to nullable fields
-    - Rejects true Union types (non-Optional anyOf)
+    - Preserves Union types (anyOf) as they are now supported by GenAI SDK
 
     Ref: https://ai.google.dev/api/python/google/generativeai/protos/Schema
     """
@@ -251,11 +236,50 @@ def map_to_gemini_function_schema(obj: dict[str, Any]) -> dict[str, Any]:
     return FunctionSchema(**schema).model_dump(exclude_none=True, exclude_unset=True)
 
 
+if TYPE_CHECKING:
+    from google.genai import types as genai_types
+
+
+def map_to_genai_schema(obj: dict[str, Any]) -> genai_types.Schema:
+    from google.genai import types
+
+    schema = map_to_gemini_function_schema(obj)
+
+    def normalize(node: Any) -> Any:
+        if isinstance(node, list):
+            return [normalize(item) for item in node]
+
+        if not isinstance(node, dict):
+            return node
+
+        key_map = {
+            "anyOf": "any_of",
+            "$ref": "ref",
+            "$defs": "defs",
+            "maxItems": "max_items",
+            "minItems": "min_items",
+            "maxLength": "max_length",
+            "minLength": "min_length",
+            "maxProperties": "max_properties",
+            "minProperties": "min_properties",
+        }
+
+        normalized: dict[str, Any] = {}
+        for key, value in node.items():
+            normalized[key_map.get(key, key)] = normalize(value)
+        return normalized
+
+    return types.Schema.model_validate(normalize(schema))
+
+
 def update_genai_kwargs(
     kwargs: dict[str, Any], base_config: dict[str, Any]
 ) -> dict[str, Any]:
     """
     Update keyword arguments for google.genai package from OpenAI format.
+
+    Handles merging of user-provided config with instructor's base config,
+    including special handling for thinking_config and other config fields.
     """
     from google.genai.types import HarmBlockThreshold, HarmCategory
 
@@ -306,10 +330,34 @@ def update_genai_kwargs(
             }
         )
 
-    # Handle thinking_config parameter - pass through directly since it's already in genai format
+    # Extract thinking_config from user's config object if provided
+    # This ensures thinking_config inside config parameter is not ignored
+    user_config = new_kwargs.get("config")
+    user_thinking_config = None
+    if user_config is not None and hasattr(user_config, "thinking_config"):
+        user_thinking_config = user_config.thinking_config
+
+    # Handle thinking_config parameter - prioritize kwarg over config.thinking_config
     thinking_config = new_kwargs.pop("thinking_config", None)
+    if thinking_config is None:
+        thinking_config = user_thinking_config
+
     if thinking_config is not None:
         base_config["thinking_config"] = thinking_config
+
+    # Extract other relevant fields from user's config object
+    # This ensures fields like automatic_function_calling are not ignored
+    if user_config is not None:
+        config_fields_to_merge = [
+            "automatic_function_calling",
+            "labels",
+            "cached_content",
+        ]
+        for field in config_fields_to_merge:
+            if hasattr(user_config, field):
+                field_value = getattr(user_config, field)
+                if field_value is not None and field not in base_config:
+                    base_config[field] = field_value
 
     return base_config
 
@@ -572,7 +620,7 @@ def reask_vertexai_tools(
     Kwargs modifications:
     - Adds: "contents" (tool response messages indicating validation errors)
     """
-    from instructor.client_vertexai import vertexai_function_response_parser
+    from ..vertexai.client import vertexai_function_response_parser
 
     kwargs = kwargs.copy()
     reask_msgs = [
@@ -594,7 +642,7 @@ def reask_vertexai_json(
     Kwargs modifications:
     - Adds: "contents" (user message requesting JSON correction)
     """
-    from instructor.client_vertexai import vertexai_message_parser
+    from ..vertexai.client import vertexai_message_parser
 
     kwargs = kwargs.copy()
 
@@ -834,6 +882,21 @@ def handle_genai_structured_outputs(
     if new_kwargs.get("stream", False) and not issubclass(response_model, PartialBase):
         response_model = Partial[response_model]
 
+    # Extract thinking_config from user-provided config object if present
+    # This fixes issue #1966 where thinking_config inside config was ignored
+    user_config = new_kwargs.get("config")
+    user_thinking_config = None
+    user_cached_content = None
+    if user_config is not None:
+        if hasattr(user_config, "thinking_config"):
+            user_thinking_config = user_config.thinking_config
+        if hasattr(user_config, "cached_content"):
+            user_cached_content = user_config.cached_content
+
+    # Prioritize kwarg thinking_config over config.thinking_config
+    if "thinking_config" not in new_kwargs and user_thinking_config is not None:
+        new_kwargs["thinking_config"] = user_thinking_config
+
     if new_kwargs.get("system"):
         system_message = new_kwargs.pop("system")
     elif new_kwargs.get("messages"):
@@ -854,10 +917,14 @@ def handle_genai_structured_outputs(
     map_to_gemini_function_schema(_get_model_schema(response_model))
 
     base_config = {
-        "system_instruction": system_message,
         "response_mime_type": "application/json",
         "response_schema": response_model,
     }
+
+    # Only set system_instruction if NOT using cached_content
+    # When cached_content is used, the system instruction is already part of the cache
+    if user_cached_content is None:
+        base_config["system_instruction"] = system_message
 
     generation_config = update_genai_kwargs(new_kwargs, base_config)
 
@@ -898,7 +965,22 @@ def handle_genai_tools(
     if new_kwargs.get("stream", False) and not issubclass(response_model, PartialBase):
         response_model = Partial[response_model]
 
-    schema = map_to_gemini_function_schema(_get_model_schema(response_model))
+    # Extract thinking_config and cached_content from user-provided config object if present
+    # This fixes issue #1966 where thinking_config inside config was ignored
+    user_config = new_kwargs.get("config")
+    user_thinking_config = None
+    user_cached_content = None
+    if user_config is not None:
+        if hasattr(user_config, "thinking_config"):
+            user_thinking_config = user_config.thinking_config
+        if hasattr(user_config, "cached_content"):
+            user_cached_content = user_config.cached_content
+
+    # Prioritize kwarg thinking_config over config.thinking_config
+    if "thinking_config" not in new_kwargs and user_thinking_config is not None:
+        new_kwargs["thinking_config"] = user_thinking_config
+
+    schema = map_to_genai_schema(_get_model_schema(response_model))
     function_definition = types.FunctionDeclaration(
         name=_get_model_name(response_model),
         description=getattr(response_model, "__doc__", None),
@@ -913,15 +995,20 @@ def handle_genai_tools(
     else:
         system_message = None
 
-    base_config = {
-        "system_instruction": system_message,
-        "tools": [types.Tool(function_declarations=[function_definition])],
-        "tool_config": types.ToolConfig(
+    base_config: dict[str, Any] = {}
+
+    # When cached_content is used, do NOT add tools, tool_config, or system_instruction
+    # These should already be part of the cache. Adding them causes 400 INVALID_ARGUMENT.
+    # See: https://ai.google.dev/gemini-api/docs/caching
+    if user_cached_content is None:
+        base_config["system_instruction"] = system_message
+        base_config["tools"] = [types.Tool(function_declarations=[function_definition])]
+        base_config["tool_config"] = types.ToolConfig(
             function_calling_config=types.FunctionCallingConfig(
-                mode="ANY", allowed_function_names=[_get_model_name(response_model)]
+                mode=types.FunctionCallingConfigMode.ANY,
+                allowed_function_names=[_get_model_name(response_model)],
             ),
-        ),
-    }
+        )
 
     generation_config = update_genai_kwargs(new_kwargs, base_config)
 
@@ -956,7 +1043,7 @@ def handle_vertexai_parallel_tools(
     """
     from typing import get_args
 
-    from instructor.client_vertexai import vertexai_process_response
+    from ..vertexai.client import vertexai_process_response
     from instructor.dsl.parallel import VertexAIParallelModel
 
     if new_kwargs.get("stream", False):
@@ -977,7 +1064,7 @@ def handle_vertexai_parallel_tools(
 def handle_vertexai_tools(
     response_model: type[Any] | None, new_kwargs: dict[str, Any]
 ) -> tuple[type[Any] | None, dict[str, Any]]:
-    from instructor.client_vertexai import vertexai_process_response
+    from ..vertexai.client import vertexai_process_response
 
     """
     Handle Vertex AI tools mode.

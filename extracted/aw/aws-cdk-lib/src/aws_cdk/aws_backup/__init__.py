@@ -309,8 +309,6 @@ from .. import (
     TimeZone as _TimeZone_cdd72ac9,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-from ..aws_dynamodb import ITable as _ITable_504fd401
-from ..aws_efs import IFileSystem as _IFileSystem_b2d3a7cb
 from ..aws_events import Schedule as _Schedule_c151d01f
 from ..aws_iam import (
     Grant as _Grant_a7ae64f8,
@@ -344,7 +342,9 @@ from ..interfaces.aws_backup import (
     RestoreTestingPlanReference as _RestoreTestingPlanReference_99f8c406,
     RestoreTestingSelectionReference as _RestoreTestingSelectionReference_05d8055b,
 )
+from ..interfaces.aws_dynamodb import ITableRef as _ITableRef_4478f0ad
 from ..interfaces.aws_ec2 import IInstanceRef as _IInstanceRef_b97803cb
+from ..interfaces.aws_efs import IFileSystemRef as _IFileSystemRef_3dcf8b98
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 
 
@@ -361,7 +361,7 @@ class BackupPlanCopyActionProps:
     def __init__(
         self,
         *,
-        destination_backup_vault: "IBackupVault",
+        destination_backup_vault: "_IBackupVaultRef_c038ce00",
         delete_after: typing.Optional["_Duration_4839e8c3"] = None,
         move_to_cold_storage_after: typing.Optional["_Duration_4839e8c3"] = None,
     ) -> None:
@@ -379,11 +379,12 @@ class BackupPlanCopyActionProps:
             # The values are placeholders you should change.
             import aws_cdk as cdk
             from aws_cdk import aws_backup as backup
+            from aws_cdk.interfaces import aws_backup as interfaces_backup
             
-            # backup_vault: backup.BackupVault
+            # backup_vault_ref: interfaces_backup.IBackupVaultRef
             
             backup_plan_copy_action_props = backup.BackupPlanCopyActionProps(
-                destination_backup_vault=backup_vault,
+                destination_backup_vault=backup_vault_ref,
             
                 # the properties below are optional
                 delete_after=cdk.Duration.minutes(30),
@@ -404,11 +405,11 @@ class BackupPlanCopyActionProps:
             self._values["move_to_cold_storage_after"] = move_to_cold_storage_after
 
     @builtins.property
-    def destination_backup_vault(self) -> "IBackupVault":
+    def destination_backup_vault(self) -> "_IBackupVaultRef_c038ce00":
         '''Destination Vault for recovery points to be copied into.'''
         result = self._values.get("destination_backup_vault")
         assert result is not None, "Required property 'destination_backup_vault' is missing"
-        return typing.cast("IBackupVault", result)
+        return typing.cast("_IBackupVaultRef_c038ce00", result)
 
     @builtins.property
     def delete_after(self) -> typing.Optional["_Duration_4839e8c3"]:
@@ -458,7 +459,7 @@ class BackupPlanProps:
         *,
         backup_plan_name: typing.Optional[builtins.str] = None,
         backup_plan_rules: typing.Optional[typing.Sequence["BackupPlanRule"]] = None,
-        backup_vault: typing.Optional["IBackupVault"] = None,
+        backup_vault: typing.Optional["_IBackupVaultRef_c038ce00"] = None,
         windows_vss: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''Properties for a BackupPlan.
@@ -514,7 +515,7 @@ class BackupPlanProps:
         return typing.cast(typing.Optional[typing.List["BackupPlanRule"]], result)
 
     @builtins.property
-    def backup_vault(self) -> typing.Optional["IBackupVault"]:
+    def backup_vault(self) -> typing.Optional["_IBackupVaultRef_c038ce00"]:
         '''The backup vault where backups are stored.
 
         :default:
@@ -523,7 +524,7 @@ class BackupPlanProps:
         common vault for the plan will be created
         '''
         result = self._values.get("backup_vault")
-        return typing.cast(typing.Optional["IBackupVault"], result)
+        return typing.cast(typing.Optional["_IBackupVaultRef_c038ce00"], result)
 
     @builtins.property
     def windows_vss(self) -> typing.Optional[builtins.bool]:
@@ -569,7 +570,7 @@ class BackupPlanRule(
     def __init__(
         self,
         *,
-        backup_vault: typing.Optional["IBackupVault"] = None,
+        backup_vault: typing.Optional["_IBackupVaultRef_c038ce00"] = None,
         completion_window: typing.Optional["_Duration_4839e8c3"] = None,
         copy_actions: typing.Optional[typing.Sequence[typing.Union["BackupPlanCopyActionProps", typing.Dict[builtins.str, typing.Any]]]] = None,
         delete_after: typing.Optional["_Duration_4839e8c3"] = None,
@@ -614,7 +615,7 @@ class BackupPlanRule(
     @builtins.classmethod
     def daily(
         cls,
-        backup_vault: typing.Optional["IBackupVault"] = None,
+        backup_vault: typing.Optional["_IBackupVaultRef_c038ce00"] = None,
     ) -> "BackupPlanRule":
         '''Daily with 35 days retention.
 
@@ -629,7 +630,7 @@ class BackupPlanRule(
     @builtins.classmethod
     def monthly1_year(
         cls,
-        backup_vault: typing.Optional["IBackupVault"] = None,
+        backup_vault: typing.Optional["_IBackupVaultRef_c038ce00"] = None,
     ) -> "BackupPlanRule":
         '''Monthly 1 year retention, move to cold storage after 1 month.
 
@@ -644,7 +645,7 @@ class BackupPlanRule(
     @builtins.classmethod
     def monthly5_year(
         cls,
-        backup_vault: typing.Optional["IBackupVault"] = None,
+        backup_vault: typing.Optional["_IBackupVaultRef_c038ce00"] = None,
     ) -> "BackupPlanRule":
         '''Monthly 5 year retention, move to cold storage after 3 months.
 
@@ -659,7 +660,7 @@ class BackupPlanRule(
     @builtins.classmethod
     def monthly7_year(
         cls,
-        backup_vault: typing.Optional["IBackupVault"] = None,
+        backup_vault: typing.Optional["_IBackupVaultRef_c038ce00"] = None,
     ) -> "BackupPlanRule":
         '''Monthly 7 year retention, move to cold storage after 3 months.
 
@@ -674,7 +675,7 @@ class BackupPlanRule(
     @builtins.classmethod
     def weekly(
         cls,
-        backup_vault: typing.Optional["IBackupVault"] = None,
+        backup_vault: typing.Optional["_IBackupVaultRef_c038ce00"] = None,
     ) -> "BackupPlanRule":
         '''Weekly with 3 months retention.
 
@@ -713,7 +714,7 @@ class BackupPlanRuleProps:
     def __init__(
         self,
         *,
-        backup_vault: typing.Optional["IBackupVault"] = None,
+        backup_vault: typing.Optional["_IBackupVaultRef_c038ce00"] = None,
         completion_window: typing.Optional["_Duration_4839e8c3"] = None,
         copy_actions: typing.Optional[typing.Sequence[typing.Union["BackupPlanCopyActionProps", typing.Dict[builtins.str, typing.Any]]]] = None,
         delete_after: typing.Optional["_Duration_4839e8c3"] = None,
@@ -792,7 +793,7 @@ class BackupPlanRuleProps:
             self._values["start_window"] = start_window
 
     @builtins.property
-    def backup_vault(self) -> typing.Optional["IBackupVault"]:
+    def backup_vault(self) -> typing.Optional["_IBackupVaultRef_c038ce00"]:
         '''The backup vault where backups are.
 
         :default:
@@ -801,7 +802,7 @@ class BackupPlanRuleProps:
         common vault for the plan will be created
         '''
         result = self._values.get("backup_vault")
-        return typing.cast(typing.Optional["IBackupVault"], result)
+        return typing.cast(typing.Optional["_IBackupVaultRef_c038ce00"], result)
 
     @builtins.property
     def completion_window(self) -> typing.Optional["_Duration_4839e8c3"]:
@@ -1007,7 +1008,7 @@ class BackupResource(
 
     @jsii.member(jsii_name="fromDynamoDbTable")
     @builtins.classmethod
-    def from_dynamo_db_table(cls, table: "_ITable_504fd401") -> "BackupResource":
+    def from_dynamo_db_table(cls, table: "_ITableRef_4478f0ad") -> "BackupResource":
         '''A DynamoDB table.
 
         :param table: -
@@ -1033,7 +1034,7 @@ class BackupResource(
     @builtins.classmethod
     def from_efs_file_system(
         cls,
-        file_system: "_IFileSystem_b2d3a7cb",
+        file_system: "_IFileSystemRef_3dcf8b98",
     ) -> "BackupResource":
         '''An EFS file system.
 
@@ -1145,13 +1146,14 @@ class BackupSelection(
         # The values are placeholders you should change.
         from aws_cdk import aws_backup as backup
         from aws_cdk import aws_iam as iam
+        from aws_cdk.interfaces import aws_backup as interfaces_backup
         
-        # backup_plan: backup.BackupPlan
+        # backup_plan_ref: interfaces_backup.IBackupPlanRef
         # backup_resource: backup.BackupResource
         # role: iam.Role
         
         backup_selection = backup.BackupSelection(self, "MyBackupSelection",
-            backup_plan=backup_plan,
+            backup_plan=backup_plan_ref,
             resources=[backup_resource],
         
             # the properties below are optional
@@ -1167,7 +1169,7 @@ class BackupSelection(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        backup_plan: "IBackupPlan",
+        backup_plan: "_IBackupPlanRef_754776b5",
         resources: typing.Sequence["BackupResource"],
         allow_restores: typing.Optional[builtins.bool] = None,
         backup_selection_name: typing.Optional[builtins.str] = None,
@@ -1404,7 +1406,7 @@ class BackupSelectionProps(BackupSelectionOptions):
         backup_selection_name: typing.Optional[builtins.str] = None,
         disable_default_backup_policy: typing.Optional[builtins.bool] = None,
         role: typing.Optional["_IRole_235f5d8e"] = None,
-        backup_plan: "IBackupPlan",
+        backup_plan: "_IBackupPlanRef_754776b5",
     ) -> None:
         '''Properties for a BackupSelection.
 
@@ -1423,13 +1425,14 @@ class BackupSelectionProps(BackupSelectionOptions):
             # The values are placeholders you should change.
             from aws_cdk import aws_backup as backup
             from aws_cdk import aws_iam as iam
+            from aws_cdk.interfaces import aws_backup as interfaces_backup
             
-            # backup_plan: backup.BackupPlan
+            # backup_plan_ref: interfaces_backup.IBackupPlanRef
             # backup_resource: backup.BackupResource
             # role: iam.Role
             
             backup_selection_props = backup.BackupSelectionProps(
-                backup_plan=backup_plan,
+                backup_plan=backup_plan_ref,
                 resources=[backup_resource],
             
                 # the properties below are optional
@@ -1517,11 +1520,11 @@ class BackupSelectionProps(BackupSelectionOptions):
         return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def backup_plan(self) -> "IBackupPlan":
+    def backup_plan(self) -> "_IBackupPlanRef_754776b5":
         '''The backup plan for this selection.'''
         result = self._values.get("backup_plan")
         assert result is not None, "Required property 'backup_plan' is missing"
-        return typing.cast("IBackupPlan", result)
+        return typing.cast("_IBackupPlanRef_754776b5", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7377,7 +7380,11 @@ class CfnRestoreTestingSelectionProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_backup.IBackupPlan")
-class IBackupPlan(_IResource_c80c4260, typing_extensions.Protocol):
+class IBackupPlan(
+    _IResource_c80c4260,
+    _IBackupPlanRef_754776b5,
+    typing_extensions.Protocol,
+):
     '''A backup plan.'''
 
     @builtins.property
@@ -7392,6 +7399,7 @@ class IBackupPlan(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IBackupPlanProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IBackupPlanRef_754776b5), # type: ignore[misc]
 ):
     '''A backup plan.'''
 
@@ -7411,7 +7419,11 @@ typing.cast(typing.Any, IBackupPlan).__jsii_proxy_class__ = lambda : _IBackupPla
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_backup.IBackupVault")
-class IBackupVault(_IResource_c80c4260, typing_extensions.Protocol):
+class IBackupVault(
+    _IResource_c80c4260,
+    _IBackupVaultRef_c038ce00,
+    typing_extensions.Protocol,
+):
     '''A backup vault.'''
 
     @builtins.property
@@ -7448,6 +7460,7 @@ class IBackupVault(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IBackupVaultProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IBackupVaultRef_c038ce00), # type: ignore[misc]
 ):
     '''A backup vault.'''
 
@@ -7723,7 +7736,7 @@ class BackupPlan(
         *,
         backup_plan_name: typing.Optional[builtins.str] = None,
         backup_plan_rules: typing.Optional[typing.Sequence["BackupPlanRule"]] = None,
-        backup_vault: typing.Optional["IBackupVault"] = None,
+        backup_vault: typing.Optional["_IBackupVaultRef_c038ce00"] = None,
         windows_vss: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''
@@ -7753,7 +7766,7 @@ class BackupPlan(
         cls,
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
-        backup_vault: typing.Optional["IBackupVault"] = None,
+        backup_vault: typing.Optional["_IBackupVaultRef_c038ce00"] = None,
     ) -> "BackupPlan":
         '''Daily with 35 day retention.
 
@@ -7774,7 +7787,7 @@ class BackupPlan(
         cls,
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
-        backup_vault: typing.Optional["IBackupVault"] = None,
+        backup_vault: typing.Optional["_IBackupVaultRef_c038ce00"] = None,
     ) -> "BackupPlan":
         '''Daily and monthly with 1 year retention.
 
@@ -7795,7 +7808,7 @@ class BackupPlan(
         cls,
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
-        backup_vault: typing.Optional["IBackupVault"] = None,
+        backup_vault: typing.Optional["_IBackupVaultRef_c038ce00"] = None,
     ) -> "BackupPlan":
         '''Daily, weekly and monthly with 5 year retention.
 
@@ -7816,7 +7829,7 @@ class BackupPlan(
         cls,
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
-        backup_vault: typing.Optional["IBackupVault"] = None,
+        backup_vault: typing.Optional["_IBackupVaultRef_c038ce00"] = None,
     ) -> "BackupPlan":
         '''Daily, weekly and monthly with 7 year retention.
 
@@ -7916,6 +7929,12 @@ class BackupPlan(
     def backup_plan_id(self) -> builtins.str:
         '''The identifier of the backup plan.'''
         return typing.cast(builtins.str, jsii.get(self, "backupPlanId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="backupPlanRef")
+    def backup_plan_ref(self) -> "_BackupPlanReference_43879719":
+        '''A reference to a BackupPlan resource.'''
+        return typing.cast("_BackupPlanReference_43879719", jsii.get(self, "backupPlanRef"))
 
     @builtins.property
     @jsii.member(jsii_name="backupVault")
@@ -8088,6 +8107,12 @@ class BackupVault(
         '''The name of a logical container where backups are stored.'''
         return typing.cast(builtins.str, jsii.get(self, "backupVaultName"))
 
+    @builtins.property
+    @jsii.member(jsii_name="backupVaultRef")
+    def backup_vault_ref(self) -> "_BackupVaultReference_228dbd3a":
+        '''A reference to a BackupVault resource.'''
+        return typing.cast("_BackupVaultReference_228dbd3a", jsii.get(self, "backupVaultRef"))
+
 
 __all__ = [
     "BackupPlan",
@@ -8129,7 +8154,7 @@ publication.publish()
 
 def _typecheckingstub__502c247f5c1b9824033ca24f5efe3e1d20ee8980208ae5382890f6168ba12843(
     *,
-    destination_backup_vault: IBackupVault,
+    destination_backup_vault: _IBackupVaultRef_c038ce00,
     delete_after: typing.Optional[_Duration_4839e8c3] = None,
     move_to_cold_storage_after: typing.Optional[_Duration_4839e8c3] = None,
 ) -> None:
@@ -8140,45 +8165,45 @@ def _typecheckingstub__2c977b2da08bc5e51abde064245ef25c86ebdc30dd86fbb4658318249
     *,
     backup_plan_name: typing.Optional[builtins.str] = None,
     backup_plan_rules: typing.Optional[typing.Sequence[BackupPlanRule]] = None,
-    backup_vault: typing.Optional[IBackupVault] = None,
+    backup_vault: typing.Optional[_IBackupVaultRef_c038ce00] = None,
     windows_vss: typing.Optional[builtins.bool] = None,
 ) -> None:
     """Type checking stubs"""
     pass
 
 def _typecheckingstub__8f78e665a93a5f3c61a81adf713b3dce3bf2c3c24d2e314a1fbc4460dc83b538(
-    backup_vault: typing.Optional[IBackupVault] = None,
+    backup_vault: typing.Optional[_IBackupVaultRef_c038ce00] = None,
 ) -> None:
     """Type checking stubs"""
     pass
 
 def _typecheckingstub__d00b6f39a5ae5e68dc286fee4603f5606c654c044712abfb5d45b4c538938e0a(
-    backup_vault: typing.Optional[IBackupVault] = None,
+    backup_vault: typing.Optional[_IBackupVaultRef_c038ce00] = None,
 ) -> None:
     """Type checking stubs"""
     pass
 
 def _typecheckingstub__4124e390401942af3d104beae29adc9c33bd1305f68302b0dd47aae3e11ca132(
-    backup_vault: typing.Optional[IBackupVault] = None,
+    backup_vault: typing.Optional[_IBackupVaultRef_c038ce00] = None,
 ) -> None:
     """Type checking stubs"""
     pass
 
 def _typecheckingstub__af7999bcc928a751830ca431012278b60250723ffee54654765a4596696d022d(
-    backup_vault: typing.Optional[IBackupVault] = None,
+    backup_vault: typing.Optional[_IBackupVaultRef_c038ce00] = None,
 ) -> None:
     """Type checking stubs"""
     pass
 
 def _typecheckingstub__759b8b9514606abffe4399669994cb3f2c365fc9e05295dd8d754f5af6bb329f(
-    backup_vault: typing.Optional[IBackupVault] = None,
+    backup_vault: typing.Optional[_IBackupVaultRef_c038ce00] = None,
 ) -> None:
     """Type checking stubs"""
     pass
 
 def _typecheckingstub__521e43eca71db1c8347b5dbf1e88135cbc1fd43f07248784b33b55d8353d5d90(
     *,
-    backup_vault: typing.Optional[IBackupVault] = None,
+    backup_vault: typing.Optional[_IBackupVaultRef_c038ce00] = None,
     completion_window: typing.Optional[_Duration_4839e8c3] = None,
     copy_actions: typing.Optional[typing.Sequence[typing.Union[BackupPlanCopyActionProps, typing.Dict[builtins.str, typing.Any]]]] = None,
     delete_after: typing.Optional[_Duration_4839e8c3] = None,
@@ -8214,7 +8239,7 @@ def _typecheckingstub__8c8359998ff8f774202e1b0869097e19c3e167e8e7a6a5ee95936f1b0
     pass
 
 def _typecheckingstub__75ec54ba33468f397b4b954ffff5bb4a26a29e306b38c37a8a831233ca47cf40(
-    table: _ITable_504fd401,
+    table: _ITableRef_4478f0ad,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8226,7 +8251,7 @@ def _typecheckingstub__bfac18ef33642ed976be7473c0fe4b5174e370a770ceabc690e397bce
     pass
 
 def _typecheckingstub__2a724b31752318e43681480d257f284af035f11db8b7b91a2712b0a19a09283b(
-    file_system: _IFileSystem_b2d3a7cb,
+    file_system: _IFileSystemRef_3dcf8b98,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8261,7 +8286,7 @@ def _typecheckingstub__cb124dbc539b313053b8d36e3fbbda7c8ef513917e5cdb41a9d2a7eca
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    backup_plan: IBackupPlan,
+    backup_plan: _IBackupPlanRef_754776b5,
     resources: typing.Sequence[BackupResource],
     allow_restores: typing.Optional[builtins.bool] = None,
     backup_selection_name: typing.Optional[builtins.str] = None,
@@ -8289,7 +8314,7 @@ def _typecheckingstub__bd3a38c041da3373a6278620797d45b4058a0d5aede2c0a4bc706fdef
     backup_selection_name: typing.Optional[builtins.str] = None,
     disable_default_backup_policy: typing.Optional[builtins.bool] = None,
     role: typing.Optional[_IRole_235f5d8e] = None,
-    backup_plan: IBackupPlan,
+    backup_plan: _IBackupPlanRef_754776b5,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9195,7 +9220,7 @@ def _typecheckingstub__ac9eeb1158690e76fc800429198c84b42bf4dc68c223e34e743ca5c3d
     *,
     backup_plan_name: typing.Optional[builtins.str] = None,
     backup_plan_rules: typing.Optional[typing.Sequence[BackupPlanRule]] = None,
-    backup_vault: typing.Optional[IBackupVault] = None,
+    backup_vault: typing.Optional[_IBackupVaultRef_c038ce00] = None,
     windows_vss: typing.Optional[builtins.bool] = None,
 ) -> None:
     """Type checking stubs"""
@@ -9204,7 +9229,7 @@ def _typecheckingstub__ac9eeb1158690e76fc800429198c84b42bf4dc68c223e34e743ca5c3d
 def _typecheckingstub__17983f2742df72bf64d28b678e89a057f2b1feed375c39a562e042faadaf8668(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
-    backup_vault: typing.Optional[IBackupVault] = None,
+    backup_vault: typing.Optional[_IBackupVaultRef_c038ce00] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9212,7 +9237,7 @@ def _typecheckingstub__17983f2742df72bf64d28b678e89a057f2b1feed375c39a562e042faa
 def _typecheckingstub__5bb65bf5b0ac30cf59b76bfc6b0fd6a5c44fe614f682166d81e998f4dd87179a(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
-    backup_vault: typing.Optional[IBackupVault] = None,
+    backup_vault: typing.Optional[_IBackupVaultRef_c038ce00] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9220,7 +9245,7 @@ def _typecheckingstub__5bb65bf5b0ac30cf59b76bfc6b0fd6a5c44fe614f682166d81e998f4d
 def _typecheckingstub__e80dbcebd876b060051ccd746c3d678b6857f64ed24fda01e09c953ebbc3199c(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
-    backup_vault: typing.Optional[IBackupVault] = None,
+    backup_vault: typing.Optional[_IBackupVaultRef_c038ce00] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9228,7 +9253,7 @@ def _typecheckingstub__e80dbcebd876b060051ccd746c3d678b6857f64ed24fda01e09c953eb
 def _typecheckingstub__564733017434e9f62e49bb99610f3dd11fc4692ba00892447d2c38e0be976290(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
-    backup_vault: typing.Optional[IBackupVault] = None,
+    backup_vault: typing.Optional[_IBackupVaultRef_c038ce00] = None,
 ) -> None:
     """Type checking stubs"""
     pass

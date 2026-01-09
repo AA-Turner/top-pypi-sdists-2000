@@ -749,10 +749,9 @@ impl BuildContextBuilder {
                         // Zig bundles musl 1.2
                         Some(PlatformTag::Musllinux { major: 1, minor: 2 })
                     } else {
-                        // With zig we can compile to any glibc version that we want, but
-                        // there are some black-listed libc symbols in auditwheel for manylinux <= 2.17/2024.
-                        // Thus we let auditwheel decide the compatibility tag.
-                        None
+                        // With zig we can compile to any glibc version that we want, so we pick the lowest
+                        // one supported by the rust compiler
+                        Some(target.get_minimum_manylinux_tag())
                     }
                 } else {
                     // Defaults to musllinux_1_2 for musl target if it's not bin bindings
@@ -770,7 +769,7 @@ impl BuildContextBuilder {
         } else if let [PlatformTag::Pypi] = &build_options.platform_tag[..] {
             // Avoid building for architectures we already know aren't allowed on PyPI
             if !is_arch_supported_by_pypi(&target) {
-                bail!("Target {} architecture is not supported by PyPI", target);
+                bail!("Rust target {} is not supported by PyPI", target);
             }
             // The defaults are already targeting PyPI: manylinux on linux,
             // and the native tag on windows and mac

@@ -422,7 +422,7 @@ class CfnCluster(
         ) -> None:
             '''The accounting configuration includes configurable settings for Slurm accounting.
 
-            :param mode: The default value for ``mode`` is ``STANDARD`` . A value of ``STANDARD`` means Slurm accounting is enabled. Default: - "NONE"
+            :param mode: The default value for ``mode`` is ``NONE`` . A value of ``STANDARD`` means Slurm accounting is enabled. Default: - "NONE"
             :param default_purge_time_in_days: The default value for all purge settings for ``slurmdbd.conf`` . For more information, see the `slurmdbd.conf documentation at SchedMD <https://docs.aws.amazon.com/https://slurm.schedmd.com/slurmdbd.conf.html>`_ . The default value for ``defaultPurgeTimeInDays`` is ``-1`` . A value of ``-1`` means there is no purge time and records persist as long as the cluster exists. .. epigraph:: ``0`` isn't a valid value. Default: - -1
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-accounting.html
@@ -453,7 +453,7 @@ class CfnCluster(
 
         @builtins.property
         def mode(self) -> builtins.str:
-            '''The default value for ``mode`` is ``STANDARD`` .
+            '''The default value for ``mode`` is ``NONE`` .
 
             A value of ``STANDARD`` means Slurm accounting is enabled.
 
@@ -1338,7 +1338,7 @@ class CfnCluster(
 
             It's a property of the `ClusterSlurmConfiguration <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-slurmconfiguration.html>`_ object.
 
-            :param mode: The default value for ``mode`` is ``STANDARD`` . A value of ``STANDARD`` means the Slurm REST API is enabled. Default: - "NONE"
+            :param mode: The default value for ``mode`` is ``NONE`` . A value of ``STANDARD`` means the Slurm REST API is enabled. Default: - "NONE"
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-slurmrest.html
             :exampleMetadata: fixture=_generated
@@ -1362,7 +1362,7 @@ class CfnCluster(
 
         @builtins.property
         def mode(self) -> builtins.str:
-            '''The default value for ``mode`` is ``STANDARD`` .
+            '''The default value for ``mode`` is ``NONE`` .
 
             A value of ``STANDARD`` means the Slurm REST API is enabled.
 

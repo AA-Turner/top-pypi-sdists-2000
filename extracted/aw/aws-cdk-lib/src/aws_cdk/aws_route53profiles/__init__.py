@@ -222,7 +222,7 @@ class CfnProfile(
     @builtins.property
     @jsii.member(jsii_name="attrShareStatus")
     def attr_share_status(self) -> builtins.str:
-        '''The sharing status of the profile.
+        '''Sharing status for the Profile.
 
         :cloudformationAttribute: ShareStatus
         '''

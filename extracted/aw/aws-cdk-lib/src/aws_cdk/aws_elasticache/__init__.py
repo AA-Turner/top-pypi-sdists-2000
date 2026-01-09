@@ -257,6 +257,41 @@ class CfnCacheCluster(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCacheCluster")
+    @builtins.classmethod
+    def arn_for_cache_cluster(
+        cls,
+        resource: "_ICacheClusterRef_a6e2b9ff",
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__661c5d674c4f43d1df87bbb0c4a0b4a47f6b3876116405904b1e4bf12621e56f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCacheCluster", [resource]))
+
+    @jsii.member(jsii_name="fromClusterName")
+    @builtins.classmethod
+    def from_cluster_name(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        cluster_name: builtins.str,
+    ) -> "_ICacheClusterRef_a6e2b9ff":
+        '''Creates a new ICacheClusterRef from a clusterName.
+
+        :param scope: -
+        :param id: -
+        :param cluster_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1d74e4bcc6796796231492f44cfb4599555abca30d4a59e0dcaf41b1cc02d876)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument cluster_name", value=cluster_name, expected_type=type_hints["cluster_name"])
+        return typing.cast("_ICacheClusterRef_a6e2b9ff", jsii.sinvoke(cls, "fromClusterName", [scope, id, cluster_name]))
+
     @jsii.member(jsii_name="isCfnCacheCluster")
     @builtins.classmethod
     def is_cfn_cache_cluster(cls, x: typing.Any) -> builtins.bool:
@@ -7334,48 +7369,6 @@ class CfnUser(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForUser", [resource]))
 
-    @jsii.member(jsii_name="fromUserArn")
-    @builtins.classmethod
-    def from_user_arn(
-        cls,
-        scope: "_constructs_77d1e7e8.Construct",
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> "_IUserRef_7cc9cbc0":
-        '''Creates a new IUserRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__7380f0a732f1ed5820b59afac42a4b8b7ba51bbed223bc85e99965ac402d95f3)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast("_IUserRef_7cc9cbc0", jsii.sinvoke(cls, "fromUserArn", [scope, id, arn]))
-
-    @jsii.member(jsii_name="fromUserId")
-    @builtins.classmethod
-    def from_user_id(
-        cls,
-        scope: "_constructs_77d1e7e8.Construct",
-        id: builtins.str,
-        user_id: builtins.str,
-    ) -> "_IUserRef_7cc9cbc0":
-        '''Creates a new IUserRef from a userId.
-
-        :param scope: -
-        :param id: -
-        :param user_id: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__1af34fe47637757c8d79c35d47d94455d8eabc7251790880e5e36d964a71c44c)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument user_id", value=user_id, expected_type=type_hints["user_id"])
-        return typing.cast("_IUserRef_7cc9cbc0", jsii.sinvoke(cls, "fromUserId", [scope, id, user_id]))
-
     @jsii.member(jsii_name="isCfnUser")
     @builtins.classmethod
     def is_cfn_user(cls, x: typing.Any) -> builtins.bool:
@@ -7682,7 +7675,7 @@ class CfnUserGroup(
         *,
         engine: builtins.str,
         user_group_id: builtins.str,
-        user_ids: typing.Sequence[typing.Union[builtins.str, "_IUserRef_7cc9cbc0"]],
+        user_ids: typing.Sequence[builtins.str],
         tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ElastiCache::UserGroup``.
@@ -7905,7 +7898,7 @@ class CfnUserGroupProps:
         *,
         engine: builtins.str,
         user_group_id: builtins.str,
-        user_ids: typing.Sequence[typing.Union[builtins.str, "_IUserRef_7cc9cbc0"]],
+        user_ids: typing.Sequence[builtins.str],
         tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnUserGroup``.
@@ -7972,7 +7965,7 @@ class CfnUserGroupProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def user_ids(self) -> typing.List[typing.Union[builtins.str, "_IUserRef_7cc9cbc0"]]:
+    def user_ids(self) -> typing.List[builtins.str]:
         '''The list of user IDs that belong to the user group.
 
         A user named ``default`` must be included.
@@ -7981,7 +7974,7 @@ class CfnUserGroupProps:
         '''
         result = self._values.get("user_ids")
         assert result is not None, "Required property 'user_ids' is missing"
-        return typing.cast(typing.List[typing.Union[builtins.str, "_IUserRef_7cc9cbc0"]], result)
+        return typing.cast(typing.List[builtins.str], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
@@ -8246,6 +8239,20 @@ def _typecheckingstub__4b878d00130d900710d9efbde27b5162741ad68343a5e4b8b7283244b
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     transit_encryption_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__661c5d674c4f43d1df87bbb0c4a0b4a47f6b3876116405904b1e4bf12621e56f(
+    resource: _ICacheClusterRef_a6e2b9ff,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1d74e4bcc6796796231492f44cfb4599555abca30d4a59e0dcaf41b1cc02d876(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    cluster_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9531,22 +9538,6 @@ def _typecheckingstub__7926c8228d0cbec24c73cc68885b3ac11dad5f7f4b6f913d423e08f71
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__7380f0a732f1ed5820b59afac42a4b8b7ba51bbed223bc85e99965ac402d95f3(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__1af34fe47637757c8d79c35d47d94455d8eabc7251790880e5e36d964a71c44c(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    user_id: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__f23ad89d2ccf92bb123aee99903910f8b0d1cc65aa8c6270ff8520b73b505375(
     x: typing.Any,
 ) -> None:
@@ -9627,7 +9618,7 @@ def _typecheckingstub__ecc142924e04b2348d54a42d3f1272d7a6d9f1886d6e9133f1a0ed55a
     *,
     engine: builtins.str,
     user_group_id: builtins.str,
-    user_ids: typing.Sequence[typing.Union[builtins.str, _IUserRef_7cc9cbc0]],
+    user_ids: typing.Sequence[builtins.str],
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -9701,7 +9692,7 @@ def _typecheckingstub__781d57350a7876de81adb05f4b5f1c6a6733fe48684f64bf990d33773
     *,
     engine: builtins.str,
     user_group_id: builtins.str,
-    user_ids: typing.Sequence[typing.Union[builtins.str, _IUserRef_7cc9cbc0]],
+    user_ids: typing.Sequence[builtins.str],
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""

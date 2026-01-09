@@ -1502,7 +1502,8 @@ class CfnOriginEndpoint(
                 ),
                 include_iframe_only_streams=False,
                 scte=mediapackagev2.CfnOriginEndpoint.ScteProperty(
-                    scte_filter=["scteFilter"]
+                    scte_filter=["scteFilter"],
+                    scte_in_segments="scteInSegments"
                 ),
                 segment_duration_seconds=123,
                 segment_name="segmentName",
@@ -4181,17 +4182,22 @@ class CfnOriginEndpoint(
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_mediapackagev2.CfnOriginEndpoint.ScteProperty",
         jsii_struct_bases=[],
-        name_mapping={"scte_filter": "scteFilter"},
+        name_mapping={
+            "scte_filter": "scteFilter",
+            "scte_in_segments": "scteInSegments",
+        },
     )
     class ScteProperty:
         def __init__(
             self,
             *,
             scte_filter: typing.Optional[typing.Sequence[builtins.str]] = None,
+            scte_in_segments: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The SCTE-35 configuration associated with the origin endpoint.
 
             :param scte_filter: The filter associated with the SCTE-35 configuration.
+            :param scte_in_segments: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackagev2-originendpoint-scte.html
             :exampleMetadata: fixture=_generated
@@ -4203,15 +4209,19 @@ class CfnOriginEndpoint(
                 from aws_cdk import aws_mediapackagev2 as mediapackagev2
                 
                 scte_property = mediapackagev2.CfnOriginEndpoint.ScteProperty(
-                    scte_filter=["scteFilter"]
+                    scte_filter=["scteFilter"],
+                    scte_in_segments="scteInSegments"
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__ef2f402f6bd5f38be28bfd79b40a3e8bf701cd6b9384547f9b36a386a6075a98)
                 check_type(argname="argument scte_filter", value=scte_filter, expected_type=type_hints["scte_filter"])
+                check_type(argname="argument scte_in_segments", value=scte_in_segments, expected_type=type_hints["scte_in_segments"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if scte_filter is not None:
                 self._values["scte_filter"] = scte_filter
+            if scte_in_segments is not None:
+                self._values["scte_in_segments"] = scte_in_segments
 
         @builtins.property
         def scte_filter(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -4221,6 +4231,14 @@ class CfnOriginEndpoint(
             '''
             result = self._values.get("scte_filter")
             return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def scte_in_segments(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackagev2-originendpoint-scte.html#cfn-mediapackagev2-originendpoint-scte-scteinsegments
+            '''
+            result = self._values.get("scte_in_segments")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4302,7 +4320,8 @@ class CfnOriginEndpoint(
                     ),
                     include_iframe_only_streams=False,
                     scte=mediapackagev2.CfnOriginEndpoint.ScteProperty(
-                        scte_filter=["scteFilter"]
+                        scte_filter=["scteFilter"],
+                        scte_in_segments="scteInSegments"
                     ),
                     segment_duration_seconds=123,
                     segment_name="segmentName",
@@ -5261,7 +5280,8 @@ class CfnOriginEndpointProps:
                     ),
                     include_iframe_only_streams=False,
                     scte=mediapackagev2.CfnOriginEndpoint.ScteProperty(
-                        scte_filter=["scteFilter"]
+                        scte_filter=["scteFilter"],
+                        scte_in_segments="scteInSegments"
                     ),
                     segment_duration_seconds=123,
                     segment_name="segmentName",
@@ -6031,6 +6051,7 @@ def _typecheckingstub__8d4f889b0a331f5c9a9819d549afcb4b4239d6f7040f9146668998df9
 def _typecheckingstub__ef2f402f6bd5f38be28bfd79b40a3e8bf701cd6b9384547f9b36a386a6075a98(
     *,
     scte_filter: typing.Optional[typing.Sequence[builtins.str]] = None,
+    scte_in_segments: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

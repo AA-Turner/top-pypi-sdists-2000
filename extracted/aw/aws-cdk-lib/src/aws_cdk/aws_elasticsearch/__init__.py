@@ -963,6 +963,48 @@ class CfnDomain(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDomain", [resource]))
 
+    @jsii.member(jsii_name="fromDomainArn")
+    @builtins.classmethod
+    def from_domain_arn(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> "_IDomainRef_67910ee2":
+        '''Creates a new IDomainRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__caac9471f0f28e5e974651a127a84450be3c6f8a0e92fea9a6e5bfbae9999306)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast("_IDomainRef_67910ee2", jsii.sinvoke(cls, "fromDomainArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromDomainName")
+    @builtins.classmethod
+    def from_domain_name(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        domain_name: builtins.str,
+    ) -> "_IDomainRef_67910ee2":
+        '''Creates a new IDomainRef from a domainName.
+
+        :param scope: -
+        :param id: -
+        :param domain_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1d0b1260df6956d655203b2ede1ca296e5195b391e1a3d5f6992fc3948ef077b)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument domain_name", value=domain_name, expected_type=type_hints["domain_name"])
+        return typing.cast("_IDomainRef_67910ee2", jsii.sinvoke(cls, "fromDomainName", [scope, id, domain_name]))
+
     @jsii.member(jsii_name="isCfnDomain")
     @builtins.classmethod
     def is_cfn_domain(cls, x: typing.Any) -> builtins.bool:
@@ -8050,6 +8092,22 @@ def _typecheckingstub__63b7f3680a648547d6da1f542a01684f9c4d84033f4c9aee8eaecae81
 
 def _typecheckingstub__f92c16f52961caa436aedaacb16657f8201f8e49e96b5f617f6b4adcf1098c98(
     resource: _IDomainRef_67910ee2,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__caac9471f0f28e5e974651a127a84450be3c6f8a0e92fea9a6e5bfbae9999306(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1d0b1260df6956d655203b2ede1ca296e5195b391e1a3d5f6992fc3948ef077b(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    domain_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

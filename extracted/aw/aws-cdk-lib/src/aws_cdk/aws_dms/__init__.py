@@ -1180,6 +1180,16 @@ class CfnDataProvider(
                     database_name="databaseName",
                     port=123,
                     server_name="serverName"
+                ),
+                sybase_ase_settings=dms.CfnDataProvider.SybaseAseSettingsProperty(
+                    port=123,
+                    server_name="serverName",
+                    ssl_mode="sslMode",
+        
+                    # the properties below are optional
+                    certificate_arn="certificateArn",
+                    database_name="databaseName",
+                    encrypt_password=False
                 )
             ),
             tags=[CfnTag(
@@ -2749,6 +2759,7 @@ class CfnDataProvider(
             "oracle_settings": "oracleSettings",
             "postgre_sql_settings": "postgreSqlSettings",
             "redshift_settings": "redshiftSettings",
+            "sybase_ase_settings": "sybaseAseSettings",
         },
     )
     class SettingsProperty:
@@ -2765,6 +2776,7 @@ class CfnDataProvider(
             oracle_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataProvider.OracleSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             postgre_sql_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataProvider.PostgreSqlSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             redshift_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataProvider.RedshiftSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sybase_ase_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataProvider.SybaseAseSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''The property identifies the exact type of settings for the data provider.
 
@@ -2778,6 +2790,7 @@ class CfnDataProvider(
             :param oracle_settings: OracleSettings property identifier.
             :param postgre_sql_settings: PostgreSqlSettings property identifier.
             :param redshift_settings: RedshiftSettings property identifier.
+            :param sybase_ase_settings: SybaseAseSettings property identifier.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-dataprovider-settings.html
             :exampleMetadata: fixture=_generated
@@ -2880,6 +2893,16 @@ class CfnDataProvider(
                         database_name="databaseName",
                         port=123,
                         server_name="serverName"
+                    ),
+                    sybase_ase_settings=dms.CfnDataProvider.SybaseAseSettingsProperty(
+                        port=123,
+                        server_name="serverName",
+                        ssl_mode="sslMode",
+                
+                        # the properties below are optional
+                        certificate_arn="certificateArn",
+                        database_name="databaseName",
+                        encrypt_password=False
                     )
                 )
             '''
@@ -2895,6 +2918,7 @@ class CfnDataProvider(
                 check_type(argname="argument oracle_settings", value=oracle_settings, expected_type=type_hints["oracle_settings"])
                 check_type(argname="argument postgre_sql_settings", value=postgre_sql_settings, expected_type=type_hints["postgre_sql_settings"])
                 check_type(argname="argument redshift_settings", value=redshift_settings, expected_type=type_hints["redshift_settings"])
+                check_type(argname="argument sybase_ase_settings", value=sybase_ase_settings, expected_type=type_hints["sybase_ase_settings"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if doc_db_settings is not None:
                 self._values["doc_db_settings"] = doc_db_settings
@@ -2916,6 +2940,8 @@ class CfnDataProvider(
                 self._values["postgre_sql_settings"] = postgre_sql_settings
             if redshift_settings is not None:
                 self._values["redshift_settings"] = redshift_settings
+            if sybase_ase_settings is not None:
+                self._values["sybase_ase_settings"] = sybase_ase_settings
 
         @builtins.property
         def doc_db_settings(
@@ -3027,6 +3053,17 @@ class CfnDataProvider(
             result = self._values.get("redshift_settings")
             return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.RedshiftSettingsProperty"]], result)
 
+        @builtins.property
+        def sybase_ase_settings(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.SybaseAseSettingsProperty"]]:
+            '''SybaseAseSettings property identifier.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-dataprovider-settings.html#cfn-dms-dataprovider-settings-sybaseasesettings
+            '''
+            result = self._values.get("sybase_ase_settings")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataProvider.SybaseAseSettingsProperty"]], result)
+
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
 
@@ -3035,6 +3072,142 @@ class CfnDataProvider(
 
         def __repr__(self) -> str:
             return "SettingsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_dms.CfnDataProvider.SybaseAseSettingsProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "port": "port",
+            "server_name": "serverName",
+            "ssl_mode": "sslMode",
+            "certificate_arn": "certificateArn",
+            "database_name": "databaseName",
+            "encrypt_password": "encryptPassword",
+        },
+    )
+    class SybaseAseSettingsProperty:
+        def __init__(
+            self,
+            *,
+            port: jsii.Number,
+            server_name: builtins.str,
+            ssl_mode: builtins.str,
+            certificate_arn: typing.Optional[builtins.str] = None,
+            database_name: typing.Optional[builtins.str] = None,
+            encrypt_password: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        ) -> None:
+            '''SybaseAseSettings property identifier.
+
+            :param port: 
+            :param server_name: 
+            :param ssl_mode: 
+            :param certificate_arn: 
+            :param database_name: 
+            :param encrypt_password: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-dataprovider-sybaseasesettings.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_dms as dms
+                
+                sybase_ase_settings_property = dms.CfnDataProvider.SybaseAseSettingsProperty(
+                    port=123,
+                    server_name="serverName",
+                    ssl_mode="sslMode",
+                
+                    # the properties below are optional
+                    certificate_arn="certificateArn",
+                    database_name="databaseName",
+                    encrypt_password=False
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__a1189866ab1917313cc77a694dcca7b7f4c5b44e965df6b9905d3cf5aa09404e)
+                check_type(argname="argument port", value=port, expected_type=type_hints["port"])
+                check_type(argname="argument server_name", value=server_name, expected_type=type_hints["server_name"])
+                check_type(argname="argument ssl_mode", value=ssl_mode, expected_type=type_hints["ssl_mode"])
+                check_type(argname="argument certificate_arn", value=certificate_arn, expected_type=type_hints["certificate_arn"])
+                check_type(argname="argument database_name", value=database_name, expected_type=type_hints["database_name"])
+                check_type(argname="argument encrypt_password", value=encrypt_password, expected_type=type_hints["encrypt_password"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "port": port,
+                "server_name": server_name,
+                "ssl_mode": ssl_mode,
+            }
+            if certificate_arn is not None:
+                self._values["certificate_arn"] = certificate_arn
+            if database_name is not None:
+                self._values["database_name"] = database_name
+            if encrypt_password is not None:
+                self._values["encrypt_password"] = encrypt_password
+
+        @builtins.property
+        def port(self) -> jsii.Number:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-dataprovider-sybaseasesettings.html#cfn-dms-dataprovider-sybaseasesettings-port
+            '''
+            result = self._values.get("port")
+            assert result is not None, "Required property 'port' is missing"
+            return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def server_name(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-dataprovider-sybaseasesettings.html#cfn-dms-dataprovider-sybaseasesettings-servername
+            '''
+            result = self._values.get("server_name")
+            assert result is not None, "Required property 'server_name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def ssl_mode(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-dataprovider-sybaseasesettings.html#cfn-dms-dataprovider-sybaseasesettings-sslmode
+            '''
+            result = self._values.get("ssl_mode")
+            assert result is not None, "Required property 'ssl_mode' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def certificate_arn(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-dataprovider-sybaseasesettings.html#cfn-dms-dataprovider-sybaseasesettings-certificatearn
+            '''
+            result = self._values.get("certificate_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def database_name(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-dataprovider-sybaseasesettings.html#cfn-dms-dataprovider-sybaseasesettings-databasename
+            '''
+            result = self._values.get("database_name")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def encrypt_password(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-dataprovider-sybaseasesettings.html#cfn-dms-dataprovider-sybaseasesettings-encryptpassword
+            '''
+            result = self._values.get("encrypt_password")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SybaseAseSettingsProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -3184,6 +3357,16 @@ class CfnDataProviderProps:
                         database_name="databaseName",
                         port=123,
                         server_name="serverName"
+                    ),
+                    sybase_ase_settings=dms.CfnDataProvider.SybaseAseSettingsProperty(
+                        port=123,
+                        server_name="serverName",
+                        ssl_mode="sslMode",
+            
+                        # the properties below are optional
+                        certificate_arn="certificateArn",
+                        database_name="databaseName",
+                        encrypt_password=False
                     )
                 ),
                 tags=[CfnTag(
@@ -10461,6 +10644,41 @@ class CfnEventSubscription(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForEventSubscription")
+    @builtins.classmethod
+    def arn_for_event_subscription(
+        cls,
+        resource: "_IEventSubscriptionRef_0bd45833",
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__48f49fbd94a597e7a1149b2cb56b566ee693a5f2c6829b33e6e662fad33cb432)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEventSubscription", [resource]))
+
+    @jsii.member(jsii_name="fromSubscriptionName")
+    @builtins.classmethod
+    def from_subscription_name(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        subscription_name: builtins.str,
+    ) -> "_IEventSubscriptionRef_0bd45833":
+        '''Creates a new IEventSubscriptionRef from a subscriptionName.
+
+        :param scope: -
+        :param id: -
+        :param subscription_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__483b8221254c81804778aa24f348260cbd06b811f7d9d8f0fb1d70273a266797)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument subscription_name", value=subscription_name, expected_type=type_hints["subscription_name"])
+        return typing.cast("_IEventSubscriptionRef_0bd45833", jsii.sinvoke(cls, "fromSubscriptionName", [scope, id, subscription_name]))
+
     @jsii.member(jsii_name="isCfnEventSubscription")
     @builtins.classmethod
     def is_cfn_event_subscription(cls, x: typing.Any) -> builtins.bool:
@@ -15155,6 +15373,19 @@ def _typecheckingstub__48803eeb23a0ec3425b1499cb6eedd7b2e70bcf1cc89d7b2c483a13b0
     oracle_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataProvider.OracleSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     postgre_sql_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataProvider.PostgreSqlSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     redshift_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataProvider.RedshiftSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    sybase_ase_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataProvider.SybaseAseSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a1189866ab1917313cc77a694dcca7b7f4c5b44e965df6b9905d3cf5aa09404e(
+    *,
+    port: jsii.Number,
+    server_name: builtins.str,
+    ssl_mode: builtins.str,
+    certificate_arn: typing.Optional[builtins.str] = None,
+    database_name: typing.Optional[builtins.str] = None,
+    encrypt_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -15812,6 +16043,20 @@ def _typecheckingstub__1d3042ac05bcc07c1b704196991fd764899b9b67bfb7cba510adb9fdd
     source_type: typing.Optional[builtins.str] = None,
     subscription_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__48f49fbd94a597e7a1149b2cb56b566ee693a5f2c6829b33e6e662fad33cb432(
+    resource: _IEventSubscriptionRef_0bd45833,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__483b8221254c81804778aa24f348260cbd06b811f7d9d8f0fb1d70273a266797(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    subscription_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

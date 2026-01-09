@@ -382,13 +382,13 @@ class DatabaseReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_glue.DevEndpointReference",
     jsii_struct_bases=[],
-    name_mapping={"dev_endpoint_id": "devEndpointId"},
+    name_mapping={"endpoint_name": "endpointName"},
 )
 class DevEndpointReference:
-    def __init__(self, *, dev_endpoint_id: builtins.str) -> None:
+    def __init__(self, *, endpoint_name: builtins.str) -> None:
         '''A reference to a DevEndpoint resource.
 
-        :param dev_endpoint_id: The Id of the DevEndpoint resource.
+        :param endpoint_name: The EndpointName of the DevEndpoint resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -399,21 +399,21 @@ class DevEndpointReference:
             from aws_cdk.interfaces import aws_glue as interfaces_glue
             
             dev_endpoint_reference = interfaces_glue.DevEndpointReference(
-                dev_endpoint_id="devEndpointId"
+                endpoint_name="endpointName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__050454acd533b9c974358b1bfdec6277e66592a87a752610c62dc6b896b95d0f)
-            check_type(argname="argument dev_endpoint_id", value=dev_endpoint_id, expected_type=type_hints["dev_endpoint_id"])
+            check_type(argname="argument endpoint_name", value=endpoint_name, expected_type=type_hints["endpoint_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "dev_endpoint_id": dev_endpoint_id,
+            "endpoint_name": endpoint_name,
         }
 
     @builtins.property
-    def dev_endpoint_id(self) -> builtins.str:
-        '''The Id of the DevEndpoint resource.'''
-        result = self._values.get("dev_endpoint_id")
-        assert result is not None, "Required property 'dev_endpoint_id' is missing"
+    def endpoint_name(self) -> builtins.str:
+        '''The EndpointName of the DevEndpoint resource.'''
+        result = self._values.get("endpoint_name")
+        assert result is not None, "Required property 'endpoint_name' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -2334,13 +2334,13 @@ class UsageProfileReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_glue.WorkflowReference",
     jsii_struct_bases=[],
-    name_mapping={"workflow_id": "workflowId"},
+    name_mapping={"workflow_name": "workflowName"},
 )
 class WorkflowReference:
-    def __init__(self, *, workflow_id: builtins.str) -> None:
+    def __init__(self, *, workflow_name: builtins.str) -> None:
         '''A reference to a Workflow resource.
 
-        :param workflow_id: The Id of the Workflow resource.
+        :param workflow_name: The Name of the Workflow resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -2351,21 +2351,21 @@ class WorkflowReference:
             from aws_cdk.interfaces import aws_glue as interfaces_glue
             
             workflow_reference = interfaces_glue.WorkflowReference(
-                workflow_id="workflowId"
+                workflow_name="workflowName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__05490662a534e7ac737a01a3e54258abf2c5d6dd3a563391b841bd656b5b6220)
-            check_type(argname="argument workflow_id", value=workflow_id, expected_type=type_hints["workflow_id"])
+            check_type(argname="argument workflow_name", value=workflow_name, expected_type=type_hints["workflow_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "workflow_id": workflow_id,
+            "workflow_name": workflow_name,
         }
 
     @builtins.property
-    def workflow_id(self) -> builtins.str:
-        '''The Id of the Workflow resource.'''
-        result = self._values.get("workflow_id")
-        assert result is not None, "Required property 'workflow_id' is missing"
+    def workflow_name(self) -> builtins.str:
+        '''The Name of the Workflow resource.'''
+        result = self._values.get("workflow_name")
+        assert result is not None, "Required property 'workflow_name' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -2484,7 +2484,7 @@ def _typecheckingstub__b006942e6851e8e5b67ab80d761f762e021506f9975b704097cc0df55
 
 def _typecheckingstub__050454acd533b9c974358b1bfdec6277e66592a87a752610c62dc6b896b95d0f(
     *,
-    dev_endpoint_id: builtins.str,
+    endpoint_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2600,7 +2600,7 @@ def _typecheckingstub__31cd7baf9c81bae2e0d29221ca6cf6bf1b06b730a8c9d8fedf8630e65
 
 def _typecheckingstub__05490662a534e7ac737a01a3e54258abf2c5d6dd3a563391b841bd656b5b6220(
     *,
-    workflow_id: builtins.str,
+    workflow_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

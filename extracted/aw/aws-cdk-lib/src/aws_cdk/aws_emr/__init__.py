@@ -10040,7 +10040,11 @@ class CfnStep(
                 )]
             ),
             job_flow_id="jobFlowId",
-            name="name"
+            name="name",
+        
+            # the properties below are optional
+            encryption_key_arn="encryptionKeyArn",
+            log_uri="logUri"
         )
     '''
 
@@ -10053,6 +10057,8 @@ class CfnStep(
         hadoop_jar_step: typing.Union["_IResolvable_da3f097b", typing.Union["CfnStep.HadoopJarStepConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         job_flow_id: builtins.str,
         name: builtins.str,
+        encryption_key_arn: typing.Optional[builtins.str] = None,
+        log_uri: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::EMR::Step``.
 
@@ -10062,6 +10068,8 @@ class CfnStep(
         :param hadoop_jar_step: The ``HadoopJarStepConfig`` property type specifies a job flow step consisting of a JAR file whose main function will be executed. The main function submits a job for the cluster to execute as a step on the master node, and then waits for the job to finish or fail before executing subsequent steps.
         :param job_flow_id: A string that uniquely identifies the cluster (job flow).
         :param name: The name of the cluster step.
+        :param encryption_key_arn: The KMS key ARN to encrypt the logs published to the given Amazon S3 destination. When omitted, EMR falls back to cluster-level logging behavior.
+        :param log_uri: The Amazon S3 destination URI for log publishing. When omitted, EMR falls back to cluster-level logging behavior.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__56108bb804f44dbb5230a71c020ff2994411f1d5f6f4226d7d5f948d62af211e)
@@ -10072,6 +10080,8 @@ class CfnStep(
             hadoop_jar_step=hadoop_jar_step,
             job_flow_id=job_flow_id,
             name=name,
+            encryption_key_arn=encryption_key_arn,
+            log_uri=log_uri,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -10194,6 +10204,32 @@ class CfnStep(
             type_hints = typing.get_type_hints(_typecheckingstub__66c3d15d09a73ee52be1d687a48f7a81900a69ccc44fb1cabb8a54adfa580c22)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="encryptionKeyArn")
+    def encryption_key_arn(self) -> typing.Optional[builtins.str]:
+        '''The KMS key ARN to encrypt the logs published to the given Amazon S3 destination.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "encryptionKeyArn"))
+
+    @encryption_key_arn.setter
+    def encryption_key_arn(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__51a7d6066ac157df87adfae05ff37ba748d51b05c66597d62d437151ff59da99)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "encryptionKeyArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="logUri")
+    def log_uri(self) -> typing.Optional[builtins.str]:
+        '''The Amazon S3 destination URI for log publishing.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "logUri"))
+
+    @log_uri.setter
+    def log_uri(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c09e03349e34529744f3c5b78024c2a8cf634ac24fa8e5cbc9bddcd0db18c86c)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "logUri", value) # pyright: ignore[reportArgumentType]
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_emr.CfnStep.HadoopJarStepConfigProperty",
@@ -10395,6 +10431,8 @@ class CfnStep(
         "hadoop_jar_step": "hadoopJarStep",
         "job_flow_id": "jobFlowId",
         "name": "name",
+        "encryption_key_arn": "encryptionKeyArn",
+        "log_uri": "logUri",
     },
 )
 class CfnStepProps:
@@ -10405,6 +10443,8 @@ class CfnStepProps:
         hadoop_jar_step: typing.Union["_IResolvable_da3f097b", typing.Union["CfnStep.HadoopJarStepConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         job_flow_id: builtins.str,
         name: builtins.str,
+        encryption_key_arn: typing.Optional[builtins.str] = None,
+        log_uri: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnStep``.
 
@@ -10412,6 +10452,8 @@ class CfnStepProps:
         :param hadoop_jar_step: The ``HadoopJarStepConfig`` property type specifies a job flow step consisting of a JAR file whose main function will be executed. The main function submits a job for the cluster to execute as a step on the master node, and then waits for the job to finish or fail before executing subsequent steps.
         :param job_flow_id: A string that uniquely identifies the cluster (job flow).
         :param name: The name of the cluster step.
+        :param encryption_key_arn: The KMS key ARN to encrypt the logs published to the given Amazon S3 destination. When omitted, EMR falls back to cluster-level logging behavior.
+        :param log_uri: The Amazon S3 destination URI for log publishing. When omitted, EMR falls back to cluster-level logging behavior.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-step.html
         :exampleMetadata: fixture=_generated
@@ -10436,7 +10478,11 @@ class CfnStepProps:
                     )]
                 ),
                 job_flow_id="jobFlowId",
-                name="name"
+                name="name",
+            
+                # the properties below are optional
+                encryption_key_arn="encryptionKeyArn",
+                log_uri="logUri"
             )
         '''
         if __debug__:
@@ -10445,12 +10491,18 @@ class CfnStepProps:
             check_type(argname="argument hadoop_jar_step", value=hadoop_jar_step, expected_type=type_hints["hadoop_jar_step"])
             check_type(argname="argument job_flow_id", value=job_flow_id, expected_type=type_hints["job_flow_id"])
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument encryption_key_arn", value=encryption_key_arn, expected_type=type_hints["encryption_key_arn"])
+            check_type(argname="argument log_uri", value=log_uri, expected_type=type_hints["log_uri"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "action_on_failure": action_on_failure,
             "hadoop_jar_step": hadoop_jar_step,
             "job_flow_id": job_flow_id,
             "name": name,
         }
+        if encryption_key_arn is not None:
+            self._values["encryption_key_arn"] = encryption_key_arn
+        if log_uri is not None:
+            self._values["log_uri"] = log_uri
 
     @builtins.property
     def action_on_failure(self) -> builtins.str:
@@ -10497,6 +10549,28 @@ class CfnStepProps:
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
         return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def encryption_key_arn(self) -> typing.Optional[builtins.str]:
+        '''The KMS key ARN to encrypt the logs published to the given Amazon S3 destination.
+
+        When omitted, EMR falls back to cluster-level logging behavior.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-step.html#cfn-emr-step-encryptionkeyarn
+        '''
+        result = self._values.get("encryption_key_arn")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def log_uri(self) -> typing.Optional[builtins.str]:
+        '''The Amazon S3 destination URI for log publishing.
+
+        When omitted, EMR falls back to cluster-level logging behavior.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-step.html#cfn-emr-step-loguri
+        '''
+        result = self._values.get("log_uri")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -12955,6 +13029,8 @@ def _typecheckingstub__56108bb804f44dbb5230a71c020ff2994411f1d5f6f4226d7d5f948d6
     hadoop_jar_step: typing.Union[_IResolvable_da3f097b, typing.Union[CfnStep.HadoopJarStepConfigProperty, typing.Dict[builtins.str, typing.Any]]],
     job_flow_id: builtins.str,
     name: builtins.str,
+    encryption_key_arn: typing.Optional[builtins.str] = None,
+    log_uri: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -13001,6 +13077,18 @@ def _typecheckingstub__66c3d15d09a73ee52be1d687a48f7a81900a69ccc44fb1cabb8a54adf
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__51a7d6066ac157df87adfae05ff37ba748d51b05c66597d62d437151ff59da99(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c09e03349e34529744f3c5b78024c2a8cf634ac24fa8e5cbc9bddcd0db18c86c(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__17116dab64c1f998800a3972016d6de90f0339e27d783be01c9aa002d894436e(
     *,
     jar: builtins.str,
@@ -13025,6 +13113,8 @@ def _typecheckingstub__a2487faa6f9278ced3b5fd2fab8e549b354a836990eb23096f7fd91d5
     hadoop_jar_step: typing.Union[_IResolvable_da3f097b, typing.Union[CfnStep.HadoopJarStepConfigProperty, typing.Dict[builtins.str, typing.Any]]],
     job_flow_id: builtins.str,
     name: builtins.str,
+    encryption_key_arn: typing.Optional[builtins.str] = None,
+    log_uri: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

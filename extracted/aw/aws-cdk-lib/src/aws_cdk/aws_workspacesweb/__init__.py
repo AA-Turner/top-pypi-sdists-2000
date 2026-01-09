@@ -4857,7 +4857,8 @@ class CfnUserSettings(
                 max_display_resolution="maxDisplayResolution",
                 toolbar_type="toolbarType",
                 visual_mode="visualMode"
-            )
+            ),
+            web_authn_allowed="webAuthnAllowed"
         )
     '''
 
@@ -4880,6 +4881,7 @@ class CfnUserSettings(
         idle_disconnect_timeout_in_minutes: typing.Optional[jsii.Number] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         toolbar_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnUserSettings.ToolbarConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        web_authn_allowed: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::WorkSpacesWeb::UserSettings``.
 
@@ -4891,7 +4893,7 @@ class CfnUserSettings(
         :param print_allowed: Specifies whether the user can print to the local device.
         :param upload_allowed: Specifies whether the user can upload files from the local device to the streaming session.
         :param additional_encryption_context: The additional encryption context of the user settings.
-        :param branding_configuration: 
+        :param branding_configuration: The branding configuration that customizes the appearance of the web portal for end users. This includes a custom logo, favicon, wallpaper, localized strings, color theme, and an optional terms of service.
         :param cookie_synchronization_configuration: The configuration that specifies which cookies should be synchronized from the end user's local browser to the remote browser.
         :param customer_managed_key: The customer managed key used to encrypt sensitive information in the user settings.
         :param deep_link_allowed: Specifies whether the user can use deep links that open automatically when connecting to a session.
@@ -4899,6 +4901,7 @@ class CfnUserSettings(
         :param idle_disconnect_timeout_in_minutes: The amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the disconnect timeout interval begins.
         :param tags: The tags to add to the user settings resource. A tag is a key-value pair.
         :param toolbar_configuration: The configuration of the toolbar. This allows administrators to select the toolbar type and visual mode, set maximum display resolution for sessions, and choose which items are visible to end users during their sessions. If administrators do not modify these settings, end users retain control over their toolbar preferences.
+        :param web_authn_allowed: Specifies whether the user can use WebAuthn redirection for passwordless login to websites within the streaming session.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__75a973eee52af75d8440f76e110a255d358bfa0d721a06403da3f4b3da691630)
@@ -4919,6 +4922,7 @@ class CfnUserSettings(
             idle_disconnect_timeout_in_minutes=idle_disconnect_timeout_in_minutes,
             tags=tags,
             toolbar_configuration=toolbar_configuration,
+            web_authn_allowed=web_authn_allowed,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -4991,7 +4995,10 @@ class CfnUserSettings(
     @builtins.property
     @jsii.member(jsii_name="attrBrandingConfigurationFaviconMetadata")
     def attr_branding_configuration_favicon_metadata(self) -> "_IResolvable_da3f097b":
-        '''
+        '''Read-only.
+
+        Metadata for the favicon image file, including the MIME type, file extension, and upload timestamp. This property is automatically populated by the service and cannot be specified in your template. It can be retrieved using the ``Fn::GetAtt`` intrinsic function.
+
         :cloudformationAttribute: BrandingConfiguration.FaviconMetadata
         '''
         return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrBrandingConfigurationFaviconMetadata"))
@@ -4999,7 +5006,10 @@ class CfnUserSettings(
     @builtins.property
     @jsii.member(jsii_name="attrBrandingConfigurationLogoMetadata")
     def attr_branding_configuration_logo_metadata(self) -> "_IResolvable_da3f097b":
-        '''
+        '''Read-only.
+
+        Metadata for the logo image file, including the MIME type, file extension, and upload timestamp. This property is automatically populated by the service and cannot be specified in your template. It can be retrieved using the ``Fn::GetAtt`` intrinsic function.
+
         :cloudformationAttribute: BrandingConfiguration.LogoMetadata
         '''
         return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrBrandingConfigurationLogoMetadata"))
@@ -5007,7 +5017,10 @@ class CfnUserSettings(
     @builtins.property
     @jsii.member(jsii_name="attrBrandingConfigurationWallpaperMetadata")
     def attr_branding_configuration_wallpaper_metadata(self) -> "_IResolvable_da3f097b":
-        '''
+        '''Read-only.
+
+        Metadata for the wallpaper image file, including the MIME type, file extension, and upload timestamp. This property is automatically populated by the service and cannot be specified in your template. It can be retrieved using the ``Fn::GetAtt`` intrinsic function.
+
         :cloudformationAttribute: BrandingConfiguration.WallpaperMetadata
         '''
         return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrBrandingConfigurationWallpaperMetadata"))
@@ -5126,6 +5139,7 @@ class CfnUserSettings(
     def branding_configuration(
         self,
     ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUserSettings.BrandingConfigurationProperty"]]:
+        '''The branding configuration that customizes the appearance of the web portal for end users.'''
         return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUserSettings.BrandingConfigurationProperty"]], jsii.get(self, "brandingConfiguration"))
 
     @branding_configuration.setter
@@ -5245,6 +5259,19 @@ class CfnUserSettings(
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "toolbarConfiguration", value) # pyright: ignore[reportArgumentType]
 
+    @builtins.property
+    @jsii.member(jsii_name="webAuthnAllowed")
+    def web_authn_allowed(self) -> typing.Optional[builtins.str]:
+        '''Specifies whether the user can use WebAuthn redirection for passwordless login to websites within the streaming session.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "webAuthnAllowed"))
+
+    @web_authn_allowed.setter
+    def web_authn_allowed(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b945687d43bb9fddebe88685fb748497488afdb4a31fa2a585556f1a253b595a)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "webAuthnAllowed", value) # pyright: ignore[reportArgumentType]
+
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_workspacesweb.CfnUserSettings.BrandingConfigurationProperty",
         jsii_struct_bases=[],
@@ -5274,16 +5301,22 @@ class CfnUserSettings(
             wallpaper: typing.Optional[builtins.str] = None,
             wallpaper_metadata: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnUserSettings.ImageMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param color_theme: 
-            :param favicon: 
-            :param favicon_metadata: 
-            :param localized_strings: 
-            :param logo: 
-            :param logo_metadata: 
-            :param terms_of_service: 
-            :param wallpaper: 
-            :param wallpaper_metadata: 
+            '''The branding configuration that customizes the appearance of the web portal for end users.
+
+            This includes a custom logo, favicon, wallpaper, localized strings, color theme, and an optional terms of service.
+            .. epigraph::
+
+               The ``LogoMetadata`` , ``FaviconMetadata`` , and ``WallpaperMetadata`` properties are read-only and cannot be specified in your template. They are automatically populated by the service after you upload images and can be retrieved using the ``Fn::GetAtt`` intrinsic function.
+
+            :param color_theme: The color theme for components on the web portal. Choose ``Light`` if you upload a dark wallpaper, or ``Dark`` for a light wallpaper.
+            :param favicon: The favicon image for the portal. Provide either a binary image file or an S3 URI pointing to the image file. Maximum 100 KB in JPEG, PNG, or ICO format.
+            :param favicon_metadata: Read-only. Metadata for the favicon image file, including the MIME type, file extension, and upload timestamp. This property is automatically populated by the service and cannot be specified in your template. It can be retrieved using the ``Fn::GetAtt`` intrinsic function.
+            :param localized_strings: A map of localized text strings for different languages, allowing the portal to display content in the user's preferred language.
+            :param logo: The logo image for the portal. Provide either a binary image file or an S3 URI pointing to the image file. Maximum 100 KB in JPEG, PNG, or ICO format.
+            :param logo_metadata: Read-only. Metadata for the logo image file, including the MIME type, file extension, and upload timestamp. This property is automatically populated by the service and cannot be specified in your template. It can be retrieved using the ``Fn::GetAtt`` intrinsic function.
+            :param terms_of_service: The terms of service text in Markdown format that users must accept before accessing the portal.
+            :param wallpaper: The wallpaper image for the portal. Provide either a binary image file or an S3 URI pointing to the image file. Maximum 5 MB in JPEG or PNG format.
+            :param wallpaper_metadata: Read-only. Metadata for the wallpaper image file, including the MIME type, file extension, and upload timestamp. This property is automatically populated by the service and cannot be specified in your template. It can be retrieved using the ``Fn::GetAtt`` intrinsic function.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-brandingconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -5364,7 +5397,10 @@ class CfnUserSettings(
 
         @builtins.property
         def color_theme(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The color theme for components on the web portal.
+
+            Choose ``Light`` if you upload a dark wallpaper, or ``Dark`` for a light wallpaper.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-brandingconfiguration.html#cfn-workspacesweb-usersettings-brandingconfiguration-colortheme
             '''
             result = self._values.get("color_theme")
@@ -5372,7 +5408,10 @@ class CfnUserSettings(
 
         @builtins.property
         def favicon(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The favicon image for the portal.
+
+            Provide either a binary image file or an S3 URI pointing to the image file. Maximum 100 KB in JPEG, PNG, or ICO format.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-brandingconfiguration.html#cfn-workspacesweb-usersettings-brandingconfiguration-favicon
             '''
             result = self._values.get("favicon")
@@ -5382,7 +5421,10 @@ class CfnUserSettings(
         def favicon_metadata(
             self,
         ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUserSettings.ImageMetadataProperty"]]:
-            '''
+            '''Read-only.
+
+            Metadata for the favicon image file, including the MIME type, file extension, and upload timestamp. This property is automatically populated by the service and cannot be specified in your template. It can be retrieved using the ``Fn::GetAtt`` intrinsic function.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-brandingconfiguration.html#cfn-workspacesweb-usersettings-brandingconfiguration-faviconmetadata
             '''
             result = self._values.get("favicon_metadata")
@@ -5392,7 +5434,8 @@ class CfnUserSettings(
         def localized_strings(
             self,
         ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Mapping[builtins.str, typing.Union["_IResolvable_da3f097b", "CfnUserSettings.LocalizedBrandingStringsProperty"]]]]:
-            '''
+            '''A map of localized text strings for different languages, allowing the portal to display content in the user's preferred language.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-brandingconfiguration.html#cfn-workspacesweb-usersettings-brandingconfiguration-localizedstrings
             '''
             result = self._values.get("localized_strings")
@@ -5400,7 +5443,10 @@ class CfnUserSettings(
 
         @builtins.property
         def logo(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The logo image for the portal.
+
+            Provide either a binary image file or an S3 URI pointing to the image file. Maximum 100 KB in JPEG, PNG, or ICO format.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-brandingconfiguration.html#cfn-workspacesweb-usersettings-brandingconfiguration-logo
             '''
             result = self._values.get("logo")
@@ -5410,7 +5456,10 @@ class CfnUserSettings(
         def logo_metadata(
             self,
         ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUserSettings.ImageMetadataProperty"]]:
-            '''
+            '''Read-only.
+
+            Metadata for the logo image file, including the MIME type, file extension, and upload timestamp. This property is automatically populated by the service and cannot be specified in your template. It can be retrieved using the ``Fn::GetAtt`` intrinsic function.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-brandingconfiguration.html#cfn-workspacesweb-usersettings-brandingconfiguration-logometadata
             '''
             result = self._values.get("logo_metadata")
@@ -5418,7 +5467,8 @@ class CfnUserSettings(
 
         @builtins.property
         def terms_of_service(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The terms of service text in Markdown format that users must accept before accessing the portal.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-brandingconfiguration.html#cfn-workspacesweb-usersettings-brandingconfiguration-termsofservice
             '''
             result = self._values.get("terms_of_service")
@@ -5426,7 +5476,10 @@ class CfnUserSettings(
 
         @builtins.property
         def wallpaper(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The wallpaper image for the portal.
+
+            Provide either a binary image file or an S3 URI pointing to the image file. Maximum 5 MB in JPEG or PNG format.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-brandingconfiguration.html#cfn-workspacesweb-usersettings-brandingconfiguration-wallpaper
             '''
             result = self._values.get("wallpaper")
@@ -5436,7 +5489,10 @@ class CfnUserSettings(
         def wallpaper_metadata(
             self,
         ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUserSettings.ImageMetadataProperty"]]:
-            '''
+            '''Read-only.
+
+            Metadata for the wallpaper image file, including the MIME type, file extension, and upload timestamp. This property is automatically populated by the service and cannot be specified in your template. It can be retrieved using the ``Fn::GetAtt`` intrinsic function.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-brandingconfiguration.html#cfn-workspacesweb-usersettings-brandingconfiguration-wallpapermetadata
             '''
             result = self._values.get("wallpaper_metadata")
@@ -5647,10 +5703,11 @@ class CfnUserSettings(
             last_upload_timestamp: builtins.str,
             mime_type: builtins.str,
         ) -> None:
-            '''
-            :param file_extension: 
-            :param last_upload_timestamp: 
-            :param mime_type: 
+            '''Metadata information about an uploaded image file.
+
+            :param file_extension: The file extension of the image.
+            :param last_upload_timestamp: The timestamp when the image was last uploaded.
+            :param mime_type: The MIME type of the image.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-imagemetadata.html
             :exampleMetadata: fixture=_generated
@@ -5680,7 +5737,8 @@ class CfnUserSettings(
 
         @builtins.property
         def file_extension(self) -> builtins.str:
-            '''
+            '''The file extension of the image.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-imagemetadata.html#cfn-workspacesweb-usersettings-imagemetadata-fileextension
             '''
             result = self._values.get("file_extension")
@@ -5689,7 +5747,8 @@ class CfnUserSettings(
 
         @builtins.property
         def last_upload_timestamp(self) -> builtins.str:
-            '''
+            '''The timestamp when the image was last uploaded.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-imagemetadata.html#cfn-workspacesweb-usersettings-imagemetadata-lastuploadtimestamp
             '''
             result = self._values.get("last_upload_timestamp")
@@ -5698,7 +5757,8 @@ class CfnUserSettings(
 
         @builtins.property
         def mime_type(self) -> builtins.str:
-            '''
+            '''The MIME type of the image.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-imagemetadata.html#cfn-workspacesweb-usersettings-imagemetadata-mimetype
             '''
             result = self._values.get("mime_type")
@@ -5743,15 +5803,16 @@ class CfnUserSettings(
             login_description: typing.Optional[builtins.str] = None,
             login_title: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''
-            :param browser_tab_title: 
-            :param welcome_text: 
-            :param contact_button_text: 
-            :param contact_link: 
-            :param loading_text: 
-            :param login_button_text: 
-            :param login_description: 
-            :param login_title: 
+            '''Localized text strings for a specific language that customize the web portal.
+
+            :param browser_tab_title: The text displayed in the browser tab title.
+            :param welcome_text: The welcome text displayed on the sign-in page.
+            :param contact_button_text: The text displayed on the contact button. This field is optional and defaults to "Contact us".
+            :param contact_link: A contact link URL. The URL must start with ``https://`` or ``mailto:`` . If not provided, the contact button will be hidden from the web portal screen.
+            :param loading_text: The text displayed during session loading. This field is optional and defaults to "Loading your session".
+            :param login_button_text: The text displayed on the login button. This field is optional and defaults to "Sign In".
+            :param login_description: The description text for the login section. This field is optional and defaults to "Sign in to your session".
+            :param login_title: The title text for the login section. This field is optional and defaults to "Sign In".
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-localizedbrandingstrings.html
             :exampleMetadata: fixture=_generated
@@ -5804,7 +5865,8 @@ class CfnUserSettings(
 
         @builtins.property
         def browser_tab_title(self) -> builtins.str:
-            '''
+            '''The text displayed in the browser tab title.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-localizedbrandingstrings.html#cfn-workspacesweb-usersettings-localizedbrandingstrings-browsertabtitle
             '''
             result = self._values.get("browser_tab_title")
@@ -5813,7 +5875,8 @@ class CfnUserSettings(
 
         @builtins.property
         def welcome_text(self) -> builtins.str:
-            '''
+            '''The welcome text displayed on the sign-in page.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-localizedbrandingstrings.html#cfn-workspacesweb-usersettings-localizedbrandingstrings-welcometext
             '''
             result = self._values.get("welcome_text")
@@ -5822,7 +5885,10 @@ class CfnUserSettings(
 
         @builtins.property
         def contact_button_text(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The text displayed on the contact button.
+
+            This field is optional and defaults to "Contact us".
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-localizedbrandingstrings.html#cfn-workspacesweb-usersettings-localizedbrandingstrings-contactbuttontext
             '''
             result = self._values.get("contact_button_text")
@@ -5830,7 +5896,10 @@ class CfnUserSettings(
 
         @builtins.property
         def contact_link(self) -> typing.Optional[builtins.str]:
-            '''
+            '''A contact link URL.
+
+            The URL must start with ``https://`` or ``mailto:`` . If not provided, the contact button will be hidden from the web portal screen.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-localizedbrandingstrings.html#cfn-workspacesweb-usersettings-localizedbrandingstrings-contactlink
             '''
             result = self._values.get("contact_link")
@@ -5838,7 +5907,10 @@ class CfnUserSettings(
 
         @builtins.property
         def loading_text(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The text displayed during session loading.
+
+            This field is optional and defaults to "Loading your session".
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-localizedbrandingstrings.html#cfn-workspacesweb-usersettings-localizedbrandingstrings-loadingtext
             '''
             result = self._values.get("loading_text")
@@ -5846,7 +5918,10 @@ class CfnUserSettings(
 
         @builtins.property
         def login_button_text(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The text displayed on the login button.
+
+            This field is optional and defaults to "Sign In".
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-localizedbrandingstrings.html#cfn-workspacesweb-usersettings-localizedbrandingstrings-loginbuttontext
             '''
             result = self._values.get("login_button_text")
@@ -5854,7 +5929,10 @@ class CfnUserSettings(
 
         @builtins.property
         def login_description(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The description text for the login section.
+
+            This field is optional and defaults to "Sign in to your session".
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-localizedbrandingstrings.html#cfn-workspacesweb-usersettings-localizedbrandingstrings-logindescription
             '''
             result = self._values.get("login_description")
@@ -5862,7 +5940,10 @@ class CfnUserSettings(
 
         @builtins.property
         def login_title(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The title text for the login section.
+
+            This field is optional and defaults to "Sign In".
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-usersettings-localizedbrandingstrings.html#cfn-workspacesweb-usersettings-localizedbrandingstrings-logintitle
             '''
             result = self._values.get("login_title")
@@ -6005,6 +6086,7 @@ class CfnUserSettings(
         "idle_disconnect_timeout_in_minutes": "idleDisconnectTimeoutInMinutes",
         "tags": "tags",
         "toolbar_configuration": "toolbarConfiguration",
+        "web_authn_allowed": "webAuthnAllowed",
     },
 )
 class CfnUserSettingsProps:
@@ -6025,6 +6107,7 @@ class CfnUserSettingsProps:
         idle_disconnect_timeout_in_minutes: typing.Optional[jsii.Number] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         toolbar_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnUserSettings.ToolbarConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        web_authn_allowed: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnUserSettings``.
 
@@ -6034,7 +6117,7 @@ class CfnUserSettingsProps:
         :param print_allowed: Specifies whether the user can print to the local device.
         :param upload_allowed: Specifies whether the user can upload files from the local device to the streaming session.
         :param additional_encryption_context: The additional encryption context of the user settings.
-        :param branding_configuration: 
+        :param branding_configuration: The branding configuration that customizes the appearance of the web portal for end users. This includes a custom logo, favicon, wallpaper, localized strings, color theme, and an optional terms of service.
         :param cookie_synchronization_configuration: The configuration that specifies which cookies should be synchronized from the end user's local browser to the remote browser.
         :param customer_managed_key: The customer managed key used to encrypt sensitive information in the user settings.
         :param deep_link_allowed: Specifies whether the user can use deep links that open automatically when connecting to a session.
@@ -6042,6 +6125,7 @@ class CfnUserSettingsProps:
         :param idle_disconnect_timeout_in_minutes: The amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the disconnect timeout interval begins.
         :param tags: The tags to add to the user settings resource. A tag is a key-value pair.
         :param toolbar_configuration: The configuration of the toolbar. This allows administrators to select the toolbar type and visual mode, set maximum display resolution for sessions, and choose which items are visible to end users during their sessions. If administrators do not modify these settings, end users retain control over their toolbar preferences.
+        :param web_authn_allowed: Specifies whether the user can use WebAuthn redirection for passwordless login to websites within the streaming session.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesweb-usersettings.html
         :exampleMetadata: fixture=_generated
@@ -6131,7 +6215,8 @@ class CfnUserSettingsProps:
                     max_display_resolution="maxDisplayResolution",
                     toolbar_type="toolbarType",
                     visual_mode="visualMode"
-                )
+                ),
+                web_authn_allowed="webAuthnAllowed"
             )
         '''
         if __debug__:
@@ -6150,6 +6235,7 @@ class CfnUserSettingsProps:
             check_type(argname="argument idle_disconnect_timeout_in_minutes", value=idle_disconnect_timeout_in_minutes, expected_type=type_hints["idle_disconnect_timeout_in_minutes"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
             check_type(argname="argument toolbar_configuration", value=toolbar_configuration, expected_type=type_hints["toolbar_configuration"])
+            check_type(argname="argument web_authn_allowed", value=web_authn_allowed, expected_type=type_hints["web_authn_allowed"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "copy_allowed": copy_allowed,
             "download_allowed": download_allowed,
@@ -6175,6 +6261,8 @@ class CfnUserSettingsProps:
             self._values["tags"] = tags
         if toolbar_configuration is not None:
             self._values["toolbar_configuration"] = toolbar_configuration
+        if web_authn_allowed is not None:
+            self._values["web_authn_allowed"] = web_authn_allowed
 
     @builtins.property
     def copy_allowed(self) -> builtins.str:
@@ -6241,7 +6329,10 @@ class CfnUserSettingsProps:
     def branding_configuration(
         self,
     ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUserSettings.BrandingConfigurationProperty"]]:
-        '''
+        '''The branding configuration that customizes the appearance of the web portal for end users.
+
+        This includes a custom logo, favicon, wallpaper, localized strings, color theme, and an optional terms of service.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesweb-usersettings.html#cfn-workspacesweb-usersettings-brandingconfiguration
         '''
         result = self._values.get("branding_configuration")
@@ -6317,6 +6408,15 @@ class CfnUserSettingsProps:
         '''
         result = self._values.get("toolbar_configuration")
         return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnUserSettings.ToolbarConfigurationProperty"]], result)
+
+    @builtins.property
+    def web_authn_allowed(self) -> typing.Optional[builtins.str]:
+        '''Specifies whether the user can use WebAuthn redirection for passwordless login to websites within the streaming session.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesweb-usersettings.html#cfn-workspacesweb-usersettings-webauthnallowed
+        '''
+        result = self._values.get("web_authn_allowed")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7206,6 +7306,7 @@ def _typecheckingstub__75a973eee52af75d8440f76e110a255d358bfa0d721a06403da3f4b3d
     idle_disconnect_timeout_in_minutes: typing.Optional[jsii.Number] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     toolbar_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserSettings.ToolbarConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    web_authn_allowed: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7318,6 +7419,12 @@ def _typecheckingstub__04b9f4577cd065eea0c0b6a9c3f2be36f624017fbed6ec1b2c5e9de10
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__b945687d43bb9fddebe88685fb748497488afdb4a31fa2a585556f1a253b595a(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__0369687c0ce662b64501771fd1540d8f87c8a27e766defb6640bb2660b227084(
     *,
     color_theme: typing.Optional[builtins.str] = None,
@@ -7399,6 +7506,7 @@ def _typecheckingstub__f5fdddc739ee6575c152d4edd4b1958f0aed7897d0804077cf3ed5b58
     idle_disconnect_timeout_in_minutes: typing.Optional[jsii.Number] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     toolbar_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserSettings.ToolbarConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    web_authn_allowed: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -37,13 +37,13 @@ from .. import IEnvironmentAware as _IEnvironmentAware_f39049ee
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_elasticache.CacheClusterReference",
     jsii_struct_bases=[],
-    name_mapping={"cache_cluster_id": "cacheClusterId"},
+    name_mapping={"cluster_name": "clusterName"},
 )
 class CacheClusterReference:
-    def __init__(self, *, cache_cluster_id: builtins.str) -> None:
+    def __init__(self, *, cluster_name: builtins.str) -> None:
         '''A reference to a CacheCluster resource.
 
-        :param cache_cluster_id: The Id of the CacheCluster resource.
+        :param cluster_name: The ClusterName of the CacheCluster resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -54,21 +54,21 @@ class CacheClusterReference:
             from aws_cdk.interfaces import aws_elasticache as interfaces_elasticache
             
             cache_cluster_reference = interfaces_elasticache.CacheClusterReference(
-                cache_cluster_id="cacheClusterId"
+                cluster_name="clusterName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e7fa7e3375e8ad9ab2e170d818c5ec8f7d2bde03d305b4be5f21f114bf0b3e9b)
-            check_type(argname="argument cache_cluster_id", value=cache_cluster_id, expected_type=type_hints["cache_cluster_id"])
+            check_type(argname="argument cluster_name", value=cluster_name, expected_type=type_hints["cluster_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "cache_cluster_id": cache_cluster_id,
+            "cluster_name": cluster_name,
         }
 
     @builtins.property
-    def cache_cluster_id(self) -> builtins.str:
-        '''The Id of the CacheCluster resource.'''
-        result = self._values.get("cache_cluster_id")
-        assert result is not None, "Required property 'cache_cluster_id' is missing"
+    def cluster_name(self) -> builtins.str:
+        '''The ClusterName of the CacheCluster resource.'''
+        result = self._values.get("cluster_name")
+        assert result is not None, "Required property 'cluster_name' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -969,14 +969,14 @@ class UserGroupReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_elasticache.UserReference",
     jsii_struct_bases=[],
-    name_mapping={"user_arn": "userArn", "user_id": "userId"},
+    name_mapping={"user_arn": "userArn", "user_name": "userName"},
 )
 class UserReference:
-    def __init__(self, *, user_arn: builtins.str, user_id: builtins.str) -> None:
+    def __init__(self, *, user_arn: builtins.str, user_name: builtins.str) -> None:
         '''A reference to a User resource.
 
         :param user_arn: The ARN of the User resource.
-        :param user_id: The UserId of the User resource.
+        :param user_name: The UserName of the User resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -988,16 +988,16 @@ class UserReference:
             
             user_reference = interfaces_elasticache.UserReference(
                 user_arn="userArn",
-                user_id="userId"
+                user_name="userName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0f5266f1a03ff8c36e332d77e256f7bd512f4776df1f9ef4e242fbab2df66185)
             check_type(argname="argument user_arn", value=user_arn, expected_type=type_hints["user_arn"])
-            check_type(argname="argument user_id", value=user_id, expected_type=type_hints["user_id"])
+            check_type(argname="argument user_name", value=user_name, expected_type=type_hints["user_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "user_arn": user_arn,
-            "user_id": user_id,
+            "user_name": user_name,
         }
 
     @builtins.property
@@ -1008,10 +1008,10 @@ class UserReference:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def user_id(self) -> builtins.str:
-        '''The UserId of the User resource.'''
-        result = self._values.get("user_id")
-        assert result is not None, "Required property 'user_id' is missing"
+    def user_name(self) -> builtins.str:
+        '''The UserName of the User resource.'''
+        result = self._values.get("user_name")
+        assert result is not None, "Required property 'user_name' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -1053,7 +1053,7 @@ publication.publish()
 
 def _typecheckingstub__e7fa7e3375e8ad9ab2e170d818c5ec8f7d2bde03d305b4be5f21f114bf0b3e9b(
     *,
-    cache_cluster_id: builtins.str,
+    cluster_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1119,7 +1119,7 @@ def _typecheckingstub__c897b5f47bb454c979ac0b259e1b55b875a6cdd1ff3ff0bbd060c62ff
 def _typecheckingstub__0f5266f1a03ff8c36e332d77e256f7bd512f4776df1f9ef4e242fbab2df66185(
     *,
     user_arn: builtins.str,
-    user_id: builtins.str,
+    user_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

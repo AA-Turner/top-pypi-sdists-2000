@@ -1414,13 +1414,13 @@ class RoutingRuleReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_apigatewayv2.StageReference",
     jsii_struct_bases=[],
-    name_mapping={"stage_id": "stageId"},
+    name_mapping={"stage_name": "stageName"},
 )
 class StageReference:
-    def __init__(self, *, stage_id: builtins.str) -> None:
+    def __init__(self, *, stage_name: builtins.str) -> None:
         '''A reference to a Stage resource.
 
-        :param stage_id: The Id of the Stage resource.
+        :param stage_name: The StageName of the Stage resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -1431,21 +1431,21 @@ class StageReference:
             from aws_cdk.interfaces import aws_apigatewayv2 as interfaces_apigatewayv2
             
             stage_reference = interfaces_apigatewayv2.StageReference(
-                stage_id="stageId"
+                stage_name="stageName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__be0fe02777445259bb9740baea840d3e2b479e563294c5907864f7e331741cb6)
-            check_type(argname="argument stage_id", value=stage_id, expected_type=type_hints["stage_id"])
+            check_type(argname="argument stage_name", value=stage_name, expected_type=type_hints["stage_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "stage_id": stage_id,
+            "stage_name": stage_name,
         }
 
     @builtins.property
-    def stage_id(self) -> builtins.str:
-        '''The Id of the Stage resource.'''
-        result = self._values.get("stage_id")
-        assert result is not None, "Required property 'stage_id' is missing"
+    def stage_name(self) -> builtins.str:
+        '''The StageName of the Stage resource.'''
+        result = self._values.get("stage_name")
+        assert result is not None, "Required property 'stage_name' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -1639,7 +1639,7 @@ def _typecheckingstub__b414cc5aebd58b5078df3cfcec68e706708dafa722e76ae034b0567f9
 
 def _typecheckingstub__be0fe02777445259bb9740baea840d3e2b479e563294c5907864f7e331741cb6(
     *,
-    stage_id: builtins.str,
+    stage_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

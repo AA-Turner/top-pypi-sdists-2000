@@ -305,6 +305,7 @@ from ..aws_cloudwatch import Alarm as _Alarm_9fbab1f1, IMetric as _IMetric_c7fd2
 from ..aws_iam import (
     IRole as _IRole_235f5d8e, PolicyStatement as _PolicyStatement_0fe33853
 )
+from ..interfaces import ResourceEnvironment as _ResourceEnvironment_603baf00
 from ..interfaces.aws_applicationautoscaling import (
     IScalableTargetRef as _IScalableTargetRef_c773595e,
     IScalingPolicyRef as _IScalingPolicyRef_50de02c0,
@@ -455,6 +456,7 @@ class AdjustmentType(enum.Enum):
     '''Make the capacity equal to the exact number given.'''
 
 
+@jsii.implements(_IScalableTargetRef_c773595e)
 class BaseScalableAttribute(
     _constructs_77d1e7e8.Construct,
     metaclass=jsii.JSIIAbstractClass,
@@ -632,9 +634,30 @@ class BaseScalableAttribute(
         return typing.cast(None, jsii.invoke(self, "doScaleToTrackMetric", [id, props]))
 
     @builtins.property
+    @jsii.member(jsii_name="env")
+    def env(self) -> "_ResourceEnvironment_603baf00":
+        '''The environment this resource belongs to.
+
+        For resources that are created and managed in a Stack (those created by
+        creating new class instances like ``new Role()``, ``new Bucket()``, etc.), this
+        is always the same as the environment of the stack they belong to.
+
+        For referenced resources (those obtained from referencing methods like
+        ``Role.fromRoleArn()``, ``Bucket.fromBucketName()``, etc.), they might be
+        different than the stack they were imported into.
+        '''
+        return typing.cast("_ResourceEnvironment_603baf00", jsii.get(self, "env"))
+
+    @builtins.property
     @jsii.member(jsii_name="props")
     def _props(self) -> "BaseScalableAttributeProps":
         return typing.cast("BaseScalableAttributeProps", jsii.get(self, "props"))
+
+    @builtins.property
+    @jsii.member(jsii_name="scalableTargetRef")
+    def scalable_target_ref(self) -> "_ScalableTargetReference_febd2a49":
+        '''A reference to a ScalableTarget resource.'''
+        return typing.cast("_ScalableTargetReference_febd2a49", jsii.get(self, "scalableTargetRef"))
 
 
 class _BaseScalableAttributeProxy(BaseScalableAttribute):
@@ -5730,7 +5753,11 @@ class EnableScalingProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_applicationautoscaling.IScalableTarget")
-class IScalableTarget(_IResource_c80c4260, typing_extensions.Protocol):
+class IScalableTarget(
+    _IResource_c80c4260,
+    _IScalableTargetRef_c773595e,
+    typing_extensions.Protocol,
+):
     @builtins.property
     @jsii.member(jsii_name="scalableTargetId")
     def scalable_target_id(self) -> builtins.str:
@@ -5742,6 +5769,7 @@ class IScalableTarget(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IScalableTargetProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IScalableTargetRef_c773595e), # type: ignore[misc]
 ):
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_applicationautoscaling.IScalableTarget"
 
@@ -5985,6 +6013,37 @@ class ScalableTarget(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromScalableTargetAttributes")
+    @builtins.classmethod
+    def from_scalable_target_attributes(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        *,
+        scalable_dimension: builtins.str,
+        scalable_target_id: builtins.str,
+        service_namespace: builtins.str,
+    ) -> "IScalableTarget":
+        '''Create a referenceable ``IScalableTarget`` object based on properties of a resource that already exists in your account.
+
+        :param scope: -
+        :param id: -
+        :param scalable_dimension: The scalable dimension that's associated with the scalable target.
+        :param scalable_target_id: The scalable target ID.
+        :param service_namespace: The namespace of the AWS service that provides the resource.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__830ebae11eb8a67b1db3334410be34f844db4381b546e9d2ef33bfe4db0e350a)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        attrs = ScalableTargetAttributes(
+            scalable_dimension=scalable_dimension,
+            scalable_target_id=scalable_target_id,
+            service_namespace=service_namespace,
+        )
+
+        return typing.cast("IScalableTarget", jsii.sinvoke(cls, "fromScalableTargetAttributes", [scope, id, attrs]))
+
     @jsii.member(jsii_name="fromScalableTargetId")
     @builtins.classmethod
     def from_scalable_target_id(
@@ -5993,7 +6052,8 @@ class ScalableTarget(
         id: builtins.str,
         scalable_target_id: builtins.str,
     ) -> "IScalableTarget":
-        '''
+        '''Create a referenceable ``IScalableTarget`` object based on properties of a resource that already exists in your account.
+
         :param scope: -
         :param id: -
         :param scalable_target_id: -
@@ -6158,6 +6218,93 @@ class ScalableTarget(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "scalableTargetId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="scalableTargetRef")
+    def scalable_target_ref(self) -> "_ScalableTargetReference_febd2a49":
+        '''A reference to a ScalableTarget resource.'''
+        return typing.cast("_ScalableTargetReference_febd2a49", jsii.get(self, "scalableTargetRef"))
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_applicationautoscaling.ScalableTargetAttributes",
+    jsii_struct_bases=[],
+    name_mapping={
+        "scalable_dimension": "scalableDimension",
+        "scalable_target_id": "scalableTargetId",
+        "service_namespace": "serviceNamespace",
+    },
+)
+class ScalableTargetAttributes:
+    def __init__(
+        self,
+        *,
+        scalable_dimension: builtins.str,
+        scalable_target_id: builtins.str,
+        service_namespace: builtins.str,
+    ) -> None:
+        '''Attributes for importing a scalable target.
+
+        :param scalable_dimension: The scalable dimension that's associated with the scalable target.
+        :param scalable_target_id: The scalable target ID.
+        :param service_namespace: The namespace of the AWS service that provides the resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_applicationautoscaling as appscaling
+            
+            scalable_target_attributes = appscaling.ScalableTargetAttributes(
+                scalable_dimension="scalableDimension",
+                scalable_target_id="scalableTargetId",
+                service_namespace="serviceNamespace"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6572b92b2ea5aef2f05d8063c429dae7f1e1ebfba8f3abe16295efc36fe31510)
+            check_type(argname="argument scalable_dimension", value=scalable_dimension, expected_type=type_hints["scalable_dimension"])
+            check_type(argname="argument scalable_target_id", value=scalable_target_id, expected_type=type_hints["scalable_target_id"])
+            check_type(argname="argument service_namespace", value=service_namespace, expected_type=type_hints["service_namespace"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "scalable_dimension": scalable_dimension,
+            "scalable_target_id": scalable_target_id,
+            "service_namespace": service_namespace,
+        }
+
+    @builtins.property
+    def scalable_dimension(self) -> builtins.str:
+        '''The scalable dimension that's associated with the scalable target.'''
+        result = self._values.get("scalable_dimension")
+        assert result is not None, "Required property 'scalable_dimension' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def scalable_target_id(self) -> builtins.str:
+        '''The scalable target ID.'''
+        result = self._values.get("scalable_target_id")
+        assert result is not None, "Required property 'scalable_target_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def service_namespace(self) -> builtins.str:
+        '''The namespace of the AWS service that provides the resource.'''
+        result = self._values.get("service_namespace")
+        assert result is not None, "Required property 'service_namespace' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "ScalableTargetAttributes(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
 
 
 @jsii.data_type(
@@ -6759,11 +6906,12 @@ class StepScalingAction(
         # The values are placeholders you should change.
         import aws_cdk as cdk
         from aws_cdk import aws_applicationautoscaling as appscaling
+        from aws_cdk.interfaces import aws_applicationautoscaling as interfaces_applicationautoscaling
         
-        # scalable_target: appscaling.ScalableTarget
+        # scalable_target_ref: interfaces_applicationautoscaling.IScalableTargetRef
         
         step_scaling_action = appscaling.StepScalingAction(self, "MyStepScalingAction",
-            scaling_target=scalable_target,
+            scaling_target=scalable_target_ref,
         
             # the properties below are optional
             adjustment_type=appscaling.AdjustmentType.CHANGE_IN_CAPACITY,
@@ -6779,7 +6927,7 @@ class StepScalingAction(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        scaling_target: "IScalableTarget",
+        scaling_target: "_IScalableTargetRef_c773595e",
         adjustment_type: typing.Optional["AdjustmentType"] = None,
         cooldown: typing.Optional["_Duration_4839e8c3"] = None,
         metric_aggregation_type: typing.Optional["MetricAggregationType"] = None,
@@ -6854,7 +7002,7 @@ class StepScalingActionProps:
     def __init__(
         self,
         *,
-        scaling_target: "IScalableTarget",
+        scaling_target: "_IScalableTargetRef_c773595e",
         adjustment_type: typing.Optional["AdjustmentType"] = None,
         cooldown: typing.Optional["_Duration_4839e8c3"] = None,
         metric_aggregation_type: typing.Optional["MetricAggregationType"] = None,
@@ -6878,11 +7026,12 @@ class StepScalingActionProps:
             # The values are placeholders you should change.
             import aws_cdk as cdk
             from aws_cdk import aws_applicationautoscaling as appscaling
+            from aws_cdk.interfaces import aws_applicationautoscaling as interfaces_applicationautoscaling
             
-            # scalable_target: appscaling.ScalableTarget
+            # scalable_target_ref: interfaces_applicationautoscaling.IScalableTargetRef
             
             step_scaling_action_props = appscaling.StepScalingActionProps(
-                scaling_target=scalable_target,
+                scaling_target=scalable_target_ref,
             
                 # the properties below are optional
                 adjustment_type=appscaling.AdjustmentType.CHANGE_IN_CAPACITY,
@@ -6915,11 +7064,11 @@ class StepScalingActionProps:
             self._values["policy_name"] = policy_name
 
     @builtins.property
-    def scaling_target(self) -> "IScalableTarget":
+    def scaling_target(self) -> "_IScalableTargetRef_c773595e":
         '''The scalable target.'''
         result = self._values.get("scaling_target")
         assert result is not None, "Required property 'scaling_target' is missing"
-        return typing.cast("IScalableTarget", result)
+        return typing.cast("_IScalableTargetRef_c773595e", result)
 
     @builtins.property
     def adjustment_type(self) -> typing.Optional["AdjustmentType"]:
@@ -7009,9 +7158,10 @@ class StepScalingPolicy(
         import aws_cdk as cdk
         from aws_cdk import aws_applicationautoscaling as appscaling
         from aws_cdk import aws_cloudwatch as cloudwatch
+        from aws_cdk.interfaces import aws_applicationautoscaling as interfaces_applicationautoscaling
         
         # metric: cloudwatch.Metric
-        # scalable_target: appscaling.ScalableTarget
+        # scalable_target_ref: interfaces_applicationautoscaling.IScalableTargetRef
         
         step_scaling_policy = appscaling.StepScalingPolicy(self, "MyStepScalingPolicy",
             metric=metric,
@@ -7022,7 +7172,7 @@ class StepScalingPolicy(
                 lower=123,
                 upper=123
             )],
-            scaling_target=scalable_target,
+            scaling_target=scalable_target_ref,
         
             # the properties below are optional
             adjustment_type=appscaling.AdjustmentType.CHANGE_IN_CAPACITY,
@@ -7039,7 +7189,7 @@ class StepScalingPolicy(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        scaling_target: "IScalableTarget",
+        scaling_target: "_IScalableTargetRef_c773595e",
         metric: "_IMetric_c7fd29de",
         scaling_steps: typing.Sequence[typing.Union["ScalingInterval", typing.Dict[builtins.str, typing.Any]]],
         adjustment_type: typing.Optional["AdjustmentType"] = None,
@@ -7128,7 +7278,7 @@ class StepScalingPolicyProps(BasicStepScalingPolicyProps):
         evaluation_periods: typing.Optional[jsii.Number] = None,
         metric_aggregation_type: typing.Optional["MetricAggregationType"] = None,
         min_adjustment_magnitude: typing.Optional[jsii.Number] = None,
-        scaling_target: "IScalableTarget",
+        scaling_target: "_IScalableTargetRef_c773595e",
     ) -> None:
         '''
         :param metric: Metric to scale on.
@@ -7150,9 +7300,10 @@ class StepScalingPolicyProps(BasicStepScalingPolicyProps):
             import aws_cdk as cdk
             from aws_cdk import aws_applicationautoscaling as appscaling
             from aws_cdk import aws_cloudwatch as cloudwatch
+            from aws_cdk.interfaces import aws_applicationautoscaling as interfaces_applicationautoscaling
             
             # metric: cloudwatch.Metric
-            # scalable_target: appscaling.ScalableTarget
+            # scalable_target_ref: interfaces_applicationautoscaling.IScalableTargetRef
             
             step_scaling_policy_props = appscaling.StepScalingPolicyProps(
                 metric=metric,
@@ -7163,7 +7314,7 @@ class StepScalingPolicyProps(BasicStepScalingPolicyProps):
                     lower=123,
                     upper=123
                 )],
-                scaling_target=scalable_target,
+                scaling_target=scalable_target_ref,
             
                 # the properties below are optional
                 adjustment_type=appscaling.AdjustmentType.CHANGE_IN_CAPACITY,
@@ -7300,11 +7451,11 @@ class StepScalingPolicyProps(BasicStepScalingPolicyProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def scaling_target(self) -> "IScalableTarget":
+    def scaling_target(self) -> "_IScalableTargetRef_c773595e":
         '''The scaling target.'''
         result = self._values.get("scaling_target")
         assert result is not None, "Required property 'scaling_target' is missing"
-        return typing.cast("IScalableTarget", result)
+        return typing.cast("_IScalableTargetRef_c773595e", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7333,12 +7484,13 @@ class TargetTrackingScalingPolicy(
         import aws_cdk as cdk
         from aws_cdk import aws_applicationautoscaling as appscaling
         from aws_cdk import aws_cloudwatch as cloudwatch
+        from aws_cdk.interfaces import aws_applicationautoscaling as interfaces_applicationautoscaling
         
         # metric: cloudwatch.Metric
-        # scalable_target: appscaling.ScalableTarget
+        # scalable_target_ref: interfaces_applicationautoscaling.IScalableTargetRef
         
         target_tracking_scaling_policy = appscaling.TargetTrackingScalingPolicy(self, "MyTargetTrackingScalingPolicy",
-            scaling_target=scalable_target,
+            scaling_target=scalable_target_ref,
             target_value=123,
         
             # the properties below are optional
@@ -7357,7 +7509,7 @@ class TargetTrackingScalingPolicy(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        scaling_target: "IScalableTarget",
+        scaling_target: "_IScalableTargetRef_c773595e",
         target_value: jsii.Number,
         custom_metric: typing.Optional["_IMetric_c7fd29de"] = None,
         predefined_metric: typing.Optional["PredefinedMetric"] = None,
@@ -7432,7 +7584,7 @@ class TargetTrackingScalingPolicyProps(BasicTargetTrackingScalingPolicyProps):
         custom_metric: typing.Optional["_IMetric_c7fd29de"] = None,
         predefined_metric: typing.Optional["PredefinedMetric"] = None,
         resource_label: typing.Optional[builtins.str] = None,
-        scaling_target: "IScalableTarget",
+        scaling_target: "_IScalableTargetRef_c773595e",
     ) -> None:
         '''Properties for a concrete TargetTrackingPolicy.
 
@@ -7457,12 +7609,13 @@ class TargetTrackingScalingPolicyProps(BasicTargetTrackingScalingPolicyProps):
             import aws_cdk as cdk
             from aws_cdk import aws_applicationautoscaling as appscaling
             from aws_cdk import aws_cloudwatch as cloudwatch
+            from aws_cdk.interfaces import aws_applicationautoscaling as interfaces_applicationautoscaling
             
             # metric: cloudwatch.Metric
-            # scalable_target: appscaling.ScalableTarget
+            # scalable_target_ref: interfaces_applicationautoscaling.IScalableTargetRef
             
             target_tracking_scaling_policy_props = appscaling.TargetTrackingScalingPolicyProps(
-                scaling_target=scalable_target,
+                scaling_target=scalable_target_ref,
                 target_value=123,
             
                 # the properties below are optional
@@ -7609,10 +7762,10 @@ class TargetTrackingScalingPolicyProps(BasicTargetTrackingScalingPolicyProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def scaling_target(self) -> "IScalableTarget":
+    def scaling_target(self) -> "_IScalableTargetRef_c773595e":
         result = self._values.get("scaling_target")
         assert result is not None, "Required property 'scaling_target' is missing"
-        return typing.cast("IScalableTarget", result)
+        return typing.cast("_IScalableTargetRef_c773595e", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7772,6 +7925,7 @@ __all__ = [
     "MetricAggregationType",
     "PredefinedMetric",
     "ScalableTarget",
+    "ScalableTargetAttributes",
     "ScalableTargetProps",
     "ScalingInterval",
     "ScalingSchedule",
@@ -8369,6 +8523,17 @@ def _typecheckingstub__8491b1f534a6fef90c954e5a091a74102f414f9194833de06be45e187
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__830ebae11eb8a67b1db3334410be34f844db4381b546e9d2ef33bfe4db0e350a(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    scalable_dimension: builtins.str,
+    scalable_target_id: builtins.str,
+    service_namespace: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f478630191026eccd5282b715948991fc462028ebdcd6fe204c039659399c45f(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -8422,6 +8587,15 @@ def _typecheckingstub__05dc12c8c78cbf6f9c0c66c5c142f63e0590f2157107bdf2505a0852a
     policy_name: typing.Optional[builtins.str] = None,
     scale_in_cooldown: typing.Optional[_Duration_4839e8c3] = None,
     scale_out_cooldown: typing.Optional[_Duration_4839e8c3] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6572b92b2ea5aef2f05d8063c429dae7f1e1ebfba8f3abe16295efc36fe31510(
+    *,
+    scalable_dimension: builtins.str,
+    scalable_target_id: builtins.str,
+    service_namespace: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8481,7 +8655,7 @@ def _typecheckingstub__4ebea522c756d3475869e6f400a5bb4b68ea539cce554df0d9e91d734
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    scaling_target: IScalableTarget,
+    scaling_target: _IScalableTargetRef_c773595e,
     adjustment_type: typing.Optional[AdjustmentType] = None,
     cooldown: typing.Optional[_Duration_4839e8c3] = None,
     metric_aggregation_type: typing.Optional[MetricAggregationType] = None,
@@ -8493,7 +8667,7 @@ def _typecheckingstub__4ebea522c756d3475869e6f400a5bb4b68ea539cce554df0d9e91d734
 
 def _typecheckingstub__749520e5db8349113a00c486486d4029b1458a70e0520261f218726bd60fcb37(
     *,
-    scaling_target: IScalableTarget,
+    scaling_target: _IScalableTargetRef_c773595e,
     adjustment_type: typing.Optional[AdjustmentType] = None,
     cooldown: typing.Optional[_Duration_4839e8c3] = None,
     metric_aggregation_type: typing.Optional[MetricAggregationType] = None,
@@ -8507,7 +8681,7 @@ def _typecheckingstub__05f13291938a9d6d13d60ff41322988d2435145fc2b81377540167007
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    scaling_target: IScalableTarget,
+    scaling_target: _IScalableTargetRef_c773595e,
     metric: _IMetric_c7fd29de,
     scaling_steps: typing.Sequence[typing.Union[ScalingInterval, typing.Dict[builtins.str, typing.Any]]],
     adjustment_type: typing.Optional[AdjustmentType] = None,
@@ -8530,7 +8704,7 @@ def _typecheckingstub__5fb811fbae284660a73659f831a4a4abee74e6e6ca7a1b7e9971a7c43
     evaluation_periods: typing.Optional[jsii.Number] = None,
     metric_aggregation_type: typing.Optional[MetricAggregationType] = None,
     min_adjustment_magnitude: typing.Optional[jsii.Number] = None,
-    scaling_target: IScalableTarget,
+    scaling_target: _IScalableTargetRef_c773595e,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8539,7 +8713,7 @@ def _typecheckingstub__7be0faf4183aa8856518e373c609ce23a62f4ca392f7caaafd9b0d195
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    scaling_target: IScalableTarget,
+    scaling_target: _IScalableTargetRef_c773595e,
     target_value: jsii.Number,
     custom_metric: typing.Optional[_IMetric_c7fd29de] = None,
     predefined_metric: typing.Optional[PredefinedMetric] = None,
@@ -8562,7 +8736,7 @@ def _typecheckingstub__ae7c2297352d4eb6a4dcaf3fd8ac527fdce1e50808e395744304db46a
     custom_metric: typing.Optional[_IMetric_c7fd29de] = None,
     predefined_metric: typing.Optional[PredefinedMetric] = None,
     resource_label: typing.Optional[builtins.str] = None,
-    scaling_target: IScalableTarget,
+    scaling_target: _IScalableTargetRef_c773595e,
 ) -> None:
     """Type checking stubs"""
     pass

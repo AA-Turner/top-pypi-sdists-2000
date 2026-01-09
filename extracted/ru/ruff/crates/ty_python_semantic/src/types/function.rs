@@ -57,9 +57,9 @@ use ruff_db::files::{File, FileRange};
 use ruff_db::parsed::{ParsedModuleRef, parsed_module};
 use ruff_python_ast::{self as ast, ParameterWithDefault};
 use ruff_text_size::Ranged;
+use ty_module_resolver::{KnownModule, ModuleName, file_to_module, resolve_module};
 
-use crate::module_resolver::{KnownModule, file_to_module};
-use crate::place::{Definedness, Place, place_from_bindings};
+use crate::place::{DefinedPlace, Definedness, Place, place_from_bindings};
 use crate::semantic_index::ast_ids::HasScopedUseId;
 use crate::semantic_index::definition::Definition;
 use crate::semantic_index::scope::ScopeId;
@@ -77,17 +77,19 @@ use crate::types::generics::{GenericContext, InferableTypeVars, typing_self};
 use crate::types::infer::nearest_enclosing_class;
 use crate::types::list_members::all_members;
 use crate::types::narrow::ClassInfoConstraintFunction;
+use crate::types::relation::{
+    HasRelationToVisitor, IsDisjointVisitor, IsEquivalentVisitor, TypeRelation,
+};
 use crate::types::signatures::{CallableSignature, Signature};
 use crate::types::visitor::any_over_type;
 use crate::types::{
     ApplyTypeMappingVisitor, BoundMethodType, BoundTypeVarInstance, CallableType, CallableTypeKind,
     ClassBase, ClassLiteral, ClassType, DeprecatedInstance, DynamicType, FindLegacyTypeVarsVisitor,
-    HasRelationToVisitor, IsDisjointVisitor, IsEquivalentVisitor, KnownClass, KnownInstanceType,
-    NormalizedVisitor, SpecialFormType, SubclassOfInner, SubclassOfType, Truthiness, Type,
-    TypeContext, TypeMapping, TypeRelation, TypeVarBoundOrConstraints, UnionBuilder, binding_type,
-    definition_expression_type, infer_definition_types, walk_signature,
+    KnownClass, KnownInstanceType, NormalizedVisitor, SpecialFormType, SubclassOfInner,
+    SubclassOfType, Truthiness, Type, TypeContext, TypeMapping, TypeVarBoundOrConstraints,
+    UnionBuilder, binding_type, definition_expression_type, infer_definition_types, walk_signature,
 };
-use crate::{Db, FxOrderSet, ModuleName, resolve_module};
+use crate::{Db, FxOrderSet};
 
 /// A collection of useful spans for annotating functions.
 ///
@@ -374,8 +376,11 @@ impl<'db> OverloadLiteral<'db> {
             .name
             .scoped_use_id(db, scope);
 
-        let Place::Defined(Type::FunctionLiteral(previous_type), _, Definedness::AlwaysDefined) =
-            place_from_bindings(db, use_def.bindings_at_use(use_id)).place
+        let Place::Defined(DefinedPlace {
+            ty: Type::FunctionLiteral(previous_type),
+            definedness: Definedness::AlwaysDefined,
+            ..
+        }) = place_from_bindings(db, use_def.bindings_at_use(use_id)).place
         else {
             return None;
         };
@@ -1089,6 +1094,8 @@ impl<'db> FunctionType<'db> {
     pub(crate) fn into_callable_type(self, db: &'db dyn Db) -> CallableType<'db> {
         let kind = if self.is_classmethod(db) {
             CallableTypeKind::ClassMethodLike
+        } else if self.is_staticmethod(db) {
+            CallableTypeKind::StaticMethodLike
         } else {
             CallableTypeKind::FunctionLike
         };
@@ -1301,6 +1308,7 @@ fn is_instance_truthiness<'db>(
         | Type::AlwaysFalsy
         | Type::BoundSuper(..)
         | Type::TypeIs(..)
+        | Type::TypeGuard(..)
         | Type::Callable(..)
         | Type::Dynamic(..)
         | Type::Never
@@ -1408,6 +1416,9 @@ pub enum KnownFunction {
     /// `dataclasses.field`
     Field,
 
+    /// `functools.total_ordering`
+    TotalOrdering,
+
     /// `inspect.getattr_static`
     GetattrStatic,
 
@@ -1496,6 +1507,7 @@ impl KnownFunction {
             Self::Dataclass | Self::Field => {
                 matches!(module, KnownModule::Dataclasses)
             }
+            Self::TotalOrdering => module.is_functools(),
             Self::GetattrStatic => module.is_inspect(),
             Self::IsAssignableTo
             | Self::IsDisjointFrom
@@ -2063,6 +2075,7 @@ pub(crate) mod tests {
 
                 KnownFunction::ImportModule => KnownModule::ImportLib,
                 KnownFunction::NamedTuple => KnownModule::Collections,
+                KnownFunction::TotalOrdering => KnownModule::Functools,
             };
 
             let function_definition = known_module_symbol(&db, module, function_name)

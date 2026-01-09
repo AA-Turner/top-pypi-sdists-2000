@@ -388,7 +388,7 @@ class AccessPointAttributes:
         *,
         access_point_arn: typing.Optional[builtins.str] = None,
         access_point_id: typing.Optional[builtins.str] = None,
-        file_system: typing.Optional["IFileSystem"] = None,
+        file_system: typing.Optional["_IFileSystemRef_3dcf8b98"] = None,
     ) -> None:
         '''Attributes that can be specified when importing an AccessPoint.
 
@@ -440,13 +440,13 @@ class AccessPointAttributes:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def file_system(self) -> typing.Optional["IFileSystem"]:
+    def file_system(self) -> typing.Optional["_IFileSystemRef_3dcf8b98"]:
         '''The EFS file system.
 
         :default: - no EFS file system
         '''
         result = self._values.get("file_system")
-        return typing.cast(typing.Optional["IFileSystem"], result)
+        return typing.cast(typing.Optional["_IFileSystemRef_3dcf8b98"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -592,7 +592,7 @@ class AccessPointProps(AccessPointOptions):
         create_acl: typing.Optional[typing.Union["Acl", typing.Dict[builtins.str, typing.Any]]] = None,
         path: typing.Optional[builtins.str] = None,
         posix_user: typing.Optional[typing.Union["PosixUser", typing.Dict[builtins.str, typing.Any]]] = None,
-        file_system: "IFileSystem",
+        file_system: "_IFileSystemRef_3dcf8b98",
     ) -> None:
         '''Properties for the AccessPoint.
 
@@ -609,11 +609,12 @@ class AccessPointProps(AccessPointOptions):
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_efs as efs
+            from aws_cdk.interfaces import aws_efs as interfaces_efs
             
-            # file_system: efs.FileSystem
+            # file_system_ref: interfaces_efs.IFileSystemRef
             
             access_point_props = efs.AccessPointProps(
-                file_system=file_system,
+                file_system=file_system_ref,
             
                 # the properties below are optional
                 client_token="clientToken",
@@ -702,11 +703,11 @@ class AccessPointProps(AccessPointOptions):
         return typing.cast(typing.Optional["PosixUser"], result)
 
     @builtins.property
-    def file_system(self) -> "IFileSystem":
+    def file_system(self) -> "_IFileSystemRef_3dcf8b98":
         '''The efs filesystem.'''
         result = self._values.get("file_system")
         assert result is not None, "Required property 'file_system' is missing"
-        return typing.cast("IFileSystem", result)
+        return typing.cast("_IFileSystemRef_3dcf8b98", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3333,7 +3334,7 @@ class CfnMountTargetProps:
     name_mapping={"destination_file_system": "destinationFileSystem"},
 )
 class ExistingFileSystemProps:
-    def __init__(self, *, destination_file_system: "IFileSystem") -> None:
+    def __init__(self, *, destination_file_system: "_IFileSystemRef_3dcf8b98") -> None:
         '''Properties for configuring ReplicationConfiguration to replicate to an existing file system.
 
         :param destination_file_system: The existing destination file system for the replication.
@@ -3345,11 +3346,12 @@ class ExistingFileSystemProps:
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_efs as efs
+            from aws_cdk.interfaces import aws_efs as interfaces_efs
             
-            # file_system: efs.FileSystem
+            # file_system_ref: interfaces_efs.IFileSystemRef
             
             existing_file_system_props = efs.ExistingFileSystemProps(
-                destination_file_system=file_system
+                destination_file_system=file_system_ref
             )
         '''
         if __debug__:
@@ -3360,11 +3362,11 @@ class ExistingFileSystemProps:
         }
 
     @builtins.property
-    def destination_file_system(self) -> "IFileSystem":
+    def destination_file_system(self) -> "_IFileSystemRef_3dcf8b98":
         '''The existing destination file system for the replication.'''
         result = self._values.get("destination_file_system")
         assert result is not None, "Required property 'destination_file_system' is missing"
-        return typing.cast("IFileSystem", result)
+        return typing.cast("_IFileSystemRef_3dcf8b98", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3827,7 +3829,11 @@ class FileSystemProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_efs.IAccessPoint")
-class IAccessPoint(_IResource_c80c4260, typing_extensions.Protocol):
+class IAccessPoint(
+    _IAccessPointRef_437d4bf7,
+    _IResource_c80c4260,
+    typing_extensions.Protocol,
+):
     '''Represents an EFS AccessPoint.'''
 
     @builtins.property
@@ -3856,6 +3862,7 @@ class IAccessPoint(_IResource_c80c4260, typing_extensions.Protocol):
 
 
 class _IAccessPointProxy(
+    jsii.proxy_for(_IAccessPointRef_437d4bf7), # type: ignore[misc]
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
 ):
     '''Represents an EFS AccessPoint.'''
@@ -3892,6 +3899,7 @@ typing.cast(typing.Any, IAccessPoint).__jsii_proxy_class__ = lambda : _IAccessPo
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_efs.IFileSystem")
 class IFileSystem(
+    _IFileSystemRef_3dcf8b98,
     _IConnectable_10015a05,
     _IResourceWithPolicy_720d64fc,
     typing_extensions.Protocol,
@@ -3961,6 +3969,7 @@ class IFileSystem(
 
 
 class _IFileSystemProxy(
+    jsii.proxy_for(_IFileSystemRef_3dcf8b98), # type: ignore[misc]
     jsii.proxy_for(_IConnectable_10015a05), # type: ignore[misc]
     jsii.proxy_for(_IResourceWithPolicy_720d64fc), # type: ignore[misc]
 ):
@@ -4454,7 +4463,7 @@ class ReplicationConfiguration(
         self,
         *,
         availability_zone: typing.Optional[builtins.str] = None,
-        destination_file_system: typing.Optional["IFileSystem"] = None,
+        destination_file_system: typing.Optional["_IFileSystemRef_3dcf8b98"] = None,
         kms_key: typing.Optional["_IKey_5f11635f"] = None,
         region: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -4477,7 +4486,7 @@ class ReplicationConfiguration(
     @builtins.classmethod
     def existing_file_system(
         cls,
-        destination_file_system: "IFileSystem",
+        destination_file_system: "_IFileSystemRef_3dcf8b98",
     ) -> "ReplicationConfiguration":
         '''Specify the existing destination file system for the replication.
 
@@ -4577,7 +4586,7 @@ class ReplicationConfigurationProps:
         self,
         *,
         availability_zone: typing.Optional[builtins.str] = None,
-        destination_file_system: typing.Optional["IFileSystem"] = None,
+        destination_file_system: typing.Optional["_IFileSystemRef_3dcf8b98"] = None,
         kms_key: typing.Optional["_IKey_5f11635f"] = None,
         region: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -4596,13 +4605,14 @@ class ReplicationConfigurationProps:
             # The values are placeholders you should change.
             from aws_cdk import aws_efs as efs
             from aws_cdk import aws_kms as kms
+            from aws_cdk.interfaces import aws_efs as interfaces_efs
             
-            # file_system: efs.FileSystem
+            # file_system_ref: interfaces_efs.IFileSystemRef
             # key: kms.Key
             
             replication_configuration_props = efs.ReplicationConfigurationProps(
                 availability_zone="availabilityZone",
-                destination_file_system=file_system,
+                destination_file_system=file_system_ref,
                 kms_key=key,
                 region="region"
             )
@@ -4635,13 +4645,13 @@ class ReplicationConfigurationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def destination_file_system(self) -> typing.Optional["IFileSystem"]:
+    def destination_file_system(self) -> typing.Optional["_IFileSystemRef_3dcf8b98"]:
         '''The existing destination file system for the replication.
 
         :default: - None
         '''
         result = self._values.get("destination_file_system")
-        return typing.cast(typing.Optional["IFileSystem"], result)
+        return typing.cast(typing.Optional["_IFileSystemRef_3dcf8b98"], result)
 
     @builtins.property
     def kms_key(self) -> typing.Optional["_IKey_5f11635f"]:
@@ -4739,7 +4749,7 @@ class AccessPoint(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        file_system: "IFileSystem",
+        file_system: "_IFileSystemRef_3dcf8b98",
         client_token: typing.Optional[builtins.str] = None,
         create_acl: typing.Optional[typing.Union["Acl", typing.Dict[builtins.str, typing.Any]]] = None,
         path: typing.Optional[builtins.str] = None,
@@ -4777,7 +4787,7 @@ class AccessPoint(
         *,
         access_point_arn: typing.Optional[builtins.str] = None,
         access_point_id: typing.Optional[builtins.str] = None,
-        file_system: typing.Optional["IFileSystem"] = None,
+        file_system: typing.Optional["_IFileSystemRef_3dcf8b98"] = None,
     ) -> "IAccessPoint":
         '''Import an existing Access Point by attributes.
 
@@ -4843,6 +4853,12 @@ class AccessPoint(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "accessPointId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="accessPointRef")
+    def access_point_ref(self) -> "_AccessPointReference_4b264f5d":
+        '''A reference to a AccessPoint resource.'''
+        return typing.cast("_AccessPointReference_4b264f5d", jsii.get(self, "accessPointRef"))
 
     @builtins.property
     @jsii.member(jsii_name="fileSystem")
@@ -5126,6 +5142,12 @@ class FileSystem(
         return typing.cast(builtins.str, jsii.get(self, "fileSystemId"))
 
     @builtins.property
+    @jsii.member(jsii_name="fileSystemRef")
+    def file_system_ref(self) -> "_FileSystemReference_4a6f4058":
+        '''A reference to a FileSystem resource.'''
+        return typing.cast("_FileSystemReference_4a6f4058", jsii.get(self, "fileSystemRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="mountTargetsAvailable")
     def mount_targets_available(self) -> "_constructs_77d1e7e8.IDependable":
         '''Dependable that can be depended upon to ensure the mount targets of the filesystem are ready.'''
@@ -5168,7 +5190,7 @@ def _typecheckingstub__a7d29db03188d21de563fa9ac94c4de056afa5ee45616d3e16e4b53de
     *,
     access_point_arn: typing.Optional[builtins.str] = None,
     access_point_id: typing.Optional[builtins.str] = None,
-    file_system: typing.Optional[IFileSystem] = None,
+    file_system: typing.Optional[_IFileSystemRef_3dcf8b98] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5189,7 +5211,7 @@ def _typecheckingstub__32b9cfe4790278ebfef38060a79ab8e87662b5508943b46c7da6a219e
     create_acl: typing.Optional[typing.Union[Acl, typing.Dict[builtins.str, typing.Any]]] = None,
     path: typing.Optional[builtins.str] = None,
     posix_user: typing.Optional[typing.Union[PosixUser, typing.Dict[builtins.str, typing.Any]]] = None,
-    file_system: IFileSystem,
+    file_system: _IFileSystemRef_3dcf8b98,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5622,7 +5644,7 @@ def _typecheckingstub__f2ad126af1a9797276c238562f8185eb06a56da00a9b12a35504f9d72
 
 def _typecheckingstub__d9c62bc4cd9ae1dbb417e0cd90508616e99886736d2ff0779e0c163618a47ea4(
     *,
-    destination_file_system: IFileSystem,
+    destination_file_system: _IFileSystemRef_3dcf8b98,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5713,7 +5735,7 @@ def _typecheckingstub__8e5f31a5d9e5ce51bef26c5cc20973bf80024b4c7fba6d891072ccaf0
     pass
 
 def _typecheckingstub__34d3dea9ddf1aad07fb26f1da53ab80f3f9dd969fdc864369ca638a47d88e7a7(
-    destination_file_system: IFileSystem,
+    destination_file_system: _IFileSystemRef_3dcf8b98,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5736,7 +5758,7 @@ def _typecheckingstub__a8c205c27eb7c267e9a53c283b59ced307f90e800333dea1748fd1901
 def _typecheckingstub__f4e59d29e2aee34149bd4bb57cf8b214cfb2a70fe199b76106b163c20aaeaec9(
     *,
     availability_zone: typing.Optional[builtins.str] = None,
-    destination_file_system: typing.Optional[IFileSystem] = None,
+    destination_file_system: typing.Optional[_IFileSystemRef_3dcf8b98] = None,
     kms_key: typing.Optional[_IKey_5f11635f] = None,
     region: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -5747,7 +5769,7 @@ def _typecheckingstub__b4cd5acd3aac2348517085a4188b85a5e2329da4dc443644482b9153e
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    file_system: IFileSystem,
+    file_system: _IFileSystemRef_3dcf8b98,
     client_token: typing.Optional[builtins.str] = None,
     create_acl: typing.Optional[typing.Union[Acl, typing.Dict[builtins.str, typing.Any]]] = None,
     path: typing.Optional[builtins.str] = None,
@@ -5762,7 +5784,7 @@ def _typecheckingstub__c0959a679ec1620c39a9d0f9763692323c37cf7d3425d339a42722079
     *,
     access_point_arn: typing.Optional[builtins.str] = None,
     access_point_id: typing.Optional[builtins.str] = None,
-    file_system: typing.Optional[IFileSystem] = None,
+    file_system: typing.Optional[_IFileSystemRef_3dcf8b98] = None,
 ) -> None:
     """Type checking stubs"""
     pass

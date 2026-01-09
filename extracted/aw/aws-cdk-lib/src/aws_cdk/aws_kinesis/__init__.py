@@ -1728,7 +1728,7 @@ class CfnStreamProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_kinesis.IStream")
-class IStream(_IResource_c80c4260, typing_extensions.Protocol):
+class IStream(_IResource_c80c4260, _IStreamRef_b484e253, typing_extensions.Protocol):
     '''A Kinesis Stream.'''
 
     @builtins.property
@@ -2582,6 +2582,7 @@ class IStream(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IStreamProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IStreamRef_b484e253), # type: ignore[misc]
 ):
     '''A Kinesis Stream.'''
 
@@ -3759,7 +3760,11 @@ typing.cast(typing.Any, IStream).__jsii_proxy_class__ = lambda : _IStreamProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_kinesis.IStreamConsumer")
-class IStreamConsumer(_IResource_c80c4260, typing_extensions.Protocol):
+class IStreamConsumer(
+    _IResource_c80c4260,
+    _IStreamConsumerRef_62f6b6ad,
+    typing_extensions.Protocol,
+):
     '''A Kinesis Stream Consumer.'''
 
     @builtins.property
@@ -3828,6 +3833,7 @@ class IStreamConsumer(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IStreamConsumerProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IStreamConsumerRef_62f6b6ad), # type: ignore[misc]
 ):
     '''A Kinesis Stream Consumer.'''
 
@@ -5437,6 +5443,12 @@ class Stream(
         return typing.cast(builtins.str, jsii.get(self, "streamName"))
 
     @builtins.property
+    @jsii.member(jsii_name="streamRef")
+    def stream_ref(self) -> "_StreamReference_030b9268":
+        '''A reference to this stream.'''
+        return typing.cast("_StreamReference_030b9268", jsii.get(self, "streamRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="encryptionKey")
     def encryption_key(self) -> typing.Optional["_IKey_5f11635f"]:
         '''Optional KMS encryption key associated with this stream.'''
@@ -5686,6 +5698,12 @@ class StreamConsumer(
     def stream_consumer_name(self) -> builtins.str:
         '''The name of the stream consumer.'''
         return typing.cast(builtins.str, jsii.get(self, "streamConsumerName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="streamConsumerRef")
+    def stream_consumer_ref(self) -> "_StreamConsumerReference_d7ef801e":
+        '''A reference to this stream consumer.'''
+        return typing.cast("_StreamConsumerReference_d7ef801e", jsii.get(self, "streamConsumerRef"))
 
 
 @jsii.data_type(

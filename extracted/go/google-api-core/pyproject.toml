@@ -83,7 +83,7 @@ version = { attr = "google.api_core.version.__version__" }
 include = ["google*"]
 
 [tool.mypy]
-python_version = "3.7"
+python_version = "3.14"
 namespace_packages = true
 ignore_missing_imports = true
 
@@ -91,6 +91,8 @@ ignore_missing_imports = true
 filterwarnings = [
   # treat all warnings as errors
   "error",
+  # Prevent Python version warnings from interfering with tests
+  "ignore:.* Python version .*:FutureWarning",
   # Remove once https://github.com/pytest-dev/pytest-cov/issues/621 is fixed
   "ignore:.*The --rsyncdir command line argument and rsyncdirs config variable are deprecated:DeprecationWarning",
   # Remove once https://github.com/protocolbuffers/protobuf/issues/12186 is fixed

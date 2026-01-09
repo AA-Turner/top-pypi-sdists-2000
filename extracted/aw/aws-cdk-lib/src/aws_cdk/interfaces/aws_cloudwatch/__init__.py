@@ -533,22 +533,13 @@ typing.cast(typing.Any, IMetricStreamRef).__jsii_proxy_class__ = lambda : _IMetr
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_cloudwatch.InsightRuleReference",
     jsii_struct_bases=[],
-    name_mapping={
-        "insight_rule_arn": "insightRuleArn",
-        "insight_rule_id": "insightRuleId",
-    },
+    name_mapping={"insight_rule_arn": "insightRuleArn"},
 )
 class InsightRuleReference:
-    def __init__(
-        self,
-        *,
-        insight_rule_arn: builtins.str,
-        insight_rule_id: builtins.str,
-    ) -> None:
+    def __init__(self, *, insight_rule_arn: builtins.str) -> None:
         '''A reference to a InsightRule resource.
 
-        :param insight_rule_arn: The ARN of the InsightRule resource.
-        :param insight_rule_id: The Id of the InsightRule resource.
+        :param insight_rule_arn: The Arn of the InsightRule resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -559,31 +550,21 @@ class InsightRuleReference:
             from aws_cdk.interfaces import aws_cloudwatch as interfaces_cloudwatch
             
             insight_rule_reference = interfaces_cloudwatch.InsightRuleReference(
-                insight_rule_arn="insightRuleArn",
-                insight_rule_id="insightRuleId"
+                insight_rule_arn="insightRuleArn"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5c9eaae14b7b5fd4caa9ee9685f1e4ff2ed87f7d35cc2260e8e46c3852afb6be)
             check_type(argname="argument insight_rule_arn", value=insight_rule_arn, expected_type=type_hints["insight_rule_arn"])
-            check_type(argname="argument insight_rule_id", value=insight_rule_id, expected_type=type_hints["insight_rule_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "insight_rule_arn": insight_rule_arn,
-            "insight_rule_id": insight_rule_id,
         }
 
     @builtins.property
     def insight_rule_arn(self) -> builtins.str:
-        '''The ARN of the InsightRule resource.'''
+        '''The Arn of the InsightRule resource.'''
         result = self._values.get("insight_rule_arn")
         assert result is not None, "Required property 'insight_rule_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def insight_rule_id(self) -> builtins.str:
-        '''The Id of the InsightRule resource.'''
-        result = self._values.get("insight_rule_id")
-        assert result is not None, "Required property 'insight_rule_id' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -716,7 +697,6 @@ def _typecheckingstub__b8a69e4049e357c44415bff967a5b2a7dd2e87def21cda4b468303b1a
 def _typecheckingstub__5c9eaae14b7b5fd4caa9ee9685f1e4ff2ed87f7d35cc2260e8e46c3852afb6be(
     *,
     insight_rule_arn: builtins.str,
-    insight_rule_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -266,14 +266,19 @@ typing.cast(typing.Any, ISourceCredentialRef).__jsii_proxy_class__ = lambda : _I
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_codebuild.ProjectReference",
     jsii_struct_bases=[],
-    name_mapping={"project_arn": "projectArn", "project_id": "projectId"},
+    name_mapping={"project_arn": "projectArn", "project_name": "projectName"},
 )
 class ProjectReference:
-    def __init__(self, *, project_arn: builtins.str, project_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        project_arn: builtins.str,
+        project_name: builtins.str,
+    ) -> None:
         '''A reference to a Project resource.
 
         :param project_arn: The ARN of the Project resource.
-        :param project_id: The Id of the Project resource.
+        :param project_name: The Name of the Project resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -285,16 +290,16 @@ class ProjectReference:
             
             project_reference = interfaces_codebuild.ProjectReference(
                 project_arn="projectArn",
-                project_id="projectId"
+                project_name="projectName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__938517d640cf480acbfa73e5d436dfdb8249909865744af5fcd6ced48675a435)
             check_type(argname="argument project_arn", value=project_arn, expected_type=type_hints["project_arn"])
-            check_type(argname="argument project_id", value=project_id, expected_type=type_hints["project_id"])
+            check_type(argname="argument project_name", value=project_name, expected_type=type_hints["project_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "project_arn": project_arn,
-            "project_id": project_id,
+            "project_name": project_name,
         }
 
     @builtins.property
@@ -305,10 +310,10 @@ class ProjectReference:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def project_id(self) -> builtins.str:
-        '''The Id of the Project resource.'''
-        result = self._values.get("project_id")
-        assert result is not None, "Required property 'project_id' is missing"
+    def project_name(self) -> builtins.str:
+        '''The Name of the Project resource.'''
+        result = self._values.get("project_name")
+        assert result is not None, "Required property 'project_name' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -326,22 +331,13 @@ class ProjectReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_codebuild.ReportGroupReference",
     jsii_struct_bases=[],
-    name_mapping={
-        "report_group_arn": "reportGroupArn",
-        "report_group_id": "reportGroupId",
-    },
+    name_mapping={"report_group_arn": "reportGroupArn"},
 )
 class ReportGroupReference:
-    def __init__(
-        self,
-        *,
-        report_group_arn: builtins.str,
-        report_group_id: builtins.str,
-    ) -> None:
+    def __init__(self, *, report_group_arn: builtins.str) -> None:
         '''A reference to a ReportGroup resource.
 
-        :param report_group_arn: The ARN of the ReportGroup resource.
-        :param report_group_id: The Id of the ReportGroup resource.
+        :param report_group_arn: The Arn of the ReportGroup resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -352,31 +348,21 @@ class ReportGroupReference:
             from aws_cdk.interfaces import aws_codebuild as interfaces_codebuild
             
             report_group_reference = interfaces_codebuild.ReportGroupReference(
-                report_group_arn="reportGroupArn",
-                report_group_id="reportGroupId"
+                report_group_arn="reportGroupArn"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7cd46ecb1a45984facc4fba5861d8c76e61cb467c28f418886f84499d8ece72c)
             check_type(argname="argument report_group_arn", value=report_group_arn, expected_type=type_hints["report_group_arn"])
-            check_type(argname="argument report_group_id", value=report_group_id, expected_type=type_hints["report_group_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "report_group_arn": report_group_arn,
-            "report_group_id": report_group_id,
         }
 
     @builtins.property
     def report_group_arn(self) -> builtins.str:
-        '''The ARN of the ReportGroup resource.'''
+        '''The Arn of the ReportGroup resource.'''
         result = self._values.get("report_group_arn")
         assert result is not None, "Required property 'report_group_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def report_group_id(self) -> builtins.str:
-        '''The Id of the ReportGroup resource.'''
-        result = self._values.get("report_group_id")
-        assert result is not None, "Required property 'report_group_id' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -463,7 +449,7 @@ def _typecheckingstub__b252b09ea2d7a037ef7eb8c132fdc4bf9af5d216a313e3c3b3a3847f4
 def _typecheckingstub__938517d640cf480acbfa73e5d436dfdb8249909865744af5fcd6ced48675a435(
     *,
     project_arn: builtins.str,
-    project_id: builtins.str,
+    project_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -471,7 +457,6 @@ def _typecheckingstub__938517d640cf480acbfa73e5d436dfdb8249909865744af5fcd6ced48
 def _typecheckingstub__7cd46ecb1a45984facc4fba5861d8c76e61cb467c28f418886f84499d8ece72c(
     *,
     report_group_arn: builtins.str,
-    report_group_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

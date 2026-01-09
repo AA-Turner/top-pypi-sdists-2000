@@ -86,14 +86,13 @@ class ApiCacheReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_appsync.ApiKeyReference",
     jsii_struct_bases=[],
-    name_mapping={"api_key_arn": "apiKeyArn", "api_key_id": "apiKeyId"},
+    name_mapping={"api_key_arn": "apiKeyArn"},
 )
 class ApiKeyReference:
-    def __init__(self, *, api_key_arn: builtins.str, api_key_id: builtins.str) -> None:
+    def __init__(self, *, api_key_arn: builtins.str) -> None:
         '''A reference to a ApiKey resource.
 
-        :param api_key_arn: The ARN of the ApiKey resource.
-        :param api_key_id: The ApiKeyId of the ApiKey resource.
+        :param api_key_arn: The Arn of the ApiKey resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -104,31 +103,21 @@ class ApiKeyReference:
             from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
             api_key_reference = interfaces_appsync.ApiKeyReference(
-                api_key_arn="apiKeyArn",
-                api_key_id="apiKeyId"
+                api_key_arn="apiKeyArn"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c89c61b6d09e514f3580cb56bddf0fff5b1a35bd5f8b47cb4d6faa952954159c)
             check_type(argname="argument api_key_arn", value=api_key_arn, expected_type=type_hints["api_key_arn"])
-            check_type(argname="argument api_key_id", value=api_key_id, expected_type=type_hints["api_key_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "api_key_arn": api_key_arn,
-            "api_key_id": api_key_id,
         }
 
     @builtins.property
     def api_key_arn(self) -> builtins.str:
-        '''The ARN of the ApiKey resource.'''
+        '''The Arn of the ApiKey resource.'''
         result = self._values.get("api_key_arn")
         assert result is not None, "Required property 'api_key_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def api_key_id(self) -> builtins.str:
-        '''The ApiKeyId of the ApiKey resource.'''
-        result = self._values.get("api_key_id")
-        assert result is not None, "Required property 'api_key_id' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -456,14 +445,13 @@ class FunctionConfigurationReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_appsync.GraphQLApiReference",
     jsii_struct_bases=[],
-    name_mapping={"api_id": "apiId", "graph_ql_api_arn": "graphQlApiArn"},
+    name_mapping={"graph_ql_api_arn": "graphQlApiArn"},
 )
 class GraphQLApiReference:
-    def __init__(self, *, api_id: builtins.str, graph_ql_api_arn: builtins.str) -> None:
+    def __init__(self, *, graph_ql_api_arn: builtins.str) -> None:
         '''A reference to a GraphQLApi resource.
 
-        :param api_id: The ApiId of the GraphQLApi resource.
-        :param graph_ql_api_arn: The ARN of the GraphQLApi resource.
+        :param graph_ql_api_arn: The Arn of the GraphQLApi resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -474,29 +462,19 @@ class GraphQLApiReference:
             from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
             graph_qLApi_reference = interfaces_appsync.GraphQLApiReference(
-                api_id="apiId",
                 graph_ql_api_arn="graphQlApiArn"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0aa4e6b2e6fad1b9dc5f2e746d6cf8738451a7c872f4d279c7ddf3b646087638)
-            check_type(argname="argument api_id", value=api_id, expected_type=type_hints["api_id"])
             check_type(argname="argument graph_ql_api_arn", value=graph_ql_api_arn, expected_type=type_hints["graph_ql_api_arn"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "api_id": api_id,
             "graph_ql_api_arn": graph_ql_api_arn,
         }
 
     @builtins.property
-    def api_id(self) -> builtins.str:
-        '''The ApiId of the GraphQLApi resource.'''
-        result = self._values.get("api_id")
-        assert result is not None, "Required property 'api_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
     def graph_ql_api_arn(self) -> builtins.str:
-        '''The ARN of the GraphQLApi resource.'''
+        '''The Arn of the GraphQLApi resource.'''
         result = self._values.get("graph_ql_api_arn")
         assert result is not None, "Required property 'graph_ql_api_arn' is missing"
         return typing.cast(builtins.str, result)
@@ -1245,7 +1223,6 @@ def _typecheckingstub__02d2fc7495b4465ad3e37604f75a0bdb55af526cf724ce569c848502d
 def _typecheckingstub__c89c61b6d09e514f3580cb56bddf0fff5b1a35bd5f8b47cb4d6faa952954159c(
     *,
     api_key_arn: builtins.str,
-    api_key_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1295,7 +1272,6 @@ def _typecheckingstub__584cd85e85f52dd14687b3606b5f2e19f0f582d52dd451ec04ae6328b
 
 def _typecheckingstub__0aa4e6b2e6fad1b9dc5f2e746d6cf8738451a7c872f4d279c7ddf3b646087638(
     *,
-    api_id: builtins.str,
     graph_ql_api_arn: builtins.str,
 ) -> None:
     """Type checking stubs"""

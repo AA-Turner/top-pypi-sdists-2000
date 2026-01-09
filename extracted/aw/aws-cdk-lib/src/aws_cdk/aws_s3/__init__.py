@@ -14175,7 +14175,7 @@ class CfnStorageLens(
             :param activity_metrics: This property contains the details of account-level activity metrics for S3 Storage Lens.
             :param advanced_cost_optimization_metrics: This property contains the details of account-level advanced cost optimization metrics for S3 Storage Lens.
             :param advanced_data_protection_metrics: This property contains the details of account-level advanced data protection metrics for S3 Storage Lens.
-            :param advanced_performance_metrics: Advanced Performance Metrics.
+            :param advanced_performance_metrics: This property contains the account-level details for S3 Storage Lens advanced performance metrics.
             :param detailed_status_codes_metrics: This property contains the details of account-level detailed status code metrics for S3 Storage Lens.
             :param storage_lens_group_level: This property determines the scope of Storage Lens group data that is displayed in the Storage Lens dashboard.
 
@@ -14317,7 +14317,7 @@ class CfnStorageLens(
         def advanced_performance_metrics(
             self,
         ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStorageLens.AdvancedPerformanceMetricsProperty"]]:
-            '''Advanced Performance Metrics.
+            '''This property contains the account-level details for S3 Storage Lens advanced performance metrics.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-accountlevel.html#cfn-s3-storagelens-accountlevel-advancedperformancemetrics
             '''
@@ -14551,9 +14551,11 @@ class CfnStorageLens(
             *,
             is_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         ) -> None:
-            '''Advanced Performance Metrics.
+            '''A property for S3 Storage Lens advanced performance metrics.
 
-            :param is_enabled: Specifies whether the Advanced Performance Metrics is enabled or disabled.
+            Advanced performance metrics provide insights into application performance such as access patterns and network originality metrics.
+
+            :param is_enabled: This property indicates whether the advanced performance metrics are enabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-advancedperformancemetrics.html
             :exampleMetadata: fixture=_generated
@@ -14579,7 +14581,7 @@ class CfnStorageLens(
         def is_enabled(
             self,
         ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
-            '''Specifies whether the Advanced Performance Metrics is enabled or disabled.
+            '''This property indicates whether the advanced performance metrics are enabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-advancedperformancemetrics.html#cfn-s3-storagelens-advancedperformancemetrics-isenabled
             '''
@@ -14677,7 +14679,7 @@ class CfnStorageLens(
             :param activity_metrics: A property for bucket-level activity metrics for S3 Storage Lens.
             :param advanced_cost_optimization_metrics: A property for bucket-level advanced cost optimization metrics for S3 Storage Lens.
             :param advanced_data_protection_metrics: A property for bucket-level advanced data protection metrics for S3 Storage Lens.
-            :param advanced_performance_metrics: Advanced Performance Metrics.
+            :param advanced_performance_metrics: A property for bucket-level advanced performance metrics for S3 Storage Lens.
             :param detailed_status_codes_metrics: A property for bucket-level detailed status code metrics for S3 Storage Lens.
             :param prefix_level: A property for bucket-level prefix-level storage metrics for S3 Storage Lens.
 
@@ -14777,7 +14779,7 @@ class CfnStorageLens(
         def advanced_performance_metrics(
             self,
         ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStorageLens.AdvancedPerformanceMetricsProperty"]]:
-            '''Advanced Performance Metrics.
+            '''A property for bucket-level advanced performance metrics for S3 Storage Lens.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-bucketlevel.html#cfn-s3-storagelens-bucketlevel-advancedperformancemetrics
             '''
@@ -14968,7 +14970,7 @@ class CfnStorageLens(
 
             :param cloud_watch_metrics: This property enables the Amazon CloudWatch publishing option for S3 Storage Lens metrics.
             :param s3_bucket_destination: This property contains the details of the bucket where the S3 Storage Lens metrics export will be placed.
-            :param storage_lens_table_destination: S3 Tables destination settings for the Amazon S3 Storage Lens metrics export.
+            :param storage_lens_table_destination: This property contains the details of the S3 table bucket where the S3 Storage Lens default metrics report will be placed. This property enables you to store your Storage Lens metrics in read-only S3 Tables.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-dataexport.html
             :exampleMetadata: fixture=_generated
@@ -15052,7 +15054,9 @@ class CfnStorageLens(
         def storage_lens_table_destination(
             self,
         ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStorageLens.StorageLensTableDestinationProperty"]]:
-            '''S3 Tables destination settings for the Amazon S3 Storage Lens metrics export.
+            '''This property contains the details of the S3 table bucket where the S3 Storage Lens default metrics report will be placed.
+
+            This property enables you to store your Storage Lens metrics in read-only S3 Tables.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-dataexport.html#cfn-s3-storagelens-dataexport-storagelenstabledestination
             '''
@@ -15686,7 +15690,7 @@ class CfnStorageLens(
             :param aws_org: This property contains the details of the AWS Organization for the S3 Storage Lens configuration.
             :param data_export: This property contains the details of this S3 Storage Lens configuration's metrics export.
             :param exclude: This property contains the details of the bucket and or Regions excluded for Amazon S3 Storage Lens configuration.
-            :param expanded_prefixes_data_export: Expanded Prefixes Data Export.
+            :param expanded_prefixes_data_export: This property configures your S3 Storage Lens expanded prefixes metrics report.
             :param include: This property contains the details of the bucket and or Regions included for Amazon S3 Storage Lens configuration.
             :param prefix_delimiter: The delimiter to divide S3 key into hierarchy of prefixes.
             :param storage_lens_arn: This property contains the details of the ARN of the S3 Storage Lens configuration. This property is read-only.
@@ -15934,7 +15938,7 @@ class CfnStorageLens(
         def expanded_prefixes_data_export(
             self,
         ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStorageLens.StorageLensExpandedPrefixesDataExportProperty"]]:
-            '''Expanded Prefixes Data Export.
+            '''This property configures your S3 Storage Lens expanded prefixes metrics report.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-storagelensconfiguration.html#cfn-s3-storagelens-storagelensconfiguration-expandedprefixesdataexport
             '''
@@ -15998,10 +16002,10 @@ class CfnStorageLens(
             s3_bucket_destination: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStorageLens.S3BucketDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             storage_lens_table_destination: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStorageLens.StorageLensTableDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''Expanded Prefixes Data Export.
+            '''This resource specifies the properties of your S3 Storage Lens Expanded Prefixes metrics export.
 
-            :param s3_bucket_destination: S3 bucket destination settings for the Amazon S3 Storage Lens metrics export.
-            :param storage_lens_table_destination: S3 Tables destination settings for the Amazon S3 Storage Lens metrics export.
+            :param s3_bucket_destination: This property specifies the general purpose bucket where the S3 Storage Lens Expanded Prefixes metrics export files are located. At least one export destination must be specified.
+            :param storage_lens_table_destination: This property configures S3 Storage Lens Expanded Prefixes metrics report to read-only S3 table buckets.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-storagelensexpandedprefixesdataexport.html
             :exampleMetadata: fixture=_generated
@@ -16057,7 +16061,9 @@ class CfnStorageLens(
         def s3_bucket_destination(
             self,
         ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStorageLens.S3BucketDestinationProperty"]]:
-            '''S3 bucket destination settings for the Amazon S3 Storage Lens metrics export.
+            '''This property specifies the general purpose bucket where the S3 Storage Lens Expanded Prefixes metrics export files are located.
+
+            At least one export destination must be specified.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-storagelensexpandedprefixesdataexport.html#cfn-s3-storagelens-storagelensexpandedprefixesdataexport-s3bucketdestination
             '''
@@ -16068,7 +16074,7 @@ class CfnStorageLens(
         def storage_lens_table_destination(
             self,
         ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStorageLens.StorageLensTableDestinationProperty"]]:
-            '''S3 Tables destination settings for the Amazon S3 Storage Lens metrics export.
+            '''This property configures S3 Storage Lens Expanded Prefixes metrics report to read-only S3 table buckets.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-storagelensexpandedprefixesdataexport.html#cfn-s3-storagelens-storagelensexpandedprefixesdataexport-storagelenstabledestination
             '''
@@ -16234,10 +16240,12 @@ class CfnStorageLens(
             is_enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
             encryption: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnStorageLens.EncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''S3 Tables destination settings for the Amazon S3 Storage Lens metrics export.
+            '''This resource configures your S3 Storage Lens reports to export to read-only S3 table buckets.
 
-            :param is_enabled: Specifies whether the export to S3 Tables is enabled or disabled.
-            :param encryption: Configures the server-side encryption for Amazon S3 Storage Lens report files with either S3-managed keys (SSE-S3) or KMS-managed keys (SSE-KMS).
+            With this resource, you can store your Storage Lens metrics in S3 Tables that are created in a read-only S3 table bucket called aws-s3.
+
+            :param is_enabled: This property indicates whether the export to read-only S3 table buckets is enabled for your S3 Storage Lens configuration. When set to true, Storage Lens reports are automatically exported to tables in addition to other configured destinations.
+            :param encryption: This resource configures your data encryption settings for Storage Lens metrics in read-only S3 table buckets.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-storagelenstabledestination.html
             :exampleMetadata: fixture=_generated
@@ -16274,7 +16282,9 @@ class CfnStorageLens(
 
         @builtins.property
         def is_enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
-            '''Specifies whether the export to S3 Tables is enabled or disabled.
+            '''This property indicates whether the export to read-only S3 table buckets is enabled for your S3 Storage Lens configuration.
+
+            When set to true, Storage Lens reports are automatically exported to tables in addition to other configured destinations.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-storagelenstabledestination.html#cfn-s3-storagelens-storagelenstabledestination-isenabled
             '''
@@ -16286,7 +16296,7 @@ class CfnStorageLens(
         def encryption(
             self,
         ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnStorageLens.EncryptionProperty"]]:
-            '''Configures the server-side encryption for Amazon S3 Storage Lens report files with either S3-managed keys (SSE-S3) or KMS-managed keys (SSE-KMS).
+            '''This resource configures your data encryption settings for Storage Lens metrics in read-only S3 table buckets.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-storagelenstabledestination.html#cfn-s3-storagelens-storagelenstabledestination-encryption
             '''

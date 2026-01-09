@@ -1479,7 +1479,8 @@ rds.OptionGroup(self, "Options",
         vpc=vpc,
         security_groups=[security_group]
     )
-    ]
+    ],
+    option_group_name="MyOptionGroup"
 )
 ```
 
@@ -3354,6 +3355,12 @@ class AuroraMysqlEngineVersion(
     def VER_3_11_0(cls) -> "AuroraMysqlEngineVersion":
         '''Version "8.0.mysql_aurora.3.11.0".'''
         return typing.cast("AuroraMysqlEngineVersion", jsii.sget(cls, "VER_3_11_0"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_3_11_1")
+    def VER_3_11_1(cls) -> "AuroraMysqlEngineVersion":
+        '''Version "8.0.mysql_aurora.3.11.1".'''
+        return typing.cast("AuroraMysqlEngineVersion", jsii.sget(cls, "VER_3_11_1"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_5_7_12")
@@ -36034,6 +36041,7 @@ class OptionGroup(
         configurations: typing.Sequence[typing.Union["OptionConfiguration", typing.Dict[builtins.str, typing.Any]]],
         engine: "IInstanceEngine",
         description: typing.Optional[builtins.str] = None,
+        option_group_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''
         :param scope: -
@@ -36041,13 +36049,17 @@ class OptionGroup(
         :param configurations: The configurations for this option group.
         :param engine: The database engine that this option group is associated with.
         :param description: A description of the option group. Default: a CDK generated description
+        :param option_group_name: The name of the option group. Default: - a CDK generated name
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3f6d2e26e5992debc701a1a08d0b3b527ba28bbebea7a4f70e295af0f59b7bcb)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = OptionGroupProps(
-            configurations=configurations, engine=engine, description=description
+            configurations=configurations,
+            engine=engine,
+            description=description,
+            option_group_name=option_group_name,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -36134,6 +36146,7 @@ class OptionGroup(
         "configurations": "configurations",
         "engine": "engine",
         "description": "description",
+        "option_group_name": "optionGroupName",
     },
 )
 class OptionGroupProps:
@@ -36143,12 +36156,14 @@ class OptionGroupProps:
         configurations: typing.Sequence[typing.Union["OptionConfiguration", typing.Dict[builtins.str, typing.Any]]],
         engine: "IInstanceEngine",
         description: typing.Optional[builtins.str] = None,
+        option_group_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Construction properties for an OptionGroup.
 
         :param configurations: The configurations for this option group.
         :param engine: The database engine that this option group is associated with.
         :param description: A description of the option group. Default: a CDK generated description
+        :param option_group_name: The name of the option group. Default: - a CDK generated name
 
         :exampleMetadata: lit=aws-rds/test/integ.instance.lit.ts infused
 
@@ -36233,12 +36248,15 @@ class OptionGroupProps:
             check_type(argname="argument configurations", value=configurations, expected_type=type_hints["configurations"])
             check_type(argname="argument engine", value=engine, expected_type=type_hints["engine"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument option_group_name", value=option_group_name, expected_type=type_hints["option_group_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "configurations": configurations,
             "engine": engine,
         }
         if description is not None:
             self._values["description"] = description
+        if option_group_name is not None:
+            self._values["option_group_name"] = option_group_name
 
     @builtins.property
     def configurations(self) -> typing.List["OptionConfiguration"]:
@@ -36261,6 +36279,15 @@ class OptionGroupProps:
         :default: a CDK generated description
         '''
         result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def option_group_name(self) -> typing.Optional[builtins.str]:
+        '''The name of the option group.
+
+        :default: - a CDK generated name
+        '''
+        result = self._values.get("option_group_name")
         return typing.cast(typing.Optional[builtins.str], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -55024,6 +55051,7 @@ def _typecheckingstub__3f6d2e26e5992debc701a1a08d0b3b527ba28bbebea7a4f70e295af0f
     configurations: typing.Sequence[typing.Union[OptionConfiguration, typing.Dict[builtins.str, typing.Any]]],
     engine: IInstanceEngine,
     description: typing.Optional[builtins.str] = None,
+    option_group_name: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -55041,6 +55069,7 @@ def _typecheckingstub__db7b5d33593b497b11e816c780348d0566e606b3af7a81b029136b2b7
     configurations: typing.Sequence[typing.Union[OptionConfiguration, typing.Dict[builtins.str, typing.Any]]],
     engine: IInstanceEngine,
     description: typing.Optional[builtins.str] = None,
+    option_group_name: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

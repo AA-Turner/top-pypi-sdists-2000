@@ -7650,7 +7650,11 @@ class CommonConstraintOptions:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_servicecatalog.IPortfolio")
-class IPortfolio(_IResource_c80c4260, typing_extensions.Protocol):
+class IPortfolio(
+    _IResource_c80c4260,
+    _IPortfolioRef_a19e4bd0,
+    typing_extensions.Protocol,
+):
     '''A Service Catalog portfolio.'''
 
     @builtins.property
@@ -7878,6 +7882,7 @@ class IPortfolio(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IPortfolioProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IPortfolioRef_a19e4bd0), # type: ignore[misc]
 ):
     '''A Service Catalog portfolio.'''
 
@@ -8191,7 +8196,11 @@ typing.cast(typing.Any, IPortfolio).__jsii_proxy_class__ = lambda : _IPortfolioP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_servicecatalog.IProduct")
-class IProduct(_IResource_c80c4260, typing_extensions.Protocol):
+class IProduct(
+    _IResource_c80c4260,
+    _ICloudFormationProductRef_d59b8740,
+    typing_extensions.Protocol,
+):
     '''A Service Catalog product, currently only supports type CloudFormationProduct.'''
 
     @builtins.property
@@ -8235,6 +8244,7 @@ class IProduct(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IProductProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_ICloudFormationProductRef_d59b8740), # type: ignore[misc]
 ):
     '''A Service Catalog product, currently only supports type CloudFormationProduct.'''
 
@@ -8704,6 +8714,12 @@ class Portfolio(
         '''The ID of the portfolio.'''
         return typing.cast(builtins.str, jsii.get(self, "portfolioId"))
 
+    @builtins.property
+    @jsii.member(jsii_name="portfolioRef")
+    def portfolio_ref(self) -> "_PortfolioReference_7a849941":
+        '''A reference to a Portfolio resource.'''
+        return typing.cast("_PortfolioReference_7a849941", jsii.get(self, "portfolioRef"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_servicecatalog.PortfolioProps",
@@ -8983,6 +8999,12 @@ class Product(
     def asset_buckets(self) -> typing.List["_IBucket_42e086fd"]:
         '''The asset buckets of a product created via product stack.'''
         ...
+
+    @builtins.property
+    @jsii.member(jsii_name="cloudFormationProductRef")
+    def cloud_formation_product_ref(self) -> "_CloudFormationProductReference_a9bb7050":
+        '''A reference to a CloudFormationProduct resource.'''
+        return typing.cast("_CloudFormationProductReference_a9bb7050", jsii.get(self, "cloudFormationProductRef"))
 
     @builtins.property
     @jsii.member(jsii_name="productArn")

@@ -991,7 +991,11 @@ class CfnResourceGroupProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_inspector.IAssessmentTemplate")
-class IAssessmentTemplate(_IResource_c80c4260, typing_extensions.Protocol):
+class IAssessmentTemplate(
+    _IResource_c80c4260,
+    _IAssessmentTemplateRef_cd6c4843,
+    typing_extensions.Protocol,
+):
     '''Interface for an Inspector Assessment Template.'''
 
     @builtins.property
@@ -1006,6 +1010,7 @@ class IAssessmentTemplate(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IAssessmentTemplateProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IAssessmentTemplateRef_cd6c4843), # type: ignore[misc]
 ):
     '''Interface for an Inspector Assessment Template.'''
 

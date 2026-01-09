@@ -223,13 +223,13 @@ typing.cast(typing.Any, ISecretTargetAttachmentRef).__jsii_proxy_class__ = lambd
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_secretsmanager.ResourcePolicyReference",
     jsii_struct_bases=[],
-    name_mapping={"resource_policy_id": "resourcePolicyId"},
+    name_mapping={"secret_id": "secretId"},
 )
 class ResourcePolicyReference:
-    def __init__(self, *, resource_policy_id: builtins.str) -> None:
+    def __init__(self, *, secret_id: builtins.str) -> None:
         '''A reference to a ResourcePolicy resource.
 
-        :param resource_policy_id: The Id of the ResourcePolicy resource.
+        :param secret_id: The SecretId of the ResourcePolicy resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -240,21 +240,21 @@ class ResourcePolicyReference:
             from aws_cdk.interfaces import aws_secretsmanager as interfaces_secretsmanager
             
             resource_policy_reference = interfaces_secretsmanager.ResourcePolicyReference(
-                resource_policy_id="resourcePolicyId"
+                secret_id="secretId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a0ca96091907390a9b4159a50654cd69c9b77b7c347601999dae8b82c4aea6a9)
-            check_type(argname="argument resource_policy_id", value=resource_policy_id, expected_type=type_hints["resource_policy_id"])
+            check_type(argname="argument secret_id", value=secret_id, expected_type=type_hints["secret_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "resource_policy_id": resource_policy_id,
+            "secret_id": secret_id,
         }
 
     @builtins.property
-    def resource_policy_id(self) -> builtins.str:
-        '''The Id of the ResourcePolicy resource.'''
-        result = self._values.get("resource_policy_id")
-        assert result is not None, "Required property 'resource_policy_id' is missing"
+    def secret_id(self) -> builtins.str:
+        '''The SecretId of the ResourcePolicy resource.'''
+        result = self._values.get("secret_id")
+        assert result is not None, "Required property 'secret_id' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -370,13 +370,13 @@ class SecretReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_secretsmanager.SecretTargetAttachmentReference",
     jsii_struct_bases=[],
-    name_mapping={"secret_target_attachment_id": "secretTargetAttachmentId"},
+    name_mapping={"secret_id": "secretId"},
 )
 class SecretTargetAttachmentReference:
-    def __init__(self, *, secret_target_attachment_id: builtins.str) -> None:
+    def __init__(self, *, secret_id: builtins.str) -> None:
         '''A reference to a SecretTargetAttachment resource.
 
-        :param secret_target_attachment_id: The Id of the SecretTargetAttachment resource.
+        :param secret_id: The SecretId of the SecretTargetAttachment resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -387,21 +387,21 @@ class SecretTargetAttachmentReference:
             from aws_cdk.interfaces import aws_secretsmanager as interfaces_secretsmanager
             
             secret_target_attachment_reference = interfaces_secretsmanager.SecretTargetAttachmentReference(
-                secret_target_attachment_id="secretTargetAttachmentId"
+                secret_id="secretId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f70d28228dde47c628bc306d8f6780dee467d05d857b0b0b777cf8e3509c39b2)
-            check_type(argname="argument secret_target_attachment_id", value=secret_target_attachment_id, expected_type=type_hints["secret_target_attachment_id"])
+            check_type(argname="argument secret_id", value=secret_id, expected_type=type_hints["secret_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "secret_target_attachment_id": secret_target_attachment_id,
+            "secret_id": secret_id,
         }
 
     @builtins.property
-    def secret_target_attachment_id(self) -> builtins.str:
-        '''The Id of the SecretTargetAttachment resource.'''
-        result = self._values.get("secret_target_attachment_id")
-        assert result is not None, "Required property 'secret_target_attachment_id' is missing"
+    def secret_id(self) -> builtins.str:
+        '''The SecretId of the SecretTargetAttachment resource.'''
+        result = self._values.get("secret_id")
+        assert result is not None, "Required property 'secret_id' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -431,7 +431,7 @@ publication.publish()
 
 def _typecheckingstub__a0ca96091907390a9b4159a50654cd69c9b77b7c347601999dae8b82c4aea6a9(
     *,
-    resource_policy_id: builtins.str,
+    secret_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -452,7 +452,7 @@ def _typecheckingstub__b324ea23961f09929b42f934498dca8c7d62f0978eebebc57a34b4668
 
 def _typecheckingstub__f70d28228dde47c628bc306d8f6780dee467d05d857b0b0b777cf8e3509c39b2(
     *,
-    secret_target_attachment_id: builtins.str,
+    secret_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -1820,6 +1820,7 @@ from ..aws_sns import ITopic as _ITopic_9eca4852
 from ..cx_api import (
     CloudFormationStackArtifact as _CloudFormationStackArtifact_97533dc8
 )
+from ..interfaces.aws_ecr import IRepositoryRef as _IRepositoryRef_f3b81117
 
 
 @jsii.data_type(
@@ -6962,7 +6963,7 @@ class CodePipelineSource(
     @builtins.classmethod
     def ecr(
         cls,
-        repository: "_IRepository_e6004aa6",
+        repository: "_IRepositoryRef_f3b81117",
         *,
         action_name: typing.Optional[builtins.str] = None,
         image_tag: typing.Optional[builtins.str] = None,
@@ -8640,7 +8641,7 @@ def _typecheckingstub__61f9c81f3f2616f051720bd0c8209831bc0b7aa25f736b93cc369f3df
     pass
 
 def _typecheckingstub__8b33e9fc6a0d43b73cabe2ee725c5ebddcca32e8eb1b382e1e11a96004696b07(
-    repository: _IRepository_e6004aa6,
+    repository: _IRepositoryRef_f3b81117,
     *,
     action_name: typing.Optional[builtins.str] = None,
     image_tag: typing.Optional[builtins.str] = None,

@@ -1872,13 +1872,13 @@ class ReceiptRuleReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_ses.ReceiptRuleSetReference",
     jsii_struct_bases=[],
-    name_mapping={"receipt_rule_set_id": "receiptRuleSetId"},
+    name_mapping={"rule_set_name": "ruleSetName"},
 )
 class ReceiptRuleSetReference:
-    def __init__(self, *, receipt_rule_set_id: builtins.str) -> None:
+    def __init__(self, *, rule_set_name: builtins.str) -> None:
         '''A reference to a ReceiptRuleSet resource.
 
-        :param receipt_rule_set_id: The Id of the ReceiptRuleSet resource.
+        :param rule_set_name: The RuleSetName of the ReceiptRuleSet resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -1889,21 +1889,21 @@ class ReceiptRuleSetReference:
             from aws_cdk.interfaces import aws_ses as interfaces_ses
             
             receipt_rule_set_reference = interfaces_ses.ReceiptRuleSetReference(
-                receipt_rule_set_id="receiptRuleSetId"
+                rule_set_name="ruleSetName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a8b0af72ead1871122888635202efb56ab07d6d385015d5dd64c6af6d67de3df)
-            check_type(argname="argument receipt_rule_set_id", value=receipt_rule_set_id, expected_type=type_hints["receipt_rule_set_id"])
+            check_type(argname="argument rule_set_name", value=rule_set_name, expected_type=type_hints["rule_set_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "receipt_rule_set_id": receipt_rule_set_id,
+            "rule_set_name": rule_set_name,
         }
 
     @builtins.property
-    def receipt_rule_set_id(self) -> builtins.str:
-        '''The Id of the ReceiptRuleSet resource.'''
-        result = self._values.get("receipt_rule_set_id")
-        assert result is not None, "Required property 'receipt_rule_set_id' is missing"
+    def rule_set_name(self) -> builtins.str:
+        '''The RuleSetName of the ReceiptRuleSet resource.'''
+        result = self._values.get("rule_set_name")
+        assert result is not None, "Required property 'rule_set_name' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -2243,7 +2243,7 @@ def _typecheckingstub__363cf68bbf8c488eefc1ebe3e54c3c412bdcb6eef06d4572cd6a7d1e3
 
 def _typecheckingstub__a8b0af72ead1871122888635202efb56ab07d6d385015d5dd64c6af6d67de3df(
     *,
-    receipt_rule_set_id: builtins.str,
+    rule_set_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

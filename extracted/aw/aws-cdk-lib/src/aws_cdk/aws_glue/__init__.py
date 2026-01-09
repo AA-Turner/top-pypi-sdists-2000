@@ -19102,6 +19102,38 @@ class CfnWorkflow(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForWorkflow")
+    @builtins.classmethod
+    def arn_for_workflow(cls, resource: "_IWorkflowRef_130478b3") -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e0b2dd7ee95ea58fc5c77b712d9c2fac28be6ce48925be77f616ab7e30177ab1)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForWorkflow", [resource]))
+
+    @jsii.member(jsii_name="fromWorkflowName")
+    @builtins.classmethod
+    def from_workflow_name(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        workflow_name: builtins.str,
+    ) -> "_IWorkflowRef_130478b3":
+        '''Creates a new IWorkflowRef from a workflowName.
+
+        :param scope: -
+        :param id: -
+        :param workflow_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f44ecac1fb957373a44885837e4df2ba6b4e908a2652eb1264f40a9b81326835)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument workflow_name", value=workflow_name, expected_type=type_hints["workflow_name"])
+        return typing.cast("_IWorkflowRef_130478b3", jsii.sinvoke(cls, "fromWorkflowName", [scope, id, workflow_name]))
+
     @jsii.member(jsii_name="isCfnWorkflow")
     @builtins.classmethod
     def is_cfn_workflow(cls, x: typing.Any) -> builtins.bool:
@@ -22227,6 +22259,20 @@ def _typecheckingstub__d6c744c641379ecc5fd54ce4fcbe0501c332b7726b6037690528980d8
     max_concurrent_runs: typing.Optional[jsii.Number] = None,
     name: typing.Optional[builtins.str] = None,
     tags: typing.Any = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e0b2dd7ee95ea58fc5c77b712d9c2fac28be6ce48925be77f616ab7e30177ab1(
+    resource: _IWorkflowRef_130478b3,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f44ecac1fb957373a44885837e4df2ba6b4e908a2652eb1264f40a9b81326835(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    workflow_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

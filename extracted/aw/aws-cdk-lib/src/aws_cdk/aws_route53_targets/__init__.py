@@ -311,7 +311,6 @@ from ..aws_cognito import UserPoolDomain as _UserPoolDomain_f402e168
 from ..aws_ec2 import InterfaceVpcEndpoint as _InterfaceVpcEndpoint_9b08bb25
 from ..aws_elasticloadbalancing import LoadBalancer as _LoadBalancer_a894d40e
 from ..aws_elasticloadbalancingv2 import ILoadBalancerV2 as _ILoadBalancerV2_4c5c0fbb
-from ..aws_globalaccelerator import IAccelerator as _IAccelerator_88df59f2
 from ..aws_route53 import (
     AliasRecordTargetConfig as _AliasRecordTargetConfig_588f62e9,
     IAliasRecordTarget as _IAliasRecordTarget_aae9327f,
@@ -319,6 +318,9 @@ from ..aws_route53 import (
     IRecordSet as _IRecordSet_7d446a82,
 )
 from ..aws_s3 import IBucket as _IBucket_42e086fd
+from ..interfaces.aws_globalaccelerator import (
+    IAcceleratorRef as _IAcceleratorRef_b1855670
+)
 
 
 @jsii.implements(_IAliasRecordTarget_aae9327f)
@@ -837,7 +839,7 @@ class GlobalAcceleratorTarget(
 
     def __init__(
         self,
-        accelerator: "_IAccelerator_88df59f2",
+        accelerator: "_IAcceleratorRef_b1855670",
         props: typing.Optional["IAliasRecordTargetProps"] = None,
     ) -> None:
         '''Create an Alias Target for a Global Accelerator instance.
@@ -1280,7 +1282,7 @@ def _typecheckingstub__558f27329c2636934fcd56512940ef2784d615ef258b5e13b88e1bdfd
     pass
 
 def _typecheckingstub__6e91db2b16be80023a03d4863b5100b3072db6e16f816be05e613cdcc1e6baec(
-    accelerator: _IAccelerator_88df59f2,
+    accelerator: _IAcceleratorRef_b1855670,
     props: typing.Optional[IAliasRecordTargetProps] = None,
 ) -> None:
     """Type checking stubs"""

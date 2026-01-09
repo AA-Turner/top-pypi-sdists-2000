@@ -45,6 +45,7 @@ from pydantic import (
 )
 from typing_extensions import TypedDict
 from . import evals as evals_types
+from . import prompt_optimizer as prompt_optimizer_types
 
 
 def camel_to_snake(camel_case_string: str) -> str:
@@ -228,7 +229,7 @@ class AgentServerMode(_common.CaseInSensitiveEnum):
 
 
 class ManagedTopicEnum(_common.CaseInSensitiveEnum):
-    """The managed topic."""
+    """The managed memory topic."""
 
     MANAGED_TOPIC_ENUM_UNSPECIFIED = "MANAGED_TOPIC_ENUM_UNSPECIFIED"
     """Unspecified topic. This value should not be used."""
@@ -332,10 +333,16 @@ class EvaluationRunState(_common.CaseInSensitiveEnum):
 
 
 class OptimizeTarget(_common.CaseInSensitiveEnum):
-    """None"""
+    """Specifies the method for calling the optimize_prompt."""
 
     OPTIMIZATION_TARGET_GEMINI_NANO = "OPTIMIZATION_TARGET_GEMINI_NANO"
     """The data driven prompt optimizer designer for prompts from Android core API."""
+    OPTIMIZATION_TARGET_FEW_SHOT_RUBRICS = "OPTIMIZATION_TARGET_FEW_SHOT_RUBRICS"
+    """The prompt optimizer based on user provided examples with rubrics."""
+    OPTIMIZATION_TARGET_FEW_SHOT_TARGET_RESPONSE = (
+        "OPTIMIZATION_TARGET_FEW_SHOT_TARGET_RESPONSE"
+    )
+    """The prompt optimizer based on user provided examples with target responses."""
 
 
 class GenerateMemoriesResponseGeneratedMemoryAction(_common.CaseInSensitiveEnum):
@@ -3786,7 +3793,12 @@ class OptimizeConfig(_common.BaseModel):
         default=None, description="""Used to override HTTP request options."""
     )
     optimization_target: Optional[OptimizeTarget] = Field(
-        default=None, description=""""""
+        default=None,
+        description="""The optimization target for the prompt optimizer. It must be one of the OptimizeTarget enum values: OPTIMIZATION_TARGET_GEMINI_NANO for the prompts from Android core API, OPTIMIZATION_TARGET_FEW_SHOT_RUBRICS for the few-shot prompt optimizer with rubrics, OPTIMIZATION_TARGET_FEW_SHOT_TARGET_RESPONSE for the few-shot prompt optimizer with target responses.""",
+    )
+    examples_dataframe: Optional[PandasDataFrame] = Field(
+        default=None,
+        description="""The examples dataframe for the few-shot prompt optimizer. It must contain "prompt" and "model_response" columns. Depending on which optimization target is used, it also needs to contain "rubrics" and "rubrics_evaluations" or "target_response" columns.""",
     )
 
 
@@ -3797,7 +3809,10 @@ class OptimizeConfigDict(TypedDict, total=False):
     """Used to override HTTP request options."""
 
     optimization_target: Optional[OptimizeTarget]
-    """"""
+    """The optimization target for the prompt optimizer. It must be one of the OptimizeTarget enum values: OPTIMIZATION_TARGET_GEMINI_NANO for the prompts from Android core API, OPTIMIZATION_TARGET_FEW_SHOT_RUBRICS for the few-shot prompt optimizer with rubrics, OPTIMIZATION_TARGET_FEW_SHOT_TARGET_RESPONSE for the few-shot prompt optimizer with target responses."""
+
+    examples_dataframe: Optional[PandasDataFrame]
+    """The examples dataframe for the few-shot prompt optimizer. It must contain "prompt" and "model_response" columns. Depending on which optimization target is used, it also needs to contain "rubrics" and "rubrics_evaluations" or "target_response" columns."""
 
 
 OptimizeConfigOrDict = Union[OptimizeConfig, OptimizeConfigDict]
@@ -4747,6 +4762,74 @@ ReasoningEngineSpecPackageSpecOrDict = Union[
 ]
 
 
+class ReasoningEngineSpecSourceCodeSpecDeveloperConnectConfig(_common.BaseModel):
+    """Specifies the configuration for fetching source code from a Git repository that is managed by Developer Connect.
+
+    This includes the repository, revision, and directory to use.
+    """
+
+    dir: Optional[str] = Field(
+        default=None,
+        description="""Required. Directory, relative to the source root, in which to run the build.""",
+    )
+    git_repository_link: Optional[str] = Field(
+        default=None,
+        description="""Required. The Developer Connect Git repository link, formatted as `projects/*/locations/*/connections/*/gitRepositoryLink/*`.""",
+    )
+    revision: Optional[str] = Field(
+        default=None,
+        description="""Required. The revision to fetch from the Git repository such as a branch, a tag, a commit SHA, or any Git ref.""",
+    )
+
+
+class ReasoningEngineSpecSourceCodeSpecDeveloperConnectConfigDict(
+    TypedDict, total=False
+):
+    """Specifies the configuration for fetching source code from a Git repository that is managed by Developer Connect.
+
+    This includes the repository, revision, and directory to use.
+    """
+
+    dir: Optional[str]
+    """Required. Directory, relative to the source root, in which to run the build."""
+
+    git_repository_link: Optional[str]
+    """Required. The Developer Connect Git repository link, formatted as `projects/*/locations/*/connections/*/gitRepositoryLink/*`."""
+
+    revision: Optional[str]
+    """Required. The revision to fetch from the Git repository such as a branch, a tag, a commit SHA, or any Git ref."""
+
+
+ReasoningEngineSpecSourceCodeSpecDeveloperConnectConfigOrDict = Union[
+    ReasoningEngineSpecSourceCodeSpecDeveloperConnectConfig,
+    ReasoningEngineSpecSourceCodeSpecDeveloperConnectConfigDict,
+]
+
+
+class ReasoningEngineSpecSourceCodeSpecDeveloperConnectSource(_common.BaseModel):
+    """Specifies source code to be fetched from a Git repository managed through the Developer Connect service."""
+
+    config: Optional[ReasoningEngineSpecSourceCodeSpecDeveloperConnectConfig] = Field(
+        default=None,
+        description="""Required. The Developer Connect configuration thats defines the specific repository, revision, and directory to use as the source code root.""",
+    )
+
+
+class ReasoningEngineSpecSourceCodeSpecDeveloperConnectSourceDict(
+    TypedDict, total=False
+):
+    """Specifies source code to be fetched from a Git repository managed through the Developer Connect service."""
+
+    config: Optional[ReasoningEngineSpecSourceCodeSpecDeveloperConnectConfigDict]
+    """Required. The Developer Connect configuration thats defines the specific repository, revision, and directory to use as the source code root."""
+
+
+ReasoningEngineSpecSourceCodeSpecDeveloperConnectSourceOrDict = Union[
+    ReasoningEngineSpecSourceCodeSpecDeveloperConnectSource,
+    ReasoningEngineSpecSourceCodeSpecDeveloperConnectSourceDict,
+]
+
+
 class ReasoningEngineSpecSourceCodeSpecInlineSource(_common.BaseModel):
     """Specifies source code provided as a byte stream."""
 
@@ -4815,6 +4898,12 @@ ReasoningEngineSpecSourceCodeSpecPythonSpecOrDict = Union[
 class ReasoningEngineSpecSourceCodeSpec(_common.BaseModel):
     """Specification for deploying from source code."""
 
+    developer_connect_source: Optional[
+        ReasoningEngineSpecSourceCodeSpecDeveloperConnectSource
+    ] = Field(
+        default=None,
+        description="""Source code is in a Git repository managed by Developer Connect.""",
+    )
     inline_source: Optional[ReasoningEngineSpecSourceCodeSpecInlineSource] = Field(
         default=None, description="""Source code is provided directly in the request."""
     )
@@ -4825,6 +4914,11 @@ class ReasoningEngineSpecSourceCodeSpec(_common.BaseModel):
 
 class ReasoningEngineSpecSourceCodeSpecDict(TypedDict, total=False):
     """Specification for deploying from source code."""
+
+    developer_connect_source: Optional[
+        ReasoningEngineSpecSourceCodeSpecDeveloperConnectSourceDict
+    ]
+    """Source code is in a Git repository managed by Developer Connect."""
 
     inline_source: Optional[ReasoningEngineSpecSourceCodeSpecInlineSourceDict]
     """Source code is provided directly in the request."""
@@ -4904,94 +4998,6 @@ class ReasoningEngineSpecDict(TypedDict, total=False):
 
 
 ReasoningEngineSpecOrDict = Union[ReasoningEngineSpec, ReasoningEngineSpecDict]
-
-
-class MemoryBankCustomizationConfigMemoryTopicCustomMemoryTopic(_common.BaseModel):
-    """A custom memory topic defined by the developer."""
-
-    label: Optional[str] = Field(
-        default=None, description="""Required. The label of the topic."""
-    )
-    description: Optional[str] = Field(
-        default=None,
-        description="""Required. Description of the memory topic. This should explain what information should be extracted for this topic.""",
-    )
-
-
-class MemoryBankCustomizationConfigMemoryTopicCustomMemoryTopicDict(
-    TypedDict, total=False
-):
-    """A custom memory topic defined by the developer."""
-
-    label: Optional[str]
-    """Required. The label of the topic."""
-
-    description: Optional[str]
-    """Required. Description of the memory topic. This should explain what information should be extracted for this topic."""
-
-
-MemoryBankCustomizationConfigMemoryTopicCustomMemoryTopicOrDict = Union[
-    MemoryBankCustomizationConfigMemoryTopicCustomMemoryTopic,
-    MemoryBankCustomizationConfigMemoryTopicCustomMemoryTopicDict,
-]
-
-
-class MemoryBankCustomizationConfigMemoryTopicManagedMemoryTopic(_common.BaseModel):
-    """A managed memory topic defined by the system."""
-
-    managed_topic_enum: Optional[ManagedTopicEnum] = Field(
-        default=None, description="""Required. The managed topic."""
-    )
-
-
-class MemoryBankCustomizationConfigMemoryTopicManagedMemoryTopicDict(
-    TypedDict, total=False
-):
-    """A managed memory topic defined by the system."""
-
-    managed_topic_enum: Optional[ManagedTopicEnum]
-    """Required. The managed topic."""
-
-
-MemoryBankCustomizationConfigMemoryTopicManagedMemoryTopicOrDict = Union[
-    MemoryBankCustomizationConfigMemoryTopicManagedMemoryTopic,
-    MemoryBankCustomizationConfigMemoryTopicManagedMemoryTopicDict,
-]
-
-
-class MemoryBankCustomizationConfigMemoryTopic(_common.BaseModel):
-    """A topic of information that should be extracted from conversations and stored as memories."""
-
-    custom_memory_topic: Optional[
-        MemoryBankCustomizationConfigMemoryTopicCustomMemoryTopic
-    ] = Field(
-        default=None, description="""A custom memory topic defined by the developer."""
-    )
-    managed_memory_topic: Optional[
-        MemoryBankCustomizationConfigMemoryTopicManagedMemoryTopic
-    ] = Field(
-        default=None, description="""A managed memory topic defined by Memory Bank."""
-    )
-
-
-class MemoryBankCustomizationConfigMemoryTopicDict(TypedDict, total=False):
-    """A topic of information that should be extracted from conversations and stored as memories."""
-
-    custom_memory_topic: Optional[
-        MemoryBankCustomizationConfigMemoryTopicCustomMemoryTopicDict
-    ]
-    """A custom memory topic defined by the developer."""
-
-    managed_memory_topic: Optional[
-        MemoryBankCustomizationConfigMemoryTopicManagedMemoryTopicDict
-    ]
-    """A managed memory topic defined by Memory Bank."""
-
-
-MemoryBankCustomizationConfigMemoryTopicOrDict = Union[
-    MemoryBankCustomizationConfigMemoryTopic,
-    MemoryBankCustomizationConfigMemoryTopicDict,
-]
 
 
 class MemoryBankCustomizationConfigGenerateMemoriesExampleConversationSourceEvent(
@@ -5145,38 +5151,133 @@ MemoryBankCustomizationConfigGenerateMemoriesExampleOrDict = Union[
 ]
 
 
+class MemoryBankCustomizationConfigMemoryTopicCustomMemoryTopic(_common.BaseModel):
+    """A custom memory topic defined by the developer."""
+
+    label: Optional[str] = Field(
+        default=None, description="""Required. The label of the topic."""
+    )
+    description: Optional[str] = Field(
+        default=None,
+        description="""Required. Description of the memory topic. This should explain what information should be extracted for this topic.""",
+    )
+
+
+class MemoryBankCustomizationConfigMemoryTopicCustomMemoryTopicDict(
+    TypedDict, total=False
+):
+    """A custom memory topic defined by the developer."""
+
+    label: Optional[str]
+    """Required. The label of the topic."""
+
+    description: Optional[str]
+    """Required. Description of the memory topic. This should explain what information should be extracted for this topic."""
+
+
+MemoryBankCustomizationConfigMemoryTopicCustomMemoryTopicOrDict = Union[
+    MemoryBankCustomizationConfigMemoryTopicCustomMemoryTopic,
+    MemoryBankCustomizationConfigMemoryTopicCustomMemoryTopicDict,
+]
+
+
+class MemoryBankCustomizationConfigMemoryTopicManagedMemoryTopic(_common.BaseModel):
+    """A managed memory topic defined by the system."""
+
+    managed_topic_enum: Optional[ManagedTopicEnum] = Field(
+        default=None, description="""Required. The managed topic."""
+    )
+
+
+class MemoryBankCustomizationConfigMemoryTopicManagedMemoryTopicDict(
+    TypedDict, total=False
+):
+    """A managed memory topic defined by the system."""
+
+    managed_topic_enum: Optional[ManagedTopicEnum]
+    """Required. The managed topic."""
+
+
+MemoryBankCustomizationConfigMemoryTopicManagedMemoryTopicOrDict = Union[
+    MemoryBankCustomizationConfigMemoryTopicManagedMemoryTopic,
+    MemoryBankCustomizationConfigMemoryTopicManagedMemoryTopicDict,
+]
+
+
+class MemoryBankCustomizationConfigMemoryTopic(_common.BaseModel):
+    """A topic of information that should be extracted from conversations and stored as memories."""
+
+    custom_memory_topic: Optional[
+        MemoryBankCustomizationConfigMemoryTopicCustomMemoryTopic
+    ] = Field(
+        default=None, description="""A custom memory topic defined by the developer."""
+    )
+    managed_memory_topic: Optional[
+        MemoryBankCustomizationConfigMemoryTopicManagedMemoryTopic
+    ] = Field(
+        default=None, description="""A managed memory topic defined by Memory Bank."""
+    )
+
+
+class MemoryBankCustomizationConfigMemoryTopicDict(TypedDict, total=False):
+    """A topic of information that should be extracted from conversations and stored as memories."""
+
+    custom_memory_topic: Optional[
+        MemoryBankCustomizationConfigMemoryTopicCustomMemoryTopicDict
+    ]
+    """A custom memory topic defined by the developer."""
+
+    managed_memory_topic: Optional[
+        MemoryBankCustomizationConfigMemoryTopicManagedMemoryTopicDict
+    ]
+    """A managed memory topic defined by Memory Bank."""
+
+
+MemoryBankCustomizationConfigMemoryTopicOrDict = Union[
+    MemoryBankCustomizationConfigMemoryTopic,
+    MemoryBankCustomizationConfigMemoryTopicDict,
+]
+
+
 class MemoryBankCustomizationConfig(_common.BaseModel):
     """Configuration for organizing memories for a particular scope."""
 
-    scope_keys: Optional[list[str]] = Field(
-        default=None,
-        description="""Optional. The scope keys (i.e. 'user_id') for which to use this config. A request's scope must include all of the provided keys for the config to be used (order does not matter). If empty, then the config will be used for all requests that do not have a more specific config. Only one default config is allowed per Memory Bank.""",
-    )
-    memory_topics: Optional[list[MemoryBankCustomizationConfigMemoryTopic]] = Field(
-        default=None,
-        description="""Optional. Topics of information that should be extracted from conversations and stored as memories. If not set, then Memory Bank's default topics will be used.""",
-    )
     generate_memories_examples: Optional[
         list[MemoryBankCustomizationConfigGenerateMemoriesExample]
     ] = Field(
         default=None,
         description="""Optional. Examples of how to generate memories for a particular scope.""",
     )
+    memory_topics: Optional[list[MemoryBankCustomizationConfigMemoryTopic]] = Field(
+        default=None,
+        description="""Optional. Topics of information that should be extracted from conversations and stored as memories. If not set, then Memory Bank's default topics will be used.""",
+    )
+    scope_keys: Optional[list[str]] = Field(
+        default=None,
+        description="""Optional. The scope keys (i.e. 'user_id') for which to use this config. A request's scope must include all of the provided keys for the config to be used (order does not matter). If empty, then the config will be used for all requests that do not have a more specific config. Only one default config is allowed per Memory Bank.""",
+    )
+    enable_third_person_memories: Optional[bool] = Field(
+        default=None,
+        description="""Optional. If true, then the memories will be generated in the third person (i.e. "The user generates memories with Memory Bank."). By default, the memories will be generated in the first person (i.e. "I generate memories with Memory Bank.")""",
+    )
 
 
 class MemoryBankCustomizationConfigDict(TypedDict, total=False):
     """Configuration for organizing memories for a particular scope."""
 
-    scope_keys: Optional[list[str]]
-    """Optional. The scope keys (i.e. 'user_id') for which to use this config. A request's scope must include all of the provided keys for the config to be used (order does not matter). If empty, then the config will be used for all requests that do not have a more specific config. Only one default config is allowed per Memory Bank."""
-
-    memory_topics: Optional[list[MemoryBankCustomizationConfigMemoryTopicDict]]
-    """Optional. Topics of information that should be extracted from conversations and stored as memories. If not set, then Memory Bank's default topics will be used."""
-
     generate_memories_examples: Optional[
         list[MemoryBankCustomizationConfigGenerateMemoriesExampleDict]
     ]
     """Optional. Examples of how to generate memories for a particular scope."""
+
+    memory_topics: Optional[list[MemoryBankCustomizationConfigMemoryTopicDict]]
+    """Optional. Topics of information that should be extracted from conversations and stored as memories. If not set, then Memory Bank's default topics will be used."""
+
+    scope_keys: Optional[list[str]]
+    """Optional. The scope keys (i.e. 'user_id') for which to use this config. A request's scope must include all of the provided keys for the config to be used (order does not matter). If empty, then the config will be used for all requests that do not have a more specific config. Only one default config is allowed per Memory Bank."""
+
+    enable_third_person_memories: Optional[bool]
+    """Optional. If true, then the memories will be generated in the third person (i.e. "The user generates memories with Memory Bank."). By default, the memories will be generated in the first person (i.e. "I generate memories with Memory Bank.")"""
 
 
 MemoryBankCustomizationConfigOrDict = Union[
@@ -5484,6 +5585,12 @@ class CreateAgentEngineConfig(_common.BaseModel):
         - class_methods     (required)
       """,
     )
+    developer_connect_source: Optional[
+        ReasoningEngineSpecSourceCodeSpecDeveloperConnectConfig
+    ] = Field(
+        default=None,
+        description="""Specifies the configuration for fetching source code from a Git repository that is managed by Developer Connect. This includes the repository, revision, and directory to use.""",
+    )
     entrypoint_module: Optional[str] = Field(
         default=None,
         description="""The entrypoint module to be used for the Agent Engine
@@ -5615,6 +5722,11 @@ class CreateAgentEngineConfigDict(TypedDict, total=False):
         - requirements_file (optional)
         - class_methods     (required)
       """
+
+    developer_connect_source: Optional[
+        ReasoningEngineSpecSourceCodeSpecDeveloperConnectConfigDict
+    ]
+    """Specifies the configuration for fetching source code from a Git repository that is managed by Developer Connect. This includes the repository, revision, and directory to use."""
 
     entrypoint_module: Optional[str]
     """The entrypoint module to be used for the Agent Engine
@@ -6244,6 +6356,12 @@ class UpdateAgentEngineConfig(_common.BaseModel):
         - class_methods     (required)
       """,
     )
+    developer_connect_source: Optional[
+        ReasoningEngineSpecSourceCodeSpecDeveloperConnectConfig
+    ] = Field(
+        default=None,
+        description="""Specifies the configuration for fetching source code from a Git repository that is managed by Developer Connect. This includes the repository, revision, and directory to use.""",
+    )
     entrypoint_module: Optional[str] = Field(
         default=None,
         description="""The entrypoint module to be used for the Agent Engine
@@ -6380,6 +6498,11 @@ class UpdateAgentEngineConfigDict(TypedDict, total=False):
         - requirements_file (optional)
         - class_methods     (required)
       """
+
+    developer_connect_source: Optional[
+        ReasoningEngineSpecSourceCodeSpecDeveloperConnectConfigDict
+    ]
+    """Specifies the configuration for fetching source code from a Git repository that is managed by Developer Connect. This includes the repository, revision, and directory to use."""
 
     entrypoint_module: Optional[str]
     """The entrypoint module to be used for the Agent Engine
@@ -12527,69 +12650,13 @@ class PromptOptimizerConfigDict(TypedDict, total=False):
 PromptOptimizerConfigOrDict = Union[PromptOptimizerConfig, PromptOptimizerConfigDict]
 
 
-class ApplicableGuideline(_common.BaseModel):
-    """Applicable guideline for the optimize_prompt method."""
-
-    applicable_guideline: Optional[str] = Field(default=None, description="""""")
-    suggested_improvement: Optional[str] = Field(default=None, description="""""")
-    text_before_change: Optional[str] = Field(default=None, description="""""")
-    text_after_change: Optional[str] = Field(default=None, description="""""")
-
-
-class ApplicableGuidelineDict(TypedDict, total=False):
-    """Applicable guideline for the optimize_prompt method."""
-
-    applicable_guideline: Optional[str]
-    """"""
-
-    suggested_improvement: Optional[str]
-    """"""
-
-    text_before_change: Optional[str]
-    """"""
-
-    text_after_change: Optional[str]
-    """"""
-
-
-ApplicableGuidelineOrDict = Union[ApplicableGuideline, ApplicableGuidelineDict]
-
-
-class ParsedResponse(_common.BaseModel):
-    """Response for the optimize_prompt method."""
-
-    optimization_type: Optional[str] = Field(default=None, description="""""")
-    applicable_guidelines: Optional[list[ApplicableGuideline]] = Field(
-        default=None, description=""""""
-    )
-    original_prompt: Optional[str] = Field(default=None, description="""""")
-    suggested_prompt: Optional[str] = Field(default=None, description="""""")
-
-
-class ParsedResponseDict(TypedDict, total=False):
-    """Response for the optimize_prompt method."""
-
-    optimization_type: Optional[str]
-    """"""
-
-    applicable_guidelines: Optional[list[ApplicableGuidelineDict]]
-    """"""
-
-    original_prompt: Optional[str]
-    """"""
-
-    suggested_prompt: Optional[str]
-    """"""
-
-
-ParsedResponseOrDict = Union[ParsedResponse, ParsedResponseDict]
-
-
 class OptimizeResponse(_common.BaseModel):
     """Response for the optimize_prompt method."""
 
     raw_text_response: Optional[str] = Field(default=None, description="""""")
-    parsed_response: Optional[ParsedResponse] = Field(default=None, description="""""")
+    parsed_response: Optional["ParsedResponseUnion"] = Field(
+        default=None, description=""""""
+    )
 
 
 class OptimizeResponseDict(TypedDict, total=False):
@@ -12598,7 +12665,7 @@ class OptimizeResponseDict(TypedDict, total=False):
     raw_text_response: Optional[str]
     """"""
 
-    parsed_response: Optional[ParsedResponseDict]
+    parsed_response: Optional["ParsedResponseUnionDict"]
     """"""
 
 
@@ -13626,6 +13693,12 @@ class AgentEngineConfig(_common.BaseModel):
         - class_methods     (required)
       """,
     )
+    developer_connect_source: Optional[
+        ReasoningEngineSpecSourceCodeSpecDeveloperConnectConfig
+    ] = Field(
+        default=None,
+        description="""Specifies the configuration for fetching source code from a Git repository that is managed by Developer Connect. This includes the repository, revision, and directory to use.""",
+    )
     entrypoint_module: Optional[str] = Field(
         default=None,
         description="""The entrypoint module to be used for the Agent Engine
@@ -13789,6 +13862,11 @@ class AgentEngineConfigDict(TypedDict, total=False):
         - requirements_file (optional)
         - class_methods     (required)
       """
+
+    developer_connect_source: Optional[
+        ReasoningEngineSpecSourceCodeSpecDeveloperConnectConfigDict
+    ]
+    """Specifies the configuration for fetching source code from a Git repository that is managed by Developer Connect. This includes the repository, revision, and directory to use."""
 
     entrypoint_module: Optional[str]
     """The entrypoint module to be used for the Agent Engine
@@ -14070,6 +14148,14 @@ class Prompt(_common.BaseModel):
 PromptData = SchemaPromptSpecPromptMessage
 PromptDataDict = SchemaPromptSpecPromptMessageDict
 PromptDataOrDict = Union[PromptData, PromptDataDict]
+
+ParsedResponseUnion = Union[
+    prompt_optimizer_types.ParsedResponse, prompt_optimizer_types.ParsedResponseFewShot
+]
+ParsedResponseUnionDict = Union[
+    prompt_optimizer_types.ParsedResponseDict,
+    prompt_optimizer_types.ParsedResponseFewShotDict,
+]
 
 
 class PromptDict(TypedDict, total=False):

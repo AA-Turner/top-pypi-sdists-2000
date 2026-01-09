@@ -1297,6 +1297,7 @@ from ..aws_ec2 import (
 )
 from ..aws_iam import IPrincipal as _IPrincipal_539bb2fd
 from ..aws_s3 import IBucket as _IBucket_42e086fd
+from ..interfaces import ResourceEnvironment as _ResourceEnvironment_603baf00
 from ..interfaces.aws_ec2 import (
     ISecurityGroupRef as _ISecurityGroupRef_efa4ff18,
     ISubnetRef as _ISubnetRef_ac31e361,
@@ -1766,12 +1767,13 @@ class ApplicationListenerCertificate(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_elasticloadbalancingv2 as elbv2
+        from aws_cdk.interfaces import aws_elasticloadbalancingv2 as interfaces_elasticloadbalancingv2
         
-        # application_listener: elbv2.ApplicationListener
         # listener_certificate: elbv2.ListenerCertificate
+        # listener_ref: interfaces_elasticloadbalancingv2.IListenerRef
         
         application_listener_certificate = elbv2.ApplicationListenerCertificate(self, "MyApplicationListenerCertificate",
-            listener=application_listener,
+            listener=listener_ref,
         
             # the properties below are optional
             certificates=[listener_certificate]
@@ -1783,7 +1785,7 @@ class ApplicationListenerCertificate(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        listener: "IApplicationListener",
+        listener: "_IListenerRef_a8ced6a8",
         certificates: typing.Optional[typing.Sequence["IListenerCertificate"]] = None,
     ) -> None:
         '''
@@ -1812,7 +1814,7 @@ class ApplicationListenerCertificateProps:
     def __init__(
         self,
         *,
-        listener: "IApplicationListener",
+        listener: "_IListenerRef_a8ced6a8",
         certificates: typing.Optional[typing.Sequence["IListenerCertificate"]] = None,
     ) -> None:
         '''Properties for adding a set of certificates to a listener.
@@ -1827,12 +1829,13 @@ class ApplicationListenerCertificateProps:
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_elasticloadbalancingv2 as elbv2
+            from aws_cdk.interfaces import aws_elasticloadbalancingv2 as interfaces_elasticloadbalancingv2
             
-            # application_listener: elbv2.ApplicationListener
             # listener_certificate: elbv2.ListenerCertificate
+            # listener_ref: interfaces_elasticloadbalancingv2.IListenerRef
             
             application_listener_certificate_props = elbv2.ApplicationListenerCertificateProps(
-                listener=application_listener,
+                listener=listener_ref,
             
                 # the properties below are optional
                 certificates=[listener_certificate]
@@ -1849,11 +1852,11 @@ class ApplicationListenerCertificateProps:
             self._values["certificates"] = certificates
 
     @builtins.property
-    def listener(self) -> "IApplicationListener":
+    def listener(self) -> "_IListenerRef_a8ced6a8":
         '''The listener to attach the rule to.'''
         result = self._values.get("listener")
         assert result is not None, "Required property 'listener' is missing"
-        return typing.cast("IApplicationListener", result)
+        return typing.cast("_IListenerRef_a8ced6a8", result)
 
     @builtins.property
     def certificates(self) -> typing.Optional[typing.List["IListenerCertificate"]]:
@@ -3134,6 +3137,12 @@ class BaseLoadBalancer(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "loadBalancerName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="loadBalancerRef")
+    def load_balancer_ref(self) -> "_LoadBalancerReference_4bd5f891":
+        '''A reference to this load balancer.'''
+        return typing.cast("_LoadBalancerReference_4bd5f891", jsii.get(self, "loadBalancerRef"))
 
     @builtins.property
     @jsii.member(jsii_name="loadBalancerSecurityGroups")
@@ -15333,6 +15342,47 @@ typing.cast(typing.Any, IApplicationLoadBalancerMetrics).__jsii_proxy_class__ = 
 
 
 @jsii.interface(
+    jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.IApplicationLoadBalancerRef"
+)
+class IApplicationLoadBalancerRef(
+    _ILoadBalancerRef_13acd8f1,
+    typing_extensions.Protocol,
+):
+    '''Indicates that this resource can be referenced as an Application LoadBalancer.'''
+
+    @builtins.property
+    @jsii.member(jsii_name="isApplicationLoadBalancer")
+    def is_application_load_balancer(self) -> builtins.bool:
+        '''Indicates that this is an Application Load Balancer.
+
+        Will always return true, but is necessary to prevent accidental structural
+        equality in TypeScript.
+        '''
+        ...
+
+
+class _IApplicationLoadBalancerRefProxy(
+    jsii.proxy_for(_ILoadBalancerRef_13acd8f1), # type: ignore[misc]
+):
+    '''Indicates that this resource can be referenced as an Application LoadBalancer.'''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_elasticloadbalancingv2.IApplicationLoadBalancerRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="isApplicationLoadBalancer")
+    def is_application_load_balancer(self) -> builtins.bool:
+        '''Indicates that this is an Application Load Balancer.
+
+        Will always return true, but is necessary to prevent accidental structural
+        equality in TypeScript.
+        '''
+        return typing.cast(builtins.bool, jsii.get(self, "isApplicationLoadBalancer"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IApplicationLoadBalancerRef).__jsii_proxy_class__ = lambda : _IApplicationLoadBalancerRefProxy
+
+
+@jsii.interface(
     jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.IApplicationLoadBalancerTarget"
 )
 class IApplicationLoadBalancerTarget(typing_extensions.Protocol):
@@ -16296,7 +16346,11 @@ typing.cast(typing.Any, IApplicationTargetGroupMetrics).__jsii_proxy_class__ = l
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.IListener")
-class IListener(_IResource_c80c4260, typing_extensions.Protocol):
+class IListener(
+    _IResource_c80c4260,
+    _IListenerRef_a8ced6a8,
+    typing_extensions.Protocol,
+):
     '''Base interface for listeners.'''
 
     @builtins.property
@@ -16311,6 +16365,7 @@ class IListener(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IListenerProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IListenerRef_a8ced6a8), # type: ignore[misc]
 ):
     '''Base interface for listeners.'''
 
@@ -16392,7 +16447,11 @@ typing.cast(typing.Any, IListenerCertificate).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.ILoadBalancerV2")
-class ILoadBalancerV2(_IResource_c80c4260, typing_extensions.Protocol):
+class ILoadBalancerV2(
+    _IResource_c80c4260,
+    _ILoadBalancerRef_13acd8f1,
+    typing_extensions.Protocol,
+):
     @builtins.property
     @jsii.member(jsii_name="loadBalancerCanonicalHostedZoneId")
     def load_balancer_canonical_hosted_zone_id(self) -> builtins.str:
@@ -16418,6 +16477,7 @@ class ILoadBalancerV2(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _ILoadBalancerV2Proxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_ILoadBalancerRef_13acd8f1), # type: ignore[misc]
 ):
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_elasticloadbalancingv2.ILoadBalancerV2"
 
@@ -16447,23 +16507,40 @@ class _ILoadBalancerV2Proxy(
 typing.cast(typing.Any, ILoadBalancerV2).__jsii_proxy_class__ = lambda : _ILoadBalancerV2Proxy
 
 
-@jsii.interface(jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.INetworkListener")
-class INetworkListener(IListener, typing_extensions.Protocol):
-    '''Properties to reference an existing listener.'''
+@jsii.interface(jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.INetworkListenerRef")
+class INetworkListenerRef(IListener, typing_extensions.Protocol):
+    '''Indicates that this resource can be referenced as an NLB Listener.'''
 
-    pass
+    @builtins.property
+    @jsii.member(jsii_name="isNetworkListener")
+    def is_network_listener(self) -> builtins.bool:
+        '''Indicates that this is an NLB listener.
+
+        Will always return true, but is necessary to prevent accidental structural
+        equality in TypeScript.
+        '''
+        ...
 
 
-class _INetworkListenerProxy(
+class _INetworkListenerRefProxy(
     jsii.proxy_for(IListener), # type: ignore[misc]
 ):
-    '''Properties to reference an existing listener.'''
+    '''Indicates that this resource can be referenced as an NLB Listener.'''
 
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_elasticloadbalancingv2.INetworkListener"
-    pass
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_elasticloadbalancingv2.INetworkListenerRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="isNetworkListener")
+    def is_network_listener(self) -> builtins.bool:
+        '''Indicates that this is an NLB listener.
+
+        Will always return true, but is necessary to prevent accidental structural
+        equality in TypeScript.
+        '''
+        return typing.cast(builtins.bool, jsii.get(self, "isNetworkListener"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, INetworkListener).__jsii_proxy_class__ = lambda : _INetworkListenerProxy
+typing.cast(typing.Any, INetworkListenerRef).__jsii_proxy_class__ = lambda : _INetworkListenerRefProxy
 
 
 @jsii.interface(
@@ -17707,8 +17784,50 @@ class _INetworkTargetGroupMetricsProxy:
 typing.cast(typing.Any, INetworkTargetGroupMetrics).__jsii_proxy_class__ = lambda : _INetworkTargetGroupMetricsProxy
 
 
+@jsii.interface(
+    jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.INetworkTargetGroupRef"
+)
+class INetworkTargetGroupRef(_ITargetGroupRef_9ed19d5e, typing_extensions.Protocol):
+    '''Indicates that this resource can be referenced as an NLB TargetGroup.'''
+
+    @builtins.property
+    @jsii.member(jsii_name="isNetworkTargetGroup")
+    def is_network_target_group(self) -> builtins.bool:
+        '''Indicates that this is a Network Target Group.
+
+        Will always return true, but is necessary to prevent accidental structural
+        equality in TypeScript.
+        '''
+        ...
+
+
+class _INetworkTargetGroupRefProxy(
+    jsii.proxy_for(_ITargetGroupRef_9ed19d5e), # type: ignore[misc]
+):
+    '''Indicates that this resource can be referenced as an NLB TargetGroup.'''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_elasticloadbalancingv2.INetworkTargetGroupRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="isNetworkTargetGroup")
+    def is_network_target_group(self) -> builtins.bool:
+        '''Indicates that this is a Network Target Group.
+
+        Will always return true, but is necessary to prevent accidental structural
+        equality in TypeScript.
+        '''
+        return typing.cast(builtins.bool, jsii.get(self, "isNetworkTargetGroup"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, INetworkTargetGroupRef).__jsii_proxy_class__ = lambda : _INetworkTargetGroupRefProxy
+
+
 @jsii.interface(jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.ITargetGroup")
-class ITargetGroup(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
+class ITargetGroup(
+    _ITargetGroupRef_9ed19d5e,
+    _constructs_77d1e7e8.IConstruct,
+    typing_extensions.Protocol,
+):
     '''A target group.'''
 
     @builtins.property
@@ -17737,6 +17856,7 @@ class ITargetGroup(_constructs_77d1e7e8.IConstruct, typing_extensions.Protocol):
 
 
 class _ITargetGroupProxy(
+    jsii.proxy_for(_ITargetGroupRef_9ed19d5e), # type: ignore[misc]
     jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
 ):
     '''A target group.'''
@@ -17772,7 +17892,11 @@ typing.cast(typing.Any, ITargetGroup).__jsii_proxy_class__ = lambda : _ITargetGr
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.ITrustStore")
-class ITrustStore(_IResource_c80c4260, typing_extensions.Protocol):
+class ITrustStore(
+    _IResource_c80c4260,
+    _ITrustStoreRef_0fa03cbe,
+    typing_extensions.Protocol,
+):
     '''Represents a Trust Store.'''
 
     @builtins.property
@@ -17796,6 +17920,7 @@ class ITrustStore(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _ITrustStoreProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_ITrustStoreRef_0fa03cbe), # type: ignore[misc]
 ):
     '''Represents a Trust Store.'''
 
@@ -18482,7 +18607,7 @@ class MutualAuthentication:
         advertise_trust_store_ca_names: typing.Optional[builtins.bool] = None,
         ignore_client_certificate_expiry: typing.Optional[builtins.bool] = None,
         mutual_authentication_mode: typing.Optional["MutualAuthenticationMode"] = None,
-        trust_store: typing.Optional["ITrustStore"] = None,
+        trust_store: typing.Optional["_ITrustStoreRef_0fa03cbe"] = None,
     ) -> None:
         '''The mutual authentication configuration information.
 
@@ -18567,7 +18692,7 @@ class MutualAuthentication:
         return typing.cast(typing.Optional["MutualAuthenticationMode"], result)
 
     @builtins.property
-    def trust_store(self) -> typing.Optional["ITrustStore"]:
+    def trust_store(self) -> typing.Optional["_ITrustStoreRef_0fa03cbe"]:
         '''The trust store.
 
         Cannot be used with MutualAuthenticationMode.OFF or MutualAuthenticationMode.PASS_THROUGH
@@ -18575,7 +18700,7 @@ class MutualAuthentication:
         :default: - no trust store
         '''
         result = self._values.get("trust_store")
-        return typing.cast(typing.Optional["ITrustStore"], result)
+        return typing.cast(typing.Optional["_ITrustStoreRef_0fa03cbe"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -18787,7 +18912,7 @@ class NetworkListenerAction(
     def bind(
         self,
         scope: "_constructs_77d1e7e8.Construct",
-        listener: "INetworkListener",
+        listener: "INetworkListenerRef",
     ) -> None:
         '''Called when the action is being used in a listener.
 
@@ -21721,6 +21846,12 @@ class TargetGroupBase(
         return typing.cast(jsii.Number, jsii.get(self, "defaultPort"))
 
     @builtins.property
+    @jsii.member(jsii_name="env")
+    def env(self) -> "_ResourceEnvironment_603baf00":
+        '''The environment this resource belongs to.'''
+        return typing.cast("_ResourceEnvironment_603baf00", jsii.get(self, "env"))
+
+    @builtins.property
     @jsii.member(jsii_name="firstLoadBalancerFullName")
     @abc.abstractmethod
     def first_load_balancer_full_name(self) -> builtins.str:
@@ -21776,6 +21907,12 @@ class TargetGroupBase(
     def target_group_name(self) -> builtins.str:
         '''The name of the target group.'''
         return typing.cast(builtins.str, jsii.get(self, "targetGroupName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="targetGroupRef")
+    def target_group_ref(self) -> "_TargetGroupReference_43f51e8b":
+        '''A reference to this target group.'''
+        return typing.cast("_TargetGroupReference_43f51e8b", jsii.get(self, "targetGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="healthCheck")
@@ -22179,6 +22316,12 @@ class TrustStore(
         '''
         return typing.cast(builtins.str, jsii.get(self, "trustStoreName"))
 
+    @builtins.property
+    @jsii.member(jsii_name="trustStoreRef")
+    def trust_store_ref(self) -> "_TrustStoreReference_ad81b807":
+        '''A reference to this trust store.'''
+        return typing.cast("_TrustStoreReference_ad81b807", jsii.get(self, "trustStoreRef"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.TrustStoreProps",
@@ -22329,7 +22472,7 @@ class TrustStoreRevocation(
         id: builtins.str,
         *,
         revocation_contents: typing.Sequence[typing.Union["RevocationContent", typing.Dict[builtins.str, typing.Any]]],
-        trust_store: "ITrustStore",
+        trust_store: "_ITrustStoreRef_0fa03cbe",
     ) -> None:
         '''
         :param scope: -
@@ -22367,7 +22510,7 @@ class TrustStoreRevocationProps:
         self,
         *,
         revocation_contents: typing.Sequence[typing.Union["RevocationContent", typing.Dict[builtins.str, typing.Any]]],
-        trust_store: "ITrustStore",
+        trust_store: "_ITrustStoreRef_0fa03cbe",
     ) -> None:
         '''Properties for the trust store revocation.
 
@@ -22409,11 +22552,11 @@ class TrustStoreRevocationProps:
         return typing.cast(typing.List["RevocationContent"], result)
 
     @builtins.property
-    def trust_store(self) -> "ITrustStore":
+    def trust_store(self) -> "_ITrustStoreRef_0fa03cbe":
         '''The trust store.'''
         result = self._values.get("trust_store")
         assert result is not None, "Required property 'trust_store' is missing"
-        return typing.cast("ITrustStore", result)
+        return typing.cast("_ITrustStoreRef_0fa03cbe", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -23279,12 +23422,13 @@ class ApplicationListenerProps(BaseApplicationListenerProps):
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_elasticloadbalancingv2 as elbv2
+            from aws_cdk.interfaces import aws_elasticloadbalancingv2 as interfaces_elasticloadbalancingv2
             
             # application_load_balancer: elbv2.ApplicationLoadBalancer
             # application_target_group: elbv2.ApplicationTargetGroup
             # listener_action: elbv2.ListenerAction
             # listener_certificate: elbv2.ListenerCertificate
-            # trust_store: elbv2.TrustStore
+            # trust_store_ref: interfaces_elasticloadbalancingv2.ITrustStoreRef
             
             application_listener_props = elbv2.ApplicationListenerProps(
                 load_balancer=application_load_balancer,
@@ -23297,7 +23441,7 @@ class ApplicationListenerProps(BaseApplicationListenerProps):
                     advertise_trust_store_ca_names=False,
                     ignore_client_certificate_expiry=False,
                     mutual_authentication_mode=elbv2.MutualAuthenticationMode.OFF,
-                    trust_store=trust_store
+                    trust_store=trust_store_ref
                 ),
                 open=False,
                 port=123,
@@ -24490,6 +24634,12 @@ class BaseListener(
         '''
         return typing.cast(builtins.str, jsii.get(self, "listenerArn"))
 
+    @builtins.property
+    @jsii.member(jsii_name="listenerRef")
+    def listener_ref(self) -> "_ListenerReference_ca663b4f":
+        '''A reference to this listener.'''
+        return typing.cast("_ListenerReference_ca663b4f", jsii.get(self, "listenerRef"))
+
 
 class _BaseListenerProxy(
     BaseListener,
@@ -24502,325 +24652,41 @@ typing.cast(typing.Any, BaseListener).__jsii_proxy_class__ = lambda : _BaseListe
 
 
 @jsii.interface(
-    jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.IApplicationListener"
+    jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.IApplicationListenerRef"
 )
-class IApplicationListener(
-    IListener,
-    _IConnectable_10015a05,
-    typing_extensions.Protocol,
-):
-    '''Properties to reference an existing listener.'''
+class IApplicationListenerRef(IListener, typing_extensions.Protocol):
+    '''Indicates that this resource can be referenced as an ALB Listener.'''
 
-    @jsii.member(jsii_name="addAction")
-    def add_action(
-        self,
-        id: builtins.str,
-        *,
-        action: "ListenerAction",
-        remove_suffix: typing.Optional[builtins.bool] = None,
-        conditions: typing.Optional[typing.Sequence["ListenerCondition"]] = None,
-        priority: typing.Optional[jsii.Number] = None,
-    ) -> None:
-        '''Perform the given action on incoming requests.
+    @builtins.property
+    @jsii.member(jsii_name="isApplicationListener")
+    def is_application_listener(self) -> builtins.bool:
+        '''Indicates that this is an ALB listener.
 
-        This allows full control of the default action of the load balancer,
-        including Action chaining, fixed responses and redirect responses. See
-        the ``ListenerAction`` class for all options.
-
-        It's possible to add routing conditions to the Action added in this way.
-
-        It is not possible to add a default action to an imported IApplicationListener.
-        In order to add actions to an imported IApplicationListener a ``priority``
-        must be provided.
-
-        :param id: -
-        :param action: Action to perform.
-        :param remove_suffix: ``ListenerRule``s have a ``Rule`` suffix on their logicalId by default. This allows you to remove that suffix. Legacy behavior of the ``addTargetGroups()`` convenience method did not include the ``Rule`` suffix on the logicalId of the generated ``ListenerRule``. At some point, increasing complexity of requirements can require users to switch from the ``addTargetGroups()`` method to the ``addAction()`` method. When migrating ``ListenerRule``s deployed by a legacy version of ``addTargetGroups()``, you will need to enable this flag to avoid changing the logicalId of your resource. Otherwise Cfn will attempt to replace the ``ListenerRule`` and fail. Default: - use standard logicalId with the ``Rule`` suffix
-        :param conditions: Rule applies if matches the conditions. Default: - No conditions.
-        :param priority: Priority of this target group. The rule with the lowest priority will be used for every request. If priority is not given, these target groups will be added as defaults, and must not have conditions. Priorities must be unique. Default: Target groups are used as defaults
-        '''
-        ...
-
-    @jsii.member(jsii_name="addCertificates")
-    def add_certificates(
-        self,
-        id: builtins.str,
-        certificates: typing.Sequence["IListenerCertificate"],
-    ) -> None:
-        '''Add one or more certificates to this listener.
-
-        :param id: -
-        :param certificates: -
-        '''
-        ...
-
-    @jsii.member(jsii_name="addTargetGroups")
-    def add_target_groups(
-        self,
-        id: builtins.str,
-        *,
-        target_groups: typing.Sequence["IApplicationTargetGroup"],
-        conditions: typing.Optional[typing.Sequence["ListenerCondition"]] = None,
-        priority: typing.Optional[jsii.Number] = None,
-    ) -> None:
-        '''Load balance incoming requests to the given target groups.
-
-        It's possible to add conditions to the TargetGroups added in this way.
-        At least one TargetGroup must be added without conditions.
-
-        :param id: -
-        :param target_groups: Target groups to forward requests to.
-        :param conditions: Rule applies if matches the conditions. Default: - No conditions.
-        :param priority: Priority of this target group. The rule with the lowest priority will be used for every request. If priority is not given, these target groups will be added as defaults, and must not have conditions. Priorities must be unique. Default: Target groups are used as defaults
-        '''
-        ...
-
-    @jsii.member(jsii_name="addTargets")
-    def add_targets(
-        self,
-        id: builtins.str,
-        *,
-        deregistration_delay: typing.Optional["_Duration_4839e8c3"] = None,
-        enable_anomaly_mitigation: typing.Optional[builtins.bool] = None,
-        health_check: typing.Optional[typing.Union["HealthCheck", typing.Dict[builtins.str, typing.Any]]] = None,
-        load_balancing_algorithm_type: typing.Optional["TargetGroupLoadBalancingAlgorithmType"] = None,
-        port: typing.Optional[jsii.Number] = None,
-        protocol: typing.Optional["ApplicationProtocol"] = None,
-        protocol_version: typing.Optional["ApplicationProtocolVersion"] = None,
-        slow_start: typing.Optional["_Duration_4839e8c3"] = None,
-        stickiness_cookie_duration: typing.Optional["_Duration_4839e8c3"] = None,
-        stickiness_cookie_name: typing.Optional[builtins.str] = None,
-        target_group_name: typing.Optional[builtins.str] = None,
-        targets: typing.Optional[typing.Sequence["IApplicationLoadBalancerTarget"]] = None,
-        conditions: typing.Optional[typing.Sequence["ListenerCondition"]] = None,
-        priority: typing.Optional[jsii.Number] = None,
-    ) -> "ApplicationTargetGroup":
-        '''Load balance incoming requests to the given load balancing targets.
-
-        This method implicitly creates an ApplicationTargetGroup for the targets
-        involved.
-
-        It's possible to add conditions to the targets added in this way. At least
-        one set of targets must be added without conditions.
-
-        :param id: -
-        :param deregistration_delay: The amount of time for Elastic Load Balancing to wait before deregistering a target. The range is 0-3600 seconds. Default: Duration.minutes(5)
-        :param enable_anomaly_mitigation: Indicates whether anomaly mitigation is enabled. Only available when ``loadBalancingAlgorithmType`` is ``TargetGroupLoadBalancingAlgorithmType.WEIGHTED_RANDOM`` Default: false
-        :param health_check: Health check configuration. Default: - The default value for each property in this configuration varies depending on the target.
-        :param load_balancing_algorithm_type: The load balancing algorithm to select targets for routing requests. Default: round_robin.
-        :param port: The port on which the listener listens for requests. Default: Determined from protocol if known
-        :param protocol: The protocol to use. Default: Determined from port if known
-        :param protocol_version: The protocol version to use. Default: ApplicationProtocolVersion.HTTP1
-        :param slow_start: The time period during which the load balancer sends a newly registered target a linearly increasing share of the traffic to the target group. The range is 30-900 seconds (15 minutes). Default: 0
-        :param stickiness_cookie_duration: The stickiness cookie expiration period. Setting this value enables load balancer stickiness. After this period, the cookie is considered stale. The minimum value is 1 second and the maximum value is 7 days (604800 seconds). Default: Stickiness disabled
-        :param stickiness_cookie_name: The name of an application-based stickiness cookie. Names that start with the following prefixes are not allowed: AWSALB, AWSALBAPP, and AWSALBTG; they're reserved for use by the load balancer. Note: ``stickinessCookieName`` parameter depends on the presence of ``stickinessCookieDuration`` parameter. If ``stickinessCookieDuration`` is not set, ``stickinessCookieName`` will be omitted. Default: - If ``stickinessCookieDuration`` is set, a load-balancer generated cookie is used. Otherwise, no stickiness is defined.
-        :param target_group_name: The name of the target group. This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and must not begin or end with a hyphen. Default: Automatically generated
-        :param targets: The targets to add to this target group. Can be ``Instance``, ``IPAddress``, or any self-registering load balancing target. All target must be of the same type.
-        :param conditions: Rule applies if matches the conditions. Default: - No conditions.
-        :param priority: Priority of this target group. The rule with the lowest priority will be used for every request. If priority is not given, these target groups will be added as defaults, and must not have conditions. Priorities must be unique. Default: Target groups are used as defaults
-
-        :return: The newly created target group
-        '''
-        ...
-
-    @jsii.member(jsii_name="registerConnectable")
-    def register_connectable(
-        self,
-        connectable: "_IConnectable_10015a05",
-        port_range: "_Port_85922693",
-    ) -> None:
-        '''Register that a connectable that has been added to this load balancer.
-
-        Don't call this directly. It is called by ApplicationTargetGroup.
-
-        :param connectable: -
-        :param port_range: -
+        Will always return true, but is necessary to prevent accidental structural
+        equality in TypeScript.
         '''
         ...
 
 
-class _IApplicationListenerProxy(
+class _IApplicationListenerRefProxy(
     jsii.proxy_for(IListener), # type: ignore[misc]
-    jsii.proxy_for(_IConnectable_10015a05), # type: ignore[misc]
 ):
-    '''Properties to reference an existing listener.'''
+    '''Indicates that this resource can be referenced as an ALB Listener.'''
 
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_elasticloadbalancingv2.IApplicationListener"
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_elasticloadbalancingv2.IApplicationListenerRef"
 
-    @jsii.member(jsii_name="addAction")
-    def add_action(
-        self,
-        id: builtins.str,
-        *,
-        action: "ListenerAction",
-        remove_suffix: typing.Optional[builtins.bool] = None,
-        conditions: typing.Optional[typing.Sequence["ListenerCondition"]] = None,
-        priority: typing.Optional[jsii.Number] = None,
-    ) -> None:
-        '''Perform the given action on incoming requests.
+    @builtins.property
+    @jsii.member(jsii_name="isApplicationListener")
+    def is_application_listener(self) -> builtins.bool:
+        '''Indicates that this is an ALB listener.
 
-        This allows full control of the default action of the load balancer,
-        including Action chaining, fixed responses and redirect responses. See
-        the ``ListenerAction`` class for all options.
-
-        It's possible to add routing conditions to the Action added in this way.
-
-        It is not possible to add a default action to an imported IApplicationListener.
-        In order to add actions to an imported IApplicationListener a ``priority``
-        must be provided.
-
-        :param id: -
-        :param action: Action to perform.
-        :param remove_suffix: ``ListenerRule``s have a ``Rule`` suffix on their logicalId by default. This allows you to remove that suffix. Legacy behavior of the ``addTargetGroups()`` convenience method did not include the ``Rule`` suffix on the logicalId of the generated ``ListenerRule``. At some point, increasing complexity of requirements can require users to switch from the ``addTargetGroups()`` method to the ``addAction()`` method. When migrating ``ListenerRule``s deployed by a legacy version of ``addTargetGroups()``, you will need to enable this flag to avoid changing the logicalId of your resource. Otherwise Cfn will attempt to replace the ``ListenerRule`` and fail. Default: - use standard logicalId with the ``Rule`` suffix
-        :param conditions: Rule applies if matches the conditions. Default: - No conditions.
-        :param priority: Priority of this target group. The rule with the lowest priority will be used for every request. If priority is not given, these target groups will be added as defaults, and must not have conditions. Priorities must be unique. Default: Target groups are used as defaults
+        Will always return true, but is necessary to prevent accidental structural
+        equality in TypeScript.
         '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__078c8c060ef52d807e9a62da847c7c1f9a2fb0a3f7bf8900246c80b1d9ff0a2e)
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = AddApplicationActionProps(
-            action=action,
-            remove_suffix=remove_suffix,
-            conditions=conditions,
-            priority=priority,
-        )
-
-        return typing.cast(None, jsii.invoke(self, "addAction", [id, props]))
-
-    @jsii.member(jsii_name="addCertificates")
-    def add_certificates(
-        self,
-        id: builtins.str,
-        certificates: typing.Sequence["IListenerCertificate"],
-    ) -> None:
-        '''Add one or more certificates to this listener.
-
-        :param id: -
-        :param certificates: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__6bf07304357ae3b96ca5010a3003b725b55d7ca3cce0adb320a1d7dd3a8e986e)
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument certificates", value=certificates, expected_type=type_hints["certificates"])
-        return typing.cast(None, jsii.invoke(self, "addCertificates", [id, certificates]))
-
-    @jsii.member(jsii_name="addTargetGroups")
-    def add_target_groups(
-        self,
-        id: builtins.str,
-        *,
-        target_groups: typing.Sequence["IApplicationTargetGroup"],
-        conditions: typing.Optional[typing.Sequence["ListenerCondition"]] = None,
-        priority: typing.Optional[jsii.Number] = None,
-    ) -> None:
-        '''Load balance incoming requests to the given target groups.
-
-        It's possible to add conditions to the TargetGroups added in this way.
-        At least one TargetGroup must be added without conditions.
-
-        :param id: -
-        :param target_groups: Target groups to forward requests to.
-        :param conditions: Rule applies if matches the conditions. Default: - No conditions.
-        :param priority: Priority of this target group. The rule with the lowest priority will be used for every request. If priority is not given, these target groups will be added as defaults, and must not have conditions. Priorities must be unique. Default: Target groups are used as defaults
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__2a75a011e579ef50ef41ed5ad7fddf22c4568fc11c8d5304364dc3fcc7ad6e05)
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = AddApplicationTargetGroupsProps(
-            target_groups=target_groups, conditions=conditions, priority=priority
-        )
-
-        return typing.cast(None, jsii.invoke(self, "addTargetGroups", [id, props]))
-
-    @jsii.member(jsii_name="addTargets")
-    def add_targets(
-        self,
-        id: builtins.str,
-        *,
-        deregistration_delay: typing.Optional["_Duration_4839e8c3"] = None,
-        enable_anomaly_mitigation: typing.Optional[builtins.bool] = None,
-        health_check: typing.Optional[typing.Union["HealthCheck", typing.Dict[builtins.str, typing.Any]]] = None,
-        load_balancing_algorithm_type: typing.Optional["TargetGroupLoadBalancingAlgorithmType"] = None,
-        port: typing.Optional[jsii.Number] = None,
-        protocol: typing.Optional["ApplicationProtocol"] = None,
-        protocol_version: typing.Optional["ApplicationProtocolVersion"] = None,
-        slow_start: typing.Optional["_Duration_4839e8c3"] = None,
-        stickiness_cookie_duration: typing.Optional["_Duration_4839e8c3"] = None,
-        stickiness_cookie_name: typing.Optional[builtins.str] = None,
-        target_group_name: typing.Optional[builtins.str] = None,
-        targets: typing.Optional[typing.Sequence["IApplicationLoadBalancerTarget"]] = None,
-        conditions: typing.Optional[typing.Sequence["ListenerCondition"]] = None,
-        priority: typing.Optional[jsii.Number] = None,
-    ) -> "ApplicationTargetGroup":
-        '''Load balance incoming requests to the given load balancing targets.
-
-        This method implicitly creates an ApplicationTargetGroup for the targets
-        involved.
-
-        It's possible to add conditions to the targets added in this way. At least
-        one set of targets must be added without conditions.
-
-        :param id: -
-        :param deregistration_delay: The amount of time for Elastic Load Balancing to wait before deregistering a target. The range is 0-3600 seconds. Default: Duration.minutes(5)
-        :param enable_anomaly_mitigation: Indicates whether anomaly mitigation is enabled. Only available when ``loadBalancingAlgorithmType`` is ``TargetGroupLoadBalancingAlgorithmType.WEIGHTED_RANDOM`` Default: false
-        :param health_check: Health check configuration. Default: - The default value for each property in this configuration varies depending on the target.
-        :param load_balancing_algorithm_type: The load balancing algorithm to select targets for routing requests. Default: round_robin.
-        :param port: The port on which the listener listens for requests. Default: Determined from protocol if known
-        :param protocol: The protocol to use. Default: Determined from port if known
-        :param protocol_version: The protocol version to use. Default: ApplicationProtocolVersion.HTTP1
-        :param slow_start: The time period during which the load balancer sends a newly registered target a linearly increasing share of the traffic to the target group. The range is 30-900 seconds (15 minutes). Default: 0
-        :param stickiness_cookie_duration: The stickiness cookie expiration period. Setting this value enables load balancer stickiness. After this period, the cookie is considered stale. The minimum value is 1 second and the maximum value is 7 days (604800 seconds). Default: Stickiness disabled
-        :param stickiness_cookie_name: The name of an application-based stickiness cookie. Names that start with the following prefixes are not allowed: AWSALB, AWSALBAPP, and AWSALBTG; they're reserved for use by the load balancer. Note: ``stickinessCookieName`` parameter depends on the presence of ``stickinessCookieDuration`` parameter. If ``stickinessCookieDuration`` is not set, ``stickinessCookieName`` will be omitted. Default: - If ``stickinessCookieDuration`` is set, a load-balancer generated cookie is used. Otherwise, no stickiness is defined.
-        :param target_group_name: The name of the target group. This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and must not begin or end with a hyphen. Default: Automatically generated
-        :param targets: The targets to add to this target group. Can be ``Instance``, ``IPAddress``, or any self-registering load balancing target. All target must be of the same type.
-        :param conditions: Rule applies if matches the conditions. Default: - No conditions.
-        :param priority: Priority of this target group. The rule with the lowest priority will be used for every request. If priority is not given, these target groups will be added as defaults, and must not have conditions. Priorities must be unique. Default: Target groups are used as defaults
-
-        :return: The newly created target group
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__84e790e0e8140f8df376ccc9404001adf95dc62c6408367a7fb37a7ac655ef44)
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = AddApplicationTargetsProps(
-            deregistration_delay=deregistration_delay,
-            enable_anomaly_mitigation=enable_anomaly_mitigation,
-            health_check=health_check,
-            load_balancing_algorithm_type=load_balancing_algorithm_type,
-            port=port,
-            protocol=protocol,
-            protocol_version=protocol_version,
-            slow_start=slow_start,
-            stickiness_cookie_duration=stickiness_cookie_duration,
-            stickiness_cookie_name=stickiness_cookie_name,
-            target_group_name=target_group_name,
-            targets=targets,
-            conditions=conditions,
-            priority=priority,
-        )
-
-        return typing.cast("ApplicationTargetGroup", jsii.invoke(self, "addTargets", [id, props]))
-
-    @jsii.member(jsii_name="registerConnectable")
-    def register_connectable(
-        self,
-        connectable: "_IConnectable_10015a05",
-        port_range: "_Port_85922693",
-    ) -> None:
-        '''Register that a connectable that has been added to this load balancer.
-
-        Don't call this directly. It is called by ApplicationTargetGroup.
-
-        :param connectable: -
-        :param port_range: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__ed17ef6987e4f2957e6bb9b0439408268b3b78152bef346bbc634ba0b8f39b8d)
-            check_type(argname="argument connectable", value=connectable, expected_type=type_hints["connectable"])
-            check_type(argname="argument port_range", value=port_range, expected_type=type_hints["port_range"])
-        return typing.cast(None, jsii.invoke(self, "registerConnectable", [connectable, port_range]))
+        return typing.cast(builtins.bool, jsii.get(self, "isApplicationListener"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IApplicationListener).__jsii_proxy_class__ = lambda : _IApplicationListenerProxy
+typing.cast(typing.Any, IApplicationListenerRef).__jsii_proxy_class__ = lambda : _IApplicationListenerRefProxy
 
 
 @jsii.interface(
@@ -24829,6 +24695,7 @@ typing.cast(typing.Any, IApplicationListener).__jsii_proxy_class__ = lambda : _I
 class IApplicationLoadBalancer(
     ILoadBalancerV2,
     _IConnectable_10015a05,
+    IApplicationLoadBalancerRef,
     typing_extensions.Protocol,
 ):
     '''An application load balancer.'''
@@ -24914,6 +24781,7 @@ class IApplicationLoadBalancer(
 class _IApplicationLoadBalancerProxy(
     jsii.proxy_for(ILoadBalancerV2), # type: ignore[misc]
     jsii.proxy_for(_IConnectable_10015a05), # type: ignore[misc]
+    jsii.proxy_for(IApplicationLoadBalancerRef), # type: ignore[misc]
 ):
     '''An application load balancer.'''
 
@@ -25131,8 +24999,32 @@ class _IApplicationTargetGroupProxy(
 typing.cast(typing.Any, IApplicationTargetGroup).__jsii_proxy_class__ = lambda : _IApplicationTargetGroupProxy
 
 
+@jsii.interface(jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.INetworkListener")
+class INetworkListener(INetworkListenerRef, IListener, typing_extensions.Protocol):
+    '''Properties to reference an existing listener.'''
+
+    pass
+
+
+class _INetworkListenerProxy(
+    jsii.proxy_for(INetworkListenerRef), # type: ignore[misc]
+    jsii.proxy_for(IListener), # type: ignore[misc]
+):
+    '''Properties to reference an existing listener.'''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_elasticloadbalancingv2.INetworkListener"
+    pass
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, INetworkListener).__jsii_proxy_class__ = lambda : _INetworkListenerProxy
+
+
 @jsii.interface(jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.INetworkTargetGroup")
-class INetworkTargetGroup(ITargetGroup, typing_extensions.Protocol):
+class INetworkTargetGroup(
+    ITargetGroup,
+    INetworkTargetGroupRef,
+    typing_extensions.Protocol,
+):
     '''A network target group.'''
 
     @builtins.property
@@ -25150,7 +25042,7 @@ class INetworkTargetGroup(ITargetGroup, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="registerListener")
-    def register_listener(self, listener: "INetworkListener") -> None:
+    def register_listener(self, listener: "INetworkListenerRef") -> None:
         '''Register a listener that is load balancing to this target group.
 
         Don't call this directly. It will be called by listeners.
@@ -25162,6 +25054,7 @@ class INetworkTargetGroup(ITargetGroup, typing_extensions.Protocol):
 
 class _INetworkTargetGroupProxy(
     jsii.proxy_for(ITargetGroup), # type: ignore[misc]
+    jsii.proxy_for(INetworkTargetGroupRef), # type: ignore[misc]
 ):
     '''A network target group.'''
 
@@ -25185,7 +25078,7 @@ class _INetworkTargetGroupProxy(
         return typing.cast(None, jsii.invoke(self, "addTarget", [*targets]))
 
     @jsii.member(jsii_name="registerListener")
-    def register_listener(self, listener: "INetworkListener") -> None:
+    def register_listener(self, listener: "INetworkListenerRef") -> None:
         '''Register a listener that is load balancing to this target group.
 
         Don't call this directly. It will be called by listeners.
@@ -25457,6 +25350,16 @@ class NetworkListener(
         return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
+    @jsii.member(jsii_name="isNetworkListener")
+    def is_network_listener(self) -> builtins.bool:
+        '''Indicates that this is an NLB listener.
+
+        Will always return true, but is necessary to prevent accidental structural
+        equality in TypeScript.
+        '''
+        return typing.cast(builtins.bool, jsii.get(self, "isNetworkListener"))
+
+    @builtins.property
     @jsii.member(jsii_name="loadBalancer")
     def load_balancer(self) -> "INetworkLoadBalancer":
         '''The load balancer this listener is attached to.'''
@@ -25708,7 +25611,7 @@ class NetworkTargetGroup(
         return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricUnHealthyHostCount", [props]))
 
     @jsii.member(jsii_name="registerListener")
-    def register_listener(self, listener: "INetworkListener") -> None:
+    def register_listener(self, listener: "INetworkListenerRef") -> None:
         '''Register a listener that is load balancing to this target group.
 
         Don't call this directly. It will be called by listeners.
@@ -25737,379 +25640,20 @@ class NetworkTargetGroup(
         return typing.cast(builtins.str, jsii.get(self, "firstLoadBalancerFullName"))
 
     @builtins.property
+    @jsii.member(jsii_name="isNetworkTargetGroup")
+    def is_network_target_group(self) -> builtins.bool:
+        '''Indicates that this is a Network Target Group.
+
+        Will always return true, but is necessary to prevent accidental structural
+        equality in TypeScript.
+        '''
+        return typing.cast(builtins.bool, jsii.get(self, "isNetworkTargetGroup"))
+
+    @builtins.property
     @jsii.member(jsii_name="metrics")
     def metrics(self) -> "INetworkTargetGroupMetrics":
         '''All metrics available for this target group.'''
         return typing.cast("INetworkTargetGroupMetrics", jsii.get(self, "metrics"))
-
-
-@jsii.implements(IApplicationListener)
-class ApplicationListener(
-    BaseListener,
-    metaclass=jsii.JSIIMeta,
-    jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.ApplicationListener",
-):
-    '''Define an ApplicationListener.
-
-    :resource: AWS::ElasticLoadBalancingV2::Listener
-    :exampleMetadata: infused
-
-    Example::
-
-        from aws_cdk.aws_autoscaling import AutoScalingGroup
-        # asg: AutoScalingGroup
-        # vpc: ec2.Vpc
-        
-        
-        # Create the load balancer in a VPC. 'internetFacing' is 'false'
-        # by default, which creates an internal load balancer.
-        lb = elbv2.ApplicationLoadBalancer(self, "LB",
-            vpc=vpc,
-            internet_facing=True
-        )
-        
-        # Add a listener and open up the load balancer's security group
-        # to the world.
-        listener = lb.add_listener("Listener",
-            port=80,
-        
-            # 'open: true' is the default, you can leave it out if you want. Set it
-            # to 'false' and use `listener.connections` if you want to be selective
-            # about who can access the load balancer.
-            open=True
-        )
-        
-        # Create an AutoScaling group and add it as a load balancing
-        # target to the listener.
-        listener.add_targets("ApplicationFleet",
-            port=8080,
-            targets=[asg]
-        )
-    '''
-
-    def __init__(
-        self,
-        scope: "_constructs_77d1e7e8.Construct",
-        id: builtins.str,
-        *,
-        load_balancer: "IApplicationLoadBalancer",
-        certificates: typing.Optional[typing.Sequence["IListenerCertificate"]] = None,
-        default_action: typing.Optional["ListenerAction"] = None,
-        default_target_groups: typing.Optional[typing.Sequence["IApplicationTargetGroup"]] = None,
-        mutual_authentication: typing.Optional[typing.Union["MutualAuthentication", typing.Dict[builtins.str, typing.Any]]] = None,
-        open: typing.Optional[builtins.bool] = None,
-        port: typing.Optional[jsii.Number] = None,
-        protocol: typing.Optional["ApplicationProtocol"] = None,
-        ssl_policy: typing.Optional["SslPolicy"] = None,
-    ) -> None:
-        '''
-        :param scope: -
-        :param id: -
-        :param load_balancer: The load balancer to attach this listener to.
-        :param certificates: Certificate list of ACM cert ARNs. You must provide exactly one certificate if the listener protocol is HTTPS or TLS. Default: - No certificates.
-        :param default_action: Default action to take for requests to this listener. This allows full control of the default action of the load balancer, including Action chaining, fixed responses and redirect responses. See the ``ListenerAction`` class for all options. Cannot be specified together with ``defaultTargetGroups``. Default: - None.
-        :param default_target_groups: Default target groups to load balance to. All target groups will be load balanced to with equal weight and without stickiness. For a more complex configuration than that, use either ``defaultAction`` or ``addAction()``. Cannot be specified together with ``defaultAction``. Default: - None.
-        :param mutual_authentication: The mutual authentication configuration information. Default: - No mutual authentication configuration
-        :param open: Allow anyone to connect to the load balancer on the listener port. If this is specified, the load balancer will be opened up to anyone who can reach it. For internal load balancers this is anyone in the same VPC. For public load balancers, this is anyone on the internet. If you want to be more selective about who can access this load balancer, set this to ``false`` and use the listener's ``connections`` object to selectively grant access to the load balancer on the listener port. Default: true
-        :param port: The port on which the listener listens for requests. Default: - Determined from protocol if known.
-        :param protocol: The protocol to use. Default: - Determined from port if known.
-        :param ssl_policy: The security policy that defines which ciphers and protocols are supported. Default: - The current predefined security policy.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__456b854cc2e0f11115cdc6d97d27e54e4d0b70c3bbcac268b8302e61be1d2846)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = ApplicationListenerProps(
-            load_balancer=load_balancer,
-            certificates=certificates,
-            default_action=default_action,
-            default_target_groups=default_target_groups,
-            mutual_authentication=mutual_authentication,
-            open=open,
-            port=port,
-            protocol=protocol,
-            ssl_policy=ssl_policy,
-        )
-
-        jsii.create(self.__class__, self, [scope, id, props])
-
-    @jsii.member(jsii_name="fromApplicationListenerAttributes")
-    @builtins.classmethod
-    def from_application_listener_attributes(
-        cls,
-        scope: "_constructs_77d1e7e8.Construct",
-        id: builtins.str,
-        *,
-        listener_arn: builtins.str,
-        security_group: "_ISecurityGroup_acf8a799",
-        default_port: typing.Optional[jsii.Number] = None,
-    ) -> "IApplicationListener":
-        '''Import an existing listener.
-
-        :param scope: -
-        :param id: -
-        :param listener_arn: ARN of the listener.
-        :param security_group: Security group of the load balancer this listener is associated with.
-        :param default_port: The default port on which this listener is listening.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__2f484c88c521d88cd42c5389c18b8ce1b5e177f2273ec92c4cec20a1c65757d0)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        attrs = ApplicationListenerAttributes(
-            listener_arn=listener_arn,
-            security_group=security_group,
-            default_port=default_port,
-        )
-
-        return typing.cast("IApplicationListener", jsii.sinvoke(cls, "fromApplicationListenerAttributes", [scope, id, attrs]))
-
-    @jsii.member(jsii_name="fromLookup")
-    @builtins.classmethod
-    def from_lookup(
-        cls,
-        scope: "_constructs_77d1e7e8.Construct",
-        id: builtins.str,
-        *,
-        listener_arn: typing.Optional[builtins.str] = None,
-        listener_protocol: typing.Optional["ApplicationProtocol"] = None,
-        listener_port: typing.Optional[jsii.Number] = None,
-        load_balancer_arn: typing.Optional[builtins.str] = None,
-        load_balancer_tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    ) -> "IApplicationListener":
-        '''Look up an ApplicationListener.
-
-        :param scope: -
-        :param id: -
-        :param listener_arn: ARN of the listener to look up. Default: - does not filter by listener arn
-        :param listener_protocol: Filter listeners by listener protocol. Default: - does not filter by listener protocol
-        :param listener_port: Filter listeners by listener port. Default: - does not filter by listener port
-        :param load_balancer_arn: Filter listeners by associated load balancer arn. Default: - does not filter by load balancer arn
-        :param load_balancer_tags: Filter listeners by associated load balancer tags. Default: - does not filter by load balancer tags
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__a7360e4910bed700a4e6a8a66d8a0eded64eca721e43b634c07ff814da957d2b)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        options = ApplicationListenerLookupOptions(
-            listener_arn=listener_arn,
-            listener_protocol=listener_protocol,
-            listener_port=listener_port,
-            load_balancer_arn=load_balancer_arn,
-            load_balancer_tags=load_balancer_tags,
-        )
-
-        return typing.cast("IApplicationListener", jsii.sinvoke(cls, "fromLookup", [scope, id, options]))
-
-    @jsii.member(jsii_name="addAction")
-    def add_action(
-        self,
-        id: builtins.str,
-        *,
-        action: "ListenerAction",
-        remove_suffix: typing.Optional[builtins.bool] = None,
-        conditions: typing.Optional[typing.Sequence["ListenerCondition"]] = None,
-        priority: typing.Optional[jsii.Number] = None,
-    ) -> None:
-        '''Perform the given default action on incoming requests.
-
-        This allows full control of the default action of the load balancer,
-        including Action chaining, fixed responses and redirect responses. See
-        the ``ListenerAction`` class for all options.
-
-        It's possible to add routing conditions to the Action added in this way.
-        At least one Action must be added without conditions (which becomes the
-        default Action).
-
-        :param id: -
-        :param action: Action to perform.
-        :param remove_suffix: ``ListenerRule``s have a ``Rule`` suffix on their logicalId by default. This allows you to remove that suffix. Legacy behavior of the ``addTargetGroups()`` convenience method did not include the ``Rule`` suffix on the logicalId of the generated ``ListenerRule``. At some point, increasing complexity of requirements can require users to switch from the ``addTargetGroups()`` method to the ``addAction()`` method. When migrating ``ListenerRule``s deployed by a legacy version of ``addTargetGroups()``, you will need to enable this flag to avoid changing the logicalId of your resource. Otherwise Cfn will attempt to replace the ``ListenerRule`` and fail. Default: - use standard logicalId with the ``Rule`` suffix
-        :param conditions: Rule applies if matches the conditions. Default: - No conditions.
-        :param priority: Priority of this target group. The rule with the lowest priority will be used for every request. If priority is not given, these target groups will be added as defaults, and must not have conditions. Priorities must be unique. Default: Target groups are used as defaults
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__646bd302ed3a63a28a30ea3b62d2e003bf976ae981493560776ad112cacb8001)
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = AddApplicationActionProps(
-            action=action,
-            remove_suffix=remove_suffix,
-            conditions=conditions,
-            priority=priority,
-        )
-
-        return typing.cast(None, jsii.invoke(self, "addAction", [id, props]))
-
-    @jsii.member(jsii_name="addCertificates")
-    def add_certificates(
-        self,
-        id: builtins.str,
-        certificates: typing.Sequence["IListenerCertificate"],
-    ) -> None:
-        '''Add one or more certificates to this listener.
-
-        After the first certificate, this creates ApplicationListenerCertificates
-        resources since cloudformation requires the certificates array on the
-        listener resource to have a length of 1.
-
-        :param id: -
-        :param certificates: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__108a21675c8facd98816b3c33cd7ecf91e67edcb3741260fd767792ce79ac8cd)
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument certificates", value=certificates, expected_type=type_hints["certificates"])
-        return typing.cast(None, jsii.invoke(self, "addCertificates", [id, certificates]))
-
-    @jsii.member(jsii_name="addTargetGroups")
-    def add_target_groups(
-        self,
-        id: builtins.str,
-        *,
-        target_groups: typing.Sequence["IApplicationTargetGroup"],
-        conditions: typing.Optional[typing.Sequence["ListenerCondition"]] = None,
-        priority: typing.Optional[jsii.Number] = None,
-    ) -> None:
-        '''Load balance incoming requests to the given target groups.
-
-        All target groups will be load balanced to with equal weight and without
-        stickiness. For a more complex configuration than that, use ``addAction()``.
-
-        It's possible to add routing conditions to the TargetGroups added in this
-        way. At least one TargetGroup must be added without conditions (which will
-        become the default Action for this listener).
-
-        :param id: -
-        :param target_groups: Target groups to forward requests to.
-        :param conditions: Rule applies if matches the conditions. Default: - No conditions.
-        :param priority: Priority of this target group. The rule with the lowest priority will be used for every request. If priority is not given, these target groups will be added as defaults, and must not have conditions. Priorities must be unique. Default: Target groups are used as defaults
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__537b1cde53c28e62d827b46edbd4c564b81aab48c43f3b0171d516036c34dd1e)
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = AddApplicationTargetGroupsProps(
-            target_groups=target_groups, conditions=conditions, priority=priority
-        )
-
-        return typing.cast(None, jsii.invoke(self, "addTargetGroups", [id, props]))
-
-    @jsii.member(jsii_name="addTargets")
-    def add_targets(
-        self,
-        id: builtins.str,
-        *,
-        deregistration_delay: typing.Optional["_Duration_4839e8c3"] = None,
-        enable_anomaly_mitigation: typing.Optional[builtins.bool] = None,
-        health_check: typing.Optional[typing.Union["HealthCheck", typing.Dict[builtins.str, typing.Any]]] = None,
-        load_balancing_algorithm_type: typing.Optional["TargetGroupLoadBalancingAlgorithmType"] = None,
-        port: typing.Optional[jsii.Number] = None,
-        protocol: typing.Optional["ApplicationProtocol"] = None,
-        protocol_version: typing.Optional["ApplicationProtocolVersion"] = None,
-        slow_start: typing.Optional["_Duration_4839e8c3"] = None,
-        stickiness_cookie_duration: typing.Optional["_Duration_4839e8c3"] = None,
-        stickiness_cookie_name: typing.Optional[builtins.str] = None,
-        target_group_name: typing.Optional[builtins.str] = None,
-        targets: typing.Optional[typing.Sequence["IApplicationLoadBalancerTarget"]] = None,
-        conditions: typing.Optional[typing.Sequence["ListenerCondition"]] = None,
-        priority: typing.Optional[jsii.Number] = None,
-    ) -> "ApplicationTargetGroup":
-        '''Load balance incoming requests to the given load balancing targets.
-
-        This method implicitly creates an ApplicationTargetGroup for the targets
-        involved, and a 'forward' action to route traffic to the given TargetGroup.
-
-        If you want more control over the precise setup, create the TargetGroup
-        and use ``addAction`` yourself.
-
-        It's possible to add conditions to the targets added in this way. At least
-        one set of targets must be added without conditions.
-
-        :param id: -
-        :param deregistration_delay: The amount of time for Elastic Load Balancing to wait before deregistering a target. The range is 0-3600 seconds. Default: Duration.minutes(5)
-        :param enable_anomaly_mitigation: Indicates whether anomaly mitigation is enabled. Only available when ``loadBalancingAlgorithmType`` is ``TargetGroupLoadBalancingAlgorithmType.WEIGHTED_RANDOM`` Default: false
-        :param health_check: Health check configuration. Default: - The default value for each property in this configuration varies depending on the target.
-        :param load_balancing_algorithm_type: The load balancing algorithm to select targets for routing requests. Default: round_robin.
-        :param port: The port on which the listener listens for requests. Default: Determined from protocol if known
-        :param protocol: The protocol to use. Default: Determined from port if known
-        :param protocol_version: The protocol version to use. Default: ApplicationProtocolVersion.HTTP1
-        :param slow_start: The time period during which the load balancer sends a newly registered target a linearly increasing share of the traffic to the target group. The range is 30-900 seconds (15 minutes). Default: 0
-        :param stickiness_cookie_duration: The stickiness cookie expiration period. Setting this value enables load balancer stickiness. After this period, the cookie is considered stale. The minimum value is 1 second and the maximum value is 7 days (604800 seconds). Default: Stickiness disabled
-        :param stickiness_cookie_name: The name of an application-based stickiness cookie. Names that start with the following prefixes are not allowed: AWSALB, AWSALBAPP, and AWSALBTG; they're reserved for use by the load balancer. Note: ``stickinessCookieName`` parameter depends on the presence of ``stickinessCookieDuration`` parameter. If ``stickinessCookieDuration`` is not set, ``stickinessCookieName`` will be omitted. Default: - If ``stickinessCookieDuration`` is set, a load-balancer generated cookie is used. Otherwise, no stickiness is defined.
-        :param target_group_name: The name of the target group. This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and must not begin or end with a hyphen. Default: Automatically generated
-        :param targets: The targets to add to this target group. Can be ``Instance``, ``IPAddress``, or any self-registering load balancing target. All target must be of the same type.
-        :param conditions: Rule applies if matches the conditions. Default: - No conditions.
-        :param priority: Priority of this target group. The rule with the lowest priority will be used for every request. If priority is not given, these target groups will be added as defaults, and must not have conditions. Priorities must be unique. Default: Target groups are used as defaults
-
-        :return: The newly created target group
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__024551e53e2a61ea5cc079e4909fa79f39b1b922c5d0ab7d4adfe8153d5962ed)
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = AddApplicationTargetsProps(
-            deregistration_delay=deregistration_delay,
-            enable_anomaly_mitigation=enable_anomaly_mitigation,
-            health_check=health_check,
-            load_balancing_algorithm_type=load_balancing_algorithm_type,
-            port=port,
-            protocol=protocol,
-            protocol_version=protocol_version,
-            slow_start=slow_start,
-            stickiness_cookie_duration=stickiness_cookie_duration,
-            stickiness_cookie_name=stickiness_cookie_name,
-            target_group_name=target_group_name,
-            targets=targets,
-            conditions=conditions,
-            priority=priority,
-        )
-
-        return typing.cast("ApplicationTargetGroup", jsii.invoke(self, "addTargets", [id, props]))
-
-    @jsii.member(jsii_name="registerConnectable")
-    def register_connectable(
-        self,
-        connectable: "_IConnectable_10015a05",
-        port_range: "_Port_85922693",
-    ) -> None:
-        '''Register that a connectable that has been added to this load balancer.
-
-        Don't call this directly. It is called by ApplicationTargetGroup.
-
-        :param connectable: -
-        :param port_range: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__aa35352f4f1ccbd7f59bb31c259f5f8206d70234128e8a2cbb6820c112f8f602)
-            check_type(argname="argument connectable", value=connectable, expected_type=type_hints["connectable"])
-            check_type(argname="argument port_range", value=port_range, expected_type=type_hints["port_range"])
-        return typing.cast(None, jsii.invoke(self, "registerConnectable", [connectable, port_range]))
-
-    @jsii.member(jsii_name="validateListener")
-    def _validate_listener(self) -> typing.List[builtins.str]:
-        '''Validate this listener.'''
-        return typing.cast(typing.List[builtins.str], jsii.invoke(self, "validateListener", []))
-
-    @jsii.python.classproperty
-    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
-    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
-        '''Uniquely identifies this class.'''
-        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
-
-    @builtins.property
-    @jsii.member(jsii_name="connections")
-    def connections(self) -> "_Connections_0f31fce8":
-        '''Manage connections to this ApplicationListener.'''
-        return typing.cast("_Connections_0f31fce8", jsii.get(self, "connections"))
-
-    @builtins.property
-    @jsii.member(jsii_name="loadBalancer")
-    def load_balancer(self) -> "IApplicationLoadBalancer":
-        '''Load balancer this listener is associated with.'''
-        return typing.cast("IApplicationLoadBalancer", jsii.get(self, "loadBalancer"))
-
-    @builtins.property
-    @jsii.member(jsii_name="port")
-    def port(self) -> jsii.Number:
-        '''The port of the listener.'''
-        return typing.cast(jsii.Number, jsii.get(self, "port"))
 
 
 @jsii.implements(IApplicationLoadBalancer)
@@ -27721,6 +27265,16 @@ class ApplicationLoadBalancer(
         return typing.cast("_Connections_0f31fce8", jsii.get(self, "connections"))
 
     @builtins.property
+    @jsii.member(jsii_name="isApplicationLoadBalancer")
+    def is_application_load_balancer(self) -> builtins.bool:
+        '''Indicates that this is an Application Load Balancer.
+
+        Will always return true, but is necessary to prevent accidental structural
+        equality in TypeScript.
+        '''
+        return typing.cast(builtins.bool, jsii.get(self, "isApplicationLoadBalancer"))
+
+    @builtins.property
     @jsii.member(jsii_name="listeners")
     def listeners(self) -> typing.List["ApplicationListener"]:
         '''A list of listeners that have been added to the load balancer.
@@ -28537,6 +28091,709 @@ class ApplicationTargetGroup(
         return typing.cast("IApplicationTargetGroupMetrics", jsii.get(self, "metrics"))
 
 
+@jsii.interface(
+    jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.IApplicationListener"
+)
+class IApplicationListener(
+    IApplicationListenerRef,
+    IListener,
+    _IConnectable_10015a05,
+    typing_extensions.Protocol,
+):
+    '''Properties to reference an existing listener.'''
+
+    @jsii.member(jsii_name="addAction")
+    def add_action(
+        self,
+        id: builtins.str,
+        *,
+        action: "ListenerAction",
+        remove_suffix: typing.Optional[builtins.bool] = None,
+        conditions: typing.Optional[typing.Sequence["ListenerCondition"]] = None,
+        priority: typing.Optional[jsii.Number] = None,
+    ) -> None:
+        '''Perform the given action on incoming requests.
+
+        This allows full control of the default action of the load balancer,
+        including Action chaining, fixed responses and redirect responses. See
+        the ``ListenerAction`` class for all options.
+
+        It's possible to add routing conditions to the Action added in this way.
+
+        It is not possible to add a default action to an imported IApplicationListener.
+        In order to add actions to an imported IApplicationListener a ``priority``
+        must be provided.
+
+        :param id: -
+        :param action: Action to perform.
+        :param remove_suffix: ``ListenerRule``s have a ``Rule`` suffix on their logicalId by default. This allows you to remove that suffix. Legacy behavior of the ``addTargetGroups()`` convenience method did not include the ``Rule`` suffix on the logicalId of the generated ``ListenerRule``. At some point, increasing complexity of requirements can require users to switch from the ``addTargetGroups()`` method to the ``addAction()`` method. When migrating ``ListenerRule``s deployed by a legacy version of ``addTargetGroups()``, you will need to enable this flag to avoid changing the logicalId of your resource. Otherwise Cfn will attempt to replace the ``ListenerRule`` and fail. Default: - use standard logicalId with the ``Rule`` suffix
+        :param conditions: Rule applies if matches the conditions. Default: - No conditions.
+        :param priority: Priority of this target group. The rule with the lowest priority will be used for every request. If priority is not given, these target groups will be added as defaults, and must not have conditions. Priorities must be unique. Default: Target groups are used as defaults
+        '''
+        ...
+
+    @jsii.member(jsii_name="addCertificates")
+    def add_certificates(
+        self,
+        id: builtins.str,
+        certificates: typing.Sequence["IListenerCertificate"],
+    ) -> None:
+        '''Add one or more certificates to this listener.
+
+        :param id: -
+        :param certificates: -
+        '''
+        ...
+
+    @jsii.member(jsii_name="addTargetGroups")
+    def add_target_groups(
+        self,
+        id: builtins.str,
+        *,
+        target_groups: typing.Sequence["IApplicationTargetGroup"],
+        conditions: typing.Optional[typing.Sequence["ListenerCondition"]] = None,
+        priority: typing.Optional[jsii.Number] = None,
+    ) -> None:
+        '''Load balance incoming requests to the given target groups.
+
+        It's possible to add conditions to the TargetGroups added in this way.
+        At least one TargetGroup must be added without conditions.
+
+        :param id: -
+        :param target_groups: Target groups to forward requests to.
+        :param conditions: Rule applies if matches the conditions. Default: - No conditions.
+        :param priority: Priority of this target group. The rule with the lowest priority will be used for every request. If priority is not given, these target groups will be added as defaults, and must not have conditions. Priorities must be unique. Default: Target groups are used as defaults
+        '''
+        ...
+
+    @jsii.member(jsii_name="addTargets")
+    def add_targets(
+        self,
+        id: builtins.str,
+        *,
+        deregistration_delay: typing.Optional["_Duration_4839e8c3"] = None,
+        enable_anomaly_mitigation: typing.Optional[builtins.bool] = None,
+        health_check: typing.Optional[typing.Union["HealthCheck", typing.Dict[builtins.str, typing.Any]]] = None,
+        load_balancing_algorithm_type: typing.Optional["TargetGroupLoadBalancingAlgorithmType"] = None,
+        port: typing.Optional[jsii.Number] = None,
+        protocol: typing.Optional["ApplicationProtocol"] = None,
+        protocol_version: typing.Optional["ApplicationProtocolVersion"] = None,
+        slow_start: typing.Optional["_Duration_4839e8c3"] = None,
+        stickiness_cookie_duration: typing.Optional["_Duration_4839e8c3"] = None,
+        stickiness_cookie_name: typing.Optional[builtins.str] = None,
+        target_group_name: typing.Optional[builtins.str] = None,
+        targets: typing.Optional[typing.Sequence["IApplicationLoadBalancerTarget"]] = None,
+        conditions: typing.Optional[typing.Sequence["ListenerCondition"]] = None,
+        priority: typing.Optional[jsii.Number] = None,
+    ) -> "ApplicationTargetGroup":
+        '''Load balance incoming requests to the given load balancing targets.
+
+        This method implicitly creates an ApplicationTargetGroup for the targets
+        involved.
+
+        It's possible to add conditions to the targets added in this way. At least
+        one set of targets must be added without conditions.
+
+        :param id: -
+        :param deregistration_delay: The amount of time for Elastic Load Balancing to wait before deregistering a target. The range is 0-3600 seconds. Default: Duration.minutes(5)
+        :param enable_anomaly_mitigation: Indicates whether anomaly mitigation is enabled. Only available when ``loadBalancingAlgorithmType`` is ``TargetGroupLoadBalancingAlgorithmType.WEIGHTED_RANDOM`` Default: false
+        :param health_check: Health check configuration. Default: - The default value for each property in this configuration varies depending on the target.
+        :param load_balancing_algorithm_type: The load balancing algorithm to select targets for routing requests. Default: round_robin.
+        :param port: The port on which the listener listens for requests. Default: Determined from protocol if known
+        :param protocol: The protocol to use. Default: Determined from port if known
+        :param protocol_version: The protocol version to use. Default: ApplicationProtocolVersion.HTTP1
+        :param slow_start: The time period during which the load balancer sends a newly registered target a linearly increasing share of the traffic to the target group. The range is 30-900 seconds (15 minutes). Default: 0
+        :param stickiness_cookie_duration: The stickiness cookie expiration period. Setting this value enables load balancer stickiness. After this period, the cookie is considered stale. The minimum value is 1 second and the maximum value is 7 days (604800 seconds). Default: Stickiness disabled
+        :param stickiness_cookie_name: The name of an application-based stickiness cookie. Names that start with the following prefixes are not allowed: AWSALB, AWSALBAPP, and AWSALBTG; they're reserved for use by the load balancer. Note: ``stickinessCookieName`` parameter depends on the presence of ``stickinessCookieDuration`` parameter. If ``stickinessCookieDuration`` is not set, ``stickinessCookieName`` will be omitted. Default: - If ``stickinessCookieDuration`` is set, a load-balancer generated cookie is used. Otherwise, no stickiness is defined.
+        :param target_group_name: The name of the target group. This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and must not begin or end with a hyphen. Default: Automatically generated
+        :param targets: The targets to add to this target group. Can be ``Instance``, ``IPAddress``, or any self-registering load balancing target. All target must be of the same type.
+        :param conditions: Rule applies if matches the conditions. Default: - No conditions.
+        :param priority: Priority of this target group. The rule with the lowest priority will be used for every request. If priority is not given, these target groups will be added as defaults, and must not have conditions. Priorities must be unique. Default: Target groups are used as defaults
+
+        :return: The newly created target group
+        '''
+        ...
+
+    @jsii.member(jsii_name="registerConnectable")
+    def register_connectable(
+        self,
+        connectable: "_IConnectable_10015a05",
+        port_range: "_Port_85922693",
+    ) -> None:
+        '''Register that a connectable that has been added to this load balancer.
+
+        Don't call this directly. It is called by ApplicationTargetGroup.
+
+        :param connectable: -
+        :param port_range: -
+        '''
+        ...
+
+
+class _IApplicationListenerProxy(
+    jsii.proxy_for(IApplicationListenerRef), # type: ignore[misc]
+    jsii.proxy_for(IListener), # type: ignore[misc]
+    jsii.proxy_for(_IConnectable_10015a05), # type: ignore[misc]
+):
+    '''Properties to reference an existing listener.'''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_elasticloadbalancingv2.IApplicationListener"
+
+    @jsii.member(jsii_name="addAction")
+    def add_action(
+        self,
+        id: builtins.str,
+        *,
+        action: "ListenerAction",
+        remove_suffix: typing.Optional[builtins.bool] = None,
+        conditions: typing.Optional[typing.Sequence["ListenerCondition"]] = None,
+        priority: typing.Optional[jsii.Number] = None,
+    ) -> None:
+        '''Perform the given action on incoming requests.
+
+        This allows full control of the default action of the load balancer,
+        including Action chaining, fixed responses and redirect responses. See
+        the ``ListenerAction`` class for all options.
+
+        It's possible to add routing conditions to the Action added in this way.
+
+        It is not possible to add a default action to an imported IApplicationListener.
+        In order to add actions to an imported IApplicationListener a ``priority``
+        must be provided.
+
+        :param id: -
+        :param action: Action to perform.
+        :param remove_suffix: ``ListenerRule``s have a ``Rule`` suffix on their logicalId by default. This allows you to remove that suffix. Legacy behavior of the ``addTargetGroups()`` convenience method did not include the ``Rule`` suffix on the logicalId of the generated ``ListenerRule``. At some point, increasing complexity of requirements can require users to switch from the ``addTargetGroups()`` method to the ``addAction()`` method. When migrating ``ListenerRule``s deployed by a legacy version of ``addTargetGroups()``, you will need to enable this flag to avoid changing the logicalId of your resource. Otherwise Cfn will attempt to replace the ``ListenerRule`` and fail. Default: - use standard logicalId with the ``Rule`` suffix
+        :param conditions: Rule applies if matches the conditions. Default: - No conditions.
+        :param priority: Priority of this target group. The rule with the lowest priority will be used for every request. If priority is not given, these target groups will be added as defaults, and must not have conditions. Priorities must be unique. Default: Target groups are used as defaults
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__078c8c060ef52d807e9a62da847c7c1f9a2fb0a3f7bf8900246c80b1d9ff0a2e)
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = AddApplicationActionProps(
+            action=action,
+            remove_suffix=remove_suffix,
+            conditions=conditions,
+            priority=priority,
+        )
+
+        return typing.cast(None, jsii.invoke(self, "addAction", [id, props]))
+
+    @jsii.member(jsii_name="addCertificates")
+    def add_certificates(
+        self,
+        id: builtins.str,
+        certificates: typing.Sequence["IListenerCertificate"],
+    ) -> None:
+        '''Add one or more certificates to this listener.
+
+        :param id: -
+        :param certificates: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6bf07304357ae3b96ca5010a3003b725b55d7ca3cce0adb320a1d7dd3a8e986e)
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument certificates", value=certificates, expected_type=type_hints["certificates"])
+        return typing.cast(None, jsii.invoke(self, "addCertificates", [id, certificates]))
+
+    @jsii.member(jsii_name="addTargetGroups")
+    def add_target_groups(
+        self,
+        id: builtins.str,
+        *,
+        target_groups: typing.Sequence["IApplicationTargetGroup"],
+        conditions: typing.Optional[typing.Sequence["ListenerCondition"]] = None,
+        priority: typing.Optional[jsii.Number] = None,
+    ) -> None:
+        '''Load balance incoming requests to the given target groups.
+
+        It's possible to add conditions to the TargetGroups added in this way.
+        At least one TargetGroup must be added without conditions.
+
+        :param id: -
+        :param target_groups: Target groups to forward requests to.
+        :param conditions: Rule applies if matches the conditions. Default: - No conditions.
+        :param priority: Priority of this target group. The rule with the lowest priority will be used for every request. If priority is not given, these target groups will be added as defaults, and must not have conditions. Priorities must be unique. Default: Target groups are used as defaults
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2a75a011e579ef50ef41ed5ad7fddf22c4568fc11c8d5304364dc3fcc7ad6e05)
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = AddApplicationTargetGroupsProps(
+            target_groups=target_groups, conditions=conditions, priority=priority
+        )
+
+        return typing.cast(None, jsii.invoke(self, "addTargetGroups", [id, props]))
+
+    @jsii.member(jsii_name="addTargets")
+    def add_targets(
+        self,
+        id: builtins.str,
+        *,
+        deregistration_delay: typing.Optional["_Duration_4839e8c3"] = None,
+        enable_anomaly_mitigation: typing.Optional[builtins.bool] = None,
+        health_check: typing.Optional[typing.Union["HealthCheck", typing.Dict[builtins.str, typing.Any]]] = None,
+        load_balancing_algorithm_type: typing.Optional["TargetGroupLoadBalancingAlgorithmType"] = None,
+        port: typing.Optional[jsii.Number] = None,
+        protocol: typing.Optional["ApplicationProtocol"] = None,
+        protocol_version: typing.Optional["ApplicationProtocolVersion"] = None,
+        slow_start: typing.Optional["_Duration_4839e8c3"] = None,
+        stickiness_cookie_duration: typing.Optional["_Duration_4839e8c3"] = None,
+        stickiness_cookie_name: typing.Optional[builtins.str] = None,
+        target_group_name: typing.Optional[builtins.str] = None,
+        targets: typing.Optional[typing.Sequence["IApplicationLoadBalancerTarget"]] = None,
+        conditions: typing.Optional[typing.Sequence["ListenerCondition"]] = None,
+        priority: typing.Optional[jsii.Number] = None,
+    ) -> "ApplicationTargetGroup":
+        '''Load balance incoming requests to the given load balancing targets.
+
+        This method implicitly creates an ApplicationTargetGroup for the targets
+        involved.
+
+        It's possible to add conditions to the targets added in this way. At least
+        one set of targets must be added without conditions.
+
+        :param id: -
+        :param deregistration_delay: The amount of time for Elastic Load Balancing to wait before deregistering a target. The range is 0-3600 seconds. Default: Duration.minutes(5)
+        :param enable_anomaly_mitigation: Indicates whether anomaly mitigation is enabled. Only available when ``loadBalancingAlgorithmType`` is ``TargetGroupLoadBalancingAlgorithmType.WEIGHTED_RANDOM`` Default: false
+        :param health_check: Health check configuration. Default: - The default value for each property in this configuration varies depending on the target.
+        :param load_balancing_algorithm_type: The load balancing algorithm to select targets for routing requests. Default: round_robin.
+        :param port: The port on which the listener listens for requests. Default: Determined from protocol if known
+        :param protocol: The protocol to use. Default: Determined from port if known
+        :param protocol_version: The protocol version to use. Default: ApplicationProtocolVersion.HTTP1
+        :param slow_start: The time period during which the load balancer sends a newly registered target a linearly increasing share of the traffic to the target group. The range is 30-900 seconds (15 minutes). Default: 0
+        :param stickiness_cookie_duration: The stickiness cookie expiration period. Setting this value enables load balancer stickiness. After this period, the cookie is considered stale. The minimum value is 1 second and the maximum value is 7 days (604800 seconds). Default: Stickiness disabled
+        :param stickiness_cookie_name: The name of an application-based stickiness cookie. Names that start with the following prefixes are not allowed: AWSALB, AWSALBAPP, and AWSALBTG; they're reserved for use by the load balancer. Note: ``stickinessCookieName`` parameter depends on the presence of ``stickinessCookieDuration`` parameter. If ``stickinessCookieDuration`` is not set, ``stickinessCookieName`` will be omitted. Default: - If ``stickinessCookieDuration`` is set, a load-balancer generated cookie is used. Otherwise, no stickiness is defined.
+        :param target_group_name: The name of the target group. This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and must not begin or end with a hyphen. Default: Automatically generated
+        :param targets: The targets to add to this target group. Can be ``Instance``, ``IPAddress``, or any self-registering load balancing target. All target must be of the same type.
+        :param conditions: Rule applies if matches the conditions. Default: - No conditions.
+        :param priority: Priority of this target group. The rule with the lowest priority will be used for every request. If priority is not given, these target groups will be added as defaults, and must not have conditions. Priorities must be unique. Default: Target groups are used as defaults
+
+        :return: The newly created target group
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__84e790e0e8140f8df376ccc9404001adf95dc62c6408367a7fb37a7ac655ef44)
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = AddApplicationTargetsProps(
+            deregistration_delay=deregistration_delay,
+            enable_anomaly_mitigation=enable_anomaly_mitigation,
+            health_check=health_check,
+            load_balancing_algorithm_type=load_balancing_algorithm_type,
+            port=port,
+            protocol=protocol,
+            protocol_version=protocol_version,
+            slow_start=slow_start,
+            stickiness_cookie_duration=stickiness_cookie_duration,
+            stickiness_cookie_name=stickiness_cookie_name,
+            target_group_name=target_group_name,
+            targets=targets,
+            conditions=conditions,
+            priority=priority,
+        )
+
+        return typing.cast("ApplicationTargetGroup", jsii.invoke(self, "addTargets", [id, props]))
+
+    @jsii.member(jsii_name="registerConnectable")
+    def register_connectable(
+        self,
+        connectable: "_IConnectable_10015a05",
+        port_range: "_Port_85922693",
+    ) -> None:
+        '''Register that a connectable that has been added to this load balancer.
+
+        Don't call this directly. It is called by ApplicationTargetGroup.
+
+        :param connectable: -
+        :param port_range: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ed17ef6987e4f2957e6bb9b0439408268b3b78152bef346bbc634ba0b8f39b8d)
+            check_type(argname="argument connectable", value=connectable, expected_type=type_hints["connectable"])
+            check_type(argname="argument port_range", value=port_range, expected_type=type_hints["port_range"])
+        return typing.cast(None, jsii.invoke(self, "registerConnectable", [connectable, port_range]))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IApplicationListener).__jsii_proxy_class__ = lambda : _IApplicationListenerProxy
+
+
+@jsii.implements(IApplicationListener)
+class ApplicationListener(
+    BaseListener,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_elasticloadbalancingv2.ApplicationListener",
+):
+    '''Define an ApplicationListener.
+
+    :resource: AWS::ElasticLoadBalancingV2::Listener
+    :exampleMetadata: infused
+
+    Example::
+
+        from aws_cdk.aws_autoscaling import AutoScalingGroup
+        # asg: AutoScalingGroup
+        # vpc: ec2.Vpc
+        
+        
+        # Create the load balancer in a VPC. 'internetFacing' is 'false'
+        # by default, which creates an internal load balancer.
+        lb = elbv2.ApplicationLoadBalancer(self, "LB",
+            vpc=vpc,
+            internet_facing=True
+        )
+        
+        # Add a listener and open up the load balancer's security group
+        # to the world.
+        listener = lb.add_listener("Listener",
+            port=80,
+        
+            # 'open: true' is the default, you can leave it out if you want. Set it
+            # to 'false' and use `listener.connections` if you want to be selective
+            # about who can access the load balancer.
+            open=True
+        )
+        
+        # Create an AutoScaling group and add it as a load balancing
+        # target to the listener.
+        listener.add_targets("ApplicationFleet",
+            port=8080,
+            targets=[asg]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        *,
+        load_balancer: "IApplicationLoadBalancer",
+        certificates: typing.Optional[typing.Sequence["IListenerCertificate"]] = None,
+        default_action: typing.Optional["ListenerAction"] = None,
+        default_target_groups: typing.Optional[typing.Sequence["IApplicationTargetGroup"]] = None,
+        mutual_authentication: typing.Optional[typing.Union["MutualAuthentication", typing.Dict[builtins.str, typing.Any]]] = None,
+        open: typing.Optional[builtins.bool] = None,
+        port: typing.Optional[jsii.Number] = None,
+        protocol: typing.Optional["ApplicationProtocol"] = None,
+        ssl_policy: typing.Optional["SslPolicy"] = None,
+    ) -> None:
+        '''
+        :param scope: -
+        :param id: -
+        :param load_balancer: The load balancer to attach this listener to.
+        :param certificates: Certificate list of ACM cert ARNs. You must provide exactly one certificate if the listener protocol is HTTPS or TLS. Default: - No certificates.
+        :param default_action: Default action to take for requests to this listener. This allows full control of the default action of the load balancer, including Action chaining, fixed responses and redirect responses. See the ``ListenerAction`` class for all options. Cannot be specified together with ``defaultTargetGroups``. Default: - None.
+        :param default_target_groups: Default target groups to load balance to. All target groups will be load balanced to with equal weight and without stickiness. For a more complex configuration than that, use either ``defaultAction`` or ``addAction()``. Cannot be specified together with ``defaultAction``. Default: - None.
+        :param mutual_authentication: The mutual authentication configuration information. Default: - No mutual authentication configuration
+        :param open: Allow anyone to connect to the load balancer on the listener port. If this is specified, the load balancer will be opened up to anyone who can reach it. For internal load balancers this is anyone in the same VPC. For public load balancers, this is anyone on the internet. If you want to be more selective about who can access this load balancer, set this to ``false`` and use the listener's ``connections`` object to selectively grant access to the load balancer on the listener port. Default: true
+        :param port: The port on which the listener listens for requests. Default: - Determined from protocol if known.
+        :param protocol: The protocol to use. Default: - Determined from port if known.
+        :param ssl_policy: The security policy that defines which ciphers and protocols are supported. Default: - The current predefined security policy.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__456b854cc2e0f11115cdc6d97d27e54e4d0b70c3bbcac268b8302e61be1d2846)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = ApplicationListenerProps(
+            load_balancer=load_balancer,
+            certificates=certificates,
+            default_action=default_action,
+            default_target_groups=default_target_groups,
+            mutual_authentication=mutual_authentication,
+            open=open,
+            port=port,
+            protocol=protocol,
+            ssl_policy=ssl_policy,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromApplicationListenerAttributes")
+    @builtins.classmethod
+    def from_application_listener_attributes(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        *,
+        listener_arn: builtins.str,
+        security_group: "_ISecurityGroup_acf8a799",
+        default_port: typing.Optional[jsii.Number] = None,
+    ) -> "IApplicationListener":
+        '''Import an existing listener.
+
+        :param scope: -
+        :param id: -
+        :param listener_arn: ARN of the listener.
+        :param security_group: Security group of the load balancer this listener is associated with.
+        :param default_port: The default port on which this listener is listening.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2f484c88c521d88cd42c5389c18b8ce1b5e177f2273ec92c4cec20a1c65757d0)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        attrs = ApplicationListenerAttributes(
+            listener_arn=listener_arn,
+            security_group=security_group,
+            default_port=default_port,
+        )
+
+        return typing.cast("IApplicationListener", jsii.sinvoke(cls, "fromApplicationListenerAttributes", [scope, id, attrs]))
+
+    @jsii.member(jsii_name="fromLookup")
+    @builtins.classmethod
+    def from_lookup(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        *,
+        listener_arn: typing.Optional[builtins.str] = None,
+        listener_protocol: typing.Optional["ApplicationProtocol"] = None,
+        listener_port: typing.Optional[jsii.Number] = None,
+        load_balancer_arn: typing.Optional[builtins.str] = None,
+        load_balancer_tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    ) -> "IApplicationListener":
+        '''Look up an ApplicationListener.
+
+        :param scope: -
+        :param id: -
+        :param listener_arn: ARN of the listener to look up. Default: - does not filter by listener arn
+        :param listener_protocol: Filter listeners by listener protocol. Default: - does not filter by listener protocol
+        :param listener_port: Filter listeners by listener port. Default: - does not filter by listener port
+        :param load_balancer_arn: Filter listeners by associated load balancer arn. Default: - does not filter by load balancer arn
+        :param load_balancer_tags: Filter listeners by associated load balancer tags. Default: - does not filter by load balancer tags
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a7360e4910bed700a4e6a8a66d8a0eded64eca721e43b634c07ff814da957d2b)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        options = ApplicationListenerLookupOptions(
+            listener_arn=listener_arn,
+            listener_protocol=listener_protocol,
+            listener_port=listener_port,
+            load_balancer_arn=load_balancer_arn,
+            load_balancer_tags=load_balancer_tags,
+        )
+
+        return typing.cast("IApplicationListener", jsii.sinvoke(cls, "fromLookup", [scope, id, options]))
+
+    @jsii.member(jsii_name="addAction")
+    def add_action(
+        self,
+        id: builtins.str,
+        *,
+        action: "ListenerAction",
+        remove_suffix: typing.Optional[builtins.bool] = None,
+        conditions: typing.Optional[typing.Sequence["ListenerCondition"]] = None,
+        priority: typing.Optional[jsii.Number] = None,
+    ) -> None:
+        '''Perform the given default action on incoming requests.
+
+        This allows full control of the default action of the load balancer,
+        including Action chaining, fixed responses and redirect responses. See
+        the ``ListenerAction`` class for all options.
+
+        It's possible to add routing conditions to the Action added in this way.
+        At least one Action must be added without conditions (which becomes the
+        default Action).
+
+        :param id: -
+        :param action: Action to perform.
+        :param remove_suffix: ``ListenerRule``s have a ``Rule`` suffix on their logicalId by default. This allows you to remove that suffix. Legacy behavior of the ``addTargetGroups()`` convenience method did not include the ``Rule`` suffix on the logicalId of the generated ``ListenerRule``. At some point, increasing complexity of requirements can require users to switch from the ``addTargetGroups()`` method to the ``addAction()`` method. When migrating ``ListenerRule``s deployed by a legacy version of ``addTargetGroups()``, you will need to enable this flag to avoid changing the logicalId of your resource. Otherwise Cfn will attempt to replace the ``ListenerRule`` and fail. Default: - use standard logicalId with the ``Rule`` suffix
+        :param conditions: Rule applies if matches the conditions. Default: - No conditions.
+        :param priority: Priority of this target group. The rule with the lowest priority will be used for every request. If priority is not given, these target groups will be added as defaults, and must not have conditions. Priorities must be unique. Default: Target groups are used as defaults
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__646bd302ed3a63a28a30ea3b62d2e003bf976ae981493560776ad112cacb8001)
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = AddApplicationActionProps(
+            action=action,
+            remove_suffix=remove_suffix,
+            conditions=conditions,
+            priority=priority,
+        )
+
+        return typing.cast(None, jsii.invoke(self, "addAction", [id, props]))
+
+    @jsii.member(jsii_name="addCertificates")
+    def add_certificates(
+        self,
+        id: builtins.str,
+        certificates: typing.Sequence["IListenerCertificate"],
+    ) -> None:
+        '''Add one or more certificates to this listener.
+
+        After the first certificate, this creates ApplicationListenerCertificates
+        resources since cloudformation requires the certificates array on the
+        listener resource to have a length of 1.
+
+        :param id: -
+        :param certificates: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__108a21675c8facd98816b3c33cd7ecf91e67edcb3741260fd767792ce79ac8cd)
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument certificates", value=certificates, expected_type=type_hints["certificates"])
+        return typing.cast(None, jsii.invoke(self, "addCertificates", [id, certificates]))
+
+    @jsii.member(jsii_name="addTargetGroups")
+    def add_target_groups(
+        self,
+        id: builtins.str,
+        *,
+        target_groups: typing.Sequence["IApplicationTargetGroup"],
+        conditions: typing.Optional[typing.Sequence["ListenerCondition"]] = None,
+        priority: typing.Optional[jsii.Number] = None,
+    ) -> None:
+        '''Load balance incoming requests to the given target groups.
+
+        All target groups will be load balanced to with equal weight and without
+        stickiness. For a more complex configuration than that, use ``addAction()``.
+
+        It's possible to add routing conditions to the TargetGroups added in this
+        way. At least one TargetGroup must be added without conditions (which will
+        become the default Action for this listener).
+
+        :param id: -
+        :param target_groups: Target groups to forward requests to.
+        :param conditions: Rule applies if matches the conditions. Default: - No conditions.
+        :param priority: Priority of this target group. The rule with the lowest priority will be used for every request. If priority is not given, these target groups will be added as defaults, and must not have conditions. Priorities must be unique. Default: Target groups are used as defaults
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__537b1cde53c28e62d827b46edbd4c564b81aab48c43f3b0171d516036c34dd1e)
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = AddApplicationTargetGroupsProps(
+            target_groups=target_groups, conditions=conditions, priority=priority
+        )
+
+        return typing.cast(None, jsii.invoke(self, "addTargetGroups", [id, props]))
+
+    @jsii.member(jsii_name="addTargets")
+    def add_targets(
+        self,
+        id: builtins.str,
+        *,
+        deregistration_delay: typing.Optional["_Duration_4839e8c3"] = None,
+        enable_anomaly_mitigation: typing.Optional[builtins.bool] = None,
+        health_check: typing.Optional[typing.Union["HealthCheck", typing.Dict[builtins.str, typing.Any]]] = None,
+        load_balancing_algorithm_type: typing.Optional["TargetGroupLoadBalancingAlgorithmType"] = None,
+        port: typing.Optional[jsii.Number] = None,
+        protocol: typing.Optional["ApplicationProtocol"] = None,
+        protocol_version: typing.Optional["ApplicationProtocolVersion"] = None,
+        slow_start: typing.Optional["_Duration_4839e8c3"] = None,
+        stickiness_cookie_duration: typing.Optional["_Duration_4839e8c3"] = None,
+        stickiness_cookie_name: typing.Optional[builtins.str] = None,
+        target_group_name: typing.Optional[builtins.str] = None,
+        targets: typing.Optional[typing.Sequence["IApplicationLoadBalancerTarget"]] = None,
+        conditions: typing.Optional[typing.Sequence["ListenerCondition"]] = None,
+        priority: typing.Optional[jsii.Number] = None,
+    ) -> "ApplicationTargetGroup":
+        '''Load balance incoming requests to the given load balancing targets.
+
+        This method implicitly creates an ApplicationTargetGroup for the targets
+        involved, and a 'forward' action to route traffic to the given TargetGroup.
+
+        If you want more control over the precise setup, create the TargetGroup
+        and use ``addAction`` yourself.
+
+        It's possible to add conditions to the targets added in this way. At least
+        one set of targets must be added without conditions.
+
+        :param id: -
+        :param deregistration_delay: The amount of time for Elastic Load Balancing to wait before deregistering a target. The range is 0-3600 seconds. Default: Duration.minutes(5)
+        :param enable_anomaly_mitigation: Indicates whether anomaly mitigation is enabled. Only available when ``loadBalancingAlgorithmType`` is ``TargetGroupLoadBalancingAlgorithmType.WEIGHTED_RANDOM`` Default: false
+        :param health_check: Health check configuration. Default: - The default value for each property in this configuration varies depending on the target.
+        :param load_balancing_algorithm_type: The load balancing algorithm to select targets for routing requests. Default: round_robin.
+        :param port: The port on which the listener listens for requests. Default: Determined from protocol if known
+        :param protocol: The protocol to use. Default: Determined from port if known
+        :param protocol_version: The protocol version to use. Default: ApplicationProtocolVersion.HTTP1
+        :param slow_start: The time period during which the load balancer sends a newly registered target a linearly increasing share of the traffic to the target group. The range is 30-900 seconds (15 minutes). Default: 0
+        :param stickiness_cookie_duration: The stickiness cookie expiration period. Setting this value enables load balancer stickiness. After this period, the cookie is considered stale. The minimum value is 1 second and the maximum value is 7 days (604800 seconds). Default: Stickiness disabled
+        :param stickiness_cookie_name: The name of an application-based stickiness cookie. Names that start with the following prefixes are not allowed: AWSALB, AWSALBAPP, and AWSALBTG; they're reserved for use by the load balancer. Note: ``stickinessCookieName`` parameter depends on the presence of ``stickinessCookieDuration`` parameter. If ``stickinessCookieDuration`` is not set, ``stickinessCookieName`` will be omitted. Default: - If ``stickinessCookieDuration`` is set, a load-balancer generated cookie is used. Otherwise, no stickiness is defined.
+        :param target_group_name: The name of the target group. This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and must not begin or end with a hyphen. Default: Automatically generated
+        :param targets: The targets to add to this target group. Can be ``Instance``, ``IPAddress``, or any self-registering load balancing target. All target must be of the same type.
+        :param conditions: Rule applies if matches the conditions. Default: - No conditions.
+        :param priority: Priority of this target group. The rule with the lowest priority will be used for every request. If priority is not given, these target groups will be added as defaults, and must not have conditions. Priorities must be unique. Default: Target groups are used as defaults
+
+        :return: The newly created target group
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__024551e53e2a61ea5cc079e4909fa79f39b1b922c5d0ab7d4adfe8153d5962ed)
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = AddApplicationTargetsProps(
+            deregistration_delay=deregistration_delay,
+            enable_anomaly_mitigation=enable_anomaly_mitigation,
+            health_check=health_check,
+            load_balancing_algorithm_type=load_balancing_algorithm_type,
+            port=port,
+            protocol=protocol,
+            protocol_version=protocol_version,
+            slow_start=slow_start,
+            stickiness_cookie_duration=stickiness_cookie_duration,
+            stickiness_cookie_name=stickiness_cookie_name,
+            target_group_name=target_group_name,
+            targets=targets,
+            conditions=conditions,
+            priority=priority,
+        )
+
+        return typing.cast("ApplicationTargetGroup", jsii.invoke(self, "addTargets", [id, props]))
+
+    @jsii.member(jsii_name="registerConnectable")
+    def register_connectable(
+        self,
+        connectable: "_IConnectable_10015a05",
+        port_range: "_Port_85922693",
+    ) -> None:
+        '''Register that a connectable that has been added to this load balancer.
+
+        Don't call this directly. It is called by ApplicationTargetGroup.
+
+        :param connectable: -
+        :param port_range: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__aa35352f4f1ccbd7f59bb31c259f5f8206d70234128e8a2cbb6820c112f8f602)
+            check_type(argname="argument connectable", value=connectable, expected_type=type_hints["connectable"])
+            check_type(argname="argument port_range", value=port_range, expected_type=type_hints["port_range"])
+        return typing.cast(None, jsii.invoke(self, "registerConnectable", [connectable, port_range]))
+
+    @jsii.member(jsii_name="validateListener")
+    def _validate_listener(self) -> typing.List[builtins.str]:
+        '''Validate this listener.'''
+        return typing.cast(typing.List[builtins.str], jsii.invoke(self, "validateListener", []))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
+    @builtins.property
+    @jsii.member(jsii_name="connections")
+    def connections(self) -> "_Connections_0f31fce8":
+        '''Manage connections to this ApplicationListener.'''
+        return typing.cast("_Connections_0f31fce8", jsii.get(self, "connections"))
+
+    @builtins.property
+    @jsii.member(jsii_name="isApplicationListener")
+    def is_application_listener(self) -> builtins.bool:
+        '''Indicates that this is an ALB listener.
+
+        Will always return true, but is necessary to prevent accidental structural
+        equality in TypeScript.
+        '''
+        return typing.cast(builtins.bool, jsii.get(self, "isApplicationListener"))
+
+    @builtins.property
+    @jsii.member(jsii_name="loadBalancer")
+    def load_balancer(self) -> "IApplicationLoadBalancer":
+        '''Load balancer this listener is associated with.'''
+        return typing.cast("IApplicationLoadBalancer", jsii.get(self, "loadBalancer"))
+
+    @builtins.property
+    @jsii.member(jsii_name="port")
+    def port(self) -> jsii.Number:
+        '''The port of the listener.'''
+        return typing.cast(jsii.Number, jsii.get(self, "port"))
+
+
 __all__ = [
     "AddApplicationActionProps",
     "AddApplicationTargetGroupsProps",
@@ -28594,8 +28851,10 @@ __all__ = [
     "HttpCodeElb",
     "HttpCodeTarget",
     "IApplicationListener",
+    "IApplicationListenerRef",
     "IApplicationLoadBalancer",
     "IApplicationLoadBalancerMetrics",
+    "IApplicationLoadBalancerRef",
     "IApplicationLoadBalancerTarget",
     "IApplicationTargetGroup",
     "IApplicationTargetGroupMetrics",
@@ -28604,11 +28863,13 @@ __all__ = [
     "IListenerCertificate",
     "ILoadBalancerV2",
     "INetworkListener",
+    "INetworkListenerRef",
     "INetworkLoadBalancer",
     "INetworkLoadBalancerMetrics",
     "INetworkLoadBalancerTarget",
     "INetworkTargetGroup",
     "INetworkTargetGroupMetrics",
+    "INetworkTargetGroupRef",
     "ITargetGroup",
     "ITrustStore",
     "IpAddressType",
@@ -28697,7 +28958,7 @@ def _typecheckingstub__52fe4faa0c2cb22f24850f57dea9971eb4dd93e8a67644c86be7afd0b
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    listener: IApplicationListener,
+    listener: _IListenerRef_a8ced6a8,
     certificates: typing.Optional[typing.Sequence[IListenerCertificate]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -28705,7 +28966,7 @@ def _typecheckingstub__52fe4faa0c2cb22f24850f57dea9971eb4dd93e8a67644c86be7afd0b
 
 def _typecheckingstub__863a0781e27e26254f4be396316d5d4f08d1ffa1d864f3923e50496d736017c9(
     *,
-    listener: IApplicationListener,
+    listener: _IListenerRef_a8ced6a8,
     certificates: typing.Optional[typing.Sequence[IListenerCertificate]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -30316,7 +30577,7 @@ def _typecheckingstub__89e8c0615ab98434e16d3e39e80ba0dcf6db041697e65279c8dffc68d
     advertise_trust_store_ca_names: typing.Optional[builtins.bool] = None,
     ignore_client_certificate_expiry: typing.Optional[builtins.bool] = None,
     mutual_authentication_mode: typing.Optional[MutualAuthenticationMode] = None,
-    trust_store: typing.Optional[ITrustStore] = None,
+    trust_store: typing.Optional[_ITrustStoreRef_0fa03cbe] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -30353,7 +30614,7 @@ def _typecheckingstub__7444d4613dae606ea0e82c7ab013a3cde544db05c468cae298e786211
 
 def _typecheckingstub__7a583bf6fd9a9b724a86ce83c82af57f23d6b30bae88f7277763a65e1d2829cf(
     scope: _constructs_77d1e7e8.Construct,
-    listener: INetworkListener,
+    listener: INetworkListenerRef,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -30679,7 +30940,7 @@ def _typecheckingstub__688628f84e2cff85506975764e889f60121aab1ab9420e53b24769400
     id: builtins.str,
     *,
     revocation_contents: typing.Sequence[typing.Union[RevocationContent, typing.Dict[builtins.str, typing.Any]]],
-    trust_store: ITrustStore,
+    trust_store: _ITrustStoreRef_0fa03cbe,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -30687,7 +30948,7 @@ def _typecheckingstub__688628f84e2cff85506975764e889f60121aab1ab9420e53b24769400
 def _typecheckingstub__de0bf3e884d9bbf4a0d3582e17910f3a46c89450790ad669a820be588c4bb749(
     *,
     revocation_contents: typing.Sequence[typing.Union[RevocationContent, typing.Dict[builtins.str, typing.Any]]],
-    trust_store: ITrustStore,
+    trust_store: _ITrustStoreRef_0fa03cbe,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -30855,62 +31116,6 @@ def _typecheckingstub__42b74f8396752d37baeef333f99c80d4ed81c443c6410c4f4002f7a35
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__078c8c060ef52d807e9a62da847c7c1f9a2fb0a3f7bf8900246c80b1d9ff0a2e(
-    id: builtins.str,
-    *,
-    action: ListenerAction,
-    remove_suffix: typing.Optional[builtins.bool] = None,
-    conditions: typing.Optional[typing.Sequence[ListenerCondition]] = None,
-    priority: typing.Optional[jsii.Number] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__6bf07304357ae3b96ca5010a3003b725b55d7ca3cce0adb320a1d7dd3a8e986e(
-    id: builtins.str,
-    certificates: typing.Sequence[IListenerCertificate],
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__2a75a011e579ef50ef41ed5ad7fddf22c4568fc11c8d5304364dc3fcc7ad6e05(
-    id: builtins.str,
-    *,
-    target_groups: typing.Sequence[IApplicationTargetGroup],
-    conditions: typing.Optional[typing.Sequence[ListenerCondition]] = None,
-    priority: typing.Optional[jsii.Number] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__84e790e0e8140f8df376ccc9404001adf95dc62c6408367a7fb37a7ac655ef44(
-    id: builtins.str,
-    *,
-    deregistration_delay: typing.Optional[_Duration_4839e8c3] = None,
-    enable_anomaly_mitigation: typing.Optional[builtins.bool] = None,
-    health_check: typing.Optional[typing.Union[HealthCheck, typing.Dict[builtins.str, typing.Any]]] = None,
-    load_balancing_algorithm_type: typing.Optional[TargetGroupLoadBalancingAlgorithmType] = None,
-    port: typing.Optional[jsii.Number] = None,
-    protocol: typing.Optional[ApplicationProtocol] = None,
-    protocol_version: typing.Optional[ApplicationProtocolVersion] = None,
-    slow_start: typing.Optional[_Duration_4839e8c3] = None,
-    stickiness_cookie_duration: typing.Optional[_Duration_4839e8c3] = None,
-    stickiness_cookie_name: typing.Optional[builtins.str] = None,
-    target_group_name: typing.Optional[builtins.str] = None,
-    targets: typing.Optional[typing.Sequence[IApplicationLoadBalancerTarget]] = None,
-    conditions: typing.Optional[typing.Sequence[ListenerCondition]] = None,
-    priority: typing.Optional[jsii.Number] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__ed17ef6987e4f2957e6bb9b0439408268b3b78152bef346bbc634ba0b8f39b8d(
-    connectable: _IConnectable_10015a05,
-    port_range: _Port_85922693,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__ec66b1151d33baa64d152f0d9139b5eb90ae2a933206ec714d923157770af88d(
     id: builtins.str,
     *,
@@ -30953,7 +31158,7 @@ def _typecheckingstub__a0013393eb1808323075aa33aa645d0d690a50d53f416b2d1bf58acf7
     pass
 
 def _typecheckingstub__1afffb3c6f3ca0abdf7d167539029d7a34413f4d65c0a41a89c71606cb301200(
-    listener: INetworkListener,
+    listener: INetworkListenerRef,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -31071,104 +31276,7 @@ def _typecheckingstub__76c7319680e5c651ebcb4a0c6df26c80ddd9971bb7e896564d6fd0140
     pass
 
 def _typecheckingstub__d7b6e73ff2d61b26c63e595fcf01cae4c6df37eaa8d11b388ed18d244583e6bb(
-    listener: INetworkListener,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__456b854cc2e0f11115cdc6d97d27e54e4d0b70c3bbcac268b8302e61be1d2846(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    *,
-    load_balancer: IApplicationLoadBalancer,
-    certificates: typing.Optional[typing.Sequence[IListenerCertificate]] = None,
-    default_action: typing.Optional[ListenerAction] = None,
-    default_target_groups: typing.Optional[typing.Sequence[IApplicationTargetGroup]] = None,
-    mutual_authentication: typing.Optional[typing.Union[MutualAuthentication, typing.Dict[builtins.str, typing.Any]]] = None,
-    open: typing.Optional[builtins.bool] = None,
-    port: typing.Optional[jsii.Number] = None,
-    protocol: typing.Optional[ApplicationProtocol] = None,
-    ssl_policy: typing.Optional[SslPolicy] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__2f484c88c521d88cd42c5389c18b8ce1b5e177f2273ec92c4cec20a1c65757d0(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    *,
-    listener_arn: builtins.str,
-    security_group: _ISecurityGroup_acf8a799,
-    default_port: typing.Optional[jsii.Number] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__a7360e4910bed700a4e6a8a66d8a0eded64eca721e43b634c07ff814da957d2b(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    *,
-    listener_arn: typing.Optional[builtins.str] = None,
-    listener_protocol: typing.Optional[ApplicationProtocol] = None,
-    listener_port: typing.Optional[jsii.Number] = None,
-    load_balancer_arn: typing.Optional[builtins.str] = None,
-    load_balancer_tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__646bd302ed3a63a28a30ea3b62d2e003bf976ae981493560776ad112cacb8001(
-    id: builtins.str,
-    *,
-    action: ListenerAction,
-    remove_suffix: typing.Optional[builtins.bool] = None,
-    conditions: typing.Optional[typing.Sequence[ListenerCondition]] = None,
-    priority: typing.Optional[jsii.Number] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__108a21675c8facd98816b3c33cd7ecf91e67edcb3741260fd767792ce79ac8cd(
-    id: builtins.str,
-    certificates: typing.Sequence[IListenerCertificate],
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__537b1cde53c28e62d827b46edbd4c564b81aab48c43f3b0171d516036c34dd1e(
-    id: builtins.str,
-    *,
-    target_groups: typing.Sequence[IApplicationTargetGroup],
-    conditions: typing.Optional[typing.Sequence[ListenerCondition]] = None,
-    priority: typing.Optional[jsii.Number] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__024551e53e2a61ea5cc079e4909fa79f39b1b922c5d0ab7d4adfe8153d5962ed(
-    id: builtins.str,
-    *,
-    deregistration_delay: typing.Optional[_Duration_4839e8c3] = None,
-    enable_anomaly_mitigation: typing.Optional[builtins.bool] = None,
-    health_check: typing.Optional[typing.Union[HealthCheck, typing.Dict[builtins.str, typing.Any]]] = None,
-    load_balancing_algorithm_type: typing.Optional[TargetGroupLoadBalancingAlgorithmType] = None,
-    port: typing.Optional[jsii.Number] = None,
-    protocol: typing.Optional[ApplicationProtocol] = None,
-    protocol_version: typing.Optional[ApplicationProtocolVersion] = None,
-    slow_start: typing.Optional[_Duration_4839e8c3] = None,
-    stickiness_cookie_duration: typing.Optional[_Duration_4839e8c3] = None,
-    stickiness_cookie_name: typing.Optional[builtins.str] = None,
-    target_group_name: typing.Optional[builtins.str] = None,
-    targets: typing.Optional[typing.Sequence[IApplicationLoadBalancerTarget]] = None,
-    conditions: typing.Optional[typing.Sequence[ListenerCondition]] = None,
-    priority: typing.Optional[jsii.Number] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__aa35352f4f1ccbd7f59bb31c259f5f8206d70234128e8a2cbb6820c112f8f602(
-    connectable: _IConnectable_10015a05,
-    port_range: _Port_85922693,
+    listener: INetworkListenerRef,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -31418,5 +31526,158 @@ def _typecheckingstub__53d72da0daaf3bca2bf3a45722a5d9d665f24ce2ef58be7bfea7dc854
     """Type checking stubs"""
     pass
 
-for cls in [IApplicationListener, IApplicationLoadBalancer, IApplicationLoadBalancerMetrics, IApplicationLoadBalancerTarget, IApplicationTargetGroup, IApplicationTargetGroupMetrics, IListener, IListenerAction, IListenerCertificate, ILoadBalancerV2, INetworkListener, INetworkLoadBalancer, INetworkLoadBalancerMetrics, INetworkLoadBalancerTarget, INetworkTargetGroup, INetworkTargetGroupMetrics, ITargetGroup, ITrustStore]:
+def _typecheckingstub__078c8c060ef52d807e9a62da847c7c1f9a2fb0a3f7bf8900246c80b1d9ff0a2e(
+    id: builtins.str,
+    *,
+    action: ListenerAction,
+    remove_suffix: typing.Optional[builtins.bool] = None,
+    conditions: typing.Optional[typing.Sequence[ListenerCondition]] = None,
+    priority: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6bf07304357ae3b96ca5010a3003b725b55d7ca3cce0adb320a1d7dd3a8e986e(
+    id: builtins.str,
+    certificates: typing.Sequence[IListenerCertificate],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2a75a011e579ef50ef41ed5ad7fddf22c4568fc11c8d5304364dc3fcc7ad6e05(
+    id: builtins.str,
+    *,
+    target_groups: typing.Sequence[IApplicationTargetGroup],
+    conditions: typing.Optional[typing.Sequence[ListenerCondition]] = None,
+    priority: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__84e790e0e8140f8df376ccc9404001adf95dc62c6408367a7fb37a7ac655ef44(
+    id: builtins.str,
+    *,
+    deregistration_delay: typing.Optional[_Duration_4839e8c3] = None,
+    enable_anomaly_mitigation: typing.Optional[builtins.bool] = None,
+    health_check: typing.Optional[typing.Union[HealthCheck, typing.Dict[builtins.str, typing.Any]]] = None,
+    load_balancing_algorithm_type: typing.Optional[TargetGroupLoadBalancingAlgorithmType] = None,
+    port: typing.Optional[jsii.Number] = None,
+    protocol: typing.Optional[ApplicationProtocol] = None,
+    protocol_version: typing.Optional[ApplicationProtocolVersion] = None,
+    slow_start: typing.Optional[_Duration_4839e8c3] = None,
+    stickiness_cookie_duration: typing.Optional[_Duration_4839e8c3] = None,
+    stickiness_cookie_name: typing.Optional[builtins.str] = None,
+    target_group_name: typing.Optional[builtins.str] = None,
+    targets: typing.Optional[typing.Sequence[IApplicationLoadBalancerTarget]] = None,
+    conditions: typing.Optional[typing.Sequence[ListenerCondition]] = None,
+    priority: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ed17ef6987e4f2957e6bb9b0439408268b3b78152bef346bbc634ba0b8f39b8d(
+    connectable: _IConnectable_10015a05,
+    port_range: _Port_85922693,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__456b854cc2e0f11115cdc6d97d27e54e4d0b70c3bbcac268b8302e61be1d2846(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    load_balancer: IApplicationLoadBalancer,
+    certificates: typing.Optional[typing.Sequence[IListenerCertificate]] = None,
+    default_action: typing.Optional[ListenerAction] = None,
+    default_target_groups: typing.Optional[typing.Sequence[IApplicationTargetGroup]] = None,
+    mutual_authentication: typing.Optional[typing.Union[MutualAuthentication, typing.Dict[builtins.str, typing.Any]]] = None,
+    open: typing.Optional[builtins.bool] = None,
+    port: typing.Optional[jsii.Number] = None,
+    protocol: typing.Optional[ApplicationProtocol] = None,
+    ssl_policy: typing.Optional[SslPolicy] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2f484c88c521d88cd42c5389c18b8ce1b5e177f2273ec92c4cec20a1c65757d0(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    listener_arn: builtins.str,
+    security_group: _ISecurityGroup_acf8a799,
+    default_port: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a7360e4910bed700a4e6a8a66d8a0eded64eca721e43b634c07ff814da957d2b(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    listener_arn: typing.Optional[builtins.str] = None,
+    listener_protocol: typing.Optional[ApplicationProtocol] = None,
+    listener_port: typing.Optional[jsii.Number] = None,
+    load_balancer_arn: typing.Optional[builtins.str] = None,
+    load_balancer_tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__646bd302ed3a63a28a30ea3b62d2e003bf976ae981493560776ad112cacb8001(
+    id: builtins.str,
+    *,
+    action: ListenerAction,
+    remove_suffix: typing.Optional[builtins.bool] = None,
+    conditions: typing.Optional[typing.Sequence[ListenerCondition]] = None,
+    priority: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__108a21675c8facd98816b3c33cd7ecf91e67edcb3741260fd767792ce79ac8cd(
+    id: builtins.str,
+    certificates: typing.Sequence[IListenerCertificate],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__537b1cde53c28e62d827b46edbd4c564b81aab48c43f3b0171d516036c34dd1e(
+    id: builtins.str,
+    *,
+    target_groups: typing.Sequence[IApplicationTargetGroup],
+    conditions: typing.Optional[typing.Sequence[ListenerCondition]] = None,
+    priority: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__024551e53e2a61ea5cc079e4909fa79f39b1b922c5d0ab7d4adfe8153d5962ed(
+    id: builtins.str,
+    *,
+    deregistration_delay: typing.Optional[_Duration_4839e8c3] = None,
+    enable_anomaly_mitigation: typing.Optional[builtins.bool] = None,
+    health_check: typing.Optional[typing.Union[HealthCheck, typing.Dict[builtins.str, typing.Any]]] = None,
+    load_balancing_algorithm_type: typing.Optional[TargetGroupLoadBalancingAlgorithmType] = None,
+    port: typing.Optional[jsii.Number] = None,
+    protocol: typing.Optional[ApplicationProtocol] = None,
+    protocol_version: typing.Optional[ApplicationProtocolVersion] = None,
+    slow_start: typing.Optional[_Duration_4839e8c3] = None,
+    stickiness_cookie_duration: typing.Optional[_Duration_4839e8c3] = None,
+    stickiness_cookie_name: typing.Optional[builtins.str] = None,
+    target_group_name: typing.Optional[builtins.str] = None,
+    targets: typing.Optional[typing.Sequence[IApplicationLoadBalancerTarget]] = None,
+    conditions: typing.Optional[typing.Sequence[ListenerCondition]] = None,
+    priority: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__aa35352f4f1ccbd7f59bb31c259f5f8206d70234128e8a2cbb6820c112f8f602(
+    connectable: _IConnectable_10015a05,
+    port_range: _Port_85922693,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+for cls in [IApplicationListener, IApplicationListenerRef, IApplicationLoadBalancer, IApplicationLoadBalancerMetrics, IApplicationLoadBalancerRef, IApplicationLoadBalancerTarget, IApplicationTargetGroup, IApplicationTargetGroupMetrics, IListener, IListenerAction, IListenerCertificate, ILoadBalancerV2, INetworkListener, INetworkListenerRef, INetworkLoadBalancer, INetworkLoadBalancerMetrics, INetworkLoadBalancerTarget, INetworkTargetGroup, INetworkTargetGroupMetrics, INetworkTargetGroupRef, ITargetGroup, ITrustStore]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

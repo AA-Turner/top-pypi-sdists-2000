@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: timezonefinder
-Version: 8.2.0
+Version: 8.2.1
 Summary: python package for finding the timezone of any point on earth (coordinates) offline
 Author-email: jannikmi <github@michelfe.it>
 License: The MIT License (MIT)
@@ -35,22 +35,19 @@ Classifier: Intended Audience :: Information Technology
 Classifier: Natural Language :: English
 Classifier: Operating System :: OS Independent
 Classifier: Topic :: Software Development :: Localization
-Classifier: Programming Language :: Python :: 3.9
-Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
 Classifier: Programming Language :: Python :: 3.14
-Requires-Python: <4,>=3.9
+Requires-Python: <4,>=3.11
 Description-Content-Type: text/x-rst
 License-File: LICENSE
-Requires-Dist: numpy<3,>=1.23; python_version >= "3.9"
-Requires-Dist: h3>4
+Requires-Dist: numpy>=2
+Requires-Dist: h3>=4
 Requires-Dist: cffi<3,>=1.15.1
 Requires-Dist: flatbuffers>=25.2.10
 Provides-Extra: numba
-Requires-Dist: numba<1,>=0.56; python_version < "3.12" and extra == "numba"
-Requires-Dist: numba<1,>=0.59; python_version >= "3.12" and extra == "numba"
+Requires-Dist: numba<1,>=0.56; extra == "numba"
 Provides-Extra: pytz
 Requires-Dist: pytz>=2022.7.1; extra == "pytz"
 Dynamic: license-file

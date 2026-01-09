@@ -4032,6 +4032,48 @@ class CfnProject(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForProject", [resource]))
 
+    @jsii.member(jsii_name="fromProjectArn")
+    @builtins.classmethod
+    def from_project_arn(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> "_IProjectRef_7528e639":
+        '''Creates a new IProjectRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d6be45915128b861878a65cc7001cff267ac8e3b72346ceb67dde364a0718b9f)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast("_IProjectRef_7528e639", jsii.sinvoke(cls, "fromProjectArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromProjectName")
+    @builtins.classmethod
+    def from_project_name(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        project_name: builtins.str,
+    ) -> "_IProjectRef_7528e639":
+        '''Creates a new IProjectRef from a projectName.
+
+        :param scope: -
+        :param id: -
+        :param project_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c307cbf5323196a096de46679117f07e504dc2c0b3abf0afde3dad26bbbe6474)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument project_name", value=project_name, expected_type=type_hints["project_name"])
+        return typing.cast("_IProjectRef_7528e639", jsii.sinvoke(cls, "fromProjectName", [scope, id, project_name]))
+
     @jsii.member(jsii_name="isCfnProject")
     @builtins.classmethod
     def is_cfn_project(cls, x: typing.Any) -> builtins.bool:
@@ -11455,6 +11497,7 @@ class IFleet(
     _IResource_c80c4260,
     _IGrantable_71c4f5de,
     _IConnectable_10015a05,
+    _IFleetRef_31046017,
     typing_extensions.Protocol,
 ):
     '''Represents a Fleet for a reserved capacity CodeBuild project.'''
@@ -11497,6 +11540,7 @@ class _IFleetProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
     jsii.proxy_for(_IGrantable_71c4f5de), # type: ignore[misc]
     jsii.proxy_for(_IConnectable_10015a05), # type: ignore[misc]
+    jsii.proxy_for(_IFleetRef_31046017), # type: ignore[misc]
 ):
     '''Represents a Fleet for a reserved capacity CodeBuild project.'''
 
@@ -11545,6 +11589,7 @@ class IProject(
     _IGrantable_71c4f5de,
     _IConnectable_10015a05,
     _INotificationRuleSource_10482823,
+    _IProjectRef_7528e639,
     typing_extensions.Protocol,
 ):
     @builtins.property
@@ -12025,6 +12070,7 @@ class _IProjectProxy(
     jsii.proxy_for(_IGrantable_71c4f5de), # type: ignore[misc]
     jsii.proxy_for(_IConnectable_10015a05), # type: ignore[misc]
     jsii.proxy_for(_INotificationRuleSource_10482823), # type: ignore[misc]
+    jsii.proxy_for(_IProjectRef_7528e639), # type: ignore[misc]
 ):
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_codebuild.IProject"
 
@@ -12686,7 +12732,11 @@ typing.cast(typing.Any, IProject).__jsii_proxy_class__ = lambda : _IProjectProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_codebuild.IReportGroup")
-class IReportGroup(_IResource_c80c4260, typing_extensions.Protocol):
+class IReportGroup(
+    _IResource_c80c4260,
+    _IReportGroupRef_79bc7a1e,
+    typing_extensions.Protocol,
+):
     '''The interface representing the ReportGroup resource - either an existing one, imported using the ``ReportGroup.fromReportGroupName`` method, or a new one, created with the ``ReportGroup`` class.'''
 
     @builtins.property
@@ -12718,6 +12768,7 @@ class IReportGroup(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IReportGroupProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IReportGroupRef_79bc7a1e), # type: ignore[misc]
 ):
     '''The interface representing the ReportGroup resource - either an existing one, imported using the ``ReportGroup.fromReportGroupName`` method, or a new one, created with the ``ReportGroup`` class.'''
 
@@ -15800,6 +15851,12 @@ class Project(
         return typing.cast(builtins.str, jsii.get(self, "projectName"))
 
     @builtins.property
+    @jsii.member(jsii_name="projectRef")
+    def project_ref(self) -> "_ProjectReference_40ed5122":
+        '''A reference to a Project resource.'''
+        return typing.cast("_ProjectReference_40ed5122", jsii.get(self, "projectRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="role")
     def role(self) -> typing.Optional["_IRole_235f5d8e"]:
         '''The IAM role for this project.'''
@@ -16646,6 +16703,12 @@ class ReportGroup(
     def report_group_name(self) -> builtins.str:
         '''The name of the ReportGroup.'''
         return typing.cast(builtins.str, jsii.get(self, "reportGroupName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="reportGroupRef")
+    def report_group_ref(self) -> "_ReportGroupReference_9845652f":
+        '''A reference to a ReportGroup resource.'''
+        return typing.cast("_ReportGroupReference_9845652f", jsii.get(self, "reportGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="exportBucket")
@@ -18674,6 +18737,12 @@ class Fleet(
         return typing.cast(builtins.str, jsii.get(self, "fleetName"))
 
     @builtins.property
+    @jsii.member(jsii_name="fleetRef")
+    def fleet_ref(self) -> "_FleetReference_8d121551":
+        '''A reference to a Fleet resource.'''
+        return typing.cast("_FleetReference_8d121551", jsii.get(self, "fleetRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="grantPrincipal")
     def grant_principal(self) -> "_IPrincipal_539bb2fd":
         '''The grant principal for this Fleet's service role.'''
@@ -20206,6 +20275,22 @@ def _typecheckingstub__7b09683005eb57000f0fc4ae40bb6720b934248e0cfb890644ad74d57
 
 def _typecheckingstub__4757a065cd326ced481eef592bfa93a84f2b29a21d765ffe45ddbb8ba7324e59(
     resource: _IProjectRef_7528e639,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d6be45915128b861878a65cc7001cff267ac8e3b72346ceb67dde364a0718b9f(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c307cbf5323196a096de46679117f07e504dc2c0b3abf0afde3dad26bbbe6474(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    project_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -100,7 +100,6 @@ from ..aws_applicationautoscaling import (
 from ..aws_autoscaling import StepScalingAction as _StepScalingAction_24d17483
 from ..aws_cloudwatch import (
     AlarmActionConfig as _AlarmActionConfig_f831c655,
-    IAlarm as _IAlarm_ff3eabc0,
     IAlarmAction as _IAlarmAction_922c5aa8,
 )
 from ..aws_lambda import (
@@ -109,6 +108,7 @@ from ..aws_lambda import (
     IVersion as _IVersion_faf7234e,
 )
 from ..aws_sns import ITopic as _ITopic_9eca4852
+from ..interfaces.aws_cloudwatch import IAlarmRef as _IAlarmRef_2bb0e5de
 
 
 @jsii.implements(_IAlarmAction_922c5aa8)
@@ -145,7 +145,7 @@ class ApplicationScalingAction(
     def bind(
         self,
         _scope: "_constructs_77d1e7e8.Construct",
-        _alarm: "_IAlarm_ff3eabc0",
+        _alarm: "_IAlarmRef_2bb0e5de",
     ) -> "_AlarmActionConfig_f831c655":
         '''Returns an alarm action configuration to use an ApplicationScaling StepScalingAction as an alarm action.
 
@@ -193,7 +193,7 @@ class AutoScalingAction(
     def bind(
         self,
         _scope: "_constructs_77d1e7e8.Construct",
-        _alarm: "_IAlarm_ff3eabc0",
+        _alarm: "_IAlarmRef_2bb0e5de",
     ) -> "_AlarmActionConfig_f831c655":
         '''Returns an alarm action configuration to use an AutoScaling StepScalingAction as an alarm action.
 
@@ -239,7 +239,7 @@ class Ec2Action(
     def bind(
         self,
         _scope: "_constructs_77d1e7e8.Construct",
-        _alarm: "_IAlarm_ff3eabc0",
+        _alarm: "_IAlarmRef_2bb0e5de",
     ) -> "_AlarmActionConfig_f831c655":
         '''Returns an alarm action configuration to use an EC2 action as an alarm action.
 
@@ -331,7 +331,7 @@ class LambdaAction(
     def bind(
         self,
         scope: "_constructs_77d1e7e8.Construct",
-        alarm: "_IAlarm_ff3eabc0",
+        alarm: "_IAlarmRef_2bb0e5de",
     ) -> "_AlarmActionConfig_f831c655":
         '''Returns an alarm action configuration to use a Lambda action as an alarm action.
 
@@ -490,7 +490,7 @@ class SnsAction(
     def bind(
         self,
         _scope: "_constructs_77d1e7e8.Construct",
-        _alarm: "_IAlarm_ff3eabc0",
+        _alarm: "_IAlarmRef_2bb0e5de",
     ) -> "_AlarmActionConfig_f831c655":
         '''Returns an alarm action configuration to use an SNS topic as an alarm action.
 
@@ -541,7 +541,7 @@ class SsmAction(
     def bind(
         self,
         _scope: "_constructs_77d1e7e8.Construct",
-        _alarm: "_IAlarm_ff3eabc0",
+        _alarm: "_IAlarmRef_2bb0e5de",
     ) -> "_AlarmActionConfig_f831c655":
         '''Returns an alarm action configuration to use an SSM OpsItem action as an alarm action.
 
@@ -586,7 +586,7 @@ class SsmIncidentAction(
     def bind(
         self,
         _scope: "_constructs_77d1e7e8.Construct",
-        _alarm: "_IAlarm_ff3eabc0",
+        _alarm: "_IAlarmRef_2bb0e5de",
     ) -> "_AlarmActionConfig_f831c655":
         '''Returns an alarm action configuration to use an SSM Incident as an alarm action based on an Incident Manager Response Plan.
 
@@ -624,7 +624,7 @@ def _typecheckingstub__b916236e2043981349e2841d1ec98b11cee63ab17d5362ab2a6d58f02
 
 def _typecheckingstub__74bb72262ab3b2a9141f8b8f1171cf0d9a0ba7d5f865b123acffaec5bfef51fd(
     _scope: _constructs_77d1e7e8.Construct,
-    _alarm: _IAlarm_ff3eabc0,
+    _alarm: _IAlarmRef_2bb0e5de,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -637,7 +637,7 @@ def _typecheckingstub__96afe5a98488b1418c68f6530257948e9ea29d3656df0b68c83d1defa
 
 def _typecheckingstub__4cd3adde7a8331a2b783351a5b794ad83f7245f085799ed1b7e3d9deedcd8d03(
     _scope: _constructs_77d1e7e8.Construct,
-    _alarm: _IAlarm_ff3eabc0,
+    _alarm: _IAlarmRef_2bb0e5de,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -650,7 +650,7 @@ def _typecheckingstub__aeaedd2203e210d309c17277a5c904dcbc459891e662493aaf75e344e
 
 def _typecheckingstub__617684dcf0b429d0176779c30669a734e5e356a2d0dbb98bf321e897c2cbdcd3(
     _scope: _constructs_77d1e7e8.Construct,
-    _alarm: _IAlarm_ff3eabc0,
+    _alarm: _IAlarmRef_2bb0e5de,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -665,7 +665,7 @@ def _typecheckingstub__2693adec8362e537633b2584509df8d0d77cb381732395de1707d1edf
 
 def _typecheckingstub__2856bb69373ffd5b6a7628782cc0fb8ab9fd20450269ca5c709a08e9bfac50d5(
     scope: _constructs_77d1e7e8.Construct,
-    alarm: _IAlarm_ff3eabc0,
+    alarm: _IAlarmRef_2bb0e5de,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -685,7 +685,7 @@ def _typecheckingstub__d45c9fa069d1e0b882f975c29c8eb30315e60025b85741889c42ee16c
 
 def _typecheckingstub__02204ab9dd4d2adf853c731232a8cb824c41fb62dc79eae79e4e69b7e0e748eb(
     _scope: _constructs_77d1e7e8.Construct,
-    _alarm: _IAlarm_ff3eabc0,
+    _alarm: _IAlarmRef_2bb0e5de,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -699,7 +699,7 @@ def _typecheckingstub__ec3a9c97b1f6b9b5d3d6db7a3eb09cb5990e4d0201ddb6c37b8ccf686
 
 def _typecheckingstub__01d8a7f674b7236375000e24e89aa7de87b7b73e1540d7b7a75318b36ba526fa(
     _scope: _constructs_77d1e7e8.Construct,
-    _alarm: _IAlarm_ff3eabc0,
+    _alarm: _IAlarmRef_2bb0e5de,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -712,7 +712,7 @@ def _typecheckingstub__be00ac2bf80144c7f66d1276bfef345e7613075b15116cbf4a62b8fa4
 
 def _typecheckingstub__27baa9de2ba955e7124c3e624eb53ed6f9be430c6d188be64d2ef483e56fabf5(
     _scope: _constructs_77d1e7e8.Construct,
-    _alarm: _IAlarm_ff3eabc0,
+    _alarm: _IAlarmRef_2bb0e5de,
 ) -> None:
     """Type checking stubs"""
     pass

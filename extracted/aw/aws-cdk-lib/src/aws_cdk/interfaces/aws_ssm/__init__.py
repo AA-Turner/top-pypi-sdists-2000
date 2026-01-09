@@ -654,21 +654,18 @@ class MaintenanceWindowTargetReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_ssm.MaintenanceWindowTaskReference",
     jsii_struct_bases=[],
-    name_mapping={
-        "maintenance_window_task_id": "maintenanceWindowTaskId",
-        "window_task_id": "windowTaskId",
-    },
+    name_mapping={"window_id": "windowId", "window_task_id": "windowTaskId"},
 )
 class MaintenanceWindowTaskReference:
     def __init__(
         self,
         *,
-        maintenance_window_task_id: builtins.str,
+        window_id: builtins.str,
         window_task_id: builtins.str,
     ) -> None:
         '''A reference to a MaintenanceWindowTask resource.
 
-        :param maintenance_window_task_id: The Id of the MaintenanceWindowTask resource.
+        :param window_id: The WindowId of the MaintenanceWindowTask resource.
         :param window_task_id: The WindowTaskId of the MaintenanceWindowTask resource.
 
         :exampleMetadata: fixture=_generated
@@ -680,24 +677,24 @@ class MaintenanceWindowTaskReference:
             from aws_cdk.interfaces import aws_ssm as interfaces_ssm
             
             maintenance_window_task_reference = interfaces_ssm.MaintenanceWindowTaskReference(
-                maintenance_window_task_id="maintenanceWindowTaskId",
+                window_id="windowId",
                 window_task_id="windowTaskId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a84f17a335bbe7c6ba37477bd79adba76a951afd9da1ec43ae2a7499c062733f)
-            check_type(argname="argument maintenance_window_task_id", value=maintenance_window_task_id, expected_type=type_hints["maintenance_window_task_id"])
+            check_type(argname="argument window_id", value=window_id, expected_type=type_hints["window_id"])
             check_type(argname="argument window_task_id", value=window_task_id, expected_type=type_hints["window_task_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "maintenance_window_task_id": maintenance_window_task_id,
+            "window_id": window_id,
             "window_task_id": window_task_id,
         }
 
     @builtins.property
-    def maintenance_window_task_id(self) -> builtins.str:
-        '''The Id of the MaintenanceWindowTask resource.'''
-        result = self._values.get("maintenance_window_task_id")
-        assert result is not None, "Required property 'maintenance_window_task_id' is missing"
+    def window_id(self) -> builtins.str:
+        '''The WindowId of the MaintenanceWindowTask resource.'''
+        result = self._values.get("window_id")
+        assert result is not None, "Required property 'window_id' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
@@ -980,7 +977,7 @@ def _typecheckingstub__bc7aececd4d9fd7cb0a70989a13064463485da38e07d1eaa1206e9cd8
 
 def _typecheckingstub__a84f17a335bbe7c6ba37477bd79adba76a951afd9da1ec43ae2a7499c062733f(
     *,
-    maintenance_window_task_id: builtins.str,
+    window_id: builtins.str,
     window_task_id: builtins.str,
 ) -> None:
     """Type checking stubs"""

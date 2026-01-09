@@ -776,7 +776,11 @@ class DetailType(enum.Enum):
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_codestarnotifications.INotificationRule")
-class INotificationRule(_IResource_c80c4260, typing_extensions.Protocol):
+class INotificationRule(
+    _IResource_c80c4260,
+    _INotificationRuleRef_72554e3b,
+    typing_extensions.Protocol,
+):
     '''Represents a notification rule.'''
 
     @builtins.property
@@ -801,6 +805,7 @@ class INotificationRule(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _INotificationRuleProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_INotificationRuleRef_72554e3b), # type: ignore[misc]
 ):
     '''Represents a notification rule.'''
 
@@ -1042,6 +1047,12 @@ class NotificationRule(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "notificationRuleArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="notificationRuleRef")
+    def notification_rule_ref(self) -> "_NotificationRuleReference_9dbce4a4":
+        '''A reference to a NotificationRule resource.'''
+        return typing.cast("_NotificationRuleReference_9dbce4a4", jsii.get(self, "notificationRuleRef"))
 
 
 @jsii.data_type(

@@ -3411,7 +3411,7 @@ class HostedRotationType(
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_secretsmanager.ISecret")
-class ISecret(_IResource_c80c4260, typing_extensions.Protocol):
+class ISecret(_IResource_c80c4260, _ISecretRef_3a7b28a3, typing_extensions.Protocol):
     '''A secret in AWS Secrets Manager.'''
 
     @builtins.property
@@ -3564,6 +3564,7 @@ class ISecret(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _ISecretProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_ISecretRef_3a7b28a3), # type: ignore[misc]
 ):
     '''A secret in AWS Secrets Manager.'''
 
@@ -3775,7 +3776,11 @@ typing.cast(typing.Any, ISecretAttachmentTarget).__jsii_proxy_class__ = lambda :
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_secretsmanager.ISecretTargetAttachment")
-class ISecretTargetAttachment(ISecret, typing_extensions.Protocol):
+class ISecretTargetAttachment(
+    ISecret,
+    _ISecretTargetAttachmentRef_0786fb30,
+    typing_extensions.Protocol,
+):
     @builtins.property
     @jsii.member(jsii_name="secretTargetAttachmentSecretArn")
     def secret_target_attachment_secret_arn(self) -> builtins.str:
@@ -3788,6 +3793,7 @@ class ISecretTargetAttachment(ISecret, typing_extensions.Protocol):
 
 class _ISecretTargetAttachmentProxy(
     jsii.proxy_for(ISecret), # type: ignore[misc]
+    jsii.proxy_for(_ISecretTargetAttachmentRef_0786fb30), # type: ignore[misc]
 ):
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_secretsmanager.ISecretTargetAttachment"
 
@@ -4703,6 +4709,12 @@ class Secret(
         '@aws-cdk/aws-secretsmanager:parseOwnedSecretName' feature flag is set.
         '''
         return typing.cast(builtins.str, jsii.get(self, "secretName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="secretRef")
+    def secret_ref(self) -> "_SecretReference_6b31850e":
+        '''A reference to a Secret resource.'''
+        return typing.cast("_SecretReference_6b31850e", jsii.get(self, "secretRef"))
 
     @builtins.property
     @jsii.member(jsii_name="secretValue")
@@ -6210,6 +6222,20 @@ class SecretTargetAttachment(
         '@aws-cdk/aws-secretsmanager:parseOwnedSecretName' feature flag is set.
         '''
         return typing.cast(builtins.str, jsii.get(self, "secretName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="secretRef")
+    def secret_ref(self) -> "_SecretReference_6b31850e":
+        '''A reference to a Secret resource.'''
+        return typing.cast("_SecretReference_6b31850e", jsii.get(self, "secretRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="secretTargetAttachmentRef")
+    def secret_target_attachment_ref(
+        self,
+    ) -> "_SecretTargetAttachmentReference_5ec6f11b":
+        '''A reference to a SecretTargetAttachment resource.'''
+        return typing.cast("_SecretTargetAttachmentReference_5ec6f11b", jsii.get(self, "secretTargetAttachmentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="secretTargetAttachmentSecretArn")

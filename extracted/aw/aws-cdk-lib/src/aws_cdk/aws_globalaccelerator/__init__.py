@@ -2742,7 +2742,7 @@ class EndpointGroupProps(EndpointGroupOptions):
         port_overrides: typing.Optional[typing.Sequence[typing.Union["PortOverride", typing.Dict[builtins.str, typing.Any]]]] = None,
         region: typing.Optional[builtins.str] = None,
         traffic_dial_percentage: typing.Optional[jsii.Number] = None,
-        listener: "IListener",
+        listener: "_IListenerRef_efaa8e2a",
     ) -> None:
         '''Property of the EndpointGroup.
 
@@ -2766,12 +2766,13 @@ class EndpointGroupProps(EndpointGroupOptions):
             # The values are placeholders you should change.
             import aws_cdk as cdk
             from aws_cdk import aws_globalaccelerator as globalaccelerator
+            from aws_cdk.interfaces import aws_globalaccelerator as interfaces_globalaccelerator
             
             # endpoint: globalaccelerator.IEndpoint
-            # listener: globalaccelerator.Listener
+            # listener_ref: interfaces_globalaccelerator.IListenerRef
             
             endpoint_group_props = globalaccelerator.EndpointGroupProps(
-                listener=listener,
+                listener=listener_ref,
             
                 # the properties below are optional
                 endpoint_group_name="endpointGroupName",
@@ -2926,11 +2927,11 @@ class EndpointGroupProps(EndpointGroupOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def listener(self) -> "IListener":
+    def listener(self) -> "_IListenerRef_efaa8e2a":
         '''The Amazon Resource Name (ARN) of the listener.'''
         result = self._values.get("listener")
         assert result is not None, "Required property 'listener' is missing"
-        return typing.cast("IListener", result)
+        return typing.cast("_IListenerRef_efaa8e2a", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2957,7 +2958,11 @@ class HealthCheckProtocol(enum.Enum):
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_globalaccelerator.IAccelerator")
-class IAccelerator(_IResource_c80c4260, typing_extensions.Protocol):
+class IAccelerator(
+    _IResource_c80c4260,
+    _IAcceleratorRef_b1855670,
+    typing_extensions.Protocol,
+):
     '''The interface of the Accelerator.'''
 
     @builtins.property
@@ -3012,6 +3017,7 @@ class IAccelerator(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IAcceleratorProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IAcceleratorRef_b1855670), # type: ignore[misc]
 ):
     '''The interface of the Accelerator.'''
 
@@ -3119,7 +3125,11 @@ typing.cast(typing.Any, IEndpoint).__jsii_proxy_class__ = lambda : _IEndpointPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_globalaccelerator.IEndpointGroup")
-class IEndpointGroup(_IResource_c80c4260, typing_extensions.Protocol):
+class IEndpointGroup(
+    _IResource_c80c4260,
+    _IEndpointGroupRef_9302598c,
+    typing_extensions.Protocol,
+):
     '''The interface of the EndpointGroup.'''
 
     @builtins.property
@@ -3134,6 +3144,7 @@ class IEndpointGroup(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IEndpointGroupProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IEndpointGroupRef_9302598c), # type: ignore[misc]
 ):
     '''The interface of the EndpointGroup.'''
 
@@ -3153,7 +3164,11 @@ typing.cast(typing.Any, IEndpointGroup).__jsii_proxy_class__ = lambda : _IEndpoi
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_globalaccelerator.IListener")
-class IListener(_IResource_c80c4260, typing_extensions.Protocol):
+class IListener(
+    _IResource_c80c4260,
+    _IListenerRef_efaa8e2a,
+    typing_extensions.Protocol,
+):
     '''Interface of the Listener.'''
 
     @builtins.property
@@ -3168,6 +3183,7 @@ class IListener(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IListenerProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IListenerRef_efaa8e2a), # type: ignore[misc]
 ):
     '''Interface of the Listener.'''
 
@@ -3253,7 +3269,7 @@ class Listener(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        accelerator: "IAccelerator",
+        accelerator: "_IAcceleratorRef_b1855670",
         port_ranges: typing.Sequence[typing.Union["PortRange", typing.Dict[builtins.str, typing.Any]]],
         client_affinity: typing.Optional["ClientAffinity"] = None,
         listener_name: typing.Optional[builtins.str] = None,
@@ -3371,6 +3387,12 @@ class Listener(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "listenerName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="listenerRef")
+    def listener_ref(self) -> "_ListenerReference_4b812def":
+        '''A reference to a Listener resource.'''
+        return typing.cast("_ListenerReference_4b812def", jsii.get(self, "listenerRef"))
 
 
 @jsii.data_type(
@@ -3519,7 +3541,7 @@ class ListenerProps(ListenerOptions):
         client_affinity: typing.Optional["ClientAffinity"] = None,
         listener_name: typing.Optional[builtins.str] = None,
         protocol: typing.Optional["ConnectionProtocol"] = None,
-        accelerator: "IAccelerator",
+        accelerator: "_IAcceleratorRef_b1855670",
     ) -> None:
         '''Construct properties for Listener.
 
@@ -3536,11 +3558,12 @@ class ListenerProps(ListenerOptions):
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_globalaccelerator as globalaccelerator
+            from aws_cdk.interfaces import aws_globalaccelerator as interfaces_globalaccelerator
             
-            # accelerator: globalaccelerator.Accelerator
+            # accelerator_ref: interfaces_globalaccelerator.IAcceleratorRef
             
             listener_props = globalaccelerator.ListenerProps(
-                accelerator=accelerator,
+                accelerator=accelerator_ref,
                 port_ranges=[globalaccelerator.PortRange(
                     from_port=123,
             
@@ -3614,11 +3637,11 @@ class ListenerProps(ListenerOptions):
         return typing.cast(typing.Optional["ConnectionProtocol"], result)
 
     @builtins.property
-    def accelerator(self) -> "IAccelerator":
+    def accelerator(self) -> "_IAcceleratorRef_b1855670":
         '''The accelerator for this listener.'''
         result = self._values.get("accelerator")
         assert result is not None, "Required property 'accelerator' is missing"
-        return typing.cast("IAccelerator", result)
+        return typing.cast("_IAcceleratorRef_b1855670", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4110,6 +4133,12 @@ class Accelerator(
         return typing.cast(builtins.str, jsii.get(self, "acceleratorArn"))
 
     @builtins.property
+    @jsii.member(jsii_name="acceleratorRef")
+    def accelerator_ref(self) -> "_AcceleratorReference_0e68657d":
+        '''A reference to a Accelerator resource.'''
+        return typing.cast("_AcceleratorReference_0e68657d", jsii.get(self, "acceleratorRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="dnsName")
     def dns_name(self) -> builtins.str:
         '''The Domain Name System (DNS) name that Global Accelerator creates that points to your accelerator's static IP addresses.'''
@@ -4173,7 +4202,7 @@ class EndpointGroup(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        listener: "IListener",
+        listener: "_IListenerRef_efaa8e2a",
         endpoint_group_name: typing.Optional[builtins.str] = None,
         endpoints: typing.Optional[typing.Sequence["IEndpoint"]] = None,
         health_check_interval: typing.Optional["_Duration_4839e8c3"] = None,
@@ -4299,6 +4328,12 @@ class EndpointGroup(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "endpointGroupName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="endpointGroupRef")
+    def endpoint_group_ref(self) -> "_EndpointGroupReference_940f730d":
+        '''A reference to a EndpointGroup resource.'''
+        return typing.cast("_EndpointGroupReference_940f730d", jsii.get(self, "endpointGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="endpoints")
@@ -4755,7 +4790,7 @@ def _typecheckingstub__f240e077c43bf1d1438df9fed96b8c90b6ac4fe31ce50798acea9853a
     port_overrides: typing.Optional[typing.Sequence[typing.Union[PortOverride, typing.Dict[builtins.str, typing.Any]]]] = None,
     region: typing.Optional[builtins.str] = None,
     traffic_dial_percentage: typing.Optional[jsii.Number] = None,
-    listener: IListener,
+    listener: _IListenerRef_efaa8e2a,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4764,7 +4799,7 @@ def _typecheckingstub__de4b03cb2514f2868f42c3e0a65af5726624595649474f6817f53a9c9
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    accelerator: IAccelerator,
+    accelerator: _IAcceleratorRef_b1855670,
     port_ranges: typing.Sequence[typing.Union[PortRange, typing.Dict[builtins.str, typing.Any]]],
     client_affinity: typing.Optional[ClientAffinity] = None,
     listener_name: typing.Optional[builtins.str] = None,
@@ -4814,7 +4849,7 @@ def _typecheckingstub__1e8dff6076e29c33015f8bf435ee5b98f62049e4b309a1fba9711778e
     client_affinity: typing.Optional[ClientAffinity] = None,
     listener_name: typing.Optional[builtins.str] = None,
     protocol: typing.Optional[ConnectionProtocol] = None,
-    accelerator: IAccelerator,
+    accelerator: _IAcceleratorRef_b1855670,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4885,7 +4920,7 @@ def _typecheckingstub__da9f1789b70ad68c208b8516991be41850e88fcd2234b59c19127b242
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    listener: IListener,
+    listener: _IListenerRef_efaa8e2a,
     endpoint_group_name: typing.Optional[builtins.str] = None,
     endpoints: typing.Optional[typing.Sequence[IEndpoint]] = None,
     health_check_interval: typing.Optional[_Duration_4839e8c3] = None,

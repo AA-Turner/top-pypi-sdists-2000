@@ -151,6 +151,74 @@ class DataflowEndpointGroupReference:
         )
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_groundstation.DataflowEndpointGroupV2Reference",
+    jsii_struct_bases=[],
+    name_mapping={
+        "dataflow_endpoint_group_v2_arn": "dataflowEndpointGroupV2Arn",
+        "dataflow_endpoint_group_v2_id": "dataflowEndpointGroupV2Id",
+    },
+)
+class DataflowEndpointGroupV2Reference:
+    def __init__(
+        self,
+        *,
+        dataflow_endpoint_group_v2_arn: builtins.str,
+        dataflow_endpoint_group_v2_id: builtins.str,
+    ) -> None:
+        '''A reference to a DataflowEndpointGroupV2 resource.
+
+        :param dataflow_endpoint_group_v2_arn: The ARN of the DataflowEndpointGroupV2 resource.
+        :param dataflow_endpoint_group_v2_id: The Id of the DataflowEndpointGroupV2 resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_groundstation as interfaces_groundstation
+            
+            dataflow_endpoint_group_v2_reference = interfaces_groundstation.DataflowEndpointGroupV2Reference(
+                dataflow_endpoint_group_v2_arn="dataflowEndpointGroupV2Arn",
+                dataflow_endpoint_group_v2_id="dataflowEndpointGroupV2Id"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__19502ad27588b6241a233e7abd2ad6c1e78c07030a2333abd2715d742b74d080)
+            check_type(argname="argument dataflow_endpoint_group_v2_arn", value=dataflow_endpoint_group_v2_arn, expected_type=type_hints["dataflow_endpoint_group_v2_arn"])
+            check_type(argname="argument dataflow_endpoint_group_v2_id", value=dataflow_endpoint_group_v2_id, expected_type=type_hints["dataflow_endpoint_group_v2_id"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "dataflow_endpoint_group_v2_arn": dataflow_endpoint_group_v2_arn,
+            "dataflow_endpoint_group_v2_id": dataflow_endpoint_group_v2_id,
+        }
+
+    @builtins.property
+    def dataflow_endpoint_group_v2_arn(self) -> builtins.str:
+        '''The ARN of the DataflowEndpointGroupV2 resource.'''
+        result = self._values.get("dataflow_endpoint_group_v2_arn")
+        assert result is not None, "Required property 'dataflow_endpoint_group_v2_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def dataflow_endpoint_group_v2_id(self) -> builtins.str:
+        '''The Id of the DataflowEndpointGroupV2 resource.'''
+        result = self._values.get("dataflow_endpoint_group_v2_id")
+        assert result is not None, "Required property 'dataflow_endpoint_group_v2_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "DataflowEndpointGroupV2Reference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_groundstation.IConfigRef")
 class IConfigRef(
     _constructs_77d1e7e8.IConstruct,
@@ -241,6 +309,53 @@ class _IDataflowEndpointGroupRefProxy(
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IDataflowEndpointGroupRef).__jsii_proxy_class__ = lambda : _IDataflowEndpointGroupRefProxy
+
+
+@jsii.interface(
+    jsii_type="aws-cdk-lib.interfaces.aws_groundstation.IDataflowEndpointGroupV2Ref"
+)
+class IDataflowEndpointGroupV2Ref(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a DataflowEndpointGroupV2.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="dataflowEndpointGroupV2Ref")
+    def dataflow_endpoint_group_v2_ref(self) -> "DataflowEndpointGroupV2Reference":
+        '''(experimental) A reference to a DataflowEndpointGroupV2 resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _IDataflowEndpointGroupV2RefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a DataflowEndpointGroupV2.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_groundstation.IDataflowEndpointGroupV2Ref"
+
+    @builtins.property
+    @jsii.member(jsii_name="dataflowEndpointGroupV2Ref")
+    def dataflow_endpoint_group_v2_ref(self) -> "DataflowEndpointGroupV2Reference":
+        '''(experimental) A reference to a DataflowEndpointGroupV2 resource.
+
+        :stability: experimental
+        '''
+        return typing.cast("DataflowEndpointGroupV2Reference", jsii.get(self, "dataflowEndpointGroupV2Ref"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IDataflowEndpointGroupV2Ref).__jsii_proxy_class__ = lambda : _IDataflowEndpointGroupV2RefProxy
 
 
 @jsii.interface(
@@ -361,8 +476,10 @@ class MissionProfileReference:
 __all__ = [
     "ConfigReference",
     "DataflowEndpointGroupReference",
+    "DataflowEndpointGroupV2Reference",
     "IConfigRef",
     "IDataflowEndpointGroupRef",
+    "IDataflowEndpointGroupV2Ref",
     "IMissionProfileRef",
     "MissionProfileReference",
 ]
@@ -384,6 +501,14 @@ def _typecheckingstub__72d1ff0dffa16a3c8c6709aada5fd4e7954b2daf59284c5dc613b0d17
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__19502ad27588b6241a233e7abd2ad6c1e78c07030a2333abd2715d742b74d080(
+    *,
+    dataflow_endpoint_group_v2_arn: builtins.str,
+    dataflow_endpoint_group_v2_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e4505c7556cd6ef4e255a1db4087f115cab71d95522e90f85fa418f40952ce36(
     *,
     mission_profile_arn: builtins.str,
@@ -392,5 +517,5 @@ def _typecheckingstub__e4505c7556cd6ef4e255a1db4087f115cab71d95522e90f85fa418f40
     """Type checking stubs"""
     pass
 
-for cls in [IConfigRef, IDataflowEndpointGroupRef, IMissionProfileRef]:
+for cls in [IConfigRef, IDataflowEndpointGroupRef, IDataflowEndpointGroupV2Ref, IMissionProfileRef]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

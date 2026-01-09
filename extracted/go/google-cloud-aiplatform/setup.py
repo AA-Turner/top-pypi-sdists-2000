@@ -57,7 +57,7 @@ xai_extra_require = ["tensorflow >=2.3.0, <3.0.0; python_version<'3.13'"]
 lit_extra_require = [
     "tensorflow >= 2.3.0, <3.0.0; python_version<'3.13'",
     "pandas >= 1.0.0",
-    "lit-nlp == 0.4.0; python_version<'3.14'",
+    "lit-nlp == 0.4.0; python_version<'3.13'",
     "explainable-ai-sdk >= 1.0.0; python_version<'3.13'",
 ]
 featurestore_extra_require = [
@@ -307,7 +307,7 @@ setuptools.setup(
             "google-api-core[grpc] >= 1.34.1,"
             " <3.0.0,!=2.0.*,!=2.1.*,!=2.2.*,!=2.3.*,!=2.4.*,!=2.5.*,!=2.6.*,!=2.7.*"
         ),
-        "google-auth >= 2.45.0, <3.0.0",
+        "google-auth >= 2.47.0, <3.0.0",
         "proto-plus >= 1.22.3, <2.0.0",
         "protobuf>=3.20.2,<7.0.0,!=4.21.0,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5",
         "packaging >= 14.3",
@@ -315,7 +315,6 @@ setuptools.setup(
         "google-cloud-storage >= 2.10.0, < 4.0.0; python_version>='3.13'",
         "google-cloud-bigquery >= 1.15.0, < 4.0.0, !=3.20.0",
         "google-cloud-resource-manager >= 1.3.3, < 3.0.0",
-        "shapely < 3.0.0",
         "google-genai >= 1.37.0, <2.0.0",
     )
     + genai_requires,

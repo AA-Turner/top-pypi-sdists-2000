@@ -771,8 +771,6 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-from ..aws_cloudwatch import IAlarm as _IAlarm_ff3eabc0
-from ..aws_codepipeline import IPipeline as _IPipeline_0931f838
 from ..aws_ecs import TaskDefinition as _TaskDefinition_a541a103
 from ..aws_events import IEventBus as _IEventBus_88d13111
 from ..aws_iam import (
@@ -810,6 +808,8 @@ from ..interfaces.aws_appconfig import (
     IExtensionRef as _IExtensionRef_abba29c3,
     IHostedConfigurationVersionRef as _IHostedConfigurationVersionRef_eb4b6788,
 )
+from ..interfaces.aws_cloudwatch import IAlarmRef as _IAlarmRef_2bb0e5de
+from ..interfaces.aws_codepipeline import IPipelineRef as _IPipelineRef_fb1b56f9
 from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 
@@ -5818,7 +5818,7 @@ class ConfigurationSource(
 
     @jsii.member(jsii_name="fromPipeline")
     @builtins.classmethod
-    def from_pipeline(cls, pipeline: "_IPipeline_0931f838") -> "ConfigurationSource":
+    def from_pipeline(cls, pipeline: "_IPipelineRef_fb1b56f9") -> "ConfigurationSource":
         '''Defines configuration content from AWS CodePipeline.
 
         :param pipeline: The pipeline where the configuration is stored.
@@ -10112,7 +10112,7 @@ class Monitor(
     @builtins.classmethod
     def from_cloud_watch_alarm(
         cls,
-        alarm: "_IAlarm_ff3eabc0",
+        alarm: "_IAlarmRef_2bb0e5de",
         alarm_role: typing.Optional["_IRoleRef_8400221f"] = None,
     ) -> "Monitor":
         '''Creates a Monitor from a CloudWatch alarm.
@@ -15058,7 +15058,7 @@ def _typecheckingstub__cd6b66aaa0f14b1ceb91da8242ecc9bb0684df0b51abed7aa97919255
     pass
 
 def _typecheckingstub__7947957f92568ae27b5114957b81b662d25a30e2da5f3c76e8d1158c12566aca(
-    pipeline: _IPipeline_0931f838,
+    pipeline: _IPipelineRef_fb1b56f9,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -15606,7 +15606,7 @@ def _typecheckingstub__a245d9ad2d5a72963867d7f392bf31c9977c87f33b0ba8389f1024ee4
     pass
 
 def _typecheckingstub__ccc59f1c5523364b8528526a5b6087774df2b905407caca37b7c685a5bfb76cb(
-    alarm: _IAlarm_ff3eabc0,
+    alarm: _IAlarmRef_2bb0e5de,
     alarm_role: typing.Optional[_IRoleRef_8400221f] = None,
 ) -> None:
     """Type checking stubs"""

@@ -2043,6 +2043,7 @@ class AppSyncBaseDataSource(
     @builtins.property
     @jsii.member(jsii_name="api")
     def _api(self) -> "IApi":
+        '''The API this data source is attached to Set the API this data source is attached to.'''
         return typing.cast("IApi", jsii.get(self, "api"))
 
     @_api.setter
@@ -2081,7 +2082,7 @@ class AppSyncBaseDataSourceProps:
     def __init__(
         self,
         *,
-        api: "IApi",
+        api: "_IApiRef_f01990a1",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -2098,11 +2099,12 @@ class AppSyncBaseDataSourceProps:
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appsync as appsync
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            # api: appsync.IApi
+            # api_ref: interfaces_appsync.IApiRef
             
             app_sync_base_data_source_props = appsync.AppSyncBaseDataSourceProps(
-                api=api,
+                api=api_ref,
             
                 # the properties below are optional
                 description="description",
@@ -2123,11 +2125,11 @@ class AppSyncBaseDataSourceProps:
             self._values["name"] = name
 
     @builtins.property
-    def api(self) -> "IApi":
+    def api(self) -> "_IApiRef_f01990a1":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast("IApi", result)
+        return typing.cast("_IApiRef_f01990a1", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -4230,7 +4232,7 @@ class BaseDataSource(
         caching_config: typing.Optional[typing.Union["CachingConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         code: typing.Optional["Code"] = None,
         max_batch_size: typing.Optional[jsii.Number] = None,
-        pipeline_config: typing.Optional[typing.Sequence["IAppsyncFunction"]] = None,
+        pipeline_config: typing.Optional[typing.Sequence["_IFunctionConfigurationRef_6eb53e57"]] = None,
         request_mapping_template: typing.Optional["MappingTemplate"] = None,
         response_mapping_template: typing.Optional["MappingTemplate"] = None,
         runtime: typing.Optional["FunctionRuntime"] = None,
@@ -4280,6 +4282,7 @@ class BaseDataSource(
     @builtins.property
     @jsii.member(jsii_name="api")
     def _api(self) -> "IGraphqlApi":
+        '''The API this data source is attached to Set the API this data source is attached to.'''
         return typing.cast("IGraphqlApi", jsii.get(self, "api"))
 
     @_api.setter
@@ -4318,7 +4321,7 @@ class BaseDataSourceProps:
     def __init__(
         self,
         *,
-        api: "IGraphqlApi",
+        api: "_IGraphQLApiRef_d46d77ba",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -4335,11 +4338,12 @@ class BaseDataSourceProps:
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appsync as appsync
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            # graphql_api: appsync.GraphqlApi
+            # graph_qLApi_ref: interfaces_appsync.IGraphQLApiRef
             
             base_data_source_props = appsync.BaseDataSourceProps(
-                api=graphql_api,
+                api=graph_qLApi_ref,
             
                 # the properties below are optional
                 description="description",
@@ -4360,11 +4364,11 @@ class BaseDataSourceProps:
             self._values["name"] = name
 
     @builtins.property
-    def api(self) -> "IGraphqlApi":
+    def api(self) -> "_IGraphQLApiRef_d46d77ba":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast("IGraphqlApi", result)
+        return typing.cast("_IGraphQLApiRef_d46d77ba", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -4420,7 +4424,7 @@ class BaseResolverProps:
         caching_config: typing.Optional[typing.Union["CachingConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         code: typing.Optional["Code"] = None,
         max_batch_size: typing.Optional[jsii.Number] = None,
-        pipeline_config: typing.Optional[typing.Sequence["IAppsyncFunction"]] = None,
+        pipeline_config: typing.Optional[typing.Sequence["_IFunctionConfigurationRef_6eb53e57"]] = None,
         request_mapping_template: typing.Optional["MappingTemplate"] = None,
         response_mapping_template: typing.Optional["MappingTemplate"] = None,
         runtime: typing.Optional["FunctionRuntime"] = None,
@@ -4574,7 +4578,9 @@ class BaseResolverProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def pipeline_config(self) -> typing.Optional[typing.List["IAppsyncFunction"]]:
+    def pipeline_config(
+        self,
+    ) -> typing.Optional[typing.List["_IFunctionConfigurationRef_6eb53e57"]]:
         '''configuration of the pipeline resolver.
 
         :default:
@@ -4583,7 +4589,7 @@ class BaseResolverProps:
         An empty array | undefined sets resolver to be of kind, unit
         '''
         result = self._values.get("pipeline_config")
-        return typing.cast(typing.Optional[typing.List["IAppsyncFunction"]], result)
+        return typing.cast(typing.Optional[typing.List["_IFunctionConfigurationRef_6eb53e57"]], result)
 
     @builtins.property
     def request_mapping_template(self) -> typing.Optional["MappingTemplate"]:
@@ -7643,7 +7649,7 @@ class CfnDataSource(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        api_id: typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"],
+        api_id: builtins.str,
         name: builtins.str,
         type: builtins.str,
         description: typing.Optional[builtins.str] = None,
@@ -8942,7 +8948,7 @@ class CfnDataSourceProps:
     def __init__(
         self,
         *,
-        api_id: typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"],
+        api_id: builtins.str,
         name: builtins.str,
         type: builtins.str,
         description: typing.Optional[builtins.str] = None,
@@ -9089,14 +9095,14 @@ class CfnDataSourceProps:
             self._values["service_role_arn"] = service_role_arn
 
     @builtins.property
-    def api_id(self) -> typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"]:
+    def api_id(self) -> builtins.str:
         '''Unique AWS AppSync GraphQL API identifier where this data source will be created.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-datasource.html#cfn-appsync-datasource-apiid
         '''
         result = self._values.get("api_id")
         assert result is not None, "Required property 'api_id' is missing"
-        return typing.cast(typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"], result)
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -9552,7 +9558,7 @@ class CfnDomainNameApiAssociation(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        api_id: typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"],
+        api_id: builtins.str,
         domain_name: typing.Union[builtins.str, "_IDomainNameRef_15b9da81"],
     ) -> None:
         '''Create a new ``AWS::AppSync::DomainNameApiAssociation``.
@@ -9671,7 +9677,7 @@ class CfnDomainNameApiAssociationProps:
     def __init__(
         self,
         *,
-        api_id: typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"],
+        api_id: builtins.str,
         domain_name: typing.Union[builtins.str, "_IDomainNameRef_15b9da81"],
     ) -> None:
         '''Properties for defining a ``CfnDomainNameApiAssociation``.
@@ -9703,14 +9709,14 @@ class CfnDomainNameApiAssociationProps:
         }
 
     @builtins.property
-    def api_id(self) -> typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"]:
+    def api_id(self) -> builtins.str:
         '''The API ID.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-domainnameapiassociation.html#cfn-appsync-domainnameapiassociation-apiid
         '''
         result = self._values.get("api_id")
         assert result is not None, "Required property 'api_id' is missing"
-        return typing.cast(typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"], result)
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def domain_name(self) -> typing.Union[builtins.str, "_IDomainNameRef_15b9da81"]:
@@ -9910,7 +9916,7 @@ class CfnFunctionConfiguration(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        api_id: typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"],
+        api_id: builtins.str,
         data_source_name: builtins.str,
         name: builtins.str,
         code: typing.Optional[builtins.str] = None,
@@ -10516,7 +10522,7 @@ class CfnFunctionConfigurationProps:
     def __init__(
         self,
         *,
-        api_id: typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"],
+        api_id: builtins.str,
         data_source_name: builtins.str,
         name: builtins.str,
         code: typing.Optional[builtins.str] = None,
@@ -10632,14 +10638,14 @@ class CfnFunctionConfigurationProps:
             self._values["sync_config"] = sync_config
 
     @builtins.property
-    def api_id(self) -> typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"]:
+    def api_id(self) -> builtins.str:
         '''The AWS AppSync GraphQL API that you want to attach using this function.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-functionconfiguration.html#cfn-appsync-functionconfiguration-apiid
         '''
         result = self._values.get("api_id")
         assert result is not None, "Required property 'api_id' is missing"
-        return typing.cast(typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"], result)
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def data_source_name(self) -> builtins.str:
@@ -12899,7 +12905,7 @@ class CfnResolver(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        api_id: typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"],
+        api_id: builtins.str,
         field_name: builtins.str,
         type_name: builtins.str,
         caching_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResolver.CachingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -13702,7 +13708,7 @@ class CfnResolverProps:
     def __init__(
         self,
         *,
-        api_id: typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"],
+        api_id: builtins.str,
         field_name: builtins.str,
         type_name: builtins.str,
         caching_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnResolver.CachingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -13843,14 +13849,14 @@ class CfnResolverProps:
             self._values["sync_config"] = sync_config
 
     @builtins.property
-    def api_id(self) -> typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"]:
+    def api_id(self) -> builtins.str:
         '''The AWS AppSync GraphQL API to which you want to attach this resolver.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-resolver.html#cfn-appsync-resolver-apiid
         '''
         result = self._values.get("api_id")
         assert result is not None, "Required property 'api_id' is missing"
-        return typing.cast(typing.Union[builtins.str, "_IGraphQLApiRef_d46d77ba"], result)
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def field_name(self) -> builtins.str:
@@ -15870,7 +15876,7 @@ class ExtendedResolverProps(BaseResolverProps):
         caching_config: typing.Optional[typing.Union["CachingConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         code: typing.Optional["Code"] = None,
         max_batch_size: typing.Optional[jsii.Number] = None,
-        pipeline_config: typing.Optional[typing.Sequence["IAppsyncFunction"]] = None,
+        pipeline_config: typing.Optional[typing.Sequence["_IFunctionConfigurationRef_6eb53e57"]] = None,
         request_mapping_template: typing.Optional["MappingTemplate"] = None,
         response_mapping_template: typing.Optional["MappingTemplate"] = None,
         runtime: typing.Optional["FunctionRuntime"] = None,
@@ -15897,10 +15903,11 @@ class ExtendedResolverProps(BaseResolverProps):
             # The values are placeholders you should change.
             import aws_cdk as cdk
             from aws_cdk import aws_appsync as appsync
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            # appsync_function: appsync.AppsyncFunction
             # base_data_source: appsync.BaseDataSource
             # code: appsync.Code
+            # function_configuration_ref: interfaces_appsync.IFunctionConfigurationRef
             # function_runtime: appsync.FunctionRuntime
             # mapping_template: appsync.MappingTemplate
             
@@ -15918,7 +15925,7 @@ class ExtendedResolverProps(BaseResolverProps):
                 code=code,
                 data_source=base_data_source,
                 max_batch_size=123,
-                pipeline_config=[appsync_function],
+                pipeline_config=[function_configuration_ref],
                 request_mapping_template=mapping_template,
                 response_mapping_template=mapping_template,
                 runtime=function_runtime
@@ -16001,7 +16008,9 @@ class ExtendedResolverProps(BaseResolverProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def pipeline_config(self) -> typing.Optional[typing.List["IAppsyncFunction"]]:
+    def pipeline_config(
+        self,
+    ) -> typing.Optional[typing.List["_IFunctionConfigurationRef_6eb53e57"]]:
         '''configuration of the pipeline resolver.
 
         :default:
@@ -16010,7 +16019,7 @@ class ExtendedResolverProps(BaseResolverProps):
         An empty array | undefined sets resolver to be of kind, unit
         '''
         result = self._values.get("pipeline_config")
-        return typing.cast(typing.Optional[typing.List["IAppsyncFunction"]], result)
+        return typing.cast(typing.Optional[typing.List["_IFunctionConfigurationRef_6eb53e57"]], result)
 
     @builtins.property
     def request_mapping_template(self) -> typing.Optional["MappingTemplate"]:
@@ -16788,7 +16797,7 @@ class HttpDataSourceOptions(DataSourceOptions):
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appsync.IApi")
-class IApi(_IResource_c80c4260, typing_extensions.Protocol):
+class IApi(_IResource_c80c4260, _IApiRef_f01990a1, typing_extensions.Protocol):
     '''Interface for an API.'''
 
     @builtins.property
@@ -16812,6 +16821,7 @@ class IApi(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IApiProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IApiRef_f01990a1), # type: ignore[misc]
 ):
     '''Interface for an API.'''
 
@@ -16967,7 +16977,11 @@ typing.cast(typing.Any, IAppSyncAuthConfig).__jsii_proxy_class__ = lambda : _IAp
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appsync.IAppsyncFunction")
-class IAppsyncFunction(_IResource_c80c4260, typing_extensions.Protocol):
+class IAppsyncFunction(
+    _IResource_c80c4260,
+    _IFunctionConfigurationRef_6eb53e57,
+    typing_extensions.Protocol,
+):
     '''Interface for AppSync Functions.'''
 
     @builtins.property
@@ -16991,6 +17005,7 @@ class IAppsyncFunction(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IAppsyncFunctionProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IFunctionConfigurationRef_6eb53e57), # type: ignore[misc]
 ):
     '''Interface for AppSync Functions.'''
 
@@ -17019,7 +17034,11 @@ typing.cast(typing.Any, IAppsyncFunction).__jsii_proxy_class__ = lambda : _IApps
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appsync.IChannelNamespace")
-class IChannelNamespace(_IResource_c80c4260, typing_extensions.Protocol):
+class IChannelNamespace(
+    _IResource_c80c4260,
+    _IChannelNamespaceRef_68af2ba2,
+    typing_extensions.Protocol,
+):
     '''An AppSync channel namespace.'''
 
     @builtins.property
@@ -17034,6 +17053,7 @@ class IChannelNamespace(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IChannelNamespaceProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IChannelNamespaceRef_68af2ba2), # type: ignore[misc]
 ):
     '''An AppSync channel namespace.'''
 
@@ -17563,7 +17583,11 @@ typing.cast(typing.Any, IEventApi).__jsii_proxy_class__ = lambda : _IEventApiPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appsync.IGraphqlApi")
-class IGraphqlApi(_IResource_c80c4260, typing_extensions.Protocol):
+class IGraphqlApi(
+    _IResource_c80c4260,
+    _IGraphQLApiRef_d46d77ba,
+    typing_extensions.Protocol,
+):
     '''Interface for GraphQL.'''
 
     @builtins.property
@@ -17801,7 +17825,7 @@ class IGraphqlApi(_IResource_c80c4260, typing_extensions.Protocol):
         caching_config: typing.Optional[typing.Union["CachingConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         code: typing.Optional["Code"] = None,
         max_batch_size: typing.Optional[jsii.Number] = None,
-        pipeline_config: typing.Optional[typing.Sequence["IAppsyncFunction"]] = None,
+        pipeline_config: typing.Optional[typing.Sequence["_IFunctionConfigurationRef_6eb53e57"]] = None,
         request_mapping_template: typing.Optional["MappingTemplate"] = None,
         response_mapping_template: typing.Optional["MappingTemplate"] = None,
         runtime: typing.Optional["FunctionRuntime"] = None,
@@ -17879,6 +17903,7 @@ class IGraphqlApi(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IGraphqlApiProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IGraphQLApiRef_d46d77ba), # type: ignore[misc]
 ):
     '''Interface for GraphQL.'''
 
@@ -18183,7 +18208,7 @@ class _IGraphqlApiProxy(
         caching_config: typing.Optional[typing.Union["CachingConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         code: typing.Optional["Code"] = None,
         max_batch_size: typing.Optional[jsii.Number] = None,
-        pipeline_config: typing.Optional[typing.Sequence["IAppsyncFunction"]] = None,
+        pipeline_config: typing.Optional[typing.Sequence["_IFunctionConfigurationRef_6eb53e57"]] = None,
         request_mapping_template: typing.Optional["MappingTemplate"] = None,
         response_mapping_template: typing.Optional["MappingTemplate"] = None,
         runtime: typing.Optional["FunctionRuntime"] = None,
@@ -18303,7 +18328,7 @@ class ISchema(typing_extensions.Protocol):
     '''
 
     @jsii.member(jsii_name="bind")
-    def bind(self, api: "IGraphqlApi") -> "ISchemaConfig":
+    def bind(self, api: "_IGraphQLApiRef_d46d77ba") -> "ISchemaConfig":
         '''Binds a schema string to a GraphQlApi.
 
         :param api: the api to bind the schema to.
@@ -18322,7 +18347,7 @@ class _ISchemaProxy:
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_appsync.ISchema"
 
     @jsii.member(jsii_name="bind")
-    def bind(self, api: "IGraphqlApi") -> "ISchemaConfig":
+    def bind(self, api: "_IGraphQLApiRef_d46d77ba") -> "ISchemaConfig":
         '''Binds a schema string to a GraphQlApi.
 
         :param api: the api to bind the schema to.
@@ -18407,7 +18432,11 @@ typing.cast(typing.Any, ISchemaConfig).__jsii_proxy_class__ = lambda : _ISchemaC
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appsync.ISourceApiAssociation")
-class ISourceApiAssociation(_IResource_c80c4260, typing_extensions.Protocol):
+class ISourceApiAssociation(
+    _IResource_c80c4260,
+    _ISourceApiAssociationRef_c89e9f16,
+    typing_extensions.Protocol,
+):
     '''Interface for AppSync Source Api Association.'''
 
     @builtins.property
@@ -18437,6 +18466,7 @@ class ISourceApiAssociation(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _ISourceApiAssociationProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_ISourceApiAssociationRef_c89e9f16), # type: ignore[misc]
 ):
     '''Interface for AppSync Source Api Association.'''
 
@@ -19379,11 +19409,12 @@ class NoneDataSource(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appsync as appsync
+        from aws_cdk.interfaces import aws_appsync as interfaces_appsync
         
-        # graphql_api: appsync.GraphqlApi
+        # graph_qLApi_ref: interfaces_appsync.IGraphQLApiRef
         
         none_data_source = appsync.NoneDataSource(self, "MyNoneDataSource",
-            api=graphql_api,
+            api=graph_qLApi_ref,
         
             # the properties below are optional
             description="description",
@@ -19396,7 +19427,7 @@ class NoneDataSource(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        api: "IGraphqlApi",
+        api: "_IGraphQLApiRef_d46d77ba",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -19425,7 +19456,7 @@ class NoneDataSourceProps(BaseDataSourceProps):
     def __init__(
         self,
         *,
-        api: "IGraphqlApi",
+        api: "_IGraphQLApiRef_d46d77ba",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -19442,11 +19473,12 @@ class NoneDataSourceProps(BaseDataSourceProps):
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_appsync as appsync
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            # graphql_api: appsync.GraphqlApi
+            # graph_qLApi_ref: interfaces_appsync.IGraphQLApiRef
             
             none_data_source_props = appsync.NoneDataSourceProps(
-                api=graphql_api,
+                api=graph_qLApi_ref,
             
                 # the properties below are optional
                 description="description",
@@ -19467,11 +19499,11 @@ class NoneDataSourceProps(BaseDataSourceProps):
             self._values["name"] = name
 
     @builtins.property
-    def api(self) -> "IGraphqlApi":
+    def api(self) -> "_IGraphQLApiRef_d46d77ba":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast("IGraphqlApi", result)
+        return typing.cast("_IGraphQLApiRef_d46d77ba", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -19801,7 +19833,7 @@ class Resolver(
         caching_config: typing.Optional[typing.Union["CachingConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         code: typing.Optional["Code"] = None,
         max_batch_size: typing.Optional[jsii.Number] = None,
-        pipeline_config: typing.Optional[typing.Sequence["IAppsyncFunction"]] = None,
+        pipeline_config: typing.Optional[typing.Sequence["_IFunctionConfigurationRef_6eb53e57"]] = None,
         request_mapping_template: typing.Optional["MappingTemplate"] = None,
         response_mapping_template: typing.Optional["MappingTemplate"] = None,
         runtime: typing.Optional["FunctionRuntime"] = None,
@@ -19874,7 +19906,7 @@ class ResolverProps(ExtendedResolverProps):
         caching_config: typing.Optional[typing.Union["CachingConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         code: typing.Optional["Code"] = None,
         max_batch_size: typing.Optional[jsii.Number] = None,
-        pipeline_config: typing.Optional[typing.Sequence["IAppsyncFunction"]] = None,
+        pipeline_config: typing.Optional[typing.Sequence["_IFunctionConfigurationRef_6eb53e57"]] = None,
         request_mapping_template: typing.Optional["MappingTemplate"] = None,
         response_mapping_template: typing.Optional["MappingTemplate"] = None,
         runtime: typing.Optional["FunctionRuntime"] = None,
@@ -19992,7 +20024,9 @@ class ResolverProps(ExtendedResolverProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def pipeline_config(self) -> typing.Optional[typing.List["IAppsyncFunction"]]:
+    def pipeline_config(
+        self,
+    ) -> typing.Optional[typing.List["_IFunctionConfigurationRef_6eb53e57"]]:
         '''configuration of the pipeline resolver.
 
         :default:
@@ -20001,7 +20035,7 @@ class ResolverProps(ExtendedResolverProps):
         An empty array | undefined sets resolver to be of kind, unit
         '''
         result = self._values.get("pipeline_config")
-        return typing.cast(typing.Optional[typing.List["IAppsyncFunction"]], result)
+        return typing.cast(typing.Optional[typing.List["_IFunctionConfigurationRef_6eb53e57"]], result)
 
     @builtins.property
     def request_mapping_template(self) -> typing.Optional["MappingTemplate"]:
@@ -20225,7 +20259,7 @@ class SchemaFile(
         return typing.cast("SchemaFile", jsii.sinvoke(cls, "fromAsset", [file_path]))
 
     @jsii.member(jsii_name="bind")
-    def bind(self, api: "IGraphqlApi") -> "ISchemaConfig":
+    def bind(self, api: "_IGraphQLApiRef_d46d77ba") -> "ISchemaConfig":
         '''Called when the GraphQL Api is initialized to allow this object to bind to the stack.
 
         :param api: The binding GraphQL Api.
@@ -20604,6 +20638,12 @@ class SourceApiAssociation(
     def source_api(self) -> "IGraphqlApi":
         '''The source api in the association.'''
         return typing.cast("IGraphqlApi", jsii.get(self, "sourceApi"))
+
+    @builtins.property
+    @jsii.member(jsii_name="sourceApiAssociationRef")
+    def source_api_association_ref(self) -> "_SourceApiAssociationReference_1d1f2085":
+        '''A reference to a SourceApiAssociation resource.'''
+        return typing.cast("_SourceApiAssociationReference_1d1f2085", jsii.get(self, "sourceApiAssociationRef"))
 
 
 @jsii.data_type(
@@ -21164,6 +21204,12 @@ class ApiBase(
         '''The unique identifier for the AWS AppSync Api generated by the service.'''
         ...
 
+    @builtins.property
+    @jsii.member(jsii_name="apiRef")
+    def api_ref(self) -> "_ApiReference_f9af25ed":
+        '''A reference to a Api resource.'''
+        return typing.cast("_ApiReference_f9af25ed", jsii.get(self, "apiRef"))
+
 
 class _ApiBaseProxy(
     ApiBase,
@@ -21290,7 +21336,7 @@ class AppSyncBackedDataSourceProps(AppSyncBaseDataSourceProps):
     def __init__(
         self,
         *,
-        api: "IApi",
+        api: "_IApiRef_f01990a1",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
@@ -21310,12 +21356,13 @@ class AppSyncBackedDataSourceProps(AppSyncBaseDataSourceProps):
             # The values are placeholders you should change.
             from aws_cdk import aws_appsync as appsync
             from aws_cdk import aws_iam as iam
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            # api: appsync.IApi
+            # api_ref: interfaces_appsync.IApiRef
             # role: iam.Role
             
             app_sync_backed_data_source_props = appsync.AppSyncBackedDataSourceProps(
-                api=api,
+                api=api_ref,
             
                 # the properties below are optional
                 description="description",
@@ -21340,11 +21387,11 @@ class AppSyncBackedDataSourceProps(AppSyncBaseDataSourceProps):
             self._values["service_role"] = service_role
 
     @builtins.property
-    def api(self) -> "IApi":
+    def api(self) -> "_IApiRef_f01990a1":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast("IApi", result)
+        return typing.cast("_IApiRef_f01990a1", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -21423,7 +21470,7 @@ class AppSyncDynamoDbDataSource(
         read_only_access: typing.Optional[builtins.bool] = None,
         use_caller_credentials: typing.Optional[builtins.bool] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
-        api: "IApi",
+        api: "_IApiRef_f01990a1",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -21472,7 +21519,7 @@ class AppSyncDynamoDbDataSourceProps(AppSyncBackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: "IApi",
+        api: "_IApiRef_f01990a1",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
@@ -21499,13 +21546,14 @@ class AppSyncDynamoDbDataSourceProps(AppSyncBackedDataSourceProps):
             from aws_cdk import aws_appsync as appsync
             from aws_cdk import aws_dynamodb as dynamodb
             from aws_cdk import aws_iam as iam
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            # api: appsync.IApi
+            # api_ref: interfaces_appsync.IApiRef
             # role: iam.Role
             # table: dynamodb.Table
             
             app_sync_dynamo_db_data_source_props = appsync.AppSyncDynamoDbDataSourceProps(
-                api=api,
+                api=api_ref,
                 table=table,
             
                 # the properties below are optional
@@ -21541,11 +21589,11 @@ class AppSyncDynamoDbDataSourceProps(AppSyncBackedDataSourceProps):
             self._values["use_caller_credentials"] = use_caller_credentials
 
     @builtins.property
-    def api(self) -> "IApi":
+    def api(self) -> "_IApiRef_f01990a1":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast("IApi", result)
+        return typing.cast("_IApiRef_f01990a1", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -21644,7 +21692,7 @@ class AppSyncEventBridgeDataSource(
         *,
         event_bus: "_IEventBus_88d13111",
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
-        api: "IApi",
+        api: "_IApiRef_f01990a1",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -21687,7 +21735,7 @@ class AppSyncEventBridgeDataSourceProps(AppSyncBackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: "IApi",
+        api: "_IApiRef_f01990a1",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
@@ -21710,13 +21758,14 @@ class AppSyncEventBridgeDataSourceProps(AppSyncBackedDataSourceProps):
             from aws_cdk import aws_appsync as appsync
             from aws_cdk import aws_events as events
             from aws_cdk import aws_iam as iam
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            # api: appsync.IApi
+            # api_ref: interfaces_appsync.IApiRef
             # event_bus: events.EventBus
             # role: iam.Role
             
             app_sync_event_bridge_data_source_props = appsync.AppSyncEventBridgeDataSourceProps(
-                api=api,
+                api=api_ref,
                 event_bus=event_bus,
             
                 # the properties below are optional
@@ -21744,11 +21793,11 @@ class AppSyncEventBridgeDataSourceProps(AppSyncBackedDataSourceProps):
             self._values["service_role"] = service_role
 
     @builtins.property
-    def api(self) -> "IApi":
+    def api(self) -> "_IApiRef_f01990a1":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast("IApi", result)
+        return typing.cast("_IApiRef_f01990a1", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -21845,7 +21894,7 @@ class AppSyncHttpDataSource(
         endpoint: builtins.str,
         authorization_config: typing.Optional[typing.Union["AppSyncAwsIamConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
-        api: "IApi",
+        api: "_IApiRef_f01990a1",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -21891,7 +21940,7 @@ class AppSyncHttpDataSourceProps(AppSyncBackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: "IApi",
+        api: "_IApiRef_f01990a1",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
@@ -21915,12 +21964,13 @@ class AppSyncHttpDataSourceProps(AppSyncBackedDataSourceProps):
             # The values are placeholders you should change.
             from aws_cdk import aws_appsync as appsync
             from aws_cdk import aws_iam as iam
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            # api: appsync.IApi
+            # api_ref: interfaces_appsync.IApiRef
             # role: iam.Role
             
             app_sync_http_data_source_props = appsync.AppSyncHttpDataSourceProps(
-                api=api,
+                api=api_ref,
                 endpoint="endpoint",
             
                 # the properties below are optional
@@ -21957,11 +22007,11 @@ class AppSyncHttpDataSourceProps(AppSyncBackedDataSourceProps):
             self._values["authorization_config"] = authorization_config
 
     @builtins.property
-    def api(self) -> "IApi":
+    def api(self) -> "_IApiRef_f01990a1":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast("IApi", result)
+        return typing.cast("_IApiRef_f01990a1", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -22051,7 +22101,7 @@ class AppSyncLambdaDataSource(
         *,
         lambda_function: "_IFunction_6adb0ab8",
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
-        api: "IApi",
+        api: "_IApiRef_f01990a1",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -22094,7 +22144,7 @@ class AppSyncLambdaDataSourceProps(AppSyncBackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: "IApi",
+        api: "_IApiRef_f01990a1",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
@@ -22117,13 +22167,14 @@ class AppSyncLambdaDataSourceProps(AppSyncBackedDataSourceProps):
             from aws_cdk import aws_appsync as appsync
             from aws_cdk import aws_iam as iam
             from aws_cdk import aws_lambda as lambda_
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            # api: appsync.IApi
+            # api_ref: interfaces_appsync.IApiRef
             # function_: lambda.Function
             # role: iam.Role
             
             app_sync_lambda_data_source_props = appsync.AppSyncLambdaDataSourceProps(
-                api=api,
+                api=api_ref,
                 lambda_function=function_,
             
                 # the properties below are optional
@@ -22151,11 +22202,11 @@ class AppSyncLambdaDataSourceProps(AppSyncBackedDataSourceProps):
             self._values["service_role"] = service_role
 
     @builtins.property
-    def api(self) -> "IApi":
+    def api(self) -> "_IApiRef_f01990a1":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast("IApi", result)
+        return typing.cast("_IApiRef_f01990a1", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -22249,7 +22300,7 @@ class AppSyncOpenSearchDataSource(
         *,
         domain: "_IDomain_3c13cbdd",
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
-        api: "IApi",
+        api: "_IApiRef_f01990a1",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -22292,7 +22343,7 @@ class AppSyncOpenSearchDataSourceProps(AppSyncBackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: "IApi",
+        api: "_IApiRef_f01990a1",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
@@ -22315,13 +22366,14 @@ class AppSyncOpenSearchDataSourceProps(AppSyncBackedDataSourceProps):
             from aws_cdk import aws_appsync as appsync
             from aws_cdk import aws_iam as iam
             from aws_cdk import aws_opensearchservice as opensearchservice
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            # api: appsync.IApi
+            # api_ref: interfaces_appsync.IApiRef
             # domain: opensearchservice.Domain
             # role: iam.Role
             
             app_sync_open_search_data_source_props = appsync.AppSyncOpenSearchDataSourceProps(
-                api=api,
+                api=api_ref,
                 domain=domain,
             
                 # the properties below are optional
@@ -22349,11 +22401,11 @@ class AppSyncOpenSearchDataSourceProps(AppSyncBackedDataSourceProps):
             self._values["service_role"] = service_role
 
     @builtins.property
-    def api(self) -> "IApi":
+    def api(self) -> "_IApiRef_f01990a1":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast("IApi", result)
+        return typing.cast("_IApiRef_f01990a1", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -22447,7 +22499,7 @@ class AppSyncRdsDataSource(
         serverless_cluster: "_IServerlessCluster_adbbb720",
         database_name: typing.Optional[builtins.str] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
-        api: "IApi",
+        api: "_IApiRef_f01990a1",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -22496,7 +22548,7 @@ class AppSyncRdsDataSourceProps(AppSyncBackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: "IApi",
+        api: "_IApiRef_f01990a1",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
@@ -22524,14 +22576,15 @@ class AppSyncRdsDataSourceProps(AppSyncBackedDataSourceProps):
             from aws_cdk import aws_iam as iam
             from aws_cdk import aws_rds as rds
             from aws_cdk import aws_secretsmanager as secretsmanager
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            # api: appsync.IApi
+            # api_ref: interfaces_appsync.IApiRef
             # role: iam.Role
             # secret: secretsmanager.Secret
             # serverless_cluster: rds.ServerlessCluster
             
             app_sync_rds_data_source_props = appsync.AppSyncRdsDataSourceProps(
-                api=api,
+                api=api_ref,
                 secret_store=secret,
                 serverless_cluster=serverless_cluster,
             
@@ -22566,11 +22619,11 @@ class AppSyncRdsDataSourceProps(AppSyncBackedDataSourceProps):
             self._values["database_name"] = database_name
 
     @builtins.property
-    def api(self) -> "IApi":
+    def api(self) -> "_IApiRef_f01990a1":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast("IApi", result)
+        return typing.cast("_IApiRef_f01990a1", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -22654,7 +22707,7 @@ class AppSyncRdsDataSourcePropsV2(AppSyncBackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: "IApi",
+        api: "_IApiRef_f01990a1",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
@@ -22682,14 +22735,15 @@ class AppSyncRdsDataSourcePropsV2(AppSyncBackedDataSourceProps):
             from aws_cdk import aws_iam as iam
             from aws_cdk import aws_rds as rds
             from aws_cdk import aws_secretsmanager as secretsmanager
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            # api: appsync.IApi
+            # api_ref: interfaces_appsync.IApiRef
             # database_cluster: rds.DatabaseCluster
             # role: iam.Role
             # secret: secretsmanager.Secret
             
             app_sync_rds_data_source_props_v2 = appsync.AppSyncRdsDataSourcePropsV2(
-                api=api,
+                api=api_ref,
                 secret_store=secret,
                 serverless_cluster=database_cluster,
             
@@ -22724,11 +22778,11 @@ class AppSyncRdsDataSourcePropsV2(AppSyncBackedDataSourceProps):
             self._values["database_name"] = database_name
 
     @builtins.property
-    def api(self) -> "IApi":
+    def api(self) -> "_IApiRef_f01990a1":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast("IApi", result)
+        return typing.cast("_IApiRef_f01990a1", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -22915,6 +22969,12 @@ class AppsyncFunction(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "functionArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="functionConfigurationRef")
+    def function_configuration_ref(self) -> "_FunctionConfigurationReference_8b9e75dc":
+        '''A reference to a FunctionConfiguration resource.'''
+        return typing.cast("_FunctionConfigurationReference_8b9e75dc", jsii.get(self, "functionConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="functionId")
@@ -23323,7 +23383,7 @@ class BackedDataSourceProps(BaseDataSourceProps):
     def __init__(
         self,
         *,
-        api: "IGraphqlApi",
+        api: "_IGraphQLApiRef_d46d77ba",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
@@ -23343,12 +23403,13 @@ class BackedDataSourceProps(BaseDataSourceProps):
             # The values are placeholders you should change.
             from aws_cdk import aws_appsync as appsync
             from aws_cdk import aws_iam as iam
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            # graphql_api: appsync.GraphqlApi
+            # graph_qLApi_ref: interfaces_appsync.IGraphQLApiRef
             # role: iam.Role
             
             backed_data_source_props = appsync.BackedDataSourceProps(
-                api=graphql_api,
+                api=graph_qLApi_ref,
             
                 # the properties below are optional
                 description="description",
@@ -23373,11 +23434,11 @@ class BackedDataSourceProps(BaseDataSourceProps):
             self._values["service_role"] = service_role
 
     @builtins.property
-    def api(self) -> "IGraphqlApi":
+    def api(self) -> "_IGraphQLApiRef_d46d77ba":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast("IGraphqlApi", result)
+        return typing.cast("_IGraphQLApiRef_d46d77ba", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -23550,6 +23611,12 @@ class ChannelNamespace(
         '''the ARN of the channel namespace.'''
         return typing.cast(builtins.str, jsii.get(self, "channelNamespaceArn"))
 
+    @builtins.property
+    @jsii.member(jsii_name="channelNamespaceRef")
+    def channel_namespace_ref(self) -> "_ChannelNamespaceReference_be895f9c":
+        '''A reference to a ChannelNamespace resource.'''
+        return typing.cast("_ChannelNamespaceReference_be895f9c", jsii.get(self, "channelNamespaceRef"))
+
 
 class DynamoDbDataSource(
     BackedDataSource,
@@ -23620,7 +23687,7 @@ class DynamoDbDataSource(
         read_only_access: typing.Optional[builtins.bool] = None,
         use_caller_credentials: typing.Optional[builtins.bool] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
-        api: "IGraphqlApi",
+        api: "_IGraphQLApiRef_d46d77ba",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -23675,7 +23742,7 @@ class DynamoDbDataSourceProps(BackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: "IGraphqlApi",
+        api: "_IGraphQLApiRef_d46d77ba",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
@@ -23702,13 +23769,14 @@ class DynamoDbDataSourceProps(BackedDataSourceProps):
             from aws_cdk import aws_appsync as appsync
             from aws_cdk import aws_dynamodb as dynamodb
             from aws_cdk import aws_iam as iam
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            # graphql_api: appsync.GraphqlApi
+            # graph_qLApi_ref: interfaces_appsync.IGraphQLApiRef
             # role: iam.Role
             # table: dynamodb.Table
             
             dynamo_db_data_source_props = appsync.DynamoDbDataSourceProps(
-                api=graphql_api,
+                api=graph_qLApi_ref,
                 table=table,
             
                 # the properties below are optional
@@ -23744,11 +23812,11 @@ class DynamoDbDataSourceProps(BackedDataSourceProps):
             self._values["use_caller_credentials"] = use_caller_credentials
 
     @builtins.property
-    def api(self) -> "IGraphqlApi":
+    def api(self) -> "_IGraphQLApiRef_d46d77ba":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast("IGraphqlApi", result)
+        return typing.cast("_IGraphQLApiRef_d46d77ba", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -23833,13 +23901,14 @@ class ElasticsearchDataSource(
         from aws_cdk import aws_appsync as appsync
         from aws_cdk import aws_elasticsearch as elasticsearch
         from aws_cdk import aws_iam as iam
+        from aws_cdk.interfaces import aws_appsync as interfaces_appsync
         
         # domain: elasticsearch.Domain
-        # graphql_api: appsync.GraphqlApi
+        # graph_qLApi_ref: interfaces_appsync.IGraphQLApiRef
         # role: iam.Role
         
         elasticsearch_data_source = appsync.ElasticsearchDataSource(self, "MyElasticsearchDataSource",
-            api=graphql_api,
+            api=graph_qLApi_ref,
             domain=domain,
         
             # the properties below are optional
@@ -23856,7 +23925,7 @@ class ElasticsearchDataSource(
         *,
         domain: "_IDomain_0c9006b4",
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
-        api: "IGraphqlApi",
+        api: "_IGraphQLApiRef_d46d77ba",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -23901,7 +23970,7 @@ class ElasticsearchDataSourceProps(BackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: "IGraphqlApi",
+        api: "_IGraphQLApiRef_d46d77ba",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
@@ -23927,13 +23996,14 @@ class ElasticsearchDataSourceProps(BackedDataSourceProps):
             from aws_cdk import aws_appsync as appsync
             from aws_cdk import aws_elasticsearch as elasticsearch
             from aws_cdk import aws_iam as iam
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
             # domain: elasticsearch.Domain
-            # graphql_api: appsync.GraphqlApi
+            # graph_qLApi_ref: interfaces_appsync.IGraphQLApiRef
             # role: iam.Role
             
             elasticsearch_data_source_props = appsync.ElasticsearchDataSourceProps(
-                api=graphql_api,
+                api=graph_qLApi_ref,
                 domain=domain,
             
                 # the properties below are optional
@@ -23961,11 +24031,11 @@ class ElasticsearchDataSourceProps(BackedDataSourceProps):
             self._values["service_role"] = service_role
 
     @builtins.property
-    def api(self) -> "IGraphqlApi":
+    def api(self) -> "_IGraphQLApiRef_d46d77ba":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast("IGraphqlApi", result)
+        return typing.cast("_IGraphQLApiRef_d46d77ba", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -24403,7 +24473,7 @@ class EventBridgeDataSource(
         *,
         event_bus: "_IEventBus_88d13111",
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
-        api: "IGraphqlApi",
+        api: "_IGraphQLApiRef_d46d77ba",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -24452,7 +24522,7 @@ class EventBridgeDataSourceProps(BackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: "IGraphqlApi",
+        api: "_IGraphQLApiRef_d46d77ba",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
@@ -24475,13 +24545,14 @@ class EventBridgeDataSourceProps(BackedDataSourceProps):
             from aws_cdk import aws_appsync as appsync
             from aws_cdk import aws_events as events
             from aws_cdk import aws_iam as iam
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
             # event_bus: events.EventBus
-            # graphql_api: appsync.GraphqlApi
+            # graph_qLApi_ref: interfaces_appsync.IGraphQLApiRef
             # role: iam.Role
             
             event_bridge_data_source_props = appsync.EventBridgeDataSourceProps(
-                api=graphql_api,
+                api=graph_qLApi_ref,
                 event_bus=event_bus,
             
                 # the properties below are optional
@@ -24509,11 +24580,11 @@ class EventBridgeDataSourceProps(BackedDataSourceProps):
             self._values["service_role"] = service_role
 
     @builtins.property
-    def api(self) -> "IGraphqlApi":
+    def api(self) -> "_IGraphQLApiRef_d46d77ba":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast("IGraphqlApi", result)
+        return typing.cast("_IGraphQLApiRef_d46d77ba", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -24863,7 +24934,7 @@ class GraphqlApiBase(
         caching_config: typing.Optional[typing.Union["CachingConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         code: typing.Optional["Code"] = None,
         max_batch_size: typing.Optional[jsii.Number] = None,
-        pipeline_config: typing.Optional[typing.Sequence["IAppsyncFunction"]] = None,
+        pipeline_config: typing.Optional[typing.Sequence["_IFunctionConfigurationRef_6eb53e57"]] = None,
         request_mapping_template: typing.Optional["MappingTemplate"] = None,
         response_mapping_template: typing.Optional["MappingTemplate"] = None,
         runtime: typing.Optional["FunctionRuntime"] = None,
@@ -24986,6 +25057,12 @@ class GraphqlApiBase(
         ...
 
     @builtins.property
+    @jsii.member(jsii_name="graphQlApiRef")
+    def graph_ql_api_ref(self) -> "_GraphQLApiReference_833f473c":
+        '''A reference to a GraphQLApi resource.'''
+        return typing.cast("_GraphQLApiReference_833f473c", jsii.get(self, "graphQlApiRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="graphQLEndpointArn")
     @abc.abstractmethod
     def graph_ql_endpoint_arn(self) -> builtins.str:
@@ -25086,7 +25163,7 @@ class HttpDataSource(
         endpoint: builtins.str,
         authorization_config: typing.Optional[typing.Union["AwsIamConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
-        api: "IGraphqlApi",
+        api: "_IGraphQLApiRef_d46d77ba",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -25138,7 +25215,7 @@ class HttpDataSourceProps(BackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: "IGraphqlApi",
+        api: "_IGraphQLApiRef_d46d77ba",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
@@ -25162,12 +25239,13 @@ class HttpDataSourceProps(BackedDataSourceProps):
             # The values are placeholders you should change.
             from aws_cdk import aws_appsync as appsync
             from aws_cdk import aws_iam as iam
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            # graphql_api: appsync.GraphqlApi
+            # graph_qLApi_ref: interfaces_appsync.IGraphQLApiRef
             # role: iam.Role
             
             http_data_source_props = appsync.HttpDataSourceProps(
-                api=graphql_api,
+                api=graph_qLApi_ref,
                 endpoint="endpoint",
             
                 # the properties below are optional
@@ -25204,11 +25282,11 @@ class HttpDataSourceProps(BackedDataSourceProps):
             self._values["authorization_config"] = authorization_config
 
     @builtins.property
-    def api(self) -> "IGraphqlApi":
+    def api(self) -> "_IGraphQLApiRef_d46d77ba":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast("IGraphqlApi", result)
+        return typing.cast("_IGraphQLApiRef_d46d77ba", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -25281,13 +25359,14 @@ class LambdaDataSource(
         from aws_cdk import aws_appsync as appsync
         from aws_cdk import aws_iam as iam
         from aws_cdk import aws_lambda as lambda_
+        from aws_cdk.interfaces import aws_appsync as interfaces_appsync
         
         # function_: lambda.Function
-        # graphql_api: appsync.GraphqlApi
+        # graph_qLApi_ref: interfaces_appsync.IGraphQLApiRef
         # role: iam.Role
         
         lambda_data_source = appsync.LambdaDataSource(self, "MyLambdaDataSource",
-            api=graphql_api,
+            api=graph_qLApi_ref,
             lambda_function=function_,
         
             # the properties below are optional
@@ -25304,7 +25383,7 @@ class LambdaDataSource(
         *,
         lambda_function: "_IFunction_6adb0ab8",
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
-        api: "IGraphqlApi",
+        api: "_IGraphQLApiRef_d46d77ba",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -25353,7 +25432,7 @@ class LambdaDataSourceProps(BackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: "IGraphqlApi",
+        api: "_IGraphQLApiRef_d46d77ba",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
@@ -25376,13 +25455,14 @@ class LambdaDataSourceProps(BackedDataSourceProps):
             from aws_cdk import aws_appsync as appsync
             from aws_cdk import aws_iam as iam
             from aws_cdk import aws_lambda as lambda_
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
             # function_: lambda.Function
-            # graphql_api: appsync.GraphqlApi
+            # graph_qLApi_ref: interfaces_appsync.IGraphQLApiRef
             # role: iam.Role
             
             lambda_data_source_props = appsync.LambdaDataSourceProps(
-                api=graphql_api,
+                api=graph_qLApi_ref,
                 lambda_function=function_,
             
                 # the properties below are optional
@@ -25410,11 +25490,11 @@ class LambdaDataSourceProps(BackedDataSourceProps):
             self._values["service_role"] = service_role
 
     @builtins.property
-    def api(self) -> "IGraphqlApi":
+    def api(self) -> "_IGraphQLApiRef_d46d77ba":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast("IGraphqlApi", result)
+        return typing.cast("_IGraphQLApiRef_d46d77ba", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -25518,7 +25598,7 @@ class OpenSearchDataSource(
         *,
         domain: "_IDomain_3c13cbdd",
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
-        api: "IGraphqlApi",
+        api: "_IGraphQLApiRef_d46d77ba",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -25567,7 +25647,7 @@ class OpenSearchDataSourceProps(BackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: "IGraphqlApi",
+        api: "_IGraphQLApiRef_d46d77ba",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
@@ -25590,13 +25670,14 @@ class OpenSearchDataSourceProps(BackedDataSourceProps):
             from aws_cdk import aws_appsync as appsync
             from aws_cdk import aws_iam as iam
             from aws_cdk import aws_opensearchservice as opensearchservice
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
             # domain: opensearchservice.Domain
-            # graphql_api: appsync.GraphqlApi
+            # graph_qLApi_ref: interfaces_appsync.IGraphQLApiRef
             # role: iam.Role
             
             open_search_data_source_props = appsync.OpenSearchDataSourceProps(
-                api=graphql_api,
+                api=graph_qLApi_ref,
                 domain=domain,
             
                 # the properties below are optional
@@ -25624,11 +25705,11 @@ class OpenSearchDataSourceProps(BackedDataSourceProps):
             self._values["service_role"] = service_role
 
     @builtins.property
-    def api(self) -> "IGraphqlApi":
+    def api(self) -> "_IGraphQLApiRef_d46d77ba":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast("IGraphqlApi", result)
+        return typing.cast("_IGraphQLApiRef_d46d77ba", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -25800,7 +25881,7 @@ class RdsDataSource(
         serverless_cluster: "_IServerlessCluster_adbbb720",
         database_name: typing.Optional[builtins.str] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
-        api: "IGraphqlApi",
+        api: "_IGraphQLApiRef_d46d77ba",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -25855,7 +25936,7 @@ class RdsDataSourceProps(BackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: "IGraphqlApi",
+        api: "_IGraphQLApiRef_d46d77ba",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
@@ -25883,14 +25964,15 @@ class RdsDataSourceProps(BackedDataSourceProps):
             from aws_cdk import aws_iam as iam
             from aws_cdk import aws_rds as rds
             from aws_cdk import aws_secretsmanager as secretsmanager
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            # graphql_api: appsync.GraphqlApi
+            # graph_qLApi_ref: interfaces_appsync.IGraphQLApiRef
             # role: iam.Role
             # secret: secretsmanager.Secret
             # serverless_cluster: rds.ServerlessCluster
             
             rds_data_source_props = appsync.RdsDataSourceProps(
-                api=graphql_api,
+                api=graph_qLApi_ref,
                 secret_store=secret,
                 serverless_cluster=serverless_cluster,
             
@@ -25925,11 +26007,11 @@ class RdsDataSourceProps(BackedDataSourceProps):
             self._values["database_name"] = database_name
 
     @builtins.property
-    def api(self) -> "IGraphqlApi":
+    def api(self) -> "_IGraphQLApiRef_d46d77ba":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast("IGraphqlApi", result)
+        return typing.cast("_IGraphQLApiRef_d46d77ba", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -26010,7 +26092,7 @@ class RdsDataSourcePropsV2(BackedDataSourceProps):
     def __init__(
         self,
         *,
-        api: "IGraphqlApi",
+        api: "_IGraphQLApiRef_d46d77ba",
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         service_role: typing.Optional["_IRole_235f5d8e"] = None,
@@ -26038,14 +26120,15 @@ class RdsDataSourcePropsV2(BackedDataSourceProps):
             from aws_cdk import aws_iam as iam
             from aws_cdk import aws_rds as rds
             from aws_cdk import aws_secretsmanager as secretsmanager
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
             # database_cluster: rds.DatabaseCluster
-            # graphql_api: appsync.GraphqlApi
+            # graph_qLApi_ref: interfaces_appsync.IGraphQLApiRef
             # role: iam.Role
             # secret: secretsmanager.Secret
             
             rds_data_source_props_v2 = appsync.RdsDataSourcePropsV2(
-                api=graphql_api,
+                api=graph_qLApi_ref,
                 secret_store=secret,
                 serverless_cluster=database_cluster,
             
@@ -26080,11 +26163,11 @@ class RdsDataSourcePropsV2(BackedDataSourceProps):
             self._values["database_name"] = database_name
 
     @builtins.property
-    def api(self) -> "IGraphqlApi":
+    def api(self) -> "_IGraphQLApiRef_d46d77ba":
         '''The API to attach this data source to.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast("IGraphqlApi", result)
+        return typing.cast("_IGraphQLApiRef_d46d77ba", result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -26817,7 +26900,7 @@ def _typecheckingstub__c0696048b430ec2cd7bcb73334c99f876ecdb0a5a047acd07237fee23
 
 def _typecheckingstub__bea0eee61b1cea87b6622231b3f162a9ae91365fb99f3750a7d7ba668769f8fd(
     *,
-    api: IApi,
+    api: _IApiRef_f01990a1,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -27048,7 +27131,7 @@ def _typecheckingstub__18da570994550f3efc007c557f3b52f15c9a82fb4ef611b37d526d983
     caching_config: typing.Optional[typing.Union[CachingConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     code: typing.Optional[Code] = None,
     max_batch_size: typing.Optional[jsii.Number] = None,
-    pipeline_config: typing.Optional[typing.Sequence[IAppsyncFunction]] = None,
+    pipeline_config: typing.Optional[typing.Sequence[_IFunctionConfigurationRef_6eb53e57]] = None,
     request_mapping_template: typing.Optional[MappingTemplate] = None,
     response_mapping_template: typing.Optional[MappingTemplate] = None,
     runtime: typing.Optional[FunctionRuntime] = None,
@@ -27070,7 +27153,7 @@ def _typecheckingstub__f22d536d795f0e6c3516e56fbc4183ece0daab0d19c19d86752c9fd35
 
 def _typecheckingstub__7cb5694e7bccdac081c0d35fee8d239110cc5fb8b7eefac7866144f6deac2d9d(
     *,
-    api: IGraphqlApi,
+    api: _IGraphQLApiRef_d46d77ba,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -27084,7 +27167,7 @@ def _typecheckingstub__57bca2ee49335be042ebfd66ab492a766a7dcba63ae9692b50ecab067
     caching_config: typing.Optional[typing.Union[CachingConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     code: typing.Optional[Code] = None,
     max_batch_size: typing.Optional[jsii.Number] = None,
-    pipeline_config: typing.Optional[typing.Sequence[IAppsyncFunction]] = None,
+    pipeline_config: typing.Optional[typing.Sequence[_IFunctionConfigurationRef_6eb53e57]] = None,
     request_mapping_template: typing.Optional[MappingTemplate] = None,
     response_mapping_template: typing.Optional[MappingTemplate] = None,
     runtime: typing.Optional[FunctionRuntime] = None,
@@ -27536,7 +27619,7 @@ def _typecheckingstub__f2dc8968068d09d9cb599cea5efad1a18016c4eca4fcc6c15e6169a08
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
+    api_id: builtins.str,
     name: builtins.str,
     type: builtins.str,
     description: typing.Optional[builtins.str] = None,
@@ -27750,7 +27833,7 @@ def _typecheckingstub__4357a1467126648487c710ab6683bf4d3954927d7c54c51b699c6f185
 
 def _typecheckingstub__77a27321db4878d92375c672ad2fd1de24e61150d04b9a9b7f544b60bf81d6d7(
     *,
-    api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
+    api_id: builtins.str,
     name: builtins.str,
     type: builtins.str,
     description: typing.Optional[builtins.str] = None,
@@ -27847,7 +27930,7 @@ def _typecheckingstub__053707dba2452392a89bf081ac7d866beeff7c348bacbfe351a815a63
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
+    api_id: builtins.str,
     domain_name: typing.Union[builtins.str, _IDomainNameRef_15b9da81],
 ) -> None:
     """Type checking stubs"""
@@ -27885,7 +27968,7 @@ def _typecheckingstub__8dd7f18cf3cb236d2ffa804f6505477d416e7b844f92f9ba86f74aea1
 
 def _typecheckingstub__10a899ca55570211a5da411a83f28448dd1e54a82a4e83cb8d8ca2b1f292ebf5(
     *,
-    api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
+    api_id: builtins.str,
     domain_name: typing.Union[builtins.str, _IDomainNameRef_15b9da81],
 ) -> None:
     """Type checking stubs"""
@@ -27905,7 +27988,7 @@ def _typecheckingstub__6a4866dafc094db4e3a18f26e71e3f210828f39f8958d47fe2d4c085a
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
+    api_id: builtins.str,
     data_source_name: builtins.str,
     name: builtins.str,
     code: typing.Optional[builtins.str] = None,
@@ -28051,7 +28134,7 @@ def _typecheckingstub__441bd762beaec70fd67cf86d84e674beae78bf0e9f78d94f1b683b403
 
 def _typecheckingstub__68fb3836c61478b4bf652995d052fa027e6b2f6b9606529969b49a74037c3061(
     *,
-    api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
+    api_id: builtins.str,
     data_source_name: builtins.str,
     name: builtins.str,
     code: typing.Optional[builtins.str] = None,
@@ -28377,7 +28460,7 @@ def _typecheckingstub__45a19b37f9f570b32d81c1e70bfcb51be048fdffa3df94ad801e69b81
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
+    api_id: builtins.str,
     field_name: builtins.str,
     type_name: builtins.str,
     caching_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResolver.CachingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -28565,7 +28648,7 @@ def _typecheckingstub__fd8efb0c43d72e5061a7c9c3de6483787260ccff8a3dff5a5152ca959
 
 def _typecheckingstub__57b1ba8346de8783ad38f1a2377fd50bdd7577d903f4b68402c7b5ab604f16e5(
     *,
-    api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
+    api_id: builtins.str,
     field_name: builtins.str,
     type_name: builtins.str,
     caching_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResolver.CachingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -28799,7 +28882,7 @@ def _typecheckingstub__7dc3b87bcc5a5c4f72f5701decf293d0da2caba80281cf58c26e7a4d9
     caching_config: typing.Optional[typing.Union[CachingConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     code: typing.Optional[Code] = None,
     max_batch_size: typing.Optional[jsii.Number] = None,
-    pipeline_config: typing.Optional[typing.Sequence[IAppsyncFunction]] = None,
+    pipeline_config: typing.Optional[typing.Sequence[_IFunctionConfigurationRef_6eb53e57]] = None,
     request_mapping_template: typing.Optional[MappingTemplate] = None,
     response_mapping_template: typing.Optional[MappingTemplate] = None,
     runtime: typing.Optional[FunctionRuntime] = None,
@@ -29079,7 +29162,7 @@ def _typecheckingstub__da1231d659a3d5f86849b39ea5e3924e5d6867178b9b48617ec806865
     caching_config: typing.Optional[typing.Union[CachingConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     code: typing.Optional[Code] = None,
     max_batch_size: typing.Optional[jsii.Number] = None,
-    pipeline_config: typing.Optional[typing.Sequence[IAppsyncFunction]] = None,
+    pipeline_config: typing.Optional[typing.Sequence[_IFunctionConfigurationRef_6eb53e57]] = None,
     request_mapping_template: typing.Optional[MappingTemplate] = None,
     response_mapping_template: typing.Optional[MappingTemplate] = None,
     runtime: typing.Optional[FunctionRuntime] = None,
@@ -29117,7 +29200,7 @@ def _typecheckingstub__35a5b1f1ae7dddd4441d16a68e0ce83640393f0cbda788440c0282fef
     pass
 
 def _typecheckingstub__3ab7bd2a4f271f294370de26c1f7a13edd4a7e586c474d1ce0d7c4b532ad79a5(
-    api: IGraphqlApi,
+    api: _IGraphQLApiRef_d46d77ba,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -29307,7 +29390,7 @@ def _typecheckingstub__1611db7d560b46fd4ac561a4c80f0c620482391b0a4b50a2e95caca4f
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    api: IGraphqlApi,
+    api: _IGraphQLApiRef_d46d77ba,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -29316,7 +29399,7 @@ def _typecheckingstub__1611db7d560b46fd4ac561a4c80f0c620482391b0a4b50a2e95caca4f
 
 def _typecheckingstub__f714cd165303e3c7148f1ca4c53fe5e7abe0f744c242bcdbb8dc5817bd63ecda(
     *,
-    api: IGraphqlApi,
+    api: _IGraphQLApiRef_d46d77ba,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -29369,7 +29452,7 @@ def _typecheckingstub__2dac7c0ed89396d7f29c7903e2a718a49bfb552b89c6e4aba2bf132b5
     caching_config: typing.Optional[typing.Union[CachingConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     code: typing.Optional[Code] = None,
     max_batch_size: typing.Optional[jsii.Number] = None,
-    pipeline_config: typing.Optional[typing.Sequence[IAppsyncFunction]] = None,
+    pipeline_config: typing.Optional[typing.Sequence[_IFunctionConfigurationRef_6eb53e57]] = None,
     request_mapping_template: typing.Optional[MappingTemplate] = None,
     response_mapping_template: typing.Optional[MappingTemplate] = None,
     runtime: typing.Optional[FunctionRuntime] = None,
@@ -29384,7 +29467,7 @@ def _typecheckingstub__fe6f3e60857395308a8a844c5a41064caae65e42a2597bef9b2139e42
     caching_config: typing.Optional[typing.Union[CachingConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     code: typing.Optional[Code] = None,
     max_batch_size: typing.Optional[jsii.Number] = None,
-    pipeline_config: typing.Optional[typing.Sequence[IAppsyncFunction]] = None,
+    pipeline_config: typing.Optional[typing.Sequence[_IFunctionConfigurationRef_6eb53e57]] = None,
     request_mapping_template: typing.Optional[MappingTemplate] = None,
     response_mapping_template: typing.Optional[MappingTemplate] = None,
     runtime: typing.Optional[FunctionRuntime] = None,
@@ -29409,7 +29492,7 @@ def _typecheckingstub__40565593cb0b74633173faf6f073987b024d4b7af8c07e296173c630a
     pass
 
 def _typecheckingstub__045c4bbd28d6b47aba2e105fffdc95a54744a147dd39c45d3bda36713099050d(
-    api: IGraphqlApi,
+    api: _IGraphQLApiRef_d46d77ba,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -29552,7 +29635,7 @@ def _typecheckingstub__d2635987984d671876790f1b9916827c51702b8353c8bb7af6c548772
 
 def _typecheckingstub__1f6e3305d2e511cd982e7e9c99e379247e0c7cfe78eb565d9f221fd42534a19b(
     *,
-    api: IApi,
+    api: _IApiRef_f01990a1,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -29568,7 +29651,7 @@ def _typecheckingstub__8e3205022ee6f0dc9f2f97372b4cbf8675fc7fe75c1e1a9913fe0ccfc
     read_only_access: typing.Optional[builtins.bool] = None,
     use_caller_credentials: typing.Optional[builtins.bool] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
-    api: IApi,
+    api: _IApiRef_f01990a1,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -29577,7 +29660,7 @@ def _typecheckingstub__8e3205022ee6f0dc9f2f97372b4cbf8675fc7fe75c1e1a9913fe0ccfc
 
 def _typecheckingstub__4482a19c025dd759c4a5aed8914a6cb81ebccddfee2f8adfe940ea0ac69e0756(
     *,
-    api: IApi,
+    api: _IApiRef_f01990a1,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -29594,7 +29677,7 @@ def _typecheckingstub__751e9252df0f4dec6b9673ceb1252eeb40bdadeb4b99c3c137f438833
     *,
     event_bus: _IEventBus_88d13111,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
-    api: IApi,
+    api: _IApiRef_f01990a1,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -29603,7 +29686,7 @@ def _typecheckingstub__751e9252df0f4dec6b9673ceb1252eeb40bdadeb4b99c3c137f438833
 
 def _typecheckingstub__26cb85c4a1a35b8c2988b9cf87941489373d3aecf9bb5d79fde3c9bae1188534(
     *,
-    api: IApi,
+    api: _IApiRef_f01990a1,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -29619,7 +29702,7 @@ def _typecheckingstub__9ccf0d7058c4e612ecff60cbb4c6cbd550eaded275ea288336ff11796
     endpoint: builtins.str,
     authorization_config: typing.Optional[typing.Union[AppSyncAwsIamConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
-    api: IApi,
+    api: _IApiRef_f01990a1,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -29628,7 +29711,7 @@ def _typecheckingstub__9ccf0d7058c4e612ecff60cbb4c6cbd550eaded275ea288336ff11796
 
 def _typecheckingstub__1b2ed0da8cb5963be25790630dbf330501d1f595ba353f2ce4c07dfb06641d02(
     *,
-    api: IApi,
+    api: _IApiRef_f01990a1,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -29644,7 +29727,7 @@ def _typecheckingstub__6570e71a473fb67648ebccadc18077d6b695534f3b200dcdde0141a73
     *,
     lambda_function: _IFunction_6adb0ab8,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
-    api: IApi,
+    api: _IApiRef_f01990a1,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -29653,7 +29736,7 @@ def _typecheckingstub__6570e71a473fb67648ebccadc18077d6b695534f3b200dcdde0141a73
 
 def _typecheckingstub__200b21ee48c8af5030c949707e06e3236c3405921281c9da3283da4c709fe855(
     *,
-    api: IApi,
+    api: _IApiRef_f01990a1,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -29668,7 +29751,7 @@ def _typecheckingstub__88cfa235d90702f5ee16305d7ffe9689757c3fd46618d484c32d16c0e
     *,
     domain: _IDomain_3c13cbdd,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
-    api: IApi,
+    api: _IApiRef_f01990a1,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -29677,7 +29760,7 @@ def _typecheckingstub__88cfa235d90702f5ee16305d7ffe9689757c3fd46618d484c32d16c0e
 
 def _typecheckingstub__0a676730e1235a7cc00912af7bd8abae3b884363a210d1ff618c3490739a974a(
     *,
-    api: IApi,
+    api: _IApiRef_f01990a1,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -29694,7 +29777,7 @@ def _typecheckingstub__ddbc89ded9404d51fd44ef8e474fdc5da0707ee33332ac5e2af8fe34b
     serverless_cluster: _IServerlessCluster_adbbb720,
     database_name: typing.Optional[builtins.str] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
-    api: IApi,
+    api: _IApiRef_f01990a1,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -29703,7 +29786,7 @@ def _typecheckingstub__ddbc89ded9404d51fd44ef8e474fdc5da0707ee33332ac5e2af8fe34b
 
 def _typecheckingstub__c6401699728fce6d8c5255208e28cfb4acbff752cc526b9a6d781597df21daba(
     *,
-    api: IApi,
+    api: _IApiRef_f01990a1,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -29716,7 +29799,7 @@ def _typecheckingstub__c6401699728fce6d8c5255208e28cfb4acbff752cc526b9a6d781597d
 
 def _typecheckingstub__81af3fcfcbbb79bfe6e2de7efc857612f0718089ff8e07ede9e3d1b4b3056e71(
     *,
-    api: IApi,
+    api: _IApiRef_f01990a1,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -29810,7 +29893,7 @@ def _typecheckingstub__42501afdb54f6472ab998a801568e1b317b9ee60d07481b1c90ef88e5
 
 def _typecheckingstub__bea2d00276bc1b45e9a26da67eba934f53db82f49e29640aa05289870be94f55(
     *,
-    api: IGraphqlApi,
+    api: _IGraphQLApiRef_d46d77ba,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -29866,7 +29949,7 @@ def _typecheckingstub__fb501305798213be783a45c59d39c261a182cd09ad0d40d480253e28a
     read_only_access: typing.Optional[builtins.bool] = None,
     use_caller_credentials: typing.Optional[builtins.bool] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
-    api: IGraphqlApi,
+    api: _IGraphQLApiRef_d46d77ba,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -29875,7 +29958,7 @@ def _typecheckingstub__fb501305798213be783a45c59d39c261a182cd09ad0d40d480253e28a
 
 def _typecheckingstub__4b2cd0eab2d8bf885992981b7b491d32e73f943353d4564c2a504d3154462a65(
     *,
-    api: IGraphqlApi,
+    api: _IGraphQLApiRef_d46d77ba,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -29892,7 +29975,7 @@ def _typecheckingstub__0e54d95c1db8116ebc9ebacf3e6a8c3fa0a47859bc0f72493b58e8941
     *,
     domain: _IDomain_0c9006b4,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
-    api: IGraphqlApi,
+    api: _IGraphQLApiRef_d46d77ba,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -29901,7 +29984,7 @@ def _typecheckingstub__0e54d95c1db8116ebc9ebacf3e6a8c3fa0a47859bc0f72493b58e8941
 
 def _typecheckingstub__6153bccef60ecdf62438c139adee9ab9afb1c0361813760bad95eae9e5f43975(
     *,
-    api: IGraphqlApi,
+    api: _IGraphQLApiRef_d46d77ba,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -30035,7 +30118,7 @@ def _typecheckingstub__ac2aea20ec487bb19cfbb1a301369050ec488bf91096759b3fb3c226c
     *,
     event_bus: _IEventBus_88d13111,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
-    api: IGraphqlApi,
+    api: _IGraphQLApiRef_d46d77ba,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -30044,7 +30127,7 @@ def _typecheckingstub__ac2aea20ec487bb19cfbb1a301369050ec488bf91096759b3fb3c226c
 
 def _typecheckingstub__e00da245f6e9b76ee0cfe04414b7bce864ba4a2790c154b23dc47e4ee33a9f8a(
     *,
-    api: IGraphqlApi,
+    api: _IGraphQLApiRef_d46d77ba,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -30174,7 +30257,7 @@ def _typecheckingstub__d8efe28cf6861260ad6e47a65b8be5e006016a7c27a4ee3f2cac0e898
     caching_config: typing.Optional[typing.Union[CachingConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     code: typing.Optional[Code] = None,
     max_batch_size: typing.Optional[jsii.Number] = None,
-    pipeline_config: typing.Optional[typing.Sequence[IAppsyncFunction]] = None,
+    pipeline_config: typing.Optional[typing.Sequence[_IFunctionConfigurationRef_6eb53e57]] = None,
     request_mapping_template: typing.Optional[MappingTemplate] = None,
     response_mapping_template: typing.Optional[MappingTemplate] = None,
     runtime: typing.Optional[FunctionRuntime] = None,
@@ -30218,7 +30301,7 @@ def _typecheckingstub__08c251fa7555c0770f24a577dcd59d2f51898cf46299807eda335998d
     endpoint: builtins.str,
     authorization_config: typing.Optional[typing.Union[AwsIamConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
-    api: IGraphqlApi,
+    api: _IGraphQLApiRef_d46d77ba,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -30227,7 +30310,7 @@ def _typecheckingstub__08c251fa7555c0770f24a577dcd59d2f51898cf46299807eda335998d
 
 def _typecheckingstub__91183bd6fd5a10b6ae91fe2450b1ca1b99e291ac5b272e3c6ccfffaa26a2b05a(
     *,
-    api: IGraphqlApi,
+    api: _IGraphQLApiRef_d46d77ba,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -30243,7 +30326,7 @@ def _typecheckingstub__72e9eb5236f193b30b614aad3d73de37944e1dc26e925a87b1683e077
     *,
     lambda_function: _IFunction_6adb0ab8,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
-    api: IGraphqlApi,
+    api: _IGraphQLApiRef_d46d77ba,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -30252,7 +30335,7 @@ def _typecheckingstub__72e9eb5236f193b30b614aad3d73de37944e1dc26e925a87b1683e077
 
 def _typecheckingstub__bd360baebe2cc73f8afb0301b4c78dd7e9c49ef5e7f543f97d3ca94cc7c49d3f(
     *,
-    api: IGraphqlApi,
+    api: _IGraphQLApiRef_d46d77ba,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -30267,7 +30350,7 @@ def _typecheckingstub__cf111cfb617596222f7a6819bc86667f0aa3335d65397549bc520d302
     *,
     domain: _IDomain_3c13cbdd,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
-    api: IGraphqlApi,
+    api: _IGraphQLApiRef_d46d77ba,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -30276,7 +30359,7 @@ def _typecheckingstub__cf111cfb617596222f7a6819bc86667f0aa3335d65397549bc520d302
 
 def _typecheckingstub__6d43f1439475200e8855550373e564cf774bcfb1c24a9ca37182ca3143b83a31(
     *,
-    api: IGraphqlApi,
+    api: _IGraphQLApiRef_d46d77ba,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -30305,7 +30388,7 @@ def _typecheckingstub__568b99c9d3f9eb137243f7121761a99603a4994f00bae5826acff0b7a
     serverless_cluster: _IServerlessCluster_adbbb720,
     database_name: typing.Optional[builtins.str] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
-    api: IGraphqlApi,
+    api: _IGraphQLApiRef_d46d77ba,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -30314,7 +30397,7 @@ def _typecheckingstub__568b99c9d3f9eb137243f7121761a99603a4994f00bae5826acff0b7a
 
 def _typecheckingstub__c062ac22fbaef687d5273408a83f4b49e1466d504c5d1d22aa7e464c31ce4e9d(
     *,
-    api: IGraphqlApi,
+    api: _IGraphQLApiRef_d46d77ba,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -30327,7 +30410,7 @@ def _typecheckingstub__c062ac22fbaef687d5273408a83f4b49e1466d504c5d1d22aa7e464c3
 
 def _typecheckingstub__2a4c5dd27ab94dcef9db42bba97fd0abc5e49c989bce0ba0ca35793d1db20a70(
     *,
-    api: IGraphqlApi,
+    api: _IGraphQLApiRef_d46d77ba,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     service_role: typing.Optional[_IRole_235f5d8e] = None,

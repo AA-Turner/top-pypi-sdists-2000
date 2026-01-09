@@ -855,6 +855,7 @@ from ..interfaces.aws_batch import (
     ServiceEnvironmentReference as _ServiceEnvironmentReference_9a7dc7ee,
 )
 from ..interfaces.aws_ec2 import IPlacementGroupRef as _IPlacementGroupRef_5d6e601f
+from ..interfaces.aws_efs import IFileSystemRef as _IFileSystemRef_3dcf8b98
 from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 
 
@@ -936,9 +937,9 @@ class AllocationStrategy(enum.Enum):
     it is recommended to use as many instance classes as is feasible for your workload.
     '''
     SPOT_CAPACITY_OPTIMIZED = "SPOT_CAPACITY_OPTIMIZED"
-    '''If your workflow tolerates interruptions, you should enable ``spot`` on your ``ComputeEnvironment`` and use ``SPOT_CAPACITY_OPTIMIZED`` (this is the default if ``spot`` is enabled).
+    '''If your workflow tolerates interruptions, you should enable ``spot`` on your ``ComputeEnvironment`` and use ``SPOT_CAPACITY_OPTIMIZED``.
 
-    This will tell Batch to choose the instance types from the ones you’ve specified that have
+    This will tell Batch to choose the instance types from the ones you've specified that have
     the most spot capacity available to minimize the chance of interruption.
     To get the most benefit from your spot instances,
     you should allow Batch to choose from as many different instance types as possible.
@@ -3260,48 +3261,6 @@ class CfnJobDefinition(
             type_hints = typing.get_type_hints(_typecheckingstub__6a7771f6bacf9a95870b88b75bad5dc2e0b21b9d2915228ca74533275287a864)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForJobDefinition", [resource]))
-
-    @jsii.member(jsii_name="fromJobDefinitionArn")
-    @builtins.classmethod
-    def from_job_definition_arn(
-        cls,
-        scope: "_constructs_77d1e7e8.Construct",
-        id: builtins.str,
-        arn: builtins.str,
-    ) -> "_IJobDefinitionRef_ae0cae56":
-        '''Creates a new IJobDefinitionRef from an ARN.
-
-        :param scope: -
-        :param id: -
-        :param arn: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__9eb64c713801d4b9b5ffb80a279b71c78cb6317fd0c771df22f2646f9d957f0d)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
-        return typing.cast("_IJobDefinitionRef_ae0cae56", jsii.sinvoke(cls, "fromJobDefinitionArn", [scope, id, arn]))
-
-    @jsii.member(jsii_name="fromJobDefinitionName")
-    @builtins.classmethod
-    def from_job_definition_name(
-        cls,
-        scope: "_constructs_77d1e7e8.Construct",
-        id: builtins.str,
-        job_definition_name: builtins.str,
-    ) -> "_IJobDefinitionRef_ae0cae56":
-        '''Creates a new IJobDefinitionRef from a jobDefinitionName.
-
-        :param scope: -
-        :param id: -
-        :param job_definition_name: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__825692ecdcf61885a93251433de856e5a5f6a3a7d68b8673883d418e98bd1956)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument job_definition_name", value=job_definition_name, expected_type=type_hints["job_definition_name"])
-        return typing.cast("_IJobDefinitionRef_ae0cae56", jsii.sinvoke(cls, "fromJobDefinitionName", [scope, id, job_definition_name]))
 
     @jsii.member(jsii_name="isCfnJobDefinition")
     @builtins.classmethod
@@ -14142,7 +14101,7 @@ class EcsVolume(
     def efs(
         cls,
         *,
-        file_system: "_IFileSystem_b2d3a7cb",
+        file_system: "_IFileSystemRef_3dcf8b98",
         access_point_id: typing.Optional[builtins.str] = None,
         enable_transit_encryption: typing.Optional[builtins.bool] = None,
         root_directory: typing.Optional[builtins.str] = None,
@@ -14343,13 +14302,13 @@ class EfsVolume(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_batch as batch
-        from aws_cdk import aws_efs as efs
+        from aws_cdk.interfaces import aws_efs as interfaces_efs
         
-        # file_system: efs.FileSystem
+        # file_system_ref: interfaces_efs.IFileSystemRef
         
         efs_volume = batch.EfsVolume(
             container_path="containerPath",
-            file_system=file_system,
+            file_system=file_system_ref,
             name="name",
         
             # the properties below are optional
@@ -14365,7 +14324,7 @@ class EfsVolume(
     def __init__(
         self,
         *,
-        file_system: "_IFileSystem_b2d3a7cb",
+        file_system: "_IFileSystemRef_3dcf8b98",
         access_point_id: typing.Optional[builtins.str] = None,
         enable_transit_encryption: typing.Optional[builtins.bool] = None,
         root_directory: typing.Optional[builtins.str] = None,
@@ -14506,7 +14465,7 @@ class EfsVolumeOptions(EcsVolumeOptions):
         container_path: builtins.str,
         name: builtins.str,
         readonly: typing.Optional[builtins.bool] = None,
-        file_system: "_IFileSystem_b2d3a7cb",
+        file_system: "_IFileSystemRef_3dcf8b98",
         access_point_id: typing.Optional[builtins.str] = None,
         enable_transit_encryption: typing.Optional[builtins.bool] = None,
         root_directory: typing.Optional[builtins.str] = None,
@@ -14602,11 +14561,11 @@ class EfsVolumeOptions(EcsVolumeOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def file_system(self) -> "_IFileSystem_b2d3a7cb":
+    def file_system(self) -> "_IFileSystemRef_3dcf8b98":
         '''The EFS File System that supports this volume.'''
         result = self._values.get("file_system")
         assert result is not None, "Required property 'file_system' is missing"
-        return typing.cast("_IFileSystem_b2d3a7cb", result)
+        return typing.cast("_IFileSystemRef_3dcf8b98", result)
 
     @builtins.property
     def access_point_id(self) -> typing.Optional[builtins.str]:
@@ -16197,7 +16156,11 @@ class HostVolumeOptions(EcsVolumeOptions):
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_batch.IComputeEnvironment")
-class IComputeEnvironment(_IResource_c80c4260, typing_extensions.Protocol):
+class IComputeEnvironment(
+    _IResource_c80c4260,
+    _IComputeEnvironmentRef_eab02155,
+    typing_extensions.Protocol,
+):
     '''Represents a ComputeEnvironment.'''
 
     @builtins.property
@@ -16248,6 +16211,7 @@ class IComputeEnvironment(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IComputeEnvironmentProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IComputeEnvironmentRef_eab02155), # type: ignore[misc]
 ):
     '''Represents a ComputeEnvironment.'''
 
@@ -17428,7 +17392,11 @@ typing.cast(typing.Any, IEksContainerDefinition).__jsii_proxy_class__ = lambda :
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_batch.IJobDefinition")
-class IJobDefinition(_IResource_c80c4260, typing_extensions.Protocol):
+class IJobDefinition(
+    _IResource_c80c4260,
+    _IJobDefinitionRef_ae0cae56,
+    typing_extensions.Protocol,
+):
     '''Represents a JobDefinition.'''
 
     @builtins.property
@@ -17516,6 +17484,7 @@ class IJobDefinition(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IJobDefinitionProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IJobDefinitionRef_ae0cae56), # type: ignore[misc]
 ):
     '''Represents a JobDefinition.'''
 
@@ -17611,7 +17580,11 @@ typing.cast(typing.Any, IJobDefinition).__jsii_proxy_class__ = lambda : _IJobDef
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_batch.IJobQueue")
-class IJobQueue(_IResource_c80c4260, typing_extensions.Protocol):
+class IJobQueue(
+    _IResource_c80c4260,
+    _IJobQueueRef_2f1c7bda,
+    typing_extensions.Protocol,
+):
     '''Represents a JobQueue.'''
 
     @builtins.property
@@ -17687,7 +17660,7 @@ class IJobQueue(_IResource_c80c4260, typing_extensions.Protocol):
     @jsii.member(jsii_name="addComputeEnvironment")
     def add_compute_environment(
         self,
-        compute_environment: "IComputeEnvironment",
+        compute_environment: "_IComputeEnvironmentRef_eab02155",
         order: jsii.Number,
     ) -> None:
         '''Add a ``ComputeEnvironment`` to this Queue.
@@ -17702,6 +17675,7 @@ class IJobQueue(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IJobQueueProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IJobQueueRef_2f1c7bda), # type: ignore[misc]
 ):
     '''Represents a JobQueue.'''
 
@@ -17780,7 +17754,7 @@ class _IJobQueueProxy(
     @jsii.member(jsii_name="addComputeEnvironment")
     def add_compute_environment(
         self,
-        compute_environment: "IComputeEnvironment",
+        compute_environment: "_IComputeEnvironmentRef_eab02155",
         order: jsii.Number,
     ) -> None:
         '''Add a ``ComputeEnvironment`` to this Queue.
@@ -18071,7 +18045,7 @@ class IManagedEc2EcsComputeEnvironment(
         :default:
 
         - ``BEST_FIT_PROGRESSIVE`` if not using Spot instances,
-        ``SPOT_CAPACITY_OPTIMIZED`` if using Spot instances.
+        ``SPOT_PRICE_CAPACITY_OPTIMIZED`` if using Spot instances.
         '''
         ...
 
@@ -18223,7 +18197,7 @@ class _IManagedEc2EcsComputeEnvironmentProxy(
         :default:
 
         - ``BEST_FIT_PROGRESSIVE`` if not using Spot instances,
-        ``SPOT_CAPACITY_OPTIMIZED`` if using Spot instances.
+        ``SPOT_PRICE_CAPACITY_OPTIMIZED`` if using Spot instances.
         '''
         return typing.cast(typing.Optional["AllocationStrategy"], jsii.get(self, "allocationStrategy"))
 
@@ -18351,7 +18325,11 @@ typing.cast(typing.Any, IManagedEc2EcsComputeEnvironment).__jsii_proxy_class__ =
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_batch.ISchedulingPolicy")
-class ISchedulingPolicy(_IResource_c80c4260, typing_extensions.Protocol):
+class ISchedulingPolicy(
+    _IResource_c80c4260,
+    _ISchedulingPolicyRef_a7864c7c,
+    typing_extensions.Protocol,
+):
     '''Represents a Scheduling Policy.
 
     Scheduling Policies tell the Batch
@@ -18379,6 +18357,7 @@ class ISchedulingPolicy(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _ISchedulingPolicyProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_ISchedulingPolicyRef_a7864c7c), # type: ignore[misc]
 ):
     '''Represents a Scheduling Policy.
 
@@ -18683,7 +18662,7 @@ class JobQueue(
         job_queue_name: typing.Optional[builtins.str] = None,
         job_state_time_limit_actions: typing.Optional[typing.Sequence[typing.Union["JobStateTimeLimitAction", typing.Dict[builtins.str, typing.Any]]]] = None,
         priority: typing.Optional[jsii.Number] = None,
-        scheduling_policy: typing.Optional["ISchedulingPolicy"] = None,
+        scheduling_policy: typing.Optional["_ISchedulingPolicyRef_a7864c7c"] = None,
     ) -> None:
         '''
         :param scope: -
@@ -18734,7 +18713,7 @@ class JobQueue(
     @jsii.member(jsii_name="addComputeEnvironment")
     def add_compute_environment(
         self,
-        compute_environment: "IComputeEnvironment",
+        compute_environment: "_IComputeEnvironmentRef_eab02155",
         order: jsii.Number,
     ) -> None:
         '''Add a ``ComputeEnvironment`` to this Queue.
@@ -18789,6 +18768,12 @@ class JobQueue(
         return typing.cast(builtins.str, jsii.get(self, "jobQueueName"))
 
     @builtins.property
+    @jsii.member(jsii_name="jobQueueRef")
+    def job_queue_ref(self) -> "_JobQueueReference_1a1e9db8":
+        '''A reference to a JobQueue resource.'''
+        return typing.cast("_JobQueueReference_1a1e9db8", jsii.get(self, "jobQueueRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="priority")
     def priority(self) -> jsii.Number:
         '''The priority of the job queue.
@@ -18839,7 +18824,7 @@ class JobQueueProps:
         job_queue_name: typing.Optional[builtins.str] = None,
         job_state_time_limit_actions: typing.Optional[typing.Sequence[typing.Union["JobStateTimeLimitAction", typing.Dict[builtins.str, typing.Any]]]] = None,
         priority: typing.Optional[jsii.Number] = None,
-        scheduling_policy: typing.Optional["ISchedulingPolicy"] = None,
+        scheduling_policy: typing.Optional["_ISchedulingPolicyRef_a7864c7c"] = None,
     ) -> None:
         '''Props to configure a JobQueue.
 
@@ -18968,7 +18953,7 @@ class JobQueueProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def scheduling_policy(self) -> typing.Optional["ISchedulingPolicy"]:
+    def scheduling_policy(self) -> typing.Optional["_ISchedulingPolicyRef_a7864c7c"]:
         '''The SchedulingPolicy for this JobQueue.
 
         Instructs the Scheduler how to schedule different jobs.
@@ -18976,7 +18961,7 @@ class JobQueueProps:
         :default: - no scheduling policy
         '''
         result = self._values.get("scheduling_policy")
-        return typing.cast(typing.Optional["ISchedulingPolicy"], result)
+        return typing.cast(typing.Optional["_ISchedulingPolicyRef_a7864c7c"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -19787,7 +19772,7 @@ class ManagedEc2EcsComputeEnvironment(
         '''
         :param scope: -
         :param id: -
-        :param allocation_strategy: The allocation strategy to use if not enough instances of the best fitting instance type can be allocated. Default: - ``BEST_FIT_PROGRESSIVE`` if not using Spot instances, ``SPOT_CAPACITY_OPTIMIZED`` if using Spot instances.
+        :param allocation_strategy: The allocation strategy to use if not enough instances of the best fitting instance type can be allocated. Default: - ``BEST_FIT_PROGRESSIVE`` if not using Spot instances, ``SPOT_PRICE_CAPACITY_OPTIMIZED`` if using Spot instances.
         :param default_instance_classes: Use batch's default instance types. A simpler way to choose up-to-date instance classes based on region instead of specifying exact instance classes. Default: - choose from instanceTypes and instanceClasses
         :param images: Configure which AMIs this Compute Environment can launch. If you specify this property with only ``image`` specified, then the ``imageType`` will default to ``ECS_AL2``. *If your image needs GPU resources, specify ``ECS_AL2_NVIDIA``; otherwise, the instances will not be able to properly join the ComputeEnvironment*. Default: - ECS_AL2 for non-GPU instances, ECS_AL2_NVIDIA for GPU instances
         :param instance_classes: The instance classes that this Compute Environment can launch. Which one is chosen depends on the ``AllocationStrategy`` used. Batch will automatically choose the instance size. Default: - the instances Batch considers will be used (currently C4, M4, and R4)
@@ -19905,6 +19890,12 @@ class ManagedEc2EcsComputeEnvironment(
     def compute_environment_name(self) -> builtins.str:
         '''The name of the ComputeEnvironment.'''
         return typing.cast(builtins.str, jsii.get(self, "computeEnvironmentName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="computeEnvironmentRef")
+    def compute_environment_ref(self) -> "_ComputeEnvironmentReference_74ec9988":
+        '''A reference to a ComputeEnvironment resource.'''
+        return typing.cast("_ComputeEnvironmentReference_74ec9988", jsii.get(self, "computeEnvironmentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="connections")
@@ -20185,7 +20176,7 @@ class ManagedEc2EcsComputeEnvironmentProps(ManagedComputeEnvironmentProps):
         :param update_timeout: Only meaningful if ``terminateOnUpdate`` is ``false``. If so, when an infrastructure update is triggered, any running jobs will be allowed to run until ``updateTimeout`` has expired. Default: 30 minutes
         :param update_to_latest_image_version: Whether or not the AMI is updated to the latest one supported by Batch when an infrastructure update occurs. If you specify a specific AMI, this property will be ignored. Note: the CDK will never set this value by default, ``false`` will set by CFN. This is to avoid a deployment failure that occurs when this value is set. Default: false
         :param vpc_subnets: The VPC Subnets this Compute Environment will launch instances in. Default: new subnets will be created
-        :param allocation_strategy: The allocation strategy to use if not enough instances of the best fitting instance type can be allocated. Default: - ``BEST_FIT_PROGRESSIVE`` if not using Spot instances, ``SPOT_CAPACITY_OPTIMIZED`` if using Spot instances.
+        :param allocation_strategy: The allocation strategy to use if not enough instances of the best fitting instance type can be allocated. Default: - ``BEST_FIT_PROGRESSIVE`` if not using Spot instances, ``SPOT_PRICE_CAPACITY_OPTIMIZED`` if using Spot instances.
         :param default_instance_classes: Use batch's default instance types. A simpler way to choose up-to-date instance classes based on region instead of specifying exact instance classes. Default: - choose from instanceTypes and instanceClasses
         :param images: Configure which AMIs this Compute Environment can launch. If you specify this property with only ``image`` specified, then the ``imageType`` will default to ``ECS_AL2``. *If your image needs GPU resources, specify ``ECS_AL2_NVIDIA``; otherwise, the instances will not be able to properly join the ComputeEnvironment*. Default: - ECS_AL2 for non-GPU instances, ECS_AL2_NVIDIA for GPU instances
         :param instance_classes: The instance classes that this Compute Environment can launch. Which one is chosen depends on the ``AllocationStrategy`` used. Batch will automatically choose the instance size. Default: - the instances Batch considers will be used (currently C4, M4, and R4)
@@ -20456,7 +20447,7 @@ class ManagedEc2EcsComputeEnvironmentProps(ManagedComputeEnvironmentProps):
         :default:
 
         - ``BEST_FIT_PROGRESSIVE`` if not using Spot instances,
-        ``SPOT_CAPACITY_OPTIMIZED`` if using Spot instances.
+        ``SPOT_PRICE_CAPACITY_OPTIMIZED`` if using Spot instances.
         '''
         result = self._values.get("allocation_strategy")
         return typing.cast(typing.Optional["AllocationStrategy"], result)
@@ -20730,7 +20721,7 @@ class ManagedEc2EksComputeEnvironment(
         :param id: -
         :param eks_cluster: The cluster that backs this Compute Environment. Required for Compute Environments running Kubernetes jobs. Please ensure that you have followed the steps at https://docs.aws.amazon.com/batch/latest/userguide/getting-started-eks.html before attempting to deploy a ``ManagedEc2EksComputeEnvironment`` that uses this cluster. If you do not follow the steps in the link, the deployment fail with a message that the compute environment did not stabilize.
         :param kubernetes_namespace: The namespace of the Cluster.
-        :param allocation_strategy: The allocation strategy to use if not enough instances of the best fitting instance type can be allocated. Default: - ``BEST_FIT_PROGRESSIVE`` if not using Spot instances, ``SPOT_CAPACITY_OPTIMIZED`` if using Spot instances.
+        :param allocation_strategy: The allocation strategy to use if not enough instances of the best fitting instance type can be allocated. Default: - ``BEST_FIT_PROGRESSIVE`` if not using Spot instances, ``SPOT_PRICE_CAPACITY_OPTIMIZED`` if using Spot instances.
         :param default_instance_classes: Use batch's default instance types. A simpler way to choose up-to-date instance classes based on region instead of specifying exact instance classes. Default: - choose from instanceTypes and instanceClasses
         :param images: Configure which AMIs this Compute Environment can launch. Default: If ``imageKubernetesVersion`` is specified, - EKS_AL2 for non-GPU instances, EKS_AL2_NVIDIA for GPU instances, Otherwise, - ECS_AL2 for non-GPU instances, ECS_AL2_NVIDIA for GPU instances,
         :param instance_classes: The instance types that this Compute Environment can launch. Which one is chosen depends on the ``AllocationStrategy`` used. Batch will automatically choose the instance size. Default: - the instances Batch considers will be used (currently C4, M4, and R4)
@@ -20827,6 +20818,12 @@ class ManagedEc2EksComputeEnvironment(
     def compute_environment_name(self) -> builtins.str:
         '''The name of the ComputeEnvironment.'''
         return typing.cast(builtins.str, jsii.get(self, "computeEnvironmentName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="computeEnvironmentRef")
+    def compute_environment_ref(self) -> "_ComputeEnvironmentReference_74ec9988":
+        '''A reference to a ComputeEnvironment resource.'''
+        return typing.cast("_ComputeEnvironmentReference_74ec9988", jsii.get(self, "computeEnvironmentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="connections")
@@ -21127,7 +21124,7 @@ class ManagedEc2EksComputeEnvironmentProps(ManagedComputeEnvironmentProps):
         :param vpc_subnets: The VPC Subnets this Compute Environment will launch instances in. Default: new subnets will be created
         :param eks_cluster: The cluster that backs this Compute Environment. Required for Compute Environments running Kubernetes jobs. Please ensure that you have followed the steps at https://docs.aws.amazon.com/batch/latest/userguide/getting-started-eks.html before attempting to deploy a ``ManagedEc2EksComputeEnvironment`` that uses this cluster. If you do not follow the steps in the link, the deployment fail with a message that the compute environment did not stabilize.
         :param kubernetes_namespace: The namespace of the Cluster.
-        :param allocation_strategy: The allocation strategy to use if not enough instances of the best fitting instance type can be allocated. Default: - ``BEST_FIT_PROGRESSIVE`` if not using Spot instances, ``SPOT_CAPACITY_OPTIMIZED`` if using Spot instances.
+        :param allocation_strategy: The allocation strategy to use if not enough instances of the best fitting instance type can be allocated. Default: - ``BEST_FIT_PROGRESSIVE`` if not using Spot instances, ``SPOT_PRICE_CAPACITY_OPTIMIZED`` if using Spot instances.
         :param default_instance_classes: Use batch's default instance types. A simpler way to choose up-to-date instance classes based on region instead of specifying exact instance classes. Default: - choose from instanceTypes and instanceClasses
         :param images: Configure which AMIs this Compute Environment can launch. Default: If ``imageKubernetesVersion`` is specified, - EKS_AL2 for non-GPU instances, EKS_AL2_NVIDIA for GPU instances, Otherwise, - ECS_AL2 for non-GPU instances, ECS_AL2_NVIDIA for GPU instances,
         :param instance_classes: The instance types that this Compute Environment can launch. Which one is chosen depends on the ``AllocationStrategy`` used. Batch will automatically choose the instance size. Default: - the instances Batch considers will be used (currently C4, M4, and R4)
@@ -21472,7 +21469,7 @@ class ManagedEc2EksComputeEnvironmentProps(ManagedComputeEnvironmentProps):
         :default:
 
         - ``BEST_FIT_PROGRESSIVE`` if not using Spot instances,
-        ``SPOT_CAPACITY_OPTIMIZED`` if using Spot instances.
+        ``SPOT_PRICE_CAPACITY_OPTIMIZED`` if using Spot instances.
         '''
         result = self._values.get("allocation_strategy")
         return typing.cast(typing.Optional["AllocationStrategy"], result)
@@ -21895,6 +21892,12 @@ class MultiNodeJobDefinition(
         return typing.cast(builtins.str, jsii.get(self, "jobDefinitionName"))
 
     @builtins.property
+    @jsii.member(jsii_name="jobDefinitionRef")
+    def job_definition_ref(self) -> "_JobDefinitionReference_e67f0e8f":
+        '''A reference to a JobDefinition resource.'''
+        return typing.cast("_JobDefinitionReference_e67f0e8f", jsii.get(self, "jobDefinitionRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="retryStrategies")
     def retry_strategies(self) -> typing.List["RetryStrategy"]:
         '''Defines the retry behavior for this job.'''
@@ -22208,7 +22211,7 @@ class OrderedComputeEnvironment:
     def __init__(
         self,
         *,
-        compute_environment: "IComputeEnvironment",
+        compute_environment: "_IComputeEnvironmentRef_eab02155",
         order: jsii.Number,
     ) -> None:
         '''Assigns an order to a ComputeEnvironment.
@@ -22225,11 +22228,12 @@ class OrderedComputeEnvironment:
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_batch as batch
+            from aws_cdk.interfaces import aws_batch as interfaces_batch
             
-            # compute_environment: batch.IComputeEnvironment
+            # compute_environment_ref: interfaces_batch.IComputeEnvironmentRef
             
             ordered_compute_environment = batch.OrderedComputeEnvironment(
-                compute_environment=compute_environment,
+                compute_environment=compute_environment_ref,
                 order=123
             )
         '''
@@ -22243,11 +22247,11 @@ class OrderedComputeEnvironment:
         }
 
     @builtins.property
-    def compute_environment(self) -> "IComputeEnvironment":
+    def compute_environment(self) -> "_IComputeEnvironmentRef_eab02155":
         '''The ComputeEnvironment to link to this JobQueue.'''
         result = self._values.get("compute_environment")
         assert result is not None, "Required property 'compute_environment' is missing"
-        return typing.cast("IComputeEnvironment", result)
+        return typing.cast("_IComputeEnvironmentRef_eab02155", result)
 
     @builtins.property
     def order(self) -> jsii.Number:
@@ -23296,6 +23300,12 @@ class UnmanagedComputeEnvironment(
         return typing.cast(builtins.str, jsii.get(self, "computeEnvironmentName"))
 
     @builtins.property
+    @jsii.member(jsii_name="computeEnvironmentRef")
+    def compute_environment_ref(self) -> "_ComputeEnvironmentReference_74ec9988":
+        '''A reference to a ComputeEnvironment resource.'''
+        return typing.cast("_ComputeEnvironmentReference_74ec9988", jsii.get(self, "computeEnvironmentRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="enabled")
     def enabled(self) -> builtins.bool:
         '''Whether or not this ComputeEnvironment can accept jobs from a Queue.
@@ -24099,7 +24109,7 @@ class EcsJobDefinition(
     def grant_submit_job(
         self,
         identity: "_IGrantable_71c4f5de",
-        queue: "IJobQueue",
+        queue: "_IJobQueueRef_2f1c7bda",
     ) -> None:
         '''Grants the ``batch:submitJob`` permission to the identity on both this job definition and the ``queue``.
 
@@ -24135,6 +24145,12 @@ class EcsJobDefinition(
     def job_definition_name(self) -> builtins.str:
         '''The name of this job definition.'''
         return typing.cast(builtins.str, jsii.get(self, "jobDefinitionName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="jobDefinitionRef")
+    def job_definition_ref(self) -> "_JobDefinitionReference_e67f0e8f":
+        '''A reference to a JobDefinition resource.'''
+        return typing.cast("_JobDefinitionReference_e67f0e8f", jsii.get(self, "jobDefinitionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="retryStrategies")
@@ -25586,6 +25602,12 @@ class EksJobDefinition(
         return typing.cast(builtins.str, jsii.get(self, "jobDefinitionName"))
 
     @builtins.property
+    @jsii.member(jsii_name="jobDefinitionRef")
+    def job_definition_ref(self) -> "_JobDefinitionReference_e67f0e8f":
+        '''A reference to a JobDefinition resource.'''
+        return typing.cast("_JobDefinitionReference_e67f0e8f", jsii.get(self, "jobDefinitionRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="retryStrategies")
     def retry_strategies(self) -> typing.List["RetryStrategy"]:
         '''Defines the retry behavior for this job.'''
@@ -25775,6 +25797,12 @@ class FairshareSchedulingPolicy(
         return typing.cast(builtins.str, jsii.get(self, "schedulingPolicyName"))
 
     @builtins.property
+    @jsii.member(jsii_name="schedulingPolicyRef")
+    def scheduling_policy_ref(self) -> "_SchedulingPolicyReference_a55795c6":
+        '''A reference to a SchedulingPolicy resource.'''
+        return typing.cast("_SchedulingPolicyReference_a55795c6", jsii.get(self, "schedulingPolicyRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="shares")
     def shares(self) -> typing.List["Share"]:
         '''The shares that this Scheduling Policy applies to.
@@ -25940,6 +25968,12 @@ class FargateComputeEnvironment(
     def compute_environment_name(self) -> builtins.str:
         '''The name of the ComputeEnvironment.'''
         return typing.cast(builtins.str, jsii.get(self, "computeEnvironmentName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="computeEnvironmentRef")
+    def compute_environment_ref(self) -> "_ComputeEnvironmentReference_74ec9988":
+        '''A reference to a ComputeEnvironment resource.'''
+        return typing.cast("_ComputeEnvironmentReference_74ec9988", jsii.get(self, "computeEnvironmentRef"))
 
     @builtins.property
     @jsii.member(jsii_name="connections")
@@ -26455,22 +26489,6 @@ def _typecheckingstub__37959c68856ab28ea1a57515db976bc2215806d52c75f6166834df6ae
 
 def _typecheckingstub__6a7771f6bacf9a95870b88b75bad5dc2e0b21b9d2915228ca74533275287a864(
     resource: _IJobDefinitionRef_ae0cae56,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__9eb64c713801d4b9b5ffb80a279b71c78cb6317fd0c771df22f2646f9d957f0d(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    arn: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__825692ecdcf61885a93251433de856e5a5f6a3a7d68b8673883d418e98bd1956(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    job_definition_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -27508,7 +27526,7 @@ def _typecheckingstub__b405b7b8103439b5c13855083d1280f8820180f747c1ac9a750a3c719
     container_path: builtins.str,
     name: builtins.str,
     readonly: typing.Optional[builtins.bool] = None,
-    file_system: _IFileSystem_b2d3a7cb,
+    file_system: _IFileSystemRef_3dcf8b98,
     access_point_id: typing.Optional[builtins.str] = None,
     enable_transit_encryption: typing.Optional[builtins.bool] = None,
     root_directory: typing.Optional[builtins.str] = None,
@@ -27637,7 +27655,7 @@ def _typecheckingstub__f5760c945c49bffb46907844e0f7cabef0079a55024105a0d8989b459
     pass
 
 def _typecheckingstub__30f04cfa57530bae3195ca823d89191697e4817baf332ff9c874f63c1aa17378(
-    compute_environment: IComputeEnvironment,
+    compute_environment: _IComputeEnvironmentRef_eab02155,
     order: jsii.Number,
 ) -> None:
     """Type checking stubs"""
@@ -27676,7 +27694,7 @@ def _typecheckingstub__723df267b7e9bb5d5c528ba5a1aa218be0ca4022c78c16074c5d4f007
     job_queue_name: typing.Optional[builtins.str] = None,
     job_state_time_limit_actions: typing.Optional[typing.Sequence[typing.Union[JobStateTimeLimitAction, typing.Dict[builtins.str, typing.Any]]]] = None,
     priority: typing.Optional[jsii.Number] = None,
-    scheduling_policy: typing.Optional[ISchedulingPolicy] = None,
+    scheduling_policy: typing.Optional[_ISchedulingPolicyRef_a7864c7c] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -27690,7 +27708,7 @@ def _typecheckingstub__927f7893a20bdd97f0124f33006175bbc60d1cb42f965975007e87ce3
     pass
 
 def _typecheckingstub__b3030ed2cc2a8ebb7686a58abaedcea97e9b552f71fb4eeaee5ed34f80be0611(
-    compute_environment: IComputeEnvironment,
+    compute_environment: _IComputeEnvironmentRef_eab02155,
     order: jsii.Number,
 ) -> None:
     """Type checking stubs"""
@@ -27703,7 +27721,7 @@ def _typecheckingstub__5b59bccb0036592bc6b4a24ae3e42d2a7f256b983fea46bc1dd442b04
     job_queue_name: typing.Optional[builtins.str] = None,
     job_state_time_limit_actions: typing.Optional[typing.Sequence[typing.Union[JobStateTimeLimitAction, typing.Dict[builtins.str, typing.Any]]]] = None,
     priority: typing.Optional[jsii.Number] = None,
-    scheduling_policy: typing.Optional[ISchedulingPolicy] = None,
+    scheduling_policy: typing.Optional[_ISchedulingPolicyRef_a7864c7c] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -27987,7 +28005,7 @@ def _typecheckingstub__0837feb6b3566a68641c2717be9c305543bcee305dee167736c163fa4
 
 def _typecheckingstub__4c2884eb2663a515f166f283945e89e776e8746cc2892342371d23b305209fae(
     *,
-    compute_environment: IComputeEnvironment,
+    compute_environment: _IComputeEnvironmentRef_eab02155,
     order: jsii.Number,
 ) -> None:
     """Type checking stubs"""
@@ -28211,7 +28229,7 @@ def _typecheckingstub__fcd2083c6919be19736d1e4fe3eef645a270d62d578d35373b8fa71e7
 
 def _typecheckingstub__aa6f8bee532b4ca739d9516202fa21bb89ec9fddcfcb571b2af8da046a0ac756(
     identity: _IGrantable_71c4f5de,
-    queue: IJobQueue,
+    queue: _IJobQueueRef_2f1c7bda,
 ) -> None:
     """Type checking stubs"""
     pass

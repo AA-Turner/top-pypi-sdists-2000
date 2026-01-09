@@ -551,9 +551,9 @@ from ..aws_elasticloadbalancingv2 import (
 )
 from ..aws_iam import IRole as _IRole_235f5d8e
 from ..aws_lambda import IFunction as _IFunction_6adb0ab8
-from ..aws_servicediscovery import IService as _IService_46860ae1
 from ..aws_sqs import IQueue as _IQueue_7ed6f679
 from ..aws_stepfunctions import StateMachine as _StateMachine_a256d24f
+from ..interfaces.aws_servicediscovery import IServiceRef as _IServiceRef_687c8f74
 
 
 class HttpAlbIntegration(
@@ -1207,7 +1207,7 @@ class HttpServiceDiscoveryIntegration(
     def __init__(
         self,
         id: builtins.str,
-        service: "_IService_46860ae1",
+        service: "_IServiceRef_687c8f74",
         *,
         method: typing.Optional["_HttpMethod_4c4f3090"] = None,
         parameter_mapping: typing.Optional["_ParameterMapping_c11a48e0"] = None,
@@ -3084,7 +3084,7 @@ def _typecheckingstub__d60e74e57400fa0f9757a69ecb53197543ad6fd054f8168eaa56d7cd0
 
 def _typecheckingstub__dc876ae5ee3ca1141486563e7214d682fb6d2e3b3b1ab6b4f91e525d7a19b53e(
     id: builtins.str,
-    service: _IService_46860ae1,
+    service: _IServiceRef_687c8f74,
     *,
     method: typing.Optional[_HttpMethod_4c4f3090] = None,
     parameter_mapping: typing.Optional[_ParameterMapping_c11a48e0] = None,

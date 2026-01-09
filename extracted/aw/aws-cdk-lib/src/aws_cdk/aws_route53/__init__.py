@@ -8389,7 +8389,11 @@ typing.cast(typing.Any, IAliasRecordTarget).__jsii_proxy_class__ = lambda : _IAl
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53.IHealthCheck")
-class IHealthCheck(_IResource_c80c4260, typing_extensions.Protocol):
+class IHealthCheck(
+    _IResource_c80c4260,
+    _IHealthCheckRef_0389fb93,
+    typing_extensions.Protocol,
+):
     '''Imported or created health check.'''
 
     @builtins.property
@@ -8404,6 +8408,7 @@ class IHealthCheck(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IHealthCheckProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IHealthCheckRef_0389fb93), # type: ignore[misc]
 ):
     '''Imported or created health check.'''
 
@@ -8423,7 +8428,11 @@ typing.cast(typing.Any, IHealthCheck).__jsii_proxy_class__ = lambda : _IHealthCh
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53.IKeySigningKey")
-class IKeySigningKey(_IResource_c80c4260, typing_extensions.Protocol):
+class IKeySigningKey(
+    _IResource_c80c4260,
+    _IKeySigningKeyRef_4bded054,
+    typing_extensions.Protocol,
+):
     '''A Key Signing Key for a Route 53 Hosted Zone.'''
 
     @builtins.property
@@ -8456,6 +8465,7 @@ class IKeySigningKey(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IKeySigningKeyProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IKeySigningKeyRef_4bded054), # type: ignore[misc]
 ):
     '''A Key Signing Key for a Route 53 Hosted Zone.'''
 
@@ -8515,7 +8525,11 @@ typing.cast(typing.Any, INamedHostedZoneRef).__jsii_proxy_class__ = lambda : _IN
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53.IRecordSet")
-class IRecordSet(_IResource_c80c4260, typing_extensions.Protocol):
+class IRecordSet(
+    _IResource_c80c4260,
+    _IRecordSetRef_a2c21b67,
+    typing_extensions.Protocol,
+):
     '''A record set.'''
 
     @builtins.property
@@ -8527,6 +8541,7 @@ class IRecordSet(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IRecordSetProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IRecordSetRef_a2c21b67), # type: ignore[misc]
 ):
     '''A record set.'''
 
@@ -8659,6 +8674,12 @@ class KeySigningKey(
     def key_signing_key_name(self) -> builtins.str:
         '''The name of the key signing key.'''
         return typing.cast(builtins.str, jsii.get(self, "keySigningKeyName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="keySigningKeyRef")
+    def key_signing_key_ref(self) -> "_KeySigningKeyReference_6697db63":
+        '''A reference to a KeySigningKey resource.'''
+        return typing.cast("_KeySigningKeyReference_6697db63", jsii.get(self, "keySigningKeyRef"))
 
 
 @jsii.data_type(
@@ -9480,6 +9501,12 @@ class RecordSet(
     def domain_name(self) -> builtins.str:
         '''The domain name of the record.'''
         return typing.cast(builtins.str, jsii.get(self, "domainName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="recordSetRef")
+    def record_set_ref(self) -> "_RecordSetReference_9c3693d0":
+        '''A reference to a RecordSet resource.'''
+        return typing.cast("_RecordSetReference_9c3693d0", jsii.get(self, "recordSetRef"))
 
 
 @jsii.data_type(
@@ -15535,6 +15562,12 @@ class HealthCheck(
     def health_check_id(self) -> builtins.str:
         '''The ID of the health check.'''
         return typing.cast(builtins.str, jsii.get(self, "healthCheckId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="healthCheckRef")
+    def health_check_ref(self) -> "_HealthCheckReference_95ea67d3":
+        '''A reference to a HealthCheck resource.'''
+        return typing.cast("_HealthCheckReference_95ea67d3", jsii.get(self, "healthCheckRef"))
 
 
 class HttpsRecord(

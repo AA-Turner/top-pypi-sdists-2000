@@ -660,7 +660,9 @@ class CfnStreamGroup(
         
                 # the properties below are optional
                 always_on_capacity=123,
-                on_demand_capacity=123
+                maximum_capacity=123,
+                on_demand_capacity=123,
+                target_idle_capacity=123
             )],
             stream_class="streamClass",
         
@@ -692,7 +694,7 @@ class CfnStreamGroup(
         :param id: Construct identifier for this resource (unique in its scope).
         :param description: A descriptive label for the stream group.
         :param location_configurations: A set of one or more locations and the streaming capacity for each location. One of the locations MUST be your primary location, which is the AWS Region where you are specifying this resource.
-        :param stream_class: The target stream quality for sessions that are hosted in this stream group. Set a stream class that is appropriate to the type of content that you're streaming. Stream class determines the type of computing resources Amazon GameLift Streams uses and impacts the cost of streaming. The following options are available: A stream class can be one of the following: - *``gen5n_win2022`` (NVIDIA, ultra)* Supports applications with extremely high 3D scene complexity. Runs applications on Microsoft Windows Server 2022 Base and supports DirectX 12. Compatible with Unreal Engine versions up through 5.4, 32 and 64-bit applications, and anti-cheat technology. Uses NVIDIA A10G Tensor GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 8 vCPUs, 32 GB RAM, 24 GB VRAM - Tenancy: Supports 1 concurrent stream session - *``gen5n_high`` (NVIDIA, high)* Supports applications with moderate to high 3D scene complexity. Uses NVIDIA A10G Tensor GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 4 vCPUs, 16 GB RAM, 12 GB VRAM - Tenancy: Supports up to 2 concurrent stream sessions - *``gen5n_ultra`` (NVIDIA, ultra)* Supports applications with extremely high 3D scene complexity. Uses dedicated NVIDIA A10G Tensor GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 8 vCPUs, 32 GB RAM, 24 GB VRAM - Tenancy: Supports 1 concurrent stream session - *``gen4n_win2022`` (NVIDIA, ultra)* Supports applications with extremely high 3D scene complexity. Runs applications on Microsoft Windows Server 2022 Base and supports DirectX 12. Compatible with Unreal Engine versions up through 5.4, 32 and 64-bit applications, and anti-cheat technology. Uses NVIDIA T4 Tensor GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 8 vCPUs, 32 GB RAM, 16 GB VRAM - Tenancy: Supports 1 concurrent stream session - *``gen4n_high`` (NVIDIA, high)* Supports applications with moderate to high 3D scene complexity. Uses NVIDIA T4 Tensor GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 4 vCPUs, 16 GB RAM, 8 GB VRAM - Tenancy: Supports up to 2 concurrent stream sessions - *``gen4n_ultra`` (NVIDIA, ultra)* Supports applications with high 3D scene complexity. Uses dedicated NVIDIA T4 Tensor GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 8 vCPUs, 32 GB RAM, 16 GB VRAM - Tenancy: Supports 1 concurrent stream session
+        :param stream_class: The target stream quality for sessions that are hosted in this stream group. Set a stream class that is appropriate to the type of content that you're streaming. Stream class determines the type of computing resources Amazon GameLift Streams uses and impacts the cost of streaming. The following options are available: A stream class can be one of the following: - *``gen6n_pro_win2022`` (NVIDIA, pro)* Supports applications with extremely high 3D scene complexity which require maximum resources. Runs applications on Microsoft Windows Server 2022 Base and supports DirectX 12. Compatible with Unreal Engine versions up through 5.6, 32 and 64-bit applications, and anti-cheat technology. Uses NVIDIA L4 Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 16 vCPUs, 64 GB RAM, 24 GB VRAM - Tenancy: Supports 1 concurrent stream session - *``gen6n_pro`` (NVIDIA, pro)* Supports applications with extremely high 3D scene complexity which require maximum resources. Uses dedicated NVIDIA L4 Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 16 vCPUs, 64 GB RAM, 24 GB VRAM - Tenancy: Supports 1 concurrent stream session - *``gen6n_ultra_win2022`` (NVIDIA, ultra)* Supports applications with high 3D scene complexity. Runs applications on Microsoft Windows Server 2022 Base and supports DirectX 12. Compatible with Unreal Engine versions up through 5.6, 32 and 64-bit applications, and anti-cheat technology. Uses NVIDIA L4 Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 8 vCPUs, 32 GB RAM, 24 GB VRAM - Tenancy: Supports 1 concurrent stream session - *``gen6n_ultra`` (NVIDIA, ultra)* Supports applications with high 3D scene complexity. Uses dedicated NVIDIA L4 Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 8 vCPUs, 32 GB RAM, 24 GB VRAM - Tenancy: Supports 1 concurrent stream session - *``gen6n_high`` (NVIDIA, high)* Supports applications with moderate to high 3D scene complexity. Uses NVIDIA L4 Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 4 vCPUs, 16 GB RAM, 12 GB VRAM - Tenancy: Supports up to 2 concurrent stream sessions - *``gen6n_medium`` (NVIDIA, medium)* Supports applications with moderate 3D scene complexity. Uses NVIDIA L4 Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 2 vCPUs, 8 GB RAM, 6 GB VRAM - Tenancy: Supports up to 4 concurrent stream sessions - *``gen6n_small`` (NVIDIA, small)* Supports applications with lightweight 3D scene complexity and low CPU usage. Uses NVIDIA L4 Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 1 vCPUs, 4 GB RAM, 2 GB VRAM - Tenancy: Supports up to 12 concurrent stream sessions - *``gen5n_win2022`` (NVIDIA, ultra)* Supports applications with extremely high 3D scene complexity. Runs applications on Microsoft Windows Server 2022 Base and supports DirectX 12. Compatible with Unreal Engine versions up through 5.6, 32 and 64-bit applications, and anti-cheat technology. Uses NVIDIA A10G Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 8 vCPUs, 32 GB RAM, 24 GB VRAM - Tenancy: Supports 1 concurrent stream session - *``gen5n_high`` (NVIDIA, high)* Supports applications with moderate to high 3D scene complexity. Uses NVIDIA A10G Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 4 vCPUs, 16 GB RAM, 12 GB VRAM - Tenancy: Supports up to 2 concurrent stream sessions - *``gen5n_ultra`` (NVIDIA, ultra)* Supports applications with extremely high 3D scene complexity. Uses dedicated NVIDIA A10G Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 8 vCPUs, 32 GB RAM, 24 GB VRAM - Tenancy: Supports 1 concurrent stream session - *``gen4n_win2022`` (NVIDIA, ultra)* Supports applications with extremely high 3D scene complexity. Runs applications on Microsoft Windows Server 2022 Base and supports DirectX 12. Compatible with Unreal Engine versions up through 5.6, 32 and 64-bit applications, and anti-cheat technology. Uses NVIDIA T4 Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 8 vCPUs, 32 GB RAM, 16 GB VRAM - Tenancy: Supports 1 concurrent stream session - *``gen4n_high`` (NVIDIA, high)* Supports applications with moderate to high 3D scene complexity. Uses NVIDIA T4 Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 4 vCPUs, 16 GB RAM, 8 GB VRAM - Tenancy: Supports up to 2 concurrent stream sessions - *``gen4n_ultra`` (NVIDIA, ultra)* Supports applications with high 3D scene complexity. Uses dedicated NVIDIA T4 Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 8 vCPUs, 32 GB RAM, 16 GB VRAM - Tenancy: Supports 1 concurrent stream session
         :param default_application: Object that identifies the Amazon GameLift Streams application to stream with this stream group.
         :param tags: A list of labels to assign to the new stream group resource. Tags are developer-defined key-value pairs. Tagging AWS resources is useful for resource management, access management and cost allocation. See `Tagging AWS Resources <https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html>`_ in the *AWS General Reference* .
         '''
@@ -959,7 +961,9 @@ class CfnStreamGroup(
         name_mapping={
             "location_name": "locationName",
             "always_on_capacity": "alwaysOnCapacity",
+            "maximum_capacity": "maximumCapacity",
             "on_demand_capacity": "onDemandCapacity",
+            "target_idle_capacity": "targetIdleCapacity",
         },
     )
     class LocationConfigurationProperty:
@@ -968,15 +972,19 @@ class CfnStreamGroup(
             *,
             location_name: builtins.str,
             always_on_capacity: typing.Optional[jsii.Number] = None,
+            maximum_capacity: typing.Optional[jsii.Number] = None,
             on_demand_capacity: typing.Optional[jsii.Number] = None,
+            target_idle_capacity: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Configuration settings that define a stream group's stream capacity for a location.
 
             When configuring a location for the first time, you must specify a numeric value for at least one of the two capacity types.
 
             :param location_name: A location's name. For example, ``us-east-1`` . For a complete list of locations that Amazon GameLift Streams supports, refer to `Regions, quotas, and limitations <https://docs.aws.amazon.com/gameliftstreams/latest/developerguide/regions-quotas.html>`_ in the *Amazon GameLift Streams Developer Guide* .
-            :param always_on_capacity: The streaming capacity that is allocated and ready to handle stream requests without delay. You pay for this capacity whether it's in use or not. Best for quickest time from streaming request to streaming session. Default is 1 (2 for high stream classes) when creating a stream group or adding a location.
-            :param on_demand_capacity: The streaming capacity that Amazon GameLift Streams can allocate in response to stream requests, and then de-allocate when the session has terminated. This offers a cost control measure at the expense of a greater startup time (typically under 5 minutes). Default is 0 when creating a stream group or adding a location.
+            :param always_on_capacity: This setting, if non-zero, indicates minimum streaming capacity which is allocated to you and is never released back to the service. You pay for this base level of capacity at all times, whether used or idle.
+            :param maximum_capacity: 
+            :param on_demand_capacity: This field is deprecated. Use MaximumCapacity instead. This parameter is ignored when MaximumCapacity is specified. The streaming capacity that Amazon GameLift Streams can allocate in response to stream requests, and then de-allocate when the session has terminated. This offers a cost control measure at the expense of a greater startup time (typically under 5 minutes). Default is 0 when you create a stream group or add a location.
+            :param target_idle_capacity: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gameliftstreams-streamgroup-locationconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -992,21 +1000,29 @@ class CfnStreamGroup(
                 
                     # the properties below are optional
                     always_on_capacity=123,
-                    on_demand_capacity=123
+                    maximum_capacity=123,
+                    on_demand_capacity=123,
+                    target_idle_capacity=123
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__4c32e96242e189f6a75d890a7316a655383684ce9337b4906f2e3b49bec9a86e)
                 check_type(argname="argument location_name", value=location_name, expected_type=type_hints["location_name"])
                 check_type(argname="argument always_on_capacity", value=always_on_capacity, expected_type=type_hints["always_on_capacity"])
+                check_type(argname="argument maximum_capacity", value=maximum_capacity, expected_type=type_hints["maximum_capacity"])
                 check_type(argname="argument on_demand_capacity", value=on_demand_capacity, expected_type=type_hints["on_demand_capacity"])
+                check_type(argname="argument target_idle_capacity", value=target_idle_capacity, expected_type=type_hints["target_idle_capacity"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "location_name": location_name,
             }
             if always_on_capacity is not None:
                 self._values["always_on_capacity"] = always_on_capacity
+            if maximum_capacity is not None:
+                self._values["maximum_capacity"] = maximum_capacity
             if on_demand_capacity is not None:
                 self._values["on_demand_capacity"] = on_demand_capacity
+            if target_idle_capacity is not None:
+                self._values["target_idle_capacity"] = target_idle_capacity
 
         @builtins.property
         def location_name(self) -> builtins.str:
@@ -1022,9 +1038,9 @@ class CfnStreamGroup(
 
         @builtins.property
         def always_on_capacity(self) -> typing.Optional[jsii.Number]:
-            '''The streaming capacity that is allocated and ready to handle stream requests without delay.
+            '''This setting, if non-zero, indicates minimum streaming capacity which is allocated to you and is never released back to the service.
 
-            You pay for this capacity whether it's in use or not. Best for quickest time from streaming request to streaming session. Default is 1 (2 for high stream classes) when creating a stream group or adding a location.
+            You pay for this base level of capacity at all times, whether used or idle.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gameliftstreams-streamgroup-locationconfiguration.html#cfn-gameliftstreams-streamgroup-locationconfiguration-alwaysoncapacity
             '''
@@ -1032,14 +1048,30 @@ class CfnStreamGroup(
             return typing.cast(typing.Optional[jsii.Number], result)
 
         @builtins.property
-        def on_demand_capacity(self) -> typing.Optional[jsii.Number]:
-            '''The streaming capacity that Amazon GameLift Streams can allocate in response to stream requests, and then de-allocate when the session has terminated.
+        def maximum_capacity(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gameliftstreams-streamgroup-locationconfiguration.html#cfn-gameliftstreams-streamgroup-locationconfiguration-maximumcapacity
+            '''
+            result = self._values.get("maximum_capacity")
+            return typing.cast(typing.Optional[jsii.Number], result)
 
-            This offers a cost control measure at the expense of a greater startup time (typically under 5 minutes). Default is 0 when creating a stream group or adding a location.
+        @builtins.property
+        def on_demand_capacity(self) -> typing.Optional[jsii.Number]:
+            '''This field is deprecated. Use MaximumCapacity instead. This parameter is ignored when MaximumCapacity is specified.
+
+            The streaming capacity that Amazon GameLift Streams can allocate in response to stream requests, and then de-allocate when the session has terminated. This offers a cost control measure at the expense of a greater startup time (typically under 5 minutes). Default is 0 when you create a stream group or add a location.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gameliftstreams-streamgroup-locationconfiguration.html#cfn-gameliftstreams-streamgroup-locationconfiguration-ondemandcapacity
             '''
             result = self._values.get("on_demand_capacity")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def target_idle_capacity(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gameliftstreams-streamgroup-locationconfiguration.html#cfn-gameliftstreams-streamgroup-locationconfiguration-targetidlecapacity
+            '''
+            result = self._values.get("target_idle_capacity")
             return typing.cast(typing.Optional[jsii.Number], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -1079,7 +1111,7 @@ class CfnStreamGroupProps:
 
         :param description: A descriptive label for the stream group.
         :param location_configurations: A set of one or more locations and the streaming capacity for each location. One of the locations MUST be your primary location, which is the AWS Region where you are specifying this resource.
-        :param stream_class: The target stream quality for sessions that are hosted in this stream group. Set a stream class that is appropriate to the type of content that you're streaming. Stream class determines the type of computing resources Amazon GameLift Streams uses and impacts the cost of streaming. The following options are available: A stream class can be one of the following: - *``gen5n_win2022`` (NVIDIA, ultra)* Supports applications with extremely high 3D scene complexity. Runs applications on Microsoft Windows Server 2022 Base and supports DirectX 12. Compatible with Unreal Engine versions up through 5.4, 32 and 64-bit applications, and anti-cheat technology. Uses NVIDIA A10G Tensor GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 8 vCPUs, 32 GB RAM, 24 GB VRAM - Tenancy: Supports 1 concurrent stream session - *``gen5n_high`` (NVIDIA, high)* Supports applications with moderate to high 3D scene complexity. Uses NVIDIA A10G Tensor GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 4 vCPUs, 16 GB RAM, 12 GB VRAM - Tenancy: Supports up to 2 concurrent stream sessions - *``gen5n_ultra`` (NVIDIA, ultra)* Supports applications with extremely high 3D scene complexity. Uses dedicated NVIDIA A10G Tensor GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 8 vCPUs, 32 GB RAM, 24 GB VRAM - Tenancy: Supports 1 concurrent stream session - *``gen4n_win2022`` (NVIDIA, ultra)* Supports applications with extremely high 3D scene complexity. Runs applications on Microsoft Windows Server 2022 Base and supports DirectX 12. Compatible with Unreal Engine versions up through 5.4, 32 and 64-bit applications, and anti-cheat technology. Uses NVIDIA T4 Tensor GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 8 vCPUs, 32 GB RAM, 16 GB VRAM - Tenancy: Supports 1 concurrent stream session - *``gen4n_high`` (NVIDIA, high)* Supports applications with moderate to high 3D scene complexity. Uses NVIDIA T4 Tensor GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 4 vCPUs, 16 GB RAM, 8 GB VRAM - Tenancy: Supports up to 2 concurrent stream sessions - *``gen4n_ultra`` (NVIDIA, ultra)* Supports applications with high 3D scene complexity. Uses dedicated NVIDIA T4 Tensor GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 8 vCPUs, 32 GB RAM, 16 GB VRAM - Tenancy: Supports 1 concurrent stream session
+        :param stream_class: The target stream quality for sessions that are hosted in this stream group. Set a stream class that is appropriate to the type of content that you're streaming. Stream class determines the type of computing resources Amazon GameLift Streams uses and impacts the cost of streaming. The following options are available: A stream class can be one of the following: - *``gen6n_pro_win2022`` (NVIDIA, pro)* Supports applications with extremely high 3D scene complexity which require maximum resources. Runs applications on Microsoft Windows Server 2022 Base and supports DirectX 12. Compatible with Unreal Engine versions up through 5.6, 32 and 64-bit applications, and anti-cheat technology. Uses NVIDIA L4 Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 16 vCPUs, 64 GB RAM, 24 GB VRAM - Tenancy: Supports 1 concurrent stream session - *``gen6n_pro`` (NVIDIA, pro)* Supports applications with extremely high 3D scene complexity which require maximum resources. Uses dedicated NVIDIA L4 Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 16 vCPUs, 64 GB RAM, 24 GB VRAM - Tenancy: Supports 1 concurrent stream session - *``gen6n_ultra_win2022`` (NVIDIA, ultra)* Supports applications with high 3D scene complexity. Runs applications on Microsoft Windows Server 2022 Base and supports DirectX 12. Compatible with Unreal Engine versions up through 5.6, 32 and 64-bit applications, and anti-cheat technology. Uses NVIDIA L4 Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 8 vCPUs, 32 GB RAM, 24 GB VRAM - Tenancy: Supports 1 concurrent stream session - *``gen6n_ultra`` (NVIDIA, ultra)* Supports applications with high 3D scene complexity. Uses dedicated NVIDIA L4 Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 8 vCPUs, 32 GB RAM, 24 GB VRAM - Tenancy: Supports 1 concurrent stream session - *``gen6n_high`` (NVIDIA, high)* Supports applications with moderate to high 3D scene complexity. Uses NVIDIA L4 Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 4 vCPUs, 16 GB RAM, 12 GB VRAM - Tenancy: Supports up to 2 concurrent stream sessions - *``gen6n_medium`` (NVIDIA, medium)* Supports applications with moderate 3D scene complexity. Uses NVIDIA L4 Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 2 vCPUs, 8 GB RAM, 6 GB VRAM - Tenancy: Supports up to 4 concurrent stream sessions - *``gen6n_small`` (NVIDIA, small)* Supports applications with lightweight 3D scene complexity and low CPU usage. Uses NVIDIA L4 Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 1 vCPUs, 4 GB RAM, 2 GB VRAM - Tenancy: Supports up to 12 concurrent stream sessions - *``gen5n_win2022`` (NVIDIA, ultra)* Supports applications with extremely high 3D scene complexity. Runs applications on Microsoft Windows Server 2022 Base and supports DirectX 12. Compatible with Unreal Engine versions up through 5.6, 32 and 64-bit applications, and anti-cheat technology. Uses NVIDIA A10G Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 8 vCPUs, 32 GB RAM, 24 GB VRAM - Tenancy: Supports 1 concurrent stream session - *``gen5n_high`` (NVIDIA, high)* Supports applications with moderate to high 3D scene complexity. Uses NVIDIA A10G Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 4 vCPUs, 16 GB RAM, 12 GB VRAM - Tenancy: Supports up to 2 concurrent stream sessions - *``gen5n_ultra`` (NVIDIA, ultra)* Supports applications with extremely high 3D scene complexity. Uses dedicated NVIDIA A10G Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 8 vCPUs, 32 GB RAM, 24 GB VRAM - Tenancy: Supports 1 concurrent stream session - *``gen4n_win2022`` (NVIDIA, ultra)* Supports applications with extremely high 3D scene complexity. Runs applications on Microsoft Windows Server 2022 Base and supports DirectX 12. Compatible with Unreal Engine versions up through 5.6, 32 and 64-bit applications, and anti-cheat technology. Uses NVIDIA T4 Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 8 vCPUs, 32 GB RAM, 16 GB VRAM - Tenancy: Supports 1 concurrent stream session - *``gen4n_high`` (NVIDIA, high)* Supports applications with moderate to high 3D scene complexity. Uses NVIDIA T4 Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 4 vCPUs, 16 GB RAM, 8 GB VRAM - Tenancy: Supports up to 2 concurrent stream sessions - *``gen4n_ultra`` (NVIDIA, ultra)* Supports applications with high 3D scene complexity. Uses dedicated NVIDIA T4 Tensor Core GPU. - Reference resolution: 1080p - Reference frame rate: 60 fps - Workload specifications: 8 vCPUs, 32 GB RAM, 16 GB VRAM - Tenancy: Supports 1 concurrent stream session
         :param default_application: Object that identifies the Amazon GameLift Streams application to stream with this stream group.
         :param tags: A list of labels to assign to the new stream group resource. Tags are developer-defined key-value pairs. Tagging AWS resources is useful for resource management, access management and cost allocation. See `Tagging AWS Resources <https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html>`_ in the *AWS General Reference* .
 
@@ -1099,7 +1131,9 @@ class CfnStreamGroupProps:
             
                     # the properties below are optional
                     always_on_capacity=123,
-                    on_demand_capacity=123
+                    maximum_capacity=123,
+                    on_demand_capacity=123,
+                    target_idle_capacity=123
                 )],
                 stream_class="streamClass",
             
@@ -1162,32 +1196,67 @@ class CfnStreamGroupProps:
 
         A stream class can be one of the following:
 
-        - *``gen5n_win2022`` (NVIDIA, ultra)* Supports applications with extremely high 3D scene complexity. Runs applications on Microsoft Windows Server 2022 Base and supports DirectX 12. Compatible with Unreal Engine versions up through 5.4, 32 and 64-bit applications, and anti-cheat technology. Uses NVIDIA A10G Tensor GPU.
+        - *``gen6n_pro_win2022`` (NVIDIA, pro)* Supports applications with extremely high 3D scene complexity which require maximum resources. Runs applications on Microsoft Windows Server 2022 Base and supports DirectX 12. Compatible with Unreal Engine versions up through 5.6, 32 and 64-bit applications, and anti-cheat technology. Uses NVIDIA L4 Tensor Core GPU.
+        - Reference resolution: 1080p
+        - Reference frame rate: 60 fps
+        - Workload specifications: 16 vCPUs, 64 GB RAM, 24 GB VRAM
+        - Tenancy: Supports 1 concurrent stream session
+        - *``gen6n_pro`` (NVIDIA, pro)* Supports applications with extremely high 3D scene complexity which require maximum resources. Uses dedicated NVIDIA L4 Tensor Core GPU.
+        - Reference resolution: 1080p
+        - Reference frame rate: 60 fps
+        - Workload specifications: 16 vCPUs, 64 GB RAM, 24 GB VRAM
+        - Tenancy: Supports 1 concurrent stream session
+        - *``gen6n_ultra_win2022`` (NVIDIA, ultra)* Supports applications with high 3D scene complexity. Runs applications on Microsoft Windows Server 2022 Base and supports DirectX 12. Compatible with Unreal Engine versions up through 5.6, 32 and 64-bit applications, and anti-cheat technology. Uses NVIDIA L4 Tensor Core GPU.
         - Reference resolution: 1080p
         - Reference frame rate: 60 fps
         - Workload specifications: 8 vCPUs, 32 GB RAM, 24 GB VRAM
         - Tenancy: Supports 1 concurrent stream session
-        - *``gen5n_high`` (NVIDIA, high)* Supports applications with moderate to high 3D scene complexity. Uses NVIDIA A10G Tensor GPU.
+        - *``gen6n_ultra`` (NVIDIA, ultra)* Supports applications with high 3D scene complexity. Uses dedicated NVIDIA L4 Tensor Core GPU.
+        - Reference resolution: 1080p
+        - Reference frame rate: 60 fps
+        - Workload specifications: 8 vCPUs, 32 GB RAM, 24 GB VRAM
+        - Tenancy: Supports 1 concurrent stream session
+        - *``gen6n_high`` (NVIDIA, high)* Supports applications with moderate to high 3D scene complexity. Uses NVIDIA L4 Tensor Core GPU.
         - Reference resolution: 1080p
         - Reference frame rate: 60 fps
         - Workload specifications: 4 vCPUs, 16 GB RAM, 12 GB VRAM
         - Tenancy: Supports up to 2 concurrent stream sessions
-        - *``gen5n_ultra`` (NVIDIA, ultra)* Supports applications with extremely high 3D scene complexity. Uses dedicated NVIDIA A10G Tensor GPU.
+        - *``gen6n_medium`` (NVIDIA, medium)* Supports applications with moderate 3D scene complexity. Uses NVIDIA L4 Tensor Core GPU.
+        - Reference resolution: 1080p
+        - Reference frame rate: 60 fps
+        - Workload specifications: 2 vCPUs, 8 GB RAM, 6 GB VRAM
+        - Tenancy: Supports up to 4 concurrent stream sessions
+        - *``gen6n_small`` (NVIDIA, small)* Supports applications with lightweight 3D scene complexity and low CPU usage. Uses NVIDIA L4 Tensor Core GPU.
+        - Reference resolution: 1080p
+        - Reference frame rate: 60 fps
+        - Workload specifications: 1 vCPUs, 4 GB RAM, 2 GB VRAM
+        - Tenancy: Supports up to 12 concurrent stream sessions
+        - *``gen5n_win2022`` (NVIDIA, ultra)* Supports applications with extremely high 3D scene complexity. Runs applications on Microsoft Windows Server 2022 Base and supports DirectX 12. Compatible with Unreal Engine versions up through 5.6, 32 and 64-bit applications, and anti-cheat technology. Uses NVIDIA A10G Tensor Core GPU.
         - Reference resolution: 1080p
         - Reference frame rate: 60 fps
         - Workload specifications: 8 vCPUs, 32 GB RAM, 24 GB VRAM
         - Tenancy: Supports 1 concurrent stream session
-        - *``gen4n_win2022`` (NVIDIA, ultra)* Supports applications with extremely high 3D scene complexity. Runs applications on Microsoft Windows Server 2022 Base and supports DirectX 12. Compatible with Unreal Engine versions up through 5.4, 32 and 64-bit applications, and anti-cheat technology. Uses NVIDIA T4 Tensor GPU.
+        - *``gen5n_high`` (NVIDIA, high)* Supports applications with moderate to high 3D scene complexity. Uses NVIDIA A10G Tensor Core GPU.
+        - Reference resolution: 1080p
+        - Reference frame rate: 60 fps
+        - Workload specifications: 4 vCPUs, 16 GB RAM, 12 GB VRAM
+        - Tenancy: Supports up to 2 concurrent stream sessions
+        - *``gen5n_ultra`` (NVIDIA, ultra)* Supports applications with extremely high 3D scene complexity. Uses dedicated NVIDIA A10G Tensor Core GPU.
+        - Reference resolution: 1080p
+        - Reference frame rate: 60 fps
+        - Workload specifications: 8 vCPUs, 32 GB RAM, 24 GB VRAM
+        - Tenancy: Supports 1 concurrent stream session
+        - *``gen4n_win2022`` (NVIDIA, ultra)* Supports applications with extremely high 3D scene complexity. Runs applications on Microsoft Windows Server 2022 Base and supports DirectX 12. Compatible with Unreal Engine versions up through 5.6, 32 and 64-bit applications, and anti-cheat technology. Uses NVIDIA T4 Tensor Core GPU.
         - Reference resolution: 1080p
         - Reference frame rate: 60 fps
         - Workload specifications: 8 vCPUs, 32 GB RAM, 16 GB VRAM
         - Tenancy: Supports 1 concurrent stream session
-        - *``gen4n_high`` (NVIDIA, high)* Supports applications with moderate to high 3D scene complexity. Uses NVIDIA T4 Tensor GPU.
+        - *``gen4n_high`` (NVIDIA, high)* Supports applications with moderate to high 3D scene complexity. Uses NVIDIA T4 Tensor Core GPU.
         - Reference resolution: 1080p
         - Reference frame rate: 60 fps
         - Workload specifications: 4 vCPUs, 16 GB RAM, 8 GB VRAM
         - Tenancy: Supports up to 2 concurrent stream sessions
-        - *``gen4n_ultra`` (NVIDIA, ultra)* Supports applications with high 3D scene complexity. Uses dedicated NVIDIA T4 Tensor GPU.
+        - *``gen4n_ultra`` (NVIDIA, ultra)* Supports applications with high 3D scene complexity. Uses dedicated NVIDIA T4 Tensor Core GPU.
         - Reference resolution: 1080p
         - Reference frame rate: 60 fps
         - Workload specifications: 8 vCPUs, 32 GB RAM, 16 GB VRAM
@@ -1423,7 +1492,9 @@ def _typecheckingstub__4c32e96242e189f6a75d890a7316a655383684ce9337b4906f2e3b49b
     *,
     location_name: builtins.str,
     always_on_capacity: typing.Optional[jsii.Number] = None,
+    maximum_capacity: typing.Optional[jsii.Number] = None,
     on_demand_capacity: typing.Optional[jsii.Number] = None,
+    target_idle_capacity: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass

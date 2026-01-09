@@ -949,9 +949,6 @@ from ..interfaces.aws_ec2 import (
     ISecurityGroupRef as _ISecurityGroupRef_efa4ff18,
     ISubnetRef as _ISubnetRef_ac31e361,
 )
-from ..interfaces.aws_elasticloadbalancing import (
-    ILoadBalancerRef as _ILoadBalancerRef_6a68b4e1
-)
 from ..interfaces.aws_elasticloadbalancingv2 import (
     ITargetGroupRef as _ITargetGroupRef_9ed19d5e
 )
@@ -2824,7 +2821,7 @@ class CfnAutoScalingGroup(
         launch_configuration_name: typing.Optional[typing.Union[builtins.str, "_ILaunchConfigurationRef_9c2fc9c2"]] = None,
         launch_template: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAutoScalingGroup.LaunchTemplateSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         lifecycle_hook_specification_list: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAutoScalingGroup.LifecycleHookSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        load_balancer_names: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ILoadBalancerRef_6a68b4e1"]]] = None,
+        load_balancer_names: typing.Optional[typing.Sequence[builtins.str]] = None,
         max_instance_lifetime: typing.Optional[jsii.Number] = None,
         metrics_collection: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAutoScalingGroup.MetricsCollectionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         mixed_instances_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAutoScalingGroup.MixedInstancesPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -2860,7 +2857,7 @@ class CfnAutoScalingGroup(
         :param health_check_grace_period: The amount of time, in seconds, that Amazon EC2 Auto Scaling waits before checking the health status of an EC2 instance that has come into service and marking it unhealthy due to a failed health check. This is useful if your instances do not immediately pass their health checks after they enter the ``InService`` state. For more information, see `Set the health check grace period for an Auto Scaling group <https://docs.aws.amazon.com/autoscaling/ec2/userguide/health-check-grace-period.html>`_ in the *Amazon EC2 Auto Scaling User Guide* . Default: ``0`` seconds
         :param health_check_type: A comma-separated value string of one or more health check types. The valid values are ``EC2`` , ``EBS`` , ``ELB`` , and ``VPC_LATTICE`` . ``EC2`` is the default health check and cannot be disabled. For more information, see `Health checks for instances in an Auto Scaling group <https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-health-checks.html>`_ in the *Amazon EC2 Auto Scaling User Guide* . Only specify ``EC2`` if you must clear a value that was previously set.
         :param instance_id: The ID of the instance used to base the launch configuration on. For more information, see `Create an Auto Scaling group using an EC2 instance <https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-asg-from-instance.html>`_ in the *Amazon EC2 Auto Scaling User Guide* . If you specify ``LaunchTemplate`` , ``MixedInstancesPolicy`` , or ``LaunchConfigurationName`` , don't specify ``InstanceId`` .
-        :param instance_lifecycle_policy: 
+        :param instance_lifecycle_policy: The instance lifecycle policy for the Auto Scaling group.
         :param instance_maintenance_policy: An instance maintenance policy. For more information, see `Set instance maintenance policy <https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-instance-maintenance-policy.html>`_ in the *Amazon EC2 Auto Scaling User Guide* .
         :param launch_configuration_name: The name of the launch configuration to use to launch instances. Required only if you don't specify ``LaunchTemplate`` , ``MixedInstancesPolicy`` , or ``InstanceId`` .
         :param launch_template: Information used to specify the launch template and version to use to launch instances. You can alternatively associate a launch template to the Auto Scaling group by specifying a ``MixedInstancesPolicy`` . For more information about creating launch templates, see `Create a launch template for an Auto Scaling group <https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-launch-template.html>`_ in the *Amazon EC2 Auto Scaling User Guide* . If you omit this property, you must specify ``MixedInstancesPolicy`` , ``LaunchConfigurationName`` , or ``InstanceId`` .
@@ -3247,6 +3244,7 @@ class CfnAutoScalingGroup(
     def instance_lifecycle_policy(
         self,
     ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAutoScalingGroup.InstanceLifecyclePolicyProperty"]]:
+        '''The instance lifecycle policy for the Auto Scaling group.'''
         return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAutoScalingGroup.InstanceLifecyclePolicyProperty"]], jsii.get(self, "instanceLifecyclePolicy"))
 
     @instance_lifecycle_policy.setter
@@ -4232,8 +4230,13 @@ class CfnAutoScalingGroup(
             *,
             retention_triggers: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAutoScalingGroup.RetentionTriggersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param retention_triggers: 
+            '''The instance lifecycle policy for the Auto Scaling group.
+
+            This policy controls instance behavior when an instance transitions through its lifecycle states. Configure retention triggers to specify when instances should move to a ``Retained`` state instead of automatic termination.
+
+            For more information, see `Control instance retention with instance lifecycle policies <https://docs.aws.amazon.com/autoscaling/ec2/userguide/instance-lifecycle-policy.html>`_ in the *Amazon EC2 Auto Scaling User Guide* .
+
+            :param retention_triggers: Specifies the conditions that trigger instance retention behavior. These triggers determine when instances should move to a ``Retained`` state instead of automatic termination. This allows you to maintain control over instance management when lifecycles transition and operations fail.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-autoscaling-autoscalinggroup-instancelifecyclepolicy.html
             :exampleMetadata: fixture=_generated
@@ -4261,7 +4264,10 @@ class CfnAutoScalingGroup(
         def retention_triggers(
             self,
         ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAutoScalingGroup.RetentionTriggersProperty"]]:
-            '''
+            '''Specifies the conditions that trigger instance retention behavior.
+
+            These triggers determine when instances should move to a ``Retained`` state instead of automatic termination. This allows you to maintain control over instance management when lifecycles transition and operations fail.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-autoscaling-autoscalinggroup-instancelifecyclepolicy.html#cfn-autoscaling-autoscalinggroup-instancelifecyclepolicy-retentiontriggers
             '''
             result = self._values.get("retention_triggers")
@@ -5176,7 +5182,7 @@ class CfnAutoScalingGroup(
 
             ``LaunchTemplateOverrides`` is a property of the `AWS::AutoScaling::AutoScalingGroup LaunchTemplate <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-autoscaling-autoscalinggroup-launchtemplate.html>`_ property type.
 
-            :param image_id: 
+            :param image_id: The ID of the Amazon Machine Image (AMI) to use for instances launched with this override. When using Instance Refresh with ``ReplaceRootVolume`` strategy, this specifies the AMI for root volume replacement operations. For ``ReplaceRootVolume`` operations: - All overrides in the ``MixedInstancesPolicy`` must specify an ImageId - The AMI must contain only a single root volume - Root volume replacement doesn't support multi-volume AMIs
             :param instance_requirements: The instance requirements. Amazon EC2 Auto Scaling uses your specified requirements to identify instance types. Then, it uses your On-Demand and Spot allocation strategies to launch instances from these instance types. You can specify up to four separate sets of instance requirements per Auto Scaling group. This is useful for provisioning instances from different Amazon Machine Images (AMIs) in the same Auto Scaling group. To do this, create the AMIs and create a new launch template for each AMI. Then, create a compatible set of instance requirements for each launch template. .. epigraph:: If you specify ``InstanceRequirements`` , you can't specify ``InstanceType`` .
             :param instance_type: The instance type, such as ``m3.xlarge`` . You must specify an instance type that is supported in your requested Region and Availability Zones. For more information, see `Instance types <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html>`_ in the *Amazon EC2 User Guide* . You can specify up to 40 instance types per Auto Scaling group.
             :param launch_template_specification: Provides a launch template for the specified instance type or set of instance requirements. For example, some instance types might require a launch template with a different AMI. If not provided, Amazon EC2 Auto Scaling uses the launch template that's specified in the ``LaunchTemplate`` definition. For more information, see `Specifying a different launch template for an instance type <https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-mixed-instances-groups-launch-template-overrides.html>`_ in the *Amazon EC2 Auto Scaling User Guide* . You can specify up to 20 launch templates per Auto Scaling group. The launch templates specified in the overrides and in the ``LaunchTemplate`` definition count towards this limit.
@@ -5287,7 +5293,16 @@ class CfnAutoScalingGroup(
 
         @builtins.property
         def image_id(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The ID of the Amazon Machine Image (AMI) to use for instances launched with this override.
+
+            When using Instance Refresh with ``ReplaceRootVolume`` strategy, this specifies the AMI for root volume replacement operations.
+
+            For ``ReplaceRootVolume`` operations:
+
+            - All overrides in the ``MixedInstancesPolicy`` must specify an ImageId
+            - The AMI must contain only a single root volume
+            - Root volume replacement doesn't support multi-volume AMIs
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-autoscaling-autoscalinggroup-launchtemplateoverrides.html#cfn-autoscaling-autoscalinggroup-launchtemplateoverrides-imageid
             '''
             result = self._values.get("image_id")
@@ -6560,8 +6575,11 @@ class CfnAutoScalingGroup(
             *,
             terminate_hook_abandon: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''
-            :param terminate_hook_abandon: 
+            '''Defines the specific triggers that cause instances to be retained in a Retained state rather than terminated.
+
+            Each trigger corresponds to a different failure scenario during the instance lifecycle. This allows fine-grained control over when to preserve instances for manual intervention.
+
+            :param terminate_hook_abandon: Specifies the action when a termination lifecycle hook is abandoned due to failure, timeout, or explicit abandonment (calling CompleteLifecycleAction). Set to ``Retain`` to move instances to a ``Retained`` state. Set to ``Terminate`` for default termination behavior. Retained instances don't count toward desired capacity and remain until you call ``TerminateInstanceInAutoScalingGroup`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-autoscaling-autoscalinggroup-retentiontriggers.html
             :exampleMetadata: fixture=_generated
@@ -6585,7 +6603,12 @@ class CfnAutoScalingGroup(
 
         @builtins.property
         def terminate_hook_abandon(self) -> typing.Optional[builtins.str]:
-            '''
+            '''Specifies the action when a termination lifecycle hook is abandoned due to failure, timeout, or explicit abandonment (calling CompleteLifecycleAction).
+
+            Set to ``Retain`` to move instances to a ``Retained`` state. Set to ``Terminate`` for default termination behavior.
+
+            Retained instances don't count toward desired capacity and remain until you call ``TerminateInstanceInAutoScalingGroup`` .
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-autoscaling-autoscalinggroup-retentiontriggers.html#cfn-autoscaling-autoscalinggroup-retentiontriggers-terminatehookabandon
             '''
             result = self._values.get("terminate_hook_abandon")
@@ -6998,7 +7021,7 @@ class CfnAutoScalingGroupProps:
         launch_configuration_name: typing.Optional[typing.Union[builtins.str, "_ILaunchConfigurationRef_9c2fc9c2"]] = None,
         launch_template: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAutoScalingGroup.LaunchTemplateSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         lifecycle_hook_specification_list: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAutoScalingGroup.LifecycleHookSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        load_balancer_names: typing.Optional[typing.Sequence[typing.Union[builtins.str, "_ILoadBalancerRef_6a68b4e1"]]] = None,
+        load_balancer_names: typing.Optional[typing.Sequence[builtins.str]] = None,
         max_instance_lifetime: typing.Optional[jsii.Number] = None,
         metrics_collection: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAutoScalingGroup.MetricsCollectionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         mixed_instances_policy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAutoScalingGroup.MixedInstancesPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -7032,7 +7055,7 @@ class CfnAutoScalingGroupProps:
         :param health_check_grace_period: The amount of time, in seconds, that Amazon EC2 Auto Scaling waits before checking the health status of an EC2 instance that has come into service and marking it unhealthy due to a failed health check. This is useful if your instances do not immediately pass their health checks after they enter the ``InService`` state. For more information, see `Set the health check grace period for an Auto Scaling group <https://docs.aws.amazon.com/autoscaling/ec2/userguide/health-check-grace-period.html>`_ in the *Amazon EC2 Auto Scaling User Guide* . Default: ``0`` seconds
         :param health_check_type: A comma-separated value string of one or more health check types. The valid values are ``EC2`` , ``EBS`` , ``ELB`` , and ``VPC_LATTICE`` . ``EC2`` is the default health check and cannot be disabled. For more information, see `Health checks for instances in an Auto Scaling group <https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-health-checks.html>`_ in the *Amazon EC2 Auto Scaling User Guide* . Only specify ``EC2`` if you must clear a value that was previously set.
         :param instance_id: The ID of the instance used to base the launch configuration on. For more information, see `Create an Auto Scaling group using an EC2 instance <https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-asg-from-instance.html>`_ in the *Amazon EC2 Auto Scaling User Guide* . If you specify ``LaunchTemplate`` , ``MixedInstancesPolicy`` , or ``LaunchConfigurationName`` , don't specify ``InstanceId`` .
-        :param instance_lifecycle_policy: 
+        :param instance_lifecycle_policy: The instance lifecycle policy for the Auto Scaling group.
         :param instance_maintenance_policy: An instance maintenance policy. For more information, see `Set instance maintenance policy <https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-instance-maintenance-policy.html>`_ in the *Amazon EC2 Auto Scaling User Guide* .
         :param launch_configuration_name: The name of the launch configuration to use to launch instances. Required only if you don't specify ``LaunchTemplate`` , ``MixedInstancesPolicy`` , or ``InstanceId`` .
         :param launch_template: Information used to specify the launch template and version to use to launch instances. You can alternatively associate a launch template to the Auto Scaling group by specifying a ``MixedInstancesPolicy`` . For more information about creating launch templates, see `Create a launch template for an Auto Scaling group <https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-launch-template.html>`_ in the *Amazon EC2 Auto Scaling User Guide* . If you omit this property, you must specify ``MixedInstancesPolicy`` , ``LaunchConfigurationName`` , or ``InstanceId`` .
@@ -7574,7 +7597,8 @@ class CfnAutoScalingGroupProps:
     def instance_lifecycle_policy(
         self,
     ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAutoScalingGroup.InstanceLifecyclePolicyProperty"]]:
-        '''
+        '''The instance lifecycle policy for the Auto Scaling group.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-autoscaling-autoscalinggroup.html#cfn-autoscaling-autoscalinggroup-instancelifecyclepolicy
         '''
         result = self._values.get("instance_lifecycle_policy")
@@ -7633,9 +7657,7 @@ class CfnAutoScalingGroupProps:
         return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAutoScalingGroup.LifecycleHookSpecificationProperty"]]]], result)
 
     @builtins.property
-    def load_balancer_names(
-        self,
-    ) -> typing.Optional[typing.List[typing.Union[builtins.str, "_ILoadBalancerRef_6a68b4e1"]]]:
+    def load_balancer_names(self) -> typing.Optional[typing.List[builtins.str]]:
         '''A list of Classic Load Balancers associated with this Auto Scaling group.
 
         For Application Load Balancers, Network Load Balancers, and Gateway Load Balancers, specify the ``TargetGroupARNs`` property instead.
@@ -7643,7 +7665,7 @@ class CfnAutoScalingGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-autoscaling-autoscalinggroup.html#cfn-autoscaling-autoscalinggroup-loadbalancernames
         '''
         result = self._values.get("load_balancer_names")
-        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, "_ILoadBalancerRef_6a68b4e1"]]], result)
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
     def max_instance_lifetime(self) -> typing.Optional[jsii.Number]:
@@ -15503,6 +15525,7 @@ class HealthChecks(
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_autoscaling.IAutoScalingGroup")
 class IAutoScalingGroup(
+    _IAutoScalingGroupRef_2f9e9183,
     _IResource_c80c4260,
     _IGrantable_71c4f5de,
     typing_extensions.Protocol,
@@ -15731,6 +15754,7 @@ class IAutoScalingGroup(
 
 
 class _IAutoScalingGroupProxy(
+    jsii.proxy_for(_IAutoScalingGroupRef_2f9e9183), # type: ignore[misc]
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
     jsii.proxy_for(_IGrantable_71c4f5de), # type: ignore[misc]
 ):
@@ -16055,7 +16079,11 @@ typing.cast(typing.Any, IAutoScalingGroup).__jsii_proxy_class__ = lambda : _IAut
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_autoscaling.ILifecycleHook")
-class ILifecycleHook(_IResource_c80c4260, typing_extensions.Protocol):
+class ILifecycleHook(
+    _ILifecycleHookRef_bb190400,
+    _IResource_c80c4260,
+    typing_extensions.Protocol,
+):
     '''A basic lifecycle hook object.'''
 
     @builtins.property
@@ -16072,6 +16100,7 @@ class ILifecycleHook(_IResource_c80c4260, typing_extensions.Protocol):
 
 
 class _ILifecycleHookProxy(
+    jsii.proxy_for(_ILifecycleHookRef_bb190400), # type: ignore[misc]
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
 ):
     '''A basic lifecycle hook object.'''
@@ -16541,13 +16570,14 @@ class LifecycleHook(
         import aws_cdk as cdk
         from aws_cdk import aws_autoscaling as autoscaling
         from aws_cdk import aws_iam as iam
+        from aws_cdk.interfaces import aws_autoscaling as interfaces_autoscaling
         
-        # auto_scaling_group: autoscaling.AutoScalingGroup
+        # auto_scaling_group_ref: interfaces_autoscaling.IAutoScalingGroupRef
         # lifecycle_hook_target: autoscaling.ILifecycleHookTarget
         # role: iam.Role
         
         lifecycle_hook = autoscaling.LifecycleHook(self, "MyLifecycleHook",
-            auto_scaling_group=auto_scaling_group,
+            auto_scaling_group=auto_scaling_group_ref,
             lifecycle_transition=autoscaling.LifecycleTransition.INSTANCE_LAUNCHING,
         
             # the properties below are optional
@@ -16565,7 +16595,7 @@ class LifecycleHook(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        auto_scaling_group: "IAutoScalingGroup",
+        auto_scaling_group: "_IAutoScalingGroupRef_2f9e9183",
         lifecycle_transition: "LifecycleTransition",
         default_result: typing.Optional["DefaultResult"] = None,
         heartbeat_timeout: typing.Optional["_Duration_4839e8c3"] = None,
@@ -16619,6 +16649,12 @@ class LifecycleHook(
         return typing.cast(builtins.str, jsii.get(self, "lifecycleHookName"))
 
     @builtins.property
+    @jsii.member(jsii_name="lifecycleHookRef")
+    def lifecycle_hook_ref(self) -> "_LifecycleHookReference_9dbdb57d":
+        '''A reference to a LifecycleHook resource.'''
+        return typing.cast("_LifecycleHookReference_9dbdb57d", jsii.get(self, "lifecycleHookRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="role")
     def role(self) -> "_IRole_235f5d8e":
         '''The role that allows the ASG to publish to the notification target.
@@ -16656,7 +16692,7 @@ class LifecycleHookProps(BasicLifecycleHookProps):
         notification_metadata: typing.Optional[builtins.str] = None,
         notification_target: typing.Optional["ILifecycleHookTarget"] = None,
         role: typing.Optional["_IRole_235f5d8e"] = None,
-        auto_scaling_group: "IAutoScalingGroup",
+        auto_scaling_group: "_IAutoScalingGroupRef_2f9e9183",
     ) -> None:
         '''Properties for a Lifecycle hook.
 
@@ -16678,13 +16714,14 @@ class LifecycleHookProps(BasicLifecycleHookProps):
             import aws_cdk as cdk
             from aws_cdk import aws_autoscaling as autoscaling
             from aws_cdk import aws_iam as iam
+            from aws_cdk.interfaces import aws_autoscaling as interfaces_autoscaling
             
-            # auto_scaling_group: autoscaling.AutoScalingGroup
+            # auto_scaling_group_ref: interfaces_autoscaling.IAutoScalingGroupRef
             # lifecycle_hook_target: autoscaling.ILifecycleHookTarget
             # role: iam.Role
             
             lifecycle_hook_props = autoscaling.LifecycleHookProps(
-                auto_scaling_group=auto_scaling_group,
+                auto_scaling_group=auto_scaling_group_ref,
                 lifecycle_transition=autoscaling.LifecycleTransition.INSTANCE_LAUNCHING,
             
                 # the properties below are optional
@@ -16787,11 +16824,11 @@ class LifecycleHookProps(BasicLifecycleHookProps):
         return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def auto_scaling_group(self) -> "IAutoScalingGroup":
+    def auto_scaling_group(self) -> "_IAutoScalingGroupRef_2f9e9183":
         '''The AutoScalingGroup to add the lifecycle hook to.'''
         result = self._values.get("auto_scaling_group")
         assert result is not None, "Required property 'auto_scaling_group' is missing"
-        return typing.cast("IAutoScalingGroup", result)
+        return typing.cast("_IAutoScalingGroupRef_2f9e9183", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -17985,12 +18022,13 @@ class ScheduledAction(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_autoscaling as autoscaling
+        from aws_cdk.interfaces import aws_autoscaling as interfaces_autoscaling
         
-        # auto_scaling_group: autoscaling.AutoScalingGroup
+        # auto_scaling_group_ref: interfaces_autoscaling.IAutoScalingGroupRef
         # schedule: autoscaling.Schedule
         
         scheduled_action = autoscaling.ScheduledAction(self, "MyScheduledAction",
-            auto_scaling_group=auto_scaling_group,
+            auto_scaling_group=auto_scaling_group_ref,
             schedule=schedule,
         
             # the properties below are optional
@@ -18008,7 +18046,7 @@ class ScheduledAction(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        auto_scaling_group: "IAutoScalingGroup",
+        auto_scaling_group: "_IAutoScalingGroupRef_2f9e9183",
         schedule: "Schedule",
         desired_capacity: typing.Optional[jsii.Number] = None,
         end_time: typing.Optional[datetime.datetime] = None,
@@ -18087,7 +18125,7 @@ class ScheduledActionProps(BasicScheduledActionProps):
         min_capacity: typing.Optional[jsii.Number] = None,
         start_time: typing.Optional[datetime.datetime] = None,
         time_zone: typing.Optional[builtins.str] = None,
-        auto_scaling_group: "IAutoScalingGroup",
+        auto_scaling_group: "_IAutoScalingGroupRef_2f9e9183",
     ) -> None:
         '''Properties for a scheduled action on an AutoScalingGroup.
 
@@ -18107,12 +18145,13 @@ class ScheduledActionProps(BasicScheduledActionProps):
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_autoscaling as autoscaling
+            from aws_cdk.interfaces import aws_autoscaling as interfaces_autoscaling
             
-            # auto_scaling_group: autoscaling.AutoScalingGroup
+            # auto_scaling_group_ref: interfaces_autoscaling.IAutoScalingGroupRef
             # schedule: autoscaling.Schedule
             
             scheduled_action_props = autoscaling.ScheduledActionProps(
-                auto_scaling_group=auto_scaling_group,
+                auto_scaling_group=auto_scaling_group_ref,
                 schedule=schedule,
             
                 # the properties below are optional
@@ -18236,11 +18275,11 @@ class ScheduledActionProps(BasicScheduledActionProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def auto_scaling_group(self) -> "IAutoScalingGroup":
+    def auto_scaling_group(self) -> "_IAutoScalingGroupRef_2f9e9183":
         '''The AutoScalingGroup to apply the scheduled actions to.'''
         result = self._values.get("auto_scaling_group")
         assert result is not None, "Required property 'auto_scaling_group' is missing"
-        return typing.cast("IAutoScalingGroup", result)
+        return typing.cast("_IAutoScalingGroupRef_2f9e9183", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -18556,11 +18595,12 @@ class StepScalingAction(
         # The values are placeholders you should change.
         import aws_cdk as cdk
         from aws_cdk import aws_autoscaling as autoscaling
+        from aws_cdk.interfaces import aws_autoscaling as interfaces_autoscaling
         
-        # auto_scaling_group: autoscaling.AutoScalingGroup
+        # auto_scaling_group_ref: interfaces_autoscaling.IAutoScalingGroupRef
         
         step_scaling_action = autoscaling.StepScalingAction(self, "MyStepScalingAction",
-            auto_scaling_group=auto_scaling_group,
+            auto_scaling_group=auto_scaling_group_ref,
         
             # the properties below are optional
             adjustment_type=autoscaling.AdjustmentType.CHANGE_IN_CAPACITY,
@@ -18576,7 +18616,7 @@ class StepScalingAction(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        auto_scaling_group: "IAutoScalingGroup",
+        auto_scaling_group: "_IAutoScalingGroupRef_2f9e9183",
         adjustment_type: typing.Optional["AdjustmentType"] = None,
         cooldown: typing.Optional["_Duration_4839e8c3"] = None,
         estimated_instance_warmup: typing.Optional["_Duration_4839e8c3"] = None,
@@ -18651,7 +18691,7 @@ class StepScalingActionProps:
     def __init__(
         self,
         *,
-        auto_scaling_group: "IAutoScalingGroup",
+        auto_scaling_group: "_IAutoScalingGroupRef_2f9e9183",
         adjustment_type: typing.Optional["AdjustmentType"] = None,
         cooldown: typing.Optional["_Duration_4839e8c3"] = None,
         estimated_instance_warmup: typing.Optional["_Duration_4839e8c3"] = None,
@@ -18675,11 +18715,12 @@ class StepScalingActionProps:
             # The values are placeholders you should change.
             import aws_cdk as cdk
             from aws_cdk import aws_autoscaling as autoscaling
+            from aws_cdk.interfaces import aws_autoscaling as interfaces_autoscaling
             
-            # auto_scaling_group: autoscaling.AutoScalingGroup
+            # auto_scaling_group_ref: interfaces_autoscaling.IAutoScalingGroupRef
             
             step_scaling_action_props = autoscaling.StepScalingActionProps(
-                auto_scaling_group=auto_scaling_group,
+                auto_scaling_group=auto_scaling_group_ref,
             
                 # the properties below are optional
                 adjustment_type=autoscaling.AdjustmentType.CHANGE_IN_CAPACITY,
@@ -18712,11 +18753,11 @@ class StepScalingActionProps:
             self._values["min_adjustment_magnitude"] = min_adjustment_magnitude
 
     @builtins.property
-    def auto_scaling_group(self) -> "IAutoScalingGroup":
+    def auto_scaling_group(self) -> "_IAutoScalingGroupRef_2f9e9183":
         '''The auto scaling group.'''
         result = self._values.get("auto_scaling_group")
         assert result is not None, "Required property 'auto_scaling_group' is missing"
-        return typing.cast("IAutoScalingGroup", result)
+        return typing.cast("_IAutoScalingGroupRef_2f9e9183", result)
 
     @builtins.property
     def adjustment_type(self) -> typing.Optional["AdjustmentType"]:
@@ -18802,12 +18843,13 @@ class StepScalingPolicy(
         import aws_cdk as cdk
         from aws_cdk import aws_autoscaling as autoscaling
         from aws_cdk import aws_cloudwatch as cloudwatch
+        from aws_cdk.interfaces import aws_autoscaling as interfaces_autoscaling
         
-        # auto_scaling_group: autoscaling.AutoScalingGroup
+        # auto_scaling_group_ref: interfaces_autoscaling.IAutoScalingGroupRef
         # metric: cloudwatch.Metric
         
         step_scaling_policy = autoscaling.StepScalingPolicy(self, "MyStepScalingPolicy",
-            auto_scaling_group=auto_scaling_group,
+            auto_scaling_group=auto_scaling_group_ref,
             metric=metric,
             scaling_steps=[autoscaling.ScalingInterval(
                 change=123,
@@ -18833,7 +18875,7 @@ class StepScalingPolicy(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        auto_scaling_group: "IAutoScalingGroup",
+        auto_scaling_group: "_IAutoScalingGroupRef_2f9e9183",
         metric: "_IMetric_c7fd29de",
         scaling_steps: typing.Sequence[typing.Union["ScalingInterval", typing.Dict[builtins.str, typing.Any]]],
         adjustment_type: typing.Optional["AdjustmentType"] = None,
@@ -18927,7 +18969,7 @@ class StepScalingPolicyProps(BasicStepScalingPolicyProps):
         evaluation_periods: typing.Optional[jsii.Number] = None,
         metric_aggregation_type: typing.Optional["MetricAggregationType"] = None,
         min_adjustment_magnitude: typing.Optional[jsii.Number] = None,
-        auto_scaling_group: "IAutoScalingGroup",
+        auto_scaling_group: "_IAutoScalingGroupRef_2f9e9183",
     ) -> None:
         '''
         :param metric: Metric to scale on.
@@ -18950,12 +18992,13 @@ class StepScalingPolicyProps(BasicStepScalingPolicyProps):
             import aws_cdk as cdk
             from aws_cdk import aws_autoscaling as autoscaling
             from aws_cdk import aws_cloudwatch as cloudwatch
+            from aws_cdk.interfaces import aws_autoscaling as interfaces_autoscaling
             
-            # auto_scaling_group: autoscaling.AutoScalingGroup
+            # auto_scaling_group_ref: interfaces_autoscaling.IAutoScalingGroupRef
             # metric: cloudwatch.Metric
             
             step_scaling_policy_props = autoscaling.StepScalingPolicyProps(
-                auto_scaling_group=auto_scaling_group,
+                auto_scaling_group=auto_scaling_group_ref,
                 metric=metric,
                 scaling_steps=[autoscaling.ScalingInterval(
                     change=123,
@@ -19107,11 +19150,11 @@ class StepScalingPolicyProps(BasicStepScalingPolicyProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def auto_scaling_group(self) -> "IAutoScalingGroup":
+    def auto_scaling_group(self) -> "_IAutoScalingGroupRef_2f9e9183":
         '''The auto scaling group.'''
         result = self._values.get("auto_scaling_group")
         assert result is not None, "Required property 'auto_scaling_group' is missing"
-        return typing.cast("IAutoScalingGroup", result)
+        return typing.cast("_IAutoScalingGroupRef_2f9e9183", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -19140,12 +19183,13 @@ class TargetTrackingScalingPolicy(
         import aws_cdk as cdk
         from aws_cdk import aws_autoscaling as autoscaling
         from aws_cdk import aws_cloudwatch as cloudwatch
+        from aws_cdk.interfaces import aws_autoscaling as interfaces_autoscaling
         
-        # auto_scaling_group: autoscaling.AutoScalingGroup
+        # auto_scaling_group_ref: interfaces_autoscaling.IAutoScalingGroupRef
         # metric: cloudwatch.Metric
         
         target_tracking_scaling_policy = autoscaling.TargetTrackingScalingPolicy(self, "MyTargetTrackingScalingPolicy",
-            auto_scaling_group=auto_scaling_group,
+            auto_scaling_group=auto_scaling_group_ref,
             target_value=123,
         
             # the properties below are optional
@@ -19163,7 +19207,7 @@ class TargetTrackingScalingPolicy(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        auto_scaling_group: "IAutoScalingGroup",
+        auto_scaling_group: "_IAutoScalingGroupRef_2f9e9183",
         target_value: jsii.Number,
         custom_metric: typing.Optional["_IMetric_c7fd29de"] = None,
         predefined_metric: typing.Optional["PredefinedMetric"] = None,
@@ -19233,7 +19277,7 @@ class TargetTrackingScalingPolicyProps(BasicTargetTrackingScalingPolicyProps):
         custom_metric: typing.Optional["_IMetric_c7fd29de"] = None,
         predefined_metric: typing.Optional["PredefinedMetric"] = None,
         resource_label: typing.Optional[builtins.str] = None,
-        auto_scaling_group: "IAutoScalingGroup",
+        auto_scaling_group: "_IAutoScalingGroupRef_2f9e9183",
     ) -> None:
         '''Properties for a concrete TargetTrackingPolicy.
 
@@ -19257,12 +19301,13 @@ class TargetTrackingScalingPolicyProps(BasicTargetTrackingScalingPolicyProps):
             import aws_cdk as cdk
             from aws_cdk import aws_autoscaling as autoscaling
             from aws_cdk import aws_cloudwatch as cloudwatch
+            from aws_cdk.interfaces import aws_autoscaling as interfaces_autoscaling
             
-            # auto_scaling_group: autoscaling.AutoScalingGroup
+            # auto_scaling_group_ref: interfaces_autoscaling.IAutoScalingGroupRef
             # metric: cloudwatch.Metric
             
             target_tracking_scaling_policy_props = autoscaling.TargetTrackingScalingPolicyProps(
-                auto_scaling_group=auto_scaling_group,
+                auto_scaling_group=auto_scaling_group_ref,
                 target_value=123,
             
                 # the properties below are optional
@@ -19383,10 +19428,10 @@ class TargetTrackingScalingPolicyProps(BasicTargetTrackingScalingPolicyProps):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def auto_scaling_group(self) -> "IAutoScalingGroup":
+    def auto_scaling_group(self) -> "_IAutoScalingGroupRef_2f9e9183":
         result = self._values.get("auto_scaling_group")
         assert result is not None, "Required property 'auto_scaling_group' is missing"
-        return typing.cast("IAutoScalingGroup", result)
+        return typing.cast("_IAutoScalingGroupRef_2f9e9183", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -19536,11 +19581,12 @@ class WarmPool(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_autoscaling as autoscaling
+        from aws_cdk.interfaces import aws_autoscaling as interfaces_autoscaling
         
-        # auto_scaling_group: autoscaling.AutoScalingGroup
+        # auto_scaling_group_ref: interfaces_autoscaling.IAutoScalingGroupRef
         
         warm_pool = autoscaling.WarmPool(self, "MyWarmPool",
-            auto_scaling_group=auto_scaling_group,
+            auto_scaling_group=auto_scaling_group_ref,
         
             # the properties below are optional
             max_group_prepared_capacity=123,
@@ -19555,7 +19601,7 @@ class WarmPool(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        auto_scaling_group: "IAutoScalingGroup",
+        auto_scaling_group: "_IAutoScalingGroupRef_2f9e9183",
         max_group_prepared_capacity: typing.Optional[jsii.Number] = None,
         min_size: typing.Optional[jsii.Number] = None,
         pool_state: typing.Optional["PoolState"] = None,
@@ -19718,7 +19764,7 @@ class WarmPoolProps(WarmPoolOptions):
         min_size: typing.Optional[jsii.Number] = None,
         pool_state: typing.Optional["PoolState"] = None,
         reuse_on_scale_in: typing.Optional[builtins.bool] = None,
-        auto_scaling_group: "IAutoScalingGroup",
+        auto_scaling_group: "_IAutoScalingGroupRef_2f9e9183",
     ) -> None:
         '''Properties for a warm pool.
 
@@ -19735,11 +19781,12 @@ class WarmPoolProps(WarmPoolOptions):
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_autoscaling as autoscaling
+            from aws_cdk.interfaces import aws_autoscaling as interfaces_autoscaling
             
-            # auto_scaling_group: autoscaling.AutoScalingGroup
+            # auto_scaling_group_ref: interfaces_autoscaling.IAutoScalingGroupRef
             
             warm_pool_props = autoscaling.WarmPoolProps(
-                auto_scaling_group=auto_scaling_group,
+                auto_scaling_group=auto_scaling_group_ref,
             
                 # the properties below are optional
                 max_group_prepared_capacity=123,
@@ -19810,11 +19857,11 @@ class WarmPoolProps(WarmPoolOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def auto_scaling_group(self) -> "IAutoScalingGroup":
+    def auto_scaling_group(self) -> "_IAutoScalingGroupRef_2f9e9183":
         '''The Auto Scaling group to add the warm pool to.'''
         result = self._values.get("auto_scaling_group")
         assert result is not None, "Required property 'auto_scaling_group' is missing"
-        return typing.cast("IAutoScalingGroup", result)
+        return typing.cast("_IAutoScalingGroupRef_2f9e9183", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -20475,6 +20522,12 @@ class AutoScalingGroup(
     def auto_scaling_group_name(self) -> builtins.str:
         '''Name of the AutoScalingGroup.'''
         return typing.cast(builtins.str, jsii.get(self, "autoScalingGroupName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="autoScalingGroupRef")
+    def auto_scaling_group_ref(self) -> "_AutoScalingGroupReference_6a7b8e35":
+        '''A reference to a AutoScalingGroup resource.'''
+        return typing.cast("_AutoScalingGroupReference_6a7b8e35", jsii.get(self, "autoScalingGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="connections")
@@ -22022,7 +22075,7 @@ def _typecheckingstub__d8ba2cee6007161ce4ac8e6f271353563746b8194e9da3c4517351b35
     launch_configuration_name: typing.Optional[typing.Union[builtins.str, _ILaunchConfigurationRef_9c2fc9c2]] = None,
     launch_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.LaunchTemplateSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     lifecycle_hook_specification_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.LifecycleHookSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    load_balancer_names: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILoadBalancerRef_6a68b4e1]]] = None,
+    load_balancer_names: typing.Optional[typing.Sequence[builtins.str]] = None,
     max_instance_lifetime: typing.Optional[jsii.Number] = None,
     metrics_collection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.MetricsCollectionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     mixed_instances_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.MixedInstancesPolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -22575,7 +22628,7 @@ def _typecheckingstub__63de692030eb0bc729681a791501e2edd744cab3141e27cc9c9c8def2
     launch_configuration_name: typing.Optional[typing.Union[builtins.str, _ILaunchConfigurationRef_9c2fc9c2]] = None,
     launch_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.LaunchTemplateSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     lifecycle_hook_specification_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.LifecycleHookSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    load_balancer_names: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILoadBalancerRef_6a68b4e1]]] = None,
+    load_balancer_names: typing.Optional[typing.Sequence[builtins.str]] = None,
     max_instance_lifetime: typing.Optional[jsii.Number] = None,
     metrics_collection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.MetricsCollectionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     mixed_instances_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.MixedInstancesPolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -23614,7 +23667,7 @@ def _typecheckingstub__a4218ed2a73b3b937967fabbbf8d60e6130673b6215bff8f98266d872
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    auto_scaling_group: IAutoScalingGroup,
+    auto_scaling_group: _IAutoScalingGroupRef_2f9e9183,
     lifecycle_transition: LifecycleTransition,
     default_result: typing.Optional[DefaultResult] = None,
     heartbeat_timeout: typing.Optional[_Duration_4839e8c3] = None,
@@ -23635,7 +23688,7 @@ def _typecheckingstub__41e05893ecfc67dfb61215da4c71fe4cfc04cbf73d9aab65be153d28a
     notification_metadata: typing.Optional[builtins.str] = None,
     notification_target: typing.Optional[ILifecycleHookTarget] = None,
     role: typing.Optional[_IRole_235f5d8e] = None,
-    auto_scaling_group: IAutoScalingGroup,
+    auto_scaling_group: _IAutoScalingGroupRef_2f9e9183,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23741,7 +23794,7 @@ def _typecheckingstub__74b3b8cb09553edb86fdacb4ea37f2427f0041f519ffb8025514989ca
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    auto_scaling_group: IAutoScalingGroup,
+    auto_scaling_group: _IAutoScalingGroupRef_2f9e9183,
     schedule: Schedule,
     desired_capacity: typing.Optional[jsii.Number] = None,
     end_time: typing.Optional[datetime.datetime] = None,
@@ -23762,7 +23815,7 @@ def _typecheckingstub__32b96efb9d6e83028fe8f913de37e12991ddcd1c9b905f945ec066669
     min_capacity: typing.Optional[jsii.Number] = None,
     start_time: typing.Optional[datetime.datetime] = None,
     time_zone: typing.Optional[builtins.str] = None,
-    auto_scaling_group: IAutoScalingGroup,
+    auto_scaling_group: _IAutoScalingGroupRef_2f9e9183,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23795,7 +23848,7 @@ def _typecheckingstub__ffa6df0b2f6132cf5774ac6f2d9a2386d0086ac8fb2e1099ce3e2d1e8
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    auto_scaling_group: IAutoScalingGroup,
+    auto_scaling_group: _IAutoScalingGroupRef_2f9e9183,
     adjustment_type: typing.Optional[AdjustmentType] = None,
     cooldown: typing.Optional[_Duration_4839e8c3] = None,
     estimated_instance_warmup: typing.Optional[_Duration_4839e8c3] = None,
@@ -23807,7 +23860,7 @@ def _typecheckingstub__ffa6df0b2f6132cf5774ac6f2d9a2386d0086ac8fb2e1099ce3e2d1e8
 
 def _typecheckingstub__0dc30b71654db9e1496b3decd98d591ff6b33ab944cb8fc3598af41487daa5d7(
     *,
-    auto_scaling_group: IAutoScalingGroup,
+    auto_scaling_group: _IAutoScalingGroupRef_2f9e9183,
     adjustment_type: typing.Optional[AdjustmentType] = None,
     cooldown: typing.Optional[_Duration_4839e8c3] = None,
     estimated_instance_warmup: typing.Optional[_Duration_4839e8c3] = None,
@@ -23821,7 +23874,7 @@ def _typecheckingstub__0005ce4226fc9248b4204e8c5ff1cd051d01ead018243acaa3ababccc
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    auto_scaling_group: IAutoScalingGroup,
+    auto_scaling_group: _IAutoScalingGroupRef_2f9e9183,
     metric: _IMetric_c7fd29de,
     scaling_steps: typing.Sequence[typing.Union[ScalingInterval, typing.Dict[builtins.str, typing.Any]]],
     adjustment_type: typing.Optional[AdjustmentType] = None,
@@ -23846,7 +23899,7 @@ def _typecheckingstub__b8819b1ea5c3198634a59e8e3f9d800de84f84dbc3832a9e409edba96
     evaluation_periods: typing.Optional[jsii.Number] = None,
     metric_aggregation_type: typing.Optional[MetricAggregationType] = None,
     min_adjustment_magnitude: typing.Optional[jsii.Number] = None,
-    auto_scaling_group: IAutoScalingGroup,
+    auto_scaling_group: _IAutoScalingGroupRef_2f9e9183,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23855,7 +23908,7 @@ def _typecheckingstub__0ffdd471947ceb35f245e265947f285493e633fcdc345bb463654f469
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    auto_scaling_group: IAutoScalingGroup,
+    auto_scaling_group: _IAutoScalingGroupRef_2f9e9183,
     target_value: jsii.Number,
     custom_metric: typing.Optional[_IMetric_c7fd29de] = None,
     predefined_metric: typing.Optional[PredefinedMetric] = None,
@@ -23876,7 +23929,7 @@ def _typecheckingstub__1dc39a4cce7891e4e5f8f914025bdc81fde69988d7b5eb053a0842ace
     custom_metric: typing.Optional[_IMetric_c7fd29de] = None,
     predefined_metric: typing.Optional[PredefinedMetric] = None,
     resource_label: typing.Optional[builtins.str] = None,
-    auto_scaling_group: IAutoScalingGroup,
+    auto_scaling_group: _IAutoScalingGroupRef_2f9e9183,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23885,7 +23938,7 @@ def _typecheckingstub__5941a55bc5215a8436958d1edd768fe089e0e6229de15632ea23ef8e7
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    auto_scaling_group: IAutoScalingGroup,
+    auto_scaling_group: _IAutoScalingGroupRef_2f9e9183,
     max_group_prepared_capacity: typing.Optional[jsii.Number] = None,
     min_size: typing.Optional[jsii.Number] = None,
     pool_state: typing.Optional[PoolState] = None,
@@ -23910,7 +23963,7 @@ def _typecheckingstub__86354b238a84c6099dfe2a6f5018ad085f646c3809aa9f4c1c2716374
     min_size: typing.Optional[jsii.Number] = None,
     pool_state: typing.Optional[PoolState] = None,
     reuse_on_scale_in: typing.Optional[builtins.bool] = None,
-    auto_scaling_group: IAutoScalingGroup,
+    auto_scaling_group: _IAutoScalingGroupRef_2f9e9183,
 ) -> None:
     """Type checking stubs"""
     pass

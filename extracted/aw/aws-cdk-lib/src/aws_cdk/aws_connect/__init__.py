@@ -1086,6 +1086,10 @@ class CfnContactFlowModule(
         
             # the properties below are optional
             description="description",
+            external_invocation_configuration=connect.CfnContactFlowModule.ExternalInvocationConfigurationProperty(
+                enabled=False
+            ),
+            settings="settings",
             state="state",
             tags=[CfnTag(
                 key="key",
@@ -1103,6 +1107,8 @@ class CfnContactFlowModule(
         instance_arn: typing.Union[builtins.str, "_IInstanceRef_b6835093"],
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
+        external_invocation_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContactFlowModule.ExternalInvocationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        settings: typing.Optional[builtins.str] = None,
         state: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -1114,6 +1120,8 @@ class CfnContactFlowModule(
         :param instance_arn: The Amazon Resource Name (ARN) of the Amazon Connect instance.
         :param name: The name of the flow module.
         :param description: The description of the flow module.
+        :param external_invocation_configuration: The external invocation configuration for the flow module.
+        :param settings: The configuration settings for the flow module.
         :param state: The state of the flow module.
         :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
         '''
@@ -1126,6 +1134,8 @@ class CfnContactFlowModule(
             instance_arn=instance_arn,
             name=name,
             description=description,
+            external_invocation_configuration=external_invocation_configuration,
+            settings=settings,
             state=state,
             tags=tags,
         )
@@ -1276,6 +1286,37 @@ class CfnContactFlowModule(
         jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="externalInvocationConfiguration")
+    def external_invocation_configuration(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContactFlowModule.ExternalInvocationConfigurationProperty"]]:
+        '''The external invocation configuration for the flow module.'''
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContactFlowModule.ExternalInvocationConfigurationProperty"]], jsii.get(self, "externalInvocationConfiguration"))
+
+    @external_invocation_configuration.setter
+    def external_invocation_configuration(
+        self,
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContactFlowModule.ExternalInvocationConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__19e76f3503292c8189ac76e603d1b9b9d1b6c9f7a3ec208d2040514ff4c5ac41)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "externalInvocationConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="settings")
+    def settings(self) -> typing.Optional[builtins.str]:
+        '''The configuration settings for the flow module.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "settings"))
+
+    @settings.setter
+    def settings(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ee73bf179b4a466438157ce3ef148e87b3c9088a822bc102833fbde331f890ad)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "settings", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="state")
     def state(self) -> typing.Optional[builtins.str]:
         '''The state of the flow module.'''
@@ -1301,6 +1342,62 @@ class CfnContactFlowModule(
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
 
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnContactFlowModule.ExternalInvocationConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"enabled": "enabled"},
+    )
+    class ExternalInvocationConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            enabled: typing.Union[builtins.bool, "_IResolvable_da3f097b"],
+        ) -> None:
+            '''The external invocation configuration for the flow module.
+
+            :param enabled: Enable external invocation.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-contactflowmodule-externalinvocationconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                external_invocation_configuration_property = connect.CfnContactFlowModule.ExternalInvocationConfigurationProperty(
+                    enabled=False
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__2f8efe241abc51b530409c9debc12d730a45ae666ff0ec6e19d2013f0d3d2302)
+                check_type(argname="argument enabled", value=enabled, expected_type=type_hints["enabled"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "enabled": enabled,
+            }
+
+        @builtins.property
+        def enabled(self) -> typing.Union[builtins.bool, "_IResolvable_da3f097b"]:
+            '''Enable external invocation.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-contactflowmodule-externalinvocationconfiguration.html#cfn-connect-contactflowmodule-externalinvocationconfiguration-enabled
+            '''
+            result = self._values.get("enabled")
+            assert result is not None, "Required property 'enabled' is missing"
+            return typing.cast(typing.Union[builtins.bool, "_IResolvable_da3f097b"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ExternalInvocationConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_connect.CfnContactFlowModuleProps",
@@ -1310,6 +1407,8 @@ class CfnContactFlowModule(
         "instance_arn": "instanceArn",
         "name": "name",
         "description": "description",
+        "external_invocation_configuration": "externalInvocationConfiguration",
+        "settings": "settings",
         "state": "state",
         "tags": "tags",
     },
@@ -1322,6 +1421,8 @@ class CfnContactFlowModuleProps:
         instance_arn: typing.Union[builtins.str, "_IInstanceRef_b6835093"],
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
+        external_invocation_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnContactFlowModule.ExternalInvocationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        settings: typing.Optional[builtins.str] = None,
         state: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -1331,6 +1432,8 @@ class CfnContactFlowModuleProps:
         :param instance_arn: The Amazon Resource Name (ARN) of the Amazon Connect instance.
         :param name: The name of the flow module.
         :param description: The description of the flow module.
+        :param external_invocation_configuration: The external invocation configuration for the flow module.
+        :param settings: The configuration settings for the flow module.
         :param state: The state of the flow module.
         :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
 
@@ -1351,6 +1454,10 @@ class CfnContactFlowModuleProps:
             
                 # the properties below are optional
                 description="description",
+                external_invocation_configuration=connect.CfnContactFlowModule.ExternalInvocationConfigurationProperty(
+                    enabled=False
+                ),
+                settings="settings",
                 state="state",
                 tags=[CfnTag(
                     key="key",
@@ -1364,6 +1471,8 @@ class CfnContactFlowModuleProps:
             check_type(argname="argument instance_arn", value=instance_arn, expected_type=type_hints["instance_arn"])
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument external_invocation_configuration", value=external_invocation_configuration, expected_type=type_hints["external_invocation_configuration"])
+            check_type(argname="argument settings", value=settings, expected_type=type_hints["settings"])
             check_type(argname="argument state", value=state, expected_type=type_hints["state"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -1373,6 +1482,10 @@ class CfnContactFlowModuleProps:
         }
         if description is not None:
             self._values["description"] = description
+        if external_invocation_configuration is not None:
+            self._values["external_invocation_configuration"] = external_invocation_configuration
+        if settings is not None:
+            self._values["settings"] = settings
         if state is not None:
             self._values["state"] = state
         if tags is not None:
@@ -1415,6 +1528,26 @@ class CfnContactFlowModuleProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-contactflowmodule.html#cfn-connect-contactflowmodule-description
         '''
         result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def external_invocation_configuration(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContactFlowModule.ExternalInvocationConfigurationProperty"]]:
+        '''The external invocation configuration for the flow module.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-contactflowmodule.html#cfn-connect-contactflowmodule-externalinvocationconfiguration
+        '''
+        result = self._values.get("external_invocation_configuration")
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnContactFlowModule.ExternalInvocationConfigurationProperty"]], result)
+
+    @builtins.property
+    def settings(self) -> typing.Optional[builtins.str]:
+        '''The configuration settings for the flow module.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-contactflowmodule.html#cfn-connect-contactflowmodule-settings
+        '''
+        result = self._values.get("settings")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -8474,6 +8607,12 @@ class CfnHoursOfOperation(
             time_zone="timeZone",
         
             # the properties below are optional
+            child_hours_of_operations=[connect.CfnHoursOfOperation.HoursOfOperationsIdentifierProperty(
+                id="id",
+        
+                # the properties below are optional
+                name="name"
+            )],
             description="description",
             hours_of_operation_overrides=[connect.CfnHoursOfOperation.HoursOfOperationOverrideProperty(
                 effective_from="effectiveFrom",
@@ -8493,7 +8632,23 @@ class CfnHoursOfOperation(
         
                 # the properties below are optional
                 hours_of_operation_override_id="hoursOfOperationOverrideId",
-                override_description="overrideDescription"
+                override_description="overrideDescription",
+                override_type="overrideType",
+                recurrence_config=connect.CfnHoursOfOperation.RecurrenceConfigProperty(
+                    recurrence_pattern=connect.CfnHoursOfOperation.RecurrencePatternProperty(
+                        by_month=[123],
+                        by_month_day=[123],
+                        by_weekday_occurrence=[123],
+                        frequency="frequency",
+                        interval=123
+                    )
+                )
+            )],
+            parent_hours_of_operations=[connect.CfnHoursOfOperation.HoursOfOperationsIdentifierProperty(
+                id="id",
+        
+                # the properties below are optional
+                name="name"
             )],
             tags=[CfnTag(
                 key="key",
@@ -8511,8 +8666,10 @@ class CfnHoursOfOperation(
         instance_arn: typing.Union[builtins.str, "_IInstanceRef_b6835093"],
         name: builtins.str,
         time_zone: builtins.str,
+        child_hours_of_operations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnHoursOfOperation.HoursOfOperationsIdentifierProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
         hours_of_operation_overrides: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnHoursOfOperation.HoursOfOperationOverrideProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        parent_hours_of_operations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnHoursOfOperation.HoursOfOperationsIdentifierProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Connect::HoursOfOperation``.
@@ -8523,8 +8680,10 @@ class CfnHoursOfOperation(
         :param instance_arn: The Amazon Resource Name (ARN) of the instance.
         :param name: The name for the hours of operation.
         :param time_zone: The time zone for the hours of operation.
+        :param child_hours_of_operations: List of child hours of operations.
         :param description: The description for the hours of operation.
         :param hours_of_operation_overrides: One or more hours of operation overrides assigned to an hour of operation.
+        :param parent_hours_of_operations: List of parent hours of operations.
         :param tags: The tags used to organize, track, or control access for this resource. For example, { "Tags": {"key1":"value1", "key2":"value2"} }.
         '''
         if __debug__:
@@ -8536,8 +8695,10 @@ class CfnHoursOfOperation(
             instance_arn=instance_arn,
             name=name,
             time_zone=time_zone,
+            child_hours_of_operations=child_hours_of_operations,
             description=description,
             hours_of_operation_overrides=hours_of_operation_overrides,
+            parent_hours_of_operations=parent_hours_of_operations,
             tags=tags,
         )
 
@@ -8683,6 +8844,24 @@ class CfnHoursOfOperation(
         jsii.set(self, "timeZone", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="childHoursOfOperations")
+    def child_hours_of_operations(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnHoursOfOperation.HoursOfOperationsIdentifierProperty"]]]]:
+        '''List of child hours of operations.'''
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnHoursOfOperation.HoursOfOperationsIdentifierProperty"]]]], jsii.get(self, "childHoursOfOperations"))
+
+    @child_hours_of_operations.setter
+    def child_hours_of_operations(
+        self,
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnHoursOfOperation.HoursOfOperationsIdentifierProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b2a66d9c97214b57f9c903fb5bc8cf91a750f18059a54b35c7cfae9890dbd56d)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "childHoursOfOperations", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="description")
     def description(self) -> typing.Optional[builtins.str]:
         '''The description for the hours of operation.'''
@@ -8712,6 +8891,24 @@ class CfnHoursOfOperation(
             type_hints = typing.get_type_hints(_typecheckingstub__aac2ad464f2908529fe7a982324e9d2212d9f0ba0ee88e3970e04f1d51655caa)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "hoursOfOperationOverrides", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="parentHoursOfOperations")
+    def parent_hours_of_operations(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnHoursOfOperation.HoursOfOperationsIdentifierProperty"]]]]:
+        '''List of parent hours of operations.'''
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnHoursOfOperation.HoursOfOperationsIdentifierProperty"]]]], jsii.get(self, "parentHoursOfOperations"))
+
+    @parent_hours_of_operations.setter
+    def parent_hours_of_operations(
+        self,
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnHoursOfOperation.HoursOfOperationsIdentifierProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5963c53484be9bb4cfb78e076517b6f96fec1e61265aa2ad406e0cbb51534215)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "parentHoursOfOperations", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
@@ -8928,6 +9125,8 @@ class CfnHoursOfOperation(
             "override_name": "overrideName",
             "hours_of_operation_override_id": "hoursOfOperationOverrideId",
             "override_description": "overrideDescription",
+            "override_type": "overrideType",
+            "recurrence_config": "recurrenceConfig",
         },
     )
     class HoursOfOperationOverrideProperty:
@@ -8940,6 +9139,8 @@ class CfnHoursOfOperation(
             override_name: builtins.str,
             hours_of_operation_override_id: typing.Optional[builtins.str] = None,
             override_description: typing.Optional[builtins.str] = None,
+            override_type: typing.Optional[builtins.str] = None,
+            recurrence_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnHoursOfOperation.RecurrenceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Information about the hours of operations override.
 
@@ -8949,6 +9150,8 @@ class CfnHoursOfOperation(
             :param override_name: The name of the hours of operation override.
             :param hours_of_operation_override_id: The identifier for the hours of operation override.
             :param override_description: The description of the hours of operation override.
+            :param override_type: The type of hours of operation override.
+            :param recurrence_config: Configuration for recurring hours of operation overrides.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-hoursofoperation-hoursofoperationoverride.html
             :exampleMetadata: fixture=_generated
@@ -8977,7 +9180,17 @@ class CfnHoursOfOperation(
                 
                     # the properties below are optional
                     hours_of_operation_override_id="hoursOfOperationOverrideId",
-                    override_description="overrideDescription"
+                    override_description="overrideDescription",
+                    override_type="overrideType",
+                    recurrence_config=connect.CfnHoursOfOperation.RecurrenceConfigProperty(
+                        recurrence_pattern=connect.CfnHoursOfOperation.RecurrencePatternProperty(
+                            by_month=[123],
+                            by_month_day=[123],
+                            by_weekday_occurrence=[123],
+                            frequency="frequency",
+                            interval=123
+                        )
+                    )
                 )
             '''
             if __debug__:
@@ -8988,6 +9201,8 @@ class CfnHoursOfOperation(
                 check_type(argname="argument override_name", value=override_name, expected_type=type_hints["override_name"])
                 check_type(argname="argument hours_of_operation_override_id", value=hours_of_operation_override_id, expected_type=type_hints["hours_of_operation_override_id"])
                 check_type(argname="argument override_description", value=override_description, expected_type=type_hints["override_description"])
+                check_type(argname="argument override_type", value=override_type, expected_type=type_hints["override_type"])
+                check_type(argname="argument recurrence_config", value=recurrence_config, expected_type=type_hints["recurrence_config"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "effective_from": effective_from,
                 "effective_till": effective_till,
@@ -8998,6 +9213,10 @@ class CfnHoursOfOperation(
                 self._values["hours_of_operation_override_id"] = hours_of_operation_override_id
             if override_description is not None:
                 self._values["override_description"] = override_description
+            if override_type is not None:
+                self._values["override_type"] = override_type
+            if recurrence_config is not None:
+                self._values["recurrence_config"] = recurrence_config
 
         @builtins.property
         def effective_from(self) -> builtins.str:
@@ -9058,6 +9277,26 @@ class CfnHoursOfOperation(
             '''
             result = self._values.get("override_description")
             return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def override_type(self) -> typing.Optional[builtins.str]:
+            '''The type of hours of operation override.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-hoursofoperation-hoursofoperationoverride.html#cfn-connect-hoursofoperation-hoursofoperationoverride-overridetype
+            '''
+            result = self._values.get("override_type")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def recurrence_config(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnHoursOfOperation.RecurrenceConfigProperty"]]:
+            '''Configuration for recurring hours of operation overrides.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-hoursofoperation-hoursofoperationoverride.html#cfn-connect-hoursofoperation-hoursofoperationoverride-recurrenceconfig
+            '''
+            result = self._values.get("recurrence_config")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnHoursOfOperation.RecurrenceConfigProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9137,6 +9376,79 @@ class CfnHoursOfOperation(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnHoursOfOperation.HoursOfOperationsIdentifierProperty",
+        jsii_struct_bases=[],
+        name_mapping={"id": "id", "name": "name"},
+    )
+    class HoursOfOperationsIdentifierProperty:
+        def __init__(
+            self,
+            *,
+            id: builtins.str,
+            name: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Identifier for hours of operation.
+
+            :param id: The identifier for the hours of operation.
+            :param name: The name of the hours of operation.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-hoursofoperation-hoursofoperationsidentifier.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                hours_of_operations_identifier_property = connect.CfnHoursOfOperation.HoursOfOperationsIdentifierProperty(
+                    id="id",
+                
+                    # the properties below are optional
+                    name="name"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__a32685d2df8d03003ddee79091051e79839dac508269943fbdcf6665cb4ecb67)
+                check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "id": id,
+            }
+            if name is not None:
+                self._values["name"] = name
+
+        @builtins.property
+        def id(self) -> builtins.str:
+            '''The identifier for the hours of operation.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-hoursofoperation-hoursofoperationsidentifier.html#cfn-connect-hoursofoperation-hoursofoperationsidentifier-id
+            '''
+            result = self._values.get("id")
+            assert result is not None, "Required property 'id' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def name(self) -> typing.Optional[builtins.str]:
+            '''The name of the hours of operation.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-hoursofoperation-hoursofoperationsidentifier.html#cfn-connect-hoursofoperation-hoursofoperationsidentifier-name
+            '''
+            result = self._values.get("name")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "HoursOfOperationsIdentifierProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_connect.CfnHoursOfOperation.OverrideTimeSliceProperty",
         jsii_struct_bases=[],
         name_mapping={"hours": "hours", "minutes": "minutes"},
@@ -9202,6 +9514,195 @@ class CfnHoursOfOperation(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnHoursOfOperation.RecurrenceConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"recurrence_pattern": "recurrencePattern"},
+    )
+    class RecurrenceConfigProperty:
+        def __init__(
+            self,
+            *,
+            recurrence_pattern: typing.Union["_IResolvable_da3f097b", typing.Union["CfnHoursOfOperation.RecurrencePatternProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''Configuration for recurring hours of operation overrides.
+
+            :param recurrence_pattern: Pattern for recurring hours of operation overrides.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-hoursofoperation-recurrenceconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                recurrence_config_property = connect.CfnHoursOfOperation.RecurrenceConfigProperty(
+                    recurrence_pattern=connect.CfnHoursOfOperation.RecurrencePatternProperty(
+                        by_month=[123],
+                        by_month_day=[123],
+                        by_weekday_occurrence=[123],
+                        frequency="frequency",
+                        interval=123
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__68cacc106512aa900b19fb5e71bedbe1a26270a14dd17de3f5bd0d4e35266bb8)
+                check_type(argname="argument recurrence_pattern", value=recurrence_pattern, expected_type=type_hints["recurrence_pattern"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "recurrence_pattern": recurrence_pattern,
+            }
+
+        @builtins.property
+        def recurrence_pattern(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnHoursOfOperation.RecurrencePatternProperty"]:
+            '''Pattern for recurring hours of operation overrides.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-hoursofoperation-recurrenceconfig.html#cfn-connect-hoursofoperation-recurrenceconfig-recurrencepattern
+            '''
+            result = self._values.get("recurrence_pattern")
+            assert result is not None, "Required property 'recurrence_pattern' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnHoursOfOperation.RecurrencePatternProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RecurrenceConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnHoursOfOperation.RecurrencePatternProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "by_month": "byMonth",
+            "by_month_day": "byMonthDay",
+            "by_weekday_occurrence": "byWeekdayOccurrence",
+            "frequency": "frequency",
+            "interval": "interval",
+        },
+    )
+    class RecurrencePatternProperty:
+        def __init__(
+            self,
+            *,
+            by_month: typing.Optional[typing.Union[typing.Sequence[jsii.Number], "_IResolvable_da3f097b"]] = None,
+            by_month_day: typing.Optional[typing.Union[typing.Sequence[jsii.Number], "_IResolvable_da3f097b"]] = None,
+            by_weekday_occurrence: typing.Optional[typing.Union[typing.Sequence[jsii.Number], "_IResolvable_da3f097b"]] = None,
+            frequency: typing.Optional[builtins.str] = None,
+            interval: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''Pattern for recurring hours of operation overrides.
+
+            :param by_month: List of months (1-12) for recurrence pattern.
+            :param by_month_day: List of month days (-1 to 31) for recurrence pattern.
+            :param by_weekday_occurrence: 
+            :param frequency: The frequency of recurrence for hours of operation overrides.
+            :param interval: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-hoursofoperation-recurrencepattern.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                recurrence_pattern_property = connect.CfnHoursOfOperation.RecurrencePatternProperty(
+                    by_month=[123],
+                    by_month_day=[123],
+                    by_weekday_occurrence=[123],
+                    frequency="frequency",
+                    interval=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__7e626e609b2038a6e672a968893eb93bfb0c925c803b19a12ce024c34da2393b)
+                check_type(argname="argument by_month", value=by_month, expected_type=type_hints["by_month"])
+                check_type(argname="argument by_month_day", value=by_month_day, expected_type=type_hints["by_month_day"])
+                check_type(argname="argument by_weekday_occurrence", value=by_weekday_occurrence, expected_type=type_hints["by_weekday_occurrence"])
+                check_type(argname="argument frequency", value=frequency, expected_type=type_hints["frequency"])
+                check_type(argname="argument interval", value=interval, expected_type=type_hints["interval"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if by_month is not None:
+                self._values["by_month"] = by_month
+            if by_month_day is not None:
+                self._values["by_month_day"] = by_month_day
+            if by_weekday_occurrence is not None:
+                self._values["by_weekday_occurrence"] = by_weekday_occurrence
+            if frequency is not None:
+                self._values["frequency"] = frequency
+            if interval is not None:
+                self._values["interval"] = interval
+
+        @builtins.property
+        def by_month(
+            self,
+        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]]:
+            '''List of months (1-12) for recurrence pattern.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-hoursofoperation-recurrencepattern.html#cfn-connect-hoursofoperation-recurrencepattern-bymonth
+            '''
+            result = self._values.get("by_month")
+            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]], result)
+
+        @builtins.property
+        def by_month_day(
+            self,
+        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]]:
+            '''List of month days (-1 to 31) for recurrence pattern.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-hoursofoperation-recurrencepattern.html#cfn-connect-hoursofoperation-recurrencepattern-bymonthday
+            '''
+            result = self._values.get("by_month_day")
+            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]], result)
+
+        @builtins.property
+        def by_weekday_occurrence(
+            self,
+        ) -> typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-hoursofoperation-recurrencepattern.html#cfn-connect-hoursofoperation-recurrencepattern-byweekdayoccurrence
+            '''
+            result = self._values.get("by_weekday_occurrence")
+            return typing.cast(typing.Optional[typing.Union[typing.List[jsii.Number], "_IResolvable_da3f097b"]], result)
+
+        @builtins.property
+        def frequency(self) -> typing.Optional[builtins.str]:
+            '''The frequency of recurrence for hours of operation overrides.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-hoursofoperation-recurrencepattern.html#cfn-connect-hoursofoperation-recurrencepattern-frequency
+            '''
+            result = self._values.get("frequency")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def interval(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-hoursofoperation-recurrencepattern.html#cfn-connect-hoursofoperation-recurrencepattern-interval
+            '''
+            result = self._values.get("interval")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RecurrencePatternProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_connect.CfnHoursOfOperationProps",
@@ -9211,8 +9712,10 @@ class CfnHoursOfOperation(
         "instance_arn": "instanceArn",
         "name": "name",
         "time_zone": "timeZone",
+        "child_hours_of_operations": "childHoursOfOperations",
         "description": "description",
         "hours_of_operation_overrides": "hoursOfOperationOverrides",
+        "parent_hours_of_operations": "parentHoursOfOperations",
         "tags": "tags",
     },
 )
@@ -9224,8 +9727,10 @@ class CfnHoursOfOperationProps:
         instance_arn: typing.Union[builtins.str, "_IInstanceRef_b6835093"],
         name: builtins.str,
         time_zone: builtins.str,
+        child_hours_of_operations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnHoursOfOperation.HoursOfOperationsIdentifierProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
         hours_of_operation_overrides: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnHoursOfOperation.HoursOfOperationOverrideProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        parent_hours_of_operations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnHoursOfOperation.HoursOfOperationsIdentifierProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnHoursOfOperation``.
@@ -9234,8 +9739,10 @@ class CfnHoursOfOperationProps:
         :param instance_arn: The Amazon Resource Name (ARN) of the instance.
         :param name: The name for the hours of operation.
         :param time_zone: The time zone for the hours of operation.
+        :param child_hours_of_operations: List of child hours of operations.
         :param description: The description for the hours of operation.
         :param hours_of_operation_overrides: One or more hours of operation overrides assigned to an hour of operation.
+        :param parent_hours_of_operations: List of parent hours of operations.
         :param tags: The tags used to organize, track, or control access for this resource. For example, { "Tags": {"key1":"value1", "key2":"value2"} }.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-hoursofoperation.html
@@ -9265,6 +9772,12 @@ class CfnHoursOfOperationProps:
                 time_zone="timeZone",
             
                 # the properties below are optional
+                child_hours_of_operations=[connect.CfnHoursOfOperation.HoursOfOperationsIdentifierProperty(
+                    id="id",
+            
+                    # the properties below are optional
+                    name="name"
+                )],
                 description="description",
                 hours_of_operation_overrides=[connect.CfnHoursOfOperation.HoursOfOperationOverrideProperty(
                     effective_from="effectiveFrom",
@@ -9284,7 +9797,23 @@ class CfnHoursOfOperationProps:
             
                     # the properties below are optional
                     hours_of_operation_override_id="hoursOfOperationOverrideId",
-                    override_description="overrideDescription"
+                    override_description="overrideDescription",
+                    override_type="overrideType",
+                    recurrence_config=connect.CfnHoursOfOperation.RecurrenceConfigProperty(
+                        recurrence_pattern=connect.CfnHoursOfOperation.RecurrencePatternProperty(
+                            by_month=[123],
+                            by_month_day=[123],
+                            by_weekday_occurrence=[123],
+                            frequency="frequency",
+                            interval=123
+                        )
+                    )
+                )],
+                parent_hours_of_operations=[connect.CfnHoursOfOperation.HoursOfOperationsIdentifierProperty(
+                    id="id",
+            
+                    # the properties below are optional
+                    name="name"
                 )],
                 tags=[CfnTag(
                     key="key",
@@ -9298,8 +9827,10 @@ class CfnHoursOfOperationProps:
             check_type(argname="argument instance_arn", value=instance_arn, expected_type=type_hints["instance_arn"])
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument time_zone", value=time_zone, expected_type=type_hints["time_zone"])
+            check_type(argname="argument child_hours_of_operations", value=child_hours_of_operations, expected_type=type_hints["child_hours_of_operations"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
             check_type(argname="argument hours_of_operation_overrides", value=hours_of_operation_overrides, expected_type=type_hints["hours_of_operation_overrides"])
+            check_type(argname="argument parent_hours_of_operations", value=parent_hours_of_operations, expected_type=type_hints["parent_hours_of_operations"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "config": config,
@@ -9307,10 +9838,14 @@ class CfnHoursOfOperationProps:
             "name": name,
             "time_zone": time_zone,
         }
+        if child_hours_of_operations is not None:
+            self._values["child_hours_of_operations"] = child_hours_of_operations
         if description is not None:
             self._values["description"] = description
         if hours_of_operation_overrides is not None:
             self._values["hours_of_operation_overrides"] = hours_of_operation_overrides
+        if parent_hours_of_operations is not None:
+            self._values["parent_hours_of_operations"] = parent_hours_of_operations
         if tags is not None:
             self._values["tags"] = tags
 
@@ -9357,6 +9892,17 @@ class CfnHoursOfOperationProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
+    def child_hours_of_operations(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnHoursOfOperation.HoursOfOperationsIdentifierProperty"]]]]:
+        '''List of child hours of operations.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-hoursofoperation.html#cfn-connect-hoursofoperation-childhoursofoperations
+        '''
+        result = self._values.get("child_hours_of_operations")
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnHoursOfOperation.HoursOfOperationsIdentifierProperty"]]]], result)
+
+    @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
         '''The description for the hours of operation.
 
@@ -9375,6 +9921,17 @@ class CfnHoursOfOperationProps:
         '''
         result = self._values.get("hours_of_operation_overrides")
         return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnHoursOfOperation.HoursOfOperationOverrideProperty"]]]], result)
+
+    @builtins.property
+    def parent_hours_of_operations(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnHoursOfOperation.HoursOfOperationsIdentifierProperty"]]]]:
+        '''List of parent hours of operations.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-hoursofoperation.html#cfn-connect-hoursofoperation-parenthoursofoperations
+        '''
+        result = self._values.get("parent_hours_of_operations")
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnHoursOfOperation.HoursOfOperationsIdentifierProperty"]]]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
@@ -24195,6 +24752,8 @@ def _typecheckingstub__008a6ee0ce6447d7f5f7c62774a959e253bc4a69cef26848e6d3f74cf
     instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     name: builtins.str,
     description: typing.Optional[builtins.str] = None,
+    external_invocation_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContactFlowModule.ExternalInvocationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    settings: typing.Optional[builtins.str] = None,
     state: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -24249,6 +24808,18 @@ def _typecheckingstub__2c1841af03e44ad4a3c471a24f30aa57c457ec766515db087b0745fb9
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__19e76f3503292c8189ac76e603d1b9b9d1b6c9f7a3ec208d2040514ff4c5ac41(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnContactFlowModule.ExternalInvocationConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ee73bf179b4a466438157ce3ef148e87b3c9088a822bc102833fbde331f890ad(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__25db523d57560a8813a16f507ae8c09c28625a53b6a24b5744ca978282ff51a3(
     value: typing.Optional[builtins.str],
 ) -> None:
@@ -24261,12 +24832,21 @@ def _typecheckingstub__47de1c508f0616d427a0546578e35f062250082b28649c89857700196
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__2f8efe241abc51b530409c9debc12d730a45ae666ff0ec6e19d2013f0d3d2302(
+    *,
+    enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__84f0f2ba3fd7010e7e0bb6aaa71b591e31e6d4c4ad736e9c4e08be6f11de0102(
     *,
     content: builtins.str,
     instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     name: builtins.str,
     description: typing.Optional[builtins.str] = None,
+    external_invocation_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContactFlowModule.ExternalInvocationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    settings: typing.Optional[builtins.str] = None,
     state: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -25131,8 +25711,10 @@ def _typecheckingstub__da9a7b2f06b8b2d053fcfa26018be9202b48193f9ffb7fc1d9518391c
     instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     name: builtins.str,
     time_zone: builtins.str,
+    child_hours_of_operations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnHoursOfOperation.HoursOfOperationsIdentifierProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     description: typing.Optional[builtins.str] = None,
     hours_of_operation_overrides: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnHoursOfOperation.HoursOfOperationOverrideProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    parent_hours_of_operations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnHoursOfOperation.HoursOfOperationsIdentifierProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -25186,6 +25768,12 @@ def _typecheckingstub__442605da8563582cbafb26c421377e100eaf1791f47f7f84657994d9d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__b2a66d9c97214b57f9c903fb5bc8cf91a750f18059a54b35c7cfae9890dbd56d(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnHoursOfOperation.HoursOfOperationsIdentifierProperty]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__224611189f5992474af63688324a9a850ba31b7aad01b0eaae5a8fd63f4ea172(
     value: typing.Optional[builtins.str],
 ) -> None:
@@ -25194,6 +25782,12 @@ def _typecheckingstub__224611189f5992474af63688324a9a850ba31b7aad01b0eaae5a8fd63
 
 def _typecheckingstub__aac2ad464f2908529fe7a982324e9d2212d9f0ba0ee88e3970e04f1d51655caa(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnHoursOfOperation.HoursOfOperationOverrideProperty]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5963c53484be9bb4cfb78e076517b6f96fec1e61265aa2ad406e0cbb51534215(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnHoursOfOperation.HoursOfOperationsIdentifierProperty]]]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -25230,6 +25824,8 @@ def _typecheckingstub__94d2d235922a59e0f97399934738d2d670e60e30b42450dbe734359a8
     override_name: builtins.str,
     hours_of_operation_override_id: typing.Optional[builtins.str] = None,
     override_description: typing.Optional[builtins.str] = None,
+    override_type: typing.Optional[builtins.str] = None,
+    recurrence_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnHoursOfOperation.RecurrenceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -25242,10 +25838,36 @@ def _typecheckingstub__ca5c5b128d189787db53fa22c88668d84b3efd31f5b54320dcda08383
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a32685d2df8d03003ddee79091051e79839dac508269943fbdcf6665cb4ecb67(
+    *,
+    id: builtins.str,
+    name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__bf0fe9b40d5f92cd82deaad81370dd578dddfd7a1db227ec3b04d8a1894b5941(
     *,
     hours: jsii.Number,
     minutes: jsii.Number,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__68cacc106512aa900b19fb5e71bedbe1a26270a14dd17de3f5bd0d4e35266bb8(
+    *,
+    recurrence_pattern: typing.Union[_IResolvable_da3f097b, typing.Union[CfnHoursOfOperation.RecurrencePatternProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7e626e609b2038a6e672a968893eb93bfb0c925c803b19a12ce024c34da2393b(
+    *,
+    by_month: typing.Optional[typing.Union[typing.Sequence[jsii.Number], _IResolvable_da3f097b]] = None,
+    by_month_day: typing.Optional[typing.Union[typing.Sequence[jsii.Number], _IResolvable_da3f097b]] = None,
+    by_weekday_occurrence: typing.Optional[typing.Union[typing.Sequence[jsii.Number], _IResolvable_da3f097b]] = None,
+    frequency: typing.Optional[builtins.str] = None,
+    interval: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -25256,8 +25878,10 @@ def _typecheckingstub__66cef12b59765322de54d22fe6de568f262a635899fc46cbe6a5f5a97
     instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     name: builtins.str,
     time_zone: builtins.str,
+    child_hours_of_operations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnHoursOfOperation.HoursOfOperationsIdentifierProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     description: typing.Optional[builtins.str] = None,
     hours_of_operation_overrides: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnHoursOfOperation.HoursOfOperationOverrideProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    parent_hours_of_operations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnHoursOfOperation.HoursOfOperationsIdentifierProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""

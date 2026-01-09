@@ -1702,27 +1702,24 @@ Managed Instances Capacity Providers allow you to use AWS-managed EC2 instances 
 
 See [ECS documentation for Managed Instances Capacity Provider](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/managed-instances-capacity-providers-concept.html) for more documentation.
 
+#### IAM Roles Setup
+
+Managed instances require an infrastructure and an EC2 instance profile. You can either provide your own infrastructure role and/or instance profile, or let the construct create them automatically.
+
+Option 1: Let CDK create the role and instance profile automatically
+
 ```python
 # vpc: ec2.Vpc
-# infrastructure_role: iam.Role
-# instance_profile: iam.InstanceProfile
 
 
 cluster = ecs.Cluster(self, "Cluster", vpc=vpc)
 
-# Create a Managed Instances Capacity Provider
 mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProvider",
-    infrastructure_role=infrastructure_role,
-    ec2_instance_profile=instance_profile,
     subnets=vpc.private_subnets,
-    security_groups=[ec2.SecurityGroup(self, "MISecurityGroup", vpc=vpc)],
     instance_requirements=ec2.InstanceRequirementsConfig(
         v_cpu_count_min=1,
-        memory_min=Size.gibibytes(2),
-        cpu_manufacturers=[ec2.CpuManufacturer.INTEL],
-        accelerator_manufacturers=[ec2.AcceleratorManufacturer.NVIDIA]
-    ),
-    propagate_tags=ecs.PropagateManagedInstancesTags.CAPACITY_PROVIDER
+        memory_min=Size.gibibytes(2)
+    )
 )
 
 # Optionally configure security group rules using IConnectable interface
@@ -1755,17 +1752,83 @@ ecs.FargateService(self, "FargateService",
 )
 ```
 
+Option 2: If you don't want to use the `AmazonECSInfrastructureRolePolicyForManagedInstances` managed policy for the ECS infrastructure role, you can create a custom infrastructure role with the required permissions. See [documentation](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/infrastructure_IAM_role.html) for what permissions are needed for the ECS infrastructure role.
+
+You can also choose not to use the automatically created ec2InstanceProfile. See [ECS documentation](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/managed-instances-instance-profile.html) for what permissions are required for the profile's role.
+
+```python
+# vpc: ec2.Vpc
+
+
+cluster = ecs.Cluster(self, "Cluster", vpc=vpc)
+
+# Add your custom policies to the role.
+custom_instance_role = iam.Role(self, "CustomInstanceRole",
+    assumed_by=iam.ServicePrincipal("ec2.amazonaws.com")
+)
+
+custom_instance_profile = iam.InstanceProfile(self, "CustomInstanceProfile",
+    role=custom_instance_role
+)
+
+# Add your custom policies to the role.
+custom_infrastructure_role = iam.Role(self, "CustomInfrastructureRole",
+    assumed_by=iam.ServicePrincipal("ecs.amazonaws.com")
+)
+
+# Add PassRole permission to allow ECS to pass the instance role to EC2.
+custom_infrastructure_role.add_to_policy(iam.PolicyStatement(
+    effect=iam.Effect.ALLOW,
+    actions=["iam:PassRole"],
+    resources=[custom_instance_role.role_arn],
+    conditions={
+        "StringEquals": {
+            "iam:PassedToService": "ec2.amazonaws.com"
+        }
+    }
+))
+
+mi_capacity_provider_custom = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProviderCustomRoles",
+    infrastructure_role=custom_infrastructure_role,
+    ec2_instance_profile=custom_instance_profile,
+    subnets=vpc.private_subnets
+)
+
+# Add the capacity provider to the cluster
+cluster.add_managed_instances_capacity_provider(mi_capacity_provider_custom)
+
+task_definition = ecs.TaskDefinition(self, "TaskDef",
+    memory_mi_b="512",
+    cpu="256",
+    network_mode=ecs.NetworkMode.AWS_VPC,
+    compatibility=ecs.Compatibility.MANAGED_INSTANCES
+)
+
+task_definition.add_container("web",
+    image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
+    memory_reservation_mi_b=256
+)
+
+ecs.FargateService(self, "FargateService",
+
+    cluster=cluster,
+    task_definition=task_definition,
+    min_healthy_percent=100,
+    capacity_provider_strategies=[ecs.CapacityProviderStrategy(
+        capacity_provider=mi_capacity_provider_custom.capacity_provider_name,
+        weight=1
+    )
+    ]
+)
+```
+
 You can specify detailed instance requirements to control which types of instances are used:
 
 ```python
-# infrastructure_role: iam.Role
-# instance_profile: iam.InstanceProfile
 # vpc: ec2.Vpc
 
 
 mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProvider",
-    infrastructure_role=infrastructure_role,
-    ec2_instance_profile=instance_profile,
     subnets=vpc.private_subnets,
     instance_requirements=ec2.InstanceRequirementsConfig(
         # Required: CPU and memory constraints
@@ -2451,7 +2514,6 @@ from ..aws_elasticloadbalancingv2 import (
     IApplicationTargetGroup as _IApplicationTargetGroup_57799827,
     INetworkLoadBalancerTarget as _INetworkLoadBalancerTarget_688b169f,
     INetworkTargetGroup as _INetworkTargetGroup_abca2df7,
-    ITargetGroup as _ITargetGroup_83c6f8c4,
     ListenerCondition as _ListenerCondition_e8416430,
     LoadBalancerTargetProps as _LoadBalancerTargetProps_4c30a73c,
     NetworkListener as _NetworkListener_539c17bf,
@@ -2498,6 +2560,9 @@ from ..interfaces.aws_ecs import (
     ServiceReference as _ServiceReference_4a98722c,
     TaskDefinitionReference as _TaskDefinitionReference_b050a42a,
     TaskSetReference as _TaskSetReference_bf1a6f8f,
+)
+from ..interfaces.aws_elasticloadbalancingv2 import (
+    ITargetGroupRef as _ITargetGroupRef_9ed19d5e
 )
 from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
@@ -3568,7 +3633,7 @@ class AlternateTargetProps(AlternateTargetOptions):
         *,
         role: typing.Optional["_IRole_235f5d8e"] = None,
         test_listener: typing.Optional["ListenerRuleConfiguration"] = None,
-        alternate_target_group: "_ITargetGroup_83c6f8c4",
+        alternate_target_group: "_ITargetGroupRef_9ed19d5e",
         production_listener: "ListenerRuleConfiguration",
     ) -> None:
         '''Properties for AlternateTarget configuration.
@@ -3648,11 +3713,11 @@ class AlternateTargetProps(AlternateTargetOptions):
         return typing.cast(typing.Optional["ListenerRuleConfiguration"], result)
 
     @builtins.property
-    def alternate_target_group(self) -> "_ITargetGroup_83c6f8c4":
+    def alternate_target_group(self) -> "_ITargetGroupRef_9ed19d5e":
         '''The alternate target group.'''
         result = self._values.get("alternate_target_group")
         assert result is not None, "Required property 'alternate_target_group' is missing"
-        return typing.cast("_ITargetGroup_83c6f8c4", result)
+        return typing.cast("_ITargetGroupRef_9ed19d5e", result)
 
     @builtins.property
     def production_listener(self) -> "ListenerRuleConfiguration":
@@ -6843,6 +6908,7 @@ class CfnCapacityProvider(
                     ),
         
                     # the properties below are optional
+                    capacity_option_type="capacityOptionType",
                     instance_requirements=ecs.CfnCapacityProvider.InstanceRequirementsRequestProperty(
                         memory_mi_b=ecs.CfnCapacityProvider.MemoryMiBRequestProperty(
                             min=123,
@@ -7550,6 +7616,7 @@ class CfnCapacityProvider(
         name_mapping={
             "ec2_instance_profile_arn": "ec2InstanceProfileArn",
             "network_configuration": "networkConfiguration",
+            "capacity_option_type": "capacityOptionType",
             "instance_requirements": "instanceRequirements",
             "monitoring": "monitoring",
             "storage_configuration": "storageConfiguration",
@@ -7561,6 +7628,7 @@ class CfnCapacityProvider(
             *,
             ec2_instance_profile_arn: builtins.str,
             network_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapacityProvider.ManagedInstancesNetworkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            capacity_option_type: typing.Optional[builtins.str] = None,
             instance_requirements: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapacityProvider.InstanceRequirementsRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             monitoring: typing.Optional[builtins.str] = None,
             storage_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapacityProvider.ManagedInstancesStorageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -7571,6 +7639,7 @@ class CfnCapacityProvider(
 
             :param ec2_instance_profile_arn: The Amazon Resource Name (ARN) of the instance profile that Amazon ECS applies to Amazon ECS Managed Instances. This instance profile must include the necessary permissions for your tasks to access AWS services and resources. For more information, see `Amazon ECS instance profile for Managed Instances <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/managed-instances-instance-profile.html>`_ in the *Amazon ECS Developer Guide* .
             :param network_configuration: The network configuration for Amazon ECS Managed Instances. This specifies the subnets and security groups that instances use for network connectivity.
+            :param capacity_option_type: The capacity option type. This determines whether Amazon ECS launches On-Demand or Spot Instances for your managed instance capacity provider. Valid values are: - ``ON_DEMAND`` - Launches standard On-Demand Instances. On-Demand Instances provide predictable pricing and availability. - ``SPOT`` - Launches Spot Instances that use spare Amazon EC2 capacity at reduced cost. Spot Instances can be interrupted by Amazon EC2 with a two-minute notification when the capacity is needed back. The default is On-Demand For more information about Amazon EC2 capacity options, see `Instance purchasing options <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html>`_ in the *Amazon EC2 User Guide* .
             :param instance_requirements: The instance requirements. You can specify:. - The instance types - Instance requirements such as vCPU count, memory, network performance, and accelerator specifications Amazon ECS automatically selects the instances that match the specified criteria.
             :param monitoring: CloudWatch provides two categories of monitoring: basic monitoring and detailed monitoring. By default, your managed instance is configured for basic monitoring. You can optionally enable detailed monitoring to help you more quickly identify and act on operational issues. You can enable or turn off detailed monitoring at launch or when the managed instance is running or stopped. For more information, see `Detailed monitoring for Amazon ECS Managed Instances <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/detailed-monitoring-managed-instances.html>`_ in the Amazon ECS Developer Guide.
             :param storage_configuration: The storage configuration for Amazon ECS Managed Instances. This defines the root volume size and type for the instances.
@@ -7594,6 +7663,7 @@ class CfnCapacityProvider(
                     ),
                 
                     # the properties below are optional
+                    capacity_option_type="capacityOptionType",
                     instance_requirements=ecs.CfnCapacityProvider.InstanceRequirementsRequestProperty(
                         memory_mi_b=ecs.CfnCapacityProvider.MemoryMiBRequestProperty(
                             min=123,
@@ -7663,6 +7733,7 @@ class CfnCapacityProvider(
                 type_hints = typing.get_type_hints(_typecheckingstub__cb545da33f3067adee24bf90d3e903b06a7562a7e6ea6b3785f5b0ae6f3e105d)
                 check_type(argname="argument ec2_instance_profile_arn", value=ec2_instance_profile_arn, expected_type=type_hints["ec2_instance_profile_arn"])
                 check_type(argname="argument network_configuration", value=network_configuration, expected_type=type_hints["network_configuration"])
+                check_type(argname="argument capacity_option_type", value=capacity_option_type, expected_type=type_hints["capacity_option_type"])
                 check_type(argname="argument instance_requirements", value=instance_requirements, expected_type=type_hints["instance_requirements"])
                 check_type(argname="argument monitoring", value=monitoring, expected_type=type_hints["monitoring"])
                 check_type(argname="argument storage_configuration", value=storage_configuration, expected_type=type_hints["storage_configuration"])
@@ -7670,6 +7741,8 @@ class CfnCapacityProvider(
                 "ec2_instance_profile_arn": ec2_instance_profile_arn,
                 "network_configuration": network_configuration,
             }
+            if capacity_option_type is not None:
+                self._values["capacity_option_type"] = capacity_option_type
             if instance_requirements is not None:
                 self._values["instance_requirements"] = instance_requirements
             if monitoring is not None:
@@ -7704,6 +7777,26 @@ class CfnCapacityProvider(
             result = self._values.get("network_configuration")
             assert result is not None, "Required property 'network_configuration' is missing"
             return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnCapacityProvider.ManagedInstancesNetworkConfigurationProperty"], result)
+
+        @builtins.property
+        def capacity_option_type(self) -> typing.Optional[builtins.str]:
+            '''The capacity option type.
+
+            This determines whether Amazon ECS launches On-Demand or Spot Instances for your managed instance capacity provider.
+
+            Valid values are:
+
+            - ``ON_DEMAND`` - Launches standard On-Demand Instances. On-Demand Instances provide predictable pricing and availability.
+            - ``SPOT`` - Launches Spot Instances that use spare Amazon EC2 capacity at reduced cost. Spot Instances can be interrupted by Amazon EC2 with a two-minute notification when the capacity is needed back.
+
+            The default is On-Demand
+
+            For more information about Amazon EC2 capacity options, see `Instance purchasing options <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html>`_ in the *Amazon EC2 User Guide* .
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancelaunchtemplate.html#cfn-ecs-capacityprovider-instancelaunchtemplate-capacityoptiontype
+            '''
+            result = self._values.get("capacity_option_type")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
         def instance_requirements(
@@ -8419,6 +8512,7 @@ class CfnCapacityProvider(
                         ),
                 
                         # the properties below are optional
+                        capacity_option_type="capacityOptionType",
                         instance_requirements=ecs.CfnCapacityProvider.InstanceRequirementsRequestProperty(
                             memory_mi_b=ecs.CfnCapacityProvider.MemoryMiBRequestProperty(
                                 min=123,
@@ -9290,6 +9384,7 @@ class CfnCapacityProviderProps:
                         ),
             
                         # the properties below are optional
+                        capacity_option_type="capacityOptionType",
                         instance_requirements=ecs.CfnCapacityProvider.InstanceRequirementsRequestProperty(
                             memory_mi_b=ecs.CfnCapacityProvider.MemoryMiBRequestProperty(
                                 min=123,
@@ -11336,7 +11431,8 @@ class CfnExpressGatewayService(
     def attr_ecs_managed_resource_arns_auto_scaling_application_auto_scaling_policies(
         self,
     ) -> typing.List[builtins.str]:
-        '''
+        '''The list of Auto Scaling policy ARNs associated with the express service.
+
         :cloudformationAttribute: ECSManagedResourceArns.AutoScaling.ApplicationAutoScalingPolicies
         '''
         return typing.cast(typing.List[builtins.str], jsii.get(self, "attrEcsManagedResourceArnsAutoScalingApplicationAutoScalingPolicies"))
@@ -11346,7 +11442,8 @@ class CfnExpressGatewayService(
     def attr_ecs_managed_resource_arns_auto_scaling_scalable_target(
         self,
     ) -> builtins.str:
-        '''
+        '''The Auto Scaling Scalable Target ARN associated with the express service.
+
         :cloudformationAttribute: ECSManagedResourceArns.AutoScaling.ScalableTarget
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrEcsManagedResourceArnsAutoScalingScalableTarget"))
@@ -11364,7 +11461,8 @@ class CfnExpressGatewayService(
     def attr_ecs_managed_resource_arns_ingress_path_certificate_arn(
         self,
     ) -> builtins.str:
-        '''
+        '''The Certificate ARN associated with the express service.
+
         :cloudformationAttribute: ECSManagedResourceArns.IngressPath.CertificateArn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrEcsManagedResourceArnsIngressPathCertificateArn"))
@@ -11372,7 +11470,8 @@ class CfnExpressGatewayService(
     @builtins.property
     @jsii.member(jsii_name="attrEcsManagedResourceArnsIngressPathListenerArn")
     def attr_ecs_managed_resource_arns_ingress_path_listener_arn(self) -> builtins.str:
-        '''
+        '''The ARN of the Load Balancer listener associated with the express service.
+
         :cloudformationAttribute: ECSManagedResourceArns.IngressPath.ListenerArn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrEcsManagedResourceArnsIngressPathListenerArn"))
@@ -11382,7 +11481,8 @@ class CfnExpressGatewayService(
     def attr_ecs_managed_resource_arns_ingress_path_listener_rule_arn(
         self,
     ) -> builtins.str:
-        '''
+        '''The ARN of the Load Balancer listener rule associated with the express service.
+
         :cloudformationAttribute: ECSManagedResourceArns.IngressPath.ListenerRuleArn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrEcsManagedResourceArnsIngressPathListenerRuleArn"))
@@ -11392,7 +11492,8 @@ class CfnExpressGatewayService(
     def attr_ecs_managed_resource_arns_ingress_path_load_balancer_arn(
         self,
     ) -> builtins.str:
-        '''
+        '''The ARN of the Load Balancer associated with the express service.
+
         :cloudformationAttribute: ECSManagedResourceArns.IngressPath.LoadBalancerArn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrEcsManagedResourceArnsIngressPathLoadBalancerArn"))
@@ -11402,7 +11503,8 @@ class CfnExpressGatewayService(
     def attr_ecs_managed_resource_arns_ingress_path_load_balancer_security_groups(
         self,
     ) -> typing.List[builtins.str]:
-        '''
+        '''The list of Load Balancer Security Group ARNs associated with the express service.
+
         :cloudformationAttribute: ECSManagedResourceArns.IngressPath.LoadBalancerSecurityGroups
         '''
         return typing.cast(typing.List[builtins.str], jsii.get(self, "attrEcsManagedResourceArnsIngressPathLoadBalancerSecurityGroups"))
@@ -11412,7 +11514,8 @@ class CfnExpressGatewayService(
     def attr_ecs_managed_resource_arns_ingress_path_target_group_arns(
         self,
     ) -> typing.List[builtins.str]:
-        '''
+        '''The list of Target Group ARNs associated with the express service.
+
         :cloudformationAttribute: ECSManagedResourceArns.IngressPath.TargetGroupArns
         '''
         return typing.cast(typing.List[builtins.str], jsii.get(self, "attrEcsManagedResourceArnsIngressPathTargetGroupArns"))
@@ -11420,7 +11523,8 @@ class CfnExpressGatewayService(
     @builtins.property
     @jsii.member(jsii_name="attrEcsManagedResourceArnsLogGroups")
     def attr_ecs_managed_resource_arns_log_groups(self) -> typing.List[builtins.str]:
-        '''
+        '''The list of Log Group ARNs associated with the express service.
+
         :cloudformationAttribute: ECSManagedResourceArns.LogGroups
         '''
         return typing.cast(typing.List[builtins.str], jsii.get(self, "attrEcsManagedResourceArnsLogGroups"))
@@ -11428,7 +11532,8 @@ class CfnExpressGatewayService(
     @builtins.property
     @jsii.member(jsii_name="attrEcsManagedResourceArnsMetricAlarms")
     def attr_ecs_managed_resource_arns_metric_alarms(self) -> typing.List[builtins.str]:
-        '''
+        '''The list of Metric Alarm ARNs associated with the express service.
+
         :cloudformationAttribute: ECSManagedResourceArns.MetricAlarms
         '''
         return typing.cast(typing.List[builtins.str], jsii.get(self, "attrEcsManagedResourceArnsMetricAlarms"))
@@ -11438,7 +11543,8 @@ class CfnExpressGatewayService(
     def attr_ecs_managed_resource_arns_service_security_groups(
         self,
     ) -> typing.List[builtins.str]:
-        '''
+        '''The list of Security Group ARNs associated with the express service.
+
         :cloudformationAttribute: ECSManagedResourceArns.ServiceSecurityGroups
         '''
         return typing.cast(typing.List[builtins.str], jsii.get(self, "attrEcsManagedResourceArnsServiceSecurityGroups"))
@@ -11446,7 +11552,8 @@ class CfnExpressGatewayService(
     @builtins.property
     @jsii.member(jsii_name="attrEndpoint")
     def attr_endpoint(self) -> builtins.str:
-        '''
+        '''The Endpoint of the express service.
+
         :cloudformationAttribute: Endpoint
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrEndpoint"))
@@ -11681,8 +11788,8 @@ class CfnExpressGatewayService(
             scalable_target: typing.Optional[builtins.str] = None,
         ) -> None:
             '''
-            :param application_auto_scaling_policies: 
-            :param scalable_target: 
+            :param application_auto_scaling_policies: The list of Auto Scaling policy ARNs associated with the express service.
+            :param scalable_target: The Auto Scaling Scalable Target ARN associated with the express service.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-autoscalingarns.html
             :exampleMetadata: fixture=_generated
@@ -11712,7 +11819,8 @@ class CfnExpressGatewayService(
         def application_auto_scaling_policies(
             self,
         ) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''The list of Auto Scaling policy ARNs associated with the express service.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-autoscalingarns.html#cfn-ecs-expressgatewayservice-autoscalingarns-applicationautoscalingpolicies
             '''
             result = self._values.get("application_auto_scaling_policies")
@@ -11720,7 +11828,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def scalable_target(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The Auto Scaling Scalable Target ARN associated with the express service.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-autoscalingarns.html#cfn-ecs-expressgatewayservice-autoscalingarns-scalabletarget
             '''
             result = self._values.get("scalable_target")
@@ -11761,9 +11870,9 @@ class CfnExpressGatewayService(
             '''
             :param auto_scaling: 
             :param ingress_path: 
-            :param log_groups: 
-            :param metric_alarms: 
-            :param service_security_groups: 
+            :param log_groups: The list of Log Group ARNs associated with the express service.
+            :param metric_alarms: The list of Metric Alarm ARNs associated with the express service.
+            :param service_security_groups: The list of Security Group ARNs associated with the express service.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-ecsmanagedresourcearns.html
             :exampleMetadata: fixture=_generated
@@ -11833,7 +11942,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def log_groups(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''The list of Log Group ARNs associated with the express service.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-ecsmanagedresourcearns.html#cfn-ecs-expressgatewayservice-ecsmanagedresourcearns-loggroups
             '''
             result = self._values.get("log_groups")
@@ -11841,7 +11951,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def metric_alarms(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''The list of Metric Alarm ARNs associated with the express service.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-ecsmanagedresourcearns.html#cfn-ecs-expressgatewayservice-ecsmanagedresourcearns-metricalarms
             '''
             result = self._values.get("metric_alarms")
@@ -11849,7 +11960,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def service_security_groups(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''The list of Security Group ARNs associated with the express service.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-ecsmanagedresourcearns.html#cfn-ecs-expressgatewayservice-ecsmanagedresourcearns-servicesecuritygroups
             '''
             result = self._values.get("service_security_groups")
@@ -12709,12 +12821,12 @@ class CfnExpressGatewayService(
             target_group_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''
-            :param certificate_arn: 
-            :param listener_arn: 
-            :param listener_rule_arn: 
-            :param load_balancer_arn: 
-            :param load_balancer_security_groups: 
-            :param target_group_arns: 
+            :param certificate_arn: The Certificate ARN associated with the express service.
+            :param listener_arn: The ARN of the Load Balancer listener associated with the express service.
+            :param listener_rule_arn: The ARN of the Load Balancer listener rule associated with the express service.
+            :param load_balancer_arn: The ARN of the Load Balancer associated with the express service.
+            :param load_balancer_security_groups: The list of Load Balancer Security Group ARNs associated with the express service.
+            :param target_group_arns: The list of Target Group ARNs associated with the express service.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-ingresspatharns.html
             :exampleMetadata: fixture=_generated
@@ -12758,7 +12870,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def certificate_arn(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The Certificate ARN associated with the express service.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-ingresspatharns.html#cfn-ecs-expressgatewayservice-ingresspatharns-certificatearn
             '''
             result = self._values.get("certificate_arn")
@@ -12766,7 +12879,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def listener_arn(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The ARN of the Load Balancer listener associated with the express service.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-ingresspatharns.html#cfn-ecs-expressgatewayservice-ingresspatharns-listenerarn
             '''
             result = self._values.get("listener_arn")
@@ -12774,7 +12888,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def listener_rule_arn(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The ARN of the Load Balancer listener rule associated with the express service.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-ingresspatharns.html#cfn-ecs-expressgatewayservice-ingresspatharns-listenerrulearn
             '''
             result = self._values.get("listener_rule_arn")
@@ -12782,7 +12897,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def load_balancer_arn(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The ARN of the Load Balancer associated with the express service.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-ingresspatharns.html#cfn-ecs-expressgatewayservice-ingresspatharns-loadbalancerarn
             '''
             result = self._values.get("load_balancer_arn")
@@ -12792,7 +12908,8 @@ class CfnExpressGatewayService(
         def load_balancer_security_groups(
             self,
         ) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''The list of Load Balancer Security Group ARNs associated with the express service.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-ingresspatharns.html#cfn-ecs-expressgatewayservice-ingresspatharns-loadbalancersecuritygroups
             '''
             result = self._values.get("load_balancer_security_groups")
@@ -12800,7 +12917,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def target_group_arns(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''The list of Target Group ARNs associated with the express service.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-ingresspatharns.html#cfn-ecs-expressgatewayservice-ingresspatharns-targetgrouparns
             '''
             result = self._values.get("target_group_arns")
@@ -26387,43 +26505,34 @@ class ClusterProps:
 
         Example::
 
-            # vpc: ec2.Vpc
-            
-            
-            cluster = ecs.Cluster(self, "Cluster",
-                vpc=vpc
+            vpc = ec2.Vpc.from_lookup(self, "Vpc",
+                is_default=True
             )
             
-            auto_scaling_group = autoscaling.AutoScalingGroup(self, "ASG",
-                vpc=vpc,
-                instance_type=ec2.InstanceType("t2.micro"),
-                machine_image=ecs.EcsOptimizedImage.amazon_linux2(),
-                min_capacity=0,
-                max_capacity=100
+            cluster = ecs.Cluster(self, "FargateCluster", vpc=vpc)
+            
+            task_definition = ecs.TaskDefinition(self, "TD",
+                memory_mi_b="512",
+                cpu="256",
+                compatibility=ecs.Compatibility.FARGATE
             )
             
-            capacity_provider = ecs.AsgCapacityProvider(self, "AsgCapacityProvider",
-                auto_scaling_group=auto_scaling_group,
-                instance_warmup_period=300
-            )
-            cluster.add_asg_capacity_provider(capacity_provider)
-            
-            task_definition = ecs.Ec2TaskDefinition(self, "TaskDef")
-            
-            task_definition.add_container("web",
-                image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
-                memory_reservation_mi_b=256
+            container_definition = task_definition.add_container("TheContainer",
+                image=ecs.ContainerImage.from_registry("foo/bar"),
+                memory_limit_mi_b=256
             )
             
-            ecs.Ec2Service(self, "EC2Service",
+            run_task = tasks.EcsRunTask(self, "RunFargate",
+                integration_pattern=sfn.IntegrationPattern.RUN_JOB,
                 cluster=cluster,
                 task_definition=task_definition,
-                min_healthy_percent=100,
-                capacity_provider_strategies=[ecs.CapacityProviderStrategy(
-                    capacity_provider=capacity_provider.capacity_provider_name,
-                    weight=1
-                )
-                ]
+                assign_public_ip=True,
+                container_overrides=[tasks.ContainerOverride(
+                    container_definition=container_definition,
+                    environment=[tasks.TaskEnvironmentVariable(name="SOME_KEY", value=sfn.JsonPath.string_at("$.SomeKey"))]
+                )],
+                launch_target=tasks.EcsFargateLaunchTarget(),
+                propagated_tag_source=ecs.PropagatedTagSource.TASK_DEFINITION
             )
         '''
         if isinstance(capacity, dict):
@@ -26879,36 +26988,33 @@ class Compatibility(enum.Enum):
             is_default=True
         )
         
-        cluster = ecs.Cluster(self, "Ec2Cluster", vpc=vpc)
-        cluster.add_capacity("DefaultAutoScalingGroup",
-            instance_type=ec2.InstanceType("t2.micro"),
-            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC)
-        )
+        cluster = ecs.Cluster(self, "FargateCluster", vpc=vpc)
         
         task_definition = ecs.TaskDefinition(self, "TD",
-            compatibility=ecs.Compatibility.EC2
+            memory_mi_b="512",
+            cpu="256",
+            compatibility=ecs.Compatibility.FARGATE
         )
         
-        task_definition.add_container("TheContainer",
-            image=ecs.ContainerImage.from_registry("foo/bar"),
-            memory_limit_mi_b=256
-        )
-        
-        run_task = tasks.EcsRunTask(self, "Run",
-            integration_pattern=sfn.IntegrationPattern.RUN_JOB,
+        # Use custom() option - specify custom capacity provider strategy
+        run_task_with_custom = tasks.EcsRunTask(self, "RunTaskWithCustom",
             cluster=cluster,
             task_definition=task_definition,
-            launch_target=tasks.EcsEc2LaunchTarget(
-                placement_strategies=[
-                    ecs.PlacementStrategy.spread_across_instances(),
-                    ecs.PlacementStrategy.packed_by_cpu(),
-                    ecs.PlacementStrategy.randomly()
-                ],
-                placement_constraints=[
-                    ecs.PlacementConstraint.member_of("blieptuut")
-                ]
-            ),
-            propagated_tag_source=ecs.PropagatedTagSource.TASK_DEFINITION
+            launch_target=tasks.EcsFargateLaunchTarget(
+                platform_version=ecs.FargatePlatformVersion.VERSION1_4,
+                capacity_provider_options=tasks.CapacityProviderOptions.custom([capacity_provider="FARGATE_SPOT", weight=2, base=1, capacity_provider="FARGATE", weight=1
+                ])
+            )
+        )
+        
+        # Use default() option - uses cluster's default capacity provider strategy
+        run_task_with_default = tasks.EcsRunTask(self, "RunTaskWithDefault",
+            cluster=cluster,
+            task_definition=task_definition,
+            launch_target=tasks.EcsFargateLaunchTarget(
+                platform_version=ecs.FargatePlatformVersion.VERSION1_4,
+                capacity_provider_options=tasks.CapacityProviderOptions.default()
+            )
         )
     '''
 
@@ -33827,6 +33933,7 @@ class FargatePlatformVersion(enum.Enum):
             cluster=cluster,
             scheduled_fargate_task_image_options=ecsPatterns.ScheduledFargateTaskImageOptions(
                 image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
+                container_name="customContainerName",
                 memory_limit_mi_b=512
             ),
             schedule=appscaling.Schedule.expression("rate(1 minute)"),
@@ -40068,25 +40175,16 @@ class ManagedInstancesCapacityProvider(
     Example::
 
         # vpc: ec2.Vpc
-        # infrastructure_role: iam.Role
-        # instance_profile: iam.InstanceProfile
         
         
         cluster = ecs.Cluster(self, "Cluster", vpc=vpc)
         
-        # Create a Managed Instances Capacity Provider
         mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProvider",
-            infrastructure_role=infrastructure_role,
-            ec2_instance_profile=instance_profile,
             subnets=vpc.private_subnets,
-            security_groups=[ec2.SecurityGroup(self, "MISecurityGroup", vpc=vpc)],
             instance_requirements=ec2.InstanceRequirementsConfig(
                 v_cpu_count_min=1,
-                memory_min=Size.gibibytes(2),
-                cpu_manufacturers=[ec2.CpuManufacturer.INTEL],
-                accelerator_manufacturers=[ec2.AcceleratorManufacturer.NVIDIA]
-            ),
-            propagate_tags=ecs.PropagateManagedInstancesTags.CAPACITY_PROVIDER
+                memory_min=Size.gibibytes(2)
+            )
         )
         
         # Optionally configure security group rules using IConnectable interface
@@ -40124,9 +40222,9 @@ class ManagedInstancesCapacityProvider(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        ec2_instance_profile: "_IInstanceProfile_10d5ce2c",
         subnets: typing.Sequence["_ISubnet_d57d1229"],
         capacity_provider_name: typing.Optional[builtins.str] = None,
+        ec2_instance_profile: typing.Optional["_IInstanceProfile_10d5ce2c"] = None,
         infrastructure_role: typing.Optional["_IRole_235f5d8e"] = None,
         instance_requirements: typing.Optional[typing.Union["_InstanceRequirementsConfig_1b353659", typing.Dict[builtins.str, typing.Any]]] = None,
         monitoring: typing.Optional["InstanceMonitoring"] = None,
@@ -40137,9 +40235,9 @@ class ManagedInstancesCapacityProvider(
         '''
         :param scope: -
         :param id: -
-        :param ec2_instance_profile: The EC2 instance profile that will be attached to instances launched by this capacity provider. This instance profile must contain the necessary IAM permissions for ECS container instances to register with the cluster and run tasks. At minimum, it should include permissions for ECS agent communication, ECR image pulling, and CloudWatch logging.
         :param subnets: The VPC subnets where EC2 instances will be launched. This array must be non-empty and should contain subnets from the VPC where you want the managed instances to be deployed.
         :param capacity_provider_name: The name of the capacity provider. If a name is specified, it cannot start with ``aws``, ``ecs``, or ``fargate``. If no name is specified, a default name in the CFNStackName-CFNResourceName-RandomString format is used. If the stack name starts with ``aws``, ``ecs``, or ``fargate``, a unique resource name is generated that starts with ``cp-``. Default: CloudFormation-generated name
+        :param ec2_instance_profile: The EC2 instance profile that will be attached to instances launched by this capacity provider. This instance profile must contain the necessary IAM permissions for ECS container instances to register with the cluster and run tasks. At minimum, it should include permissions for ECS agent communication, ECR image pulling, and CloudWatch logging. If you are using Amazon ECS Managed Instances with the AWS-managed Infrastructure policy (``AmazonECSInfrastructureRolePolicyForManagedInstances``), the instance profile must be prefixed with ``ecsInstanceRole`` for the built in PassRole policy to apply. If you are using a custom policy for the Infrastructure role, the instance profile can have an alternative name. Default: - A new instance profile prefixed with 'ecsInstanceRole' will be created
         :param infrastructure_role: The IAM role that ECS uses to manage the infrastructure for the capacity provider. This role is used by ECS to perform actions such as launching and terminating instances, managing Auto Scaling Groups, and other infrastructure operations required for the managed instances capacity provider. Default: - A new role will be created with the AmazonECSInfrastructureRolePolicyForManagedInstances managed policy
         :param instance_requirements: The instance requirements configuration for EC2 instance selection. This allows you to specify detailed requirements for instance selection including vCPU count ranges, memory ranges, CPU manufacturers (Intel, AMD, AWS Graviton), instance generations, network performance requirements, and many other criteria. ECS will automatically select appropriate instance types that meet these requirements. Default: - no specific instance requirements, ECS will choose appropriate instances
         :param monitoring: The CloudWatch monitoring configuration for the EC2 instances. Determines the granularity of CloudWatch metrics collection for the instances. Detailed monitoring incurs additional costs but provides better observability. Default: - no enhanced monitoring (basic monitoring only)
@@ -40152,9 +40250,9 @@ class ManagedInstancesCapacityProvider(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = ManagedInstancesCapacityProviderProps(
-            ec2_instance_profile=ec2_instance_profile,
             subnets=subnets,
             capacity_provider_name=capacity_provider_name,
+            ec2_instance_profile=ec2_instance_profile,
             infrastructure_role=infrastructure_role,
             instance_requirements=instance_requirements,
             monitoring=monitoring,
@@ -40196,14 +40294,32 @@ class ManagedInstancesCapacityProvider(
         '''The network connections associated with this resource.'''
         return typing.cast("_Connections_0f31fce8", jsii.get(self, "connections"))
 
+    @builtins.property
+    @jsii.member(jsii_name="ec2InstanceProfile")
+    def ec2_instance_profile(self) -> "_IInstanceProfile_10d5ce2c":
+        '''The EC2 instance profile attached to instances launched by this capacity provider.'''
+        return typing.cast("_IInstanceProfile_10d5ce2c", jsii.get(self, "ec2InstanceProfile"))
+
+    @builtins.property
+    @jsii.member(jsii_name="infrastructureRole")
+    def infrastructure_role(self) -> "_IRole_235f5d8e":
+        '''The IAM role that ECS uses to manage the infrastructure for the capacity provider.'''
+        return typing.cast("_IRole_235f5d8e", jsii.get(self, "infrastructureRole"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cluster")
+    def cluster(self) -> typing.Optional["ICluster"]:
+        '''The cluster this capacity provider is associated with.'''
+        return typing.cast(typing.Optional["ICluster"], jsii.get(self, "cluster"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_ecs.ManagedInstancesCapacityProviderProps",
     jsii_struct_bases=[],
     name_mapping={
-        "ec2_instance_profile": "ec2InstanceProfile",
         "subnets": "subnets",
         "capacity_provider_name": "capacityProviderName",
+        "ec2_instance_profile": "ec2InstanceProfile",
         "infrastructure_role": "infrastructureRole",
         "instance_requirements": "instanceRequirements",
         "monitoring": "monitoring",
@@ -40216,9 +40332,9 @@ class ManagedInstancesCapacityProviderProps:
     def __init__(
         self,
         *,
-        ec2_instance_profile: "_IInstanceProfile_10d5ce2c",
         subnets: typing.Sequence["_ISubnet_d57d1229"],
         capacity_provider_name: typing.Optional[builtins.str] = None,
+        ec2_instance_profile: typing.Optional["_IInstanceProfile_10d5ce2c"] = None,
         infrastructure_role: typing.Optional["_IRole_235f5d8e"] = None,
         instance_requirements: typing.Optional[typing.Union["_InstanceRequirementsConfig_1b353659", typing.Dict[builtins.str, typing.Any]]] = None,
         monitoring: typing.Optional["InstanceMonitoring"] = None,
@@ -40228,9 +40344,9 @@ class ManagedInstancesCapacityProviderProps:
     ) -> None:
         '''The options for creating a Managed Instances Capacity Provider.
 
-        :param ec2_instance_profile: The EC2 instance profile that will be attached to instances launched by this capacity provider. This instance profile must contain the necessary IAM permissions for ECS container instances to register with the cluster and run tasks. At minimum, it should include permissions for ECS agent communication, ECR image pulling, and CloudWatch logging.
         :param subnets: The VPC subnets where EC2 instances will be launched. This array must be non-empty and should contain subnets from the VPC where you want the managed instances to be deployed.
         :param capacity_provider_name: The name of the capacity provider. If a name is specified, it cannot start with ``aws``, ``ecs``, or ``fargate``. If no name is specified, a default name in the CFNStackName-CFNResourceName-RandomString format is used. If the stack name starts with ``aws``, ``ecs``, or ``fargate``, a unique resource name is generated that starts with ``cp-``. Default: CloudFormation-generated name
+        :param ec2_instance_profile: The EC2 instance profile that will be attached to instances launched by this capacity provider. This instance profile must contain the necessary IAM permissions for ECS container instances to register with the cluster and run tasks. At minimum, it should include permissions for ECS agent communication, ECR image pulling, and CloudWatch logging. If you are using Amazon ECS Managed Instances with the AWS-managed Infrastructure policy (``AmazonECSInfrastructureRolePolicyForManagedInstances``), the instance profile must be prefixed with ``ecsInstanceRole`` for the built in PassRole policy to apply. If you are using a custom policy for the Infrastructure role, the instance profile can have an alternative name. Default: - A new instance profile prefixed with 'ecsInstanceRole' will be created
         :param infrastructure_role: The IAM role that ECS uses to manage the infrastructure for the capacity provider. This role is used by ECS to perform actions such as launching and terminating instances, managing Auto Scaling Groups, and other infrastructure operations required for the managed instances capacity provider. Default: - A new role will be created with the AmazonECSInfrastructureRolePolicyForManagedInstances managed policy
         :param instance_requirements: The instance requirements configuration for EC2 instance selection. This allows you to specify detailed requirements for instance selection including vCPU count ranges, memory ranges, CPU manufacturers (Intel, AMD, AWS Graviton), instance generations, network performance requirements, and many other criteria. ECS will automatically select appropriate instance types that meet these requirements. Default: - no specific instance requirements, ECS will choose appropriate instances
         :param monitoring: The CloudWatch monitoring configuration for the EC2 instances. Determines the granularity of CloudWatch metrics collection for the instances. Detailed monitoring incurs additional costs but provides better observability. Default: - no enhanced monitoring (basic monitoring only)
@@ -40243,25 +40359,16 @@ class ManagedInstancesCapacityProviderProps:
         Example::
 
             # vpc: ec2.Vpc
-            # infrastructure_role: iam.Role
-            # instance_profile: iam.InstanceProfile
             
             
             cluster = ecs.Cluster(self, "Cluster", vpc=vpc)
             
-            # Create a Managed Instances Capacity Provider
             mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProvider",
-                infrastructure_role=infrastructure_role,
-                ec2_instance_profile=instance_profile,
                 subnets=vpc.private_subnets,
-                security_groups=[ec2.SecurityGroup(self, "MISecurityGroup", vpc=vpc)],
                 instance_requirements=ec2.InstanceRequirementsConfig(
                     v_cpu_count_min=1,
-                    memory_min=Size.gibibytes(2),
-                    cpu_manufacturers=[ec2.CpuManufacturer.INTEL],
-                    accelerator_manufacturers=[ec2.AcceleratorManufacturer.NVIDIA]
-                ),
-                propagate_tags=ecs.PropagateManagedInstancesTags.CAPACITY_PROVIDER
+                    memory_min=Size.gibibytes(2)
+                )
             )
             
             # Optionally configure security group rules using IConnectable interface
@@ -40297,9 +40404,9 @@ class ManagedInstancesCapacityProviderProps:
             instance_requirements = _InstanceRequirementsConfig_1b353659(**instance_requirements)
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__efa15b9a00384128ebdb40ffd56f7e66e8863f1c3a6b8d4cf8bc61fb9e822e92)
-            check_type(argname="argument ec2_instance_profile", value=ec2_instance_profile, expected_type=type_hints["ec2_instance_profile"])
             check_type(argname="argument subnets", value=subnets, expected_type=type_hints["subnets"])
             check_type(argname="argument capacity_provider_name", value=capacity_provider_name, expected_type=type_hints["capacity_provider_name"])
+            check_type(argname="argument ec2_instance_profile", value=ec2_instance_profile, expected_type=type_hints["ec2_instance_profile"])
             check_type(argname="argument infrastructure_role", value=infrastructure_role, expected_type=type_hints["infrastructure_role"])
             check_type(argname="argument instance_requirements", value=instance_requirements, expected_type=type_hints["instance_requirements"])
             check_type(argname="argument monitoring", value=monitoring, expected_type=type_hints["monitoring"])
@@ -40307,11 +40414,12 @@ class ManagedInstancesCapacityProviderProps:
             check_type(argname="argument security_groups", value=security_groups, expected_type=type_hints["security_groups"])
             check_type(argname="argument task_volume_storage", value=task_volume_storage, expected_type=type_hints["task_volume_storage"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "ec2_instance_profile": ec2_instance_profile,
             "subnets": subnets,
         }
         if capacity_provider_name is not None:
             self._values["capacity_provider_name"] = capacity_provider_name
+        if ec2_instance_profile is not None:
+            self._values["ec2_instance_profile"] = ec2_instance_profile
         if infrastructure_role is not None:
             self._values["infrastructure_role"] = infrastructure_role
         if instance_requirements is not None:
@@ -40324,18 +40432,6 @@ class ManagedInstancesCapacityProviderProps:
             self._values["security_groups"] = security_groups
         if task_volume_storage is not None:
             self._values["task_volume_storage"] = task_volume_storage
-
-    @builtins.property
-    def ec2_instance_profile(self) -> "_IInstanceProfile_10d5ce2c":
-        '''The EC2 instance profile that will be attached to instances launched by this capacity provider.
-
-        This instance profile must contain the necessary IAM permissions for ECS container instances
-        to register with the cluster and run tasks. At minimum, it should include permissions for
-        ECS agent communication, ECR image pulling, and CloudWatch logging.
-        '''
-        result = self._values.get("ec2_instance_profile")
-        assert result is not None, "Required property 'ec2_instance_profile' is missing"
-        return typing.cast("_IInstanceProfile_10d5ce2c", result)
 
     @builtins.property
     def subnets(self) -> typing.List["_ISubnet_d57d1229"]:
@@ -40361,6 +40457,26 @@ class ManagedInstancesCapacityProviderProps:
         '''
         result = self._values.get("capacity_provider_name")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def ec2_instance_profile(self) -> typing.Optional["_IInstanceProfile_10d5ce2c"]:
+        '''The EC2 instance profile that will be attached to instances launched by this capacity provider.
+
+        This instance profile must contain the necessary IAM permissions for ECS container instances
+        to register with the cluster and run tasks. At minimum, it should include permissions for
+        ECS agent communication, ECR image pulling, and CloudWatch logging.
+
+        If you are using Amazon ECS Managed Instances with the AWS-managed Infrastructure policy (``AmazonECSInfrastructureRolePolicyForManagedInstances``),
+        the instance profile must be prefixed with ``ecsInstanceRole`` for the built in PassRole policy to apply.
+
+        If you are using a custom policy for the Infrastructure role, the instance profile can have an alternative name.
+
+        :default: - A new instance profile prefixed with 'ecsInstanceRole' will be created
+
+        :see: https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AmazonECSInfrastructureRolePolicyForManagedInstances.html
+        '''
+        result = self._values.get("ec2_instance_profile")
+        return typing.cast(typing.Optional["_IInstanceProfile_10d5ce2c"], result)
 
     @builtins.property
     def infrastructure_role(self) -> typing.Optional["_IRole_235f5d8e"]:
@@ -40782,14 +40898,46 @@ class NetworkMode(enum.Enum):
 
     Example::
 
-        ec2_task_definition = ecs.Ec2TaskDefinition(self, "TaskDef",
-            network_mode=ecs.NetworkMode.BRIDGE
+        # vpc: ec2.Vpc
+        
+        
+        cluster = ecs.Cluster(self, "Cluster", vpc=vpc)
+        
+        mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProvider",
+            subnets=vpc.private_subnets,
+            instance_requirements=ec2.InstanceRequirementsConfig(
+                v_cpu_count_min=1,
+                memory_min=Size.gibibytes(2)
+            )
         )
         
-        container = ec2_task_definition.add_container("WebContainer",
-            # Use an image from DockerHub
+        # Optionally configure security group rules using IConnectable interface
+        mi_capacity_provider.connections.allow_from(ec2.Peer.ipv4(vpc.vpc_cidr_block), ec2.Port.tcp(80))
+        
+        # Add the capacity provider to the cluster
+        cluster.add_managed_instances_capacity_provider(mi_capacity_provider)
+        
+        task_definition = ecs.TaskDefinition(self, "TaskDef",
+            memory_mi_b="512",
+            cpu="256",
+            network_mode=ecs.NetworkMode.AWS_VPC,
+            compatibility=ecs.Compatibility.MANAGED_INSTANCES
+        )
+        
+        task_definition.add_container("web",
             image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
-            memory_limit_mi_b=1024
+            memory_reservation_mi_b=256
+        )
+        
+        ecs.FargateService(self, "FargateService",
+            cluster=cluster,
+            task_definition=task_definition,
+            min_healthy_percent=100,
+            capacity_provider_strategies=[ecs.CapacityProviderStrategy(
+                capacity_provider=mi_capacity_provider.capacity_provider_name,
+                weight=1
+            )
+            ]
         )
     '''
 
@@ -41391,63 +41539,7 @@ class PortMapping:
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_ecs.PropagateManagedInstancesTags")
 class PropagateManagedInstancesTags(enum.Enum):
-    '''Propagate tags for Managed Instances.
-
-    :exampleMetadata: infused
-
-    Example::
-
-        # vpc: ec2.Vpc
-        # infrastructure_role: iam.Role
-        # instance_profile: iam.InstanceProfile
-        
-        
-        cluster = ecs.Cluster(self, "Cluster", vpc=vpc)
-        
-        # Create a Managed Instances Capacity Provider
-        mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProvider",
-            infrastructure_role=infrastructure_role,
-            ec2_instance_profile=instance_profile,
-            subnets=vpc.private_subnets,
-            security_groups=[ec2.SecurityGroup(self, "MISecurityGroup", vpc=vpc)],
-            instance_requirements=ec2.InstanceRequirementsConfig(
-                v_cpu_count_min=1,
-                memory_min=Size.gibibytes(2),
-                cpu_manufacturers=[ec2.CpuManufacturer.INTEL],
-                accelerator_manufacturers=[ec2.AcceleratorManufacturer.NVIDIA]
-            ),
-            propagate_tags=ecs.PropagateManagedInstancesTags.CAPACITY_PROVIDER
-        )
-        
-        # Optionally configure security group rules using IConnectable interface
-        mi_capacity_provider.connections.allow_from(ec2.Peer.ipv4(vpc.vpc_cidr_block), ec2.Port.tcp(80))
-        
-        # Add the capacity provider to the cluster
-        cluster.add_managed_instances_capacity_provider(mi_capacity_provider)
-        
-        task_definition = ecs.TaskDefinition(self, "TaskDef",
-            memory_mi_b="512",
-            cpu="256",
-            network_mode=ecs.NetworkMode.AWS_VPC,
-            compatibility=ecs.Compatibility.MANAGED_INSTANCES
-        )
-        
-        task_definition.add_container("web",
-            image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
-            memory_reservation_mi_b=256
-        )
-        
-        ecs.FargateService(self, "FargateService",
-            cluster=cluster,
-            task_definition=task_definition,
-            min_healthy_percent=100,
-            capacity_provider_strategies=[ecs.CapacityProviderStrategy(
-                capacity_provider=mi_capacity_provider.capacity_provider_name,
-                weight=1
-            )
-            ]
-        )
-    '''
+    '''Propagate tags for Managed Instances.'''
 
     CAPACITY_PROVIDER = "CAPACITY_PROVIDER"
     '''Propagate tags from the capacity provider.'''
@@ -45792,36 +45884,33 @@ class TaskDefinitionProps(CommonTaskDefinitionProps):
                 is_default=True
             )
             
-            cluster = ecs.Cluster(self, "Ec2Cluster", vpc=vpc)
-            cluster.add_capacity("DefaultAutoScalingGroup",
-                instance_type=ec2.InstanceType("t2.micro"),
-                vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC)
-            )
+            cluster = ecs.Cluster(self, "FargateCluster", vpc=vpc)
             
             task_definition = ecs.TaskDefinition(self, "TD",
-                compatibility=ecs.Compatibility.EC2
+                memory_mi_b="512",
+                cpu="256",
+                compatibility=ecs.Compatibility.FARGATE
             )
             
-            task_definition.add_container("TheContainer",
-                image=ecs.ContainerImage.from_registry("foo/bar"),
-                memory_limit_mi_b=256
-            )
-            
-            run_task = tasks.EcsRunTask(self, "Run",
-                integration_pattern=sfn.IntegrationPattern.RUN_JOB,
+            # Use custom() option - specify custom capacity provider strategy
+            run_task_with_custom = tasks.EcsRunTask(self, "RunTaskWithCustom",
                 cluster=cluster,
                 task_definition=task_definition,
-                launch_target=tasks.EcsEc2LaunchTarget(
-                    placement_strategies=[
-                        ecs.PlacementStrategy.spread_across_instances(),
-                        ecs.PlacementStrategy.packed_by_cpu(),
-                        ecs.PlacementStrategy.randomly()
-                    ],
-                    placement_constraints=[
-                        ecs.PlacementConstraint.member_of("blieptuut")
-                    ]
-                ),
-                propagated_tag_source=ecs.PropagatedTagSource.TASK_DEFINITION
+                launch_target=tasks.EcsFargateLaunchTarget(
+                    platform_version=ecs.FargatePlatformVersion.VERSION1_4,
+                    capacity_provider_options=tasks.CapacityProviderOptions.custom([capacity_provider="FARGATE_SPOT", weight=2, base=1, capacity_provider="FARGATE", weight=1
+                    ])
+                )
+            )
+            
+            # Use default() option - uses cluster's default capacity provider strategy
+            run_task_with_default = tasks.EcsRunTask(self, "RunTaskWithDefault",
+                cluster=cluster,
+                task_definition=task_definition,
+                launch_target=tasks.EcsFargateLaunchTarget(
+                    platform_version=ecs.FargatePlatformVersion.VERSION1_4,
+                    capacity_provider_options=tasks.CapacityProviderOptions.default()
+                )
             )
         '''
         if isinstance(runtime_platform, dict):
@@ -46895,7 +46984,7 @@ class AlternateTarget(
         self,
         id: builtins.str,
         *,
-        alternate_target_group: "_ITargetGroup_83c6f8c4",
+        alternate_target_group: "_ITargetGroupRef_9ed19d5e",
         production_listener: "ListenerRuleConfiguration",
         role: typing.Optional["_IRole_235f5d8e"] = None,
         test_listener: typing.Optional["ListenerRuleConfiguration"] = None,
@@ -51313,7 +51402,7 @@ def _typecheckingstub__308a285b9e7be7ba49d4d78caf88537a973f5504d7b7519fb1fe4ab1c
     *,
     role: typing.Optional[_IRole_235f5d8e] = None,
     test_listener: typing.Optional[ListenerRuleConfiguration] = None,
-    alternate_target_group: _ITargetGroup_83c6f8c4,
+    alternate_target_group: _ITargetGroupRef_9ed19d5e,
     production_listener: ListenerRuleConfiguration,
 ) -> None:
     """Type checking stubs"""
@@ -51678,6 +51767,7 @@ def _typecheckingstub__cb545da33f3067adee24bf90d3e903b06a7562a7e6ea6b3785f5b0ae6
     *,
     ec2_instance_profile_arn: builtins.str,
     network_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.ManagedInstancesNetworkConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    capacity_option_type: typing.Optional[builtins.str] = None,
     instance_requirements: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.InstanceRequirementsRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     monitoring: typing.Optional[builtins.str] = None,
     storage_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.ManagedInstancesStorageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -54883,9 +54973,9 @@ def _typecheckingstub__718bb820f1409b5f15556f2e394659a060bda46e302dbb4e973a6484f
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    ec2_instance_profile: _IInstanceProfile_10d5ce2c,
     subnets: typing.Sequence[_ISubnet_d57d1229],
     capacity_provider_name: typing.Optional[builtins.str] = None,
+    ec2_instance_profile: typing.Optional[_IInstanceProfile_10d5ce2c] = None,
     infrastructure_role: typing.Optional[_IRole_235f5d8e] = None,
     instance_requirements: typing.Optional[typing.Union[_InstanceRequirementsConfig_1b353659, typing.Dict[builtins.str, typing.Any]]] = None,
     monitoring: typing.Optional[InstanceMonitoring] = None,
@@ -54904,9 +54994,9 @@ def _typecheckingstub__86f1df235e6255faeece6081f964f386186a84532c53bb8fad57fd4ab
 
 def _typecheckingstub__efa15b9a00384128ebdb40ffd56f7e66e8863f1c3a6b8d4cf8bc61fb9e822e92(
     *,
-    ec2_instance_profile: _IInstanceProfile_10d5ce2c,
     subnets: typing.Sequence[_ISubnet_d57d1229],
     capacity_provider_name: typing.Optional[builtins.str] = None,
+    ec2_instance_profile: typing.Optional[_IInstanceProfile_10d5ce2c] = None,
     infrastructure_role: typing.Optional[_IRole_235f5d8e] = None,
     instance_requirements: typing.Optional[typing.Union[_InstanceRequirementsConfig_1b353659, typing.Dict[builtins.str, typing.Any]]] = None,
     monitoring: typing.Optional[InstanceMonitoring] = None,
@@ -55646,7 +55736,7 @@ def _typecheckingstub__8874c61d65168e60874c9191682af53d5d88352dbfe615fd842f45b2b
 def _typecheckingstub__aa25b044df0e4eef1817fd07bd799a88800df4e6bd79f283ca2657cfee9e4b29(
     id: builtins.str,
     *,
-    alternate_target_group: _ITargetGroup_83c6f8c4,
+    alternate_target_group: _ITargetGroupRef_9ed19d5e,
     production_listener: ListenerRuleConfiguration,
     role: typing.Optional[_IRole_235f5d8e] = None,
     test_listener: typing.Optional[ListenerRuleConfiguration] = None,

@@ -2356,14 +2356,14 @@ class PolicyPrincipalAttachmentReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_iot.PolicyReference",
     jsii_struct_bases=[],
-    name_mapping={"policy_arn": "policyArn", "policy_id": "policyId"},
+    name_mapping={"policy_arn": "policyArn", "policy_name": "policyName"},
 )
 class PolicyReference:
-    def __init__(self, *, policy_arn: builtins.str, policy_id: builtins.str) -> None:
+    def __init__(self, *, policy_arn: builtins.str, policy_name: builtins.str) -> None:
         '''A reference to a Policy resource.
 
         :param policy_arn: The ARN of the Policy resource.
-        :param policy_id: The Id of the Policy resource.
+        :param policy_name: The PolicyName of the Policy resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -2375,16 +2375,16 @@ class PolicyReference:
             
             policy_reference = interfaces_iot.PolicyReference(
                 policy_arn="policyArn",
-                policy_id="policyId"
+                policy_name="policyName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b627d7889748208bffcd4d74e49d11968847654f52f8d4d0b508b1333b01f6aa)
             check_type(argname="argument policy_arn", value=policy_arn, expected_type=type_hints["policy_arn"])
-            check_type(argname="argument policy_id", value=policy_id, expected_type=type_hints["policy_id"])
+            check_type(argname="argument policy_name", value=policy_name, expected_type=type_hints["policy_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "policy_arn": policy_arn,
-            "policy_id": policy_id,
+            "policy_name": policy_name,
         }
 
     @builtins.property
@@ -2395,10 +2395,10 @@ class PolicyReference:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def policy_id(self) -> builtins.str:
-        '''The Id of the Policy resource.'''
-        result = self._values.get("policy_id")
-        assert result is not None, "Required property 'policy_id' is missing"
+    def policy_name(self) -> builtins.str:
+        '''The PolicyName of the Policy resource.'''
+        result = self._values.get("policy_name")
+        assert result is not None, "Required property 'policy_name' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -3375,7 +3375,7 @@ def _typecheckingstub__2c433b17a937fb1b126780e6e4b459921a745c39de25b681aa6e87feb
 def _typecheckingstub__b627d7889748208bffcd4d74e49d11968847654f52f8d4d0b508b1333b01f6aa(
     *,
     policy_arn: builtins.str,
-    policy_id: builtins.str,
+    policy_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

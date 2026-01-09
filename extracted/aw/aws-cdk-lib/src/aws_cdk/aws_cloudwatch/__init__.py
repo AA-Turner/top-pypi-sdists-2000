@@ -1291,7 +1291,11 @@ class AlarmRule(
 
     @jsii.member(jsii_name="fromAlarm")
     @builtins.classmethod
-    def from_alarm(cls, alarm: "IAlarm", alarm_state: "AlarmState") -> "IAlarmRule":
+    def from_alarm(
+        cls,
+        alarm: "_IAlarmRef_2bb0e5de",
+        alarm_state: "AlarmState",
+    ) -> "IAlarmRule":
         '''function to build Rule Expression for given IAlarm and AlarmState.
 
         :param alarm: IAlarm to be used in Rule Expression.
@@ -1384,7 +1388,7 @@ class AlarmStatusWidgetProps:
     def __init__(
         self,
         *,
-        alarms: typing.Sequence["IAlarm"],
+        alarms: typing.Sequence["_IAlarmRef_2bb0e5de"],
         height: typing.Optional[jsii.Number] = None,
         sort_by: typing.Optional["AlarmStatusWidgetSortBy"] = None,
         states: typing.Optional[typing.Sequence["AlarmState"]] = None,
@@ -1436,11 +1440,11 @@ class AlarmStatusWidgetProps:
             self._values["width"] = width
 
     @builtins.property
-    def alarms(self) -> typing.List["IAlarm"]:
+    def alarms(self) -> typing.List["_IAlarmRef_2bb0e5de"]:
         '''CloudWatch Alarms to show in widget.'''
         result = self._values.get("alarms")
         assert result is not None, "Required property 'alarms' is missing"
-        return typing.cast(typing.List["IAlarm"], result)
+        return typing.cast(typing.List["_IAlarmRef_2bb0e5de"], result)
 
     @builtins.property
     def height(self) -> typing.Optional[jsii.Number]:
@@ -7456,7 +7460,7 @@ class CompositeAlarmProps:
         *,
         alarm_rule: "IAlarmRule",
         actions_enabled: typing.Optional[builtins.bool] = None,
-        actions_suppressor: typing.Optional["IAlarm"] = None,
+        actions_suppressor: typing.Optional["_IAlarmRef_2bb0e5de"] = None,
         actions_suppressor_extension_period: typing.Optional["_Duration_4839e8c3"] = None,
         actions_suppressor_wait_period: typing.Optional["_Duration_4839e8c3"] = None,
         alarm_description: typing.Optional[builtins.str] = None,
@@ -7535,13 +7539,13 @@ class CompositeAlarmProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def actions_suppressor(self) -> typing.Optional["IAlarm"]:
+    def actions_suppressor(self) -> typing.Optional["_IAlarmRef_2bb0e5de"]:
         '''Actions will be suppressed if the suppressor alarm is in the ALARM state.
 
         :default: - alarm will not be suppressed.
         '''
         result = self._values.get("actions_suppressor")
-        return typing.cast(typing.Optional["IAlarm"], result)
+        return typing.cast(typing.Optional["_IAlarmRef_2bb0e5de"], result)
 
     @builtins.property
     def actions_suppressor_extension_period(
@@ -8688,7 +8692,7 @@ class IAlarmAction(typing_extensions.Protocol):
     def bind(
         self,
         scope: "_constructs_77d1e7e8.Construct",
-        alarm: "IAlarm",
+        alarm: "_IAlarmRef_2bb0e5de",
     ) -> "AlarmActionConfig":
         '''Return the properties required to send alarm actions to this CloudWatch alarm.
 
@@ -8707,7 +8711,7 @@ class _IAlarmActionProxy:
     def bind(
         self,
         scope: "_constructs_77d1e7e8.Construct",
-        alarm: "IAlarm",
+        alarm: "_IAlarmRef_2bb0e5de",
     ) -> "AlarmActionConfig":
         '''Return the properties required to send alarm actions to this CloudWatch alarm.
 
@@ -14418,7 +14422,7 @@ class AlarmWidgetProps(MetricWidgetProps):
         region: typing.Optional[builtins.str] = None,
         title: typing.Optional[builtins.str] = None,
         width: typing.Optional[jsii.Number] = None,
-        alarm: "IAlarm",
+        alarm: "_IAlarmRef_2bb0e5de",
         left_y_axis: typing.Optional[typing.Union["YAxisProps", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Properties for an AlarmWidget.
@@ -14527,11 +14531,11 @@ class AlarmWidgetProps(MetricWidgetProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def alarm(self) -> "IAlarm":
+    def alarm(self) -> "_IAlarmRef_2bb0e5de":
         '''The alarm to show.'''
         result = self._values.get("alarm")
         assert result is not None, "Required property 'alarm' is missing"
-        return typing.cast("IAlarm", result)
+        return typing.cast("_IAlarmRef_2bb0e5de", result)
 
     @builtins.property
     def left_y_axis(self) -> typing.Optional["YAxisProps"]:
@@ -16021,7 +16025,12 @@ class GraphWidgetProps(MetricWidgetProps):
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudwatch.IAlarm")
-class IAlarm(IAlarmRule, _IResource_c80c4260, typing_extensions.Protocol):
+class IAlarm(
+    IAlarmRule,
+    _IResource_c80c4260,
+    _IAlarmRef_2bb0e5de,
+    typing_extensions.Protocol,
+):
     '''Represents a CloudWatch Alarm.'''
 
     @builtins.property
@@ -16046,6 +16055,7 @@ class IAlarm(IAlarmRule, _IResource_c80c4260, typing_extensions.Protocol):
 class _IAlarmProxy(
     jsii.proxy_for(IAlarmRule), # type: ignore[misc]
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IAlarmRef_2bb0e5de), # type: ignore[misc]
 ):
     '''Represents a CloudWatch Alarm.'''
 
@@ -16476,6 +16486,12 @@ class AlarmBase(
         ...
 
     @builtins.property
+    @jsii.member(jsii_name="alarmRef")
+    def alarm_ref(self) -> "_AlarmReference_76b2c14f":
+        '''A reference to a Alarm resource.'''
+        return typing.cast("_AlarmReference_76b2c14f", jsii.get(self, "alarmRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="alarmActionArns")
     def _alarm_action_arns(self) -> typing.Optional[typing.List[builtins.str]]:
         return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "alarmActionArns"))
@@ -16570,7 +16586,7 @@ class AlarmStatusWidget(
     def __init__(
         self,
         *,
-        alarms: typing.Sequence["IAlarm"],
+        alarms: typing.Sequence["_IAlarmRef_2bb0e5de"],
         height: typing.Optional[jsii.Number] = None,
         sort_by: typing.Optional["AlarmStatusWidgetSortBy"] = None,
         states: typing.Optional[typing.Sequence["AlarmState"]] = None,
@@ -16639,7 +16655,7 @@ class AlarmWidget(
     def __init__(
         self,
         *,
-        alarm: "IAlarm",
+        alarm: "_IAlarmRef_2bb0e5de",
         left_y_axis: typing.Optional[typing.Union["YAxisProps", typing.Dict[builtins.str, typing.Any]]] = None,
         account_id: typing.Optional[builtins.str] = None,
         height: typing.Optional[jsii.Number] = None,
@@ -16710,7 +16726,7 @@ class CompositeAlarm(
         *,
         alarm_rule: "IAlarmRule",
         actions_enabled: typing.Optional[builtins.bool] = None,
-        actions_suppressor: typing.Optional["IAlarm"] = None,
+        actions_suppressor: typing.Optional["_IAlarmRef_2bb0e5de"] = None,
         actions_suppressor_extension_period: typing.Optional["_Duration_4839e8c3"] = None,
         actions_suppressor_wait_period: typing.Optional["_Duration_4839e8c3"] = None,
         alarm_description: typing.Optional[builtins.str] = None,
@@ -17236,7 +17252,7 @@ def _typecheckingstub__9c83f7a2932bb0e6ad7daedb63c82a736735f725c8596adb65d2dd035
     pass
 
 def _typecheckingstub__c7dd0ffc30f4ddc0cb0621fdae0fe1af07770e9fd504527c4df1f6e9ed2032cc(
-    alarm: IAlarm,
+    alarm: _IAlarmRef_2bb0e5de,
     alarm_state: AlarmState,
 ) -> None:
     """Type checking stubs"""
@@ -17262,7 +17278,7 @@ def _typecheckingstub__130f148217f9842e34a2de59608585cc9ab66211fa42610aa323425b1
 
 def _typecheckingstub__b487d6400a85492ffe968131ec5a7294320f90cef90f0505f02beffc7d3055a1(
     *,
-    alarms: typing.Sequence[IAlarm],
+    alarms: typing.Sequence[_IAlarmRef_2bb0e5de],
     height: typing.Optional[jsii.Number] = None,
     sort_by: typing.Optional[AlarmStatusWidgetSortBy] = None,
     states: typing.Optional[typing.Sequence[AlarmState]] = None,
@@ -18175,7 +18191,7 @@ def _typecheckingstub__ac3983e61925a8b50987e3b6213e939907d0c4bb41a5682e1321634d8
     *,
     alarm_rule: IAlarmRule,
     actions_enabled: typing.Optional[builtins.bool] = None,
-    actions_suppressor: typing.Optional[IAlarm] = None,
+    actions_suppressor: typing.Optional[_IAlarmRef_2bb0e5de] = None,
     actions_suppressor_extension_period: typing.Optional[_Duration_4839e8c3] = None,
     actions_suppressor_wait_period: typing.Optional[_Duration_4839e8c3] = None,
     alarm_description: typing.Optional[builtins.str] = None,
@@ -18294,7 +18310,7 @@ def _typecheckingstub__590b09336dca786909b6d40a91a4108f1ce6787811718cd6151f7cd2d
 
 def _typecheckingstub__19a88cc904e70d7841abfa1406b71edcf34c316b173c37c2881e75702bc0c75a(
     scope: _constructs_77d1e7e8.Construct,
-    alarm: IAlarm,
+    alarm: _IAlarmRef_2bb0e5de,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -18774,7 +18790,7 @@ def _typecheckingstub__8b6bef2cc64a78bffd68dc95a764829a6c125294deaebcd42b56c4935
     region: typing.Optional[builtins.str] = None,
     title: typing.Optional[builtins.str] = None,
     width: typing.Optional[jsii.Number] = None,
-    alarm: IAlarm,
+    alarm: _IAlarmRef_2bb0e5de,
     left_y_axis: typing.Optional[typing.Union[YAxisProps, typing.Dict[builtins.str, typing.Any]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -18985,7 +19001,7 @@ def _typecheckingstub__e7a7ea1ddc8fb0690826832fbc77c405acacd10123a1aa81696d3863d
     *,
     alarm_rule: IAlarmRule,
     actions_enabled: typing.Optional[builtins.bool] = None,
-    actions_suppressor: typing.Optional[IAlarm] = None,
+    actions_suppressor: typing.Optional[_IAlarmRef_2bb0e5de] = None,
     actions_suppressor_extension_period: typing.Optional[_Duration_4839e8c3] = None,
     actions_suppressor_wait_period: typing.Optional[_Duration_4839e8c3] = None,
     alarm_description: typing.Optional[builtins.str] = None,

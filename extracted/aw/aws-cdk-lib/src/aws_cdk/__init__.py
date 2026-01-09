@@ -22052,24 +22052,24 @@ class Size(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Size"):
 
     Example::
 
-        # bucket: s3.Bucket
-        # Provide a Lambda function that will transform records before delivery, with custom
-        # buffering and retry configuration
-        lambda_function = lambda_.Function(self, "Processor",
-            runtime=lambda_.Runtime.NODEJS_LATEST,
-            handler="index.handler",
-            code=lambda_.Code.from_asset(path.join(__dirname, "process-records"))
-        )
-        lambda_processor = firehose.LambdaFunctionProcessor(lambda_function,
-            buffer_interval=Duration.minutes(5),
-            buffer_size=Size.mebibytes(5),
-            retries=5
-        )
-        s3_destination = firehose.S3Bucket(bucket,
-            processors=[lambda_processor]
-        )
-        firehose.DeliveryStream(self, "Delivery Stream",
-            destination=s3_destination
+        # my_file_system: efs.IFileSystem
+        # my_job_role: iam.Role
+        
+        my_file_system.grant_read(my_job_role)
+        
+        job_defn = batch.EcsJobDefinition(self, "JobDefn",
+            container=batch.EcsEc2ContainerDefinition(self, "containerDefn",
+                image=ecs.ContainerImage.from_registry("public.ecr.aws/amazonlinux/amazonlinux:latest"),
+                memory=cdk.Size.mebibytes(2048),
+                cpu=256,
+                volumes=[batch.EcsVolume.efs(
+                    name="myVolume",
+                    file_system=my_file_system,
+                    container_path="/Volumes/myVolume",
+                    use_job_role=True
+                )],
+                job_role=my_job_role
+            )
         )
     '''
 
@@ -22953,6 +22953,12 @@ class Stack(
     def dependencies(self) -> typing.List["Stack"]:
         '''Return the stacks this stack depends on.'''
         return typing.cast(typing.List["Stack"], jsii.get(self, "dependencies"))
+
+    @builtins.property
+    @jsii.member(jsii_name="env")
+    def env(self) -> "_ResourceEnvironment_603baf00":
+        '''The environment this Stack deploys to.'''
+        return typing.cast("_ResourceEnvironment_603baf00", jsii.get(self, "env"))
 
     @builtins.property
     @jsii.member(jsii_name="environment")
@@ -29457,6 +29463,21 @@ class App(Stage, metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.App"):
             type_hints = typing.get_type_hints(_typecheckingstub__35aa557fa12e9d406415aec6c61b056749a1154d97c26976b46cb44152fdc787)
             check_type(argname="argument obj", value=obj, expected_type=type_hints["obj"])
         return typing.cast(builtins.bool, jsii.sinvoke(cls, "isApp", [obj]))
+
+    @jsii.member(jsii_name="of")
+    @builtins.classmethod
+    def of(
+        cls,
+        construct: "_constructs_77d1e7e8.IConstruct",
+    ) -> typing.Optional["Stage"]:
+        '''Return the app that is the root of the construct tree, if available.
+
+        :param construct: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__41e11a4ae5cb788014dc602796fe5eabf74680964a5670046b019d6971088ca6)
+            check_type(argname="argument construct", value=construct, expected_type=type_hints["construct"])
+        return typing.cast(typing.Optional["Stage"], jsii.sinvoke(cls, "of", [construct]))
 
 
 @jsii.data_type(
@@ -35964,7 +35985,7 @@ class CfnWaitCondition(
     In these situations, we recommend that you associate a ``CreationPolicy`` attribute with the wait condition instead of using a wait condition handle. For more information and an example, see `CreationPolicy attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-attribute-creationpolicy.html>`_ in the *CloudFormation User Guide* . If you use a ``CreationPolicy`` with a wait condition, don't specify any of the wait condition's properties.
     .. epigraph::
 
-       If you use AWS PrivateLink , resources in the VPC that respond to wait conditions must have access to CloudFormation , specific Amazon S3 buckets. Resources must send wait condition responses to a presigned Amazon S3 URL. If they can't send responses to Amazon S3 , CloudFormation won't receive a response and the stack operation fails. For more information, see `Access CloudFormation using an interface endpoint ( AWS PrivateLink ) <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/vpc-interface-endpoints.html>`_ in the *CloudFormation User Guide* . > For Amazon EC2 and Amazon EC2 Auto Scaling resources, we recommend that you use a ``CreationPolicy`` attribute instead of wait conditions. Add a ``CreationPolicy`` attribute to those resources, and use the ``cfn-signal`` helper script to signal when an instance creation process has completed successfully.
+       If you use AWS PrivateLink , resources in the VPC that respond to wait conditions must have access to CloudFormation , specific Amazon S3 buckets. Resources must send wait condition responses to a presigned Amazon S3 URL. If they can't send responses to Amazon S3 , CloudFormation won't receive a response and the stack operation fails. For more information, see `Access CloudFormation using an interface endpoint ( AWS PrivateLink ) <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/vpc-interface-endpoints.html>`_ in the *CloudFormation User Guide* . > For Amazon EC2 and Auto Scaling resources, we recommend that you use a ``CreationPolicy`` attribute instead of wait conditions. Add a ``CreationPolicy`` attribute to those resources, and use the ``cfn-signal`` helper script to signal when an instance creation process has completed successfully.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-waitcondition.html
     :cloudformationResource: AWS::CloudFormation::WaitCondition
@@ -38887,6 +38908,7 @@ __all__ = [
     "aws_bedrockagentcore",
     "aws_billingconductor",
     "aws_budgets",
+    "aws_cases",
     "aws_cassandra",
     "aws_ce",
     "aws_certificatemanager",
@@ -39198,6 +39220,7 @@ from . import aws_bedrock
 from . import aws_bedrockagentcore
 from . import aws_billingconductor
 from . import aws_budgets
+from . import aws_cases
 from . import aws_cassandra
 from . import aws_ce
 from . import aws_certificatemanager
@@ -42707,6 +42730,12 @@ def _typecheckingstub__9effc33e84903ea022b71088eb4acbafab3c5e135ab84d1b08231a7b3
 
 def _typecheckingstub__35aa557fa12e9d406415aec6c61b056749a1154d97c26976b46cb44152fdc787(
     obj: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__41e11a4ae5cb788014dc602796fe5eabf74680964a5670046b019d6971088ca6(
+    construct: _constructs_77d1e7e8.IConstruct,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -87,7 +87,7 @@ class CfnChannel(
 ):
     '''The AWS::IoTAnalytics::Channel resource collects data from an MQTT topic and archives the raw, unprocessed messages before publishing the data to a pipeline.
 
-    For more information, see `How to Use AWS IoT Analytics <https://docs.aws.amazon.com/iotanalytics/latest/userguide/welcome.html#aws-iot-analytics-how>`_ in the *AWS IoT Analytics User Guide* .
+    For more information, see `How to Use <https://docs.aws.amazon.com/iotanalytics/latest/userguide/welcome.html#aws-iot-analytics-how>`_ in the *User Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotanalytics-channel.html
     :cloudformationResource: AWS::IoTAnalytics::Channel
@@ -338,7 +338,7 @@ class CfnChannel(
             You may choose one of ``serviceManagedS3`` , ``customerManagedS3`` storage. If not specified, the default is ``serviceManagedS3`` . This can't be changed after creation of the channel.
 
             :param customer_managed_s3: Used to store channel data in an S3 bucket that you manage. If customer managed storage is selected, the ``retentionPeriod`` parameter is ignored. You can't change the choice of S3 storage after the data store is created.
-            :param service_managed_s3: Used to store channel data in an S3 bucket managed by AWS IoT Analytics . You can't change the choice of S3 storage after the data store is created.
+            :param service_managed_s3: Used to store channel data in an S3 bucket managed by ITA . You can't change the choice of S3 storage after the data store is created.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iotanalytics-channel-channelstorage.html
             :exampleMetadata: fixture=_generated
@@ -387,7 +387,7 @@ class CfnChannel(
 
         @builtins.property
         def service_managed_s3(self) -> typing.Any:
-            '''Used to store channel data in an S3 bucket managed by AWS IoT Analytics .
+            '''Used to store channel data in an S3 bucket managed by ITA .
 
             You can't change the choice of S3 storage after the data store is created.
 
@@ -427,7 +427,7 @@ class CfnChannel(
             '''Used to store channel data in an S3 bucket that you manage.
 
             :param bucket: The name of the S3 bucket in which channel data is stored.
-            :param role_arn: The ARN of the role that grants AWS IoT Analytics permission to interact with your Amazon S3 resources.
+            :param role_arn: The ARN of the role that grants ITA permission to interact with your Amazon S3 resources.
             :param key_prefix: (Optional) The prefix used to create the keys of the channel data objects. Each object in an S3 bucket has a key that is its unique identifier within the bucket (each object in a bucket has exactly one key). The prefix must end with a forward slash (/).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iotanalytics-channel-customermanageds3.html
@@ -471,7 +471,7 @@ class CfnChannel(
 
         @builtins.property
         def role_arn(self) -> builtins.str:
-            '''The ARN of the role that grants AWS IoT Analytics permission to interact with your Amazon S3 resources.
+            '''The ARN of the role that grants ITA permission to interact with your Amazon S3 resources.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iotanalytics-channel-customermanageds3.html#cfn-iotanalytics-channel-customermanageds3-rolearn
             '''
@@ -714,7 +714,7 @@ class CfnDataset(
 ):
     '''The AWS::IoTAnalytics::Dataset resource stores data retrieved from a data store by applying a ``queryAction`` (an SQL query) or a ``containerAction`` (executing a containerized application).
 
-    The data set can be populated manually by calling ``CreateDatasetContent`` or automatically according to a ``trigger`` you specify. For more information, see `How to Use AWS IoT Analytics <https://docs.aws.amazon.com/iotanalytics/latest/userguide/welcome.html#aws-iot-analytics-how>`_ in the *AWS IoT Analytics User Guide* .
+    The data set can be populated manually by calling ``CreateDatasetContent`` or automatically according to a ``trigger`` you specify. For more information, see `How to Use <https://docs.aws.amazon.com/iotanalytics/latest/userguide/welcome.html#aws-iot-analytics-how>`_ in the *User Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotanalytics-dataset.html
     :cloudformationResource: AWS::IoTAnalytics::Dataset
@@ -850,7 +850,7 @@ class CfnDataset(
         :param retention_period: Optional. How long, in days, message data is kept for the dataset.
         :param tags: Metadata which can be used to manage the data set. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
         :param triggers: The ``DatasetTrigger`` objects that specify when the dataset is automatically updated.
-        :param versioning_configuration: Optional. How many versions of dataset contents are kept. If not specified or set to null, only the latest version plus the latest succeeded version (if they are different) are kept for the time period specified by the ``retentionPeriod`` parameter. For more information, see `Keeping Multiple Versions of AWS IoT Analytics datasets <https://docs.aws.amazon.com/iotanalytics/latest/userguide/getting-started.html#aws-iot-analytics-dataset-versions>`_ in the *AWS IoT Analytics User Guide* .
+        :param versioning_configuration: Optional. How many versions of dataset contents are kept. If not specified or set to null, only the latest version plus the latest succeeded version (if they are different) are kept for the time period specified by the ``retentionPeriod`` parameter. For more information, see `Keeping Multiple Versions of ITA datasets <https://docs.aws.amazon.com/iotanalytics/latest/userguide/getting-started.html#aws-iot-analytics-dataset-versions>`_ in the *ITA User Guide* .
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__28e622d1f32fa52fab95276ceeda7ad3576bf8992514bb441ca9b4ec4c53e656)
@@ -1685,9 +1685,9 @@ class CfnDataset(
         def __init__(self, *, timeout_in_minutes: jsii.Number) -> None:
             '''A structure that contains the configuration information of a delta time session window.
 
-            ```DeltaTime`` <https://docs.aws.amazon.com/iotanalytics/latest/APIReference/API_DeltaTime.html>`_ specifies a time interval. You can use ``DeltaTime`` to create dataset contents with data that has arrived in the data store since the last execution. For an example of ``DeltaTime`` , see `Creating a SQL dataset with a delta window (CLI) <https://docs.aws.amazon.com/iotanalytics/latest/userguide/automate-create-dataset.html#automate-example6>`_ in the *AWS IoT Analytics User Guide* .
+            ```DeltaTime`` <https://docs.aws.amazon.com/iotanalytics/latest/APIReference/API_DeltaTime.html>`_ specifies a time interval. You can use ``DeltaTime`` to create dataset contents with data that has arrived in the data store since the last execution. For an example of ``DeltaTime`` , see `Creating a SQL dataset with a delta window (CLI) <https://docs.aws.amazon.com/iotanalytics/latest/userguide/automate-create-dataset.html#automate-example6>`_ in the *ITA User Guide* .
 
-            :param timeout_in_minutes: A time interval. You can use ``timeoutInMinutes`` so that AWS IoT Analytics can batch up late data notifications that have been generated since the last execution. AWS IoT Analytics sends one batch of notifications to Amazon CloudWatch Events at one time. For more information about how to write a timestamp expression, see `Date and Time Functions and Operators <https://docs.aws.amazon.com/https://prestodb.io/docs/current/functions/datetime.html>`_ , in the *Presto 0.172 Documentation* .
+            :param timeout_in_minutes: A time interval. You can use ``timeoutInMinutes`` so that ITA can batch up late data notifications that have been generated since the last execution. ITA sends one batch of notifications to Amazon CloudWatch Events at one time. For more information about how to write a timestamp expression, see `Date and Time Functions and Operators <https://docs.aws.amazon.com/https://prestodb.io/docs/current/functions/datetime.html>`_ , in the *Presto 0.172 Documentation* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iotanalytics-dataset-deltatimesessionwindowconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1713,7 +1713,7 @@ class CfnDataset(
         def timeout_in_minutes(self) -> jsii.Number:
             '''A time interval.
 
-            You can use ``timeoutInMinutes`` so that AWS IoT Analytics can batch up late data notifications that have been generated since the last execution. AWS IoT Analytics sends one batch of notifications to Amazon CloudWatch Events at one time.
+            You can use ``timeoutInMinutes`` so that ITA can batch up late data notifications that have been generated since the last execution. ITA sends one batch of notifications to Amazon CloudWatch Events at one time.
 
             For more information about how to write a timestamp expression, see `Date and Time Functions and Operators <https://docs.aws.amazon.com/https://prestodb.io/docs/current/functions/datetime.html>`_ , in the *Presto 0.172 Documentation* .
 
@@ -1879,7 +1879,7 @@ class CfnDataset(
             '''Configuration information for delivery of dataset contents to AWS IoT Events .
 
             :param input_name: The name of the AWS IoT Events input to which dataset contents are delivered.
-            :param role_arn: The ARN of the role that grants AWS IoT Analytics permission to deliver dataset contents to an AWS IoT Events input.
+            :param role_arn: The ARN of the role that grants ITA permission to deliver dataset contents to an AWS IoT Events input.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iotanalytics-dataset-ioteventsdestinationconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1916,7 +1916,7 @@ class CfnDataset(
 
         @builtins.property
         def role_arn(self) -> builtins.str:
-            '''The ARN of the role that grants AWS IoT Analytics permission to deliver dataset contents to an AWS IoT Events input.
+            '''The ARN of the role that grants ITA permission to deliver dataset contents to an AWS IoT Events input.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iotanalytics-dataset-ioteventsdestinationconfiguration.html#cfn-iotanalytics-dataset-ioteventsdestinationconfiguration-rolearn
             '''
@@ -2383,7 +2383,7 @@ class CfnDataset(
 
             :param bucket: The name of the S3 bucket to which dataset contents are delivered.
             :param key: The key of the dataset contents object in an S3 bucket. Each object has a key that is a unique identifier. Each object has exactly one key. You can create a unique key with the following options: - Use ``!{iotanalytics:scheduleTime}`` to insert the time of a scheduled SQL query run. - Use ``!{iotanalytics:versionId}`` to insert a unique hash that identifies a dataset content. - Use ``!{iotanalytics:creationTime}`` to insert the creation time of a dataset content. The following example creates a unique key for a CSV file: ``dataset/mydataset/!{iotanalytics:scheduleTime}/!{iotanalytics:versionId}.csv`` .. epigraph:: If you don't use ``!{iotanalytics:versionId}`` to specify the key, you might get duplicate keys. For example, you might have two dataset contents with the same ``scheduleTime`` but different ``versionId`` s. This means that one dataset content overwrites the other.
-            :param role_arn: The ARN of the role that grants AWS IoT Analytics permission to interact with your Amazon S3 and AWS Glue resources.
+            :param role_arn: The ARN of the role that grants ITA permission to interact with your Amazon S3 and AWS Glue resources.
             :param glue_configuration: Configuration information for coordination with AWS Glue , a fully managed extract, transform and load (ETL) service.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iotanalytics-dataset-s3destinationconfiguration.html
@@ -2456,7 +2456,7 @@ class CfnDataset(
 
         @builtins.property
         def role_arn(self) -> builtins.str:
-            '''The ARN of the role that grants AWS IoT Analytics permission to interact with your Amazon S3 and AWS Glue resources.
+            '''The ARN of the role that grants ITA permission to interact with your Amazon S3 and AWS Glue resources.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iotanalytics-dataset-s3destinationconfiguration.html#cfn-iotanalytics-dataset-s3destinationconfiguration-rolearn
             '''
@@ -2918,7 +2918,7 @@ class CfnDatasetProps:
         :param retention_period: Optional. How long, in days, message data is kept for the dataset.
         :param tags: Metadata which can be used to manage the data set. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
         :param triggers: The ``DatasetTrigger`` objects that specify when the dataset is automatically updated.
-        :param versioning_configuration: Optional. How many versions of dataset contents are kept. If not specified or set to null, only the latest version plus the latest succeeded version (if they are different) are kept for the time period specified by the ``retentionPeriod`` parameter. For more information, see `Keeping Multiple Versions of AWS IoT Analytics datasets <https://docs.aws.amazon.com/iotanalytics/latest/userguide/getting-started.html#aws-iot-analytics-dataset-versions>`_ in the *AWS IoT Analytics User Guide* .
+        :param versioning_configuration: Optional. How many versions of dataset contents are kept. If not specified or set to null, only the latest version plus the latest succeeded version (if they are different) are kept for the time period specified by the ``retentionPeriod`` parameter. For more information, see `Keeping Multiple Versions of ITA datasets <https://docs.aws.amazon.com/iotanalytics/latest/userguide/getting-started.html#aws-iot-analytics-dataset-versions>`_ in the *ITA User Guide* .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotanalytics-dataset.html
         :exampleMetadata: fixture=_generated
@@ -3141,7 +3141,7 @@ class CfnDatasetProps:
     ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataset.VersioningConfigurationProperty"]]:
         '''Optional.
 
-        How many versions of dataset contents are kept. If not specified or set to null, only the latest version plus the latest succeeded version (if they are different) are kept for the time period specified by the ``retentionPeriod`` parameter. For more information, see `Keeping Multiple Versions of AWS IoT Analytics datasets <https://docs.aws.amazon.com/iotanalytics/latest/userguide/getting-started.html#aws-iot-analytics-dataset-versions>`_ in the *AWS IoT Analytics User Guide* .
+        How many versions of dataset contents are kept. If not specified or set to null, only the latest version plus the latest succeeded version (if they are different) are kept for the time period specified by the ``retentionPeriod`` parameter. For more information, see `Keeping Multiple Versions of ITA datasets <https://docs.aws.amazon.com/iotanalytics/latest/userguide/getting-started.html#aws-iot-analytics-dataset-versions>`_ in the *ITA User Guide* .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotanalytics-dataset.html#cfn-iotanalytics-dataset-versioningconfiguration
         '''
@@ -3168,7 +3168,7 @@ class CfnDatastore(
 ):
     '''AWS::IoTAnalytics::Datastore resource is a repository for messages.
 
-    For more information, see `How to Use AWS IoT Analytics <https://docs.aws.amazon.com/iotanalytics/latest/userguide/welcome.html#aws-iot-analytics-how>`_ in the *AWS IoT Analytics User Guide* .
+    For more information, see `How to Use <https://docs.aws.amazon.com/iotanalytics/latest/userguide/welcome.html#aws-iot-analytics-how>`_ in the *User Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotanalytics-datastore.html
     :cloudformationResource: AWS::IoTAnalytics::Datastore
@@ -3258,7 +3258,7 @@ class CfnDatastore(
         :param datastore_name: The name of the data store.
         :param datastore_partitions: Information about the partition dimensions in a data store.
         :param datastore_storage: Where data store data is stored.
-        :param file_format_configuration: Contains the configuration information of file formats. AWS IoT Analytics data stores support JSON and `Parquet <https://docs.aws.amazon.com/https://parquet.apache.org/>`_ . The default file format is JSON. You can specify only one format. You can't change the file format after you create the data store.
+        :param file_format_configuration: Contains the configuration information of file formats. ITA data stores support JSON and `Parquet <https://docs.aws.amazon.com/https://parquet.apache.org/>`_ . The default file format is JSON. You can specify only one format. You can't change the file format after you create the data store.
         :param retention_period: How long, in days, message data is kept for the data store. When ``customerManagedS3`` storage is selected, this parameter is ignored.
         :param tags: Metadata which can be used to manage the data store. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
         '''
@@ -3432,7 +3432,7 @@ class CfnDatastore(
     ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDatastore.FileFormatConfigurationProperty"]]:
         '''Contains the configuration information of file formats.
 
-        AWS IoT Analytics data stores support JSON and `Parquet <https://docs.aws.amazon.com/https://parquet.apache.org/>`_ .
+        ITA data stores support JSON and `Parquet <https://docs.aws.amazon.com/https://parquet.apache.org/>`_ .
         '''
         return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDatastore.FileFormatConfigurationProperty"]], jsii.get(self, "fileFormatConfiguration"))
 
@@ -3567,7 +3567,7 @@ class CfnDatastore(
             When you choose customer-managed storage, the ``retentionPeriod`` parameter is ignored. You can't change the choice of Amazon S3 storage after your data store is created.
 
             :param bucket: The name of the Amazon S3 bucket where your data is stored.
-            :param role_arn: The ARN of the role that grants AWS IoT Analytics permission to interact with your Amazon S3 resources.
+            :param role_arn: The ARN of the role that grants ITA permission to interact with your Amazon S3 resources.
             :param key_prefix: (Optional) The prefix used to create the keys of the data store data objects. Each object in an Amazon S3 bucket has a key that is its unique identifier in the bucket. Each object in a bucket has exactly one key. The prefix must end with a forward slash (/).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iotanalytics-datastore-customermanageds3.html
@@ -3611,7 +3611,7 @@ class CfnDatastore(
 
         @builtins.property
         def role_arn(self) -> builtins.str:
-            '''The ARN of the role that grants AWS IoT Analytics permission to interact with your Amazon S3 resources.
+            '''The ARN of the role that grants ITA permission to interact with your Amazon S3 resources.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iotanalytics-datastore-customermanageds3.html#cfn-iotanalytics-datastore-customermanageds3-rolearn
             '''
@@ -3892,7 +3892,7 @@ class CfnDatastore(
 
             :param customer_managed_s3: Use this to store data store data in an S3 bucket that you manage. The choice of service-managed or customer-managed S3 storage cannot be changed after creation of the data store.
             :param iot_site_wise_multi_layer_storage: Use this to store data used by AWS IoT SiteWise in an Amazon S3 bucket that you manage. You can't change the choice of Amazon S3 storage after your data store is created.
-            :param service_managed_s3: Use this to store data store data in an S3 bucket managed by the AWS IoT Analytics service. The choice of service-managed or customer-managed S3 storage cannot be changed after creation of the data store.
+            :param service_managed_s3: Use this to store data store data in an S3 bucket managed by the service. The choice of service-managed or customer-managed S3 storage cannot be changed after creation of the data store.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iotanalytics-datastore-datastorestorage.html
             :exampleMetadata: fixture=_generated
@@ -3965,7 +3965,7 @@ class CfnDatastore(
 
         @builtins.property
         def service_managed_s3(self) -> typing.Any:
-            '''Use this to store data store data in an S3 bucket managed by the AWS IoT Analytics service.
+            '''Use this to store data store data in an S3 bucket managed by the  service.
 
             The choice of service-managed or customer-managed S3 storage cannot be changed after creation of the data store.
 
@@ -4000,7 +4000,7 @@ class CfnDatastore(
             json_configuration: typing.Any = None,
             parquet_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDatastore.ParquetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''Contains the configuration information of file formats. AWS IoT Analytics data stores support JSON and `Parquet <https://docs.aws.amazon.com/https://parquet.apache.org/>`_ .
+            '''Contains the configuration information of file formats. ITA data stores support JSON and `Parquet <https://docs.aws.amazon.com/https://parquet.apache.org/>`_ .
 
             The default file format is JSON. You can specify only one format.
 
@@ -4496,7 +4496,7 @@ class CfnDatastoreProps:
         :param datastore_name: The name of the data store.
         :param datastore_partitions: Information about the partition dimensions in a data store.
         :param datastore_storage: Where data store data is stored.
-        :param file_format_configuration: Contains the configuration information of file formats. AWS IoT Analytics data stores support JSON and `Parquet <https://docs.aws.amazon.com/https://parquet.apache.org/>`_ . The default file format is JSON. You can specify only one format. You can't change the file format after you create the data store.
+        :param file_format_configuration: Contains the configuration information of file formats. ITA data stores support JSON and `Parquet <https://docs.aws.amazon.com/https://parquet.apache.org/>`_ . The default file format is JSON. You can specify only one format. You can't change the file format after you create the data store.
         :param retention_period: How long, in days, message data is kept for the data store. When ``customerManagedS3`` storage is selected, this parameter is ignored.
         :param tags: Metadata which can be used to manage the data store. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
 
@@ -4624,7 +4624,7 @@ class CfnDatastoreProps:
     def file_format_configuration(
         self,
     ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDatastore.FileFormatConfigurationProperty"]]:
-        '''Contains the configuration information of file formats. AWS IoT Analytics data stores support JSON and `Parquet <https://docs.aws.amazon.com/https://parquet.apache.org/>`_ .
+        '''Contains the configuration information of file formats. ITA data stores support JSON and `Parquet <https://docs.aws.amazon.com/https://parquet.apache.org/>`_ .
 
         The default file format is JSON. You can specify only one format.
 
@@ -4679,7 +4679,7 @@ class CfnPipeline(
 ):
     '''The AWS::IoTAnalytics::Pipeline resource consumes messages from one or more channels and allows you to process the messages before storing them in a data store.
 
-    You must specify both a ``channel`` and a ``datastore`` activity and, optionally, as many as 23 additional activities in the ``pipelineActivities`` array. For more information, see `How to Use AWS IoT Analytics <https://docs.aws.amazon.com/iotanalytics/latest/userguide/welcome.html#aws-iot-analytics-how>`_ in the *AWS IoT Analytics User Guide* .
+    You must specify both a ``channel`` and a ``datastore`` activity and, optionally, as many as 23 additional activities in the ``pipelineActivities`` array. For more information, see `How to Use <https://docs.aws.amazon.com/iotanalytics/latest/userguide/welcome.html#aws-iot-analytics-how>`_ in the *User Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotanalytics-pipeline.html
     :cloudformationResource: AWS::IoTAnalytics::Pipeline

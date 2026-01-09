@@ -10106,6 +10106,48 @@ class CfnPolicy(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPolicy", [resource]))
 
+    @jsii.member(jsii_name="fromPolicyArn")
+    @builtins.classmethod
+    def from_policy_arn(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> "_IPolicyRef_d07d9913":
+        '''Creates a new IPolicyRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9b0fff5d16f5f10312b71c01ed52c2e5cd78c15892562eea73b81804b82d6d6b)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast("_IPolicyRef_d07d9913", jsii.sinvoke(cls, "fromPolicyArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromPolicyName")
+    @builtins.classmethod
+    def from_policy_name(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        policy_name: builtins.str,
+    ) -> "_IPolicyRef_d07d9913":
+        '''Creates a new IPolicyRef from a policyName.
+
+        :param scope: -
+        :param id: -
+        :param policy_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__11b7fcec074eb7b27dc54efa00dcdc23e5dcedb9b29dcf861c2b477957ea6a4b)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument policy_name", value=policy_name, expected_type=type_hints["policy_name"])
+        return typing.cast("_IPolicyRef_d07d9913", jsii.sinvoke(cls, "fromPolicyName", [scope, id, policy_name]))
+
     @jsii.member(jsii_name="isCfnPolicy")
     @builtins.classmethod
     def is_cfn_policy(cls, x: typing.Any) -> builtins.bool:
@@ -16632,7 +16674,13 @@ class CfnTopicRule(
                                 signing_region="signingRegion"
                             )
                         ),
+                        batch_config=iot.CfnTopicRule.BatchConfigProperty(
+                            max_batch_open_ms=123,
+                            max_batch_size=123,
+                            max_batch_size_bytes=123
+                        ),
                         confirmation_url="confirmationUrl",
+                        enable_batching=False,
                         headers=[iot.CfnTopicRule.HttpActionHeaderProperty(
                             key="key",
                             value="value"
@@ -16865,7 +16913,13 @@ class CfnTopicRule(
                                 signing_region="signingRegion"
                             )
                         ),
+                        batch_config=iot.CfnTopicRule.BatchConfigProperty(
+                            max_batch_open_ms=123,
+                            max_batch_size=123,
+                            max_batch_size_bytes=123
+                        ),
                         confirmation_url="confirmationUrl",
+                        enable_batching=False,
                         headers=[iot.CfnTopicRule.HttpActionHeaderProperty(
                             key="key",
                             value="value"
@@ -17386,7 +17440,13 @@ class CfnTopicRule(
                                 signing_region="signingRegion"
                             )
                         ),
+                        batch_config=iot.CfnTopicRule.BatchConfigProperty(
+                            max_batch_open_ms=123,
+                            max_batch_size=123,
+                            max_batch_size_bytes=123
+                        ),
                         confirmation_url="confirmationUrl",
+                        enable_batching=False,
                         headers=[iot.CfnTopicRule.HttpActionHeaderProperty(
                             key="key",
                             value="value"
@@ -18173,6 +18233,91 @@ class CfnTopicRule(
 
         def __repr__(self) -> str:
             return "AssetPropertyVariantProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_iot.CfnTopicRule.BatchConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "max_batch_open_ms": "maxBatchOpenMs",
+            "max_batch_size": "maxBatchSize",
+            "max_batch_size_bytes": "maxBatchSizeBytes",
+        },
+    )
+    class BatchConfigProperty:
+        def __init__(
+            self,
+            *,
+            max_batch_open_ms: typing.Optional[jsii.Number] = None,
+            max_batch_size: typing.Optional[jsii.Number] = None,
+            max_batch_size_bytes: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param max_batch_open_ms: 
+            :param max_batch_size: 
+            :param max_batch_size_bytes: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-batchconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_iot as iot
+                
+                batch_config_property = iot.CfnTopicRule.BatchConfigProperty(
+                    max_batch_open_ms=123,
+                    max_batch_size=123,
+                    max_batch_size_bytes=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__3fbcd9d5cb432d9f1c758a930c904d2e5fe115c76d8bb51ff0e97bcda596b165)
+                check_type(argname="argument max_batch_open_ms", value=max_batch_open_ms, expected_type=type_hints["max_batch_open_ms"])
+                check_type(argname="argument max_batch_size", value=max_batch_size, expected_type=type_hints["max_batch_size"])
+                check_type(argname="argument max_batch_size_bytes", value=max_batch_size_bytes, expected_type=type_hints["max_batch_size_bytes"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if max_batch_open_ms is not None:
+                self._values["max_batch_open_ms"] = max_batch_open_ms
+            if max_batch_size is not None:
+                self._values["max_batch_size"] = max_batch_size
+            if max_batch_size_bytes is not None:
+                self._values["max_batch_size_bytes"] = max_batch_size_bytes
+
+        @builtins.property
+        def max_batch_open_ms(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-batchconfig.html#cfn-iot-topicrule-batchconfig-maxbatchopenms
+            '''
+            result = self._values.get("max_batch_open_ms")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def max_batch_size(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-batchconfig.html#cfn-iot-topicrule-batchconfig-maxbatchsize
+            '''
+            result = self._values.get("max_batch_size")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def max_batch_size_bytes(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-batchconfig.html#cfn-iot-topicrule-batchconfig-maxbatchsizebytes
+            '''
+            result = self._values.get("max_batch_size_bytes")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "BatchConfigProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -19120,7 +19265,9 @@ class CfnTopicRule(
         name_mapping={
             "url": "url",
             "auth": "auth",
+            "batch_config": "batchConfig",
             "confirmation_url": "confirmationUrl",
+            "enable_batching": "enableBatching",
             "headers": "headers",
         },
     )
@@ -19130,14 +19277,18 @@ class CfnTopicRule(
             *,
             url: builtins.str,
             auth: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.HttpAuthorizationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            batch_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.BatchConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             confirmation_url: typing.Optional[builtins.str] = None,
+            enable_batching: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             headers: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnTopicRule.HttpActionHeaderProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
             '''Send data to an HTTPS endpoint.
 
             :param url: The endpoint URL. If substitution templates are used in the URL, you must also specify a ``confirmationUrl`` . If this is a new destination, a new ``TopicRuleDestination`` is created if possible.
             :param auth: The authentication method to use when sending data to an HTTPS endpoint.
+            :param batch_config: 
             :param confirmation_url: The URL to which AWS IoT sends a confirmation message. The value of the confirmation URL must be a prefix of the endpoint URL. If you do not specify a confirmation URL AWS IoT uses the endpoint URL as the confirmation URL. If you use substitution templates in the confirmationUrl, you must create and enable topic rule destinations that match each possible value of the substitution template before traffic is allowed to your endpoint URL.
+            :param enable_batching: 
             :param headers: The HTTP headers to send with the message data.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-httpaction.html
@@ -19160,7 +19311,13 @@ class CfnTopicRule(
                             signing_region="signingRegion"
                         )
                     ),
+                    batch_config=iot.CfnTopicRule.BatchConfigProperty(
+                        max_batch_open_ms=123,
+                        max_batch_size=123,
+                        max_batch_size_bytes=123
+                    ),
                     confirmation_url="confirmationUrl",
+                    enable_batching=False,
                     headers=[iot.CfnTopicRule.HttpActionHeaderProperty(
                         key="key",
                         value="value"
@@ -19171,15 +19328,21 @@ class CfnTopicRule(
                 type_hints = typing.get_type_hints(_typecheckingstub__7a7751e5a2c320f86684a244ab9ae594bac00f4f8bd37456a82ca41a565aae6d)
                 check_type(argname="argument url", value=url, expected_type=type_hints["url"])
                 check_type(argname="argument auth", value=auth, expected_type=type_hints["auth"])
+                check_type(argname="argument batch_config", value=batch_config, expected_type=type_hints["batch_config"])
                 check_type(argname="argument confirmation_url", value=confirmation_url, expected_type=type_hints["confirmation_url"])
+                check_type(argname="argument enable_batching", value=enable_batching, expected_type=type_hints["enable_batching"])
                 check_type(argname="argument headers", value=headers, expected_type=type_hints["headers"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "url": url,
             }
             if auth is not None:
                 self._values["auth"] = auth
+            if batch_config is not None:
+                self._values["batch_config"] = batch_config
             if confirmation_url is not None:
                 self._values["confirmation_url"] = confirmation_url
+            if enable_batching is not None:
+                self._values["enable_batching"] = enable_batching
             if headers is not None:
                 self._values["headers"] = headers
 
@@ -19207,6 +19370,16 @@ class CfnTopicRule(
             return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.HttpAuthorizationProperty"]], result)
 
         @builtins.property
+        def batch_config(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.BatchConfigProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-httpaction.html#cfn-iot-topicrule-httpaction-batchconfig
+            '''
+            result = self._values.get("batch_config")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTopicRule.BatchConfigProperty"]], result)
+
+        @builtins.property
         def confirmation_url(self) -> typing.Optional[builtins.str]:
             '''The URL to which AWS IoT sends a confirmation message.
 
@@ -19216,6 +19389,16 @@ class CfnTopicRule(
             '''
             result = self._values.get("confirmation_url")
             return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def enable_batching(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-topicrule-httpaction.html#cfn-iot-topicrule-httpaction-enablebatching
+            '''
+            result = self._values.get("enable_batching")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def headers(
@@ -21688,7 +21871,13 @@ class CfnTopicRule(
                                     signing_region="signingRegion"
                                 )
                             ),
+                            batch_config=iot.CfnTopicRule.BatchConfigProperty(
+                                max_batch_open_ms=123,
+                                max_batch_size=123,
+                                max_batch_size_bytes=123
+                            ),
                             confirmation_url="confirmationUrl",
+                            enable_batching=False,
                             headers=[iot.CfnTopicRule.HttpActionHeaderProperty(
                                 key="key",
                                 value="value"
@@ -21921,7 +22110,13 @@ class CfnTopicRule(
                                     signing_region="signingRegion"
                                 )
                             ),
+                            batch_config=iot.CfnTopicRule.BatchConfigProperty(
+                                max_batch_open_ms=123,
+                                max_batch_size=123,
+                                max_batch_size_bytes=123
+                            ),
                             confirmation_url="confirmationUrl",
+                            enable_batching=False,
                             headers=[iot.CfnTopicRule.HttpActionHeaderProperty(
                                 key="key",
                                 value="value"
@@ -22815,7 +23010,13 @@ class CfnTopicRuleProps:
                                     signing_region="signingRegion"
                                 )
                             ),
+                            batch_config=iot.CfnTopicRule.BatchConfigProperty(
+                                max_batch_open_ms=123,
+                                max_batch_size=123,
+                                max_batch_size_bytes=123
+                            ),
                             confirmation_url="confirmationUrl",
+                            enable_batching=False,
                             headers=[iot.CfnTopicRule.HttpActionHeaderProperty(
                                 key="key",
                                 value="value"
@@ -23048,7 +23249,13 @@ class CfnTopicRuleProps:
                                     signing_region="signingRegion"
                                 )
                             ),
+                            batch_config=iot.CfnTopicRule.BatchConfigProperty(
+                                max_batch_open_ms=123,
+                                max_batch_size=123,
+                                max_batch_size_bytes=123
+                            ),
                             confirmation_url="confirmationUrl",
+                            enable_batching=False,
                             headers=[iot.CfnTopicRule.HttpActionHeaderProperty(
                                 key="key",
                                 value="value"
@@ -25130,6 +25337,22 @@ def _typecheckingstub__8796f70ff5a08fbf874c453071af67d17f6e264a78ab791e9da92cbfc
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__9b0fff5d16f5f10312b71c01ed52c2e5cd78c15892562eea73b81804b82d6d6b(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__11b7fcec074eb7b27dc54efa00dcdc23e5dcedb9b29dcf861c2b477957ea6a4b(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    policy_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__6e262fc28dcedff7f60e6bc0eff1684df98f359f0caf6c53f7da9577c0a2e7ce(
     x: typing.Any,
 ) -> None:
@@ -26453,6 +26676,15 @@ def _typecheckingstub__9cb29be426554b6004e27c4c3a95dfc3b22d16ecf1629b7e1907b1a71
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__3fbcd9d5cb432d9f1c758a930c904d2e5fe115c76d8bb51ff0e97bcda596b165(
+    *,
+    max_batch_open_ms: typing.Optional[jsii.Number] = None,
+    max_batch_size: typing.Optional[jsii.Number] = None,
+    max_batch_size_bytes: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__59d9a04057904271e871659dc10e37e736732c816a917e568f03c64badf0d0f7(
     *,
     alarm_name: builtins.str,
@@ -26540,7 +26772,9 @@ def _typecheckingstub__7a7751e5a2c320f86684a244ab9ae594bac00f4f8bd37456a82ca41a5
     *,
     url: builtins.str,
     auth: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTopicRule.HttpAuthorizationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    batch_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTopicRule.BatchConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     confirmation_url: typing.Optional[builtins.str] = None,
+    enable_batching: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     headers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTopicRule.HttpActionHeaderProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
 ) -> None:
     """Type checking stubs"""

@@ -7627,20 +7627,35 @@ class Effect(enum.Enum):
 
     Example::
 
-        # books: apigateway.Resource
-        # iam_user: iam.User
+        from aws_cdk.aws_apigatewayv2_authorizers import WebSocketIamAuthorizer
+        from aws_cdk.aws_apigatewayv2_integrations import WebSocketLambdaIntegration
+        
+        # This function handles your connect route
+        # connect_handler: lambda.Function
         
         
-        get_books = books.add_method("GET", apigateway.HttpIntegration("http://amazon.com"),
-            authorization_type=apigateway.AuthorizationType.IAM
+        web_socket_api = apigwv2.WebSocketApi(self, "WebSocketApi")
+        
+        web_socket_api.add_route("$connect",
+            integration=WebSocketLambdaIntegration("Integration", connect_handler),
+            authorizer=WebSocketIamAuthorizer()
         )
         
-        iam_user.attach_inline_policy(iam.Policy(self, "AllowBooks",
+        # Create an IAM user (identity)
+        user = iam.User(self, "User")
+        
+        web_socket_arn = Stack.of(self).format_arn(
+            service="execute-api",
+            resource=web_socket_api.api_id
+        )
+        
+        # Grant access to the IAM user
+        user.attach_inline_policy(iam.Policy(self, "AllowInvoke",
             statements=[
                 iam.PolicyStatement(
                     actions=["execute-api:Invoke"],
                     effect=iam.Effect.ALLOW,
-                    resources=[get_books.method_arn]
+                    resources=[web_socket_arn]
                 )
             ]
         ))
@@ -11403,24 +11418,34 @@ class PolicyStatement(
 ):
     '''Represents a statement in an IAM policy document.
 
-    :exampleMetadata: infused
+    :exampleMetadata: lit=aws-ec2/test/integ.vpc-endpoint.lit.ts infused
 
     Example::
 
-        access_logs_bucket = s3.Bucket(self, "AccessLogsBucket",
-            object_ownership=s3.ObjectOwnership.BUCKET_OWNER_ENFORCED
+        # Add gateway endpoints when creating the VPC
+        vpc = ec2.Vpc(self, "MyVpc",
+            gateway_endpoints={
+                "S3": cdk.aws_ec2.GatewayVpcEndpointOptions(
+                    service=ec2.GatewayVpcEndpointAwsService.S3
+                )
+            }
         )
         
-        access_logs_bucket.add_to_resource_policy(
-            iam.PolicyStatement(
-                actions=["s3:*"],
-                resources=[access_logs_bucket.bucket_arn, access_logs_bucket.arn_for_objects("*")],
-                principals=[iam.AnyPrincipal()]
-            ))
+        # Alternatively gateway endpoints can be added on the VPC
+        dynamo_db_endpoint = vpc.add_gateway_endpoint("DynamoDbEndpoint",
+            service=ec2.GatewayVpcEndpointAwsService.DYNAMODB
+        )
         
-        bucket = s3.Bucket(self, "MyBucket",
-            server_access_logs_bucket=access_logs_bucket,
-            server_access_logs_prefix="logs"
+        # This allows to customize the endpoint policy
+        dynamo_db_endpoint.add_to_policy(
+            iam.PolicyStatement( # Restrict to listing and describing tables
+                principals=[iam.AnyPrincipal()],
+                actions=["dynamodb:DescribeTable", "dynamodb:ListTables"],
+                resources=["*"]))
+        
+        # Add an interface endpoint
+        vpc.add_interface_endpoint("EcrDockerEndpoint",
+            service=ec2.InterfaceVpcEndpointAwsService.ECR_DOCKER
         )
     '''
 
@@ -11971,24 +11996,34 @@ class PolicyStatementProps:
         :param resources: Resource ARNs to add to the statement. Default: - no resources
         :param sid: The Sid (statement ID) is an optional identifier that you provide for the policy statement. You can assign a Sid value to each statement in a statement array. In services that let you specify an ID element, such as SQS and SNS, the Sid value is just a sub-ID of the policy document's ID. In IAM, the Sid value must be unique within a JSON policy. Default: - no sid
 
-        :exampleMetadata: infused
+        :exampleMetadata: lit=aws-ec2/test/integ.vpc-endpoint.lit.ts infused
 
         Example::
 
-            access_logs_bucket = s3.Bucket(self, "AccessLogsBucket",
-                object_ownership=s3.ObjectOwnership.BUCKET_OWNER_ENFORCED
+            # Add gateway endpoints when creating the VPC
+            vpc = ec2.Vpc(self, "MyVpc",
+                gateway_endpoints={
+                    "S3": cdk.aws_ec2.GatewayVpcEndpointOptions(
+                        service=ec2.GatewayVpcEndpointAwsService.S3
+                    )
+                }
             )
             
-            access_logs_bucket.add_to_resource_policy(
-                iam.PolicyStatement(
-                    actions=["s3:*"],
-                    resources=[access_logs_bucket.bucket_arn, access_logs_bucket.arn_for_objects("*")],
-                    principals=[iam.AnyPrincipal()]
-                ))
+            # Alternatively gateway endpoints can be added on the VPC
+            dynamo_db_endpoint = vpc.add_gateway_endpoint("DynamoDbEndpoint",
+                service=ec2.GatewayVpcEndpointAwsService.DYNAMODB
+            )
             
-            bucket = s3.Bucket(self, "MyBucket",
-                server_access_logs_bucket=access_logs_bucket,
-                server_access_logs_prefix="logs"
+            # This allows to customize the endpoint policy
+            dynamo_db_endpoint.add_to_policy(
+                iam.PolicyStatement( # Restrict to listing and describing tables
+                    principals=[iam.AnyPrincipal()],
+                    actions=["dynamodb:DescribeTable", "dynamodb:ListTables"],
+                    resources=["*"]))
+            
+            # Add an interface endpoint
+            vpc.add_interface_endpoint("EcrDockerEndpoint",
+                service=ec2.InterfaceVpcEndpointAwsService.ECR_DOCKER
             )
         '''
         if __debug__:
@@ -12393,30 +12428,23 @@ class RoleProps:
         :param permissions_boundary: AWS supports permissions boundaries for IAM entities (users or roles). A permissions boundary is an advanced feature for using a managed policy to set the maximum permissions that an identity-based policy can grant to an IAM entity. An entity's permissions boundary allows it to perform only the actions that are allowed by both its identity-based policies and its permissions boundaries. Default: - No permissions boundary.
         :param role_name: A name for the IAM role. For valid values, see the RoleName parameter for the CreateRole action in the IAM API Reference. IMPORTANT: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name. If you specify a name, you must specify the CAPABILITY_NAMED_IAM value to acknowledge your template's capabilities. For more information, see Acknowledging IAM Resources in AWS CloudFormation Templates. Default: - AWS CloudFormation generates a unique physical ID and uses that ID for the role name.
 
-        :exampleMetadata: fixture=default infused
+        :exampleMetadata: infused
 
         Example::
 
-            # Create a browser
-            browser = agentcore.BrowserCustom(self, "MyBrowser",
-                browser_custom_name="my_browser",
-                description="Browser for web automation",
-                network_configuration=agentcore.BrowserNetworkConfiguration.using_public_network()
+            # vpc: ec2.Vpc
+            
+            
+            log_group = logs.LogGroup(self, "MyCustomLogGroup")
+            
+            role = iam.Role(self, "MyCustomRole",
+                assumed_by=iam.ServicePrincipal("vpc-flow-logs.amazonaws.com")
             )
             
-            # Create a role that needs access to the browser
-            user_role = iam.Role(self, "UserRole",
-                assumed_by=iam.ServicePrincipal("lambda.amazonaws.com")
+            ec2.FlowLog(self, "FlowLog",
+                resource_type=ec2.FlowLogResourceType.from_vpc(vpc),
+                destination=ec2.FlowLogDestination.to_cloud_watch_logs(log_group, role)
             )
-            
-            # Grant read permissions (Get and List actions)
-            browser.grant_read(user_role)
-            
-            # Grant use permissions (Start, Update, Stop actions)
-            browser.grant_use(user_role)
-            
-            # Grant specific custom permissions
-            browser.grant(user_role, "bedrock-agentcore:GetBrowserSession")
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9c9223cb9fa6dff45ee4fd7013629ab18542c2499a83f542c5405968fad2287c)
@@ -14788,25 +14816,25 @@ class Role(
     Defines an IAM role. The role is created with an assume policy document associated with
     the specified AWS service principal defined in ``serviceAssumeRole``.
 
-    :exampleMetadata: fixture=default infused
+    :exampleMetadata: infused
 
     Example::
 
-        # Create a custom execution role
-        execution_role = iam.Role(self, "BrowserExecutionRole",
-            assumed_by=iam.ServicePrincipal("bedrock-agentcore.amazonaws.com"),
-            managed_policies=[
-                iam.ManagedPolicy.from_aws_managed_policy_name("AmazonBedrockAgentCoreBrowserExecutionRolePolicy")
-            ]
+        lambda_role = iam.Role(self, "Role",
+            assumed_by=iam.ServicePrincipal("lambda.amazonaws.com"),
+            description="Example role..."
         )
         
-        # Create browser with custom execution role
-        browser = agentcore.BrowserCustom(self, "MyBrowser",
-            browser_custom_name="my_browser",
-            description="Browser with custom execution role",
-            network_configuration=agentcore.BrowserNetworkConfiguration.using_public_network(),
-            execution_role=execution_role
+        stream = kinesis.Stream(self, "MyEncryptedStream",
+            encryption=kinesis.StreamEncryption.KMS
         )
+        stream_consumer = kinesis.StreamConsumer(self, "MyStreamConsumer",
+            stream_consumer_name="MyStreamConsumer",
+            stream=stream
+        )
+        
+        # give lambda permissions to read stream via the stream consumer
+        stream_consumer.grant_read(lambda_role)
     '''
 
     def __init__(

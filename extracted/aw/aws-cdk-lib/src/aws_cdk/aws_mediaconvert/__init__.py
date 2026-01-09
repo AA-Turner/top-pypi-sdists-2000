@@ -187,6 +187,48 @@ class CfnJobTemplate(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForJobTemplate", [resource]))
 
+    @jsii.member(jsii_name="fromJobTemplateArn")
+    @builtins.classmethod
+    def from_job_template_arn(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> "_IJobTemplateRef_427db06b":
+        '''Creates a new IJobTemplateRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4809f63cfa5b0eaee3116ae30c7b0bf5157633abac0b37990d00160446adaa96)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast("_IJobTemplateRef_427db06b", jsii.sinvoke(cls, "fromJobTemplateArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromJobTemplateName")
+    @builtins.classmethod
+    def from_job_template_name(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        job_template_name: builtins.str,
+    ) -> "_IJobTemplateRef_427db06b":
+        '''Creates a new IJobTemplateRef from a jobTemplateName.
+
+        :param scope: -
+        :param id: -
+        :param job_template_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__42a3479bd074b701111f61398d999f046219fd2dd8f086d27c182f1740564d00)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument job_template_name", value=job_template_name, expected_type=type_hints["job_template_name"])
+        return typing.cast("_IJobTemplateRef_427db06b", jsii.sinvoke(cls, "fromJobTemplateName", [scope, id, job_template_name]))
+
     @jsii.member(jsii_name="isCfnJobTemplate")
     @builtins.classmethod
     def is_cfn_job_template(cls, x: typing.Any) -> builtins.bool:
@@ -916,6 +958,48 @@ class CfnPreset(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPreset", [resource]))
 
+    @jsii.member(jsii_name="fromPresetArn")
+    @builtins.classmethod
+    def from_preset_arn(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> "_IPresetRef_e69b176f":
+        '''Creates a new IPresetRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a99241dadc7fc99a26e224c8535217403cfb796a22b5efefe6afc0f46aa38ac9)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast("_IPresetRef_e69b176f", jsii.sinvoke(cls, "fromPresetArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromPresetName")
+    @builtins.classmethod
+    def from_preset_name(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        preset_name: builtins.str,
+    ) -> "_IPresetRef_e69b176f":
+        '''Creates a new IPresetRef from a presetName.
+
+        :param scope: -
+        :param id: -
+        :param preset_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__daeb5e1026c75b763773d2e35369da112badf0f684fcbfd804ba7f76690d5fb3)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument preset_name", value=preset_name, expected_type=type_hints["preset_name"])
+        return typing.cast("_IPresetRef_e69b176f", jsii.sinvoke(cls, "fromPresetName", [scope, id, preset_name]))
+
     @jsii.member(jsii_name="isCfnPreset")
     @builtins.classmethod
     def is_cfn_preset(cls, x: typing.Any) -> builtins.bool:
@@ -1282,6 +1366,48 @@ class CfnQueue(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForQueue", [resource]))
 
+    @jsii.member(jsii_name="fromQueueArn")
+    @builtins.classmethod
+    def from_queue_arn(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> "_IQueueRef_ef5dbb18":
+        '''Creates a new IQueueRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3cf257fa04bd949ea2c8d3833cd6de6e214c953996fa70bc69c261422ed43c6a)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast("_IQueueRef_ef5dbb18", jsii.sinvoke(cls, "fromQueueArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromQueueName")
+    @builtins.classmethod
+    def from_queue_name(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        queue_name: builtins.str,
+    ) -> "_IQueueRef_ef5dbb18":
+        '''Creates a new IQueueRef from a queueName.
+
+        :param scope: -
+        :param id: -
+        :param queue_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b981e07a22c42bfd1c724172570cd43ae112b4bdf2b68e051887b23734c9bded)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument queue_name", value=queue_name, expected_type=type_hints["queue_name"])
+        return typing.cast("_IQueueRef_ef5dbb18", jsii.sinvoke(cls, "fromQueueName", [scope, id, queue_name]))
+
     @jsii.member(jsii_name="isCfnQueue")
     @builtins.classmethod
     def is_cfn_queue(cls, x: typing.Any) -> builtins.bool:
@@ -1633,6 +1759,22 @@ def _typecheckingstub__0d56f628bc50defd3c895e5ef7b41a1bff57cf0d2d4793131956d13c4
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4809f63cfa5b0eaee3116ae30c7b0bf5157633abac0b37990d00160446adaa96(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__42a3479bd074b701111f61398d999f046219fd2dd8f086d27c182f1740564d00(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    job_template_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__accf5c8b3c4c8b776f5e518a7795c6424f8e866ef33996cedcd6d6fd19952101(
     x: typing.Any,
 ) -> None:
@@ -1762,6 +1904,22 @@ def _typecheckingstub__b2167b00fe5ac49cfe022a479389e7426bccc0b9b2d60c4347501e6fc
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a99241dadc7fc99a26e224c8535217403cfb796a22b5efefe6afc0f46aa38ac9(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__daeb5e1026c75b763773d2e35369da112badf0f684fcbfd804ba7f76690d5fb3(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    preset_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__d17a3590cdd9de6ce33c7070b5a010746adeeb948ec8eb093321a86812723b18(
     x: typing.Any,
 ) -> None:
@@ -1837,6 +1995,22 @@ def _typecheckingstub__ce85d095c93254b82e67ee70a5cae96a78ca7b1fbb86f6494f48602d8
 
 def _typecheckingstub__a7f8d877fb1ae486c5c8540a8f28e337951176af9d4b7bd7598fe14b7db2d1c7(
     resource: _IQueueRef_ef5dbb18,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3cf257fa04bd949ea2c8d3833cd6de6e214c953996fa70bc69c261422ed43c6a(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b981e07a22c42bfd1c724172570cd43ae112b4bdf2b68e051887b23734c9bded(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    queue_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

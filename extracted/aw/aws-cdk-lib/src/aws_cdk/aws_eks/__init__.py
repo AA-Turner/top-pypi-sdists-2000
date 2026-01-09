@@ -301,7 +301,7 @@ cluster.add_nodegroup_capacity("custom-node-group",
 )
 ```
 
-> **NOTE:** If you add instances with the inferentia class (`inf1` or `inf2`) or trainium class (`trn1` or `trn1n`)
+> **NOTE:** If you add instances with the inferentia class (`inf1` or `inf2`) or trainium class (`trn1`, `trn1n`, or `trn2`)
 > the [neuron plugin](https://awsdocs-neuron.readthedocs-hosted.com/en/latest/containers/dlc-then-eks-devflow.html)
 > will be automatically installed in the kubernetes cluster.
 
@@ -11320,7 +11320,7 @@ class CfnNodegroup(
 
     For later updates, you will only be able to update a node group using a launch template only if it was originally deployed with a launch template. Additionally, the launch template ID or name must match what was used when the node group was created. You can update the launch template version with necessary changes. For more information about using launch templates, see `Customizing managed nodes with launch templates <https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html>`_ .
 
-    An Amazon EKS managed node group is an Amazon EC2 Amazon EC2 Auto Scaling group and associated Amazon EC2 instances that are managed by AWS for an Amazon EKS cluster. For more information, see `Managed node groups <https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html>`_ in the *Amazon EKS User Guide* .
+    An Amazon EKS managed node group is an Amazon EC2 Auto Scaling group and associated Amazon EC2 instances that are managed by AWS for an Amazon EKS cluster. For more information, see `Managed node groups <https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html>`_ in the *Amazon EKS User Guide* .
     .. epigraph::
 
        Windows AMI types are only supported for commercial AWS Regions that support Windows on Amazon EKS.
@@ -12330,7 +12330,7 @@ class CfnNodegroup(
             max_size: typing.Optional[jsii.Number] = None,
             min_size: typing.Optional[jsii.Number] = None,
         ) -> None:
-            '''An object representing the scaling configuration details for the Amazon EC2 Auto Scaling group that is associated with your node group.
+            '''An object representing the scaling configuration details for the Auto Scaling group that is associated with your node group.
 
             When creating a node group, you must specify all or none of the properties. When updating a node group, you can specify any or none of the properties.
 

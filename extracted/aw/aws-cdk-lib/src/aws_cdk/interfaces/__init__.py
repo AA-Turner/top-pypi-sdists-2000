@@ -222,6 +222,7 @@ __all__ = [
     "aws_billing",
     "aws_billingconductor",
     "aws_budgets",
+    "aws_cases",
     "aws_cassandra",
     "aws_ce",
     "aws_certificatemanager",
@@ -496,6 +497,7 @@ from . import aws_bedrockagentcore
 from . import aws_billing
 from . import aws_billingconductor
 from . import aws_budgets
+from . import aws_cases
 from . import aws_cassandra
 from . import aws_ce
 from . import aws_certificatemanager

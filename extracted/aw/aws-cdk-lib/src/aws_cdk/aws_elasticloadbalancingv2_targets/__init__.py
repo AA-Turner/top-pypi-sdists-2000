@@ -38,7 +38,7 @@ from .._jsii import *
 from ..aws_ec2 import Instance as _Instance_873cd165
 from ..aws_elasticloadbalancingv2 import (
     ApplicationListener as _ApplicationListener_e0620bf5,
-    IApplicationLoadBalancer as _IApplicationLoadBalancer_4cbd50ab,
+    IApplicationLoadBalancerRef as _IApplicationLoadBalancerRef_94a322e8,
     IApplicationLoadBalancerTarget as _IApplicationLoadBalancerTarget_fabf9003,
     IApplicationTargetGroup as _IApplicationTargetGroup_57799827,
     INetworkLoadBalancerTarget as _INetworkLoadBalancerTarget_688b169f,
@@ -203,14 +203,14 @@ class AlbTarget(
         from aws_cdk import aws_elasticloadbalancingv2 as elbv2
         from aws_cdk import aws_elasticloadbalancingv2_targets as elasticloadbalancingv2_targets
         
-        # application_load_balancer: elbv2.ApplicationLoadBalancer
+        # application_load_balancer_ref: elbv2.IApplicationLoadBalancerRef
         
-        alb_target = elasticloadbalancingv2_targets.AlbTarget(application_load_balancer, 123)
+        alb_target = elasticloadbalancingv2_targets.AlbTarget(application_load_balancer_ref, 123)
     '''
 
     def __init__(
         self,
-        alb: "_IApplicationLoadBalancer_4cbd50ab",
+        alb: "_IApplicationLoadBalancerRef_94a322e8",
         port: jsii.Number,
     ) -> None:
         '''
@@ -542,7 +542,7 @@ def _typecheckingstub__20a98e4d36be7fd597fbdb5dc2eb39c596b74bb2f49614c2332d5ae90
     pass
 
 def _typecheckingstub__bd3c46777bea3cc0051ec19e4d49e906dc65667b0e86f1104c7ed8f70dc67e80(
-    alb: _IApplicationLoadBalancer_4cbd50ab,
+    alb: _IApplicationLoadBalancerRef_94a322e8,
     port: jsii.Number,
 ) -> None:
     """Type checking stubs"""

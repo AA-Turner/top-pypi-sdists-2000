@@ -168,7 +168,8 @@ def proto_to_thread(proto_thread: pb.Thread) -> Thread:
         "thread_id": thread_id,
         "created_at": created_at,
         "updated_at": updated_at,
-        "metadata": fragment_to_value(proto_thread.metadata),
+        # Unlike other fields, metadata should never be `None`.
+        "metadata": fragment_to_value(proto_thread.metadata) or {},
         "config": fragment_to_value(proto_thread.config) or {},
         "error": fragment_to_value(proto_thread.error),
         "status": status,  # type: ignore[typeddict-item]

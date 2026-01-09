@@ -5069,7 +5069,9 @@ class CfnOdbPeeringConnection(
     @builtins.property
     @jsii.member(jsii_name="attrPeerNetworkCidrs")
     def attr_peer_network_cidrs(self) -> typing.List[builtins.str]:
-        '''The CIDR blocks for the ODB peering connection.
+        '''The CIDR blocks associated with the peering connection.
+
+        These CIDR blocks define the IP address ranges that can communicate through the peering connection.
 
         :cloudformationAttribute: PeerNetworkCidrs
         '''

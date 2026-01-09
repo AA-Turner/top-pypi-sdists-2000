@@ -37,14 +37,14 @@ from .. import IEnvironmentAware as _IEnvironmentAware_f39049ee
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_elasticsearch.DomainReference",
     jsii_struct_bases=[],
-    name_mapping={"domain_arn": "domainArn", "domain_id": "domainId"},
+    name_mapping={"domain_arn": "domainArn", "domain_name": "domainName"},
 )
 class DomainReference:
-    def __init__(self, *, domain_arn: builtins.str, domain_id: builtins.str) -> None:
+    def __init__(self, *, domain_arn: builtins.str, domain_name: builtins.str) -> None:
         '''A reference to a Domain resource.
 
         :param domain_arn: The ARN of the Domain resource.
-        :param domain_id: The Id of the Domain resource.
+        :param domain_name: The DomainName of the Domain resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -56,16 +56,16 @@ class DomainReference:
             
             domain_reference = interfaces_elasticsearch.DomainReference(
                 domain_arn="domainArn",
-                domain_id="domainId"
+                domain_name="domainName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6bfb0c0e1d3afb18d07e620a007f63ba655340946e8d9d250beb2c62f1923805)
             check_type(argname="argument domain_arn", value=domain_arn, expected_type=type_hints["domain_arn"])
-            check_type(argname="argument domain_id", value=domain_id, expected_type=type_hints["domain_id"])
+            check_type(argname="argument domain_name", value=domain_name, expected_type=type_hints["domain_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "domain_arn": domain_arn,
-            "domain_id": domain_id,
+            "domain_name": domain_name,
         }
 
     @builtins.property
@@ -76,10 +76,10 @@ class DomainReference:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def domain_id(self) -> builtins.str:
-        '''The Id of the Domain resource.'''
-        result = self._values.get("domain_id")
-        assert result is not None, "Required property 'domain_id' is missing"
+    def domain_name(self) -> builtins.str:
+        '''The DomainName of the Domain resource.'''
+        result = self._values.get("domain_name")
+        assert result is not None, "Required property 'domain_name' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -149,7 +149,7 @@ publication.publish()
 def _typecheckingstub__6bfb0c0e1d3afb18d07e620a007f63ba655340946e8d9d250beb2c62f1923805(
     *,
     domain_arn: builtins.str,
-    domain_id: builtins.str,
+    domain_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

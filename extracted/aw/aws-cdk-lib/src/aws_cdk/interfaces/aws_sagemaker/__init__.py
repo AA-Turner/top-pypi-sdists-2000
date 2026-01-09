@@ -427,13 +427,13 @@ class DeviceFleetReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_sagemaker.DeviceReference",
     jsii_struct_bases=[],
-    name_mapping={"device_name": "deviceName"},
+    name_mapping={"device_fleet_name": "deviceFleetName"},
 )
 class DeviceReference:
-    def __init__(self, *, device_name: builtins.str) -> None:
+    def __init__(self, *, device_fleet_name: builtins.str) -> None:
         '''A reference to a Device resource.
 
-        :param device_name: The Device/DeviceName of the Device resource.
+        :param device_fleet_name: The DeviceFleetName of the Device resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -444,21 +444,21 @@ class DeviceReference:
             from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
             device_reference = interfaces_sagemaker.DeviceReference(
-                device_name="deviceName"
+                device_fleet_name="deviceFleetName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5e91123dc160df144def6083969becc0cfa03100ce49a86dbd47dbc531c40dc4)
-            check_type(argname="argument device_name", value=device_name, expected_type=type_hints["device_name"])
+            check_type(argname="argument device_fleet_name", value=device_fleet_name, expected_type=type_hints["device_fleet_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "device_name": device_name,
+            "device_fleet_name": device_fleet_name,
         }
 
     @builtins.property
-    def device_name(self) -> builtins.str:
-        '''The Device/DeviceName of the Device resource.'''
-        result = self._values.get("device_name")
-        assert result is not None, "Required property 'device_name' is missing"
+    def device_fleet_name(self) -> builtins.str:
+        '''The DeviceFleetName of the Device resource.'''
+        result = self._values.get("device_fleet_name")
+        assert result is not None, "Required property 'device_fleet_name' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -3693,7 +3693,7 @@ def _typecheckingstub__1b9a733d992a034e2946905dc4f6aea8cb11d66ab8a69578e5ec6f5ac
 
 def _typecheckingstub__5e91123dc160df144def6083969becc0cfa03100ce49a86dbd47dbc531c40dc4(
     *,
-    device_name: builtins.str,
+    device_fleet_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

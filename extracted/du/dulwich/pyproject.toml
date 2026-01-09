@@ -43,14 +43,15 @@ pgp = ["gpg"]
 paramiko = ["paramiko"]
 colordiff = ["rich"]
 dev = [
-    "ruff==0.14.7",
-    "mypy==1.19.0",
+    "ruff==0.14.10",
+    "mypy==1.19.1",
     "dissolve>=0.1.1",
     "codespell==2.4.1",
 ]
 merge = ["merge3"]
 fuzzing = ["atheris"]
 patiencediff = ["patiencediff"]
+aiohttp = ["aiohttp"]
 
 [project.scripts]
 dulwich = "dulwich.cli:main"
@@ -100,9 +101,16 @@ ignore_missing_imports = true
 disallow_untyped_calls = false
 warn_return_any = false
 
+[[tool.mypy.overrides]]
+module = "sshsig.*"
+ignore_missing_imports = true
+disallow_untyped_calls = false
+warn_return_any = false
+
 [tool.setuptools]
 packages = [
     "dulwich",
+    "dulwich.aiohttp",
     "dulwich.cloud",
     "dulwich.contrib",
     "dulwich.porcelain",

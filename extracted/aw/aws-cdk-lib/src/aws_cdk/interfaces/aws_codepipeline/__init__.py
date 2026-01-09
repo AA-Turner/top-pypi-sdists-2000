@@ -304,13 +304,13 @@ class PipelineReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_codepipeline.WebhookReference",
     jsii_struct_bases=[],
-    name_mapping={"webhook_id": "webhookId"},
+    name_mapping={"webhook_name": "webhookName"},
 )
 class WebhookReference:
-    def __init__(self, *, webhook_id: builtins.str) -> None:
+    def __init__(self, *, webhook_name: builtins.str) -> None:
         '''A reference to a Webhook resource.
 
-        :param webhook_id: The Id of the Webhook resource.
+        :param webhook_name: The Name of the Webhook resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -321,21 +321,21 @@ class WebhookReference:
             from aws_cdk.interfaces import aws_codepipeline as interfaces_codepipeline
             
             webhook_reference = interfaces_codepipeline.WebhookReference(
-                webhook_id="webhookId"
+                webhook_name="webhookName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f9bf91bcd59a23afc69aebe9df6f0e55e1421bec01f1ae86241d173c8d51a7ae)
-            check_type(argname="argument webhook_id", value=webhook_id, expected_type=type_hints["webhook_id"])
+            check_type(argname="argument webhook_name", value=webhook_name, expected_type=type_hints["webhook_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "webhook_id": webhook_id,
+            "webhook_name": webhook_name,
         }
 
     @builtins.property
-    def webhook_id(self) -> builtins.str:
-        '''The Id of the Webhook resource.'''
-        result = self._values.get("webhook_id")
-        assert result is not None, "Required property 'webhook_id' is missing"
+    def webhook_name(self) -> builtins.str:
+        '''The Name of the Webhook resource.'''
+        result = self._values.get("webhook_name")
+        assert result is not None, "Required property 'webhook_name' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -379,7 +379,7 @@ def _typecheckingstub__fa099517d79cc704f4edb70aa548901841938ff855915f72a8b83d5ff
 
 def _typecheckingstub__f9bf91bcd59a23afc69aebe9df6f0e55e1421bec01f1ae86241d173c8d51a7ae(
     *,
-    webhook_id: builtins.str,
+    webhook_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

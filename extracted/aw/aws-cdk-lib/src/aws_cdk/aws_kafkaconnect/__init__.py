@@ -169,6 +169,7 @@ class CfnConnector(
                     )
                 )
             ),
+            network_type="networkType",
             tags=[CfnTag(
                 key="key",
                 value="value"
@@ -196,6 +197,7 @@ class CfnConnector(
         service_execution_role_arn: builtins.str,
         connector_description: typing.Optional[builtins.str] = None,
         log_delivery: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.LogDeliveryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        network_type: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         worker_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.WorkerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -214,6 +216,7 @@ class CfnConnector(
         :param service_execution_role_arn: The Amazon Resource Name (ARN) of the IAM role used by the connector to access Amazon Web Services resources.
         :param connector_description: The description of the connector.
         :param log_delivery: The settings for delivering connector logs to Amazon CloudWatch Logs.
+        :param network_type: The network type of the connector. It gives connectors connectivity to either IPv4 (IPV4) or IPv4 and IPv6 (DUAL) destinations. Defaults to IPV4.
         :param tags: A collection of tags associated with a resource.
         :param worker_configuration: The worker configurations that are in use with the connector.
         '''
@@ -233,6 +236,7 @@ class CfnConnector(
             service_execution_role_arn=service_execution_role_arn,
             connector_description=connector_description,
             log_delivery=log_delivery,
+            network_type=network_type,
             tags=tags,
             worker_configuration=worker_configuration,
         )
@@ -495,6 +499,19 @@ class CfnConnector(
             type_hints = typing.get_type_hints(_typecheckingstub__49a29da785c6c8f30f5fc4ffcb9320d7a0377e8c1032eb5ff26ba046ae554772)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "logDelivery", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="networkType")
+    def network_type(self) -> typing.Optional[builtins.str]:
+        '''The network type of the connector.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "networkType"))
+
+    @network_type.setter
+    def network_type(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ecb768ba8331b08dd6af43ec679bb63ca311831d677890057ea549e3988aa55f)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "networkType", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -1896,6 +1913,7 @@ class CfnConnector(
         "service_execution_role_arn": "serviceExecutionRoleArn",
         "connector_description": "connectorDescription",
         "log_delivery": "logDelivery",
+        "network_type": "networkType",
         "tags": "tags",
         "worker_configuration": "workerConfiguration",
     },
@@ -1915,6 +1933,7 @@ class CfnConnectorProps:
         service_execution_role_arn: builtins.str,
         connector_description: typing.Optional[builtins.str] = None,
         log_delivery: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.LogDeliveryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        network_type: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         worker_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConnector.WorkerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -1931,6 +1950,7 @@ class CfnConnectorProps:
         :param service_execution_role_arn: The Amazon Resource Name (ARN) of the IAM role used by the connector to access Amazon Web Services resources.
         :param connector_description: The description of the connector.
         :param log_delivery: The settings for delivering connector logs to Amazon CloudWatch Logs.
+        :param network_type: The network type of the connector. It gives connectors connectivity to either IPv4 (IPV4) or IPv4 and IPv6 (DUAL) destinations. Defaults to IPV4.
         :param tags: A collection of tags associated with a resource.
         :param worker_configuration: The worker configurations that are in use with the connector.
 
@@ -2017,6 +2037,7 @@ class CfnConnectorProps:
                         )
                     )
                 ),
+                network_type="networkType",
                 tags=[CfnTag(
                     key="key",
                     value="value"
@@ -2040,6 +2061,7 @@ class CfnConnectorProps:
             check_type(argname="argument service_execution_role_arn", value=service_execution_role_arn, expected_type=type_hints["service_execution_role_arn"])
             check_type(argname="argument connector_description", value=connector_description, expected_type=type_hints["connector_description"])
             check_type(argname="argument log_delivery", value=log_delivery, expected_type=type_hints["log_delivery"])
+            check_type(argname="argument network_type", value=network_type, expected_type=type_hints["network_type"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
             check_type(argname="argument worker_configuration", value=worker_configuration, expected_type=type_hints["worker_configuration"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -2057,6 +2079,8 @@ class CfnConnectorProps:
             self._values["connector_description"] = connector_description
         if log_delivery is not None:
             self._values["log_delivery"] = log_delivery
+        if network_type is not None:
+            self._values["network_type"] = network_type
         if tags is not None:
             self._values["tags"] = tags
         if worker_configuration is not None:
@@ -2191,6 +2215,17 @@ class CfnConnectorProps:
         '''
         result = self._values.get("log_delivery")
         return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConnector.LogDeliveryProperty"]], result)
+
+    @builtins.property
+    def network_type(self) -> typing.Optional[builtins.str]:
+        '''The network type of the connector.
+
+        It gives connectors connectivity to either IPv4 (IPV4) or IPv4 and IPv6 (DUAL) destinations. Defaults to IPV4.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kafkaconnect-connector.html#cfn-kafkaconnect-connector-networktype
+        '''
+        result = self._values.get("network_type")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
@@ -3187,6 +3222,7 @@ def _typecheckingstub__300d015169800cb7d305cead5c1382d5e67bfb30617c5f51d4668a050
     service_execution_role_arn: builtins.str,
     connector_description: typing.Optional[builtins.str] = None,
     log_delivery: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.LogDeliveryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    network_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     worker_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.WorkerConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -3279,6 +3315,12 @@ def _typecheckingstub__729e3b6e3d1046550d05c40ab52749c149a4f3f01ce2c03e0daa86cc3
 
 def _typecheckingstub__49a29da785c6c8f30f5fc4ffcb9320d7a0377e8c1032eb5ff26ba046ae554772(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnConnector.LogDeliveryProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ecb768ba8331b08dd6af43ec679bb63ca311831d677890057ea549e3988aa55f(
+    value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3450,6 +3492,7 @@ def _typecheckingstub__12463a17cb9c37949b260894212e085ba134c7ff0644cf3913b56f022
     service_execution_role_arn: builtins.str,
     connector_description: typing.Optional[builtins.str] = None,
     log_delivery: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.LogDeliveryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    network_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     worker_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnector.WorkerConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:

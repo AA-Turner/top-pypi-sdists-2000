@@ -12322,7 +12322,7 @@ class CfnMultiRegionEndpoint(
         ) -> None:
             '''An object that contains configuration details of multi-region endpoint (global-endpoint).
 
-            :param route_details: A list of route configuration details. Must contain exactly one route configuration
+            :param route_details: A list of route configuration details. Must contain exactly one route configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-multiregionendpoint-details.html
             :exampleMetadata: fixture=_generated
@@ -12352,7 +12352,7 @@ class CfnMultiRegionEndpoint(
         ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnMultiRegionEndpoint.RouteDetailsItemsProperty"]]]:
             '''A list of route configuration details.
 
-            Must contain exactly one route configuration
+            Must contain exactly one route configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-multiregionendpoint-details.html#cfn-ses-multiregionendpoint-details-routedetails
             '''
@@ -12378,7 +12378,10 @@ class CfnMultiRegionEndpoint(
     )
     class RouteDetailsItemsProperty:
         def __init__(self, *, region: builtins.str) -> None:
-            '''
+            '''An object that contains route configuration.
+
+            Includes secondary region name.
+
             :param region: The name of an AWS-Region to be a secondary region for the multi-region endpoint (global-endpoint).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-multiregionendpoint-routedetailsitems.html
@@ -14976,7 +14979,9 @@ class CfnTenant(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_ses.CfnTenant",
 ):
-    '''Resource Type definition for AWS::SES::Tenant.
+    '''Create a tenant.
+
+    *Tenants* are logical containers that group related SES resources together. Each tenant can have its own set of resources like email identities, configuration sets, and templates, along with reputation metrics and sending status. This helps isolate and manage email sending for different customers or business units within your Amazon SES API v2 account.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ses-tenant.html
     :cloudformationResource: AWS::SES::Tenant
@@ -15016,9 +15021,9 @@ class CfnTenant(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param tenant_name: The name of the tenant.
+        :param tenant_name: The name of a tenant. The name can contain up to 64 alphanumeric characters, including letters, numbers, hyphens (-) and underscores (_) only.
         :param resource_associations: The list of resources to associate with the tenant.
-        :param tags: The tags (keys and values) associated with the tenant.
+        :param tags: An array of objects that define the tags (keys and values) associated with the tenant.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8afe8bad335ae56d9b7cf1a6b54cd155eda9d7a80a0674f08798ca9c04508944)
@@ -15088,7 +15093,7 @@ class CfnTenant(
     @builtins.property
     @jsii.member(jsii_name="attrArn")
     def attr_arn(self) -> builtins.str:
-        '''Amazon Resource Name (ARN) of the tenant.
+        '''Returns the ARN of the tenant.
 
         :cloudformationAttribute: Arn
         '''
@@ -15114,7 +15119,7 @@ class CfnTenant(
     @builtins.property
     @jsii.member(jsii_name="tenantName")
     def tenant_name(self) -> builtins.str:
-        '''The name of the tenant.'''
+        '''The name of a tenant.'''
         return typing.cast(builtins.str, jsii.get(self, "tenantName"))
 
     @tenant_name.setter
@@ -15145,7 +15150,7 @@ class CfnTenant(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
-        '''The tags (keys and values) associated with the tenant.'''
+        '''An array of objects that define the tags (keys and values) associated with the tenant.'''
         return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -15164,7 +15169,7 @@ class CfnTenant(
         def __init__(self, *, resource_arn: builtins.str) -> None:
             '''The resource to associate with the tenant.
 
-            :param resource_arn: The ARN of the resource to associate with the tenant.
+            :param resource_arn: The Amazon Resource Name (ARN) of the resource associated with the tenant.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-tenant-resourceassociation.html
             :exampleMetadata: fixture=_generated
@@ -15188,7 +15193,7 @@ class CfnTenant(
 
         @builtins.property
         def resource_arn(self) -> builtins.str:
-            '''The ARN of the resource to associate with the tenant.
+            '''The Amazon Resource Name (ARN) of the resource associated with the tenant.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-tenant-resourceassociation.html#cfn-ses-tenant-resourceassociation-resourcearn
             '''
@@ -15227,9 +15232,9 @@ class CfnTenantProps:
     ) -> None:
         '''Properties for defining a ``CfnTenant``.
 
-        :param tenant_name: The name of the tenant.
+        :param tenant_name: The name of a tenant. The name can contain up to 64 alphanumeric characters, including letters, numbers, hyphens (-) and underscores (_) only.
         :param resource_associations: The list of resources to associate with the tenant.
-        :param tags: The tags (keys and values) associated with the tenant.
+        :param tags: An array of objects that define the tags (keys and values) associated with the tenant.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ses-tenant.html
         :exampleMetadata: fixture=_generated
@@ -15269,7 +15274,9 @@ class CfnTenantProps:
 
     @builtins.property
     def tenant_name(self) -> builtins.str:
-        '''The name of the tenant.
+        '''The name of a tenant.
+
+        The name can contain up to 64 alphanumeric characters, including letters, numbers, hyphens (-) and underscores (_) only.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ses-tenant.html#cfn-ses-tenant-tenantname
         '''
@@ -15290,7 +15297,7 @@ class CfnTenantProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
-        '''The tags (keys and values) associated with the tenant.
+        '''An array of objects that define the tags (keys and values) associated with the tenant.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ses-tenant.html#cfn-ses-tenant-tags
         '''

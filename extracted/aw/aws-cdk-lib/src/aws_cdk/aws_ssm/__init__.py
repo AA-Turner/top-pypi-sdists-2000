@@ -2791,14 +2791,6 @@ class CfnMaintenanceWindowTarget(
         return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
 
     @builtins.property
-    @jsii.member(jsii_name="attrId")
-    def attr_id(self) -> builtins.str:
-        '''
-        :cloudformationAttribute: Id
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrId"))
-
-    @builtins.property
     @jsii.member(jsii_name="attrWindowTargetId")
     def attr_window_target_id(self) -> builtins.str:
         '''The ID of the target.
@@ -3338,17 +3330,9 @@ class CfnMaintenanceWindowTask(
         return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
 
     @builtins.property
-    @jsii.member(jsii_name="attrId")
-    def attr_id(self) -> builtins.str:
-        '''
-        :cloudformationAttribute: Id
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrId"))
-
-    @builtins.property
     @jsii.member(jsii_name="attrWindowTaskId")
     def attr_window_task_id(self) -> builtins.str:
-        '''Unique identifier of the maintenance window task.
+        '''The task ID.
 
         :cloudformationAttribute: WindowTaskId
         '''

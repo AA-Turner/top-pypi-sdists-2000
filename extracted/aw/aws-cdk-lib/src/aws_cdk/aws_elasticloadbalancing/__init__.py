@@ -102,6 +102,7 @@ from .. import (
     Duration as _Duration_4839e8c3,
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
+    IResource as _IResource_c80c4260,
     ITaggable as _ITaggable_36806126,
     Resource as _Resource_45bc6135,
     TagManager as _TagManager_0a598cb3,
@@ -285,6 +286,41 @@ class CfnLoadBalancer(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForLoadBalancer")
+    @builtins.classmethod
+    def arn_for_load_balancer(
+        cls,
+        resource: "_ILoadBalancerRef_6a68b4e1",
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2e4ffef71ca18dfe3f31e74c55f93919aa7ffb9c2dfe24d92f6327824bc990da)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLoadBalancer", [resource]))
+
+    @jsii.member(jsii_name="fromLoadBalancerName")
+    @builtins.classmethod
+    def from_load_balancer_name(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        load_balancer_name: builtins.str,
+    ) -> "_ILoadBalancerRef_6a68b4e1":
+        '''Creates a new ILoadBalancerRef from a loadBalancerName.
+
+        :param scope: -
+        :param id: -
+        :param load_balancer_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1b47e42384987eb10f5691f58706f7fea48e923c6e0765a426e20613c90069ce)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument load_balancer_name", value=load_balancer_name, expected_type=type_hints["load_balancer_name"])
+        return typing.cast("_ILoadBalancerRef_6a68b4e1", jsii.sinvoke(cls, "fromLoadBalancerName", [scope, id, load_balancer_name]))
 
     @jsii.member(jsii_name="isCfnLoadBalancer")
     @builtins.classmethod
@@ -2038,6 +2074,30 @@ class HealthCheck:
         )
 
 
+@jsii.interface(jsii_type="aws-cdk-lib.aws_elasticloadbalancing.ILoadBalancer")
+class ILoadBalancer(
+    _IResource_c80c4260,
+    _ILoadBalancerRef_6a68b4e1,
+    typing_extensions.Protocol,
+):
+    '''Represents a load balancer.'''
+
+    pass
+
+
+class _ILoadBalancerProxy(
+    jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_ILoadBalancerRef_6a68b4e1), # type: ignore[misc]
+):
+    '''Represents a load balancer.'''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_elasticloadbalancing.ILoadBalancer"
+    pass
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, ILoadBalancer).__jsii_proxy_class__ = lambda : _ILoadBalancerProxy
+
+
 @jsii.interface(jsii_type="aws-cdk-lib.aws_elasticloadbalancing.ILoadBalancerTarget")
 class ILoadBalancerTarget(_IConnectable_10015a05, typing_extensions.Protocol):
     '''Interface that is going to be implemented by constructs that you can load balance to.'''
@@ -2188,7 +2248,7 @@ class ListenerPort(
         return typing.cast("_Connections_0f31fce8", jsii.get(self, "connections"))
 
 
-@jsii.implements(_IConnectable_10015a05)
+@jsii.implements(ILoadBalancer, _IConnectable_10015a05)
 class LoadBalancer(
     _Resource_45bc6135,
     metaclass=jsii.JSIIMeta,
@@ -2354,6 +2414,12 @@ class LoadBalancer(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "loadBalancerName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="loadBalancerRef")
+    def load_balancer_ref(self) -> "_LoadBalancerReference_35a92ab4":
+        '''A reference to this LoadBalancer resource.'''
+        return typing.cast("_LoadBalancerReference_35a92ab4", jsii.get(self, "loadBalancerRef"))
 
     @builtins.property
     @jsii.member(jsii_name="loadBalancerSourceSecurityGroupGroupName")
@@ -2735,6 +2801,7 @@ __all__ = [
     "CfnLoadBalancer",
     "CfnLoadBalancerProps",
     "HealthCheck",
+    "ILoadBalancer",
     "ILoadBalancerTarget",
     "InstanceTarget",
     "ListenerPort",
@@ -2766,6 +2833,20 @@ def _typecheckingstub__ad4de01fae3e412612aab1283fdbc2d6f0e2fef6e20c971f887b72cbc
     security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     subnets: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2e4ffef71ca18dfe3f31e74c55f93919aa7ffb9c2dfe24d92f6327824bc990da(
+    resource: _ILoadBalancerRef_6a68b4e1,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1b47e42384987eb10f5691f58706f7fea48e923c6e0765a426e20613c90069ce(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    load_balancer_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3068,5 +3149,5 @@ def _typecheckingstub__24b4c81055a8883e5d5e58c21898344055594c5189d0fd4f7fef884c2
     """Type checking stubs"""
     pass
 
-for cls in [ILoadBalancerTarget]:
+for cls in [ILoadBalancer, ILoadBalancerTarget]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

@@ -830,7 +830,11 @@ class CfnSigningProfileProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_signer.ISigningProfile")
-class ISigningProfile(_IResource_c80c4260, typing_extensions.Protocol):
+class ISigningProfile(
+    _IResource_c80c4260,
+    _ISigningProfileRef_80e46916,
+    typing_extensions.Protocol,
+):
     '''A Signer Profile.'''
 
     @builtins.property
@@ -872,6 +876,7 @@ class ISigningProfile(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _ISigningProfileProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_ISigningProfileRef_80e46916), # type: ignore[misc]
 ):
     '''A Signer Profile.'''
 
@@ -1100,6 +1105,12 @@ class SigningProfile(
     def signing_profile_name(self) -> builtins.str:
         '''The name of signing profile.'''
         return typing.cast(builtins.str, jsii.get(self, "signingProfileName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="signingProfileRef")
+    def signing_profile_ref(self) -> "_SigningProfileReference_9219187c":
+        '''A reference to a SigningProfile resource.'''
+        return typing.cast("_SigningProfileReference_9219187c", jsii.get(self, "signingProfileRef"))
 
     @builtins.property
     @jsii.member(jsii_name="signingProfileVersion")

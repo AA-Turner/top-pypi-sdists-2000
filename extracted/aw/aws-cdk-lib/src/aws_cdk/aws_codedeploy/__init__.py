@@ -809,12 +809,10 @@ from ..aws_autoscaling import (
     AutoScalingGroup as _AutoScalingGroup_c547a7b9,
     IAutoScalingGroup as _IAutoScalingGroup_360f1cde,
 )
-from ..aws_cloudwatch import IAlarm as _IAlarm_ff3eabc0
 from ..aws_ecs import IBaseService as _IBaseService_3fcdd913
 from ..aws_elasticloadbalancing import LoadBalancer as _LoadBalancer_a894d40e
 from ..aws_elasticloadbalancingv2 import (
     IApplicationTargetGroup as _IApplicationTargetGroup_57799827,
-    IListener as _IListener_7f84e41f,
     INetworkTargetGroup as _INetworkTargetGroup_abca2df7,
     ITargetGroup as _ITargetGroup_83c6f8c4,
 )
@@ -824,6 +822,7 @@ from ..aws_iam import (
     IRole as _IRole_235f5d8e,
 )
 from ..aws_lambda import Alias as _Alias_55be8873, IFunction as _IFunction_6adb0ab8
+from ..interfaces.aws_cloudwatch import IAlarmRef as _IAlarmRef_2bb0e5de
 from ..interfaces.aws_codedeploy import (
     ApplicationReference as _ApplicationReference_936fe716,
     DeploymentConfigReference as _DeploymentConfigReference_df2fccdb,
@@ -831,6 +830,9 @@ from ..interfaces.aws_codedeploy import (
     IApplicationRef as _IApplicationRef_1ffc51d6,
     IDeploymentConfigRef as _IDeploymentConfigRef_bc0b49ed,
     IDeploymentGroupRef as _IDeploymentGroupRef_120f3b25,
+)
+from ..interfaces.aws_elasticloadbalancingv2 import (
+    IListenerRef as _IListenerRef_a8ced6a8
 )
 from ..interfaces.aws_lambda import IFunctionRef as _IFunctionRef_2601eb33
 
@@ -2664,7 +2666,7 @@ class CfnDeploymentGroup(
         :param service_role_arn: A service role Amazon Resource Name (ARN) that grants CodeDeploy permission to make calls to AWS services on your behalf. For more information, see `Create a Service Role for AWS CodeDeploy <https://docs.aws.amazon.com/codedeploy/latest/userguide/getting-started-create-service-role.html>`_ in the *AWS CodeDeploy User Guide* . .. epigraph:: In some cases, you might need to add a dependency on the service role's policy. For more information, see IAM role policy in `DependsOn Attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-dependson.html>`_ .
         :param alarm_configuration: Information about the Amazon CloudWatch alarms that are associated with the deployment group.
         :param auto_rollback_configuration: Information about the automatic rollback configuration that is associated with the deployment group. If you specify this property, don't specify the ``Deployment`` property.
-        :param auto_scaling_groups: A list of associated Amazon EC2 Auto Scaling groups that CodeDeploy automatically deploys revisions to when new instances are created. Duplicates are not allowed.
+        :param auto_scaling_groups: A list of associated Auto Scaling groups that CodeDeploy automatically deploys revisions to when new instances are created. Duplicates are not allowed.
         :param blue_green_deployment_configuration: Information about blue/green deployment options for a deployment group.
         :param deployment: The application revision to deploy to this deployment group. If you specify this property, your target application revision is deployed as soon as the provisioning process is complete. If you specify this property, don't specify the ``AutoRollbackConfiguration`` property.
         :param deployment_config_name: A deployment configuration name or a predefined configuration name. With predefined configurations, you can deploy application revisions to one instance at a time ( ``CodeDeployDefault.OneAtATime`` ), half of the instances at a time ( ``CodeDeployDefault.HalfAtATime`` ), or all the instances at once ( ``CodeDeployDefault.AllAtOnce`` ). For more information and valid values, see `Working with Deployment Configurations <https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html>`_ in the *AWS CodeDeploy User Guide* .
@@ -2678,7 +2680,7 @@ class CfnDeploymentGroup(
         :param on_premises_tag_set: Information about groups of tags applied to on-premises instances. The deployment group includes only on-premises instances identified by all the tag groups. You can specify ``OnPremisesInstanceTagFilters`` or ``OnPremisesInstanceTagSet`` , but not both.
         :param outdated_instances_strategy: Indicates what happens when new Amazon EC2 instances are launched mid-deployment and do not receive the deployed application revision. If this option is set to ``UPDATE`` or is unspecified, CodeDeploy initiates one or more 'auto-update outdated instances' deployments to apply the deployed application revision to the new Amazon EC2 instances. If this option is set to ``IGNORE`` , CodeDeploy does not initiate a deployment to update the new Amazon EC2 instances. This may result in instances having different revisions.
         :param tags: The metadata that you apply to CodeDeploy deployment groups to help you organize and categorize them. Each tag consists of a key and an optional value, both of which you define.
-        :param termination_hook_enabled: Indicates whether the deployment group was configured to have CodeDeploy install a termination hook into an Amazon EC2 Auto Scaling group. For more information about the termination hook, see `How Amazon EC2 Auto Scaling works with CodeDeploy <https://docs.aws.amazon.com//codedeploy/latest/userguide/integrations-aws-auto-scaling.html#integrations-aws-auto-scaling-behaviors>`_ in the *AWS CodeDeploy User Guide* .
+        :param termination_hook_enabled: Indicates whether the deployment group was configured to have CodeDeploy install a termination hook into an Auto Scaling group. For more information about the termination hook, see `How Amazon EC2 Auto Scaling works with CodeDeploy <https://docs.aws.amazon.com//codedeploy/latest/userguide/integrations-aws-auto-scaling.html#integrations-aws-auto-scaling-behaviors>`_ in the *AWS CodeDeploy User Guide* .
         :param trigger_configurations: Information about triggers associated with the deployment group. Duplicates are not allowed
         '''
         if __debug__:
@@ -2842,7 +2844,7 @@ class CfnDeploymentGroup(
     @builtins.property
     @jsii.member(jsii_name="autoScalingGroups")
     def auto_scaling_groups(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''A list of associated Amazon EC2 Auto Scaling groups that CodeDeploy automatically deploys revisions to when new instances are created.'''
+        '''A list of associated Auto Scaling groups that CodeDeploy automatically deploys revisions to when new instances are created.'''
         return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "autoScalingGroups"))
 
     @auto_scaling_groups.setter
@@ -3074,7 +3076,7 @@ class CfnDeploymentGroup(
     def termination_hook_enabled(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
-        '''Indicates whether the deployment group was configured to have CodeDeploy install a termination hook into an Amazon EC2 Auto Scaling group.'''
+        '''Indicates whether the deployment group was configured to have CodeDeploy install a termination hook into an Auto Scaling group.'''
         return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "terminationHookEnabled"))
 
     @termination_hook_enabled.setter
@@ -4247,7 +4249,7 @@ class CfnDeploymentGroup(
         def __init__(self, *, action: typing.Optional[builtins.str] = None) -> None:
             '''Information about the instances that belong to the replacement environment in a blue/green deployment.
 
-            :param action: The method used to add instances to a replacement environment. - ``DISCOVER_EXISTING`` : Use instances that already exist or will be created manually. - ``COPY_AUTO_SCALING_GROUP`` : Use settings from a specified Amazon EC2 Auto Scaling group to define and create instances in a new Amazon EC2 Auto Scaling group.
+            :param action: The method used to add instances to a replacement environment. - ``DISCOVER_EXISTING`` : Use instances that already exist or will be created manually. - ``COPY_AUTO_SCALING_GROUP`` : Use settings from a specified Auto Scaling group to define and create instances in a new Auto Scaling group.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-greenfleetprovisioningoption.html
             :exampleMetadata: fixture=_generated
@@ -4274,7 +4276,7 @@ class CfnDeploymentGroup(
             '''The method used to add instances to a replacement environment.
 
             - ``DISCOVER_EXISTING`` : Use instances that already exist or will be created manually.
-            - ``COPY_AUTO_SCALING_GROUP`` : Use settings from a specified Amazon EC2 Auto Scaling group to define and create instances in a new Amazon EC2 Auto Scaling group.
+            - ``COPY_AUTO_SCALING_GROUP`` : Use settings from a specified Auto Scaling group to define and create instances in a new Auto Scaling group.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-greenfleetprovisioningoption.html#cfn-codedeploy-deploymentgroup-greenfleetprovisioningoption-action
             '''
@@ -5271,7 +5273,7 @@ class CfnDeploymentGroupProps:
         :param service_role_arn: A service role Amazon Resource Name (ARN) that grants CodeDeploy permission to make calls to AWS services on your behalf. For more information, see `Create a Service Role for AWS CodeDeploy <https://docs.aws.amazon.com/codedeploy/latest/userguide/getting-started-create-service-role.html>`_ in the *AWS CodeDeploy User Guide* . .. epigraph:: In some cases, you might need to add a dependency on the service role's policy. For more information, see IAM role policy in `DependsOn Attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-dependson.html>`_ .
         :param alarm_configuration: Information about the Amazon CloudWatch alarms that are associated with the deployment group.
         :param auto_rollback_configuration: Information about the automatic rollback configuration that is associated with the deployment group. If you specify this property, don't specify the ``Deployment`` property.
-        :param auto_scaling_groups: A list of associated Amazon EC2 Auto Scaling groups that CodeDeploy automatically deploys revisions to when new instances are created. Duplicates are not allowed.
+        :param auto_scaling_groups: A list of associated Auto Scaling groups that CodeDeploy automatically deploys revisions to when new instances are created. Duplicates are not allowed.
         :param blue_green_deployment_configuration: Information about blue/green deployment options for a deployment group.
         :param deployment: The application revision to deploy to this deployment group. If you specify this property, your target application revision is deployed as soon as the provisioning process is complete. If you specify this property, don't specify the ``AutoRollbackConfiguration`` property.
         :param deployment_config_name: A deployment configuration name or a predefined configuration name. With predefined configurations, you can deploy application revisions to one instance at a time ( ``CodeDeployDefault.OneAtATime`` ), half of the instances at a time ( ``CodeDeployDefault.HalfAtATime`` ), or all the instances at once ( ``CodeDeployDefault.AllAtOnce`` ). For more information and valid values, see `Working with Deployment Configurations <https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html>`_ in the *AWS CodeDeploy User Guide* .
@@ -5285,7 +5287,7 @@ class CfnDeploymentGroupProps:
         :param on_premises_tag_set: Information about groups of tags applied to on-premises instances. The deployment group includes only on-premises instances identified by all the tag groups. You can specify ``OnPremisesInstanceTagFilters`` or ``OnPremisesInstanceTagSet`` , but not both.
         :param outdated_instances_strategy: Indicates what happens when new Amazon EC2 instances are launched mid-deployment and do not receive the deployed application revision. If this option is set to ``UPDATE`` or is unspecified, CodeDeploy initiates one or more 'auto-update outdated instances' deployments to apply the deployed application revision to the new Amazon EC2 instances. If this option is set to ``IGNORE`` , CodeDeploy does not initiate a deployment to update the new Amazon EC2 instances. This may result in instances having different revisions.
         :param tags: The metadata that you apply to CodeDeploy deployment groups to help you organize and categorize them. Each tag consists of a key and an optional value, both of which you define.
-        :param termination_hook_enabled: Indicates whether the deployment group was configured to have CodeDeploy install a termination hook into an Amazon EC2 Auto Scaling group. For more information about the termination hook, see `How Amazon EC2 Auto Scaling works with CodeDeploy <https://docs.aws.amazon.com//codedeploy/latest/userguide/integrations-aws-auto-scaling.html#integrations-aws-auto-scaling-behaviors>`_ in the *AWS CodeDeploy User Guide* .
+        :param termination_hook_enabled: Indicates whether the deployment group was configured to have CodeDeploy install a termination hook into an Auto Scaling group. For more information about the termination hook, see `How Amazon EC2 Auto Scaling works with CodeDeploy <https://docs.aws.amazon.com//codedeploy/latest/userguide/integrations-aws-auto-scaling.html#integrations-aws-auto-scaling-behaviors>`_ in the *AWS CodeDeploy User Guide* .
         :param trigger_configurations: Information about triggers associated with the deployment group. Duplicates are not allowed
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html
@@ -5534,7 +5536,7 @@ class CfnDeploymentGroupProps:
 
     @builtins.property
     def auto_scaling_groups(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''A list of associated Amazon EC2 Auto Scaling groups that CodeDeploy automatically deploys revisions to when new instances are created.
+        '''A list of associated Auto Scaling groups that CodeDeploy automatically deploys revisions to when new instances are created.
 
         Duplicates are not allowed.
 
@@ -5720,7 +5722,7 @@ class CfnDeploymentGroupProps:
     def termination_hook_enabled(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
-        '''Indicates whether the deployment group was configured to have CodeDeploy install a termination hook into an Amazon EC2 Auto Scaling group.
+        '''Indicates whether the deployment group was configured to have CodeDeploy install a termination hook into an Auto Scaling group.
 
         For more information about the termination hook, see `How Amazon EC2 Auto Scaling works with CodeDeploy <https://docs.aws.amazon.com//codedeploy/latest/userguide/integrations-aws-auto-scaling.html#integrations-aws-auto-scaling-behaviors>`_ in the *AWS CodeDeploy User Guide* .
 
@@ -5985,10 +5987,10 @@ class EcsBlueGreenDeploymentConfig:
         *,
         blue_target_group: "_ITargetGroup_83c6f8c4",
         green_target_group: "_ITargetGroup_83c6f8c4",
-        listener: "_IListener_7f84e41f",
+        listener: "_IListenerRef_a8ced6a8",
         deployment_approval_wait_time: typing.Optional["_Duration_4839e8c3"] = None,
         termination_wait_time: typing.Optional["_Duration_4839e8c3"] = None,
-        test_listener: typing.Optional["_IListener_7f84e41f"] = None,
+        test_listener: typing.Optional["_IListenerRef_a8ced6a8"] = None,
     ) -> None:
         '''Specify how the deployment behaves and how traffic is routed to the ECS service during a blue-green ECS deployment.
 
@@ -6065,11 +6067,11 @@ class EcsBlueGreenDeploymentConfig:
         return typing.cast("_ITargetGroup_83c6f8c4", result)
 
     @builtins.property
-    def listener(self) -> "_IListener_7f84e41f":
+    def listener(self) -> "_IListenerRef_a8ced6a8":
         '''The load balancer listener used to serve production traffic and to shift production traffic from the 'blue' ECS task set to the 'green' ECS task set during a blue-green deployment.'''
         result = self._values.get("listener")
         assert result is not None, "Required property 'listener' is missing"
-        return typing.cast("_IListener_7f84e41f", result)
+        return typing.cast("_IListenerRef_a8ced6a8", result)
 
     @builtins.property
     def deployment_approval_wait_time(self) -> typing.Optional["_Duration_4839e8c3"]:
@@ -6108,7 +6110,7 @@ class EcsBlueGreenDeploymentConfig:
         return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def test_listener(self) -> typing.Optional["_IListener_7f84e41f"]:
+    def test_listener(self) -> typing.Optional["_IListenerRef_a8ced6a8"]:
         '''The load balancer listener used to route test traffic to the 'green' ECS task set during a blue-green deployment.
 
         During a blue-green deployment, validation can occur after test traffic has been re-routed and before production
@@ -6123,7 +6125,7 @@ class EcsBlueGreenDeploymentConfig:
         :default: No test listener will be added
         '''
         result = self._values.get("test_listener")
-        return typing.cast(typing.Optional["_IListener_7f84e41f"], result)
+        return typing.cast(typing.Optional["_IListenerRef_a8ced6a8"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6312,7 +6314,7 @@ class EcsDeploymentGroupProps:
         *,
         blue_green_deployment_config: typing.Union["EcsBlueGreenDeploymentConfig", typing.Dict[builtins.str, typing.Any]],
         service: "_IBaseService_3fcdd913",
-        alarms: typing.Optional[typing.Sequence["_IAlarm_ff3eabc0"]] = None,
+        alarms: typing.Optional[typing.Sequence["_IAlarmRef_2bb0e5de"]] = None,
         application: typing.Optional["IEcsApplication"] = None,
         auto_rollback: typing.Optional[typing.Union["AutoRollbackConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         deployment_config: typing.Optional["IEcsDeploymentConfig"] = None,
@@ -6416,7 +6418,7 @@ class EcsDeploymentGroupProps:
         return typing.cast("_IBaseService_3fcdd913", result)
 
     @builtins.property
-    def alarms(self) -> typing.Optional[typing.List["_IAlarm_ff3eabc0"]]:
+    def alarms(self) -> typing.Optional[typing.List["_IAlarmRef_2bb0e5de"]]:
         '''The CloudWatch alarms associated with this Deployment Group.
 
         CodeDeploy will stop (and optionally roll back)
@@ -6429,7 +6431,7 @@ class EcsDeploymentGroupProps:
         :see: https://docs.aws.amazon.com/codedeploy/latest/userguide/monitoring-create-alarms.html
         '''
         result = self._values.get("alarms")
-        return typing.cast(typing.Optional[typing.List["_IAlarm_ff3eabc0"]], result)
+        return typing.cast(typing.Optional[typing.List["_IAlarmRef_2bb0e5de"]], result)
 
     @builtins.property
     def application(self) -> typing.Optional["IEcsApplication"]:
@@ -7500,7 +7502,7 @@ class LambdaDeploymentGroup(
         id: builtins.str,
         *,
         alias: "_Alias_55be8873",
-        alarms: typing.Optional[typing.Sequence["_IAlarm_ff3eabc0"]] = None,
+        alarms: typing.Optional[typing.Sequence["_IAlarmRef_2bb0e5de"]] = None,
         application: typing.Optional["ILambdaApplication"] = None,
         auto_rollback: typing.Optional[typing.Union["AutoRollbackConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         deployment_config: typing.Optional["ILambdaDeploymentConfig"] = None,
@@ -7582,7 +7584,7 @@ class LambdaDeploymentGroup(
         return typing.cast("ILambdaDeploymentGroup", jsii.sinvoke(cls, "fromLambdaDeploymentGroupAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="addAlarm")
-    def add_alarm(self, alarm: "_IAlarm_ff3eabc0") -> None:
+    def add_alarm(self, alarm: "_IAlarmRef_2bb0e5de") -> None:
         '''Associates an additional alarm with this Deployment Group.
 
         :param alarm: the alarm to associate with this Deployment Group.
@@ -7773,7 +7775,7 @@ class LambdaDeploymentGroupProps:
         self,
         *,
         alias: "_Alias_55be8873",
-        alarms: typing.Optional[typing.Sequence["_IAlarm_ff3eabc0"]] = None,
+        alarms: typing.Optional[typing.Sequence["_IAlarmRef_2bb0e5de"]] = None,
         application: typing.Optional["ILambdaApplication"] = None,
         auto_rollback: typing.Optional[typing.Union["AutoRollbackConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         deployment_config: typing.Optional["ILambdaDeploymentConfig"] = None,
@@ -7867,7 +7869,7 @@ class LambdaDeploymentGroupProps:
         return typing.cast("_Alias_55be8873", result)
 
     @builtins.property
-    def alarms(self) -> typing.Optional[typing.List["_IAlarm_ff3eabc0"]]:
+    def alarms(self) -> typing.Optional[typing.List["_IAlarmRef_2bb0e5de"]]:
         '''The CloudWatch alarms associated with this Deployment Group.
 
         CodeDeploy will stop (and optionally roll back)
@@ -7880,7 +7882,7 @@ class LambdaDeploymentGroupProps:
         :see: https://docs.aws.amazon.com/codedeploy/latest/userguide/monitoring-create-alarms.html
         '''
         result = self._values.get("alarms")
-        return typing.cast(typing.Optional[typing.List["_IAlarm_ff3eabc0"]], result)
+        return typing.cast(typing.Optional[typing.List["_IAlarmRef_2bb0e5de"]], result)
 
     @builtins.property
     def application(self) -> typing.Optional["ILambdaApplication"]:
@@ -8504,7 +8506,7 @@ class ServerDeploymentGroup(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        alarms: typing.Optional[typing.Sequence["_IAlarm_ff3eabc0"]] = None,
+        alarms: typing.Optional[typing.Sequence["_IAlarmRef_2bb0e5de"]] = None,
         application: typing.Optional["IServerApplication"] = None,
         auto_rollback: typing.Optional[typing.Union["AutoRollbackConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         auto_scaling_groups: typing.Optional[typing.Sequence["_IAutoScalingGroup_360f1cde"]] = None,
@@ -8597,7 +8599,7 @@ class ServerDeploymentGroup(
         return typing.cast("IServerDeploymentGroup", jsii.sinvoke(cls, "fromServerDeploymentGroupAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="addAlarm")
-    def add_alarm(self, alarm: "_IAlarm_ff3eabc0") -> None:
+    def add_alarm(self, alarm: "_IAlarmRef_2bb0e5de") -> None:
         '''Associates an additional alarm with this Deployment Group.
 
         :param alarm: the alarm to associate with this Deployment Group.
@@ -8767,7 +8769,7 @@ class ServerDeploymentGroupProps:
     def __init__(
         self,
         *,
-        alarms: typing.Optional[typing.Sequence["_IAlarm_ff3eabc0"]] = None,
+        alarms: typing.Optional[typing.Sequence["_IAlarmRef_2bb0e5de"]] = None,
         application: typing.Optional["IServerApplication"] = None,
         auto_rollback: typing.Optional[typing.Union["AutoRollbackConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         auto_scaling_groups: typing.Optional[typing.Sequence["_IAutoScalingGroup_360f1cde"]] = None,
@@ -8866,7 +8868,7 @@ class ServerDeploymentGroupProps:
             self._values["termination_hook"] = termination_hook
 
     @builtins.property
-    def alarms(self) -> typing.Optional[typing.List["_IAlarm_ff3eabc0"]]:
+    def alarms(self) -> typing.Optional[typing.List["_IAlarmRef_2bb0e5de"]]:
         '''The CloudWatch alarms associated with this Deployment Group.
 
         CodeDeploy will stop (and optionally roll back)
@@ -8879,7 +8881,7 @@ class ServerDeploymentGroupProps:
         :see: https://docs.aws.amazon.com/codedeploy/latest/userguide/monitoring-create-alarms.html
         '''
         result = self._values.get("alarms")
-        return typing.cast(typing.Optional[typing.List["_IAlarm_ff3eabc0"]], result)
+        return typing.cast(typing.Optional[typing.List["_IAlarmRef_2bb0e5de"]], result)
 
     @builtins.property
     def application(self) -> typing.Optional["IServerApplication"]:
@@ -9974,7 +9976,7 @@ class EcsDeploymentGroup(
         *,
         blue_green_deployment_config: typing.Union["EcsBlueGreenDeploymentConfig", typing.Dict[builtins.str, typing.Any]],
         service: "_IBaseService_3fcdd913",
-        alarms: typing.Optional[typing.Sequence["_IAlarm_ff3eabc0"]] = None,
+        alarms: typing.Optional[typing.Sequence["_IAlarmRef_2bb0e5de"]] = None,
         application: typing.Optional["IEcsApplication"] = None,
         auto_rollback: typing.Optional[typing.Union["AutoRollbackConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         deployment_config: typing.Optional["IEcsDeploymentConfig"] = None,
@@ -10052,7 +10054,7 @@ class EcsDeploymentGroup(
         return typing.cast("IEcsDeploymentGroup", jsii.sinvoke(cls, "fromEcsDeploymentGroupAttributes", [scope, id, attrs]))
 
     @jsii.member(jsii_name="addAlarm")
-    def add_alarm(self, alarm: "_IAlarm_ff3eabc0") -> None:
+    def add_alarm(self, alarm: "_IAlarmRef_2bb0e5de") -> None:
         '''Associates an additional alarm with this Deployment Group.
 
         :param alarm: the alarm to associate with this Deployment Group.
@@ -11221,10 +11223,10 @@ def _typecheckingstub__b251dc2bb3166b5b08fc4a016e350d50231d6a3f0a8566638996a2952
     *,
     blue_target_group: _ITargetGroup_83c6f8c4,
     green_target_group: _ITargetGroup_83c6f8c4,
-    listener: _IListener_7f84e41f,
+    listener: _IListenerRef_a8ced6a8,
     deployment_approval_wait_time: typing.Optional[_Duration_4839e8c3] = None,
     termination_wait_time: typing.Optional[_Duration_4839e8c3] = None,
-    test_listener: typing.Optional[_IListener_7f84e41f] = None,
+    test_listener: typing.Optional[_IListenerRef_a8ced6a8] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11250,7 +11252,7 @@ def _typecheckingstub__7adf7c582969f2d223ca19321a889bd4195cc6c299e92558e985e0fdc
     *,
     blue_green_deployment_config: typing.Union[EcsBlueGreenDeploymentConfig, typing.Dict[builtins.str, typing.Any]],
     service: _IBaseService_3fcdd913,
-    alarms: typing.Optional[typing.Sequence[_IAlarm_ff3eabc0]] = None,
+    alarms: typing.Optional[typing.Sequence[_IAlarmRef_2bb0e5de]] = None,
     application: typing.Optional[IEcsApplication] = None,
     auto_rollback: typing.Optional[typing.Union[AutoRollbackConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     deployment_config: typing.Optional[IEcsDeploymentConfig] = None,
@@ -11320,7 +11322,7 @@ def _typecheckingstub__c26416b16de08b4064de631244255b96e87828c1c22b3d5795282b418
     id: builtins.str,
     *,
     alias: _Alias_55be8873,
-    alarms: typing.Optional[typing.Sequence[_IAlarm_ff3eabc0]] = None,
+    alarms: typing.Optional[typing.Sequence[_IAlarmRef_2bb0e5de]] = None,
     application: typing.Optional[ILambdaApplication] = None,
     auto_rollback: typing.Optional[typing.Union[AutoRollbackConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     deployment_config: typing.Optional[ILambdaDeploymentConfig] = None,
@@ -11346,7 +11348,7 @@ def _typecheckingstub__8fd4dfddfe47c0a8dd92426b46cd63260d58eb3379c02a54f93345706
     pass
 
 def _typecheckingstub__9b711b8130a1d80370d61b0db615c68c614d3077ac9c81be826135376059b97e(
-    alarm: _IAlarm_ff3eabc0,
+    alarm: _IAlarmRef_2bb0e5de,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11381,7 +11383,7 @@ def _typecheckingstub__08bd7879a63053a6c7bc752ef445954728069ab3039a8ede60d6b4eee
 def _typecheckingstub__874e757437525f2d71406c292cf5ac7fae66797609da322dac9063247a871238(
     *,
     alias: _Alias_55be8873,
-    alarms: typing.Optional[typing.Sequence[_IAlarm_ff3eabc0]] = None,
+    alarms: typing.Optional[typing.Sequence[_IAlarmRef_2bb0e5de]] = None,
     application: typing.Optional[ILambdaApplication] = None,
     auto_rollback: typing.Optional[typing.Union[AutoRollbackConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     deployment_config: typing.Optional[ILambdaDeploymentConfig] = None,
@@ -11490,7 +11492,7 @@ def _typecheckingstub__e0364d4b48c02675a1899e742e45b411f0e83905e634a84441d088a41
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    alarms: typing.Optional[typing.Sequence[_IAlarm_ff3eabc0]] = None,
+    alarms: typing.Optional[typing.Sequence[_IAlarmRef_2bb0e5de]] = None,
     application: typing.Optional[IServerApplication] = None,
     auto_rollback: typing.Optional[typing.Union[AutoRollbackConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     auto_scaling_groups: typing.Optional[typing.Sequence[_IAutoScalingGroup_360f1cde]] = None,
@@ -11521,7 +11523,7 @@ def _typecheckingstub__d8af8e520b8abc653e37c88dc9f6e51e7d52aa5f24d99a8bcc8765154
     pass
 
 def _typecheckingstub__356a323fcb86d198006a31f41e7e9d1c8a6892ac423e8cb69666cd1ddcb8e718(
-    alarm: _IAlarm_ff3eabc0,
+    alarm: _IAlarmRef_2bb0e5de,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11543,7 +11545,7 @@ def _typecheckingstub__a7c78d15fd80ffece3b49e232b4a29903107350aac8446220b8caea80
 
 def _typecheckingstub__a3ad41a581be1a234fd5722299d51aa77bd7beaf51e0511c95ee742d49944018(
     *,
-    alarms: typing.Optional[typing.Sequence[_IAlarm_ff3eabc0]] = None,
+    alarms: typing.Optional[typing.Sequence[_IAlarmRef_2bb0e5de]] = None,
     application: typing.Optional[IServerApplication] = None,
     auto_rollback: typing.Optional[typing.Union[AutoRollbackConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     auto_scaling_groups: typing.Optional[typing.Sequence[_IAutoScalingGroup_360f1cde]] = None,
@@ -11690,7 +11692,7 @@ def _typecheckingstub__1d5a27f58faebed8ad465b39d408bd717722f646f6471896e02b8ea95
     *,
     blue_green_deployment_config: typing.Union[EcsBlueGreenDeploymentConfig, typing.Dict[builtins.str, typing.Any]],
     service: _IBaseService_3fcdd913,
-    alarms: typing.Optional[typing.Sequence[_IAlarm_ff3eabc0]] = None,
+    alarms: typing.Optional[typing.Sequence[_IAlarmRef_2bb0e5de]] = None,
     application: typing.Optional[IEcsApplication] = None,
     auto_rollback: typing.Optional[typing.Union[AutoRollbackConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     deployment_config: typing.Optional[IEcsDeploymentConfig] = None,
@@ -11714,7 +11716,7 @@ def _typecheckingstub__e21d5d2081ae62e02eb318efb6845c80afcd2a31d1f65949b88d5e28b
     pass
 
 def _typecheckingstub__ecbfe2758d485b20b4d7753475293fc67c26edc4d904112e8a409df22ce5f06c(
-    alarm: _IAlarm_ff3eabc0,
+    alarm: _IAlarmRef_2bb0e5de,
 ) -> None:
     """Type checking stubs"""
     pass

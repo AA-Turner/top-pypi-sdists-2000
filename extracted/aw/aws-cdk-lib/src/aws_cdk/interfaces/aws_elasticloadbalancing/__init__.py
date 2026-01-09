@@ -84,13 +84,13 @@ typing.cast(typing.Any, ILoadBalancerRef).__jsii_proxy_class__ = lambda : _ILoad
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_elasticloadbalancing.LoadBalancerReference",
     jsii_struct_bases=[],
-    name_mapping={"load_balancer_id": "loadBalancerId"},
+    name_mapping={"load_balancer_name": "loadBalancerName"},
 )
 class LoadBalancerReference:
-    def __init__(self, *, load_balancer_id: builtins.str) -> None:
+    def __init__(self, *, load_balancer_name: builtins.str) -> None:
         '''A reference to a LoadBalancer resource.
 
-        :param load_balancer_id: The Id of the LoadBalancer resource.
+        :param load_balancer_name: The LoadBalancerName of the LoadBalancer resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -101,21 +101,21 @@ class LoadBalancerReference:
             from aws_cdk.interfaces import aws_elasticloadbalancing as interfaces_elasticloadbalancing
             
             load_balancer_reference = interfaces_elasticloadbalancing.LoadBalancerReference(
-                load_balancer_id="loadBalancerId"
+                load_balancer_name="loadBalancerName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__fcf014b61d9cbc6234dfacc907c27ebff410e96cc0547c87fa9dd0b7c43f629e)
-            check_type(argname="argument load_balancer_id", value=load_balancer_id, expected_type=type_hints["load_balancer_id"])
+            check_type(argname="argument load_balancer_name", value=load_balancer_name, expected_type=type_hints["load_balancer_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "load_balancer_id": load_balancer_id,
+            "load_balancer_name": load_balancer_name,
         }
 
     @builtins.property
-    def load_balancer_id(self) -> builtins.str:
-        '''The Id of the LoadBalancer resource.'''
-        result = self._values.get("load_balancer_id")
-        assert result is not None, "Required property 'load_balancer_id' is missing"
+    def load_balancer_name(self) -> builtins.str:
+        '''The LoadBalancerName of the LoadBalancer resource.'''
+        result = self._values.get("load_balancer_name")
+        assert result is not None, "Required property 'load_balancer_name' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -139,7 +139,7 @@ publication.publish()
 
 def _typecheckingstub__fcf014b61d9cbc6234dfacc907c27ebff410e96cc0547c87fa9dd0b7c43f629e(
     *,
-    load_balancer_id: builtins.str,
+    load_balancer_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

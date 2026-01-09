@@ -6307,6 +6307,10 @@ class CfnAssistantAssociation(
         cfn_assistant_association = wisdom.CfnAssistantAssociation(self, "MyCfnAssistantAssociation",
             assistant_id="assistantId",
             association=wisdom.CfnAssistantAssociation.AssociationDataProperty(
+                external_bedrock_knowledge_base_config=wisdom.CfnAssistantAssociation.ExternalBedrockKnowledgeBaseConfigProperty(
+                    access_role_arn="accessRoleArn",
+                    bedrock_knowledge_base_arn="bedrockKnowledgeBaseArn"
+                ),
                 knowledge_base_id="knowledgeBaseId"
             ),
             association_type="associationType",
@@ -6511,12 +6515,21 @@ class CfnAssistantAssociation(
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_wisdom.CfnAssistantAssociation.AssociationDataProperty",
         jsii_struct_bases=[],
-        name_mapping={"knowledge_base_id": "knowledgeBaseId"},
+        name_mapping={
+            "external_bedrock_knowledge_base_config": "externalBedrockKnowledgeBaseConfig",
+            "knowledge_base_id": "knowledgeBaseId",
+        },
     )
     class AssociationDataProperty:
-        def __init__(self, *, knowledge_base_id: builtins.str) -> None:
+        def __init__(
+            self,
+            *,
+            external_bedrock_knowledge_base_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAssistantAssociation.ExternalBedrockKnowledgeBaseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            knowledge_base_id: typing.Optional[builtins.str] = None,
+        ) -> None:
             '''A union type that currently has a single argument, which is the knowledge base ID.
 
+            :param external_bedrock_knowledge_base_config: 
             :param knowledge_base_id: The identifier of the knowledge base.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-assistantassociation-associationdata.html
@@ -6529,25 +6542,41 @@ class CfnAssistantAssociation(
                 from aws_cdk import aws_wisdom as wisdom
                 
                 association_data_property = wisdom.CfnAssistantAssociation.AssociationDataProperty(
+                    external_bedrock_knowledge_base_config=wisdom.CfnAssistantAssociation.ExternalBedrockKnowledgeBaseConfigProperty(
+                        access_role_arn="accessRoleArn",
+                        bedrock_knowledge_base_arn="bedrockKnowledgeBaseArn"
+                    ),
                     knowledge_base_id="knowledgeBaseId"
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__f6ecf0cfb2eb97624a8ec4ab51e16f75cfa1a5397890274252a2621ff5ad378d)
+                check_type(argname="argument external_bedrock_knowledge_base_config", value=external_bedrock_knowledge_base_config, expected_type=type_hints["external_bedrock_knowledge_base_config"])
                 check_type(argname="argument knowledge_base_id", value=knowledge_base_id, expected_type=type_hints["knowledge_base_id"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {
-                "knowledge_base_id": knowledge_base_id,
-            }
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if external_bedrock_knowledge_base_config is not None:
+                self._values["external_bedrock_knowledge_base_config"] = external_bedrock_knowledge_base_config
+            if knowledge_base_id is not None:
+                self._values["knowledge_base_id"] = knowledge_base_id
 
         @builtins.property
-        def knowledge_base_id(self) -> builtins.str:
+        def external_bedrock_knowledge_base_config(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssistantAssociation.ExternalBedrockKnowledgeBaseConfigProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-assistantassociation-associationdata.html#cfn-wisdom-assistantassociation-associationdata-externalbedrockknowledgebaseconfig
+            '''
+            result = self._values.get("external_bedrock_knowledge_base_config")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAssistantAssociation.ExternalBedrockKnowledgeBaseConfigProperty"]], result)
+
+        @builtins.property
+        def knowledge_base_id(self) -> typing.Optional[builtins.str]:
             '''The identifier of the knowledge base.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-assistantassociation-associationdata.html#cfn-wisdom-assistantassociation-associationdata-knowledgebaseid
             '''
             result = self._values.get("knowledge_base_id")
-            assert result is not None, "Required property 'knowledge_base_id' is missing"
-            return typing.cast(builtins.str, result)
+            return typing.cast(typing.Optional[builtins.str], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6557,6 +6586,77 @@ class CfnAssistantAssociation(
 
         def __repr__(self) -> str:
             return "AssociationDataProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_wisdom.CfnAssistantAssociation.ExternalBedrockKnowledgeBaseConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "access_role_arn": "accessRoleArn",
+            "bedrock_knowledge_base_arn": "bedrockKnowledgeBaseArn",
+        },
+    )
+    class ExternalBedrockKnowledgeBaseConfigProperty:
+        def __init__(
+            self,
+            *,
+            access_role_arn: builtins.str,
+            bedrock_knowledge_base_arn: builtins.str,
+        ) -> None:
+            '''
+            :param access_role_arn: 
+            :param bedrock_knowledge_base_arn: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-assistantassociation-externalbedrockknowledgebaseconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_wisdom as wisdom
+                
+                external_bedrock_knowledge_base_config_property = wisdom.CfnAssistantAssociation.ExternalBedrockKnowledgeBaseConfigProperty(
+                    access_role_arn="accessRoleArn",
+                    bedrock_knowledge_base_arn="bedrockKnowledgeBaseArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__567f1e2401d39efb4b0c1a33b42b034bc5f2f02e89292f54b7c6a004e36ff068)
+                check_type(argname="argument access_role_arn", value=access_role_arn, expected_type=type_hints["access_role_arn"])
+                check_type(argname="argument bedrock_knowledge_base_arn", value=bedrock_knowledge_base_arn, expected_type=type_hints["bedrock_knowledge_base_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "access_role_arn": access_role_arn,
+                "bedrock_knowledge_base_arn": bedrock_knowledge_base_arn,
+            }
+
+        @builtins.property
+        def access_role_arn(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-assistantassociation-externalbedrockknowledgebaseconfig.html#cfn-wisdom-assistantassociation-externalbedrockknowledgebaseconfig-accessrolearn
+            '''
+            result = self._values.get("access_role_arn")
+            assert result is not None, "Required property 'access_role_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def bedrock_knowledge_base_arn(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-assistantassociation-externalbedrockknowledgebaseconfig.html#cfn-wisdom-assistantassociation-externalbedrockknowledgebaseconfig-bedrockknowledgebasearn
+            '''
+            result = self._values.get("bedrock_knowledge_base_arn")
+            assert result is not None, "Required property 'bedrock_knowledge_base_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ExternalBedrockKnowledgeBaseConfigProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -6600,6 +6700,10 @@ class CfnAssistantAssociationProps:
             cfn_assistant_association_props = wisdom.CfnAssistantAssociationProps(
                 assistant_id="assistantId",
                 association=wisdom.CfnAssistantAssociation.AssociationDataProperty(
+                    external_bedrock_knowledge_base_config=wisdom.CfnAssistantAssociation.ExternalBedrockKnowledgeBaseConfigProperty(
+                        access_role_arn="accessRoleArn",
+                        bedrock_knowledge_base_arn="bedrockKnowledgeBaseArn"
+                    ),
                     knowledge_base_id="knowledgeBaseId"
                 ),
                 association_type="associationType",
@@ -13740,7 +13844,16 @@ def _typecheckingstub__ea3d3cb4fe1048c256fc8719ac3d18f47cb21ef29730dd9d1f53a9304
 
 def _typecheckingstub__f6ecf0cfb2eb97624a8ec4ab51e16f75cfa1a5397890274252a2621ff5ad378d(
     *,
-    knowledge_base_id: builtins.str,
+    external_bedrock_knowledge_base_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAssistantAssociation.ExternalBedrockKnowledgeBaseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    knowledge_base_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__567f1e2401d39efb4b0c1a33b42b034bc5f2f02e89292f54b7c6a004e36ff068(
+    *,
+    access_role_arn: builtins.str,
+    bedrock_knowledge_base_arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -197,6 +197,48 @@ class CfnCluster(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCluster", [resource]))
 
+    @jsii.member(jsii_name="fromClusterArn")
+    @builtins.classmethod
+    def from_cluster_arn(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> "_IClusterRef_6a4f1a29":
+        '''Creates a new IClusterRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9c1304ec1ad0df095caea7bfed90b2657054d8d06510a2257f49aa1dec714c75)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast("_IClusterRef_6a4f1a29", jsii.sinvoke(cls, "fromClusterArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromClusterName")
+    @builtins.classmethod
+    def from_cluster_name(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        cluster_name: builtins.str,
+    ) -> "_IClusterRef_6a4f1a29":
+        '''Creates a new IClusterRef from a clusterName.
+
+        :param scope: -
+        :param id: -
+        :param cluster_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6562dfce020ce6aeaffca053e2713110c50b70f4c00d5d667fffbe7fc9fc86cf)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument cluster_name", value=cluster_name, expected_type=type_hints["cluster_name"])
+        return typing.cast("_IClusterRef_6a4f1a29", jsii.sinvoke(cls, "fromClusterName", [scope, id, cluster_name]))
+
     @jsii.member(jsii_name="isCfnCluster")
     @builtins.classmethod
     def is_cfn_cluster(cls, x: typing.Any) -> builtins.bool:
@@ -1444,6 +1486,22 @@ def _typecheckingstub__324ad6077b574145119496cf9145399149504cf843373d16080bbfc26
 
 def _typecheckingstub__f9f30ee10a84923167efcee2b8e1e518005532c0ce7a5332fd89071e657258ed(
     resource: _IClusterRef_6a4f1a29,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9c1304ec1ad0df095caea7bfed90b2657054d8d06510a2257f49aa1dec714c75(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6562dfce020ce6aeaffca053e2713110c50b70f4c00d5d667fffbe7fc9fc86cf(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    cluster_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

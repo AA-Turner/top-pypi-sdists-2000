@@ -1219,6 +1219,9 @@ from ..aws_iam import (
 from ..aws_kinesis import IStream as _IStream_4e2457d2
 from ..aws_kms import IKey as _IKey_5f11635f
 from ..aws_s3 import IBucket as _IBucket_42e086fd
+from ..interfaces.aws_applicationautoscaling import (
+    IScalableTargetRef as _IScalableTargetRef_c773595e
+)
 from ..interfaces.aws_dynamodb import (
     GlobalTableReference as _GlobalTableReference_7ca912b6,
     IGlobalTableRef as _IGlobalTableRef_596046fc,
@@ -8541,7 +8544,7 @@ class EnableScalingProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_dynamodb.IScalableTableAttribute")
-class IScalableTableAttribute(typing_extensions.Protocol):
+class IScalableTableAttribute(_IScalableTargetRef_c773595e, typing_extensions.Protocol):
     '''Interface for scalable attributes.'''
 
     @jsii.member(jsii_name="scaleOnSchedule")
@@ -8589,7 +8592,9 @@ class IScalableTableAttribute(typing_extensions.Protocol):
         ...
 
 
-class _IScalableTableAttributeProxy:
+class _IScalableTableAttributeProxy(
+    jsii.proxy_for(_IScalableTargetRef_c773595e), # type: ignore[misc]
+):
     '''Interface for scalable attributes.'''
 
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_dynamodb.IScalableTableAttribute"
@@ -8663,7 +8668,7 @@ typing.cast(typing.Any, IScalableTableAttribute).__jsii_proxy_class__ = lambda :
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_dynamodb.ITable")
-class ITable(_IResource_c80c4260, typing_extensions.Protocol):
+class ITable(_IResource_c80c4260, _ITableRef_4478f0ad, typing_extensions.Protocol):
     '''An interface that represents a DynamoDB Table - either created with the CDK, or an existing one.'''
 
     @builtins.property
@@ -9122,6 +9127,7 @@ class ITable(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _ITableProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_ITableRef_4478f0ad), # type: ignore[misc]
 ):
     '''An interface that represents a DynamoDB Table - either created with the CDK, or an existing one.'''
 
@@ -13352,6 +13358,12 @@ class TableBaseV2(
         :attribute: true
         '''
         ...
+
+    @builtins.property
+    @jsii.member(jsii_name="tableRef")
+    def table_ref(self) -> "_TableReference_642dbaf9":
+        '''A reference to this table.'''
+        return typing.cast("_TableReference_642dbaf9", jsii.get(self, "tableRef"))
 
     @builtins.property
     @jsii.member(jsii_name="encryptionKey")

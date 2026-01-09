@@ -1922,10 +1922,8 @@ from ..aws_codepipeline import (
     ArtifactPath as _ArtifactPath_bf444090,
     CommonActionProps as _CommonActionProps_e3aaeecb,
     CommonAwsActionProps as _CommonAwsActionProps_8b809bb6,
-    IPipeline as _IPipeline_0931f838,
     IStage as _IStage_415fc571,
 )
-from ..aws_ecr import IRepository as _IRepository_e6004aa6
 from ..aws_ecs import IBaseService as _IBaseService_3fcdd913
 from ..aws_elasticloadbalancingv2 import ITargetGroup as _ITargetGroup_83c6f8c4
 from ..aws_events import (
@@ -1943,6 +1941,8 @@ from ..aws_s3 import (
 )
 from ..aws_sns import ITopic as _ITopic_9eca4852
 from ..aws_stepfunctions import IStateMachine as _IStateMachine_73e8d2b0
+from ..interfaces.aws_codepipeline import IPipelineRef as _IPipelineRef_fb1b56f9
+from ..interfaces.aws_ecr import IRepositoryRef as _IRepositoryRef_f3b81117
 
 
 class Action(
@@ -8565,7 +8565,7 @@ class EcrSourceAction(
         self,
         *,
         output: "_Artifact_0cb05964",
-        repository: "_IRepository_e6004aa6",
+        repository: "_IRepositoryRef_f3b81117",
         image_tag: typing.Optional[builtins.str] = None,
         role: typing.Optional["_IRole_235f5d8e"] = None,
         action_name: builtins.str,
@@ -8646,7 +8646,7 @@ class EcrSourceActionProps(_CommonAwsActionProps_8b809bb6):
         variables_namespace: typing.Optional[builtins.str] = None,
         role: typing.Optional["_IRole_235f5d8e"] = None,
         output: "_Artifact_0cb05964",
-        repository: "_IRepository_e6004aa6",
+        repository: "_IRepositoryRef_f3b81117",
         image_tag: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Construction properties of ``EcrSourceAction``.
@@ -8761,11 +8761,11 @@ class EcrSourceActionProps(_CommonAwsActionProps_8b809bb6):
         return typing.cast("_Artifact_0cb05964", result)
 
     @builtins.property
-    def repository(self) -> "_IRepository_e6004aa6":
+    def repository(self) -> "_IRepositoryRef_f3b81117":
         '''The repository that will be watched for changes.'''
         result = self._values.get("repository")
         assert result is not None, "Required property 'repository' is missing"
-        return typing.cast("_IRepository_e6004aa6", result)
+        return typing.cast("_IRepositoryRef_f3b81117", result)
 
     @builtins.property
     def image_tag(self) -> typing.Optional[builtins.str]:
@@ -11913,7 +11913,7 @@ class PipelineInvokeAction(
     def __init__(
         self,
         *,
-        target_pipeline: "_IPipeline_0931f838",
+        target_pipeline: "_IPipelineRef_fb1b56f9",
         source_revisions: typing.Optional[typing.Sequence[typing.Union["SourceRevision", typing.Dict[builtins.str, typing.Any]]]] = None,
         variables: typing.Optional[typing.Sequence[typing.Union["Variable", typing.Dict[builtins.str, typing.Any]]]] = None,
         role: typing.Optional["_IRole_235f5d8e"] = None,
@@ -11988,7 +11988,7 @@ class PipelineInvokeActionProps(_CommonAwsActionProps_8b809bb6):
         run_order: typing.Optional[jsii.Number] = None,
         variables_namespace: typing.Optional[builtins.str] = None,
         role: typing.Optional["_IRole_235f5d8e"] = None,
-        target_pipeline: "_IPipeline_0931f838",
+        target_pipeline: "_IPipelineRef_fb1b56f9",
         source_revisions: typing.Optional[typing.Sequence[typing.Union["SourceRevision", typing.Dict[builtins.str, typing.Any]]]] = None,
         variables: typing.Optional[typing.Sequence[typing.Union["Variable", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -12104,14 +12104,14 @@ class PipelineInvokeActionProps(_CommonAwsActionProps_8b809bb6):
         return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
 
     @builtins.property
-    def target_pipeline(self) -> "_IPipeline_0931f838":
+    def target_pipeline(self) -> "_IPipelineRef_fb1b56f9":
         '''The pipeline that will, upon running, start the current target pipeline.
 
         You must have already created the invoking pipeline.
         '''
         result = self._values.get("target_pipeline")
         assert result is not None, "Required property 'target_pipeline' is missing"
-        return typing.cast("_IPipeline_0931f838", result)
+        return typing.cast("_IPipelineRef_fb1b56f9", result)
 
     @builtins.property
     def source_revisions(self) -> typing.Optional[typing.List["SourceRevision"]]:
@@ -14964,7 +14964,7 @@ class InspectorEcrImageScanAction(
     def __init__(
         self,
         *,
-        repository: "_IRepository_e6004aa6",
+        repository: "_IRepositoryRef_f3b81117",
         image_tag: typing.Optional[builtins.str] = None,
         output: "_Artifact_0cb05964",
         critical_threshold: typing.Optional[jsii.Number] = None,
@@ -15064,7 +15064,7 @@ class InspectorEcrImageScanActionProps(InspectorScanActionBaseProps):
         high_threshold: typing.Optional[jsii.Number] = None,
         low_threshold: typing.Optional[jsii.Number] = None,
         medium_threshold: typing.Optional[jsii.Number] = None,
-        repository: "_IRepository_e6004aa6",
+        repository: "_IRepositoryRef_f3b81117",
         image_tag: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Construction properties of the ``InspectorEcrImageScanAction``.
@@ -15233,11 +15233,11 @@ class InspectorEcrImageScanActionProps(InspectorScanActionBaseProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def repository(self) -> "_IRepository_e6004aa6":
+    def repository(self) -> "_IRepositoryRef_f3b81117":
         '''The Amazon ECR repository where the image is pushed.'''
         result = self._values.get("repository")
         assert result is not None, "Required property 'repository' is missing"
-        return typing.cast("_IRepository_e6004aa6", result)
+        return typing.cast("_IRepositoryRef_f3b81117", result)
 
     @builtins.property
     def image_tag(self) -> typing.Optional[builtins.str]:
@@ -15994,7 +15994,7 @@ def _typecheckingstub__8ba2cd26256aa79e321d4f53bd1f303945241d77de68904ac98b7a536
     variables_namespace: typing.Optional[builtins.str] = None,
     role: typing.Optional[_IRole_235f5d8e] = None,
     output: _Artifact_0cb05964,
-    repository: _IRepository_e6004aa6,
+    repository: _IRepositoryRef_f3b81117,
     image_tag: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -16283,7 +16283,7 @@ def _typecheckingstub__2e6b4bcc5a2d9a18c86282291d297ea7e0240c2783c54be4c653d47ea
     run_order: typing.Optional[jsii.Number] = None,
     variables_namespace: typing.Optional[builtins.str] = None,
     role: typing.Optional[_IRole_235f5d8e] = None,
-    target_pipeline: _IPipeline_0931f838,
+    target_pipeline: _IPipelineRef_fb1b56f9,
     source_revisions: typing.Optional[typing.Sequence[typing.Union[SourceRevision, typing.Dict[builtins.str, typing.Any]]]] = None,
     variables: typing.Optional[typing.Sequence[typing.Union[Variable, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -16539,7 +16539,7 @@ def _typecheckingstub__6a7982da431d6fa0bd0f4dcdb140e96377e641305c9d377e566f656cf
     high_threshold: typing.Optional[jsii.Number] = None,
     low_threshold: typing.Optional[jsii.Number] = None,
     medium_threshold: typing.Optional[jsii.Number] = None,
-    repository: _IRepository_e6004aa6,
+    repository: _IRepositoryRef_f3b81117,
     image_tag: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""

@@ -1828,6 +1828,16 @@ class CfnPlaybackConfiguration(
             ad_conditioning_configuration=mediatailor.CfnPlaybackConfiguration.AdConditioningConfigurationProperty(
                 streaming_media_file_conditioning="streamingMediaFileConditioning"
             ),
+            ad_decision_server_configuration=mediatailor.CfnPlaybackConfiguration.AdDecisionServerConfigurationProperty(
+                http_request=mediatailor.CfnPlaybackConfiguration.HttpRequestProperty(
+                    body="body",
+                    compress_request="compressRequest",
+                    headers={
+                        "headers_key": "headers"
+                    },
+                    http_method="httpMethod"
+                )
+            ),
             avail_suppression=mediatailor.CfnPlaybackConfiguration.AvailSuppressionProperty(
                 fill_policy="fillPolicy",
                 mode="mode",
@@ -1894,6 +1904,7 @@ class CfnPlaybackConfiguration(
         name: builtins.str,
         video_content_source_url: builtins.str,
         ad_conditioning_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPlaybackConfiguration.AdConditioningConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ad_decision_server_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPlaybackConfiguration.AdDecisionServerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         avail_suppression: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPlaybackConfiguration.AvailSuppressionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         bumper: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPlaybackConfiguration.BumperProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         cdn_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPlaybackConfiguration.CdnConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -1917,6 +1928,7 @@ class CfnPlaybackConfiguration(
         :param name: The identifier for the playback configuration.
         :param video_content_source_url: The URL prefix for the parent manifest for the stream, minus the asset ID. The maximum length is 512 characters.
         :param ad_conditioning_configuration: The setting that indicates what conditioning MediaTailor will perform on ads that the ad decision server (ADS) returns, and what priority MediaTailor uses when inserting ads.
+        :param ad_decision_server_configuration: The configuration for the request to the specified Ad Decision Server URL.
         :param avail_suppression: The configuration for avail suppression, also known as ad suppression. For more information about ad suppression, see `Ad Suppression <https://docs.aws.amazon.com/mediatailor/latest/ug/ad-behavior.html>`_ .
         :param bumper: The configuration for bumpers. Bumpers are short audio or video clips that play at the start or before the end of an ad break. To learn more about bumpers, see `Bumpers <https://docs.aws.amazon.com/mediatailor/latest/ug/bumpers.html>`_ .
         :param cdn_configuration: The configuration for using a content delivery network (CDN), like Amazon CloudFront, for content and ad segment management.
@@ -1941,6 +1953,7 @@ class CfnPlaybackConfiguration(
             name=name,
             video_content_source_url=video_content_source_url,
             ad_conditioning_configuration=ad_conditioning_configuration,
+            ad_decision_server_configuration=ad_decision_server_configuration,
             avail_suppression=avail_suppression,
             bumper=bumper,
             cdn_configuration=cdn_configuration,
@@ -2139,6 +2152,24 @@ class CfnPlaybackConfiguration(
             type_hints = typing.get_type_hints(_typecheckingstub__bb81abb7826e9e9444261d39e06ed23acbaea73a559203da5ca788273a1bbc94)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "adConditioningConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="adDecisionServerConfiguration")
+    def ad_decision_server_configuration(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPlaybackConfiguration.AdDecisionServerConfigurationProperty"]]:
+        '''The configuration for the request to the specified Ad Decision Server URL.'''
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPlaybackConfiguration.AdDecisionServerConfigurationProperty"]], jsii.get(self, "adDecisionServerConfiguration"))
+
+    @ad_decision_server_configuration.setter
+    def ad_decision_server_configuration(
+        self,
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPlaybackConfiguration.AdDecisionServerConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__22beebeb31ad301089cab0d08fffbf7d70892dcdea0070ebbc8c036efa8475c2)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "adDecisionServerConfiguration", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="availSuppression")
@@ -2423,6 +2454,71 @@ class CfnPlaybackConfiguration(
 
         def __repr__(self) -> str:
             return "AdConditioningConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediatailor.CfnPlaybackConfiguration.AdDecisionServerConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"http_request": "httpRequest"},
+    )
+    class AdDecisionServerConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            http_request: typing.Union["_IResolvable_da3f097b", typing.Union["CfnPlaybackConfiguration.HttpRequestProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''The configuration for the request to the specified Ad Decision Server URL.
+
+            :param http_request: The configuration for the request to the Ad Decision Server URL.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediatailor-playbackconfiguration-addecisionserverconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediatailor as mediatailor
+                
+                ad_decision_server_configuration_property = mediatailor.CfnPlaybackConfiguration.AdDecisionServerConfigurationProperty(
+                    http_request=mediatailor.CfnPlaybackConfiguration.HttpRequestProperty(
+                        body="body",
+                        compress_request="compressRequest",
+                        headers={
+                            "headers_key": "headers"
+                        },
+                        http_method="httpMethod"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__be522b7afa0a40f87526bb5baa285488ee37ade9f2edd720c05a21cdcf1ba383)
+                check_type(argname="argument http_request", value=http_request, expected_type=type_hints["http_request"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "http_request": http_request,
+            }
+
+        @builtins.property
+        def http_request(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnPlaybackConfiguration.HttpRequestProperty"]:
+            '''The configuration for the request to the Ad Decision Server URL.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediatailor-playbackconfiguration-addecisionserverconfiguration.html#cfn-mediatailor-playbackconfiguration-addecisionserverconfiguration-httprequest
+            '''
+            result = self._values.get("http_request")
+            assert result is not None, "Required property 'http_request' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnPlaybackConfiguration.HttpRequestProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AdDecisionServerConfigurationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -2957,6 +3053,121 @@ class CfnPlaybackConfiguration(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediatailor.CfnPlaybackConfiguration.HttpRequestProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "body": "body",
+            "compress_request": "compressRequest",
+            "headers": "headers",
+            "http_method": "httpMethod",
+        },
+    )
+    class HttpRequestProperty:
+        def __init__(
+            self,
+            *,
+            body: typing.Optional[builtins.str] = None,
+            compress_request: typing.Optional[builtins.str] = None,
+            headers: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
+            http_method: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The configuration for the request to the Ad Decision Server URL.
+
+            :param body: The body of the request to the Ad Decision Server URL. The maximum length is 100,000 characters.
+            :param compress_request: The compression type of the request sent to the Ad Decision Server URL. Only the POST HTTP Method permits compression other than NONE.
+            :param headers: The headers in the request sent to the Ad Decision Server URL. The max length is 10,000 characters.
+            :param http_method: Supported HTTP Methods for the request to the Ad Decision Server URL.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediatailor-playbackconfiguration-httprequest.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediatailor as mediatailor
+                
+                http_request_property = mediatailor.CfnPlaybackConfiguration.HttpRequestProperty(
+                    body="body",
+                    compress_request="compressRequest",
+                    headers={
+                        "headers_key": "headers"
+                    },
+                    http_method="httpMethod"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__7a1a27fdd711151047a9a372fb7f330c24afc446e3e97dd914e66a4a4a637017)
+                check_type(argname="argument body", value=body, expected_type=type_hints["body"])
+                check_type(argname="argument compress_request", value=compress_request, expected_type=type_hints["compress_request"])
+                check_type(argname="argument headers", value=headers, expected_type=type_hints["headers"])
+                check_type(argname="argument http_method", value=http_method, expected_type=type_hints["http_method"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if body is not None:
+                self._values["body"] = body
+            if compress_request is not None:
+                self._values["compress_request"] = compress_request
+            if headers is not None:
+                self._values["headers"] = headers
+            if http_method is not None:
+                self._values["http_method"] = http_method
+
+        @builtins.property
+        def body(self) -> typing.Optional[builtins.str]:
+            '''The body of the request to the Ad Decision Server URL.
+
+            The maximum length is 100,000 characters.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediatailor-playbackconfiguration-httprequest.html#cfn-mediatailor-playbackconfiguration-httprequest-body
+            '''
+            result = self._values.get("body")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def compress_request(self) -> typing.Optional[builtins.str]:
+            '''The compression type of the request sent to the Ad Decision Server URL.
+
+            Only the POST HTTP Method permits compression other than NONE.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediatailor-playbackconfiguration-httprequest.html#cfn-mediatailor-playbackconfiguration-httprequest-compressrequest
+            '''
+            result = self._values.get("compress_request")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def headers(
+            self,
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
+            '''The headers in the request sent to the Ad Decision Server URL.
+
+            The max length is 10,000 characters.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediatailor-playbackconfiguration-httprequest.html#cfn-mediatailor-playbackconfiguration-httprequest-headers
+            '''
+            result = self._values.get("headers")
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
+
+        @builtins.property
+        def http_method(self) -> typing.Optional[builtins.str]:
+            '''Supported HTTP Methods for the request to the Ad Decision Server URL.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediatailor-playbackconfiguration-httprequest.html#cfn-mediatailor-playbackconfiguration-httprequest-httpmethod
+            '''
+            result = self._values.get("http_method")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "HttpRequestProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_mediatailor.CfnPlaybackConfiguration.LivePreRollConfigurationProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -3287,6 +3498,7 @@ class CfnPlaybackConfiguration(
         "name": "name",
         "video_content_source_url": "videoContentSourceUrl",
         "ad_conditioning_configuration": "adConditioningConfiguration",
+        "ad_decision_server_configuration": "adDecisionServerConfiguration",
         "avail_suppression": "availSuppression",
         "bumper": "bumper",
         "cdn_configuration": "cdnConfiguration",
@@ -3311,6 +3523,7 @@ class CfnPlaybackConfigurationProps:
         name: builtins.str,
         video_content_source_url: builtins.str,
         ad_conditioning_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPlaybackConfiguration.AdConditioningConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ad_decision_server_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPlaybackConfiguration.AdDecisionServerConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         avail_suppression: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPlaybackConfiguration.AvailSuppressionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         bumper: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPlaybackConfiguration.BumperProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         cdn_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnPlaybackConfiguration.CdnConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -3332,6 +3545,7 @@ class CfnPlaybackConfigurationProps:
         :param name: The identifier for the playback configuration.
         :param video_content_source_url: The URL prefix for the parent manifest for the stream, minus the asset ID. The maximum length is 512 characters.
         :param ad_conditioning_configuration: The setting that indicates what conditioning MediaTailor will perform on ads that the ad decision server (ADS) returns, and what priority MediaTailor uses when inserting ads.
+        :param ad_decision_server_configuration: The configuration for the request to the specified Ad Decision Server URL.
         :param avail_suppression: The configuration for avail suppression, also known as ad suppression. For more information about ad suppression, see `Ad Suppression <https://docs.aws.amazon.com/mediatailor/latest/ug/ad-behavior.html>`_ .
         :param bumper: The configuration for bumpers. Bumpers are short audio or video clips that play at the start or before the end of an ad break. To learn more about bumpers, see `Bumpers <https://docs.aws.amazon.com/mediatailor/latest/ug/bumpers.html>`_ .
         :param cdn_configuration: The configuration for using a content delivery network (CDN), like Amazon CloudFront, for content and ad segment management.
@@ -3367,6 +3581,16 @@ class CfnPlaybackConfigurationProps:
                 # the properties below are optional
                 ad_conditioning_configuration=mediatailor.CfnPlaybackConfiguration.AdConditioningConfigurationProperty(
                     streaming_media_file_conditioning="streamingMediaFileConditioning"
+                ),
+                ad_decision_server_configuration=mediatailor.CfnPlaybackConfiguration.AdDecisionServerConfigurationProperty(
+                    http_request=mediatailor.CfnPlaybackConfiguration.HttpRequestProperty(
+                        body="body",
+                        compress_request="compressRequest",
+                        headers={
+                            "headers_key": "headers"
+                        },
+                        http_method="httpMethod"
+                    )
                 ),
                 avail_suppression=mediatailor.CfnPlaybackConfiguration.AvailSuppressionProperty(
                     fill_policy="fillPolicy",
@@ -3430,6 +3654,7 @@ class CfnPlaybackConfigurationProps:
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument video_content_source_url", value=video_content_source_url, expected_type=type_hints["video_content_source_url"])
             check_type(argname="argument ad_conditioning_configuration", value=ad_conditioning_configuration, expected_type=type_hints["ad_conditioning_configuration"])
+            check_type(argname="argument ad_decision_server_configuration", value=ad_decision_server_configuration, expected_type=type_hints["ad_decision_server_configuration"])
             check_type(argname="argument avail_suppression", value=avail_suppression, expected_type=type_hints["avail_suppression"])
             check_type(argname="argument bumper", value=bumper, expected_type=type_hints["bumper"])
             check_type(argname="argument cdn_configuration", value=cdn_configuration, expected_type=type_hints["cdn_configuration"])
@@ -3451,6 +3676,8 @@ class CfnPlaybackConfigurationProps:
         }
         if ad_conditioning_configuration is not None:
             self._values["ad_conditioning_configuration"] = ad_conditioning_configuration
+        if ad_decision_server_configuration is not None:
+            self._values["ad_decision_server_configuration"] = ad_decision_server_configuration
         if avail_suppression is not None:
             self._values["avail_suppression"] = avail_suppression
         if bumper is not None:
@@ -3524,6 +3751,17 @@ class CfnPlaybackConfigurationProps:
         '''
         result = self._values.get("ad_conditioning_configuration")
         return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPlaybackConfiguration.AdConditioningConfigurationProperty"]], result)
+
+    @builtins.property
+    def ad_decision_server_configuration(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPlaybackConfiguration.AdDecisionServerConfigurationProperty"]]:
+        '''The configuration for the request to the specified Ad Decision Server URL.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediatailor-playbackconfiguration.html#cfn-mediatailor-playbackconfiguration-addecisionserverconfiguration
+        '''
+        result = self._values.get("ad_decision_server_configuration")
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnPlaybackConfiguration.AdDecisionServerConfigurationProperty"]], result)
 
     @builtins.property
     def avail_suppression(
@@ -5284,6 +5522,7 @@ def _typecheckingstub__3dcfb97a898a80ee6a7b069e26028183e8a797f0c48fdbd4fe6ecb8ad
     name: builtins.str,
     video_content_source_url: builtins.str,
     ad_conditioning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPlaybackConfiguration.AdConditioningConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ad_decision_server_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPlaybackConfiguration.AdDecisionServerConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     avail_suppression: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPlaybackConfiguration.AvailSuppressionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     bumper: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPlaybackConfiguration.BumperProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     cdn_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPlaybackConfiguration.CdnConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -5346,6 +5585,12 @@ def _typecheckingstub__75b50d6fe13101dc70996fb19d5c8a163f6176ddcd37a0ebe0b08f5f7
 
 def _typecheckingstub__bb81abb7826e9e9444261d39e06ed23acbaea73a559203da5ca788273a1bbc94(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPlaybackConfiguration.AdConditioningConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__22beebeb31ad301089cab0d08fffbf7d70892dcdea0070ebbc8c036efa8475c2(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPlaybackConfiguration.AdDecisionServerConfigurationProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5441,6 +5686,13 @@ def _typecheckingstub__86f7802737ba8294b0aa8d203c7f9bc7ff38b98bf17f1f9066c772b20
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__be522b7afa0a40f87526bb5baa285488ee37ade9f2edd720c05a21cdcf1ba383(
+    *,
+    http_request: typing.Union[_IResolvable_da3f097b, typing.Union[CfnPlaybackConfiguration.HttpRequestProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__c84cc8c470c35ea1870d24a6e58a722cc2d0952d699c858000349755866ccea6(
     *,
     enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -5497,6 +5749,16 @@ def _typecheckingstub__cc73c21d5b8ef9a10443ded7266b5dc44c0980daadbc5f8f5a49b9793
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__7a1a27fdd711151047a9a372fb7f330c24afc446e3e97dd914e66a4a4a637017(
+    *,
+    body: typing.Optional[builtins.str] = None,
+    compress_request: typing.Optional[builtins.str] = None,
+    headers: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+    http_method: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__be1326ff9046a5c3b87adfaac42a0610149574f9d367d1c04949ccf8a48d1a93(
     *,
     ad_decision_server_url: typing.Optional[builtins.str] = None,
@@ -5535,6 +5797,7 @@ def _typecheckingstub__935886ab495203cc213786b925e7fd8fe4acd3f9db5864d4f1f5c0115
     name: builtins.str,
     video_content_source_url: builtins.str,
     ad_conditioning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPlaybackConfiguration.AdConditioningConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ad_decision_server_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPlaybackConfiguration.AdDecisionServerConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     avail_suppression: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPlaybackConfiguration.AvailSuppressionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     bumper: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPlaybackConfiguration.BumperProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     cdn_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPlaybackConfiguration.CdnConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,

@@ -21,6 +21,7 @@ import typing
 
 from . import agent_engines
 from . import evals
+from . import prompt_optimizer
 from .common import _AppendAgentEngineSessionEventRequestParameters
 from .common import _AssembleDatasetParameters
 from .common import _AssessDatasetParameters
@@ -126,9 +127,6 @@ from .common import AppendAgentEngineSessionEventConfigOrDict
 from .common import AppendAgentEngineSessionEventResponse
 from .common import AppendAgentEngineSessionEventResponseDict
 from .common import AppendAgentEngineSessionEventResponseOrDict
-from .common import ApplicableGuideline
-from .common import ApplicableGuidelineDict
-from .common import ApplicableGuidelineOrDict
 from .common import AssembleDataset
 from .common import AssembleDatasetConfig
 from .common import AssembleDatasetConfigDict
@@ -635,9 +633,7 @@ from .common import PairwiseMetricInstanceOrDict
 from .common import PairwiseMetricResult
 from .common import PairwiseMetricResultDict
 from .common import PairwiseMetricResultOrDict
-from .common import ParsedResponse
-from .common import ParsedResponseDict
-from .common import ParsedResponseOrDict
+from .common import ParsedResponseUnion
 from .common import PointwiseMetricInput
 from .common import PointwiseMetricInputDict
 from .common import PointwiseMetricInputOrDict
@@ -730,6 +726,12 @@ from .common import ReasoningEngineSpecPackageSpec
 from .common import ReasoningEngineSpecPackageSpecDict
 from .common import ReasoningEngineSpecPackageSpecOrDict
 from .common import ReasoningEngineSpecSourceCodeSpec
+from .common import ReasoningEngineSpecSourceCodeSpecDeveloperConnectConfig
+from .common import ReasoningEngineSpecSourceCodeSpecDeveloperConnectConfigDict
+from .common import ReasoningEngineSpecSourceCodeSpecDeveloperConnectConfigOrDict
+from .common import ReasoningEngineSpecSourceCodeSpecDeveloperConnectSource
+from .common import ReasoningEngineSpecSourceCodeSpecDeveloperConnectSourceDict
+from .common import ReasoningEngineSpecSourceCodeSpecDeveloperConnectSourceOrDict
 from .common import ReasoningEngineSpecSourceCodeSpecDict
 from .common import ReasoningEngineSpecSourceCodeSpecInlineSource
 from .common import ReasoningEngineSpecSourceCodeSpecInlineSourceDict
@@ -1365,6 +1367,12 @@ __all__ = [
     "ReasoningEngineSpecPackageSpec",
     "ReasoningEngineSpecPackageSpecDict",
     "ReasoningEngineSpecPackageSpecOrDict",
+    "ReasoningEngineSpecSourceCodeSpecDeveloperConnectConfig",
+    "ReasoningEngineSpecSourceCodeSpecDeveloperConnectConfigDict",
+    "ReasoningEngineSpecSourceCodeSpecDeveloperConnectConfigOrDict",
+    "ReasoningEngineSpecSourceCodeSpecDeveloperConnectSource",
+    "ReasoningEngineSpecSourceCodeSpecDeveloperConnectSourceDict",
+    "ReasoningEngineSpecSourceCodeSpecDeveloperConnectSourceOrDict",
     "ReasoningEngineSpecSourceCodeSpecInlineSource",
     "ReasoningEngineSpecSourceCodeSpecInlineSourceDict",
     "ReasoningEngineSpecSourceCodeSpecInlineSourceOrDict",
@@ -1377,15 +1385,6 @@ __all__ = [
     "ReasoningEngineSpec",
     "ReasoningEngineSpecDict",
     "ReasoningEngineSpecOrDict",
-    "MemoryBankCustomizationConfigMemoryTopicCustomMemoryTopic",
-    "MemoryBankCustomizationConfigMemoryTopicCustomMemoryTopicDict",
-    "MemoryBankCustomizationConfigMemoryTopicCustomMemoryTopicOrDict",
-    "MemoryBankCustomizationConfigMemoryTopicManagedMemoryTopic",
-    "MemoryBankCustomizationConfigMemoryTopicManagedMemoryTopicDict",
-    "MemoryBankCustomizationConfigMemoryTopicManagedMemoryTopicOrDict",
-    "MemoryBankCustomizationConfigMemoryTopic",
-    "MemoryBankCustomizationConfigMemoryTopicDict",
-    "MemoryBankCustomizationConfigMemoryTopicOrDict",
     "MemoryBankCustomizationConfigGenerateMemoriesExampleConversationSourceEvent",
     "MemoryBankCustomizationConfigGenerateMemoriesExampleConversationSourceEventDict",
     "MemoryBankCustomizationConfigGenerateMemoriesExampleConversationSourceEventOrDict",
@@ -1401,6 +1400,15 @@ __all__ = [
     "MemoryBankCustomizationConfigGenerateMemoriesExample",
     "MemoryBankCustomizationConfigGenerateMemoriesExampleDict",
     "MemoryBankCustomizationConfigGenerateMemoriesExampleOrDict",
+    "MemoryBankCustomizationConfigMemoryTopicCustomMemoryTopic",
+    "MemoryBankCustomizationConfigMemoryTopicCustomMemoryTopicDict",
+    "MemoryBankCustomizationConfigMemoryTopicCustomMemoryTopicOrDict",
+    "MemoryBankCustomizationConfigMemoryTopicManagedMemoryTopic",
+    "MemoryBankCustomizationConfigMemoryTopicManagedMemoryTopicDict",
+    "MemoryBankCustomizationConfigMemoryTopicManagedMemoryTopicOrDict",
+    "MemoryBankCustomizationConfigMemoryTopic",
+    "MemoryBankCustomizationConfigMemoryTopicDict",
+    "MemoryBankCustomizationConfigMemoryTopicOrDict",
     "MemoryBankCustomizationConfig",
     "MemoryBankCustomizationConfigDict",
     "MemoryBankCustomizationConfigOrDict",
@@ -1812,12 +1820,6 @@ __all__ = [
     "PromptOptimizerConfig",
     "PromptOptimizerConfigDict",
     "PromptOptimizerConfigOrDict",
-    "ApplicableGuideline",
-    "ApplicableGuidelineDict",
-    "ApplicableGuidelineOrDict",
-    "ParsedResponse",
-    "ParsedResponseDict",
-    "ParsedResponseOrDict",
     "OptimizeResponse",
     "OptimizeResponseDict",
     "OptimizeResponseOrDict",
@@ -1937,6 +1939,7 @@ __all__ = [
     "Message",
     "MessageDict",
     "Importance",
+    "ParsedResponseUnion",
     "_CreateEvaluationItemParameters",
     "_CreateEvaluationRunParameters",
     "_CreateEvaluationSetParameters",
@@ -2003,6 +2006,7 @@ __all__ = [
     "_UpdateDatasetParameters",
     "evals",
     "agent_engines",
+    "prompt_optimizer",
     "PrebuiltMetric",
     "RubricMetric",
 ]

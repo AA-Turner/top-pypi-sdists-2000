@@ -436,8 +436,6 @@ def check_type(argname: str, value: object, expected_type: typing.Any) -> typing
 from .._jsii import *
 
 from .. import Duration as _Duration_4839e8c3
-from ..aws_codebuild import IProject as _IProject_aafae30a
-from ..aws_codepipeline import IPipeline as _IPipeline_0931f838
 from ..aws_ec2 import (
     ISecurityGroup as _ISecurityGroup_acf8a799,
     SubnetSelection as _SubnetSelection_e57d76df,
@@ -454,7 +452,6 @@ from ..aws_events import IEventBus as _IEventBus_88d13111
 from ..aws_iam import (
     IRole as _IRole_235f5d8e, PolicyStatement as _PolicyStatement_0fe33853
 )
-from ..aws_inspector import IAssessmentTemplate as _IAssessmentTemplate_495c2d4e
 from ..aws_kinesis import IStream as _IStream_4e2457d2
 from ..aws_kinesisfirehose import IDeliveryStream as _IDeliveryStream_8f118861
 from ..aws_lambda import IFunction as _IFunction_6adb0ab8
@@ -468,6 +465,11 @@ from ..aws_scheduler import (
 from ..aws_sns import ITopic as _ITopic_9eca4852
 from ..aws_sqs import IQueue as _IQueue_7ed6f679
 from ..aws_stepfunctions import IStateMachine as _IStateMachine_73e8d2b0
+from ..interfaces.aws_codebuild import IProjectRef as _IProjectRef_7528e639
+from ..interfaces.aws_codepipeline import IPipelineRef as _IPipelineRef_fb1b56f9
+from ..interfaces.aws_inspector import (
+    IAssessmentTemplateRef as _IAssessmentTemplateRef_cd6c4843
+)
 
 
 @jsii.data_type(
@@ -1628,7 +1630,7 @@ class CodeBuildStartBuild(
 
     def __init__(
         self,
-        project: "_IProject_aafae30a",
+        project: "_IProjectRef_7528e639",
         *,
         dead_letter_queue: typing.Optional["_IQueue_7ed6f679"] = None,
         input: typing.Optional["_ScheduleTargetInput_dd30d070"] = None,
@@ -1693,7 +1695,7 @@ class CodePipelineStartPipelineExecution(
 
     def __init__(
         self,
-        pipeline: "_IPipeline_0931f838",
+        pipeline: "_IPipelineRef_fb1b56f9",
         *,
         dead_letter_queue: typing.Optional["_IQueue_7ed6f679"] = None,
         input: typing.Optional["_ScheduleTargetInput_dd30d070"] = None,
@@ -2757,7 +2759,7 @@ class InspectorStartAssessmentRun(
 
     def __init__(
         self,
-        template: "_IAssessmentTemplate_495c2d4e",
+        template: "_IAssessmentTemplateRef_cd6c4843",
         *,
         dead_letter_queue: typing.Optional["_IQueue_7ed6f679"] = None,
         input: typing.Optional["_ScheduleTargetInput_dd30d070"] = None,
@@ -4111,7 +4113,7 @@ def _typecheckingstub__7aebf9e651de63ef570a11970d3762c22b62acdcb5386c5ba69076181
     pass
 
 def _typecheckingstub__eacc4f0e06890a24c88fe0c8814a8e396c6c6442e38857fee0168c08fca876ea(
-    project: _IProject_aafae30a,
+    project: _IProjectRef_7528e639,
     *,
     dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
     input: typing.Optional[_ScheduleTargetInput_dd30d070] = None,
@@ -4129,7 +4131,7 @@ def _typecheckingstub__7638691fb0294fb00596be4967a0508a1091ee4b552678b943b548af3
     pass
 
 def _typecheckingstub__f972d090ad80411fc0dff42233ee8b4ff2a48be68b7d646d1c7606a3cfb7fe56(
-    pipeline: _IPipeline_0931f838,
+    pipeline: _IPipelineRef_fb1b56f9,
     *,
     dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
     input: typing.Optional[_ScheduleTargetInput_dd30d070] = None,
@@ -4270,7 +4272,7 @@ def _typecheckingstub__12ef15c1799d86a7551586a9a9e97d06dd1a9ac00d3ff8f956b86ee69
     pass
 
 def _typecheckingstub__827e380295982b1bf320134c0d482e805db91e38e0a4e6207c777b292c586409(
-    template: _IAssessmentTemplate_495c2d4e,
+    template: _IAssessmentTemplateRef_cd6c4843,
     *,
     dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,
     input: typing.Optional[_ScheduleTargetInput_dd30d070] = None,

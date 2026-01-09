@@ -4161,7 +4161,11 @@ class HttpNamespaceProps(BaseNamespaceProps):
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_servicediscovery.IInstance")
-class IInstance(_IResource_c80c4260, typing_extensions.Protocol):
+class IInstance(
+    _IResource_c80c4260,
+    _IInstanceRef_e05d45e9,
+    typing_extensions.Protocol,
+):
     @builtins.property
     @jsii.member(jsii_name="instanceId")
     def instance_id(self) -> builtins.str:
@@ -4180,6 +4184,7 @@ class IInstance(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IInstanceProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IInstanceRef_e05d45e9), # type: ignore[misc]
 ):
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_servicediscovery.IInstance"
 
@@ -4281,12 +4286,17 @@ typing.cast(typing.Any, INamespace).__jsii_proxy_class__ = lambda : _INamespaceP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_servicediscovery.IPrivateDnsNamespace")
-class IPrivateDnsNamespace(INamespace, typing_extensions.Protocol):
+class IPrivateDnsNamespace(
+    INamespace,
+    _IPrivateDnsNamespaceRef_19402306,
+    typing_extensions.Protocol,
+):
     pass
 
 
 class _IPrivateDnsNamespaceProxy(
     jsii.proxy_for(INamespace), # type: ignore[misc]
+    jsii.proxy_for(_IPrivateDnsNamespaceRef_19402306), # type: ignore[misc]
 ):
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_servicediscovery.IPrivateDnsNamespace"
     pass
@@ -4296,12 +4306,17 @@ typing.cast(typing.Any, IPrivateDnsNamespace).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_servicediscovery.IPublicDnsNamespace")
-class IPublicDnsNamespace(INamespace, typing_extensions.Protocol):
+class IPublicDnsNamespace(
+    INamespace,
+    _IPublicDnsNamespaceRef_1d27bfe2,
+    typing_extensions.Protocol,
+):
     pass
 
 
 class _IPublicDnsNamespaceProxy(
     jsii.proxy_for(INamespace), # type: ignore[misc]
+    jsii.proxy_for(_IPublicDnsNamespaceRef_1d27bfe2), # type: ignore[misc]
 ):
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_servicediscovery.IPublicDnsNamespace"
     pass
@@ -4311,7 +4326,7 @@ typing.cast(typing.Any, IPublicDnsNamespace).__jsii_proxy_class__ = lambda : _IP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_servicediscovery.IService")
-class IService(_IResource_c80c4260, typing_extensions.Protocol):
+class IService(_IResource_c80c4260, _IServiceRef_687c8f74, typing_extensions.Protocol):
     @builtins.property
     @jsii.member(jsii_name="discoveryType")
     def discovery_type(self) -> "DiscoveryType":
@@ -4366,6 +4381,7 @@ class IService(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IServiceProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IServiceRef_687c8f74), # type: ignore[misc]
 ):
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_servicediscovery.IService"
 
@@ -4472,6 +4488,12 @@ class InstanceBase(
     def instance_id(self) -> builtins.str:
         '''The Id of the instance.'''
         ...
+
+    @builtins.property
+    @jsii.member(jsii_name="instanceRef")
+    def instance_ref(self) -> "_InstanceReference_6f952041":
+        '''A reference to a Instance resource.'''
+        return typing.cast("_InstanceReference_6f952041", jsii.get(self, "instanceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="service")
@@ -5383,6 +5405,12 @@ class PrivateDnsNamespace(
         return typing.cast(builtins.str, jsii.get(self, "privateDnsNamespaceName"))
 
     @builtins.property
+    @jsii.member(jsii_name="privateDnsNamespaceRef")
+    def private_dns_namespace_ref(self) -> "_PrivateDnsNamespaceReference_1bf1c3c8":
+        '''A reference to a PrivateDnsNamespace resource.'''
+        return typing.cast("_PrivateDnsNamespaceReference_1bf1c3c8", jsii.get(self, "privateDnsNamespaceRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="type")
     def type(self) -> "NamespaceType":
         '''Type of the namespace.'''
@@ -5764,6 +5792,12 @@ class PublicDnsNamespace(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "publicDnsNamespaceName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="publicDnsNamespaceRef")
+    def public_dns_namespace_ref(self) -> "_PublicDnsNamespaceReference_ff5b938d":
+        '''A reference to a PublicDnsNamespace resource.'''
+        return typing.cast("_PublicDnsNamespaceReference_ff5b938d", jsii.get(self, "publicDnsNamespaceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="type")
@@ -6228,6 +6262,12 @@ class Service(
     def service_name(self) -> builtins.str:
         '''A name for the Cloudmap Service.'''
         return typing.cast(builtins.str, jsii.get(self, "serviceName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="serviceRef")
+    def service_ref(self) -> "_ServiceReference_bb8f24e4":
+        '''A reference to a Service resource.'''
+        return typing.cast("_ServiceReference_bb8f24e4", jsii.get(self, "serviceRef"))
 
 
 @jsii.data_type(
@@ -6869,12 +6909,17 @@ class CnameInstance(
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_servicediscovery.IHttpNamespace")
-class IHttpNamespace(INamespace, typing_extensions.Protocol):
+class IHttpNamespace(
+    INamespace,
+    _IHttpNamespaceRef_68a0c4c4,
+    typing_extensions.Protocol,
+):
     pass
 
 
 class _IHttpNamespaceProxy(
     jsii.proxy_for(INamespace), # type: ignore[misc]
+    jsii.proxy_for(_IHttpNamespaceRef_68a0c4c4), # type: ignore[misc]
 ):
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_servicediscovery.IHttpNamespace"
     pass
@@ -7039,6 +7084,12 @@ class HttpNamespace(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "httpNamespaceName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="httpNamespaceRef")
+    def http_namespace_ref(self) -> "_HttpNamespaceReference_2edf16fb":
+        '''A reference to a HttpNamespace resource.'''
+        return typing.cast("_HttpNamespaceReference_2edf16fb", jsii.get(self, "httpNamespaceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="namespaceArn")

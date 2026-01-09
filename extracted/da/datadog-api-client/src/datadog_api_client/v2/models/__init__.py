@@ -372,6 +372,22 @@ from datadog_api_client.v2.model.attach_jira_issue_request_data_attributes impor
 from datadog_api_client.v2.model.attach_jira_issue_request_data_relationships import (
     AttachJiraIssueRequestDataRelationships,
 )
+from datadog_api_client.v2.model.attachment import Attachment
+from datadog_api_client.v2.model.attachment_array import AttachmentArray
+from datadog_api_client.v2.model.attachment_data import AttachmentData
+from datadog_api_client.v2.model.attachment_data_attributes import AttachmentDataAttributes
+from datadog_api_client.v2.model.attachment_data_attributes_attachment import AttachmentDataAttributesAttachment
+from datadog_api_client.v2.model.attachment_data_attributes_attachment_type import (
+    AttachmentDataAttributesAttachmentType,
+)
+from datadog_api_client.v2.model.attachment_data_relationships import AttachmentDataRelationships
+from datadog_api_client.v2.model.attachment_data_relationships_last_modified_by_user import (
+    AttachmentDataRelationshipsLastModifiedByUser,
+)
+from datadog_api_client.v2.model.attachment_data_relationships_last_modified_by_user_data import (
+    AttachmentDataRelationshipsLastModifiedByUserData,
+)
+from datadog_api_client.v2.model.attachment_included import AttachmentIncluded
 from datadog_api_client.v2.model.audit_logs_event import AuditLogsEvent
 from datadog_api_client.v2.model.audit_logs_event_attributes import AuditLogsEventAttributes
 from datadog_api_client.v2.model.audit_logs_event_type import AuditLogsEventType
@@ -973,6 +989,12 @@ from datadog_api_client.v2.model.create_apps_datastore_request_data_attributes_o
 )
 from datadog_api_client.v2.model.create_apps_datastore_response import CreateAppsDatastoreResponse
 from datadog_api_client.v2.model.create_apps_datastore_response_data import CreateAppsDatastoreResponseData
+from datadog_api_client.v2.model.create_attachment_request import CreateAttachmentRequest
+from datadog_api_client.v2.model.create_attachment_request_data import CreateAttachmentRequestData
+from datadog_api_client.v2.model.create_attachment_request_data_attributes import CreateAttachmentRequestDataAttributes
+from datadog_api_client.v2.model.create_attachment_request_data_attributes_attachment import (
+    CreateAttachmentRequestDataAttributesAttachment,
+)
 from datadog_api_client.v2.model.create_case_request_array import CreateCaseRequestArray
 from datadog_api_client.v2.model.create_case_request_data import CreateCaseRequestData
 from datadog_api_client.v2.model.create_case_request_data_attributes import CreateCaseRequestDataAttributes
@@ -1022,6 +1044,10 @@ from datadog_api_client.v2.model.create_notification_rule_parameters import Crea
 from datadog_api_client.v2.model.create_notification_rule_parameters_data import CreateNotificationRuleParametersData
 from datadog_api_client.v2.model.create_notification_rule_parameters_data_attributes import (
     CreateNotificationRuleParametersDataAttributes,
+)
+from datadog_api_client.v2.model.create_on_call_notification_rule_request import CreateOnCallNotificationRuleRequest
+from datadog_api_client.v2.model.create_on_call_notification_rule_request_data import (
+    CreateOnCallNotificationRuleRequestData,
 )
 from datadog_api_client.v2.model.create_open_api_response import CreateOpenAPIResponse
 from datadog_api_client.v2.model.create_open_api_response_attributes import CreateOpenAPIResponseAttributes
@@ -1279,21 +1305,27 @@ from datadog_api_client.v2.model.custom_framework_metadata import CustomFramewor
 from datadog_api_client.v2.model.custom_framework_requirement import CustomFrameworkRequirement
 from datadog_api_client.v2.model.custom_framework_type import CustomFrameworkType
 from datadog_api_client.v2.model.custom_framework_without_requirements import CustomFrameworkWithoutRequirements
+from datadog_api_client.v2.model.dora_deployment_fetch_response import DORADeploymentFetchResponse
+from datadog_api_client.v2.model.dora_deployment_object import DORADeploymentObject
+from datadog_api_client.v2.model.dora_deployment_object_attributes import DORADeploymentObjectAttributes
 from datadog_api_client.v2.model.dora_deployment_request import DORADeploymentRequest
 from datadog_api_client.v2.model.dora_deployment_request_attributes import DORADeploymentRequestAttributes
 from datadog_api_client.v2.model.dora_deployment_request_data import DORADeploymentRequestData
 from datadog_api_client.v2.model.dora_deployment_response import DORADeploymentResponse
 from datadog_api_client.v2.model.dora_deployment_response_data import DORADeploymentResponseData
 from datadog_api_client.v2.model.dora_deployment_type import DORADeploymentType
-from datadog_api_client.v2.model.dora_event import DORAEvent
+from datadog_api_client.v2.model.dora_deployments_list_response import DORADeploymentsListResponse
+from datadog_api_client.v2.model.dora_failure_fetch_response import DORAFailureFetchResponse
 from datadog_api_client.v2.model.dora_failure_request import DORAFailureRequest
 from datadog_api_client.v2.model.dora_failure_request_attributes import DORAFailureRequestAttributes
 from datadog_api_client.v2.model.dora_failure_request_data import DORAFailureRequestData
 from datadog_api_client.v2.model.dora_failure_response import DORAFailureResponse
 from datadog_api_client.v2.model.dora_failure_response_data import DORAFailureResponseData
 from datadog_api_client.v2.model.dora_failure_type import DORAFailureType
-from datadog_api_client.v2.model.dora_fetch_response import DORAFetchResponse
+from datadog_api_client.v2.model.dora_failures_list_response import DORAFailuresListResponse
 from datadog_api_client.v2.model.dora_git_info import DORAGitInfo
+from datadog_api_client.v2.model.dora_incident_object import DORAIncidentObject
+from datadog_api_client.v2.model.dora_incident_object_attributes import DORAIncidentObjectAttributes
 from datadog_api_client.v2.model.dora_list_deployments_request import DORAListDeploymentsRequest
 from datadog_api_client.v2.model.dora_list_deployments_request_attributes import DORAListDeploymentsRequestAttributes
 from datadog_api_client.v2.model.dora_list_deployments_request_data import DORAListDeploymentsRequestData
@@ -1302,7 +1334,6 @@ from datadog_api_client.v2.model.dora_list_failures_request import DORAListFailu
 from datadog_api_client.v2.model.dora_list_failures_request_attributes import DORAListFailuresRequestAttributes
 from datadog_api_client.v2.model.dora_list_failures_request_data import DORAListFailuresRequestData
 from datadog_api_client.v2.model.dora_list_failures_request_data_type import DORAListFailuresRequestDataType
-from datadog_api_client.v2.model.dora_list_response import DORAListResponse
 from datadog_api_client.v2.model.dashboard_list_add_items_request import DashboardListAddItemsRequest
 from datadog_api_client.v2.model.dashboard_list_add_items_response import DashboardListAddItemsResponse
 from datadog_api_client.v2.model.dashboard_list_delete_items_request import DashboardListDeleteItemsRequest
@@ -2014,6 +2045,15 @@ from datadog_api_client.v2.model.gitlab_credentials_update import GitlabCredenti
 from datadog_api_client.v2.model.gitlab_integration import GitlabIntegration
 from datadog_api_client.v2.model.gitlab_integration_type import GitlabIntegrationType
 from datadog_api_client.v2.model.gitlab_integration_update import GitlabIntegrationUpdate
+from datadog_api_client.v2.model.global_variable_data import GlobalVariableData
+from datadog_api_client.v2.model.global_variable_json_patch_request import GlobalVariableJsonPatchRequest
+from datadog_api_client.v2.model.global_variable_json_patch_request_data import GlobalVariableJsonPatchRequestData
+from datadog_api_client.v2.model.global_variable_json_patch_request_data_attributes import (
+    GlobalVariableJsonPatchRequestDataAttributes,
+)
+from datadog_api_client.v2.model.global_variable_json_patch_type import GlobalVariableJsonPatchType
+from datadog_api_client.v2.model.global_variable_response import GlobalVariableResponse
+from datadog_api_client.v2.model.global_variable_type import GlobalVariableType
 from datadog_api_client.v2.model.google_meet_configuration_reference import GoogleMeetConfigurationReference
 from datadog_api_client.v2.model.google_meet_configuration_reference_data import GoogleMeetConfigurationReferenceData
 from datadog_api_client.v2.model.grey_noise_api_key import GreyNoiseAPIKey
@@ -2065,32 +2105,7 @@ from datadog_api_client.v2.model.ip_allowlist_response import IPAllowlistRespons
 from datadog_api_client.v2.model.ip_allowlist_type import IPAllowlistType
 from datadog_api_client.v2.model.ip_allowlist_update_request import IPAllowlistUpdateRequest
 from datadog_api_client.v2.model.idp_metadata_form_data import IdPMetadataFormData
-from datadog_api_client.v2.model.incident_attachment_attachment_type import IncidentAttachmentAttachmentType
-from datadog_api_client.v2.model.incident_attachment_attributes import IncidentAttachmentAttributes
-from datadog_api_client.v2.model.incident_attachment_data import IncidentAttachmentData
-from datadog_api_client.v2.model.incident_attachment_link_attachment_type import IncidentAttachmentLinkAttachmentType
-from datadog_api_client.v2.model.incident_attachment_link_attributes import IncidentAttachmentLinkAttributes
-from datadog_api_client.v2.model.incident_attachment_link_attributes_attachment_object import (
-    IncidentAttachmentLinkAttributesAttachmentObject,
-)
-from datadog_api_client.v2.model.incident_attachment_postmortem_attachment_type import (
-    IncidentAttachmentPostmortemAttachmentType,
-)
-from datadog_api_client.v2.model.incident_attachment_postmortem_attributes import IncidentAttachmentPostmortemAttributes
-from datadog_api_client.v2.model.incident_attachment_related_object import IncidentAttachmentRelatedObject
-from datadog_api_client.v2.model.incident_attachment_relationships import IncidentAttachmentRelationships
 from datadog_api_client.v2.model.incident_attachment_type import IncidentAttachmentType
-from datadog_api_client.v2.model.incident_attachment_update_attributes import IncidentAttachmentUpdateAttributes
-from datadog_api_client.v2.model.incident_attachment_update_data import IncidentAttachmentUpdateData
-from datadog_api_client.v2.model.incident_attachment_update_request import IncidentAttachmentUpdateRequest
-from datadog_api_client.v2.model.incident_attachment_update_response import IncidentAttachmentUpdateResponse
-from datadog_api_client.v2.model.incident_attachments_postmortem_attributes_attachment_object import (
-    IncidentAttachmentsPostmortemAttributesAttachmentObject,
-)
-from datadog_api_client.v2.model.incident_attachments_response import IncidentAttachmentsResponse
-from datadog_api_client.v2.model.incident_attachments_response_included_item import (
-    IncidentAttachmentsResponseIncludedItem,
-)
 from datadog_api_client.v2.model.incident_create_attributes import IncidentCreateAttributes
 from datadog_api_client.v2.model.incident_create_data import IncidentCreateData
 from datadog_api_client.v2.model.incident_create_relationships import IncidentCreateRelationships
@@ -2384,6 +2399,8 @@ from datadog_api_client.v2.model.job_create_response import JobCreateResponse
 from datadog_api_client.v2.model.job_create_response_data import JobCreateResponseData
 from datadog_api_client.v2.model.job_definition import JobDefinition
 from datadog_api_client.v2.model.job_definition_from_rule import JobDefinitionFromRule
+from datadog_api_client.v2.model.json_patch_operation import JsonPatchOperation
+from datadog_api_client.v2.model.json_patch_operation_op import JsonPatchOperationOp
 from datadog_api_client.v2.model.kind_attributes import KindAttributes
 from datadog_api_client.v2.model.kind_data import KindData
 from datadog_api_client.v2.model.kind_metadata import KindMetadata
@@ -2456,6 +2473,7 @@ from datadog_api_client.v2.model.list_findings_page import ListFindingsPage
 from datadog_api_client.v2.model.list_findings_response import ListFindingsResponse
 from datadog_api_client.v2.model.list_kind_catalog_response import ListKindCatalogResponse
 from datadog_api_client.v2.model.list_notification_channels_response import ListNotificationChannelsResponse
+from datadog_api_client.v2.model.list_on_call_notification_rules_response import ListOnCallNotificationRulesResponse
 from datadog_api_client.v2.model.list_pipelines_response import ListPipelinesResponse
 from datadog_api_client.v2.model.list_pipelines_response_meta import ListPipelinesResponseMeta
 from datadog_api_client.v2.model.list_powerpacks_response import ListPowerpacksResponse
@@ -3467,7 +3485,26 @@ from datadog_api_client.v2.model.okta_credentials_update import OktaCredentialsU
 from datadog_api_client.v2.model.okta_integration import OktaIntegration
 from datadog_api_client.v2.model.okta_integration_type import OktaIntegrationType
 from datadog_api_client.v2.model.okta_integration_update import OktaIntegrationUpdate
+from datadog_api_client.v2.model.on_call_notification_rule import OnCallNotificationRule
+from datadog_api_client.v2.model.on_call_notification_rule_attributes import OnCallNotificationRuleAttributes
+from datadog_api_client.v2.model.on_call_notification_rule_category import OnCallNotificationRuleCategory
+from datadog_api_client.v2.model.on_call_notification_rule_channel_relationship import (
+    OnCallNotificationRuleChannelRelationship,
+)
+from datadog_api_client.v2.model.on_call_notification_rule_channel_relationship_data import (
+    OnCallNotificationRuleChannelRelationshipData,
+)
+from datadog_api_client.v2.model.on_call_notification_rule_channel_settings import OnCallNotificationRuleChannelSettings
+from datadog_api_client.v2.model.on_call_notification_rule_data import OnCallNotificationRuleData
+from datadog_api_client.v2.model.on_call_notification_rule_relationships import OnCallNotificationRuleRelationships
+from datadog_api_client.v2.model.on_call_notification_rule_request_attributes import (
+    OnCallNotificationRuleRequestAttributes,
+)
+from datadog_api_client.v2.model.on_call_notification_rule_type import OnCallNotificationRuleType
+from datadog_api_client.v2.model.on_call_notification_rules_included import OnCallNotificationRulesIncluded
 from datadog_api_client.v2.model.on_call_page_target_type import OnCallPageTargetType
+from datadog_api_client.v2.model.on_call_phone_notification_rule_method import OnCallPhoneNotificationRuleMethod
+from datadog_api_client.v2.model.on_call_phone_notification_rule_settings import OnCallPhoneNotificationRuleSettings
 from datadog_api_client.v2.model.on_demand_concurrency_cap import OnDemandConcurrencyCap
 from datadog_api_client.v2.model.on_demand_concurrency_cap_attributes import OnDemandConcurrencyCapAttributes
 from datadog_api_client.v2.model.on_demand_concurrency_cap_response import OnDemandConcurrencyCapResponse
@@ -3556,6 +3593,12 @@ from datadog_api_client.v2.model.partial_api_key_attributes import PartialAPIKey
 from datadog_api_client.v2.model.partial_application_key import PartialApplicationKey
 from datadog_api_client.v2.model.partial_application_key_attributes import PartialApplicationKeyAttributes
 from datadog_api_client.v2.model.partial_application_key_response import PartialApplicationKeyResponse
+from datadog_api_client.v2.model.patch_attachment_request import PatchAttachmentRequest
+from datadog_api_client.v2.model.patch_attachment_request_data import PatchAttachmentRequestData
+from datadog_api_client.v2.model.patch_attachment_request_data_attributes import PatchAttachmentRequestDataAttributes
+from datadog_api_client.v2.model.patch_attachment_request_data_attributes_attachment import (
+    PatchAttachmentRequestDataAttributesAttachment,
+)
 from datadog_api_client.v2.model.patch_incident_notification_template_request import (
     PatchIncidentNotificationTemplateRequest,
 )
@@ -3618,6 +3661,27 @@ from datadog_api_client.v2.model.process_summaries_response import ProcessSummar
 from datadog_api_client.v2.model.process_summary import ProcessSummary
 from datadog_api_client.v2.model.process_summary_attributes import ProcessSummaryAttributes
 from datadog_api_client.v2.model.process_summary_type import ProcessSummaryType
+from datadog_api_client.v2.model.product_analytics_server_side_event_error import ProductAnalyticsServerSideEventError
+from datadog_api_client.v2.model.product_analytics_server_side_event_errors import ProductAnalyticsServerSideEventErrors
+from datadog_api_client.v2.model.product_analytics_server_side_event_item import ProductAnalyticsServerSideEventItem
+from datadog_api_client.v2.model.product_analytics_server_side_event_item_account import (
+    ProductAnalyticsServerSideEventItemAccount,
+)
+from datadog_api_client.v2.model.product_analytics_server_side_event_item_application import (
+    ProductAnalyticsServerSideEventItemApplication,
+)
+from datadog_api_client.v2.model.product_analytics_server_side_event_item_event import (
+    ProductAnalyticsServerSideEventItemEvent,
+)
+from datadog_api_client.v2.model.product_analytics_server_side_event_item_session import (
+    ProductAnalyticsServerSideEventItemSession,
+)
+from datadog_api_client.v2.model.product_analytics_server_side_event_item_type import (
+    ProductAnalyticsServerSideEventItemType,
+)
+from datadog_api_client.v2.model.product_analytics_server_side_event_item_usr import (
+    ProductAnalyticsServerSideEventItemUsr,
+)
 from datadog_api_client.v2.model.project import Project
 from datadog_api_client.v2.model.project_attributes import ProjectAttributes
 from datadog_api_client.v2.model.project_create import ProjectCreate
@@ -4171,6 +4235,18 @@ from datadog_api_client.v2.model.security_monitoring_filter import SecurityMonit
 from datadog_api_client.v2.model.security_monitoring_filter_action import SecurityMonitoringFilterAction
 from datadog_api_client.v2.model.security_monitoring_list_rules_response import SecurityMonitoringListRulesResponse
 from datadog_api_client.v2.model.security_monitoring_reference_table import SecurityMonitoringReferenceTable
+from datadog_api_client.v2.model.security_monitoring_rule_anomaly_detection_options import (
+    SecurityMonitoringRuleAnomalyDetectionOptions,
+)
+from datadog_api_client.v2.model.security_monitoring_rule_anomaly_detection_options_bucket_duration import (
+    SecurityMonitoringRuleAnomalyDetectionOptionsBucketDuration,
+)
+from datadog_api_client.v2.model.security_monitoring_rule_anomaly_detection_options_detection_tolerance import (
+    SecurityMonitoringRuleAnomalyDetectionOptionsDetectionTolerance,
+)
+from datadog_api_client.v2.model.security_monitoring_rule_anomaly_detection_options_learning_duration import (
+    SecurityMonitoringRuleAnomalyDetectionOptionsLearningDuration,
+)
 from datadog_api_client.v2.model.security_monitoring_rule_case import SecurityMonitoringRuleCase
 from datadog_api_client.v2.model.security_monitoring_rule_case_action import SecurityMonitoringRuleCaseAction
 from datadog_api_client.v2.model.security_monitoring_rule_case_action_options import (
@@ -4678,6 +4754,21 @@ from datadog_api_client.v2.model.step_display import StepDisplay
 from datadog_api_client.v2.model.step_display_bounds import StepDisplayBounds
 from datadog_api_client.v2.model.suppression_version_history import SuppressionVersionHistory
 from datadog_api_client.v2.model.suppression_versions import SuppressionVersions
+from datadog_api_client.v2.model.synthetics_global_variable import SyntheticsGlobalVariable
+from datadog_api_client.v2.model.synthetics_global_variable_attributes import SyntheticsGlobalVariableAttributes
+from datadog_api_client.v2.model.synthetics_global_variable_options import SyntheticsGlobalVariableOptions
+from datadog_api_client.v2.model.synthetics_global_variable_parse_test_options import (
+    SyntheticsGlobalVariableParseTestOptions,
+)
+from datadog_api_client.v2.model.synthetics_global_variable_parse_test_options_type import (
+    SyntheticsGlobalVariableParseTestOptionsType,
+)
+from datadog_api_client.v2.model.synthetics_global_variable_parser_type import SyntheticsGlobalVariableParserType
+from datadog_api_client.v2.model.synthetics_global_variable_totp_parameters import (
+    SyntheticsGlobalVariableTOTPParameters,
+)
+from datadog_api_client.v2.model.synthetics_global_variable_value import SyntheticsGlobalVariableValue
+from datadog_api_client.v2.model.synthetics_variable_parser import SyntheticsVariableParser
 from datadog_api_client.v2.model.table_result_v2 import TableResultV2
 from datadog_api_client.v2.model.table_result_v2_array import TableResultV2Array
 from datadog_api_client.v2.model.table_result_v2_data import TableResultV2Data
@@ -4750,6 +4841,20 @@ from datadog_api_client.v2.model.team_link_create_request import TeamLinkCreateR
 from datadog_api_client.v2.model.team_link_response import TeamLinkResponse
 from datadog_api_client.v2.model.team_link_type import TeamLinkType
 from datadog_api_client.v2.model.team_links_response import TeamLinksResponse
+from datadog_api_client.v2.model.team_notification_rule import TeamNotificationRule
+from datadog_api_client.v2.model.team_notification_rule_attributes import TeamNotificationRuleAttributes
+from datadog_api_client.v2.model.team_notification_rule_attributes_email import TeamNotificationRuleAttributesEmail
+from datadog_api_client.v2.model.team_notification_rule_attributes_ms_teams import TeamNotificationRuleAttributesMsTeams
+from datadog_api_client.v2.model.team_notification_rule_attributes_pagerduty import (
+    TeamNotificationRuleAttributesPagerduty,
+)
+from datadog_api_client.v2.model.team_notification_rule_attributes_slack import TeamNotificationRuleAttributesSlack
+from datadog_api_client.v2.model.team_notification_rule_request import TeamNotificationRuleRequest
+from datadog_api_client.v2.model.team_notification_rule_response import TeamNotificationRuleResponse
+from datadog_api_client.v2.model.team_notification_rule_type import TeamNotificationRuleType
+from datadog_api_client.v2.model.team_notification_rules_response import TeamNotificationRulesResponse
+from datadog_api_client.v2.model.team_notification_rules_response_meta import TeamNotificationRulesResponseMeta
+from datadog_api_client.v2.model.team_notification_rules_response_meta_page import TeamNotificationRulesResponseMetaPage
 from datadog_api_client.v2.model.team_on_call_responders import TeamOnCallResponders
 from datadog_api_client.v2.model.team_on_call_responders_data import TeamOnCallRespondersData
 from datadog_api_client.v2.model.team_on_call_responders_data_relationships import TeamOnCallRespondersDataRelationships
@@ -4926,6 +5031,13 @@ from datadog_api_client.v2.model.update_deployment_rule_params_data import Updat
 from datadog_api_client.v2.model.update_deployment_rule_params_data_attributes import (
     UpdateDeploymentRuleParamsDataAttributes,
 )
+from datadog_api_client.v2.model.update_on_call_notification_rule_request import UpdateOnCallNotificationRuleRequest
+from datadog_api_client.v2.model.update_on_call_notification_rule_request_attributes import (
+    UpdateOnCallNotificationRuleRequestAttributes,
+)
+from datadog_api_client.v2.model.update_on_call_notification_rule_request_data import (
+    UpdateOnCallNotificationRuleRequestData,
+)
 from datadog_api_client.v2.model.update_open_api_response import UpdateOpenAPIResponse
 from datadog_api_client.v2.model.update_open_api_response_attributes import UpdateOpenAPIResponseAttributes
 from datadog_api_client.v2.model.update_open_api_response_data import UpdateOpenAPIResponseData
@@ -4994,6 +5106,7 @@ from datadog_api_client.v2.model.usage_observability_pipelines_response import U
 from datadog_api_client.v2.model.usage_time_series_object import UsageTimeSeriesObject
 from datadog_api_client.v2.model.usage_time_series_type import UsageTimeSeriesType
 from datadog_api_client.v2.model.user import User
+from datadog_api_client.v2.model.user140420082644000 import User140420082644000
 from datadog_api_client.v2.model.user_attributes import UserAttributes
 from datadog_api_client.v2.model.user_attributes_status import UserAttributesStatus
 from datadog_api_client.v2.model.user_create_attributes import UserCreateAttributes
@@ -5032,6 +5145,7 @@ from datadog_api_client.v2.model.user_team_update import UserTeamUpdate
 from datadog_api_client.v2.model.user_team_update_request import UserTeamUpdateRequest
 from datadog_api_client.v2.model.user_team_user_type import UserTeamUserType
 from datadog_api_client.v2.model.user_teams_response import UserTeamsResponse
+from datadog_api_client.v2.model.user_type import UserType
 from datadog_api_client.v2.model.user_update_attributes import UserUpdateAttributes
 from datadog_api_client.v2.model.user_update_data import UserUpdateData
 from datadog_api_client.v2.model.user_update_request import UserUpdateRequest
@@ -5360,6 +5474,16 @@ __all__ = [
     "AttachJiraIssueRequestData",
     "AttachJiraIssueRequestDataAttributes",
     "AttachJiraIssueRequestDataRelationships",
+    "Attachment",
+    "AttachmentArray",
+    "AttachmentData",
+    "AttachmentDataAttributes",
+    "AttachmentDataAttributesAttachment",
+    "AttachmentDataAttributesAttachmentType",
+    "AttachmentDataRelationships",
+    "AttachmentDataRelationshipsLastModifiedByUser",
+    "AttachmentDataRelationshipsLastModifiedByUserData",
+    "AttachmentIncluded",
     "AuditLogsEvent",
     "AuditLogsEventAttributes",
     "AuditLogsEventType",
@@ -5841,6 +5965,10 @@ __all__ = [
     "CreateAppsDatastoreRequestDataAttributesOrgAccess",
     "CreateAppsDatastoreResponse",
     "CreateAppsDatastoreResponseData",
+    "CreateAttachmentRequest",
+    "CreateAttachmentRequestData",
+    "CreateAttachmentRequestDataAttributes",
+    "CreateAttachmentRequestDataAttributesAttachment",
     "CreateCaseRequestArray",
     "CreateCaseRequestData",
     "CreateCaseRequestDataAttributes",
@@ -5875,6 +6003,8 @@ __all__ = [
     "CreateNotificationRuleParameters",
     "CreateNotificationRuleParametersData",
     "CreateNotificationRuleParametersDataAttributes",
+    "CreateOnCallNotificationRuleRequest",
+    "CreateOnCallNotificationRuleRequestData",
     "CreateOpenAPIResponse",
     "CreateOpenAPIResponseAttributes",
     "CreateOpenAPIResponseData",
@@ -6017,21 +6147,27 @@ __all__ = [
     "CustomFrameworkRequirement",
     "CustomFrameworkType",
     "CustomFrameworkWithoutRequirements",
+    "DORADeploymentFetchResponse",
+    "DORADeploymentObject",
+    "DORADeploymentObjectAttributes",
     "DORADeploymentRequest",
     "DORADeploymentRequestAttributes",
     "DORADeploymentRequestData",
     "DORADeploymentResponse",
     "DORADeploymentResponseData",
     "DORADeploymentType",
-    "DORAEvent",
+    "DORADeploymentsListResponse",
+    "DORAFailureFetchResponse",
     "DORAFailureRequest",
     "DORAFailureRequestAttributes",
     "DORAFailureRequestData",
     "DORAFailureResponse",
     "DORAFailureResponseData",
     "DORAFailureType",
-    "DORAFetchResponse",
+    "DORAFailuresListResponse",
     "DORAGitInfo",
+    "DORAIncidentObject",
+    "DORAIncidentObjectAttributes",
     "DORAListDeploymentsRequest",
     "DORAListDeploymentsRequestAttributes",
     "DORAListDeploymentsRequestData",
@@ -6040,7 +6176,6 @@ __all__ = [
     "DORAListFailuresRequestAttributes",
     "DORAListFailuresRequestData",
     "DORAListFailuresRequestDataType",
-    "DORAListResponse",
     "DashboardListAddItemsRequest",
     "DashboardListAddItemsResponse",
     "DashboardListDeleteItemsRequest",
@@ -6614,6 +6749,13 @@ __all__ = [
     "GitlabIntegration",
     "GitlabIntegrationType",
     "GitlabIntegrationUpdate",
+    "GlobalVariableData",
+    "GlobalVariableJsonPatchRequest",
+    "GlobalVariableJsonPatchRequestData",
+    "GlobalVariableJsonPatchRequestDataAttributes",
+    "GlobalVariableJsonPatchType",
+    "GlobalVariableResponse",
+    "GlobalVariableType",
     "GoogleMeetConfigurationReference",
     "GoogleMeetConfigurationReferenceData",
     "GreyNoiseAPIKey",
@@ -6665,24 +6807,7 @@ __all__ = [
     "IPAllowlistType",
     "IPAllowlistUpdateRequest",
     "IdPMetadataFormData",
-    "IncidentAttachmentAttachmentType",
-    "IncidentAttachmentAttributes",
-    "IncidentAttachmentData",
-    "IncidentAttachmentLinkAttachmentType",
-    "IncidentAttachmentLinkAttributes",
-    "IncidentAttachmentLinkAttributesAttachmentObject",
-    "IncidentAttachmentPostmortemAttachmentType",
-    "IncidentAttachmentPostmortemAttributes",
-    "IncidentAttachmentRelatedObject",
-    "IncidentAttachmentRelationships",
     "IncidentAttachmentType",
-    "IncidentAttachmentUpdateAttributes",
-    "IncidentAttachmentUpdateData",
-    "IncidentAttachmentUpdateRequest",
-    "IncidentAttachmentUpdateResponse",
-    "IncidentAttachmentsPostmortemAttributesAttachmentObject",
-    "IncidentAttachmentsResponse",
-    "IncidentAttachmentsResponseIncludedItem",
     "IncidentCreateAttributes",
     "IncidentCreateData",
     "IncidentCreateRelationships",
@@ -6918,6 +7043,8 @@ __all__ = [
     "JobCreateResponseData",
     "JobDefinition",
     "JobDefinitionFromRule",
+    "JsonPatchOperation",
+    "JsonPatchOperationOp",
     "KindAttributes",
     "KindData",
     "KindMetadata",
@@ -6980,6 +7107,7 @@ __all__ = [
     "ListFindingsResponse",
     "ListKindCatalogResponse",
     "ListNotificationChannelsResponse",
+    "ListOnCallNotificationRulesResponse",
     "ListPipelinesResponse",
     "ListPipelinesResponseMeta",
     "ListPowerpacksResponse",
@@ -7537,7 +7665,20 @@ __all__ = [
     "OktaIntegration",
     "OktaIntegrationType",
     "OktaIntegrationUpdate",
+    "OnCallNotificationRule",
+    "OnCallNotificationRuleAttributes",
+    "OnCallNotificationRuleCategory",
+    "OnCallNotificationRuleChannelRelationship",
+    "OnCallNotificationRuleChannelRelationshipData",
+    "OnCallNotificationRuleChannelSettings",
+    "OnCallNotificationRuleData",
+    "OnCallNotificationRuleRelationships",
+    "OnCallNotificationRuleRequestAttributes",
+    "OnCallNotificationRuleType",
+    "OnCallNotificationRulesIncluded",
     "OnCallPageTargetType",
+    "OnCallPhoneNotificationRuleMethod",
+    "OnCallPhoneNotificationRuleSettings",
     "OnDemandConcurrencyCap",
     "OnDemandConcurrencyCapAttributes",
     "OnDemandConcurrencyCapResponse",
@@ -7624,6 +7765,10 @@ __all__ = [
     "PartialApplicationKey",
     "PartialApplicationKeyAttributes",
     "PartialApplicationKeyResponse",
+    "PatchAttachmentRequest",
+    "PatchAttachmentRequestData",
+    "PatchAttachmentRequestDataAttributes",
+    "PatchAttachmentRequestDataAttributesAttachment",
     "PatchIncidentNotificationTemplateRequest",
     "PatchNotificationRuleParameters",
     "PatchNotificationRuleParametersData",
@@ -7666,6 +7811,15 @@ __all__ = [
     "ProcessSummary",
     "ProcessSummaryAttributes",
     "ProcessSummaryType",
+    "ProductAnalyticsServerSideEventError",
+    "ProductAnalyticsServerSideEventErrors",
+    "ProductAnalyticsServerSideEventItem",
+    "ProductAnalyticsServerSideEventItemAccount",
+    "ProductAnalyticsServerSideEventItemApplication",
+    "ProductAnalyticsServerSideEventItemEvent",
+    "ProductAnalyticsServerSideEventItemSession",
+    "ProductAnalyticsServerSideEventItemType",
+    "ProductAnalyticsServerSideEventItemUsr",
     "Project",
     "ProjectAttributes",
     "ProjectCreate",
@@ -8121,6 +8275,10 @@ __all__ = [
     "SecurityMonitoringFilterAction",
     "SecurityMonitoringListRulesResponse",
     "SecurityMonitoringReferenceTable",
+    "SecurityMonitoringRuleAnomalyDetectionOptions",
+    "SecurityMonitoringRuleAnomalyDetectionOptionsBucketDuration",
+    "SecurityMonitoringRuleAnomalyDetectionOptionsDetectionTolerance",
+    "SecurityMonitoringRuleAnomalyDetectionOptionsLearningDuration",
     "SecurityMonitoringRuleCase",
     "SecurityMonitoringRuleCaseAction",
     "SecurityMonitoringRuleCaseActionOptions",
@@ -8472,6 +8630,15 @@ __all__ = [
     "StepDisplayBounds",
     "SuppressionVersionHistory",
     "SuppressionVersions",
+    "SyntheticsGlobalVariable",
+    "SyntheticsGlobalVariableAttributes",
+    "SyntheticsGlobalVariableOptions",
+    "SyntheticsGlobalVariableParseTestOptions",
+    "SyntheticsGlobalVariableParseTestOptionsType",
+    "SyntheticsGlobalVariableParserType",
+    "SyntheticsGlobalVariableTOTPParameters",
+    "SyntheticsGlobalVariableValue",
+    "SyntheticsVariableParser",
     "TableResultV2",
     "TableResultV2Array",
     "TableResultV2Data",
@@ -8528,6 +8695,18 @@ __all__ = [
     "TeamLinkResponse",
     "TeamLinkType",
     "TeamLinksResponse",
+    "TeamNotificationRule",
+    "TeamNotificationRuleAttributes",
+    "TeamNotificationRuleAttributesEmail",
+    "TeamNotificationRuleAttributesMsTeams",
+    "TeamNotificationRuleAttributesPagerduty",
+    "TeamNotificationRuleAttributesSlack",
+    "TeamNotificationRuleRequest",
+    "TeamNotificationRuleResponse",
+    "TeamNotificationRuleType",
+    "TeamNotificationRulesResponse",
+    "TeamNotificationRulesResponseMeta",
+    "TeamNotificationRulesResponseMetaPage",
     "TeamOnCallResponders",
     "TeamOnCallRespondersData",
     "TeamOnCallRespondersDataRelationships",
@@ -8670,6 +8849,9 @@ __all__ = [
     "UpdateDeploymentRuleParams",
     "UpdateDeploymentRuleParamsData",
     "UpdateDeploymentRuleParamsDataAttributes",
+    "UpdateOnCallNotificationRuleRequest",
+    "UpdateOnCallNotificationRuleRequestAttributes",
+    "UpdateOnCallNotificationRuleRequestData",
     "UpdateOpenAPIResponse",
     "UpdateOpenAPIResponseAttributes",
     "UpdateOpenAPIResponseData",
@@ -8714,6 +8896,7 @@ __all__ = [
     "UsageTimeSeriesObject",
     "UsageTimeSeriesType",
     "User",
+    "User140420082644000",
     "UserAttributes",
     "UserAttributesStatus",
     "UserCreateAttributes",
@@ -8752,6 +8935,7 @@ __all__ = [
     "UserTeamUpdateRequest",
     "UserTeamUserType",
     "UserTeamsResponse",
+    "UserType",
     "UserUpdateAttributes",
     "UserUpdateData",
     "UserUpdateRequest",

@@ -63,7 +63,7 @@ def test_uuid_setattr() -> None:
     uuid = uuid_utils.UUID(int=223359875637754765292326297443183672862)
 
     with pytest.raises(TypeError):
-        uuid.int = 123  # type: ignore
+        uuid.int = 123  # type: ignore[misc]
 
 
 def test_uuid1() -> None:
@@ -130,19 +130,15 @@ def test_uuid_comparisons() -> None:
 
     assert uuid_1 < uuid_2
     assert uuid_1 <= uuid_2
+    assert uuid_1 != uuid_2
+    assert uuid_2 > uuid_1
+    assert uuid_2 >= uuid_1
 
     uuid_1 = uuid_utils.uuid8(b"1234567812345678")
     uuid_2 = uuid_utils.uuid8(b"1234567812345678")
 
     assert uuid_1 == uuid_2
     assert hash(uuid_1) == hash(uuid_2)
-    assert not uuid_1 != uuid_2
-
-    uuid_1 = uuid_utils.uuid8(b"1234567812345678")
-    uuid_2 = uuid_utils.uuid8(b"1234567812345677")
-
-    assert uuid_1 > uuid_2
-    assert uuid_1 >= uuid_2
 
 
 @pytest.mark.parametrize("version", [1, 2, 3, 4, 5, 7, 8])
@@ -217,7 +213,7 @@ def test_reseed_rng_with_fork() -> None:
     # forcibly generate uuid before fork to have rng state
     uuid_utils.uuid4()
 
-    pid = os.fork()
+    pid = os.fork()  # type: ignore[attr-defined]
     if pid == 0:
         os.close(read_end)
         # explicity reseed in the child
@@ -235,3 +231,8 @@ def test_reseed_rng_with_fork() -> None:
 
     # the uuids should be different because we reseeded
     assert next_parent_uuid != uuid_from_pipe
+
+
+def test_max_and_nil() -> None:
+    assert uuid_utils.UUID("ffffffff-ffff-ffff-ffff-ffffffffffff") == uuid_utils.MAX
+    assert uuid_utils.UUID("00000000-0000-0000-0000-000000000000") == uuid_utils.NIL

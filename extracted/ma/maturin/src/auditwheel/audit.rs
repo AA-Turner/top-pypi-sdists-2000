@@ -2,10 +2,10 @@ use super::musllinux::{find_musl_libc, get_musl_version};
 use super::policy::{MANYLINUX_POLICIES, MUSLLINUX_POLICIES, Policy};
 use crate::auditwheel::{PlatformTag, find_external_libs};
 use crate::compile::BuildArtifact;
-use crate::target::Target;
+use crate::target::{Arch, Target};
 use anyhow::{Context, Result, bail};
 use fs_err::File;
-use goblin::elf::{Elf, sym::STT_FUNC};
+use goblin::elf::{Elf, sym::STB_WEAK, sym::STT_FUNC};
 use lddtree::Library;
 use once_cell::sync::Lazy;
 use regex::Regex;
@@ -162,7 +162,10 @@ fn policy_is_satisfied(
         .dynsyms
         .iter()
         .filter_map(|sym| {
-            if sym.st_shndx == goblin::elf::section_header::SHN_UNDEF as usize {
+            // Do not consider weak symbols as undefined, they are optional at runtime.
+            if sym.st_shndx == goblin::elf::section_header::SHN_UNDEF as usize
+                && sym.st_bind() != STB_WEAK
+            {
                 elf.dynstrtab.get_at(sym.st_name).map(ToString::to_string)
             } else {
                 None
@@ -402,6 +405,10 @@ pub fn auditwheel_rs(
         }
     } else if let Some(policy) = highest_policy {
         Ok(policy)
+    } else if target.target_arch() == Arch::Armv6L || target.target_arch() == Arch::Armv7L {
+        // Old arm versions
+        // https://github.com/pypi/warehouse/blob/556e1e3390999381c382873b003a779a1363cb4d/warehouse/forklift/legacy.py#L122-L123
+        Ok(Policy::default())
     } else {
         eprintln!(
             "⚠️  Warning: No compatible platform tag found, using the linux tag instead. \

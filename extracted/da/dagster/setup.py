@@ -70,6 +70,7 @@ setup(
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "License :: OSI Approved :: Apache Software License",
         "Topic :: System :: Monitoring",
         "Topic :: Software Development :: Libraries :: Application Frameworks",
@@ -77,7 +78,7 @@ setup(
     ],
     packages=find_packages(exclude=["dagster_tests*"]),
     include_package_data=True,
-    python_requires=">=3.10,<3.14",
+    python_requires=">=3.10,<3.15",
     install_requires=[
         # cli
         "click>=5.0,<9.0",
@@ -111,8 +112,8 @@ setup(
         "universal_pathlib>=0.2.0; python_version>='3.12'",
         "rich",
         "filelock",
-        "dagster-pipes==1.12.8",
-        "dagster-shared==1.12.8",
+        "dagster-pipes==1.12.9",
+        "dagster-shared==1.12.9",
         "antlr4-python3-runtime",
     ],
     extras_require={

@@ -64,14 +64,17 @@ from .. import (
     IInspectable as _IInspectable_c2943556,
     IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
+    ITaggableV2 as _ITaggableV2_4e6798f8,
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
 from ..interfaces.aws_groundstation import (
     ConfigReference as _ConfigReference_865aabc6,
     DataflowEndpointGroupReference as _DataflowEndpointGroupReference_badac723,
+    DataflowEndpointGroupV2Reference as _DataflowEndpointGroupV2Reference_2499b7be,
     IConfigRef as _IConfigRef_dc69720e,
     IDataflowEndpointGroupRef as _IDataflowEndpointGroupRef_cf3d8979,
+    IDataflowEndpointGroupV2Ref as _IDataflowEndpointGroupV2Ref_2f95eb4f,
     IMissionProfileRef as _IMissionProfileRef_941bd296,
     MissionProfileReference as _MissionProfileReference_ba21ddb1,
 )
@@ -3117,6 +3120,1915 @@ class CfnDataflowEndpointGroupProps:
         )
 
 
+@jsii.implements(_IInspectable_c2943556, _IDataflowEndpointGroupV2Ref_2f95eb4f, _ITaggableV2_4e6798f8)
+class CfnDataflowEndpointGroupV2(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_groundstation.CfnDataflowEndpointGroupV2",
+):
+    '''Creates a ``DataflowEndpoint`` group containing the specified list of Ground Station Agent based endpoints.
+
+    The ``name`` field in each endpoint is used in your mission profile ``DataflowEndpointConfig`` to specify which endpoints to use during a contact.
+
+    When a contact uses multiple ``DataflowEndpointConfig`` objects, each ``Config`` must match a ``DataflowEndpoint`` in the same group.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-groundstation-dataflowendpointgroupv2.html
+    :cloudformationResource: AWS::GroundStation::DataflowEndpointGroupV2
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        from aws_cdk import CfnTag
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_groundstation as groundstation
+        
+        cfn_dataflow_endpoint_group_v2 = groundstation.CfnDataflowEndpointGroupV2(self, "MyCfnDataflowEndpointGroupV2",
+            contact_post_pass_duration_seconds=123,
+            contact_pre_pass_duration_seconds=123,
+            endpoints=[groundstation.CfnDataflowEndpointGroupV2.CreateEndpointDetailsProperty(
+                downlink_aws_ground_station_agent_endpoint=groundstation.CfnDataflowEndpointGroupV2.DownlinkAwsGroundStationAgentEndpointProperty(
+                    dataflow_details=groundstation.CfnDataflowEndpointGroupV2.DownlinkDataflowDetailsProperty(
+                        agent_connection_details=groundstation.CfnDataflowEndpointGroupV2.DownlinkConnectionDetailsProperty(
+                            agent_ip_and_port_address=groundstation.CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty(
+                                socket_address=groundstation.CfnDataflowEndpointGroupV2.RangedSocketAddressProperty(
+                                    name="name",
+                                    port_range=groundstation.CfnDataflowEndpointGroupV2.IntegerRangeProperty(
+                                        maximum=123,
+                                        minimum=123
+                                    )
+                                ),
+        
+                                # the properties below are optional
+                                mtu=123
+                            ),
+                            egress_address_and_port=groundstation.CfnDataflowEndpointGroupV2.ConnectionDetailsProperty(
+                                socket_address=groundstation.CfnDataflowEndpointGroupV2.SocketAddressProperty(
+                                    name="name",
+                                    port=123
+                                ),
+        
+                                # the properties below are optional
+                                mtu=123
+                            )
+                        )
+                    ),
+                    name="name"
+                ),
+                uplink_aws_ground_station_agent_endpoint=groundstation.CfnDataflowEndpointGroupV2.UplinkAwsGroundStationAgentEndpointProperty(
+                    dataflow_details=groundstation.CfnDataflowEndpointGroupV2.UplinkDataflowDetailsProperty(
+                        agent_connection_details=groundstation.CfnDataflowEndpointGroupV2.UplinkConnectionDetailsProperty(
+                            agent_ip_and_port_address=groundstation.CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty(
+                                socket_address=groundstation.CfnDataflowEndpointGroupV2.RangedSocketAddressProperty(
+                                    name="name",
+                                    port_range=groundstation.CfnDataflowEndpointGroupV2.IntegerRangeProperty(
+                                        maximum=123,
+                                        minimum=123
+                                    )
+                                ),
+        
+                                # the properties below are optional
+                                mtu=123
+                            ),
+                            ingress_address_and_port=groundstation.CfnDataflowEndpointGroupV2.ConnectionDetailsProperty(
+                                socket_address=groundstation.CfnDataflowEndpointGroupV2.SocketAddressProperty(
+                                    name="name",
+                                    port=123
+                                ),
+        
+                                # the properties below are optional
+                                mtu=123
+                            )
+                        )
+                    ),
+                    name="name"
+                )
+            )],
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        *,
+        contact_post_pass_duration_seconds: typing.Optional[jsii.Number] = None,
+        contact_pre_pass_duration_seconds: typing.Optional[jsii.Number] = None,
+        endpoints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroupV2.CreateEndpointDetailsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Create a new ``AWS::GroundStation::DataflowEndpointGroupV2``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param contact_post_pass_duration_seconds: Amount of time, in seconds, after a contact ends that the Ground Station Dataflow Endpoint Group will be in a POSTPASS state.
+        :param contact_pre_pass_duration_seconds: Amount of time, in seconds, before a contact starts that the Ground Station Dataflow Endpoint Group will be in a PREPASS state.
+        :param endpoints: List of endpoints for the dataflow endpoint group.
+        :param tags: Tags assigned to a resource.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d2e60b33a4f971173adc3870582147594d3dc420e78e52e4b79a67a6c495c946)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnDataflowEndpointGroupV2Props(
+            contact_post_pass_duration_seconds=contact_post_pass_duration_seconds,
+            contact_pre_pass_duration_seconds=contact_pre_pass_duration_seconds,
+            endpoints=endpoints,
+            tags=tags,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDataflowEndpointGroupV2")
+    @builtins.classmethod
+    def arn_for_dataflow_endpoint_group_v2(
+        cls,
+        resource: "_IDataflowEndpointGroupV2Ref_2f95eb4f",
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__50cf5e7a2c0a35a59864fca12b408e28629b5e997f4b61dcd968e80aab3a2fef)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDataflowEndpointGroupV2", [resource]))
+
+    @jsii.member(jsii_name="isCfnDataflowEndpointGroupV2")
+    @builtins.classmethod
+    def is_cfn_dataflow_endpoint_group_v2(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDataflowEndpointGroupV2.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2e120a8548a43d7db4db37beeb9c69e89797dd0225c8cba83040e9988678dd7d)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDataflowEndpointGroupV2", [x]))
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__013aa982627a60606a6ccccf55a4792c5ce7ae8929f4cc0d8854635503e58086)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6b3f19a98a1664e323a23c3fccc6dec673f0c2fc57f177c07224b515d6bf190e)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrArn")
+    def attr_arn(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrEndpointDetails")
+    def attr_endpoint_details(self) -> "_IResolvable_da3f097b":
+        '''Information about the endpoint details.
+
+        :cloudformationAttribute: EndpointDetails
+        '''
+        return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrEndpointDetails"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrId")
+    def attr_id(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: Id
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="dataflowEndpointGroupV2Ref")
+    def dataflow_endpoint_group_v2_ref(
+        self,
+    ) -> "_DataflowEndpointGroupV2Reference_2499b7be":
+        '''A reference to a DataflowEndpointGroupV2 resource.'''
+        return typing.cast("_DataflowEndpointGroupV2Reference_2499b7be", jsii.get(self, "dataflowEndpointGroupV2Ref"))
+
+    @builtins.property
+    @jsii.member(jsii_name="contactPostPassDurationSeconds")
+    def contact_post_pass_duration_seconds(self) -> typing.Optional[jsii.Number]:
+        '''Amount of time, in seconds, after a contact ends that the Ground Station Dataflow Endpoint Group will be in a POSTPASS state.'''
+        return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "contactPostPassDurationSeconds"))
+
+    @contact_post_pass_duration_seconds.setter
+    def contact_post_pass_duration_seconds(
+        self,
+        value: typing.Optional[jsii.Number],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3c131a8656742ea4977e6718d582f7038b2a15ecdcab7f29050c11b410c0499f)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "contactPostPassDurationSeconds", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="contactPrePassDurationSeconds")
+    def contact_pre_pass_duration_seconds(self) -> typing.Optional[jsii.Number]:
+        '''Amount of time, in seconds, before a contact starts that the Ground Station Dataflow Endpoint Group will be in a PREPASS state.'''
+        return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "contactPrePassDurationSeconds"))
+
+    @contact_pre_pass_duration_seconds.setter
+    def contact_pre_pass_duration_seconds(
+        self,
+        value: typing.Optional[jsii.Number],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f6961a5a542de3095fba90b602069436ed50bb4f8cfc750302285cbb8090f749)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "contactPrePassDurationSeconds", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="endpoints")
+    def endpoints(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.CreateEndpointDetailsProperty"]]]]:
+        '''List of endpoints for the dataflow endpoint group.'''
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.CreateEndpointDetailsProperty"]]]], jsii.get(self, "endpoints"))
+
+    @endpoints.setter
+    def endpoints(
+        self,
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.CreateEndpointDetailsProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e750ec1e3e40870deb06f4e079867b08b391d8caaae5b4430bdd8982e8f6e6fe)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "endpoints", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
+        '''Tags assigned to a resource.'''
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d5dd88f1acaa27720877cdd3c9681eb01e73c2667c52f00e1c830b3852587ff6)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_groundstation.CfnDataflowEndpointGroupV2.ConnectionDetailsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"socket_address": "socketAddress", "mtu": "mtu"},
+    )
+    class ConnectionDetailsProperty:
+        def __init__(
+            self,
+            *,
+            socket_address: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroupV2.SocketAddressProperty", typing.Dict[builtins.str, typing.Any]]],
+            mtu: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''Egress address of AgentEndpoint with an optional mtu.
+
+            :param socket_address: A socket address.
+            :param mtu: Maximum transmission unit (MTU) size in bytes of a dataflow endpoint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-connectiondetails.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_groundstation as groundstation
+                
+                connection_details_property = groundstation.CfnDataflowEndpointGroupV2.ConnectionDetailsProperty(
+                    socket_address=groundstation.CfnDataflowEndpointGroupV2.SocketAddressProperty(
+                        name="name",
+                        port=123
+                    ),
+                
+                    # the properties below are optional
+                    mtu=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__24b67200167046ed13df91bad37a2e4f9e0e99877947e4da1e0622b06df66a17)
+                check_type(argname="argument socket_address", value=socket_address, expected_type=type_hints["socket_address"])
+                check_type(argname="argument mtu", value=mtu, expected_type=type_hints["mtu"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "socket_address": socket_address,
+            }
+            if mtu is not None:
+                self._values["mtu"] = mtu
+
+        @builtins.property
+        def socket_address(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.SocketAddressProperty"]:
+            '''A socket address.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-connectiondetails.html#cfn-groundstation-dataflowendpointgroupv2-connectiondetails-socketaddress
+            '''
+            result = self._values.get("socket_address")
+            assert result is not None, "Required property 'socket_address' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.SocketAddressProperty"], result)
+
+        @builtins.property
+        def mtu(self) -> typing.Optional[jsii.Number]:
+            '''Maximum transmission unit (MTU) size in bytes of a dataflow endpoint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-connectiondetails.html#cfn-groundstation-dataflowendpointgroupv2-connectiondetails-mtu
+            '''
+            result = self._values.get("mtu")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ConnectionDetailsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_groundstation.CfnDataflowEndpointGroupV2.CreateEndpointDetailsProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "downlink_aws_ground_station_agent_endpoint": "downlinkAwsGroundStationAgentEndpoint",
+            "uplink_aws_ground_station_agent_endpoint": "uplinkAwsGroundStationAgentEndpoint",
+        },
+    )
+    class CreateEndpointDetailsProperty:
+        def __init__(
+            self,
+            *,
+            downlink_aws_ground_station_agent_endpoint: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroupV2.DownlinkAwsGroundStationAgentEndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            uplink_aws_ground_station_agent_endpoint: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroupV2.UplinkAwsGroundStationAgentEndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''Endpoint definition used for creating a dataflow endpoint.
+
+            :param downlink_aws_ground_station_agent_endpoint: Definition for a downlink agent endpoint.
+            :param uplink_aws_ground_station_agent_endpoint: Definition for an uplink agent endpoint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-createendpointdetails.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_groundstation as groundstation
+                
+                create_endpoint_details_property = groundstation.CfnDataflowEndpointGroupV2.CreateEndpointDetailsProperty(
+                    downlink_aws_ground_station_agent_endpoint=groundstation.CfnDataflowEndpointGroupV2.DownlinkAwsGroundStationAgentEndpointProperty(
+                        dataflow_details=groundstation.CfnDataflowEndpointGroupV2.DownlinkDataflowDetailsProperty(
+                            agent_connection_details=groundstation.CfnDataflowEndpointGroupV2.DownlinkConnectionDetailsProperty(
+                                agent_ip_and_port_address=groundstation.CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty(
+                                    socket_address=groundstation.CfnDataflowEndpointGroupV2.RangedSocketAddressProperty(
+                                        name="name",
+                                        port_range=groundstation.CfnDataflowEndpointGroupV2.IntegerRangeProperty(
+                                            maximum=123,
+                                            minimum=123
+                                        )
+                                    ),
+                
+                                    # the properties below are optional
+                                    mtu=123
+                                ),
+                                egress_address_and_port=groundstation.CfnDataflowEndpointGroupV2.ConnectionDetailsProperty(
+                                    socket_address=groundstation.CfnDataflowEndpointGroupV2.SocketAddressProperty(
+                                        name="name",
+                                        port=123
+                                    ),
+                
+                                    # the properties below are optional
+                                    mtu=123
+                                )
+                            )
+                        ),
+                        name="name"
+                    ),
+                    uplink_aws_ground_station_agent_endpoint=groundstation.CfnDataflowEndpointGroupV2.UplinkAwsGroundStationAgentEndpointProperty(
+                        dataflow_details=groundstation.CfnDataflowEndpointGroupV2.UplinkDataflowDetailsProperty(
+                            agent_connection_details=groundstation.CfnDataflowEndpointGroupV2.UplinkConnectionDetailsProperty(
+                                agent_ip_and_port_address=groundstation.CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty(
+                                    socket_address=groundstation.CfnDataflowEndpointGroupV2.RangedSocketAddressProperty(
+                                        name="name",
+                                        port_range=groundstation.CfnDataflowEndpointGroupV2.IntegerRangeProperty(
+                                            maximum=123,
+                                            minimum=123
+                                        )
+                                    ),
+                
+                                    # the properties below are optional
+                                    mtu=123
+                                ),
+                                ingress_address_and_port=groundstation.CfnDataflowEndpointGroupV2.ConnectionDetailsProperty(
+                                    socket_address=groundstation.CfnDataflowEndpointGroupV2.SocketAddressProperty(
+                                        name="name",
+                                        port=123
+                                    ),
+                
+                                    # the properties below are optional
+                                    mtu=123
+                                )
+                            )
+                        ),
+                        name="name"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__66de60a301e858fdd0d2203e7725f587995c04cef509b515c3ceac196a6f819b)
+                check_type(argname="argument downlink_aws_ground_station_agent_endpoint", value=downlink_aws_ground_station_agent_endpoint, expected_type=type_hints["downlink_aws_ground_station_agent_endpoint"])
+                check_type(argname="argument uplink_aws_ground_station_agent_endpoint", value=uplink_aws_ground_station_agent_endpoint, expected_type=type_hints["uplink_aws_ground_station_agent_endpoint"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if downlink_aws_ground_station_agent_endpoint is not None:
+                self._values["downlink_aws_ground_station_agent_endpoint"] = downlink_aws_ground_station_agent_endpoint
+            if uplink_aws_ground_station_agent_endpoint is not None:
+                self._values["uplink_aws_ground_station_agent_endpoint"] = uplink_aws_ground_station_agent_endpoint
+
+        @builtins.property
+        def downlink_aws_ground_station_agent_endpoint(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.DownlinkAwsGroundStationAgentEndpointProperty"]]:
+            '''Definition for a downlink agent endpoint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-createendpointdetails.html#cfn-groundstation-dataflowendpointgroupv2-createendpointdetails-downlinkawsgroundstationagentendpoint
+            '''
+            result = self._values.get("downlink_aws_ground_station_agent_endpoint")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.DownlinkAwsGroundStationAgentEndpointProperty"]], result)
+
+        @builtins.property
+        def uplink_aws_ground_station_agent_endpoint(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.UplinkAwsGroundStationAgentEndpointProperty"]]:
+            '''Definition for an uplink agent endpoint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-createendpointdetails.html#cfn-groundstation-dataflowendpointgroupv2-createendpointdetails-uplinkawsgroundstationagentendpoint
+            '''
+            result = self._values.get("uplink_aws_ground_station_agent_endpoint")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.UplinkAwsGroundStationAgentEndpointProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CreateEndpointDetailsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_groundstation.CfnDataflowEndpointGroupV2.DownlinkAwsGroundStationAgentEndpointDetailsProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "dataflow_details": "dataflowDetails",
+            "name": "name",
+            "agent_status": "agentStatus",
+            "audit_results": "auditResults",
+        },
+    )
+    class DownlinkAwsGroundStationAgentEndpointDetailsProperty:
+        def __init__(
+            self,
+            *,
+            dataflow_details: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroupV2.DownlinkDataflowDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
+            name: builtins.str,
+            agent_status: typing.Optional[builtins.str] = None,
+            audit_results: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Details for a downlink agent endpoint.
+
+            :param dataflow_details: Dataflow details for the downlink endpoint.
+            :param name: Downlink dataflow endpoint name.
+            :param agent_status: Status of the agent associated with the downlink dataflow endpoint.
+            :param audit_results: Health audit results for the downlink dataflow endpoint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-downlinkawsgroundstationagentendpointdetails.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_groundstation as groundstation
+                
+                downlink_aws_ground_station_agent_endpoint_details_property = groundstation.CfnDataflowEndpointGroupV2.DownlinkAwsGroundStationAgentEndpointDetailsProperty(
+                    dataflow_details=groundstation.CfnDataflowEndpointGroupV2.DownlinkDataflowDetailsProperty(
+                        agent_connection_details=groundstation.CfnDataflowEndpointGroupV2.DownlinkConnectionDetailsProperty(
+                            agent_ip_and_port_address=groundstation.CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty(
+                                socket_address=groundstation.CfnDataflowEndpointGroupV2.RangedSocketAddressProperty(
+                                    name="name",
+                                    port_range=groundstation.CfnDataflowEndpointGroupV2.IntegerRangeProperty(
+                                        maximum=123,
+                                        minimum=123
+                                    )
+                                ),
+                
+                                # the properties below are optional
+                                mtu=123
+                            ),
+                            egress_address_and_port=groundstation.CfnDataflowEndpointGroupV2.ConnectionDetailsProperty(
+                                socket_address=groundstation.CfnDataflowEndpointGroupV2.SocketAddressProperty(
+                                    name="name",
+                                    port=123
+                                ),
+                
+                                # the properties below are optional
+                                mtu=123
+                            )
+                        )
+                    ),
+                    name="name",
+                
+                    # the properties below are optional
+                    agent_status="agentStatus",
+                    audit_results="auditResults"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__a417a1b04d511865539513cbc1bf9b1d63e13cf7d317251678604544a5c09994)
+                check_type(argname="argument dataflow_details", value=dataflow_details, expected_type=type_hints["dataflow_details"])
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+                check_type(argname="argument agent_status", value=agent_status, expected_type=type_hints["agent_status"])
+                check_type(argname="argument audit_results", value=audit_results, expected_type=type_hints["audit_results"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "dataflow_details": dataflow_details,
+                "name": name,
+            }
+            if agent_status is not None:
+                self._values["agent_status"] = agent_status
+            if audit_results is not None:
+                self._values["audit_results"] = audit_results
+
+        @builtins.property
+        def dataflow_details(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.DownlinkDataflowDetailsProperty"]:
+            '''Dataflow details for the downlink endpoint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-downlinkawsgroundstationagentendpointdetails.html#cfn-groundstation-dataflowendpointgroupv2-downlinkawsgroundstationagentendpointdetails-dataflowdetails
+            '''
+            result = self._values.get("dataflow_details")
+            assert result is not None, "Required property 'dataflow_details' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.DownlinkDataflowDetailsProperty"], result)
+
+        @builtins.property
+        def name(self) -> builtins.str:
+            '''Downlink dataflow endpoint name.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-downlinkawsgroundstationagentendpointdetails.html#cfn-groundstation-dataflowendpointgroupv2-downlinkawsgroundstationagentendpointdetails-name
+            '''
+            result = self._values.get("name")
+            assert result is not None, "Required property 'name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def agent_status(self) -> typing.Optional[builtins.str]:
+            '''Status of the agent associated with the downlink dataflow endpoint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-downlinkawsgroundstationagentendpointdetails.html#cfn-groundstation-dataflowendpointgroupv2-downlinkawsgroundstationagentendpointdetails-agentstatus
+            '''
+            result = self._values.get("agent_status")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def audit_results(self) -> typing.Optional[builtins.str]:
+            '''Health audit results for the downlink dataflow endpoint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-downlinkawsgroundstationagentendpointdetails.html#cfn-groundstation-dataflowendpointgroupv2-downlinkawsgroundstationagentendpointdetails-auditresults
+            '''
+            result = self._values.get("audit_results")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "DownlinkAwsGroundStationAgentEndpointDetailsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_groundstation.CfnDataflowEndpointGroupV2.DownlinkAwsGroundStationAgentEndpointProperty",
+        jsii_struct_bases=[],
+        name_mapping={"dataflow_details": "dataflowDetails", "name": "name"},
+    )
+    class DownlinkAwsGroundStationAgentEndpointProperty:
+        def __init__(
+            self,
+            *,
+            dataflow_details: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroupV2.DownlinkDataflowDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
+            name: builtins.str,
+        ) -> None:
+            '''Definition for a downlink agent endpoint.
+
+            :param dataflow_details: Dataflow details for the downlink endpoint.
+            :param name: Downlink dataflow endpoint name.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-downlinkawsgroundstationagentendpoint.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_groundstation as groundstation
+                
+                downlink_aws_ground_station_agent_endpoint_property = groundstation.CfnDataflowEndpointGroupV2.DownlinkAwsGroundStationAgentEndpointProperty(
+                    dataflow_details=groundstation.CfnDataflowEndpointGroupV2.DownlinkDataflowDetailsProperty(
+                        agent_connection_details=groundstation.CfnDataflowEndpointGroupV2.DownlinkConnectionDetailsProperty(
+                            agent_ip_and_port_address=groundstation.CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty(
+                                socket_address=groundstation.CfnDataflowEndpointGroupV2.RangedSocketAddressProperty(
+                                    name="name",
+                                    port_range=groundstation.CfnDataflowEndpointGroupV2.IntegerRangeProperty(
+                                        maximum=123,
+                                        minimum=123
+                                    )
+                                ),
+                
+                                # the properties below are optional
+                                mtu=123
+                            ),
+                            egress_address_and_port=groundstation.CfnDataflowEndpointGroupV2.ConnectionDetailsProperty(
+                                socket_address=groundstation.CfnDataflowEndpointGroupV2.SocketAddressProperty(
+                                    name="name",
+                                    port=123
+                                ),
+                
+                                # the properties below are optional
+                                mtu=123
+                            )
+                        )
+                    ),
+                    name="name"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__15ab41303bf0da0f79d117ce201fdcba7ed62a7c881a9d1a16fbce475f69fa71)
+                check_type(argname="argument dataflow_details", value=dataflow_details, expected_type=type_hints["dataflow_details"])
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "dataflow_details": dataflow_details,
+                "name": name,
+            }
+
+        @builtins.property
+        def dataflow_details(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.DownlinkDataflowDetailsProperty"]:
+            '''Dataflow details for the downlink endpoint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-downlinkawsgroundstationagentendpoint.html#cfn-groundstation-dataflowendpointgroupv2-downlinkawsgroundstationagentendpoint-dataflowdetails
+            '''
+            result = self._values.get("dataflow_details")
+            assert result is not None, "Required property 'dataflow_details' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.DownlinkDataflowDetailsProperty"], result)
+
+        @builtins.property
+        def name(self) -> builtins.str:
+            '''Downlink dataflow endpoint name.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-downlinkawsgroundstationagentendpoint.html#cfn-groundstation-dataflowendpointgroupv2-downlinkawsgroundstationagentendpoint-name
+            '''
+            result = self._values.get("name")
+            assert result is not None, "Required property 'name' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "DownlinkAwsGroundStationAgentEndpointProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_groundstation.CfnDataflowEndpointGroupV2.DownlinkConnectionDetailsProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "agent_ip_and_port_address": "agentIpAndPortAddress",
+            "egress_address_and_port": "egressAddressAndPort",
+        },
+    )
+    class DownlinkConnectionDetailsProperty:
+        def __init__(
+            self,
+            *,
+            agent_ip_and_port_address: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
+            egress_address_and_port: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroupV2.ConnectionDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''Connection details for Ground Station to Agent and Agent to customer.
+
+            :param agent_ip_and_port_address: Agent IP and port address for the downlink connection.
+            :param egress_address_and_port: Egress address and port for the downlink connection.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-downlinkconnectiondetails.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_groundstation as groundstation
+                
+                downlink_connection_details_property = groundstation.CfnDataflowEndpointGroupV2.DownlinkConnectionDetailsProperty(
+                    agent_ip_and_port_address=groundstation.CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty(
+                        socket_address=groundstation.CfnDataflowEndpointGroupV2.RangedSocketAddressProperty(
+                            name="name",
+                            port_range=groundstation.CfnDataflowEndpointGroupV2.IntegerRangeProperty(
+                                maximum=123,
+                                minimum=123
+                            )
+                        ),
+                
+                        # the properties below are optional
+                        mtu=123
+                    ),
+                    egress_address_and_port=groundstation.CfnDataflowEndpointGroupV2.ConnectionDetailsProperty(
+                        socket_address=groundstation.CfnDataflowEndpointGroupV2.SocketAddressProperty(
+                            name="name",
+                            port=123
+                        ),
+                
+                        # the properties below are optional
+                        mtu=123
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__78a9cd08c23c4b90ff5db324ebb4fc125e3364c1708fffe222f64db415d71889)
+                check_type(argname="argument agent_ip_and_port_address", value=agent_ip_and_port_address, expected_type=type_hints["agent_ip_and_port_address"])
+                check_type(argname="argument egress_address_and_port", value=egress_address_and_port, expected_type=type_hints["egress_address_and_port"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "agent_ip_and_port_address": agent_ip_and_port_address,
+                "egress_address_and_port": egress_address_and_port,
+            }
+
+        @builtins.property
+        def agent_ip_and_port_address(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty"]:
+            '''Agent IP and port address for the downlink connection.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-downlinkconnectiondetails.html#cfn-groundstation-dataflowendpointgroupv2-downlinkconnectiondetails-agentipandportaddress
+            '''
+            result = self._values.get("agent_ip_and_port_address")
+            assert result is not None, "Required property 'agent_ip_and_port_address' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty"], result)
+
+        @builtins.property
+        def egress_address_and_port(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.ConnectionDetailsProperty"]:
+            '''Egress address and port for the downlink connection.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-downlinkconnectiondetails.html#cfn-groundstation-dataflowendpointgroupv2-downlinkconnectiondetails-egressaddressandport
+            '''
+            result = self._values.get("egress_address_and_port")
+            assert result is not None, "Required property 'egress_address_and_port' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.ConnectionDetailsProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "DownlinkConnectionDetailsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_groundstation.CfnDataflowEndpointGroupV2.DownlinkDataflowDetailsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"agent_connection_details": "agentConnectionDetails"},
+    )
+    class DownlinkDataflowDetailsProperty:
+        def __init__(
+            self,
+            *,
+            agent_connection_details: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroupV2.DownlinkConnectionDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''Dataflow details for a downlink endpoint.
+
+            :param agent_connection_details: Downlink connection details for customer to Agent and Agent to Ground Station.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-downlinkdataflowdetails.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_groundstation as groundstation
+                
+                downlink_dataflow_details_property = groundstation.CfnDataflowEndpointGroupV2.DownlinkDataflowDetailsProperty(
+                    agent_connection_details=groundstation.CfnDataflowEndpointGroupV2.DownlinkConnectionDetailsProperty(
+                        agent_ip_and_port_address=groundstation.CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty(
+                            socket_address=groundstation.CfnDataflowEndpointGroupV2.RangedSocketAddressProperty(
+                                name="name",
+                                port_range=groundstation.CfnDataflowEndpointGroupV2.IntegerRangeProperty(
+                                    maximum=123,
+                                    minimum=123
+                                )
+                            ),
+                
+                            # the properties below are optional
+                            mtu=123
+                        ),
+                        egress_address_and_port=groundstation.CfnDataflowEndpointGroupV2.ConnectionDetailsProperty(
+                            socket_address=groundstation.CfnDataflowEndpointGroupV2.SocketAddressProperty(
+                                name="name",
+                                port=123
+                            ),
+                
+                            # the properties below are optional
+                            mtu=123
+                        )
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__a6c167e5d5e1f35f991b35c20845368e9daf3cf60db38ab8f09f07ff6fea5904)
+                check_type(argname="argument agent_connection_details", value=agent_connection_details, expected_type=type_hints["agent_connection_details"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "agent_connection_details": agent_connection_details,
+            }
+
+        @builtins.property
+        def agent_connection_details(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.DownlinkConnectionDetailsProperty"]:
+            '''Downlink connection details for customer to Agent and Agent to Ground Station.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-downlinkdataflowdetails.html#cfn-groundstation-dataflowendpointgroupv2-downlinkdataflowdetails-agentconnectiondetails
+            '''
+            result = self._values.get("agent_connection_details")
+            assert result is not None, "Required property 'agent_connection_details' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.DownlinkConnectionDetailsProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "DownlinkDataflowDetailsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_groundstation.CfnDataflowEndpointGroupV2.EndpointDetailsProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "downlink_aws_ground_station_agent_endpoint": "downlinkAwsGroundStationAgentEndpoint",
+            "uplink_aws_ground_station_agent_endpoint": "uplinkAwsGroundStationAgentEndpoint",
+        },
+    )
+    class EndpointDetailsProperty:
+        def __init__(
+            self,
+            *,
+            downlink_aws_ground_station_agent_endpoint: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroupV2.DownlinkAwsGroundStationAgentEndpointDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            uplink_aws_ground_station_agent_endpoint: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroupV2.UplinkAwsGroundStationAgentEndpointDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''Information about the endpoint details.
+
+            :param downlink_aws_ground_station_agent_endpoint: Definition for a downlink agent endpoint.
+            :param uplink_aws_ground_station_agent_endpoint: Definition for an uplink agent endpoint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-endpointdetails.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_groundstation as groundstation
+                
+                endpoint_details_property = groundstation.CfnDataflowEndpointGroupV2.EndpointDetailsProperty(
+                    downlink_aws_ground_station_agent_endpoint=groundstation.CfnDataflowEndpointGroupV2.DownlinkAwsGroundStationAgentEndpointDetailsProperty(
+                        dataflow_details=groundstation.CfnDataflowEndpointGroupV2.DownlinkDataflowDetailsProperty(
+                            agent_connection_details=groundstation.CfnDataflowEndpointGroupV2.DownlinkConnectionDetailsProperty(
+                                agent_ip_and_port_address=groundstation.CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty(
+                                    socket_address=groundstation.CfnDataflowEndpointGroupV2.RangedSocketAddressProperty(
+                                        name="name",
+                                        port_range=groundstation.CfnDataflowEndpointGroupV2.IntegerRangeProperty(
+                                            maximum=123,
+                                            minimum=123
+                                        )
+                                    ),
+                
+                                    # the properties below are optional
+                                    mtu=123
+                                ),
+                                egress_address_and_port=groundstation.CfnDataflowEndpointGroupV2.ConnectionDetailsProperty(
+                                    socket_address=groundstation.CfnDataflowEndpointGroupV2.SocketAddressProperty(
+                                        name="name",
+                                        port=123
+                                    ),
+                
+                                    # the properties below are optional
+                                    mtu=123
+                                )
+                            )
+                        ),
+                        name="name",
+                
+                        # the properties below are optional
+                        agent_status="agentStatus",
+                        audit_results="auditResults"
+                    ),
+                    uplink_aws_ground_station_agent_endpoint=groundstation.CfnDataflowEndpointGroupV2.UplinkAwsGroundStationAgentEndpointDetailsProperty(
+                        dataflow_details=groundstation.CfnDataflowEndpointGroupV2.UplinkDataflowDetailsProperty(
+                            agent_connection_details=groundstation.CfnDataflowEndpointGroupV2.UplinkConnectionDetailsProperty(
+                                agent_ip_and_port_address=groundstation.CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty(
+                                    socket_address=groundstation.CfnDataflowEndpointGroupV2.RangedSocketAddressProperty(
+                                        name="name",
+                                        port_range=groundstation.CfnDataflowEndpointGroupV2.IntegerRangeProperty(
+                                            maximum=123,
+                                            minimum=123
+                                        )
+                                    ),
+                
+                                    # the properties below are optional
+                                    mtu=123
+                                ),
+                                ingress_address_and_port=groundstation.CfnDataflowEndpointGroupV2.ConnectionDetailsProperty(
+                                    socket_address=groundstation.CfnDataflowEndpointGroupV2.SocketAddressProperty(
+                                        name="name",
+                                        port=123
+                                    ),
+                
+                                    # the properties below are optional
+                                    mtu=123
+                                )
+                            )
+                        ),
+                        name="name",
+                
+                        # the properties below are optional
+                        agent_status="agentStatus",
+                        audit_results="auditResults"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__2fd2dbdebd7d9d80bd1d68fac423a06a0fbe75e85b5d49e34b24bd3dba40e7c3)
+                check_type(argname="argument downlink_aws_ground_station_agent_endpoint", value=downlink_aws_ground_station_agent_endpoint, expected_type=type_hints["downlink_aws_ground_station_agent_endpoint"])
+                check_type(argname="argument uplink_aws_ground_station_agent_endpoint", value=uplink_aws_ground_station_agent_endpoint, expected_type=type_hints["uplink_aws_ground_station_agent_endpoint"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if downlink_aws_ground_station_agent_endpoint is not None:
+                self._values["downlink_aws_ground_station_agent_endpoint"] = downlink_aws_ground_station_agent_endpoint
+            if uplink_aws_ground_station_agent_endpoint is not None:
+                self._values["uplink_aws_ground_station_agent_endpoint"] = uplink_aws_ground_station_agent_endpoint
+
+        @builtins.property
+        def downlink_aws_ground_station_agent_endpoint(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.DownlinkAwsGroundStationAgentEndpointDetailsProperty"]]:
+            '''Definition for a downlink agent endpoint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-endpointdetails.html#cfn-groundstation-dataflowendpointgroupv2-endpointdetails-downlinkawsgroundstationagentendpoint
+            '''
+            result = self._values.get("downlink_aws_ground_station_agent_endpoint")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.DownlinkAwsGroundStationAgentEndpointDetailsProperty"]], result)
+
+        @builtins.property
+        def uplink_aws_ground_station_agent_endpoint(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.UplinkAwsGroundStationAgentEndpointDetailsProperty"]]:
+            '''Definition for an uplink agent endpoint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-endpointdetails.html#cfn-groundstation-dataflowendpointgroupv2-endpointdetails-uplinkawsgroundstationagentendpoint
+            '''
+            result = self._values.get("uplink_aws_ground_station_agent_endpoint")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.UplinkAwsGroundStationAgentEndpointDetailsProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EndpointDetailsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_groundstation.CfnDataflowEndpointGroupV2.IntegerRangeProperty",
+        jsii_struct_bases=[],
+        name_mapping={"maximum": "maximum", "minimum": "minimum"},
+    )
+    class IntegerRangeProperty:
+        def __init__(self, *, maximum: jsii.Number, minimum: jsii.Number) -> None:
+            '''An integer range that has a minimum and maximum value.
+
+            :param maximum: A maximum value.
+            :param minimum: A minimum value.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-integerrange.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_groundstation as groundstation
+                
+                integer_range_property = groundstation.CfnDataflowEndpointGroupV2.IntegerRangeProperty(
+                    maximum=123,
+                    minimum=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__d9d536afda5ff20ea47aef9411d5a3f5431976a6634f3fcb3afcd0ca96a95bc8)
+                check_type(argname="argument maximum", value=maximum, expected_type=type_hints["maximum"])
+                check_type(argname="argument minimum", value=minimum, expected_type=type_hints["minimum"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "maximum": maximum,
+                "minimum": minimum,
+            }
+
+        @builtins.property
+        def maximum(self) -> jsii.Number:
+            '''A maximum value.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-integerrange.html#cfn-groundstation-dataflowendpointgroupv2-integerrange-maximum
+            '''
+            result = self._values.get("maximum")
+            assert result is not None, "Required property 'maximum' is missing"
+            return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def minimum(self) -> jsii.Number:
+            '''A minimum value.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-integerrange.html#cfn-groundstation-dataflowendpointgroupv2-integerrange-minimum
+            '''
+            result = self._values.get("minimum")
+            assert result is not None, "Required property 'minimum' is missing"
+            return typing.cast(jsii.Number, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "IntegerRangeProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_groundstation.CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"socket_address": "socketAddress", "mtu": "mtu"},
+    )
+    class RangedConnectionDetailsProperty:
+        def __init__(
+            self,
+            *,
+            socket_address: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroupV2.RangedSocketAddressProperty", typing.Dict[builtins.str, typing.Any]]],
+            mtu: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''Ingress address of AgentEndpoint with a port range and an optional mtu.
+
+            :param socket_address: A ranged socket address.
+            :param mtu: Maximum transmission unit (MTU) size in bytes of a dataflow endpoint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-rangedconnectiondetails.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_groundstation as groundstation
+                
+                ranged_connection_details_property = groundstation.CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty(
+                    socket_address=groundstation.CfnDataflowEndpointGroupV2.RangedSocketAddressProperty(
+                        name="name",
+                        port_range=groundstation.CfnDataflowEndpointGroupV2.IntegerRangeProperty(
+                            maximum=123,
+                            minimum=123
+                        )
+                    ),
+                
+                    # the properties below are optional
+                    mtu=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__882f6dae9d30a6df40846e45547623f0811ffb5fdce8b91ce2d1af3bb103f05e)
+                check_type(argname="argument socket_address", value=socket_address, expected_type=type_hints["socket_address"])
+                check_type(argname="argument mtu", value=mtu, expected_type=type_hints["mtu"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "socket_address": socket_address,
+            }
+            if mtu is not None:
+                self._values["mtu"] = mtu
+
+        @builtins.property
+        def socket_address(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.RangedSocketAddressProperty"]:
+            '''A ranged socket address.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-rangedconnectiondetails.html#cfn-groundstation-dataflowendpointgroupv2-rangedconnectiondetails-socketaddress
+            '''
+            result = self._values.get("socket_address")
+            assert result is not None, "Required property 'socket_address' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.RangedSocketAddressProperty"], result)
+
+        @builtins.property
+        def mtu(self) -> typing.Optional[jsii.Number]:
+            '''Maximum transmission unit (MTU) size in bytes of a dataflow endpoint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-rangedconnectiondetails.html#cfn-groundstation-dataflowendpointgroupv2-rangedconnectiondetails-mtu
+            '''
+            result = self._values.get("mtu")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RangedConnectionDetailsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_groundstation.CfnDataflowEndpointGroupV2.RangedSocketAddressProperty",
+        jsii_struct_bases=[],
+        name_mapping={"name": "name", "port_range": "portRange"},
+    )
+    class RangedSocketAddressProperty:
+        def __init__(
+            self,
+            *,
+            name: builtins.str,
+            port_range: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroupV2.IntegerRangeProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''A socket address with a port range.
+
+            :param name: IPv4 socket address.
+            :param port_range: Port range of a socket address.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-rangedsocketaddress.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_groundstation as groundstation
+                
+                ranged_socket_address_property = groundstation.CfnDataflowEndpointGroupV2.RangedSocketAddressProperty(
+                    name="name",
+                    port_range=groundstation.CfnDataflowEndpointGroupV2.IntegerRangeProperty(
+                        maximum=123,
+                        minimum=123
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__1cc9be83324b20f3dc7186b59bd240cc51a778d52994f0b5f2fb30c098a45f73)
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+                check_type(argname="argument port_range", value=port_range, expected_type=type_hints["port_range"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "name": name,
+                "port_range": port_range,
+            }
+
+        @builtins.property
+        def name(self) -> builtins.str:
+            '''IPv4 socket address.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-rangedsocketaddress.html#cfn-groundstation-dataflowendpointgroupv2-rangedsocketaddress-name
+            '''
+            result = self._values.get("name")
+            assert result is not None, "Required property 'name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def port_range(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.IntegerRangeProperty"]:
+            '''Port range of a socket address.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-rangedsocketaddress.html#cfn-groundstation-dataflowendpointgroupv2-rangedsocketaddress-portrange
+            '''
+            result = self._values.get("port_range")
+            assert result is not None, "Required property 'port_range' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.IntegerRangeProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RangedSocketAddressProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_groundstation.CfnDataflowEndpointGroupV2.SocketAddressProperty",
+        jsii_struct_bases=[],
+        name_mapping={"name": "name", "port": "port"},
+    )
+    class SocketAddressProperty:
+        def __init__(self, *, name: builtins.str, port: jsii.Number) -> None:
+            '''Information about the socket address.
+
+            :param name: Name of a socket address.
+            :param port: Port of a socket address.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-socketaddress.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_groundstation as groundstation
+                
+                socket_address_property = groundstation.CfnDataflowEndpointGroupV2.SocketAddressProperty(
+                    name="name",
+                    port=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__ed30a98d1382c0b255d8272a39fa47a40eb4b572f2195b6f1526ead9ee3b12bb)
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+                check_type(argname="argument port", value=port, expected_type=type_hints["port"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "name": name,
+                "port": port,
+            }
+
+        @builtins.property
+        def name(self) -> builtins.str:
+            '''Name of a socket address.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-socketaddress.html#cfn-groundstation-dataflowendpointgroupv2-socketaddress-name
+            '''
+            result = self._values.get("name")
+            assert result is not None, "Required property 'name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def port(self) -> jsii.Number:
+            '''Port of a socket address.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-socketaddress.html#cfn-groundstation-dataflowendpointgroupv2-socketaddress-port
+            '''
+            result = self._values.get("port")
+            assert result is not None, "Required property 'port' is missing"
+            return typing.cast(jsii.Number, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SocketAddressProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_groundstation.CfnDataflowEndpointGroupV2.UplinkAwsGroundStationAgentEndpointDetailsProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "dataflow_details": "dataflowDetails",
+            "name": "name",
+            "agent_status": "agentStatus",
+            "audit_results": "auditResults",
+        },
+    )
+    class UplinkAwsGroundStationAgentEndpointDetailsProperty:
+        def __init__(
+            self,
+            *,
+            dataflow_details: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroupV2.UplinkDataflowDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
+            name: builtins.str,
+            agent_status: typing.Optional[builtins.str] = None,
+            audit_results: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Details for an uplink agent endpoint.
+
+            :param dataflow_details: Dataflow details for the uplink endpoint.
+            :param name: Uplink dataflow endpoint name.
+            :param agent_status: Status of the agent associated with the uplink dataflow endpoint.
+            :param audit_results: Health audit results for the uplink dataflow endpoint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-uplinkawsgroundstationagentendpointdetails.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_groundstation as groundstation
+                
+                uplink_aws_ground_station_agent_endpoint_details_property = groundstation.CfnDataflowEndpointGroupV2.UplinkAwsGroundStationAgentEndpointDetailsProperty(
+                    dataflow_details=groundstation.CfnDataflowEndpointGroupV2.UplinkDataflowDetailsProperty(
+                        agent_connection_details=groundstation.CfnDataflowEndpointGroupV2.UplinkConnectionDetailsProperty(
+                            agent_ip_and_port_address=groundstation.CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty(
+                                socket_address=groundstation.CfnDataflowEndpointGroupV2.RangedSocketAddressProperty(
+                                    name="name",
+                                    port_range=groundstation.CfnDataflowEndpointGroupV2.IntegerRangeProperty(
+                                        maximum=123,
+                                        minimum=123
+                                    )
+                                ),
+                
+                                # the properties below are optional
+                                mtu=123
+                            ),
+                            ingress_address_and_port=groundstation.CfnDataflowEndpointGroupV2.ConnectionDetailsProperty(
+                                socket_address=groundstation.CfnDataflowEndpointGroupV2.SocketAddressProperty(
+                                    name="name",
+                                    port=123
+                                ),
+                
+                                # the properties below are optional
+                                mtu=123
+                            )
+                        )
+                    ),
+                    name="name",
+                
+                    # the properties below are optional
+                    agent_status="agentStatus",
+                    audit_results="auditResults"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__b3c2811ee6e952b54168efbb0a3197045f100fe8a3e94c8592b02bd29877ceef)
+                check_type(argname="argument dataflow_details", value=dataflow_details, expected_type=type_hints["dataflow_details"])
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+                check_type(argname="argument agent_status", value=agent_status, expected_type=type_hints["agent_status"])
+                check_type(argname="argument audit_results", value=audit_results, expected_type=type_hints["audit_results"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "dataflow_details": dataflow_details,
+                "name": name,
+            }
+            if agent_status is not None:
+                self._values["agent_status"] = agent_status
+            if audit_results is not None:
+                self._values["audit_results"] = audit_results
+
+        @builtins.property
+        def dataflow_details(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.UplinkDataflowDetailsProperty"]:
+            '''Dataflow details for the uplink endpoint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-uplinkawsgroundstationagentendpointdetails.html#cfn-groundstation-dataflowendpointgroupv2-uplinkawsgroundstationagentendpointdetails-dataflowdetails
+            '''
+            result = self._values.get("dataflow_details")
+            assert result is not None, "Required property 'dataflow_details' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.UplinkDataflowDetailsProperty"], result)
+
+        @builtins.property
+        def name(self) -> builtins.str:
+            '''Uplink dataflow endpoint name.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-uplinkawsgroundstationagentendpointdetails.html#cfn-groundstation-dataflowendpointgroupv2-uplinkawsgroundstationagentendpointdetails-name
+            '''
+            result = self._values.get("name")
+            assert result is not None, "Required property 'name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def agent_status(self) -> typing.Optional[builtins.str]:
+            '''Status of the agent associated with the uplink dataflow endpoint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-uplinkawsgroundstationagentendpointdetails.html#cfn-groundstation-dataflowendpointgroupv2-uplinkawsgroundstationagentendpointdetails-agentstatus
+            '''
+            result = self._values.get("agent_status")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def audit_results(self) -> typing.Optional[builtins.str]:
+            '''Health audit results for the uplink dataflow endpoint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-uplinkawsgroundstationagentendpointdetails.html#cfn-groundstation-dataflowendpointgroupv2-uplinkawsgroundstationagentendpointdetails-auditresults
+            '''
+            result = self._values.get("audit_results")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "UplinkAwsGroundStationAgentEndpointDetailsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_groundstation.CfnDataflowEndpointGroupV2.UplinkAwsGroundStationAgentEndpointProperty",
+        jsii_struct_bases=[],
+        name_mapping={"dataflow_details": "dataflowDetails", "name": "name"},
+    )
+    class UplinkAwsGroundStationAgentEndpointProperty:
+        def __init__(
+            self,
+            *,
+            dataflow_details: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroupV2.UplinkDataflowDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
+            name: builtins.str,
+        ) -> None:
+            '''Definition for an uplink agent endpoint.
+
+            :param dataflow_details: Dataflow details for the uplink endpoint.
+            :param name: Uplink dataflow endpoint name.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-uplinkawsgroundstationagentendpoint.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_groundstation as groundstation
+                
+                uplink_aws_ground_station_agent_endpoint_property = groundstation.CfnDataflowEndpointGroupV2.UplinkAwsGroundStationAgentEndpointProperty(
+                    dataflow_details=groundstation.CfnDataflowEndpointGroupV2.UplinkDataflowDetailsProperty(
+                        agent_connection_details=groundstation.CfnDataflowEndpointGroupV2.UplinkConnectionDetailsProperty(
+                            agent_ip_and_port_address=groundstation.CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty(
+                                socket_address=groundstation.CfnDataflowEndpointGroupV2.RangedSocketAddressProperty(
+                                    name="name",
+                                    port_range=groundstation.CfnDataflowEndpointGroupV2.IntegerRangeProperty(
+                                        maximum=123,
+                                        minimum=123
+                                    )
+                                ),
+                
+                                # the properties below are optional
+                                mtu=123
+                            ),
+                            ingress_address_and_port=groundstation.CfnDataflowEndpointGroupV2.ConnectionDetailsProperty(
+                                socket_address=groundstation.CfnDataflowEndpointGroupV2.SocketAddressProperty(
+                                    name="name",
+                                    port=123
+                                ),
+                
+                                # the properties below are optional
+                                mtu=123
+                            )
+                        )
+                    ),
+                    name="name"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__01cdfd0c19f7ca0315a2277a8033c43679ae27a6caf04925c645e71b1e6f0e28)
+                check_type(argname="argument dataflow_details", value=dataflow_details, expected_type=type_hints["dataflow_details"])
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "dataflow_details": dataflow_details,
+                "name": name,
+            }
+
+        @builtins.property
+        def dataflow_details(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.UplinkDataflowDetailsProperty"]:
+            '''Dataflow details for the uplink endpoint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-uplinkawsgroundstationagentendpoint.html#cfn-groundstation-dataflowendpointgroupv2-uplinkawsgroundstationagentendpoint-dataflowdetails
+            '''
+            result = self._values.get("dataflow_details")
+            assert result is not None, "Required property 'dataflow_details' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.UplinkDataflowDetailsProperty"], result)
+
+        @builtins.property
+        def name(self) -> builtins.str:
+            '''Uplink dataflow endpoint name.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-uplinkawsgroundstationagentendpoint.html#cfn-groundstation-dataflowendpointgroupv2-uplinkawsgroundstationagentendpoint-name
+            '''
+            result = self._values.get("name")
+            assert result is not None, "Required property 'name' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "UplinkAwsGroundStationAgentEndpointProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_groundstation.CfnDataflowEndpointGroupV2.UplinkConnectionDetailsProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "agent_ip_and_port_address": "agentIpAndPortAddress",
+            "ingress_address_and_port": "ingressAddressAndPort",
+        },
+    )
+    class UplinkConnectionDetailsProperty:
+        def __init__(
+            self,
+            *,
+            agent_ip_and_port_address: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
+            ingress_address_and_port: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroupV2.ConnectionDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''Connection details for customer to Agent and Agent to Ground Station.
+
+            :param agent_ip_and_port_address: Agent IP and port address for the uplink connection.
+            :param ingress_address_and_port: Ingress address and port for the uplink connection.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-uplinkconnectiondetails.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_groundstation as groundstation
+                
+                uplink_connection_details_property = groundstation.CfnDataflowEndpointGroupV2.UplinkConnectionDetailsProperty(
+                    agent_ip_and_port_address=groundstation.CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty(
+                        socket_address=groundstation.CfnDataflowEndpointGroupV2.RangedSocketAddressProperty(
+                            name="name",
+                            port_range=groundstation.CfnDataflowEndpointGroupV2.IntegerRangeProperty(
+                                maximum=123,
+                                minimum=123
+                            )
+                        ),
+                
+                        # the properties below are optional
+                        mtu=123
+                    ),
+                    ingress_address_and_port=groundstation.CfnDataflowEndpointGroupV2.ConnectionDetailsProperty(
+                        socket_address=groundstation.CfnDataflowEndpointGroupV2.SocketAddressProperty(
+                            name="name",
+                            port=123
+                        ),
+                
+                        # the properties below are optional
+                        mtu=123
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__b417804a63c4792d7bafc5d2b26cdf9e4a202d7fb359b47503d1000adf434709)
+                check_type(argname="argument agent_ip_and_port_address", value=agent_ip_and_port_address, expected_type=type_hints["agent_ip_and_port_address"])
+                check_type(argname="argument ingress_address_and_port", value=ingress_address_and_port, expected_type=type_hints["ingress_address_and_port"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "agent_ip_and_port_address": agent_ip_and_port_address,
+                "ingress_address_and_port": ingress_address_and_port,
+            }
+
+        @builtins.property
+        def agent_ip_and_port_address(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty"]:
+            '''Agent IP and port address for the uplink connection.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-uplinkconnectiondetails.html#cfn-groundstation-dataflowendpointgroupv2-uplinkconnectiondetails-agentipandportaddress
+            '''
+            result = self._values.get("agent_ip_and_port_address")
+            assert result is not None, "Required property 'agent_ip_and_port_address' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty"], result)
+
+        @builtins.property
+        def ingress_address_and_port(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.ConnectionDetailsProperty"]:
+            '''Ingress address and port for the uplink connection.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-uplinkconnectiondetails.html#cfn-groundstation-dataflowendpointgroupv2-uplinkconnectiondetails-ingressaddressandport
+            '''
+            result = self._values.get("ingress_address_and_port")
+            assert result is not None, "Required property 'ingress_address_and_port' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.ConnectionDetailsProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "UplinkConnectionDetailsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_groundstation.CfnDataflowEndpointGroupV2.UplinkDataflowDetailsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"agent_connection_details": "agentConnectionDetails"},
+    )
+    class UplinkDataflowDetailsProperty:
+        def __init__(
+            self,
+            *,
+            agent_connection_details: typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroupV2.UplinkConnectionDetailsProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''Dataflow details for an uplink endpoint.
+
+            :param agent_connection_details: Uplink connection details for customer to Agent and Agent to Ground Station.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-uplinkdataflowdetails.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_groundstation as groundstation
+                
+                uplink_dataflow_details_property = groundstation.CfnDataflowEndpointGroupV2.UplinkDataflowDetailsProperty(
+                    agent_connection_details=groundstation.CfnDataflowEndpointGroupV2.UplinkConnectionDetailsProperty(
+                        agent_ip_and_port_address=groundstation.CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty(
+                            socket_address=groundstation.CfnDataflowEndpointGroupV2.RangedSocketAddressProperty(
+                                name="name",
+                                port_range=groundstation.CfnDataflowEndpointGroupV2.IntegerRangeProperty(
+                                    maximum=123,
+                                    minimum=123
+                                )
+                            ),
+                
+                            # the properties below are optional
+                            mtu=123
+                        ),
+                        ingress_address_and_port=groundstation.CfnDataflowEndpointGroupV2.ConnectionDetailsProperty(
+                            socket_address=groundstation.CfnDataflowEndpointGroupV2.SocketAddressProperty(
+                                name="name",
+                                port=123
+                            ),
+                
+                            # the properties below are optional
+                            mtu=123
+                        )
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__4716cee3ee78796ff5a765dd13630cb2b16d314dd0a6ef3f6f91e3bb23b08ae0)
+                check_type(argname="argument agent_connection_details", value=agent_connection_details, expected_type=type_hints["agent_connection_details"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "agent_connection_details": agent_connection_details,
+            }
+
+        @builtins.property
+        def agent_connection_details(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.UplinkConnectionDetailsProperty"]:
+            '''Uplink connection details for customer to Agent and Agent to Ground Station.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-groundstation-dataflowendpointgroupv2-uplinkdataflowdetails.html#cfn-groundstation-dataflowendpointgroupv2-uplinkdataflowdetails-agentconnectiondetails
+            '''
+            result = self._values.get("agent_connection_details")
+            assert result is not None, "Required property 'agent_connection_details' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.UplinkConnectionDetailsProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "UplinkDataflowDetailsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_groundstation.CfnDataflowEndpointGroupV2Props",
+    jsii_struct_bases=[],
+    name_mapping={
+        "contact_post_pass_duration_seconds": "contactPostPassDurationSeconds",
+        "contact_pre_pass_duration_seconds": "contactPrePassDurationSeconds",
+        "endpoints": "endpoints",
+        "tags": "tags",
+    },
+)
+class CfnDataflowEndpointGroupV2Props:
+    def __init__(
+        self,
+        *,
+        contact_post_pass_duration_seconds: typing.Optional[jsii.Number] = None,
+        contact_pre_pass_duration_seconds: typing.Optional[jsii.Number] = None,
+        endpoints: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDataflowEndpointGroupV2.CreateEndpointDetailsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnDataflowEndpointGroupV2``.
+
+        :param contact_post_pass_duration_seconds: Amount of time, in seconds, after a contact ends that the Ground Station Dataflow Endpoint Group will be in a POSTPASS state.
+        :param contact_pre_pass_duration_seconds: Amount of time, in seconds, before a contact starts that the Ground Station Dataflow Endpoint Group will be in a PREPASS state.
+        :param endpoints: List of endpoints for the dataflow endpoint group.
+        :param tags: Tags assigned to a resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-groundstation-dataflowendpointgroupv2.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            from aws_cdk import CfnTag
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_groundstation as groundstation
+            
+            cfn_dataflow_endpoint_group_v2_props = groundstation.CfnDataflowEndpointGroupV2Props(
+                contact_post_pass_duration_seconds=123,
+                contact_pre_pass_duration_seconds=123,
+                endpoints=[groundstation.CfnDataflowEndpointGroupV2.CreateEndpointDetailsProperty(
+                    downlink_aws_ground_station_agent_endpoint=groundstation.CfnDataflowEndpointGroupV2.DownlinkAwsGroundStationAgentEndpointProperty(
+                        dataflow_details=groundstation.CfnDataflowEndpointGroupV2.DownlinkDataflowDetailsProperty(
+                            agent_connection_details=groundstation.CfnDataflowEndpointGroupV2.DownlinkConnectionDetailsProperty(
+                                agent_ip_and_port_address=groundstation.CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty(
+                                    socket_address=groundstation.CfnDataflowEndpointGroupV2.RangedSocketAddressProperty(
+                                        name="name",
+                                        port_range=groundstation.CfnDataflowEndpointGroupV2.IntegerRangeProperty(
+                                            maximum=123,
+                                            minimum=123
+                                        )
+                                    ),
+            
+                                    # the properties below are optional
+                                    mtu=123
+                                ),
+                                egress_address_and_port=groundstation.CfnDataflowEndpointGroupV2.ConnectionDetailsProperty(
+                                    socket_address=groundstation.CfnDataflowEndpointGroupV2.SocketAddressProperty(
+                                        name="name",
+                                        port=123
+                                    ),
+            
+                                    # the properties below are optional
+                                    mtu=123
+                                )
+                            )
+                        ),
+                        name="name"
+                    ),
+                    uplink_aws_ground_station_agent_endpoint=groundstation.CfnDataflowEndpointGroupV2.UplinkAwsGroundStationAgentEndpointProperty(
+                        dataflow_details=groundstation.CfnDataflowEndpointGroupV2.UplinkDataflowDetailsProperty(
+                            agent_connection_details=groundstation.CfnDataflowEndpointGroupV2.UplinkConnectionDetailsProperty(
+                                agent_ip_and_port_address=groundstation.CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty(
+                                    socket_address=groundstation.CfnDataflowEndpointGroupV2.RangedSocketAddressProperty(
+                                        name="name",
+                                        port_range=groundstation.CfnDataflowEndpointGroupV2.IntegerRangeProperty(
+                                            maximum=123,
+                                            minimum=123
+                                        )
+                                    ),
+            
+                                    # the properties below are optional
+                                    mtu=123
+                                ),
+                                ingress_address_and_port=groundstation.CfnDataflowEndpointGroupV2.ConnectionDetailsProperty(
+                                    socket_address=groundstation.CfnDataflowEndpointGroupV2.SocketAddressProperty(
+                                        name="name",
+                                        port=123
+                                    ),
+            
+                                    # the properties below are optional
+                                    mtu=123
+                                )
+                            )
+                        ),
+                        name="name"
+                    )
+                )],
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0983faa4ac567c0b99f7a0c783cec7084628c8fbee11ee54d4b5543ba8d3e5e6)
+            check_type(argname="argument contact_post_pass_duration_seconds", value=contact_post_pass_duration_seconds, expected_type=type_hints["contact_post_pass_duration_seconds"])
+            check_type(argname="argument contact_pre_pass_duration_seconds", value=contact_pre_pass_duration_seconds, expected_type=type_hints["contact_pre_pass_duration_seconds"])
+            check_type(argname="argument endpoints", value=endpoints, expected_type=type_hints["endpoints"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if contact_post_pass_duration_seconds is not None:
+            self._values["contact_post_pass_duration_seconds"] = contact_post_pass_duration_seconds
+        if contact_pre_pass_duration_seconds is not None:
+            self._values["contact_pre_pass_duration_seconds"] = contact_pre_pass_duration_seconds
+        if endpoints is not None:
+            self._values["endpoints"] = endpoints
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def contact_post_pass_duration_seconds(self) -> typing.Optional[jsii.Number]:
+        '''Amount of time, in seconds, after a contact ends that the Ground Station Dataflow Endpoint Group will be in a POSTPASS state.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-groundstation-dataflowendpointgroupv2.html#cfn-groundstation-dataflowendpointgroupv2-contactpostpassdurationseconds
+        '''
+        result = self._values.get("contact_post_pass_duration_seconds")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def contact_pre_pass_duration_seconds(self) -> typing.Optional[jsii.Number]:
+        '''Amount of time, in seconds, before a contact starts that the Ground Station Dataflow Endpoint Group will be in a PREPASS state.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-groundstation-dataflowendpointgroupv2.html#cfn-groundstation-dataflowendpointgroupv2-contactprepassdurationseconds
+        '''
+        result = self._values.get("contact_pre_pass_duration_seconds")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def endpoints(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.CreateEndpointDetailsProperty"]]]]:
+        '''List of endpoints for the dataflow endpoint group.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-groundstation-dataflowendpointgroupv2.html#cfn-groundstation-dataflowendpointgroupv2-endpoints
+        '''
+        result = self._values.get("endpoints")
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDataflowEndpointGroupV2.CreateEndpointDetailsProperty"]]]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
+        '''Tags assigned to a resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-groundstation-dataflowendpointgroupv2.html#cfn-groundstation-dataflowendpointgroupv2-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnDataflowEndpointGroupV2Props(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.implements(_IInspectable_c2943556, _IMissionProfileRef_941bd296, _ITaggable_36806126)
 class CfnMissionProfile(
     _CfnResource_9df397a6,
@@ -3839,6 +5751,8 @@ __all__ = [
     "CfnConfigProps",
     "CfnDataflowEndpointGroup",
     "CfnDataflowEndpointGroupProps",
+    "CfnDataflowEndpointGroupV2",
+    "CfnDataflowEndpointGroupV2Props",
     "CfnMissionProfile",
     "CfnMissionProfileProps",
 ]
@@ -4191,6 +6105,198 @@ def _typecheckingstub__063930c43a6ff97faaee9a4c322e7e786cb86ec9ca51ac8c6d171f9a4
     endpoint_details: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataflowEndpointGroup.EndpointDetailsProperty, typing.Dict[builtins.str, typing.Any]]]]],
     contact_post_pass_duration_seconds: typing.Optional[jsii.Number] = None,
     contact_pre_pass_duration_seconds: typing.Optional[jsii.Number] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d2e60b33a4f971173adc3870582147594d3dc420e78e52e4b79a67a6c495c946(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    contact_post_pass_duration_seconds: typing.Optional[jsii.Number] = None,
+    contact_pre_pass_duration_seconds: typing.Optional[jsii.Number] = None,
+    endpoints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataflowEndpointGroupV2.CreateEndpointDetailsProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__50cf5e7a2c0a35a59864fca12b408e28629b5e997f4b61dcd968e80aab3a2fef(
+    resource: _IDataflowEndpointGroupV2Ref_2f95eb4f,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2e120a8548a43d7db4db37beeb9c69e89797dd0225c8cba83040e9988678dd7d(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__013aa982627a60606a6ccccf55a4792c5ce7ae8929f4cc0d8854635503e58086(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6b3f19a98a1664e323a23c3fccc6dec673f0c2fc57f177c07224b515d6bf190e(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3c131a8656742ea4977e6718d582f7038b2a15ecdcab7f29050c11b410c0499f(
+    value: typing.Optional[jsii.Number],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f6961a5a542de3095fba90b602069436ed50bb4f8cfc750302285cbb8090f749(
+    value: typing.Optional[jsii.Number],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e750ec1e3e40870deb06f4e079867b08b391d8caaae5b4430bdd8982e8f6e6fe(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDataflowEndpointGroupV2.CreateEndpointDetailsProperty]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d5dd88f1acaa27720877cdd3c9681eb01e73c2667c52f00e1c830b3852587ff6(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__24b67200167046ed13df91bad37a2e4f9e0e99877947e4da1e0622b06df66a17(
+    *,
+    socket_address: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataflowEndpointGroupV2.SocketAddressProperty, typing.Dict[builtins.str, typing.Any]]],
+    mtu: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__66de60a301e858fdd0d2203e7725f587995c04cef509b515c3ceac196a6f819b(
+    *,
+    downlink_aws_ground_station_agent_endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataflowEndpointGroupV2.DownlinkAwsGroundStationAgentEndpointProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    uplink_aws_ground_station_agent_endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataflowEndpointGroupV2.UplinkAwsGroundStationAgentEndpointProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a417a1b04d511865539513cbc1bf9b1d63e13cf7d317251678604544a5c09994(
+    *,
+    dataflow_details: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataflowEndpointGroupV2.DownlinkDataflowDetailsProperty, typing.Dict[builtins.str, typing.Any]]],
+    name: builtins.str,
+    agent_status: typing.Optional[builtins.str] = None,
+    audit_results: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__15ab41303bf0da0f79d117ce201fdcba7ed62a7c881a9d1a16fbce475f69fa71(
+    *,
+    dataflow_details: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataflowEndpointGroupV2.DownlinkDataflowDetailsProperty, typing.Dict[builtins.str, typing.Any]]],
+    name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__78a9cd08c23c4b90ff5db324ebb4fc125e3364c1708fffe222f64db415d71889(
+    *,
+    agent_ip_and_port_address: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty, typing.Dict[builtins.str, typing.Any]]],
+    egress_address_and_port: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataflowEndpointGroupV2.ConnectionDetailsProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a6c167e5d5e1f35f991b35c20845368e9daf3cf60db38ab8f09f07ff6fea5904(
+    *,
+    agent_connection_details: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataflowEndpointGroupV2.DownlinkConnectionDetailsProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2fd2dbdebd7d9d80bd1d68fac423a06a0fbe75e85b5d49e34b24bd3dba40e7c3(
+    *,
+    downlink_aws_ground_station_agent_endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataflowEndpointGroupV2.DownlinkAwsGroundStationAgentEndpointDetailsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    uplink_aws_ground_station_agent_endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataflowEndpointGroupV2.UplinkAwsGroundStationAgentEndpointDetailsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d9d536afda5ff20ea47aef9411d5a3f5431976a6634f3fcb3afcd0ca96a95bc8(
+    *,
+    maximum: jsii.Number,
+    minimum: jsii.Number,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__882f6dae9d30a6df40846e45547623f0811ffb5fdce8b91ce2d1af3bb103f05e(
+    *,
+    socket_address: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataflowEndpointGroupV2.RangedSocketAddressProperty, typing.Dict[builtins.str, typing.Any]]],
+    mtu: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1cc9be83324b20f3dc7186b59bd240cc51a778d52994f0b5f2fb30c098a45f73(
+    *,
+    name: builtins.str,
+    port_range: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataflowEndpointGroupV2.IntegerRangeProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ed30a98d1382c0b255d8272a39fa47a40eb4b572f2195b6f1526ead9ee3b12bb(
+    *,
+    name: builtins.str,
+    port: jsii.Number,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b3c2811ee6e952b54168efbb0a3197045f100fe8a3e94c8592b02bd29877ceef(
+    *,
+    dataflow_details: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataflowEndpointGroupV2.UplinkDataflowDetailsProperty, typing.Dict[builtins.str, typing.Any]]],
+    name: builtins.str,
+    agent_status: typing.Optional[builtins.str] = None,
+    audit_results: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__01cdfd0c19f7ca0315a2277a8033c43679ae27a6caf04925c645e71b1e6f0e28(
+    *,
+    dataflow_details: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataflowEndpointGroupV2.UplinkDataflowDetailsProperty, typing.Dict[builtins.str, typing.Any]]],
+    name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b417804a63c4792d7bafc5d2b26cdf9e4a202d7fb359b47503d1000adf434709(
+    *,
+    agent_ip_and_port_address: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataflowEndpointGroupV2.RangedConnectionDetailsProperty, typing.Dict[builtins.str, typing.Any]]],
+    ingress_address_and_port: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataflowEndpointGroupV2.ConnectionDetailsProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4716cee3ee78796ff5a765dd13630cb2b16d314dd0a6ef3f6f91e3bb23b08ae0(
+    *,
+    agent_connection_details: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataflowEndpointGroupV2.UplinkConnectionDetailsProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0983faa4ac567c0b99f7a0c783cec7084628c8fbee11ee54d4b5543ba8d3e5e6(
+    *,
+    contact_post_pass_duration_seconds: typing.Optional[jsii.Number] = None,
+    contact_pre_pass_duration_seconds: typing.Optional[jsii.Number] = None,
+    endpoints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataflowEndpointGroupV2.CreateEndpointDetailsProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""

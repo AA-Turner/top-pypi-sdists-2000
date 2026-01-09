@@ -397,7 +397,7 @@ class CfnBillingGroup(
 
             :param auto_associate: Specifies if this billing group will automatically associate newly added AWS accounts that join your consolidated billing family.
             :param linked_account_ids: The account IDs that make up the billing group. Account IDs must be a part of the consolidated billing family, and not associated with another billing group.
-            :param responsibility_transfer_arn: 
+            :param responsibility_transfer_arn: The Amazon Resource Name (ARN) that identifies the transfer relationship owned by the Bill Transfer account (caller account). When specified, the PrimaryAccountId is no longer required.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-billingconductor-billinggroup-accountgrouping.html
             :exampleMetadata: fixture=_generated
@@ -451,7 +451,10 @@ class CfnBillingGroup(
 
         @builtins.property
         def responsibility_transfer_arn(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The Amazon Resource Name (ARN) that identifies the transfer relationship owned by the Bill Transfer account (caller account).
+
+            When specified, the PrimaryAccountId is no longer required.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-billingconductor-billinggroup-accountgrouping.html#cfn-billingconductor-billinggroup-accountgrouping-responsibilitytransferarn
             '''
             result = self._values.get("responsibility_transfer_arn")

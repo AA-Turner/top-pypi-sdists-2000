@@ -675,13 +675,12 @@ class PrimaryTaskSetReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_ecs.ServiceReference",
     jsii_struct_bases=[],
-    name_mapping={"cluster": "cluster", "service_arn": "serviceArn"},
+    name_mapping={"service_arn": "serviceArn"},
 )
 class ServiceReference:
-    def __init__(self, *, cluster: builtins.str, service_arn: builtins.str) -> None:
+    def __init__(self, *, service_arn: builtins.str) -> None:
         '''A reference to a Service resource.
 
-        :param cluster: The Cluster of the Service resource.
         :param service_arn: The ServiceArn of the Service resource.
 
         :exampleMetadata: fixture=_generated
@@ -693,25 +692,15 @@ class ServiceReference:
             from aws_cdk.interfaces import aws_ecs as interfaces_ecs
             
             service_reference = interfaces_ecs.ServiceReference(
-                cluster="cluster",
                 service_arn="serviceArn"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__222e58c3bfd0aefe61c64da263b2f2f7ee538bff76050254c35072818cb84d58)
-            check_type(argname="argument cluster", value=cluster, expected_type=type_hints["cluster"])
             check_type(argname="argument service_arn", value=service_arn, expected_type=type_hints["service_arn"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "cluster": cluster,
             "service_arn": service_arn,
         }
-
-    @builtins.property
-    def cluster(self) -> builtins.str:
-        '''The Cluster of the Service resource.'''
-        result = self._values.get("cluster")
-        assert result is not None, "Required property 'cluster' is missing"
-        return typing.cast(builtins.str, result)
 
     @builtins.property
     def service_arn(self) -> builtins.str:
@@ -922,7 +911,6 @@ def _typecheckingstub__4a1b939f002ad0ae1231600a088f90e5a07ee32dc47266ea7d20bc402
 
 def _typecheckingstub__222e58c3bfd0aefe61c64da263b2f2f7ee538bff76050254c35072818cb84d58(
     *,
-    cluster: builtins.str,
     service_arn: builtins.str,
 ) -> None:
     """Type checking stubs"""

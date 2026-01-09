@@ -37,22 +37,13 @@ from .. import IEnvironmentAware as _IEnvironmentAware_f39049ee
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_appmesh.GatewayRouteReference",
     jsii_struct_bases=[],
-    name_mapping={
-        "gateway_route_arn": "gatewayRouteArn",
-        "gateway_route_id": "gatewayRouteId",
-    },
+    name_mapping={"gateway_route_arn": "gatewayRouteArn"},
 )
 class GatewayRouteReference:
-    def __init__(
-        self,
-        *,
-        gateway_route_arn: builtins.str,
-        gateway_route_id: builtins.str,
-    ) -> None:
+    def __init__(self, *, gateway_route_arn: builtins.str) -> None:
         '''A reference to a GatewayRoute resource.
 
-        :param gateway_route_arn: The ARN of the GatewayRoute resource.
-        :param gateway_route_id: The Id of the GatewayRoute resource.
+        :param gateway_route_arn: The Arn of the GatewayRoute resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -63,31 +54,21 @@ class GatewayRouteReference:
             from aws_cdk.interfaces import aws_appmesh as interfaces_appmesh
             
             gateway_route_reference = interfaces_appmesh.GatewayRouteReference(
-                gateway_route_arn="gatewayRouteArn",
-                gateway_route_id="gatewayRouteId"
+                gateway_route_arn="gatewayRouteArn"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__32f9dfc866e97093a7680c54e7baaba765d04e694a0898a329ffd7263580b8b3)
             check_type(argname="argument gateway_route_arn", value=gateway_route_arn, expected_type=type_hints["gateway_route_arn"])
-            check_type(argname="argument gateway_route_id", value=gateway_route_id, expected_type=type_hints["gateway_route_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "gateway_route_arn": gateway_route_arn,
-            "gateway_route_id": gateway_route_id,
         }
 
     @builtins.property
     def gateway_route_arn(self) -> builtins.str:
-        '''The ARN of the GatewayRoute resource.'''
+        '''The Arn of the GatewayRoute resource.'''
         result = self._values.get("gateway_route_arn")
         assert result is not None, "Required property 'gateway_route_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def gateway_route_id(self) -> builtins.str:
-        '''The Id of the GatewayRoute resource.'''
-        result = self._values.get("gateway_route_id")
-        assert result is not None, "Required property 'gateway_route_id' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -420,14 +401,13 @@ typing.cast(typing.Any, IVirtualServiceRef).__jsii_proxy_class__ = lambda : _IVi
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_appmesh.MeshReference",
     jsii_struct_bases=[],
-    name_mapping={"mesh_arn": "meshArn", "mesh_id": "meshId"},
+    name_mapping={"mesh_arn": "meshArn"},
 )
 class MeshReference:
-    def __init__(self, *, mesh_arn: builtins.str, mesh_id: builtins.str) -> None:
+    def __init__(self, *, mesh_arn: builtins.str) -> None:
         '''A reference to a Mesh resource.
 
-        :param mesh_arn: The ARN of the Mesh resource.
-        :param mesh_id: The Id of the Mesh resource.
+        :param mesh_arn: The Arn of the Mesh resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -438,31 +418,21 @@ class MeshReference:
             from aws_cdk.interfaces import aws_appmesh as interfaces_appmesh
             
             mesh_reference = interfaces_appmesh.MeshReference(
-                mesh_arn="meshArn",
-                mesh_id="meshId"
+                mesh_arn="meshArn"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__2b90d52e88f982a2eae93b3122a7a4c5eecc4ef9a4b13b5c948b3446f391e924)
             check_type(argname="argument mesh_arn", value=mesh_arn, expected_type=type_hints["mesh_arn"])
-            check_type(argname="argument mesh_id", value=mesh_id, expected_type=type_hints["mesh_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "mesh_arn": mesh_arn,
-            "mesh_id": mesh_id,
         }
 
     @builtins.property
     def mesh_arn(self) -> builtins.str:
-        '''The ARN of the Mesh resource.'''
+        '''The Arn of the Mesh resource.'''
         result = self._values.get("mesh_arn")
         assert result is not None, "Required property 'mesh_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def mesh_id(self) -> builtins.str:
-        '''The Id of the Mesh resource.'''
-        result = self._values.get("mesh_id")
-        assert result is not None, "Required property 'mesh_id' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -480,14 +450,13 @@ class MeshReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_appmesh.RouteReference",
     jsii_struct_bases=[],
-    name_mapping={"route_arn": "routeArn", "route_id": "routeId"},
+    name_mapping={"route_arn": "routeArn"},
 )
 class RouteReference:
-    def __init__(self, *, route_arn: builtins.str, route_id: builtins.str) -> None:
+    def __init__(self, *, route_arn: builtins.str) -> None:
         '''A reference to a Route resource.
 
-        :param route_arn: The ARN of the Route resource.
-        :param route_id: The Id of the Route resource.
+        :param route_arn: The Arn of the Route resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -498,31 +467,21 @@ class RouteReference:
             from aws_cdk.interfaces import aws_appmesh as interfaces_appmesh
             
             route_reference = interfaces_appmesh.RouteReference(
-                route_arn="routeArn",
-                route_id="routeId"
+                route_arn="routeArn"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__69bbf3d73f757ba9320fb88c0be633121bdabd4fc70b89f3cf930233e793be1b)
             check_type(argname="argument route_arn", value=route_arn, expected_type=type_hints["route_arn"])
-            check_type(argname="argument route_id", value=route_id, expected_type=type_hints["route_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "route_arn": route_arn,
-            "route_id": route_id,
         }
 
     @builtins.property
     def route_arn(self) -> builtins.str:
-        '''The ARN of the Route resource.'''
+        '''The Arn of the Route resource.'''
         result = self._values.get("route_arn")
         assert result is not None, "Required property 'route_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def route_id(self) -> builtins.str:
-        '''The Id of the Route resource.'''
-        result = self._values.get("route_id")
-        assert result is not None, "Required property 'route_id' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -540,22 +499,13 @@ class RouteReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_appmesh.VirtualGatewayReference",
     jsii_struct_bases=[],
-    name_mapping={
-        "virtual_gateway_arn": "virtualGatewayArn",
-        "virtual_gateway_id": "virtualGatewayId",
-    },
+    name_mapping={"virtual_gateway_arn": "virtualGatewayArn"},
 )
 class VirtualGatewayReference:
-    def __init__(
-        self,
-        *,
-        virtual_gateway_arn: builtins.str,
-        virtual_gateway_id: builtins.str,
-    ) -> None:
+    def __init__(self, *, virtual_gateway_arn: builtins.str) -> None:
         '''A reference to a VirtualGateway resource.
 
-        :param virtual_gateway_arn: The ARN of the VirtualGateway resource.
-        :param virtual_gateway_id: The Id of the VirtualGateway resource.
+        :param virtual_gateway_arn: The Arn of the VirtualGateway resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -566,31 +516,21 @@ class VirtualGatewayReference:
             from aws_cdk.interfaces import aws_appmesh as interfaces_appmesh
             
             virtual_gateway_reference = interfaces_appmesh.VirtualGatewayReference(
-                virtual_gateway_arn="virtualGatewayArn",
-                virtual_gateway_id="virtualGatewayId"
+                virtual_gateway_arn="virtualGatewayArn"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7a3f6112a2ac96415941139a80c912bcbd3cc4150f9d19ffb2ed8301bc438506)
             check_type(argname="argument virtual_gateway_arn", value=virtual_gateway_arn, expected_type=type_hints["virtual_gateway_arn"])
-            check_type(argname="argument virtual_gateway_id", value=virtual_gateway_id, expected_type=type_hints["virtual_gateway_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "virtual_gateway_arn": virtual_gateway_arn,
-            "virtual_gateway_id": virtual_gateway_id,
         }
 
     @builtins.property
     def virtual_gateway_arn(self) -> builtins.str:
-        '''The ARN of the VirtualGateway resource.'''
+        '''The Arn of the VirtualGateway resource.'''
         result = self._values.get("virtual_gateway_arn")
         assert result is not None, "Required property 'virtual_gateway_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def virtual_gateway_id(self) -> builtins.str:
-        '''The Id of the VirtualGateway resource.'''
-        result = self._values.get("virtual_gateway_id")
-        assert result is not None, "Required property 'virtual_gateway_id' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -608,22 +548,13 @@ class VirtualGatewayReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_appmesh.VirtualNodeReference",
     jsii_struct_bases=[],
-    name_mapping={
-        "virtual_node_arn": "virtualNodeArn",
-        "virtual_node_id": "virtualNodeId",
-    },
+    name_mapping={"virtual_node_arn": "virtualNodeArn"},
 )
 class VirtualNodeReference:
-    def __init__(
-        self,
-        *,
-        virtual_node_arn: builtins.str,
-        virtual_node_id: builtins.str,
-    ) -> None:
+    def __init__(self, *, virtual_node_arn: builtins.str) -> None:
         '''A reference to a VirtualNode resource.
 
-        :param virtual_node_arn: The ARN of the VirtualNode resource.
-        :param virtual_node_id: The Id of the VirtualNode resource.
+        :param virtual_node_arn: The Arn of the VirtualNode resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -634,31 +565,21 @@ class VirtualNodeReference:
             from aws_cdk.interfaces import aws_appmesh as interfaces_appmesh
             
             virtual_node_reference = interfaces_appmesh.VirtualNodeReference(
-                virtual_node_arn="virtualNodeArn",
-                virtual_node_id="virtualNodeId"
+                virtual_node_arn="virtualNodeArn"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5598969a1377de6ec924d41db272dd5dd531fc0efe16da92d5a1cbd9267d4ee8)
             check_type(argname="argument virtual_node_arn", value=virtual_node_arn, expected_type=type_hints["virtual_node_arn"])
-            check_type(argname="argument virtual_node_id", value=virtual_node_id, expected_type=type_hints["virtual_node_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "virtual_node_arn": virtual_node_arn,
-            "virtual_node_id": virtual_node_id,
         }
 
     @builtins.property
     def virtual_node_arn(self) -> builtins.str:
-        '''The ARN of the VirtualNode resource.'''
+        '''The Arn of the VirtualNode resource.'''
         result = self._values.get("virtual_node_arn")
         assert result is not None, "Required property 'virtual_node_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def virtual_node_id(self) -> builtins.str:
-        '''The Id of the VirtualNode resource.'''
-        result = self._values.get("virtual_node_id")
-        assert result is not None, "Required property 'virtual_node_id' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -676,22 +597,13 @@ class VirtualNodeReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_appmesh.VirtualRouterReference",
     jsii_struct_bases=[],
-    name_mapping={
-        "virtual_router_arn": "virtualRouterArn",
-        "virtual_router_id": "virtualRouterId",
-    },
+    name_mapping={"virtual_router_arn": "virtualRouterArn"},
 )
 class VirtualRouterReference:
-    def __init__(
-        self,
-        *,
-        virtual_router_arn: builtins.str,
-        virtual_router_id: builtins.str,
-    ) -> None:
+    def __init__(self, *, virtual_router_arn: builtins.str) -> None:
         '''A reference to a VirtualRouter resource.
 
-        :param virtual_router_arn: The ARN of the VirtualRouter resource.
-        :param virtual_router_id: The Id of the VirtualRouter resource.
+        :param virtual_router_arn: The Arn of the VirtualRouter resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -702,31 +614,21 @@ class VirtualRouterReference:
             from aws_cdk.interfaces import aws_appmesh as interfaces_appmesh
             
             virtual_router_reference = interfaces_appmesh.VirtualRouterReference(
-                virtual_router_arn="virtualRouterArn",
-                virtual_router_id="virtualRouterId"
+                virtual_router_arn="virtualRouterArn"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__30b6512320fa651664ac7d23cd15a484325a424f57eed28afda6ea95f36525f8)
             check_type(argname="argument virtual_router_arn", value=virtual_router_arn, expected_type=type_hints["virtual_router_arn"])
-            check_type(argname="argument virtual_router_id", value=virtual_router_id, expected_type=type_hints["virtual_router_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "virtual_router_arn": virtual_router_arn,
-            "virtual_router_id": virtual_router_id,
         }
 
     @builtins.property
     def virtual_router_arn(self) -> builtins.str:
-        '''The ARN of the VirtualRouter resource.'''
+        '''The Arn of the VirtualRouter resource.'''
         result = self._values.get("virtual_router_arn")
         assert result is not None, "Required property 'virtual_router_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def virtual_router_id(self) -> builtins.str:
-        '''The Id of the VirtualRouter resource.'''
-        result = self._values.get("virtual_router_id")
-        assert result is not None, "Required property 'virtual_router_id' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -744,22 +646,13 @@ class VirtualRouterReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_appmesh.VirtualServiceReference",
     jsii_struct_bases=[],
-    name_mapping={
-        "virtual_service_arn": "virtualServiceArn",
-        "virtual_service_id": "virtualServiceId",
-    },
+    name_mapping={"virtual_service_arn": "virtualServiceArn"},
 )
 class VirtualServiceReference:
-    def __init__(
-        self,
-        *,
-        virtual_service_arn: builtins.str,
-        virtual_service_id: builtins.str,
-    ) -> None:
+    def __init__(self, *, virtual_service_arn: builtins.str) -> None:
         '''A reference to a VirtualService resource.
 
-        :param virtual_service_arn: The ARN of the VirtualService resource.
-        :param virtual_service_id: The Id of the VirtualService resource.
+        :param virtual_service_arn: The Arn of the VirtualService resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -770,31 +663,21 @@ class VirtualServiceReference:
             from aws_cdk.interfaces import aws_appmesh as interfaces_appmesh
             
             virtual_service_reference = interfaces_appmesh.VirtualServiceReference(
-                virtual_service_arn="virtualServiceArn",
-                virtual_service_id="virtualServiceId"
+                virtual_service_arn="virtualServiceArn"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__31a1da06971cf3191917cdf6392ad724b0f7117725e942fd00648526ac541a5c)
             check_type(argname="argument virtual_service_arn", value=virtual_service_arn, expected_type=type_hints["virtual_service_arn"])
-            check_type(argname="argument virtual_service_id", value=virtual_service_id, expected_type=type_hints["virtual_service_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "virtual_service_arn": virtual_service_arn,
-            "virtual_service_id": virtual_service_id,
         }
 
     @builtins.property
     def virtual_service_arn(self) -> builtins.str:
-        '''The ARN of the VirtualService resource.'''
+        '''The Arn of the VirtualService resource.'''
         result = self._values.get("virtual_service_arn")
         assert result is not None, "Required property 'virtual_service_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def virtual_service_id(self) -> builtins.str:
-        '''The Id of the VirtualService resource.'''
-        result = self._values.get("virtual_service_id")
-        assert result is not None, "Required property 'virtual_service_id' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -831,7 +714,6 @@ publication.publish()
 def _typecheckingstub__32f9dfc866e97093a7680c54e7baaba765d04e694a0898a329ffd7263580b8b3(
     *,
     gateway_route_arn: builtins.str,
-    gateway_route_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -839,7 +721,6 @@ def _typecheckingstub__32f9dfc866e97093a7680c54e7baaba765d04e694a0898a329ffd7263
 def _typecheckingstub__2b90d52e88f982a2eae93b3122a7a4c5eecc4ef9a4b13b5c948b3446f391e924(
     *,
     mesh_arn: builtins.str,
-    mesh_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -847,7 +728,6 @@ def _typecheckingstub__2b90d52e88f982a2eae93b3122a7a4c5eecc4ef9a4b13b5c948b3446f
 def _typecheckingstub__69bbf3d73f757ba9320fb88c0be633121bdabd4fc70b89f3cf930233e793be1b(
     *,
     route_arn: builtins.str,
-    route_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -855,7 +735,6 @@ def _typecheckingstub__69bbf3d73f757ba9320fb88c0be633121bdabd4fc70b89f3cf930233e
 def _typecheckingstub__7a3f6112a2ac96415941139a80c912bcbd3cc4150f9d19ffb2ed8301bc438506(
     *,
     virtual_gateway_arn: builtins.str,
-    virtual_gateway_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -863,7 +742,6 @@ def _typecheckingstub__7a3f6112a2ac96415941139a80c912bcbd3cc4150f9d19ffb2ed8301b
 def _typecheckingstub__5598969a1377de6ec924d41db272dd5dd531fc0efe16da92d5a1cbd9267d4ee8(
     *,
     virtual_node_arn: builtins.str,
-    virtual_node_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -871,7 +749,6 @@ def _typecheckingstub__5598969a1377de6ec924d41db272dd5dd531fc0efe16da92d5a1cbd92
 def _typecheckingstub__30b6512320fa651664ac7d23cd15a484325a424f57eed28afda6ea95f36525f8(
     *,
     virtual_router_arn: builtins.str,
-    virtual_router_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -879,7 +756,6 @@ def _typecheckingstub__30b6512320fa651664ac7d23cd15a484325a424f57eed28afda6ea95f
 def _typecheckingstub__31a1da06971cf3191917cdf6392ad724b0f7117725e942fd00648526ac541a5c(
     *,
     virtual_service_arn: builtins.str,
-    virtual_service_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

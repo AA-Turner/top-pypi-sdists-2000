@@ -1249,7 +1249,7 @@ class CfnPullTimeUpdateExclusion(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_ecr.CfnPullTimeUpdateExclusion",
 ):
-    '''Resource Type definition for AWS::ECR::PullTimeUpdateExclusion controls the exclusion configuration for ecr image pull time update.
+    '''The ARN of the IAM principal to remove from the pull time update exclusion list.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-pulltimeupdateexclusion.html
     :cloudformationResource: AWS::ECR::PullTimeUpdateExclusion
@@ -3225,7 +3225,7 @@ class CfnRepositoryCreationTemplate(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param applied_for: A list of enumerable Strings representing the repository creation scenarios that this template will apply towards. The two supported scenarios are PULL_THROUGH_CACHE and REPLICATION
+        :param applied_for: A list of enumerable Strings representing the repository creation scenarios that this template will apply towards. The supported scenarios are PULL_THROUGH_CACHE, REPLICATION, and CREATE_ON_PUSH
         :param prefix: The repository namespace prefix associated with the repository creation template.
         :param custom_role_arn: The ARN of the role to be assumed by Amazon ECR. Amazon ECR will assume your supplied role when the customRoleArn is specified. When this field isn't specified, Amazon ECR will use the service-linked role for the repository creation template.
         :param description: The description associated with the repository creation template.
@@ -3666,7 +3666,7 @@ class CfnRepositoryCreationTemplateProps:
     ) -> None:
         '''Properties for defining a ``CfnRepositoryCreationTemplate``.
 
-        :param applied_for: A list of enumerable Strings representing the repository creation scenarios that this template will apply towards. The two supported scenarios are PULL_THROUGH_CACHE and REPLICATION
+        :param applied_for: A list of enumerable Strings representing the repository creation scenarios that this template will apply towards. The supported scenarios are PULL_THROUGH_CACHE, REPLICATION, and CREATE_ON_PUSH
         :param prefix: The repository namespace prefix associated with the repository creation template.
         :param custom_role_arn: The ARN of the role to be assumed by Amazon ECR. Amazon ECR will assume your supplied role when the customRoleArn is specified. When this field isn't specified, Amazon ECR will use the service-linked role for the repository creation template.
         :param description: The description associated with the repository creation template.
@@ -3750,7 +3750,7 @@ class CfnRepositoryCreationTemplateProps:
     def applied_for(self) -> typing.List[builtins.str]:
         '''A list of enumerable Strings representing the repository creation scenarios that this template will apply towards.
 
-        The two supported scenarios are PULL_THROUGH_CACHE and REPLICATION
+        The supported scenarios are PULL_THROUGH_CACHE, REPLICATION, and CREATE_ON_PUSH
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repositorycreationtemplate.html#cfn-ecr-repositorycreationtemplate-appliedfor
         '''
@@ -4472,7 +4472,11 @@ class CfnSigningConfigurationProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ecr.IRepository")
-class IRepository(_IResource_c80c4260, typing_extensions.Protocol):
+class IRepository(
+    _IResource_c80c4260,
+    _IRepositoryRef_f3b81117,
+    typing_extensions.Protocol,
+):
     '''Represents an ECR repository.'''
 
     @builtins.property
@@ -4717,6 +4721,7 @@ class IRepository(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IRepositoryProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IRepositoryRef_f3b81117), # type: ignore[misc]
 ):
     '''Represents an ECR repository.'''
 
@@ -5999,6 +6004,12 @@ class RepositoryBase(
     def repository_name(self) -> builtins.str:
         '''The name of the repository.'''
         ...
+
+    @builtins.property
+    @jsii.member(jsii_name="repositoryRef")
+    def repository_ref(self) -> "_RepositoryReference_af4d81f0":
+        '''A reference to this repository.'''
+        return typing.cast("_RepositoryReference_af4d81f0", jsii.get(self, "repositoryRef"))
 
     @builtins.property
     @jsii.member(jsii_name="repositoryUri")

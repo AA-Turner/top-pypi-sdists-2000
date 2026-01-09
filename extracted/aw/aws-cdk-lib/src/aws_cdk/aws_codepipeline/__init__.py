@@ -6588,6 +6588,38 @@ class CfnWebhook(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForWebhook")
+    @builtins.classmethod
+    def arn_for_webhook(cls, resource: "_IWebhookRef_f412ea52") -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3069d1bcc981497c2b2db473beb5a2c2af27ada3beb0d2ffd3c9127721d2a112)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForWebhook", [resource]))
+
+    @jsii.member(jsii_name="fromWebhookName")
+    @builtins.classmethod
+    def from_webhook_name(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        webhook_name: builtins.str,
+    ) -> "_IWebhookRef_f412ea52":
+        '''Creates a new IWebhookRef from a webhookName.
+
+        :param scope: -
+        :param id: -
+        :param webhook_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fffe594b262b1c0cd439ebf5d2982d28067163f9ea73338b1446797e57fc82fe)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument webhook_name", value=webhook_name, expected_type=type_hints["webhook_name"])
+        return typing.cast("_IWebhookRef_f412ea52", jsii.sinvoke(cls, "fromWebhookName", [scope, id, webhook_name]))
+
     @jsii.member(jsii_name="isCfnWebhook")
     @builtins.classmethod
     def is_cfn_webhook(cls, x: typing.Any) -> builtins.bool:
@@ -8883,6 +8915,7 @@ typing.cast(typing.Any, IAction).__jsii_proxy_class__ = lambda : _IActionProxy
 @jsii.interface(jsii_type="aws-cdk-lib.aws_codepipeline.IPipeline")
 class IPipeline(
     _IResource_c80c4260,
+    _IPipelineRef_fb1b56f9,
     _INotificationRuleSource_10482823,
     typing_extensions.Protocol,
 ):
@@ -9083,6 +9116,7 @@ class IPipeline(
 
 class _IPipelineProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IPipelineRef_fb1b56f9), # type: ignore[misc]
     jsii.proxy_for(_INotificationRuleSource_10482823), # type: ignore[misc]
 ):
     '''The abstract view of an AWS CodePipeline as required and used by Actions.
@@ -9994,6 +10028,12 @@ class Pipeline(
     def pipeline_name(self) -> builtins.str:
         '''The name of the pipeline.'''
         return typing.cast(builtins.str, jsii.get(self, "pipelineName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="pipelineRef")
+    def pipeline_ref(self) -> "_PipelineReference_0706267b":
+        '''A reference to a Pipeline resource.'''
+        return typing.cast("_PipelineReference_0706267b", jsii.get(self, "pipelineRef"))
 
     @builtins.property
     @jsii.member(jsii_name="pipelineVersion")
@@ -12672,6 +12712,20 @@ def _typecheckingstub__bf02f564438140d92570cd41d3abeeb991e242929571b6de0035b8a8b
     name: typing.Optional[builtins.str] = None,
     register_with_third_party: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     target_pipeline_version: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3069d1bcc981497c2b2db473beb5a2c2af27ada3beb0d2ffd3c9127721d2a112(
+    resource: _IWebhookRef_f412ea52,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fffe594b262b1c0cd439ebf5d2982d28067163f9ea73338b1446797e57fc82fe(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    webhook_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

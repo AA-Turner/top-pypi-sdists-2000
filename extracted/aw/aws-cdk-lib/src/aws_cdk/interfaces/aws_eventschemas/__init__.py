@@ -266,13 +266,13 @@ typing.cast(typing.Any, ISchemaRef).__jsii_proxy_class__ = lambda : _ISchemaRefP
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_eventschemas.RegistryPolicyReference",
     jsii_struct_bases=[],
-    name_mapping={"registry_policy_id": "registryPolicyId"},
+    name_mapping={"registry_name": "registryName"},
 )
 class RegistryPolicyReference:
-    def __init__(self, *, registry_policy_id: builtins.str) -> None:
+    def __init__(self, *, registry_name: builtins.str) -> None:
         '''A reference to a RegistryPolicy resource.
 
-        :param registry_policy_id: The Id of the RegistryPolicy resource.
+        :param registry_name: The RegistryName of the RegistryPolicy resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -283,21 +283,21 @@ class RegistryPolicyReference:
             from aws_cdk.interfaces import aws_eventschemas as interfaces_eventschemas
             
             registry_policy_reference = interfaces_eventschemas.RegistryPolicyReference(
-                registry_policy_id="registryPolicyId"
+                registry_name="registryName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__01fcbf08dbbccfe46b4a7e85e067411892483d560177fa9bf861e4ebad973d4f)
-            check_type(argname="argument registry_policy_id", value=registry_policy_id, expected_type=type_hints["registry_policy_id"])
+            check_type(argname="argument registry_name", value=registry_name, expected_type=type_hints["registry_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "registry_policy_id": registry_policy_id,
+            "registry_name": registry_name,
         }
 
     @builtins.property
-    def registry_policy_id(self) -> builtins.str:
-        '''The Id of the RegistryPolicy resource.'''
-        result = self._values.get("registry_policy_id")
-        assert result is not None, "Required property 'registry_policy_id' is missing"
+    def registry_name(self) -> builtins.str:
+        '''The RegistryName of the RegistryPolicy resource.'''
+        result = self._values.get("registry_name")
+        assert result is not None, "Required property 'registry_name' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -432,7 +432,7 @@ def _typecheckingstub__ef5f0f98b996f76f680660442586169116e286a17380f815a5a3a3756
 
 def _typecheckingstub__01fcbf08dbbccfe46b4a7e85e067411892483d560177fa9bf861e4ebad973d4f(
     *,
-    registry_policy_id: builtins.str,
+    registry_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

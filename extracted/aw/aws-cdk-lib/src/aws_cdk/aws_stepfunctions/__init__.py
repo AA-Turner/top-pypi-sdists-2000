@@ -6525,7 +6525,11 @@ class FindStateOptions:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_stepfunctions.IActivity")
-class IActivity(_IResource_c80c4260, typing_extensions.Protocol):
+class IActivity(
+    _IResource_c80c4260,
+    _IActivityRef_cfa2906a,
+    typing_extensions.Protocol,
+):
     '''Represents a Step Functions Activity https://docs.aws.amazon.com/step-functions/latest/dg/concepts-activities.html.'''
 
     @builtins.property
@@ -6558,6 +6562,7 @@ class IActivity(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IActivityProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IActivityRef_cfa2906a), # type: ignore[misc]
 ):
     '''Represents a Step Functions Activity https://docs.aws.amazon.com/step-functions/latest/dg/concepts-activities.html.'''
 
@@ -18407,6 +18412,12 @@ class Activity(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "activityName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="activityRef")
+    def activity_ref(self) -> "_ActivityReference_781f8e4f":
+        '''A reference to a Activity resource.'''
+        return typing.cast("_ActivityReference_781f8e4f", jsii.get(self, "activityRef"))
 
     @builtins.property
     @jsii.member(jsii_name="encryptionConfiguration")

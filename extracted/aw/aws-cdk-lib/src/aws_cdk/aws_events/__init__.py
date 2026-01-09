@@ -5640,6 +5640,27 @@ class CfnRule(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRule", [resource]))
 
+    @jsii.member(jsii_name="fromRuleArn")
+    @builtins.classmethod
+    def from_rule_arn(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> "_IRuleRef_4038a611":
+        '''Creates a new IRuleRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8c98bba385ad30c7d90d7374cf6895452caa709aa7ce71519fe9e783513f1b9b)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast("_IRuleRef_4038a611", jsii.sinvoke(cls, "fromRuleArn", [scope, id, arn]))
+
     @jsii.member(jsii_name="isCfnRule")
     @builtins.classmethod
     def is_cfn_rule(cls, x: typing.Any) -> builtins.bool:
@@ -13965,6 +13986,14 @@ def _typecheckingstub__e06314755e55e41a2976ff974daa36bbbb473330c92c9fef111b716f2
 
 def _typecheckingstub__47ddfdaa73e35b2bbb6599aa98e79e69ad6f7c74c287b09d3525d778ee3c984a(
     resource: _IRuleRef_4038a611,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8c98bba385ad30c7d90d7374cf6895452caa709aa7ce71519fe9e783513f1b9b(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -972,8 +972,6 @@ from ..aws_cloudfront import (
     AccessLevel as _AccessLevel_315d9a76,
     CfnDistribution as _CfnDistribution_d9ad3595,
     IOrigin as _IOrigin_83d4c1fa,
-    IOriginAccessControl as _IOriginAccessControl_82a6fe5a,
-    IOriginAccessIdentity as _IOriginAccessIdentity_a922494c,
     IVpcOrigin as _IVpcOrigin_6f584d50,
     OriginBase as _OriginBase_b8fe5bcc,
     OriginBindConfig as _OriginBindConfig_25a57096,
@@ -991,8 +989,13 @@ from ..aws_elasticloadbalancingv2 import (
     ILoadBalancerV2 as _ILoadBalancerV2_4c5c0fbb,
     INetworkLoadBalancer as _INetworkLoadBalancer_96e17101,
 )
+from ..aws_iam import IGrantable as _IGrantable_71c4f5de
 from ..aws_lambda import IFunctionUrl as _IFunctionUrl_1a74cd94
 from ..aws_s3 import IBucket as _IBucket_42e086fd
+from ..interfaces.aws_cloudfront import (
+    ICloudFrontOriginAccessIdentityRef as _ICloudFrontOriginAccessIdentityRef_a078bb8b,
+    IOriginAccessControlRef as _IOriginAccessControlRef_c4ffc680,
+)
 
 
 class FunctionUrlOrigin(
@@ -1081,7 +1084,7 @@ class FunctionUrlOrigin(
         cls,
         lambda_function_url: "_IFunctionUrl_1a74cd94",
         *,
-        origin_access_control: typing.Optional["_IOriginAccessControl_82a6fe5a"] = None,
+        origin_access_control: typing.Optional["_IOriginAccessControlRef_c4ffc680"] = None,
         ip_address_type: typing.Optional["_OriginIpAddressType_1c01e1a0"] = None,
         keepalive_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
@@ -1641,7 +1644,7 @@ class FunctionUrlOriginWithOACProps(FunctionUrlOriginProps):
         ip_address_type: typing.Optional["_OriginIpAddressType_1c01e1a0"] = None,
         keepalive_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         read_timeout: typing.Optional["_Duration_4839e8c3"] = None,
-        origin_access_control: typing.Optional["_IOriginAccessControl_82a6fe5a"] = None,
+        origin_access_control: typing.Optional["_IOriginAccessControlRef_c4ffc680"] = None,
     ) -> None:
         '''Properties for configuring a Lambda Functions URLs with OAC.
 
@@ -1870,13 +1873,13 @@ class FunctionUrlOriginWithOACProps(FunctionUrlOriginProps):
     @builtins.property
     def origin_access_control(
         self,
-    ) -> typing.Optional["_IOriginAccessControl_82a6fe5a"]:
+    ) -> typing.Optional["_IOriginAccessControlRef_c4ffc680"]:
         '''An optional Origin Access Control.
 
         :default: - an Origin Access Control will be created.
         '''
         result = self._values.get("origin_access_control")
-        return typing.cast(typing.Optional["_IOriginAccessControl_82a6fe5a"], result)
+        return typing.cast(typing.Optional["_IOriginAccessControlRef_c4ffc680"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3314,7 +3317,7 @@ class S3BucketOrigin(
         cls,
         bucket: "_IBucket_42e086fd",
         *,
-        origin_access_control: typing.Optional["_IOriginAccessControl_82a6fe5a"] = None,
+        origin_access_control: typing.Optional["_IOriginAccessControlRef_c4ffc680"] = None,
         origin_access_levels: typing.Optional[typing.Sequence["_AccessLevel_315d9a76"]] = None,
         origin_path: typing.Optional[builtins.str] = None,
         connection_attempts: typing.Optional[jsii.Number] = None,
@@ -3366,7 +3369,7 @@ class S3BucketOrigin(
         cls,
         bucket: "_IBucket_42e086fd",
         *,
-        origin_access_identity: typing.Optional["_IOriginAccessIdentity_a922494c"] = None,
+        origin_access_identity: typing.Optional['__ICloudFrontOriginAccessIdentityRef_a078bb8b__IGrantable_71c4f5de'] = None,
         origin_path: typing.Optional[builtins.str] = None,
         connection_attempts: typing.Optional[jsii.Number] = None,
         connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
@@ -3662,7 +3665,7 @@ class S3BucketOriginWithOACProps(S3BucketOriginBaseProps):
         origin_shield_region: typing.Optional[builtins.str] = None,
         response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
-        origin_access_control: typing.Optional["_IOriginAccessControl_82a6fe5a"] = None,
+        origin_access_control: typing.Optional["_IOriginAccessControlRef_c4ffc680"] = None,
         origin_access_levels: typing.Optional[typing.Sequence["_AccessLevel_315d9a76"]] = None,
     ) -> None:
         '''Properties for configuring a S3 origin with OAC.
@@ -3835,13 +3838,13 @@ class S3BucketOriginWithOACProps(S3BucketOriginBaseProps):
     @builtins.property
     def origin_access_control(
         self,
-    ) -> typing.Optional["_IOriginAccessControl_82a6fe5a"]:
+    ) -> typing.Optional["_IOriginAccessControlRef_c4ffc680"]:
         '''An optional Origin Access Control.
 
         :default: - an Origin Access Control will be created.
         '''
         result = self._values.get("origin_access_control")
-        return typing.cast(typing.Optional["_IOriginAccessControl_82a6fe5a"], result)
+        return typing.cast(typing.Optional["_IOriginAccessControlRef_c4ffc680"], result)
 
     @builtins.property
     def origin_access_levels(
@@ -3895,7 +3898,7 @@ class S3BucketOriginWithOAIProps(S3BucketOriginBaseProps):
         origin_shield_region: typing.Optional[builtins.str] = None,
         response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
-        origin_access_identity: typing.Optional["_IOriginAccessIdentity_a922494c"] = None,
+        origin_access_identity: typing.Optional['__ICloudFrontOriginAccessIdentityRef_a078bb8b__IGrantable_71c4f5de'] = None,
     ) -> None:
         '''Properties for configuring a S3 origin with OAI.
 
@@ -4063,13 +4066,13 @@ class S3BucketOriginWithOAIProps(S3BucketOriginBaseProps):
     @builtins.property
     def origin_access_identity(
         self,
-    ) -> typing.Optional["_IOriginAccessIdentity_a922494c"]:
+    ) -> typing.Optional['__ICloudFrontOriginAccessIdentityRef_a078bb8b__IGrantable_71c4f5de']:
         '''An optional Origin Access Identity.
 
         :default: - an Origin Access Identity will be created.
         '''
         result = self._values.get("origin_access_identity")
-        return typing.cast(typing.Optional["_IOriginAccessIdentity_a922494c"], result)
+        return typing.cast(typing.Optional['__ICloudFrontOriginAccessIdentityRef_a078bb8b__IGrantable_71c4f5de'], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4122,7 +4125,7 @@ class S3Origin(
         self,
         bucket: "_IBucket_42e086fd",
         *,
-        origin_access_identity: typing.Optional["_IOriginAccessIdentity_a922494c"] = None,
+        origin_access_identity: typing.Optional['__ICloudFrontOriginAccessIdentityRef_a078bb8b__IGrantable_71c4f5de'] = None,
         origin_path: typing.Optional[builtins.str] = None,
         connection_attempts: typing.Optional[jsii.Number] = None,
         connection_timeout: typing.Optional["_Duration_4839e8c3"] = None,
@@ -4221,7 +4224,7 @@ class S3OriginProps(_OriginProps_0675928d):
         origin_shield_region: typing.Optional[builtins.str] = None,
         response_completion_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         origin_path: typing.Optional[builtins.str] = None,
-        origin_access_identity: typing.Optional["_IOriginAccessIdentity_a922494c"] = None,
+        origin_access_identity: typing.Optional['__ICloudFrontOriginAccessIdentityRef_a078bb8b__IGrantable_71c4f5de'] = None,
     ) -> None:
         '''Properties to use to customize an S3 Origin.
 
@@ -4243,10 +4246,11 @@ class S3OriginProps(_OriginProps_0675928d):
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             import aws_cdk as cdk
-            from aws_cdk import aws_cloudfront as cloudfront
             from aws_cdk import aws_cloudfront_origins as cloudfront_origins
+            from aws_cdk import aws_iam as iam
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            # origin_access_identity: cloudfront.OriginAccessIdentity
+            # cloud_front_origin_access_identity_ref: interfaces_cloudfront.ICloudFrontOriginAccessIdentityRef & iam.IGrantable
             
             s3_origin_props = cloudfront_origins.S3OriginProps(
                 connection_attempts=123,
@@ -4255,7 +4259,7 @@ class S3OriginProps(_OriginProps_0675928d):
                     "custom_headers_key": "customHeaders"
                 },
                 origin_access_control_id="originAccessControlId",
-                origin_access_identity=origin_access_identity,
+                origin_access_identity=cloud_front_origin_access_identity_ref,
                 origin_id="originId",
                 origin_path="originPath",
                 origin_shield_enabled=False,
@@ -4399,13 +4403,13 @@ class S3OriginProps(_OriginProps_0675928d):
     @builtins.property
     def origin_access_identity(
         self,
-    ) -> typing.Optional["_IOriginAccessIdentity_a922494c"]:
+    ) -> typing.Optional['__ICloudFrontOriginAccessIdentityRef_a078bb8b__IGrantable_71c4f5de']:
         '''An optional Origin Access Identity of the origin identity cloudfront will use when calling your s3 bucket.
 
         :default: - An Origin Access Identity will be created.
         '''
         result = self._values.get("origin_access_identity")
-        return typing.cast(typing.Optional["_IOriginAccessIdentity_a922494c"], result)
+        return typing.cast(typing.Optional['__ICloudFrontOriginAccessIdentityRef_a078bb8b__IGrantable_71c4f5de'], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5872,7 +5876,7 @@ def _typecheckingstub__fcda903697b26acfe2149a285d5a64619682b675affb52f4ae2d1aca4
 def _typecheckingstub__b4d59b7721f41be7903dbcffeddd34d596392d2c8d2a4110f31a4dacdb532727(
     lambda_function_url: _IFunctionUrl_1a74cd94,
     *,
-    origin_access_control: typing.Optional[_IOriginAccessControl_82a6fe5a] = None,
+    origin_access_control: typing.Optional[_IOriginAccessControlRef_c4ffc680] = None,
     ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
     keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
     read_timeout: typing.Optional[_Duration_4839e8c3] = None,
@@ -5936,7 +5940,7 @@ def _typecheckingstub__56968af993436ccfcac0aa6a57169f1a033078c10740d435d086816ad
     ip_address_type: typing.Optional[_OriginIpAddressType_1c01e1a0] = None,
     keepalive_timeout: typing.Optional[_Duration_4839e8c3] = None,
     read_timeout: typing.Optional[_Duration_4839e8c3] = None,
-    origin_access_control: typing.Optional[_IOriginAccessControl_82a6fe5a] = None,
+    origin_access_control: typing.Optional[_IOriginAccessControlRef_c4ffc680] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6120,7 +6124,7 @@ def _typecheckingstub__f676436dc530972f0e77d574f148913989a94d38c9af09bff28450e29
 def _typecheckingstub__23afb965139dc34be23cec3ad5506b4c5de509db9c0d653bed7877f463b7a9db(
     bucket: _IBucket_42e086fd,
     *,
-    origin_access_control: typing.Optional[_IOriginAccessControl_82a6fe5a] = None,
+    origin_access_control: typing.Optional[_IOriginAccessControlRef_c4ffc680] = None,
     origin_access_levels: typing.Optional[typing.Sequence[_AccessLevel_315d9a76]] = None,
     origin_path: typing.Optional[builtins.str] = None,
     connection_attempts: typing.Optional[jsii.Number] = None,
@@ -6138,7 +6142,7 @@ def _typecheckingstub__23afb965139dc34be23cec3ad5506b4c5de509db9c0d653bed7877f46
 def _typecheckingstub__13e7421c65d5fbb92fc686fa854daca3e90dc002f3e99da4b4757e32e3c4105d(
     bucket: _IBucket_42e086fd,
     *,
-    origin_access_identity: typing.Optional[_IOriginAccessIdentity_a922494c] = None,
+    origin_access_identity: typing.Optional['__ICloudFrontOriginAccessIdentityRef_a078bb8b__IGrantable_71c4f5de'] = None,
     origin_path: typing.Optional[builtins.str] = None,
     connection_attempts: typing.Optional[jsii.Number] = None,
     connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
@@ -6178,7 +6182,7 @@ def _typecheckingstub__1af53a7ded1427e29cc874af45efdfe026a0004a1f2782a5bc936dbfc
     origin_shield_region: typing.Optional[builtins.str] = None,
     response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
     origin_path: typing.Optional[builtins.str] = None,
-    origin_access_control: typing.Optional[_IOriginAccessControl_82a6fe5a] = None,
+    origin_access_control: typing.Optional[_IOriginAccessControlRef_c4ffc680] = None,
     origin_access_levels: typing.Optional[typing.Sequence[_AccessLevel_315d9a76]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -6195,7 +6199,7 @@ def _typecheckingstub__4b64c18ef31b660c450eee84b6738d7bbd960797e1788e068be966312
     origin_shield_region: typing.Optional[builtins.str] = None,
     response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
     origin_path: typing.Optional[builtins.str] = None,
-    origin_access_identity: typing.Optional[_IOriginAccessIdentity_a922494c] = None,
+    origin_access_identity: typing.Optional['__ICloudFrontOriginAccessIdentityRef_a078bb8b__IGrantable_71c4f5de'] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6203,7 +6207,7 @@ def _typecheckingstub__4b64c18ef31b660c450eee84b6738d7bbd960797e1788e068be966312
 def _typecheckingstub__9ba8623373b0faa9ac55c816167da21a58e0753e0dd032b1f3e6ccd0bd977994(
     bucket: _IBucket_42e086fd,
     *,
-    origin_access_identity: typing.Optional[_IOriginAccessIdentity_a922494c] = None,
+    origin_access_identity: typing.Optional['__ICloudFrontOriginAccessIdentityRef_a078bb8b__IGrantable_71c4f5de'] = None,
     origin_path: typing.Optional[builtins.str] = None,
     connection_attempts: typing.Optional[jsii.Number] = None,
     connection_timeout: typing.Optional[_Duration_4839e8c3] = None,
@@ -6237,7 +6241,7 @@ def _typecheckingstub__bbd2a0ca1bf4d32899d90ea633e3ac416a6fa29972ee055a5866ec269
     origin_shield_region: typing.Optional[builtins.str] = None,
     response_completion_timeout: typing.Optional[_Duration_4839e8c3] = None,
     origin_path: typing.Optional[builtins.str] = None,
-    origin_access_identity: typing.Optional[_IOriginAccessIdentity_a922494c] = None,
+    origin_access_identity: typing.Optional['__ICloudFrontOriginAccessIdentityRef_a078bb8b__IGrantable_71c4f5de'] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6443,3 +6447,9 @@ def _typecheckingstub__e581b80df977101d74a87a861c6ddf752f3dc8bcbd114f5e12bc33daa
 ) -> None:
     """Type checking stubs"""
     pass
+
+class __ICloudFrontOriginAccessIdentityRef_a078bb8b__IGrantable_71c4f5de(_ICloudFrontOriginAccessIdentityRef_a078bb8b, _IGrantable_71c4f5de, typing_extensions.Protocol):
+    pass
+
+for cls in [__ICloudFrontOriginAccessIdentityRef_a078bb8b__IGrantable_71c4f5de]:
+    typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

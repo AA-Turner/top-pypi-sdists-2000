@@ -836,8 +836,6 @@ from ..aws_apigateway import (
 )
 from ..aws_apigatewayv2 import IHttpApi as _IHttpApi_dc82ff0d
 from ..aws_appsync import IGraphqlApi as _IGraphqlApi_ed8270f3
-from ..aws_codebuild import IProject as _IProject_aafae30a
-from ..aws_codepipeline import IPipeline as _IPipeline_0931f838
 from ..aws_ec2 import (
     ISecurityGroup as _ISecurityGroup_acf8a799,
     SubnetSelection as _SubnetSelection_e57d76df,
@@ -872,6 +870,8 @@ from ..aws_secretsmanager import ISecret as _ISecret_6e020e6a
 from ..aws_sns import ITopic as _ITopic_9eca4852
 from ..aws_sqs import IQueue as _IQueue_7ed6f679
 from ..aws_stepfunctions import IStateMachine as _IStateMachine_73e8d2b0
+from ..interfaces.aws_codebuild import IProjectRef as _IProjectRef_7528e639
+from ..interfaces.aws_codepipeline import IPipelineRef as _IPipelineRef_fb1b56f9
 
 
 @jsii.implements(_IRuleTarget_7a91f454)
@@ -1859,7 +1859,7 @@ class CodeBuildProject(
 
     def __init__(
         self,
-        project: "_IProject_aafae30a",
+        project: "_IProjectRef_7528e639",
         *,
         event: typing.Optional["_RuleTargetInput_6beca786"] = None,
         event_role: typing.Optional["_IRole_235f5d8e"] = None,
@@ -1933,7 +1933,7 @@ class CodePipeline(
 
     def __init__(
         self,
-        pipeline: "_IPipeline_0931f838",
+        pipeline: "_IPipelineRef_fb1b56f9",
         *,
         event_role: typing.Optional["_IRole_235f5d8e"] = None,
         dead_letter_queue: typing.Optional["_IQueue_7ed6f679"] = None,
@@ -6547,7 +6547,7 @@ def _typecheckingstub__5583066efc6b7b2980bfbfbf33e6491271f5faf3b97e5d2ae998d1fe4
     pass
 
 def _typecheckingstub__3a8679d207265b7ec6863cf63c5b8aaaa8577dce8b9b2c6ec8d9a52c6bde44f1(
-    project: _IProject_aafae30a,
+    project: _IProjectRef_7528e639,
     *,
     event: typing.Optional[_RuleTargetInput_6beca786] = None,
     event_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -6566,7 +6566,7 @@ def _typecheckingstub__c864909db0683c496942d72c9b834b03e1082bec9e20c368a204df374
     pass
 
 def _typecheckingstub__daa7b4e77a0ef964ea3cdb54ce57cc8f475d7342b57d85f348e63fff7e5ecc14(
-    pipeline: _IPipeline_0931f838,
+    pipeline: _IPipelineRef_fb1b56f9,
     *,
     event_role: typing.Optional[_IRole_235f5d8e] = None,
     dead_letter_queue: typing.Optional[_IQueue_7ed6f679] = None,

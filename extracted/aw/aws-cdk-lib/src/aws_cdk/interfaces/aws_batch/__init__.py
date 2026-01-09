@@ -405,22 +405,13 @@ typing.cast(typing.Any, IServiceEnvironmentRef).__jsii_proxy_class__ = lambda : 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_batch.JobDefinitionReference",
     jsii_struct_bases=[],
-    name_mapping={
-        "job_definition_arn": "jobDefinitionArn",
-        "job_definition_name": "jobDefinitionName",
-    },
+    name_mapping={"job_definition_arn": "jobDefinitionArn"},
 )
 class JobDefinitionReference:
-    def __init__(
-        self,
-        *,
-        job_definition_arn: builtins.str,
-        job_definition_name: builtins.str,
-    ) -> None:
+    def __init__(self, *, job_definition_arn: builtins.str) -> None:
         '''A reference to a JobDefinition resource.
 
-        :param job_definition_arn: The ARN of the JobDefinition resource.
-        :param job_definition_name: The JobDefinitionName of the JobDefinition resource.
+        :param job_definition_arn: The JobDefinitionArn of the JobDefinition resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -431,31 +422,21 @@ class JobDefinitionReference:
             from aws_cdk.interfaces import aws_batch as interfaces_batch
             
             job_definition_reference = interfaces_batch.JobDefinitionReference(
-                job_definition_arn="jobDefinitionArn",
-                job_definition_name="jobDefinitionName"
+                job_definition_arn="jobDefinitionArn"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__03d6fd2ef98b3bbd19b585886fbfc0882ccef6244aa7d36aaded401eb007a47f)
             check_type(argname="argument job_definition_arn", value=job_definition_arn, expected_type=type_hints["job_definition_arn"])
-            check_type(argname="argument job_definition_name", value=job_definition_name, expected_type=type_hints["job_definition_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "job_definition_arn": job_definition_arn,
-            "job_definition_name": job_definition_name,
         }
 
     @builtins.property
     def job_definition_arn(self) -> builtins.str:
-        '''The ARN of the JobDefinition resource.'''
+        '''The JobDefinitionArn of the JobDefinition resource.'''
         result = self._values.get("job_definition_arn")
         assert result is not None, "Required property 'job_definition_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def job_definition_name(self) -> builtins.str:
-        '''The JobDefinitionName of the JobDefinition resource.'''
-        result = self._values.get("job_definition_name")
-        assert result is not None, "Required property 'job_definition_name' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -651,7 +632,6 @@ def _typecheckingstub__efae255fc2224f92988a48a3e484cd67fe6c4ec91ce5e9c6fed9a015b
 def _typecheckingstub__03d6fd2ef98b3bbd19b585886fbfc0882ccef6244aa7d36aaded401eb007a47f(
     *,
     job_definition_arn: builtins.str,
-    job_definition_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

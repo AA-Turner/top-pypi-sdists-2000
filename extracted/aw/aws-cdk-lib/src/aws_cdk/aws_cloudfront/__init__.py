@@ -2176,7 +2176,7 @@ class Behavior:
         max_ttl: typing.Optional["_Duration_4839e8c3"] = None,
         min_ttl: typing.Optional["_Duration_4839e8c3"] = None,
         path_pattern: typing.Optional[builtins.str] = None,
-        trusted_key_groups: typing.Optional[typing.Sequence["IKeyGroup"]] = None,
+        trusted_key_groups: typing.Optional[typing.Sequence["_IKeyGroupRef_44670bc7"]] = None,
         trusted_signers: typing.Optional[typing.Sequence[builtins.str]] = None,
         viewer_protocol_policy: typing.Optional["ViewerProtocolPolicy"] = None,
     ) -> None:
@@ -2209,7 +2209,7 @@ class Behavior:
             from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
             # function_ref: interfaces_cloudfront.IFunctionRef
-            # key_group: cloudfront.KeyGroup
+            # key_group_ref: interfaces_cloudfront.IKeyGroupRef
             # version: lambda.Version
             
             behavior = cloudfront.Behavior(
@@ -2245,7 +2245,7 @@ class Behavior:
                 max_ttl=cdk.Duration.minutes(30),
                 min_ttl=cdk.Duration.minutes(30),
                 path_pattern="pathPattern",
-                trusted_key_groups=[key_group],
+                trusted_key_groups=[key_group_ref],
                 trusted_signers=["trustedSigners"],
                 viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.HTTPS_ONLY
             )
@@ -2405,7 +2405,9 @@ class Behavior:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def trusted_key_groups(self) -> typing.Optional[typing.List["IKeyGroup"]]:
+    def trusted_key_groups(
+        self,
+    ) -> typing.Optional[typing.List["_IKeyGroupRef_44670bc7"]]:
         '''A list of Key Groups that CloudFront can use to validate signed URLs or signed cookies.
 
         :default: - no KeyGroups are associated with cache behavior
@@ -2413,7 +2415,7 @@ class Behavior:
         :see: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html
         '''
         result = self._values.get("trusted_key_groups")
-        return typing.cast(typing.Optional[typing.List["IKeyGroup"]], result)
+        return typing.cast(typing.Optional[typing.List["_IKeyGroupRef_44670bc7"]], result)
 
     @builtins.property
     def trusted_signers(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -3278,7 +3280,7 @@ class CfnAnycastIpList(
         :param ip_count: The number of IP addresses in the Anycast static IP list.
         :param name: The name of the Anycast static IP list.
         :param ip_address_type: The IP address type for the Anycast static IP list.
-        :param ipam_cidr_configs: 
+        :param ipam_cidr_configs: A list of IPAM CIDR configurations that define the IP address ranges, IPAM pools, and associated Anycast IP addresses.
         :param tags: A complex type that contains zero or more ``Tag`` elements.
         '''
         if __debug__:
@@ -3389,7 +3391,8 @@ class CfnAnycastIpList(
     @builtins.property
     @jsii.member(jsii_name="attrIpamCidrConfigResults")
     def attr_ipam_cidr_config_results(self) -> "_IResolvable_da3f097b":
-        '''
+        '''The results for the IPAM CIDRs that defines a specific IP address range, IPAM pool, and associated Anycast IP address.
+
         :cloudformationAttribute: IpamCidrConfigResults
         '''
         return typing.cast("_IResolvable_da3f097b", jsii.get(self, "attrIpamCidrConfigResults"))
@@ -3449,6 +3452,7 @@ class CfnAnycastIpList(
     def ipam_cidr_configs(
         self,
     ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnycastIpList.IpamCidrConfigProperty"]]]]:
+        '''A list of IPAM CIDR configurations that define the IP address ranges, IPAM pools, and associated Anycast IP addresses.'''
         return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnycastIpList.IpamCidrConfigProperty"]]]], jsii.get(self, "ipamCidrConfigs"))
 
     @ipam_cidr_configs.setter
@@ -3515,7 +3519,7 @@ class CfnAnycastIpList(
             :param name: The name of the Anycast static IP list.
             :param status: The status of the Anycast static IP list. Valid values: ``Deployed`` , ``Deploying`` , or ``Failed`` .
             :param ip_address_type: The IP address type for the Anycast static IP list.
-            :param ipam_cidr_config_results: 
+            :param ipam_cidr_config_results: The results for the IPAM CIDRs that defines a specific IP address range, IPAM pool, and associated Anycast IP address.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-anycastiplist-anycastiplist.html
             :exampleMetadata: fixture=_generated
@@ -3655,7 +3659,8 @@ class CfnAnycastIpList(
         def ipam_cidr_config_results(
             self,
         ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnycastIpList.IpamCidrConfigResultProperty"]]]]:
-            '''
+            '''The results for the IPAM CIDRs that defines a specific IP address range, IPAM pool, and associated Anycast IP address.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-anycastiplist-anycastiplist.html#cfn-cloudfront-anycastiplist-anycastiplist-ipamcidrconfigresults
             '''
             result = self._values.get("ipam_cidr_config_results")
@@ -3757,11 +3762,12 @@ class CfnAnycastIpList(
             ipam_pool_arn: typing.Optional[builtins.str] = None,
             status: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''
-            :param anycast_ip: 
-            :param cidr: 
-            :param ipam_pool_arn: 
-            :param status: 
+            '''The result for the IPAM CIDR that defines a specific IP address range, IPAM pool, and associated Anycast IP address.
+
+            :param anycast_ip: The specified Anycast IP address allocated from the IPAM pool for this CIDR configuration.
+            :param cidr: The CIDR that specifies the IP address range for this IPAM configuration.
+            :param ipam_pool_arn: The Amazon Resource Name (ARN) of the IPAM pool that the CIDR block is assigned to.
+            :param status: The current status of the IPAM CIDR configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-anycastiplist-ipamcidrconfigresult.html
             :exampleMetadata: fixture=_generated
@@ -3797,7 +3803,8 @@ class CfnAnycastIpList(
 
         @builtins.property
         def anycast_ip(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The specified Anycast IP address allocated from the IPAM pool for this CIDR configuration.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-anycastiplist-ipamcidrconfigresult.html#cfn-cloudfront-anycastiplist-ipamcidrconfigresult-anycastip
             '''
             result = self._values.get("anycast_ip")
@@ -3805,7 +3812,8 @@ class CfnAnycastIpList(
 
         @builtins.property
         def cidr(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The CIDR that specifies the IP address range for this IPAM configuration.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-anycastiplist-ipamcidrconfigresult.html#cfn-cloudfront-anycastiplist-ipamcidrconfigresult-cidr
             '''
             result = self._values.get("cidr")
@@ -3813,7 +3821,8 @@ class CfnAnycastIpList(
 
         @builtins.property
         def ipam_pool_arn(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The Amazon Resource Name (ARN) of the IPAM pool that the CIDR block is assigned to.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-anycastiplist-ipamcidrconfigresult.html#cfn-cloudfront-anycastiplist-ipamcidrconfigresult-ipampoolarn
             '''
             result = self._values.get("ipam_pool_arn")
@@ -3821,7 +3830,8 @@ class CfnAnycastIpList(
 
         @builtins.property
         def status(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The current status of the IPAM CIDR configuration.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-anycastiplist-ipamcidrconfigresult.html#cfn-cloudfront-anycastiplist-ipamcidrconfigresult-status
             '''
             result = self._values.get("status")
@@ -3926,7 +3936,7 @@ class CfnAnycastIpListProps:
         :param ip_count: The number of IP addresses in the Anycast static IP list.
         :param name: The name of the Anycast static IP list.
         :param ip_address_type: The IP address type for the Anycast static IP list.
-        :param ipam_cidr_configs: 
+        :param ipam_cidr_configs: A list of IPAM CIDR configurations that define the IP address ranges, IPAM pools, and associated Anycast IP addresses.
         :param tags: A complex type that contains zero or more ``Tag`` elements.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-anycastiplist.html
@@ -4010,7 +4020,8 @@ class CfnAnycastIpListProps:
     def ipam_cidr_configs(
         self,
     ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAnycastIpList.IpamCidrConfigProperty"]]]]:
-        '''
+        '''A list of IPAM CIDR configurations that define the IP address ranges, IPAM pools, and associated Anycast IP addresses.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-anycastiplist.html#cfn-cloudfront-anycastiplist-ipamcidrconfigs
         '''
         result = self._values.get("ipam_cidr_configs")
@@ -8407,6 +8418,7 @@ class CfnDistribution(
             "https_port": "httpsPort",
             "ip_address_type": "ipAddressType",
             "origin_keepalive_timeout": "originKeepaliveTimeout",
+            "origin_mtls_config": "originMtlsConfig",
             "origin_read_timeout": "originReadTimeout",
             "origin_ssl_protocols": "originSslProtocols",
         },
@@ -8420,6 +8432,7 @@ class CfnDistribution(
             https_port: typing.Optional[jsii.Number] = None,
             ip_address_type: typing.Optional[builtins.str] = None,
             origin_keepalive_timeout: typing.Optional[jsii.Number] = None,
+            origin_mtls_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDistribution.OriginMtlsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             origin_read_timeout: typing.Optional[jsii.Number] = None,
             origin_ssl_protocols: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
@@ -8432,6 +8445,7 @@ class CfnDistribution(
             :param https_port: The HTTPS port that CloudFront uses to connect to the origin. Specify the HTTPS port that the origin listens on. Default: - 443
             :param ip_address_type: Specifies which IP protocol CloudFront uses when connecting to your origin. If your origin uses both IPv4 and IPv6 protocols, you can choose ``dualstack`` to help optimize reliability.
             :param origin_keepalive_timeout: Specifies how long, in seconds, CloudFront persists its connection to the origin. The minimum timeout is 1 second, the maximum is 120 seconds, and the default (if you don't specify otherwise) is 5 seconds. For more information, see `Keep-alive timeout (custom origins only) <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesOrigin.html#DownloadDistValuesOriginKeepaliveTimeout>`_ in the *Amazon CloudFront Developer Guide* . Default: - 5
+            :param origin_mtls_config: 
             :param origin_read_timeout: Specifies how long, in seconds, CloudFront waits for a response from the origin. This is also known as the *origin response timeout* . The minimum timeout is 1 second, the maximum is 120 seconds, and the default (if you don't specify otherwise) is 30 seconds. For more information, see `Response timeout <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesOrigin.html#DownloadDistValuesOriginResponseTimeout>`_ in the *Amazon CloudFront Developer Guide* . Default: - 30
             :param origin_ssl_protocols: Specifies the minimum SSL/TLS protocol that CloudFront uses when connecting to your origin over HTTPS. Valid values include ``SSLv3`` , ``TLSv1`` , ``TLSv1.1`` , and ``TLSv1.2`` . For more information, see `Minimum Origin SSL Protocol <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DownloadDistValuesOrigin.html#DownloadDistValuesOriginSSLProtocols>`_ in the *Amazon CloudFront Developer Guide* .
 
@@ -8452,6 +8466,9 @@ class CfnDistribution(
                     https_port=123,
                     ip_address_type="ipAddressType",
                     origin_keepalive_timeout=123,
+                    origin_mtls_config=cloudfront.CfnDistribution.OriginMtlsConfigProperty(
+                        client_certificate_arn="clientCertificateArn"
+                    ),
                     origin_read_timeout=123,
                     origin_ssl_protocols=["originSslProtocols"]
                 )
@@ -8463,6 +8480,7 @@ class CfnDistribution(
                 check_type(argname="argument https_port", value=https_port, expected_type=type_hints["https_port"])
                 check_type(argname="argument ip_address_type", value=ip_address_type, expected_type=type_hints["ip_address_type"])
                 check_type(argname="argument origin_keepalive_timeout", value=origin_keepalive_timeout, expected_type=type_hints["origin_keepalive_timeout"])
+                check_type(argname="argument origin_mtls_config", value=origin_mtls_config, expected_type=type_hints["origin_mtls_config"])
                 check_type(argname="argument origin_read_timeout", value=origin_read_timeout, expected_type=type_hints["origin_read_timeout"])
                 check_type(argname="argument origin_ssl_protocols", value=origin_ssl_protocols, expected_type=type_hints["origin_ssl_protocols"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -8476,6 +8494,8 @@ class CfnDistribution(
                 self._values["ip_address_type"] = ip_address_type
             if origin_keepalive_timeout is not None:
                 self._values["origin_keepalive_timeout"] = origin_keepalive_timeout
+            if origin_mtls_config is not None:
+                self._values["origin_mtls_config"] = origin_mtls_config
             if origin_read_timeout is not None:
                 self._values["origin_read_timeout"] = origin_read_timeout
             if origin_ssl_protocols is not None:
@@ -8546,6 +8566,16 @@ class CfnDistribution(
             '''
             result = self._values.get("origin_keepalive_timeout")
             return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def origin_mtls_config(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.OriginMtlsConfigProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-customoriginconfig.html#cfn-cloudfront-distribution-customoriginconfig-originmtlsconfig
+            '''
+            result = self._values.get("origin_mtls_config")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnDistribution.OriginMtlsConfigProperty"]], result)
 
         @builtins.property
         def origin_read_timeout(self) -> typing.Optional[jsii.Number]:
@@ -11148,6 +11178,56 @@ class CfnDistribution(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_cloudfront.CfnDistribution.OriginMtlsConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"client_certificate_arn": "clientCertificateArn"},
+    )
+    class OriginMtlsConfigProperty:
+        def __init__(self, *, client_certificate_arn: builtins.str) -> None:
+            '''
+            :param client_certificate_arn: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-originmtlsconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_cloudfront as cloudfront
+                
+                origin_mtls_config_property = cloudfront.CfnDistribution.OriginMtlsConfigProperty(
+                    client_certificate_arn="clientCertificateArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__921a26296c579eeb402cf2790da3cb7403b5027d2b4118a8f945f26a70bab2bf)
+                check_type(argname="argument client_certificate_arn", value=client_certificate_arn, expected_type=type_hints["client_certificate_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "client_certificate_arn": client_certificate_arn,
+            }
+
+        @builtins.property
+        def client_certificate_arn(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-originmtlsconfig.html#cfn-cloudfront-distribution-originmtlsconfig-clientcertificatearn
+            '''
+            result = self._values.get("client_certificate_arn")
+            assert result is not None, "Required property 'client_certificate_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "OriginMtlsConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_cloudfront.CfnDistribution.OriginProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -11234,6 +11314,9 @@ class CfnDistribution(
                         https_port=123,
                         ip_address_type="ipAddressType",
                         origin_keepalive_timeout=123,
+                        origin_mtls_config=cloudfront.CfnDistribution.OriginMtlsConfigProperty(
+                            client_certificate_arn="clientCertificateArn"
+                        ),
                         origin_read_timeout=123,
                         origin_ssl_protocols=["originSslProtocols"]
                     ),
@@ -12706,6 +12789,9 @@ class CfnDistributionProps:
                             https_port=123,
                             ip_address_type="ipAddressType",
                             origin_keepalive_timeout=123,
+                            origin_mtls_config=cloudfront.CfnDistribution.OriginMtlsConfigProperty(
+                                client_certificate_arn="clientCertificateArn"
+                            ),
                             origin_read_timeout=123,
                             origin_ssl_protocols=["originSslProtocols"]
                         ),
@@ -23795,7 +23881,11 @@ typing.cast(typing.Any, IOrigin).__jsii_proxy_class__ = lambda : _IOriginProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cloudfront.IOriginAccessControl")
-class IOriginAccessControl(_IResource_c80c4260, typing_extensions.Protocol):
+class IOriginAccessControl(
+    _IResource_c80c4260,
+    _IOriginAccessControlRef_c4ffc680,
+    typing_extensions.Protocol,
+):
     '''Represents a CloudFront Origin Access Control.'''
 
     @builtins.property
@@ -23810,6 +23900,7 @@ class IOriginAccessControl(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IOriginAccessControlProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IOriginAccessControlRef_c4ffc680), # type: ignore[misc]
 ):
     '''Represents a CloudFront Origin Access Control.'''
 
@@ -25435,6 +25526,9 @@ class OriginBindConfig:
                         https_port=123,
                         ip_address_type="ipAddressType",
                         origin_keepalive_timeout=123,
+                        origin_mtls_config=cloudfront.CfnDistribution.OriginMtlsConfigProperty(
+                            client_certificate_arn="clientCertificateArn"
+                        ),
                         origin_read_timeout=123,
                         origin_ssl_protocols=["originSslProtocols"]
                     ),
@@ -28843,6 +28937,12 @@ class S3OriginAccessControl(
         '''
         return typing.cast(builtins.str, jsii.get(self, "originAccessControlId"))
 
+    @builtins.property
+    @jsii.member(jsii_name="originAccessControlRef")
+    def origin_access_control_ref(self) -> "_OriginAccessControlReference_811487ee":
+        '''A reference to a OriginAccessControl resource.'''
+        return typing.cast("_OriginAccessControlReference_811487ee", jsii.get(self, "originAccessControlRef"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_cloudfront.S3OriginAccessControlProps",
@@ -28954,7 +29054,7 @@ class S3OriginConfig:
         self,
         *,
         s3_bucket_source: "_IBucket_42e086fd",
-        origin_access_identity: typing.Optional["IOriginAccessIdentity"] = None,
+        origin_access_identity: typing.Optional['__ICloudFrontOriginAccessIdentityRef_a078bb8b__IGrantable_71c4f5de'] = None,
         origin_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         origin_path: typing.Optional[builtins.str] = None,
         origin_shield_region: typing.Optional[builtins.str] = None,
@@ -29015,13 +29115,15 @@ class S3OriginConfig:
         return typing.cast("_IBucket_42e086fd", result)
 
     @builtins.property
-    def origin_access_identity(self) -> typing.Optional["IOriginAccessIdentity"]:
+    def origin_access_identity(
+        self,
+    ) -> typing.Optional['__ICloudFrontOriginAccessIdentityRef_a078bb8b__IGrantable_71c4f5de']:
         '''The optional Origin Access Identity of the origin identity cloudfront will use when calling your s3 bucket.
 
         :default: No Origin Access Identity which requires the S3 bucket to be public accessible
         '''
         result = self._values.get("origin_access_identity")
-        return typing.cast(typing.Optional["IOriginAccessIdentity"], result)
+        return typing.cast(typing.Optional['__ICloudFrontOriginAccessIdentityRef_a078bb8b__IGrantable_71c4f5de'], result)
 
     @builtins.property
     def origin_headers(
@@ -29289,14 +29391,15 @@ class SourceConfiguration:
             # The values are placeholders you should change.
             import aws_cdk as cdk
             from aws_cdk import aws_cloudfront as cloudfront
+            from aws_cdk import aws_iam as iam
             from aws_cdk import aws_lambda as lambda_
             from aws_cdk import aws_s3 as s3
             from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
             # bucket: s3.Bucket
+            # cloud_front_origin_access_identity_ref: interfaces_cloudfront.ICloudFrontOriginAccessIdentityRef & iam.IGrantable
             # function_ref: interfaces_cloudfront.IFunctionRef
-            # key_group: cloudfront.KeyGroup
-            # origin_access_identity: cloudfront.OriginAccessIdentity
+            # key_group_ref: interfaces_cloudfront.IKeyGroupRef
             # version: lambda.Version
             
             source_configuration = cloudfront.SourceConfiguration(
@@ -29333,7 +29436,7 @@ class SourceConfiguration:
                     max_ttl=cdk.Duration.minutes(30),
                     min_ttl=cdk.Duration.minutes(30),
                     path_pattern="pathPattern",
-                    trusted_key_groups=[key_group],
+                    trusted_key_groups=[key_group_ref],
                     trusted_signers=["trustedSigners"],
                     viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.HTTPS_ONLY
                 )],
@@ -29378,7 +29481,7 @@ class SourceConfiguration:
                     s3_bucket_source=bucket,
             
                     # the properties below are optional
-                    origin_access_identity=origin_access_identity,
+                    origin_access_identity=cloud_front_origin_access_identity_ref,
                     origin_headers={
                         "origin_headers_key": "originHeaders"
                     },
@@ -29390,7 +29493,7 @@ class SourceConfiguration:
                     s3_bucket_source=bucket,
             
                     # the properties below are optional
-                    origin_access_identity=origin_access_identity,
+                    origin_access_identity=cloud_front_origin_access_identity_ref,
                     origin_headers={
                         "origin_headers_key": "originHeaders"
                     },
@@ -32303,6 +32406,12 @@ class FunctionUrlOriginAccessControl(
         '''
         return typing.cast(builtins.str, jsii.get(self, "originAccessControlId"))
 
+    @builtins.property
+    @jsii.member(jsii_name="originAccessControlRef")
+    def origin_access_control_ref(self) -> "_OriginAccessControlReference_811487ee":
+        '''A reference to a OriginAccessControl resource.'''
+        return typing.cast("_OriginAccessControlReference_811487ee", jsii.get(self, "originAccessControlRef"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_cloudfront.FunctionUrlOriginAccessControlProps",
@@ -32605,7 +32714,7 @@ def _typecheckingstub__e9578dfe76ca23ed5579560a4735db540df319a1f3d27dbe31a05d73a
     max_ttl: typing.Optional[_Duration_4839e8c3] = None,
     min_ttl: typing.Optional[_Duration_4839e8c3] = None,
     path_pattern: typing.Optional[builtins.str] = None,
-    trusted_key_groups: typing.Optional[typing.Sequence[IKeyGroup]] = None,
+    trusted_key_groups: typing.Optional[typing.Sequence[_IKeyGroupRef_44670bc7]] = None,
     trusted_signers: typing.Optional[typing.Sequence[builtins.str]] = None,
     viewer_protocol_policy: typing.Optional[ViewerProtocolPolicy] = None,
 ) -> None:
@@ -33334,6 +33443,7 @@ def _typecheckingstub__4818766b050bad18cc83a1490771aa31b5eaddfe75b97673cb8c97008
     https_port: typing.Optional[jsii.Number] = None,
     ip_address_type: typing.Optional[builtins.str] = None,
     origin_keepalive_timeout: typing.Optional[jsii.Number] = None,
+    origin_mtls_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDistribution.OriginMtlsConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     origin_read_timeout: typing.Optional[jsii.Number] = None,
     origin_ssl_protocols: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
@@ -33519,6 +33629,13 @@ def _typecheckingstub__1ec6db0461baa77c3c5f4808e0fd24051c8b01a4b3b804d8c8e89cc35
     *,
     quantity: jsii.Number,
     items: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDistribution.OriginGroupProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__921a26296c579eeb402cf2790da3cb7403b5027d2b4118a8f945f26a70bab2bf(
+    *,
+    client_certificate_arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -35521,7 +35638,7 @@ def _typecheckingstub__8f6d25b92869f9d23abd5a05839feb0af6686aa049fbbe51cca648f46
 def _typecheckingstub__e5837aa017bcf235e169321284a6cfe3cd3ac7b3c0baef0d9b68b55e8da518be(
     *,
     s3_bucket_source: _IBucket_42e086fd,
-    origin_access_identity: typing.Optional[IOriginAccessIdentity] = None,
+    origin_access_identity: typing.Optional['__ICloudFrontOriginAccessIdentityRef_a078bb8b__IGrantable_71c4f5de'] = None,
     origin_headers: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     origin_path: typing.Optional[builtins.str] = None,
     origin_shield_region: typing.Optional[builtins.str] = None,
@@ -35914,5 +36031,8 @@ def _typecheckingstub__207551b5918cb2acd48d7da3c08e9254a8c19ba3c2219d13ee2391852
     """Type checking stubs"""
     pass
 
-for cls in [ICachePolicy, IDistribution, IFunction, IKeyGroup, IKeyValueStore, IOrigin, IOriginAccessControl, IOriginAccessIdentity, IOriginRequestPolicy, IPublicKey, IRealtimeLogConfig, IResponseHeadersPolicy, IVpcOrigin]:
+class __ICloudFrontOriginAccessIdentityRef_a078bb8b__IGrantable_71c4f5de(_ICloudFrontOriginAccessIdentityRef_a078bb8b, _IGrantable_71c4f5de, typing_extensions.Protocol):
+    pass
+
+for cls in [ICachePolicy, IDistribution, IFunction, IKeyGroup, IKeyValueStore, IOrigin, IOriginAccessControl, IOriginAccessIdentity, IOriginRequestPolicy, IPublicKey, IRealtimeLogConfig, IResponseHeadersPolicy, IVpcOrigin, __ICloudFrontOriginAccessIdentityRef_a078bb8b__IGrantable_71c4f5de]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

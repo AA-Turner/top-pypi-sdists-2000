@@ -1641,6 +1641,11 @@ class CfnProject(
         
             # the properties below are optional
             default_job_timeout_minutes=123,
+            environment_variables=[devicefarm.CfnProject.EnvironmentVariableProperty(
+                name="name",
+                value="value"
+            )],
+            execution_role_arn="executionRoleArn",
             tags=[CfnTag(
                 key="key",
                 value="value"
@@ -1660,6 +1665,8 @@ class CfnProject(
         *,
         name: builtins.str,
         default_job_timeout_minutes: typing.Optional[jsii.Number] = None,
+        environment_variables: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.EnvironmentVariableProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        execution_role_arn: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         vpc_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -1669,6 +1676,8 @@ class CfnProject(
         :param id: Construct identifier for this resource (unique in its scope).
         :param name: The project's name.
         :param default_job_timeout_minutes: Sets the execution timeout value (in minutes) for a project. All test runs in this project use the specified execution timeout value unless overridden when scheduling a run.
+        :param environment_variables: 
+        :param execution_role_arn: 
         :param tags: The tags to add to the resource. A tag is an array of key-value pairs. Tag keys can have a maximum character length of 128 characters. Tag values can have a maximum length of 256 characters.
         :param vpc_config: The VPC security groups and subnets that are attached to a project.
         '''
@@ -1679,6 +1688,8 @@ class CfnProject(
         props = CfnProjectProps(
             name=name,
             default_job_timeout_minutes=default_job_timeout_minutes,
+            environment_variables=environment_variables,
+            execution_role_arn=execution_role_arn,
             tags=tags,
             vpc_config=vpc_config,
         )
@@ -1793,6 +1804,35 @@ class CfnProject(
         jsii.set(self, "defaultJobTimeoutMinutes", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="environmentVariables")
+    def environment_variables(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.EnvironmentVariableProperty"]]]]:
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.EnvironmentVariableProperty"]]]], jsii.get(self, "environmentVariables"))
+
+    @environment_variables.setter
+    def environment_variables(
+        self,
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.EnvironmentVariableProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__373a486494125e07c663db0a2734b701e614d21cacb9d410ac74509468832c43)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "environmentVariables", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="executionRoleArn")
+    def execution_role_arn(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "executionRoleArn"))
+
+    @execution_role_arn.setter
+    def execution_role_arn(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ea505032ef293a7281e50f2583e0c4d2f5e37c724121e4d551db8dc6caa98c13)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "executionRoleArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="tagsRaw")
     def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''The tags to add to the resource.'''
@@ -1822,6 +1862,69 @@ class CfnProject(
             type_hints = typing.get_type_hints(_typecheckingstub__d3fa42db493c8ae53f5c45defd768baab8f31711f46fd941b6fdd015f0417e30)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "vpcConfig", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_devicefarm.CfnProject.EnvironmentVariableProperty",
+        jsii_struct_bases=[],
+        name_mapping={"name": "name", "value": "value"},
+    )
+    class EnvironmentVariableProperty:
+        def __init__(self, *, name: builtins.str, value: builtins.str) -> None:
+            '''
+            :param name: 
+            :param value: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devicefarm-project-environmentvariable.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_devicefarm as devicefarm
+                
+                environment_variable_property = devicefarm.CfnProject.EnvironmentVariableProperty(
+                    name="name",
+                    value="value"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__5937bf09e24572df4c4a53b6d73dbbd301d83d90d6015bf7a59f7ed419d38f45)
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+                check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "name": name,
+                "value": value,
+            }
+
+        @builtins.property
+        def name(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devicefarm-project-environmentvariable.html#cfn-devicefarm-project-environmentvariable-name
+            '''
+            result = self._values.get("name")
+            assert result is not None, "Required property 'name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def value(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-devicefarm-project-environmentvariable.html#cfn-devicefarm-project-environmentvariable-value
+            '''
+            result = self._values.get("value")
+            assert result is not None, "Required property 'value' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EnvironmentVariableProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_devicefarm.CfnProject.VpcConfigProperty",
@@ -1926,6 +2029,8 @@ class CfnProject(
     name_mapping={
         "name": "name",
         "default_job_timeout_minutes": "defaultJobTimeoutMinutes",
+        "environment_variables": "environmentVariables",
+        "execution_role_arn": "executionRoleArn",
         "tags": "tags",
         "vpc_config": "vpcConfig",
     },
@@ -1936,6 +2041,8 @@ class CfnProjectProps:
         *,
         name: builtins.str,
         default_job_timeout_minutes: typing.Optional[jsii.Number] = None,
+        environment_variables: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.EnvironmentVariableProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        execution_role_arn: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         vpc_config: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProject.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -1943,6 +2050,8 @@ class CfnProjectProps:
 
         :param name: The project's name.
         :param default_job_timeout_minutes: Sets the execution timeout value (in minutes) for a project. All test runs in this project use the specified execution timeout value unless overridden when scheduling a run.
+        :param environment_variables: 
+        :param execution_role_arn: 
         :param tags: The tags to add to the resource. A tag is an array of key-value pairs. Tag keys can have a maximum character length of 128 characters. Tag values can have a maximum length of 256 characters.
         :param vpc_config: The VPC security groups and subnets that are attached to a project.
 
@@ -1961,6 +2070,11 @@ class CfnProjectProps:
             
                 # the properties below are optional
                 default_job_timeout_minutes=123,
+                environment_variables=[devicefarm.CfnProject.EnvironmentVariableProperty(
+                    name="name",
+                    value="value"
+                )],
+                execution_role_arn="executionRoleArn",
                 tags=[CfnTag(
                     key="key",
                     value="value"
@@ -1976,6 +2090,8 @@ class CfnProjectProps:
             type_hints = typing.get_type_hints(_typecheckingstub__6559d9d182fd1fc519eba56cb6cb8709e18e4013a0f927415f794e48faa0066c)
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument default_job_timeout_minutes", value=default_job_timeout_minutes, expected_type=type_hints["default_job_timeout_minutes"])
+            check_type(argname="argument environment_variables", value=environment_variables, expected_type=type_hints["environment_variables"])
+            check_type(argname="argument execution_role_arn", value=execution_role_arn, expected_type=type_hints["execution_role_arn"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
             check_type(argname="argument vpc_config", value=vpc_config, expected_type=type_hints["vpc_config"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -1983,6 +2099,10 @@ class CfnProjectProps:
         }
         if default_job_timeout_minutes is not None:
             self._values["default_job_timeout_minutes"] = default_job_timeout_minutes
+        if environment_variables is not None:
+            self._values["environment_variables"] = environment_variables
+        if execution_role_arn is not None:
+            self._values["execution_role_arn"] = execution_role_arn
         if tags is not None:
             self._values["tags"] = tags
         if vpc_config is not None:
@@ -2008,6 +2128,24 @@ class CfnProjectProps:
         '''
         result = self._values.get("default_job_timeout_minutes")
         return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def environment_variables(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.EnvironmentVariableProperty"]]]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devicefarm-project.html#cfn-devicefarm-project-environmentvariables
+        '''
+        result = self._values.get("environment_variables")
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnProject.EnvironmentVariableProperty"]]]], result)
+
+    @builtins.property
+    def execution_role_arn(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-devicefarm-project.html#cfn-devicefarm-project-executionrolearn
+        '''
+        result = self._values.get("execution_role_arn")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
@@ -3161,6 +3299,8 @@ def _typecheckingstub__235d8b8da76a28a97a451896d3b8c3cb58dfdd957be4b441ac00cfaaf
     *,
     name: builtins.str,
     default_job_timeout_minutes: typing.Optional[jsii.Number] = None,
+    environment_variables: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.EnvironmentVariableProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    execution_role_arn: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -3203,6 +3343,18 @@ def _typecheckingstub__acb87f983595b1a8464d152e1854f60b6c281bc9bee144f8c5527ab92
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__373a486494125e07c663db0a2734b701e614d21cacb9d410ac74509468832c43(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnProject.EnvironmentVariableProperty]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ea505032ef293a7281e50f2583e0c4d2f5e37c724121e4d551db8dc6caa98c13(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__41fbb1c60eec673fc1dd40b21d96b07f793303fbfbd3ec34d3536f2ad3b05f66(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
 ) -> None:
@@ -3211,6 +3363,14 @@ def _typecheckingstub__41fbb1c60eec673fc1dd40b21d96b07f793303fbfbd3ec34d3536f2ad
 
 def _typecheckingstub__d3fa42db493c8ae53f5c45defd768baab8f31711f46fd941b6fdd015f0417e30(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnProject.VpcConfigProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5937bf09e24572df4c4a53b6d73dbbd301d83d90d6015bf7a59f7ed419d38f45(
+    *,
+    name: builtins.str,
+    value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3228,6 +3388,8 @@ def _typecheckingstub__6559d9d182fd1fc519eba56cb6cb8709e18e4013a0f927415f794e48f
     *,
     name: builtins.str,
     default_job_timeout_minutes: typing.Optional[jsii.Number] = None,
+    environment_variables: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.EnvironmentVariableProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    execution_role_arn: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:

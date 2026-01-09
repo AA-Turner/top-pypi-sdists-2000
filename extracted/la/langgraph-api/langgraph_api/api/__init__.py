@@ -30,7 +30,6 @@ from langgraph_api.config import (
     LANGGRAPH_ENCRYPTION,
     MIGRATIONS_PATH,
     MOUNT_PREFIX,
-    PROBE_CORE_API_SERVER,
 )
 from langgraph_api.feature_flags import FF_USE_CORE_API
 from langgraph_api.graph import js_bg_tasks
@@ -38,7 +37,7 @@ from langgraph_api.grpc.client import get_shared_client
 from langgraph_api.js.base import is_js_path
 from langgraph_api.timing import profiled_import
 from langgraph_api.validation import DOCS_HTML
-from langgraph_runtime.database import connect, healthcheck
+from langgraph_runtime.database import healthcheck
 
 logger = structlog.stdlib.get_logger(__name__)
 
@@ -76,7 +75,7 @@ async def ok(request: Request, *, disabled: bool = False):
 
         healthcheck_coroutines.append(js_healthcheck())
 
-    if FF_USE_CORE_API and PROBE_CORE_API_SERVER:
+    if FF_USE_CORE_API:
         healthcheck_coroutines.append(grpc_healthcheck())
 
     await asyncio.gather(*healthcheck_coroutines)
@@ -217,16 +216,9 @@ if HTTP_CONFIG:
             )
 
 
-if "inmem" in MIGRATIONS_PATH:
+if "__inmem" in MIGRATIONS_PATH:
+    from langgraph_runtime_inmem.routes import get_internal_routes
 
-    async def truncate(request: Request):
-        from langgraph_runtime.checkpoint import Checkpointer
-
-        await asyncio.to_thread(Checkpointer().clear)
-        async with connect() as conn:
-            await asyncio.to_thread(conn.clear)
-        return JSONResponse({"ok": True})
-
-    unshadowable_meta_routes.insert(
-        0, Route("/internal/truncate", truncate, methods=["POST"])
-    )
+    if get_internal_routes is not None:
+        for route in get_internal_routes():
+            unshadowable_meta_routes.insert(0, route)

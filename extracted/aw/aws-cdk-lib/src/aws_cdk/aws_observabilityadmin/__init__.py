@@ -3046,9 +3046,9 @@ class CfnS3TableIntegration(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param encryption: Defines the encryption configuration for S3 Table integrations, including the encryption algorithm and KMS key settings.
-        :param role_arn: The ARN of the role used to access the S3 Table Integration.
-        :param log_sources: The CloudWatch Logs data sources to associate with the S3 Table Integration.
-        :param tags: An array of key-value pairs to apply to this resource.
+        :param role_arn: The Amazon Resource Name (ARN) of the IAM role that grants permissions for the S3 Table integration to access necessary resources.
+        :param log_sources: A data source with an S3 Table integration for query access in the ``logs`` namespace.
+        :param tags: The key-value pairs to associate with the S3 Table integration resource for categorization and management purposes.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e613f2b4c0bd0fe05183ae10e1072f669e68ecf8da1370aa25246cc8572b5e2f)
@@ -3122,7 +3122,7 @@ class CfnS3TableIntegration(
     @builtins.property
     @jsii.member(jsii_name="attrArn")
     def attr_arn(self) -> builtins.str:
-        '''The ARN of the S3 Table Integration.
+        '''The Amazon Resource Name (ARN) of the S3 Table integration.
 
         :cloudformationAttribute: Arn
         '''
@@ -3166,7 +3166,7 @@ class CfnS3TableIntegration(
     @builtins.property
     @jsii.member(jsii_name="roleArn")
     def role_arn(self) -> builtins.str:
-        '''The ARN of the role used to access the S3 Table Integration.'''
+        '''The Amazon Resource Name (ARN) of the IAM role that grants permissions for the S3 Table integration to access necessary resources.'''
         return typing.cast(builtins.str, jsii.get(self, "roleArn"))
 
     @role_arn.setter
@@ -3181,7 +3181,7 @@ class CfnS3TableIntegration(
     def log_sources(
         self,
     ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnS3TableIntegration.LogSourceProperty"]]]]:
-        '''The CloudWatch Logs data sources to associate with the S3 Table Integration.'''
+        '''A data source with an S3 Table integration for query access in the ``logs`` namespace.'''
         return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnS3TableIntegration.LogSourceProperty"]]]], jsii.get(self, "logSources"))
 
     @log_sources.setter
@@ -3197,7 +3197,7 @@ class CfnS3TableIntegration(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
-        '''An array of key-value pairs to apply to this resource.'''
+        '''The key-value pairs to associate with the S3 Table integration resource for categorization and management purposes.'''
         return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -3219,10 +3219,10 @@ class CfnS3TableIntegration(
             sse_algorithm: builtins.str,
             kms_key_arn: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''Encryption configuration for the S3 Table Integration.
+            '''Defines the encryption configuration for S3 Table integrations, including the encryption algorithm and KMS key settings.
 
-            :param sse_algorithm: The server-side encryption algorithm used to encrypt the S3 Table(s) data.
-            :param kms_key_arn: The ARN of the KMS key used to encrypt the S3 Table Integration.
+            :param sse_algorithm: The server-side encryption algorithm used for encrypting data in the S3 Table integration.
+            :param kms_key_arn: The Amazon Resource Name (ARN) of the KMS key used for encryption when using customer-managed keys.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-s3tableintegration-encryptionconfig.html
             :exampleMetadata: fixture=_generated
@@ -3252,7 +3252,7 @@ class CfnS3TableIntegration(
 
         @builtins.property
         def sse_algorithm(self) -> builtins.str:
-            '''The server-side encryption algorithm used to encrypt the S3 Table(s) data.
+            '''The server-side encryption algorithm used for encrypting data in the S3 Table integration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-s3tableintegration-encryptionconfig.html#cfn-observabilityadmin-s3tableintegration-encryptionconfig-ssealgorithm
             '''
@@ -3262,7 +3262,7 @@ class CfnS3TableIntegration(
 
         @builtins.property
         def kms_key_arn(self) -> typing.Optional[builtins.str]:
-            '''The ARN of the KMS key used to encrypt the S3 Table Integration.
+            '''The Amazon Resource Name (ARN) of the KMS key used for encryption when using customer-managed keys.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-s3tableintegration-encryptionconfig.html#cfn-observabilityadmin-s3tableintegration-encryptionconfig-kmskeyarn
             '''
@@ -3293,11 +3293,11 @@ class CfnS3TableIntegration(
             type: builtins.str,
             identifier: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''CloudWatch Logs data source to associate with the S3 Table Integration.
+            '''A data source with an S3 Table integration for query access in the ``logs`` namespace.
 
-            :param name: The name of the CloudWatch Logs data source.
-            :param type: The type of the CloudWatch Logs data source.
-            :param identifier: The ID of the CloudWatch Logs data source association.
+            :param name: The name of the data source.
+            :param type: The type of the data source.
+            :param identifier: The unique identifier for the association between the data source and S3 Table integration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-s3tableintegration-logsource.html
             :exampleMetadata: fixture=_generated
@@ -3330,7 +3330,7 @@ class CfnS3TableIntegration(
 
         @builtins.property
         def name(self) -> builtins.str:
-            '''The name of the CloudWatch Logs data source.
+            '''The name of the data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-s3tableintegration-logsource.html#cfn-observabilityadmin-s3tableintegration-logsource-name
             '''
@@ -3340,7 +3340,7 @@ class CfnS3TableIntegration(
 
         @builtins.property
         def type(self) -> builtins.str:
-            '''The type of the CloudWatch Logs data source.
+            '''The type of the data source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-s3tableintegration-logsource.html#cfn-observabilityadmin-s3tableintegration-logsource-type
             '''
@@ -3350,7 +3350,7 @@ class CfnS3TableIntegration(
 
         @builtins.property
         def identifier(self) -> typing.Optional[builtins.str]:
-            '''The ID of the CloudWatch Logs data source association.
+            '''The unique identifier for the association between the data source and S3 Table integration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-s3tableintegration-logsource.html#cfn-observabilityadmin-s3tableintegration-logsource-identifier
             '''
@@ -3391,9 +3391,9 @@ class CfnS3TableIntegrationProps:
         '''Properties for defining a ``CfnS3TableIntegration``.
 
         :param encryption: Defines the encryption configuration for S3 Table integrations, including the encryption algorithm and KMS key settings.
-        :param role_arn: The ARN of the role used to access the S3 Table Integration.
-        :param log_sources: The CloudWatch Logs data sources to associate with the S3 Table Integration.
-        :param tags: An array of key-value pairs to apply to this resource.
+        :param role_arn: The Amazon Resource Name (ARN) of the IAM role that grants permissions for the S3 Table integration to access necessary resources.
+        :param log_sources: A data source with an S3 Table integration for query access in the ``logs`` namespace.
+        :param tags: The key-value pairs to associate with the S3 Table integration resource for categorization and management purposes.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-s3tableintegration.html
         :exampleMetadata: fixture=_generated
@@ -3457,7 +3457,7 @@ class CfnS3TableIntegrationProps:
 
     @builtins.property
     def role_arn(self) -> builtins.str:
-        '''The ARN of the role used to access the S3 Table Integration.
+        '''The Amazon Resource Name (ARN) of the IAM role that grants permissions for the S3 Table integration to access necessary resources.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-s3tableintegration.html#cfn-observabilityadmin-s3tableintegration-rolearn
         '''
@@ -3469,7 +3469,7 @@ class CfnS3TableIntegrationProps:
     def log_sources(
         self,
     ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnS3TableIntegration.LogSourceProperty"]]]]:
-        '''The CloudWatch Logs data sources to associate with the S3 Table Integration.
+        '''A data source with an S3 Table integration for query access in the ``logs`` namespace.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-s3tableintegration.html#cfn-observabilityadmin-s3tableintegration-logsources
         '''
@@ -3478,7 +3478,7 @@ class CfnS3TableIntegrationProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
-        '''An array of key-value pairs to apply to this resource.
+        '''The key-value pairs to associate with the S3 Table integration resource for categorization and management purposes.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-s3tableintegration.html#cfn-observabilityadmin-s3tableintegration-tags
         '''
@@ -3503,7 +3503,15 @@ class CfnTelemetryPipelines(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_observabilityadmin.CfnTelemetryPipelines",
 ):
-    '''Resource Type definition for AWS::ObservabilityAdmin::TelemetryPipelines.
+    '''Creates a telemetry pipeline for processing and transforming telemetry data.
+
+    The pipeline defines how data flows from sources through processors to destinations, enabling data transformation and delivering capabilities.
+
+    **Using CloudWatch as a pipeline source** The following is an example of a ``Body`` property value for the ``Configuration`` object. { "Type": "AWS::ObservabilityAdmin::TelemetryPipelines", "Properties": { "Configuration": { "Body": "pipeline:\\n source:\\n cloudwatch_logs:\\n log_event_metadata:\\n data_source_name: "my_data_source"\\n data_source_type: "default"\\n aws:\\n sts_role_arn: "arn:aws:iam::123456789012:role/MyPipelineAccessRole"\\n processor:\\n - parse_json: {}\\n sink:\\n - cloudwatch_logs:\\n log_group: "@original"" } }
+    } Type: AWS::ObservabilityAdmin::TelemetryPipelines
+    Properties: Configuration: Body: | pipeline: source: cloudwatch_logs: log_event_metadata: data_source_name: "my_data_source" data_source_type: "default" aws: sts_role_arn: "arn:aws:iam::123456789012:role/MyPipelineAccessRole" processor: - parse_json: {} sink: - cloudwatch_logs: log_group: "@original" **Using Amazon S3 as a pipeline source** The following is an example of a ``Body`` property value for the ``Configuration`` object. { "Type": "AWS::ObservabilityAdmin::TelemetryPipelines", "Properties": { "Configuration": { "Body": "pipeline:\\n source:\\n s3:\\n sqs:\\n visibility_timeout: "PT60S"\\n visibility_duplication_protection: true\\n maximum_messages: 10\\n queue_url: "https://sqs.us-east-1.amazonaws.com/123456789012/my-sqs-queue"\\n notification_type: "sqs"\\n codec:\\n ndjson: {}\\n aws:\\n region: "us-east-1"\\n sts_role_arn: "arn:aws:iam::123456789012:role/MyAccessRole"\\n data_source_name: "crowdstrike_falcon"\\n processor:\\n - ocsf:\\n version: "1.5"\\n mapping_version: "1.5.0"\\n schema:\\n crowdstrike_falcon:\\n sink:\\n - cloudwatch_logs:\\n log_group: "my-log-group"" } }
+    } Type: AWS::ObservabilityAdmin::TelemetryPipelines
+    Properties: Configuration: Body: | pipeline: source: s3: sqs: visibility_timeout: "PT60S" visibility_duplication_protection: true maximum_messages: 10 queue_url: "https://sqs.us-east-1.amazonaws.com/123456789012/my-sqs-queue" notification_type: "sqs" codec: ndjson: {} aws: region: "us-east-1" sts_role_arn: "arn:aws:iam::123456789012:role/MyAccessRole" data_source_name: "crowdstrike_falcon" processor: - ocsf: version: "1.5" mapping_version: "1.5.0" schema: crowdstrike_falcon: sink: - cloudwatch_logs: log_group: "my-log-group"
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-telemetrypipelines.html
     :cloudformationResource: AWS::ObservabilityAdmin::TelemetryPipelines
@@ -3543,9 +3551,9 @@ class CfnTelemetryPipelines(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param configuration: 
-        :param name: 
-        :param tags: An array of key-value pairs to apply to this resource.
+        :param configuration: The configuration that defines how the telemetry pipeline processes data, including sources, processors, and destinations. For more information, see the `Amazon CloudWatch User Guide <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Creating-pipelines.html>`_ .
+        :param name: The name of the telemetry pipeline to create. The name must be unique within your account.
+        :param tags: The key-value pairs to associate with the telemetry pipeline resource for categorization and management purposes.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f612352088aa915560d9c73b4fc630a10a3f3706939f1998202a1ad9dcaa9b2e)
@@ -3616,7 +3624,8 @@ class CfnTelemetryPipelines(
     @builtins.property
     @jsii.member(jsii_name="attrArn")
     def attr_arn(self) -> builtins.str:
-        '''
+        '''The Amazon Resource Name (ARN) of the created telemetry pipeline.
+
         :cloudformationAttribute: Arn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrArn"))
@@ -3632,7 +3641,8 @@ class CfnTelemetryPipelines(
     @builtins.property
     @jsii.member(jsii_name="attrPipelineIdentifier")
     def attr_pipeline_identifier(self) -> builtins.str:
-        '''
+        '''The Amazon Resource Name (ARN) of the telemetry pipeline.
+
         :cloudformationAttribute: PipelineIdentifier
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrPipelineIdentifier"))
@@ -3640,7 +3650,8 @@ class CfnTelemetryPipelines(
     @builtins.property
     @jsii.member(jsii_name="attrStatus")
     def attr_status(self) -> builtins.str:
-        '''
+        '''The current status of the telemetry pipeline.
+
         :cloudformationAttribute: Status
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrStatus"))
@@ -3675,6 +3686,7 @@ class CfnTelemetryPipelines(
     def configuration(
         self,
     ) -> typing.Union["_IResolvable_da3f097b", "CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty"]:
+        '''The configuration that defines how the telemetry pipeline processes data, including sources, processors, and destinations.'''
         return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty"], jsii.get(self, "configuration"))
 
     @configuration.setter
@@ -3690,6 +3702,7 @@ class CfnTelemetryPipelines(
     @builtins.property
     @jsii.member(jsii_name="name")
     def name(self) -> typing.Optional[builtins.str]:
+        '''The name of the telemetry pipeline to create.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "name"))
 
     @name.setter
@@ -3702,7 +3715,7 @@ class CfnTelemetryPipelines(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
-        '''An array of key-value pairs to apply to this resource.'''
+        '''The key-value pairs to associate with the telemetry pipeline resource for categorization and management purposes.'''
         return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -3719,7 +3732,18 @@ class CfnTelemetryPipelines(
     )
     class TelemetryPipelineConfigurationProperty:
         def __init__(self, *, body: builtins.str) -> None:
-            '''Defines the configuration for a telemetry pipeline, including how data flows from sources through processors to destinations.
+            '''Defines the configuration for a pipeline, including how data flows from sources through processors to destinations.
+
+            The configuration is specified in YAML format and must include a valid pipeline definition with required source and sink components. This pipeline enables end-to-end telemetry data collection, transformation, and delivery while supporting optional processing steps and extensions for enhanced functionality.
+
+            The primary pipeline configuration section are:
+
+            - *Source:* Defines where log data originates from (S3 buckets, CloudWatch Logs, third-party APIs). Each pipeline must have exactly one source.
+            - *Processors (optional):* Transform, parse, and enrich log data as it flows through the pipeline. Processors are applied sequentially in the order they are defined.
+            - *Sink:* Defines the destination where processed log data is sent. Each pipeline must have exactly one sink.
+            - *Extensions (optional):* Provide additional functionality such as AWS Secrets Manager integration for credential management.
+
+            For more details on each configuration section see `CloudWatch pipelines User Guide <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch-pipelines.html>`_ . Additional comprehensive configuration examples can be found in the `CreateTelemetryPipeline API docs <https://docs.aws.amazon.com/cloudwatch/latest/observabilityadmin/API_CreateTelemetryPipeline.html#API_CreateTelemetryPipeline_Examples>`_ .
 
             :param body: The pipeline configuration body that defines the data processing rules and transformations.
 
@@ -3794,7 +3818,7 @@ class CfnTelemetryPipelines(
             '''Represents a complete telemetry pipeline resource with configuration, status, and metadata for data processing and transformation.
 
             :param arn: The Amazon Resource Name (ARN) of the telemetry pipeline.
-            :param configuration: The configuration that defines how the telemetry pipeline processes data.
+            :param configuration: The configuration that defines how the telemetry pipeline processes data. For more information, see the `Amazon CloudWatch User Guide <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Creating-pipelines.html>`_ .
             :param created_time_stamp: The timestamp when the telemetry pipeline was created.
             :param last_update_time_stamp: The timestamp when the telemetry pipeline was last updated.
             :param name: The name of the telemetry pipeline.
@@ -3872,6 +3896,8 @@ class CfnTelemetryPipelines(
             self,
         ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty"]]:
             '''The configuration that defines how the telemetry pipeline processes data.
+
+            For more information, see the `Amazon CloudWatch User Guide <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Creating-pipelines.html>`_ .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetrypipelines-telemetrypipeline.html#cfn-observabilityadmin-telemetrypipelines-telemetrypipeline-configuration
             '''
@@ -4016,9 +4042,9 @@ class CfnTelemetryPipelinesProps:
     ) -> None:
         '''Properties for defining a ``CfnTelemetryPipelines``.
 
-        :param configuration: 
-        :param name: 
-        :param tags: An array of key-value pairs to apply to this resource.
+        :param configuration: The configuration that defines how the telemetry pipeline processes data, including sources, processors, and destinations. For more information, see the `Amazon CloudWatch User Guide <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Creating-pipelines.html>`_ .
+        :param name: The name of the telemetry pipeline to create. The name must be unique within your account.
+        :param tags: The key-value pairs to associate with the telemetry pipeline resource for categorization and management purposes.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-telemetrypipelines.html
         :exampleMetadata: fixture=_generated
@@ -4060,7 +4086,10 @@ class CfnTelemetryPipelinesProps:
     def configuration(
         self,
     ) -> typing.Union["_IResolvable_da3f097b", "CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty"]:
-        '''
+        '''The configuration that defines how the telemetry pipeline processes data, including sources, processors, and destinations.
+
+        For more information, see the `Amazon CloudWatch User Guide <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Creating-pipelines.html>`_ .
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-telemetrypipelines.html#cfn-observabilityadmin-telemetrypipelines-configuration
         '''
         result = self._values.get("configuration")
@@ -4069,7 +4098,10 @@ class CfnTelemetryPipelinesProps:
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The name of the telemetry pipeline to create.
+
+        The name must be unique within your account.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-telemetrypipelines.html#cfn-observabilityadmin-telemetrypipelines-name
         '''
         result = self._values.get("name")
@@ -4077,7 +4109,7 @@ class CfnTelemetryPipelinesProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
-        '''An array of key-value pairs to apply to this resource.
+        '''The key-value pairs to associate with the telemetry pipeline resource for categorization and management purposes.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-telemetrypipelines.html#cfn-observabilityadmin-telemetrypipelines-tags
         '''

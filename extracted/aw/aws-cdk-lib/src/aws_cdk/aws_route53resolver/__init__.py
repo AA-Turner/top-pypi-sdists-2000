@@ -2575,9 +2575,9 @@ class CfnResolverEndpoint(
         :param preferred_instance_type: The Amazon EC2 instance type.
         :param protocols: Protocols used for the endpoint. DoH-FIPS is applicable for a default inbound endpoints only. For an inbound endpoint you can apply the protocols as follows: - Do53 and DoH in combination. - Do53 and DoH-FIPS in combination. - Do53 alone. - DoH alone. - DoH-FIPS alone. - None, which is treated as Do53. For a delegation inbound endpoint you can use Do53 only. For an outbound endpoint you can apply the protocols as follows: - Do53 and DoH in combination. - Do53 alone. - DoH alone. - None, which is treated as Do53.
         :param resolver_endpoint_type: The Resolver endpoint IP address type.
-        :param rni_enhanced_metrics_enabled: Specifies whether RNI enhanced metrics are enabled for the Resolver Endpoints. When set to true, one-minute granular metrics are published in CloudWatch for each RNI associated with this endpoint. When set to false, metrics are not published. Default is false.
+        :param rni_enhanced_metrics_enabled: Indicates whether RNI enhanced metrics are enabled for the Resolver endpoint. When enabled, one-minute granular metrics are published in CloudWatch for each RNI associated with this endpoint. When disabled, these metrics are not published.
         :param tags: Route 53 Resolver doesn't support updating tags through CloudFormation.
-        :param target_name_server_metrics_enabled: Specifies whether target name server metrics are enabled for the Outbound Resolver Endpoint. When set to true, one-minute granular metrics are published in CloudWatch for each target name server associated with this endpoint. When set to false, metrics are not published. Default is false.
+        :param target_name_server_metrics_enabled: Indicates whether target name server metrics are enabled for the outbound Resolver endpoint. When enabled, one-minute granular metrics are published in CloudWatch for each target name server associated with this endpoint. When disabled, these metrics are not published. This feature is not supported for inbound Resolver endpoint.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__08cda89b08c8f731727f875daf3a8c19a757df0fc3eddf478f27fb0918b6f59b)
@@ -2867,7 +2867,7 @@ class CfnResolverEndpoint(
     def rni_enhanced_metrics_enabled(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
-        '''Specifies whether RNI enhanced metrics are enabled for the Resolver Endpoints.'''
+        '''Indicates whether RNI enhanced metrics are enabled for the Resolver endpoint.'''
         return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "rniEnhancedMetricsEnabled"))
 
     @rni_enhanced_metrics_enabled.setter
@@ -2898,7 +2898,7 @@ class CfnResolverEndpoint(
     def target_name_server_metrics_enabled(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
-        '''Specifies whether target name server metrics are enabled for the Outbound Resolver Endpoint.'''
+        '''Indicates whether target name server metrics are enabled for the outbound Resolver endpoint.'''
         return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "targetNameServerMetricsEnabled"))
 
     @target_name_server_metrics_enabled.setter
@@ -3043,9 +3043,9 @@ class CfnResolverEndpointProps:
         :param preferred_instance_type: The Amazon EC2 instance type.
         :param protocols: Protocols used for the endpoint. DoH-FIPS is applicable for a default inbound endpoints only. For an inbound endpoint you can apply the protocols as follows: - Do53 and DoH in combination. - Do53 and DoH-FIPS in combination. - Do53 alone. - DoH alone. - DoH-FIPS alone. - None, which is treated as Do53. For a delegation inbound endpoint you can use Do53 only. For an outbound endpoint you can apply the protocols as follows: - Do53 and DoH in combination. - Do53 alone. - DoH alone. - None, which is treated as Do53.
         :param resolver_endpoint_type: The Resolver endpoint IP address type.
-        :param rni_enhanced_metrics_enabled: Specifies whether RNI enhanced metrics are enabled for the Resolver Endpoints. When set to true, one-minute granular metrics are published in CloudWatch for each RNI associated with this endpoint. When set to false, metrics are not published. Default is false.
+        :param rni_enhanced_metrics_enabled: Indicates whether RNI enhanced metrics are enabled for the Resolver endpoint. When enabled, one-minute granular metrics are published in CloudWatch for each RNI associated with this endpoint. When disabled, these metrics are not published.
         :param tags: Route 53 Resolver doesn't support updating tags through CloudFormation.
-        :param target_name_server_metrics_enabled: Specifies whether target name server metrics are enabled for the Outbound Resolver Endpoint. When set to true, one-minute granular metrics are published in CloudWatch for each target name server associated with this endpoint. When set to false, metrics are not published. Default is false.
+        :param target_name_server_metrics_enabled: Indicates whether target name server metrics are enabled for the outbound Resolver endpoint. When enabled, one-minute granular metrics are published in CloudWatch for each target name server associated with this endpoint. When disabled, these metrics are not published. This feature is not supported for inbound Resolver endpoint.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53resolver-resolverendpoint.html
         :exampleMetadata: fixture=_generated
@@ -3227,9 +3227,9 @@ class CfnResolverEndpointProps:
     def rni_enhanced_metrics_enabled(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
-        '''Specifies whether RNI enhanced metrics are enabled for the Resolver Endpoints.
+        '''Indicates whether RNI enhanced metrics are enabled for the Resolver endpoint.
 
-        When set to true, one-minute granular metrics are published in CloudWatch for each RNI associated with this endpoint. When set to false, metrics are not published. Default is false.
+        When enabled, one-minute granular metrics are published in CloudWatch for each RNI associated with this endpoint. When disabled, these metrics are not published.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53resolver-resolverendpoint.html#cfn-route53resolver-resolverendpoint-rnienhancedmetricsenabled
         '''
@@ -3249,9 +3249,9 @@ class CfnResolverEndpointProps:
     def target_name_server_metrics_enabled(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
-        '''Specifies whether target name server metrics are enabled for the Outbound Resolver Endpoint.
+        '''Indicates whether target name server metrics are enabled for the outbound Resolver endpoint.
 
-        When set to true, one-minute granular metrics are published in CloudWatch for each target name server associated with this endpoint. When set to false, metrics are not published. Default is false.
+        When enabled, one-minute granular metrics are published in CloudWatch for each target name server associated with this endpoint. When disabled, these metrics are not published. This feature is not supported for inbound Resolver endpoint.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53resolver-resolverendpoint.html#cfn-route53resolver-resolverendpoint-targetnameservermetricsenabled
         '''
