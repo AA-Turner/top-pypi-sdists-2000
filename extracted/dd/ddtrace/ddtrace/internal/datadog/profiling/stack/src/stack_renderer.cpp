@@ -153,6 +153,7 @@ StackRenderer::render_frame(Frame& frame)
             pushed_task_name = true;
         }
         // And return early to avoid pushing task name as a frame
+        // TODO: We may want to do that for clarity, actually. Let's reconvene.
         return;
     }
 

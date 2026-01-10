@@ -25,7 +25,8 @@ from langgraph_api.grpc.ops import (
     grpc_error_guard,
     map_if_exists,
 )
-from langgraph_api.serde import json_dumpb_optional, json_loads
+from langgraph_api.serde import json_dumpb, json_dumpb_optional, json_loads
+from langgraph_api.state import patch_interrupt
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
@@ -188,6 +189,27 @@ def _filter_thread_fields(
 
 def _normalize_uuid(value: UUID | str) -> str:
     return str(value) if isinstance(value, UUID) else str(UUID(str(value)))
+
+
+def _thread_status_checkpoint_to_proto(
+    checkpoint: dict[str, Any] | None,
+) -> pb.ThreadStatusCheckpoint | None:
+    """Convert checkpoint dict to ThreadStatusCheckpoint proto."""
+    if checkpoint is None:
+        return None
+
+    # Compute interrupts map from tasks (same logic as storage_postgres/ops.py)
+    interrupts = {
+        t["id"]: [patch_interrupt(i) for i in t["interrupts"]]
+        for t in checkpoint.get("tasks", [])
+        if t.get("interrupts")
+    }
+
+    return pb.ThreadStatusCheckpoint(
+        values_json=json_dumpb(checkpoint.get("values", {})),
+        next=list(checkpoint.get("next", [])),
+        interrupts_json=json_dumpb(interrupts),
+    )
 
 
 def _json_contains(container: Any, subset: dict[str, Any]) -> bool:
@@ -598,3 +620,57 @@ class Threads(Authenticated):
             yield thread
 
         return generate_result()
+
+    @staticmethod
+    async def _set_status(
+        conn,  # Not used in gRPC implementation
+        thread_id: UUID | str,
+        checkpoint: dict[str, Any] | None,
+        exception: BaseException | dict[str, Any] | None,
+        expected_status: ThreadStatus | Sequence[ThreadStatus] | None = None,
+    ) -> None:
+        """Set thread status.
+
+        This is an internal method (no auth) used in `Threads.State`.
+
+        Args:
+            conn: Not used (required for interface compatibility)
+            thread_id: Thread ID
+            checkpoint: Checkpoint payload containing values, next, tasks, etc.
+            exception: Exception to store on thread (BaseException or serialized dict)
+            expected_status: Expected current status(es) for optimistic locking
+        """
+        request_kwargs: dict[str, Any] = {
+            "thread_id": pb.UUID(value=_normalize_uuid(thread_id)),
+        }
+
+        # Map checkpoint to proto
+        checkpoint_proto = _thread_status_checkpoint_to_proto(checkpoint)
+        if checkpoint_proto is not None:
+            request_kwargs["checkpoint"] = checkpoint_proto
+
+        # Map exception to JSON bytes
+        if exception is not None:
+            if isinstance(exception, BaseException):
+                exception_dict = {
+                    "type": type(exception).__name__,
+                    "message": str(exception),
+                }
+            else:
+                exception_dict = exception
+            request_kwargs["exception_json"] = json_dumpb(exception_dict)
+
+        # Map expected_status to enum values
+        if expected_status:
+            if isinstance(expected_status, str):
+                expected_status = [expected_status]
+            status_enums = []
+            for status in expected_status:
+                mapped = THREAD_STATUS_TO_PB.get(status)
+                if mapped is not None:
+                    status_enums.append(mapped)
+            if status_enums:
+                request_kwargs["expected_status"] = status_enums
+
+        client = await get_shared_client()
+        await client.threads.SetStatus(pb.SetThreadStatusRequest(**request_kwargs))

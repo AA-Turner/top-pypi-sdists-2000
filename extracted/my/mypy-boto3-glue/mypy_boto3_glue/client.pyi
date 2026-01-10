@@ -3,7 +3,7 @@ Type annotations for glue service Client.
 
 [Documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/)
 
-Copyright 2025 Vlad Emelianov
+Copyright 2026 Vlad Emelianov
 
 Usage::
 
@@ -49,6 +49,7 @@ from .paginator import (
     ListConnectionTypesPaginator,
     ListEntitiesPaginator,
     ListJobsPaginator,
+    ListMaterializedViewRefreshTaskRunsPaginator,
     ListRegistriesPaginator,
     ListSchemasPaginator,
     ListSchemaVersionsPaginator,
@@ -280,6 +281,8 @@ from .type_defs import (
     GetJobsResponseTypeDef,
     GetMappingRequestTypeDef,
     GetMappingResponseTypeDef,
+    GetMaterializedViewRefreshTaskRunRequestTypeDef,
+    GetMaterializedViewRefreshTaskRunResponseTypeDef,
     GetMLTaskRunRequestTypeDef,
     GetMLTaskRunResponseTypeDef,
     GetMLTaskRunsRequestTypeDef,
@@ -387,6 +390,8 @@ from .type_defs import (
     ListIntegrationResourcePropertiesResponseTypeDef,
     ListJobsRequestTypeDef,
     ListJobsResponseTypeDef,
+    ListMaterializedViewRefreshTaskRunsRequestTypeDef,
+    ListMaterializedViewRefreshTaskRunsResponseTypeDef,
     ListMLTransformsRequestTypeDef,
     ListMLTransformsResponseTypeDef,
     ListRegistriesInputTypeDef,
@@ -447,6 +452,8 @@ from .type_defs import (
     StartImportLabelsTaskRunResponseTypeDef,
     StartJobRunRequestTypeDef,
     StartJobRunResponseTypeDef,
+    StartMaterializedViewRefreshTaskRunRequestTypeDef,
+    StartMaterializedViewRefreshTaskRunResponseTypeDef,
     StartMLEvaluationTaskRunRequestTypeDef,
     StartMLEvaluationTaskRunResponseTypeDef,
     StartMLLabelingSetGenerationTaskRunRequestTypeDef,
@@ -459,6 +466,7 @@ from .type_defs import (
     StopColumnStatisticsTaskRunScheduleRequestTypeDef,
     StopCrawlerRequestTypeDef,
     StopCrawlerScheduleRequestTypeDef,
+    StopMaterializedViewRefreshTaskRunRequestTypeDef,
     StopSessionRequestTypeDef,
     StopSessionResponseTypeDef,
     StopTriggerRequestTypeDef,
@@ -551,6 +559,9 @@ class Exceptions(BaseClientExceptions):
     InvalidStateException: type[BotocoreClientError]
     KMSKeyNotAccessibleFault: type[BotocoreClientError]
     MLTransformNotReadyException: type[BotocoreClientError]
+    MaterializedViewRefreshTaskNotRunningException: type[BotocoreClientError]
+    MaterializedViewRefreshTaskRunningException: type[BotocoreClientError]
+    MaterializedViewRefreshTaskStoppingException: type[BotocoreClientError]
     NoScheduleException: type[BotocoreClientError]
     OperationNotSupportedException: type[BotocoreClientError]
     OperationTimeoutException: type[BotocoreClientError]
@@ -1915,6 +1926,16 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#get_mapping)
         """
 
+    def get_materialized_view_refresh_task_run(
+        self, **kwargs: Unpack[GetMaterializedViewRefreshTaskRunRequestTypeDef]
+    ) -> GetMaterializedViewRefreshTaskRunResponseTypeDef:
+        """
+        Get the associated metadata/information for a task run, given a task run ID.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/glue/client/get_materialized_view_refresh_task_run.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#get_materialized_view_refresh_task_run)
+        """
+
     def get_partition(
         self, **kwargs: Unpack[GetPartitionRequestTypeDef]
     ) -> GetPartitionResponseTypeDef:
@@ -2421,6 +2442,16 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#list_ml_transforms)
         """
 
+    def list_materialized_view_refresh_task_runs(
+        self, **kwargs: Unpack[ListMaterializedViewRefreshTaskRunsRequestTypeDef]
+    ) -> ListMaterializedViewRefreshTaskRunsResponseTypeDef:
+        """
+        List all task runs for a particular account.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/glue/client/list_materialized_view_refresh_task_runs.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#list_materialized_view_refresh_task_runs)
+        """
+
     def list_registries(
         self, **kwargs: Unpack[ListRegistriesInputTypeDef]
     ) -> ListRegistriesResponseTypeDef:
@@ -2770,6 +2801,16 @@ class GlueClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#start_ml_labeling_set_generation_task_run)
         """
 
+    def start_materialized_view_refresh_task_run(
+        self, **kwargs: Unpack[StartMaterializedViewRefreshTaskRunRequestTypeDef]
+    ) -> StartMaterializedViewRefreshTaskRunResponseTypeDef:
+        """
+        Starts a materialized view refresh task run, for a specified table and columns.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/glue/client/start_materialized_view_refresh_task_run.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#start_materialized_view_refresh_task_run)
+        """
+
     def start_trigger(
         self, **kwargs: Unpack[StartTriggerRequestTypeDef]
     ) -> StartTriggerResponseTypeDef:
@@ -2827,6 +2868,16 @@ class GlueClient(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/glue/client/stop_crawler_schedule.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#stop_crawler_schedule)
+        """
+
+    def stop_materialized_view_refresh_task_run(
+        self, **kwargs: Unpack[StopMaterializedViewRefreshTaskRunRequestTypeDef]
+    ) -> dict[str, Any]:
+        """
+        Stops a materialized view refresh task run, for a specified table and columns.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/glue/client/stop_materialized_view_refresh_task_run.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#stop_materialized_view_refresh_task_run)
         """
 
     def stop_session(
@@ -3387,6 +3438,17 @@ class GlueClient(BaseClient):
     def get_paginator(  # type: ignore[override]
         self, operation_name: Literal["list_jobs"]
     ) -> ListJobsPaginator:
+        """
+        Create a paginator for an operation.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/glue/client/get_paginator.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/client/#get_paginator)
+        """
+
+    @overload  # type: ignore[override]
+    def get_paginator(  # type: ignore[override]
+        self, operation_name: Literal["list_materialized_view_refresh_task_runs"]
+    ) -> ListMaterializedViewRefreshTaskRunsPaginator:
         """
         Create a paginator for an operation.
 

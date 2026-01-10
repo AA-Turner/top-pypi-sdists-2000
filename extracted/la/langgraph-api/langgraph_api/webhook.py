@@ -10,7 +10,7 @@ from starlette.exceptions import HTTPException
 
 from langgraph_api.config import HTTP_CONFIG, WEBHOOKS_CONFIG
 from langgraph_api.config.schemas import WebhookUrlPolicy
-from langgraph_api.http import get_http_client, get_loopback_client, http_request
+from langgraph_api.http import ensure_http_client, get_loopback_client, http_request
 
 if TYPE_CHECKING:
     from langgraph_api.worker import WorkerResult
@@ -142,7 +142,7 @@ async def call_webhook(result: "WorkerResult") -> None:
                 # Call into this own app
                 webhook_client = get_loopback_client()
             else:
-                webhook_client = get_http_client()
+                webhook_client = await ensure_http_client()
             await http_request(
                 "POST",
                 webhook,

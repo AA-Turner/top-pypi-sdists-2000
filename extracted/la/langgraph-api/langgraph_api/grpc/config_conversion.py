@@ -218,6 +218,9 @@ def _configurable_from_proto(
     if config_proto.HasField("graph_id"):
         configurable[CONFIG_KEY_GRAPH_ID] = config_proto.graph_id
 
+    if config_proto.HasField("run_id"):
+        configurable["run_id"] = config_proto.run_id
+
     if len(config_proto.checkpoint_map) > 0:
         configurable[CONFIG_KEY_CHECKPOINT_MAP] = dict(config_proto.checkpoint_map)
 

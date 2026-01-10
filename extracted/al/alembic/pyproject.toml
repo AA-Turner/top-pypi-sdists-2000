@@ -52,9 +52,10 @@ alembic = "alembic.config:main"
 
 [dependency-groups]
 tests = [
-    "pytest>8,<8.4",
+    "pytest>8,<10",
     "pytest-xdist",
-    "black==25.1.0",  # for test_post_write.py
+    "black==25.9.0",  # for test_post_write.py
+    "zimports",  # for stub testing
     "tzdata",
     "junitparser"
 ]
@@ -65,7 +66,7 @@ coverage = [
 
 tests_postgresql = ["psycopg2>=2.7"]
 tests_mysql = ["mysqlclient>=1.4.0", "pymysql"]
-tests_oracle = ["cx_oracle"]
+tests_oracle = ["oracledb"]
 tests_mssql = ["pyodbc"]
 
 lint = [
@@ -83,7 +84,7 @@ lint = [
 mypy = [
     "mypy>=1.16.0",
     "nox",  # because we check noxfile.py
-    "pytest>8,<8.4",  # alembic/testing imports pytest
+    "pytest>8,<10",  # alembic/testing imports pytest
 ]
 
 [tool.coverage.paths]

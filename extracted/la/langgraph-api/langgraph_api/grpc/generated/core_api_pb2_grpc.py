@@ -992,7 +992,7 @@ class RunsStub(object):
         self.Create = channel.unary_unary(
                 '/coreApi.Runs/Create',
                 request_serializer=core__api__pb2.CreateRunRequest.SerializeToString,
-                response_deserializer=core__api__pb2.Run.FromString,
+                response_deserializer=core__api__pb2.CreateRunResponse.FromString,
                 _registered_method=True)
         self.Get = channel.unary_unary(
                 '/coreApi.Runs/Get',
@@ -1140,7 +1140,7 @@ def add_RunsServicer_to_server(servicer, server):
             'Create': grpc.unary_unary_rpc_method_handler(
                     servicer.Create,
                     request_deserializer=core__api__pb2.CreateRunRequest.FromString,
-                    response_serializer=core__api__pb2.Run.SerializeToString,
+                    response_serializer=core__api__pb2.CreateRunResponse.SerializeToString,
             ),
             'Get': grpc.unary_unary_rpc_method_handler(
                     servicer.Get,
@@ -1224,7 +1224,7 @@ class Runs(object):
             target,
             '/coreApi.Runs/Create',
             core__api__pb2.CreateRunRequest.SerializeToString,
-            core__api__pb2.Run.FromString,
+            core__api__pb2.CreateRunResponse.FromString,
             options,
             channel_credentials,
             insecure,

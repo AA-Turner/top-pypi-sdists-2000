@@ -2,7 +2,7 @@
 sections for nox tests, which include tags that indicate various combinations
 of those parameters in such a way that it's somewhat similar to how
 we were using the tox project; where individual dash-separated tags could
-be added to add more specificity to the suite configuation, or omitting them
+be added to add more specificity to the suite configuration, or omitting them
 would fall back to defaults.
 
 
@@ -215,6 +215,10 @@ def apply_pytest_opts(
     coverage: bool = False,
 ) -> list[str]:
     posargs, opts = extract_opts(session.posargs, "generate-junit")
+
+    if session.python and isinstance(session.python, str):
+        python_token = session.python.replace(".", "")
+        tokens.insert(0, python_token)
 
     file_suffix = "-".join(t for t in tokens if not t.startswith("_"))
 

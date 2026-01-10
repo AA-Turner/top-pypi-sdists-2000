@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pathspec
-Version: 1.0.2
+Version: 1.0.3
 Summary: Utility library for gitignore style pattern matching of file paths.
 Author-email: "Caleb P. Burns" <cpburnz@gmail.com>
 Requires-Python: >=3.9
@@ -262,6 +262,19 @@ a `Ruby gem`_.
 
 Change History
 ==============
+
+
+1.0.3 (2026-01-09)
+------------------
+
+Bug fixes:
+
+- `Issue #101`_: pyright strict errors with pathspec >= 1.0.0.
+- `Issue #102`_: No module named 'tomllib'.
+
+
+.. _`Issue #101`: https://github.com/cpburnz/python-pathspec/issues/101
+.. _`Issue #102`: https://github.com/cpburnz/python-pathspec/issues/102
 
 
 1.0.2 (2026-01-07)

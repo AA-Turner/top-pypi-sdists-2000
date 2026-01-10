@@ -838,12 +838,7 @@ from ..aws_iam import (
 from ..aws_logs import ILogGroup as _ILogGroup_3c4fa718
 from ..aws_s3 import IBucket as _IBucket_42e086fd
 from ..interfaces.aws_apigateway import (
-    ApiKeyReference as _ApiKeyReference_6382fd3a,
-    IApiKeyRef as _IApiKeyRef_6e16b46a,
-    IDomainNameRef as _IDomainNameRef_8b0ccf94,
-    IRestApiRef as _IRestApiRef_72dcbda0,
-    IUsagePlanRef as _IUsagePlanRef_7a28b470,
-    UsagePlanReference as _UsagePlanReference_3d3ec4d2,
+    IDomainNameRef as _IDomainNameRef_8b0ccf94, IRestApiRef as _IRestApiRef_72dcbda0
 )
 from ..interfaces.aws_apigatewayv2 import (
     ApiGatewayManagedOverridesReference as _ApiGatewayManagedOverridesReference_0d50f3d1,
@@ -1238,19 +1233,13 @@ class ApiKeyProps(ApiKeyOptions):
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_apigatewayv2.ApiMappingAttributes",
     jsii_struct_bases=[],
-    name_mapping={"api_mapping_id": "apiMappingId", "domain_name": "domainName"},
+    name_mapping={"api_mapping_id": "apiMappingId"},
 )
 class ApiMappingAttributes:
-    def __init__(
-        self,
-        *,
-        api_mapping_id: builtins.str,
-        domain_name: typing.Optional[builtins.str] = None,
-    ) -> None:
+    def __init__(self, *, api_mapping_id: builtins.str) -> None:
         '''The attributes used to import existing ApiMapping.
 
         :param api_mapping_id: The API mapping ID.
-        :param domain_name: Domain name. Default: - Certain operations on the referenced object may fail if not supplied
 
         :exampleMetadata: fixture=_generated
 
@@ -1261,21 +1250,15 @@ class ApiMappingAttributes:
             from aws_cdk import aws_apigatewayv2 as apigatewayv2
             
             api_mapping_attributes = apigatewayv2.ApiMappingAttributes(
-                api_mapping_id="apiMappingId",
-            
-                # the properties below are optional
-                domain_name="domainName"
+                api_mapping_id="apiMappingId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__87e51f8314eb457688965754ef962ccc6b34cd3477e30e0b5c48927231e6e450)
             check_type(argname="argument api_mapping_id", value=api_mapping_id, expected_type=type_hints["api_mapping_id"])
-            check_type(argname="argument domain_name", value=domain_name, expected_type=type_hints["domain_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "api_mapping_id": api_mapping_id,
         }
-        if domain_name is not None:
-            self._values["domain_name"] = domain_name
 
     @builtins.property
     def api_mapping_id(self) -> builtins.str:
@@ -1283,15 +1266,6 @@ class ApiMappingAttributes:
         result = self._values.get("api_mapping_id")
         assert result is not None, "Required property 'api_mapping_id' is missing"
         return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def domain_name(self) -> typing.Optional[builtins.str]:
-        '''Domain name.
-
-        :default: - Certain operations on the referenced object may fail if not supplied
-        '''
-        result = self._values.get("domain_name")
-        return typing.cast(typing.Optional[builtins.str], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1319,8 +1293,8 @@ class ApiMappingProps:
     def __init__(
         self,
         *,
-        api: "_IApiRef_53cfa8c6",
-        domain_name: "_IDomainNameRef_f08efdb1",
+        api: "IApi",
+        domain_name: "IDomainName",
         api_mapping_key: typing.Optional[builtins.str] = None,
         stage: typing.Optional["IStage"] = None,
     ) -> None:
@@ -1338,15 +1312,14 @@ class ApiMappingProps:
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_apigatewayv2 as apigatewayv2
-            from aws_cdk.interfaces import aws_apigatewayv2 as interfaces_apigatewayv2
             
-            # api_ref: interfaces_apigatewayv2.IApiRef
-            # domain_name_ref: interfaces_apigatewayv2.IDomainNameRef
+            # api: apigatewayv2.IApi
+            # domain_name: apigatewayv2.DomainName
             # stage: apigatewayv2.IStage
             
             api_mapping_props = apigatewayv2.ApiMappingProps(
-                api=api_ref,
-                domain_name=domain_name_ref,
+                api=api,
+                domain_name=domain_name,
             
                 # the properties below are optional
                 api_mapping_key="apiMappingKey",
@@ -1369,18 +1342,18 @@ class ApiMappingProps:
             self._values["stage"] = stage
 
     @builtins.property
-    def api(self) -> "_IApiRef_53cfa8c6":
+    def api(self) -> "IApi":
         '''The Api to which this mapping is applied.'''
         result = self._values.get("api")
         assert result is not None, "Required property 'api' is missing"
-        return typing.cast("_IApiRef_53cfa8c6", result)
+        return typing.cast("IApi", result)
 
     @builtins.property
-    def domain_name(self) -> "_IDomainNameRef_f08efdb1":
+    def domain_name(self) -> "IDomainName":
         '''custom domain name of the mapping target.'''
         result = self._values.get("domain_name")
         assert result is not None, "Required property 'domain_name' is missing"
-        return typing.cast("_IDomainNameRef_f08efdb1", result)
+        return typing.cast("IDomainName", result)
 
     @builtins.property
     def api_mapping_key(self) -> typing.Optional[builtins.str]:
@@ -10453,7 +10426,7 @@ class DomainMappingOptions:
     def __init__(
         self,
         *,
-        domain_name: "_IDomainNameRef_f08efdb1",
+        domain_name: "IDomainName",
         mapping_key: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Options for DomainMapping.
@@ -10491,11 +10464,11 @@ class DomainMappingOptions:
             self._values["mapping_key"] = mapping_key
 
     @builtins.property
-    def domain_name(self) -> "_IDomainNameRef_f08efdb1":
+    def domain_name(self) -> "IDomainName":
         '''The domain name for the mapping.'''
         result = self._values.get("domain_name")
         assert result is not None, "Required property 'domain_name' is missing"
-        return typing.cast("_IDomainNameRef_f08efdb1", result)
+        return typing.cast("IDomainName", result)
 
     @builtins.property
     def mapping_key(self) -> typing.Optional[builtins.str]:
@@ -10888,68 +10861,6 @@ class HttpApiAttributes:
         )
 
 
-class HttpApiHelper(
-    metaclass=jsii.JSIIMeta,
-    jsii_type="aws-cdk-lib.aws_apigatewayv2.HttpApiHelper",
-):
-    '''Calculations and operations for HTTP APIs.
-
-    :exampleMetadata: fixture=_generated
-
-    Example::
-
-        # The code below shows an example of how to instantiate this type.
-        # The values are placeholders you should change.
-        from aws_cdk import aws_apigatewayv2 as apigatewayv2
-        
-        # http_api_ref: apigatewayv2.IHttpApiRef
-        
-        http_api_helper = apigatewayv2.HttpApiHelper.from_http_api(http_api_ref)
-    '''
-
-    @jsii.member(jsii_name="fromHttpApi")
-    @builtins.classmethod
-    def from_http_api(cls, http_api: "IHttpApiRef") -> "HttpApiHelper":
-        '''Return an ``HttpApiHelper`` for the given HTTP API.
-
-        :param http_api: -
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__0e3ff3c01e95abb0ad5fa38fe714d34ffd17e015c3ab60f203ea2a67596e8ec0)
-            check_type(argname="argument http_api", value=http_api, expected_type=type_hints["http_api"])
-        return typing.cast("HttpApiHelper", jsii.sinvoke(cls, "fromHttpApi", [http_api]))
-
-    @jsii.member(jsii_name="arnForExecuteApi")
-    def arn_for_execute_api(
-        self,
-        method: typing.Optional[builtins.str] = None,
-        path: typing.Optional[builtins.str] = None,
-        stage: typing.Optional[builtins.str] = None,
-    ) -> builtins.str:
-        '''Get the "execute-api" ARN.
-
-        When 'ANY' is passed to the method, an ARN with the method set to '*' is obtained.
-
-        :param method: -
-        :param path: -
-        :param stage: -
-
-        :default:
-
-        - The default behavior applies when no specific method, path, or stage is provided.
-        In this case, the ARN will cover all methods, all resources, and all stages of this API.
-        Specifically, if 'method' is not specified, it defaults to '*', representing all methods.
-        If 'path' is not specified, it defaults to '/*', representing all paths.
-        If 'stage' is not specified, it also defaults to '*', representing all stages.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__b72a400eaaad8e79d99165c87dfd9dbfd1e5c7ba065d3f45093a7b804e655cb0)
-            check_type(argname="argument method", value=method, expected_type=type_hints["method"])
-            check_type(argname="argument path", value=path, expected_type=type_hints["path"])
-            check_type(argname="argument stage", value=stage, expected_type=type_hints["stage"])
-        return typing.cast(builtins.str, jsii.invoke(self, "arnForExecuteApi", [method, path, stage]))
-
-
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_apigatewayv2.HttpApiProps",
     jsii_struct_bases=[],
@@ -11280,7 +11191,7 @@ class HttpAuthorizerProps:
     def __init__(
         self,
         *,
-        http_api: "IHttpApiRef",
+        http_api: "IHttpApi",
         identity_source: typing.Sequence[builtins.str],
         type: "HttpAuthorizerType",
         authorizer_name: typing.Optional[builtins.str] = None,
@@ -11313,10 +11224,10 @@ class HttpAuthorizerProps:
             import aws_cdk as cdk
             from aws_cdk import aws_apigatewayv2 as apigatewayv2
             
-            # http_api_ref: apigatewayv2.IHttpApiRef
+            # http_api: apigatewayv2.HttpApi
             
             http_authorizer_props = apigatewayv2.HttpAuthorizerProps(
-                http_api=http_api_ref,
+                http_api=http_api,
                 identity_source=["identitySource"],
                 type=apigatewayv2.HttpAuthorizerType.IAM,
             
@@ -11363,11 +11274,11 @@ class HttpAuthorizerProps:
             self._values["results_cache_ttl"] = results_cache_ttl
 
     @builtins.property
-    def http_api(self) -> "IHttpApiRef":
+    def http_api(self) -> "IHttpApi":
         '''HTTP Api to attach the authorizer to.'''
         result = self._values.get("http_api")
         assert result is not None, "Required property 'http_api' is missing"
-        return typing.cast("IHttpApiRef", result)
+        return typing.cast("IHttpApi", result)
 
     @builtins.property
     def identity_source(self) -> typing.List[builtins.str]:
@@ -11513,7 +11424,7 @@ class HttpIntegrationProps:
     def __init__(
         self,
         *,
-        http_api: "IHttpApiRef",
+        http_api: "IHttpApi",
         integration_type: "HttpIntegrationType",
         connection_id: typing.Optional[builtins.str] = None,
         connection_type: typing.Optional["HttpConnectionType"] = None,
@@ -11550,13 +11461,13 @@ class HttpIntegrationProps:
             import aws_cdk as cdk
             from aws_cdk import aws_apigatewayv2 as apigatewayv2
             
-            # http_api_ref: apigatewayv2.IHttpApiRef
+            # http_api: apigatewayv2.HttpApi
             # integration_credentials: apigatewayv2.IntegrationCredentials
             # parameter_mapping: apigatewayv2.ParameterMapping
             # payload_format_version: apigatewayv2.PayloadFormatVersion
             
             http_integration_props = apigatewayv2.HttpIntegrationProps(
-                http_api=http_api_ref,
+                http_api=http_api,
                 integration_type=apigatewayv2.HttpIntegrationType.HTTP_PROXY,
             
                 # the properties below are optional
@@ -11612,11 +11523,11 @@ class HttpIntegrationProps:
             self._values["timeout"] = timeout
 
     @builtins.property
-    def http_api(self) -> "IHttpApiRef":
+    def http_api(self) -> "IHttpApi":
         '''The HTTP API to which this integration should be bound.'''
         result = self._values.get("http_api")
         assert result is not None, "Required property 'http_api' is missing"
-        return typing.cast("IHttpApiRef", result)
+        return typing.cast("IHttpApi", result)
 
     @builtins.property
     def integration_type(self) -> "HttpIntegrationType":
@@ -12543,7 +12454,7 @@ class HttpRouteProps(BatchHttpRouteOptions):
         self,
         *,
         integration: "HttpRouteIntegration",
-        http_api: "IHttpApiRef",
+        http_api: "IHttpApi",
         route_key: "HttpRouteKey",
         authorization_scopes: typing.Optional[typing.Sequence[builtins.str]] = None,
         authorizer: typing.Optional["IHttpRouteAuthorizer"] = None,
@@ -12564,13 +12475,13 @@ class HttpRouteProps(BatchHttpRouteOptions):
             # The values are placeholders you should change.
             from aws_cdk import aws_apigatewayv2 as apigatewayv2
             
-            # http_api_ref: apigatewayv2.IHttpApiRef
+            # http_api: apigatewayv2.HttpApi
             # http_route_authorizer: apigatewayv2.IHttpRouteAuthorizer
             # http_route_integration: apigatewayv2.HttpRouteIntegration
             # http_route_key: apigatewayv2.HttpRouteKey
             
             http_route_props = apigatewayv2.HttpRouteProps(
-                http_api=http_api_ref,
+                http_api=http_api,
                 integration=http_route_integration,
                 route_key=http_route_key,
             
@@ -12604,11 +12515,11 @@ class HttpRouteProps(BatchHttpRouteOptions):
         return typing.cast("HttpRouteIntegration", result)
 
     @builtins.property
-    def http_api(self) -> "IHttpApiRef":
+    def http_api(self) -> "IHttpApi":
         '''the API the route is associated with.'''
         result = self._values.get("http_api")
         assert result is not None, "Required property 'http_api' is missing"
-        return typing.cast("IHttpApiRef", result)
+        return typing.cast("IHttpApi", result)
 
     @builtins.property
     def route_key(self) -> "HttpRouteKey":
@@ -12746,7 +12657,7 @@ typing.cast(typing.Any, IAccessLogSettings).__jsii_proxy_class__ = lambda : _IAc
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IApi")
-class IApi(_IResource_c80c4260, _IApiRef_53cfa8c6, typing_extensions.Protocol):
+class IApi(_IResource_c80c4260, typing_extensions.Protocol):
     '''Represents a API Gateway HTTP/WebSocket API.'''
 
     @builtins.property
@@ -12808,7 +12719,6 @@ class IApi(_IResource_c80c4260, _IApiRef_53cfa8c6, typing_extensions.Protocol):
 
 class _IApiProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
-    jsii.proxy_for(_IApiRef_53cfa8c6), # type: ignore[misc]
 ):
     '''Represents a API Gateway HTTP/WebSocket API.'''
 
@@ -12893,11 +12803,8 @@ typing.cast(typing.Any, IApi).__jsii_proxy_class__ = lambda : _IApiProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IApiKey")
-class IApiKey(_IResource_c80c4260, _IApiKeyRef_6e16b46a, typing_extensions.Protocol):
-    '''API keys are alphanumeric string values that you distribute to app developer customers to grant access to your API.
-
-    API Keys are an API Gateway V1 concept.
-    '''
+class IApiKey(_IResource_c80c4260, typing_extensions.Protocol):
+    '''API keys are alphanumeric string values that you distribute to app developer customers to grant access to your API.'''
 
     @builtins.property
     @jsii.member(jsii_name="keyArn")
@@ -12920,12 +12827,8 @@ class IApiKey(_IResource_c80c4260, _IApiKeyRef_6e16b46a, typing_extensions.Proto
 
 class _IApiKeyProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
-    jsii.proxy_for(_IApiKeyRef_6e16b46a), # type: ignore[misc]
 ):
-    '''API keys are alphanumeric string values that you distribute to app developer customers to grant access to your API.
-
-    API Keys are an API Gateway V1 concept.
-    '''
+    '''API keys are alphanumeric string values that you distribute to app developer customers to grant access to your API.'''
 
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_apigatewayv2.IApiKey"
 
@@ -12952,11 +12855,7 @@ typing.cast(typing.Any, IApiKey).__jsii_proxy_class__ = lambda : _IApiKeyProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IApiMapping")
-class IApiMapping(
-    _IResource_c80c4260,
-    _IApiMappingRef_be958d58,
-    typing_extensions.Protocol,
-):
+class IApiMapping(_IResource_c80c4260, typing_extensions.Protocol):
     '''Represents an ApiGatewayV2 ApiMapping resource.
 
     :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigatewayv2-apimapping.html
@@ -12974,7 +12873,6 @@ class IApiMapping(
 
 class _IApiMappingProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
-    jsii.proxy_for(_IApiMappingRef_be958d58), # type: ignore[misc]
 ):
     '''Represents an ApiGatewayV2 ApiMapping resource.
 
@@ -12997,11 +12895,7 @@ typing.cast(typing.Any, IApiMapping).__jsii_proxy_class__ = lambda : _IApiMappin
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IAuthorizer")
-class IAuthorizer(
-    _IResource_c80c4260,
-    _IAuthorizerRef_99af86ae,
-    typing_extensions.Protocol,
-):
+class IAuthorizer(_IResource_c80c4260, typing_extensions.Protocol):
     '''Represents an Authorizer.'''
 
     @builtins.property
@@ -13016,7 +12910,6 @@ class IAuthorizer(
 
 class _IAuthorizerProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
-    jsii.proxy_for(_IAuthorizerRef_99af86ae), # type: ignore[misc]
 ):
     '''Represents an Authorizer.'''
 
@@ -13036,11 +12929,7 @@ typing.cast(typing.Any, IAuthorizer).__jsii_proxy_class__ = lambda : _IAuthorize
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IDomainName")
-class IDomainName(
-    _IResource_c80c4260,
-    _IDomainNameRef_f08efdb1,
-    typing_extensions.Protocol,
-):
+class IDomainName(_IResource_c80c4260, typing_extensions.Protocol):
     '''Represents an APIGatewayV2 DomainName.
 
     :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigatewayv2-domainname.html
@@ -13076,7 +12965,6 @@ class IDomainName(
 
 class _IDomainNameProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
-    jsii.proxy_for(_IDomainNameRef_f08efdb1), # type: ignore[misc]
 ):
     '''Represents an APIGatewayV2 DomainName.
 
@@ -13116,40 +13004,718 @@ class _IDomainNameProxy(
 typing.cast(typing.Any, IDomainName).__jsii_proxy_class__ = lambda : _IDomainNameProxy
 
 
-@jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IHttpApiRef")
-class IHttpApiRef(_IApiRef_53cfa8c6, typing_extensions.Protocol):
-    '''Represents a reference to an HTTP API.'''
+@jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IHttpApi")
+class IHttpApi(IApi, typing_extensions.Protocol):
+    '''Represents an HTTP API.'''
 
     @builtins.property
-    @jsii.member(jsii_name="isHttpApi")
-    def is_http_api(self) -> builtins.bool:
-        '''Indicates that this is an HTTP API.
+    @jsii.member(jsii_name="defaultAuthorizationScopes")
+    def default_authorization_scopes(
+        self,
+    ) -> typing.Optional[typing.List[builtins.str]]:
+        '''Default OIDC scopes attached to all routes in the gateway, unless explicitly configured on the route.
 
-        Will always return true, but is necessary to prevent accidental structural
-        equality in TypeScript.
+        The scopes are used with a COGNITO_USER_POOLS authorizer to authorize the method invocation.
+
+        :default: - no default authorization scopes
+
+        :attribute: true
+        '''
+        ...
+
+    @builtins.property
+    @jsii.member(jsii_name="defaultAuthorizer")
+    def default_authorizer(self) -> typing.Optional["IHttpRouteAuthorizer"]:
+        '''Default Authorizer applied to all routes in the gateway.
+
+        :default: - no default authorizer
+
+        :attribute: true
+        '''
+        ...
+
+    @builtins.property
+    @jsii.member(jsii_name="defaultStage")
+    def default_stage(self) -> typing.Optional["IHttpStage"]:
+        '''The default stage of this API.
+
+        :default: - a stage will be created
+
+        :attribute: true
+        '''
+        ...
+
+    @jsii.member(jsii_name="addVpcLink")
+    def add_vpc_link(
+        self,
+        *,
+        vpc: "_IVpc_f30d5663",
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroupRef_efa4ff18"]] = None,
+        subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        vpc_link_name: typing.Optional[builtins.str] = None,
+    ) -> "VpcLink":
+        '''Add a new VpcLink.
+
+        :param vpc: The VPC in which the private resources reside.
+        :param security_groups: A list of security groups for the VPC link. Default: - no security groups. Use ``addSecurityGroups`` to add security groups
+        :param subnets: A list of subnets for the VPC link. Default: - private subnets of the provided VPC. Use ``addSubnets`` to add more subnets
+        :param vpc_link_name: The name used to label and identify the VPC link. Default: - automatically generated name
+        '''
+        ...
+
+    @jsii.member(jsii_name="arnForExecuteApi")
+    def arn_for_execute_api(
+        self,
+        method: typing.Optional[builtins.str] = None,
+        path: typing.Optional[builtins.str] = None,
+        stage: typing.Optional[builtins.str] = None,
+    ) -> builtins.str:
+        '''Get the "execute-api" ARN.
+
+        When 'ANY' is passed to the method, an ARN with the method set to '*' is obtained.
+
+        :param method: -
+        :param path: -
+        :param stage: -
+
+        :default:
+
+        - The default behavior applies when no specific method, path, or stage is provided.
+        In this case, the ARN will cover all methods, all resources, and all stages of this API.
+        Specifically, if 'method' is not specified, it defaults to '*', representing all methods.
+        If 'path' is not specified, it defaults to '/*', representing all paths.
+        If 'stage' is not specified, it also defaults to '*', representing all stages.
+        '''
+        ...
+
+    @jsii.member(jsii_name="metricClientError")
+    def metric_client_error(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''Metric for the number of client-side errors captured in a given period.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - sum over 5 minutes
+        '''
+        ...
+
+    @jsii.member(jsii_name="metricCount")
+    def metric_count(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''Metric for the total number API requests in a given period.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - SampleCount over 5 minutes
+        '''
+        ...
+
+    @jsii.member(jsii_name="metricDataProcessed")
+    def metric_data_processed(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''Metric for the amount of data processed in bytes.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - sum over 5 minutes
+        '''
+        ...
+
+    @jsii.member(jsii_name="metricIntegrationLatency")
+    def metric_integration_latency(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''Metric for the time between when API Gateway relays a request to the backend and when it receives a response from the backend.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - no statistic
+        '''
+        ...
+
+    @jsii.member(jsii_name="metricLatency")
+    def metric_latency(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''The time between when API Gateway receives a request from a client and when it returns a response to the client.
+
+        The latency includes the integration latency and other API Gateway overhead.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - no statistic
+        '''
+        ...
+
+    @jsii.member(jsii_name="metricServerError")
+    def metric_server_error(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''Metric for the number of server-side errors captured in a given period.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - sum over 5 minutes
         '''
         ...
 
 
-class _IHttpApiRefProxy(
-    jsii.proxy_for(_IApiRef_53cfa8c6), # type: ignore[misc]
+class _IHttpApiProxy(
+    jsii.proxy_for(IApi), # type: ignore[misc]
 ):
-    '''Represents a reference to an HTTP API.'''
+    '''Represents an HTTP API.'''
 
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_apigatewayv2.IHttpApiRef"
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_apigatewayv2.IHttpApi"
 
     @builtins.property
-    @jsii.member(jsii_name="isHttpApi")
-    def is_http_api(self) -> builtins.bool:
-        '''Indicates that this is an HTTP API.
+    @jsii.member(jsii_name="defaultAuthorizationScopes")
+    def default_authorization_scopes(
+        self,
+    ) -> typing.Optional[typing.List[builtins.str]]:
+        '''Default OIDC scopes attached to all routes in the gateway, unless explicitly configured on the route.
 
-        Will always return true, but is necessary to prevent accidental structural
-        equality in TypeScript.
+        The scopes are used with a COGNITO_USER_POOLS authorizer to authorize the method invocation.
+
+        :default: - no default authorization scopes
+
+        :attribute: true
         '''
-        return typing.cast(builtins.bool, jsii.get(self, "isHttpApi"))
+        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "defaultAuthorizationScopes"))
+
+    @builtins.property
+    @jsii.member(jsii_name="defaultAuthorizer")
+    def default_authorizer(self) -> typing.Optional["IHttpRouteAuthorizer"]:
+        '''Default Authorizer applied to all routes in the gateway.
+
+        :default: - no default authorizer
+
+        :attribute: true
+        '''
+        return typing.cast(typing.Optional["IHttpRouteAuthorizer"], jsii.get(self, "defaultAuthorizer"))
+
+    @builtins.property
+    @jsii.member(jsii_name="defaultStage")
+    def default_stage(self) -> typing.Optional["IHttpStage"]:
+        '''The default stage of this API.
+
+        :default: - a stage will be created
+
+        :attribute: true
+        '''
+        return typing.cast(typing.Optional["IHttpStage"], jsii.get(self, "defaultStage"))
+
+    @jsii.member(jsii_name="addVpcLink")
+    def add_vpc_link(
+        self,
+        *,
+        vpc: "_IVpc_f30d5663",
+        security_groups: typing.Optional[typing.Sequence["_ISecurityGroupRef_efa4ff18"]] = None,
+        subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
+        vpc_link_name: typing.Optional[builtins.str] = None,
+    ) -> "VpcLink":
+        '''Add a new VpcLink.
+
+        :param vpc: The VPC in which the private resources reside.
+        :param security_groups: A list of security groups for the VPC link. Default: - no security groups. Use ``addSecurityGroups`` to add security groups
+        :param subnets: A list of subnets for the VPC link. Default: - private subnets of the provided VPC. Use ``addSubnets`` to add more subnets
+        :param vpc_link_name: The name used to label and identify the VPC link. Default: - automatically generated name
+        '''
+        options = VpcLinkProps(
+            vpc=vpc,
+            security_groups=security_groups,
+            subnets=subnets,
+            vpc_link_name=vpc_link_name,
+        )
+
+        return typing.cast("VpcLink", jsii.invoke(self, "addVpcLink", [options]))
+
+    @jsii.member(jsii_name="arnForExecuteApi")
+    def arn_for_execute_api(
+        self,
+        method: typing.Optional[builtins.str] = None,
+        path: typing.Optional[builtins.str] = None,
+        stage: typing.Optional[builtins.str] = None,
+    ) -> builtins.str:
+        '''Get the "execute-api" ARN.
+
+        When 'ANY' is passed to the method, an ARN with the method set to '*' is obtained.
+
+        :param method: -
+        :param path: -
+        :param stage: -
+
+        :default:
+
+        - The default behavior applies when no specific method, path, or stage is provided.
+        In this case, the ARN will cover all methods, all resources, and all stages of this API.
+        Specifically, if 'method' is not specified, it defaults to '*', representing all methods.
+        If 'path' is not specified, it defaults to '/*', representing all paths.
+        If 'stage' is not specified, it also defaults to '*', representing all stages.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d4bdb3d2e15291eea92125ef948cd6cf44f902aa79fe0c219f66cb001a9ea68e)
+            check_type(argname="argument method", value=method, expected_type=type_hints["method"])
+            check_type(argname="argument path", value=path, expected_type=type_hints["path"])
+            check_type(argname="argument stage", value=stage, expected_type=type_hints["stage"])
+        return typing.cast(builtins.str, jsii.invoke(self, "arnForExecuteApi", [method, path, stage]))
+
+    @jsii.member(jsii_name="metricClientError")
+    def metric_client_error(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''Metric for the number of client-side errors captured in a given period.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - sum over 5 minutes
+        '''
+        props = _MetricOptions_1788b62f(
+            account=account,
+            color=color,
+            dimensions_map=dimensions_map,
+            id=id,
+            label=label,
+            period=period,
+            region=region,
+            stack_account=stack_account,
+            stack_region=stack_region,
+            statistic=statistic,
+            unit=unit,
+            visible=visible,
+        )
+
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricClientError", [props]))
+
+    @jsii.member(jsii_name="metricCount")
+    def metric_count(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''Metric for the total number API requests in a given period.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - SampleCount over 5 minutes
+        '''
+        props = _MetricOptions_1788b62f(
+            account=account,
+            color=color,
+            dimensions_map=dimensions_map,
+            id=id,
+            label=label,
+            period=period,
+            region=region,
+            stack_account=stack_account,
+            stack_region=stack_region,
+            statistic=statistic,
+            unit=unit,
+            visible=visible,
+        )
+
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricCount", [props]))
+
+    @jsii.member(jsii_name="metricDataProcessed")
+    def metric_data_processed(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''Metric for the amount of data processed in bytes.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - sum over 5 minutes
+        '''
+        props = _MetricOptions_1788b62f(
+            account=account,
+            color=color,
+            dimensions_map=dimensions_map,
+            id=id,
+            label=label,
+            period=period,
+            region=region,
+            stack_account=stack_account,
+            stack_region=stack_region,
+            statistic=statistic,
+            unit=unit,
+            visible=visible,
+        )
+
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricDataProcessed", [props]))
+
+    @jsii.member(jsii_name="metricIntegrationLatency")
+    def metric_integration_latency(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''Metric for the time between when API Gateway relays a request to the backend and when it receives a response from the backend.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - no statistic
+        '''
+        props = _MetricOptions_1788b62f(
+            account=account,
+            color=color,
+            dimensions_map=dimensions_map,
+            id=id,
+            label=label,
+            period=period,
+            region=region,
+            stack_account=stack_account,
+            stack_region=stack_region,
+            statistic=statistic,
+            unit=unit,
+            visible=visible,
+        )
+
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricIntegrationLatency", [props]))
+
+    @jsii.member(jsii_name="metricLatency")
+    def metric_latency(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''The time between when API Gateway receives a request from a client and when it returns a response to the client.
+
+        The latency includes the integration latency and other API Gateway overhead.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - no statistic
+        '''
+        props = _MetricOptions_1788b62f(
+            account=account,
+            color=color,
+            dimensions_map=dimensions_map,
+            id=id,
+            label=label,
+            period=period,
+            region=region,
+            stack_account=stack_account,
+            stack_region=stack_region,
+            statistic=statistic,
+            unit=unit,
+            visible=visible,
+        )
+
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricLatency", [props]))
+
+    @jsii.member(jsii_name="metricServerError")
+    def metric_server_error(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''Metric for the number of server-side errors captured in a given period.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - sum over 5 minutes
+        '''
+        props = _MetricOptions_1788b62f(
+            account=account,
+            color=color,
+            dimensions_map=dimensions_map,
+            id=id,
+            label=label,
+            period=period,
+            region=region,
+            stack_account=stack_account,
+            stack_region=stack_region,
+            statistic=statistic,
+            unit=unit,
+            visible=visible,
+        )
+
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricServerError", [props]))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IHttpApiRef).__jsii_proxy_class__ = lambda : _IHttpApiRefProxy
+typing.cast(typing.Any, IHttpApi).__jsii_proxy_class__ = lambda : _IHttpApiProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IHttpAuthorizer")
@@ -13215,48 +13781,8 @@ class _IHttpRouteAuthorizerProxy:
 typing.cast(typing.Any, IHttpRouteAuthorizer).__jsii_proxy_class__ = lambda : _IHttpRouteAuthorizerProxy
 
 
-@jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IHttpStageRef")
-class IHttpStageRef(_IStageRef_4af54d27, typing_extensions.Protocol):
-    '''Represents a reference to an HTTP Stage.'''
-
-    @builtins.property
-    @jsii.member(jsii_name="isHttpStage")
-    def is_http_stage(self) -> builtins.bool:
-        '''Indicates that this is an HTTP Stage.
-
-        Will always return true, but is necessary to prevent accidental structural
-        equality in TypeScript.
-        '''
-        ...
-
-
-class _IHttpStageRefProxy(
-    jsii.proxy_for(_IStageRef_4af54d27), # type: ignore[misc]
-):
-    '''Represents a reference to an HTTP Stage.'''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_apigatewayv2.IHttpStageRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="isHttpStage")
-    def is_http_stage(self) -> builtins.bool:
-        '''Indicates that this is an HTTP Stage.
-
-        Will always return true, but is necessary to prevent accidental structural
-        equality in TypeScript.
-        '''
-        return typing.cast(builtins.bool, jsii.get(self, "isHttpStage"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IHttpStageRef).__jsii_proxy_class__ = lambda : _IHttpStageRefProxy
-
-
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IIntegration")
-class IIntegration(
-    _IResource_c80c4260,
-    _IIntegrationRef_0c967a25,
-    typing_extensions.Protocol,
-):
+class IIntegration(_IResource_c80c4260, typing_extensions.Protocol):
     '''Represents an integration to an API Route.'''
 
     @builtins.property
@@ -13271,7 +13797,6 @@ class IIntegration(
 
 class _IIntegrationProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
-    jsii.proxy_for(_IIntegrationRef_0c967a25), # type: ignore[misc]
 ):
     '''Represents an integration to an API Route.'''
 
@@ -13317,7 +13842,7 @@ typing.cast(typing.Any, IMappingValue).__jsii_proxy_class__ = lambda : _IMapping
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IRoute")
-class IRoute(_IResource_c80c4260, _IRouteRef_a7e7b745, typing_extensions.Protocol):
+class IRoute(_IResource_c80c4260, typing_extensions.Protocol):
     '''Represents a route.'''
 
     @builtins.property
@@ -13332,7 +13857,6 @@ class IRoute(_IResource_c80c4260, _IRouteRef_a7e7b745, typing_extensions.Protoco
 
 class _IRouteProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
-    jsii.proxy_for(_IRouteRef_a7e7b745), # type: ignore[misc]
 ):
     '''Represents a route.'''
 
@@ -13352,7 +13876,7 @@ typing.cast(typing.Any, IRoute).__jsii_proxy_class__ = lambda : _IRouteProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IStage")
-class IStage(_IResource_c80c4260, _IStageRef_4af54d27, typing_extensions.Protocol):
+class IStage(_IResource_c80c4260, typing_extensions.Protocol):
     '''Represents a Stage.'''
 
     @builtins.property
@@ -13422,7 +13946,6 @@ class IStage(_IResource_c80c4260, _IStageRef_4af54d27, typing_extensions.Protoco
 
 class _IStageProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
-    jsii.proxy_for(_IStageRef_4af54d27), # type: ignore[misc]
 ):
     '''Represents a Stage.'''
 
@@ -13519,11 +14042,7 @@ typing.cast(typing.Any, IStage).__jsii_proxy_class__ = lambda : _IStageProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IUsagePlan")
-class IUsagePlan(
-    _IResource_c80c4260,
-    _IUsagePlanRef_7a28b470,
-    typing_extensions.Protocol,
-):
+class IUsagePlan(_IResource_c80c4260, typing_extensions.Protocol):
     '''A UsagePlan, either managed by this CDK app, or imported.'''
 
     @builtins.property
@@ -13538,7 +14057,7 @@ class IUsagePlan(
     @jsii.member(jsii_name="addApiKey")
     def add_api_key(
         self,
-        api_key: "_IApiKeyRef_6e16b46a",
+        api_key: "IApiKey",
         *,
         override_logical_id: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -13552,7 +14071,6 @@ class IUsagePlan(
 
 class _IUsagePlanProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
-    jsii.proxy_for(_IUsagePlanRef_7a28b470), # type: ignore[misc]
 ):
     '''A UsagePlan, either managed by this CDK app, or imported.'''
 
@@ -13570,7 +14088,7 @@ class _IUsagePlanProxy(
     @jsii.member(jsii_name="addApiKey")
     def add_api_key(
         self,
-        api_key: "_IApiKeyRef_6e16b46a",
+        api_key: "IApiKey",
         *,
         override_logical_id: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -13591,7 +14109,7 @@ typing.cast(typing.Any, IUsagePlan).__jsii_proxy_class__ = lambda : _IUsagePlanP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IVpcLink")
-class IVpcLink(_IResource_c80c4260, _IVpcLinkRef_11ccc38b, typing_extensions.Protocol):
+class IVpcLink(_IResource_c80c4260, typing_extensions.Protocol):
     '''Represents an API Gateway VpcLink.'''
 
     @builtins.property
@@ -13612,7 +14130,6 @@ class IVpcLink(_IResource_c80c4260, _IVpcLinkRef_11ccc38b, typing_extensions.Pro
 
 class _IVpcLinkProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
-    jsii.proxy_for(_IVpcLinkRef_11ccc38b), # type: ignore[misc]
 ):
     '''Represents an API Gateway VpcLink.'''
 
@@ -13637,40 +14154,23 @@ class _IVpcLinkProxy(
 typing.cast(typing.Any, IVpcLink).__jsii_proxy_class__ = lambda : _IVpcLinkProxy
 
 
-@jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IWebSocketApiRef")
-class IWebSocketApiRef(_IApiRef_53cfa8c6, typing_extensions.Protocol):
-    '''Represents a reference to an HTTP API.'''
+@jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IWebSocketApi")
+class IWebSocketApi(IApi, typing_extensions.Protocol):
+    '''Represents a WebSocket API.'''
 
-    @builtins.property
-    @jsii.member(jsii_name="isWebsocketApi")
-    def is_websocket_api(self) -> builtins.bool:
-        '''Indicates that this is a WebSocket API.
-
-        Will always return true, but is necessary to prevent accidental structural
-        equality in TypeScript.
-        '''
-        ...
+    pass
 
 
-class _IWebSocketApiRefProxy(
-    jsii.proxy_for(_IApiRef_53cfa8c6), # type: ignore[misc]
+class _IWebSocketApiProxy(
+    jsii.proxy_for(IApi), # type: ignore[misc]
 ):
-    '''Represents a reference to an HTTP API.'''
+    '''Represents a WebSocket API.'''
 
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_apigatewayv2.IWebSocketApiRef"
-
-    @builtins.property
-    @jsii.member(jsii_name="isWebsocketApi")
-    def is_websocket_api(self) -> builtins.bool:
-        '''Indicates that this is a WebSocket API.
-
-        Will always return true, but is necessary to prevent accidental structural
-        equality in TypeScript.
-        '''
-        return typing.cast(builtins.bool, jsii.get(self, "isWebsocketApi"))
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_apigatewayv2.IWebSocketApi"
+    pass
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IWebSocketApiRef).__jsii_proxy_class__ = lambda : _IWebSocketApiRefProxy
+typing.cast(typing.Any, IWebSocketApi).__jsii_proxy_class__ = lambda : _IWebSocketApiProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IWebSocketAuthorizer")
@@ -14700,12 +15200,6 @@ class RateLimitedApiKey(
         return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
-    @jsii.member(jsii_name="apiKeyRef")
-    def api_key_ref(self) -> "_ApiKeyReference_6382fd3a":
-        '''A reference to a ApiKey resource.'''
-        return typing.cast("_ApiKeyReference_6382fd3a", jsii.get(self, "apiKeyRef"))
-
-    @builtins.property
     @jsii.member(jsii_name="keyArn")
     def key_arn(self) -> builtins.str:
         '''The API key ARN.'''
@@ -15030,10 +15524,9 @@ class StageOptions:
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_apigatewayv2 as apigatewayv2
-            from aws_cdk.interfaces import aws_apigatewayv2 as interfaces_apigatewayv2
             
             # access_log_settings: apigatewayv2.IAccessLogSettings
-            # domain_name_ref: interfaces_apigatewayv2.IDomainNameRef
+            # domain_name: apigatewayv2.DomainName
             
             stage_options = apigatewayv2.StageOptions(
                 access_log_settings=access_log_settings,
@@ -15041,7 +15534,7 @@ class StageOptions:
                 description="description",
                 detailed_metrics_enabled=False,
                 domain_mapping=apigatewayv2.DomainMappingOptions(
-                    domain_name=domain_name_ref,
+                    domain_name=domain_name,
             
                     # the properties below are optional
                     mapping_key="mappingKey"
@@ -15320,7 +15813,7 @@ class UsagePlan(
     @jsii.member(jsii_name="addApiKey")
     def add_api_key(
         self,
-        api_key: "_IApiKeyRef_6e16b46a",
+        api_key: "IApiKey",
         *,
         override_logical_id: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -15366,12 +15859,6 @@ class UsagePlan(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "usagePlanId"))
-
-    @builtins.property
-    @jsii.member(jsii_name="usagePlanRef")
-    def usage_plan_ref(self) -> "_UsagePlanReference_3d3ec4d2":
-        '''A reference to a UsagePlan resource.'''
-        return typing.cast("_UsagePlanReference_3d3ec4d2", jsii.get(self, "usagePlanRef"))
 
 
 @jsii.data_type(
@@ -15700,12 +16187,6 @@ class VpcLink(
         '''Physical ID of the VpcLink resource.'''
         return typing.cast(builtins.str, jsii.get(self, "vpcLinkId"))
 
-    @builtins.property
-    @jsii.member(jsii_name="vpcLinkRef")
-    def vpc_link_ref(self) -> "_VpcLinkReference_cd0cc53d":
-        '''A reference to a VpcLink resource.'''
-        return typing.cast("_VpcLinkReference_cd0cc53d", jsii.get(self, "vpcLinkRef"))
-
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_apigatewayv2.VpcLinkAttributes",
@@ -15874,6 +16355,279 @@ class VpcLinkProps:
         return "VpcLinkProps(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
+
+
+@jsii.implements(IWebSocketApi, IApi)
+class WebSocketApi(
+    _Resource_45bc6135,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_apigatewayv2.WebSocketApi",
+):
+    '''Create a new API Gateway WebSocket API endpoint.
+
+    :resource: AWS::ApiGatewayV2::Api
+    :exampleMetadata: infused
+
+    Example::
+
+        from aws_cdk.aws_apigatewayv2_integrations import WebSocketLambdaIntegration
+        
+        # message_handler: lambda.Function
+        
+        
+        web_socket_api = apigwv2.WebSocketApi(self, "mywsapi")
+        apigwv2.WebSocketStage(self, "mystage",
+            web_socket_api=web_socket_api,
+            stage_name="dev",
+            auto_deploy=True
+        )
+        web_socket_api.add_route("sendMessage",
+            integration=WebSocketLambdaIntegration("SendMessageIntegration", message_handler)
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        *,
+        api_key_selection_expression: typing.Optional["WebSocketApiKeySelectionExpression"] = None,
+        api_name: typing.Optional[builtins.str] = None,
+        connect_route_options: typing.Optional[typing.Union["WebSocketRouteOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        default_route_options: typing.Optional[typing.Union["WebSocketRouteOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        description: typing.Optional[builtins.str] = None,
+        disable_schema_validation: typing.Optional[builtins.bool] = None,
+        disconnect_route_options: typing.Optional[typing.Union["WebSocketRouteOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        ip_address_type: typing.Optional["IpAddressType"] = None,
+        route_selection_expression: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''
+        :param scope: -
+        :param id: -
+        :param api_key_selection_expression: An API key selection expression. Providing this option will require an API Key be provided to access the API. Default: - Key is not required to access these APIs
+        :param api_name: Name for the WebSocket API resource. Default: - id of the WebSocketApi construct.
+        :param connect_route_options: Options to configure a '$connect' route. Default: - no '$connect' route configured
+        :param default_route_options: Options to configure a '$default' route. Default: - no '$default' route configured
+        :param description: The description of the API. Default: - none
+        :param disable_schema_validation: Avoid validating models when creating a deployment. Default: false
+        :param disconnect_route_options: Options to configure a '$disconnect' route. Default: - no '$disconnect' route configured
+        :param ip_address_type: The IP address types that can invoke the API. Default: undefined - AWS default is IPV4
+        :param route_selection_expression: The route selection expression for the API. Default: '$request.body.action'
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8f37be20ee015faaaf9283fe203dc28d2dcc56800f6007ae9105e3ad425c9333)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = WebSocketApiProps(
+            api_key_selection_expression=api_key_selection_expression,
+            api_name=api_name,
+            connect_route_options=connect_route_options,
+            default_route_options=default_route_options,
+            description=description,
+            disable_schema_validation=disable_schema_validation,
+            disconnect_route_options=disconnect_route_options,
+            ip_address_type=ip_address_type,
+            route_selection_expression=route_selection_expression,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromWebSocketApiAttributes")
+    @builtins.classmethod
+    def from_web_socket_api_attributes(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        *,
+        web_socket_id: builtins.str,
+        api_endpoint: typing.Optional[builtins.str] = None,
+    ) -> "IWebSocketApi":
+        '''Import an existing WebSocket API into this CDK app.
+
+        :param scope: -
+        :param id: -
+        :param web_socket_id: The identifier of the WebSocketApi.
+        :param api_endpoint: The endpoint URL of the WebSocketApi. Default: - throw san error if apiEndpoint is accessed.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ffffbf7cb72667cc3ea84c141969c65006f66fab5b2acc9cd1e5508c6dd8df5d)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        attrs = WebSocketApiAttributes(
+            web_socket_id=web_socket_id, api_endpoint=api_endpoint
+        )
+
+        return typing.cast("IWebSocketApi", jsii.sinvoke(cls, "fromWebSocketApiAttributes", [scope, id, attrs]))
+
+    @jsii.member(jsii_name="addRoute")
+    def add_route(
+        self,
+        route_key: builtins.str,
+        *,
+        integration: "WebSocketRouteIntegration",
+        authorizer: typing.Optional["IWebSocketRouteAuthorizer"] = None,
+        return_response: typing.Optional[builtins.bool] = None,
+    ) -> "WebSocketRoute":
+        '''Add a new route.
+
+        :param route_key: -
+        :param integration: The integration to be configured on this route.
+        :param authorizer: The authorize to this route. You can only set authorizer to a $connect route. Default: - No Authorizer
+        :param return_response: Should the route send a response to the client. Default: false
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2ef71104699a1a6990c5a5d37692781dccedb21a0a0d0990f6bd28a66f2e982c)
+            check_type(argname="argument route_key", value=route_key, expected_type=type_hints["route_key"])
+        options = WebSocketRouteOptions(
+            integration=integration,
+            authorizer=authorizer,
+            return_response=return_response,
+        )
+
+        return typing.cast("WebSocketRoute", jsii.invoke(self, "addRoute", [route_key, options]))
+
+    @jsii.member(jsii_name="arnForExecuteApi")
+    def arn_for_execute_api(
+        self,
+        method: typing.Optional[builtins.str] = None,
+        path: typing.Optional[builtins.str] = None,
+        stage: typing.Optional[builtins.str] = None,
+    ) -> builtins.str:
+        '''(deprecated) Get the "execute-api" ARN.
+
+        :param method: -
+        :param path: -
+        :param stage: -
+
+        :deprecated: Use ``arnForExecuteApiV2()`` instead.
+
+        :stability: deprecated
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9264ba32d47f82ef3a26b02826879368a02191f9da4b21bcc8ced5b7bf7baaef)
+            check_type(argname="argument method", value=method, expected_type=type_hints["method"])
+            check_type(argname="argument path", value=path, expected_type=type_hints["path"])
+            check_type(argname="argument stage", value=stage, expected_type=type_hints["stage"])
+        return typing.cast(builtins.str, jsii.invoke(self, "arnForExecuteApi", [method, path, stage]))
+
+    @jsii.member(jsii_name="arnForExecuteApiV2")
+    def arn_for_execute_api_v2(
+        self,
+        route: typing.Optional[builtins.str] = None,
+        stage: typing.Optional[builtins.str] = None,
+    ) -> builtins.str:
+        '''Get the "execute-api" ARN.
+
+        :param route: -
+        :param stage: -
+
+        :default:
+
+        - The default behavior applies when no specific route, or stage is provided.
+        In this case, the ARN will cover all routes, and all stages of this API.
+        Specifically, if 'route' is not specified, it defaults to '*', representing all routes.
+        If 'stage' is not specified, it also defaults to '*', representing all stages.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7932b9aa0a92e32c752b93b8918a3842bdad62b6bef47b0af36c7d680a79303e)
+            check_type(argname="argument route", value=route, expected_type=type_hints["route"])
+            check_type(argname="argument stage", value=stage, expected_type=type_hints["stage"])
+        return typing.cast(builtins.str, jsii.invoke(self, "arnForExecuteApiV2", [route, stage]))
+
+    @jsii.member(jsii_name="grantManageConnections")
+    def grant_manage_connections(
+        self,
+        identity: "_IGrantable_71c4f5de",
+    ) -> "_Grant_a7ae64f8":
+        '''Grant access to the API Gateway management API for this WebSocket API to an IAM principal (Role/Group/User).
+
+        :param identity: The principal.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8b1b5ff9a3e2b7c784498514fce501075a0999cea935f9ddec92e79caec71014)
+            check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantManageConnections", [identity]))
+
+    @jsii.member(jsii_name="metric")
+    def metric(
+        self,
+        metric_name: builtins.str,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''Return the given named metric for this Api Gateway.
+
+        :param metric_name: -
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8ea2af8d6aef7e127f3feb093668fe567793f3442bb0838c12dde2c9a975fbe6)
+            check_type(argname="argument metric_name", value=metric_name, expected_type=type_hints["metric_name"])
+        props = _MetricOptions_1788b62f(
+            account=account,
+            color=color,
+            dimensions_map=dimensions_map,
+            id=id,
+            label=label,
+            period=period,
+            region=region,
+            stack_account=stack_account,
+            stack_region=stack_region,
+            statistic=statistic,
+            unit=unit,
+            visible=visible,
+        )
+
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
+    @builtins.property
+    @jsii.member(jsii_name="apiEndpoint")
+    def api_endpoint(self) -> builtins.str:
+        '''The default endpoint for an API.'''
+        return typing.cast(builtins.str, jsii.get(self, "apiEndpoint"))
+
+    @builtins.property
+    @jsii.member(jsii_name="apiId")
+    def api_id(self) -> builtins.str:
+        '''The identifier of this API Gateway API.'''
+        return typing.cast(builtins.str, jsii.get(self, "apiId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="webSocketApiName")
+    def web_socket_api_name(self) -> typing.Optional[builtins.str]:
+        '''A human friendly name for this WebSocket API.
+
+        Note that this is different from ``webSocketApiId``.
+        '''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "webSocketApiName"))
 
 
 @jsii.data_type(
@@ -16271,12 +17025,6 @@ class WebSocketAuthorizer(
         '''Id of the Authorizer.'''
         return typing.cast(builtins.str, jsii.get(self, "authorizerId"))
 
-    @builtins.property
-    @jsii.member(jsii_name="authorizerRef")
-    def authorizer_ref(self) -> "_AuthorizerReference_134fef83":
-        '''A reference to a Authorizer resource.'''
-        return typing.cast("_AuthorizerReference_134fef83", jsii.get(self, "authorizerRef"))
-
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_apigatewayv2.WebSocketAuthorizerAttributes",
@@ -16504,12 +17252,12 @@ class WebSocketIntegration(
         from aws_cdk import aws_iam as iam
         
         # role: iam.Role
-        # web_socket_api_ref: apigatewayv2.IWebSocketApiRef
+        # web_socket_api: apigatewayv2.WebSocketApi
         
         web_socket_integration = apigatewayv2.WebSocketIntegration(self, "MyWebSocketIntegration",
             integration_type=apigatewayv2.WebSocketIntegrationType.AWS_PROXY,
             integration_uri="integrationUri",
-            web_socket_api=web_socket_api_ref,
+            web_socket_api=web_socket_api,
         
             # the properties below are optional
             content_handling=apigatewayv2.ContentHandling.CONVERT_TO_BINARY,
@@ -16534,7 +17282,7 @@ class WebSocketIntegration(
         *,
         integration_type: "WebSocketIntegrationType",
         integration_uri: builtins.str,
-        web_socket_api: "IWebSocketApiRef",
+        web_socket_api: "IWebSocketApi",
         content_handling: typing.Optional["ContentHandling"] = None,
         credentials_role: typing.Optional["_IRole_235f5d8e"] = None,
         integration_method: typing.Optional[builtins.str] = None,
@@ -16592,12 +17340,6 @@ class WebSocketIntegration(
         return typing.cast(builtins.str, jsii.get(self, "integrationId"))
 
     @builtins.property
-    @jsii.member(jsii_name="integrationRef")
-    def integration_ref(self) -> "_IntegrationReference_4149ccc5":
-        '''A reference to a Integration resource.'''
-        return typing.cast("_IntegrationReference_4149ccc5", jsii.get(self, "integrationRef"))
-
-    @builtins.property
     @jsii.member(jsii_name="webSocketApi")
     def web_socket_api(self) -> "IWebSocketApi":
         '''The WebSocket API associated with this integration.'''
@@ -16627,7 +17369,7 @@ class WebSocketIntegrationProps:
         *,
         integration_type: "WebSocketIntegrationType",
         integration_uri: builtins.str,
-        web_socket_api: "IWebSocketApiRef",
+        web_socket_api: "IWebSocketApi",
         content_handling: typing.Optional["ContentHandling"] = None,
         credentials_role: typing.Optional["_IRole_235f5d8e"] = None,
         integration_method: typing.Optional[builtins.str] = None,
@@ -16662,12 +17404,12 @@ class WebSocketIntegrationProps:
             from aws_cdk import aws_iam as iam
             
             # role: iam.Role
-            # web_socket_api_ref: apigatewayv2.IWebSocketApiRef
+            # web_socket_api: apigatewayv2.WebSocketApi
             
             web_socket_integration_props = apigatewayv2.WebSocketIntegrationProps(
                 integration_type=apigatewayv2.WebSocketIntegrationType.AWS_PROXY,
                 integration_uri="integrationUri",
-                web_socket_api=web_socket_api_ref,
+                web_socket_api=web_socket_api,
             
                 # the properties below are optional
                 content_handling=apigatewayv2.ContentHandling.CONVERT_TO_BINARY,
@@ -16734,11 +17476,11 @@ class WebSocketIntegrationProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def web_socket_api(self) -> "IWebSocketApiRef":
+    def web_socket_api(self) -> "IWebSocketApi":
         '''The WebSocket API to which this integration should be bound.'''
         result = self._values.get("web_socket_api")
         assert result is not None, "Required property 'web_socket_api' is missing"
-        return typing.cast("IWebSocketApiRef", result)
+        return typing.cast("IWebSocketApi", result)
 
     @builtins.property
     def content_handling(self) -> typing.Optional["ContentHandling"]:
@@ -16980,12 +17722,6 @@ class WebSocketRoute(
     def route_key(self) -> builtins.str:
         '''The key to this route.'''
         return typing.cast(builtins.str, jsii.get(self, "routeKey"))
-
-    @builtins.property
-    @jsii.member(jsii_name="routeRef")
-    def route_ref(self) -> "_RouteReference_074e6d7d":
-        '''A reference to a Route resource.'''
-        return typing.cast("_RouteReference_074e6d7d", jsii.get(self, "routeRef"))
 
     @builtins.property
     @jsii.member(jsii_name="webSocketApi")
@@ -17963,12 +18699,6 @@ class WebSocketStage(
         return typing.cast(builtins.str, jsii.get(self, "stageName"))
 
     @builtins.property
-    @jsii.member(jsii_name="stageRef")
-    def stage_ref(self) -> "_StageReference_d2663761":
-        '''A reference to a Stage resource.'''
-        return typing.cast("_StageReference_d2663761", jsii.get(self, "stageRef"))
-
-    @builtins.property
     @jsii.member(jsii_name="url")
     def url(self) -> builtins.str:
         '''The websocket URL to this stage.'''
@@ -18495,12 +19225,6 @@ class ApiKey(
         return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
-    @jsii.member(jsii_name="apiKeyRef")
-    def api_key_ref(self) -> "_ApiKeyReference_6382fd3a":
-        '''A reference to a ApiKey resource.'''
-        return typing.cast("_ApiKeyReference_6382fd3a", jsii.get(self, "apiKeyRef"))
-
-    @builtins.property
     @jsii.member(jsii_name="keyArn")
     def key_arn(self) -> builtins.str:
         '''The API key ARN.'''
@@ -18529,15 +19253,14 @@ class ApiMapping(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_apigatewayv2 as apigatewayv2
-        from aws_cdk.interfaces import aws_apigatewayv2 as interfaces_apigatewayv2
         
-        # api_ref: interfaces_apigatewayv2.IApiRef
-        # domain_name_ref: interfaces_apigatewayv2.IDomainNameRef
+        # api: apigatewayv2.IApi
+        # domain_name: apigatewayv2.DomainName
         # stage: apigatewayv2.IStage
         
         api_mapping = apigatewayv2.ApiMapping(self, "MyApiMapping",
-            api=api_ref,
-            domain_name=domain_name_ref,
+            api=api,
+            domain_name=domain_name,
         
             # the properties below are optional
             api_mapping_key="apiMappingKey",
@@ -18550,8 +19273,8 @@ class ApiMapping(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        api: "_IApiRef_53cfa8c6",
-        domain_name: "_IDomainNameRef_f08efdb1",
+        api: "IApi",
+        domain_name: "IDomainName",
         api_mapping_key: typing.Optional[builtins.str] = None,
         stage: typing.Optional["IStage"] = None,
     ) -> None:
@@ -18584,22 +19307,18 @@ class ApiMapping(
         id: builtins.str,
         *,
         api_mapping_id: builtins.str,
-        domain_name: typing.Optional[builtins.str] = None,
     ) -> "IApiMapping":
         '''import from API ID.
 
         :param scope: -
         :param id: -
         :param api_mapping_id: The API mapping ID.
-        :param domain_name: Domain name. Default: - Certain operations on the referenced object may fail if not supplied
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0135f8db3f6dd0d89428364a8fbc4da80890991347755032f117e2e49ea65549)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        attrs = ApiMappingAttributes(
-            api_mapping_id=api_mapping_id, domain_name=domain_name
-        )
+        attrs = ApiMappingAttributes(api_mapping_id=api_mapping_id)
 
         return typing.cast("IApiMapping", jsii.sinvoke(cls, "fromApiMappingAttributes", [scope, id, attrs]))
 
@@ -18616,22 +19335,10 @@ class ApiMapping(
         return typing.cast(builtins.str, jsii.get(self, "apiMappingId"))
 
     @builtins.property
-    @jsii.member(jsii_name="apiMappingRef")
-    def api_mapping_ref(self) -> "_ApiMappingReference_c9af78d7":
-        '''A reference to a ApiMapping resource.'''
-        return typing.cast("_ApiMappingReference_c9af78d7", jsii.get(self, "apiMappingRef"))
-
-    @builtins.property
     @jsii.member(jsii_name="domainName")
     def domain_name(self) -> "IDomainName":
         '''API domain name.'''
         return typing.cast("IDomainName", jsii.get(self, "domainName"))
-
-    @builtins.property
-    @jsii.member(jsii_name="domainUrl")
-    def domain_url(self) -> builtins.str:
-        '''Return the domain for this API Mapping.'''
-        return typing.cast(builtins.str, jsii.get(self, "domainUrl"))
 
     @builtins.property
     @jsii.member(jsii_name="mappingKey")
@@ -18781,12 +19488,6 @@ class DomainName(
     def PROPERTY_INJECTION_ID(cls) -> builtins.str:
         '''Uniquely identifies this class.'''
         return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
-
-    @builtins.property
-    @jsii.member(jsii_name="domainNameRef")
-    def domain_name_ref(self) -> "_DomainNameReference_9eee7557":
-        '''A reference to a DomainName resource.'''
-        return typing.cast("_DomainNameReference_9eee7557", jsii.get(self, "domainNameRef"))
 
     @builtins.property
     @jsii.member(jsii_name="name")
@@ -18983,2363 +19684,6 @@ class DomainNameProps(EndpointOptions):
         return "DomainNameProps(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
-
-
-@jsii.implements(IHttpAuthorizer)
-class HttpAuthorizer(
-    _Resource_45bc6135,
-    metaclass=jsii.JSIIMeta,
-    jsii_type="aws-cdk-lib.aws_apigatewayv2.HttpAuthorizer",
-):
-    '''An authorizer for Http Apis.
-
-    :resource: AWS::ApiGatewayV2::Authorizer
-    :exampleMetadata: fixture=_generated
-
-    Example::
-
-        # The code below shows an example of how to instantiate this type.
-        # The values are placeholders you should change.
-        import aws_cdk as cdk
-        from aws_cdk import aws_apigatewayv2 as apigatewayv2
-        
-        # http_api_ref: apigatewayv2.IHttpApiRef
-        
-        http_authorizer = apigatewayv2.HttpAuthorizer(self, "MyHttpAuthorizer",
-            http_api=http_api_ref,
-            identity_source=["identitySource"],
-            type=apigatewayv2.HttpAuthorizerType.IAM,
-        
-            # the properties below are optional
-            authorizer_name="authorizerName",
-            authorizer_uri="authorizerUri",
-            enable_simple_responses=False,
-            jwt_audience=["jwtAudience"],
-            jwt_issuer="jwtIssuer",
-            payload_format_version=apigatewayv2.AuthorizerPayloadVersion.VERSION_1_0,
-            results_cache_ttl=cdk.Duration.minutes(30)
-        )
-    '''
-
-    def __init__(
-        self,
-        scope: "_constructs_77d1e7e8.Construct",
-        id: builtins.str,
-        *,
-        http_api: "IHttpApiRef",
-        identity_source: typing.Sequence[builtins.str],
-        type: "HttpAuthorizerType",
-        authorizer_name: typing.Optional[builtins.str] = None,
-        authorizer_uri: typing.Optional[builtins.str] = None,
-        enable_simple_responses: typing.Optional[builtins.bool] = None,
-        jwt_audience: typing.Optional[typing.Sequence[builtins.str]] = None,
-        jwt_issuer: typing.Optional[builtins.str] = None,
-        payload_format_version: typing.Optional["AuthorizerPayloadVersion"] = None,
-        results_cache_ttl: typing.Optional["_Duration_4839e8c3"] = None,
-    ) -> None:
-        '''
-        :param scope: -
-        :param id: -
-        :param http_api: HTTP Api to attach the authorizer to.
-        :param identity_source: The identity source for which authorization is requested.
-        :param type: The type of authorizer.
-        :param authorizer_name: Name of the authorizer. Default: - id of the HttpAuthorizer construct.
-        :param authorizer_uri: The authorizer's Uniform Resource Identifier (URI). For REQUEST authorizers, this must be a well-formed Lambda function URI. Default: - required for Request authorizer types
-        :param enable_simple_responses: Specifies whether a Lambda authorizer returns a response in a simple format. If enabled, the Lambda authorizer can return a boolean value instead of an IAM policy. Default: - The lambda authorizer must return an IAM policy as its response
-        :param jwt_audience: A list of the intended recipients of the JWT. A valid JWT must provide an aud that matches at least one entry in this list. Default: - required for JWT authorizer typess.
-        :param jwt_issuer: The base domain of the identity provider that issues JWT. Default: - required for JWT authorizer types.
-        :param payload_format_version: Specifies the format of the payload sent to an HTTP API Lambda authorizer. Default: AuthorizerPayloadVersion.VERSION_2_0 if the authorizer type is HttpAuthorizerType.LAMBDA
-        :param results_cache_ttl: How long APIGateway should cache the results. Max 1 hour. Default: - API Gateway will not cache authorizer responses
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__7da0023111eeaa20140212b6b10bdb3fc690c730188acea2d4f7443b8f801ce4)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = HttpAuthorizerProps(
-            http_api=http_api,
-            identity_source=identity_source,
-            type=type,
-            authorizer_name=authorizer_name,
-            authorizer_uri=authorizer_uri,
-            enable_simple_responses=enable_simple_responses,
-            jwt_audience=jwt_audience,
-            jwt_issuer=jwt_issuer,
-            payload_format_version=payload_format_version,
-            results_cache_ttl=results_cache_ttl,
-        )
-
-        jsii.create(self.__class__, self, [scope, id, props])
-
-    @jsii.member(jsii_name="fromHttpAuthorizerAttributes")
-    @builtins.classmethod
-    def from_http_authorizer_attributes(
-        cls,
-        scope: "_constructs_77d1e7e8.Construct",
-        id: builtins.str,
-        *,
-        authorizer_id: builtins.str,
-        authorizer_type: builtins.str,
-    ) -> "IHttpRouteAuthorizer":
-        '''Import an existing HTTP Authorizer into this CDK app.
-
-        :param scope: -
-        :param id: -
-        :param authorizer_id: Id of the Authorizer.
-        :param authorizer_type: Type of authorizer. Possible values are: - JWT - JSON Web Token Authorizer - CUSTOM - Lambda Authorizer - NONE - No Authorization
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__f9bf1dfd7e3e3fb3162d44ea2fce7d99df068c43428b43d0d969d3252feb6044)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        attrs = HttpAuthorizerAttributes(
-            authorizer_id=authorizer_id, authorizer_type=authorizer_type
-        )
-
-        return typing.cast("IHttpRouteAuthorizer", jsii.sinvoke(cls, "fromHttpAuthorizerAttributes", [scope, id, attrs]))
-
-    @jsii.python.classproperty
-    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
-    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
-        '''Uniquely identifies this class.'''
-        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
-
-    @builtins.property
-    @jsii.member(jsii_name="authorizerId")
-    def authorizer_id(self) -> builtins.str:
-        '''Id of the Authorizer.'''
-        return typing.cast(builtins.str, jsii.get(self, "authorizerId"))
-
-    @builtins.property
-    @jsii.member(jsii_name="authorizerRef")
-    def authorizer_ref(self) -> "_AuthorizerReference_134fef83":
-        '''A reference to a Authorizer resource.'''
-        return typing.cast("_AuthorizerReference_134fef83", jsii.get(self, "authorizerRef"))
-
-
-@jsii.implements(IHttpRouteAuthorizer)
-class HttpNoneAuthorizer(
-    metaclass=jsii.JSIIMeta,
-    jsii_type="aws-cdk-lib.aws_apigatewayv2.HttpNoneAuthorizer",
-):
-    '''Explicitly configure no authorizers on specific HTTP API routes.
-
-    :exampleMetadata: infused
-
-    Example::
-
-        from aws_cdk.aws_apigatewayv2_authorizers import HttpJwtAuthorizer
-        from aws_cdk.aws_apigatewayv2_integrations import HttpUrlIntegration
-        
-        
-        issuer = "https://test.us.auth0.com"
-        authorizer = HttpJwtAuthorizer("DefaultAuthorizer", issuer,
-            jwt_audience=["3131231"]
-        )
-        
-        api = apigwv2.HttpApi(self, "HttpApi",
-            default_authorizer=authorizer,
-            default_authorization_scopes=["read:books"]
-        )
-        
-        api.add_routes(
-            integration=HttpUrlIntegration("BooksIntegration", "https://get-books-proxy.example.com"),
-            path="/books",
-            methods=[apigwv2.HttpMethod.GET]
-        )
-        
-        api.add_routes(
-            integration=HttpUrlIntegration("BooksIdIntegration", "https://get-books-proxy.example.com"),
-            path="/books/{id}",
-            methods=[apigwv2.HttpMethod.GET]
-        )
-        
-        api.add_routes(
-            integration=HttpUrlIntegration("BooksIntegration", "https://get-books-proxy.example.com"),
-            path="/books",
-            methods=[apigwv2.HttpMethod.POST],
-            authorization_scopes=["write:books"]
-        )
-        
-        api.add_routes(
-            integration=HttpUrlIntegration("LoginIntegration", "https://get-books-proxy.example.com"),
-            path="/login",
-            methods=[apigwv2.HttpMethod.POST],
-            authorizer=apigwv2.HttpNoneAuthorizer()
-        )
-    '''
-
-    def __init__(self) -> None:
-        jsii.create(self.__class__, self, [])
-
-    @jsii.member(jsii_name="bind")
-    def bind(
-        self,
-        *,
-        route: "IHttpRoute",
-        scope: "_constructs_77d1e7e8.Construct",
-    ) -> "HttpRouteAuthorizerConfig":
-        '''Bind this authorizer to a specified Http route.
-
-        :param route: The route to which the authorizer is being bound.
-        :param scope: The scope for any constructs created as part of the bind.
-        '''
-        _options = HttpRouteAuthorizerBindOptions(route=route, scope=scope)
-
-        return typing.cast("HttpRouteAuthorizerConfig", jsii.invoke(self, "bind", [_options]))
-
-    @builtins.property
-    @jsii.member(jsii_name="authorizationType")
-    def authorization_type(self) -> builtins.str:
-        '''The authorizationType used for IAM Authorizer.'''
-        return typing.cast(builtins.str, jsii.get(self, "authorizationType"))
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_apigatewayv2.HttpStageAttributes",
-    jsii_struct_bases=[StageAttributes],
-    name_mapping={"stage_name": "stageName", "api": "api"},
-)
-class HttpStageAttributes(StageAttributes):
-    def __init__(self, *, stage_name: builtins.str, api: "IHttpApi") -> None:
-        '''The attributes used to import existing HttpStage.
-
-        :param stage_name: The name of the stage.
-        :param api: The API to which this stage is associated.
-
-        :exampleMetadata: fixture=_generated
-
-        Example::
-
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_apigatewayv2 as apigatewayv2
-            
-            # http_api: apigatewayv2.HttpApi
-            
-            http_stage_attributes = apigatewayv2.HttpStageAttributes(
-                api=http_api,
-                stage_name="stageName"
-            )
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__14605c3383d1d699194e37511d84f3f4da8c64b724b0eacc42f7bff95af97855)
-            check_type(argname="argument stage_name", value=stage_name, expected_type=type_hints["stage_name"])
-            check_type(argname="argument api", value=api, expected_type=type_hints["api"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "stage_name": stage_name,
-            "api": api,
-        }
-
-    @builtins.property
-    def stage_name(self) -> builtins.str:
-        '''The name of the stage.'''
-        result = self._values.get("stage_name")
-        assert result is not None, "Required property 'stage_name' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def api(self) -> "IHttpApi":
-        '''The API to which this stage is associated.'''
-        result = self._values.get("api")
-        assert result is not None, "Required property 'api' is missing"
-        return typing.cast("IHttpApi", result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "HttpStageAttributes(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_apigatewayv2.HttpStageOptions",
-    jsii_struct_bases=[StageOptions],
-    name_mapping={
-        "access_log_settings": "accessLogSettings",
-        "auto_deploy": "autoDeploy",
-        "description": "description",
-        "detailed_metrics_enabled": "detailedMetricsEnabled",
-        "domain_mapping": "domainMapping",
-        "stage_variables": "stageVariables",
-        "throttle": "throttle",
-        "stage_name": "stageName",
-    },
-)
-class HttpStageOptions(StageOptions):
-    def __init__(
-        self,
-        *,
-        access_log_settings: typing.Optional["IAccessLogSettings"] = None,
-        auto_deploy: typing.Optional[builtins.bool] = None,
-        description: typing.Optional[builtins.str] = None,
-        detailed_metrics_enabled: typing.Optional[builtins.bool] = None,
-        domain_mapping: typing.Optional[typing.Union["DomainMappingOptions", typing.Dict[builtins.str, typing.Any]]] = None,
-        stage_variables: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        throttle: typing.Optional[typing.Union["ThrottleSettings", typing.Dict[builtins.str, typing.Any]]] = None,
-        stage_name: typing.Optional[builtins.str] = None,
-    ) -> None:
-        '''The options to create a new Stage for an HTTP API.
-
-        :param access_log_settings: Settings for access logging. Default: - No access logging
-        :param auto_deploy: Whether updates to an API automatically trigger a new deployment. Default: false
-        :param description: The description for the API stage. Default: - no description
-        :param detailed_metrics_enabled: Specifies whether detailed metrics are enabled. Default: false
-        :param domain_mapping: The options for custom domain and api mapping. Default: - no custom domain and api mapping configuration
-        :param stage_variables: Stage variables for the stage. These are key-value pairs that you can define and use in your API routes. The allowed characters for variable names and the required pattern for variable values are specified here: https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-apigateway-stage.html#cfn-apigateway-stage-variables Default: - No stage variables
-        :param throttle: Throttle settings for the routes of this stage. Default: - no throttling configuration
-        :param stage_name: The name of the stage. See ``StageName`` class for more details. Default: '$default' the default stage of the API. This stage will have the URL at the root of the API endpoint.
-
-        :exampleMetadata: infused
-
-        Example::
-
-            # api: apigwv2.HttpApi
-            # dn: apigwv2.DomainName
-            
-            
-            api.add_stage("beta",
-                stage_name="beta",
-                auto_deploy=True,
-                # https://${dn.domainName}/bar goes to the beta stage
-                domain_mapping=apigwv2.DomainMappingOptions(
-                    domain_name=dn,
-                    mapping_key="bar"
-                )
-            )
-        '''
-        if isinstance(domain_mapping, dict):
-            domain_mapping = DomainMappingOptions(**domain_mapping)
-        if isinstance(throttle, dict):
-            throttle = ThrottleSettings(**throttle)
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__70c0bb0779b1636661ab1c2d695953c6dda7a5247d18a4bd7e045cc96d717a8a)
-            check_type(argname="argument access_log_settings", value=access_log_settings, expected_type=type_hints["access_log_settings"])
-            check_type(argname="argument auto_deploy", value=auto_deploy, expected_type=type_hints["auto_deploy"])
-            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
-            check_type(argname="argument detailed_metrics_enabled", value=detailed_metrics_enabled, expected_type=type_hints["detailed_metrics_enabled"])
-            check_type(argname="argument domain_mapping", value=domain_mapping, expected_type=type_hints["domain_mapping"])
-            check_type(argname="argument stage_variables", value=stage_variables, expected_type=type_hints["stage_variables"])
-            check_type(argname="argument throttle", value=throttle, expected_type=type_hints["throttle"])
-            check_type(argname="argument stage_name", value=stage_name, expected_type=type_hints["stage_name"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {}
-        if access_log_settings is not None:
-            self._values["access_log_settings"] = access_log_settings
-        if auto_deploy is not None:
-            self._values["auto_deploy"] = auto_deploy
-        if description is not None:
-            self._values["description"] = description
-        if detailed_metrics_enabled is not None:
-            self._values["detailed_metrics_enabled"] = detailed_metrics_enabled
-        if domain_mapping is not None:
-            self._values["domain_mapping"] = domain_mapping
-        if stage_variables is not None:
-            self._values["stage_variables"] = stage_variables
-        if throttle is not None:
-            self._values["throttle"] = throttle
-        if stage_name is not None:
-            self._values["stage_name"] = stage_name
-
-    @builtins.property
-    def access_log_settings(self) -> typing.Optional["IAccessLogSettings"]:
-        '''Settings for access logging.
-
-        :default: - No access logging
-        '''
-        result = self._values.get("access_log_settings")
-        return typing.cast(typing.Optional["IAccessLogSettings"], result)
-
-    @builtins.property
-    def auto_deploy(self) -> typing.Optional[builtins.bool]:
-        '''Whether updates to an API automatically trigger a new deployment.
-
-        :default: false
-        '''
-        result = self._values.get("auto_deploy")
-        return typing.cast(typing.Optional[builtins.bool], result)
-
-    @builtins.property
-    def description(self) -> typing.Optional[builtins.str]:
-        '''The description for the API stage.
-
-        :default: - no description
-        '''
-        result = self._values.get("description")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def detailed_metrics_enabled(self) -> typing.Optional[builtins.bool]:
-        '''Specifies whether detailed metrics are enabled.
-
-        :default: false
-        '''
-        result = self._values.get("detailed_metrics_enabled")
-        return typing.cast(typing.Optional[builtins.bool], result)
-
-    @builtins.property
-    def domain_mapping(self) -> typing.Optional["DomainMappingOptions"]:
-        '''The options for custom domain and api mapping.
-
-        :default: - no custom domain and api mapping configuration
-        '''
-        result = self._values.get("domain_mapping")
-        return typing.cast(typing.Optional["DomainMappingOptions"], result)
-
-    @builtins.property
-    def stage_variables(
-        self,
-    ) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''Stage variables for the stage. These are key-value pairs that you can define and use in your API routes.
-
-        The allowed characters for variable names and the required pattern for variable values are specified here: https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-apigateway-stage.html#cfn-apigateway-stage-variables
-
-        :default: - No stage variables
-        '''
-        result = self._values.get("stage_variables")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
-
-    @builtins.property
-    def throttle(self) -> typing.Optional["ThrottleSettings"]:
-        '''Throttle settings for the routes of this stage.
-
-        :default: - no throttling configuration
-        '''
-        result = self._values.get("throttle")
-        return typing.cast(typing.Optional["ThrottleSettings"], result)
-
-    @builtins.property
-    def stage_name(self) -> typing.Optional[builtins.str]:
-        '''The name of the stage.
-
-        See ``StageName`` class for more details.
-
-        :default: '$default' the default stage of the API. This stage will have the URL at the root of the API endpoint.
-        '''
-        result = self._values.get("stage_name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "HttpStageOptions(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.data_type(
-    jsii_type="aws-cdk-lib.aws_apigatewayv2.HttpStageProps",
-    jsii_struct_bases=[HttpStageOptions],
-    name_mapping={
-        "access_log_settings": "accessLogSettings",
-        "auto_deploy": "autoDeploy",
-        "description": "description",
-        "detailed_metrics_enabled": "detailedMetricsEnabled",
-        "domain_mapping": "domainMapping",
-        "stage_variables": "stageVariables",
-        "throttle": "throttle",
-        "stage_name": "stageName",
-        "http_api": "httpApi",
-    },
-)
-class HttpStageProps(HttpStageOptions):
-    def __init__(
-        self,
-        *,
-        access_log_settings: typing.Optional["IAccessLogSettings"] = None,
-        auto_deploy: typing.Optional[builtins.bool] = None,
-        description: typing.Optional[builtins.str] = None,
-        detailed_metrics_enabled: typing.Optional[builtins.bool] = None,
-        domain_mapping: typing.Optional[typing.Union["DomainMappingOptions", typing.Dict[builtins.str, typing.Any]]] = None,
-        stage_variables: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        throttle: typing.Optional[typing.Union["ThrottleSettings", typing.Dict[builtins.str, typing.Any]]] = None,
-        stage_name: typing.Optional[builtins.str] = None,
-        http_api: "IHttpApiRef",
-    ) -> None:
-        '''Properties to initialize an instance of ``HttpStage``.
-
-        :param access_log_settings: Settings for access logging. Default: - No access logging
-        :param auto_deploy: Whether updates to an API automatically trigger a new deployment. Default: false
-        :param description: The description for the API stage. Default: - no description
-        :param detailed_metrics_enabled: Specifies whether detailed metrics are enabled. Default: false
-        :param domain_mapping: The options for custom domain and api mapping. Default: - no custom domain and api mapping configuration
-        :param stage_variables: Stage variables for the stage. These are key-value pairs that you can define and use in your API routes. The allowed characters for variable names and the required pattern for variable values are specified here: https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-apigateway-stage.html#cfn-apigateway-stage-variables Default: - No stage variables
-        :param throttle: Throttle settings for the routes of this stage. Default: - no throttling configuration
-        :param stage_name: The name of the stage. See ``StageName`` class for more details. Default: '$default' the default stage of the API. This stage will have the URL at the root of the API endpoint.
-        :param http_api: The HTTP API to which this stage is associated.
-
-        :exampleMetadata: infused
-
-        Example::
-
-            import aws_cdk.aws_apigateway as apigw
-            import aws_cdk.aws_logs as logs
-            
-            # api: apigwv2.HttpApi
-            # log_group: logs.LogGroup
-            
-            
-            stage = apigwv2.HttpStage(self, "Stage",
-                http_api=api,
-                access_log_settings={
-                    "destination": apigwv2.LogGroupLogDestination(log_group),
-                    "format": apigw.AccessLogFormat.clf()
-                }
-            )
-        '''
-        if isinstance(domain_mapping, dict):
-            domain_mapping = DomainMappingOptions(**domain_mapping)
-        if isinstance(throttle, dict):
-            throttle = ThrottleSettings(**throttle)
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__77d8b0adbb783021a6c7e33999d2a3a80e2414824d202954599bb4ad7f291721)
-            check_type(argname="argument access_log_settings", value=access_log_settings, expected_type=type_hints["access_log_settings"])
-            check_type(argname="argument auto_deploy", value=auto_deploy, expected_type=type_hints["auto_deploy"])
-            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
-            check_type(argname="argument detailed_metrics_enabled", value=detailed_metrics_enabled, expected_type=type_hints["detailed_metrics_enabled"])
-            check_type(argname="argument domain_mapping", value=domain_mapping, expected_type=type_hints["domain_mapping"])
-            check_type(argname="argument stage_variables", value=stage_variables, expected_type=type_hints["stage_variables"])
-            check_type(argname="argument throttle", value=throttle, expected_type=type_hints["throttle"])
-            check_type(argname="argument stage_name", value=stage_name, expected_type=type_hints["stage_name"])
-            check_type(argname="argument http_api", value=http_api, expected_type=type_hints["http_api"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "http_api": http_api,
-        }
-        if access_log_settings is not None:
-            self._values["access_log_settings"] = access_log_settings
-        if auto_deploy is not None:
-            self._values["auto_deploy"] = auto_deploy
-        if description is not None:
-            self._values["description"] = description
-        if detailed_metrics_enabled is not None:
-            self._values["detailed_metrics_enabled"] = detailed_metrics_enabled
-        if domain_mapping is not None:
-            self._values["domain_mapping"] = domain_mapping
-        if stage_variables is not None:
-            self._values["stage_variables"] = stage_variables
-        if throttle is not None:
-            self._values["throttle"] = throttle
-        if stage_name is not None:
-            self._values["stage_name"] = stage_name
-
-    @builtins.property
-    def access_log_settings(self) -> typing.Optional["IAccessLogSettings"]:
-        '''Settings for access logging.
-
-        :default: - No access logging
-        '''
-        result = self._values.get("access_log_settings")
-        return typing.cast(typing.Optional["IAccessLogSettings"], result)
-
-    @builtins.property
-    def auto_deploy(self) -> typing.Optional[builtins.bool]:
-        '''Whether updates to an API automatically trigger a new deployment.
-
-        :default: false
-        '''
-        result = self._values.get("auto_deploy")
-        return typing.cast(typing.Optional[builtins.bool], result)
-
-    @builtins.property
-    def description(self) -> typing.Optional[builtins.str]:
-        '''The description for the API stage.
-
-        :default: - no description
-        '''
-        result = self._values.get("description")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def detailed_metrics_enabled(self) -> typing.Optional[builtins.bool]:
-        '''Specifies whether detailed metrics are enabled.
-
-        :default: false
-        '''
-        result = self._values.get("detailed_metrics_enabled")
-        return typing.cast(typing.Optional[builtins.bool], result)
-
-    @builtins.property
-    def domain_mapping(self) -> typing.Optional["DomainMappingOptions"]:
-        '''The options for custom domain and api mapping.
-
-        :default: - no custom domain and api mapping configuration
-        '''
-        result = self._values.get("domain_mapping")
-        return typing.cast(typing.Optional["DomainMappingOptions"], result)
-
-    @builtins.property
-    def stage_variables(
-        self,
-    ) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
-        '''Stage variables for the stage. These are key-value pairs that you can define and use in your API routes.
-
-        The allowed characters for variable names and the required pattern for variable values are specified here: https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-apigateway-stage.html#cfn-apigateway-stage-variables
-
-        :default: - No stage variables
-        '''
-        result = self._values.get("stage_variables")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
-
-    @builtins.property
-    def throttle(self) -> typing.Optional["ThrottleSettings"]:
-        '''Throttle settings for the routes of this stage.
-
-        :default: - no throttling configuration
-        '''
-        result = self._values.get("throttle")
-        return typing.cast(typing.Optional["ThrottleSettings"], result)
-
-    @builtins.property
-    def stage_name(self) -> typing.Optional[builtins.str]:
-        '''The name of the stage.
-
-        See ``StageName`` class for more details.
-
-        :default: '$default' the default stage of the API. This stage will have the URL at the root of the API endpoint.
-        '''
-        result = self._values.get("stage_name")
-        return typing.cast(typing.Optional[builtins.str], result)
-
-    @builtins.property
-    def http_api(self) -> "IHttpApiRef":
-        '''The HTTP API to which this stage is associated.'''
-        result = self._values.get("http_api")
-        assert result is not None, "Required property 'http_api' is missing"
-        return typing.cast("IHttpApiRef", result)
-
-    def __eq__(self, rhs: typing.Any) -> builtins.bool:
-        return isinstance(rhs, self.__class__) and rhs._values == self._values
-
-    def __ne__(self, rhs: typing.Any) -> builtins.bool:
-        return not (rhs == self)
-
-    def __repr__(self) -> str:
-        return "HttpStageProps(%s)" % ", ".join(
-            k + "=" + repr(v) for k, v in self._values.items()
-        )
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IHttpApi")
-class IHttpApi(IApi, IHttpApiRef, typing_extensions.Protocol):
-    '''Represents an HTTP API.'''
-
-    @builtins.property
-    @jsii.member(jsii_name="defaultAuthorizationScopes")
-    def default_authorization_scopes(
-        self,
-    ) -> typing.Optional[typing.List[builtins.str]]:
-        '''Default OIDC scopes attached to all routes in the gateway, unless explicitly configured on the route.
-
-        The scopes are used with a COGNITO_USER_POOLS authorizer to authorize the method invocation.
-
-        :default: - no default authorization scopes
-
-        :attribute: true
-        '''
-        ...
-
-    @builtins.property
-    @jsii.member(jsii_name="defaultAuthorizer")
-    def default_authorizer(self) -> typing.Optional["IHttpRouteAuthorizer"]:
-        '''Default Authorizer applied to all routes in the gateway.
-
-        :default: - no default authorizer
-
-        :attribute: true
-        '''
-        ...
-
-    @builtins.property
-    @jsii.member(jsii_name="defaultStage")
-    def default_stage(self) -> typing.Optional["IHttpStage"]:
-        '''The default stage of this API.
-
-        :default: - a stage will be created
-
-        :attribute: true
-        '''
-        ...
-
-    @jsii.member(jsii_name="addVpcLink")
-    def add_vpc_link(
-        self,
-        *,
-        vpc: "_IVpc_f30d5663",
-        security_groups: typing.Optional[typing.Sequence["_ISecurityGroupRef_efa4ff18"]] = None,
-        subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
-        vpc_link_name: typing.Optional[builtins.str] = None,
-    ) -> "VpcLink":
-        '''Add a new VpcLink.
-
-        :param vpc: The VPC in which the private resources reside.
-        :param security_groups: A list of security groups for the VPC link. Default: - no security groups. Use ``addSecurityGroups`` to add security groups
-        :param subnets: A list of subnets for the VPC link. Default: - private subnets of the provided VPC. Use ``addSubnets`` to add more subnets
-        :param vpc_link_name: The name used to label and identify the VPC link. Default: - automatically generated name
-        '''
-        ...
-
-    @jsii.member(jsii_name="arnForExecuteApi")
-    def arn_for_execute_api(
-        self,
-        method: typing.Optional[builtins.str] = None,
-        path: typing.Optional[builtins.str] = None,
-        stage: typing.Optional[builtins.str] = None,
-    ) -> builtins.str:
-        '''Get the "execute-api" ARN.
-
-        When 'ANY' is passed to the method, an ARN with the method set to '*' is obtained.
-
-        :param method: -
-        :param path: -
-        :param stage: -
-
-        :default:
-
-        - The default behavior applies when no specific method, path, or stage is provided.
-        In this case, the ARN will cover all methods, all resources, and all stages of this API.
-        Specifically, if 'method' is not specified, it defaults to '*', representing all methods.
-        If 'path' is not specified, it defaults to '/*', representing all paths.
-        If 'stage' is not specified, it also defaults to '*', representing all stages.
-        '''
-        ...
-
-    @jsii.member(jsii_name="metricClientError")
-    def metric_client_error(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''Metric for the number of client-side errors captured in a given period.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - sum over 5 minutes
-        '''
-        ...
-
-    @jsii.member(jsii_name="metricCount")
-    def metric_count(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''Metric for the total number API requests in a given period.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - SampleCount over 5 minutes
-        '''
-        ...
-
-    @jsii.member(jsii_name="metricDataProcessed")
-    def metric_data_processed(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''Metric for the amount of data processed in bytes.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - sum over 5 minutes
-        '''
-        ...
-
-    @jsii.member(jsii_name="metricIntegrationLatency")
-    def metric_integration_latency(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''Metric for the time between when API Gateway relays a request to the backend and when it receives a response from the backend.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - no statistic
-        '''
-        ...
-
-    @jsii.member(jsii_name="metricLatency")
-    def metric_latency(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''The time between when API Gateway receives a request from a client and when it returns a response to the client.
-
-        The latency includes the integration latency and other API Gateway overhead.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - no statistic
-        '''
-        ...
-
-    @jsii.member(jsii_name="metricServerError")
-    def metric_server_error(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''Metric for the number of server-side errors captured in a given period.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - sum over 5 minutes
-        '''
-        ...
-
-
-class _IHttpApiProxy(
-    jsii.proxy_for(IApi), # type: ignore[misc]
-    jsii.proxy_for(IHttpApiRef), # type: ignore[misc]
-):
-    '''Represents an HTTP API.'''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_apigatewayv2.IHttpApi"
-
-    @builtins.property
-    @jsii.member(jsii_name="defaultAuthorizationScopes")
-    def default_authorization_scopes(
-        self,
-    ) -> typing.Optional[typing.List[builtins.str]]:
-        '''Default OIDC scopes attached to all routes in the gateway, unless explicitly configured on the route.
-
-        The scopes are used with a COGNITO_USER_POOLS authorizer to authorize the method invocation.
-
-        :default: - no default authorization scopes
-
-        :attribute: true
-        '''
-        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "defaultAuthorizationScopes"))
-
-    @builtins.property
-    @jsii.member(jsii_name="defaultAuthorizer")
-    def default_authorizer(self) -> typing.Optional["IHttpRouteAuthorizer"]:
-        '''Default Authorizer applied to all routes in the gateway.
-
-        :default: - no default authorizer
-
-        :attribute: true
-        '''
-        return typing.cast(typing.Optional["IHttpRouteAuthorizer"], jsii.get(self, "defaultAuthorizer"))
-
-    @builtins.property
-    @jsii.member(jsii_name="defaultStage")
-    def default_stage(self) -> typing.Optional["IHttpStage"]:
-        '''The default stage of this API.
-
-        :default: - a stage will be created
-
-        :attribute: true
-        '''
-        return typing.cast(typing.Optional["IHttpStage"], jsii.get(self, "defaultStage"))
-
-    @jsii.member(jsii_name="addVpcLink")
-    def add_vpc_link(
-        self,
-        *,
-        vpc: "_IVpc_f30d5663",
-        security_groups: typing.Optional[typing.Sequence["_ISecurityGroupRef_efa4ff18"]] = None,
-        subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
-        vpc_link_name: typing.Optional[builtins.str] = None,
-    ) -> "VpcLink":
-        '''Add a new VpcLink.
-
-        :param vpc: The VPC in which the private resources reside.
-        :param security_groups: A list of security groups for the VPC link. Default: - no security groups. Use ``addSecurityGroups`` to add security groups
-        :param subnets: A list of subnets for the VPC link. Default: - private subnets of the provided VPC. Use ``addSubnets`` to add more subnets
-        :param vpc_link_name: The name used to label and identify the VPC link. Default: - automatically generated name
-        '''
-        options = VpcLinkProps(
-            vpc=vpc,
-            security_groups=security_groups,
-            subnets=subnets,
-            vpc_link_name=vpc_link_name,
-        )
-
-        return typing.cast("VpcLink", jsii.invoke(self, "addVpcLink", [options]))
-
-    @jsii.member(jsii_name="arnForExecuteApi")
-    def arn_for_execute_api(
-        self,
-        method: typing.Optional[builtins.str] = None,
-        path: typing.Optional[builtins.str] = None,
-        stage: typing.Optional[builtins.str] = None,
-    ) -> builtins.str:
-        '''Get the "execute-api" ARN.
-
-        When 'ANY' is passed to the method, an ARN with the method set to '*' is obtained.
-
-        :param method: -
-        :param path: -
-        :param stage: -
-
-        :default:
-
-        - The default behavior applies when no specific method, path, or stage is provided.
-        In this case, the ARN will cover all methods, all resources, and all stages of this API.
-        Specifically, if 'method' is not specified, it defaults to '*', representing all methods.
-        If 'path' is not specified, it defaults to '/*', representing all paths.
-        If 'stage' is not specified, it also defaults to '*', representing all stages.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__d4bdb3d2e15291eea92125ef948cd6cf44f902aa79fe0c219f66cb001a9ea68e)
-            check_type(argname="argument method", value=method, expected_type=type_hints["method"])
-            check_type(argname="argument path", value=path, expected_type=type_hints["path"])
-            check_type(argname="argument stage", value=stage, expected_type=type_hints["stage"])
-        return typing.cast(builtins.str, jsii.invoke(self, "arnForExecuteApi", [method, path, stage]))
-
-    @jsii.member(jsii_name="metricClientError")
-    def metric_client_error(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''Metric for the number of client-side errors captured in a given period.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - sum over 5 minutes
-        '''
-        props = _MetricOptions_1788b62f(
-            account=account,
-            color=color,
-            dimensions_map=dimensions_map,
-            id=id,
-            label=label,
-            period=period,
-            region=region,
-            stack_account=stack_account,
-            stack_region=stack_region,
-            statistic=statistic,
-            unit=unit,
-            visible=visible,
-        )
-
-        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricClientError", [props]))
-
-    @jsii.member(jsii_name="metricCount")
-    def metric_count(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''Metric for the total number API requests in a given period.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - SampleCount over 5 minutes
-        '''
-        props = _MetricOptions_1788b62f(
-            account=account,
-            color=color,
-            dimensions_map=dimensions_map,
-            id=id,
-            label=label,
-            period=period,
-            region=region,
-            stack_account=stack_account,
-            stack_region=stack_region,
-            statistic=statistic,
-            unit=unit,
-            visible=visible,
-        )
-
-        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricCount", [props]))
-
-    @jsii.member(jsii_name="metricDataProcessed")
-    def metric_data_processed(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''Metric for the amount of data processed in bytes.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - sum over 5 minutes
-        '''
-        props = _MetricOptions_1788b62f(
-            account=account,
-            color=color,
-            dimensions_map=dimensions_map,
-            id=id,
-            label=label,
-            period=period,
-            region=region,
-            stack_account=stack_account,
-            stack_region=stack_region,
-            statistic=statistic,
-            unit=unit,
-            visible=visible,
-        )
-
-        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricDataProcessed", [props]))
-
-    @jsii.member(jsii_name="metricIntegrationLatency")
-    def metric_integration_latency(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''Metric for the time between when API Gateway relays a request to the backend and when it receives a response from the backend.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - no statistic
-        '''
-        props = _MetricOptions_1788b62f(
-            account=account,
-            color=color,
-            dimensions_map=dimensions_map,
-            id=id,
-            label=label,
-            period=period,
-            region=region,
-            stack_account=stack_account,
-            stack_region=stack_region,
-            statistic=statistic,
-            unit=unit,
-            visible=visible,
-        )
-
-        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricIntegrationLatency", [props]))
-
-    @jsii.member(jsii_name="metricLatency")
-    def metric_latency(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''The time between when API Gateway receives a request from a client and when it returns a response to the client.
-
-        The latency includes the integration latency and other API Gateway overhead.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - no statistic
-        '''
-        props = _MetricOptions_1788b62f(
-            account=account,
-            color=color,
-            dimensions_map=dimensions_map,
-            id=id,
-            label=label,
-            period=period,
-            region=region,
-            stack_account=stack_account,
-            stack_region=stack_region,
-            statistic=statistic,
-            unit=unit,
-            visible=visible,
-        )
-
-        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricLatency", [props]))
-
-    @jsii.member(jsii_name="metricServerError")
-    def metric_server_error(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''Metric for the number of server-side errors captured in a given period.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - sum over 5 minutes
-        '''
-        props = _MetricOptions_1788b62f(
-            account=account,
-            color=color,
-            dimensions_map=dimensions_map,
-            id=id,
-            label=label,
-            period=period,
-            region=region,
-            stack_account=stack_account,
-            stack_region=stack_region,
-            statistic=statistic,
-            unit=unit,
-            visible=visible,
-        )
-
-        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricServerError", [props]))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IHttpApi).__jsii_proxy_class__ = lambda : _IHttpApiProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IHttpIntegration")
-class IHttpIntegration(IIntegration, typing_extensions.Protocol):
-    '''Represents an Integration for an HTTP API.'''
-
-    @builtins.property
-    @jsii.member(jsii_name="httpApi")
-    def http_api(self) -> "IHttpApi":
-        '''The HTTP API associated with this integration.'''
-        ...
-
-
-class _IHttpIntegrationProxy(
-    jsii.proxy_for(IIntegration), # type: ignore[misc]
-):
-    '''Represents an Integration for an HTTP API.'''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_apigatewayv2.IHttpIntegration"
-
-    @builtins.property
-    @jsii.member(jsii_name="httpApi")
-    def http_api(self) -> "IHttpApi":
-        '''The HTTP API associated with this integration.'''
-        return typing.cast("IHttpApi", jsii.get(self, "httpApi"))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IHttpIntegration).__jsii_proxy_class__ = lambda : _IHttpIntegrationProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IHttpRoute")
-class IHttpRoute(IRoute, typing_extensions.Protocol):
-    '''Represents a Route for an HTTP API.'''
-
-    @builtins.property
-    @jsii.member(jsii_name="httpApi")
-    def http_api(self) -> "IHttpApi":
-        '''The HTTP API associated with this route.'''
-        ...
-
-    @builtins.property
-    @jsii.member(jsii_name="routeArn")
-    def route_arn(self) -> builtins.str:
-        '''Returns the arn of the route.
-
-        :attribute: true
-        '''
-        ...
-
-    @builtins.property
-    @jsii.member(jsii_name="path")
-    def path(self) -> typing.Optional[builtins.str]:
-        '''Returns the path component of this HTTP route, ``undefined`` if the path is the catch-all route.'''
-        ...
-
-    @jsii.member(jsii_name="grantInvoke")
-    def grant_invoke(
-        self,
-        grantee: "_IGrantable_71c4f5de",
-        *,
-        http_methods: typing.Optional[typing.Sequence["HttpMethod"]] = None,
-    ) -> "_Grant_a7ae64f8":
-        '''Grant access to invoke the route.
-
-        This method requires that the authorizer of the route is undefined or is
-        an ``HttpIamAuthorizer``.
-
-        :param grantee: -
-        :param http_methods: The HTTP methods to allow. Default: - the HttpMethod of the route
-        '''
-        ...
-
-
-class _IHttpRouteProxy(
-    jsii.proxy_for(IRoute), # type: ignore[misc]
-):
-    '''Represents a Route for an HTTP API.'''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_apigatewayv2.IHttpRoute"
-
-    @builtins.property
-    @jsii.member(jsii_name="httpApi")
-    def http_api(self) -> "IHttpApi":
-        '''The HTTP API associated with this route.'''
-        return typing.cast("IHttpApi", jsii.get(self, "httpApi"))
-
-    @builtins.property
-    @jsii.member(jsii_name="routeArn")
-    def route_arn(self) -> builtins.str:
-        '''Returns the arn of the route.
-
-        :attribute: true
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "routeArn"))
-
-    @builtins.property
-    @jsii.member(jsii_name="path")
-    def path(self) -> typing.Optional[builtins.str]:
-        '''Returns the path component of this HTTP route, ``undefined`` if the path is the catch-all route.'''
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "path"))
-
-    @jsii.member(jsii_name="grantInvoke")
-    def grant_invoke(
-        self,
-        grantee: "_IGrantable_71c4f5de",
-        *,
-        http_methods: typing.Optional[typing.Sequence["HttpMethod"]] = None,
-    ) -> "_Grant_a7ae64f8":
-        '''Grant access to invoke the route.
-
-        This method requires that the authorizer of the route is undefined or is
-        an ``HttpIamAuthorizer``.
-
-        :param grantee: -
-        :param http_methods: The HTTP methods to allow. Default: - the HttpMethod of the route
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__c5f5ee3dd0468079018fb38cdc642f4071e063f1fee1994a9ac9c0a7bff54fb9)
-            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        options = GrantInvokeOptions(http_methods=http_methods)
-
-        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantInvoke", [grantee, options]))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IHttpRoute).__jsii_proxy_class__ = lambda : _IHttpRouteProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IHttpStage")
-class IHttpStage(IStage, IHttpStageRef, typing_extensions.Protocol):
-    '''Represents the HttpStage.'''
-
-    @builtins.property
-    @jsii.member(jsii_name="api")
-    def api(self) -> "IHttpApi":
-        '''The API this stage is associated to.'''
-        ...
-
-    @builtins.property
-    @jsii.member(jsii_name="domainUrl")
-    def domain_url(self) -> builtins.str:
-        '''The custom domain URL to this stage.'''
-        ...
-
-    @jsii.member(jsii_name="metricClientError")
-    def metric_client_error(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''Metric for the number of client-side errors captured in a given period.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - sum over 5 minutes
-        '''
-        ...
-
-    @jsii.member(jsii_name="metricCount")
-    def metric_count(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''Metric for the total number API requests in a given period.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - SampleCount over 5 minutes
-        '''
-        ...
-
-    @jsii.member(jsii_name="metricDataProcessed")
-    def metric_data_processed(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''Metric for the amount of data processed in bytes.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - sum over 5 minutes
-        '''
-        ...
-
-    @jsii.member(jsii_name="metricIntegrationLatency")
-    def metric_integration_latency(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''Metric for the time between when API Gateway relays a request to the backend and when it receives a response from the backend.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - no statistic
-        '''
-        ...
-
-    @jsii.member(jsii_name="metricLatency")
-    def metric_latency(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''The time between when API Gateway receives a request from a client and when it returns a response to the client.
-
-        The latency includes the integration latency and other API Gateway overhead.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - no statistic
-        '''
-        ...
-
-    @jsii.member(jsii_name="metricServerError")
-    def metric_server_error(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''Metric for the number of server-side errors captured in a given period.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - sum over 5 minutes
-        '''
-        ...
-
-
-class _IHttpStageProxy(
-    jsii.proxy_for(IStage), # type: ignore[misc]
-    jsii.proxy_for(IHttpStageRef), # type: ignore[misc]
-):
-    '''Represents the HttpStage.'''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_apigatewayv2.IHttpStage"
-
-    @builtins.property
-    @jsii.member(jsii_name="api")
-    def api(self) -> "IHttpApi":
-        '''The API this stage is associated to.'''
-        return typing.cast("IHttpApi", jsii.get(self, "api"))
-
-    @builtins.property
-    @jsii.member(jsii_name="domainUrl")
-    def domain_url(self) -> builtins.str:
-        '''The custom domain URL to this stage.'''
-        return typing.cast(builtins.str, jsii.get(self, "domainUrl"))
-
-    @jsii.member(jsii_name="metricClientError")
-    def metric_client_error(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''Metric for the number of client-side errors captured in a given period.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - sum over 5 minutes
-        '''
-        props = _MetricOptions_1788b62f(
-            account=account,
-            color=color,
-            dimensions_map=dimensions_map,
-            id=id,
-            label=label,
-            period=period,
-            region=region,
-            stack_account=stack_account,
-            stack_region=stack_region,
-            statistic=statistic,
-            unit=unit,
-            visible=visible,
-        )
-
-        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricClientError", [props]))
-
-    @jsii.member(jsii_name="metricCount")
-    def metric_count(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''Metric for the total number API requests in a given period.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - SampleCount over 5 minutes
-        '''
-        props = _MetricOptions_1788b62f(
-            account=account,
-            color=color,
-            dimensions_map=dimensions_map,
-            id=id,
-            label=label,
-            period=period,
-            region=region,
-            stack_account=stack_account,
-            stack_region=stack_region,
-            statistic=statistic,
-            unit=unit,
-            visible=visible,
-        )
-
-        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricCount", [props]))
-
-    @jsii.member(jsii_name="metricDataProcessed")
-    def metric_data_processed(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''Metric for the amount of data processed in bytes.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - sum over 5 minutes
-        '''
-        props = _MetricOptions_1788b62f(
-            account=account,
-            color=color,
-            dimensions_map=dimensions_map,
-            id=id,
-            label=label,
-            period=period,
-            region=region,
-            stack_account=stack_account,
-            stack_region=stack_region,
-            statistic=statistic,
-            unit=unit,
-            visible=visible,
-        )
-
-        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricDataProcessed", [props]))
-
-    @jsii.member(jsii_name="metricIntegrationLatency")
-    def metric_integration_latency(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''Metric for the time between when API Gateway relays a request to the backend and when it receives a response from the backend.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - no statistic
-        '''
-        props = _MetricOptions_1788b62f(
-            account=account,
-            color=color,
-            dimensions_map=dimensions_map,
-            id=id,
-            label=label,
-            period=period,
-            region=region,
-            stack_account=stack_account,
-            stack_region=stack_region,
-            statistic=statistic,
-            unit=unit,
-            visible=visible,
-        )
-
-        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricIntegrationLatency", [props]))
-
-    @jsii.member(jsii_name="metricLatency")
-    def metric_latency(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''The time between when API Gateway receives a request from a client and when it returns a response to the client.
-
-        The latency includes the integration latency and other API Gateway overhead.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - no statistic
-        '''
-        props = _MetricOptions_1788b62f(
-            account=account,
-            color=color,
-            dimensions_map=dimensions_map,
-            id=id,
-            label=label,
-            period=period,
-            region=region,
-            stack_account=stack_account,
-            stack_region=stack_region,
-            statistic=statistic,
-            unit=unit,
-            visible=visible,
-        )
-
-        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricLatency", [props]))
-
-    @jsii.member(jsii_name="metricServerError")
-    def metric_server_error(
-        self,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''Metric for the number of server-side errors captured in a given period.
-
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-
-        :default: - sum over 5 minutes
-        '''
-        props = _MetricOptions_1788b62f(
-            account=account,
-            color=color,
-            dimensions_map=dimensions_map,
-            id=id,
-            label=label,
-            period=period,
-            region=region,
-            stack_account=stack_account,
-            stack_region=stack_region,
-            statistic=statistic,
-            unit=unit,
-            visible=visible,
-        )
-
-        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricServerError", [props]))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IHttpStage).__jsii_proxy_class__ = lambda : _IHttpStageProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IWebSocketApi")
-class IWebSocketApi(IApi, IWebSocketApiRef, typing_extensions.Protocol):
-    '''Represents a WebSocket API.'''
-
-    pass
-
-
-class _IWebSocketApiProxy(
-    jsii.proxy_for(IApi), # type: ignore[misc]
-    jsii.proxy_for(IWebSocketApiRef), # type: ignore[misc]
-):
-    '''Represents a WebSocket API.'''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_apigatewayv2.IWebSocketApi"
-    pass
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IWebSocketApi).__jsii_proxy_class__ = lambda : _IWebSocketApiProxy
-
-
-@jsii.implements(IWebSocketApi, IApi)
-class WebSocketApi(
-    _Resource_45bc6135,
-    metaclass=jsii.JSIIMeta,
-    jsii_type="aws-cdk-lib.aws_apigatewayv2.WebSocketApi",
-):
-    '''Create a new API Gateway WebSocket API endpoint.
-
-    :resource: AWS::ApiGatewayV2::Api
-    :exampleMetadata: infused
-
-    Example::
-
-        from aws_cdk.aws_apigatewayv2_integrations import WebSocketLambdaIntegration
-        
-        # message_handler: lambda.Function
-        
-        
-        web_socket_api = apigwv2.WebSocketApi(self, "mywsapi")
-        apigwv2.WebSocketStage(self, "mystage",
-            web_socket_api=web_socket_api,
-            stage_name="dev",
-            auto_deploy=True
-        )
-        web_socket_api.add_route("sendMessage",
-            integration=WebSocketLambdaIntegration("SendMessageIntegration", message_handler)
-        )
-    '''
-
-    def __init__(
-        self,
-        scope: "_constructs_77d1e7e8.Construct",
-        id: builtins.str,
-        *,
-        api_key_selection_expression: typing.Optional["WebSocketApiKeySelectionExpression"] = None,
-        api_name: typing.Optional[builtins.str] = None,
-        connect_route_options: typing.Optional[typing.Union["WebSocketRouteOptions", typing.Dict[builtins.str, typing.Any]]] = None,
-        default_route_options: typing.Optional[typing.Union["WebSocketRouteOptions", typing.Dict[builtins.str, typing.Any]]] = None,
-        description: typing.Optional[builtins.str] = None,
-        disable_schema_validation: typing.Optional[builtins.bool] = None,
-        disconnect_route_options: typing.Optional[typing.Union["WebSocketRouteOptions", typing.Dict[builtins.str, typing.Any]]] = None,
-        ip_address_type: typing.Optional["IpAddressType"] = None,
-        route_selection_expression: typing.Optional[builtins.str] = None,
-    ) -> None:
-        '''
-        :param scope: -
-        :param id: -
-        :param api_key_selection_expression: An API key selection expression. Providing this option will require an API Key be provided to access the API. Default: - Key is not required to access these APIs
-        :param api_name: Name for the WebSocket API resource. Default: - id of the WebSocketApi construct.
-        :param connect_route_options: Options to configure a '$connect' route. Default: - no '$connect' route configured
-        :param default_route_options: Options to configure a '$default' route. Default: - no '$default' route configured
-        :param description: The description of the API. Default: - none
-        :param disable_schema_validation: Avoid validating models when creating a deployment. Default: false
-        :param disconnect_route_options: Options to configure a '$disconnect' route. Default: - no '$disconnect' route configured
-        :param ip_address_type: The IP address types that can invoke the API. Default: undefined - AWS default is IPV4
-        :param route_selection_expression: The route selection expression for the API. Default: '$request.body.action'
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__8f37be20ee015faaaf9283fe203dc28d2dcc56800f6007ae9105e3ad425c9333)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = WebSocketApiProps(
-            api_key_selection_expression=api_key_selection_expression,
-            api_name=api_name,
-            connect_route_options=connect_route_options,
-            default_route_options=default_route_options,
-            description=description,
-            disable_schema_validation=disable_schema_validation,
-            disconnect_route_options=disconnect_route_options,
-            ip_address_type=ip_address_type,
-            route_selection_expression=route_selection_expression,
-        )
-
-        jsii.create(self.__class__, self, [scope, id, props])
-
-    @jsii.member(jsii_name="fromWebSocketApiAttributes")
-    @builtins.classmethod
-    def from_web_socket_api_attributes(
-        cls,
-        scope: "_constructs_77d1e7e8.Construct",
-        id: builtins.str,
-        *,
-        web_socket_id: builtins.str,
-        api_endpoint: typing.Optional[builtins.str] = None,
-    ) -> "IWebSocketApi":
-        '''Import an existing WebSocket API into this CDK app.
-
-        :param scope: -
-        :param id: -
-        :param web_socket_id: The identifier of the WebSocketApi.
-        :param api_endpoint: The endpoint URL of the WebSocketApi. Default: - throw san error if apiEndpoint is accessed.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__ffffbf7cb72667cc3ea84c141969c65006f66fab5b2acc9cd1e5508c6dd8df5d)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        attrs = WebSocketApiAttributes(
-            web_socket_id=web_socket_id, api_endpoint=api_endpoint
-        )
-
-        return typing.cast("IWebSocketApi", jsii.sinvoke(cls, "fromWebSocketApiAttributes", [scope, id, attrs]))
-
-    @jsii.member(jsii_name="addRoute")
-    def add_route(
-        self,
-        route_key: builtins.str,
-        *,
-        integration: "WebSocketRouteIntegration",
-        authorizer: typing.Optional["IWebSocketRouteAuthorizer"] = None,
-        return_response: typing.Optional[builtins.bool] = None,
-    ) -> "WebSocketRoute":
-        '''Add a new route.
-
-        :param route_key: -
-        :param integration: The integration to be configured on this route.
-        :param authorizer: The authorize to this route. You can only set authorizer to a $connect route. Default: - No Authorizer
-        :param return_response: Should the route send a response to the client. Default: false
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__2ef71104699a1a6990c5a5d37692781dccedb21a0a0d0990f6bd28a66f2e982c)
-            check_type(argname="argument route_key", value=route_key, expected_type=type_hints["route_key"])
-        options = WebSocketRouteOptions(
-            integration=integration,
-            authorizer=authorizer,
-            return_response=return_response,
-        )
-
-        return typing.cast("WebSocketRoute", jsii.invoke(self, "addRoute", [route_key, options]))
-
-    @jsii.member(jsii_name="arnForExecuteApi")
-    def arn_for_execute_api(
-        self,
-        method: typing.Optional[builtins.str] = None,
-        path: typing.Optional[builtins.str] = None,
-        stage: typing.Optional[builtins.str] = None,
-    ) -> builtins.str:
-        '''(deprecated) Get the "execute-api" ARN.
-
-        :param method: -
-        :param path: -
-        :param stage: -
-
-        :deprecated: Use ``arnForExecuteApiV2()`` instead.
-
-        :stability: deprecated
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__9264ba32d47f82ef3a26b02826879368a02191f9da4b21bcc8ced5b7bf7baaef)
-            check_type(argname="argument method", value=method, expected_type=type_hints["method"])
-            check_type(argname="argument path", value=path, expected_type=type_hints["path"])
-            check_type(argname="argument stage", value=stage, expected_type=type_hints["stage"])
-        return typing.cast(builtins.str, jsii.invoke(self, "arnForExecuteApi", [method, path, stage]))
-
-    @jsii.member(jsii_name="arnForExecuteApiV2")
-    def arn_for_execute_api_v2(
-        self,
-        route: typing.Optional[builtins.str] = None,
-        stage: typing.Optional[builtins.str] = None,
-    ) -> builtins.str:
-        '''Get the "execute-api" ARN.
-
-        :param route: -
-        :param stage: -
-
-        :default:
-
-        - The default behavior applies when no specific route, or stage is provided.
-        In this case, the ARN will cover all routes, and all stages of this API.
-        Specifically, if 'route' is not specified, it defaults to '*', representing all routes.
-        If 'stage' is not specified, it also defaults to '*', representing all stages.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__7932b9aa0a92e32c752b93b8918a3842bdad62b6bef47b0af36c7d680a79303e)
-            check_type(argname="argument route", value=route, expected_type=type_hints["route"])
-            check_type(argname="argument stage", value=stage, expected_type=type_hints["stage"])
-        return typing.cast(builtins.str, jsii.invoke(self, "arnForExecuteApiV2", [route, stage]))
-
-    @jsii.member(jsii_name="grantManageConnections")
-    def grant_manage_connections(
-        self,
-        identity: "_IGrantable_71c4f5de",
-    ) -> "_Grant_a7ae64f8":
-        '''Grant access to the API Gateway management API for this WebSocket API to an IAM principal (Role/Group/User).
-
-        :param identity: The principal.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__8b1b5ff9a3e2b7c784498514fce501075a0999cea935f9ddec92e79caec71014)
-            check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
-        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantManageConnections", [identity]))
-
-    @jsii.member(jsii_name="metric")
-    def metric(
-        self,
-        metric_name: builtins.str,
-        *,
-        account: typing.Optional[builtins.str] = None,
-        color: typing.Optional[builtins.str] = None,
-        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        id: typing.Optional[builtins.str] = None,
-        label: typing.Optional[builtins.str] = None,
-        period: typing.Optional["_Duration_4839e8c3"] = None,
-        region: typing.Optional[builtins.str] = None,
-        stack_account: typing.Optional[builtins.str] = None,
-        stack_region: typing.Optional[builtins.str] = None,
-        statistic: typing.Optional[builtins.str] = None,
-        unit: typing.Optional["_Unit_61bc6f70"] = None,
-        visible: typing.Optional[builtins.bool] = None,
-    ) -> "_Metric_e396a4dc":
-        '''Return the given named metric for this Api Gateway.
-
-        :param metric_name: -
-        :param account: Account which this metric comes from. Default: - Deployment account.
-        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
-        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
-        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
-        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
-        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
-        :param region: Region which this metric comes from. Default: - Deployment region.
-        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
-        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
-        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
-        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
-        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__8ea2af8d6aef7e127f3feb093668fe567793f3442bb0838c12dde2c9a975fbe6)
-            check_type(argname="argument metric_name", value=metric_name, expected_type=type_hints["metric_name"])
-        props = _MetricOptions_1788b62f(
-            account=account,
-            color=color,
-            dimensions_map=dimensions_map,
-            id=id,
-            label=label,
-            period=period,
-            region=region,
-            stack_account=stack_account,
-            stack_region=stack_region,
-            statistic=statistic,
-            unit=unit,
-            visible=visible,
-        )
-
-        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metric", [metric_name, props]))
-
-    @jsii.python.classproperty
-    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
-    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
-        '''Uniquely identifies this class.'''
-        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
-
-    @builtins.property
-    @jsii.member(jsii_name="apiEndpoint")
-    def api_endpoint(self) -> builtins.str:
-        '''The default endpoint for an API.'''
-        return typing.cast(builtins.str, jsii.get(self, "apiEndpoint"))
-
-    @builtins.property
-    @jsii.member(jsii_name="apiId")
-    def api_id(self) -> builtins.str:
-        '''The identifier of this API Gateway API.'''
-        return typing.cast(builtins.str, jsii.get(self, "apiId"))
-
-    @builtins.property
-    @jsii.member(jsii_name="apiRef")
-    def api_ref(self) -> "_ApiReference_aca897ee":
-        '''A reference to a Api resource.'''
-        return typing.cast("_ApiReference_aca897ee", jsii.get(self, "apiRef"))
-
-    @builtins.property
-    @jsii.member(jsii_name="isWebsocketApi")
-    def is_websocket_api(self) -> builtins.bool:
-        '''Indicates that this is a WebSocket API.
-
-        Will always return true, but is necessary to prevent accidental structural
-        equality in TypeScript.
-        '''
-        return typing.cast(builtins.bool, jsii.get(self, "isWebsocketApi"))
-
-    @builtins.property
-    @jsii.member(jsii_name="webSocketApiName")
-    def web_socket_api_name(self) -> typing.Optional[builtins.str]:
-        '''A human friendly name for this WebSocket API.
-
-        Note that this is different from ``webSocketApiId``.
-        '''
-        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "webSocketApiName"))
 
 
 @jsii.implements(IHttpApi, IApi)
@@ -21936,12 +20280,6 @@ class HttpApi(
         return typing.cast(builtins.str, jsii.get(self, "apiId"))
 
     @builtins.property
-    @jsii.member(jsii_name="apiRef")
-    def api_ref(self) -> "_ApiReference_aca897ee":
-        '''A reference to a Api resource.'''
-        return typing.cast("_ApiReference_aca897ee", jsii.get(self, "apiRef"))
-
-    @builtins.property
     @jsii.member(jsii_name="httpApiId")
     def http_api_id(self) -> builtins.str:
         '''The identifier of the HTTP API.
@@ -21949,16 +20287,6 @@ class HttpApi(
         :see: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigatewayv2-api.html#aws-resource-apigatewayv2-api-return-values
         '''
         return typing.cast(builtins.str, jsii.get(self, "httpApiId"))
-
-    @builtins.property
-    @jsii.member(jsii_name="isHttpApi")
-    def is_http_api(self) -> builtins.bool:
-        '''Indicates that this is an HTTP API.
-
-        Will always return true, but is necessary to prevent accidental structural
-        equality in TypeScript.
-        '''
-        return typing.cast(builtins.bool, jsii.get(self, "isHttpApi"))
 
     @builtins.property
     @jsii.member(jsii_name="defaultAuthorizationScopes")
@@ -22008,6 +20336,1332 @@ class HttpApi(
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "url"))
 
 
+@jsii.implements(IHttpAuthorizer)
+class HttpAuthorizer(
+    _Resource_45bc6135,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_apigatewayv2.HttpAuthorizer",
+):
+    '''An authorizer for Http Apis.
+
+    :resource: AWS::ApiGatewayV2::Authorizer
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        import aws_cdk as cdk
+        from aws_cdk import aws_apigatewayv2 as apigatewayv2
+        
+        # http_api: apigatewayv2.HttpApi
+        
+        http_authorizer = apigatewayv2.HttpAuthorizer(self, "MyHttpAuthorizer",
+            http_api=http_api,
+            identity_source=["identitySource"],
+            type=apigatewayv2.HttpAuthorizerType.IAM,
+        
+            # the properties below are optional
+            authorizer_name="authorizerName",
+            authorizer_uri="authorizerUri",
+            enable_simple_responses=False,
+            jwt_audience=["jwtAudience"],
+            jwt_issuer="jwtIssuer",
+            payload_format_version=apigatewayv2.AuthorizerPayloadVersion.VERSION_1_0,
+            results_cache_ttl=cdk.Duration.minutes(30)
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        *,
+        http_api: "IHttpApi",
+        identity_source: typing.Sequence[builtins.str],
+        type: "HttpAuthorizerType",
+        authorizer_name: typing.Optional[builtins.str] = None,
+        authorizer_uri: typing.Optional[builtins.str] = None,
+        enable_simple_responses: typing.Optional[builtins.bool] = None,
+        jwt_audience: typing.Optional[typing.Sequence[builtins.str]] = None,
+        jwt_issuer: typing.Optional[builtins.str] = None,
+        payload_format_version: typing.Optional["AuthorizerPayloadVersion"] = None,
+        results_cache_ttl: typing.Optional["_Duration_4839e8c3"] = None,
+    ) -> None:
+        '''
+        :param scope: -
+        :param id: -
+        :param http_api: HTTP Api to attach the authorizer to.
+        :param identity_source: The identity source for which authorization is requested.
+        :param type: The type of authorizer.
+        :param authorizer_name: Name of the authorizer. Default: - id of the HttpAuthorizer construct.
+        :param authorizer_uri: The authorizer's Uniform Resource Identifier (URI). For REQUEST authorizers, this must be a well-formed Lambda function URI. Default: - required for Request authorizer types
+        :param enable_simple_responses: Specifies whether a Lambda authorizer returns a response in a simple format. If enabled, the Lambda authorizer can return a boolean value instead of an IAM policy. Default: - The lambda authorizer must return an IAM policy as its response
+        :param jwt_audience: A list of the intended recipients of the JWT. A valid JWT must provide an aud that matches at least one entry in this list. Default: - required for JWT authorizer typess.
+        :param jwt_issuer: The base domain of the identity provider that issues JWT. Default: - required for JWT authorizer types.
+        :param payload_format_version: Specifies the format of the payload sent to an HTTP API Lambda authorizer. Default: AuthorizerPayloadVersion.VERSION_2_0 if the authorizer type is HttpAuthorizerType.LAMBDA
+        :param results_cache_ttl: How long APIGateway should cache the results. Max 1 hour. Default: - API Gateway will not cache authorizer responses
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7da0023111eeaa20140212b6b10bdb3fc690c730188acea2d4f7443b8f801ce4)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = HttpAuthorizerProps(
+            http_api=http_api,
+            identity_source=identity_source,
+            type=type,
+            authorizer_name=authorizer_name,
+            authorizer_uri=authorizer_uri,
+            enable_simple_responses=enable_simple_responses,
+            jwt_audience=jwt_audience,
+            jwt_issuer=jwt_issuer,
+            payload_format_version=payload_format_version,
+            results_cache_ttl=results_cache_ttl,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromHttpAuthorizerAttributes")
+    @builtins.classmethod
+    def from_http_authorizer_attributes(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        *,
+        authorizer_id: builtins.str,
+        authorizer_type: builtins.str,
+    ) -> "IHttpRouteAuthorizer":
+        '''Import an existing HTTP Authorizer into this CDK app.
+
+        :param scope: -
+        :param id: -
+        :param authorizer_id: Id of the Authorizer.
+        :param authorizer_type: Type of authorizer. Possible values are: - JWT - JSON Web Token Authorizer - CUSTOM - Lambda Authorizer - NONE - No Authorization
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f9bf1dfd7e3e3fb3162d44ea2fce7d99df068c43428b43d0d969d3252feb6044)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        attrs = HttpAuthorizerAttributes(
+            authorizer_id=authorizer_id, authorizer_type=authorizer_type
+        )
+
+        return typing.cast("IHttpRouteAuthorizer", jsii.sinvoke(cls, "fromHttpAuthorizerAttributes", [scope, id, attrs]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
+    @builtins.property
+    @jsii.member(jsii_name="authorizerId")
+    def authorizer_id(self) -> builtins.str:
+        '''Id of the Authorizer.'''
+        return typing.cast(builtins.str, jsii.get(self, "authorizerId"))
+
+
+@jsii.implements(IHttpRouteAuthorizer)
+class HttpNoneAuthorizer(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_apigatewayv2.HttpNoneAuthorizer",
+):
+    '''Explicitly configure no authorizers on specific HTTP API routes.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        from aws_cdk.aws_apigatewayv2_authorizers import HttpJwtAuthorizer
+        from aws_cdk.aws_apigatewayv2_integrations import HttpUrlIntegration
+        
+        
+        issuer = "https://test.us.auth0.com"
+        authorizer = HttpJwtAuthorizer("DefaultAuthorizer", issuer,
+            jwt_audience=["3131231"]
+        )
+        
+        api = apigwv2.HttpApi(self, "HttpApi",
+            default_authorizer=authorizer,
+            default_authorization_scopes=["read:books"]
+        )
+        
+        api.add_routes(
+            integration=HttpUrlIntegration("BooksIntegration", "https://get-books-proxy.example.com"),
+            path="/books",
+            methods=[apigwv2.HttpMethod.GET]
+        )
+        
+        api.add_routes(
+            integration=HttpUrlIntegration("BooksIdIntegration", "https://get-books-proxy.example.com"),
+            path="/books/{id}",
+            methods=[apigwv2.HttpMethod.GET]
+        )
+        
+        api.add_routes(
+            integration=HttpUrlIntegration("BooksIntegration", "https://get-books-proxy.example.com"),
+            path="/books",
+            methods=[apigwv2.HttpMethod.POST],
+            authorization_scopes=["write:books"]
+        )
+        
+        api.add_routes(
+            integration=HttpUrlIntegration("LoginIntegration", "https://get-books-proxy.example.com"),
+            path="/login",
+            methods=[apigwv2.HttpMethod.POST],
+            authorizer=apigwv2.HttpNoneAuthorizer()
+        )
+    '''
+
+    def __init__(self) -> None:
+        jsii.create(self.__class__, self, [])
+
+    @jsii.member(jsii_name="bind")
+    def bind(
+        self,
+        *,
+        route: "IHttpRoute",
+        scope: "_constructs_77d1e7e8.Construct",
+    ) -> "HttpRouteAuthorizerConfig":
+        '''Bind this authorizer to a specified Http route.
+
+        :param route: The route to which the authorizer is being bound.
+        :param scope: The scope for any constructs created as part of the bind.
+        '''
+        _options = HttpRouteAuthorizerBindOptions(route=route, scope=scope)
+
+        return typing.cast("HttpRouteAuthorizerConfig", jsii.invoke(self, "bind", [_options]))
+
+    @builtins.property
+    @jsii.member(jsii_name="authorizationType")
+    def authorization_type(self) -> builtins.str:
+        '''The authorizationType used for IAM Authorizer.'''
+        return typing.cast(builtins.str, jsii.get(self, "authorizationType"))
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_apigatewayv2.HttpStageAttributes",
+    jsii_struct_bases=[StageAttributes],
+    name_mapping={"stage_name": "stageName", "api": "api"},
+)
+class HttpStageAttributes(StageAttributes):
+    def __init__(self, *, stage_name: builtins.str, api: "IHttpApi") -> None:
+        '''The attributes used to import existing HttpStage.
+
+        :param stage_name: The name of the stage.
+        :param api: The API to which this stage is associated.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_apigatewayv2 as apigatewayv2
+            
+            # http_api: apigatewayv2.HttpApi
+            
+            http_stage_attributes = apigatewayv2.HttpStageAttributes(
+                api=http_api,
+                stage_name="stageName"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__14605c3383d1d699194e37511d84f3f4da8c64b724b0eacc42f7bff95af97855)
+            check_type(argname="argument stage_name", value=stage_name, expected_type=type_hints["stage_name"])
+            check_type(argname="argument api", value=api, expected_type=type_hints["api"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "stage_name": stage_name,
+            "api": api,
+        }
+
+    @builtins.property
+    def stage_name(self) -> builtins.str:
+        '''The name of the stage.'''
+        result = self._values.get("stage_name")
+        assert result is not None, "Required property 'stage_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def api(self) -> "IHttpApi":
+        '''The API to which this stage is associated.'''
+        result = self._values.get("api")
+        assert result is not None, "Required property 'api' is missing"
+        return typing.cast("IHttpApi", result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "HttpStageAttributes(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_apigatewayv2.HttpStageOptions",
+    jsii_struct_bases=[StageOptions],
+    name_mapping={
+        "access_log_settings": "accessLogSettings",
+        "auto_deploy": "autoDeploy",
+        "description": "description",
+        "detailed_metrics_enabled": "detailedMetricsEnabled",
+        "domain_mapping": "domainMapping",
+        "stage_variables": "stageVariables",
+        "throttle": "throttle",
+        "stage_name": "stageName",
+    },
+)
+class HttpStageOptions(StageOptions):
+    def __init__(
+        self,
+        *,
+        access_log_settings: typing.Optional["IAccessLogSettings"] = None,
+        auto_deploy: typing.Optional[builtins.bool] = None,
+        description: typing.Optional[builtins.str] = None,
+        detailed_metrics_enabled: typing.Optional[builtins.bool] = None,
+        domain_mapping: typing.Optional[typing.Union["DomainMappingOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        stage_variables: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        throttle: typing.Optional[typing.Union["ThrottleSettings", typing.Dict[builtins.str, typing.Any]]] = None,
+        stage_name: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''The options to create a new Stage for an HTTP API.
+
+        :param access_log_settings: Settings for access logging. Default: - No access logging
+        :param auto_deploy: Whether updates to an API automatically trigger a new deployment. Default: false
+        :param description: The description for the API stage. Default: - no description
+        :param detailed_metrics_enabled: Specifies whether detailed metrics are enabled. Default: false
+        :param domain_mapping: The options for custom domain and api mapping. Default: - no custom domain and api mapping configuration
+        :param stage_variables: Stage variables for the stage. These are key-value pairs that you can define and use in your API routes. The allowed characters for variable names and the required pattern for variable values are specified here: https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-apigateway-stage.html#cfn-apigateway-stage-variables Default: - No stage variables
+        :param throttle: Throttle settings for the routes of this stage. Default: - no throttling configuration
+        :param stage_name: The name of the stage. See ``StageName`` class for more details. Default: '$default' the default stage of the API. This stage will have the URL at the root of the API endpoint.
+
+        :exampleMetadata: infused
+
+        Example::
+
+            # api: apigwv2.HttpApi
+            # dn: apigwv2.DomainName
+            
+            
+            api.add_stage("beta",
+                stage_name="beta",
+                auto_deploy=True,
+                # https://${dn.domainName}/bar goes to the beta stage
+                domain_mapping=apigwv2.DomainMappingOptions(
+                    domain_name=dn,
+                    mapping_key="bar"
+                )
+            )
+        '''
+        if isinstance(domain_mapping, dict):
+            domain_mapping = DomainMappingOptions(**domain_mapping)
+        if isinstance(throttle, dict):
+            throttle = ThrottleSettings(**throttle)
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__70c0bb0779b1636661ab1c2d695953c6dda7a5247d18a4bd7e045cc96d717a8a)
+            check_type(argname="argument access_log_settings", value=access_log_settings, expected_type=type_hints["access_log_settings"])
+            check_type(argname="argument auto_deploy", value=auto_deploy, expected_type=type_hints["auto_deploy"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument detailed_metrics_enabled", value=detailed_metrics_enabled, expected_type=type_hints["detailed_metrics_enabled"])
+            check_type(argname="argument domain_mapping", value=domain_mapping, expected_type=type_hints["domain_mapping"])
+            check_type(argname="argument stage_variables", value=stage_variables, expected_type=type_hints["stage_variables"])
+            check_type(argname="argument throttle", value=throttle, expected_type=type_hints["throttle"])
+            check_type(argname="argument stage_name", value=stage_name, expected_type=type_hints["stage_name"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if access_log_settings is not None:
+            self._values["access_log_settings"] = access_log_settings
+        if auto_deploy is not None:
+            self._values["auto_deploy"] = auto_deploy
+        if description is not None:
+            self._values["description"] = description
+        if detailed_metrics_enabled is not None:
+            self._values["detailed_metrics_enabled"] = detailed_metrics_enabled
+        if domain_mapping is not None:
+            self._values["domain_mapping"] = domain_mapping
+        if stage_variables is not None:
+            self._values["stage_variables"] = stage_variables
+        if throttle is not None:
+            self._values["throttle"] = throttle
+        if stage_name is not None:
+            self._values["stage_name"] = stage_name
+
+    @builtins.property
+    def access_log_settings(self) -> typing.Optional["IAccessLogSettings"]:
+        '''Settings for access logging.
+
+        :default: - No access logging
+        '''
+        result = self._values.get("access_log_settings")
+        return typing.cast(typing.Optional["IAccessLogSettings"], result)
+
+    @builtins.property
+    def auto_deploy(self) -> typing.Optional[builtins.bool]:
+        '''Whether updates to an API automatically trigger a new deployment.
+
+        :default: false
+        '''
+        result = self._values.get("auto_deploy")
+        return typing.cast(typing.Optional[builtins.bool], result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''The description for the API stage.
+
+        :default: - no description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def detailed_metrics_enabled(self) -> typing.Optional[builtins.bool]:
+        '''Specifies whether detailed metrics are enabled.
+
+        :default: false
+        '''
+        result = self._values.get("detailed_metrics_enabled")
+        return typing.cast(typing.Optional[builtins.bool], result)
+
+    @builtins.property
+    def domain_mapping(self) -> typing.Optional["DomainMappingOptions"]:
+        '''The options for custom domain and api mapping.
+
+        :default: - no custom domain and api mapping configuration
+        '''
+        result = self._values.get("domain_mapping")
+        return typing.cast(typing.Optional["DomainMappingOptions"], result)
+
+    @builtins.property
+    def stage_variables(
+        self,
+    ) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''Stage variables for the stage. These are key-value pairs that you can define and use in your API routes.
+
+        The allowed characters for variable names and the required pattern for variable values are specified here: https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-apigateway-stage.html#cfn-apigateway-stage-variables
+
+        :default: - No stage variables
+        '''
+        result = self._values.get("stage_variables")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    @builtins.property
+    def throttle(self) -> typing.Optional["ThrottleSettings"]:
+        '''Throttle settings for the routes of this stage.
+
+        :default: - no throttling configuration
+        '''
+        result = self._values.get("throttle")
+        return typing.cast(typing.Optional["ThrottleSettings"], result)
+
+    @builtins.property
+    def stage_name(self) -> typing.Optional[builtins.str]:
+        '''The name of the stage.
+
+        See ``StageName`` class for more details.
+
+        :default: '$default' the default stage of the API. This stage will have the URL at the root of the API endpoint.
+        '''
+        result = self._values.get("stage_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "HttpStageOptions(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_apigatewayv2.HttpStageProps",
+    jsii_struct_bases=[HttpStageOptions],
+    name_mapping={
+        "access_log_settings": "accessLogSettings",
+        "auto_deploy": "autoDeploy",
+        "description": "description",
+        "detailed_metrics_enabled": "detailedMetricsEnabled",
+        "domain_mapping": "domainMapping",
+        "stage_variables": "stageVariables",
+        "throttle": "throttle",
+        "stage_name": "stageName",
+        "http_api": "httpApi",
+    },
+)
+class HttpStageProps(HttpStageOptions):
+    def __init__(
+        self,
+        *,
+        access_log_settings: typing.Optional["IAccessLogSettings"] = None,
+        auto_deploy: typing.Optional[builtins.bool] = None,
+        description: typing.Optional[builtins.str] = None,
+        detailed_metrics_enabled: typing.Optional[builtins.bool] = None,
+        domain_mapping: typing.Optional[typing.Union["DomainMappingOptions", typing.Dict[builtins.str, typing.Any]]] = None,
+        stage_variables: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        throttle: typing.Optional[typing.Union["ThrottleSettings", typing.Dict[builtins.str, typing.Any]]] = None,
+        stage_name: typing.Optional[builtins.str] = None,
+        http_api: "IHttpApi",
+    ) -> None:
+        '''Properties to initialize an instance of ``HttpStage``.
+
+        :param access_log_settings: Settings for access logging. Default: - No access logging
+        :param auto_deploy: Whether updates to an API automatically trigger a new deployment. Default: false
+        :param description: The description for the API stage. Default: - no description
+        :param detailed_metrics_enabled: Specifies whether detailed metrics are enabled. Default: false
+        :param domain_mapping: The options for custom domain and api mapping. Default: - no custom domain and api mapping configuration
+        :param stage_variables: Stage variables for the stage. These are key-value pairs that you can define and use in your API routes. The allowed characters for variable names and the required pattern for variable values are specified here: https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-apigateway-stage.html#cfn-apigateway-stage-variables Default: - No stage variables
+        :param throttle: Throttle settings for the routes of this stage. Default: - no throttling configuration
+        :param stage_name: The name of the stage. See ``StageName`` class for more details. Default: '$default' the default stage of the API. This stage will have the URL at the root of the API endpoint.
+        :param http_api: The HTTP API to which this stage is associated.
+
+        :exampleMetadata: infused
+
+        Example::
+
+            import aws_cdk.aws_apigateway as apigw
+            import aws_cdk.aws_logs as logs
+            
+            # api: apigwv2.HttpApi
+            # log_group: logs.LogGroup
+            
+            
+            stage = apigwv2.HttpStage(self, "Stage",
+                http_api=api,
+                access_log_settings={
+                    "destination": apigwv2.LogGroupLogDestination(log_group),
+                    "format": apigw.AccessLogFormat.clf()
+                }
+            )
+        '''
+        if isinstance(domain_mapping, dict):
+            domain_mapping = DomainMappingOptions(**domain_mapping)
+        if isinstance(throttle, dict):
+            throttle = ThrottleSettings(**throttle)
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__77d8b0adbb783021a6c7e33999d2a3a80e2414824d202954599bb4ad7f291721)
+            check_type(argname="argument access_log_settings", value=access_log_settings, expected_type=type_hints["access_log_settings"])
+            check_type(argname="argument auto_deploy", value=auto_deploy, expected_type=type_hints["auto_deploy"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument detailed_metrics_enabled", value=detailed_metrics_enabled, expected_type=type_hints["detailed_metrics_enabled"])
+            check_type(argname="argument domain_mapping", value=domain_mapping, expected_type=type_hints["domain_mapping"])
+            check_type(argname="argument stage_variables", value=stage_variables, expected_type=type_hints["stage_variables"])
+            check_type(argname="argument throttle", value=throttle, expected_type=type_hints["throttle"])
+            check_type(argname="argument stage_name", value=stage_name, expected_type=type_hints["stage_name"])
+            check_type(argname="argument http_api", value=http_api, expected_type=type_hints["http_api"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "http_api": http_api,
+        }
+        if access_log_settings is not None:
+            self._values["access_log_settings"] = access_log_settings
+        if auto_deploy is not None:
+            self._values["auto_deploy"] = auto_deploy
+        if description is not None:
+            self._values["description"] = description
+        if detailed_metrics_enabled is not None:
+            self._values["detailed_metrics_enabled"] = detailed_metrics_enabled
+        if domain_mapping is not None:
+            self._values["domain_mapping"] = domain_mapping
+        if stage_variables is not None:
+            self._values["stage_variables"] = stage_variables
+        if throttle is not None:
+            self._values["throttle"] = throttle
+        if stage_name is not None:
+            self._values["stage_name"] = stage_name
+
+    @builtins.property
+    def access_log_settings(self) -> typing.Optional["IAccessLogSettings"]:
+        '''Settings for access logging.
+
+        :default: - No access logging
+        '''
+        result = self._values.get("access_log_settings")
+        return typing.cast(typing.Optional["IAccessLogSettings"], result)
+
+    @builtins.property
+    def auto_deploy(self) -> typing.Optional[builtins.bool]:
+        '''Whether updates to an API automatically trigger a new deployment.
+
+        :default: false
+        '''
+        result = self._values.get("auto_deploy")
+        return typing.cast(typing.Optional[builtins.bool], result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''The description for the API stage.
+
+        :default: - no description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def detailed_metrics_enabled(self) -> typing.Optional[builtins.bool]:
+        '''Specifies whether detailed metrics are enabled.
+
+        :default: false
+        '''
+        result = self._values.get("detailed_metrics_enabled")
+        return typing.cast(typing.Optional[builtins.bool], result)
+
+    @builtins.property
+    def domain_mapping(self) -> typing.Optional["DomainMappingOptions"]:
+        '''The options for custom domain and api mapping.
+
+        :default: - no custom domain and api mapping configuration
+        '''
+        result = self._values.get("domain_mapping")
+        return typing.cast(typing.Optional["DomainMappingOptions"], result)
+
+    @builtins.property
+    def stage_variables(
+        self,
+    ) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''Stage variables for the stage. These are key-value pairs that you can define and use in your API routes.
+
+        The allowed characters for variable names and the required pattern for variable values are specified here: https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-apigateway-stage.html#cfn-apigateway-stage-variables
+
+        :default: - No stage variables
+        '''
+        result = self._values.get("stage_variables")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    @builtins.property
+    def throttle(self) -> typing.Optional["ThrottleSettings"]:
+        '''Throttle settings for the routes of this stage.
+
+        :default: - no throttling configuration
+        '''
+        result = self._values.get("throttle")
+        return typing.cast(typing.Optional["ThrottleSettings"], result)
+
+    @builtins.property
+    def stage_name(self) -> typing.Optional[builtins.str]:
+        '''The name of the stage.
+
+        See ``StageName`` class for more details.
+
+        :default: '$default' the default stage of the API. This stage will have the URL at the root of the API endpoint.
+        '''
+        result = self._values.get("stage_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def http_api(self) -> "IHttpApi":
+        '''The HTTP API to which this stage is associated.'''
+        result = self._values.get("http_api")
+        assert result is not None, "Required property 'http_api' is missing"
+        return typing.cast("IHttpApi", result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "HttpStageProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IHttpIntegration")
+class IHttpIntegration(IIntegration, typing_extensions.Protocol):
+    '''Represents an Integration for an HTTP API.'''
+
+    @builtins.property
+    @jsii.member(jsii_name="httpApi")
+    def http_api(self) -> "IHttpApi":
+        '''The HTTP API associated with this integration.'''
+        ...
+
+
+class _IHttpIntegrationProxy(
+    jsii.proxy_for(IIntegration), # type: ignore[misc]
+):
+    '''Represents an Integration for an HTTP API.'''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_apigatewayv2.IHttpIntegration"
+
+    @builtins.property
+    @jsii.member(jsii_name="httpApi")
+    def http_api(self) -> "IHttpApi":
+        '''The HTTP API associated with this integration.'''
+        return typing.cast("IHttpApi", jsii.get(self, "httpApi"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IHttpIntegration).__jsii_proxy_class__ = lambda : _IHttpIntegrationProxy
+
+
+@jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IHttpRoute")
+class IHttpRoute(IRoute, typing_extensions.Protocol):
+    '''Represents a Route for an HTTP API.'''
+
+    @builtins.property
+    @jsii.member(jsii_name="httpApi")
+    def http_api(self) -> "IHttpApi":
+        '''The HTTP API associated with this route.'''
+        ...
+
+    @builtins.property
+    @jsii.member(jsii_name="routeArn")
+    def route_arn(self) -> builtins.str:
+        '''Returns the arn of the route.
+
+        :attribute: true
+        '''
+        ...
+
+    @builtins.property
+    @jsii.member(jsii_name="path")
+    def path(self) -> typing.Optional[builtins.str]:
+        '''Returns the path component of this HTTP route, ``undefined`` if the path is the catch-all route.'''
+        ...
+
+    @jsii.member(jsii_name="grantInvoke")
+    def grant_invoke(
+        self,
+        grantee: "_IGrantable_71c4f5de",
+        *,
+        http_methods: typing.Optional[typing.Sequence["HttpMethod"]] = None,
+    ) -> "_Grant_a7ae64f8":
+        '''Grant access to invoke the route.
+
+        This method requires that the authorizer of the route is undefined or is
+        an ``HttpIamAuthorizer``.
+
+        :param grantee: -
+        :param http_methods: The HTTP methods to allow. Default: - the HttpMethod of the route
+        '''
+        ...
+
+
+class _IHttpRouteProxy(
+    jsii.proxy_for(IRoute), # type: ignore[misc]
+):
+    '''Represents a Route for an HTTP API.'''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_apigatewayv2.IHttpRoute"
+
+    @builtins.property
+    @jsii.member(jsii_name="httpApi")
+    def http_api(self) -> "IHttpApi":
+        '''The HTTP API associated with this route.'''
+        return typing.cast("IHttpApi", jsii.get(self, "httpApi"))
+
+    @builtins.property
+    @jsii.member(jsii_name="routeArn")
+    def route_arn(self) -> builtins.str:
+        '''Returns the arn of the route.
+
+        :attribute: true
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "routeArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="path")
+    def path(self) -> typing.Optional[builtins.str]:
+        '''Returns the path component of this HTTP route, ``undefined`` if the path is the catch-all route.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "path"))
+
+    @jsii.member(jsii_name="grantInvoke")
+    def grant_invoke(
+        self,
+        grantee: "_IGrantable_71c4f5de",
+        *,
+        http_methods: typing.Optional[typing.Sequence["HttpMethod"]] = None,
+    ) -> "_Grant_a7ae64f8":
+        '''Grant access to invoke the route.
+
+        This method requires that the authorizer of the route is undefined or is
+        an ``HttpIamAuthorizer``.
+
+        :param grantee: -
+        :param http_methods: The HTTP methods to allow. Default: - the HttpMethod of the route
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c5f5ee3dd0468079018fb38cdc642f4071e063f1fee1994a9ac9c0a7bff54fb9)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        options = GrantInvokeOptions(http_methods=http_methods)
+
+        return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grantInvoke", [grantee, options]))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IHttpRoute).__jsii_proxy_class__ = lambda : _IHttpRouteProxy
+
+
+@jsii.interface(jsii_type="aws-cdk-lib.aws_apigatewayv2.IHttpStage")
+class IHttpStage(IStage, typing_extensions.Protocol):
+    '''Represents the HttpStage.'''
+
+    @builtins.property
+    @jsii.member(jsii_name="api")
+    def api(self) -> "IHttpApi":
+        '''The API this stage is associated to.'''
+        ...
+
+    @builtins.property
+    @jsii.member(jsii_name="domainUrl")
+    def domain_url(self) -> builtins.str:
+        '''The custom domain URL to this stage.'''
+        ...
+
+    @jsii.member(jsii_name="metricClientError")
+    def metric_client_error(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''Metric for the number of client-side errors captured in a given period.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - sum over 5 minutes
+        '''
+        ...
+
+    @jsii.member(jsii_name="metricCount")
+    def metric_count(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''Metric for the total number API requests in a given period.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - SampleCount over 5 minutes
+        '''
+        ...
+
+    @jsii.member(jsii_name="metricDataProcessed")
+    def metric_data_processed(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''Metric for the amount of data processed in bytes.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - sum over 5 minutes
+        '''
+        ...
+
+    @jsii.member(jsii_name="metricIntegrationLatency")
+    def metric_integration_latency(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''Metric for the time between when API Gateway relays a request to the backend and when it receives a response from the backend.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - no statistic
+        '''
+        ...
+
+    @jsii.member(jsii_name="metricLatency")
+    def metric_latency(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''The time between when API Gateway receives a request from a client and when it returns a response to the client.
+
+        The latency includes the integration latency and other API Gateway overhead.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - no statistic
+        '''
+        ...
+
+    @jsii.member(jsii_name="metricServerError")
+    def metric_server_error(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''Metric for the number of server-side errors captured in a given period.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - sum over 5 minutes
+        '''
+        ...
+
+
+class _IHttpStageProxy(
+    jsii.proxy_for(IStage), # type: ignore[misc]
+):
+    '''Represents the HttpStage.'''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_apigatewayv2.IHttpStage"
+
+    @builtins.property
+    @jsii.member(jsii_name="api")
+    def api(self) -> "IHttpApi":
+        '''The API this stage is associated to.'''
+        return typing.cast("IHttpApi", jsii.get(self, "api"))
+
+    @builtins.property
+    @jsii.member(jsii_name="domainUrl")
+    def domain_url(self) -> builtins.str:
+        '''The custom domain URL to this stage.'''
+        return typing.cast(builtins.str, jsii.get(self, "domainUrl"))
+
+    @jsii.member(jsii_name="metricClientError")
+    def metric_client_error(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''Metric for the number of client-side errors captured in a given period.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - sum over 5 minutes
+        '''
+        props = _MetricOptions_1788b62f(
+            account=account,
+            color=color,
+            dimensions_map=dimensions_map,
+            id=id,
+            label=label,
+            period=period,
+            region=region,
+            stack_account=stack_account,
+            stack_region=stack_region,
+            statistic=statistic,
+            unit=unit,
+            visible=visible,
+        )
+
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricClientError", [props]))
+
+    @jsii.member(jsii_name="metricCount")
+    def metric_count(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''Metric for the total number API requests in a given period.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - SampleCount over 5 minutes
+        '''
+        props = _MetricOptions_1788b62f(
+            account=account,
+            color=color,
+            dimensions_map=dimensions_map,
+            id=id,
+            label=label,
+            period=period,
+            region=region,
+            stack_account=stack_account,
+            stack_region=stack_region,
+            statistic=statistic,
+            unit=unit,
+            visible=visible,
+        )
+
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricCount", [props]))
+
+    @jsii.member(jsii_name="metricDataProcessed")
+    def metric_data_processed(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''Metric for the amount of data processed in bytes.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - sum over 5 minutes
+        '''
+        props = _MetricOptions_1788b62f(
+            account=account,
+            color=color,
+            dimensions_map=dimensions_map,
+            id=id,
+            label=label,
+            period=period,
+            region=region,
+            stack_account=stack_account,
+            stack_region=stack_region,
+            statistic=statistic,
+            unit=unit,
+            visible=visible,
+        )
+
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricDataProcessed", [props]))
+
+    @jsii.member(jsii_name="metricIntegrationLatency")
+    def metric_integration_latency(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''Metric for the time between when API Gateway relays a request to the backend and when it receives a response from the backend.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - no statistic
+        '''
+        props = _MetricOptions_1788b62f(
+            account=account,
+            color=color,
+            dimensions_map=dimensions_map,
+            id=id,
+            label=label,
+            period=period,
+            region=region,
+            stack_account=stack_account,
+            stack_region=stack_region,
+            statistic=statistic,
+            unit=unit,
+            visible=visible,
+        )
+
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricIntegrationLatency", [props]))
+
+    @jsii.member(jsii_name="metricLatency")
+    def metric_latency(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''The time between when API Gateway receives a request from a client and when it returns a response to the client.
+
+        The latency includes the integration latency and other API Gateway overhead.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - no statistic
+        '''
+        props = _MetricOptions_1788b62f(
+            account=account,
+            color=color,
+            dimensions_map=dimensions_map,
+            id=id,
+            label=label,
+            period=period,
+            region=region,
+            stack_account=stack_account,
+            stack_region=stack_region,
+            statistic=statistic,
+            unit=unit,
+            visible=visible,
+        )
+
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricLatency", [props]))
+
+    @jsii.member(jsii_name="metricServerError")
+    def metric_server_error(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''Metric for the number of server-side errors captured in a given period.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - sum over 5 minutes
+        '''
+        props = _MetricOptions_1788b62f(
+            account=account,
+            color=color,
+            dimensions_map=dimensions_map,
+            id=id,
+            label=label,
+            period=period,
+            region=region,
+            stack_account=stack_account,
+            stack_region=stack_region,
+            statistic=statistic,
+            unit=unit,
+            visible=visible,
+        )
+
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricServerError", [props]))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IHttpStage).__jsii_proxy_class__ = lambda : _IHttpStageProxy
+
+
 @jsii.implements(IHttpIntegration)
 class HttpIntegration(
     _Resource_45bc6135,
@@ -22026,13 +21680,13 @@ class HttpIntegration(
         import aws_cdk as cdk
         from aws_cdk import aws_apigatewayv2 as apigatewayv2
         
-        # http_api_ref: apigatewayv2.IHttpApiRef
+        # http_api: apigatewayv2.HttpApi
         # integration_credentials: apigatewayv2.IntegrationCredentials
         # parameter_mapping: apigatewayv2.ParameterMapping
         # payload_format_version: apigatewayv2.PayloadFormatVersion
         
         http_integration = apigatewayv2.HttpIntegration(self, "MyHttpIntegration",
-            http_api=http_api_ref,
+            http_api=http_api,
             integration_type=apigatewayv2.HttpIntegrationType.HTTP_PROXY,
         
             # the properties below are optional
@@ -22054,7 +21708,7 @@ class HttpIntegration(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        http_api: "IHttpApiRef",
+        http_api: "IHttpApi",
         integration_type: "HttpIntegrationType",
         connection_id: typing.Optional[builtins.str] = None,
         connection_type: typing.Optional["HttpConnectionType"] = None,
@@ -22122,12 +21776,6 @@ class HttpIntegration(
         '''Id of the integration.'''
         return typing.cast(builtins.str, jsii.get(self, "integrationId"))
 
-    @builtins.property
-    @jsii.member(jsii_name="integrationRef")
-    def integration_ref(self) -> "_IntegrationReference_4149ccc5":
-        '''A reference to a Integration resource.'''
-        return typing.cast("_IntegrationReference_4149ccc5", jsii.get(self, "integrationRef"))
-
 
 @jsii.implements(IHttpRoute)
 class HttpRoute(
@@ -22146,13 +21794,13 @@ class HttpRoute(
         # The values are placeholders you should change.
         from aws_cdk import aws_apigatewayv2 as apigatewayv2
         
-        # http_api_ref: apigatewayv2.IHttpApiRef
+        # http_api: apigatewayv2.HttpApi
         # http_route_authorizer: apigatewayv2.IHttpRouteAuthorizer
         # http_route_integration: apigatewayv2.HttpRouteIntegration
         # http_route_key: apigatewayv2.HttpRouteKey
         
         http_route = apigatewayv2.HttpRoute(self, "MyHttpRoute",
-            http_api=http_api_ref,
+            http_api=http_api,
             integration=http_route_integration,
             route_key=http_route_key,
         
@@ -22167,7 +21815,7 @@ class HttpRoute(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        http_api: "IHttpApiRef",
+        http_api: "IHttpApi",
         route_key: "HttpRouteKey",
         authorization_scopes: typing.Optional[typing.Sequence[builtins.str]] = None,
         authorizer: typing.Optional["IHttpRouteAuthorizer"] = None,
@@ -22243,12 +21891,6 @@ class HttpRoute(
         return typing.cast(builtins.str, jsii.get(self, "routeId"))
 
     @builtins.property
-    @jsii.member(jsii_name="routeRef")
-    def route_ref(self) -> "_RouteReference_074e6d7d":
-        '''A reference to a Route resource.'''
-        return typing.cast("_RouteReference_074e6d7d", jsii.get(self, "routeRef"))
-
-    @builtins.property
     @jsii.member(jsii_name="path")
     def path(self) -> typing.Optional[builtins.str]:
         '''Returns the path component of this HTTP route, ``undefined`` if the path is the catch-all route.'''
@@ -22289,7 +21931,7 @@ class HttpStage(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        http_api: "IHttpApiRef",
+        http_api: "IHttpApi",
         stage_name: typing.Optional[builtins.str] = None,
         access_log_settings: typing.Optional["IAccessLogSettings"] = None,
         auto_deploy: typing.Optional[builtins.bool] = None,
@@ -22750,16 +22392,6 @@ class HttpStage(
         return typing.cast(builtins.str, jsii.get(self, "domainUrl"))
 
     @builtins.property
-    @jsii.member(jsii_name="isHttpStage")
-    def is_http_stage(self) -> builtins.bool:
-        '''Indicates that this is an HTTP Stage.
-
-        Will always return true, but is necessary to prevent accidental structural
-        equality in TypeScript.
-        '''
-        return typing.cast(builtins.bool, jsii.get(self, "isHttpStage"))
-
-    @builtins.property
     @jsii.member(jsii_name="stageName")
     def stage_name(self) -> builtins.str:
         '''The name of the stage;
@@ -22767,12 +22399,6 @@ class HttpStage(
         its primary identifier.
         '''
         return typing.cast(builtins.str, jsii.get(self, "stageName"))
-
-    @builtins.property
-    @jsii.member(jsii_name="stageRef")
-    def stage_ref(self) -> "_StageReference_d2663761":
-        '''A reference to a Stage resource.'''
-        return typing.cast("_StageReference_d2663761", jsii.get(self, "stageRef"))
 
     @builtins.property
     @jsii.member(jsii_name="url")
@@ -22833,7 +22459,6 @@ __all__ = [
     "GrantInvokeOptions",
     "HttpApi",
     "HttpApiAttributes",
-    "HttpApiHelper",
     "HttpApiProps",
     "HttpAuthorizer",
     "HttpAuthorizerAttributes",
@@ -22866,13 +22491,11 @@ __all__ = [
     "IAuthorizer",
     "IDomainName",
     "IHttpApi",
-    "IHttpApiRef",
     "IHttpAuthorizer",
     "IHttpIntegration",
     "IHttpRoute",
     "IHttpRouteAuthorizer",
     "IHttpStage",
-    "IHttpStageRef",
     "IIntegration",
     "IMappingValue",
     "IRoute",
@@ -22880,7 +22503,6 @@ __all__ = [
     "IUsagePlan",
     "IVpcLink",
     "IWebSocketApi",
-    "IWebSocketApiRef",
     "IWebSocketAuthorizer",
     "IWebSocketIntegration",
     "IWebSocketRoute",
@@ -22973,15 +22595,14 @@ def _typecheckingstub__8f84fc0c61e7fd558c82b45bbc4bcd6801e5a01a36339712c0577607b
 def _typecheckingstub__87e51f8314eb457688965754ef962ccc6b34cd3477e30e0b5c48927231e6e450(
     *,
     api_mapping_id: builtins.str,
-    domain_name: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
 
 def _typecheckingstub__13aa23c153c9f4800a12215b1f81d8e36b1118b544e5cec013cb40221158ee46(
     *,
-    api: _IApiRef_53cfa8c6,
-    domain_name: _IDomainNameRef_f08efdb1,
+    api: IApi,
+    domain_name: IDomainName,
     api_mapping_key: typing.Optional[builtins.str] = None,
     stage: typing.Optional[IStage] = None,
 ) -> None:
@@ -24611,7 +24232,7 @@ def _typecheckingstub__db497d902c6976b341334a7b0fc8311309ee0588817b97a9f5a623915
 
 def _typecheckingstub__5b5464d795b2d8ec4d8e5a4cc4f593522d455ce6c00b1217f4fd7f5eebafaf82(
     *,
-    domain_name: _IDomainNameRef_f08efdb1,
+    domain_name: IDomainName,
     mapping_key: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -24653,20 +24274,6 @@ def _typecheckingstub__2b621959ee98892c37e0e42895b31db61c97876d9eb6e9ca68eb6a0c9
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__0e3ff3c01e95abb0ad5fa38fe714d34ffd17e015c3ab60f203ea2a67596e8ec0(
-    http_api: IHttpApiRef,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__b72a400eaaad8e79d99165c87dfd9dbfd1e5c7ba065d3f45093a7b804e655cb0(
-    method: typing.Optional[builtins.str] = None,
-    path: typing.Optional[builtins.str] = None,
-    stage: typing.Optional[builtins.str] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__cae61f98d904e8d8d184da1dff09df331c70ac82ebd0d24c6d28a445add99720(
     *,
     api_name: typing.Optional[builtins.str] = None,
@@ -24694,7 +24301,7 @@ def _typecheckingstub__7d8f9df722d4da406b06487bf1305950e1a312e47a05dd1610a92e035
 
 def _typecheckingstub__f1fe97485bbc5a620b78f1e8a3be5294e95494746492949834f083faf2212fbd(
     *,
-    http_api: IHttpApiRef,
+    http_api: IHttpApi,
     identity_source: typing.Sequence[builtins.str],
     type: HttpAuthorizerType,
     authorizer_name: typing.Optional[builtins.str] = None,
@@ -24710,7 +24317,7 @@ def _typecheckingstub__f1fe97485bbc5a620b78f1e8a3be5294e95494746492949834f083faf
 
 def _typecheckingstub__58e572b65aa78a3b74d001d0e0643b1e9a8a3f184db7245d5b0bf384d0395599(
     *,
-    http_api: IHttpApiRef,
+    http_api: IHttpApi,
     integration_type: HttpIntegrationType,
     connection_id: typing.Optional[builtins.str] = None,
     connection_type: typing.Optional[HttpConnectionType] = None,
@@ -24784,7 +24391,7 @@ def _typecheckingstub__e1e1a31cd20a3001067e7697f013f4910dc171dfa4af075802ea1cbe2
 def _typecheckingstub__01a95593431af244579bfa1874fdfecb297826dc468c06ee6143c4435fdc0e6d(
     *,
     integration: HttpRouteIntegration,
-    http_api: IHttpApiRef,
+    http_api: IHttpApi,
     route_key: HttpRouteKey,
     authorization_scopes: typing.Optional[typing.Sequence[builtins.str]] = None,
     authorizer: typing.Optional[IHttpRouteAuthorizer] = None,
@@ -24817,6 +24424,14 @@ def _typecheckingstub__c88a55b08f170ef03ef7ee65891d47150923f5d517c30630b947b1c74
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d4bdb3d2e15291eea92125ef948cd6cf44f902aa79fe0c219f66cb001a9ea68e(
+    method: typing.Optional[builtins.str] = None,
+    path: typing.Optional[builtins.str] = None,
+    stage: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__4c665dea48f412447206e1f5da11faba5435e964a15bc960b6d46ece81fa0f67(
     name: builtins.str,
     value: builtins.str,
@@ -24844,7 +24459,7 @@ def _typecheckingstub__d4b9c7a822660da49cf87c3fc29340609a45b07f2b21e9c3832e9a550
     pass
 
 def _typecheckingstub__4feb0fa4d2b3aa6f0e443abfac19ee78cf632f1573ba5c6ccfa6fb8619018bcb(
-    api_key: _IApiKeyRef_6e16b46a,
+    api_key: IApiKey,
     *,
     override_logical_id: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -25100,7 +24715,7 @@ def _typecheckingstub__9903279f47ccd34953dfccff0e79862896fbecac5df5b4c485f95f32e
     pass
 
 def _typecheckingstub__892ce11886a70d15231181494f2d96dd60dca39f438ede2530803c668aab974a(
-    api_key: _IApiKeyRef_6e16b46a,
+    api_key: IApiKey,
     *,
     override_logical_id: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -25174,6 +24789,83 @@ def _typecheckingstub__57d0a11fda2968d0b7b01fa82e44de6e2db3b2923d38dad1fa491a03b
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroupRef_efa4ff18]] = None,
     subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
     vpc_link_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8f37be20ee015faaaf9283fe203dc28d2dcc56800f6007ae9105e3ad425c9333(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    api_key_selection_expression: typing.Optional[WebSocketApiKeySelectionExpression] = None,
+    api_name: typing.Optional[builtins.str] = None,
+    connect_route_options: typing.Optional[typing.Union[WebSocketRouteOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+    default_route_options: typing.Optional[typing.Union[WebSocketRouteOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+    description: typing.Optional[builtins.str] = None,
+    disable_schema_validation: typing.Optional[builtins.bool] = None,
+    disconnect_route_options: typing.Optional[typing.Union[WebSocketRouteOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+    ip_address_type: typing.Optional[IpAddressType] = None,
+    route_selection_expression: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ffffbf7cb72667cc3ea84c141969c65006f66fab5b2acc9cd1e5508c6dd8df5d(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    web_socket_id: builtins.str,
+    api_endpoint: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2ef71104699a1a6990c5a5d37692781dccedb21a0a0d0990f6bd28a66f2e982c(
+    route_key: builtins.str,
+    *,
+    integration: WebSocketRouteIntegration,
+    authorizer: typing.Optional[IWebSocketRouteAuthorizer] = None,
+    return_response: typing.Optional[builtins.bool] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9264ba32d47f82ef3a26b02826879368a02191f9da4b21bcc8ced5b7bf7baaef(
+    method: typing.Optional[builtins.str] = None,
+    path: typing.Optional[builtins.str] = None,
+    stage: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7932b9aa0a92e32c752b93b8918a3842bdad62b6bef47b0af36c7d680a79303e(
+    route: typing.Optional[builtins.str] = None,
+    stage: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8b1b5ff9a3e2b7c784498514fce501075a0999cea935f9ddec92e79caec71014(
+    identity: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8ea2af8d6aef7e127f3feb093668fe567793f3442bb0838c12dde2c9a975fbe6(
+    metric_name: builtins.str,
+    *,
+    account: typing.Optional[builtins.str] = None,
+    color: typing.Optional[builtins.str] = None,
+    dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    id: typing.Optional[builtins.str] = None,
+    label: typing.Optional[builtins.str] = None,
+    period: typing.Optional[_Duration_4839e8c3] = None,
+    region: typing.Optional[builtins.str] = None,
+    stack_account: typing.Optional[builtins.str] = None,
+    stack_region: typing.Optional[builtins.str] = None,
+    statistic: typing.Optional[builtins.str] = None,
+    unit: typing.Optional[_Unit_61bc6f70] = None,
+    visible: typing.Optional[builtins.bool] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -25255,7 +24947,7 @@ def _typecheckingstub__2ac02687d2321489f6dc08575470245377b3d158bc0eff4843806483b
     *,
     integration_type: WebSocketIntegrationType,
     integration_uri: builtins.str,
-    web_socket_api: IWebSocketApiRef,
+    web_socket_api: IWebSocketApi,
     content_handling: typing.Optional[ContentHandling] = None,
     credentials_role: typing.Optional[_IRole_235f5d8e] = None,
     integration_method: typing.Optional[builtins.str] = None,
@@ -25272,7 +24964,7 @@ def _typecheckingstub__387d500d57f22163933acec7964371aae4b496767a5ff3b8785875149
     *,
     integration_type: WebSocketIntegrationType,
     integration_uri: builtins.str,
-    web_socket_api: IWebSocketApiRef,
+    web_socket_api: IWebSocketApi,
     content_handling: typing.Optional[ContentHandling] = None,
     credentials_role: typing.Optional[_IRole_235f5d8e] = None,
     integration_method: typing.Optional[builtins.str] = None,
@@ -25503,8 +25195,8 @@ def _typecheckingstub__20562f173d26f5b2f63b53ea1553375396a2401df8e153d3e4cbaf824
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    api: _IApiRef_53cfa8c6,
-    domain_name: _IDomainNameRef_f08efdb1,
+    api: IApi,
+    domain_name: IDomainName,
     api_mapping_key: typing.Optional[builtins.str] = None,
     stage: typing.Optional[IStage] = None,
 ) -> None:
@@ -25516,7 +25208,6 @@ def _typecheckingstub__0135f8db3f6dd0d89428364a8fbc4da80890991347755032f117e2e49
     id: builtins.str,
     *,
     api_mapping_id: builtins.str,
-    domain_name: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -25558,164 +25249,6 @@ def _typecheckingstub__bf9ba44a3d76edbaeae31f2d3f5182b50739d6fc964c1bbfc6a1bde50
     security_policy: typing.Optional[SecurityPolicy] = None,
     domain_name: builtins.str,
     mtls: typing.Optional[typing.Union[MTLSConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__7da0023111eeaa20140212b6b10bdb3fc690c730188acea2d4f7443b8f801ce4(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    *,
-    http_api: IHttpApiRef,
-    identity_source: typing.Sequence[builtins.str],
-    type: HttpAuthorizerType,
-    authorizer_name: typing.Optional[builtins.str] = None,
-    authorizer_uri: typing.Optional[builtins.str] = None,
-    enable_simple_responses: typing.Optional[builtins.bool] = None,
-    jwt_audience: typing.Optional[typing.Sequence[builtins.str]] = None,
-    jwt_issuer: typing.Optional[builtins.str] = None,
-    payload_format_version: typing.Optional[AuthorizerPayloadVersion] = None,
-    results_cache_ttl: typing.Optional[_Duration_4839e8c3] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__f9bf1dfd7e3e3fb3162d44ea2fce7d99df068c43428b43d0d969d3252feb6044(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    *,
-    authorizer_id: builtins.str,
-    authorizer_type: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__14605c3383d1d699194e37511d84f3f4da8c64b724b0eacc42f7bff95af97855(
-    *,
-    stage_name: builtins.str,
-    api: IHttpApi,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__70c0bb0779b1636661ab1c2d695953c6dda7a5247d18a4bd7e045cc96d717a8a(
-    *,
-    access_log_settings: typing.Optional[IAccessLogSettings] = None,
-    auto_deploy: typing.Optional[builtins.bool] = None,
-    description: typing.Optional[builtins.str] = None,
-    detailed_metrics_enabled: typing.Optional[builtins.bool] = None,
-    domain_mapping: typing.Optional[typing.Union[DomainMappingOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-    stage_variables: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    throttle: typing.Optional[typing.Union[ThrottleSettings, typing.Dict[builtins.str, typing.Any]]] = None,
-    stage_name: typing.Optional[builtins.str] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__77d8b0adbb783021a6c7e33999d2a3a80e2414824d202954599bb4ad7f291721(
-    *,
-    access_log_settings: typing.Optional[IAccessLogSettings] = None,
-    auto_deploy: typing.Optional[builtins.bool] = None,
-    description: typing.Optional[builtins.str] = None,
-    detailed_metrics_enabled: typing.Optional[builtins.bool] = None,
-    domain_mapping: typing.Optional[typing.Union[DomainMappingOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-    stage_variables: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    throttle: typing.Optional[typing.Union[ThrottleSettings, typing.Dict[builtins.str, typing.Any]]] = None,
-    stage_name: typing.Optional[builtins.str] = None,
-    http_api: IHttpApiRef,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__d4bdb3d2e15291eea92125ef948cd6cf44f902aa79fe0c219f66cb001a9ea68e(
-    method: typing.Optional[builtins.str] = None,
-    path: typing.Optional[builtins.str] = None,
-    stage: typing.Optional[builtins.str] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__c5f5ee3dd0468079018fb38cdc642f4071e063f1fee1994a9ac9c0a7bff54fb9(
-    grantee: _IGrantable_71c4f5de,
-    *,
-    http_methods: typing.Optional[typing.Sequence[HttpMethod]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__8f37be20ee015faaaf9283fe203dc28d2dcc56800f6007ae9105e3ad425c9333(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    *,
-    api_key_selection_expression: typing.Optional[WebSocketApiKeySelectionExpression] = None,
-    api_name: typing.Optional[builtins.str] = None,
-    connect_route_options: typing.Optional[typing.Union[WebSocketRouteOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-    default_route_options: typing.Optional[typing.Union[WebSocketRouteOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-    description: typing.Optional[builtins.str] = None,
-    disable_schema_validation: typing.Optional[builtins.bool] = None,
-    disconnect_route_options: typing.Optional[typing.Union[WebSocketRouteOptions, typing.Dict[builtins.str, typing.Any]]] = None,
-    ip_address_type: typing.Optional[IpAddressType] = None,
-    route_selection_expression: typing.Optional[builtins.str] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__ffffbf7cb72667cc3ea84c141969c65006f66fab5b2acc9cd1e5508c6dd8df5d(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    *,
-    web_socket_id: builtins.str,
-    api_endpoint: typing.Optional[builtins.str] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__2ef71104699a1a6990c5a5d37692781dccedb21a0a0d0990f6bd28a66f2e982c(
-    route_key: builtins.str,
-    *,
-    integration: WebSocketRouteIntegration,
-    authorizer: typing.Optional[IWebSocketRouteAuthorizer] = None,
-    return_response: typing.Optional[builtins.bool] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__9264ba32d47f82ef3a26b02826879368a02191f9da4b21bcc8ced5b7bf7baaef(
-    method: typing.Optional[builtins.str] = None,
-    path: typing.Optional[builtins.str] = None,
-    stage: typing.Optional[builtins.str] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__7932b9aa0a92e32c752b93b8918a3842bdad62b6bef47b0af36c7d680a79303e(
-    route: typing.Optional[builtins.str] = None,
-    stage: typing.Optional[builtins.str] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__8b1b5ff9a3e2b7c784498514fce501075a0999cea935f9ddec92e79caec71014(
-    identity: _IGrantable_71c4f5de,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__8ea2af8d6aef7e127f3feb093668fe567793f3442bb0838c12dde2c9a975fbe6(
-    metric_name: builtins.str,
-    *,
-    account: typing.Optional[builtins.str] = None,
-    color: typing.Optional[builtins.str] = None,
-    dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    id: typing.Optional[builtins.str] = None,
-    label: typing.Optional[builtins.str] = None,
-    period: typing.Optional[_Duration_4839e8c3] = None,
-    region: typing.Optional[builtins.str] = None,
-    stack_account: typing.Optional[builtins.str] = None,
-    stack_region: typing.Optional[builtins.str] = None,
-    statistic: typing.Optional[builtins.str] = None,
-    unit: typing.Optional[_Unit_61bc6f70] = None,
-    visible: typing.Optional[builtins.bool] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -25791,11 +25324,84 @@ def _typecheckingstub__31e154e9541eb25c25b2ca77a4523aa38748dc392dd466816c178cb31
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__7da0023111eeaa20140212b6b10bdb3fc690c730188acea2d4f7443b8f801ce4(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    http_api: IHttpApi,
+    identity_source: typing.Sequence[builtins.str],
+    type: HttpAuthorizerType,
+    authorizer_name: typing.Optional[builtins.str] = None,
+    authorizer_uri: typing.Optional[builtins.str] = None,
+    enable_simple_responses: typing.Optional[builtins.bool] = None,
+    jwt_audience: typing.Optional[typing.Sequence[builtins.str]] = None,
+    jwt_issuer: typing.Optional[builtins.str] = None,
+    payload_format_version: typing.Optional[AuthorizerPayloadVersion] = None,
+    results_cache_ttl: typing.Optional[_Duration_4839e8c3] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f9bf1dfd7e3e3fb3162d44ea2fce7d99df068c43428b43d0d969d3252feb6044(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    authorizer_id: builtins.str,
+    authorizer_type: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__14605c3383d1d699194e37511d84f3f4da8c64b724b0eacc42f7bff95af97855(
+    *,
+    stage_name: builtins.str,
+    api: IHttpApi,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__70c0bb0779b1636661ab1c2d695953c6dda7a5247d18a4bd7e045cc96d717a8a(
+    *,
+    access_log_settings: typing.Optional[IAccessLogSettings] = None,
+    auto_deploy: typing.Optional[builtins.bool] = None,
+    description: typing.Optional[builtins.str] = None,
+    detailed_metrics_enabled: typing.Optional[builtins.bool] = None,
+    domain_mapping: typing.Optional[typing.Union[DomainMappingOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+    stage_variables: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    throttle: typing.Optional[typing.Union[ThrottleSettings, typing.Dict[builtins.str, typing.Any]]] = None,
+    stage_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__77d8b0adbb783021a6c7e33999d2a3a80e2414824d202954599bb4ad7f291721(
+    *,
+    access_log_settings: typing.Optional[IAccessLogSettings] = None,
+    auto_deploy: typing.Optional[builtins.bool] = None,
+    description: typing.Optional[builtins.str] = None,
+    detailed_metrics_enabled: typing.Optional[builtins.bool] = None,
+    domain_mapping: typing.Optional[typing.Union[DomainMappingOptions, typing.Dict[builtins.str, typing.Any]]] = None,
+    stage_variables: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    throttle: typing.Optional[typing.Union[ThrottleSettings, typing.Dict[builtins.str, typing.Any]]] = None,
+    stage_name: typing.Optional[builtins.str] = None,
+    http_api: IHttpApi,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c5f5ee3dd0468079018fb38cdc642f4071e063f1fee1994a9ac9c0a7bff54fb9(
+    grantee: _IGrantable_71c4f5de,
+    *,
+    http_methods: typing.Optional[typing.Sequence[HttpMethod]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__d19be0a597e0cdbd39568aa6832089127bfe4497b2bb7caf9bf941856497c1a8(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    http_api: IHttpApiRef,
+    http_api: IHttpApi,
     integration_type: HttpIntegrationType,
     connection_id: typing.Optional[builtins.str] = None,
     connection_type: typing.Optional[HttpConnectionType] = None,
@@ -25815,7 +25421,7 @@ def _typecheckingstub__2898f3dc1e9b1d54de8ea686f445e23845ebdad25e5dce8c2ea7797dc
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    http_api: IHttpApiRef,
+    http_api: IHttpApi,
     route_key: HttpRouteKey,
     authorization_scopes: typing.Optional[typing.Sequence[builtins.str]] = None,
     authorizer: typing.Optional[IHttpRouteAuthorizer] = None,
@@ -25836,7 +25442,7 @@ def _typecheckingstub__4573d7530f36463b1b12875197f2c49f968925d114c4ed7ac6b9ab04e
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    http_api: IHttpApiRef,
+    http_api: IHttpApi,
     stage_name: typing.Optional[builtins.str] = None,
     access_log_settings: typing.Optional[IAccessLogSettings] = None,
     auto_deploy: typing.Optional[builtins.bool] = None,
@@ -25885,5 +25491,5 @@ def _typecheckingstub__500452af5f3368ca0335b3b0a1f3ad3606a8d42f9416ce2e98f133fb0
     """Type checking stubs"""
     pass
 
-for cls in [IAccessLogDestination, IAccessLogSettings, IApi, IApiKey, IApiMapping, IAuthorizer, IDomainName, IHttpApi, IHttpApiRef, IHttpAuthorizer, IHttpIntegration, IHttpRoute, IHttpRouteAuthorizer, IHttpStage, IHttpStageRef, IIntegration, IMappingValue, IRoute, IStage, IUsagePlan, IVpcLink, IWebSocketApi, IWebSocketApiRef, IWebSocketAuthorizer, IWebSocketIntegration, IWebSocketRoute, IWebSocketRouteAuthorizer, IWebSocketStage]:
+for cls in [IAccessLogDestination, IAccessLogSettings, IApi, IApiKey, IApiMapping, IAuthorizer, IDomainName, IHttpApi, IHttpAuthorizer, IHttpIntegration, IHttpRoute, IHttpRouteAuthorizer, IHttpStage, IIntegration, IMappingValue, IRoute, IStage, IUsagePlan, IVpcLink, IWebSocketApi, IWebSocketAuthorizer, IWebSocketIntegration, IWebSocketRoute, IWebSocketRouteAuthorizer, IWebSocketStage]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

@@ -124,7 +124,7 @@ class ExecutionProgress:
         """
         self.docket = docket
         self.key = key
-        self._redis_key = f"{docket.name}:progress:{key}"
+        self._redis_key = docket.key(f"progress:{key}")
         self.current: int | None = None
         self.total: int = 1
         self.message: str | None = None
@@ -258,7 +258,7 @@ class ExecutionProgress:
         Args:
             data: Progress data to publish (partial update)
         """
-        channel = f"{self.docket.name}:progress:{self.key}"
+        channel = self.docket.key(f"progress:{self.key}")
         # Create ephemeral Redis client for publishing
         async with self.docket.redis() as redis:
             # Use instance attributes for current state
@@ -286,7 +286,7 @@ class ExecutionProgress:
             - message: status message (or None)
             - updated_at: ISO 8601 timestamp
         """
-        channel = f"{self.docket.name}:progress:{self.key}"
+        channel = self.docket.key(f"progress:{self.key}")
         async with self.docket.redis() as redis:
             async with redis.pubsub() as pubsub:
                 await pubsub.subscribe(channel)
@@ -345,7 +345,7 @@ class Execution:
         self.progress: ExecutionProgress = ExecutionProgress(docket, key)
 
         # Redis key
-        self._redis_key = f"{docket.name}:runs:{key}"
+        self._redis_key = docket.key(f"runs:{key}")
 
     # Task definition properties (immutable)
     @property
@@ -514,8 +514,8 @@ class Execution:
                 schedule_script = cast(
                     _schedule_task,
                     redis.register_script(
-                        # KEYS: stream_key, known_key, parked_key, queue_key, stream_id_key, runs_key, worker_group_key
-                        # ARGV: task_key, when_timestamp, is_immediate, replace, reschedule_message_id, ...message_fields
+                        # KEYS: stream_key, known_key, parked_key, queue_key, stream_id_key, runs_key
+                        # ARGV: task_key, when_timestamp, is_immediate, replace, reschedule_message_id, worker_group_name, ...message_fields
                         """
                             local stream_key = KEYS[1]
                             -- TODO: Remove in next breaking release (v0.14.0) - legacy key locations
@@ -524,21 +524,21 @@ class Execution:
                             local queue_key = KEYS[4]
                             local stream_id_key = KEYS[5]
                             local runs_key = KEYS[6]
-                            local worker_group_name = KEYS[7]
 
                             local task_key = ARGV[1]
                             local when_timestamp = ARGV[2]
                             local is_immediate = ARGV[3] == '1'
                             local replace = ARGV[4] == '1'
                             local reschedule_message_id = ARGV[5]
+                            local worker_group_name = ARGV[6]
 
-                            -- Extract message fields from ARGV[6] onwards
+                            -- Extract message fields from ARGV[7] onwards
                             local message = {}
                             local function_name = nil
                             local args_data = nil
                             local kwargs_data = nil
 
-                            for i = 6, #ARGV, 2 do
+                            for i = 7, #ARGV, 2 do
                                 local field_name = ARGV[i]
                                 local field_value = ARGV[i + 1]
                                 message[#message + 1] = field_name
@@ -664,7 +664,6 @@ class Execution:
                         self.docket.queue_key,
                         self.docket.stream_id_key(key),
                         self._redis_key,
-                        self.docket.worker_group_name,
                     ],
                     args=[
                         key,
@@ -672,6 +671,7 @@ class Execution:
                         "1" if is_immediate else "0",
                         "1" if replace else "0",
                         reschedule_message or b"",
+                        self.docket.worker_group_name,
                         *[
                             item
                             for field, value in message.items()
@@ -755,8 +755,8 @@ class Execution:
                 keys=[
                     self._redis_key,  # runs_key
                     self.progress._redis_key,  # progress_key
-                    f"{self.docket.name}:known:{self.key}",  # legacy known_key
-                    f"{self.docket.name}:stream-id:{self.key}",  # legacy stream_id_key
+                    self.docket.known_task_key(self.key),  # legacy known_key
+                    self.docket.stream_id_key(self.key),  # legacy stream_id_key
                 ],
                 args=[worker, started_at_iso],
             )
@@ -994,7 +994,7 @@ class Execution:
         Args:
             data: State data to publish
         """
-        channel = f"{self.docket.name}:state:{self.key}"
+        channel = self.docket.key(f"state:{self.key}")
         # Create ephemeral Redis client for publishing
         async with self.docket.redis() as redis:
             # Build payload with all relevant state information
@@ -1049,8 +1049,8 @@ class Execution:
         yield progress_event
 
         # Then subscribe to real-time updates
-        state_channel = f"{self.docket.name}:state:{self.key}"
-        progress_channel = f"{self.docket.name}:progress:{self.key}"
+        state_channel = self.docket.key(f"state:{self.key}")
+        progress_channel = self.docket.key(f"progress:{self.key}")
         async with self.docket.redis() as redis:
             async with redis.pubsub() as pubsub:
                 await pubsub.subscribe(state_channel, progress_channel)

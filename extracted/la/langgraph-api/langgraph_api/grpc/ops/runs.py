@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from contextlib import asynccontextmanager
 from datetime import UTC
 from http import HTTPStatus
 from typing import TYPE_CHECKING, Any, Literal
@@ -10,9 +11,12 @@ from uuid import UUID
 import structlog
 from google.protobuf.empty_pb2 import Empty  # type: ignore[import]
 from grpc import StatusCode
+from grpc.aio import AioRpcError
 from langgraph_sdk import Auth
 from starlette.exceptions import HTTPException
 
+from langgraph_api.asyncio import SimpleTaskGroup, ValueEvent
+from langgraph_api.errors import UserInterrupt, UserRollback
 from langgraph_api.grpc.client import get_shared_client
 from langgraph_api.grpc.config_conversion import config_from_proto
 from langgraph_api.grpc.generated import (
@@ -20,6 +24,9 @@ from langgraph_api.grpc.generated import (
 )
 from langgraph_api.grpc.generated import (
     enum_cancel_run_action_pb2 as enum_cancel_run_action,
+)
+from langgraph_api.grpc.generated import (
+    enum_control_signal_pb2 as enum_control_signal,
 )
 from langgraph_api.grpc.generated import (
     enum_multitask_strategy_pb2 as enum_multitask_strategy,
@@ -34,13 +41,14 @@ from langgraph_api.grpc.ops import (
     Authenticated,
     grpc_error_guard,
 )
-from langgraph_api.serde import json_loads_optional
+from langgraph_api.serde import json_dumpb, json_dumpb_optional, json_loads_optional
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator, Sequence
 
     from langgraph_api.schema import (
         IfNotExists,
+        MetadataInput,
         MultitaskStrategy,
         QueueStats,
         Run,
@@ -333,6 +341,87 @@ class Runs(Authenticated):
         return generate_result()
 
     @staticmethod
+    async def put(
+        conn,  # Not used in gRPC implementation
+        assistant_id: UUID,
+        kwargs: dict,
+        *,
+        thread_id: UUID | None = None,
+        user_id: str | None = None,
+        run_id: UUID | None = None,
+        status: RunStatus | None = "pending",
+        metadata: MetadataInput,
+        prevent_insert_if_inflight: bool,
+        multitask_strategy: MultitaskStrategy = "reject",
+        if_not_exists: IfNotExists = "reject",
+        after_seconds: int = 0,
+        ctx: Any = None,
+    ) -> AsyncIterator[Run]:  # type: ignore[return-value]
+        """Create a run."""
+        metadata = metadata or {}
+        kwargs = kwargs or {}
+        temporary = kwargs.get("temporary", False)
+
+        auth_filters = await Runs.handle_event(
+            ctx,
+            "create_run",
+            Auth.types.RunsCreate(
+                thread_id=None if temporary else thread_id,
+                assistant_id=assistant_id,
+                run_id=run_id,
+                status=status,
+                metadata=metadata,
+                prevent_insert_if_inflight=prevent_insert_if_inflight,
+                multitask_strategy=multitask_strategy,
+                if_not_exists=if_not_exists,
+                after_seconds=after_seconds,
+                kwargs=kwargs,
+            ),
+        )
+
+        kwargs_json_bytes = json_dumpb(kwargs)
+        request_kwargs: dict[str, Any] = {
+            "assistant_id": pb.UUID(value=str(assistant_id)),
+            "kwargs_json": kwargs_json_bytes,
+            "thread_filters": auth_filters,
+        }
+
+        if thread_id is not None:
+            request_kwargs["thread_id"] = pb.UUID(value=str(thread_id))
+        if user_id is not None:
+            request_kwargs["user_id"] = user_id
+        if run_id is not None:
+            request_kwargs["run_id"] = pb.UUID(value=str(run_id))
+
+        mapped_status = _map_run_status(status)
+        if mapped_status is not None:
+            request_kwargs["status"] = mapped_status
+        if metadata:
+            request_kwargs["metadata_json"] = json_dumpb_optional(metadata)
+        if prevent_insert_if_inflight:
+            request_kwargs["prevent_insert_if_inflight"] = prevent_insert_if_inflight
+
+        mapped_strategy = _map_multitask_strategy(multitask_strategy)
+        if mapped_strategy is not None:
+            request_kwargs["multitask_strategy"] = mapped_strategy
+
+        mapped_if_not_exists = _map_if_not_exists(if_not_exists)
+        if mapped_if_not_exists is not None:
+            request_kwargs["if_not_exists"] = mapped_if_not_exists
+
+        if after_seconds > 0:
+            request_kwargs["after_seconds"] = int(after_seconds)
+
+        client = await get_shared_client()
+        response = await client.runs.Create(pb.CreateRunRequest(**request_kwargs))
+
+        async def generate_result():
+            for run in response.runs:
+                yield proto_to_run(run)
+
+        return generate_result()
+
+    @staticmethod
     async def cancel(
         conn,  # Not used in gRPC implementation
         run_ids: Sequence[UUID] | None = None,
@@ -421,12 +510,66 @@ class Runs(Authenticated):
         }
 
     @staticmethod
+    async def set_status(
+        conn,  # Not used in gRPC implementation
+        run_id: UUID,
+        status: RunStatus,
+    ) -> None:
+        """Set the status of a run (not exposed via API, no auth)."""
+        mapped_status = _map_run_status(status)
+        if mapped_status is None:
+            return
+
+        request = pb.SetRunStatusRequest(
+            run_id=pb.UUID(value=str(run_id)),
+            status=mapped_status,
+        )
+
+        client = await get_shared_client()
+        await client.runs.SetStatus(request)
+
+    @staticmethod
     async def sweep() -> list[UUID]:
         """Sweep runs that have been in running state for too long (not exposed via API, no auth)."""
         client = await get_shared_client()
         response = await client.runs.Sweep(Empty())
 
         return [UUID(uuid_pb.value) for uuid_pb in response.run_ids]
+
+    @staticmethod
+    async def _mark_done(run_id: UUID, thread_id: UUID, resumable: bool) -> None:
+        """Mark a run as done by signaling control and publishing to stream.
+
+        Internal method used by workers. Not exposed via API, no auth.
+        """
+        request = pb.MarkRunDoneRequest(
+            run_id=pb.UUID(value=str(run_id)),
+            thread_id=pb.UUID(value=str(thread_id)),
+            resumable=resumable,
+        )
+
+        client = await get_shared_client()
+        await client.runs.MarkDone(request)
+
+    @staticmethod
+    async def next(wait: bool, limit: int = 1) -> AsyncIterator[tuple[Run, int]]:  # type: ignore[return-value]
+        """Get the next run from the queue, and the attempt number.
+
+        1 is the first attempt, 2 is the first retry, etc.
+
+        Not exposed via API, no auth.
+        """
+        request = pb.NextRunRequest(wait=wait, limit=limit)
+
+        client = await get_shared_client()
+        response = await client.runs.Next(request)
+
+        async def generate_results():
+            for run_with_attempt in response.runs:
+                run = proto_to_run(run_with_attempt.run)
+                yield run, run_with_attempt.attempt
+
+        return generate_results()
 
     class Stream(Authenticated):
         """Stream operations for runs."""
@@ -485,3 +628,137 @@ class Runs(Authenticated):
             """Publish a message to the run stream."""
             # TODO: Implement gRPC stream publishing
             raise NotImplementedError("Stream.publish not yet implemented for gRPC")
+
+    @staticmethod
+    def enter(
+        run_id: UUID,
+        thread_id: UUID,
+        loop: Any,  # unused, for API compatibility
+        resumable: bool,
+    ):
+        """Enter a run context manager for execution.
+
+        Opens a streaming Enter RPC that:
+        1. Starts heartbeat and Redis cancellation listening on the server
+        2. Streams back control signals (interrupt/rollback) when they occur
+        3. Returns a ValueEvent that will be set on interrupt/rollback
+
+        Args:
+            run_id: The run ID
+            thread_id: The thread ID
+            loop: The event loop (unused in gRPC implementation)
+            resumable: Whether the run is resumable
+
+        Yields:
+            ValueEvent that will be set with UserInterrupt() or UserRollback() if cancelled
+        """
+
+        @asynccontextmanager
+        async def _enter_impl():
+            done = ValueEvent()
+
+            # Open streaming Enter RPC
+            client = await get_shared_client()
+            enter_request = pb.EnterRunRequest(
+                run_id=pb.UUID(value=str(run_id)),
+                thread_id=pb.UUID(value=str(thread_id)),
+                resumable=resumable,
+            )
+            enter_stream = client.runs.Enter(enter_request)
+
+            async with SimpleTaskGroup(cancel=True, taskgroup_name="Runs.enter") as tg:
+                # Background task to listen for control signals from the stream
+                async def listen_for_signals():
+                    try:
+                        async for event in enter_stream:
+                            if event.action == enum_control_signal.interrupt:
+                                logger.info(
+                                    "Received interrupt signal from gRPC stream",
+                                    run_id=run_id,
+                                    thread_id=thread_id,
+                                )
+                                done.set(UserInterrupt())
+                                break
+                            elif event.action == enum_control_signal.rollback:
+                                logger.info(
+                                    "Received rollback signal from gRPC stream",
+                                    run_id=run_id,
+                                    thread_id=thread_id,
+                                )
+                                done.set(UserRollback())
+                                break
+                    except Exception as exc:
+                        logger.exception(
+                            "listen_for_signals failed",
+                            run_id=run_id,
+                            thread_id=thread_id,
+                            exc_info=exc,
+                        )
+                        done.set(
+                            GrpcRetryableException(
+                                f"listen_for_signals failed. \nError: {exc!r}"
+                            )
+                        )
+                        raise
+
+                tg.create_task(listen_for_signals())
+
+                try:
+                    yield done
+                    # Signal done via gRPC (stops heartbeat and cleanup on server)
+                    await Runs.mark_done(
+                        run_id=run_id, thread_id=thread_id, resumable=resumable
+                    )
+                except GrpcRetryableException:
+                    logger.info(
+                        "Retriable exception, will not signal done",
+                        run_id=run_id,
+                        thread_id=thread_id,
+                    )
+                except AioRpcError as e:
+                    if e.code() in GRPC_RETRIABLE_STATUS_CODES:
+                        logger.info(
+                            "Retriable gRPC error, will not signal done",
+                            run_id=run_id,
+                            thread_id=thread_id,
+                            grpc_code=e.code().name,
+                        )
+                    else:
+                        logger.exception(
+                            "Non-retriable gRPC error when marking run as done",
+                            run_id=run_id,
+                            thread_id=thread_id,
+                            grpc_code=e.code().name,
+                        )
+                        raise
+                except BaseException:
+                    logger.exception(
+                        "Non-retriable exception when marking run as done",
+                        run_id=run_id,
+                        thread_id=thread_id,
+                    )
+                    raise
+
+        return _enter_impl()
+
+    @staticmethod
+    @grpc_error_guard
+    async def mark_done(
+        run_id: UUID,
+        thread_id: UUID,
+        resumable: bool,
+    ) -> None:
+        """Mark a run as done.
+
+        Args:
+            run_id: The run ID
+            thread_id: The thread ID
+            resumable: Whether streaming is resumable
+        """
+        client = await get_shared_client()
+        request = pb.MarkRunDoneRequest(
+            run_id=pb.UUID(value=str(run_id)),
+            thread_id=pb.UUID(value=str(thread_id)),
+            resumable=resumable,
+        )
+        await client.runs.MarkDone(request)

@@ -3,7 +3,7 @@ Type annotations for glue service literal definitions.
 
 [Documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/literals/)
 
-Copyright 2025 Vlad Emelianov
+Copyright 2026 Vlad Emelianov
 
 Usage::
 
@@ -116,6 +116,7 @@ __all__ = (
     "ListConnectionTypesPaginatorName",
     "ListEntitiesPaginatorName",
     "ListJobsPaginatorName",
+    "ListMaterializedViewRefreshTaskRunsPaginatorName",
     "ListRegistriesPaginatorName",
     "ListSchemaVersionsPaginatorName",
     "ListSchemasPaginatorName",
@@ -126,6 +127,8 @@ __all__ = (
     "LogicalOperatorType",
     "LogicalType",
     "MLUserDataEncryptionModeStringType",
+    "MaterializedViewRefreshStateType",
+    "MaterializedViewRefreshTypeType",
     "MetadataOperationType",
     "NodeTypeType",
     "OAuth2GrantTypeType",
@@ -546,6 +549,9 @@ ListBlueprintsPaginatorName = Literal["list_blueprints"]
 ListConnectionTypesPaginatorName = Literal["list_connection_types"]
 ListEntitiesPaginatorName = Literal["list_entities"]
 ListJobsPaginatorName = Literal["list_jobs"]
+ListMaterializedViewRefreshTaskRunsPaginatorName = Literal[
+    "list_materialized_view_refresh_task_runs"
+]
 ListRegistriesPaginatorName = Literal["list_registries"]
 ListSchemaVersionsPaginatorName = Literal["list_schema_versions"]
 ListSchemasPaginatorName = Literal["list_schemas"]
@@ -556,6 +562,8 @@ ListWorkflowsPaginatorName = Literal["list_workflows"]
 LogicalOperatorType = Literal["EQUALS"]
 LogicalType = Literal["AND", "ANY"]
 MLUserDataEncryptionModeStringType = Literal["DISABLED", "SSE-KMS"]
+MaterializedViewRefreshStateType = Literal["FAILED", "RUNNING", "STARTING", "STOPPED", "SUCCEEDED"]
+MaterializedViewRefreshTypeType = Literal["FULL", "INCREMENTAL"]
 MetadataOperationType = Literal["CREATE"]
 NodeTypeType = Literal["CRAWLER", "JOB", "TRIGGER"]
 OAuth2GrantTypeType = Literal["AUTHORIZATION_CODE", "CLIENT_CREDENTIALS", "JWT_BEARER"]
@@ -791,7 +799,6 @@ ServiceName = Literal[
     "eks-auth",
     "elasticache",
     "elasticbeanstalk",
-    "elastictranscoder",
     "elb",
     "elbv2",
     "emr",
@@ -1056,6 +1063,7 @@ ServiceName = Literal[
     "waf-regional",
     "wafv2",
     "wellarchitected",
+    "wickr",
     "wisdom",
     "workdocs",
     "workmail",
@@ -1092,6 +1100,7 @@ PaginatorName = Literal[
     "list_connection_types",
     "list_entities",
     "list_jobs",
+    "list_materialized_view_refresh_task_runs",
     "list_registries",
     "list_schema_versions",
     "list_schemas",

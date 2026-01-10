@@ -140,6 +140,12 @@ class GraphBubbleUp(_message.Message):
     __slots__ = ()
     def __init__(self) -> None: ...
 
+class ParentCommand(_message.Message):
+    __slots__ = ("command",)
+    COMMAND_FIELD_NUMBER: _ClassVar[int]
+    command: Command
+    def __init__(self, command: _Optional[_Union[Command, _Mapping]] = ...) -> None: ...
+
 class GraphInterrupt(_message.Message):
     __slots__ = ("interrupts",)
     INTERRUPTS_FIELD_NUMBER: _ClassVar[int]
@@ -311,16 +317,16 @@ class Task(_message.Message):
     def __init__(self, name: _Optional[str] = ..., writes: _Optional[_Iterable[_Union[Write, _Mapping]]] = ..., config: _Optional[_Union[EngineRunnableConfig, _Mapping]] = ..., triggers: _Optional[_Iterable[str]] = ..., id: _Optional[str] = ..., task_path: _Optional[_Iterable[_Union[PathSegment, _Mapping]]] = ..., pending_writes: _Optional[_Iterable[_Union[PendingWrite, _Mapping]]] = ..., stream_subgraphs: bool = ..., subgraph: _Optional[_Union[Subgraph, _Mapping]] = ...) -> None: ...
 
 class TaskResult(_message.Message):
-    __slots__ = ("user_error", "interrupts", "bubble_up", "writes")
+    __slots__ = ("user_error", "interrupts", "parent_command", "writes")
     USER_ERROR_FIELD_NUMBER: _ClassVar[int]
     INTERRUPTS_FIELD_NUMBER: _ClassVar[int]
-    BUBBLE_UP_FIELD_NUMBER: _ClassVar[int]
+    PARENT_COMMAND_FIELD_NUMBER: _ClassVar[int]
     WRITES_FIELD_NUMBER: _ClassVar[int]
     user_error: _errors_pb2.UserCodeExecutionError
     interrupts: WrappedInterrupts
-    bubble_up: GraphBubbleUp
+    parent_command: ParentCommand
     writes: _containers.RepeatedCompositeFieldContainer[Write]
-    def __init__(self, user_error: _Optional[_Union[_errors_pb2.UserCodeExecutionError, _Mapping]] = ..., interrupts: _Optional[_Union[WrappedInterrupts, _Mapping]] = ..., bubble_up: _Optional[_Union[GraphBubbleUp, _Mapping]] = ..., writes: _Optional[_Iterable[_Union[Write, _Mapping]]] = ...) -> None: ...
+    def __init__(self, user_error: _Optional[_Union[_errors_pb2.UserCodeExecutionError, _Mapping]] = ..., interrupts: _Optional[_Union[WrappedInterrupts, _Mapping]] = ..., parent_command: _Optional[_Union[ParentCommand, _Mapping]] = ..., writes: _Optional[_Iterable[_Union[Write, _Mapping]]] = ...) -> None: ...
 
 class CheckpointRef(_message.Message):
     __slots__ = ("checkpoint_id", "thread_id", "checkpoint_ns", "checkpoint_map")

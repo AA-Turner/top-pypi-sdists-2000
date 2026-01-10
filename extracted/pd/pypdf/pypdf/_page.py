@@ -29,7 +29,8 @@
 
 import math
 from collections.abc import Iterable, Iterator, Sequence
-from dataclasses import dataclass
+from copy import deepcopy
+from dataclasses import asdict, dataclass
 from decimal import Decimal
 from io import BytesIO
 from pathlib import Path
@@ -43,9 +44,7 @@ from typing import (
     overload,
 )
 
-from ._cmap import (
-    build_char_map,
-)
+from ._font import Font
 from ._protocols import PdfCommonDocProtocol
 from ._text_extraction import (
     _layout_mode,
@@ -55,6 +54,7 @@ from ._utils import (
     CompressedTransformationMatrix,
     TransformationMatrixType,
     _human_readable_bytes,
+    deprecate,
     logger_warning,
     matrix_multiply,
 )
@@ -85,7 +85,7 @@ try:
 
     pil_not_imported = False
 except ImportError:
-    Image = object  # type: ignore
+    Image = object  # type: ignore[assignment,misc,unused-ignore]  # TODO: Remove unused-ignore on Python 3.10
     pil_not_imported = True  # error will be raised only when using images
 
 MERGE_CROP_BOX = "cropbox"  # pypdf <= 3.4.0 used "trimbox"
@@ -999,10 +999,20 @@ class PageObject(DictionaryObject):
             self[NameObject(PG.CONTENTS)] = content
             return
 
+        from pypdf._writer import PdfWriter  # noqa: PLC0415
+        if not isinstance(self.indirect_reference.pdf, PdfWriter):
+            deprecate(
+                "Calling `PageObject.replace_contents()` for pages not assigned to a writer is deprecated "
+                "and will be removed in pypdf 7.0.0. Attach the page to the writer first or use "
+                "`PdfWriter(clone_from=...)` directly. The existing approach has proved being unreliable."
+            )
+
         if isinstance(self.get(PG.CONTENTS, None), ArrayObject):
             for o in self[PG.CONTENTS]:  # type: ignore[attr-defined]
                 try:
-                    self._objects[o.indirect_reference.idnum - 1] = NullObject()  # type: ignore
+                    self.indirect_reference.pdf._objects[
+                        o.indirect_reference.idnum - 1
+                    ] = NullObject()
                 except AttributeError:
                     pass
 
@@ -1086,20 +1096,13 @@ class PageObject(DictionaryObject):
                 return self._merge_page_writer(
                     page2, page2transformation, ctm, over, expand
                 )
-                return None
         except (AssertionError, AttributeError):
             pass
 
         new_resources = DictionaryObject()
         rename = {}
-        try:
-            original_resources = cast(DictionaryObject, self[PG.RESOURCES].get_object())
-        except KeyError:
-            original_resources = DictionaryObject()
-        try:
-            page2resources = cast(DictionaryObject, page2[PG.RESOURCES].get_object())
-        except KeyError:
-            page2resources = DictionaryObject()
+        original_resources = cast(DictionaryObject, self.get(PG.RESOURCES, DictionaryObject()).get_object())
+        page2resources = cast(DictionaryObject, page2.get(PG.RESOURCES, DictionaryObject()).get_object())
         new_annots = ArrayObject()
 
         for page in (self, page2):
@@ -1238,7 +1241,9 @@ class PageObject(DictionaryObject):
                 trsf = Transformation()
             else:
                 trsf = Transformation(ctm)
-            for a in cast(ArrayObject, page2[PG.ANNOTS]):
+            # Ensure we are working on a copy of the list. Otherwise, if both pages
+            # are the same object, we might run into an infinite loop.
+            for a in cast(ArrayObject, deepcopy(page2[PG.ANNOTS])):
                 a = a.get_object()
                 aa = a.clone(
                     pdf,
@@ -1384,8 +1389,8 @@ class PageObject(DictionaryObject):
             ctm = ctm.ctm
         self._merge_page(
             page2,
-            lambda page2Content: PageObject._add_transformation_matrix(
-                page2Content, page2.pdf, ctm
+            lambda page2_content: PageObject._add_transformation_matrix(
+                page2_content, page2.pdf, ctm
             ),
             ctm,
             over,
@@ -1684,12 +1689,8 @@ class PageObject(DictionaryObject):
 
         """
         extractor = TextExtraction()
-        cmaps: dict[
-            str,
-            tuple[
-                str, float, Union[str, dict[int, str]], dict[str, str], DictionaryObject
-            ],
-        ] = {}
+        font_resources: dict[str, DictionaryObject] = {}
+        fonts: dict[str, Font] = {}
 
         try:
             objr = obj
@@ -1704,11 +1705,20 @@ class PageObject(DictionaryObject):
             # file as not damaged, no need to check for TJ or Tj
             return ""
 
-        if not is_null_or_none(resources_dict) and "/Font" in resources_dict and (font := resources_dict["/Font"]):
-            for f in cast(DictionaryObject, font):
+        if (
+            not is_null_or_none(resources_dict)
+            and "/Font" in resources_dict
+            and (font_resources_dict := cast(DictionaryObject, resources_dict["/Font"]))
+        ):
+            for font_resource in font_resources_dict:
                 try:
-                    cmaps[f] = build_char_map(f, space_width, obj)
-                except TypeError:
+                    font_resource_object = cast(DictionaryObject, font_resources_dict[font_resource].get_object())
+                    font_resources[font_resource] = font_resource_object
+                    fonts[font_resource] = Font.from_font_resource(font_resource_object)
+                    # Override space width, if applicable
+                    if fonts[font_resource].character_widths.get(" ", 0) == 0:
+                        fonts[font_resource].space_width = space_width
+                except (AttributeError, TypeError):
                     pass
 
         try:
@@ -1724,7 +1734,7 @@ class PageObject(DictionaryObject):
         # them to the text here would be gibberish.
 
         # Initialize the extractor with the necessary parameters
-        extractor.initialize_extraction(orientations, visitor_text, cmaps)
+        extractor.initialize_extraction(orientations, visitor_text, font_resources, fonts)
 
         for operands, operator in content.operations:
             if visitor_operand_before is not None:
@@ -1761,7 +1771,7 @@ class PageObject(DictionaryObject):
                         extractor.text,
                         extractor.memo_cm,
                         extractor.memo_tm,
-                        extractor.cmap[3],
+                        extractor.font_resource,
                         extractor.font_size,
                     )
                 try:
@@ -1772,7 +1782,7 @@ class PageObject(DictionaryObject):
                                 "\n",
                                 extractor.memo_cm,
                                 extractor.memo_tm,
-                                extractor.cmap[3],
+                                extractor.font_resource,
                                 extractor.font_size,
                             )
                 except IndexError:
@@ -1794,7 +1804,7 @@ class PageObject(DictionaryObject):
                                 text,
                                 extractor.memo_cm,
                                 extractor.memo_tm,
-                                extractor.cmap[3],
+                                extractor.font_resource,
                                 extractor.font_size,
                             )
                 except Exception as exception:
@@ -1816,22 +1826,22 @@ class PageObject(DictionaryObject):
                 extractor.text,
                 extractor.memo_cm,
                 extractor.memo_tm,
-                extractor.cmap[3],
+                extractor.font_resource,
                 extractor.font_size,
             )
         return extractor.output
 
-    def _layout_mode_fonts(self) -> dict[str, _layout_mode.Font]:
+    def _layout_mode_fonts(self) -> dict[str, Font]:
         """
         Get fonts formatted for "layout" mode text extraction.
 
         Returns:
-            Dict[str, Font]: dictionary of _layout_mode.Font instances keyed by font name
+            Dict[str, Font]: dictionary of Font instances keyed by font name
 
         """
         # Font retrieval logic adapted from pypdf.PageObject._extract_text()
         objr: Any = self
-        fonts: dict[str, _layout_mode.Font] = {}
+        fonts: dict[str, Font] = {}
         while objr is not None:
             try:
                 resources_dict: Any = objr[PG.RESOURCES]
@@ -1839,17 +1849,7 @@ class PageObject(DictionaryObject):
                 resources_dict = {}
             if "/Font" in resources_dict and self.pdf is not None:
                 for font_name in resources_dict["/Font"]:
-                    *cmap, font_dict_obj = build_char_map(font_name, 200.0, self)
-                    font_dict = {
-                        k: v.get_object()
-                        if isinstance(v, IndirectObject)
-                        else [_v.get_object() for _v in v]
-                        if isinstance(v, ArrayObject)
-                        else v
-                        for k, v in font_dict_obj.items()
-                    }
-                    # mypy really sucks at unpacking
-                    fonts[font_name] = _layout_mode.Font(*cmap, font_dict)  # type: ignore[call-arg,arg-type]
+                    fonts[font_name] = Font.from_font_resource(resources_dict["/Font"][font_name])
             try:
                 objr = objr["/Parent"].get_object()
             except KeyError:
@@ -1896,10 +1896,8 @@ class PageObject(DictionaryObject):
             import json  # noqa: PLC0415
 
             debug_path.joinpath("fonts.json").write_text(
-                json.dumps(
-                    fonts, indent=2, default=lambda x: getattr(x, "to_dict", str)(x)
-                ),
-                "utf-8",
+                json.dumps(fonts, indent=2, default=asdict),
+                "utf-8"
             )
 
         ops = iter(

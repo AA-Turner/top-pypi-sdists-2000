@@ -423,6 +423,16 @@ class CheckpointPayload(_message.Message):
     tasks: _containers.RepeatedCompositeFieldContainer[CheckpointTask]
     def __init__(self, config: _Optional[_Union[_engine_common_pb2.EngineRunnableConfig, _Mapping]] = ..., metadata: _Optional[_Union[CheckpointMetadata, _Mapping]] = ..., values_json: _Optional[bytes] = ..., next: _Optional[_Iterable[str]] = ..., parent_config: _Optional[_Union[_engine_common_pb2.EngineRunnableConfig, _Mapping]] = ..., tasks: _Optional[_Iterable[_Union[CheckpointTask, _Mapping]]] = ...) -> None: ...
 
+class ThreadStatusCheckpoint(_message.Message):
+    __slots__ = ("values_json", "next", "interrupts_json")
+    VALUES_JSON_FIELD_NUMBER: _ClassVar[int]
+    NEXT_FIELD_NUMBER: _ClassVar[int]
+    INTERRUPTS_JSON_FIELD_NUMBER: _ClassVar[int]
+    values_json: bytes
+    next: _containers.RepeatedScalarFieldContainer[str]
+    interrupts_json: bytes
+    def __init__(self, values_json: _Optional[bytes] = ..., next: _Optional[_Iterable[str]] = ..., interrupts_json: _Optional[bytes] = ...) -> None: ...
+
 class Interrupt(_message.Message):
     __slots__ = ("id", "value", "when", "resumable", "ns")
     ID_FIELD_NUMBER: _ClassVar[int]
@@ -585,10 +595,10 @@ class SetThreadStatusRequest(_message.Message):
     EXCEPTION_JSON_FIELD_NUMBER: _ClassVar[int]
     EXPECTED_STATUS_FIELD_NUMBER: _ClassVar[int]
     thread_id: UUID
-    checkpoint: CheckpointPayload
+    checkpoint: ThreadStatusCheckpoint
     exception_json: bytes
     expected_status: _containers.RepeatedScalarFieldContainer[_enum_thread_status_pb2.ThreadStatus]
-    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., checkpoint: _Optional[_Union[CheckpointPayload, _Mapping]] = ..., exception_json: _Optional[bytes] = ..., expected_status: _Optional[_Iterable[_Union[_enum_thread_status_pb2.ThreadStatus, str]]] = ...) -> None: ...
+    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., checkpoint: _Optional[_Union[ThreadStatusCheckpoint, _Mapping]] = ..., exception_json: _Optional[bytes] = ..., expected_status: _Optional[_Iterable[_Union[_enum_thread_status_pb2.ThreadStatus, str]]] = ...) -> None: ...
 
 class SetThreadJointStatusRequest(_message.Message):
     __slots__ = ("thread_id", "run_id", "run_status", "graph_id", "checkpoint", "exception_json")
@@ -859,6 +869,12 @@ class MarkRunDoneRequest(_message.Message):
     thread_id: UUID
     resumable: bool
     def __init__(self, run_id: _Optional[_Union[UUID, _Mapping]] = ..., thread_id: _Optional[_Union[UUID, _Mapping]] = ..., resumable: bool = ...) -> None: ...
+
+class CreateRunResponse(_message.Message):
+    __slots__ = ("runs",)
+    RUNS_FIELD_NUMBER: _ClassVar[int]
+    runs: _containers.RepeatedCompositeFieldContainer[Run]
+    def __init__(self, runs: _Optional[_Iterable[_Union[Run, _Mapping]]] = ...) -> None: ...
 
 class ControlEvent(_message.Message):
     __slots__ = ("action",)

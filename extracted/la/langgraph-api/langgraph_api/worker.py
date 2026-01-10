@@ -23,6 +23,8 @@ from langgraph_api.config import (
 )
 from langgraph_api.encryption.context import set_encryption_context
 from langgraph_api.errors import UserInterrupt, UserRollback, UserTimeout
+from langgraph_api.feature_flags import FF_USE_CORE_API
+from langgraph_api.grpc.ops import Runs as GrpcRuns
 from langgraph_api.js.errors import RemoteException
 from langgraph_api.metadata import incr_runs
 from langgraph_api.schema import RUN_KWARGS_ENCRYPTION_SUBFIELDS, Run, StreamMode
@@ -32,6 +34,8 @@ from langgraph_api.utils import with_user
 from langgraph_runtime.database import connect
 from langgraph_runtime.ops import Runs, Threads
 from langgraph_runtime.retry import RETRIABLE_EXCEPTIONS
+
+CrudRuns = GrpcRuns if FF_USE_CORE_API else Runs
 
 logger = structlog.stdlib.get_logger(__name__)
 
@@ -173,7 +177,7 @@ async def worker(
                 raise UserTimeout(e) from e
             raise
 
-    async with Runs.enter(run_id, run["thread_id"], main_loop, resumable) as done:
+    async with CrudRuns.enter(run_id, run["thread_id"], main_loop, resumable) as done:
         # attempt the run
         try:
             if attempt > BG_JOB_MAX_RETRIES:
@@ -353,7 +357,7 @@ async def worker(
                 )
                 # Don't update thread status yet.
                 # Apply this even for temporary runs, so we retry
-                await Runs.set_status(conn, run_id, "pending")
+                await CrudRuns.set_status(conn, run_id, "pending")
             else:
                 status = "error"
 

@@ -3,7 +3,7 @@ Type annotations for glue service type definitions.
 
 [Documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_glue/type_defs/)
 
-Copyright 2025 Vlad Emelianov
+Copyright 2026 Vlad Emelianov
 
 Usage::
 
@@ -94,6 +94,8 @@ from .literals import (
     LastCrawlStatusType,
     LastRefreshTypeType,
     LogicalType,
+    MaterializedViewRefreshStateType,
+    MaterializedViewRefreshTypeType,
     MLUserDataEncryptionModeStringType,
     NodeTypeType,
     OAuth2GrantTypeType,
@@ -658,6 +660,8 @@ __all__ = (
     "GetMLTransformsResponseTypeDef",
     "GetMappingRequestTypeDef",
     "GetMappingResponseTypeDef",
+    "GetMaterializedViewRefreshTaskRunRequestTypeDef",
+    "GetMaterializedViewRefreshTaskRunResponseTypeDef",
     "GetPartitionIndexesRequestPaginateTypeDef",
     "GetPartitionIndexesRequestTypeDef",
     "GetPartitionIndexesResponseTypeDef",
@@ -860,6 +864,9 @@ __all__ = (
     "ListJobsResponseTypeDef",
     "ListMLTransformsRequestTypeDef",
     "ListMLTransformsResponseTypeDef",
+    "ListMaterializedViewRefreshTaskRunsRequestPaginateTypeDef",
+    "ListMaterializedViewRefreshTaskRunsRequestTypeDef",
+    "ListMaterializedViewRefreshTaskRunsResponseTypeDef",
     "ListRegistriesInputPaginateTypeDef",
     "ListRegistriesInputTypeDef",
     "ListRegistriesResponseTypeDef",
@@ -894,6 +901,7 @@ __all__ = (
     "MappingPaginatorTypeDef",
     "MappingTypeDef",
     "MappingUnionTypeDef",
+    "MaterializedViewRefreshTaskRunTypeDef",
     "MergeOutputTypeDef",
     "MergeTypeDef",
     "MergeUnionTypeDef",
@@ -1152,6 +1160,8 @@ __all__ = (
     "StartMLEvaluationTaskRunResponseTypeDef",
     "StartMLLabelingSetGenerationTaskRunRequestTypeDef",
     "StartMLLabelingSetGenerationTaskRunResponseTypeDef",
+    "StartMaterializedViewRefreshTaskRunRequestTypeDef",
+    "StartMaterializedViewRefreshTaskRunResponseTypeDef",
     "StartTriggerRequestTypeDef",
     "StartTriggerResponseTypeDef",
     "StartWorkflowRunRequestTypeDef",
@@ -1169,6 +1179,7 @@ __all__ = (
     "StopColumnStatisticsTaskRunScheduleRequestTypeDef",
     "StopCrawlerRequestTypeDef",
     "StopCrawlerScheduleRequestTypeDef",
+    "StopMaterializedViewRefreshTaskRunRequestTypeDef",
     "StopSessionRequestTypeDef",
     "StopSessionResponseTypeDef",
     "StopTriggerRequestTypeDef",
@@ -3153,6 +3164,29 @@ class MappingEntryTypeDef(TypedDict):
     TargetType: NotRequired[str]
 
 
+class GetMaterializedViewRefreshTaskRunRequestTypeDef(TypedDict):
+    CatalogId: str
+    MaterializedViewRefreshTaskRunId: str
+
+
+class MaterializedViewRefreshTaskRunTypeDef(TypedDict):
+    CustomerId: NotRequired[str]
+    MaterializedViewRefreshTaskRunId: NotRequired[str]
+    DatabaseName: NotRequired[str]
+    TableName: NotRequired[str]
+    CatalogId: NotRequired[str]
+    Role: NotRequired[str]
+    Status: NotRequired[MaterializedViewRefreshStateType]
+    CreationTime: NotRequired[datetime]
+    LastUpdated: NotRequired[datetime]
+    StartTime: NotRequired[datetime]
+    EndTime: NotRequired[datetime]
+    ErrorMessage: NotRequired[str]
+    DPUSeconds: NotRequired[float]
+    RefreshType: NotRequired[MaterializedViewRefreshTypeType]
+    ProcessedBytes: NotRequired[int]
+
+
 class GetPartitionIndexesRequestTypeDef(TypedDict):
     DatabaseName: str
     TableName: str
@@ -3513,6 +3547,14 @@ class ListJobsRequestTypeDef(TypedDict):
     NextToken: NotRequired[str]
     MaxResults: NotRequired[int]
     Tags: NotRequired[Mapping[str, str]]
+
+
+class ListMaterializedViewRefreshTaskRunsRequestTypeDef(TypedDict):
+    CatalogId: str
+    DatabaseName: NotRequired[str]
+    TableName: NotRequired[str]
+    MaxResults: NotRequired[int]
+    NextToken: NotRequired[str]
 
 
 class ListRegistriesInputTypeDef(TypedDict):
@@ -3911,6 +3953,13 @@ class StartMLLabelingSetGenerationTaskRunRequestTypeDef(TypedDict):
     OutputS3Path: str
 
 
+class StartMaterializedViewRefreshTaskRunRequestTypeDef(TypedDict):
+    CatalogId: str
+    DatabaseName: str
+    TableName: str
+    FullRefresh: NotRequired[bool]
+
+
 class StartTriggerRequestTypeDef(TypedDict):
     Name: str
 
@@ -3950,6 +3999,12 @@ class StopCrawlerRequestTypeDef(TypedDict):
 
 class StopCrawlerScheduleRequestTypeDef(TypedDict):
     CrawlerName: str
+
+
+class StopMaterializedViewRefreshTaskRunRequestTypeDef(TypedDict):
+    CatalogId: str
+    DatabaseName: str
+    TableName: str
 
 
 class StopSessionRequestTypeDef(TypedDict):
@@ -4744,6 +4799,11 @@ class StartMLEvaluationTaskRunResponseTypeDef(TypedDict):
 
 class StartMLLabelingSetGenerationTaskRunResponseTypeDef(TypedDict):
     TaskRunId: str
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class StartMaterializedViewRefreshTaskRunResponseTypeDef(TypedDict):
+    MaterializedViewRefreshTaskRunId: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -5785,6 +5845,13 @@ class ListJobsRequestPaginateTypeDef(TypedDict):
     PaginationConfig: NotRequired[PaginatorConfigTypeDef]
 
 
+class ListMaterializedViewRefreshTaskRunsRequestPaginateTypeDef(TypedDict):
+    CatalogId: str
+    DatabaseName: NotRequired[str]
+    TableName: NotRequired[str]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+
 class ListRegistriesInputPaginateTypeDef(TypedDict):
     PaginationConfig: NotRequired[PaginatorConfigTypeDef]
 
@@ -6019,6 +6086,17 @@ GetMappingResponseTypeDef = TypedDict(
         "ResponseMetadata": ResponseMetadataTypeDef,
     },
 )
+
+
+class GetMaterializedViewRefreshTaskRunResponseTypeDef(TypedDict):
+    MaterializedViewRefreshTaskRun: MaterializedViewRefreshTaskRunTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class ListMaterializedViewRefreshTaskRunsResponseTypeDef(TypedDict):
+    MaterializedViewRefreshTaskRuns: list[MaterializedViewRefreshTaskRunTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
 
 
 class GetPartitionsRequestPaginateTypeDef(TypedDict):

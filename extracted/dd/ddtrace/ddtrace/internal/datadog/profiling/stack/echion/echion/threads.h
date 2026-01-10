@@ -39,6 +39,9 @@ class ThreadInfo
 
     uintptr_t thread_id;
     unsigned long native_id;
+    FrameStack python_stack;
+    std::vector<std::unique_ptr<StackInfo>> current_tasks;
+    std::vector<std::unique_ptr<StackInfo>> current_greenlets;
 
     std::string name;
 
@@ -200,17 +203,18 @@ inline std::mutex thread_info_map_lock;
 inline void
 ThreadInfo::unwind(PyThreadState* tstate)
 {
-    unwind_python_stack(tstate);
+    unwind_python_stack(tstate, python_stack);
+
     if (asyncio_loop) {
         // unwind_tasks returns a [[nodiscard]] Result<void>.
         // We cast it to void to ignore failures.
         (void)unwind_tasks(tstate);
+    } else {
+        // We make the assumption that gevent and asyncio are not mixed
+        // together to keep the logic here simple. We can always revisit this
+        // should there be a substantial demand for it.
+        unwind_greenlets(tstate, native_id);
     }
-
-    // We make the assumption that gevent and asyncio are not mixed
-    // together to keep the logic here simple. We can always revisit this
-    // should there be a substantial demand for it.
-    unwind_greenlets(tstate, native_id);
 }
 
 // ----------------------------------------------------------------------------
@@ -294,7 +298,7 @@ ThreadInfo::unwind_tasks(PyThreadState* tstate)
         for (auto key : to_remove) {
             // Only remove the link if the Child Task previously existed; otherwise it's a Task that
             // has just been created and that wasn't in all_tasks when we took the snapshot.
-            if (previous_task_objects.find(key) != previous_task_objects.end()) {
+            if (auto it = previous_task_objects.find(key); it != previous_task_objects.end()) {
                 task_link_map.erase(key);
             }
         }
@@ -364,8 +368,8 @@ ThreadInfo::unwind_tasks(PyThreadState* tstate)
 
             // Get the next task in the chain
             PyObject* task_origin = task.origin;
-            if (waitee_map.find(task_origin) != waitee_map.end()) {
-                current_task = waitee_map.find(task_origin)->second;
+            if (auto maybe_waitee = waitee_map.find(task_origin); maybe_waitee != waitee_map.end()) {
+                current_task = maybe_waitee->second;
                 continue;
             }
 
@@ -373,10 +377,11 @@ ThreadInfo::unwind_tasks(PyThreadState* tstate)
                 // Check for, e.g., gather links
                 std::lock_guard<std::mutex> lock(task_link_map_lock);
 
-                if (task_link_map.find(task_origin) != task_link_map.end() &&
-                    origin_map.find(task_link_map[task_origin]) != origin_map.end()) {
-                    current_task = origin_map.find(task_link_map[task_origin])->second;
-                    continue;
+                if (auto maybe_parent = task_link_map.find(task_origin); maybe_parent != task_link_map.end()) {
+                    if (auto maybe_origin = origin_map.find(maybe_parent->second); maybe_origin != origin_map.end()) {
+                        current_task = maybe_origin->second;
+                        continue;
+                    }
                 }
             }
 
@@ -657,7 +662,7 @@ ThreadInfo::unwind_greenlets(PyThreadState* tstate, unsigned long cur_native_id)
         auto greenlet_id = greenlet_info.first;
         auto& greenlet = greenlet_info.second;
 
-        if (parent_greenlets.find(greenlet_id) != parent_greenlets.end())
+        if (parent_greenlets.contains(greenlet_id))
             continue;
 
         auto frame = greenlet->frame;
@@ -711,9 +716,7 @@ ThreadInfo::sample(int64_t iid, PyThreadState* tstate, microsecond_t delta)
         return ErrorKind::CpuTimeError;
     }
 
-    bool thread_is_running = is_running();
-
-    Renderer::get().render_cpu_time(thread_is_running ? cpu_time - previous_cpu_time : 0);
+    Renderer::get().render_cpu_time(is_running() ? cpu_time - previous_cpu_time : 0);
 
     this->unwind(tstate);
 
@@ -757,18 +760,9 @@ ThreadInfo::sample(int64_t iid, PyThreadState* tstate, microsecond_t delta)
 
         current_greenlets.clear();
     } else {
-        // If we don't have any asyncio tasks, we check that we don't have any
-        // greenlets either. In this case, we print the ordinary thread stack.
-        // With greenlets, we recover the thread stack from the active greenlet,
-        // so if we don't skip here we would have a double print.
-        if (current_greenlets.empty()) {
-            // Print the PID and thread name
-            Renderer::get().render_stack_begin(pid, iid, name);
-            // Print the stack
-            python_stack.render();
-
-            Renderer::get().render_stack_end(MetricType::Time, delta);
-        }
+        Renderer::get().render_stack_begin(pid, iid, name);
+        python_stack.render();
+        Renderer::get().render_stack_end(MetricType::Time, delta);
     }
 
     return Result<void>::ok();

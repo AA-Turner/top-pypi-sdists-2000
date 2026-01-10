@@ -39,7 +39,7 @@ dependencies = [
     "sentry-sdk >= 2.20.0",
     "fastar >= 0.8.0",
 ]
-version = "0.8.0"
+version = "0.9.0"
 
 [project.license]
 text = "MIT"
@@ -58,7 +58,7 @@ Changelog = "https://github.com/fastapilabs/fastapi-cloud-cli/blob/main/release-
 
 [dependency-groups]
 dev = [
-    "pre-commit>=2.17.0,<5.0.0",
+    "prek>=0.2.24,<1.0.0",
     "pytest>=4.4.0,<9.0.0",
     "coverage[toml]>=6.2,<8.0",
     "mypy==1.14.1",

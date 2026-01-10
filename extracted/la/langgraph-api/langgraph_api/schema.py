@@ -148,8 +148,6 @@ class Thread(TypedDict):
     """The thread metadata."""
     config: Fragment
     """The thread config."""
-    context: Fragment
-    """The thread context."""
     status: ThreadStatus
     """The status of the thread. One of 'idle', 'busy', 'interrupted', "error"."""
     values: Fragment
@@ -307,7 +305,6 @@ ThreadSelectField = Literal[
     "updated_at",
     "metadata",
     "config",
-    "context",
     "status",
     "values",
     "interrupts",

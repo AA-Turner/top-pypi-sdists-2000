@@ -108,6 +108,10 @@ class UnclosableBytesIO(io.BytesIO):
         self.seek(0)
 
 
+def _gcp_universe_domain():
+    return os.getenv("GOOGLE_CLOUD_UNIVERSE_DOMAIN", "googleapis.com")
+
+
 def _location():
     """
     Resolves GCS HTTP location as http[s]://host
@@ -125,7 +129,8 @@ def _location():
         ):
             _emulator_location = f"http://{_emulator_location}"
         return _emulator_location
-    return "https://storage.googleapis.com"
+
+    return f"https://storage.{_gcp_universe_domain()}"
 
 
 def _chunks(lst, n):
@@ -345,6 +350,10 @@ class GCSFileSystem(asyn.AsyncFileSystem):
     @property
     def base(self):
         return f"{self._location}/storage/v1/"
+
+    @property
+    def batch_url_base(self):
+        return f"{self._location}/batch/storage/v1"
 
     @property
     def project(self):
@@ -797,7 +806,9 @@ class GCSFileSystem(asyn.AsyncFileSystem):
         next_page_token = page.get("nextPageToken", None)
 
         while len(items) + len(prefixes) < max_results and next_page_token is not None:
-            num_items = min(items_per_call, max_results - len(items), 1000)
+            num_items = min(
+                items_per_call, max_results - (len(items) + len(prefixes)), 1000
+            )
             page = await self._call(
                 "GET",
                 "b/{}/o",
@@ -1038,6 +1049,12 @@ class GCSFileSystem(asyn.AsyncFileSystem):
                 return exact
         except FileNotFoundError:
             pass
+        return await self._get_directory_info(path, bucket, key, generation)
+
+    async def _get_directory_info(self, path, bucket, key, generation):
+        """
+        Internal method to check if a path is a directory by listing objects.
+        """
         out = await self._list_objects(path, max_results=1)
         exact = next((o for o in out if o["name"].rstrip("/") == path), None)
         if exact and not _is_directory_marker(exact):
@@ -1292,7 +1309,7 @@ class GCSFileSystem(asyn.AsyncFileSystem):
             body = "".join(parts)
             headers, content = await self._call(
                 "POST",
-                f"{self._location}/batch/storage/v1",
+                self.batch_url_base,
                 headers={
                     "Content-Type": 'multipart/mixed; boundary="=========='
                     '=====7330845974216740156=="'
@@ -1331,7 +1348,7 @@ class GCSFileSystem(asyn.AsyncFileSystem):
 
     @property
     def on_google(self):
-        return "torage.googleapis.com" in self._location
+        return f"torage.{_gcp_universe_domain()}" in self._location
 
     async def _rm(self, path, recursive=False, maxdepth=None, batchsize=20):
         paths = await self._expand_path(path, recursive=recursive, maxdepth=maxdepth)
@@ -1864,9 +1881,10 @@ class GCSFile(fsspec.spec.AbstractBufferedFile):
         self.bucket = bucket
         self.key = key
         self.acl = acl
+        self.consistency = consistency
         self.checker = get_consistency_checker(consistency)
-
-        if "a" in self.mode:
+        supports_append = kwargs.pop("supports_append", False)
+        if "a" in self.mode and not supports_append:
             warnings.warn(
                 "Append mode 'a' is not supported in GCS. Using overwrite mode instead."
             )
@@ -1963,12 +1981,16 @@ class GCSFile(fsspec.spec.AbstractBufferedFile):
                     continue
                 else:
                     self.checker.update(data)
+                if final and contents:
+                    j = json.loads(contents)
+                    self.generation = j.get("generation")
             else:
                 assert final, "Response looks like upload is over"
                 if l:
                     j = json.loads(contents)
                     self.checker.update(data)
                     self.checker.validate_json_response(j)
+                    self.generation = j.get("generation")
             # Clear buffer and update offset when all is received
             self.buffer = UnclosableBytesIO()
             self.offset += l
@@ -2014,7 +2036,7 @@ class GCSFile(fsspec.spec.AbstractBufferedFile):
         """One-shot upload, less than 5MB"""
         self.buffer.seek(0)
         data = self.buffer.read()
-        asyn.sync(
+        j = asyn.sync(
             self.gcsfs.loop,
             simple_upload,
             self.gcsfs,
@@ -2029,6 +2051,7 @@ class GCSFile(fsspec.spec.AbstractBufferedFile):
             kms_key_name=self.kms_key_name,
             timeout=self.timeout,
         )
+        self.generation = j.get("generation")
 
     def _fetch_range(self, start=None, end=None):
         """Get data from GCS
@@ -2073,6 +2096,23 @@ def _convert_fixed_key_metadata(metadata, *, from_google=False):
 
 
 async def upload_chunk(fs, location, data, offset, size, content_type):
+    """
+    Uploads a chunk of data. This function has a conditional path to support
+    experimental features for Zonal buckets to append data using gRPC.
+    """
+    from google.cloud.storage._experimental.asyncio.async_appendable_object_writer import (
+        AsyncAppendableObjectWriter,
+    )
+
+    from .extended_gcsfs import ExtendedGcsFileSystem
+    from .extended_gcsfs import upload_chunk as ext_upload_chunk
+
+    # location is AsyncAppendableObjectWriter only when ExtendedGcsFileSystem is used
+    if isinstance(fs, ExtendedGcsFileSystem) and isinstance(
+        location, AsyncAppendableObjectWriter
+    ):
+
+        return await ext_upload_chunk(fs, location, data, offset, size, content_type)
     head = {}
     l = len(data)
     range = "bytes %i-%i/%i" % (offset, offset + l - 1, size)
@@ -2101,6 +2141,29 @@ async def initiate_upload(
     mode="overwrite",
     kms_key_name=None,
 ):
+    """
+    Initiates a resumable upload. This function has a conditional path to support
+    experimental features for Zonal buckets to append data using gRPC, returning an
+    "AsyncAppendableObjectWriter" instance as location.
+    """
+    from .extended_gcsfs import ExtendedGcsFileSystem
+    from .extended_gcsfs import initiate_upload as ext_initiate_upload
+
+    # Explicit type checking is used to ensure only the ExtendedGcsFileSystem
+    # enters this path, ruling out false positives from mocks or coincidentally matching attributes.
+    if isinstance(fs, ExtendedGcsFileSystem) and await fs._is_zonal_bucket(bucket):
+
+        return await ext_initiate_upload(
+            fs,
+            bucket,
+            key,
+            content_type,
+            metadata,
+            fixed_key_metadata,
+            mode,
+            kms_key_name,
+        )
+
     j = {"name": key}
     if metadata:
         j["metadata"] = metadata
@@ -2135,6 +2198,30 @@ async def simple_upload(
     mode="overwrite",
     kms_key_name=None,
 ):
+    """
+    Performs a simple, single-request upload. This function has a conditional path to support
+    experimental features for Zonal buckets to upload data using gRPC.
+    """
+    from .extended_gcsfs import ExtendedGcsFileSystem
+    from .extended_gcsfs import simple_upload as ext_simple_upload
+
+    # Explicit type checking is used to ensure only the ExtendedGcsFileSystem
+    # enters this path, ruling out false positives from mocks or coincidentally matching attributes.
+    if isinstance(fs, ExtendedGcsFileSystem) and await fs._is_zonal_bucket(bucket):
+
+        return await ext_simple_upload(
+            fs,
+            bucket,
+            key,
+            datain,
+            metadatain,
+            consistency,
+            content_type,
+            fixed_key_metadata,
+            mode,
+            kms_key_name,
+        )
+
     checker = get_consistency_checker(consistency)
     path = f"{fs._location}/upload/storage/v1/b/{quote(bucket)}/o"
     metadata = {"name": key}
@@ -2163,3 +2250,4 @@ async def simple_upload(
     )
     checker.update(datain)
     checker.validate_json_response(j)
+    return j

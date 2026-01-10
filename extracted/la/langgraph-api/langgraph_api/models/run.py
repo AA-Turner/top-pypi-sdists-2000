@@ -11,7 +11,9 @@ from starlette.exceptions import HTTPException
 from typing_extensions import TypedDict
 
 from langgraph_api.api.encryption_middleware import encrypt_request
+from langgraph_api.feature_flags import FF_USE_CORE_API
 from langgraph_api.graph import GRAPHS, get_assistant_id
+from langgraph_api.grpc.ops import Runs as GrpcRuns
 from langgraph_api.schema import (
     All,
     Config,
@@ -29,6 +31,8 @@ from langgraph_api.utils.headers import get_configurable_headers
 from langgraph_api.utils.uuids import uuid7
 from langgraph_api.webhook import validate_webhook_url_or_raise
 from langgraph_runtime.ops import Runs
+
+CrudRuns = GrpcRuns if FF_USE_CORE_API else Runs
 
 if TYPE_CHECKING:
     from starlette.authentication import BaseUser
@@ -276,7 +280,7 @@ async def create_valid_run(
         ["metadata", "input", "config", "context", "command"],
     )
 
-    run_coro = Runs.put(
+    run_coro = CrudRuns.put(
         conn,
         assistant_id,
         {
@@ -344,7 +348,7 @@ async def create_valid_run(
         if multitask_strategy in ("interrupt", "rollback") and inflight_runs:
             with contextlib.suppress(HTTPException):
                 # if we can't find the inflight runs again, we can proceeed
-                await Runs.cancel(
+                await CrudRuns.cancel(
                     conn,
                     [run["run_id"] for run in inflight_runs],
                     thread_id=thread_id_,
