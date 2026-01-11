@@ -281,9 +281,11 @@ class Assistants(Authenticated):
 
     @staticmethod
     async def delete(
-        conn,  # Not used in gRPC implementation
+        conn: Any,  # Not used in gRPC implementation
         assistant_id: UUID | str,
         ctx: Any = None,
+        *,
+        delete_threads: bool = False,
     ) -> AsyncIterator[UUID]:  # type: ignore[return-value]
         """Delete assistant via gRPC."""
         # Handle auth filters
@@ -295,6 +297,7 @@ class Assistants(Authenticated):
         request = pb.DeleteAssistantRequest(
             assistant_id=str(assistant_id),
             filters=auth_filters,
+            delete_threads=delete_threads,
         )
 
         client = await get_shared_client()

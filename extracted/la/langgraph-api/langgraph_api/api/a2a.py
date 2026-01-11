@@ -10,6 +10,7 @@ The implementation currently supports JSON-RPC 2.0 transport only.
 Push notifications are not implemented.
 """
 
+import asyncio
 import functools
 import uuid
 from datetime import UTC, datetime
@@ -1018,10 +1019,17 @@ async def handle_tasks_get(
                 }
 
         try:
-            run_info = await client.runs.get(
-                thread_id=context_id,
-                run_id=task_id,
-                headers=request.headers,
+            # TODO: fix the N+1 query issue
+            run_info, thread_info = await asyncio.gather(
+                client.runs.get(
+                    thread_id=context_id,
+                    run_id=task_id,
+                    headers=request.headers,
+                ),
+                client.threads.get(
+                    thread_id=context_id,
+                    headers=request.headers,
+                ),
             )
         except Exception as e:
             error_response = _map_runs_get_error_to_rpc(e, task_id, context_id)
@@ -1030,18 +1038,6 @@ async def handle_tasks_get(
                 raise
             return error_response
 
-        assistant_id = run_info.get("assistant_id")
-        if assistant_id:
-            try:
-                await _get_assistant(assistant_id, request.headers)
-            except ValueError as e:
-                return {
-                    "error": {
-                        "code": ERROR_CODE_INVALID_PARAMS,
-                        "message": str(e),
-                    }
-                }
-
         lg_status = run_info.get("status", "unknown")
 
         if lg_status == "pending":
@@ -1049,8 +1045,16 @@ async def handle_tasks_get(
         elif lg_status == "running":
             a2a_state = "working"
         elif lg_status == "success":
-            a2a_state = "completed"
-        elif lg_status == "interrupted":
+            # Hack hack: if the thread **at present** is interrupted, assume
+            # the run also is interrupted
+            if thread_info.get("status") == "interrupted":
+                a2a_state = "input-required"
+            else:
+                # Inspect whether there are next tasks
+                a2a_state = "completed"
+        elif (
+            lg_status == "interrupted"
+        ):  # Note that this is if you interrupt FROM the outside (i.e., with double texting)
             a2a_state = "input-required"
         elif lg_status in ["error", "timeout"]:
             a2a_state = "failed"

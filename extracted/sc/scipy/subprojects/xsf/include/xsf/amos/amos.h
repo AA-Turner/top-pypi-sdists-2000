@@ -4132,7 +4132,7 @@ namespace amos {
                 continue;
             }
             cs = -zr + std::log(s1);
-            cs = (exp(std::real(cs)) / tol) * (cos(std::imag(cs)) + sin(std::imag(cs) * std::complex<double>(0, 1)));
+            cs = (exp(std::real(cs)) / tol) * std::complex<double>(cos(std::imag(cs)), sin(std::imag(cs)));
             if (!uchk(cs, *ascle, tol)) {
                 y[i - 1] = cs;
                 nz -= 1;
@@ -5473,7 +5473,7 @@ namespace amos {
         std::complex<double> cfn, ck, crsc, cs, cscl, csgn, cspn, c1, c2, rz, s1, s2, zr, phid, zeta1d = 0.0,
                                                                                                 zeta2d = 0.0, sumd;
         double ang, aphi, asc, ascle, c2i, c2m, c2r, fmr, fn, fnf, rs1, sgn, x;
-        int i, ib, iflag = 0, ifn, il, inu, iuf, k, kdflg, kflag, kk, m, nw, nz, j, jc, ipard, initd, ic;
+        int i, ib, iflag = 0, ifn, il, inu, iuf, k, kdflg, kflag, kk, m, nw, nz, j, jc, ipard, initd = 0, ic;
 
         cscl = 1.0 / tol;
         crsc = tol;

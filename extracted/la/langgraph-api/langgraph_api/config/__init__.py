@@ -101,6 +101,9 @@ GRPC_CLIENT_MAX_SEND_MSG_BYTES = env(
 JSON_THREAD_POOL_MINIMUM_SIZE_BYTES = 100 * 1024  # 100 KB
 
 HTTP_CONFIG = env("LANGGRAPH_HTTP", cast=_parse.parse_schema(HttpConfig), default=None)
+MCP_ENABLED = HTTP_CONFIG is None or not HTTP_CONFIG.get("disable_mcp")
+A2A_ENABLED = HTTP_CONFIG is None or not HTTP_CONFIG.get("disable_a2a")
+WEBHOOKS_ENABLED = HTTP_CONFIG and HTTP_CONFIG.get("disable_webhooks")
 STORE_CONFIG = env(
     "LANGGRAPH_STORE", cast=_parse.parse_schema(StoreConfig), default=None
 )

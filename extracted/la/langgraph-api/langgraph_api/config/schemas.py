@@ -80,6 +80,8 @@ class HttpConfig(TypedDict, total=False):
     """Disable /ui routes"""
     disable_mcp: bool
     """Disable /mcp routes"""
+    disable_a2a: bool
+    """Disable /a2a routes"""
     mount_prefix: str
     """Prefix for mounted routes. E.g., "/my-deployment/api"."""
     configurable_headers: ConfigurableHeaders | None

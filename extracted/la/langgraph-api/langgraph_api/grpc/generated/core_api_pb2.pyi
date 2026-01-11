@@ -263,12 +263,14 @@ class PatchAssistantRequest(_message.Message):
     def __init__(self, assistant_id: _Optional[str] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., graph_id: _Optional[str] = ..., config: _Optional[_Union[_engine_common_pb2.EngineRunnableConfig, _Mapping]] = ..., context_json: _Optional[bytes] = ..., name: _Optional[str] = ..., description: _Optional[str] = ..., metadata_json: _Optional[bytes] = ...) -> None: ...
 
 class DeleteAssistantRequest(_message.Message):
-    __slots__ = ("assistant_id", "filters")
+    __slots__ = ("assistant_id", "filters", "delete_threads")
     ASSISTANT_ID_FIELD_NUMBER: _ClassVar[int]
     FILTERS_FIELD_NUMBER: _ClassVar[int]
+    DELETE_THREADS_FIELD_NUMBER: _ClassVar[int]
     assistant_id: str
     filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
-    def __init__(self, assistant_id: _Optional[str] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ...) -> None: ...
+    delete_threads: bool
+    def __init__(self, assistant_id: _Optional[str] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., delete_threads: bool = ...) -> None: ...
 
 class DeleteAssistantsResponse(_message.Message):
     __slots__ = ("assistant_ids",)

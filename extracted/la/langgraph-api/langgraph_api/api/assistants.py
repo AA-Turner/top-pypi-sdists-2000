@@ -483,11 +483,21 @@ async def patch_assistant(
 
 @retry_db
 async def delete_assistant(request: ApiRequest) -> Response:
-    """Delete an assistant by ID."""
+    """Delete an assistant by ID.
+
+    Query params:
+        delete_threads: If "true", delete all threads where
+            metadata.assistant_id matches this assistant.
+    """
     assistant_id = request.path_params["assistant_id"]
     validate_uuid(assistant_id, "Invalid assistant ID: must be a UUID")
-    async with connect() as conn:
-        aid = await CrudAssistants.delete(conn, assistant_id)
+    delete_threads = request.query_params.get("delete_threads", "").lower() == "true"
+
+    aid = await CrudAssistants.delete(
+        None,
+        assistant_id,
+        delete_threads=delete_threads,
+    )
     await fetchone(aid)
     return Response(status_code=204)
 
