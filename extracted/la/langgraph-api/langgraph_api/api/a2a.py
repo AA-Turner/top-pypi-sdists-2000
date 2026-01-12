@@ -1152,6 +1152,7 @@ async def handle_tasks_cancel(
 # ============================================================================
 
 
+# TODO: add routes for /a2a/agents/{id}/card
 async def generate_agent_card(request: ApiRequest, assistant_id: str) -> dict[str, Any]:
     """Generate A2A Agent Card for a specific assistant.
 

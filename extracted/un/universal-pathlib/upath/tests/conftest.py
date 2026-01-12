@@ -238,9 +238,19 @@ def docker_gcs():
         pytest.skip("docker not installed")
 
     container = "gcsfs_test"
-    cmd = (
-        "docker run -d -p 4443:4443 --name gcsfs_test fsouza/fake-gcs-server:latest -scheme "  # noqa: E501
-        "http -public-host http://localhost:4443 -external-url http://localhost:4443"  # noqa: E501
+    cmd = " ".join(
+        [
+            "docker",
+            "run",
+            "-d",
+            "-p 4443:4443",
+            "--name gcsfs_test",
+            "fsouza/fake-gcs-server:latest",
+            "-scheme http",
+            "-public-host http://localhost:4443",
+            "-external-url http://localhost:4443",
+            "-backend memory",
+        ]
     )
     stop_docker(container)
     subprocess.check_output(shlex.split(cmd))
@@ -286,7 +296,7 @@ def http_server(tmp_path_factory):
     requests = pytest.importorskip("requests")
     pytest.importorskip("http.server")
     proc = subprocess.Popen(
-        shlex.split(f"python -m http.server --directory {http_tempdir} 18080")
+        shlex.split(f"{sys.executable} -m http.server --directory {http_tempdir} 18080")
     )
     try:
         url = "http://127.0.0.1:18080/folder"
@@ -385,8 +395,8 @@ def docker_azurite(azurite_credentials):
     image = "mcr.microsoft.com/azure-storage/azurite"
     container_name = "azure_test"
     cmd = (
-        f"docker run --rm -d -p {AZURITE_PORT}:10000 --name {container_name} {image}"  # noqa: E501
-        " azurite-blob --loose --blobHost 0.0.0.0"  # noqa: E501
+        f"docker run --rm -d -p {AZURITE_PORT}:10000 --name {container_name} {image}:latest"  # noqa: E501
+        " azurite-blob --loose --blobHost 0.0.0.0 --skipApiVersionCheck"  # noqa: E501
     )
     url = f"http://localhost:{AZURITE_PORT}"
 
@@ -585,12 +595,16 @@ def mock_hf_api(pathlib_base, monkeypatch, hf_test_repo):  # noqa: C901
     hf_file_system = pytest.importorskip(
         "huggingface_hub.hf_file_system", reason="hf tests require huggingface_hub"
     )
+    httpx = pytest.importorskip("httpx")
 
     class MockedHfApi(huggingface_hub.HfApi):
 
         def repo_info(self, repo_id, *args, repo_type=None, **kwargs):
             if repo_id != hf_test_repo:
-                raise huggingface_hub.errors.RepositoryNotFoundError(repo_id)
+                raise huggingface_hub.errors.RepositoryNotFoundError(
+                    repo_id,
+                    response=httpx.Response(404, request=...),
+                )
             elif repo_type is None or repo_type == "model":
                 return huggingface_hub.hf_api.ModelInfo(id=repo_id)
             elif repo_type == "dataset":
@@ -602,7 +616,10 @@ def mock_hf_api(pathlib_base, monkeypatch, hf_test_repo):  # noqa: C901
 
         def get_paths_info(self, repo_id, paths, *args, **kwargs):
             if repo_id != hf_test_repo:
-                raise huggingface_hub.errors.RepositoryNotFoundError(repo_id)
+                raise huggingface_hub.errors.RepositoryNotFoundError(
+                    repo_id,
+                    response=httpx.Response(404, request=...),
+                )
             paths_info = []
             for path in paths:
                 if path:
@@ -628,7 +645,9 @@ def mock_hf_api(pathlib_base, monkeypatch, hf_test_repo):  # noqa: C901
             self, repo_id, path_in_repo, *args, recursive=False, **kwargs
         ):
             if repo_id != hf_test_repo:
-                raise huggingface_hub.errors.RepositoryNotFoundError(repo_id)
+                raise huggingface_hub.errors.RepositoryNotFoundError(
+                    repo_id, response=httpx.Response(404, request=...)
+                )
             pathlib_dir = pathlib_base / path_in_repo if path_in_repo else pathlib_base
             for path in pathlib_dir.rglob("*") if recursive else pathlib_dir.glob("*"):
                 if path.is_file():

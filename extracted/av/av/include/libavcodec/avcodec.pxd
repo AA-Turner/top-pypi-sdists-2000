@@ -75,6 +75,13 @@ cdef extern from "libavcodec/avcodec.h" nogil:
     cdef char* avcodec_configuration()
     cdef char* avcodec_license()
 
+    AVPixelFormat avcodec_find_best_pix_fmt_of_list(
+        const AVPixelFormat *pix_fmt_list,
+        AVPixelFormat src_pix_fmt,
+        int has_alpha,
+        int *loss_ptr,
+    )
+
     cdef size_t AV_INPUT_BUFFER_PADDING_SIZE
     cdef int64_t AV_NOPTS_VALUE
 
@@ -289,6 +296,10 @@ cdef extern from "libavcodec/avcodec.h" nogil:
         int extradata_size
         uint8_t *extradata
 
+        # Subtitle header (ASS/SSA format for text subtitles)
+        uint8_t *subtitle_header
+        int subtitle_header_size
+
         int delay
 
         AVCodec *codec
@@ -325,8 +336,6 @@ cdef extern from "libavcodec/avcodec.h" nogil:
         AVBufferRef *hw_device_ctx
         AVPixelFormat (*get_format)(AVCodecContext *s, const AVPixelFormat *fmt)
 
-        # User Data
-        void *opaque
 
     cdef AVCodecContext* avcodec_alloc_context3(AVCodec *codec)
     cdef void avcodec_free_context(AVCodecContext **ctx)

@@ -132,6 +132,7 @@ class WrappedFileSystemFlavour(UPathParser):  # (pathlib_abc.FlavourBase)
             "https",
         },
         "root_marker_override": {
+            "smb": "/",
             "ssh": "/",
             "sftp": "/",
         },
@@ -253,7 +254,7 @@ class WrappedFileSystemFlavour(UPathParser):  # (pathlib_abc.FlavourBase)
 
     def strip_protocol(self, pth: JoinablePathLike) -> str:
         pth = self.stringify_path(pth)
-        return self._spec._strip_protocol(pth)
+        return self._spec._strip_protocol(pth) or self.root_marker
 
     def get_kwargs_from_url(self, url: JoinablePathLike) -> dict[str, Any]:
         # NOTE: the public variant is _from_url not _from_urls
@@ -274,7 +275,7 @@ class WrappedFileSystemFlavour(UPathParser):  # (pathlib_abc.FlavourBase)
 
     @property
     def altsep(self) -> str | None:  # type: ignore[override]
-        return None
+        return getattr(self._spec, "altsep", None)
 
     def isabs(self, path: JoinablePathLike) -> bool:
         path = self.strip_protocol(path)
@@ -317,6 +318,9 @@ class WrappedFileSystemFlavour(UPathParser):  # (pathlib_abc.FlavourBase)
             tail = stripped_path[1:]
         elif head:
             tail = stripped_path[len(head) + 1 :]
+        elif self.netloc_is_anchor:  # and not head
+            head = stripped_path
+            tail = ""
         else:
             tail = stripped_path
         if (

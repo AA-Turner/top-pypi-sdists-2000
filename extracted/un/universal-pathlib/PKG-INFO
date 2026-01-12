@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: universal_pathlib
-Version: 0.3.7
+Version: 0.3.8
 Summary: pathlib api extended to use fsspec backends
 Author-email: Andrew Fulton <andrewfulton9@gmail.com>
 Maintainer: Andreas Poehlmann, Norman Rzepka

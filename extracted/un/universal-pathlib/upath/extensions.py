@@ -16,6 +16,7 @@ from typing import overload
 from urllib.parse import SplitResult
 
 from fsspec import AbstractFileSystem
+from pathlib_abc import vfspath
 
 from upath._chain import Chain
 from upath._chain import ChainSegment
@@ -160,6 +161,8 @@ class ProxyUPath:
         target: ReadablePathLike,
         target_is_directory: bool = False,
     ) -> None:
+        if not isinstance(target, str):
+            target = vfspath(target)
         self.__wrapped__.symlink_to(target, target_is_directory=target_is_directory)
 
     def mkdir(
@@ -428,9 +431,13 @@ class ProxyUPath:
         )
 
     def is_relative_to(self, other, /, *_deprecated) -> bool:  # type: ignore[override]
+        if not isinstance(other, str):
+            other = vfspath(other)
         return self.__wrapped__.is_relative_to(other, *_deprecated)
 
     def hardlink_to(self, target: ReadablePathLike) -> None:
+        if not isinstance(target, str):
+            target = vfspath(target)
         return self.__wrapped__.hardlink_to(target)
 
     def match(self, pattern: str, *, case_sensitive: bool | None = None) -> bool:

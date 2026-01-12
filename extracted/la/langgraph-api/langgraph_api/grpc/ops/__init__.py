@@ -170,17 +170,37 @@ def _filters_to_proto(filters: dict[str, Any] | None) -> list[pb.AuthFilter]:
         auth_filter = pb.AuthFilter()
 
         if key == "$or":
-            # Recursively convert each filter and flatten the results
+            # Recursively convert each filter, wrapping multi-filter branches in AND
             nested_filters = []
             for filter_dict in filter_value:
-                nested_filters.extend(_filters_to_proto(filter_dict))
+                branch_filters = _filters_to_proto(filter_dict)
+                if len(branch_filters) == 1:
+                    # Single filter, add directly
+                    nested_filters.append(branch_filters[0])
+                else:
+                    # Multiple filters in this branch, wrap in AND
+                    and_filter = pb.AuthFilter()
+                    and_filter.and_filter.CopyFrom(
+                        pb.AndAuthFilter(filters=branch_filters)
+                    )
+                    nested_filters.append(and_filter)
             auth_filter.or_filter.CopyFrom(pb.OrAuthFilter(filters=nested_filters))
             proto_filters.append(auth_filter)
         elif key == "$and":
-            # Recursively convert each filter and flatten the results
+            # Recursively convert each filter, wrapping multi-filter branches in AND
             nested_filters = []
             for filter_dict in filter_value:
-                nested_filters.extend(_filters_to_proto(filter_dict))
+                branch_filters = _filters_to_proto(filter_dict)
+                if len(branch_filters) == 1:
+                    # Single filter, add directly
+                    nested_filters.append(branch_filters[0])
+                else:
+                    # Multiple filters in this branch, wrap in AND
+                    and_filter = pb.AuthFilter()
+                    and_filter.and_filter.CopyFrom(
+                        pb.AndAuthFilter(filters=branch_filters)
+                    )
+                    nested_filters.append(and_filter)
             auth_filter.and_filter.CopyFrom(pb.AndAuthFilter(filters=nested_filters))
             proto_filters.append(auth_filter)
         else:

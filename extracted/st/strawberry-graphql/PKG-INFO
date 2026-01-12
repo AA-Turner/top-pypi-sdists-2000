@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: strawberry-graphql
-Version: 0.288.3
+Version: 0.288.4
 Summary: A library for creating GraphQL APIs
 License: MIT
 License-File: LICENSE
@@ -31,9 +31,9 @@ Provides-Extra: quart
 Provides-Extra: sanic
 Requires-Dist: Django (>=3.2) ; extra == "django"
 Requires-Dist: aiohttp (>=3.7.4.post0,<4) ; extra == "aiohttp"
-Requires-Dist: asgiref (>=3.2,<4.0) ; extra == "channels"
-Requires-Dist: asgiref (>=3.2,<4.0) ; extra == "django"
-Requires-Dist: chalice (>=1.22,<2.0) ; extra == "chalice"
+Requires-Dist: asgiref (>=3.2) ; extra == "channels"
+Requires-Dist: asgiref (>=3.2) ; extra == "django"
+Requires-Dist: chalice (>=1.22) ; extra == "chalice"
 Requires-Dist: channels (>=3.0.5) ; extra == "channels"
 Requires-Dist: cross-web (>=0.4.0)
 Requires-Dist: fastapi (>=0.65.2) ; extra == "fastapi"
@@ -47,8 +47,8 @@ Requires-Dist: opentelemetry-api (<2) ; extra == "opentelemetry"
 Requires-Dist: opentelemetry-sdk (<2) ; extra == "opentelemetry"
 Requires-Dist: packaging (>=23)
 Requires-Dist: pydantic (>1.6.1) ; extra == "pydantic"
+Requires-Dist: pygments (>=2.3) ; extra == "cli"
 Requires-Dist: pygments (>=2.3) ; extra == "debug-server"
-Requires-Dist: pygments (>=2.3,<3.0) ; extra == "cli"
 Requires-Dist: pyinstrument (>=4.0.0) ; extra == "pyinstrument"
 Requires-Dist: python-dateutil (>=2.7)
 Requires-Dist: python-multipart (>=0.0.7) ; extra == "asgi"
