@@ -23,6 +23,7 @@ import structlog
 from langgraph.errors import EmptyInputError, InvalidUpdateError
 from langgraph_sdk.client import configure_loopback_transports
 from starlette.applications import Starlette
+from starlette.exceptions import HTTPException
 from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
 from starlette.routing import BaseRoute, Mount
@@ -38,6 +39,7 @@ from langgraph_api.api import (
 )
 from langgraph_api.api.openapi import set_custom_spec
 from langgraph_api.errors import (
+    http_exception_handler,
     overloaded_error_handler,
     validation_error_handler,
     value_error_handler,
@@ -95,6 +97,7 @@ global_middleware.extend(
     ]
 )
 exception_handlers = {
+    HTTPException: http_exception_handler,
     ValueError: value_error_handler,
     InvalidUpdateError: value_error_handler,
     EmptyInputError: value_error_handler,
@@ -252,7 +255,7 @@ configure_loopback_transports(app)
 if config.MOUNT_PREFIX:
     from starlette.routing import Route
 
-    from langgraph_api.api import ok
+    from langgraph_api.api import meta_metrics, ok
 
     prefix = config.MOUNT_PREFIX
     if not prefix.startswith("/") or prefix.endswith("/"):
@@ -261,8 +264,6 @@ if config.MOUNT_PREFIX:
             f"Valid examples: '/my-api', '/v1', '/api/v1'.\nInvalid examples: 'api/', '/api/'"
         )
     logger.info(f"Mounting routes at prefix: {prefix}")
-    plen = len(prefix)
-    rplen = len(prefix.encode("utf-8"))
 
     class ASGIBypassMiddleware:
         def __init__(self, app: typing.Any, **kwargs):
@@ -285,6 +286,7 @@ if config.MOUNT_PREFIX:
         routes=[
             Route("/", ok, methods=["GET"]),
             Route("/ok", ok, methods=["GET"]),
+            Route("/metrics", meta_metrics, methods=["GET"]),
             Mount(prefix, app=app),
         ],
         lifespan=app.router.lifespan_context,

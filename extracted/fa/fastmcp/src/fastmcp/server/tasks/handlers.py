@@ -56,6 +56,7 @@ async def handle_tool_as_task(
     ctx = get_context()
     session_id = ctx.session_id
 
+    # Get Docket from ContextVar (set by Context.__aenter__ at request time)
     docket = _current_docket.get()
     if docket is None:
         raise McpError(
@@ -72,13 +73,15 @@ async def handle_tool_as_task(
     tool = await server.get_tool(tool_name)
 
     # Store task key mapping and creation timestamp in Redis for protocol handlers
-    redis_key = f"fastmcp:task:{session_id}:{server_task_id}"
-    created_at_key = f"fastmcp:task:{session_id}:{server_task_id}:created_at"
+    task_meta_key = docket.key(f"fastmcp:task:{session_id}:{server_task_id}")
+    created_at_key = docket.key(
+        f"fastmcp:task:{session_id}:{server_task_id}:created_at"
+    )
     ttl_seconds = int(
         docket.execution_ttl.total_seconds() + TASK_MAPPING_TTL_BUFFER_SECONDS
     )
     async with docket.redis() as redis:
-        await redis.set(redis_key, task_key, ex=ttl_seconds)
+        await redis.set(task_meta_key, task_key, ex=ttl_seconds)
         await redis.set(created_at_key, created_at, ex=ttl_seconds)
 
     # Send notifications/tasks/created per SEP-1686 (mandatory)
@@ -165,6 +168,7 @@ async def handle_prompt_as_task(
     ctx = get_context()
     session_id = ctx.session_id
 
+    # Get Docket from ContextVar (set by Context.__aenter__ at request time)
     docket = _current_docket.get()
     if docket is None:
         raise McpError(
@@ -181,13 +185,15 @@ async def handle_prompt_as_task(
     prompt = await server.get_prompt(prompt_name)
 
     # Store task key mapping and creation timestamp in Redis for protocol handlers
-    redis_key = f"fastmcp:task:{session_id}:{server_task_id}"
-    created_at_key = f"fastmcp:task:{session_id}:{server_task_id}:created_at"
+    task_meta_key = docket.key(f"fastmcp:task:{session_id}:{server_task_id}")
+    created_at_key = docket.key(
+        f"fastmcp:task:{session_id}:{server_task_id}:created_at"
+    )
     ttl_seconds = int(
         docket.execution_ttl.total_seconds() + TASK_MAPPING_TTL_BUFFER_SECONDS
     )
     async with docket.redis() as redis:
-        await redis.set(redis_key, task_key, ex=ttl_seconds)
+        await redis.set(task_meta_key, task_key, ex=ttl_seconds)
         await redis.set(created_at_key, created_at, ex=ttl_seconds)
 
     # Send notifications/tasks/created per SEP-1686 (mandatory)
@@ -272,12 +278,13 @@ async def handle_resource_as_task(
     ctx = get_context()
     session_id = ctx.session_id
 
+    # Get Docket from ContextVar (set by Context.__aenter__ at request time)
     docket = _current_docket.get()
     if docket is None:
         raise McpError(
             ErrorData(
                 code=INTERNAL_ERROR,
-                message="Background tasks require Docket",
+                message="Background tasks require a running FastMCP server context",
             )
         )
 
@@ -285,13 +292,15 @@ async def handle_resource_as_task(
     task_key = build_task_key(session_id, server_task_id, "resource", str(uri))
 
     # Store task key mapping and creation timestamp in Redis for protocol handlers
-    redis_key = f"fastmcp:task:{session_id}:{server_task_id}"
-    created_at_key = f"fastmcp:task:{session_id}:{server_task_id}:created_at"
+    task_meta_key = docket.key(f"fastmcp:task:{session_id}:{server_task_id}")
+    created_at_key = docket.key(
+        f"fastmcp:task:{session_id}:{server_task_id}:created_at"
+    )
     ttl_seconds = int(
         docket.execution_ttl.total_seconds() + TASK_MAPPING_TTL_BUFFER_SECONDS
     )
     async with docket.redis() as redis:
-        await redis.set(redis_key, task_key, ex=ttl_seconds)
+        await redis.set(task_meta_key, task_key, ex=ttl_seconds)
         await redis.set(created_at_key, created_at, ex=ttl_seconds)
 
     # Send notifications/tasks/created per SEP-1686 (mandatory)

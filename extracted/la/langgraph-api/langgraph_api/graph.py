@@ -671,7 +671,15 @@ def resolve_embeddings(index_config: dict) -> "Embeddings":
     from langchain_core.embeddings import Embeddings
     from langgraph.store.base import ensure_embeddings
 
-    embed: str = index_config["embed"]
+    embed = index_config["embed"]
+    if isinstance(embed, Embeddings):
+        return embed
+    if callable(embed):
+        return ensure_embeddings(embed)
+    if not isinstance(embed, str):
+        raise ValueError(
+            f"Embeddings config must be a string or callable, got: {type(embed).__name__}"
+        )
     if ".py:" in embed:
         module_name, function = embed.rsplit(":", 1)
         module_name = module_name.rstrip(":")
@@ -738,8 +746,6 @@ def resolve_embeddings(index_config: dict) -> "Embeddings":
                 " or specify 'embed' as a path to a "
                 "variable in a Python file instead."
             )
-        if isinstance(embed, Embeddings):
-            return embed
         # Capture warnings
         with warnings.catch_warnings():
             warnings.filterwarnings(

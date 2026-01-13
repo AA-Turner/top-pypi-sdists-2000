@@ -16,7 +16,17 @@ from zoneinfo import ZoneInfo
 
 
 def load_capacity_results(results_dir: str) -> list[dict]:
-    """Load all capacity summary JSON files and extract metadata from filenames."""
+    """Load all capacity summary JSON files.
+
+    File format:
+    {
+        "clusterName": "dr-small",
+        "workloads": {
+            "parallel-small": {"maxSuccessfulTarget": 10, "avgExecutionLatencySeconds": 1.5},
+            "parallel-tiny": {"maxSuccessfulTarget": 20, "avgExecutionLatencySeconds": 0.8}
+        }
+    }
+    """
     results = []
 
     results_path = Path(results_dir)
@@ -28,21 +38,19 @@ def load_capacity_results(results_dir: str) -> list[dict]:
             with open(f) as fp:
                 data = json.load(fp)
 
-            # Extract cluster_name and workload_name from filename
-            # Format: {cluster_name}_{workload_name}_capacity_summary.json
-            # Example: dr-small_sequential-small_capacity_summary.json
-            name_part = f.stem.replace("_capacity_summary", "")
-            parts = name_part.split("_", 1)  # Split only on first underscore
-            if len(parts) >= 2:
-                cluster_name = parts[0]
-                workload_name = parts[1]
+            cluster_name = data.get("clusterName")
+            workloads = data.get("workloads", {})
 
+            if not cluster_name or not workloads:
+                continue
+
+            for workload_name, workload_data in workloads.items():
                 results.append(
                     {
                         "clusterName": cluster_name,
                         "workloadName": workload_name,
-                        "maxSuccessfulTarget": data.get("maxSuccessfulTarget"),
-                        "avgExecutionLatencySeconds": data.get(
+                        "maxSuccessfulTarget": workload_data.get("maxSuccessfulTarget"),
+                        "avgExecutionLatencySeconds": workload_data.get(
                             "avgExecutionLatencySeconds"
                         ),
                     }
@@ -86,7 +94,7 @@ def generate_capacity_table(results: list[dict]) -> tuple[str, bool]:
     lines = ["*📊 Capacity Benchmark Results*\n"]
     has_missing_data = False
 
-    sizes = ["small", "medium", "large"]
+    sizes = ["1-node", "3-node", "5-node", "7-node", "10-node", "15-node", "20-node"]
 
     for workload in sorted(by_workload.keys()):
         clusters_data = by_workload[workload]

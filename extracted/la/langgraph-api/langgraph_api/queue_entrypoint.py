@@ -40,8 +40,9 @@ async def health_and_metrics_server():
     from starlette.applications import Starlette
     from starlette.requests import Request
     from starlette.responses import JSONResponse, PlainTextResponse
-    from starlette.routing import Route
+    from starlette.routing import Mount, Route
 
+    from langgraph_api import config as lc_config
     from langgraph_api.api.meta import METRICS_FORMATS
 
     port = int(os.getenv("PORT", "8080"))
@@ -101,12 +102,17 @@ async def health_and_metrics_server():
                 media_type="text/plain; version=0.0.4; charset=utf-8",
             )
 
-    app = Starlette(
-        routes=[
-            Route("/ok", health_endpoint),
-            Route("/metrics", metrics_endpoint),
-        ]
-    )
+    routes = [
+        Route("/ok", health_endpoint),
+        Route("/metrics", metrics_endpoint),
+    ]
+    app = Starlette(routes=routes)
+    if lc_config.MOUNT_PREFIX:
+        app = Starlette(
+            routes=[*routes, Mount(lc_config.MOUNT_PREFIX, app=app)],
+            lifespan=app.router.lifespan_context,
+            exception_handlers=app.exception_handlers,
+        )
 
     try:
         _ensure_port_available(host, port)

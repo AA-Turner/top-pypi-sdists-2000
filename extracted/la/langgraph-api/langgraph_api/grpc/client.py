@@ -1,7 +1,7 @@
 """gRPC client wrapper for LangGraph persistence services."""
 
 import asyncio
-import os
+import threading
 import time
 
 import structlog
@@ -21,8 +21,9 @@ from .generated.core_api_pb2_grpc import (
 logger = structlog.stdlib.get_logger(__name__)
 
 
-# Shared global client pool
+# Shared gRPC client pools (main thread + thread-local for isolated loops).
 _client_pool: "GrpcClientPool | None" = None
+_thread_local = threading.local()
 
 
 GRPC_HEALTHCHECK_TIMEOUT = 5.0
@@ -42,9 +43,7 @@ class GrpcClient:
         Args:
             server_address: The gRPC server address (default: localhost:50051)
         """
-        self.server_address = server_address or os.getenv(
-            "GRPC_SERVER_ADDRESS", "localhost:50051"
-        )
+        self.server_address = server_address or config.GRPC_SERVER_ADDRESS
         self._channel: aio.Channel | None = None
         self._assistants_stub: AssistantsStub | None = None
         self._runs_stub: RunsStub | None = None
@@ -229,20 +228,28 @@ async def get_shared_client() -> GrpcClient:
 
     Uses a pool of channels for better performance under high concurrency.
     Each channel is a separate TCP connection that can handle ~100-200
-    concurrent streams effectively.
+    concurrent streams effectively. Pools are scoped per thread/loop to
+    avoid cross-loop gRPC channel usage.
 
     Returns:
         A GrpcClient instance from the pool
     """
+    if threading.current_thread() is not threading.main_thread():
+        pool = getattr(_thread_local, "grpc_pool", None)
+        if pool is None:
+            pool = GrpcClientPool(
+                pool_size=1,
+                server_address=config.GRPC_SERVER_ADDRESS,
+            )
+            _thread_local.grpc_pool = pool
+        return await pool.get_client()
+
     global _client_pool
     if _client_pool is None:
-        from langgraph_api import config
-
         _client_pool = GrpcClientPool(
             pool_size=config.GRPC_CLIENT_POOL_SIZE,
-            server_address=os.getenv("GRPC_SERVER_ADDRESS"),
+            server_address=config.GRPC_SERVER_ADDRESS,
         )
-
     return await _client_pool.get_client()
 
 
@@ -293,8 +300,14 @@ async def wait_until_grpc_ready(
 
 async def close_shared_client():
     """Close the shared gRPC client pool."""
-    global _client_pool
+    if threading.current_thread() is not threading.main_thread():
+        pool = getattr(_thread_local, "grpc_pool", None)
+        if pool is not None:
+            await pool.close()
+            delattr(_thread_local, "grpc_pool")
+        return
 
+    global _client_pool
     if _client_pool is not None:
         await _client_pool.close()
         _client_pool = None

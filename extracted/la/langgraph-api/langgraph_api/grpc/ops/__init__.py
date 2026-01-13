@@ -121,11 +121,19 @@ def _map_sort_order(sort_order: str | None) -> Any:
 
 def _handle_grpc_error(error: AioRpcError) -> None:
     """Handle gRPC errors and convert to appropriate exceptions."""
+    details: dict[str, Any] = {}
+    error_details = error.details()
+    if error_details is not None:
+        try:
+            details = orjson.loads(error_details)
+        except orjson.JSONDecodeError:
+            logger.exception("Failed to decode gRPC error details: %s", error_details)
+
     raise HTTPException(
         status_code=GRPC_STATUS_TO_HTTP_STATUS.get(
             error.code(), HTTPStatus.INTERNAL_SERVER_ERROR
         ),
-        detail=str(error.details()),
+        detail=orjson.dumps({"detail": details.get("message", "")}).decode(),
     )
 
 

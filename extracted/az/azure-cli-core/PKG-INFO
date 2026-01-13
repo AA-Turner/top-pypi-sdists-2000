@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: azure-cli-core
-Version: 2.81.0
+Version: 2.82.0
 Summary: Microsoft Azure Command-Line Tools Core Module
 Home-page: https://github.com/Azure/azure-cli
 Author: Microsoft Corporation
@@ -20,7 +20,7 @@ Requires-Python: >=3.10.0
 License-File: LICENSE.txt
 Requires-Dist: argcomplete~=3.5.2
 Requires-Dist: azure-cli-telemetry==1.1.0.*
-Requires-Dist: azure-core~=1.35.0
+Requires-Dist: azure-core~=1.37.0
 Requires-Dist: azure-mgmt-core<2,>=1.2.0
 Requires-Dist: cryptography
 Requires-Dist: distro; sys_platform == "linux"

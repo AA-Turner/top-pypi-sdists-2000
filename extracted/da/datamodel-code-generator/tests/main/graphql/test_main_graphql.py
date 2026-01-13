@@ -7,7 +7,13 @@ from typing import TYPE_CHECKING
 import black
 import pytest
 
-from tests.main.conftest import DEFAULT_VALUES_DATA_PATH, GRAPHQL_DATA_PATH, LEGACY_BLACK_SKIP, run_main_and_assert
+from tests.main.conftest import (
+    DEFAULT_VALUES_DATA_PATH,
+    EXPECTED_GRAPHQL_PATH,
+    GRAPHQL_DATA_PATH,
+    LEGACY_BLACK_SKIP,
+    run_main_and_assert,
+)
 from tests.main.graphql.conftest import assert_file_content
 
 if TYPE_CHECKING:
@@ -101,6 +107,40 @@ def test_main_use_default_kwarg(output_file: Path) -> None:
         assert_func=assert_file_content,
         expected_file="annotated_use_default_kwarg.py",
         extra_args=["--use-default-kwarg"],
+    )
+
+
+@pytest.mark.parametrize(
+    ("output_model", "expected_output"),
+    [
+        (
+            "pydantic.BaseModel",
+            "empty_list_default.py",
+        ),
+        (
+            "pydantic_v2.BaseModel",
+            "pydantic_v2_empty_list_default.py",
+        ),
+    ],
+)
+@pytest.mark.skipif(
+    black.__version__.split(".")[0] in {"19", "22"},
+    reason="Installed black doesn't support Python 3.12 target version",
+)
+def test_main_graphql_empty_list_default(output_model: str, expected_output: str, output_file: Path) -> None:
+    """Test GraphQL generation with empty list default values."""
+    run_main_and_assert(
+        input_path=GRAPHQL_DATA_PATH / "empty_list_default.graphql",
+        output_path=output_file,
+        assert_func=assert_file_content,
+        expected_file=EXPECTED_GRAPHQL_PATH / expected_output,
+        input_file_type="graphql",
+        extra_args=[
+            "--output-model-type",
+            output_model,
+            "--target-python-version",
+            "3.12",
+        ],
     )
 
 
@@ -777,6 +817,32 @@ def test_main_graphql_class_name_prefix(output_file: Path) -> None:
     )
 
 
+@LEGACY_BLACK_SKIP
+def test_main_graphql_union_class_name_prefix(output_file: Path) -> None:
+    """Test that union type members get class name prefix applied.
+
+    When using --class-name-prefix, the prefix should be applied to both
+    the union type name and all its member type references.
+
+    This test verifies fix for issue #2939.
+    """
+    run_main_and_assert(
+        input_path=GRAPHQL_DATA_PATH / "union_class_name_prefix.graphql",
+        output_path=output_file,
+        input_file_type="graphql",
+        assert_func=assert_file_content,
+        expected_file="union_class_name_prefix.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--class-name-prefix",
+            "Foo",
+            "--use-annotated",
+            "--snake-case-field",
+        ],
+    )
+
+
 def test_main_graphql_union_snake_case_field(output_file: Path) -> None:
     """Test that union type references are not converted to snake_case."""
     run_main_and_assert(
@@ -786,6 +852,32 @@ def test_main_graphql_union_snake_case_field(output_file: Path) -> None:
         assert_func=assert_file_content,
         expected_file="union_snake_case_field.py",
         extra_args=["--snake-case-field", "--output-model-type", "pydantic_v2.BaseModel"],
+    )
+
+
+@LEGACY_BLACK_SKIP
+def test_main_graphql_interface_mro(output_file: Path) -> None:
+    """Test that interface inheritance is ordered correctly for Python MRO.
+
+    When a class implements multiple interfaces where some interfaces extend others,
+    the base classes must be ordered so that subclasses come before their parent classes.
+    For example, if Notification implements Node, and a class implements both
+    Node and Notification, the order should be (Notification, Node) not (Node, Notification).
+
+    This test verifies fix for issue #2938.
+    """
+    run_main_and_assert(
+        input_path=GRAPHQL_DATA_PATH / "interface_mro.graphql",
+        output_path=output_file,
+        input_file_type="graphql",
+        assert_func=assert_file_content,
+        expected_file="interface_mro.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-annotated",
+            "--snake-case-field",
+        ],
     )
 
 

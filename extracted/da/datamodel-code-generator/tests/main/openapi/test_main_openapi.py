@@ -2808,6 +2808,7 @@ def test_main_openapi_empty_list_default(output_model: str, expected_output: str
         input_path=OPEN_API_DATA_PATH / "empty_list_default.yaml",
         output_path=output_file,
         expected_file=EXPECTED_OPENAPI_PATH / expected_output,
+        assert_func=assert_file_content,
         input_file_type="openapi",
         extra_args=[
             "--output-model-type",
@@ -4421,6 +4422,29 @@ def test_main_openapi_read_only_write_only_empty_base(output_file: Path) -> None
     )
 
 
+def test_main_openapi_read_only_write_only_ref_request_response(output_file: Path) -> None:
+    """Test readOnly/writeOnly with $ref in request-response mode (issue #2940).
+
+    When a schema references another schema via $ref:
+    - If the referenced schema generates variants, use the variant reference
+    - If the referenced schema would have no model (only readOnly/writeOnly fields),
+      force generation of the base model
+    """
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "read_only_write_only_ref_request_response.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="read_only_write_only_ref_request_response.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--read-only-write-only-model-type",
+            "request-response",
+        ],
+    )
+
+
 def test_main_openapi_dot_notation_inheritance(output_dir: Path) -> None:
     """Test dot notation in schema names with inheritance."""
     run_main_and_assert(
@@ -4915,4 +4939,28 @@ def test_main_openapi_deprecated_field(output_file: Path) -> None:
         assert_func=assert_file_content,
         expected_file="deprecated_field.py",
         extra_args=["--output-model-type", "pydantic_v2.BaseModel"],
+    )
+
+
+@SKIP_PYDANTIC_V1
+def test_main_openapi_allof_array_ref_no_duplicate_model(output_file: Path) -> None:
+    """Test allOf with array property referencing another schema (#2959).
+
+    When allOf merges an array property from parent (with generic items) and child
+    (with $ref items), the child's $ref should completely override the parent,
+    preventing duplicate model generation like 'Datum' class.
+    """
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "allof_array_ref_override.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="allof_array_ref_override.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-standard-collections",
+            "--use-union-operator",
+            "--use-schema-description",
+        ],
     )

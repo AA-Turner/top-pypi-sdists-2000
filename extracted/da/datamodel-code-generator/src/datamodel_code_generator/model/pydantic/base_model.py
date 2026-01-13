@@ -19,7 +19,7 @@ from datamodel_code_generator.model import (
     DataModelFieldBase,
 )
 from datamodel_code_generator.model._types import WrappedDefault
-from datamodel_code_generator.model.base import UNDEFINED
+from datamodel_code_generator.model.base import UNDEFINED, repr_set_sorted
 from datamodel_code_generator.model.pydantic.imports import (
     IMPORT_ANYURL,
     IMPORT_EXTRA,
@@ -91,6 +91,8 @@ class DataModelField(DataModelFieldBase):
     @property
     def field(self) -> str | None:
         """For backwards compatibility."""
+        if self.is_class_var:
+            return None
         result = str(self)
         if (
             self.use_default_kwarg
@@ -124,9 +126,22 @@ class DataModelField(DataModelFieldBase):
             return value
         return int(value)
 
-    def _get_default_as_pydantic_model(self) -> str | None:
+    def _get_default_as_pydantic_model(self) -> str | None:  # noqa: PLR0911, PLR0912
         if isinstance(self.default, WrappedDefault):
             return f"lambda :{self.default!r}"
+        if self.data_type.is_list and len(self.data_type.data_types) == 1:
+            data_type_child = self.data_type.data_types[0]
+            if (
+                data_type_child.reference
+                and isinstance(data_type_child.reference.source, BaseModelBase)
+                and isinstance(self.default, list)
+            ):
+                if not self.default:
+                    return STANDARD_LIST
+                return (  # pragma: no cover
+                    f"lambda :[{data_type_child.alias or data_type_child.reference.source.class_name}."
+                    f"{self._PARSE_METHOD}(v) for v in {self.default!r}]"
+                )
         for data_type in self.data_type.data_types or (self.data_type,):
             # TODO: Check nested data_types
             if data_type.is_dict:
@@ -218,7 +233,7 @@ class DataModelField(DataModelFieldBase):
             elif isinstance(discriminator, dict):  # pragma: no cover
                 data["discriminator"] = discriminator["propertyName"]
 
-        if self.required:
+        if self.required and not self.has_default:
             default_factory = None
         elif self.default is not UNDEFINED and self.default is not None and "default_factory" not in data:
             default_factory = self._get_default_as_pydantic_model()
@@ -247,20 +262,35 @@ class DataModelField(DataModelFieldBase):
 
         if self.use_annotated:
             field_arguments = self._process_annotated_field_arguments(field_arguments)
-        elif self.required:
+        elif self.required and not default_factory:
             field_arguments = ["...", *field_arguments]
         elif not default_factory:
-            from datamodel_code_generator.model.base import repr_set_sorted  # noqa: PLC0415
-
             default_repr = repr_set_sorted(self.default) if isinstance(self.default, set) else repr(self.default)
             field_arguments = [default_repr, *field_arguments]
+
+        if self.is_class_var:
+            if self.default is UNDEFINED:  # pragma: no cover
+                return ""
+            return repr_set_sorted(self.default) if isinstance(self.default, set) else repr(self.default)
 
         return f"Field({', '.join(field_arguments)})"
 
     @property
+    def is_class_var(self) -> bool:
+        """Check if this field is a ClassVar."""
+        return self.extras.get("x-is-classvar") is True
+
+    @property
+    def type_hint(self) -> str:
+        """Get the type hint including ClassVar if applicable."""
+        if self.is_class_var:
+            return f"ClassVar[{super().type_hint}]"
+        return super().type_hint
+
+    @property
     def annotated(self) -> str | None:
         """Get the Annotated type hint if use_annotated is enabled."""
-        if not self.use_annotated or not str(self):
+        if not self.use_annotated or not str(self) or self.is_class_var:
             return None
         return f"Annotated[{self.type_hint}, {self!s}]"
 

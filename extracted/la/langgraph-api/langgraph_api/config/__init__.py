@@ -95,6 +95,7 @@ GRPC_CLIENT_MAX_RECV_MSG_BYTES = env(
 GRPC_CLIENT_MAX_SEND_MSG_BYTES = env(
     "GRPC_CLIENT_MAX_SEND_MSG_BYTES", cast=int, default=300 * 1024 * 1024
 )
+GRPC_SERVER_ADDRESS = env("GRPC_SERVER_ADDRESS", cast=str, default="localhost:50051")
 
 # Minimum payload size to use the dedicated thread pool for JSON parsing.
 # (Otherwise, the payload is parsed directly in the event loop.)
@@ -111,6 +112,14 @@ STORE_CONFIG = env(
 MOUNT_PREFIX: str | None = env("MOUNT_PREFIX", cast=str, default=None) or (
     HTTP_CONFIG.get("mount_prefix") if HTTP_CONFIG else None
 )
+if MOUNT_PREFIX:
+    if not MOUNT_PREFIX.startswith("/"):
+        raise ValueError(
+            f"Invalid mount_prefix '{MOUNT_PREFIX}': Must start with '/'. "
+            f"Valid examples: '/my-api', '/v1', '/api/v1'.\nInvalid examples: 'api/', '/api/'"
+        )
+    if MOUNT_PREFIX.endswith("/"):
+        MOUNT_PREFIX = MOUNT_PREFIX[:-1]
 
 CORS_ALLOW_ORIGINS = env("CORS_ALLOW_ORIGINS", cast=CommaSeparatedStrings, default="*")
 CORS_CONFIG = env(

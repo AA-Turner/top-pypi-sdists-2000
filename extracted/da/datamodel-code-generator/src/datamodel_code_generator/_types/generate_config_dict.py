@@ -32,6 +32,7 @@ if TYPE_CHECKING:
         StrictTypes,
         TargetPydanticVersion,
         UnionMode,
+        VersionMode,
     )
     from datamodel_code_generator.format import DateClassType, DatetimeClassType, Formatter, PythonVersion
     from datamodel_code_generator.parser import LiteralType
@@ -112,6 +113,7 @@ class GenerateConfigDict(TypedDict, closed=True):
     use_operation_id_as_name: NotRequired[bool]
     use_unique_items_as_set: NotRequired[bool]
     use_tuple_for_fixed_items: NotRequired[bool]
+    use_closed_typed_dict: NotRequired[bool]
     allof_merge_mode: NotRequired[AllOfMergeMode]
     allof_class_hierarchy: NotRequired[AllOfClassHierarchy]
     http_headers: NotRequired[Sequence[tuple[str, str]] | None]
@@ -168,6 +170,8 @@ class GenerateConfigDict(TypedDict, closed=True):
     field_type_collision_strategy: NotRequired[FieldTypeCollisionStrategy | None]
     module_split_mode: NotRequired[ModuleSplitMode | None]
     default_value_overrides: NotRequired[Mapping[str, Any] | None]
+    schema_version: NotRequired[str | None]
+    schema_version_mode: NotRequired[VersionMode | None]
 
 
 class ValidatorDefinition(TypedDict):

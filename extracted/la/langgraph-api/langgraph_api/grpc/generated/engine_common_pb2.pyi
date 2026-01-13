@@ -289,10 +289,10 @@ class Runtime(_message.Message):
     def __init__(self, langgraph_context_json: _Optional[bytes] = ..., previous: _Optional[_Union[ChannelValue, _Mapping]] = ...) -> None: ...
 
 class Subgraph(_message.Message):
-    __slots__ = ("name",)
-    NAME_FIELD_NUMBER: _ClassVar[int]
-    name: str
-    def __init__(self, name: _Optional[str] = ...) -> None: ...
+    __slots__ = ("graph_id",)
+    GRAPH_ID_FIELD_NUMBER: _ClassVar[int]
+    graph_id: str
+    def __init__(self, graph_id: _Optional[str] = ...) -> None: ...
 
 class Task(_message.Message):
     __slots__ = ("name", "writes", "config", "triggers", "id", "task_path", "pending_writes", "stream_subgraphs", "subgraph")

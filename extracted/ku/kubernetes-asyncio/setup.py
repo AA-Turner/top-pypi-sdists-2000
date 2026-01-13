@@ -16,7 +16,7 @@ from setuptools import setup
 
 # Do not edit these constants. They will be updated automatically
 # by scripts/update-client.sh.
-CLIENT_VERSION = "34.3.2"
+CLIENT_VERSION = "34.3.3"
 PACKAGE_NAME = "kubernetes_asyncio"
 DEVELOPMENT_STATUS = "5 - Production/Stable"
 
@@ -46,7 +46,7 @@ setup(
         "OpenAPI",
         "Kubernetes"],
     install_requires=REQUIRES,
-    python_requires=">=3.8",
+    python_requires=">=3.10",
     tests_require=TESTS_REQUIRES,
     packages=[
         'kubernetes_asyncio',

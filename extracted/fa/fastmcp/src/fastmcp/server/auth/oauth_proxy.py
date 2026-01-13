@@ -1221,12 +1221,24 @@ class OAuthProxy(OAuthProvider):
         # - 1 year if no refresh token (likely API-key-style token like GitHub OAuth Apps)
         if "expires_in" in idp_tokens:
             expires_in = int(idp_tokens["expires_in"])
+            logger.debug(
+                "Access token TTL: %d seconds (from IdP expires_in)", expires_in
+            )
         elif self._fallback_access_token_expiry_seconds is not None:
             expires_in = self._fallback_access_token_expiry_seconds
+            logger.debug(
+                "Access token TTL: %d seconds (using configured fallback)", expires_in
+            )
         elif idp_tokens.get("refresh_token"):
             expires_in = DEFAULT_ACCESS_TOKEN_EXPIRY_SECONDS
+            logger.debug(
+                "Access token TTL: %d seconds (default, has refresh token)", expires_in
+            )
         else:
             expires_in = DEFAULT_ACCESS_TOKEN_EXPIRY_NO_REFRESH_SECONDS
+            logger.debug(
+                "Access token TTL: %d seconds (default, no refresh token)", expires_in
+            )
 
         # Calculate refresh token expiry if provided by upstream
         # Some providers include refresh_expires_in, some don't
@@ -1266,8 +1278,9 @@ class OAuthProxy(OAuthProvider):
         await self._upstream_token_store.put(
             key=upstream_token_id,
             value=upstream_token_set,
-            ttl=refresh_expires_in
-            or expires_in,  # Auto-expire when refresh token, or access token expires
+            ttl=max(
+                refresh_expires_in or 0, expires_in, 1
+            ),  # Keep until longest-lived token expires (min 1s for safety)
         )
         logger.debug("Stored encrypted upstream tokens (jti=%s)", access_jti[:8])
 
@@ -1467,10 +1480,21 @@ class OAuthProxy(OAuthProvider):
         # (user override still applies if set)
         if "expires_in" in token_response:
             new_expires_in = int(token_response["expires_in"])
+            logger.debug(
+                "Refreshed access token TTL: %d seconds (from IdP expires_in)",
+                new_expires_in,
+            )
         elif self._fallback_access_token_expiry_seconds is not None:
             new_expires_in = self._fallback_access_token_expiry_seconds
+            logger.debug(
+                "Refreshed access token TTL: %d seconds (using configured fallback)",
+                new_expires_in,
+            )
         else:
             new_expires_in = DEFAULT_ACCESS_TOKEN_EXPIRY_SECONDS
+            logger.debug(
+                "Refreshed access token TTL: %d seconds (default)", new_expires_in
+            )
         upstream_token_set.access_token = token_response["access_token"]
         upstream_token_set.expires_at = time.time() + new_expires_in
 
@@ -1504,15 +1528,18 @@ class OAuthProxy(OAuthProvider):
                 )
 
         upstream_token_set.raw_token_data = token_response
+        # Calculate refresh TTL for storage
+        refresh_ttl = new_refresh_expires_in or (
+            int(upstream_token_set.refresh_token_expires_at - time.time())
+            if upstream_token_set.refresh_token_expires_at
+            else 60 * 60 * 24 * 30  # Default to 30 days if unknown
+        )
         await self._upstream_token_store.put(
             key=upstream_token_set.upstream_token_id,
             value=upstream_token_set,
-            ttl=new_refresh_expires_in
-            or (
-                int(upstream_token_set.refresh_token_expires_at - time.time())
-                if upstream_token_set.refresh_token_expires_at
-                else 60 * 60 * 24 * 30  # Default to 30 days if unknown
-            ),  # Auto-expire when refresh token expires
+            ttl=max(
+                refresh_ttl, new_expires_in, 1
+            ),  # Keep until longest-lived token expires (min 1s for safety)
         )
 
         # Issue new minimal FastMCP access token (just a reference via JTI)
@@ -1549,7 +1576,7 @@ class OAuthProxy(OAuthProvider):
         )
 
         # Store new refresh token JTI mapping with aligned expiry
-        refresh_ttl = new_refresh_expires_in or 60 * 60 * 24 * 30
+        # (reuse refresh_ttl calculated above for upstream token store)
         await self._jti_mapping_store.put(
             key=new_refresh_jti,
             value=JTIMapping(
@@ -1622,7 +1649,10 @@ class OAuthProxy(OAuthProvider):
             # 2. Look up upstream token via JTI mapping
             jti_mapping = await self._jti_mapping_store.get(key=jti)
             if not jti_mapping:
-                logger.debug("JTI mapping not found: %s", jti)
+                logger.info(
+                    "JTI mapping not found (token may have expired): jti=%s...",
+                    jti[:16],
+                )
                 return None
 
             upstream_token_set = await self._upstream_token_store.get(
@@ -1864,6 +1894,11 @@ class OAuthProxy(OAuthProvider):
 
                 logger.debug(
                     f"Successfully exchanged IdP code for tokens (transaction: {txn_id}, PKCE: {bool(proxy_code_verifier)})"
+                )
+                logger.debug(
+                    "IdP token response: expires_in=%s, has_refresh_token=%s",
+                    idp_tokens.get("expires_in"),
+                    "refresh_token" in idp_tokens,
                 )
 
             except Exception as e:

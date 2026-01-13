@@ -14,6 +14,7 @@ from langgraph_api.config import (
     LANGGRAPH_CLOUD_LICENSE_KEY,
     LANGSMITH_AUTH_ENDPOINT,
     LANGSMITH_CONTROL_PLANE_API_KEY,
+    LANGSMITH_LICENSE_REQUIRED_CLAIMS,
     USES_CUSTOM_APP,
     USES_CUSTOM_AUTH,
     USES_INDEXING,
@@ -135,6 +136,20 @@ async def metadata_loop() -> None:
         and not LANGSMITH_CONTROL_PLANE_API_KEY
     ):
         logger.info("Running in air-gapped mode, skipping metadata loop")
+        return
+
+    # TODO: This is a temporary "hack". A user could inadvertently include
+    # 'agent_builder_enabled' in LANGSMITH_LICENSE_REQUIRED_CLAIMS for a
+    # non-Agent Builder self-hosted deployment. If the 'agent_builder_enabled'
+    # entitlement is enabled, then this would bypass the metadata loop.
+    #
+    # If the 'agent_builder_enabled' entitlement is disabled, then this is ok
+    # because the license key validation would fail and the app would not start.
+    if (
+        LANGGRAPH_CLOUD_LICENSE_KEY
+        and "agent_builder_enabled" in LANGSMITH_LICENSE_REQUIRED_CLAIMS
+    ):
+        logger.info("Skipping metadata loop for self-hosted Agent Builder")
         return
 
     logger.info("Starting metadata loop", endpoint=LANGCHAIN_METADATA_ENDPOINT)

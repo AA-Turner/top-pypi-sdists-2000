@@ -28,6 +28,7 @@ from datamodel_code_generator.enums import (
     ReadOnlyWriteOnlyModelType,
     ReuseScope,
     TargetPydanticVersion,
+    VersionMode,
 )
 from datamodel_code_generator.format import PythonVersionMin
 from datamodel_code_generator.model import DataModel, DataModelFieldBase
@@ -132,6 +133,7 @@ def _baseline_generate(
     use_operation_id_as_name: bool = False,
     use_unique_items_as_set: bool = False,
     use_tuple_for_fixed_items: bool = False,
+    use_closed_typed_dict: bool = True,
     allof_merge_mode: AllOfMergeMode = AllOfMergeMode.Constraints,
     allof_class_hierarchy: AllOfClassHierarchy = AllOfClassHierarchy.IfNoConflict,
     http_headers: Sequence[tuple[str, str]] | None = None,
@@ -187,6 +189,8 @@ def _baseline_generate(
     all_exports_collision_strategy: AllExportsCollisionStrategy | None = None,
     field_type_collision_strategy: FieldTypeCollisionStrategy | None = None,
     module_split_mode: ModuleSplitMode | None = None,
+    schema_version: str | None = None,
+    schema_version_mode: VersionMode | None = None,
 ) -> str | object | None:
     raise NotImplementedError
 
@@ -261,6 +265,7 @@ class _BaselineParser:
         use_operation_id_as_name: bool = False,
         use_unique_items_as_set: bool = False,
         use_tuple_for_fixed_items: bool = False,
+        use_closed_typed_dict: bool = True,
         allof_merge_mode: AllOfMergeMode = AllOfMergeMode.Constraints,
         allof_class_hierarchy: AllOfClassHierarchy = AllOfClassHierarchy.IfNoConflict,
         http_headers: Sequence[tuple[str, str]] | None = None,
