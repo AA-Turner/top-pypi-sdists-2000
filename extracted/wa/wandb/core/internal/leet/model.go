@@ -23,9 +23,6 @@ type Model struct {
 	config *ConfigManager
 	keyMap map[string]func(*Model, tea.KeyMsg) (*Model, tea.Cmd)
 
-	// Pending grid configuration input.
-	pendingGridConfig gridConfigTarget
-
 	// Terminal dimensions.
 	width, height int
 
@@ -421,8 +418,8 @@ func (m *Model) buildStatusText() string {
 	if m.metricsGrid.IsFilterMode() {
 		return m.buildMetricsFilterStatus()
 	}
-	if m.pendingGridConfig != gridConfigNone {
-		return m.buildGridConfigStatus()
+	if m.config.IsAwaitingGridConfig() {
+		return m.config.GridConfigStatus()
 	}
 	if m.isLoading {
 		return m.buildLoadingStatus()
@@ -455,22 +452,6 @@ func (m *Model) buildMetricsFilterStatus() string {
 		m.metricsGrid.FilterQuery(),
 		string(mediumShadeBlock),
 		m.metricsGrid.FilteredChartCount(), m.metricsGrid.ChartCount())
-}
-
-// buildGridConfigStatus builds status for grid configuration mode.
-func (m *Model) buildGridConfigStatus() string {
-	switch m.pendingGridConfig {
-	case gridConfigMetricsCols:
-		return "Press 1-9 to set metrics grid columns (ESC to cancel)"
-	case gridConfigMetricsRows:
-		return "Press 1-9 to set metrics grid rows (ESC to cancel)"
-	case gridConfigSystemCols:
-		return "Press 1-9 to set system grid columns (ESC to cancel)"
-	case gridConfigSystemRows:
-		return "Press 1-9 to set system grid rows (ESC to cancel)"
-	default:
-		return ""
-	}
 }
 
 // buildLoadingStatus builds status for loading mode.

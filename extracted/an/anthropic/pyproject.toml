@@ -1,22 +1,24 @@
 [project]
 name = "anthropic"
-version = "0.75.0"
+version = "0.76.0"
 description = "The official Python library for the anthropic API"
 dynamic = ["readme"]
 license = "MIT"
 authors = [
 { name = "Anthropic", email = "support@anthropic.com" },
 ]
+
 dependencies = [
     "httpx>=0.25.0, <1",
-    "pydantic>=1.9.0, <3",
-    "typing-extensions>=4.10, <5",
-    "anyio>=3.5.0, <5",
-    "distro>=1.7.0, <2",
-    "sniffio",
+  "pydantic>=1.9.0, <3",
+  "typing-extensions>=4.10, <5",
+  "anyio>=3.5.0, <5",
+  "distro>=1.7.0, <2",
+  "sniffio",
     "jiter>=0.4.0, <1",
     "docstring-parser>=0.15,<1",
 ]
+
 requires-python = ">= 3.9"
 classifiers = [
   "Typing :: Typed",
@@ -26,6 +28,7 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Operating System :: OS Independent",
   "Operating System :: POSIX",
   "Operating System :: MacOS",
@@ -46,7 +49,7 @@ Repository = "https://github.com/anthropics/anthropic-sdk-python"
 
 [tool.uv]
 managed = true
-required-version = ">=0.5.0"
+required-version = ">=0.9"
 conflicts = [
     [
       { group = "pydantic-v1" },
@@ -58,7 +61,7 @@ conflicts = [
 # version pins are in uv.lock
 dev = [
     "pyright==1.1.399",
-    "mypy",
+    "mypy==1.17",
     "respx",
     "pytest",
     "pytest-asyncio",
@@ -76,7 +79,8 @@ pydantic-v1 = [
     "pydantic>=1.9.0,<2",
 ]
 pydantic-v2 = [
-    "pydantic>=2,<3",
+    "pydantic~=2.0 ; python_full_version < '3.14'",
+    "pydantic~=2.12 ; python_full_version >= '3.14'",
 ]
 
 [build-system]

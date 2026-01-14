@@ -39,7 +39,7 @@ dependencies = [
     "sentry-sdk >= 2.20.0",
     "fastar >= 0.8.0",
 ]
-version = "0.9.0"
+version = "0.10.1"
 
 [project.license]
 text = "MIT"

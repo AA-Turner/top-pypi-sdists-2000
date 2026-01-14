@@ -115,11 +115,22 @@ class ServiceConnection:
         self,
         paths: set[pathlib.Path],
         settings: wandb_settings.Settings,
+        *,
+        cwd: pathlib.Path | None,
+        live: bool,
+        entity: str,
+        project: str,
+        run_id: str,
     ) -> MailboxHandle[wandb_sync_pb2.ServerInitSyncResponse]:
         """Send a ServerInitSyncRequest."""
         init_sync = wandb_sync_pb2.ServerInitSyncRequest(
             path=(str(path) for path in paths),
+            cwd=str(cwd) if cwd else "",
+            live=live,
             settings=settings.to_proto(),
+            new_entity=entity,
+            new_project=project,
+            new_run_id=run_id,
         )
         request = spb.ServerRequest(init_sync=init_sync)
 

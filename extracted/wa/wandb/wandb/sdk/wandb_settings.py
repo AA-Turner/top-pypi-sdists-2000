@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import configparser
 import json
 import logging
 import os
@@ -34,7 +33,7 @@ from wandb._pydantic import (
 )
 from wandb.errors import UsageError
 from wandb.proto import wandb_settings_pb2
-from wandb.sdk.lib import deprecation, urls
+from wandb.sdk.lib import deprecation, settings_file, urls
 
 from .lib import credentials, filesystem, ipython
 from .lib.run_moment import RunMoment
@@ -50,6 +49,7 @@ def _path_convert(*args: str) -> str:
 
 CLIENT_ONLY_SETTINGS = (
     "anonymous",
+    "app_url_override",
     "files_dir",
     "max_end_of_run_history_metrics",
     "max_end_of_run_summary_metrics",
@@ -109,6 +109,15 @@ class Settings(BaseModel, validate_assignment=True):
 
     azure_account_url_to_access_key: Optional[Dict[str, str]] = None
     """Mapping of Azure account URLs to their corresponding access keys for Azure integration."""
+
+    app_url_override: Optional[str] = None
+    """Override for the 'app' URL for the W&B UI.
+
+    The `app_url` is normally computed based on `base_url`, but this can be
+    used to set it explicitly.
+
+    WANDB_APP_URL is the corresponding environment variable.
+    """
 
     base_url: str = "https://api.wandb.ai"
     """The URL of the W&B backend for data synchronization."""
@@ -1595,6 +1604,16 @@ class Settings(BaseModel, validate_assignment=True):
 
     @computed_field  # type: ignore[prop-decorator]
     @property
+    def app_url(self) -> str:
+        """The URL for the W&B UI, usually https://wandb.ai.
+
+        This is different from `base_url` (like https://api.wandb.ai) which
+        is used to access W&B APIs programmatically.
+        """
+        return self.app_url_override or util.api_to_app_url(self.base_url)
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
     def colab_url(self) -> Optional[str]:
         """The URL to the Colab notebook, if running in Colab."""
         if not self._colab:
@@ -1749,23 +1768,69 @@ class Settings(BaseModel, validate_assignment=True):
     # in the correct order. Most of the updates are done in
     # wandb/sdk/wandb_setup.py::_WandbSetup._settings_setup.
 
-    def update_from_system_config_file(self):
-        """Update settings from the system config file.
+    def read_system_settings(self) -> settings_file.SettingsFiles:
+        """Read settings from the workspace and global settings files.
+
+        The files are determined by the settings_system and settings_workspace
+        settings.
+
+        The resulting object is a snapshot of the system settings at the time
+        this function is used and does not reflect the settings on this Settings
+        object. It can be used to update the files, and it should be short-lived
+        since it does not reflect external changes to the files.
+
+        Updating the settings files does not update this Settings instance
+        and vice versa.
 
         <!-- lazydoc-ignore: internal -->
         """
-        if not self.settings_system or not os.path.exists(self.settings_system):
-            return
-        self._load_config_file(self.settings_system)
+        local_settings = pathlib.Path(self.settings_workspace)
 
-    def update_from_workspace_config_file(self):
-        """Update settings from the workspace config file.
+        if self.settings_system:
+            global_settings = pathlib.Path(self.settings_system)
+        else:
+            global_settings = None
+
+        return settings_file.SettingsFiles(
+            global_settings=global_settings,
+            local_settings=local_settings,
+        )
+
+    def update_from_system_settings(self) -> None:
+        """Load settings from the settings files.
 
         <!-- lazydoc-ignore: internal -->
         """
-        if not self.settings_workspace or not os.path.exists(self.settings_workspace):
-            return
-        self._load_config_file(self.settings_workspace)
+        system_settings = self.read_system_settings()
+
+        if not self.quiet and (sources := system_settings.sources):
+            parts = ["Loaded settings from"]
+            for source in sources:
+                parts.append(f"  {source}")
+            wandb.termlog("\n".join(parts))
+
+        value: object  # Can be transformed arbitrarily.
+        for key, value in system_settings.all().items():
+            if key == "ignore_globs":
+                value = value.split(",")
+
+            elif key == "anonymous":
+                wandb.termwarn(
+                    "Deprecated setting 'anonymous' has no effect and will be"
+                    + " removed in a future version of wandb."
+                    + " Please delete it manually or by running `wandb login`"
+                    + " to avoid errors.",
+                    repeat=False,
+                )
+                value = deprecation.UNSET
+
+            elif key in ("settings_system", "root_dir"):
+                wandb.termwarn(
+                    f"Ignoring setting {key!r} which is not allowed in a settings file."
+                    + " Please delete it manually to avoid errors in the future."
+                )
+
+            setattr(self, key, value)
 
     def update_from_env_vars(self, environ: Dict[str, Any]):
         """Update settings from environment variables.
@@ -1775,17 +1840,18 @@ class Settings(BaseModel, validate_assignment=True):
         env_prefix: str = "WANDB_"
         private_env_prefix: str = env_prefix + "_"
         special_env_var_names = {
+            env.APP_URL: "app_url_override",
             "WANDB_SERVICE_TRANSPORT": "x_service_transport",
-            "WANDB_DIR": "root_dir",
-            "WANDB_NAME": "run_name",
-            "WANDB_NOTES": "run_notes",
-            "WANDB_TAGS": "run_tags",
-            "WANDB_JOB_TYPE": "run_job_type",
-            "WANDB_HTTP_TIMEOUT": "x_graphql_timeout_seconds",
-            "WANDB_FILE_PUSHER_TIMEOUT": "x_file_transfer_timeout_seconds",
-            "WANDB_USER_EMAIL": "email",
+            env.DIR: "root_dir",
+            env.NAME: "run_name",
+            env.NOTES: "run_notes",
+            env.TAGS: "run_tags",
+            env.JOB_TYPE: "run_job_type",
+            env.HTTP_TIMEOUT: "x_graphql_timeout_seconds",
+            env.FILE_PUSHER_TIMEOUT: "x_file_transfer_timeout_seconds",
+            env.USER_EMAIL: "email",
         }
-        env = dict()
+
         for setting, value in environ.items():
             if not setting.startswith(env_prefix):
                 continue
@@ -1798,14 +1864,16 @@ class Settings(BaseModel, validate_assignment=True):
                 # otherwise, strip the prefix and convert to lowercase
                 key = setting[len(env_prefix) :].lower()
 
-            if key in self.__dict__:
-                if key in ("ignore_globs", "run_tags"):
-                    value = value.split(",")
-                env[key] = value
+            if key not in self.__dict__:
+                continue
 
-        for key, value in env.items():
-            if value is not None:
-                setattr(self, key, value)
+            if key in ("ignore_globs", "run_tags"):
+                value = value.split(",")
+
+            if value is None:
+                continue
+
+            setattr(self, key, value)
 
     def update_from_system_environment(self):
         """Update settings from the system environment.
@@ -2026,41 +2094,12 @@ class Settings(BaseModel, validate_assignment=True):
 
         return None
 
-    def _load_config_file(
-        self,
-        file_name: str,
-        section: str = "default",
-    ) -> None:
-        """Load settings from a section in a config file."""
-        parser = configparser.ConfigParser()
-        parser.add_section(section)
-        parser.read(file_name)
-
-        key: str
-        value: object
-        for key, value in parser[section].items():
-            if key == "ignore_globs":
-                value = value.split(",")
-
-            elif key == "anonymous":
-                wandb.termwarn(
-                    f"Deprecated setting 'anonymous' in {file_name} has no"
-                    + " effect and will be removed in a future version of wandb."
-                    + " Please delete it manually or by running `wandb login`"
-                    + " to avoid errors.",
-                    repeat=False,
-                )
-                value = deprecation.UNSET
-
-            setattr(self, key, value)
-
     def _project_url_base(self) -> str:
         """Construct the base URL for the project."""
         if not all([self.entity, self.project]):
             return ""
 
-        app_url = util.app_url(self.base_url)
-        return f"{app_url}/{quote(self.entity or '')}/{quote(self.project or '')}"
+        return f"{self.app_url}/{quote(self.entity or '')}/{quote(self.project or '')}"
 
     @staticmethod
     def _runmoment_preprocessor(

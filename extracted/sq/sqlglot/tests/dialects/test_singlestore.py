@@ -20,6 +20,10 @@ class TestSingleStore(Validator):
         self.validate_identity("SELECT 1")
         self.validate_identity("SELECT * FROM `users` ORDER BY ALL")
         self.validate_identity("SELECT ELT(2, 'foo', 'bar', 'baz')")
+        self.validate_identity("SELECT CHARSET(CHAR(100 USING utf8))")
+        self.validate_identity("SELECT TO_JSON(ROW(1, 2) :> RECORD(a INT, b INT))")
+
+        self.validate_identity("JSON_KEYS(json_doc, 'a', 'b', 'c', 2)")
 
     def test_byte_strings(self):
         self.validate_identity("SELECT e'text'")

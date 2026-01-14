@@ -126,7 +126,7 @@ class SeriesGroupBy(GroupBy[Series[S2]], Generic[S2, ByT]):
     ) -> Series: ...
     def nunique(self, dropna: bool = ...) -> Series[int]: ...
     # describe delegates to super() method but here it has keyword-only parameters
-    def describe(  # type: ignore[override] # pyright: ignore[reportIncompatibleMethodOverride]
+    def describe(  # type: ignore[override] # pyright: ignore[reportIncompatibleMethodOverride] # pyrefly: ignore[bad-override] # ty: ignore[invalid-method-override]
         self,
         *,
         percentiles: Iterable[float] | None = ...,
@@ -208,8 +208,7 @@ class SeriesGroupBy(GroupBy[Series[S2]], Generic[S2, ByT]):
     def unique(self) -> Series: ...
     # Overrides that provide more precise return types over the GroupBy class
     @final  # type: ignore[misc]
-    # pyrefly: ignore  # bad-override
-    def __iter__(  # pyright: ignore[reportIncompatibleMethodOverride] # ty: ignore[override-of-final-method]
+    def __iter__(  # pyright: ignore[reportIncompatibleMethodOverride] # pyrefly: ignore[bad-override] # ty: ignore[override-of-final-method]
         self,
     ) -> Iterator[tuple[ByT, Series[S2]]]: ...
 
@@ -304,7 +303,7 @@ class DataFrameGroupBy(GroupBy[DataFrame], Generic[ByT, _TT]):
         **kwargs: P.kwargs,
     ) -> DataFrame: ...
     @overload
-    def __getitem__(self, key: Scalar) -> SeriesGroupBy[Any, ByT]: ...  # type: ignore[overload-overlap] # pyright: ignore[reportOverlappingOverload]
+    def __getitem__(self, key: Scalar) -> SeriesGroupBy[Any, ByT]: ...  # type: ignore[overload-overlap] # pyright: ignore[reportOverlappingOverload] # pyrefly: ignore[bad-override]
     @overload
     def __getitem__(  # pyright: ignore[reportIncompatibleMethodOverride] # ty: ignore[invalid-method-override]
         self, key: Iterable[Hashable]
@@ -458,9 +457,7 @@ class DataFrameGroupBy(GroupBy[DataFrame], Generic[ByT, _TT]):
     ) -> Series: ...  # Series[Axes] but this is not allowed
     @property
     def dtypes(self) -> Series: ...
-    def __getattr__(
-        self, attr: str
-    ) -> SeriesGroupBy[Any, ByT]: ...  # ty: ignore[invalid-method-override]
+    def __getattr__(self, attr: str) -> SeriesGroupBy[Any, ByT]: ...
     # Overrides that provide more precise return types over the GroupBy class
     @final  # type: ignore[misc]
     def __iter__(  # pyright: ignore[reportIncompatibleMethodOverride] # ty: ignore[override-of-final-method] # pyrefly: ignore[bad-override]

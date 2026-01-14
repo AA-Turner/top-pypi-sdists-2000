@@ -21,7 +21,7 @@ from http import HTTPStatus
 from typing import TYPE_CHECKING, Any, Callable, Iterator, Literal
 
 from pydantic import ValidationError
-from typing_extensions import Unpack
+from typing_extensions import Unpack, overload
 from wandb_gql import Client, gql
 from wandb_gql.client import RetryError
 
@@ -45,11 +45,11 @@ from wandb.errors import UsageError
 from wandb.proto import wandb_internal_pb2 as pb
 from wandb.proto.wandb_api_pb2 import ApiRequest, ApiResponse
 from wandb.proto.wandb_telemetry_pb2 import Deprecated
-from wandb.sdk import wandb_login
+from wandb.sdk import wandb_login, wandb_setup
 from wandb.sdk.artifacts._gqlutils import resolve_org_entity_name, server_supports
 from wandb.sdk.internal.internal_api import Api as InternalApi
 from wandb.sdk.launch.utils import LAUNCH_DEFAULT_PROJECT
-from wandb.sdk.lib import retry, runid
+from wandb.sdk.lib import retry, runid, wbauth
 from wandb.sdk.lib.deprecation import warn_and_record_deprecation
 from wandb.sdk.lib.gql_request import GraphQLSession
 
@@ -165,126 +165,6 @@ class Api:
     """
 
     _HTTP_TIMEOUT = env.get_http_timeout(19)
-    DEFAULT_ENTITY_QUERY = gql(
-        """
-        query Viewer{
-            viewer {
-                id
-                entity
-            }
-        }
-        """
-    )
-
-    VIEWER_QUERY = gql(
-        """
-        query Viewer{
-            viewer {
-                id
-                flags
-                entity
-                username
-                email
-                admin
-                apiKeys {
-                    edges {
-                        node {
-                            id
-                            name
-                            description
-                        }
-                    }
-                }
-                teams {
-                    edges {
-                        node {
-                            name
-                        }
-                    }
-                }
-            }
-        }
-        """
-    )
-    USERS_QUERY = gql(
-        """
-        query SearchUsers($query: String) {
-            users(query: $query) {
-                edges {
-                    node {
-                        id
-                        flags
-                        entity
-                        admin
-                        email
-                        deletedAt
-                        username
-                        apiKeys {
-                            edges {
-                                node {
-                                    id
-                                    name
-                                    description
-                                }
-                            }
-                        }
-                        teams {
-                            edges {
-                                node {
-                                    name
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        """
-    )
-
-    CREATE_PROJECT = gql(
-        """
-        mutation upsertModel(
-            $description: String
-            $entityName: String
-            $id: String
-            $name: String
-            $framework: String
-            $access: String
-            $views: JSONString
-        ) {
-            upsertModel(
-            input: {
-                description: $description
-                entityName: $entityName
-                id: $id
-                name: $name
-                framework: $framework
-                access: $access
-                views: $views
-            }
-            ) {
-            project {
-                id
-                name
-                entityName
-                description
-                access
-                views
-            }
-            model {
-                id
-                name
-                entityName
-                description
-                access
-                views
-            }
-            inserted
-            }
-        }
-    """
-    )
 
     def __init__(
         self,
@@ -368,28 +248,25 @@ class Api:
 
     def _load_api_key(self, base_url: str) -> str:
         """Load or prompt for an API key."""
-        try:
-            _, key = wandb_login._login(
-                host=base_url,
-                force=True,
-                update_api_key=False,
-                no_oidc=True,
-                _silent=(
-                    self.settings.get("silent", False)  #
-                    or self.settings.get("quiet", False)
-                ),
-            )
-        except wandb_login.OidcError:
-            raise UsageError(
-                "wandb.Api cannot be used with federated identities."
-                + " Please make sure you are not setting WANDB_IDENTITY_TOKEN_FILE"
-                + " or the identity_token_file setting."
-            ) from None
+        auth = wbauth.authenticate_session(
+            host=base_url,
+            source="wandb.Api()",
+            no_offline=True,
+            input_timeout=wandb_setup.singleton().settings.login_timeout,
+        )
 
-        if not key:
+        if not auth:
             raise UsageError("No API key configured. Use `wandb login` to log in.")
+        if not isinstance(auth, wbauth.AuthApiKey):
+            message = (
+                "wandb.Api() can only use API key authentication, but you have"
+                " another form of credentials configured."
+                " Check if you have set WANDB_IDENTITY_TOKEN_FILE."
+                f" Current credentials: {auth}"
+            )
+            raise UsageError(message)
 
-        return key
+        return auth.api_key
 
     def _configure_sentry(self) -> None:
         if not env.error_reporting_enabled():
@@ -439,7 +316,10 @@ class Api:
             name: The name of the new project.
             entity: The entity of the new project.
         """
-        self.client.execute(self.CREATE_PROJECT, {"entityName": entity, "name": name})
+        from wandb.apis._generated import CREATE_PROJECT_GQL, UpsertModelInput
+
+        gql_input = UpsertModelInput(name=name, entity_name=entity)
+        self.client.execute(gql(CREATE_PROJECT_GQL), {"input": gql_input.model_dump()})
 
     def create_run(
         self,
@@ -811,9 +691,13 @@ class Api:
     @property
     def default_entity(self) -> str | None:
         """Returns the default W&B entity."""
+        from wandb.apis._generated import GET_DEFAULT_ENTITY_GQL, GetDefaultEntity
+
         if self._default_entity is None:
-            res = self._client.execute(self.DEFAULT_ENTITY_QUERY)
-            self._default_entity = (res.get("viewer") or {}).get("entity")
+            data = self._client.execute(gql(GET_DEFAULT_ENTITY_GQL))
+            result = GetDefaultEntity.model_validate(data)
+            if (viewer := result.viewer) and (entity := viewer.entity):
+                self._default_entity = entity
         return self._default_entity
 
     @property
@@ -824,18 +708,17 @@ class Api:
             ValueError: If viewer data is not able to be fetched from W&B.
             requests.RequestException: If an error occurs while making the graphql request.
         """
+        from wandb.apis._generated import GET_VIEWER_GQL, GetViewer
+
         from .users import User
 
         if self._viewer is None:
-            viewer = self._client.execute(self.VIEWER_QUERY).get("viewer")
-
-            if viewer is None:
-                raise ValueError(
-                    "Unable to fetch user data from W&B,"
-                    " please verify your API key is valid."
-                )
-
-            self._viewer = User(self._client, viewer)
+            data = self._client.execute(gql(GET_VIEWER_GQL))
+            result = GetViewer.model_validate(data)
+            if (viewer := result.viewer) is None:
+                msg = "Unable to fetch user data from W&B, please verify your API key is valid."
+                raise ValueError(msg)
+            self._viewer = User(self._client, viewer.model_dump())
             self._default_entity = self._viewer.entity
         return self._viewer
 
@@ -957,7 +840,12 @@ class Api:
             project = parts[0]
         return entity, project, id
 
-    def _parse_artifact_path(self, path):
+    @overload
+    def _parse_artifact_path(self, path: None) -> tuple[str | None, str]: ...
+    @overload
+    def _parse_artifact_path(self, path: str) -> tuple[str | None, str, str]: ...
+
+    def _parse_artifact_path(self, path: str | None) -> tuple[str | None, ...]:
         """Return project, entity and artifact name for project specified by path."""
         from wandb.sdk.artifacts._validators import ArtifactPath
 
@@ -1109,18 +997,18 @@ class Api:
         Returns:
             A `User` object or None if a user is not found.
         """
+        from wandb.apis._generated import SEARCH_USERS_GQL, SearchUsers
+
         from .users import User
 
-        res = self._client.execute(self.USERS_QUERY, {"query": username_or_email})
-        if len(res["users"]["edges"]) == 0:
+        data = self._client.execute(gql(SEARCH_USERS_GQL), {"query": username_or_email})
+        result = SearchUsers.model_validate(data)
+        if not (conn := result.users) or not (edges := conn.edges):
             return None
-        elif len(res["users"]["edges"]) > 1:
-            wandb.termwarn(
-                "Found multiple users, returning the first user matching {}".format(
-                    username_or_email
-                )
-            )
-        return User(self._client, res["users"]["edges"][0]["node"])
+        if len(edges) > 1:
+            msg = f"Found multiple users, returning the first user matching {username_or_email!r}"
+            wandb.termwarn(msg)
+        return User(self._client, edges[0].node.model_dump())
 
     def users(self, username_or_email: str) -> list[User]:
         """Return all users from a partial username or email address query.
@@ -1134,10 +1022,15 @@ class Api:
         Returns:
             An array of `User` objects.
         """
+        from wandb.apis._generated import SEARCH_USERS_GQL, SearchUsers
+
         from .users import User
 
-        res = self._client.execute(self.USERS_QUERY, {"query": username_or_email})
-        return [User(self._client, edge["node"]) for edge in res["users"]["edges"]]
+        data = self._client.execute(gql(SEARCH_USERS_GQL), {"query": username_or_email})
+        result = SearchUsers.model_validate(data)
+        if not ((conn := result.users) and (edges := conn.edges)):
+            return []
+        return [User(self._client, edge.node.model_dump()) for edge in edges]
 
     def runs(
         self,
@@ -1206,13 +1099,16 @@ class Api:
 
         Examples:
         ```python
+        import wandb
+        from wandb.apis.public import Api
+
         # Find runs in project where config.experiment_name has been set to "foo"
-        api.runs(path="my_entity/project", filters={"config.experiment_name": "foo"})
+        Api.runs(path="my_entity/project", filters={"config.experiment_name": "foo"})
         ```
 
         ```python
         # Find runs in project where config.experiment_name has been set to "foo" or "bar"
-        api.runs(
+        Api.runs(
             path="my_entity/project",
             filters={
                 "$or": [
@@ -1226,7 +1122,7 @@ class Api:
         ```python
         # Find runs in project where config.experiment_name matches a regex
         # (anchors are not supported)
-        api.runs(
+        Api.runs(
             path="my_entity/project",
             filters={"config.experiment_name": {"$regex": "b.*"}},
         )
@@ -1235,14 +1131,14 @@ class Api:
         ```python
         # Find runs in project where the run name matches a regex
         # (anchors are not supported)
-        api.runs(
+        Api.runs(
             path="my_entity/project", filters={"display_name": {"$regex": "^foo.*"}}
         )
         ```
 
         ```python
         # Find runs in project sorted by ascending loss
-        api.runs(path="my_entity/project", order="+summary_metrics.loss")
+        Api.runs(path="my_entity/project", order="+summary_metrics.loss")
         ```
         """
         entity, project = self._parse_project_path(path)

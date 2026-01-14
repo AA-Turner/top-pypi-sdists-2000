@@ -63,11 +63,11 @@ classifiers = [
 ]
 
 # Version is defined in src/airflow/__init__.py and it is automatically synchronized by prek
-version = "3.1.5"
+version = "3.1.6"
 
 dependencies = [
-    "apache-airflow-task-sdk==1.1.5",
-    "apache-airflow-core==3.1.5",
+    "apache-airflow-task-sdk==1.1.6",
+    "apache-airflow-core==3.1.6",
 ]
 
 packages = []
@@ -533,7 +533,7 @@ packages = []
     "apache-airflow-providers-amazon[s3fs]",
 ]
 "uv" = [
-    "uv>=0.9.14",
+    "uv>=0.9.22",
 ]
 
 
@@ -672,7 +672,6 @@ ignore = [
     "COM819",
     "E501", # Formatted code may exceed the line length, leading to line-too-long (E501) errors.
     "ASYNC110", # TODO: Use `anyio.Event` instead of awaiting `anyio.sleep` in a `while` loop
-    "UP038",
     "SIM105", # Use contextlib.suppress({exception}) instead of try-except-pass
 ]
 unfixable = [

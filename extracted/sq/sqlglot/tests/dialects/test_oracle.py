@@ -1,4 +1,4 @@
-from sqlglot import exp, UnsupportedError, ParseError, parse_one
+from sqlglot import exp, UnsupportedError, ParseError, parse_one, parse
 from tests.dialects.test_dialect import Validator
 from sqlglot.optimizer.qualify import qualify
 
@@ -17,6 +17,7 @@ class TestOracle(Validator):
         )
         self.parse_one("ALTER TABLE tbl_name DROP FOREIGN KEY fk_symbol").assert_is(exp.Alter)
 
+        self.validate_identity("XMLELEMENT(EVALNAME foo + bar)")
         self.validate_identity("SELECT BITMAP_BUCKET_NUMBER(32769)")
         self.validate_identity("SELECT BITMAP_CONSTRUCT_AGG(value)")
         self.validate_identity("DBMS_RANDOM.NORMAL")
@@ -28,6 +29,8 @@ class TestOracle(Validator):
         self.validate_identity("CREATE PRIVATE TEMPORARY TABLE t AS SELECT * FROM orders")
         self.validate_identity("REGEXP_REPLACE('source', 'search')")
         self.validate_identity("TIMESTAMP(3) WITH TIME ZONE")
+        self.validate_identity("SYSTIMESTAMP").assert_is(exp.Systimestamp)
+        self.validate_identity("SELECT SYSTIMESTAMP AT TIME ZONE 'UTC'")
         self.validate_identity("CURRENT_TIMESTAMP(precision)")
         self.validate_identity("ALTER TABLE tbl_name DROP FOREIGN KEY fk_symbol")
         self.validate_identity("ALTER TABLE Payments ADD Stock NUMBER NOT NULL")
@@ -53,6 +56,12 @@ class TestOracle(Validator):
         self.validate_identity("SELECT * FROM V$SESSION")
         self.validate_identity("SELECT TO_DATE('January 15, 1989, 11:00 A.M.')")
         self.validate_identity("SELECT INSTR(haystack, needle)")
+        self.validate_identity(
+            "SELECT (TIMESTAMP '2025-12-30 20:00:00' - TIMESTAMP '2025-12-29 14:30:00') DAY TO SECOND",
+            "SELECT (TO_TIMESTAMP('2025-12-30 20:00:00', 'YYYY-MM-DD HH24:MI:SS.FF6') - TO_TIMESTAMP('2025-12-29 14:30:00', 'YYYY-MM-DD HH24:MI:SS.FF6')) DAY TO SECOND",
+        )
+        self.validate_identity("SELECT (SYSTIMESTAMP - order_date) DAY(9) TO SECOND FROM orders")
+        self.validate_identity("SELECT (SYSTIMESTAMP - order_date) DAY(9) TO SECOND(3) FROM orders")
         self.validate_identity(
             "SELECT * FROM consumer LEFT JOIN groceries ON consumer.groceries_id = consumer.id PIVOT(MAX(type_id) FOR consumer_type IN (1, 2, 3, 4))"
         )
@@ -88,6 +97,10 @@ class TestOracle(Validator):
         )
         self.validate_identity(
             "SELECT MIN(column_name) KEEP (DENSE_RANK FIRST ORDER BY column_name DESC) FROM table_name"
+        )
+        self.validate_identity(
+            'XMLELEMENT("ImageID", image.id)',
+            'XMLELEMENT(NAME "ImageID", image.id)',
         )
         self.validate_identity(
             "SELECT CAST('January 15, 1989, 11:00 A.M.' AS DATE DEFAULT NULL ON CONVERSION ERROR, 'Month dd, YYYY, HH:MI A.M.') FROM DUAL",
@@ -230,13 +243,6 @@ class TestOracle(Validator):
                 "spark": "TO_NUMBER(x, fmt)",
                 "redshift": "TO_NUMBER(x, fmt)",
                 "teradata": "TO_NUMBER(x, fmt)",
-            },
-        )
-        self.validate_all(
-            "SELECT TO_CHAR(TIMESTAMP '1999-12-01 10:00:00')",
-            write={
-                "oracle": "SELECT TO_CHAR(CAST('1999-12-01 10:00:00' AS TIMESTAMP))",
-                "postgres": "SELECT TO_CHAR(CAST('1999-12-01 10:00:00' AS TIMESTAMP))",
             },
         )
         self.validate_all(
@@ -813,3 +819,52 @@ CONNECT BY PRIOR employee_id = manager_id AND LEVEL <= 4"""
             qualified.sql(dialect="oracle"),
             'WITH "T" AS (SELECT 1 AS "COL") SELECT "T"."COL" AS "COL", ROWID AS "ROWID" FROM "T" "T" WHERE ROWNUM = 1',
         )
+
+    def test_chr(self):
+        self.validate_identity("SELECT CHR(187 USING NCHAR_CS)")
+        self.validate_identity("SELECT CHR(187)")
+
+    def test_full_procedure(self):
+        sql = """
+        CREATE OR REPLACE PROCEDURE query_emp(
+            p_id     IN  VARCHAR2,
+            p_name   OUT VARCHAR2,
+            p_salary OUT NUMBER
+        ) AS
+        BEGIN
+            SELECT last_name, salary 
+            INTO p_name, p_salary
+            FROM employees
+            WHERE employee_id = p_id;
+        END;
+        """
+
+        expected_sqls = [
+            "CREATE OR REPLACE PROCEDURE query_emp(p_id IN VARCHAR2, p_name OUT VARCHAR2, p_salary OUT NUMBER) AS BEGIN SELECT last_name, salary INTO p_name, p_salary FROM employees WHERE employee_id = p_id",
+            "END",
+        ]
+
+        for expr, expected_sql in zip(parse(sql, read="oracle"), expected_sqls):
+            self.assertEqual(expr.sql(dialect="oracle"), expected_sql)
+
+        sql = """
+        CREATE OR REPLACE PROCEDURE test_proc (
+            a NUMBER,
+            b IN NUMBER,
+            c IN OUT NUMBER,
+            d OUT NUMBER
+        ) AS
+        BEGIN
+            c := c + a + b;
+            d := 42 + c;
+        END;
+        """
+
+        expected_sqls = [
+            "CREATE OR REPLACE PROCEDURE test_proc(a NUMBER, b IN NUMBER, c IN OUT NUMBER, d OUT NUMBER) AS BEGIN c := c + a + b",
+            "d := 42 + c",
+            "END",
+        ]
+
+        for expr, expected_sql in zip(parse(sql, read="oracle"), expected_sqls):
+            self.assertEqual(expr.sql(dialect="oracle"), expected_sql)

@@ -993,7 +993,9 @@ class LiteLLM_ProxyModelTable(LiteLLMPydanticObjectBase):
     model_name: str
     litellm_params: dict
     model_info: dict
+    created_at: Optional[datetime] = None
     created_by: str
+    updated_at: Optional[datetime] = None
     updated_by: str
 
     @model_validator(mode="before")
@@ -3803,7 +3805,7 @@ class SpendUpdateQueueItem(TypedDict, total=False):
 
 class LiteLLM_ManagedFileTable(LiteLLMPydanticObjectBase):
     unified_file_id: str
-    file_object: OpenAIFileObject
+    file_object: Optional[OpenAIFileObject] = None
     model_mappings: Dict[str, str]
     flat_model_file_ids: List[str]
     created_by: Optional[str]

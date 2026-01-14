@@ -39,6 +39,14 @@ static EXCLUDE_NEWER: &str = "2024-03-25T00:00:00Z";
 pub const PACKSE_VERSION: &str = "0.3.53";
 pub const DEFAULT_PYTHON_VERSION: &str = "3.12";
 
+// The expected latest patch version for each Python minor version.
+pub const LATEST_PYTHON_3_15: &str = "3.15.0a4";
+pub const LATEST_PYTHON_3_14: &str = "3.14.2";
+pub const LATEST_PYTHON_3_13: &str = "3.13.11";
+pub const LATEST_PYTHON_3_12: &str = "3.12.12";
+pub const LATEST_PYTHON_3_11: &str = "3.11.14";
+pub const LATEST_PYTHON_3_10: &str = "3.10.19";
+
 /// Using a find links url allows using `--index-url` instead of `--extra-index-url` in tests
 /// to prevent dependency confusion attacks against our test suite.
 pub fn build_vendor_links_url() -> String {
@@ -468,6 +476,26 @@ impl TestContext {
         self
     }
 
+    /// Adds a filter that replaces the latest Python patch versions with `[LATEST]` placeholder.
+    pub fn with_filtered_latest_python_versions(mut self) -> Self {
+        // Filter the latest patch versions with [LATEST] placeholder
+        // The order matters - we want to match the full version first
+        for (minor, patch) in [
+            ("3.15", LATEST_PYTHON_3_15.strip_prefix("3.15.").unwrap()),
+            ("3.14", LATEST_PYTHON_3_14.strip_prefix("3.14.").unwrap()),
+            ("3.13", LATEST_PYTHON_3_13.strip_prefix("3.13.").unwrap()),
+            ("3.12", LATEST_PYTHON_3_12.strip_prefix("3.12.").unwrap()),
+            ("3.11", LATEST_PYTHON_3_11.strip_prefix("3.11.").unwrap()),
+            ("3.10", LATEST_PYTHON_3_10.strip_prefix("3.10.").unwrap()),
+        ] {
+            // Match the full version in various contexts (cpython-X.Y.Z, Python X.Y.Z, etc.)
+            let pattern = format!(r"(\b){minor}\.{patch}(\b)");
+            let replacement = format!("${{1}}{minor}.[LATEST]${{2}}");
+            self.filters.push((pattern, replacement));
+        }
+        self
+    }
+
     /// Add a filter that ignores temporary directory in path.
     pub fn with_filtered_windows_temp_dir(mut self) -> Self {
         let pattern = regex::escape(
@@ -478,6 +506,16 @@ impl TestContext {
                 .replace('/', "\\"),
         );
         self.filters.push((pattern, "[TEMP_DIR]".to_string()));
+        self
+    }
+
+    /// Add a filter for (bytecode) compilation file counts
+    #[must_use]
+    pub fn with_filtered_compiled_file_count(mut self) -> Self {
+        self.filters.push((
+            r"compiled \d+ files".to_string(),
+            "compiled [COUNT] files".to_string(),
+        ));
         self
     }
 

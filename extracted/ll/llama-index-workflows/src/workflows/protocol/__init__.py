@@ -2,9 +2,10 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from workflows.protocol.serializable_events import EventEnvelopeWithMetadata
+from workflows.representation import WorkflowGraph
 
 # Shared protocol types between client and server
 
@@ -34,6 +35,13 @@ class HandlersListResponse(BaseModel):
 
 class HealthResponse(BaseModel):
     status: Literal["healthy"]
+    loaded_workflows: int = Field(
+        description="Number of workflow handlers currently loaded in memory"
+    )
+    active_workflows: int = Field(
+        description="Number of workflow handlers that are active (not idle)"
+    )
+    idle_workflows: int = Field(description="Number of workflow handlers that are idle")
 
 
 class WorkflowsListResponse(BaseModel):
@@ -58,29 +66,12 @@ class WorkflowEventsListResponse(BaseModel):
 
 
 class WorkflowGraphResponse(BaseModel):
-    graph: WorkflowGraphNodeEdges
-
-
-class WorkflowGraphNode(BaseModel):
-    id: str
-    label: str
-    node_type: str
-    title: str | None
-    event_type: str | None
-
-
-class WorkflowGraphEdge(BaseModel):
-    source: str
-    target: str
-
-
-class WorkflowGraphNodeEdges(BaseModel):
-    nodes: list[WorkflowGraphNode]
-    edges: list[WorkflowGraphEdge]
+    graph: WorkflowGraph
 
 
 __all__ = [
     "Status",
+    "is_status_completed",
     "HandlerData",
     "HandlersListResponse",
     "HealthResponse",
@@ -90,7 +81,4 @@ __all__ = [
     "WorkflowSchemaResponse",
     "WorkflowEventsListResponse",
     "WorkflowGraphResponse",
-    "WorkflowGraphNode",
-    "WorkflowGraphEdge",
-    "WorkflowGraphNodeEdges",
 ]

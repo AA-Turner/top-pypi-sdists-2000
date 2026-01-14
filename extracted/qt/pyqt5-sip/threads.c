@@ -22,14 +22,11 @@ typedef struct _pendingDef {
 } pendingDef;
 
 
-#ifdef WITH_THREAD
-
-#include <pythread.h>
-
-
 /*
  * The per thread data we need to maintain.
  */
+#include <pythread.h>
+
 typedef struct _threadDef {
     long thr_ident;                 /* The thread identifier. */
     pendingDef pending;             /* An object waiting to be wrapped. */
@@ -39,9 +36,6 @@ typedef struct _threadDef {
 static threadDef *threads = NULL;   /* Linked list of threads. */
 
 static threadDef *currentThreadDef(int auto_alloc);
-
-#endif
-
 
 static pendingDef *get_pending(int auto_alloc);
 
@@ -124,7 +118,6 @@ PyObject *sipWrapInstance(void *cpp, PyTypeObject *py_type, PyObject *args,
  */
 void sip_api_end_thread(void)
 {
-#ifdef WITH_THREAD
     threadDef *thread;
     PyGILState_STATE gil = PyGILState_Ensure();
 
@@ -132,7 +125,6 @@ void sip_api_end_thread(void)
         thread->thr_ident = 0;
 
     PyGILState_Release(gil);
-#endif
 }
 
 
@@ -142,22 +134,14 @@ void sip_api_end_thread(void)
  */
 static pendingDef *get_pending(int auto_alloc)
 {
-#ifdef WITH_THREAD
     threadDef *thread;
 
     if ((thread = currentThreadDef(auto_alloc)) == NULL)
         return NULL;
 
     return &thread->pending;
-#else
-    static pendingDef pending;
-
-    return &pending;
-#endif
 }
 
-
-#ifdef WITH_THREAD
 
 /*
  * Return the thread data for the current thread, allocating it if necessary,
@@ -204,5 +188,3 @@ static threadDef *currentThreadDef(int auto_alloc)
 
     return thread;
 }
-
-#endif

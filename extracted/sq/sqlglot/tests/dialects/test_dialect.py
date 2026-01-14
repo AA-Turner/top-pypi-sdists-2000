@@ -1473,6 +1473,44 @@ class TestDialect(Validator):
             },
         )
 
+        self.validate_all(
+            "ARRAY_PREPEND(arr, x)",
+            read={
+                "": "ARRAY_PREPEND(arr, x)",
+                "duckdb": "LIST_PREPEND(x, arr)",
+                "postgres": "ARRAY_PREPEND(x, arr)",
+                "spark": "ARRAY_PREPEND(arr, x)",
+                "databricks": "ARRAY_PREPEND(arr, x)",
+                "snowflake": "ARRAY_PREPEND(arr, x)",
+            },
+            write={
+                "duckdb": "LIST_PREPEND(x, arr)",
+                "postgres": "ARRAY_PREPEND(x, arr)",
+                "spark": "ARRAY_PREPEND(arr, x)",
+                "databricks": "ARRAY_PREPEND(arr, x)",
+                "snowflake": "ARRAY_PREPEND(arr, x)",
+            },
+        )
+
+        self.validate_all(
+            "ARRAY_APPEND(arr, x)",
+            read={
+                "": "ARRAY_APPEND(arr, x)",
+                "duckdb": "LIST_APPEND(arr, x)",
+                "postgres": "ARRAY_APPEND(arr, x)",
+                "spark": "ARRAY_APPEND(arr, x)",
+                "databricks": "ARRAY_APPEND(arr, x)",
+                "snowflake": "ARRAY_APPEND(arr, x)",
+            },
+            write={
+                "duckdb": "LIST_APPEND(arr, x)",
+                "postgres": "ARRAY_APPEND(arr, x)",
+                "spark": "ARRAY_APPEND(arr, x)",
+                "databricks": "ARRAY_APPEND(arr, x)",
+                "snowflake": "ARRAY_APPEND(arr, x)",
+            },
+        )
+
     def test_order_by(self):
         self.validate_identity(
             "SELECT c FROM t ORDER BY a, b,",
@@ -3383,7 +3421,7 @@ FROM subquery2""",
                 "spark": "SELECT 1 EXCEPT ALL SELECT 1",
                 "sqlite": UnsupportedError,
                 "starrocks": UnsupportedError,
-                "trino": UnsupportedError,
+                "trino": "SELECT 1 EXCEPT ALL SELECT 1",
                 "tsql": UnsupportedError,
             },
         )
@@ -3436,44 +3474,118 @@ FROM subquery2""",
             read={
                 "bigquery": "TRIM('abc', 'a')",
                 "snowflake": "TRIM('abc', 'a')",
+                "hive": "TRIM('abc', 'a')",
+                "spark2": "TRIM('a', 'abc')",
+                "spark": "TRIM('a', 'abc')",
+                "databricks": "TRIM('a', 'abc')",
             },
             write={
                 "bigquery": "TRIM('abc', 'a')",
                 "snowflake": "TRIM('abc', 'a')",
+                "hive": "TRIM('a' FROM 'abc')",
+                "spark2": "TRIM('a' FROM 'abc')",
+                "spark": "TRIM('a' FROM 'abc')",
+                "databricks": "TRIM('a' FROM 'abc')",
             },
         )
 
         self.validate_all(
             "LTRIM('Hello World', 'H')",
             read={
+                "": "LTRIM('Hello World', 'H')",
                 "oracle": "LTRIM('Hello World', 'H')",
                 "clickhouse": "TRIM(LEADING 'H' FROM 'Hello World')",
                 "snowflake": "LTRIM('Hello World', 'H')",
                 "bigquery": "LTRIM('Hello World', 'H')",
-                "": "LTRIM('Hello World', 'H')",
+                "hive": "LTRIM('Hello World', 'H')",
+                "spark2": "LTRIM('H', 'Hello World')",
+                "spark": "LTRIM('H', 'Hello World')",
+                "databricks": "LTRIM('H', 'Hello World')",
             },
             write={
                 "clickhouse": "TRIM(LEADING 'H' FROM 'Hello World')",
                 "oracle": "LTRIM('Hello World', 'H')",
                 "snowflake": "LTRIM('Hello World', 'H')",
                 "bigquery": "LTRIM('Hello World', 'H')",
+                "hive": "TRIM(LEADING 'H' FROM 'Hello World')",
+                "spark2": "TRIM(LEADING 'H' FROM 'Hello World')",
+                "spark": "TRIM(LEADING 'H' FROM 'Hello World')",
+                "databricks": "TRIM(LEADING 'H' FROM 'Hello World')",
             },
         )
 
         self.validate_all(
             "RTRIM('Hello World', 'd')",
             read={
+                "": "RTRIM('Hello World', 'd')",
                 "clickhouse": "TRIM(TRAILING 'd' FROM 'Hello World')",
                 "oracle": "RTRIM('Hello World', 'd')",
                 "snowflake": "RTRIM('Hello World', 'd')",
                 "bigquery": "RTRIM('Hello World', 'd')",
-                "": "RTRIM('Hello World', 'd')",
+                "hive": "RTRIM('Hello World', 'd')",
+                "spark2": "RTRIM('d', 'Hello World')",
+                "spark": "RTRIM('d', 'Hello World')",
+                "databricks": "RTRIM('d', 'Hello World')",
             },
             write={
                 "clickhouse": "TRIM(TRAILING 'd' FROM 'Hello World')",
                 "oracle": "RTRIM('Hello World', 'd')",
                 "snowflake": "RTRIM('Hello World', 'd')",
                 "bigquery": "RTRIM('Hello World', 'd')",
+                "hive": "TRIM(TRAILING 'd' FROM 'Hello World')",
+                "spark2": "TRIM(TRAILING 'd' FROM 'Hello World')",
+                "spark": "TRIM(TRAILING 'd' FROM 'Hello World')",
+                "databricks": "TRIM(TRAILING 'd' FROM 'Hello World')",
+            },
+        )
+
+        self.validate_all(
+            "LTRIM('Hello World')",
+            read={
+                "": "LTRIM('Hello World')",
+                "clickhouse": "LTRIM('Hello World')",
+                "oracle": "LTRIM('Hello World')",
+                "snowflake": "LTRIM('Hello World')",
+                "bigquery": "LTRIM('Hello World')",
+                "hive": "LTRIM('Hello World')",
+                "spark2": "LTRIM('Hello World')",
+                "spark": "LTRIM('Hello World')",
+                "databricks": "LTRIM('Hello World')",
+            },
+            write={
+                "clickhouse": "LTRIM('Hello World')",
+                "oracle": "LTRIM('Hello World')",
+                "snowflake": "LTRIM('Hello World')",
+                "bigquery": "LTRIM('Hello World')",
+                "hive": "LTRIM('Hello World')",
+                "spark2": "LTRIM('Hello World')",
+                "spark": "LTRIM('Hello World')",
+                "databricks": "LTRIM('Hello World')",
+            },
+        )
+
+        self.validate_all(
+            "RTRIM('Hello World')",
+            read={
+                "": "RTRIM('Hello World')",
+                "clickhouse": "RTRIM('Hello World')",
+                "oracle": "RTRIM('Hello World')",
+                "snowflake": "RTRIM('Hello World')",
+                "bigquery": "RTRIM('Hello World')",
+                "hive": "RTRIM('Hello World')",
+                "spark2": "RTRIM('Hello World')",
+                "spark": "RTRIM('Hello World')",
+                "databricks": "RTRIM('Hello World')",
+            },
+            write={
+                "clickhouse": "RTRIM('Hello World')",
+                "oracle": "RTRIM('Hello World')",
+                "snowflake": "RTRIM('Hello World')",
+                "bigquery": "RTRIM('Hello World')",
+                "hive": "RTRIM('Hello World')",
+                "spark2": "RTRIM('Hello World')",
+                "spark": "RTRIM('Hello World')",
+                "databricks": "RTRIM('Hello World')",
             },
         )
 
@@ -4703,7 +4815,6 @@ FROM subquery2""",
                     "postgres": f"SELECT {func}",
                     "duckdb": f"SELECT {func}",
                     "redshift": f"SELECT {func}",
-                    "snowflake": f"SELECT {func}",
                     "presto": f"SELECT {func}",
                     "trino": f"SELECT {func}",
                     "mysql": f"SELECT {func}",
@@ -4724,7 +4835,6 @@ FROM subquery2""",
                     "postgres": f"SELECT {func}(2)",
                     "duckdb": f"SELECT {func}(2)",
                     "redshift": f"SELECT {func}(2)",
-                    "snowflake": f"SELECT {func}(2)",
                     "presto": f"SELECT {func}(2)",
                     "trino": f"SELECT {func}(2)",
                     "mysql": f"SELECT {func}(2)",
@@ -4840,3 +4950,60 @@ FROM subquery2""",
                     self.assertEqual(
                         parse_one(func_sql, dialect=dialect).sql(dialect), no_paren_sql
                     )
+
+    def test_operator(self):
+        expr = self.validate_identity("1 OPERATOR(+) 2 OPERATOR(*) 3")
+
+        expr.left.assert_is(exp.Operator)
+        expr.left.left.assert_is(exp.Literal)
+        expr.left.right.assert_is(exp.Literal)
+        expr.right.assert_is(exp.Literal)
+        self.assertEqual(expr.sql(dialect="postgres"), "1 OPERATOR(+) 2 OPERATOR(*) 3")
+
+        self.validate_identity("SELECT operator FROM t")
+        self.validate_identity("SELECT 1 OPERATOR(+) 2")
+        self.validate_identity("SELECT 1 OPERATOR(+) /* foo */ 2")
+        self.validate_identity("SELECT 1 OPERATOR(pg_catalog.+) 2")
+
+    def test_json_keys(self):
+        self.validate_all(
+            "JSON_KEYS(foo)",
+            read={
+                "": "JSON_KEYS(foo)",
+                "spark": "JSON_OBJECT_KEYS(foo)",
+                "databricks": "JSON_OBJECT_KEYS(foo)",
+                "mysql": "JSON_KEYS(foo)",
+                "starrocks": "JSON_KEYS(foo)",
+                "duckdb": "JSON_KEYS(foo)",
+                "snowflake": "OBJECT_KEYS(foo)",
+                "doris": "JSON_KEYS(foo)",
+                "singlestore": "JSON_KEYS(foo)",
+            },
+            write={
+                "spark": "JSON_OBJECT_KEYS(foo)",
+                "databricks": "JSON_OBJECT_KEYS(foo)",
+                "mysql": "JSON_KEYS(foo)",
+                "starrocks": "JSON_KEYS(foo)",
+                "duckdb": "JSON_KEYS(foo)",
+                "snowflake": "OBJECT_KEYS(foo)",
+                "doris": "JSON_KEYS(foo)",
+                "singlestore": "JSON_KEYS(foo)",
+            },
+        )
+
+        self.validate_all(
+            "JSON_KEYS(foo, '$.a')",
+            read={
+                "": "JSON_KEYS(foo, '$.a')",
+                "mysql": "JSON_KEYS(foo, '$.a')",
+                "starrocks": "JSON_KEYS(foo, '$.a')",
+                "duckdb": "JSON_KEYS(foo, '$.a')",
+                "doris": "JSON_KEYS(foo, '$.a')",
+            },
+            write={
+                "mysql": "JSON_KEYS(foo, '$.a')",
+                "starrocks": "JSON_KEYS(foo, '$.a')",
+                "duckdb": "JSON_KEYS(foo, '$.a')",
+                "doris": "JSON_KEYS(foo, '$.a')",
+            },
+        )

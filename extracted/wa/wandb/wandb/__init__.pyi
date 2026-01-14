@@ -108,7 +108,7 @@ if TYPE_CHECKING:
     import wandb
     from wandb.plot import CustomChart
 
-__version__: str = "0.23.1"
+__version__: str = "0.24.0"
 
 run: Run | None
 config: wandb_config.Config
@@ -546,7 +546,7 @@ def log(
     ```
 
     Only one level of nesting is supported; `run.log({"a/b/c": 1})`
-    produces a section named "a/b".
+    produces a section named "a".
 
     `run.log()` is not intended to be called more than a few times per second.
     For optimal performance, limit your logging to once every N iterations,
@@ -869,6 +869,7 @@ def agent(
     entity: Optional[str] = None,
     project: Optional[str] = None,
     count: Optional[int] = None,
+    forward_signals: bool = False,
 ) -> None:
     """Start one or more sweep agents.
 
@@ -890,6 +891,8 @@ def agent(
             the sweep are sent to. If the project is not specified, the
             run is sent to a project labeled "Uncategorized".
         count: The number of sweep config trials to try.
+        forward_signals: Whether to forward signals the agent receives
+            to the child processes. Only supported by CLI agent.
     """
     ...
 

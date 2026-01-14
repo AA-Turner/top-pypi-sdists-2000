@@ -155,6 +155,7 @@ class TestDuckDB(Validator):
                 "bigquery": "CREATE TEMP FUNCTION f1(a INT64, b INT64) AS (a + b)",
             },
         )
+        self.validate_identity("SELECT GET_BIT(CAST('0110010' AS BIT), 2)")
         self.validate_identity("SELECT 1 WHERE x > $1")
         self.validate_identity("SELECT 1 WHERE x > $name")
         self.validate_identity("""SELECT '{"x": 1}' -> c FROM t""")
@@ -370,6 +371,12 @@ class TestDuckDB(Validator):
         )
 
         self.validate_identity(
+            "SELECT tbl.x*1e4+tbl.y FROM tbl",
+            "SELECT tbl.x * 1e4 + tbl.y FROM tbl",
+        )
+        self.validate_identity("DAYNAME(x)")
+        self.validate_identity("MONTHNAME(x)")
+        self.validate_identity(
             "SELECT LIST_TRANSFORM([5, NULL, 6], (x, y) -> COALESCE(x, y, 0) + 1)"
         )
         self.validate_identity(
@@ -492,7 +499,7 @@ class TestDuckDB(Validator):
         )
         self.validate_identity(
             "SELECT a, LOGICAL_OR(b) FROM foo GROUP BY a",
-            "SELECT a, BOOL_OR(b) FROM foo GROUP BY a",
+            "SELECT a, BOOL_OR(CAST(b AS BOOLEAN)) FROM foo GROUP BY a",
         )
         self.validate_identity(
             "SELECT JSON_EXTRACT_STRING(c, '$.k1') = 'v1'",
@@ -541,6 +548,24 @@ class TestDuckDB(Validator):
         self.validate_identity(
             "JSON_EXTRACT_PATH_TEXT(x, '$.family')",
             "x ->> '$.family'",
+        )
+        self.validate_all(
+            "SELECT NOT (data -> '$.value')",
+            read={
+                "snowflake": "SELECT NOT data:value",
+            },
+        )
+        self.validate_all(
+            "SELECT NOT (data -> '$.value.nested')",
+            read={
+                "snowflake": "SELECT NOT data:value:nested",
+            },
+        )
+        self.validate_all(
+            "SELECT (data -> '$.value') = 1",
+            read={
+                "snowflake": "SELECT data:value = 1",
+            },
         )
         self.validate_identity(
             "SELECT {'yes': 'duck', 'maybe': 'goose', 'huh': NULL, 'no': 'heron'}"
@@ -718,23 +743,6 @@ class TestDuckDB(Validator):
                 "duckdb": "CREATE TABLE IF NOT EXISTS t (cola INT, colb TEXT)",
             },
         )
-
-        expr = self.parse_one("TO_BINARY('48454C50', 'HEX')", dialect="snowflake")
-        annotated = annotate_types(expr, dialect="snowflake")
-        self.assertEqual(annotated.sql("duckdb"), "UNHEX('48454C50')")
-
-        expr = self.parse_one("TO_BINARY('48454C50')", dialect="snowflake")
-        annotated = annotate_types(expr, dialect="snowflake")
-        self.assertEqual(annotated.sql("duckdb"), "UNHEX('48454C50')")
-
-        expr = self.parse_one("TO_BINARY('TEST', 'UTF-8')", dialect="snowflake")
-        annotated = annotate_types(expr, dialect="snowflake")
-        self.assertEqual(annotated.sql("duckdb"), "ENCODE('TEST')")
-
-        expr = self.parse_one("TO_BINARY('SEVMUA==', 'BASE64')", dialect="snowflake")
-        annotated = annotate_types(expr, dialect="snowflake")
-        self.assertEqual(annotated.sql("duckdb"), "FROM_BASE64('SEVMUA==')")
-
         self.validate_all(
             "[0, 1, 2]",
             read={
@@ -1290,6 +1298,38 @@ class TestDuckDB(Validator):
         self.validate_identity("SELECT 20_000 AS literal")
         self.validate_identity("SELECT 1_2E+1_0::FLOAT", "SELECT CAST(1_2E+1_0 AS REAL)")
 
+        # Test BITMAP_BUCKET_NUMBER transpilation from Snowflake to DuckDB
+        self.validate_all(
+            "CASE WHEN 2500 > 0 THEN ((2500 - 1) // 32768) + 1 ELSE 2500 // 32768 END",
+            read={
+                "snowflake": "BITMAP_BUCKET_NUMBER(2500)",
+            },
+        )
+        self.validate_all(
+            "CASE WHEN 32768 > 0 THEN ((32768 - 1) // 32768) + 1 ELSE 32768 // 32768 END",
+            read={
+                "snowflake": "BITMAP_BUCKET_NUMBER(32768)",
+            },
+        )
+        self.validate_all(
+            "CASE WHEN 32769 > 0 THEN ((32769 - 1) // 32768) + 1 ELSE 32769 // 32768 END",
+            read={
+                "snowflake": "BITMAP_BUCKET_NUMBER(32769)",
+            },
+        )
+        self.validate_all(
+            "CASE WHEN -100 > 0 THEN ((-100 - 1) // 32768) + 1 ELSE -100 // 32768 END",
+            read={
+                "snowflake": "BITMAP_BUCKET_NUMBER(-100)",
+            },
+        )
+        self.validate_all(
+            "CASE WHEN NULL > 0 THEN ((NULL - 1) // 32768) + 1 ELSE NULL // 32768 END",
+            read={
+                "snowflake": "BITMAP_BUCKET_NUMBER(NULL)",
+            },
+        )
+
     def test_array_index(self):
         with self.assertLogs(helper_logger) as cm:
             self.validate_all(
@@ -1356,9 +1396,15 @@ class TestDuckDB(Validator):
             read={"bigquery": "SELECT DATE(DATETIME '2016-12-25 23:59:59')"},
         )
         self.validate_all(
-            "SELECT STRPTIME(STRFTIME(CAST(CAST('2016-12-25' AS TIMESTAMPTZ) AS DATE), '%d/%m/%Y') || ' ' || 'America/Los_Angeles', '%d/%m/%Y %Z')",
+            "SELECT CAST(CAST(CAST('2016-12-25' AS TIMESTAMPTZ) AS TIMESTAMP) AT TIME ZONE 'UTC' AT TIME ZONE 'America/Los_Angeles' AS DATE)",
             read={
                 "bigquery": "SELECT DATE(TIMESTAMP '2016-12-25', 'America/Los_Angeles')",
+            },
+        )
+        self.validate_all(
+            "SELECT CAST(CAST('2024-01-15 23:30:00' AS TIMESTAMP) AT TIME ZONE 'UTC' AT TIME ZONE 'Europe/Berlin' AS DATE)",
+            read={
+                "bigquery": "SELECT DATE('2024-01-15 23:30:00', 'Europe/Berlin')",
             },
         )
         self.validate_all(
@@ -2092,3 +2138,54 @@ class TestDuckDB(Validator):
                 self.validate_identity(
                     f"CREATE {keyword} ifelse(a, b, c) AS CASE WHEN a THEN b ELSE c END"
                 )
+
+    def test_bitwise_agg(self):
+        self.validate_all(
+            "SELECT BIT_OR(int_value) FROM t",
+            read={
+                "snowflake": "SELECT BITOR_AGG(int_value) FROM t",
+                "duckdb": "SELECT BIT_OR(int_value) FROM t",
+            },
+        )
+        self.validate_all(
+            "SELECT BIT_AND(int_value) FROM t",
+            read={
+                "snowflake": "SELECT BITAND_AGG(int_value) FROM t",
+                "duckdb": "SELECT BIT_AND(int_value) FROM t",
+            },
+        )
+        self.validate_all(
+            "SELECT BIT_XOR(int_value) FROM t",
+            read={
+                "snowflake": "SELECT BITXOR_AGG(int_value) FROM t",
+                "duckdb": "SELECT BIT_XOR(int_value) FROM t",
+            },
+        )
+        self.validate_all(
+            "SELECT BIT_OR(CAST(val AS FLOAT)) FROM t",
+            write={
+                "duckdb": "SELECT BIT_OR(CAST(ROUND(CAST(val AS REAL)) AS INT)) FROM t",
+                "snowflake": "SELECT BITORAGG(CAST(val AS FLOAT)) FROM t",
+            },
+        )
+        self.validate_all(
+            "SELECT BIT_AND(CAST(val AS DOUBLE)) FROM t",
+            write={
+                "duckdb": "SELECT BIT_AND(CAST(ROUND(CAST(val AS DOUBLE)) AS INT)) FROM t",
+                "snowflake": "SELECT BITANDAGG(CAST(val AS DOUBLE)) FROM t",
+            },
+        )
+        self.validate_all(
+            "SELECT BIT_OR(CAST(val AS DECIMAL(10, 2))) FROM t",
+            write={
+                "duckdb": "SELECT BIT_OR(CAST(CAST(val AS DECIMAL(10, 2)) AS INT)) FROM t",
+                "snowflake": "SELECT BITORAGG(CAST(val AS DECIMAL(10, 2))) FROM t",
+            },
+        )
+        self.validate_all(
+            "SELECT BIT_XOR(CAST(val AS DECIMAL)) FROM t",
+            write={
+                "duckdb": "SELECT BIT_XOR(CAST(CAST(val AS DECIMAL(18, 3)) AS INT)) FROM t",
+                "snowflake": "SELECT BITXORAGG(CAST(val AS DECIMAL(18, 3))) FROM t",
+            },
+        )

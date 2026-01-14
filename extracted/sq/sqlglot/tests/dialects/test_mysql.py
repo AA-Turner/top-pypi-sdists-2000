@@ -193,6 +193,9 @@ class TestMySQL(Validator):
         self.validate_identity("ALTER TABLE t ALTER INDEX i VISIBLE")
         self.validate_identity("ALTER TABLE t ALTER COLUMN c SET INVISIBLE")
         self.validate_identity("ALTER TABLE t ALTER COLUMN c SET VISIBLE")
+        self.validate_identity(
+            "UPDATE foo JOIN bar ON TRUE SET foo.a = bar.a WHERE foo.id = bar.id"
+        )
 
     def test_identity(self):
         self.validate_identity("SELECT HIGH_PRIORITY STRAIGHT_JOIN SQL_CALC_FOUND_ROWS * FROM t")
@@ -332,6 +335,7 @@ class TestMySQL(Validator):
         )
         self.validate_identity("SELECT SUBSTR(1 FROM 2 FOR 3)", "SELECT SUBSTRING(1, 2, 3)")
         self.validate_identity("SELECT ELT(2, 'foo', 'bar', 'baz') AS Result")
+        self.validate_identity("SELECT CHARSET(CHAR(100 USING utf8))")
 
     def test_types(self):
         for char_type in MySQL.Generator.CHAR_CAST_MAPPING:
@@ -482,7 +486,7 @@ class TestMySQL(Validator):
             "clickhouse": UnsupportedError,
             "databricks": "SELECT X'CC'",
             "drill": "SELECT 204",
-            "duckdb": "SELECT CAST(HEX(FROM_HEX('CC')) AS VARBINARY)",
+            "duckdb": "SELECT UNHEX('CC')",
             "hive": "SELECT 204",
             "mysql": "SELECT x'CC'",
             "oracle": "SELECT 204",
@@ -503,7 +507,7 @@ class TestMySQL(Validator):
             "clickhouse": UnsupportedError,
             "databricks": "SELECT X'0000CC'",
             "drill": "SELECT 204",
-            "duckdb": "SELECT CAST(HEX(FROM_HEX('0000CC')) AS VARBINARY)",
+            "duckdb": "SELECT UNHEX('0000CC')",
             "hive": "SELECT 204",
             "mysql": "SELECT x'0000CC'",
             "oracle": "SELECT 204",
@@ -572,6 +576,9 @@ class TestMySQL(Validator):
             write={
                 "mysql": "CAST(x AS CHAR CHARACTER SET latin1)",
             },
+        )
+        self.validate_identity(
+            "CONVERT('a' USING binary)", "CAST('a' AS CHAR CHARACTER SET binary)"
         )
 
     def test_match_against(self):

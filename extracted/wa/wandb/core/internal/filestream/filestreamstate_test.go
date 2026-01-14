@@ -8,6 +8,7 @@ import (
 	"github.com/wandb/wandb/core/internal/observability"
 	"github.com/wandb/wandb/core/internal/observabilitytest"
 	"github.com/wandb/wandb/core/internal/runsummary"
+	"github.com/wandb/wandb/core/internal/sparselist"
 	spb "github.com/wandb/wandb/core/pkg/service_go_proto"
 )
 
@@ -74,6 +75,7 @@ func TestState_IsAtSizeLimit_UnsentSummary(t *testing.T) {
 func TestState_IsAtSizeLimit_Console(t *testing.T) {
 	state := &FileStreamState{MaxRequestSizeBytes: 10}
 	request := &FileStreamRequest{}
+	request.ConsoleLines = &sparselist.SparseList[string]{}
 	request.ConsoleLines.Put(0, "one")
 	request.ConsoleLines.Put(1, "two")
 	request.ConsoleLines.Put(2, "this line is too long")
@@ -84,6 +86,7 @@ func TestState_IsAtSizeLimit_Console(t *testing.T) {
 func TestState_IsAtSizeLimit_ConsoleSmallRun(t *testing.T) {
 	state := &FileStreamState{MaxRequestSizeBytes: 10}
 	request := &FileStreamRequest{}
+	request.ConsoleLines = &sparselist.SparseList[string]{}
 	request.ConsoleLines.Put(0, "one")
 	request.ConsoleLines.Put(1, "two")
 	request.ConsoleLines.Put(10, "too long but in a different run")
@@ -279,12 +282,13 @@ func TestState_Pop_SummaryLineTooLong(t *testing.T) {
 	assert.Contains(t,
 		logs.String(),
 		"filestream: run summary line too long, skipping")
+	messages := printer.Read()
+	assert.Len(t, messages, 1)
+	assert.Equal(t, observability.Warning, messages[0].Severity)
 	assert.Equal(t,
-		[]string{
-			"Skipped uploading summary data that exceeded size limit" +
-				" (8 > 1 bytes).",
-		},
-		printer.Read())
+		"Skipped uploading summary data that exceeded size limit"+
+			" (8 > 1 bytes).",
+		messages[0].Content)
 }
 
 func TestState_Pop_FullConsoleLines(t *testing.T) {
@@ -293,6 +297,7 @@ func TestState_Pop_FullConsoleLines(t *testing.T) {
 		ConsoleLineOffset:   7,
 	}
 	request := &FileStreamRequest{}
+	request.ConsoleLines = &sparselist.SparseList[string]{}
 	request.ConsoleLines.Put(10, "line 17")
 	request.ConsoleLines.Put(11, "line 18")
 
@@ -309,6 +314,7 @@ func TestState_Pop_FullConsoleLines(t *testing.T) {
 func TestState_Pop_ConsoleLinesLimitedBySize(t *testing.T) {
 	state := &FileStreamState{ConsoleLineOffset: 7}
 	request := &FileStreamRequest{}
+	request.ConsoleLines = &sparselist.SparseList[string]{}
 	request.ConsoleLines.Put(6, "line 13")
 	request.ConsoleLines.Put(7, "line 14")
 
@@ -328,6 +334,7 @@ func TestState_Pop_ConsoleLinesMoreThanOneRun(t *testing.T) {
 		ConsoleLineOffset:   7,
 	}
 	request := &FileStreamRequest{}
+	request.ConsoleLines = &sparselist.SparseList[string]{}
 	request.ConsoleLines.Put(10, "run1_a")
 	request.ConsoleLines.Put(11, "run1_b")
 	request.ConsoleLines.Put(20, "run2_a")

@@ -10,6 +10,9 @@ class TestExasol(Validator):
             "SELECT 1 AS [x]",
             'SELECT 1 AS "x"',
         )
+        self.validate_identity("SYSTIMESTAMP", "SYSTIMESTAMP()")
+        self.validate_identity("SELECT SYSTIMESTAMP()")
+        self.validate_identity("SELECT SYSTIMESTAMP(6)")
 
     def test_qualify_unscoped_star(self):
         self.validate_all(
@@ -336,10 +339,10 @@ class TestExasol(Validator):
                 "SELECT TO_CHAR(CAST('1999-12-31' AS DATE)) AS TO_CHAR",
                 write={
                     "exasol": "SELECT TO_CHAR(CAST('1999-12-31' AS DATE)) AS TO_CHAR",
-                    "redshift": "SELECT TO_CHAR(CAST('1999-12-31' AS DATE)) AS TO_CHAR",
                     "presto": "SELECT DATE_FORMAT(CAST('1999-12-31' AS DATE)) AS TO_CHAR",
                     "oracle": "SELECT TO_CHAR(CAST('1999-12-31' AS DATE)) AS TO_CHAR",
-                    "postgres": "SELECT TO_CHAR(CAST('1999-12-31' AS DATE)) AS TO_CHAR",
+                    "redshift": "SELECT CAST(CAST('1999-12-31' AS DATE) AS VARCHAR(MAX)) AS TO_CHAR",
+                    "postgres": "SELECT CAST(CAST('1999-12-31' AS DATE) AS TEXT) AS TO_CHAR",
                 },
                 read={
                     "exasol": "SELECT TO_CHAR(DATE '1999-12-31') AS TO_CHAR",
@@ -424,6 +427,16 @@ class TestExasol(Validator):
                 )
 
         self.validate_all(
+            "SELECT TO_CHAR(CAST('2024-07-08 13:45:00' AS TIMESTAMP), 'DY')",
+            write={
+                "exasol": "SELECT TO_CHAR(CAST('2024-07-08 13:45:00' AS TIMESTAMP), 'DY')",
+                "oracle": "SELECT TO_CHAR(CAST('2024-07-08 13:45:00' AS TIMESTAMP), 'DY')",
+                "postgres": "SELECT TO_CHAR(CAST('2024-07-08 13:45:00' AS TIMESTAMP), 'TMDy')",
+                "databricks": "SELECT DATE_FORMAT(CAST('2024-07-08 13:45:00' AS TIMESTAMP), 'EEE')",
+            },
+        )
+
+        self.validate_all(
             "TO_DATE(x, 'YYYY-MM-DD')",
             write={
                 "exasol": "TO_DATE(x, 'YYYY-MM-DD')",
@@ -481,7 +494,7 @@ class TestExasol(Validator):
         )
         units = ["MM", "QUARTER", "WEEK", "MINUTE", "YEAR"]
         for unit in units:
-            with self.subTest(f"Testing TO_CHAR with format '{unit}'"):
+            with self.subTest(f"Testing DATE_TRUNC with format '{unit}'"):
                 self.validate_all(
                     f"SELECT TRUNC(CAST('2006-12-31' AS DATE), '{unit}') AS TRUNC",
                     write={
@@ -704,6 +717,8 @@ class TestExasol(Validator):
         self.validate_identity(
             "SELECT name, age, IF age < 18 THEN 'underaged' ELSE 'adult' ENDIF AS LEGALITY FROM persons"
         )
+
+        self.validate_identity("SELECT HASHTYPE_MD5(a, b, c, d)")
 
     def test_odbc_date_literals(self):
         self.validate_identity("SELECT {d'2024-01-01'}", "SELECT TO_DATE('2024-01-01')")

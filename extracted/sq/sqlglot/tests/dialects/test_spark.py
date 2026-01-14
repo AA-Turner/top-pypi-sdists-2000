@@ -649,6 +649,17 @@ TBLPROPERTIES (
             },
         )
 
+        self.validate_all(
+            "SELECT * FROM quarterly_sales PIVOT(SUM(amount) AS amount, 'dummy' AS bar FOR quarter IN ('2023_Q1'))",
+            read={
+                "spark": "SELECT * FROM quarterly_sales PIVOT(SUM(amount) amount, 'dummy' bar FOR quarter IN ('2023_Q1'))",
+                "databricks": "SELECT * FROM quarterly_sales PIVOT(SUM(amount) amount, 'dummy' bar FOR quarter IN ('2023_Q1'))",
+            },
+            write={
+                "databricks": "SELECT * FROM quarterly_sales PIVOT(SUM(amount) AS amount, 'dummy' AS bar FOR quarter IN ('2023_Q1'))",
+            },
+        )
+
         for data_type in (
             "BOOLEAN",
             "DATE",
@@ -928,6 +939,7 @@ TBLPROPERTIES (
         )
         self.validate_identity("BITMAP_OR_AGG(x)")
         self.validate_identity("SELECT ELT(2, 'foo', 'bar', 'baz') AS Result")
+        self.validate_identity("SELECT MAKE_INTERVAL(100, 11, 12, 13, 14, 14, 15)")
 
     def test_bool_or(self):
         self.validate_all(

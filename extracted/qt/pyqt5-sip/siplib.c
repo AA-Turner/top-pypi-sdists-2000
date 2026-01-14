@@ -8504,9 +8504,7 @@ static PyObject *sip_api_is_py_method_12_8(sip_gilstate_t *gil, char *pymc,
     if (sipInterpreter == NULL)
         return NULL;
 
-#ifdef WITH_THREAD
     *gil = PyGILState_Ensure();
-#endif
 
     /* Only read this when we have the GIL. */
     sipSelf = *sipSelfp;
@@ -8638,17 +8636,13 @@ static PyObject *sip_api_is_py_method_12_8(sip_gilstate_t *gil, char *pymc,
             PyErr_Print();
         }
 
-#ifdef WITH_THREAD
         PyGILState_Release(*gil);
-#endif
     }
 
     return reimp;
 
 release_gil:
-#ifdef WITH_THREAD
     PyGILState_Release(*gil);
-#endif
     return NULL;
 }
 

@@ -167,8 +167,24 @@ ARG_BUNDLE_NAME = Arg(
     default=None,
     action="append",
 )
-ARG_START_DATE = Arg(("-s", "--start-date"), help="Override start_date YYYY-MM-DD", type=parsedate)
-ARG_END_DATE = Arg(("-e", "--end-date"), help="Override end_date YYYY-MM-DD", type=parsedate)
+ARG_START_DATE = Arg(
+    ("-s", "--start-date"),
+    help=(
+        "Override start_date. Accepts multiple datetime formats including: "
+        "YYYY-MM-DD, YYYY-MM-DDTHH:MM:SS, YYYY-MM-DDTHH:MM:SS±HH:MM (ISO 8601), "
+        "and other formats supported by pendulum.parse()"
+    ),
+    type=parsedate,
+)
+ARG_END_DATE = Arg(
+    ("-e", "--end-date"),
+    help=(
+        "Override end_date. Accepts multiple datetime formats including: "
+        "YYYY-MM-DD, YYYY-MM-DDTHH:MM:SS, YYYY-MM-DDTHH:MM:SS±HH:MM (ISO 8601), "
+        "and other formats supported by pendulum.parse()"
+    ),
+    type=parsedate,
+)
 ARG_OUTPUT_PATH = Arg(
     (
         "-o",
@@ -344,10 +360,11 @@ ARG_BACKFILL_REPROCESS_BEHAVIOR = Arg(
 ARG_BACKFILL_RUN_ON_LATEST_VERSION = Arg(
     ("--run-on-latest-version",),
     help=(
-        "(Experimental) If set, the backfill will run tasks using the latest bundle version instead of "
-        "the version that was active when the original Dag run was created."
+        "(Experimental) The backfill will run tasks using the latest bundle version instead of "
+        "the version that was active when the original Dag run was created. Defaults to True."
     ),
     action="store_true",
+    default=True,
 )
 
 

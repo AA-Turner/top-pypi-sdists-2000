@@ -132,7 +132,7 @@ from pandas._libs.interval import (
     Interval,
     _OrderableT,
 )
-from pandas._libs.lib import _NoDefaultDoNotUse
+from pandas._libs.lib import NoDefaultDoNotUse
 from pandas._libs.missing import NAType
 from pandas._libs.tslibs import BaseOffset
 from pandas._libs.tslibs.nattype import NaTType
@@ -191,8 +191,6 @@ from pandas._typing import (
     NsmallestNlargestKeep,
     NumpyStrDtypeArg,
     ObjectDtypeArg,
-    PandasAstypeComplexDtypeArg,
-    PandasAstypeFloatDtypeArg,
     PandasAstypeTimedeltaDtypeArg,
     PandasAstypeTimestampDtypeArg,
     PeriodFrequency,
@@ -446,23 +444,13 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
             IntervalIndex[Interval[_OrderableT]]
             | Interval[_OrderableT]
             | Sequence[Interval[_OrderableT]]
-            | dict[HashableT1, Interval[_OrderableT]]
+            | dict[Hashable, Interval[_OrderableT]]
         ),
         index: AxesData | None = None,
         dtype: Literal["Interval"] = ...,
         name: Hashable = None,
         copy: bool | None = None,
     ) -> Series[Interval[_OrderableT]]: ...
-    @overload
-    def __new__(  # type: ignore[overload-overlap] # pyright: ignore[reportOverlappingOverload]
-        cls,
-        data: Scalar | _DataLike | dict[HashableT1, Any] | None,
-        index: AxesData | None = None,
-        *,
-        dtype: type[S1],
-        name: Hashable = None,
-        copy: bool | None = None,
-    ) -> Self: ...
     @overload
     def __new__(  # pyright: ignore[reportOverlappingOverload]
         cls,
@@ -512,6 +500,16 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
     @overload
     def __new__(
         cls,
+        data: Scalar | _DataLike | dict[HashableT1, Any] | None,
+        index: AxesData | None = None,
+        *,
+        dtype: type[S1],
+        name: Hashable = None,
+        copy: bool | None = None,
+    ) -> Self: ...
+    @overload
+    def __new__(
+        cls,
         data: (
             S1
             | ArrayLike
@@ -534,7 +532,7 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
             Scalar
             | _DataLike
             | Mapping[HashableT1, Any]
-            | BaseGroupBy
+            | BaseGroupBy[Any]
             | NaTType
             | NAType
             | None
@@ -556,7 +554,6 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
     def name(self, value: Hashable | None) -> None: ...
     @property
     def values(self) -> np_1darray | ExtensionArray | Categorical: ...
-    def ravel(self, order: _str = ...) -> np_1darray: ...
     def __len__(self) -> int: ...
     @final
     def __array_ufunc__(
@@ -793,7 +790,7 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
         as_index: _bool = ...,
         sort: _bool = ...,
         group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
+        observed: _bool | NoDefaultDoNotUse = ...,
         dropna: _bool = ...,
     ) -> SeriesGroupBy[S1, Scalar]: ...
     @overload
@@ -804,7 +801,7 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
         as_index: _bool = ...,
         sort: _bool = ...,
         group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
+        observed: _bool | NoDefaultDoNotUse = ...,
         dropna: _bool = ...,
     ) -> SeriesGroupBy[S1, Timestamp]: ...
     @overload
@@ -815,7 +812,7 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
         as_index: _bool = ...,
         sort: _bool = ...,
         group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
+        observed: _bool | NoDefaultDoNotUse = ...,
         dropna: _bool = ...,
     ) -> SeriesGroupBy[S1, Timedelta]: ...
     @overload
@@ -826,7 +823,7 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
         as_index: _bool = ...,
         sort: _bool = ...,
         group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
+        observed: _bool | NoDefaultDoNotUse = ...,
         dropna: _bool = ...,
     ) -> SeriesGroupBy[S1, Period]: ...
     @overload
@@ -837,7 +834,7 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
         as_index: _bool = ...,
         sort: _bool = ...,
         group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
+        observed: _bool | NoDefaultDoNotUse = ...,
         dropna: _bool = ...,
     ) -> SeriesGroupBy[S1, IntervalT]: ...
     @overload
@@ -848,7 +845,7 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
         as_index: _bool = ...,
         sort: _bool = ...,
         group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
+        observed: _bool | NoDefaultDoNotUse = ...,
         dropna: _bool = ...,
     ) -> SeriesGroupBy[S1, tuple[Hashable, ...]]: ...
     @overload
@@ -859,7 +856,7 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
         as_index: _bool = ...,
         sort: _bool = ...,
         group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
+        observed: _bool | NoDefaultDoNotUse = ...,
         dropna: _bool = ...,
     ) -> SeriesGroupBy[S1, Scalar]: ...
     @overload
@@ -871,7 +868,7 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
         as_index: _bool = ...,
         sort: _bool = ...,
         group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
+        observed: _bool | NoDefaultDoNotUse = ...,
         dropna: _bool = ...,
     ) -> SeriesGroupBy[S1, Scalar]: ...
     @overload
@@ -882,7 +879,7 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
         as_index: _bool = ...,
         sort: _bool = ...,
         group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
+        observed: _bool | NoDefaultDoNotUse = ...,
         dropna: _bool = ...,
     ) -> SeriesGroupBy[S1, SeriesByT]: ...
     @overload
@@ -893,7 +890,7 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
         as_index: _bool = ...,
         sort: _bool = ...,
         group_keys: _bool = ...,
-        observed: _bool | _NoDefaultDoNotUse = ...,
+        observed: _bool | NoDefaultDoNotUse = ...,
         dropna: _bool = ...,
     ) -> SeriesGroupBy[S1, Any]: ...
     def count(self) -> int: ...
@@ -1105,7 +1102,7 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
     def swaplevel(
         self, i: Level = -2, j: Level = -1, copy: _bool = True
     ) -> Series[S1]: ...
-    def reorder_levels(self, order: list[Any]) -> Series[S1]: ...
+    def reorder_levels(self, order: Sequence[int | np.integer]) -> Series[S1]: ...
     def explode(self, ignore_index: _bool = ...) -> Series[S1]: ...
     def unstack(
         self,
@@ -1467,14 +1464,14 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
     @overload
     def astype(
         self,
-        dtype: FloatDtypeArg | PandasAstypeFloatDtypeArg,
+        dtype: FloatDtypeArg,
         copy: _bool = ...,
         errors: IgnoreRaise = ...,
     ) -> Series[float]: ...
     @overload
     def astype(
         self,
-        dtype: ComplexDtypeArg | PandasAstypeComplexDtypeArg,
+        dtype: ComplexDtypeArg,
         copy: _bool = ...,
         errors: IgnoreRaise = ...,
     ) -> Series[complex]: ...
@@ -2273,7 +2270,7 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
     ) -> Series[bool]: ...
     @overload
     def __and__(self, other: int | np_ndarray_anyint | Series[int]) -> Series[int]: ...
-    def __eq__(self, other: object) -> Series[_bool]: ...  # type: ignore[override] # pyright: ignore[reportIncompatibleMethodOverride]
+    def __eq__(self, other: object) -> Series[_bool]: ...  # type: ignore[override] # pyright: ignore[reportIncompatibleMethodOverride] # pyrefly: ignore[bad-override] # ty: ignore[invalid-method-override]
     @overload
     def __floordiv__(self, other: np_ndarray_dt) -> Never: ...
     @overload
@@ -2428,17 +2425,10 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
         fill_value: float | None = None,
         axis: AxisIndex | None = 0,
     ) -> Series[int]: ...
-    if sys.version_info >= (3, 11):
-        @overload
-        def __rfloordiv__(  # type: ignore[overload-overlap]
-            self: Series[Never], other: ScalarArrayIndexSeriesReal
-        ) -> Series: ...
-    else:
-        @overload
-        def __rfloordiv__(
-            self: Series[Never], other: ScalarArrayIndexSeriesReal
-        ) -> Series: ...
-
+    @overload
+    def __rfloordiv__(  # type: ignore[overload-overlap]
+        self: Series[Never], other: ScalarArrayIndexSeriesReal
+    ) -> Series: ...
     @overload
     def __rfloordiv__(self, other: np_ndarray_complex | np_ndarray_dt) -> Never: ...
     @overload
@@ -2580,16 +2570,16 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
         fill_value: float | None = None,
         axis: AxisIndex = ...,
     ) -> Series[int]: ...
-    def __ge__(  # type: ignore[override]
+    def __ge__(  # type: ignore[override] # pyrefly: ignore[bad-override]
         self, other: S1 | ListLike | Series[S1] | datetime | timedelta | date
     ) -> Series[_bool]: ...
-    def __gt__(  # type: ignore[override]
+    def __gt__(  # type: ignore[override] # pyrefly: ignore[bad-override]
         self, other: S1 | ListLike | Series[S1] | datetime | timedelta | date
     ) -> Series[_bool]: ...
-    def __le__(  # type: ignore[override]
+    def __le__(  # type: ignore[override] # pyrefly: ignore[bad-override]
         self, other: S1 | ListLike | Series[S1] | datetime | timedelta | date
     ) -> Series[_bool]: ...
-    def __lt__(  # type: ignore[override]
+    def __lt__(  # type: ignore[override] # pyrefly: ignore[bad-override]
         self, other: S1 | ListLike | Series[S1] | datetime | timedelta | date
     ) -> Series[_bool]: ...
     @overload
@@ -3023,7 +3013,7 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
         axis: int = 0,
     ) -> Series[complex]: ...
     def __mod__(self, other: float | ListLike | Series[S1]) -> Series[S1]: ...
-    def __ne__(self, other: object) -> Series[_bool]: ...  # type: ignore[override] # pyright: ignore[reportIncompatibleMethodOverride]
+    def __ne__(self, other: object) -> Series[_bool]: ...  # type: ignore[override] # pyright: ignore[reportIncompatibleMethodOverride] # pyrefly: ignore[bad-override] # ty: ignore[invalid-method-override]
     def __pow__(self, other: complex | ListLike | Series[S1]) -> Series[S1]: ...
     # ignore needed for mypy as we want different results based on the arguments
     @overload  # type: ignore[override]
@@ -3039,7 +3029,7 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
     ) -> Series[bool]: ...
     @overload
     def __rand__(self, other: int | np_ndarray_anyint | Series[int]) -> Series[int]: ...
-    def __rdivmod__(self, other: float | ListLike | Series[S1]) -> Series[S1]: ...  # type: ignore[override] # pyright: ignore[reportIncompatibleMethodOverride]
+    def __rdivmod__(self, other: float | ListLike | Series[S1]) -> Series[S1]: ...  # type: ignore[override] # pyright: ignore[reportIncompatibleMethodOverride] # pyrefly: ignore[bad-override] # ty: ignore[invalid-method-override]
     def __rmod__(self, other: float | ListLike | Series[S1]) -> Series[S1]: ...
     def __rpow__(self, other: complex | ListLike | Series[S1]) -> Series[S1]: ...
     # ignore needed for mypy as we want different results based on the arguments
@@ -4636,14 +4626,42 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
         **kwargs: Any,
     ) -> np_1darray: ...
     def tolist(self) -> list[S1]: ...
+    @overload
     def var(
-        self,
+        self: Series[Never],
         axis: AxisIndex | None = 0,
         skipna: _bool | None = True,
         ddof: int = 1,
         numeric_only: _bool = False,
         **kwargs: Any,
-    ) -> Scalar: ...
+    ) -> float: ...
+    @overload
+    def var(
+        self: Series[Timedelta] | Series[Timestamp],
+        axis: AxisIndex | None = 0,
+        skipna: _bool | None = True,
+        ddof: int = 1,
+        numeric_only: _bool = False,
+        **kwargs: Any,
+    ) -> Never: ...
+    @overload
+    def var(
+        self: Series[complex],
+        axis: AxisIndex | None = 0,
+        skipna: _bool | None = True,
+        ddof: int = 1,
+        numeric_only: _bool = False,
+        **kwargs: Any,
+    ) -> float: ...
+    @overload
+    def var(
+        self: SupportsGetItem[Scalar, SupportsTruedivInt[S2]],
+        axis: AxisIndex | None = 0,
+        skipna: _bool | None = True,
+        ddof: int = 1,
+        numeric_only: _bool = False,
+        **kwargs: Any,
+    ) -> S2: ...
     # Rename axis with `mapper`, `axis`, and `inplace=True`
     @overload
     def rename_axis(
@@ -4687,7 +4705,7 @@ class Series(IndexOpsMixin[S1], ElementOpsMixin[S1], NDFrame):
         labels: AxesData,
         *,
         axis: Axis = 0,
-        copy: _bool | _NoDefaultDoNotUse = ...,
+        copy: _bool | NoDefaultDoNotUse = ...,
     ) -> Self: ...
     @final
     def xs(  # pyright: ignore[reportIncompatibleMethodOverride] # pyrefly: ignore[bad-override] # ty: ignore[invalid-method-override]
