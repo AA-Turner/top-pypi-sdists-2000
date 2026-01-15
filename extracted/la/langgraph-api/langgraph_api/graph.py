@@ -92,6 +92,20 @@ async def register_graph(
         await register_graph_db()
 
 
+def _validate_assistant_id(assistant_id: str) -> None:
+    """Validate an assistant ID is either a graph_id or a valid UUID. Throw an error if not valid."""
+    if assistant_id and assistant_id not in GRAPHS:
+        # Not a graph_id, must be a valid UUID
+        try:
+            UUID(assistant_id)
+        except ValueError:
+            # Invalid format - return 404 to match test expectations
+            raise HTTPException(
+                status_code=404,
+                detail=f"Assistant '{assistant_id}' not found",
+            ) from None
+
+
 def _log_slow_graph_generation(
     start: float,
     value_type: str,
@@ -272,9 +286,9 @@ class GraphSpec(NamedTuple):
     variable: str | None = None
     config: dict | None = None
     """The configuration for the graph.
-    
+
     Contains information such as: tags, recursion_limit and configurable.
-    
+
     Configurable is a dict containing user defined values for the graph.
     """
     description: str | None = None

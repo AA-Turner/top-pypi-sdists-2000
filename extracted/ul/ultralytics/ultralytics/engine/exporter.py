@@ -463,6 +463,9 @@ class Exporter:
             )
         if tfjs and (ARM64 and LINUX):
             raise SystemError("TF.js exports are not currently supported on ARM64 Linux")
+        if ncnn and hasattr(model.model[-1], "one2one_cv2"):
+            del model.model[-1].one2one_cv2  # Disable end2end branch for NCNN export as it does not support topk
+            LOGGER.warning("NCNN export does not support end2end models, disabling end2end branch.")
         # Recommend OpenVINO if export and Intel CPU
         if SETTINGS.get("openvino_msg"):
             if is_intel():
@@ -791,7 +794,6 @@ class Exporter:
                         f".*{head_module_name}/.*/Sub*",
                         f".*{head_module_name}/.*/Mul*",
                         f".*{head_module_name}/.*/Div*",
-                        f".*{head_module_name}\\.dfl.*",
                     ],
                     types=["Sigmoid"],
                 )
@@ -864,10 +866,6 @@ class Exporter:
     @try_export
     def export_ncnn(self, prefix=colorstr("NCNN:")):
         """Export YOLO model to NCNN format using PNNX https://github.com/pnnx/pnnx."""
-        if ARM64:
-            raise NotImplementedError(
-                "NCNN export is not supported on ARM64"
-            )  # https://github.com/Tencent/ncnn/issues/6509
         check_requirements("ncnn", cmds="--no-deps")  # no deps to avoid installing opencv-python
         check_requirements("pnnx")
         import ncnn

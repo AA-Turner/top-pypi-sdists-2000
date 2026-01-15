@@ -23,6 +23,7 @@ from chromadb.api.types import (
     Include,
     Metadata,
     Metadatas,
+    ReadLevel,
     Where,
     QueryResult,
     GetResult,
@@ -107,7 +108,7 @@ logger = logging.getLogger(__name__)
 
 __settings = Settings()
 
-__version__ = "1.4.0"
+__version__ = "1.4.1"
 
 
 # Workaround to deal with Colab's old sqlite3 version

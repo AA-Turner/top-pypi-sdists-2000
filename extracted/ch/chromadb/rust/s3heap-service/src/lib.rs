@@ -32,8 +32,8 @@ use s3heap::{
     Triggerable,
 };
 use wal3::{
-    Cursor, CursorName, CursorStore, CursorStoreOptions, CursorWitness, FragmentPuller,
-    FragmentSeqNo, LogPosition, LogReader, LogReaderOptions, ManifestReader,
+    Cursor, CursorName, CursorStore, CursorStoreOptions, CursorWitness, FragmentSeqNo, LogPosition,
+    LogReader, LogReaderOptions, ManifestReader, S3FragmentPuller,
 };
 
 /// gRPC client for heap tender service
@@ -214,7 +214,7 @@ pub static HEAP_TENDER_CURSOR_NAME: CursorName =
 //////////////////////////////////////////// HeapTender ////////////////////////////////////////////
 
 /// Concrete type alias for the LogReader with S3 consumers.
-type S3LogReader = LogReader<(FragmentSeqNo, LogPosition), FragmentPuller, ManifestReader>;
+type S3LogReader = LogReader<(FragmentSeqNo, LogPosition), S3FragmentPuller, ManifestReader>;
 
 /// Manages heap compaction by reading dirty logs and coordinating with HeapWriter.
 pub struct HeapTender {
@@ -313,7 +313,7 @@ impl HeapTender {
         let dirty_futures = dirty_fragments
             .iter()
             .map(|fragment| async {
-                let (_, records, _) = self.reader.read_parquet(fragment).await?;
+                let (_, records, _, _) = self.reader.read_parquet(fragment).await?;
                 let dirty_markers = records
                     .into_iter()
                     .map(|x| -> Result<(LogPosition, DirtyMarker), Error> {

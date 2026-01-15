@@ -339,7 +339,6 @@ CronSelectField = Literal[
     "payload",
     "next_run_date",
     "metadata",
-    "now",
 ]
 CRON_FIELDS: set[str] = set(CronSelectField.__args__)  # type: ignore[attr-defined]
 

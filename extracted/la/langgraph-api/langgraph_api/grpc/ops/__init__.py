@@ -21,6 +21,8 @@ from langgraph_api.grpc.generated import core_api_pb2 as pb
 from langgraph_api.serde import json_dumpb
 from langgraph_api.utils import get_auth_ctx
 
+_MAX_AUTH_FILTER_DEPTH = 2
+
 if TYPE_CHECKING:
     from langgraph_api.schema import Context
 
@@ -155,7 +157,9 @@ def _serialize_filter_value(value: Any) -> str:
     return json_bytes.decode("utf-8")
 
 
-def _filters_to_proto(filters: dict[str, Any] | None) -> list[pb.AuthFilter]:
+def _filters_to_proto(
+    filters: dict[str, Any] | None, *, _depth: int = 0
+) -> list[pb.AuthFilter]:
     """Convert Python auth filters to gRPC proto format.
 
     We have some weird auth semantics today:
@@ -168,6 +172,9 @@ def _filters_to_proto(filters: dict[str, Any] | None) -> list[pb.AuthFilter]:
 
     Returns:
         List of AuthFilter proto messages, empty list if no filters
+
+    Raises:
+        HTTPException: If filters exceed maximum nesting depth (_MAX_AUTH_FILTER_DEPTH).
     """
     if not filters:
         return []
@@ -178,15 +185,25 @@ def _filters_to_proto(filters: dict[str, Any] | None) -> list[pb.AuthFilter]:
         auth_filter = pb.AuthFilter()
 
         if key == "$or":
+            if _depth >= _MAX_AUTH_FILTER_DEPTH:
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"Your auth handler returned a filter with too much nesting. Maximum nesting depth is {_MAX_AUTH_FILTER_DEPTH}. Check the filter returned by your auth handler.",
+                )
+            if not isinstance(filter_value, list) or len(filter_value) < 2:
+                raise HTTPException(
+                    status_code=500,
+                    detail="Your auth handler returned a filter with an invalid $or operator. The $or operator must be a list of at least 2 filter objects. Check the filter returned by your auth handler.",
+                )
             # Recursively convert each filter, wrapping multi-filter branches in AND
             nested_filters = []
             for filter_dict in filter_value:
-                branch_filters = _filters_to_proto(filter_dict)
+                branch_filters = _filters_to_proto(filter_dict, _depth=_depth + 1)
+                if not branch_filters:
+                    continue
                 if len(branch_filters) == 1:
-                    # Single filter, add directly
                     nested_filters.append(branch_filters[0])
                 else:
-                    # Multiple filters in this branch, wrap in AND
                     and_filter = pb.AuthFilter()
                     and_filter.and_filter.CopyFrom(
                         pb.AndAuthFilter(filters=branch_filters)
@@ -195,22 +212,20 @@ def _filters_to_proto(filters: dict[str, Any] | None) -> list[pb.AuthFilter]:
             auth_filter.or_filter.CopyFrom(pb.OrAuthFilter(filters=nested_filters))
             proto_filters.append(auth_filter)
         elif key == "$and":
-            # Recursively convert each filter, wrapping multi-filter branches in AND
-            nested_filters = []
+            if _depth >= _MAX_AUTH_FILTER_DEPTH:
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"Your auth handler returned a filter with too much nesting. Maximum nesting depth is {_MAX_AUTH_FILTER_DEPTH}. Check the filter returned by your auth handler.",
+                )
+            if not isinstance(filter_value, list) or len(filter_value) < 2:
+                raise HTTPException(
+                    status_code=500,
+                    detail="Your auth handler returned a filter with an invalid $and operator. The $and operator must be a list of at least 2 filter objects. Check the filter returned by your auth handler.",
+                )
+            # Flatten $and branches into the current AND level.
             for filter_dict in filter_value:
-                branch_filters = _filters_to_proto(filter_dict)
-                if len(branch_filters) == 1:
-                    # Single filter, add directly
-                    nested_filters.append(branch_filters[0])
-                else:
-                    # Multiple filters in this branch, wrap in AND
-                    and_filter = pb.AuthFilter()
-                    and_filter.and_filter.CopyFrom(
-                        pb.AndAuthFilter(filters=branch_filters)
-                    )
-                    nested_filters.append(and_filter)
-            auth_filter.and_filter.CopyFrom(pb.AndAuthFilter(filters=nested_filters))
-            proto_filters.append(auth_filter)
+                branch_filters = _filters_to_proto(filter_dict, _depth=_depth + 1)
+                proto_filters.extend(branch_filters)
         else:
             # We expect one key in the dict with a specific known value
             if isinstance(filter_value, dict):

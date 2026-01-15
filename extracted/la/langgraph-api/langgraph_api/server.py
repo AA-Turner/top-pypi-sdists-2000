@@ -8,7 +8,6 @@ import os
 import sys
 import typing
 
-
 if not (
     (disable_truststore := os.getenv("DISABLE_TRUSTSTORE"))
     and disable_truststore.lower() == "true"

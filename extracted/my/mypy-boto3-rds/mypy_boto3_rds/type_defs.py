@@ -3,7 +3,7 @@ Type annotations for rds service type definitions.
 
 [Documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_rds/type_defs/)
 
-Copyright 2025 Vlad Emelianov
+Copyright 2026 Vlad Emelianov
 
 Usage::
 
@@ -1808,6 +1808,7 @@ class CreateCustomDBEngineVersionMessageTypeDef(TypedDict):
     EngineVersion: str
     DatabaseInstallationFilesS3BucketName: NotRequired[str]
     DatabaseInstallationFilesS3Prefix: NotRequired[str]
+    DatabaseInstallationFiles: NotRequired[Sequence[str]]
     ImageId: NotRequired[str]
     KMSKeyId: NotRequired[str]
     SourceCustomDbEngineVersionIdentifier: NotRequired[str]
@@ -1815,7 +1816,6 @@ class CreateCustomDBEngineVersionMessageTypeDef(TypedDict):
     Description: NotRequired[str]
     Manifest: NotRequired[str]
     Tags: NotRequired[Sequence[TagTypeDef]]
-    DatabaseInstallationFiles: NotRequired[Sequence[str]]
 
 
 class CreateDBClusterEndpointMessageTypeDef(TypedDict):
@@ -2076,8 +2076,8 @@ class OrderableDBInstanceOptionTypeDef(TypedDict):
     SupportedNetworkTypes: NotRequired[list[str]]
     SupportsClusters: NotRequired[bool]
     SupportsDedicatedLogVolume: NotRequired[bool]
-    SupportsHttpEndpoint: NotRequired[bool]
     SupportsAdditionalStorageVolumes: NotRequired[bool]
+    SupportsHttpEndpoint: NotRequired[bool]
     AvailableAdditionalStorageVolumesOptions: NotRequired[
         list[AvailableAdditionalStorageVolumesOptionTypeDef]
     ]
@@ -2267,8 +2267,8 @@ class DBSnapshotTypeDef(TypedDict):
     DBSystemId: NotRequired[str]
     MultiTenant: NotRequired[bool]
     DedicatedLogVolume: NotRequired[bool]
-    SnapshotAvailabilityZone: NotRequired[str]
     AdditionalStorageVolumes: NotRequired[list[AdditionalStorageVolumeTypeDef]]
+    SnapshotAvailabilityZone: NotRequired[str]
 
 
 class PendingModifiedValuesTypeDef(TypedDict):
@@ -2416,12 +2416,14 @@ class DBEngineVersionResponseTypeDef(TypedDict):
     EngineVersion: str
     DatabaseInstallationFilesS3BucketName: str
     DatabaseInstallationFilesS3Prefix: str
+    DatabaseInstallationFiles: list[str]
     CustomDBEngineVersionManifest: str
     DBParameterGroupFamily: str
     DBEngineDescription: str
     DBEngineVersionArn: str
     DBEngineVersionDescription: str
     DefaultCharacterSet: CharacterSetTypeDef
+    FailureReason: str
     Image: CustomDBEngineVersionAMITypeDef
     DBEngineMediaType: str
     KMSKeyId: str
@@ -2446,8 +2448,6 @@ class DBEngineVersionResponseTypeDef(TypedDict):
     SupportsLocalWriteForwarding: bool
     SupportsIntegrations: bool
     ServerlessV2FeaturesSupport: ServerlessV2FeaturesSupportTypeDef
-    DatabaseInstallationFiles: list[str]
-    FailureReason: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -2457,12 +2457,14 @@ class DBEngineVersionTypeDef(TypedDict):
     EngineVersion: NotRequired[str]
     DatabaseInstallationFilesS3BucketName: NotRequired[str]
     DatabaseInstallationFilesS3Prefix: NotRequired[str]
+    DatabaseInstallationFiles: NotRequired[list[str]]
     CustomDBEngineVersionManifest: NotRequired[str]
     DBParameterGroupFamily: NotRequired[str]
     DBEngineDescription: NotRequired[str]
     DBEngineVersionArn: NotRequired[str]
     DBEngineVersionDescription: NotRequired[str]
     DefaultCharacterSet: NotRequired[CharacterSetTypeDef]
+    FailureReason: NotRequired[str]
     Image: NotRequired[CustomDBEngineVersionAMITypeDef]
     DBEngineMediaType: NotRequired[str]
     KMSKeyId: NotRequired[str]
@@ -2487,8 +2489,6 @@ class DBEngineVersionTypeDef(TypedDict):
     SupportsLocalWriteForwarding: NotRequired[bool]
     SupportsIntegrations: NotRequired[bool]
     ServerlessV2FeaturesSupport: NotRequired[ServerlessV2FeaturesSupportTypeDef]
-    DatabaseInstallationFiles: NotRequired[list[str]]
-    FailureReason: NotRequired[str]
 
 
 class DBInstanceAutomatedBackupTypeDef(TypedDict):
@@ -3734,9 +3734,9 @@ class CreateDBInstanceMessageTypeDef(TypedDict):
     MultiTenant: NotRequired[bool]
     DedicatedLogVolume: NotRequired[bool]
     EngineLifecycleSupport: NotRequired[str]
+    AdditionalStorageVolumes: NotRequired[Sequence[AdditionalStorageVolumeTypeDef]]
     TagSpecifications: NotRequired[Sequence[TagSpecificationTypeDef]]
     MasterUserAuthenticationType: NotRequired[MasterUserAuthenticationTypeType]
-    AdditionalStorageVolumes: NotRequired[Sequence[AdditionalStorageVolumeTypeDef]]
 
 
 class CreateDBInstanceReadReplicaMessageTypeDef(TypedDict):
@@ -3787,8 +3787,8 @@ class CreateDBInstanceReadReplicaMessageTypeDef(TypedDict):
     DedicatedLogVolume: NotRequired[bool]
     UpgradeStorageConfig: NotRequired[bool]
     CACertificateIdentifier: NotRequired[str]
-    TagSpecifications: NotRequired[Sequence[TagSpecificationTypeDef]]
     AdditionalStorageVolumes: NotRequired[Sequence[AdditionalStorageVolumeTypeDef]]
+    TagSpecifications: NotRequired[Sequence[TagSpecificationTypeDef]]
     SourceRegion: NotRequired[str]
 
 
@@ -3854,9 +3854,9 @@ class ModifyDBInstanceMessageTypeDef(TypedDict):
     MultiTenant: NotRequired[bool]
     DedicatedLogVolume: NotRequired[bool]
     Engine: NotRequired[str]
+    AdditionalStorageVolumes: NotRequired[Sequence[ModifyAdditionalStorageVolumeTypeDef]]
     TagSpecifications: NotRequired[Sequence[TagSpecificationTypeDef]]
     MasterUserAuthenticationType: NotRequired[MasterUserAuthenticationTypeType]
-    AdditionalStorageVolumes: NotRequired[Sequence[ModifyAdditionalStorageVolumeTypeDef]]
 
 
 class PromoteReadReplicaMessageTypeDef(TypedDict):
@@ -4028,10 +4028,10 @@ class RestoreDBInstanceFromDBSnapshotMessageTypeDef(TypedDict):
     DedicatedLogVolume: NotRequired[bool]
     CACertificateIdentifier: NotRequired[str]
     EngineLifecycleSupport: NotRequired[str]
+    AdditionalStorageVolumes: NotRequired[Sequence[AdditionalStorageVolumeTypeDef]]
     TagSpecifications: NotRequired[Sequence[TagSpecificationTypeDef]]
     ManageMasterUserPassword: NotRequired[bool]
     MasterUserSecretKmsKeyId: NotRequired[str]
-    AdditionalStorageVolumes: NotRequired[Sequence[AdditionalStorageVolumeTypeDef]]
 
 
 class RestoreDBInstanceFromS3MessageTypeDef(TypedDict):
@@ -4087,8 +4087,8 @@ class RestoreDBInstanceFromS3MessageTypeDef(TypedDict):
     DedicatedLogVolume: NotRequired[bool]
     CACertificateIdentifier: NotRequired[str]
     EngineLifecycleSupport: NotRequired[str]
-    TagSpecifications: NotRequired[Sequence[TagSpecificationTypeDef]]
     AdditionalStorageVolumes: NotRequired[Sequence[AdditionalStorageVolumeTypeDef]]
+    TagSpecifications: NotRequired[Sequence[TagSpecificationTypeDef]]
 
 
 class RestoreDBInstanceToPointInTimeMessageTypeDef(TypedDict):
@@ -4138,10 +4138,10 @@ class RestoreDBInstanceToPointInTimeMessageTypeDef(TypedDict):
     DedicatedLogVolume: NotRequired[bool]
     CACertificateIdentifier: NotRequired[str]
     EngineLifecycleSupport: NotRequired[str]
+    AdditionalStorageVolumes: NotRequired[Sequence[AdditionalStorageVolumeTypeDef]]
     TagSpecifications: NotRequired[Sequence[TagSpecificationTypeDef]]
     ManageMasterUserPassword: NotRequired[bool]
     MasterUserSecretKmsKeyId: NotRequired[str]
-    AdditionalStorageVolumes: NotRequired[Sequence[AdditionalStorageVolumeTypeDef]]
 
 
 class OrderableDBInstanceOptionsMessageTypeDef(TypedDict):

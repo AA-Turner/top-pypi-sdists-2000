@@ -1,6 +1,6 @@
 Metadata-Version: 2.2
 Name: datasets
-Version: 4.4.2
+Version: 4.5.0
 Summary: HuggingFace community-driven open-source library of datasets
 Home-page: https://github.com/huggingface/datasets
 Download-URL: https://github.com/huggingface/datasets/tags
@@ -68,6 +68,7 @@ Requires-Dist: aiohttp; extra == "dev"
 Requires-Dist: elasticsearch<8.0.0,>=7.17.12; extra == "dev"
 Requires-Dist: faiss-cpu>=1.8.0.post1; extra == "dev"
 Requires-Dist: h5py; extra == "dev"
+Requires-Dist: pylance; extra == "dev"
 Requires-Dist: jax>=0.3.14; sys_platform != "win32" and extra == "dev"
 Requires-Dist: jaxlib>=0.3.14; sys_platform != "win32" and extra == "dev"
 Requires-Dist: lz4; python_version < "3.14" and extra == "dev"
@@ -105,6 +106,7 @@ Requires-Dist: aiohttp; extra == "tests"
 Requires-Dist: elasticsearch<8.0.0,>=7.17.12; extra == "tests"
 Requires-Dist: faiss-cpu>=1.8.0.post1; extra == "tests"
 Requires-Dist: h5py; extra == "tests"
+Requires-Dist: pylance; extra == "tests"
 Requires-Dist: jax>=0.3.14; sys_platform != "win32" and extra == "tests"
 Requires-Dist: jaxlib>=0.3.14; sys_platform != "win32" and extra == "tests"
 Requires-Dist: lz4; python_version < "3.14" and extra == "tests"
@@ -137,6 +139,7 @@ Requires-Dist: pytest-xdist; extra == "tests-numpy2"
 Requires-Dist: aiohttp; extra == "tests-numpy2"
 Requires-Dist: elasticsearch<8.0.0,>=7.17.12; extra == "tests-numpy2"
 Requires-Dist: h5py; extra == "tests-numpy2"
+Requires-Dist: pylance; extra == "tests-numpy2"
 Requires-Dist: jax>=0.3.14; sys_platform != "win32" and extra == "tests-numpy2"
 Requires-Dist: jaxlib>=0.3.14; sys_platform != "win32" and extra == "tests-numpy2"
 Requires-Dist: lz4; python_version < "3.14" and extra == "tests-numpy2"

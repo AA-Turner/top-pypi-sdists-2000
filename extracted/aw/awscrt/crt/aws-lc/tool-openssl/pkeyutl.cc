@@ -28,7 +28,7 @@ static const argument_t kArguments[] = {
     {"", kOptionalArgument, ""}};
 
 static bool LoadPrivateKey(const std::string &keyfile,
-                           bssl::UniquePtr<std::string> &passin_arg,
+                           Password &passin_arg,
                            bssl::UniquePtr<EVP_PKEY> &pkey) {
   ScopedFILE key_file;
   if (keyfile.empty()) {
@@ -45,12 +45,12 @@ static bool LoadPrivateKey(const std::string &keyfile,
 
   // Extract password using pass_util if provided
   const char *password = nullptr;
-  if (passin_arg && !passin_arg->empty()) {
+  if (!passin_arg.empty()) {
     if (!pass_util::ExtractPassword(passin_arg)) {
       fprintf(stderr, "Error: failed to extract password\n");
       return false;
     }
-    password = passin_arg->c_str();
+    password = passin_arg.get().c_str();
   }
 
   pkey.reset(PEM_read_PrivateKey(key_file.get(), nullptr, nullptr,
@@ -113,29 +113,6 @@ static bool ReadInputData(const std::string &in_path,
   return true;
 }
 
-static bool ApplyPKeyParam(EVP_PKEY_CTX *ctx, const char *pkeyopt) {
-  char *stmp = OPENSSL_strdup(pkeyopt);
-  if (!stmp) {
-    return false;
-  }
-
-  char *vtmp = strchr(stmp, ':');
-  if (!vtmp) {
-    OPENSSL_free(stmp);
-    return false;
-  }
-
-  *vtmp = 0;
-  vtmp++;
-
-  OPENSSL_BEGIN_ALLOW_DEPRECATED
-  int result = EVP_PKEY_CTX_ctrl_str(ctx, stmp, vtmp);
-  OPENSSL_END_ALLOW_DEPRECATED
-
-  OPENSSL_free(stmp);
-  return result == 1;
-}
-
 static bool DoSign(EVP_PKEY *pkey, const std::vector<uint8_t> &input_data,
                    const std::vector<std::string> &pkeyopts,
                    std::vector<uint8_t> &signature) {
@@ -153,7 +130,7 @@ static bool DoSign(EVP_PKEY *pkey, const std::vector<uint8_t> &input_data,
 
   if (pkeyopts.size() > 0) {
     for (const auto &pkeyopt : pkeyopts) {
-      if (!ApplyPKeyParam(ctx.get(), pkeyopt.c_str())) {
+      if (!ApplyPkeyCtrlString(ctx.get(), pkeyopt.c_str())) {
         fprintf(stderr, "Signature parameter error \"%s\"\n", pkeyopt.c_str());
         return false;
       }
@@ -197,7 +174,7 @@ static bool DoVerify(EVP_PKEY *pkey, const std::vector<uint8_t> &input_data,
 
   if (pkeyopts.size() > 0) {
     for (const auto &pkeyopt : pkeyopts) {
-      if (!ApplyPKeyParam(ctx.get(), pkeyopt.c_str())) {
+      if (!ApplyPkeyCtrlString(ctx.get(), pkeyopt.c_str())) {
         fprintf(stderr, "Signature parameter error \"%s\"\n", pkeyopt.c_str());
         return false;
       }
@@ -255,13 +232,13 @@ bool pkeyutlTool(const args_list_t &args) {
   std::string in_path, out_path, inkey_path, sigfile_path;
   std::vector<std::string> pkeyopts;
   // Use sensitive string handling for password
-  bssl::UniquePtr<std::string> passin_arg(new std::string());
+  Password passin_arg;
   bool sign = false, verify = false, pubin = false;
 
   GetString(&in_path, "-in", "", parsed_args);
   GetString(&out_path, "-out", "", parsed_args);
   GetString(&inkey_path, "-inkey", "", parsed_args);
-  GetString(passin_arg.get(), "-passin", "", parsed_args);
+  GetString(&passin_arg.get(), "-passin", "", parsed_args);
   GetString(&sigfile_path, "-sigfile", "", parsed_args);
   GetBoolArgument(&sign, "-sign", parsed_args);
   GetBoolArgument(&verify, "-verify", parsed_args);

@@ -14,6 +14,7 @@ from langgraph_api.api.encryption_middleware import encrypt_request
 from langgraph_api.feature_flags import FF_USE_CORE_API
 from langgraph_api.graph import GRAPHS, get_assistant_id
 from langgraph_api.grpc.ops import Runs as GrpcRuns
+from langgraph_api.otel_context import inject_current_trace_context
 from langgraph_api.schema import (
     All,
     Config,
@@ -234,6 +235,7 @@ async def create_valid_run(
     if checkpoint := payload.get("checkpoint"):
         configurable.update(checkpoint)
     configurable.update(get_configurable_headers(headers))
+    inject_current_trace_context(configurable)
     ctx = get_auth_ctx()
     if ctx:
         user = cast("BaseUser | None", ctx.user)

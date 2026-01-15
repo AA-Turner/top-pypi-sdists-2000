@@ -11,8 +11,9 @@ mod copy;
 mod cursors;
 mod destroy;
 mod gc;
-mod interfaces;
+pub mod interfaces;
 mod manifest;
+mod quorum_writer;
 mod reader;
 mod snapshot_cache;
 mod writer;
@@ -22,20 +23,26 @@ pub use copy::copy;
 pub use cursors::{Cursor, CursorName, CursorStore, CursorWitness};
 pub use destroy::destroy;
 pub use gc::{Garbage, GarbageCollector};
+pub use interfaces::repl::{
+    create_repl_factories, ReplicatedFragmentManagerFactory, ReplicatedFragmentOptions,
+    ReplicatedManifestManagerFactory, StorageWrapper,
+};
 pub use interfaces::s3::{
-    create_factories, upload_parquet, BatchManager, FragmentPuller, ManifestManager,
-    ManifestReader, S3FragmentManagerFactory, S3ManifestManagerFactory,
+    create_s3_factories, upload_parquet, ManifestManager, ManifestReader, S3FragmentManagerFactory,
+    S3FragmentPuller, S3FragmentUploader, S3ManifestManagerFactory,
 };
 pub use interfaces::{
-    FragmentConsumer, FragmentManagerFactory, FragmentPointer, FragmentPublisher, ManifestConsumer,
-    ManifestManagerFactory, ManifestPublisher, ManifestWitness,
+    BatchManager, FragmentConsumer, FragmentManagerFactory, FragmentPointer, FragmentPublisher,
+    FragmentUploader, ManifestConsumer, ManifestManagerFactory, ManifestPublisher, ManifestWitness,
+    PositionWitness,
 };
 pub use manifest::{
-    unprefixed_snapshot_path, Manifest, ManifestAndETag, Snapshot, SnapshotPointer,
+    unprefixed_snapshot_path, Manifest, ManifestAndWitness, Snapshot, SnapshotPointer,
 };
-pub use reader::{checksum_parquet, scan_from_manifest, Limits, LogReader};
+pub use quorum_writer::write_quorum;
+pub use reader::{scan_from_manifest, Limits, LogReader};
 pub use snapshot_cache::SnapshotCache;
-pub use writer::{LogWriter, MarkDirty};
+pub use writer::{now_micros, LogWriter, MarkDirty};
 
 /////////////////////////////////////////////// Error //////////////////////////////////////////////
 
@@ -84,6 +91,8 @@ pub enum Error {
     Internal { file: String, line: u32 },
     #[error("could not find FSN in path: {0}")]
     MissingFragmentSequenceNumber(String),
+    #[error("manifest missing for log {log_id}")]
+    ManifestMissing { log_id: Uuid },
     #[error("corrupt manifest: {0}")]
     CorruptManifest(String),
     #[error("corrupt fragment: {0}")]
@@ -104,6 +113,22 @@ pub enum Error {
     ParquetError(#[from] Arc<parquet::errors::ParquetError>),
     #[error("storage error: {0}")]
     StorageError(#[from] Arc<chroma_storage::StorageError>),
+    #[error("overflow error: {0}")]
+    Overflow(String),
+    #[error("replication error:  failed to replicate")]
+    ReplicationError,
+    #[error("replication consistency error: {0}")]
+    ReplicationConsistencyError(String),
+    #[error("replication batch too large: {messages_len} messages exceeds limit {limit}")]
+    ReplicationBatchTooLarge { messages_len: u64, limit: u64 },
+    #[error("spanner-related error: {0}")]
+    SpannerError(#[from] Arc<google_cloud_spanner::client::Error>),
+    #[error("spanner-row-related error: {0}")]
+    SpannerRowError(#[from] Arc<google_cloud_spanner::row::Error>),
+    #[error("spanner-session-related error: {0}")]
+    SpannerSessionError(#[from] Arc<google_cloud_spanner::session::SessionError>),
+    #[error("tonic-related error: {0}")]
+    TonicError(#[from] tonic::Status),
 }
 
 impl Error {
@@ -130,6 +155,7 @@ impl chroma_error::ChromaError for Error {
             Self::Backoff => chroma_error::ErrorCodes::Unavailable,
             Self::Internal { .. } => chroma_error::ErrorCodes::Internal,
             Self::MissingFragmentSequenceNumber(_) => chroma_error::ErrorCodes::Internal,
+            Self::ManifestMissing { .. } => chroma_error::ErrorCodes::NotFound,
             Self::CorruptManifest(_) => chroma_error::ErrorCodes::DataLoss,
             Self::CorruptFragment(_) => chroma_error::ErrorCodes::DataLoss,
             Self::CorruptCursor(_) => chroma_error::ErrorCodes::DataLoss,
@@ -140,6 +166,42 @@ impl chroma_error::ChromaError for Error {
             Self::ScrubError(_) => chroma_error::ErrorCodes::DataLoss,
             Self::ParquetError(_) => chroma_error::ErrorCodes::Unknown,
             Self::StorageError(storage) => storage.code(),
+            Self::Overflow(_) => chroma_error::ErrorCodes::InvalidArgument,
+            Self::ReplicationError => chroma_error::ErrorCodes::Unavailable,
+            Self::ReplicationConsistencyError(_) => chroma_error::ErrorCodes::DataLoss,
+            Self::ReplicationBatchTooLarge { .. } => chroma_error::ErrorCodes::InvalidArgument,
+            Self::SpannerError(_) => chroma_error::ErrorCodes::Internal,
+            Self::SpannerRowError(_) => chroma_error::ErrorCodes::Internal,
+            Self::SpannerSessionError(_) => chroma_error::ErrorCodes::Internal,
+            Self::TonicError(t) => t.code().into(),
+        }
+    }
+}
+
+impl From<google_cloud_spanner::client::Error> for Error {
+    fn from(err: google_cloud_spanner::client::Error) -> Self {
+        Self::SpannerError(Arc::new(err))
+    }
+}
+
+impl From<google_cloud_spanner::row::Error> for Error {
+    fn from(err: google_cloud_spanner::row::Error) -> Self {
+        Self::SpannerRowError(Arc::new(err))
+    }
+}
+
+impl From<google_cloud_spanner::session::SessionError> for Error {
+    fn from(err: google_cloud_spanner::session::SessionError) -> Self {
+        Self::SpannerSessionError(Arc::new(err))
+    }
+}
+
+impl google_cloud_gax::retry::TryAs<tonic::Status> for Error {
+    fn try_as(&self) -> Option<&tonic::Status> {
+        if let Self::TonicError(t) = self {
+            Some(t)
+        } else {
+            None
         }
     }
 }
@@ -569,6 +631,12 @@ impl std::fmt::Display for FragmentSeqNo {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, serde::Deserialize, serde::Serialize)]
 pub struct FragmentUuid(Uuid);
 
+impl FragmentUuid {
+    pub fn generate() -> Self {
+        Self(Uuid::now_v7())
+    }
+}
+
 impl PartialOrd for FragmentUuid {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
         Some(self.cmp(other))
@@ -770,6 +838,10 @@ pub fn parse_fragment_path(path: &str) -> Option<FragmentIdentifier> {
     } else {
         None
     }
+}
+
+pub fn fragment_path(prefix: &str, path: &str) -> String {
+    format!("{prefix}/{path}")
 }
 
 /////////////////////////////////////////////// tests //////////////////////////////////////////////

@@ -16,6 +16,7 @@ from langgraph_api.api.encryption_middleware import (
 )
 from langgraph_api.asyncio import ValueEvent
 from langgraph_api.feature_flags import FF_USE_CORE_API
+from langgraph_api.graph import _validate_assistant_id
 from langgraph_api.grpc.ops import Runs as GrpcRuns
 from langgraph_api.models.run import create_valid_run
 from langgraph_api.route import ApiRequest, ApiResponse, ApiRoute
@@ -667,6 +668,7 @@ async def create_cron(request: ApiRequest):
     payload = await request.json(CronCreate)
     if webhook := payload.get("webhook"):
         await validate_webhook_url_or_raise(str(webhook))
+    _validate_assistant_id(payload.get("assistant_id"))
 
     encrypted_payload = await encrypt_request(
         payload,
@@ -699,6 +701,7 @@ async def create_thread_cron(request: ApiRequest):
     payload = await request.json(ThreadCronCreate)
     if webhook := payload.get("webhook"):
         await validate_webhook_url_or_raise(str(webhook))
+    _validate_assistant_id(payload.get("assistant_id"))
 
     encrypted_payload = await encrypt_request(
         payload,

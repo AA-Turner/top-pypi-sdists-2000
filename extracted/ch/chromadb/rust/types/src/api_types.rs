@@ -12,6 +12,7 @@ use crate::operators_generated::{
     FUNCTION_STATISTICS_NAME,
 };
 use crate::plan::PlanToProtoError;
+use crate::plan::ReadLevel;
 use crate::plan::SearchPayload;
 use crate::validators::{
     validate_metadata_vec, validate_name, validate_non_empty_collection_update_metadata,
@@ -440,6 +441,16 @@ impl Database {
     #[getter]
     pub fn tenant(&self) -> &str {
         &self.tenant
+    }
+}
+
+impl From<Database> for crate::chroma_proto::Database {
+    fn from(d: Database) -> Self {
+        crate::chroma_proto::Database {
+            id: d.id.to_string(),
+            name: d.name,
+            tenant: d.tenant,
+        }
     }
 }
 
@@ -1018,6 +1029,41 @@ impl ChromaError for DeleteCollectionError {
             DeleteCollectionError::NotFound(_) => ErrorCodes::NotFound,
             DeleteCollectionError::Get(err) => err.code(),
             DeleteCollectionError::Internal(err) => err.code(),
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+#[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
+pub struct IndexStatusResponse {
+    pub op_indexing_progress: f32,
+    pub num_unindexed_ops: u64,
+    pub num_indexed_ops: u64,
+    pub total_ops: u64,
+}
+
+#[derive(Error, Debug)]
+pub enum IndexStatusError {
+    #[error("Collection [{0}] does not exist")]
+    NotFound(String),
+    #[error(transparent)]
+    Internal(#[from] Box<dyn ChromaError>),
+}
+
+impl From<GetCollectionError> for IndexStatusError {
+    fn from(err: GetCollectionError) -> Self {
+        match err {
+            GetCollectionError::NotFound(msg) => IndexStatusError::NotFound(msg),
+            other => IndexStatusError::Internal(Box::new(other)),
+        }
+    }
+}
+
+impl ChromaError for IndexStatusError {
+    fn code(&self) -> ErrorCodes {
+        match self {
+            IndexStatusError::NotFound(_) => ErrorCodes::NotFound,
+            IndexStatusError::Internal(err) => err.code(),
         }
     }
 }
@@ -2117,6 +2163,10 @@ impl From<(KnnBatchResult, IncludeList)> for QueryResponse {
 #[cfg_attr(feature = "utoipa", derive(utoipa::ToSchema))]
 pub struct SearchRequestPayload {
     pub searches: Vec<SearchPayload>,
+    /// Specifies the read level for consistency vs performance tradeoffs.
+    /// Defaults to IndexAndWal (full consistency).
+    #[serde(default)]
+    pub read_level: ReadLevel,
 }
 
 #[non_exhaustive]
@@ -2128,6 +2178,8 @@ pub struct SearchRequest {
     pub collection_id: CollectionUuid,
     #[validate(nested)]
     pub searches: Vec<SearchPayload>,
+    /// Specifies the read level for consistency vs performance tradeoffs.
+    pub read_level: ReadLevel,
 }
 
 impl SearchRequest {
@@ -2136,12 +2188,14 @@ impl SearchRequest {
         database_name: String,
         collection_id: CollectionUuid,
         searches: Vec<SearchPayload>,
+        read_level: ReadLevel,
     ) -> Result<Self, ChromaValidationError> {
         let request = Self {
             tenant_id,
             database_name,
             collection_id,
             searches,
+            read_level,
         };
         request.validate().map_err(ChromaValidationError::from)?;
         Ok(request)
@@ -2150,6 +2204,7 @@ impl SearchRequest {
     pub fn into_payload(self) -> SearchRequestPayload {
         SearchRequestPayload {
             searches: self.searches,
+            read_level: self.read_level,
         }
     }
 }

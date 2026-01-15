@@ -215,6 +215,10 @@ FF_CRONS_ENABLED = env("FF_CRONS_ENABLED", cast=bool, default=True)
 FF_LOG_DROPPED_EVENTS = env("FF_LOG_DROPPED_EVENTS", cast=bool, default=False)
 FF_LOG_QUERY_AND_PARAMS = env("FF_LOG_QUERY_AND_PARAMS", cast=bool, default=False)
 
+# Internal flag intended for testing only
+CRON_SCHEDULER_SLEEP_TIME = env("CRON_SCHEDULER_SLEEP_TIME", cast=int, default=5)
+
+
 # auth
 
 LANGGRAPH_AUTH_TYPE = env("LANGGRAPH_AUTH_TYPE", cast=str, default="noop")
@@ -396,6 +400,7 @@ __all__ = [
     "CHECKPOINTER_CONFIG",
     "CORS_ALLOW_ORIGINS",
     "CORS_CONFIG",
+    "CRON_SCHEDULER_SLEEP_TIME",
     "DATABASE_URI",
     "FF_CRONS_ENABLED",
     "FF_LOG_DROPPED_EVENTS",
@@ -405,6 +410,7 @@ __all__ = [
     "GRPC_CLIENT_MAX_RECV_MSG_BYTES",
     "GRPC_CLIENT_MAX_SEND_MSG_BYTES",
     "GRPC_CLIENT_POOL_SIZE",
+    "GRPC_SERVER_ADDRESS",
     "GRPC_SERVER_MAX_RECV_MSG_BYTES",
     "GRPC_SERVER_MAX_SEND_MSG_BYTES",
     "HTTP_CONFIG",

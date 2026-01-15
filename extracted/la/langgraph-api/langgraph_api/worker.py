@@ -27,6 +27,7 @@ from langgraph_api.feature_flags import FF_USE_CORE_API
 from langgraph_api.grpc.ops import Runs as GrpcRuns
 from langgraph_api.js.errors import RemoteException
 from langgraph_api.metadata import incr_runs
+from langgraph_api.otel_context import restore_otel_trace_context
 from langgraph_api.schema import RUN_KWARGS_ENCRYPTION_SUBFIELDS, Run, StreamMode
 from langgraph_api.state import state_snapshot_to_thread_state
 from langgraph_api.stream import AnyStream, astream_state, consume
@@ -205,24 +206,28 @@ async def worker(
                     )
 
                 raise RuntimeError(error_message)
+            configurable = run["kwargs"].get("config", {}).get("configurable", {})
             async with set_auth_ctx_for_run(run["kwargs"]):
-                if temporary:
-                    stream = astream_state(run, attempt, done)
-                else:
-                    stream = astream_state(
-                        run,
-                        attempt,
-                        done,
-                        on_checkpoint=on_checkpoint,
-                        on_task_result=on_task_result,
+                with restore_otel_trace_context(
+                    configurable, run_id=str(run_id), thread_id=str(thread_id)
+                ):
+                    if temporary:
+                        stream = astream_state(run, attempt, done)
+                    else:
+                        stream = astream_state(
+                            run,
+                            attempt,
+                            done,
+                            on_checkpoint=on_checkpoint,
+                            on_task_result=on_task_result,
+                        )
+                    stream_modes: set[StreamMode] = set(
+                        run["kwargs"].get("stream_mode", [])
                     )
-                stream_modes: set[StreamMode] = set(
-                    run["kwargs"].get("stream_mode", [])
-                )
-                await asyncio.wait_for(
-                    wrap_user_errors(stream, run_id, resumable, stream_modes),
-                    BG_JOB_TIMEOUT_SECS,
-                )
+                    await asyncio.wait_for(
+                        wrap_user_errors(stream, run_id, resumable, stream_modes),
+                        BG_JOB_TIMEOUT_SECS,
+                    )
         except (Exception, asyncio.CancelledError) as ee:
             exception = ee
         except BaseException as eee:

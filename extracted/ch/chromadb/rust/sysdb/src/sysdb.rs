@@ -98,6 +98,7 @@ fn prost_struct_to_json(s: prost_types::Struct) -> serde_json::Value {
 }
 
 #[derive(Debug, Clone)]
+#[allow(clippy::large_enum_variant)]
 pub enum SysDb {
     Grpc(GrpcSysDb),
     Sqlite(SqliteSysDb),
@@ -347,6 +348,7 @@ impl SysDb {
                     lineage_file_path: None,
                     updated_at: SystemTime::now(),
                     database_id: DatabaseUuid::new(),
+                    compaction_failure_count: 0,
                 };
 
                 test_sysdb.add_collection(collection.clone());
@@ -695,6 +697,21 @@ impl SysDb {
         }
     }
 
+    /// Increment the compaction failure count for a collection.
+    pub async fn increment_compaction_failure_count(
+        &mut self,
+        collection_id: CollectionUuid,
+    ) -> Result<(), IncrementCompactionFailureCountError> {
+        match self {
+            SysDb::Grpc(grpc) => grpc.increment_compaction_failure_count(collection_id).await,
+            SysDb::Test(test) => {
+                test.increment_compaction_failure_count(collection_id);
+                Ok(())
+            }
+            SysDb::Sqlite(_) => Err(IncrementCompactionFailureCountError::Unimplemented),
+        }
+    }
+
     pub async fn reset(&mut self) -> Result<ResetResponse, ResetError> {
         match self {
             SysDb::Grpc(grpc) => grpc.reset().await,
@@ -885,14 +902,24 @@ impl GrpcSysDb {
         let req = chroma_proto::CreateTenantRequest {
             name: tenant_name.clone(),
         };
-        // TODO(Sanket): This should fan out to all topologies.
-        match self.client.create_tenant(req).await {
+        // TODO(Sanket): More sophisticated error handling here.
+        match self.client.create_tenant(req.clone()).await {
             Ok(_) => Ok(CreateTenantResponse {}),
             Err(err) if matches!(err.code(), Code::AlreadyExists) => {
-                Err(CreateTenantError::AlreadyExists(tenant_name))
+                Err(CreateTenantError::AlreadyExists(tenant_name.clone()))
             }
             Err(err) => Err(CreateTenantError::Internal(err.into())),
+        }?;
+        if let Some(mut mcmr_client) = self._mcmr_client.clone() {
+            return match mcmr_client.create_tenant(req).await {
+                Ok(_) => Ok(CreateTenantResponse {}),
+                Err(err) if matches!(err.code(), Code::AlreadyExists) => {
+                    Err(CreateTenantError::AlreadyExists(tenant_name))
+                }
+                Err(err) => Err(CreateTenantError::Internal(err.into())),
+            };
         }
+        Ok(CreateTenantResponse {})
     }
 
     pub async fn get_tenant(
@@ -1787,6 +1814,18 @@ impl GrpcSysDb {
         Ok(res.into_inner().collection_id_to_success)
     }
 
+    async fn increment_compaction_failure_count(
+        &mut self,
+        collection_id: CollectionUuid,
+    ) -> Result<(), IncrementCompactionFailureCountError> {
+        let req = chroma_proto::IncrementCompactionFailureCountRequest {
+            collection_id: collection_id.0.to_string(),
+        };
+
+        self.client.increment_compaction_failure_count(req).await?;
+        Ok(())
+    }
+
     async fn update_tenant(
         &mut self,
         tenant_id: String,
@@ -1796,8 +1835,11 @@ impl GrpcSysDb {
             id: tenant_id,
             resource_name,
         };
-
-        self.client.set_tenant_resource_name(req).await?;
+        // TODO(Sanket): More sophisticated error handling here.
+        self.client.set_tenant_resource_name(req.clone()).await?;
+        if let Some(mut mcmr_client) = self._mcmr_client.clone() {
+            mcmr_client.set_tenant_resource_name(req).await?;
+        }
         Ok(UpdateTenantResponse {})
     }
 
@@ -1905,6 +1947,7 @@ impl GrpcSysDb {
     }
 
     /// Helper function to convert a proto AttachedFunction to a chroma_types::AttachedFunction
+    #[allow(clippy::result_large_err)]
     fn attached_function_from_proto(
         attached_function: chroma_proto::AttachedFunction,
     ) -> Result<chroma_types::AttachedFunction, GetAttachedFunctionError> {
@@ -2226,6 +2269,26 @@ impl ChromaError for DeleteCollectionVersionError {
     fn code(&self) -> ErrorCodes {
         match self {
             DeleteCollectionVersionError::FailedToDeleteVersion(e) => e.code().into(),
+        }
+    }
+}
+
+#[derive(Error, Debug)]
+pub enum IncrementCompactionFailureCountError {
+    #[error("Failed to increment compaction failure count: {0}")]
+    FailedToIncrement(#[from] tonic::Status),
+    #[error("SQLite error: {0}")]
+    Sqlite(#[from] sqlx::Error),
+    #[error("Unimplemented: increment_compaction_failure_count is not supported for SqliteSysDb")]
+    Unimplemented,
+}
+
+impl ChromaError for IncrementCompactionFailureCountError {
+    fn code(&self) -> ErrorCodes {
+        match self {
+            IncrementCompactionFailureCountError::FailedToIncrement(_) => ErrorCodes::Internal,
+            IncrementCompactionFailureCountError::Sqlite(_) => ErrorCodes::Internal,
+            IncrementCompactionFailureCountError::Unimplemented => ErrorCodes::Internal,
         }
     }
 }

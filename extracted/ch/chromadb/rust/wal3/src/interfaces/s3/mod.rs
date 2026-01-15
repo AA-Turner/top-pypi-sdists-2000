@@ -1,24 +1,26 @@
 use std::sync::Arc;
 
-use tracing::Level;
-
 use chroma_storage::{
     admissioncontrolleds3::StorageRequestPriority, ETag, GetOptions, Storage, StorageError,
 };
+use setsum::Setsum;
+use tracing::Level;
 
 use crate::interfaces::{FragmentManagerFactory, ManifestManagerFactory};
 use crate::{
-    Error, FragmentSeqNo, LogPosition, LogReaderOptions, LogWriterOptions, Manifest, MarkDirty,
-    Snapshot, SnapshotCache, SnapshotPointer, ThrottleOptions,
+    fragment_path, parse_fragment_path, Error, Fragment, FragmentIdentifier, FragmentSeqNo,
+    LogPosition, LogReaderOptions, LogWriterOptions, Manifest, MarkDirty, Snapshot, SnapshotCache,
+    SnapshotPointer, ThrottleOptions,
 };
 
-pub mod batch_manager;
 pub mod fragment_puller;
+pub mod fragment_uploader;
 pub mod manifest_manager;
 pub mod manifest_reader;
 
-pub use batch_manager::{upload_parquet, BatchManager};
-pub use fragment_puller::FragmentPuller;
+pub use super::batch_manager::{upload_parquet, BatchManager};
+pub use fragment_puller::S3FragmentPuller;
+pub use fragment_uploader::S3FragmentUploader;
 pub use manifest_manager::ManifestManager;
 pub use manifest_reader::ManifestReader;
 
@@ -26,7 +28,7 @@ pub use manifest_reader::ManifestReader;
 ///
 /// This helper encapsulates the common factory setup logic, reducing boilerplate
 /// when opening logs.
-pub fn create_factories(
+pub fn create_s3_factories(
     write: LogWriterOptions,
     read: LogReaderOptions,
     storage: Arc<Storage>,
@@ -65,21 +67,22 @@ pub struct S3FragmentManagerFactory {
 #[async_trait::async_trait]
 impl FragmentManagerFactory for S3FragmentManagerFactory {
     type FragmentPointer = (FragmentSeqNo, LogPosition);
-    type Publisher = BatchManager;
-    type Consumer = FragmentPuller;
+    type Publisher = BatchManager<Self::FragmentPointer, S3FragmentUploader>;
+    type Consumer = S3FragmentPuller;
 
     async fn make_publisher(&self) -> Result<Self::Publisher, Error> {
-        BatchManager::new(
+        let fragment_uploader = S3FragmentUploader::new(
             self.write.clone(),
             Arc::clone(&self.storage),
             self.prefix.clone(),
             Arc::clone(&self.mark_dirty),
-        )
-        .ok_or_else(|| Error::internal(file!(), line!()))
+        );
+        BatchManager::new(self.write.clone(), fragment_uploader)
+            .ok_or_else(|| Error::internal(file!(), line!()))
     }
 
     async fn make_consumer(&self) -> Result<Self::Consumer, Error> {
-        Ok(FragmentPuller::new(
+        Ok(S3FragmentPuller::new(
             self.read.clone(),
             Arc::clone(&self.storage),
             self.prefix.clone(),
@@ -243,4 +246,65 @@ pub async fn manifest_load(
             },
         }
     }
+}
+
+/// Reads a parquet fragment from storage and computes its setsum and records.
+pub async fn read_parquet(
+    storage: &Storage,
+    prefix: &str,
+    path: &str,
+    starting_log_position: Option<LogPosition>,
+) -> Result<(Setsum, Vec<(LogPosition, Vec<u8>)>, u64, u64), Error> {
+    let path = fragment_path(prefix, path);
+    let parquet = storage
+        .get(&path, GetOptions::new(StorageRequestPriority::P0))
+        .await
+        .map_err(Arc::new)?;
+    let num_bytes = parquet.len() as u64;
+    let (setsum, records, uses_relative_offsets, now_micros) =
+        super::checksum_parquet(&parquet, starting_log_position)?;
+    match (starting_log_position, uses_relative_offsets) {
+        (Some(_), true) => Ok((setsum, records, num_bytes, now_micros)),
+        (Some(_), false) => Err(Error::internal(file!(), line!())),
+        (None, false) => Ok((setsum, records, num_bytes, now_micros)),
+        (None, true) => Err(Error::internal(file!(), line!())),
+    }
+}
+
+pub async fn read_fragment(
+    storage: &Storage,
+    prefix: &str,
+    path: &str,
+    starting_log_position: Option<LogPosition>,
+) -> Result<Option<Fragment>, Error> {
+    let seq_no = parse_fragment_path(path)
+        .ok_or_else(|| Error::MissingFragmentSequenceNumber(path.to_string()))?;
+    let FragmentIdentifier::SeqNo(_) = seq_no else {
+        return Err(Error::internal(file!(), line!()));
+    };
+    let (setsum, data, num_bytes) =
+        match read_parquet(storage, prefix, path, starting_log_position).await {
+            Ok((setsum, data, num_bytes, _ts)) => (setsum, data, num_bytes),
+            Err(Error::StorageError(storage)) => {
+                if matches!(&*storage, StorageError::NotFound { .. }) {
+                    return Ok(None);
+                }
+                return Err(Error::StorageError(storage));
+            }
+            Err(e) => return Err(e),
+        };
+    if data.is_empty() {
+        return Err(Error::CorruptFragment(path.to_string()));
+    }
+    let start = LogPosition::from_offset(data.iter().map(|(p, _)| p.offset()).min().unwrap_or(0));
+    let limit =
+        LogPosition::from_offset(data.iter().map(|(p, _)| p.offset() + 1).max().unwrap_or(0));
+    Ok(Some(Fragment {
+        path: path.to_string(),
+        seq_no,
+        start,
+        limit,
+        num_bytes,
+        setsum,
+    }))
 }

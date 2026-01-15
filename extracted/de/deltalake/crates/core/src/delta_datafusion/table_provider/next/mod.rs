@@ -42,6 +42,7 @@ use datafusion::{
 use delta_kernel::table_configuration::TableConfiguration;
 use serde::{Deserialize, Serialize};
 
+pub use self::scan::DeltaScanExec;
 use self::scan::KernelScanPlan;
 use crate::delta_datafusion::DeltaScanConfig;
 use crate::delta_datafusion::engine::DataFusionEngine;
@@ -57,6 +58,30 @@ const FILE_ID_COLUMN_DEFAULT: &str = "__delta_rs_file_id__";
 pub enum SnapshotWrapper {
     Snapshot(Arc<Snapshot>),
     EagerSnapshot(Arc<EagerSnapshot>),
+}
+
+impl From<Arc<Snapshot>> for SnapshotWrapper {
+    fn from(snap: Arc<Snapshot>) -> Self {
+        SnapshotWrapper::Snapshot(snap)
+    }
+}
+
+impl From<Snapshot> for SnapshotWrapper {
+    fn from(snap: Snapshot) -> Self {
+        SnapshotWrapper::Snapshot(snap.into())
+    }
+}
+
+impl From<Arc<EagerSnapshot>> for SnapshotWrapper {
+    fn from(esnap: Arc<EagerSnapshot>) -> Self {
+        SnapshotWrapper::EagerSnapshot(esnap)
+    }
+}
+
+impl From<EagerSnapshot> for SnapshotWrapper {
+    fn from(esnap: EagerSnapshot) -> Self {
+        SnapshotWrapper::EagerSnapshot(esnap.into())
+    }
 }
 
 impl SnapshotWrapper {
@@ -86,7 +111,8 @@ pub struct DeltaScan {
 
 impl DeltaScan {
     // create new delta scan
-    pub fn new(snapshot: SnapshotWrapper, config: DeltaScanConfig) -> Result<Self> {
+    pub fn new(snapshot: impl Into<SnapshotWrapper>, config: DeltaScanConfig) -> Result<Self> {
+        let snapshot = snapshot.into();
         let scan_schema = config.table_schema(snapshot.table_configuration())?;
         let full_schema = if config.retain_file_id() {
             let mut fields = scan_schema.fields().to_vec();
