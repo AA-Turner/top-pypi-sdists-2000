@@ -114,6 +114,10 @@ class CfnAIAgent(
         # The values are placeholders you should change.
         from aws_cdk import aws_wisdom as wisdom
         
+        # annotations: Any
+        # input_schema: Any
+        # output_schema: Any
+        
         cfn_aIAgent = wisdom.CfnAIAgent(self, "MyCfnAIAgent",
             assistant_id="assistantId",
             configuration=wisdom.CfnAIAgent.AIAgentConfigurationProperty(
@@ -161,6 +165,11 @@ class CfnAIAgent(
                     intent_labeling_generation_ai_prompt_id="intentLabelingGenerationAiPromptId",
                     locale="locale",
                     query_reformulation_ai_prompt_id="queryReformulationAiPromptId"
+                ),
+                case_summarization_ai_agent_configuration=wisdom.CfnAIAgent.CaseSummarizationAIAgentConfigurationProperty(
+                    case_summarization_ai_guardrail_id="caseSummarizationAiGuardrailId",
+                    case_summarization_ai_prompt_id="caseSummarizationAiPromptId",
+                    locale="locale"
                 ),
                 email_generative_answer_ai_agent_configuration=wisdom.CfnAIAgent.EmailGenerativeAnswerAIAgentConfigurationProperty(
                     association_configurations=[wisdom.CfnAIAgent.AssociationConfigurationProperty(
@@ -294,6 +303,56 @@ class CfnAIAgent(
                         association_type="associationType"
                     )],
                     locale="locale"
+                ),
+                note_taking_ai_agent_configuration=wisdom.CfnAIAgent.NoteTakingAIAgentConfigurationProperty(
+                    locale="locale",
+                    note_taking_ai_guardrail_id="noteTakingAiGuardrailId",
+                    note_taking_ai_prompt_id="noteTakingAiPromptId"
+                ),
+                orchestration_ai_agent_configuration=wisdom.CfnAIAgent.OrchestrationAIAgentConfigurationProperty(
+                    orchestration_ai_prompt_id="orchestrationAiPromptId",
+        
+                    # the properties below are optional
+                    connect_instance_arn="connectInstanceArn",
+                    locale="locale",
+                    orchestration_ai_guardrail_id="orchestrationAiGuardrailId",
+                    tool_configurations=[wisdom.CfnAIAgent.ToolConfigurationProperty(
+                        tool_name="toolName",
+                        tool_type="toolType",
+        
+                        # the properties below are optional
+                        annotations=annotations,
+                        description="description",
+                        input_schema=input_schema,
+                        instruction=wisdom.CfnAIAgent.ToolInstructionProperty(
+                            examples=["examples"],
+                            instruction="instruction"
+                        ),
+                        output_filters=[wisdom.CfnAIAgent.ToolOutputFilterProperty(
+                            json_path="jsonPath",
+        
+                            # the properties below are optional
+                            output_configuration=wisdom.CfnAIAgent.ToolOutputConfigurationProperty(
+                                output_variable_name_override="outputVariableNameOverride",
+                                session_data_namespace="sessionDataNamespace"
+                            )
+                        )],
+                        output_schema=output_schema,
+                        override_input_values=[wisdom.CfnAIAgent.ToolOverrideInputValueProperty(
+                            json_path="jsonPath",
+                            value=wisdom.CfnAIAgent.ToolOverrideInputValueConfigurationProperty(
+                                constant=wisdom.CfnAIAgent.ToolOverrideConstantInputValueProperty(
+                                    type="type",
+                                    value="value"
+                                )
+                            )
+                        )],
+                        title="title",
+                        tool_id="toolId",
+                        user_interaction_configuration=wisdom.CfnAIAgent.UserInteractionConfigurationProperty(
+                            is_user_confirmation_required=False
+                        )
+                    )]
                 ),
                 self_service_ai_agent_configuration=wisdom.CfnAIAgent.SelfServiceAIAgentConfigurationProperty(
                     association_configurations=[wisdom.CfnAIAgent.AssociationConfigurationProperty(
@@ -584,10 +643,13 @@ class CfnAIAgent(
         jsii_struct_bases=[],
         name_mapping={
             "answer_recommendation_ai_agent_configuration": "answerRecommendationAiAgentConfiguration",
+            "case_summarization_ai_agent_configuration": "caseSummarizationAiAgentConfiguration",
             "email_generative_answer_ai_agent_configuration": "emailGenerativeAnswerAiAgentConfiguration",
             "email_overview_ai_agent_configuration": "emailOverviewAiAgentConfiguration",
             "email_response_ai_agent_configuration": "emailResponseAiAgentConfiguration",
             "manual_search_ai_agent_configuration": "manualSearchAiAgentConfiguration",
+            "note_taking_ai_agent_configuration": "noteTakingAiAgentConfiguration",
+            "orchestration_ai_agent_configuration": "orchestrationAiAgentConfiguration",
             "self_service_ai_agent_configuration": "selfServiceAiAgentConfiguration",
         },
     )
@@ -596,19 +658,25 @@ class CfnAIAgent(
             self,
             *,
             answer_recommendation_ai_agent_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.AnswerRecommendationAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            case_summarization_ai_agent_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.CaseSummarizationAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             email_generative_answer_ai_agent_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.EmailGenerativeAnswerAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             email_overview_ai_agent_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.EmailOverviewAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             email_response_ai_agent_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.EmailResponseAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             manual_search_ai_agent_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.ManualSearchAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            note_taking_ai_agent_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.NoteTakingAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            orchestration_ai_agent_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.OrchestrationAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             self_service_ai_agent_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.SelfServiceAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A typed union that specifies the configuration based on the type of AI Agent.
 
             :param answer_recommendation_ai_agent_configuration: The configuration for AI Agents of type ``ANSWER_RECOMMENDATION`` .
+            :param case_summarization_ai_agent_configuration: 
             :param email_generative_answer_ai_agent_configuration: Configuration for the EMAIL_GENERATIVE_ANSWER AI agent that provides comprehensive knowledge-based answers for customer queries.
             :param email_overview_ai_agent_configuration: Configuration for the EMAIL_OVERVIEW AI agent that generates structured overview of email conversations.
             :param email_response_ai_agent_configuration: Configuration for the EMAIL_RESPONSE AI agent that generates professional email responses using knowledge base content.
             :param manual_search_ai_agent_configuration: The configuration for AI Agents of type ``MANUAL_SEARCH`` .
+            :param note_taking_ai_agent_configuration: 
+            :param orchestration_ai_agent_configuration: 
             :param self_service_ai_agent_configuration: The self-service AI agent configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-aiagentconfiguration.html
@@ -619,6 +687,10 @@ class CfnAIAgent(
                 # The code below shows an example of how to instantiate this type.
                 # The values are placeholders you should change.
                 from aws_cdk import aws_wisdom as wisdom
+                
+                # annotations: Any
+                # input_schema: Any
+                # output_schema: Any
                 
                 a_iAgent_configuration_property = wisdom.CfnAIAgent.AIAgentConfigurationProperty(
                     answer_recommendation_ai_agent_configuration=wisdom.CfnAIAgent.AnswerRecommendationAIAgentConfigurationProperty(
@@ -665,6 +737,11 @@ class CfnAIAgent(
                         intent_labeling_generation_ai_prompt_id="intentLabelingGenerationAiPromptId",
                         locale="locale",
                         query_reformulation_ai_prompt_id="queryReformulationAiPromptId"
+                    ),
+                    case_summarization_ai_agent_configuration=wisdom.CfnAIAgent.CaseSummarizationAIAgentConfigurationProperty(
+                        case_summarization_ai_guardrail_id="caseSummarizationAiGuardrailId",
+                        case_summarization_ai_prompt_id="caseSummarizationAiPromptId",
+                        locale="locale"
                     ),
                     email_generative_answer_ai_agent_configuration=wisdom.CfnAIAgent.EmailGenerativeAnswerAIAgentConfigurationProperty(
                         association_configurations=[wisdom.CfnAIAgent.AssociationConfigurationProperty(
@@ -799,6 +876,56 @@ class CfnAIAgent(
                         )],
                         locale="locale"
                     ),
+                    note_taking_ai_agent_configuration=wisdom.CfnAIAgent.NoteTakingAIAgentConfigurationProperty(
+                        locale="locale",
+                        note_taking_ai_guardrail_id="noteTakingAiGuardrailId",
+                        note_taking_ai_prompt_id="noteTakingAiPromptId"
+                    ),
+                    orchestration_ai_agent_configuration=wisdom.CfnAIAgent.OrchestrationAIAgentConfigurationProperty(
+                        orchestration_ai_prompt_id="orchestrationAiPromptId",
+                
+                        # the properties below are optional
+                        connect_instance_arn="connectInstanceArn",
+                        locale="locale",
+                        orchestration_ai_guardrail_id="orchestrationAiGuardrailId",
+                        tool_configurations=[wisdom.CfnAIAgent.ToolConfigurationProperty(
+                            tool_name="toolName",
+                            tool_type="toolType",
+                
+                            # the properties below are optional
+                            annotations=annotations,
+                            description="description",
+                            input_schema=input_schema,
+                            instruction=wisdom.CfnAIAgent.ToolInstructionProperty(
+                                examples=["examples"],
+                                instruction="instruction"
+                            ),
+                            output_filters=[wisdom.CfnAIAgent.ToolOutputFilterProperty(
+                                json_path="jsonPath",
+                
+                                # the properties below are optional
+                                output_configuration=wisdom.CfnAIAgent.ToolOutputConfigurationProperty(
+                                    output_variable_name_override="outputVariableNameOverride",
+                                    session_data_namespace="sessionDataNamespace"
+                                )
+                            )],
+                            output_schema=output_schema,
+                            override_input_values=[wisdom.CfnAIAgent.ToolOverrideInputValueProperty(
+                                json_path="jsonPath",
+                                value=wisdom.CfnAIAgent.ToolOverrideInputValueConfigurationProperty(
+                                    constant=wisdom.CfnAIAgent.ToolOverrideConstantInputValueProperty(
+                                        type="type",
+                                        value="value"
+                                    )
+                                )
+                            )],
+                            title="title",
+                            tool_id="toolId",
+                            user_interaction_configuration=wisdom.CfnAIAgent.UserInteractionConfigurationProperty(
+                                is_user_confirmation_required=False
+                            )
+                        )]
+                    ),
                     self_service_ai_agent_configuration=wisdom.CfnAIAgent.SelfServiceAIAgentConfigurationProperty(
                         association_configurations=[wisdom.CfnAIAgent.AssociationConfigurationProperty(
                             association_configuration_data=wisdom.CfnAIAgent.AssociationConfigurationDataProperty(
@@ -847,14 +974,19 @@ class CfnAIAgent(
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__8cb84ad0dc27ffdae65e4e739c98ea6a4e7c36340f15c21ae83a2225ff763ba3)
                 check_type(argname="argument answer_recommendation_ai_agent_configuration", value=answer_recommendation_ai_agent_configuration, expected_type=type_hints["answer_recommendation_ai_agent_configuration"])
+                check_type(argname="argument case_summarization_ai_agent_configuration", value=case_summarization_ai_agent_configuration, expected_type=type_hints["case_summarization_ai_agent_configuration"])
                 check_type(argname="argument email_generative_answer_ai_agent_configuration", value=email_generative_answer_ai_agent_configuration, expected_type=type_hints["email_generative_answer_ai_agent_configuration"])
                 check_type(argname="argument email_overview_ai_agent_configuration", value=email_overview_ai_agent_configuration, expected_type=type_hints["email_overview_ai_agent_configuration"])
                 check_type(argname="argument email_response_ai_agent_configuration", value=email_response_ai_agent_configuration, expected_type=type_hints["email_response_ai_agent_configuration"])
                 check_type(argname="argument manual_search_ai_agent_configuration", value=manual_search_ai_agent_configuration, expected_type=type_hints["manual_search_ai_agent_configuration"])
+                check_type(argname="argument note_taking_ai_agent_configuration", value=note_taking_ai_agent_configuration, expected_type=type_hints["note_taking_ai_agent_configuration"])
+                check_type(argname="argument orchestration_ai_agent_configuration", value=orchestration_ai_agent_configuration, expected_type=type_hints["orchestration_ai_agent_configuration"])
                 check_type(argname="argument self_service_ai_agent_configuration", value=self_service_ai_agent_configuration, expected_type=type_hints["self_service_ai_agent_configuration"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if answer_recommendation_ai_agent_configuration is not None:
                 self._values["answer_recommendation_ai_agent_configuration"] = answer_recommendation_ai_agent_configuration
+            if case_summarization_ai_agent_configuration is not None:
+                self._values["case_summarization_ai_agent_configuration"] = case_summarization_ai_agent_configuration
             if email_generative_answer_ai_agent_configuration is not None:
                 self._values["email_generative_answer_ai_agent_configuration"] = email_generative_answer_ai_agent_configuration
             if email_overview_ai_agent_configuration is not None:
@@ -863,6 +995,10 @@ class CfnAIAgent(
                 self._values["email_response_ai_agent_configuration"] = email_response_ai_agent_configuration
             if manual_search_ai_agent_configuration is not None:
                 self._values["manual_search_ai_agent_configuration"] = manual_search_ai_agent_configuration
+            if note_taking_ai_agent_configuration is not None:
+                self._values["note_taking_ai_agent_configuration"] = note_taking_ai_agent_configuration
+            if orchestration_ai_agent_configuration is not None:
+                self._values["orchestration_ai_agent_configuration"] = orchestration_ai_agent_configuration
             if self_service_ai_agent_configuration is not None:
                 self._values["self_service_ai_agent_configuration"] = self_service_ai_agent_configuration
 
@@ -876,6 +1012,16 @@ class CfnAIAgent(
             '''
             result = self._values.get("answer_recommendation_ai_agent_configuration")
             return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.AnswerRecommendationAIAgentConfigurationProperty"]], result)
+
+        @builtins.property
+        def case_summarization_ai_agent_configuration(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.CaseSummarizationAIAgentConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-aiagentconfiguration.html#cfn-wisdom-aiagent-aiagentconfiguration-casesummarizationaiagentconfiguration
+            '''
+            result = self._values.get("case_summarization_ai_agent_configuration")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.CaseSummarizationAIAgentConfigurationProperty"]], result)
 
         @builtins.property
         def email_generative_answer_ai_agent_configuration(
@@ -920,6 +1066,26 @@ class CfnAIAgent(
             '''
             result = self._values.get("manual_search_ai_agent_configuration")
             return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.ManualSearchAIAgentConfigurationProperty"]], result)
+
+        @builtins.property
+        def note_taking_ai_agent_configuration(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.NoteTakingAIAgentConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-aiagentconfiguration.html#cfn-wisdom-aiagent-aiagentconfiguration-notetakingaiagentconfiguration
+            '''
+            result = self._values.get("note_taking_ai_agent_configuration")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.NoteTakingAIAgentConfigurationProperty"]], result)
+
+        @builtins.property
+        def orchestration_ai_agent_configuration(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.OrchestrationAIAgentConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-aiagentconfiguration.html#cfn-wisdom-aiagent-aiagentconfiguration-orchestrationaiagentconfiguration
+            '''
+            result = self._values.get("orchestration_ai_agent_configuration")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.OrchestrationAIAgentConfigurationProperty"]], result)
 
         @builtins.property
         def self_service_ai_agent_configuration(
@@ -1333,6 +1499,91 @@ class CfnAIAgent(
 
         def __repr__(self) -> str:
             return "AssociationConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_wisdom.CfnAIAgent.CaseSummarizationAIAgentConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "case_summarization_ai_guardrail_id": "caseSummarizationAiGuardrailId",
+            "case_summarization_ai_prompt_id": "caseSummarizationAiPromptId",
+            "locale": "locale",
+        },
+    )
+    class CaseSummarizationAIAgentConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            case_summarization_ai_guardrail_id: typing.Optional[builtins.str] = None,
+            case_summarization_ai_prompt_id: typing.Optional[builtins.str] = None,
+            locale: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param case_summarization_ai_guardrail_id: 
+            :param case_summarization_ai_prompt_id: 
+            :param locale: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-casesummarizationaiagentconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_wisdom as wisdom
+                
+                case_summarization_aIAgent_configuration_property = wisdom.CfnAIAgent.CaseSummarizationAIAgentConfigurationProperty(
+                    case_summarization_ai_guardrail_id="caseSummarizationAiGuardrailId",
+                    case_summarization_ai_prompt_id="caseSummarizationAiPromptId",
+                    locale="locale"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__f843ffb161c8436256f2389c34b14a1cbcde9d5b7f3b894da03a97430ff39cb1)
+                check_type(argname="argument case_summarization_ai_guardrail_id", value=case_summarization_ai_guardrail_id, expected_type=type_hints["case_summarization_ai_guardrail_id"])
+                check_type(argname="argument case_summarization_ai_prompt_id", value=case_summarization_ai_prompt_id, expected_type=type_hints["case_summarization_ai_prompt_id"])
+                check_type(argname="argument locale", value=locale, expected_type=type_hints["locale"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if case_summarization_ai_guardrail_id is not None:
+                self._values["case_summarization_ai_guardrail_id"] = case_summarization_ai_guardrail_id
+            if case_summarization_ai_prompt_id is not None:
+                self._values["case_summarization_ai_prompt_id"] = case_summarization_ai_prompt_id
+            if locale is not None:
+                self._values["locale"] = locale
+
+        @builtins.property
+        def case_summarization_ai_guardrail_id(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-casesummarizationaiagentconfiguration.html#cfn-wisdom-aiagent-casesummarizationaiagentconfiguration-casesummarizationaiguardrailid
+            '''
+            result = self._values.get("case_summarization_ai_guardrail_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def case_summarization_ai_prompt_id(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-casesummarizationaiagentconfiguration.html#cfn-wisdom-aiagent-casesummarizationaiagentconfiguration-casesummarizationaipromptid
+            '''
+            result = self._values.get("case_summarization_ai_prompt_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def locale(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-casesummarizationaiagentconfiguration.html#cfn-wisdom-aiagent-casesummarizationaiagentconfiguration-locale
+            '''
+            result = self._values.get("locale")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CaseSummarizationAIAgentConfigurationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -1966,6 +2217,91 @@ class CfnAIAgent(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_wisdom.CfnAIAgent.NoteTakingAIAgentConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "locale": "locale",
+            "note_taking_ai_guardrail_id": "noteTakingAiGuardrailId",
+            "note_taking_ai_prompt_id": "noteTakingAiPromptId",
+        },
+    )
+    class NoteTakingAIAgentConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            locale: typing.Optional[builtins.str] = None,
+            note_taking_ai_guardrail_id: typing.Optional[builtins.str] = None,
+            note_taking_ai_prompt_id: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param locale: 
+            :param note_taking_ai_guardrail_id: 
+            :param note_taking_ai_prompt_id: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-notetakingaiagentconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_wisdom as wisdom
+                
+                note_taking_aIAgent_configuration_property = wisdom.CfnAIAgent.NoteTakingAIAgentConfigurationProperty(
+                    locale="locale",
+                    note_taking_ai_guardrail_id="noteTakingAiGuardrailId",
+                    note_taking_ai_prompt_id="noteTakingAiPromptId"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__4b907ebdc1513151aa0683d791228c325eecbda6c127d1add9102d6e59d07981)
+                check_type(argname="argument locale", value=locale, expected_type=type_hints["locale"])
+                check_type(argname="argument note_taking_ai_guardrail_id", value=note_taking_ai_guardrail_id, expected_type=type_hints["note_taking_ai_guardrail_id"])
+                check_type(argname="argument note_taking_ai_prompt_id", value=note_taking_ai_prompt_id, expected_type=type_hints["note_taking_ai_prompt_id"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if locale is not None:
+                self._values["locale"] = locale
+            if note_taking_ai_guardrail_id is not None:
+                self._values["note_taking_ai_guardrail_id"] = note_taking_ai_guardrail_id
+            if note_taking_ai_prompt_id is not None:
+                self._values["note_taking_ai_prompt_id"] = note_taking_ai_prompt_id
+
+        @builtins.property
+        def locale(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-notetakingaiagentconfiguration.html#cfn-wisdom-aiagent-notetakingaiagentconfiguration-locale
+            '''
+            result = self._values.get("locale")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def note_taking_ai_guardrail_id(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-notetakingaiagentconfiguration.html#cfn-wisdom-aiagent-notetakingaiagentconfiguration-notetakingaiguardrailid
+            '''
+            result = self._values.get("note_taking_ai_guardrail_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def note_taking_ai_prompt_id(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-notetakingaiagentconfiguration.html#cfn-wisdom-aiagent-notetakingaiagentconfiguration-notetakingaipromptid
+            '''
+            result = self._values.get("note_taking_ai_prompt_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "NoteTakingAIAgentConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_wisdom.CfnAIAgent.OrConditionProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -2049,6 +2385,166 @@ class CfnAIAgent(
 
         def __repr__(self) -> str:
             return "OrConditionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_wisdom.CfnAIAgent.OrchestrationAIAgentConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "orchestration_ai_prompt_id": "orchestrationAiPromptId",
+            "connect_instance_arn": "connectInstanceArn",
+            "locale": "locale",
+            "orchestration_ai_guardrail_id": "orchestrationAiGuardrailId",
+            "tool_configurations": "toolConfigurations",
+        },
+    )
+    class OrchestrationAIAgentConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            orchestration_ai_prompt_id: builtins.str,
+            connect_instance_arn: typing.Optional[builtins.str] = None,
+            locale: typing.Optional[builtins.str] = None,
+            orchestration_ai_guardrail_id: typing.Optional[builtins.str] = None,
+            tool_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.ToolConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ) -> None:
+            '''
+            :param orchestration_ai_prompt_id: 
+            :param connect_instance_arn: 
+            :param locale: 
+            :param orchestration_ai_guardrail_id: 
+            :param tool_configurations: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-orchestrationaiagentconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_wisdom as wisdom
+                
+                # annotations: Any
+                # input_schema: Any
+                # output_schema: Any
+                
+                orchestration_aIAgent_configuration_property = wisdom.CfnAIAgent.OrchestrationAIAgentConfigurationProperty(
+                    orchestration_ai_prompt_id="orchestrationAiPromptId",
+                
+                    # the properties below are optional
+                    connect_instance_arn="connectInstanceArn",
+                    locale="locale",
+                    orchestration_ai_guardrail_id="orchestrationAiGuardrailId",
+                    tool_configurations=[wisdom.CfnAIAgent.ToolConfigurationProperty(
+                        tool_name="toolName",
+                        tool_type="toolType",
+                
+                        # the properties below are optional
+                        annotations=annotations,
+                        description="description",
+                        input_schema=input_schema,
+                        instruction=wisdom.CfnAIAgent.ToolInstructionProperty(
+                            examples=["examples"],
+                            instruction="instruction"
+                        ),
+                        output_filters=[wisdom.CfnAIAgent.ToolOutputFilterProperty(
+                            json_path="jsonPath",
+                
+                            # the properties below are optional
+                            output_configuration=wisdom.CfnAIAgent.ToolOutputConfigurationProperty(
+                                output_variable_name_override="outputVariableNameOverride",
+                                session_data_namespace="sessionDataNamespace"
+                            )
+                        )],
+                        output_schema=output_schema,
+                        override_input_values=[wisdom.CfnAIAgent.ToolOverrideInputValueProperty(
+                            json_path="jsonPath",
+                            value=wisdom.CfnAIAgent.ToolOverrideInputValueConfigurationProperty(
+                                constant=wisdom.CfnAIAgent.ToolOverrideConstantInputValueProperty(
+                                    type="type",
+                                    value="value"
+                                )
+                            )
+                        )],
+                        title="title",
+                        tool_id="toolId",
+                        user_interaction_configuration=wisdom.CfnAIAgent.UserInteractionConfigurationProperty(
+                            is_user_confirmation_required=False
+                        )
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__50792ed10fbfae7c3f42cc9d7c29f44107e43ed1ea2ce5a7603a2eb4e7b9be8f)
+                check_type(argname="argument orchestration_ai_prompt_id", value=orchestration_ai_prompt_id, expected_type=type_hints["orchestration_ai_prompt_id"])
+                check_type(argname="argument connect_instance_arn", value=connect_instance_arn, expected_type=type_hints["connect_instance_arn"])
+                check_type(argname="argument locale", value=locale, expected_type=type_hints["locale"])
+                check_type(argname="argument orchestration_ai_guardrail_id", value=orchestration_ai_guardrail_id, expected_type=type_hints["orchestration_ai_guardrail_id"])
+                check_type(argname="argument tool_configurations", value=tool_configurations, expected_type=type_hints["tool_configurations"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "orchestration_ai_prompt_id": orchestration_ai_prompt_id,
+            }
+            if connect_instance_arn is not None:
+                self._values["connect_instance_arn"] = connect_instance_arn
+            if locale is not None:
+                self._values["locale"] = locale
+            if orchestration_ai_guardrail_id is not None:
+                self._values["orchestration_ai_guardrail_id"] = orchestration_ai_guardrail_id
+            if tool_configurations is not None:
+                self._values["tool_configurations"] = tool_configurations
+
+        @builtins.property
+        def orchestration_ai_prompt_id(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-orchestrationaiagentconfiguration.html#cfn-wisdom-aiagent-orchestrationaiagentconfiguration-orchestrationaipromptid
+            '''
+            result = self._values.get("orchestration_ai_prompt_id")
+            assert result is not None, "Required property 'orchestration_ai_prompt_id' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def connect_instance_arn(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-orchestrationaiagentconfiguration.html#cfn-wisdom-aiagent-orchestrationaiagentconfiguration-connectinstancearn
+            '''
+            result = self._values.get("connect_instance_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def locale(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-orchestrationaiagentconfiguration.html#cfn-wisdom-aiagent-orchestrationaiagentconfiguration-locale
+            '''
+            result = self._values.get("locale")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def orchestration_ai_guardrail_id(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-orchestrationaiagentconfiguration.html#cfn-wisdom-aiagent-orchestrationaiagentconfiguration-orchestrationaiguardrailid
+            '''
+            result = self._values.get("orchestration_ai_guardrail_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def tool_configurations(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.ToolConfigurationProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-orchestrationaiagentconfiguration.html#cfn-wisdom-aiagent-orchestrationaiagentconfiguration-toolconfigurations
+            '''
+            result = self._values.get("tool_configurations")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.ToolConfigurationProperty"]]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "OrchestrationAIAgentConfigurationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -2391,6 +2887,729 @@ class CfnAIAgent(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_wisdom.CfnAIAgent.ToolConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "tool_name": "toolName",
+            "tool_type": "toolType",
+            "annotations": "annotations",
+            "description": "description",
+            "input_schema": "inputSchema",
+            "instruction": "instruction",
+            "output_filters": "outputFilters",
+            "output_schema": "outputSchema",
+            "override_input_values": "overrideInputValues",
+            "title": "title",
+            "tool_id": "toolId",
+            "user_interaction_configuration": "userInteractionConfiguration",
+        },
+    )
+    class ToolConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            tool_name: builtins.str,
+            tool_type: builtins.str,
+            annotations: typing.Any = None,
+            description: typing.Optional[builtins.str] = None,
+            input_schema: typing.Any = None,
+            instruction: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.ToolInstructionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            output_filters: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.ToolOutputFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            output_schema: typing.Any = None,
+            override_input_values: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.ToolOverrideInputValueProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            title: typing.Optional[builtins.str] = None,
+            tool_id: typing.Optional[builtins.str] = None,
+            user_interaction_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.UserInteractionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param tool_name: 
+            :param tool_type: 
+            :param annotations: 
+            :param description: 
+            :param input_schema: 
+            :param instruction: 
+            :param output_filters: 
+            :param output_schema: 
+            :param override_input_values: 
+            :param title: 
+            :param tool_id: 
+            :param user_interaction_configuration: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-toolconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_wisdom as wisdom
+                
+                # annotations: Any
+                # input_schema: Any
+                # output_schema: Any
+                
+                tool_configuration_property = wisdom.CfnAIAgent.ToolConfigurationProperty(
+                    tool_name="toolName",
+                    tool_type="toolType",
+                
+                    # the properties below are optional
+                    annotations=annotations,
+                    description="description",
+                    input_schema=input_schema,
+                    instruction=wisdom.CfnAIAgent.ToolInstructionProperty(
+                        examples=["examples"],
+                        instruction="instruction"
+                    ),
+                    output_filters=[wisdom.CfnAIAgent.ToolOutputFilterProperty(
+                        json_path="jsonPath",
+                
+                        # the properties below are optional
+                        output_configuration=wisdom.CfnAIAgent.ToolOutputConfigurationProperty(
+                            output_variable_name_override="outputVariableNameOverride",
+                            session_data_namespace="sessionDataNamespace"
+                        )
+                    )],
+                    output_schema=output_schema,
+                    override_input_values=[wisdom.CfnAIAgent.ToolOverrideInputValueProperty(
+                        json_path="jsonPath",
+                        value=wisdom.CfnAIAgent.ToolOverrideInputValueConfigurationProperty(
+                            constant=wisdom.CfnAIAgent.ToolOverrideConstantInputValueProperty(
+                                type="type",
+                                value="value"
+                            )
+                        )
+                    )],
+                    title="title",
+                    tool_id="toolId",
+                    user_interaction_configuration=wisdom.CfnAIAgent.UserInteractionConfigurationProperty(
+                        is_user_confirmation_required=False
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__8f83dec58abce2576b80d59ee7266878c1e4b7ac84bac82051b1884b31a6dacf)
+                check_type(argname="argument tool_name", value=tool_name, expected_type=type_hints["tool_name"])
+                check_type(argname="argument tool_type", value=tool_type, expected_type=type_hints["tool_type"])
+                check_type(argname="argument annotations", value=annotations, expected_type=type_hints["annotations"])
+                check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+                check_type(argname="argument input_schema", value=input_schema, expected_type=type_hints["input_schema"])
+                check_type(argname="argument instruction", value=instruction, expected_type=type_hints["instruction"])
+                check_type(argname="argument output_filters", value=output_filters, expected_type=type_hints["output_filters"])
+                check_type(argname="argument output_schema", value=output_schema, expected_type=type_hints["output_schema"])
+                check_type(argname="argument override_input_values", value=override_input_values, expected_type=type_hints["override_input_values"])
+                check_type(argname="argument title", value=title, expected_type=type_hints["title"])
+                check_type(argname="argument tool_id", value=tool_id, expected_type=type_hints["tool_id"])
+                check_type(argname="argument user_interaction_configuration", value=user_interaction_configuration, expected_type=type_hints["user_interaction_configuration"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "tool_name": tool_name,
+                "tool_type": tool_type,
+            }
+            if annotations is not None:
+                self._values["annotations"] = annotations
+            if description is not None:
+                self._values["description"] = description
+            if input_schema is not None:
+                self._values["input_schema"] = input_schema
+            if instruction is not None:
+                self._values["instruction"] = instruction
+            if output_filters is not None:
+                self._values["output_filters"] = output_filters
+            if output_schema is not None:
+                self._values["output_schema"] = output_schema
+            if override_input_values is not None:
+                self._values["override_input_values"] = override_input_values
+            if title is not None:
+                self._values["title"] = title
+            if tool_id is not None:
+                self._values["tool_id"] = tool_id
+            if user_interaction_configuration is not None:
+                self._values["user_interaction_configuration"] = user_interaction_configuration
+
+        @builtins.property
+        def tool_name(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-toolconfiguration.html#cfn-wisdom-aiagent-toolconfiguration-toolname
+            '''
+            result = self._values.get("tool_name")
+            assert result is not None, "Required property 'tool_name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def tool_type(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-toolconfiguration.html#cfn-wisdom-aiagent-toolconfiguration-tooltype
+            '''
+            result = self._values.get("tool_type")
+            assert result is not None, "Required property 'tool_type' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def annotations(self) -> typing.Any:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-toolconfiguration.html#cfn-wisdom-aiagent-toolconfiguration-annotations
+            '''
+            result = self._values.get("annotations")
+            return typing.cast(typing.Any, result)
+
+        @builtins.property
+        def description(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-toolconfiguration.html#cfn-wisdom-aiagent-toolconfiguration-description
+            '''
+            result = self._values.get("description")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def input_schema(self) -> typing.Any:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-toolconfiguration.html#cfn-wisdom-aiagent-toolconfiguration-inputschema
+            '''
+            result = self._values.get("input_schema")
+            return typing.cast(typing.Any, result)
+
+        @builtins.property
+        def instruction(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.ToolInstructionProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-toolconfiguration.html#cfn-wisdom-aiagent-toolconfiguration-instruction
+            '''
+            result = self._values.get("instruction")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.ToolInstructionProperty"]], result)
+
+        @builtins.property
+        def output_filters(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.ToolOutputFilterProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-toolconfiguration.html#cfn-wisdom-aiagent-toolconfiguration-outputfilters
+            '''
+            result = self._values.get("output_filters")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.ToolOutputFilterProperty"]]]], result)
+
+        @builtins.property
+        def output_schema(self) -> typing.Any:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-toolconfiguration.html#cfn-wisdom-aiagent-toolconfiguration-outputschema
+            '''
+            result = self._values.get("output_schema")
+            return typing.cast(typing.Any, result)
+
+        @builtins.property
+        def override_input_values(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.ToolOverrideInputValueProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-toolconfiguration.html#cfn-wisdom-aiagent-toolconfiguration-overrideinputvalues
+            '''
+            result = self._values.get("override_input_values")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.ToolOverrideInputValueProperty"]]]], result)
+
+        @builtins.property
+        def title(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-toolconfiguration.html#cfn-wisdom-aiagent-toolconfiguration-title
+            '''
+            result = self._values.get("title")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def tool_id(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-toolconfiguration.html#cfn-wisdom-aiagent-toolconfiguration-toolid
+            '''
+            result = self._values.get("tool_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def user_interaction_configuration(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.UserInteractionConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-toolconfiguration.html#cfn-wisdom-aiagent-toolconfiguration-userinteractionconfiguration
+            '''
+            result = self._values.get("user_interaction_configuration")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.UserInteractionConfigurationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ToolConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_wisdom.CfnAIAgent.ToolInstructionProperty",
+        jsii_struct_bases=[],
+        name_mapping={"examples": "examples", "instruction": "instruction"},
+    )
+    class ToolInstructionProperty:
+        def __init__(
+            self,
+            *,
+            examples: typing.Optional[typing.Sequence[builtins.str]] = None,
+            instruction: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param examples: 
+            :param instruction: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-toolinstruction.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_wisdom as wisdom
+                
+                tool_instruction_property = wisdom.CfnAIAgent.ToolInstructionProperty(
+                    examples=["examples"],
+                    instruction="instruction"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__2699357ebac12e2c00458ee028f3acba4e3f1528fb814d4b70735c3a9f4b3ad3)
+                check_type(argname="argument examples", value=examples, expected_type=type_hints["examples"])
+                check_type(argname="argument instruction", value=instruction, expected_type=type_hints["instruction"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if examples is not None:
+                self._values["examples"] = examples
+            if instruction is not None:
+                self._values["instruction"] = instruction
+
+        @builtins.property
+        def examples(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-toolinstruction.html#cfn-wisdom-aiagent-toolinstruction-examples
+            '''
+            result = self._values.get("examples")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def instruction(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-toolinstruction.html#cfn-wisdom-aiagent-toolinstruction-instruction
+            '''
+            result = self._values.get("instruction")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ToolInstructionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_wisdom.CfnAIAgent.ToolOutputConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "output_variable_name_override": "outputVariableNameOverride",
+            "session_data_namespace": "sessionDataNamespace",
+        },
+    )
+    class ToolOutputConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            output_variable_name_override: typing.Optional[builtins.str] = None,
+            session_data_namespace: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param output_variable_name_override: 
+            :param session_data_namespace: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-tooloutputconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_wisdom as wisdom
+                
+                tool_output_configuration_property = wisdom.CfnAIAgent.ToolOutputConfigurationProperty(
+                    output_variable_name_override="outputVariableNameOverride",
+                    session_data_namespace="sessionDataNamespace"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__c500818d7ba0c3d1eac9ec8eb0d2ee7506183f4c9aa46df538f93f8f74d8bec2)
+                check_type(argname="argument output_variable_name_override", value=output_variable_name_override, expected_type=type_hints["output_variable_name_override"])
+                check_type(argname="argument session_data_namespace", value=session_data_namespace, expected_type=type_hints["session_data_namespace"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if output_variable_name_override is not None:
+                self._values["output_variable_name_override"] = output_variable_name_override
+            if session_data_namespace is not None:
+                self._values["session_data_namespace"] = session_data_namespace
+
+        @builtins.property
+        def output_variable_name_override(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-tooloutputconfiguration.html#cfn-wisdom-aiagent-tooloutputconfiguration-outputvariablenameoverride
+            '''
+            result = self._values.get("output_variable_name_override")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def session_data_namespace(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-tooloutputconfiguration.html#cfn-wisdom-aiagent-tooloutputconfiguration-sessiondatanamespace
+            '''
+            result = self._values.get("session_data_namespace")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ToolOutputConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_wisdom.CfnAIAgent.ToolOutputFilterProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "json_path": "jsonPath",
+            "output_configuration": "outputConfiguration",
+        },
+    )
+    class ToolOutputFilterProperty:
+        def __init__(
+            self,
+            *,
+            json_path: builtins.str,
+            output_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.ToolOutputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param json_path: 
+            :param output_configuration: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-tooloutputfilter.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_wisdom as wisdom
+                
+                tool_output_filter_property = wisdom.CfnAIAgent.ToolOutputFilterProperty(
+                    json_path="jsonPath",
+                
+                    # the properties below are optional
+                    output_configuration=wisdom.CfnAIAgent.ToolOutputConfigurationProperty(
+                        output_variable_name_override="outputVariableNameOverride",
+                        session_data_namespace="sessionDataNamespace"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__9350629db867c72951d741fd753f0c0d4801a1979ed47f243cf6f155d8856fc5)
+                check_type(argname="argument json_path", value=json_path, expected_type=type_hints["json_path"])
+                check_type(argname="argument output_configuration", value=output_configuration, expected_type=type_hints["output_configuration"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "json_path": json_path,
+            }
+            if output_configuration is not None:
+                self._values["output_configuration"] = output_configuration
+
+        @builtins.property
+        def json_path(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-tooloutputfilter.html#cfn-wisdom-aiagent-tooloutputfilter-jsonpath
+            '''
+            result = self._values.get("json_path")
+            assert result is not None, "Required property 'json_path' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def output_configuration(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.ToolOutputConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-tooloutputfilter.html#cfn-wisdom-aiagent-tooloutputfilter-outputconfiguration
+            '''
+            result = self._values.get("output_configuration")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnAIAgent.ToolOutputConfigurationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ToolOutputFilterProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_wisdom.CfnAIAgent.ToolOverrideConstantInputValueProperty",
+        jsii_struct_bases=[],
+        name_mapping={"type": "type", "value": "value"},
+    )
+    class ToolOverrideConstantInputValueProperty:
+        def __init__(self, *, type: builtins.str, value: builtins.str) -> None:
+            '''
+            :param type: 
+            :param value: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-tooloverrideconstantinputvalue.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_wisdom as wisdom
+                
+                tool_override_constant_input_value_property = wisdom.CfnAIAgent.ToolOverrideConstantInputValueProperty(
+                    type="type",
+                    value="value"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__fe3bc7fb6cc4fc7b3e3d2cd7987b6ea0d07db8fe3ef37612c6186a0df20190a9)
+                check_type(argname="argument type", value=type, expected_type=type_hints["type"])
+                check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "type": type,
+                "value": value,
+            }
+
+        @builtins.property
+        def type(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-tooloverrideconstantinputvalue.html#cfn-wisdom-aiagent-tooloverrideconstantinputvalue-type
+            '''
+            result = self._values.get("type")
+            assert result is not None, "Required property 'type' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def value(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-tooloverrideconstantinputvalue.html#cfn-wisdom-aiagent-tooloverrideconstantinputvalue-value
+            '''
+            result = self._values.get("value")
+            assert result is not None, "Required property 'value' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ToolOverrideConstantInputValueProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_wisdom.CfnAIAgent.ToolOverrideInputValueConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"constant": "constant"},
+    )
+    class ToolOverrideInputValueConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            constant: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.ToolOverrideConstantInputValueProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''
+            :param constant: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-tooloverrideinputvalueconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_wisdom as wisdom
+                
+                tool_override_input_value_configuration_property = wisdom.CfnAIAgent.ToolOverrideInputValueConfigurationProperty(
+                    constant=wisdom.CfnAIAgent.ToolOverrideConstantInputValueProperty(
+                        type="type",
+                        value="value"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__44dbafeee0fb9492d3cbc332cec765f5e653891bfd0a0c28218b392a8cd4c973)
+                check_type(argname="argument constant", value=constant, expected_type=type_hints["constant"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "constant": constant,
+            }
+
+        @builtins.property
+        def constant(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnAIAgent.ToolOverrideConstantInputValueProperty"]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-tooloverrideinputvalueconfiguration.html#cfn-wisdom-aiagent-tooloverrideinputvalueconfiguration-constant
+            '''
+            result = self._values.get("constant")
+            assert result is not None, "Required property 'constant' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAIAgent.ToolOverrideConstantInputValueProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ToolOverrideInputValueConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_wisdom.CfnAIAgent.ToolOverrideInputValueProperty",
+        jsii_struct_bases=[],
+        name_mapping={"json_path": "jsonPath", "value": "value"},
+    )
+    class ToolOverrideInputValueProperty:
+        def __init__(
+            self,
+            *,
+            json_path: builtins.str,
+            value: typing.Union["_IResolvable_da3f097b", typing.Union["CfnAIAgent.ToolOverrideInputValueConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''
+            :param json_path: 
+            :param value: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-tooloverrideinputvalue.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_wisdom as wisdom
+                
+                tool_override_input_value_property = wisdom.CfnAIAgent.ToolOverrideInputValueProperty(
+                    json_path="jsonPath",
+                    value=wisdom.CfnAIAgent.ToolOverrideInputValueConfigurationProperty(
+                        constant=wisdom.CfnAIAgent.ToolOverrideConstantInputValueProperty(
+                            type="type",
+                            value="value"
+                        )
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__090df08ebd9694962515522673c45178c741838135924455fb465df9b1867d4d)
+                check_type(argname="argument json_path", value=json_path, expected_type=type_hints["json_path"])
+                check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "json_path": json_path,
+                "value": value,
+            }
+
+        @builtins.property
+        def json_path(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-tooloverrideinputvalue.html#cfn-wisdom-aiagent-tooloverrideinputvalue-jsonpath
+            '''
+            result = self._values.get("json_path")
+            assert result is not None, "Required property 'json_path' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def value(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnAIAgent.ToolOverrideInputValueConfigurationProperty"]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-tooloverrideinputvalue.html#cfn-wisdom-aiagent-tooloverrideinputvalue-value
+            '''
+            result = self._values.get("value")
+            assert result is not None, "Required property 'value' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnAIAgent.ToolOverrideInputValueConfigurationProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ToolOverrideInputValueProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_wisdom.CfnAIAgent.UserInteractionConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"is_user_confirmation_required": "isUserConfirmationRequired"},
+    )
+    class UserInteractionConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            is_user_confirmation_required: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        ) -> None:
+            '''
+            :param is_user_confirmation_required: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-userinteractionconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_wisdom as wisdom
+                
+                user_interaction_configuration_property = wisdom.CfnAIAgent.UserInteractionConfigurationProperty(
+                    is_user_confirmation_required=False
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__ab93695143a224592ff6f428694dbc0aed882d7ceb8dd6e76e00f20025d435ed)
+                check_type(argname="argument is_user_confirmation_required", value=is_user_confirmation_required, expected_type=type_hints["is_user_confirmation_required"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if is_user_confirmation_required is not None:
+                self._values["is_user_confirmation_required"] = is_user_confirmation_required
+
+        @builtins.property
+        def is_user_confirmation_required(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-userinteractionconfiguration.html#cfn-wisdom-aiagent-userinteractionconfiguration-isuserconfirmationrequired
+            '''
+            result = self._values.get("is_user_confirmation_required")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "UserInteractionConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_wisdom.CfnAIAgentProps",
@@ -2432,6 +3651,10 @@ class CfnAIAgentProps:
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_wisdom as wisdom
+            
+            # annotations: Any
+            # input_schema: Any
+            # output_schema: Any
             
             cfn_aIAgent_props = wisdom.CfnAIAgentProps(
                 assistant_id="assistantId",
@@ -2480,6 +3703,11 @@ class CfnAIAgentProps:
                         intent_labeling_generation_ai_prompt_id="intentLabelingGenerationAiPromptId",
                         locale="locale",
                         query_reformulation_ai_prompt_id="queryReformulationAiPromptId"
+                    ),
+                    case_summarization_ai_agent_configuration=wisdom.CfnAIAgent.CaseSummarizationAIAgentConfigurationProperty(
+                        case_summarization_ai_guardrail_id="caseSummarizationAiGuardrailId",
+                        case_summarization_ai_prompt_id="caseSummarizationAiPromptId",
+                        locale="locale"
                     ),
                     email_generative_answer_ai_agent_configuration=wisdom.CfnAIAgent.EmailGenerativeAnswerAIAgentConfigurationProperty(
                         association_configurations=[wisdom.CfnAIAgent.AssociationConfigurationProperty(
@@ -2613,6 +3841,56 @@ class CfnAIAgentProps:
                             association_type="associationType"
                         )],
                         locale="locale"
+                    ),
+                    note_taking_ai_agent_configuration=wisdom.CfnAIAgent.NoteTakingAIAgentConfigurationProperty(
+                        locale="locale",
+                        note_taking_ai_guardrail_id="noteTakingAiGuardrailId",
+                        note_taking_ai_prompt_id="noteTakingAiPromptId"
+                    ),
+                    orchestration_ai_agent_configuration=wisdom.CfnAIAgent.OrchestrationAIAgentConfigurationProperty(
+                        orchestration_ai_prompt_id="orchestrationAiPromptId",
+            
+                        # the properties below are optional
+                        connect_instance_arn="connectInstanceArn",
+                        locale="locale",
+                        orchestration_ai_guardrail_id="orchestrationAiGuardrailId",
+                        tool_configurations=[wisdom.CfnAIAgent.ToolConfigurationProperty(
+                            tool_name="toolName",
+                            tool_type="toolType",
+            
+                            # the properties below are optional
+                            annotations=annotations,
+                            description="description",
+                            input_schema=input_schema,
+                            instruction=wisdom.CfnAIAgent.ToolInstructionProperty(
+                                examples=["examples"],
+                                instruction="instruction"
+                            ),
+                            output_filters=[wisdom.CfnAIAgent.ToolOutputFilterProperty(
+                                json_path="jsonPath",
+            
+                                # the properties below are optional
+                                output_configuration=wisdom.CfnAIAgent.ToolOutputConfigurationProperty(
+                                    output_variable_name_override="outputVariableNameOverride",
+                                    session_data_namespace="sessionDataNamespace"
+                                )
+                            )],
+                            output_schema=output_schema,
+                            override_input_values=[wisdom.CfnAIAgent.ToolOverrideInputValueProperty(
+                                json_path="jsonPath",
+                                value=wisdom.CfnAIAgent.ToolOverrideInputValueConfigurationProperty(
+                                    constant=wisdom.CfnAIAgent.ToolOverrideConstantInputValueProperty(
+                                        type="type",
+                                        value="value"
+                                    )
+                                )
+                            )],
+                            title="title",
+                            tool_id="toolId",
+                            user_interaction_configuration=wisdom.CfnAIAgent.UserInteractionConfigurationProperty(
+                                is_user_confirmation_required=False
+                            )
+                        )]
                     ),
                     self_service_ai_agent_configuration=wisdom.CfnAIAgent.SelfServiceAIAgentConfigurationProperty(
                         association_configurations=[wisdom.CfnAIAgent.AssociationConfigurationProperty(
@@ -6604,9 +7882,10 @@ class CfnAssistantAssociation(
             access_role_arn: builtins.str,
             bedrock_knowledge_base_arn: builtins.str,
         ) -> None:
-            '''
-            :param access_role_arn: 
-            :param bedrock_knowledge_base_arn: 
+            '''Configuration for an external Bedrock knowledge base.
+
+            :param access_role_arn: The Amazon Resource Name (ARN) of the IAM role used to access the external Bedrock knowledge base.
+            :param bedrock_knowledge_base_arn: The Amazon Resource Name (ARN) of the external Bedrock knowledge base.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-assistantassociation-externalbedrockknowledgebaseconfig.html
             :exampleMetadata: fixture=_generated
@@ -6633,7 +7912,8 @@ class CfnAssistantAssociation(
 
         @builtins.property
         def access_role_arn(self) -> builtins.str:
-            '''
+            '''The Amazon Resource Name (ARN) of the IAM role used to access the external Bedrock knowledge base.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-assistantassociation-externalbedrockknowledgebaseconfig.html#cfn-wisdom-assistantassociation-externalbedrockknowledgebaseconfig-accessrolearn
             '''
             result = self._values.get("access_role_arn")
@@ -6642,7 +7922,8 @@ class CfnAssistantAssociation(
 
         @builtins.property
         def bedrock_knowledge_base_arn(self) -> builtins.str:
-            '''
+            '''The Amazon Resource Name (ARN) of the external Bedrock knowledge base.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-assistantassociation-externalbedrockknowledgebaseconfig.html#cfn-wisdom-assistantassociation-externalbedrockknowledgebaseconfig-bedrockknowledgebasearn
             '''
             result = self._values.get("bedrock_knowledge_base_arn")
@@ -13047,10 +14328,13 @@ def _typecheckingstub__2e3ed01afbf4aa2c01303d467dcbf5c5cd3fb267902b917f3c4f5fdd0
 def _typecheckingstub__8cb84ad0dc27ffdae65e4e739c98ea6a4e7c36340f15c21ae83a2225ff763ba3(
     *,
     answer_recommendation_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.AnswerRecommendationAIAgentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    case_summarization_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.CaseSummarizationAIAgentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     email_generative_answer_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.EmailGenerativeAnswerAIAgentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     email_overview_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.EmailOverviewAIAgentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     email_response_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.EmailResponseAIAgentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     manual_search_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.ManualSearchAIAgentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    note_taking_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.NoteTakingAIAgentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    orchestration_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.OrchestrationAIAgentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     self_service_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.SelfServiceAIAgentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -13080,6 +14364,15 @@ def _typecheckingstub__2df56062b7b8c55a883d0469e63c3aad05d8079bf21171f13f4e68d2f
     association_configuration_data: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.AssociationConfigurationDataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     association_id: typing.Optional[builtins.str] = None,
     association_type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f843ffb161c8436256f2389c34b14a1cbcde9d5b7f3b894da03a97430ff39cb1(
+    *,
+    case_summarization_ai_guardrail_id: typing.Optional[builtins.str] = None,
+    case_summarization_ai_prompt_id: typing.Optional[builtins.str] = None,
+    locale: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -13131,10 +14424,30 @@ def _typecheckingstub__3346eba3a05ad4b31350bf2c54edbb6063a18cfea8a25ebbab80c4024
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4b907ebdc1513151aa0683d791228c325eecbda6c127d1add9102d6e59d07981(
+    *,
+    locale: typing.Optional[builtins.str] = None,
+    note_taking_ai_guardrail_id: typing.Optional[builtins.str] = None,
+    note_taking_ai_prompt_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__bf2bbad68aea63c5546563872782e30b131382ddae5fbabf04602b928494d4d4(
     *,
     and_conditions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.TagConditionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tag_condition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.TagConditionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__50792ed10fbfae7c3f42cc9d7c29f44107e43ed1ea2ce5a7603a2eb4e7b9be8f(
+    *,
+    orchestration_ai_prompt_id: builtins.str,
+    connect_instance_arn: typing.Optional[builtins.str] = None,
+    locale: typing.Optional[builtins.str] = None,
+    orchestration_ai_guardrail_id: typing.Optional[builtins.str] = None,
+    tool_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.ToolConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -13162,6 +14475,78 @@ def _typecheckingstub__47961a691b994d09a0537dc7d655a0aab653585a5e8bd78b30c4bc84e
     and_conditions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.TagConditionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     or_conditions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.OrConditionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tag_condition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.TagConditionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8f83dec58abce2576b80d59ee7266878c1e4b7ac84bac82051b1884b31a6dacf(
+    *,
+    tool_name: builtins.str,
+    tool_type: builtins.str,
+    annotations: typing.Any = None,
+    description: typing.Optional[builtins.str] = None,
+    input_schema: typing.Any = None,
+    instruction: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.ToolInstructionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    output_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.ToolOutputFilterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    output_schema: typing.Any = None,
+    override_input_values: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.ToolOverrideInputValueProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    title: typing.Optional[builtins.str] = None,
+    tool_id: typing.Optional[builtins.str] = None,
+    user_interaction_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.UserInteractionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2699357ebac12e2c00458ee028f3acba4e3f1528fb814d4b70735c3a9f4b3ad3(
+    *,
+    examples: typing.Optional[typing.Sequence[builtins.str]] = None,
+    instruction: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c500818d7ba0c3d1eac9ec8eb0d2ee7506183f4c9aa46df538f93f8f74d8bec2(
+    *,
+    output_variable_name_override: typing.Optional[builtins.str] = None,
+    session_data_namespace: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9350629db867c72951d741fd753f0c0d4801a1979ed47f243cf6f155d8856fc5(
+    *,
+    json_path: builtins.str,
+    output_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.ToolOutputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fe3bc7fb6cc4fc7b3e3d2cd7987b6ea0d07db8fe3ef37612c6186a0df20190a9(
+    *,
+    type: builtins.str,
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__44dbafeee0fb9492d3cbc332cec765f5e653891bfd0a0c28218b392a8cd4c973(
+    *,
+    constant: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.ToolOverrideConstantInputValueProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__090df08ebd9694962515522673c45178c741838135924455fb465df9b1867d4d(
+    *,
+    json_path: builtins.str,
+    value: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.ToolOverrideInputValueConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ab93695143a224592ff6f428694dbc0aed882d7ceb8dd6e76e00f20025d435ed(
+    *,
+    is_user_confirmation_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

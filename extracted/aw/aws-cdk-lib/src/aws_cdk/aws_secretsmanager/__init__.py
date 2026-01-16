@@ -4632,7 +4632,7 @@ class Secret(
         grantee: "_IGrantable_71c4f5de",
         version_stages: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> "_Grant_a7ae64f8":
-        '''Grants reading the secret value to some role.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         :param version_stages: -
@@ -4645,7 +4645,7 @@ class Secret(
 
     @jsii.member(jsii_name="grantWrite")
     def grant_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grants writing and updating the secret value to some role.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         '''
@@ -6145,7 +6145,7 @@ class SecretTargetAttachment(
         grantee: "_IGrantable_71c4f5de",
         version_stages: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> "_Grant_a7ae64f8":
-        '''Grants reading the secret value to some role.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         :param version_stages: -
@@ -6158,7 +6158,7 @@ class SecretTargetAttachment(
 
     @jsii.member(jsii_name="grantWrite")
     def grant_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grants writing and updating the secret value to some role.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         '''

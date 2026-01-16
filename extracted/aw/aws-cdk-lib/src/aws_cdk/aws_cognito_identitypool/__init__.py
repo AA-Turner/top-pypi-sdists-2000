@@ -425,6 +425,7 @@ from ..aws_cognito import (
     IUserPoolClient as _IUserPoolClient_75623ba4,
 )
 from ..aws_iam import IRole as _IRole_235f5d8e
+from ..interfaces.aws_cognito import IUserPoolClientRef as _IUserPoolClientRef_4466eeba
 from ..interfaces.aws_iam import (
     IOIDCProviderRef as _IOIDCProviderRef_a866c7c8,
     ISAMLProviderRef as _ISAMLProviderRef_6e369856,
@@ -1891,7 +1892,7 @@ class UserPoolAuthenticationProvider(
         *,
         user_pool: "_IUserPool_1f1029e2",
         disable_server_side_token_check: typing.Optional[builtins.bool] = None,
-        user_pool_client: typing.Optional["_IUserPoolClient_75623ba4"] = None,
+        user_pool_client: typing.Optional["_IUserPoolClientRef_4466eeba"] = None,
     ) -> None:
         '''
         :param user_pool: The User Pool of the Associated Identity Providers.
@@ -2055,7 +2056,7 @@ class UserPoolAuthenticationProviderProps:
         *,
         user_pool: "_IUserPool_1f1029e2",
         disable_server_side_token_check: typing.Optional[builtins.bool] = None,
-        user_pool_client: typing.Optional["_IUserPoolClient_75623ba4"] = None,
+        user_pool_client: typing.Optional["_IUserPoolClientRef_4466eeba"] = None,
     ) -> None:
         '''Props for the User Pool Authentication Provider.
 
@@ -2107,13 +2108,13 @@ class UserPoolAuthenticationProviderProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def user_pool_client(self) -> typing.Optional["_IUserPoolClient_75623ba4"]:
+    def user_pool_client(self) -> typing.Optional["_IUserPoolClientRef_4466eeba"]:
         '''The User Pool Client for the provided User Pool.
 
         :default: - A default user pool client will be added to User Pool
         '''
         result = self._values.get("user_pool_client")
-        return typing.cast(typing.Optional["_IUserPoolClient_75623ba4"], result)
+        return typing.cast(typing.Optional["_IUserPoolClientRef_4466eeba"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2332,7 +2333,7 @@ def _typecheckingstub__96b0f5e74875a97abd1e74170f934c5a7746bf416d00b5b9a3a2b7956
     *,
     user_pool: _IUserPool_1f1029e2,
     disable_server_side_token_check: typing.Optional[builtins.bool] = None,
-    user_pool_client: typing.Optional[_IUserPoolClient_75623ba4] = None,
+    user_pool_client: typing.Optional[_IUserPoolClientRef_4466eeba] = None,
 ) -> None:
     """Type checking stubs"""
     pass

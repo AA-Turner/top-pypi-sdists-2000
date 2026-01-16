@@ -772,7 +772,6 @@ from .. import (
     TreeInspector as _TreeInspector_488e0dd5,
 )
 from ..aws_ecs import TaskDefinition as _TaskDefinition_a541a103
-from ..aws_events import IEventBus as _IEventBus_88d13111
 from ..aws_iam import (
     Grant as _Grant_a7ae64f8,
     IGrantable as _IGrantable_71c4f5de,
@@ -810,6 +809,7 @@ from ..interfaces.aws_appconfig import (
 )
 from ..interfaces.aws_cloudwatch import IAlarmRef as _IAlarmRef_2bb0e5de
 from ..interfaces.aws_codepipeline import IPipelineRef as _IPipelineRef_fb1b56f9
+from ..interfaces.aws_events import IEventBusRef as _IEventBusRef_aa86e9b4
 from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 
@@ -12462,6 +12462,8 @@ class Environment(
 ):
     '''An AWS AppConfig environment.
 
+    [disable-awslint:no-grants]
+
     :see: https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-environment.html
     :resource: AWS::AppConfig::Environment
     :exampleMetadata: infused
@@ -12653,7 +12655,7 @@ class Environment(
         grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
     ) -> "_Grant_a7ae64f8":
-        '''Adds an IAM policy statement associated with this environment to an IAM principal's policy.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         :param actions: -
@@ -12666,9 +12668,7 @@ class Environment(
 
     @jsii.member(jsii_name="grantReadConfig")
     def grant_read_config(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Permits an IAM principal to perform read operations on this environment's configurations.
-
-        Actions: GetLatestConfiguration, StartConfigurationSession.
+        '''[disable-awslint:no-grants].
 
         :param identity: -
         '''
@@ -13028,7 +13028,7 @@ class EventBridgeDestination(
         )
     '''
 
-    def __init__(self, bus: "_IEventBus_88d13111") -> None:
+    def __init__(self, bus: "_IEventBusRef_aa86e9b4") -> None:
         '''
         :param bus: -
         '''
@@ -16237,7 +16237,7 @@ def _typecheckingstub__f249899e37c9153afa9dc39542328ce1c247c1f209ac134fb2bc8a4ad
     pass
 
 def _typecheckingstub__80f21051c7734c306113ac626a6c5c630b229e3c1cb7444771ec9a9a993a7a3f(
-    bus: _IEventBus_88d13111,
+    bus: _IEventBusRef_aa86e9b4,
 ) -> None:
     """Type checking stubs"""
     pass

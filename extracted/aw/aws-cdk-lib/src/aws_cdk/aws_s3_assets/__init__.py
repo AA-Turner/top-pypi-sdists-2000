@@ -373,6 +373,8 @@ class Asset(
     def grant_read(self, grantee: "_IGrantable_71c4f5de") -> None:
         '''Grants read permissions to the principal on the assets bucket.
 
+        [disable-awslint:no-grants]
+
         :param grantee: -
         '''
         if __debug__:

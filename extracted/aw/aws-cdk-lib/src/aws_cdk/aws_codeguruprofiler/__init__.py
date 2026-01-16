@@ -864,6 +864,8 @@ class ProfilingGroup(
         - codeguru-profiler:ConfigureAgent
         - codeguru-profiler:PostAgentProfile
 
+        [disable-awslint:no-grants]
+
         :param grantee: Principal to grant publish rights to.
         '''
         if __debug__:
@@ -879,6 +881,8 @@ class ProfilingGroup(
 
         - codeguru-profiler:GetProfile
         - codeguru-profiler:DescribeProfilingGroup
+
+        [disable-awslint:no-grants]
 
         :param grantee: Principal to grant read rights to.
         '''

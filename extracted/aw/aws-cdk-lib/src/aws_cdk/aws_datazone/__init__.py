@@ -7637,6 +7637,9 @@ class CfnEnvironmentBlueprintConfiguration(
         
             # the properties below are optional
             environment_role_permission_boundary="environmentRolePermissionBoundary",
+            global_parameters={
+                "global_parameters_key": "globalParameters"
+            },
             manage_access_role_arn="manageAccessRoleArn",
             provisioning_configurations=[datazone.CfnEnvironmentBlueprintConfiguration.ProvisioningConfigurationProperty(
                 lake_formation_configuration=datazone.CfnEnvironmentBlueprintConfiguration.LakeFormationConfigurationProperty(
@@ -7663,6 +7666,7 @@ class CfnEnvironmentBlueprintConfiguration(
         enabled_regions: typing.Sequence[builtins.str],
         environment_blueprint_identifier: builtins.str,
         environment_role_permission_boundary: typing.Optional[builtins.str] = None,
+        global_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         manage_access_role_arn: typing.Optional[builtins.str] = None,
         provisioning_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEnvironmentBlueprintConfiguration.ProvisioningConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         provisioning_role_arn: typing.Optional[builtins.str] = None,
@@ -7676,6 +7680,7 @@ class CfnEnvironmentBlueprintConfiguration(
         :param enabled_regions: The enabled AWS Regions specified in a blueprint configuration.
         :param environment_blueprint_identifier: The identifier of the environment blueprint. In the current release, only the following values are supported: ``DefaultDataLake`` and ``DefaultDataWarehouse`` .
         :param environment_role_permission_boundary: The environment role permission boundary.
+        :param global_parameters: Region-agnostic environment blueprint parameters.
         :param manage_access_role_arn: The ARN of the manage access role.
         :param provisioning_configurations: The provisioning configuration of a blueprint.
         :param provisioning_role_arn: The ARN of the provisioning role.
@@ -7690,6 +7695,7 @@ class CfnEnvironmentBlueprintConfiguration(
             enabled_regions=enabled_regions,
             environment_blueprint_identifier=environment_blueprint_identifier,
             environment_role_permission_boundary=environment_role_permission_boundary,
+            global_parameters=global_parameters,
             manage_access_role_arn=manage_access_role_arn,
             provisioning_configurations=provisioning_configurations,
             provisioning_role_arn=provisioning_role_arn,
@@ -7845,6 +7851,24 @@ class CfnEnvironmentBlueprintConfiguration(
             type_hints = typing.get_type_hints(_typecheckingstub__0142557047b6391f0c0d7425b73085935e7a1d5e07139d87dcb9c9ab709bd4ac)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "environmentRolePermissionBoundary", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="globalParameters")
+    def global_parameters(
+        self,
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
+        '''Region-agnostic environment blueprint parameters.'''
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], jsii.get(self, "globalParameters"))
+
+    @global_parameters.setter
+    def global_parameters(
+        self,
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7ca022caecfc4112e662c62e43c15f92fe597cca888fd042fb8981ce06c43219)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "globalParameters", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="manageAccessRoleArn")
@@ -8127,6 +8151,7 @@ class CfnEnvironmentBlueprintConfiguration(
         "enabled_regions": "enabledRegions",
         "environment_blueprint_identifier": "environmentBlueprintIdentifier",
         "environment_role_permission_boundary": "environmentRolePermissionBoundary",
+        "global_parameters": "globalParameters",
         "manage_access_role_arn": "manageAccessRoleArn",
         "provisioning_configurations": "provisioningConfigurations",
         "provisioning_role_arn": "provisioningRoleArn",
@@ -8141,6 +8166,7 @@ class CfnEnvironmentBlueprintConfigurationProps:
         enabled_regions: typing.Sequence[builtins.str],
         environment_blueprint_identifier: builtins.str,
         environment_role_permission_boundary: typing.Optional[builtins.str] = None,
+        global_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]] = None,
         manage_access_role_arn: typing.Optional[builtins.str] = None,
         provisioning_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEnvironmentBlueprintConfiguration.ProvisioningConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         provisioning_role_arn: typing.Optional[builtins.str] = None,
@@ -8152,6 +8178,7 @@ class CfnEnvironmentBlueprintConfigurationProps:
         :param enabled_regions: The enabled AWS Regions specified in a blueprint configuration.
         :param environment_blueprint_identifier: The identifier of the environment blueprint. In the current release, only the following values are supported: ``DefaultDataLake`` and ``DefaultDataWarehouse`` .
         :param environment_role_permission_boundary: The environment role permission boundary.
+        :param global_parameters: Region-agnostic environment blueprint parameters.
         :param manage_access_role_arn: The ARN of the manage access role.
         :param provisioning_configurations: The provisioning configuration of a blueprint.
         :param provisioning_role_arn: The ARN of the provisioning role.
@@ -8173,6 +8200,9 @@ class CfnEnvironmentBlueprintConfigurationProps:
             
                 # the properties below are optional
                 environment_role_permission_boundary="environmentRolePermissionBoundary",
+                global_parameters={
+                    "global_parameters_key": "globalParameters"
+                },
                 manage_access_role_arn="manageAccessRoleArn",
                 provisioning_configurations=[datazone.CfnEnvironmentBlueprintConfiguration.ProvisioningConfigurationProperty(
                     lake_formation_configuration=datazone.CfnEnvironmentBlueprintConfiguration.LakeFormationConfigurationProperty(
@@ -8195,6 +8225,7 @@ class CfnEnvironmentBlueprintConfigurationProps:
             check_type(argname="argument enabled_regions", value=enabled_regions, expected_type=type_hints["enabled_regions"])
             check_type(argname="argument environment_blueprint_identifier", value=environment_blueprint_identifier, expected_type=type_hints["environment_blueprint_identifier"])
             check_type(argname="argument environment_role_permission_boundary", value=environment_role_permission_boundary, expected_type=type_hints["environment_role_permission_boundary"])
+            check_type(argname="argument global_parameters", value=global_parameters, expected_type=type_hints["global_parameters"])
             check_type(argname="argument manage_access_role_arn", value=manage_access_role_arn, expected_type=type_hints["manage_access_role_arn"])
             check_type(argname="argument provisioning_configurations", value=provisioning_configurations, expected_type=type_hints["provisioning_configurations"])
             check_type(argname="argument provisioning_role_arn", value=provisioning_role_arn, expected_type=type_hints["provisioning_role_arn"])
@@ -8206,6 +8237,8 @@ class CfnEnvironmentBlueprintConfigurationProps:
         }
         if environment_role_permission_boundary is not None:
             self._values["environment_role_permission_boundary"] = environment_role_permission_boundary
+        if global_parameters is not None:
+            self._values["global_parameters"] = global_parameters
         if manage_access_role_arn is not None:
             self._values["manage_access_role_arn"] = manage_access_role_arn
         if provisioning_configurations is not None:
@@ -8255,6 +8288,17 @@ class CfnEnvironmentBlueprintConfigurationProps:
         '''
         result = self._values.get("environment_role_permission_boundary")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def global_parameters(
+        self,
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]]:
+        '''Region-agnostic environment blueprint parameters.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-environmentblueprintconfiguration.html#cfn-datazone-environmentblueprintconfiguration-globalparameters
+        '''
+        result = self._values.get("global_parameters")
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], "_IResolvable_da3f097b"]], result)
 
     @builtins.property
     def manage_access_role_arn(self) -> typing.Optional[builtins.str]:
@@ -13246,7 +13290,8 @@ class CfnProjectProfile(
                 description="description",
                 environment_configuration_id="environmentConfigurationId"
             )],
-            status="status"
+            status="status",
+            use_default_configurations=False
         )
     '''
 
@@ -13261,6 +13306,7 @@ class CfnProjectProfile(
         domain_unit_identifier: typing.Optional[builtins.str] = None,
         environment_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProjectProfile.EnvironmentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         status: typing.Optional[builtins.str] = None,
+        use_default_configurations: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Create a new ``AWS::DataZone::ProjectProfile``.
 
@@ -13272,6 +13318,7 @@ class CfnProjectProfile(
         :param domain_unit_identifier: A domain unit ID of the project profile.
         :param environment_configurations: Environment configurations of a project profile.
         :param status: The status of a project profile.
+        :param use_default_configurations: 
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__be64eda6c4825457191dba5045e07eaa3e14f5b1d6605cefc1c291b8f70eb5b2)
@@ -13284,6 +13331,7 @@ class CfnProjectProfile(
             domain_unit_identifier=domain_unit_identifier,
             environment_configurations=environment_configurations,
             status=status,
+            use_default_configurations=use_default_configurations,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -13486,6 +13534,23 @@ class CfnProjectProfile(
             type_hints = typing.get_type_hints(_typecheckingstub__22f2f0484438c03962ae71a7a8c680afa1c54e8a672160956c3951d55a32ae02)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "status", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="useDefaultConfigurations")
+    def use_default_configurations(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "useDefaultConfigurations"))
+
+    @use_default_configurations.setter
+    def use_default_configurations(
+        self,
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fa228cc6fd03dbd429268d1512304cedf600eb65aba503304a9e9522b6b35df1)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "useDefaultConfigurations", value) # pyright: ignore[reportArgumentType]
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_datazone.CfnProjectProfile.AwsAccountProperty",
@@ -13999,6 +14064,7 @@ class CfnProjectProfile(
         "domain_unit_identifier": "domainUnitIdentifier",
         "environment_configurations": "environmentConfigurations",
         "status": "status",
+        "use_default_configurations": "useDefaultConfigurations",
     },
 )
 class CfnProjectProfileProps:
@@ -14011,6 +14077,7 @@ class CfnProjectProfileProps:
         domain_unit_identifier: typing.Optional[builtins.str] = None,
         environment_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnProjectProfile.EnvironmentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         status: typing.Optional[builtins.str] = None,
+        use_default_configurations: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
     ) -> None:
         '''Properties for defining a ``CfnProjectProfile``.
 
@@ -14020,6 +14087,7 @@ class CfnProjectProfileProps:
         :param domain_unit_identifier: A domain unit ID of the project profile.
         :param environment_configurations: Environment configurations of a project profile.
         :param status: The status of a project profile.
+        :param use_default_configurations: 
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-projectprofile.html
         :exampleMetadata: fixture=_generated
@@ -14066,7 +14134,8 @@ class CfnProjectProfileProps:
                     description="description",
                     environment_configuration_id="environmentConfigurationId"
                 )],
-                status="status"
+                status="status",
+                use_default_configurations=False
             )
         '''
         if __debug__:
@@ -14077,6 +14146,7 @@ class CfnProjectProfileProps:
             check_type(argname="argument domain_unit_identifier", value=domain_unit_identifier, expected_type=type_hints["domain_unit_identifier"])
             check_type(argname="argument environment_configurations", value=environment_configurations, expected_type=type_hints["environment_configurations"])
             check_type(argname="argument status", value=status, expected_type=type_hints["status"])
+            check_type(argname="argument use_default_configurations", value=use_default_configurations, expected_type=type_hints["use_default_configurations"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "name": name,
         }
@@ -14090,6 +14160,8 @@ class CfnProjectProfileProps:
             self._values["environment_configurations"] = environment_configurations
         if status is not None:
             self._values["status"] = status
+        if use_default_configurations is not None:
+            self._values["use_default_configurations"] = use_default_configurations
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -14147,6 +14219,16 @@ class CfnProjectProfileProps:
         '''
         result = self._values.get("status")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def use_default_configurations(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datazone-projectprofile.html#cfn-datazone-projectprofile-usedefaultconfigurations
+        '''
+        result = self._values.get("use_default_configurations")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -16506,6 +16588,7 @@ def _typecheckingstub__48d8677ae22ff2da132402ace39f998c6b914f7464ce38abe9373fdbc
     enabled_regions: typing.Sequence[builtins.str],
     environment_blueprint_identifier: builtins.str,
     environment_role_permission_boundary: typing.Optional[builtins.str] = None,
+    global_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     manage_access_role_arn: typing.Optional[builtins.str] = None,
     provisioning_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironmentBlueprintConfiguration.ProvisioningConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     provisioning_role_arn: typing.Optional[builtins.str] = None,
@@ -16552,6 +16635,12 @@ def _typecheckingstub__db2bf9c4c7f25403fe2aa03be854b8b8b1f530f8d53a317f87b2fb947
 
 def _typecheckingstub__0142557047b6391f0c0d7425b73085935e7a1d5e07139d87dcb9c9ab709bd4ac(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7ca022caecfc4112e662c62e43c15f92fe597cca888fd042fb8981ce06c43219(
+    value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -16609,6 +16698,7 @@ def _typecheckingstub__ca96f6fc24dc164f6fafb08d94645f48f6b4fc5c0a2ad8a3b95e17093
     enabled_regions: typing.Sequence[builtins.str],
     environment_blueprint_identifier: builtins.str,
     environment_role_permission_boundary: typing.Optional[builtins.str] = None,
+    global_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     manage_access_role_arn: typing.Optional[builtins.str] = None,
     provisioning_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironmentBlueprintConfiguration.ProvisioningConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     provisioning_role_arn: typing.Optional[builtins.str] = None,
@@ -17382,6 +17472,7 @@ def _typecheckingstub__be64eda6c4825457191dba5045e07eaa3e14f5b1d6605cefc1c291b8f
     domain_unit_identifier: typing.Optional[builtins.str] = None,
     environment_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProjectProfile.EnvironmentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     status: typing.Optional[builtins.str] = None,
+    use_default_configurations: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -17436,6 +17527,12 @@ def _typecheckingstub__11d2d41d817a0c6b3e1fb33f36874d8544dda639fa89db0b3de59a241
 
 def _typecheckingstub__22f2f0484438c03962ae71a7a8c680afa1c54e8a672160956c3951d55a32ae02(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fa228cc6fd03dbd429268d1512304cedf600eb65aba503304a9e9522b6b35df1(
+    value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -17495,6 +17592,7 @@ def _typecheckingstub__16088b85440c601f18ad4a194ccb23740aedaa1b4f93a76e720d939c5
     domain_unit_identifier: typing.Optional[builtins.str] = None,
     environment_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProjectProfile.EnvironmentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     status: typing.Optional[builtins.str] = None,
+    use_default_configurations: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

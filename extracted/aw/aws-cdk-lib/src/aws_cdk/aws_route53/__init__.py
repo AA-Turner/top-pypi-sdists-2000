@@ -2849,7 +2849,7 @@ class CfnHostedZone(
         ) -> None:
             '''Represents the features configuration for a hosted zone, including the status of various features and any associated failure reasons.
 
-            :param enable_accelerated_recovery: Enable accelerated recovery on your public hosted zone to gain the ability to make changes to DNS records in the event of us-east-1 unavailability.
+            :param enable_accelerated_recovery: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-hostedzone-hostedzonefeatures.html
             :exampleMetadata: fixture=_generated
@@ -2875,8 +2875,7 @@ class CfnHostedZone(
         def enable_accelerated_recovery(
             self,
         ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
-            '''Enable accelerated recovery on your public hosted zone to gain the ability to make changes to DNS records in the event of us-east-1 unavailability.
-
+            '''
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-hostedzone-hostedzonefeatures.html#cfn-route53-hostedzone-hostedzonefeatures-enableacceleratedrecovery
             '''
             result = self._values.get("enable_accelerated_recovery")
@@ -17467,7 +17466,7 @@ class HostedZone(
         *,
         delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> "_Grant_a7ae64f8":
-        '''Grant permissions to add delegation records to this zone.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         :param delegated_zone_names: List of hosted zone names to allow delegation to in the grant permissions. If the delegated zone name contains an unresolved token, it must resolve to a zone name that satisfies the requirements according to the documentation: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/specifying-conditions-route53.html#route53_rrset_conditionkeys_normalization .. epigraph:: All letters must be lowercase. The DNS name must be without the trailing dot. Characters other than a–z, 0–9, - (hyphen), _ (underscore), and . (period, as a delimiter between labels) must use escape codes in the format \\three-digit octal code. For example, \\052 is the octal code for character *. Default: the grant allows delegation to any hosted zone

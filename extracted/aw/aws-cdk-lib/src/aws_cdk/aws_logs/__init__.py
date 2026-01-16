@@ -117,9 +117,10 @@ Log events matching a particular filter can be sent to either a Lambda function
 or a Kinesis stream.
 
 If the Kinesis stream lives in a different account, a `CrossAccountDestination`
-object needs to be added in the destination account which will act as a proxy
-for the remote Kinesis stream. This object is automatically created for you
-if you use the CDK Kinesis library.
+object must be explicitly created in the destination account which will act as a proxy
+for the remote Kinesis stream.
+
+Note: The aws-cdk-lib/aws-logs-destinations KinesisDestination construct does not automatically create a CrossAccountDestination for cross-account scenarios.
 
 Create a `SubscriptionFilter`, initialize it with an appropriate `Pattern` (see
 below) and supply the intended destination:
@@ -11095,7 +11096,7 @@ class DataProtectionPolicy(
         identifiers: typing.Sequence["DataIdentifier"],
         delivery_stream_name_audit_destination: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        log_group_audit_destination: typing.Optional["ILogGroup"] = None,
+        log_group_audit_destination: typing.Optional["_ILogGroupRef_874d025a"] = None,
         name: typing.Optional[builtins.str] = None,
         s3_bucket_audit_destination: typing.Optional["_IBucketRef_3debe44e"] = None,
     ) -> None:
@@ -11138,7 +11139,7 @@ class DataProtectionPolicyProps:
         identifiers: typing.Sequence["DataIdentifier"],
         delivery_stream_name_audit_destination: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
-        log_group_audit_destination: typing.Optional["ILogGroup"] = None,
+        log_group_audit_destination: typing.Optional["_ILogGroupRef_874d025a"] = None,
         name: typing.Optional[builtins.str] = None,
         s3_bucket_audit_destination: typing.Optional["_IBucketRef_3debe44e"] = None,
     ) -> None:
@@ -11240,7 +11241,7 @@ class DataProtectionPolicyProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def log_group_audit_destination(self) -> typing.Optional["ILogGroup"]:
+    def log_group_audit_destination(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''CloudWatch Logs log group to send audit findings to.
 
         The log group must already exist prior to creating the data protection policy.
@@ -11248,7 +11249,7 @@ class DataProtectionPolicyProps:
         :default: - no CloudWatch Logs audit destination
         '''
         result = self._values.get("log_group_audit_destination")
-        return typing.cast(typing.Optional["ILogGroup"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -12608,7 +12609,11 @@ typing.cast(typing.Any, ILogGroup).__jsii_proxy_class__ = lambda : _ILogGroupPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_logs.ILogStream")
-class ILogStream(_IResource_c80c4260, typing_extensions.Protocol):
+class ILogStream(
+    _IResource_c80c4260,
+    _ILogStreamRef_62edcb03,
+    typing_extensions.Protocol,
+):
     @builtins.property
     @jsii.member(jsii_name="logStreamName")
     def log_stream_name(self) -> builtins.str:
@@ -12621,6 +12626,7 @@ class ILogStream(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _ILogStreamProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_ILogStreamRef_62edcb03), # type: ignore[misc]
 ):
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_logs.ILogStream"
 
@@ -12645,7 +12651,7 @@ class ILogSubscriptionDestination(typing_extensions.Protocol):
     def bind(
         self,
         scope: "_constructs_77d1e7e8.Construct",
-        source_log_group: "ILogGroup",
+        source_log_group: "_ILogGroupRef_874d025a",
     ) -> "LogSubscriptionDestinationConfig":
         '''Return the properties required to send subscription events to this destination.
 
@@ -12671,7 +12677,7 @@ class _ILogSubscriptionDestinationProxy:
     def bind(
         self,
         scope: "_constructs_77d1e7e8.Construct",
-        source_log_group: "ILogGroup",
+        source_log_group: "_ILogGroupRef_874d025a",
     ) -> "LogSubscriptionDestinationConfig":
         '''Return the properties required to send subscription events to this destination.
 
@@ -13548,6 +13554,8 @@ class LogGroup(
     ) -> "_Grant_a7ae64f8":
         '''Give the indicated permissions on this log group and all streams.
 
+        [disable-awslint:no-grants]
+
         :param grantee: -
         :param actions: -
         '''
@@ -13561,6 +13569,8 @@ class LogGroup(
     def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Give permissions to read and filter events from this log group.
 
+        [disable-awslint:no-grants]
+
         :param grantee: -
         '''
         if __debug__:
@@ -13571,6 +13581,8 @@ class LogGroup(
     @jsii.member(jsii_name="grantWrite")
     def grant_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Give permissions to create and write to streams in this log group.
+
+        [disable-awslint:no-grants]
 
         :param grantee: -
         '''
@@ -14399,11 +14411,12 @@ class LogStream(
         # The values are placeholders you should change.
         import aws_cdk as cdk
         from aws_cdk import aws_logs as logs
+        from aws_cdk.interfaces import aws_logs as interfaces_logs
         
-        # log_group: logs.LogGroup
+        # log_group_ref: interfaces_logs.ILogGroupRef
         
         log_stream = logs.LogStream(self, "MyLogStream",
-            log_group=log_group,
+            log_group=log_group_ref,
         
             # the properties below are optional
             log_stream_name="logStreamName",
@@ -14416,7 +14429,7 @@ class LogStream(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        log_group: "ILogGroup",
+        log_group: "_ILogGroupRef_874d025a",
         log_stream_name: typing.Optional[builtins.str] = None,
         removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
     ) -> None:
@@ -14439,6 +14452,33 @@ class LogStream(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="fromLogStreamAttributes")
+    @builtins.classmethod
+    def from_log_stream_attributes(
+        cls,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        *,
+        log_group_name: builtins.str,
+        log_stream_name: builtins.str,
+    ) -> "ILogStream":
+        '''Import an existing LogStream using its attributes.
+
+        :param scope: -
+        :param id: -
+        :param log_group_name: The name of the log group. Default: - When not provided, logStreamRef will throw an error
+        :param log_stream_name: The name of the log stream.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e142c30ab15cf1075047a4d1a620cba01c49d77aa7a0794190355204fa8c5b42)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        attrs = LogStreamAttributes(
+            log_group_name=log_group_name, log_stream_name=log_stream_name
+        )
+
+        return typing.cast("ILogStream", jsii.sinvoke(cls, "fromLogStreamAttributes", [scope, id, attrs]))
+
     @jsii.member(jsii_name="fromLogStreamName")
     @builtins.classmethod
     def from_log_stream_name(
@@ -14447,7 +14487,7 @@ class LogStream(
         id: builtins.str,
         log_stream_name: builtins.str,
     ) -> "ILogStream":
-        '''Import an existing LogGroup.
+        '''Import an existing LogStream.
 
         :param scope: -
         :param id: -
@@ -14472,6 +14512,83 @@ class LogStream(
         '''The name of this log stream.'''
         return typing.cast(builtins.str, jsii.get(self, "logStreamName"))
 
+    @builtins.property
+    @jsii.member(jsii_name="logStreamRef")
+    def log_stream_ref(self) -> "_LogStreamReference_66badb2c":
+        '''A reference to a LogStream resource.'''
+        return typing.cast("_LogStreamReference_66badb2c", jsii.get(self, "logStreamRef"))
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_logs.LogStreamAttributes",
+    jsii_struct_bases=[],
+    name_mapping={
+        "log_group_name": "logGroupName",
+        "log_stream_name": "logStreamName",
+    },
+)
+class LogStreamAttributes:
+    def __init__(
+        self,
+        *,
+        log_group_name: builtins.str,
+        log_stream_name: builtins.str,
+    ) -> None:
+        '''Attributes for importing a LogStream.
+
+        :param log_group_name: The name of the log group. Default: - When not provided, logStreamRef will throw an error
+        :param log_stream_name: The name of the log stream.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_logs as logs
+            
+            log_stream_attributes = logs.LogStreamAttributes(
+                log_group_name="logGroupName",
+                log_stream_name="logStreamName"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d0ba0f063556e9e1bfde543a6e028c2b06ba099ce02b3bfc1196749cfa0d4a17)
+            check_type(argname="argument log_group_name", value=log_group_name, expected_type=type_hints["log_group_name"])
+            check_type(argname="argument log_stream_name", value=log_stream_name, expected_type=type_hints["log_stream_name"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "log_group_name": log_group_name,
+            "log_stream_name": log_stream_name,
+        }
+
+    @builtins.property
+    def log_group_name(self) -> builtins.str:
+        '''The name of the log group.
+
+        :default: - When not provided, logStreamRef will throw an error
+        '''
+        result = self._values.get("log_group_name")
+        assert result is not None, "Required property 'log_group_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def log_stream_name(self) -> builtins.str:
+        '''The name of the log stream.'''
+        result = self._values.get("log_stream_name")
+        assert result is not None, "Required property 'log_stream_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "LogStreamAttributes(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_logs.LogStreamProps",
@@ -14486,7 +14603,7 @@ class LogStreamProps:
     def __init__(
         self,
         *,
-        log_group: "ILogGroup",
+        log_group: "_ILogGroupRef_874d025a",
         log_stream_name: typing.Optional[builtins.str] = None,
         removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
     ) -> None:
@@ -14504,11 +14621,12 @@ class LogStreamProps:
             # The values are placeholders you should change.
             import aws_cdk as cdk
             from aws_cdk import aws_logs as logs
+            from aws_cdk.interfaces import aws_logs as interfaces_logs
             
-            # log_group: logs.LogGroup
+            # log_group_ref: interfaces_logs.ILogGroupRef
             
             log_stream_props = logs.LogStreamProps(
-                log_group=log_group,
+                log_group=log_group_ref,
             
                 # the properties below are optional
                 log_stream_name="logStreamName",
@@ -14529,11 +14647,11 @@ class LogStreamProps:
             self._values["removal_policy"] = removal_policy
 
     @builtins.property
-    def log_group(self) -> "ILogGroup":
+    def log_group(self) -> "_ILogGroupRef_874d025a":
         '''The log group to create a log stream for.'''
         result = self._values.get("log_group")
         assert result is not None, "Required property 'log_group' is missing"
-        return typing.cast("ILogGroup", result)
+        return typing.cast("_ILogGroupRef_874d025a", result)
 
     @builtins.property
     def log_stream_name(self) -> typing.Optional[builtins.str]:
@@ -14673,7 +14791,7 @@ class MetricFilter(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        log_group: "ILogGroup",
+        log_group: "_ILogGroupRef_874d025a",
         filter_pattern: "IFilterPattern",
         metric_name: builtins.str,
         metric_namespace: builtins.str,
@@ -15007,7 +15125,7 @@ class MetricFilterProps(MetricFilterOptions):
         filter_name: typing.Optional[builtins.str] = None,
         metric_value: typing.Optional[builtins.str] = None,
         unit: typing.Optional["_Unit_61bc6f70"] = None,
-        log_group: "ILogGroup",
+        log_group: "_ILogGroupRef_874d025a",
     ) -> None:
         '''Properties for a MetricFilter.
 
@@ -15162,11 +15280,11 @@ class MetricFilterProps(MetricFilterOptions):
         return typing.cast(typing.Optional["_Unit_61bc6f70"], result)
 
     @builtins.property
-    def log_group(self) -> "ILogGroup":
+    def log_group(self) -> "_ILogGroupRef_874d025a":
         '''The log group to create the filter on.'''
         result = self._values.get("log_group")
         assert result is not None, "Required property 'log_group' is missing"
-        return typing.cast("ILogGroup", result)
+        return typing.cast("_ILogGroupRef_874d025a", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -16062,7 +16180,7 @@ class QueryDefinition(
         *,
         query_definition_name: builtins.str,
         query_string: "QueryString",
-        log_groups: typing.Optional[typing.Sequence["ILogGroup"]] = None,
+        log_groups: typing.Optional[typing.Sequence["_ILogGroupRef_874d025a"]] = None,
     ) -> None:
         '''
         :param scope: -
@@ -16114,7 +16232,7 @@ class QueryDefinitionProps:
         *,
         query_definition_name: builtins.str,
         query_string: "QueryString",
-        log_groups: typing.Optional[typing.Sequence["ILogGroup"]] = None,
+        log_groups: typing.Optional[typing.Sequence["_ILogGroupRef_874d025a"]] = None,
     ) -> None:
         '''Properties for a QueryDefinition.
 
@@ -16168,13 +16286,13 @@ class QueryDefinitionProps:
         return typing.cast("QueryString", result)
 
     @builtins.property
-    def log_groups(self) -> typing.Optional[typing.List["ILogGroup"]]:
+    def log_groups(self) -> typing.Optional[typing.List["_ILogGroupRef_874d025a"]]:
         '''Specify certain log groups for the query definition.
 
         :default: - no specified log groups
         '''
         result = self._values.get("log_groups")
-        return typing.cast(typing.Optional[typing.List["ILogGroup"]], result)
+        return typing.cast(typing.Optional[typing.List["_ILogGroupRef_874d025a"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -17465,7 +17583,7 @@ class SubscriptionFilter(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        log_group: "ILogGroup",
+        log_group: "_ILogGroupRef_874d025a",
         destination: "ILogSubscriptionDestination",
         filter_pattern: "IFilterPattern",
         distribution: typing.Optional["Distribution"] = None,
@@ -17630,7 +17748,7 @@ class SubscriptionFilterProps(SubscriptionFilterOptions):
         filter_pattern: "IFilterPattern",
         distribution: typing.Optional["Distribution"] = None,
         filter_name: typing.Optional[builtins.str] = None,
-        log_group: "ILogGroup",
+        log_group: "_ILogGroupRef_874d025a",
     ) -> None:
         '''Properties for a SubscriptionFilter.
 
@@ -17712,11 +17830,11 @@ class SubscriptionFilterProps(SubscriptionFilterOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def log_group(self) -> "ILogGroup":
+    def log_group(self) -> "_ILogGroupRef_874d025a":
         '''The log group to create the subscription on.'''
         result = self._values.get("log_group")
         assert result is not None, "Required property 'log_group' is missing"
-        return typing.cast("ILogGroup", result)
+        return typing.cast("_ILogGroupRef_874d025a", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -17909,7 +18027,7 @@ class Transformer(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        log_group: "ILogGroup",
+        log_group: "_ILogGroupRef_874d025a",
         transformer_config: typing.Sequence["IProcessor"],
         transformer_name: builtins.str,
     ) -> None:
@@ -18026,7 +18144,7 @@ class TransformerProps:
     def __init__(
         self,
         *,
-        log_group: "ILogGroup",
+        log_group: "_ILogGroupRef_874d025a",
         transformer_config: typing.Sequence["IProcessor"],
         transformer_name: builtins.str,
     ) -> None:
@@ -18081,11 +18199,11 @@ class TransformerProps:
         }
 
     @builtins.property
-    def log_group(self) -> "ILogGroup":
+    def log_group(self) -> "_ILogGroupRef_874d025a":
         '''Existing log group that you want to associate with this transformer.'''
         result = self._values.get("log_group")
         assert result is not None, "Required property 'log_group' is missing"
-        return typing.cast("ILogGroup", result)
+        return typing.cast("_ILogGroupRef_874d025a", result)
 
     @builtins.property
     def transformer_config(self) -> typing.List["IProcessor"]:
@@ -18401,10 +18519,11 @@ class CrossAccountDestination(
     CrossAccountDestinations are used to subscribe a Kinesis stream in a
     different account to a CloudWatch Subscription.
 
-    Consumers will hardly ever need to use this class. Instead, directly
-    subscribe a Kinesis stream using the integration class in the
-    ``aws-cdk-lib/aws-logs-destinations`` package; if necessary, a
-    ``CrossAccountDestination`` will be created automatically.
+    For cross-account scenarios, you need to manually create a
+    ``CrossAccountDestination`` in the destination account. The integration
+    classes in the ``aws-cdk-lib/aws-logs-destinations`` package (such as
+    ``KinesisDestination``) only handle same-account scenarios and do not
+    automatically create ``CrossAccountDestination`` for cross-account usage.
 
     :resource: AWS::Logs::Destination
     :exampleMetadata: fixture=_generated
@@ -18467,7 +18586,7 @@ class CrossAccountDestination(
     def bind(
         self,
         _scope: "_constructs_77d1e7e8.Construct",
-        _source_log_group: "ILogGroup",
+        _source_log_group: "_ILogGroupRef_874d025a",
     ) -> "LogSubscriptionDestinationConfig":
         '''Return the properties required to send subscription events to this destination.
 
@@ -18746,6 +18865,7 @@ __all__ = [
     "LogRetentionProps",
     "LogRetentionRetryOptions",
     "LogStream",
+    "LogStreamAttributes",
     "LogStreamProps",
     "LogSubscriptionDestinationConfig",
     "MetricFilter",
@@ -20317,7 +20437,7 @@ def _typecheckingstub__a7783165e1d00e232a8ee35869f53b7ff500c9680f96b895f705e2447
     identifiers: typing.Sequence[DataIdentifier],
     delivery_stream_name_audit_destination: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
-    log_group_audit_destination: typing.Optional[ILogGroup] = None,
+    log_group_audit_destination: typing.Optional[_ILogGroupRef_874d025a] = None,
     name: typing.Optional[builtins.str] = None,
     s3_bucket_audit_destination: typing.Optional[_IBucketRef_3debe44e] = None,
 ) -> None:
@@ -20535,7 +20655,7 @@ def _typecheckingstub__e63ab70f8bacc728cdbf61171dfc0b89720bb794e34d29336b9486edb
 
 def _typecheckingstub__0d2d750464949100272f59f23f28dae31a40c84ad1d188b0cd44fdca6ca395d5(
     scope: _constructs_77d1e7e8.Construct,
-    source_log_group: ILogGroup,
+    source_log_group: _ILogGroupRef_874d025a,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20773,9 +20893,19 @@ def _typecheckingstub__a7b310f4ff2940ed4dffa21e4ffde6e0f0bb15bdf93db6bd6d3446615
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    log_group: ILogGroup,
+    log_group: _ILogGroupRef_874d025a,
     log_stream_name: typing.Optional[builtins.str] = None,
     removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e142c30ab15cf1075047a4d1a620cba01c49d77aa7a0794190355204fa8c5b42(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    log_group_name: builtins.str,
+    log_stream_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20788,9 +20918,17 @@ def _typecheckingstub__c90257c192f43807c3ca64b0dfd7f0d8f24a0e76af49b59d49ef0b271
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d0ba0f063556e9e1bfde543a6e028c2b06ba099ce02b3bfc1196749cfa0d4a17(
+    *,
+    log_group_name: builtins.str,
+    log_stream_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3f49a14f2b0eea132d7cea27db911c1bac5a2370d8c93686afb12d7bf18544ca(
     *,
-    log_group: ILogGroup,
+    log_group: _ILogGroupRef_874d025a,
     log_stream_name: typing.Optional[builtins.str] = None,
     removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
 ) -> None:
@@ -20809,7 +20947,7 @@ def _typecheckingstub__8d62ba20acf6180e35fd081efe9f21747bf2bd8765dd3a4a5c41cc0f4
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    log_group: ILogGroup,
+    log_group: _ILogGroupRef_874d025a,
     filter_pattern: IFilterPattern,
     metric_name: builtins.str,
     metric_namespace: builtins.str,
@@ -20849,7 +20987,7 @@ def _typecheckingstub__66722f3b881a30b7ce1b9efa7c76f2539915abe8fe84a770e1e2c4765
     filter_name: typing.Optional[builtins.str] = None,
     metric_value: typing.Optional[builtins.str] = None,
     unit: typing.Optional[_Unit_61bc6f70] = None,
-    log_group: ILogGroup,
+    log_group: _ILogGroupRef_874d025a,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20931,7 +21069,7 @@ def _typecheckingstub__f7cb87fa9a91fccd75052278e9031242b20cab41bb53f8f18544b867e
     *,
     query_definition_name: builtins.str,
     query_string: QueryString,
-    log_groups: typing.Optional[typing.Sequence[ILogGroup]] = None,
+    log_groups: typing.Optional[typing.Sequence[_ILogGroupRef_874d025a]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20940,7 +21078,7 @@ def _typecheckingstub__993712107c64f2acd19761e2b930e6e052534d1100257989bcf307bb6
     *,
     query_definition_name: builtins.str,
     query_string: QueryString,
-    log_groups: typing.Optional[typing.Sequence[ILogGroup]] = None,
+    log_groups: typing.Optional[typing.Sequence[_ILogGroupRef_874d025a]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21068,7 +21206,7 @@ def _typecheckingstub__e3c78d3f905ddfb9bb1ff8466a0b030e7b262b0793c43d2667b561e42
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    log_group: ILogGroup,
+    log_group: _ILogGroupRef_874d025a,
     destination: ILogSubscriptionDestination,
     filter_pattern: IFilterPattern,
     distribution: typing.Optional[Distribution] = None,
@@ -21093,7 +21231,7 @@ def _typecheckingstub__eb936c8dd6a8ee03c9e8f4ffbe991c19b4b98648bbdd91f03367a058d
     filter_pattern: IFilterPattern,
     distribution: typing.Optional[Distribution] = None,
     filter_name: typing.Optional[builtins.str] = None,
-    log_group: ILogGroup,
+    log_group: _ILogGroupRef_874d025a,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21118,7 +21256,7 @@ def _typecheckingstub__15229fc0be2da1cdc000826d3fc7c0eb70960587299f27c938a1fd71c
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    log_group: ILogGroup,
+    log_group: _ILogGroupRef_874d025a,
     transformer_config: typing.Sequence[IProcessor],
     transformer_name: builtins.str,
 ) -> None:
@@ -21135,7 +21273,7 @@ def _typecheckingstub__5fb14deb68ad2a391c38083a4ab9599103e7918f73904352784a6fbf0
 
 def _typecheckingstub__c44d5878511fc89516420ebac8e669a5edc49cf01182e21ae66e8d8f47e3df4b(
     *,
-    log_group: ILogGroup,
+    log_group: _ILogGroupRef_874d025a,
     transformer_config: typing.Sequence[IProcessor],
     transformer_name: builtins.str,
 ) -> None:
@@ -21190,7 +21328,7 @@ def _typecheckingstub__4a3a6f7c79a2740b0e52fcc48d64fb4e96cfdc2abd91649f986c7d67b
 
 def _typecheckingstub__901846e19d9ba5beee9ef4784401b7413f0b32b2034ea5700b5fa8a30a1c0394(
     _scope: _constructs_77d1e7e8.Construct,
-    _source_log_group: ILogGroup,
+    _source_log_group: _ILogGroupRef_874d025a,
 ) -> None:
     """Type checking stubs"""
     pass

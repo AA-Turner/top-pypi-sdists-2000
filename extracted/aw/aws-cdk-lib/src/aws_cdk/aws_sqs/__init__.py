@@ -2877,6 +2877,8 @@ class QueueBase(
     ) -> "_Grant_a7ae64f8":
         '''Grant the actions defined in queueActions to the identity Principal given on this SQS queue resource.
 
+        [disable-awslint:no-grants]
+
         :param grantee: Principal to grant right to.
         :param actions: The actions to grant.
         '''
@@ -2906,6 +2908,8 @@ class QueueBase(
         This will grant the following KMS permissions:
 
         - kms:Decrypt
+
+        [disable-awslint:no-grants]
 
         :param grantee: Principal to grant consume rights to.
         '''
@@ -2941,6 +2945,8 @@ class QueueBase(
         - sqs:GetQueueAttributes
         - sqs:GetQueueUrl
 
+        [disable-awslint:no-grants]
+
         :param grantee: Principal to grant send rights to.
         '''
         if __debug__:
@@ -2966,6 +2972,8 @@ class QueueBase(
         - kms:Encrypt
         - kms:ReEncrypt*
         - kms:GenerateDataKey*
+
+        [disable-awslint:no-grants]
 
         :param grantee: Principal to grant send rights to.
         '''

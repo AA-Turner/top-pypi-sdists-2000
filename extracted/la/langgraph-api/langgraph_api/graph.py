@@ -188,12 +188,14 @@ async def get_graph(
 ) -> AsyncIterator[Pregel]:
     """Return the runnable."""
     from langgraph_api.utils import config as lg_config
+    from langgraph_api.utils import merge_auth
 
     assert_graph_exists(graph_id)
     value = GRAPHS[graph_id]
     if is_factory(value, graph_id):
         config = lg_config.ensure_config(config)
         config["configurable"]["__is_for_execution__"] = is_for_execution
+        config = merge_auth(config)
 
         if store is not None:
             if USE_RUNTIME_CONTEXT_API:

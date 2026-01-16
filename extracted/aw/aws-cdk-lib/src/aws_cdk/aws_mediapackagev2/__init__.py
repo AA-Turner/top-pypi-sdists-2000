@@ -1375,6 +1375,7 @@ class CfnOriginEndpoint(
                 ),
                 filter_configuration=mediapackagev2.CfnOriginEndpoint.FilterConfigurationProperty(
                     clip_start_time="clipStartTime",
+                    drm_settings="drmSettings",
                     end="end",
                     manifest_filter="manifestFilter",
                     start="start",
@@ -1418,6 +1419,7 @@ class CfnOriginEndpoint(
                 child_manifest_name="childManifestName",
                 filter_configuration=mediapackagev2.CfnOriginEndpoint.FilterConfigurationProperty(
                     clip_start_time="clipStartTime",
+                    drm_settings="drmSettings",
                     end="end",
                     manifest_filter="manifestFilter",
                     start="start",
@@ -1444,6 +1446,7 @@ class CfnOriginEndpoint(
                 child_manifest_name="childManifestName",
                 filter_configuration=mediapackagev2.CfnOriginEndpoint.FilterConfigurationProperty(
                     clip_start_time="clipStartTime",
+                    drm_settings="drmSettings",
                     end="end",
                     manifest_filter="manifestFilter",
                     start="start",
@@ -1469,6 +1472,7 @@ class CfnOriginEndpoint(
                 # the properties below are optional
                 filter_configuration=mediapackagev2.CfnOriginEndpoint.FilterConfigurationProperty(
                     clip_start_time="clipStartTime",
+                    drm_settings="drmSettings",
                     end="end",
                     manifest_filter="manifestFilter",
                     start="start",
@@ -1492,7 +1496,10 @@ class CfnOriginEndpoint(
                         ),
                         resource_id="resourceId",
                         role_arn="roleArn",
-                        url="url"
+                        url="url",
+        
+                        # the properties below are optional
+                        certificate_arn="certificateArn"
                     ),
         
                     # the properties below are optional
@@ -2386,6 +2393,7 @@ class CfnOriginEndpoint(
                     ),
                     filter_configuration=mediapackagev2.CfnOriginEndpoint.FilterConfigurationProperty(
                         clip_start_time="clipStartTime",
+                        drm_settings="drmSettings",
                         end="end",
                         manifest_filter="manifestFilter",
                         start="start",
@@ -3213,7 +3221,10 @@ class CfnOriginEndpoint(
                         ),
                         resource_id="resourceId",
                         role_arn="roleArn",
-                        url="url"
+                        url="url",
+                
+                        # the properties below are optional
+                        certificate_arn="certificateArn"
                     ),
                 
                     # the properties below are optional
@@ -3324,6 +3335,7 @@ class CfnOriginEndpoint(
         jsii_struct_bases=[],
         name_mapping={
             "clip_start_time": "clipStartTime",
+            "drm_settings": "drmSettings",
             "end": "end",
             "manifest_filter": "manifestFilter",
             "start": "start",
@@ -3335,6 +3347,7 @@ class CfnOriginEndpoint(
             self,
             *,
             clip_start_time: typing.Optional[builtins.str] = None,
+            drm_settings: typing.Optional[builtins.str] = None,
             end: typing.Optional[builtins.str] = None,
             manifest_filter: typing.Optional[builtins.str] = None,
             start: typing.Optional[builtins.str] = None,
@@ -3343,6 +3356,7 @@ class CfnOriginEndpoint(
             '''Filter configuration includes settings for manifest filtering, start and end times, and time delay that apply to all of your egress requests for this manifest.
 
             :param clip_start_time: Optionally specify the clip start time for all of your manifest egress requests. When you include clip start time, note that you cannot use clip start time query parameters for this manifest's endpoint URL.
+            :param drm_settings:  When you include a DRM setting, note that you cannot use an identical DRM setting query parameter for this manifest's endpoint URL.
             :param end: Optionally specify the end time for all of your manifest egress requests. When you include end time, note that you cannot use end time query parameters for this manifest's endpoint URL.
             :param manifest_filter: Optionally specify one or more manifest filters for all of your manifest egress requests. When you include a manifest filter, note that you cannot use an identical manifest filter query parameter for this manifest's endpoint URL.
             :param start: Optionally specify the start time for all of your manifest egress requests. When you include start time, note that you cannot use start time query parameters for this manifest's endpoint URL.
@@ -3359,6 +3373,7 @@ class CfnOriginEndpoint(
                 
                 filter_configuration_property = mediapackagev2.CfnOriginEndpoint.FilterConfigurationProperty(
                     clip_start_time="clipStartTime",
+                    drm_settings="drmSettings",
                     end="end",
                     manifest_filter="manifestFilter",
                     start="start",
@@ -3368,6 +3383,7 @@ class CfnOriginEndpoint(
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__cd4523035a4ce6e5ff7d759a2d3d8f5fc12e2c0c96ad04c9ef1b884c6334f16c)
                 check_type(argname="argument clip_start_time", value=clip_start_time, expected_type=type_hints["clip_start_time"])
+                check_type(argname="argument drm_settings", value=drm_settings, expected_type=type_hints["drm_settings"])
                 check_type(argname="argument end", value=end, expected_type=type_hints["end"])
                 check_type(argname="argument manifest_filter", value=manifest_filter, expected_type=type_hints["manifest_filter"])
                 check_type(argname="argument start", value=start, expected_type=type_hints["start"])
@@ -3375,6 +3391,8 @@ class CfnOriginEndpoint(
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if clip_start_time is not None:
                 self._values["clip_start_time"] = clip_start_time
+            if drm_settings is not None:
+                self._values["drm_settings"] = drm_settings
             if end is not None:
                 self._values["end"] = end
             if manifest_filter is not None:
@@ -3393,6 +3411,16 @@ class CfnOriginEndpoint(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackagev2-originendpoint-filterconfiguration.html#cfn-mediapackagev2-originendpoint-filterconfiguration-clipstarttime
             '''
             result = self._values.get("clip_start_time")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def drm_settings(self) -> typing.Optional[builtins.str]:
+            '''
+            When you include a DRM setting, note that you cannot use an identical DRM setting query parameter for this manifest's endpoint URL.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackagev2-originendpoint-filterconfiguration.html#cfn-mediapackagev2-originendpoint-filterconfiguration-drmsettings
+            '''
+            result = self._values.get("drm_settings")
             return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
@@ -3569,6 +3597,7 @@ class CfnOriginEndpoint(
                     child_manifest_name="childManifestName",
                     filter_configuration=mediapackagev2.CfnOriginEndpoint.FilterConfigurationProperty(
                         clip_start_time="clipStartTime",
+                        drm_settings="drmSettings",
                         end="end",
                         manifest_filter="manifestFilter",
                         start="start",
@@ -3782,6 +3811,7 @@ class CfnOriginEndpoint(
                     child_manifest_name="childManifestName",
                     filter_configuration=mediapackagev2.CfnOriginEndpoint.FilterConfigurationProperty(
                         clip_start_time="clipStartTime",
+                        drm_settings="drmSettings",
                         end="end",
                         manifest_filter="manifestFilter",
                         start="start",
@@ -3986,6 +4016,7 @@ class CfnOriginEndpoint(
                     # the properties below are optional
                     filter_configuration=mediapackagev2.CfnOriginEndpoint.FilterConfigurationProperty(
                         clip_start_time="clipStartTime",
+                        drm_settings="drmSettings",
                         end="end",
                         manifest_filter="manifestFilter",
                         start="start",
@@ -4197,7 +4228,7 @@ class CfnOriginEndpoint(
             '''The SCTE-35 configuration associated with the origin endpoint.
 
             :param scte_filter: The filter associated with the SCTE-35 configuration.
-            :param scte_in_segments: 
+            :param scte_in_segments: Controls whether SCTE-35 messages are included in segment files. - None – SCTE-35 messages are not included in segments (default) - All – SCTE-35 messages are embedded in segment data For DASH manifests, when set to ``All`` , an ``InbandEventStream`` tag signals that SCTE messages are present in segments. This setting works independently of manifest ad markers.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackagev2-originendpoint-scte.html
             :exampleMetadata: fixture=_generated
@@ -4234,7 +4265,13 @@ class CfnOriginEndpoint(
 
         @builtins.property
         def scte_in_segments(self) -> typing.Optional[builtins.str]:
-            '''
+            '''Controls whether SCTE-35 messages are included in segment files.
+
+            - None – SCTE-35 messages are not included in segments (default)
+            - All – SCTE-35 messages are embedded in segment data
+
+            For DASH manifests, when set to ``All`` , an ``InbandEventStream`` tag signals that SCTE messages are present in segments. This setting works independently of manifest ad markers.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackagev2-originendpoint-scte.html#cfn-mediapackagev2-originendpoint-scte-scteinsegments
             '''
             result = self._values.get("scte_in_segments")
@@ -4310,7 +4347,10 @@ class CfnOriginEndpoint(
                             ),
                             resource_id="resourceId",
                             role_arn="roleArn",
-                            url="url"
+                            url="url",
+                
+                            # the properties below are optional
+                            certificate_arn="certificateArn"
                         ),
                 
                         # the properties below are optional
@@ -4447,6 +4487,7 @@ class CfnOriginEndpoint(
             "resource_id": "resourceId",
             "role_arn": "roleArn",
             "url": "url",
+            "certificate_arn": "certificateArn",
         },
     )
     class SpekeKeyProviderProperty:
@@ -4458,6 +4499,7 @@ class CfnOriginEndpoint(
             resource_id: builtins.str,
             role_arn: builtins.str,
             url: builtins.str,
+            certificate_arn: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The parameters for the SPEKE key provider.
 
@@ -4466,6 +4508,7 @@ class CfnOriginEndpoint(
             :param resource_id: The unique identifier for the content. The service sends this identifier to the key server to identify the current endpoint. How unique you make this identifier depends on how fine-grained you want access controls to be. The service does not permit you to use the same ID for two simultaneous encryption processes. The resource ID is also known as the content ID. The following example shows a resource ID: ``MovieNight20171126093045``
             :param role_arn: The ARN for the IAM role granted by the key provider that provides access to the key provider API. This role must have a trust policy that allows MediaPackage to assume the role, and it must have a sufficient permissions policy to allow access to the specific key retrieval URL. Get this from your DRM solution provider. Valid format: ``arn:aws:iam::{accountID}:role/{name}`` . The following example shows a role ARN: ``arn:aws:iam::444455556666:role/SpekeAccess``
             :param url: The URL of the SPEKE key provider.
+            :param certificate_arn:  For this feature to work, your DRM key provider must support content key encryption.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackagev2-originendpoint-spekekeyprovider.html
             :exampleMetadata: fixture=_generated
@@ -4484,7 +4527,10 @@ class CfnOriginEndpoint(
                     ),
                     resource_id="resourceId",
                     role_arn="roleArn",
-                    url="url"
+                    url="url",
+                
+                    # the properties below are optional
+                    certificate_arn="certificateArn"
                 )
             '''
             if __debug__:
@@ -4494,6 +4540,7 @@ class CfnOriginEndpoint(
                 check_type(argname="argument resource_id", value=resource_id, expected_type=type_hints["resource_id"])
                 check_type(argname="argument role_arn", value=role_arn, expected_type=type_hints["role_arn"])
                 check_type(argname="argument url", value=url, expected_type=type_hints["url"])
+                check_type(argname="argument certificate_arn", value=certificate_arn, expected_type=type_hints["certificate_arn"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "drm_systems": drm_systems,
                 "encryption_contract_configuration": encryption_contract_configuration,
@@ -4501,6 +4548,8 @@ class CfnOriginEndpoint(
                 "role_arn": role_arn,
                 "url": url,
             }
+            if certificate_arn is not None:
+                self._values["certificate_arn"] = certificate_arn
 
         @builtins.property
         def drm_systems(self) -> typing.List[builtins.str]:
@@ -4561,6 +4610,16 @@ class CfnOriginEndpoint(
             result = self._values.get("url")
             assert result is not None, "Required property 'url' is missing"
             return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def certificate_arn(self) -> typing.Optional[builtins.str]:
+            '''
+            For this feature to work, your DRM key provider must support content key encryption.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackagev2-originendpoint-spekekeyprovider.html#cfn-mediapackagev2-originendpoint-spekekeyprovider-certificatearn
+            '''
+            result = self._values.get("certificate_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5153,6 +5212,7 @@ class CfnOriginEndpointProps:
                     ),
                     filter_configuration=mediapackagev2.CfnOriginEndpoint.FilterConfigurationProperty(
                         clip_start_time="clipStartTime",
+                        drm_settings="drmSettings",
                         end="end",
                         manifest_filter="manifestFilter",
                         start="start",
@@ -5196,6 +5256,7 @@ class CfnOriginEndpointProps:
                     child_manifest_name="childManifestName",
                     filter_configuration=mediapackagev2.CfnOriginEndpoint.FilterConfigurationProperty(
                         clip_start_time="clipStartTime",
+                        drm_settings="drmSettings",
                         end="end",
                         manifest_filter="manifestFilter",
                         start="start",
@@ -5222,6 +5283,7 @@ class CfnOriginEndpointProps:
                     child_manifest_name="childManifestName",
                     filter_configuration=mediapackagev2.CfnOriginEndpoint.FilterConfigurationProperty(
                         clip_start_time="clipStartTime",
+                        drm_settings="drmSettings",
                         end="end",
                         manifest_filter="manifestFilter",
                         start="start",
@@ -5247,6 +5309,7 @@ class CfnOriginEndpointProps:
                     # the properties below are optional
                     filter_configuration=mediapackagev2.CfnOriginEndpoint.FilterConfigurationProperty(
                         clip_start_time="clipStartTime",
+                        drm_settings="drmSettings",
                         end="end",
                         manifest_filter="manifestFilter",
                         start="start",
@@ -5270,7 +5333,10 @@ class CfnOriginEndpointProps:
                             ),
                             resource_id="resourceId",
                             role_arn="roleArn",
-                            url="url"
+                            url="url",
+            
+                            # the properties below are optional
+                            certificate_arn="certificateArn"
                         ),
             
                         # the properties below are optional
@@ -5979,6 +6045,7 @@ def _typecheckingstub__ba68bba2e5edd62f12d66393f036d9e0dc8f60c4705d328714b3a2f95
 def _typecheckingstub__cd4523035a4ce6e5ff7d759a2d3d8f5fc12e2c0c96ad04c9ef1b884c6334f16c(
     *,
     clip_start_time: typing.Optional[builtins.str] = None,
+    drm_settings: typing.Optional[builtins.str] = None,
     end: typing.Optional[builtins.str] = None,
     manifest_filter: typing.Optional[builtins.str] = None,
     start: typing.Optional[builtins.str] = None,
@@ -6076,6 +6143,7 @@ def _typecheckingstub__e4c003b5dabc0ccf6e42c45fb4504036521870f7799525c5b18f42c7c
     resource_id: builtins.str,
     role_arn: builtins.str,
     url: builtins.str,
+    certificate_arn: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -2034,6 +2034,7 @@ class AWSEventMetadataProps:
 
             from aws_cdk import AWSEventMetadataProps
             from aws_cdk.mixins_preview.aws_s3.events import BucketEvents
+            import aws_cdk.aws_events as events
             
             # bucket: s3.Bucket
             
@@ -2041,7 +2042,7 @@ class AWSEventMetadataProps:
             
             pattern = bucket_events.object_created_pattern(
                 event_metadata=AWSEventMetadataProps(
-                    region=["us-east-1", "us-west-2"],
+                    region=events.Match.prefix("us-"),
                     version=["0"]
                 )
             )
@@ -13838,19 +13839,19 @@ class Duration(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.Duration"):
 
     Example::
 
-        import aws_cdk.aws_lambda as lambda_
+        # my_role: iam.Role
         
-        # fn: lambda.Function
-        
-        fn_url = fn.add_function_url(auth_type=lambda_.FunctionUrlAuthType.NONE)
-        
-        cloudfront.Distribution(self, "Distribution",
-            default_behavior=cloudfront.BehaviorOptions(
-                origin=origins.FunctionUrlOrigin(fn_url,
-                    read_timeout=Duration.seconds(30),
-                    response_completion_timeout=Duration.seconds(90),
-                    keepalive_timeout=Duration.seconds(45)
-                )
+        cr.AwsCustomResource(self, "Customized",
+            role=my_role,  # must be assumable by the `lambda.amazonaws.com` service principal
+            timeout=Duration.minutes(10),  # defaults to 2 minutes
+            memory_size=1025,  # defaults to 512 if installLatestAwsSdk is true
+            log_group=logs.LogGroup(self, "AwsCustomResourceLogs",
+                retention=logs.RetentionDays.ONE_DAY
+            ),
+            function_name="my-custom-name",  # defaults to a CloudFormation generated name
+            removal_policy=RemovalPolicy.RETAIN,  # defaults to `RemovalPolicy.DESTROY`
+            policy=cr.AwsCustomResourcePolicy.from_sdk_calls(
+                resources=cr.AwsCustomResourcePolicy.ANY_RESOURCE
             )
         )
     '''

@@ -971,7 +971,6 @@ from ..aws_codestarnotifications import (
 )
 from ..aws_events import (
     EventPattern as _EventPattern_fe557901,
-    IEventBus as _IEventBus_88d13111,
     IRuleTarget as _IRuleTarget_7a91f454,
     OnEventOptions as _OnEventOptions_8711b8b3,
     Rule as _Rule_334ed2b5,
@@ -992,6 +991,7 @@ from ..interfaces.aws_codepipeline import (
     PipelineReference as _PipelineReference_0706267b,
     WebhookReference as _WebhookReference_96b0d16f,
 )
+from ..interfaces.aws_events import IEventBusRef as _IEventBusRef_aa86e9b4
 from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 
 
@@ -8791,7 +8791,7 @@ class IAction(typing_extensions.Protocol):
         target: typing.Optional["_IRuleTarget_7a91f454"] = None,
         *,
         enabled: typing.Optional[builtins.bool] = None,
-        event_bus: typing.Optional["_IEventBus_88d13111"] = None,
+        event_bus: typing.Optional["_IEventBusRef_aa86e9b4"] = None,
         role: typing.Optional["_IRoleRef_8400221f"] = None,
         schedule: typing.Optional["_Schedule_c151d01f"] = None,
         targets: typing.Optional[typing.Sequence["_IRuleTarget_7a91f454"]] = None,
@@ -8867,7 +8867,7 @@ class _IActionProxy:
         target: typing.Optional["_IRuleTarget_7a91f454"] = None,
         *,
         enabled: typing.Optional[builtins.bool] = None,
-        event_bus: typing.Optional["_IEventBus_88d13111"] = None,
+        event_bus: typing.Optional["_IEventBusRef_aa86e9b4"] = None,
         role: typing.Optional["_IRoleRef_8400221f"] = None,
         schedule: typing.Optional["_Schedule_c151d01f"] = None,
         targets: typing.Optional[typing.Sequence["_IRuleTarget_7a91f454"]] = None,
@@ -9432,7 +9432,7 @@ class IStage(typing_extensions.Protocol):
         target: typing.Optional["_IRuleTarget_7a91f454"] = None,
         *,
         enabled: typing.Optional[builtins.bool] = None,
-        event_bus: typing.Optional["_IEventBus_88d13111"] = None,
+        event_bus: typing.Optional["_IEventBusRef_aa86e9b4"] = None,
         role: typing.Optional["_IRoleRef_8400221f"] = None,
         schedule: typing.Optional["_Schedule_c151d01f"] = None,
         targets: typing.Optional[typing.Sequence["_IRuleTarget_7a91f454"]] = None,
@@ -9496,7 +9496,7 @@ class _IStageProxy:
         target: typing.Optional["_IRuleTarget_7a91f454"] = None,
         *,
         enabled: typing.Optional[builtins.bool] = None,
-        event_bus: typing.Optional["_IEventBus_88d13111"] = None,
+        event_bus: typing.Optional["_IEventBusRef_aa86e9b4"] = None,
         role: typing.Optional["_IRoleRef_8400221f"] = None,
         schedule: typing.Optional["_Schedule_c151d01f"] = None,
         targets: typing.Optional[typing.Sequence["_IRuleTarget_7a91f454"]] = None,
@@ -11762,7 +11762,7 @@ class Action(
         target: typing.Optional["_IRuleTarget_7a91f454"] = None,
         *,
         enabled: typing.Optional[builtins.bool] = None,
-        event_bus: typing.Optional["_IEventBus_88d13111"] = None,
+        event_bus: typing.Optional["_IEventBusRef_aa86e9b4"] = None,
         role: typing.Optional["_IRoleRef_8400221f"] = None,
         schedule: typing.Optional["_Schedule_c151d01f"] = None,
         targets: typing.Optional[typing.Sequence["_IRuleTarget_7a91f454"]] = None,
@@ -12965,7 +12965,7 @@ def _typecheckingstub__eade87f30c22d51a2286b3ee64e16e90fb0a8ea80f7298a87d888c798
     target: typing.Optional[_IRuleTarget_7a91f454] = None,
     *,
     enabled: typing.Optional[builtins.bool] = None,
-    event_bus: typing.Optional[_IEventBus_88d13111] = None,
+    event_bus: typing.Optional[_IEventBusRef_aa86e9b4] = None,
     role: typing.Optional[_IRoleRef_8400221f] = None,
     schedule: typing.Optional[_Schedule_c151d01f] = None,
     targets: typing.Optional[typing.Sequence[_IRuleTarget_7a91f454]] = None,
@@ -13073,7 +13073,7 @@ def _typecheckingstub__0ba37766e87b23b98a0021d06208be5996c1efd9e28f67b66f737bdc2
     target: typing.Optional[_IRuleTarget_7a91f454] = None,
     *,
     enabled: typing.Optional[builtins.bool] = None,
-    event_bus: typing.Optional[_IEventBus_88d13111] = None,
+    event_bus: typing.Optional[_IEventBusRef_aa86e9b4] = None,
     role: typing.Optional[_IRoleRef_8400221f] = None,
     schedule: typing.Optional[_Schedule_c151d01f] = None,
     targets: typing.Optional[typing.Sequence[_IRuleTarget_7a91f454]] = None,
@@ -13322,7 +13322,7 @@ def _typecheckingstub__8c29cd3253c1a51c9fbbe36fbb102b2f0cef595e0d8fa41e7ec1e9e03
     target: typing.Optional[_IRuleTarget_7a91f454] = None,
     *,
     enabled: typing.Optional[builtins.bool] = None,
-    event_bus: typing.Optional[_IEventBus_88d13111] = None,
+    event_bus: typing.Optional[_IEventBusRef_aa86e9b4] = None,
     role: typing.Optional[_IRoleRef_8400221f] = None,
     schedule: typing.Optional[_Schedule_c151d01f] = None,
     targets: typing.Optional[typing.Sequence[_IRuleTarget_7a91f454]] = None,

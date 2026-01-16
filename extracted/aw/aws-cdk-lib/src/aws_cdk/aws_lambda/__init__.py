@@ -18610,7 +18610,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         layers: typing.Optional[typing.Sequence["ILayerVersion"]] = None,
         log_format: typing.Optional[builtins.str] = None,
         logging_format: typing.Optional["LoggingFormat"] = None,
-        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         log_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         log_retention_retry_options: typing.Optional[typing.Union["LogRetentionRetryOptions", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -18704,6 +18704,7 @@ class FunctionOptions(EventInvokeConfigOptions):
             from aws_cdk import aws_sqs as sqs
             from aws_cdk.interfaces import aws_kms as interfaces_kms
             from aws_cdk.interfaces import aws_lambda as interfaces_lambda
+            from aws_cdk.interfaces import aws_logs as interfaces_logs
             
             # adot_layer_version: lambda.AdotLayerVersion
             # architecture: lambda.Architecture
@@ -18714,7 +18715,7 @@ class FunctionOptions(EventInvokeConfigOptions):
             # key_ref: interfaces_kms.IKeyRef
             # lambda_insights_version: lambda.LambdaInsightsVersion
             # layer_version: lambda.LayerVersion
-            # log_group: logs.LogGroup
+            # log_group_ref: interfaces_logs.ILogGroupRef
             # params_and_secrets_layer_version: lambda.ParamsAndSecretsLayerVersion
             # policy_statement: iam.PolicyStatement
             # profiling_group: codeguruprofiler.ProfilingGroup
@@ -18778,7 +18779,7 @@ class FunctionOptions(EventInvokeConfigOptions):
                 layers=[layer_version],
                 log_format="logFormat",
                 logging_format=lambda_.LoggingFormat.TEXT,
-                log_group=log_group,
+                log_group=log_group_ref,
                 log_removal_policy=cdk.RemovalPolicy.DESTROY,
                 log_retention=logs.RetentionDays.ONE_DAY,
                 log_retention_retry_options=lambda.LogRetentionRetryOptions(
@@ -19324,7 +19325,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         return typing.cast(typing.Optional["LoggingFormat"], result)
 
     @builtins.property
-    def log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
+    def log_group(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''The log group the function sends logs to.
 
         By default, Lambda functions send logs to an automatically created default log group named /aws/lambda/.
@@ -19338,7 +19339,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         :default: ``/aws/lambda/${this.functionName}`` - default log group created by Lambda
         '''
         result = self._values.get("log_group")
-        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def log_removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
@@ -19730,7 +19731,7 @@ class FunctionProps(FunctionOptions):
         layers: typing.Optional[typing.Sequence["ILayerVersion"]] = None,
         log_format: typing.Optional[builtins.str] = None,
         logging_format: typing.Optional["LoggingFormat"] = None,
-        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         log_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         log_retention_retry_options: typing.Optional[typing.Union["LogRetentionRetryOptions", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -20353,7 +20354,7 @@ class FunctionProps(FunctionOptions):
         return typing.cast(typing.Optional["LoggingFormat"], result)
 
     @builtins.property
-    def log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
+    def log_group(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''The log group the function sends logs to.
 
         By default, Lambda functions send logs to an automatically created default log group named /aws/lambda/.
@@ -20367,7 +20368,7 @@ class FunctionProps(FunctionOptions):
         :default: ``/aws/lambda/${this.functionName}`` - default log group created by Lambda
         '''
         result = self._values.get("log_group")
-        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def log_removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
@@ -21167,7 +21168,11 @@ class HttpMethod(enum.Enum):
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lambda.ICapacityProvider")
-class ICapacityProvider(_IResource_c80c4260, typing_extensions.Protocol):
+class ICapacityProvider(
+    _IResource_c80c4260,
+    _ICapacityProviderRef_2d9bc4af,
+    typing_extensions.Protocol,
+):
     '''Represents a Lambda capacity provider.'''
 
     @builtins.property
@@ -21191,6 +21196,7 @@ class ICapacityProvider(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _ICapacityProviderProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_ICapacityProviderRef_2d9bc4af), # type: ignore[misc]
 ):
     '''Represents a Lambda capacity provider.'''
 
@@ -22561,7 +22567,7 @@ typing.cast(typing.Any, IFunction).__jsii_proxy_class__ = lambda : _IFunctionPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lambda.IFunctionUrl")
-class IFunctionUrl(_IResource_c80c4260, typing_extensions.Protocol):
+class IFunctionUrl(_IResource_c80c4260, _IUrlRef_54a89375, typing_extensions.Protocol):
     '''A Lambda function Url.'''
 
     @builtins.property
@@ -22602,6 +22608,7 @@ class IFunctionUrl(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IFunctionUrlProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IUrlRef_54a89375), # type: ignore[misc]
 ):
     '''A Lambda function Url.'''
 
@@ -25780,7 +25787,12 @@ class Runtime(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_lambda.Runtime
     @jsii.python.classproperty
     @jsii.member(jsii_name="DOTNET_6")
     def DOTNET_6(cls) -> "Runtime":
-        '''The .NET 6 runtime (dotnet6).'''
+        '''(deprecated) The .NET 6 runtime (dotnet6).
+
+        :deprecated: Legacy runtime no longer supported by AWS Lambda. Migrate to the latest .NET runtime.
+
+        :stability: deprecated
+        '''
         return typing.cast("Runtime", jsii.sget(cls, "DOTNET_6"))
 
     @jsii.python.classproperty
@@ -25955,7 +25967,12 @@ class Runtime(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_lambda.Runtime
     @jsii.python.classproperty
     @jsii.member(jsii_name="NODEJS_18_X")
     def NODEJS_18_X(cls) -> "Runtime":
-        '''The NodeJS 18.x runtime (nodejs18.x).'''
+        '''(deprecated) The NodeJS 18.x runtime (nodejs18.x).
+
+        :deprecated: Legacy runtime no longer supported by AWS Lambda. Migrate to the latest NodeJS runtime.
+
+        :stability: deprecated
+        '''
         return typing.cast("Runtime", jsii.sget(cls, "NODEJS_18_X"))
 
     @jsii.python.classproperty
@@ -26117,7 +26134,12 @@ class Runtime(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_lambda.Runtime
     @jsii.python.classproperty
     @jsii.member(jsii_name="PYTHON_3_9")
     def PYTHON_3_9(cls) -> "Runtime":
-        '''The Python 3.9 runtime (python3.9).'''
+        '''(deprecated) The Python 3.9 runtime (python3.9).
+
+        :deprecated: Legacy runtime no longer supported by AWS Lambda. Migrate to the latest Python runtime.
+
+        :stability: deprecated
+        '''
         return typing.cast("Runtime", jsii.sget(cls, "PYTHON_3_9"))
 
     @jsii.python.classproperty
@@ -26668,7 +26690,7 @@ class SingletonFunctionProps(FunctionProps):
         layers: typing.Optional[typing.Sequence["ILayerVersion"]] = None,
         log_format: typing.Optional[builtins.str] = None,
         logging_format: typing.Optional["LoggingFormat"] = None,
-        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         log_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         log_retention_retry_options: typing.Optional[typing.Union["LogRetentionRetryOptions", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -27286,7 +27308,7 @@ class SingletonFunctionProps(FunctionProps):
         return typing.cast(typing.Optional["LoggingFormat"], result)
 
     @builtins.property
-    def log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
+    def log_group(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''The log group the function sends logs to.
 
         By default, Lambda functions send logs to an automatically created default log group named /aws/lambda/.
@@ -27300,7 +27322,7 @@ class SingletonFunctionProps(FunctionProps):
         :default: ``/aws/lambda/${this.functionName}`` - default log group created by Lambda
         '''
         result = self._values.get("log_group")
-        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def log_removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
@@ -29687,6 +29709,12 @@ class CapacityProvider(
         '''The name of the capacity provider.'''
         return typing.cast(builtins.str, jsii.get(self, "capacityProviderName"))
 
+    @builtins.property
+    @jsii.member(jsii_name="capacityProviderRef")
+    def capacity_provider_ref(self) -> "_CapacityProviderReference_4bee18a0":
+        '''A reference to a CapacityProvider resource.'''
+        return typing.cast("_CapacityProviderReference_4bee18a0", jsii.get(self, "capacityProviderRef"))
+
 
 class CfnParametersCode(
     Code,
@@ -30100,7 +30128,7 @@ class DockerImageFunctionProps(FunctionOptions):
         layers: typing.Optional[typing.Sequence["ILayerVersion"]] = None,
         log_format: typing.Optional[builtins.str] = None,
         logging_format: typing.Optional["LoggingFormat"] = None,
-        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         log_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         log_retention_retry_options: typing.Optional[typing.Union["LogRetentionRetryOptions", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -30699,7 +30727,7 @@ class DockerImageFunctionProps(FunctionOptions):
         return typing.cast(typing.Optional["LoggingFormat"], result)
 
     @builtins.property
-    def log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
+    def log_group(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''The log group the function sends logs to.
 
         By default, Lambda functions send logs to an automatically created default log group named /aws/lambda/.
@@ -30713,7 +30741,7 @@ class DockerImageFunctionProps(FunctionOptions):
         :default: ``/aws/lambda/${this.functionName}`` - default log group created by Lambda
         '''
         result = self._values.get("log_group")
-        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def log_removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
@@ -31518,6 +31546,8 @@ class FunctionBase(
     def grant_invoke(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke this Lambda.
 
+        [disable-awslint:no-grants]
+
         :param grantee: -
         '''
         if __debug__:
@@ -31531,6 +31561,8 @@ class FunctionBase(
         composite_principal: "_CompositePrincipal_c2fe180a",
     ) -> typing.List["_Grant_a7ae64f8"]:
         '''Grant multiple principals the ability to invoke this Lambda via CompositePrincipal.
+
+        [disable-awslint:no-grants]
 
         :param composite_principal: -
         '''
@@ -31546,6 +31578,8 @@ class FunctionBase(
     ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke the $LATEST version or unqualified version of this Lambda.
 
+        [disable-awslint:no-grants]
+
         :param grantee: -
         '''
         if __debug__:
@@ -31556,6 +31590,8 @@ class FunctionBase(
     @jsii.member(jsii_name="grantInvokeUrl")
     def grant_invoke_url(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke this Lambda Function URL.
+
+        [disable-awslint:no-grants]
 
         :param grantee: -
         '''
@@ -31571,6 +31607,8 @@ class FunctionBase(
         version: "IVersion",
     ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to invoke the given version of this Lambda.
+
+        [disable-awslint:no-grants]
 
         :param grantee: -
         :param version: -
@@ -32088,7 +32126,7 @@ class FunctionUrl(
 
     @jsii.member(jsii_name="grantInvokeUrl")
     def grant_invoke_url(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grant the given identity permissions to invoke this Lambda Function URL.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         '''
@@ -32120,6 +32158,12 @@ class FunctionUrl(
     def url(self) -> builtins.str:
         '''The url of the Lambda function.'''
         return typing.cast(builtins.str, jsii.get(self, "url"))
+
+    @builtins.property
+    @jsii.member(jsii_name="urlRef")
+    def url_ref(self) -> "_UrlReference_4ae6d27d":
+        '''A reference to a Url resource.'''
+        return typing.cast("_UrlReference_4ae6d27d", jsii.get(self, "urlRef"))
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lambda.IAlias")
@@ -32385,7 +32429,7 @@ class SingletonFunction(
         layers: typing.Optional[typing.Sequence["ILayerVersion"]] = None,
         log_format: typing.Optional[builtins.str] = None,
         logging_format: typing.Optional["LoggingFormat"] = None,
-        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         log_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         log_retention_retry_options: typing.Optional[typing.Union["LogRetentionRetryOptions", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -33459,7 +33503,7 @@ class Function(
         layers: typing.Optional[typing.Sequence["ILayerVersion"]] = None,
         log_format: typing.Optional[builtins.str] = None,
         logging_format: typing.Optional["LoggingFormat"] = None,
-        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         log_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         log_retention_retry_options: typing.Optional[typing.Union["LogRetentionRetryOptions", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -34365,7 +34409,7 @@ class DockerImageFunction(
         layers: typing.Optional[typing.Sequence["ILayerVersion"]] = None,
         log_format: typing.Optional[builtins.str] = None,
         logging_format: typing.Optional["LoggingFormat"] = None,
-        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         log_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         log_retention_retry_options: typing.Optional[typing.Union["LogRetentionRetryOptions", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -37071,7 +37115,7 @@ def _typecheckingstub__59918bb957d892739733c7a5849db990615fe5329709ad7ba703e0ee4
     layers: typing.Optional[typing.Sequence[ILayerVersion]] = None,
     log_format: typing.Optional[builtins.str] = None,
     logging_format: typing.Optional[LoggingFormat] = None,
-    log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     log_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
     log_retention_retry_options: typing.Optional[typing.Union[LogRetentionRetryOptions, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -37129,7 +37173,7 @@ def _typecheckingstub__94e70d11aa3c53737d418dbb9983973dfc06dbdef5c8cc30613cc3c6d
     layers: typing.Optional[typing.Sequence[ILayerVersion]] = None,
     log_format: typing.Optional[builtins.str] = None,
     logging_format: typing.Optional[LoggingFormat] = None,
-    log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     log_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
     log_retention_retry_options: typing.Optional[typing.Union[LogRetentionRetryOptions, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -37756,7 +37800,7 @@ def _typecheckingstub__68a03ec9f866a29c77aabcf8328c63a49511790fa9714874f255b3292
     layers: typing.Optional[typing.Sequence[ILayerVersion]] = None,
     log_format: typing.Optional[builtins.str] = None,
     logging_format: typing.Optional[LoggingFormat] = None,
-    log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     log_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
     log_retention_retry_options: typing.Optional[typing.Union[LogRetentionRetryOptions, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -38084,7 +38128,7 @@ def _typecheckingstub__04dd97f4b18c00e7ee0981f2428664401ae0b75dbda6102ea3ef53d08
     layers: typing.Optional[typing.Sequence[ILayerVersion]] = None,
     log_format: typing.Optional[builtins.str] = None,
     logging_format: typing.Optional[LoggingFormat] = None,
-    log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     log_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
     log_retention_retry_options: typing.Optional[typing.Union[LogRetentionRetryOptions, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -38358,7 +38402,7 @@ def _typecheckingstub__e7b766bff13bb7266787cec9bebb600187e19c1672e530bb9cfa31649
     layers: typing.Optional[typing.Sequence[ILayerVersion]] = None,
     log_format: typing.Optional[builtins.str] = None,
     logging_format: typing.Optional[LoggingFormat] = None,
-    log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     log_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
     log_retention_retry_options: typing.Optional[typing.Union[LogRetentionRetryOptions, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -38590,7 +38634,7 @@ def _typecheckingstub__724895b6b59aaf2b678ef25f2beca19fb114fc04ff6b37edef28e12b3
     layers: typing.Optional[typing.Sequence[ILayerVersion]] = None,
     log_format: typing.Optional[builtins.str] = None,
     logging_format: typing.Optional[LoggingFormat] = None,
-    log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     log_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
     log_retention_retry_options: typing.Optional[typing.Union[LogRetentionRetryOptions, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -38743,7 +38787,7 @@ def _typecheckingstub__368a49fe1f866c7ea7986c57b6f8488d0fddea8f62bf05ec1ed7eb09b
     layers: typing.Optional[typing.Sequence[ILayerVersion]] = None,
     log_format: typing.Optional[builtins.str] = None,
     logging_format: typing.Optional[LoggingFormat] = None,
-    log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     log_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
     log_retention_retry_options: typing.Optional[typing.Union[LogRetentionRetryOptions, typing.Dict[builtins.str, typing.Any]]] = None,

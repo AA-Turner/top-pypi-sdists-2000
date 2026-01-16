@@ -370,6 +370,7 @@ from .. import (
     IResolvable as _IResolvable_da3f097b,
     IResource as _IResource_c80c4260,
     ITaggable as _ITaggable_36806126,
+    ITaggableV2 as _ITaggableV2_4e6798f8,
     RemovalPolicy as _RemovalPolicy_9f93c814,
     Resource as _Resource_45bc6135,
     SecretValue as _SecretValue_3dd0ddae,
@@ -401,11 +402,13 @@ from ..interfaces.aws_docdb import (
     DBInstanceReference as _DBInstanceReference_81dfbd4e,
     DBSubnetGroupReference as _DBSubnetGroupReference_4e749f31,
     EventSubscriptionReference as _EventSubscriptionReference_2048e5f0,
+    GlobalClusterReference as _GlobalClusterReference_5ddc6d86,
     IDBClusterParameterGroupRef as _IDBClusterParameterGroupRef_ef5b94f0,
     IDBClusterRef as _IDBClusterRef_53d579d4,
     IDBInstanceRef as _IDBInstanceRef_41253090,
     IDBSubnetGroupRef as _IDBSubnetGroupRef_606c3916,
     IEventSubscriptionRef as _IEventSubscriptionRef_5849a8d4,
+    IGlobalClusterRef as _IGlobalClusterRef_3eb8d2c7,
 )
 
 
@@ -3682,6 +3685,451 @@ class CfnEventSubscriptionProps:
         )
 
 
+@jsii.implements(_IInspectable_c2943556, _IGlobalClusterRef_3eb8d2c7, _ITaggableV2_4e6798f8)
+class CfnGlobalCluster(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_docdb.CfnGlobalCluster",
+):
+    '''The AWS::DocDB::GlobalCluster resource represents an Amazon DocumentDB Global Cluster.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-docdb-globalcluster.html
+    :cloudformationResource: AWS::DocDB::GlobalCluster
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        from aws_cdk import CfnTag
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_docdb as docdb
+        
+        cfn_global_cluster = docdb.CfnGlobalCluster(self, "MyCfnGlobalCluster",
+            global_cluster_identifier="globalClusterIdentifier",
+        
+            # the properties below are optional
+            deletion_protection=False,
+            engine="engine",
+            engine_version="engineVersion",
+            source_db_cluster_identifier="sourceDbClusterIdentifier",
+            storage_encrypted=False,
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: "_constructs_77d1e7e8.Construct",
+        id: builtins.str,
+        *,
+        global_cluster_identifier: builtins.str,
+        deletion_protection: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        engine: typing.Optional[builtins.str] = None,
+        engine_version: typing.Optional[builtins.str] = None,
+        source_db_cluster_identifier: typing.Optional[builtins.str] = None,
+        storage_encrypted: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Create a new ``AWS::DocDB::GlobalCluster``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param global_cluster_identifier: The cluster identifier of the global cluster.
+        :param deletion_protection: Indicates whether the global cluster has deletion protection enabled. The global cluster can't be deleted when deletion protection is enabled.
+        :param engine: The database engine to use for this global cluster. Default: - "docdb"
+        :param engine_version: The engine version to use for this global cluster.
+        :param source_db_cluster_identifier: The Amazon Resource Name (ARN) to use as the primary cluster of the global cluster. You may also choose to instead specify the DBClusterIdentifier. If you provide a value for this parameter, don't specify values for the following settings because Amazon DocumentDB uses the values from the specified source DB cluster: Engine, EngineVersion, StorageEncrypted
+        :param storage_encrypted: Indicates whether the global cluster has storage encryption enabled.
+        :param tags: The tags to be assigned to the Amazon DocumentDB resource.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8e05cf5cfda9b59ffe41ee7e87b4c63dc4d286aba0e2e4966901531ddda9f324)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnGlobalClusterProps(
+            global_cluster_identifier=global_cluster_identifier,
+            deletion_protection=deletion_protection,
+            engine=engine,
+            engine_version=engine_version,
+            source_db_cluster_identifier=source_db_cluster_identifier,
+            storage_encrypted=storage_encrypted,
+            tags=tags,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForGlobalCluster")
+    @builtins.classmethod
+    def arn_for_global_cluster(
+        cls,
+        resource: "_IGlobalClusterRef_3eb8d2c7",
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6207f2ee215c65620105c57c61f66465de1198f05681c7da8f9da7b2d24c510a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForGlobalCluster", [resource]))
+
+    @jsii.member(jsii_name="isCfnGlobalCluster")
+    @builtins.classmethod
+    def is_cfn_global_cluster(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnGlobalCluster.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2958ff3ed3bccdb1a2a27f65998b672f55bcbbeb0457bda3184516b99a66362b)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGlobalCluster", [x]))
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: "_TreeInspector_488e0dd5") -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8ad8f3754d3d166edf33f5eb0f73a6a5bdc4d8369aa506c744b91d8aefeeb417)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b32fd9e0dd8470cfed3c6a707f8c358f4b1dd18afc8f332f6b661636ebc2ca87)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrGlobalClusterArn")
+    def attr_global_cluster_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) for the global cluster.
+
+        :cloudformationAttribute: GlobalClusterArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrGlobalClusterArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrGlobalClusterResourceId")
+    def attr_global_cluster_resource_id(self) -> builtins.str:
+        '''The AWS Region-unique, immutable identifier for the global database cluster.
+
+        This identifier is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB cluster is accessed.
+
+        :cloudformationAttribute: GlobalClusterResourceId
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrGlobalClusterResourceId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="globalClusterRef")
+    def global_cluster_ref(self) -> "_GlobalClusterReference_5ddc6d86":
+        '''A reference to a GlobalCluster resource.'''
+        return typing.cast("_GlobalClusterReference_5ddc6d86", jsii.get(self, "globalClusterRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="globalClusterIdentifier")
+    def global_cluster_identifier(self) -> builtins.str:
+        '''The cluster identifier of the global cluster.'''
+        return typing.cast(builtins.str, jsii.get(self, "globalClusterIdentifier"))
+
+    @global_cluster_identifier.setter
+    def global_cluster_identifier(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e978ec084e88a81db2bfe156d4473f1e27d7e100a75adbb10e281ff2e0dab318)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "globalClusterIdentifier", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="deletionProtection")
+    def deletion_protection(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
+        '''Indicates whether the global cluster has deletion protection enabled.'''
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "deletionProtection"))
+
+    @deletion_protection.setter
+    def deletion_protection(
+        self,
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__589e1e5900b3b7b0f06c428ba5efdc979e22bd05a01bc945d8aa11ad6b69fa8b)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "deletionProtection", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="engine")
+    def engine(self) -> typing.Optional[builtins.str]:
+        '''The database engine to use for this global cluster.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "engine"))
+
+    @engine.setter
+    def engine(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ee8718c4aef1bfd83769edbf2b5165dc05e4707fa2e92b11aeeb92e4105031cc)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "engine", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="engineVersion")
+    def engine_version(self) -> typing.Optional[builtins.str]:
+        '''The engine version to use for this global cluster.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "engineVersion"))
+
+    @engine_version.setter
+    def engine_version(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__197f04446dd554664658967e2bb1634a5e5601cff1dc56926363b822fd93cc61)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "engineVersion", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="sourceDbClusterIdentifier")
+    def source_db_cluster_identifier(self) -> typing.Optional[builtins.str]:
+        '''The Amazon Resource Name (ARN) to use as the primary cluster of the global cluster.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "sourceDbClusterIdentifier"))
+
+    @source_db_cluster_identifier.setter
+    def source_db_cluster_identifier(
+        self,
+        value: typing.Optional[builtins.str],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d103a16257df077bc8f587f0d7f9c52a16d7b92af9509674f8278d2bcb511587)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "sourceDbClusterIdentifier", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="storageEncrypted")
+    def storage_encrypted(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
+        '''Indicates whether the global cluster has storage encryption enabled.'''
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], jsii.get(self, "storageEncrypted"))
+
+    @storage_encrypted.setter
+    def storage_encrypted(
+        self,
+        value: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6fc2492e1ca12e1767074fdf562b81529f58a28f001be82a16025c39fbe44705)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "storageEncrypted", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
+        '''The tags to be assigned to the Amazon DocumentDB resource.'''
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6965130ecd3995c44f26142c677181a2bfbed87fdf11b570728e814366cf7cf5)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_docdb.CfnGlobalClusterProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "global_cluster_identifier": "globalClusterIdentifier",
+        "deletion_protection": "deletionProtection",
+        "engine": "engine",
+        "engine_version": "engineVersion",
+        "source_db_cluster_identifier": "sourceDbClusterIdentifier",
+        "storage_encrypted": "storageEncrypted",
+        "tags": "tags",
+    },
+)
+class CfnGlobalClusterProps:
+    def __init__(
+        self,
+        *,
+        global_cluster_identifier: builtins.str,
+        deletion_protection: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        engine: typing.Optional[builtins.str] = None,
+        engine_version: typing.Optional[builtins.str] = None,
+        source_db_cluster_identifier: typing.Optional[builtins.str] = None,
+        storage_encrypted: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnGlobalCluster``.
+
+        :param global_cluster_identifier: The cluster identifier of the global cluster.
+        :param deletion_protection: Indicates whether the global cluster has deletion protection enabled. The global cluster can't be deleted when deletion protection is enabled.
+        :param engine: The database engine to use for this global cluster. Default: - "docdb"
+        :param engine_version: The engine version to use for this global cluster.
+        :param source_db_cluster_identifier: The Amazon Resource Name (ARN) to use as the primary cluster of the global cluster. You may also choose to instead specify the DBClusterIdentifier. If you provide a value for this parameter, don't specify values for the following settings because Amazon DocumentDB uses the values from the specified source DB cluster: Engine, EngineVersion, StorageEncrypted
+        :param storage_encrypted: Indicates whether the global cluster has storage encryption enabled.
+        :param tags: The tags to be assigned to the Amazon DocumentDB resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-docdb-globalcluster.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            from aws_cdk import CfnTag
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_docdb as docdb
+            
+            cfn_global_cluster_props = docdb.CfnGlobalClusterProps(
+                global_cluster_identifier="globalClusterIdentifier",
+            
+                # the properties below are optional
+                deletion_protection=False,
+                engine="engine",
+                engine_version="engineVersion",
+                source_db_cluster_identifier="sourceDbClusterIdentifier",
+                storage_encrypted=False,
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f905c1e916900d6811bae79d470677d2e13a69789a1194dc07e384c9179bc82d)
+            check_type(argname="argument global_cluster_identifier", value=global_cluster_identifier, expected_type=type_hints["global_cluster_identifier"])
+            check_type(argname="argument deletion_protection", value=deletion_protection, expected_type=type_hints["deletion_protection"])
+            check_type(argname="argument engine", value=engine, expected_type=type_hints["engine"])
+            check_type(argname="argument engine_version", value=engine_version, expected_type=type_hints["engine_version"])
+            check_type(argname="argument source_db_cluster_identifier", value=source_db_cluster_identifier, expected_type=type_hints["source_db_cluster_identifier"])
+            check_type(argname="argument storage_encrypted", value=storage_encrypted, expected_type=type_hints["storage_encrypted"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "global_cluster_identifier": global_cluster_identifier,
+        }
+        if deletion_protection is not None:
+            self._values["deletion_protection"] = deletion_protection
+        if engine is not None:
+            self._values["engine"] = engine
+        if engine_version is not None:
+            self._values["engine_version"] = engine_version
+        if source_db_cluster_identifier is not None:
+            self._values["source_db_cluster_identifier"] = source_db_cluster_identifier
+        if storage_encrypted is not None:
+            self._values["storage_encrypted"] = storage_encrypted
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def global_cluster_identifier(self) -> builtins.str:
+        '''The cluster identifier of the global cluster.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-docdb-globalcluster.html#cfn-docdb-globalcluster-globalclusteridentifier
+        '''
+        result = self._values.get("global_cluster_identifier")
+        assert result is not None, "Required property 'global_cluster_identifier' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def deletion_protection(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
+        '''Indicates whether the global cluster has deletion protection enabled.
+
+        The global cluster can't be deleted when deletion protection is enabled.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-docdb-globalcluster.html#cfn-docdb-globalcluster-deletionprotection
+        '''
+        result = self._values.get("deletion_protection")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
+
+    @builtins.property
+    def engine(self) -> typing.Optional[builtins.str]:
+        '''The database engine to use for this global cluster.
+
+        :default: - "docdb"
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-docdb-globalcluster.html#cfn-docdb-globalcluster-engine
+        '''
+        result = self._values.get("engine")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def engine_version(self) -> typing.Optional[builtins.str]:
+        '''The engine version to use for this global cluster.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-docdb-globalcluster.html#cfn-docdb-globalcluster-engineversion
+        '''
+        result = self._values.get("engine_version")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def source_db_cluster_identifier(self) -> typing.Optional[builtins.str]:
+        '''The Amazon Resource Name (ARN) to use as the primary cluster of the global cluster.
+
+        You may also choose to instead specify the DBClusterIdentifier. If you provide a value for this parameter, don't specify values for the following settings because Amazon DocumentDB uses the values from the specified source DB cluster: Engine, EngineVersion, StorageEncrypted
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-docdb-globalcluster.html#cfn-docdb-globalcluster-sourcedbclusteridentifier
+        '''
+        result = self._values.get("source_db_cluster_identifier")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def storage_encrypted(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
+        '''Indicates whether the global cluster has storage encryption enabled.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-docdb-globalcluster.html#cfn-docdb-globalcluster-storageencrypted
+        '''
+        result = self._values.get("storage_encrypted")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
+        '''The tags to be assigned to the Amazon DocumentDB resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-docdb-globalcluster.html#cfn-docdb-globalcluster-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnGlobalClusterProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_docdb.ClusterParameterGroupProps",
     jsii_struct_bases=[],
@@ -3998,7 +4446,7 @@ class DatabaseClusterProps:
         instances: typing.Optional[jsii.Number] = None,
         instance_type: typing.Optional["_InstanceType_f64915b9"] = None,
         kms_key: typing.Optional["_IKey_5f11635f"] = None,
-        parameter_group: typing.Optional["IClusterParameterGroup"] = None,
+        parameter_group: typing.Optional["_IDBClusterParameterGroupRef_ef5b94f0"] = None,
         port: typing.Optional[jsii.Number] = None,
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
         removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
@@ -4354,13 +4802,15 @@ class DatabaseClusterProps:
         return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
-    def parameter_group(self) -> typing.Optional["IClusterParameterGroup"]:
+    def parameter_group(
+        self,
+    ) -> typing.Optional["_IDBClusterParameterGroupRef_ef5b94f0"]:
         '''The DB parameter group to associate with the instance.
 
         :default: no parameter group
         '''
         result = self._values.get("parameter_group")
-        return typing.cast(typing.Optional["IClusterParameterGroup"], result)
+        return typing.cast(typing.Optional["_IDBClusterParameterGroupRef_ef5b94f0"], result)
 
     @builtins.property
     def port(self) -> typing.Optional[jsii.Number]:
@@ -4587,7 +5037,7 @@ class DatabaseInstanceProps:
     def __init__(
         self,
         *,
-        cluster: "IDatabaseCluster",
+        cluster: "_IDBClusterRef_53d579d4",
         instance_type: "_InstanceType_f64915b9",
         auto_minor_version_upgrade: typing.Optional[builtins.bool] = None,
         availability_zone: typing.Optional[builtins.str] = None,
@@ -4619,13 +5069,14 @@ class DatabaseInstanceProps:
             from aws_cdk import aws_docdb as docdb
             from aws_cdk import aws_ec2 as ec2
             from aws_cdk import aws_rds as rds
+            from aws_cdk.interfaces import aws_docdb as interfaces_docdb
             
             # ca_certificate: rds.CaCertificate
-            # database_cluster: docdb.DatabaseCluster
+            # d_bCluster_ref: interfaces_docdb.IDBClusterRef
             # instance_type: ec2.InstanceType
             
             database_instance_props = docdb.DatabaseInstanceProps(
-                cluster=database_cluster,
+                cluster=d_bCluster_ref,
                 instance_type=instance_type,
             
                 # the properties below are optional
@@ -4669,11 +5120,11 @@ class DatabaseInstanceProps:
             self._values["removal_policy"] = removal_policy
 
     @builtins.property
-    def cluster(self) -> "IDatabaseCluster":
+    def cluster(self) -> "_IDBClusterRef_53d579d4":
         '''The DocumentDB database cluster the instance should launch into.'''
         result = self._values.get("cluster")
         assert result is not None, "Required property 'cluster' is missing"
-        return typing.cast("IDatabaseCluster", result)
+        return typing.cast("_IDBClusterRef_53d579d4", result)
 
     @builtins.property
     def instance_type(self) -> "_InstanceType_f64915b9":
@@ -5018,7 +5469,11 @@ class Endpoint(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_docdb.Endpoin
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_docdb.IClusterParameterGroup")
-class IClusterParameterGroup(_IResource_c80c4260, typing_extensions.Protocol):
+class IClusterParameterGroup(
+    _IResource_c80c4260,
+    _IDBClusterParameterGroupRef_ef5b94f0,
+    typing_extensions.Protocol,
+):
     '''A parameter group.'''
 
     @builtins.property
@@ -5030,6 +5485,7 @@ class IClusterParameterGroup(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IClusterParameterGroupProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IDBClusterParameterGroupRef_ef5b94f0), # type: ignore[misc]
 ):
     '''A parameter group.'''
 
@@ -5050,6 +5506,7 @@ class IDatabaseCluster(
     _IResource_c80c4260,
     _IConnectable_10015a05,
     _ISecretAttachmentTarget_123e2df9,
+    _IDBClusterRef_53d579d4,
     typing_extensions.Protocol,
 ):
     '''Create a clustered database with a given number of instances.'''
@@ -5101,6 +5558,7 @@ class _IDatabaseClusterProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
     jsii.proxy_for(_IConnectable_10015a05), # type: ignore[misc]
     jsii.proxy_for(_ISecretAttachmentTarget_123e2df9), # type: ignore[misc]
+    jsii.proxy_for(_IDBClusterRef_53d579d4), # type: ignore[misc]
 ):
     '''Create a clustered database with a given number of instances.'''
 
@@ -5153,7 +5611,11 @@ typing.cast(typing.Any, IDatabaseCluster).__jsii_proxy_class__ = lambda : _IData
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_docdb.IDatabaseInstance")
-class IDatabaseInstance(_IResource_c80c4260, typing_extensions.Protocol):
+class IDatabaseInstance(
+    _IResource_c80c4260,
+    _IDBInstanceRef_41253090,
+    typing_extensions.Protocol,
+):
     '''A database instance.'''
 
     @builtins.property
@@ -5195,6 +5657,7 @@ class IDatabaseInstance(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IDatabaseInstanceProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IDBInstanceRef_41253090), # type: ignore[misc]
 ):
     '''A database instance.'''
 
@@ -5627,6 +6090,14 @@ class ClusterParameterGroup(
         return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
+    @jsii.member(jsii_name="dbClusterParameterGroupRef")
+    def db_cluster_parameter_group_ref(
+        self,
+    ) -> "_DBClusterParameterGroupReference_c3ab43f9":
+        '''A reference to this parameter group.'''
+        return typing.cast("_DBClusterParameterGroupReference_c3ab43f9", jsii.get(self, "dbClusterParameterGroupRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="parameterGroupName")
     def parameter_group_name(self) -> builtins.str:
         '''The name of the parameter group.'''
@@ -5684,7 +6155,7 @@ class DatabaseCluster(
         instances: typing.Optional[jsii.Number] = None,
         instance_type: typing.Optional["_InstanceType_f64915b9"] = None,
         kms_key: typing.Optional["_IKey_5f11635f"] = None,
-        parameter_group: typing.Optional["IClusterParameterGroup"] = None,
+        parameter_group: typing.Optional["_IDBClusterParameterGroupRef_ef5b94f0"] = None,
         port: typing.Optional[jsii.Number] = None,
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
         removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
@@ -5915,6 +6386,12 @@ class DatabaseCluster(
         return typing.cast("_Connections_0f31fce8", jsii.get(self, "connections"))
 
     @builtins.property
+    @jsii.member(jsii_name="dbClusterRef")
+    def db_cluster_ref(self) -> "_DBClusterReference_9e146947":
+        '''A reference to this cluster.'''
+        return typing.cast("_DBClusterReference_9e146947", jsii.get(self, "dbClusterRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="instanceEndpoints")
     def instance_endpoints(self) -> typing.List["Endpoint"]:
         '''Endpoints which address each individual replica.'''
@@ -5958,13 +6435,14 @@ class DatabaseInstance(
         from aws_cdk import aws_docdb as docdb
         from aws_cdk import aws_ec2 as ec2
         from aws_cdk import aws_rds as rds
+        from aws_cdk.interfaces import aws_docdb as interfaces_docdb
         
         # ca_certificate: rds.CaCertificate
-        # database_cluster: docdb.DatabaseCluster
+        # d_bCluster_ref: interfaces_docdb.IDBClusterRef
         # instance_type: ec2.InstanceType
         
         database_instance = docdb.DatabaseInstance(self, "MyDatabaseInstance",
-            cluster=database_cluster,
+            cluster=d_bCluster_ref,
             instance_type=instance_type,
         
             # the properties below are optional
@@ -5983,7 +6461,7 @@ class DatabaseInstance(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        cluster: "IDatabaseCluster",
+        cluster: "_IDBClusterRef_53d579d4",
         instance_type: "_InstanceType_f64915b9",
         auto_minor_version_upgrade: typing.Optional[builtins.bool] = None,
         availability_zone: typing.Optional[builtins.str] = None,
@@ -6086,6 +6564,12 @@ class DatabaseInstance(
         return typing.cast(builtins.str, jsii.get(self, "dbInstanceEndpointPort"))
 
     @builtins.property
+    @jsii.member(jsii_name="dbInstanceRef")
+    def db_instance_ref(self) -> "_DBInstanceReference_81dfbd4e":
+        '''A reference to this instance.'''
+        return typing.cast("_DBInstanceReference_81dfbd4e", jsii.get(self, "dbInstanceRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="instanceArn")
     def instance_arn(self) -> builtins.str:
         '''The instance arn.'''
@@ -6123,6 +6607,8 @@ __all__ = [
     "CfnDBSubnetGroupProps",
     "CfnEventSubscription",
     "CfnEventSubscriptionProps",
+    "CfnGlobalCluster",
+    "CfnGlobalClusterProps",
     "ClusterParameterGroup",
     "ClusterParameterGroupProps",
     "DatabaseCluster",
@@ -6767,6 +7253,100 @@ def _typecheckingstub__92e72afa83105140ea15cc6ce1340e83894ccd39b3b2bb6575b33f8fa
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__8e05cf5cfda9b59ffe41ee7e87b4c63dc4d286aba0e2e4966901531ddda9f324(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    global_cluster_identifier: builtins.str,
+    deletion_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    engine: typing.Optional[builtins.str] = None,
+    engine_version: typing.Optional[builtins.str] = None,
+    source_db_cluster_identifier: typing.Optional[builtins.str] = None,
+    storage_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6207f2ee215c65620105c57c61f66465de1198f05681c7da8f9da7b2d24c510a(
+    resource: _IGlobalClusterRef_3eb8d2c7,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2958ff3ed3bccdb1a2a27f65998b672f55bcbbeb0457bda3184516b99a66362b(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8ad8f3754d3d166edf33f5eb0f73a6a5bdc4d8369aa506c744b91d8aefeeb417(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b32fd9e0dd8470cfed3c6a707f8c358f4b1dd18afc8f332f6b661636ebc2ca87(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e978ec084e88a81db2bfe156d4473f1e27d7e100a75adbb10e281ff2e0dab318(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__589e1e5900b3b7b0f06c428ba5efdc979e22bd05a01bc945d8aa11ad6b69fa8b(
+    value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ee8718c4aef1bfd83769edbf2b5165dc05e4707fa2e92b11aeeb92e4105031cc(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__197f04446dd554664658967e2bb1634a5e5601cff1dc56926363b822fd93cc61(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d103a16257df077bc8f587f0d7f9c52a16d7b92af9509674f8278d2bcb511587(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6fc2492e1ca12e1767074fdf562b81529f58a28f001be82a16025c39fbe44705(
+    value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6965130ecd3995c44f26142c677181a2bfbed87fdf11b570728e814366cf7cf5(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f905c1e916900d6811bae79d470677d2e13a69789a1194dc07e384c9179bc82d(
+    *,
+    global_cluster_identifier: builtins.str,
+    deletion_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    engine: typing.Optional[builtins.str] = None,
+    engine_version: typing.Optional[builtins.str] = None,
+    source_db_cluster_identifier: typing.Optional[builtins.str] = None,
+    storage_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__491f89cfa8a5f727c317b5eded8174371b0bb8ddb08980d3f8ad7e3c0bf535e0(
     *,
     family: builtins.str,
@@ -6810,7 +7390,7 @@ def _typecheckingstub__bb24ec128a97ca07df15f55d4e96dda851d4300951806a7a3d7f391cc
     instances: typing.Optional[jsii.Number] = None,
     instance_type: typing.Optional[_InstanceType_f64915b9] = None,
     kms_key: typing.Optional[_IKey_5f11635f] = None,
-    parameter_group: typing.Optional[IClusterParameterGroup] = None,
+    parameter_group: typing.Optional[_IDBClusterParameterGroupRef_ef5b94f0] = None,
     port: typing.Optional[jsii.Number] = None,
     preferred_maintenance_window: typing.Optional[builtins.str] = None,
     removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
@@ -6835,7 +7415,7 @@ def _typecheckingstub__36cfeaaeef4180fd2afc1ee16f95e19c74c9cfb8467158fc246cb7a17
 
 def _typecheckingstub__676d69b0db2a30b5f20b867ed1d439431b0f7d419a335b2a51aaaf2086c68ada(
     *,
-    cluster: IDatabaseCluster,
+    cluster: _IDBClusterRef_53d579d4,
     instance_type: _InstanceType_f64915b9,
     auto_minor_version_upgrade: typing.Optional[builtins.bool] = None,
     availability_zone: typing.Optional[builtins.str] = None,
@@ -6948,7 +7528,7 @@ def _typecheckingstub__3fef762ebf4d69195051e79f76d91c6d9e93e2a84a6c1e71f7b4a0b8c
     instances: typing.Optional[jsii.Number] = None,
     instance_type: typing.Optional[_InstanceType_f64915b9] = None,
     kms_key: typing.Optional[_IKey_5f11635f] = None,
-    parameter_group: typing.Optional[IClusterParameterGroup] = None,
+    parameter_group: typing.Optional[_IDBClusterParameterGroupRef_ef5b94f0] = None,
     port: typing.Optional[jsii.Number] = None,
     preferred_maintenance_window: typing.Optional[builtins.str] = None,
     removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
@@ -7002,7 +7582,7 @@ def _typecheckingstub__5817f4b16546e48d296754293847a6856ad12a571f11de701f04c2152
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    cluster: IDatabaseCluster,
+    cluster: _IDBClusterRef_53d579d4,
     instance_type: _InstanceType_f64915b9,
     auto_minor_version_upgrade: typing.Optional[builtins.bool] = None,
     availability_zone: typing.Optional[builtins.str] = None,

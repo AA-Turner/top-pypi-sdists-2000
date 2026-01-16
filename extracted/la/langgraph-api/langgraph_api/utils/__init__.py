@@ -7,6 +7,7 @@ from datetime import datetime
 from typing import Any, Protocol, TypeAlias, TypeVar, cast
 
 import structlog
+from langchain_core.runnables import RunnableConfig
 from langgraph_sdk import Auth
 from starlette.authentication import AuthCredentials, BaseUser
 from starlette.exceptions import HTTPException
@@ -70,6 +71,30 @@ def get_user_id(user: BaseUser | None) -> str | None:
             return user.display_name
         except NotImplementedError:
             pass
+
+
+def merge_auth(
+    config: RunnableConfig,
+    ctx: Auth.types.BaseAuthContext | None = None,
+) -> RunnableConfig:
+    """Inject auth context into config's configurable dict.
+
+    If ctx is not provided, attempts to get it from the current context.
+    """
+    if ctx is None:
+        ctx = get_auth_ctx()
+    if ctx is None:
+        return config
+
+    configurable = config.setdefault("configurable", {})
+    return config | {
+        "configurable": configurable
+        | {
+            "langgraph_auth_user": cast("BaseUser | None", ctx.user),
+            "langgraph_auth_user_id": get_user_id(cast("BaseUser | None", ctx.user)),
+            "langgraph_auth_permissions": ctx.permissions,
+        }
+    }
 
 
 class AsyncCursorProto(Protocol):

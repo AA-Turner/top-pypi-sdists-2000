@@ -809,6 +809,19 @@ map = sfn.Map(self, "Map State",
 )
 ```
 
+When using `JSONata`, you can also specify the `maxConcurrency` dynamically using a JSONata expression with the `jsonataMaxConcurrency` property. This allows you to determine the concurrency limit based on state input or other runtime values:
+
+```python
+map = sfn.Map(self, "Map State",
+    jsonata_max_concurrency="{% $states.input.maxConcurrency %}",
+    item_selector={
+        "item": "{% $states.context.Map.Item.Value %}"
+    }
+)
+```
+
+Note that `jsonataMaxConcurrency` is mutually exclusive with `maxConcurrency` and `maxConcurrencyPath`.
+
 To define a distributed `Map` state set `itemProcessors` mode to `ProcessorMode.DISTRIBUTED`.
 An `executionType` must be specified for the distributed `Map` workflow.
 
@@ -1750,7 +1763,6 @@ from ..aws_iam import (
     PolicyStatement as _PolicyStatement_0fe33853,
 )
 from ..aws_kms import IKey as _IKey_5f11635f
-from ..aws_logs import ILogGroup as _ILogGroup_3c4fa718
 from ..aws_s3 import IBucket as _IBucket_42e086fd
 from ..aws_s3_assets import AssetOptions as _AssetOptions_2aa69621
 from ..interfaces.aws_dynamodb import ITableRef as _ITableRef_4478f0ad
@@ -1760,6 +1772,7 @@ from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 from ..interfaces.aws_lambda import (
     IFunctionRef as _IFunctionRef_2601eb33, IVersionRef as _IVersionRef_4fdb94ad
 )
+from ..interfaces.aws_logs import ILogGroupRef as _ILogGroupRef_874d025a
 from ..interfaces.aws_sns import ITopicRef as _ITopicRef_29aa9a88
 from ..interfaces.aws_sqs import IQueueRef as _IQueueRef_fa8b2198
 from ..interfaces.aws_stepfunctions import (
@@ -8946,7 +8959,7 @@ class LogOptions:
     def __init__(
         self,
         *,
-        destination: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        destination: typing.Optional["_ILogGroupRef_874d025a"] = None,
         include_execution_data: typing.Optional[builtins.bool] = None,
         level: typing.Optional["LogLevel"] = None,
     ) -> None:
@@ -8989,13 +9002,13 @@ class LogOptions:
             self._values["level"] = level
 
     @builtins.property
-    def destination(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
+    def destination(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''The log group where the execution history events will be logged.
 
         :default: No log group. Required if your log level is not set to OFF.
         '''
         result = self._values.get("destination")
-        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def include_execution_data(self) -> typing.Optional[builtins.bool]:
@@ -9276,6 +9289,7 @@ class MapBaseJsonataOptions(JsonataCommonOptions):
         "assign": "assign",
         "item_selector": "itemSelector",
         "jsonata_item_selector": "jsonataItemSelector",
+        "jsonata_max_concurrency": "jsonataMaxConcurrency",
         "max_concurrency": "maxConcurrency",
     },
 )
@@ -9286,6 +9300,7 @@ class MapBaseOptions(AssignableStateOptions):
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         jsonata_item_selector: typing.Optional[builtins.str] = None,
+        jsonata_max_concurrency: typing.Optional[builtins.str] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
     ) -> None:
         '''Base properties for defining a Map state.
@@ -9293,6 +9308,7 @@ class MapBaseOptions(AssignableStateOptions):
         :param assign: Workflow variables to store in this step. Using workflow variables, you can store data in a step and retrieve that data in future steps. Default: - Not assign variables
         :param item_selector: The JSON that you want to override your default iteration input (mutually exclusive with ``parameters`` and ``jsonataItemSelector``). Default: $
         :param jsonata_item_selector: Jsonata expression that evaluates to a JSON array to override your default iteration input (mutually exclusive with ``parameters`` and ``itemSelector``). Example value: ``{% {\\"foo\\": \\"foo\\", \\"input\\": $states.input} %}`` Default: $
+        :param jsonata_max_concurrency: JSONata expression for MaxConcurrency. A JSONata expression that evaluates to an integer, specifying the maximum concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and ``maxConcurrencyPath``. Example value: ``{% $states.input.maxConcurrency %}`` Default: - full concurrency
         :param max_concurrency: MaxConcurrency. An upper bound on the number of iterations you want running at once. Default: - full concurrency
 
         :exampleMetadata: fixture=_generated
@@ -9314,6 +9330,7 @@ class MapBaseOptions(AssignableStateOptions):
                     "item_selector_key": item_selector
                 },
                 jsonata_item_selector="jsonataItemSelector",
+                jsonata_max_concurrency="jsonataMaxConcurrency",
                 max_concurrency=123
             )
         '''
@@ -9322,6 +9339,7 @@ class MapBaseOptions(AssignableStateOptions):
             check_type(argname="argument assign", value=assign, expected_type=type_hints["assign"])
             check_type(argname="argument item_selector", value=item_selector, expected_type=type_hints["item_selector"])
             check_type(argname="argument jsonata_item_selector", value=jsonata_item_selector, expected_type=type_hints["jsonata_item_selector"])
+            check_type(argname="argument jsonata_max_concurrency", value=jsonata_max_concurrency, expected_type=type_hints["jsonata_max_concurrency"])
             check_type(argname="argument max_concurrency", value=max_concurrency, expected_type=type_hints["max_concurrency"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if assign is not None:
@@ -9330,6 +9348,8 @@ class MapBaseOptions(AssignableStateOptions):
             self._values["item_selector"] = item_selector
         if jsonata_item_selector is not None:
             self._values["jsonata_item_selector"] = jsonata_item_selector
+        if jsonata_max_concurrency is not None:
+            self._values["jsonata_max_concurrency"] = jsonata_max_concurrency
         if max_concurrency is not None:
             self._values["max_concurrency"] = max_concurrency
 
@@ -9368,6 +9388,23 @@ class MapBaseOptions(AssignableStateOptions):
         :default: $
         '''
         result = self._values.get("jsonata_item_selector")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def jsonata_max_concurrency(self) -> typing.Optional[builtins.str]:
+        '''JSONata expression for MaxConcurrency.
+
+        A JSONata expression that evaluates to an integer, specifying the maximum
+        concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and
+        ``maxConcurrencyPath``.
+
+        Example value: ``{% $states.input.maxConcurrency %}``
+
+        :default: - full concurrency
+
+        :see: https://docs.aws.amazon.com/step-functions/latest/dg/concepts-asl-use-map-state-inline.html#map-state-inline-additional-fields
+        '''
+        result = self._values.get("jsonata_max_concurrency")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -12157,6 +12194,8 @@ class StateMachine(
     ) -> "_Grant_a7ae64f8":
         '''Grant the given identity custom permissions.
 
+        [disable-awslint:no-grants]
+
         :param identity: -
         :param actions: -
         '''
@@ -12172,7 +12211,7 @@ class StateMachine(
         identity: "_IGrantable_71c4f5de",
         *actions: builtins.str,
     ) -> "_Grant_a7ae64f8":
-        '''Grant the given identity permissions on all executions of the state machine.
+        '''Grant the given identity permissions on all executions of the state machine [disable-awslint:no-grants].
 
         :param identity: -
         :param actions: -
@@ -12186,6 +12225,8 @@ class StateMachine(
     @jsii.member(jsii_name="grantRead")
     def grant_read(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to read results from state machine.
+
+        [disable-awslint:no-grants]
 
         :param identity: -
         '''
@@ -12201,6 +12242,8 @@ class StateMachine(
     ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permission to redrive the execution of the state machine.
 
+        [disable-awslint:no-grants]
+
         :param identity: -
         '''
         if __debug__:
@@ -12214,6 +12257,8 @@ class StateMachine(
         identity: "_IGrantable_71c4f5de",
     ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to start an execution of this state machine.
+
+        [disable-awslint:no-grants]
 
         :param identity: -
         '''
@@ -12229,6 +12274,8 @@ class StateMachine(
     ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to start a synchronous execution of this state machine.
 
+        [disable-awslint:no-grants]
+
         :param identity: -
         '''
         if __debug__:
@@ -12241,7 +12288,7 @@ class StateMachine(
         self,
         identity: "_IGrantable_71c4f5de",
     ) -> "_Grant_a7ae64f8":
-        '''Grant the given identity task response permissions on a state machine.
+        '''Grant the given identity task response permissions on a state machine [disable-awslint:no-grants].
 
         :param identity: -
         '''
@@ -17865,6 +17912,8 @@ class Activity(
     ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions on this Activity.
 
+        [disable-awslint:no-grants]
+
         :param identity: The principal.
         :param actions: The list of desired actions.
         '''
@@ -19657,6 +19706,7 @@ class CustomerManagedEncryptionConfiguration(
         "assign": "assign",
         "item_selector": "itemSelector",
         "jsonata_item_selector": "jsonataItemSelector",
+        "jsonata_max_concurrency": "jsonataMaxConcurrency",
         "max_concurrency": "maxConcurrency",
         "input_path": "inputPath",
         "output_path": "outputPath",
@@ -19690,6 +19740,7 @@ class DistributedMapJsonPathProps(
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         jsonata_item_selector: typing.Optional[builtins.str] = None,
+        jsonata_max_concurrency: typing.Optional[builtins.str] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
         input_path: typing.Optional[builtins.str] = None,
         output_path: typing.Optional[builtins.str] = None,
@@ -19716,6 +19767,7 @@ class DistributedMapJsonPathProps(
         :param assign: Workflow variables to store in this step. Using workflow variables, you can store data in a step and retrieve that data in future steps. Default: - Not assign variables
         :param item_selector: The JSON that you want to override your default iteration input (mutually exclusive with ``parameters`` and ``jsonataItemSelector``). Default: $
         :param jsonata_item_selector: Jsonata expression that evaluates to a JSON array to override your default iteration input (mutually exclusive with ``parameters`` and ``itemSelector``). Example value: ``{% {\\"foo\\": \\"foo\\", \\"input\\": $states.input} %}`` Default: $
+        :param jsonata_max_concurrency: JSONata expression for MaxConcurrency. A JSONata expression that evaluates to an integer, specifying the maximum concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and ``maxConcurrencyPath``. Example value: ``{% $states.input.maxConcurrency %}`` Default: - full concurrency
         :param max_concurrency: MaxConcurrency. An upper bound on the number of iterations you want running at once. Default: - full concurrency
         :param input_path: JSONPath expression to select part of the state to be the input to this state. May also be the special value JsonPath.DISCARD, which will cause the effective input to be the empty object {}. Default: $
         :param output_path: JSONPath expression to select part of the state to be the output to this state. May also be the special value JsonPath.DISCARD, which will cause the effective output to be the empty object {}. Default: $
@@ -19763,6 +19815,7 @@ class DistributedMapJsonPathProps(
                 },
                 items_path="itemsPath",
                 jsonata_item_selector="jsonataItemSelector",
+                jsonata_max_concurrency="jsonataMaxConcurrency",
                 label="label",
                 map_execution_type=stepfunctions.StateMachineType.EXPRESS,
                 max_concurrency=123,
@@ -19790,6 +19843,7 @@ class DistributedMapJsonPathProps(
             check_type(argname="argument assign", value=assign, expected_type=type_hints["assign"])
             check_type(argname="argument item_selector", value=item_selector, expected_type=type_hints["item_selector"])
             check_type(argname="argument jsonata_item_selector", value=jsonata_item_selector, expected_type=type_hints["jsonata_item_selector"])
+            check_type(argname="argument jsonata_max_concurrency", value=jsonata_max_concurrency, expected_type=type_hints["jsonata_max_concurrency"])
             check_type(argname="argument max_concurrency", value=max_concurrency, expected_type=type_hints["max_concurrency"])
             check_type(argname="argument input_path", value=input_path, expected_type=type_hints["input_path"])
             check_type(argname="argument output_path", value=output_path, expected_type=type_hints["output_path"])
@@ -19820,6 +19874,8 @@ class DistributedMapJsonPathProps(
             self._values["item_selector"] = item_selector
         if jsonata_item_selector is not None:
             self._values["jsonata_item_selector"] = jsonata_item_selector
+        if jsonata_max_concurrency is not None:
+            self._values["jsonata_max_concurrency"] = jsonata_max_concurrency
         if max_concurrency is not None:
             self._values["max_concurrency"] = max_concurrency
         if input_path is not None:
@@ -19920,6 +19976,23 @@ class DistributedMapJsonPathProps(
         :default: $
         '''
         result = self._values.get("jsonata_item_selector")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def jsonata_max_concurrency(self) -> typing.Optional[builtins.str]:
+        '''JSONata expression for MaxConcurrency.
+
+        A JSONata expression that evaluates to an integer, specifying the maximum
+        concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and
+        ``maxConcurrencyPath``.
+
+        Example value: ``{% $states.input.maxConcurrency %}``
+
+        :default: - full concurrency
+
+        :see: https://docs.aws.amazon.com/step-functions/latest/dg/concepts-asl-use-map-state-inline.html#map-state-inline-additional-fields
+        '''
+        result = self._values.get("jsonata_max_concurrency")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -20141,6 +20214,7 @@ class DistributedMapJsonPathProps(
         "assign": "assign",
         "item_selector": "itemSelector",
         "jsonata_item_selector": "jsonataItemSelector",
+        "jsonata_max_concurrency": "jsonataMaxConcurrency",
         "max_concurrency": "maxConcurrency",
         "outputs": "outputs",
         "items": "items",
@@ -20164,6 +20238,7 @@ class DistributedMapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataO
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         jsonata_item_selector: typing.Optional[builtins.str] = None,
+        jsonata_max_concurrency: typing.Optional[builtins.str] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
         outputs: typing.Any = None,
         items: typing.Optional["ProvideItems"] = None,
@@ -20184,6 +20259,7 @@ class DistributedMapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataO
         :param assign: Workflow variables to store in this step. Using workflow variables, you can store data in a step and retrieve that data in future steps. Default: - Not assign variables
         :param item_selector: The JSON that you want to override your default iteration input (mutually exclusive with ``parameters`` and ``jsonataItemSelector``). Default: $
         :param jsonata_item_selector: Jsonata expression that evaluates to a JSON array to override your default iteration input (mutually exclusive with ``parameters`` and ``itemSelector``). Example value: ``{% {\\"foo\\": \\"foo\\", \\"input\\": $states.input} %}`` Default: $
+        :param jsonata_max_concurrency: JSONata expression for MaxConcurrency. A JSONata expression that evaluates to an integer, specifying the maximum concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and ``maxConcurrencyPath``. Example value: ``{% $states.input.maxConcurrency %}`` Default: - full concurrency
         :param max_concurrency: MaxConcurrency. An upper bound on the number of iterations you want running at once. Default: - full concurrency
         :param outputs: Used to specify and transform output from the state. When specified, the value overrides the state output default. The output field accepts any JSON value (object, array, string, number, boolean, null). Any string value, including those inside objects or arrays, will be evaluated as JSONata if surrounded by {% %} characters. Output also accepts a JSONata expression directly. Default: - $states.result or $states.errorOutput
         :param items: The array that the Map state will iterate over. Default: - The state input as is.
@@ -20225,6 +20301,7 @@ class DistributedMapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataO
                     "item_selector_key": item_selector
                 },
                 jsonata_item_selector="jsonataItemSelector",
+                jsonata_max_concurrency="jsonataMaxConcurrency",
                 label="label",
                 map_execution_type=stepfunctions.StateMachineType.EXPRESS,
                 max_concurrency=123,
@@ -20245,6 +20322,7 @@ class DistributedMapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataO
             check_type(argname="argument assign", value=assign, expected_type=type_hints["assign"])
             check_type(argname="argument item_selector", value=item_selector, expected_type=type_hints["item_selector"])
             check_type(argname="argument jsonata_item_selector", value=jsonata_item_selector, expected_type=type_hints["jsonata_item_selector"])
+            check_type(argname="argument jsonata_max_concurrency", value=jsonata_max_concurrency, expected_type=type_hints["jsonata_max_concurrency"])
             check_type(argname="argument max_concurrency", value=max_concurrency, expected_type=type_hints["max_concurrency"])
             check_type(argname="argument outputs", value=outputs, expected_type=type_hints["outputs"])
             check_type(argname="argument items", value=items, expected_type=type_hints["items"])
@@ -20269,6 +20347,8 @@ class DistributedMapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataO
             self._values["item_selector"] = item_selector
         if jsonata_item_selector is not None:
             self._values["jsonata_item_selector"] = jsonata_item_selector
+        if jsonata_max_concurrency is not None:
+            self._values["jsonata_max_concurrency"] = jsonata_max_concurrency
         if max_concurrency is not None:
             self._values["max_concurrency"] = max_concurrency
         if outputs is not None:
@@ -20357,6 +20437,23 @@ class DistributedMapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataO
         :default: $
         '''
         result = self._values.get("jsonata_item_selector")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def jsonata_max_concurrency(self) -> typing.Optional[builtins.str]:
+        '''JSONata expression for MaxConcurrency.
+
+        A JSONata expression that evaluates to an integer, specifying the maximum
+        concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and
+        ``maxConcurrencyPath``.
+
+        Example value: ``{% $states.input.maxConcurrency %}``
+
+        :default: - full concurrency
+
+        :see: https://docs.aws.amazon.com/step-functions/latest/dg/concepts-asl-use-map-state-inline.html#map-state-inline-additional-fields
+        '''
+        result = self._values.get("jsonata_max_concurrency")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -21513,6 +21610,7 @@ class MapBase(
         state_name: typing.Optional[builtins.str] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         jsonata_item_selector: typing.Optional[builtins.str] = None,
+        jsonata_max_concurrency: typing.Optional[builtins.str] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
         items_path: typing.Optional[builtins.str] = None,
         max_concurrency_path: typing.Optional[builtins.str] = None,
@@ -21532,6 +21630,7 @@ class MapBase(
         :param state_name: Optional name for this state. Default: - The construct ID will be used as state name
         :param item_selector: The JSON that you want to override your default iteration input (mutually exclusive with ``parameters`` and ``jsonataItemSelector``). Default: $
         :param jsonata_item_selector: Jsonata expression that evaluates to a JSON array to override your default iteration input (mutually exclusive with ``parameters`` and ``itemSelector``). Example value: ``{% {\\"foo\\": \\"foo\\", \\"input\\": $states.input} %}`` Default: $
+        :param jsonata_max_concurrency: JSONata expression for MaxConcurrency. A JSONata expression that evaluates to an integer, specifying the maximum concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and ``maxConcurrencyPath``. Example value: ``{% $states.input.maxConcurrency %}`` Default: - full concurrency
         :param max_concurrency: MaxConcurrency. An upper bound on the number of iterations you want running at once. Default: - full concurrency
         :param items_path: JSONPath expression to select the array to iterate over. Default: $
         :param max_concurrency_path: MaxConcurrencyPath. A JsonPath that specifies the maximum concurrency dynamically from the state input. Default: - full concurrency
@@ -21553,6 +21652,7 @@ class MapBase(
             state_name=state_name,
             item_selector=item_selector,
             jsonata_item_selector=jsonata_item_selector,
+            jsonata_max_concurrency=jsonata_max_concurrency,
             max_concurrency=max_concurrency,
             items_path=items_path,
             max_concurrency_path=max_concurrency_path,
@@ -21648,6 +21748,7 @@ typing.cast(typing.Any, MapBase).__jsii_proxy_class__ = lambda : _MapBaseProxy
         "assign": "assign",
         "item_selector": "itemSelector",
         "jsonata_item_selector": "jsonataItemSelector",
+        "jsonata_max_concurrency": "jsonataMaxConcurrency",
         "max_concurrency": "maxConcurrency",
         "input_path": "inputPath",
         "output_path": "outputPath",
@@ -21674,6 +21775,7 @@ class MapBaseProps(
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         jsonata_item_selector: typing.Optional[builtins.str] = None,
+        jsonata_max_concurrency: typing.Optional[builtins.str] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
         input_path: typing.Optional[builtins.str] = None,
         output_path: typing.Optional[builtins.str] = None,
@@ -21692,6 +21794,7 @@ class MapBaseProps(
         :param assign: Workflow variables to store in this step. Using workflow variables, you can store data in a step and retrieve that data in future steps. Default: - Not assign variables
         :param item_selector: The JSON that you want to override your default iteration input (mutually exclusive with ``parameters`` and ``jsonataItemSelector``). Default: $
         :param jsonata_item_selector: Jsonata expression that evaluates to a JSON array to override your default iteration input (mutually exclusive with ``parameters`` and ``itemSelector``). Example value: ``{% {\\"foo\\": \\"foo\\", \\"input\\": $states.input} %}`` Default: $
+        :param jsonata_max_concurrency: JSONata expression for MaxConcurrency. A JSONata expression that evaluates to an integer, specifying the maximum concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and ``maxConcurrencyPath``. Example value: ``{% $states.input.maxConcurrency %}`` Default: - full concurrency
         :param max_concurrency: MaxConcurrency. An upper bound on the number of iterations you want running at once. Default: - full concurrency
         :param input_path: JSONPath expression to select part of the state to be the input to this state. May also be the special value JsonPath.DISCARD, which will cause the effective input to be the empty object {}. Default: $
         :param output_path: JSONPath expression to select part of the state to be the output to this state. May also be the special value JsonPath.DISCARD, which will cause the effective output to be the empty object {}. Default: $
@@ -21728,6 +21831,7 @@ class MapBaseProps(
                 },
                 items_path="itemsPath",
                 jsonata_item_selector="jsonataItemSelector",
+                jsonata_max_concurrency="jsonataMaxConcurrency",
                 max_concurrency=123,
                 max_concurrency_path="maxConcurrencyPath",
                 output_path="outputPath",
@@ -21748,6 +21852,7 @@ class MapBaseProps(
             check_type(argname="argument assign", value=assign, expected_type=type_hints["assign"])
             check_type(argname="argument item_selector", value=item_selector, expected_type=type_hints["item_selector"])
             check_type(argname="argument jsonata_item_selector", value=jsonata_item_selector, expected_type=type_hints["jsonata_item_selector"])
+            check_type(argname="argument jsonata_max_concurrency", value=jsonata_max_concurrency, expected_type=type_hints["jsonata_max_concurrency"])
             check_type(argname="argument max_concurrency", value=max_concurrency, expected_type=type_hints["max_concurrency"])
             check_type(argname="argument input_path", value=input_path, expected_type=type_hints["input_path"])
             check_type(argname="argument output_path", value=output_path, expected_type=type_hints["output_path"])
@@ -21770,6 +21875,8 @@ class MapBaseProps(
             self._values["item_selector"] = item_selector
         if jsonata_item_selector is not None:
             self._values["jsonata_item_selector"] = jsonata_item_selector
+        if jsonata_max_concurrency is not None:
+            self._values["jsonata_max_concurrency"] = jsonata_max_concurrency
         if max_concurrency is not None:
             self._values["max_concurrency"] = max_concurrency
         if input_path is not None:
@@ -21854,6 +21961,23 @@ class MapBaseProps(
         :default: $
         '''
         result = self._values.get("jsonata_item_selector")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def jsonata_max_concurrency(self) -> typing.Optional[builtins.str]:
+        '''JSONata expression for MaxConcurrency.
+
+        A JSONata expression that evaluates to an integer, specifying the maximum
+        concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and
+        ``maxConcurrencyPath``.
+
+        Example value: ``{% $states.input.maxConcurrency %}``
+
+        :default: - full concurrency
+
+        :see: https://docs.aws.amazon.com/step-functions/latest/dg/concepts-asl-use-map-state-inline.html#map-state-inline-additional-fields
+        '''
+        result = self._values.get("jsonata_max_concurrency")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -21991,6 +22115,7 @@ class MapBaseProps(
         "assign": "assign",
         "item_selector": "itemSelector",
         "jsonata_item_selector": "jsonataItemSelector",
+        "jsonata_max_concurrency": "jsonataMaxConcurrency",
         "max_concurrency": "maxConcurrency",
         "input_path": "inputPath",
         "output_path": "outputPath",
@@ -22011,6 +22136,7 @@ class MapJsonPathProps(StateBaseProps, MapBaseOptions, MapBaseJsonPathOptions):
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         jsonata_item_selector: typing.Optional[builtins.str] = None,
+        jsonata_max_concurrency: typing.Optional[builtins.str] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
         input_path: typing.Optional[builtins.str] = None,
         output_path: typing.Optional[builtins.str] = None,
@@ -22028,6 +22154,7 @@ class MapJsonPathProps(StateBaseProps, MapBaseOptions, MapBaseJsonPathOptions):
         :param assign: Workflow variables to store in this step. Using workflow variables, you can store data in a step and retrieve that data in future steps. Default: - Not assign variables
         :param item_selector: The JSON that you want to override your default iteration input (mutually exclusive with ``parameters`` and ``jsonataItemSelector``). Default: $
         :param jsonata_item_selector: Jsonata expression that evaluates to a JSON array to override your default iteration input (mutually exclusive with ``parameters`` and ``itemSelector``). Example value: ``{% {\\"foo\\": \\"foo\\", \\"input\\": $states.input} %}`` Default: $
+        :param jsonata_max_concurrency: JSONata expression for MaxConcurrency. A JSONata expression that evaluates to an integer, specifying the maximum concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and ``maxConcurrencyPath``. Example value: ``{% $states.input.maxConcurrency %}`` Default: - full concurrency
         :param max_concurrency: MaxConcurrency. An upper bound on the number of iterations you want running at once. Default: - full concurrency
         :param input_path: JSONPath expression to select part of the state to be the input to this state. May also be the special value JsonPath.DISCARD, which will cause the effective input to be the empty object {}. Default: $
         :param output_path: JSONPath expression to select part of the state to be the output to this state. May also be the special value JsonPath.DISCARD, which will cause the effective output to be the empty object {}. Default: $
@@ -22061,6 +22188,7 @@ class MapJsonPathProps(StateBaseProps, MapBaseOptions, MapBaseJsonPathOptions):
                 },
                 items_path="itemsPath",
                 jsonata_item_selector="jsonataItemSelector",
+                jsonata_max_concurrency="jsonataMaxConcurrency",
                 max_concurrency=123,
                 max_concurrency_path="maxConcurrencyPath",
                 output_path="outputPath",
@@ -22083,6 +22211,7 @@ class MapJsonPathProps(StateBaseProps, MapBaseOptions, MapBaseJsonPathOptions):
             check_type(argname="argument assign", value=assign, expected_type=type_hints["assign"])
             check_type(argname="argument item_selector", value=item_selector, expected_type=type_hints["item_selector"])
             check_type(argname="argument jsonata_item_selector", value=jsonata_item_selector, expected_type=type_hints["jsonata_item_selector"])
+            check_type(argname="argument jsonata_max_concurrency", value=jsonata_max_concurrency, expected_type=type_hints["jsonata_max_concurrency"])
             check_type(argname="argument max_concurrency", value=max_concurrency, expected_type=type_hints["max_concurrency"])
             check_type(argname="argument input_path", value=input_path, expected_type=type_hints["input_path"])
             check_type(argname="argument output_path", value=output_path, expected_type=type_hints["output_path"])
@@ -22104,6 +22233,8 @@ class MapJsonPathProps(StateBaseProps, MapBaseOptions, MapBaseJsonPathOptions):
             self._values["item_selector"] = item_selector
         if jsonata_item_selector is not None:
             self._values["jsonata_item_selector"] = jsonata_item_selector
+        if jsonata_max_concurrency is not None:
+            self._values["jsonata_max_concurrency"] = jsonata_max_concurrency
         if max_concurrency is not None:
             self._values["max_concurrency"] = max_concurrency
         if input_path is not None:
@@ -22186,6 +22317,23 @@ class MapJsonPathProps(StateBaseProps, MapBaseOptions, MapBaseJsonPathOptions):
         :default: $
         '''
         result = self._values.get("jsonata_item_selector")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def jsonata_max_concurrency(self) -> typing.Optional[builtins.str]:
+        '''JSONata expression for MaxConcurrency.
+
+        A JSONata expression that evaluates to an integer, specifying the maximum
+        concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and
+        ``maxConcurrencyPath``.
+
+        Example value: ``{% $states.input.maxConcurrency %}``
+
+        :default: - full concurrency
+
+        :see: https://docs.aws.amazon.com/step-functions/latest/dg/concepts-asl-use-map-state-inline.html#map-state-inline-additional-fields
+        '''
+        result = self._values.get("jsonata_max_concurrency")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -22314,6 +22462,7 @@ class MapJsonPathProps(StateBaseProps, MapBaseOptions, MapBaseJsonPathOptions):
         "assign": "assign",
         "item_selector": "itemSelector",
         "jsonata_item_selector": "jsonataItemSelector",
+        "jsonata_max_concurrency": "jsonataMaxConcurrency",
         "max_concurrency": "maxConcurrency",
         "outputs": "outputs",
         "items": "items",
@@ -22330,6 +22479,7 @@ class MapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataOptions):
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         jsonata_item_selector: typing.Optional[builtins.str] = None,
+        jsonata_max_concurrency: typing.Optional[builtins.str] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
         outputs: typing.Any = None,
         items: typing.Optional["ProvideItems"] = None,
@@ -22343,6 +22493,7 @@ class MapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataOptions):
         :param assign: Workflow variables to store in this step. Using workflow variables, you can store data in a step and retrieve that data in future steps. Default: - Not assign variables
         :param item_selector: The JSON that you want to override your default iteration input (mutually exclusive with ``parameters`` and ``jsonataItemSelector``). Default: $
         :param jsonata_item_selector: Jsonata expression that evaluates to a JSON array to override your default iteration input (mutually exclusive with ``parameters`` and ``itemSelector``). Example value: ``{% {\\"foo\\": \\"foo\\", \\"input\\": $states.input} %}`` Default: $
+        :param jsonata_max_concurrency: JSONata expression for MaxConcurrency. A JSONata expression that evaluates to an integer, specifying the maximum concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and ``maxConcurrencyPath``. Example value: ``{% $states.input.maxConcurrency %}`` Default: - full concurrency
         :param max_concurrency: MaxConcurrency. An upper bound on the number of iterations you want running at once. Default: - full concurrency
         :param outputs: Used to specify and transform output from the state. When specified, the value overrides the state output default. The output field accepts any JSON value (object, array, string, number, boolean, null). Any string value, including those inside objects or arrays, will be evaluated as JSONata if surrounded by {% %} characters. Output also accepts a JSONata expression directly. Default: - $states.result or $states.errorOutput
         :param items: The array that the Map state will iterate over. Default: - The state input as is.
@@ -22372,6 +22523,7 @@ class MapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataOptions):
                     "item_selector_key": item_selector
                 },
                 jsonata_item_selector="jsonataItemSelector",
+                jsonata_max_concurrency="jsonataMaxConcurrency",
                 max_concurrency=123,
                 outputs=outputs,
                 parameters={
@@ -22389,6 +22541,7 @@ class MapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataOptions):
             check_type(argname="argument assign", value=assign, expected_type=type_hints["assign"])
             check_type(argname="argument item_selector", value=item_selector, expected_type=type_hints["item_selector"])
             check_type(argname="argument jsonata_item_selector", value=jsonata_item_selector, expected_type=type_hints["jsonata_item_selector"])
+            check_type(argname="argument jsonata_max_concurrency", value=jsonata_max_concurrency, expected_type=type_hints["jsonata_max_concurrency"])
             check_type(argname="argument max_concurrency", value=max_concurrency, expected_type=type_hints["max_concurrency"])
             check_type(argname="argument outputs", value=outputs, expected_type=type_hints["outputs"])
             check_type(argname="argument items", value=items, expected_type=type_hints["items"])
@@ -22406,6 +22559,8 @@ class MapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataOptions):
             self._values["item_selector"] = item_selector
         if jsonata_item_selector is not None:
             self._values["jsonata_item_selector"] = jsonata_item_selector
+        if jsonata_max_concurrency is not None:
+            self._values["jsonata_max_concurrency"] = jsonata_max_concurrency
         if max_concurrency is not None:
             self._values["max_concurrency"] = max_concurrency
         if outputs is not None:
@@ -22480,6 +22635,23 @@ class MapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataOptions):
         :default: $
         '''
         result = self._values.get("jsonata_item_selector")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def jsonata_max_concurrency(self) -> typing.Optional[builtins.str]:
+        '''JSONata expression for MaxConcurrency.
+
+        A JSONata expression that evaluates to an integer, specifying the maximum
+        concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and
+        ``maxConcurrencyPath``.
+
+        Example value: ``{% $states.input.maxConcurrency %}``
+
+        :default: - full concurrency
+
+        :see: https://docs.aws.amazon.com/step-functions/latest/dg/concepts-asl-use-map-state-inline.html#map-state-inline-additional-fields
+        '''
+        result = self._values.get("jsonata_max_concurrency")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -22560,6 +22732,7 @@ class MapJsonataProps(StateBaseProps, MapBaseOptions, MapBaseJsonataOptions):
         "assign": "assign",
         "item_selector": "itemSelector",
         "jsonata_item_selector": "jsonataItemSelector",
+        "jsonata_max_concurrency": "jsonataMaxConcurrency",
         "max_concurrency": "maxConcurrency",
         "input_path": "inputPath",
         "output_path": "outputPath",
@@ -22582,6 +22755,7 @@ class MapProps(MapBaseProps, MapBaseOptions):
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         jsonata_item_selector: typing.Optional[builtins.str] = None,
+        jsonata_max_concurrency: typing.Optional[builtins.str] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
         input_path: typing.Optional[builtins.str] = None,
         output_path: typing.Optional[builtins.str] = None,
@@ -22601,6 +22775,7 @@ class MapProps(MapBaseProps, MapBaseOptions):
         :param assign: Workflow variables to store in this step. Using workflow variables, you can store data in a step and retrieve that data in future steps. Default: - Not assign variables
         :param item_selector: The JSON that you want to override your default iteration input (mutually exclusive with ``parameters`` and ``jsonataItemSelector``). Default: $
         :param jsonata_item_selector: Jsonata expression that evaluates to a JSON array to override your default iteration input (mutually exclusive with ``parameters`` and ``itemSelector``). Example value: ``{% {\\"foo\\": \\"foo\\", \\"input\\": $states.input} %}`` Default: $
+        :param jsonata_max_concurrency: JSONata expression for MaxConcurrency. A JSONata expression that evaluates to an integer, specifying the maximum concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and ``maxConcurrencyPath``. Example value: ``{% $states.input.maxConcurrency %}`` Default: - full concurrency
         :param max_concurrency: MaxConcurrency. An upper bound on the number of iterations you want running at once. Default: - full concurrency
         :param input_path: JSONPath expression to select part of the state to be the input to this state. May also be the special value JsonPath.DISCARD, which will cause the effective input to be the empty object {}. Default: $
         :param output_path: JSONPath expression to select part of the state to be the output to this state. May also be the special value JsonPath.DISCARD, which will cause the effective output to be the empty object {}. Default: $
@@ -22638,6 +22813,7 @@ class MapProps(MapBaseProps, MapBaseOptions):
             check_type(argname="argument assign", value=assign, expected_type=type_hints["assign"])
             check_type(argname="argument item_selector", value=item_selector, expected_type=type_hints["item_selector"])
             check_type(argname="argument jsonata_item_selector", value=jsonata_item_selector, expected_type=type_hints["jsonata_item_selector"])
+            check_type(argname="argument jsonata_max_concurrency", value=jsonata_max_concurrency, expected_type=type_hints["jsonata_max_concurrency"])
             check_type(argname="argument max_concurrency", value=max_concurrency, expected_type=type_hints["max_concurrency"])
             check_type(argname="argument input_path", value=input_path, expected_type=type_hints["input_path"])
             check_type(argname="argument output_path", value=output_path, expected_type=type_hints["output_path"])
@@ -22661,6 +22837,8 @@ class MapProps(MapBaseProps, MapBaseOptions):
             self._values["item_selector"] = item_selector
         if jsonata_item_selector is not None:
             self._values["jsonata_item_selector"] = jsonata_item_selector
+        if jsonata_max_concurrency is not None:
+            self._values["jsonata_max_concurrency"] = jsonata_max_concurrency
         if max_concurrency is not None:
             self._values["max_concurrency"] = max_concurrency
         if input_path is not None:
@@ -22747,6 +22925,23 @@ class MapProps(MapBaseProps, MapBaseOptions):
         :default: $
         '''
         result = self._values.get("jsonata_item_selector")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def jsonata_max_concurrency(self) -> typing.Optional[builtins.str]:
+        '''JSONata expression for MaxConcurrency.
+
+        A JSONata expression that evaluates to an integer, specifying the maximum
+        concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and
+        ``maxConcurrencyPath``.
+
+        Example value: ``{% $states.input.maxConcurrency %}``
+
+        :default: - full concurrency
+
+        :see: https://docs.aws.amazon.com/step-functions/latest/dg/concepts-asl-use-map-state-inline.html#map-state-inline-additional-fields
+        '''
+        result = self._values.get("jsonata_max_concurrency")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -25165,6 +25360,7 @@ class DistributedMap(
         tolerated_failure_percentage_path: typing.Optional[builtins.str] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         jsonata_item_selector: typing.Optional[builtins.str] = None,
+        jsonata_max_concurrency: typing.Optional[builtins.str] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
         items_path: typing.Optional[builtins.str] = None,
         max_concurrency_path: typing.Optional[builtins.str] = None,
@@ -25194,6 +25390,7 @@ class DistributedMap(
         :param tolerated_failure_percentage_path: ToleratedFailurePercentagePath. Percentage of failed items to tolerate in a Map Run, as JsonPath Default: - No toleratedFailurePercentagePath
         :param item_selector: The JSON that you want to override your default iteration input (mutually exclusive with ``parameters`` and ``jsonataItemSelector``). Default: $
         :param jsonata_item_selector: Jsonata expression that evaluates to a JSON array to override your default iteration input (mutually exclusive with ``parameters`` and ``itemSelector``). Example value: ``{% {\\"foo\\": \\"foo\\", \\"input\\": $states.input} %}`` Default: $
+        :param jsonata_max_concurrency: JSONata expression for MaxConcurrency. A JSONata expression that evaluates to an integer, specifying the maximum concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and ``maxConcurrencyPath``. Example value: ``{% $states.input.maxConcurrency %}`` Default: - full concurrency
         :param max_concurrency: MaxConcurrency. An upper bound on the number of iterations you want running at once. Default: - full concurrency
         :param items_path: JSONPath expression to select the array to iterate over. Default: $
         :param max_concurrency_path: MaxConcurrencyPath. A JsonPath that specifies the maximum concurrency dynamically from the state input. Default: - full concurrency
@@ -25225,6 +25422,7 @@ class DistributedMap(
             tolerated_failure_percentage_path=tolerated_failure_percentage_path,
             item_selector=item_selector,
             jsonata_item_selector=jsonata_item_selector,
+            jsonata_max_concurrency=jsonata_max_concurrency,
             max_concurrency=max_concurrency,
             items_path=items_path,
             max_concurrency_path=max_concurrency_path,
@@ -25274,6 +25472,7 @@ class DistributedMap(
         state_name: typing.Optional[builtins.str] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         jsonata_item_selector: typing.Optional[builtins.str] = None,
+        jsonata_max_concurrency: typing.Optional[builtins.str] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
         items: typing.Optional["ProvideItems"] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
@@ -25305,6 +25504,7 @@ class DistributedMap(
         :param state_name: Optional name for this state. Default: - The construct ID will be used as state name
         :param item_selector: The JSON that you want to override your default iteration input (mutually exclusive with ``parameters`` and ``jsonataItemSelector``). Default: $
         :param jsonata_item_selector: Jsonata expression that evaluates to a JSON array to override your default iteration input (mutually exclusive with ``parameters`` and ``itemSelector``). Example value: ``{% {\\"foo\\": \\"foo\\", \\"input\\": $states.input} %}`` Default: $
+        :param jsonata_max_concurrency: JSONata expression for MaxConcurrency. A JSONata expression that evaluates to an integer, specifying the maximum concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and ``maxConcurrencyPath``. Example value: ``{% $states.input.maxConcurrency %}`` Default: - full concurrency
         :param max_concurrency: MaxConcurrency. An upper bound on the number of iterations you want running at once. Default: - full concurrency
         :param items: The array that the Map state will iterate over. Default: - The state input as is.
         :param assign: Workflow variables to store in this step. Using workflow variables, you can store data in a step and retrieve that data in future steps. Default: - Not assign variables
@@ -25330,6 +25530,7 @@ class DistributedMap(
             state_name=state_name,
             item_selector=item_selector,
             jsonata_item_selector=jsonata_item_selector,
+            jsonata_max_concurrency=jsonata_max_concurrency,
             max_concurrency=max_concurrency,
             items=items,
             assign=assign,
@@ -25360,6 +25561,7 @@ class DistributedMap(
         state_name: typing.Optional[builtins.str] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         jsonata_item_selector: typing.Optional[builtins.str] = None,
+        jsonata_max_concurrency: typing.Optional[builtins.str] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
         items_path: typing.Optional[builtins.str] = None,
         max_concurrency_path: typing.Optional[builtins.str] = None,
@@ -25397,6 +25599,7 @@ class DistributedMap(
         :param state_name: Optional name for this state. Default: - The construct ID will be used as state name
         :param item_selector: The JSON that you want to override your default iteration input (mutually exclusive with ``parameters`` and ``jsonataItemSelector``). Default: $
         :param jsonata_item_selector: Jsonata expression that evaluates to a JSON array to override your default iteration input (mutually exclusive with ``parameters`` and ``itemSelector``). Example value: ``{% {\\"foo\\": \\"foo\\", \\"input\\": $states.input} %}`` Default: $
+        :param jsonata_max_concurrency: JSONata expression for MaxConcurrency. A JSONata expression that evaluates to an integer, specifying the maximum concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and ``maxConcurrencyPath``. Example value: ``{% $states.input.maxConcurrency %}`` Default: - full concurrency
         :param max_concurrency: MaxConcurrency. An upper bound on the number of iterations you want running at once. Default: - full concurrency
         :param items_path: JSONPath expression to select the array to iterate over. Default: $
         :param max_concurrency_path: MaxConcurrencyPath. A JsonPath that specifies the maximum concurrency dynamically from the state input. Default: - full concurrency
@@ -25428,6 +25631,7 @@ class DistributedMap(
             state_name=state_name,
             item_selector=item_selector,
             jsonata_item_selector=jsonata_item_selector,
+            jsonata_max_concurrency=jsonata_max_concurrency,
             max_concurrency=max_concurrency,
             items_path=items_path,
             max_concurrency_path=max_concurrency_path,
@@ -25572,6 +25776,7 @@ class DistributedMap(
         "assign": "assign",
         "item_selector": "itemSelector",
         "jsonata_item_selector": "jsonataItemSelector",
+        "jsonata_max_concurrency": "jsonataMaxConcurrency",
         "max_concurrency": "maxConcurrency",
         "input_path": "inputPath",
         "output_path": "outputPath",
@@ -25608,6 +25813,7 @@ class DistributedMapProps(
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         jsonata_item_selector: typing.Optional[builtins.str] = None,
+        jsonata_max_concurrency: typing.Optional[builtins.str] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
         input_path: typing.Optional[builtins.str] = None,
         output_path: typing.Optional[builtins.str] = None,
@@ -25636,6 +25842,7 @@ class DistributedMapProps(
         :param assign: Workflow variables to store in this step. Using workflow variables, you can store data in a step and retrieve that data in future steps. Default: - Not assign variables
         :param item_selector: The JSON that you want to override your default iteration input (mutually exclusive with ``parameters`` and ``jsonataItemSelector``). Default: $
         :param jsonata_item_selector: Jsonata expression that evaluates to a JSON array to override your default iteration input (mutually exclusive with ``parameters`` and ``itemSelector``). Example value: ``{% {\\"foo\\": \\"foo\\", \\"input\\": $states.input} %}`` Default: $
+        :param jsonata_max_concurrency: JSONata expression for MaxConcurrency. A JSONata expression that evaluates to an integer, specifying the maximum concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and ``maxConcurrencyPath``. Example value: ``{% $states.input.maxConcurrency %}`` Default: - full concurrency
         :param max_concurrency: MaxConcurrency. An upper bound on the number of iterations you want running at once. Default: - full concurrency
         :param input_path: JSONPath expression to select part of the state to be the input to this state. May also be the special value JsonPath.DISCARD, which will cause the effective input to be the empty object {}. Default: $
         :param output_path: JSONPath expression to select part of the state to be the output to this state. May also be the special value JsonPath.DISCARD, which will cause the effective output to be the empty object {}. Default: $
@@ -25683,6 +25890,7 @@ class DistributedMapProps(
             check_type(argname="argument assign", value=assign, expected_type=type_hints["assign"])
             check_type(argname="argument item_selector", value=item_selector, expected_type=type_hints["item_selector"])
             check_type(argname="argument jsonata_item_selector", value=jsonata_item_selector, expected_type=type_hints["jsonata_item_selector"])
+            check_type(argname="argument jsonata_max_concurrency", value=jsonata_max_concurrency, expected_type=type_hints["jsonata_max_concurrency"])
             check_type(argname="argument max_concurrency", value=max_concurrency, expected_type=type_hints["max_concurrency"])
             check_type(argname="argument input_path", value=input_path, expected_type=type_hints["input_path"])
             check_type(argname="argument output_path", value=output_path, expected_type=type_hints["output_path"])
@@ -25715,6 +25923,8 @@ class DistributedMapProps(
             self._values["item_selector"] = item_selector
         if jsonata_item_selector is not None:
             self._values["jsonata_item_selector"] = jsonata_item_selector
+        if jsonata_max_concurrency is not None:
+            self._values["jsonata_max_concurrency"] = jsonata_max_concurrency
         if max_concurrency is not None:
             self._values["max_concurrency"] = max_concurrency
         if input_path is not None:
@@ -25819,6 +26029,23 @@ class DistributedMapProps(
         :default: $
         '''
         result = self._values.get("jsonata_item_selector")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def jsonata_max_concurrency(self) -> typing.Optional[builtins.str]:
+        '''JSONata expression for MaxConcurrency.
+
+        A JSONata expression that evaluates to an integer, specifying the maximum
+        concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and
+        ``maxConcurrencyPath``.
+
+        Example value: ``{% $states.input.maxConcurrency %}``
+
+        :default: - full concurrency
+
+        :see: https://docs.aws.amazon.com/step-functions/latest/dg/concepts-asl-use-map-state-inline.html#map-state-inline-additional-fields
+        '''
+        result = self._values.get("jsonata_max_concurrency")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -26098,6 +26325,7 @@ class Map(
         parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         jsonata_item_selector: typing.Optional[builtins.str] = None,
+        jsonata_max_concurrency: typing.Optional[builtins.str] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
         comment: typing.Optional[builtins.str] = None,
         query_language: typing.Optional["QueryLanguage"] = None,
@@ -26118,6 +26346,7 @@ class Map(
         :param parameters: (deprecated) The JSON that you want to override your default iteration input (mutually exclusive with ``itemSelector``). Default: $
         :param item_selector: The JSON that you want to override your default iteration input (mutually exclusive with ``parameters`` and ``jsonataItemSelector``). Default: $
         :param jsonata_item_selector: Jsonata expression that evaluates to a JSON array to override your default iteration input (mutually exclusive with ``parameters`` and ``itemSelector``). Example value: ``{% {\\"foo\\": \\"foo\\", \\"input\\": $states.input} %}`` Default: $
+        :param jsonata_max_concurrency: JSONata expression for MaxConcurrency. A JSONata expression that evaluates to an integer, specifying the maximum concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and ``maxConcurrencyPath``. Example value: ``{% $states.input.maxConcurrency %}`` Default: - full concurrency
         :param max_concurrency: MaxConcurrency. An upper bound on the number of iterations you want running at once. Default: - full concurrency
         :param comment: A comment describing this state. Default: No comment
         :param query_language: The name of the query language used by the state. If the state does not contain a ``queryLanguage`` field, then it will use the query language specified in the top-level ``queryLanguage`` field. Default: - JSONPath
@@ -26140,6 +26369,7 @@ class Map(
             parameters=parameters,
             item_selector=item_selector,
             jsonata_item_selector=jsonata_item_selector,
+            jsonata_max_concurrency=jsonata_max_concurrency,
             max_concurrency=max_concurrency,
             comment=comment,
             query_language=query_language,
@@ -26170,6 +26400,7 @@ class Map(
         state_name: typing.Optional[builtins.str] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         jsonata_item_selector: typing.Optional[builtins.str] = None,
+        jsonata_max_concurrency: typing.Optional[builtins.str] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
         items: typing.Optional["ProvideItems"] = None,
         assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
@@ -26191,6 +26422,7 @@ class Map(
         :param state_name: Optional name for this state. Default: - The construct ID will be used as state name
         :param item_selector: The JSON that you want to override your default iteration input (mutually exclusive with ``parameters`` and ``jsonataItemSelector``). Default: $
         :param jsonata_item_selector: Jsonata expression that evaluates to a JSON array to override your default iteration input (mutually exclusive with ``parameters`` and ``itemSelector``). Example value: ``{% {\\"foo\\": \\"foo\\", \\"input\\": $states.input} %}`` Default: $
+        :param jsonata_max_concurrency: JSONata expression for MaxConcurrency. A JSONata expression that evaluates to an integer, specifying the maximum concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and ``maxConcurrencyPath``. Example value: ``{% $states.input.maxConcurrency %}`` Default: - full concurrency
         :param max_concurrency: MaxConcurrency. An upper bound on the number of iterations you want running at once. Default: - full concurrency
         :param items: The array that the Map state will iterate over. Default: - The state input as is.
         :param assign: Workflow variables to store in this step. Using workflow variables, you can store data in a step and retrieve that data in future steps. Default: - Not assign variables
@@ -26209,6 +26441,7 @@ class Map(
             state_name=state_name,
             item_selector=item_selector,
             jsonata_item_selector=jsonata_item_selector,
+            jsonata_max_concurrency=jsonata_max_concurrency,
             max_concurrency=max_concurrency,
             items=items,
             assign=assign,
@@ -26230,6 +26463,7 @@ class Map(
         state_name: typing.Optional[builtins.str] = None,
         item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
         jsonata_item_selector: typing.Optional[builtins.str] = None,
+        jsonata_max_concurrency: typing.Optional[builtins.str] = None,
         max_concurrency: typing.Optional[jsii.Number] = None,
         items_path: typing.Optional[builtins.str] = None,
         max_concurrency_path: typing.Optional[builtins.str] = None,
@@ -26255,6 +26489,7 @@ class Map(
         :param state_name: Optional name for this state. Default: - The construct ID will be used as state name
         :param item_selector: The JSON that you want to override your default iteration input (mutually exclusive with ``parameters`` and ``jsonataItemSelector``). Default: $
         :param jsonata_item_selector: Jsonata expression that evaluates to a JSON array to override your default iteration input (mutually exclusive with ``parameters`` and ``itemSelector``). Example value: ``{% {\\"foo\\": \\"foo\\", \\"input\\": $states.input} %}`` Default: $
+        :param jsonata_max_concurrency: JSONata expression for MaxConcurrency. A JSONata expression that evaluates to an integer, specifying the maximum concurrency dynamically. Mutually exclusive with ``maxConcurrency`` and ``maxConcurrencyPath``. Example value: ``{% $states.input.maxConcurrency %}`` Default: - full concurrency
         :param max_concurrency: MaxConcurrency. An upper bound on the number of iterations you want running at once. Default: - full concurrency
         :param items_path: JSONPath expression to select the array to iterate over. Default: $
         :param max_concurrency_path: MaxConcurrencyPath. A JsonPath that specifies the maximum concurrency dynamically from the state input. Default: - full concurrency
@@ -26277,6 +26512,7 @@ class Map(
             state_name=state_name,
             item_selector=item_selector,
             jsonata_item_selector=jsonata_item_selector,
+            jsonata_max_concurrency=jsonata_max_concurrency,
             max_concurrency=max_concurrency,
             items_path=items_path,
             max_concurrency_path=max_concurrency_path,
@@ -27727,7 +27963,7 @@ def _typecheckingstub__fcf28e5e7257e423138f4865382515f73bbac4c41c327df36b853bccf
 
 def _typecheckingstub__8b27a348000a6495796817f9fd3b73934a015750ac2d2e09e165c45b4d2d5772(
     *,
-    destination: typing.Optional[_ILogGroup_3c4fa718] = None,
+    destination: typing.Optional[_ILogGroupRef_874d025a] = None,
     include_execution_data: typing.Optional[builtins.bool] = None,
     level: typing.Optional[LogLevel] = None,
 ) -> None:
@@ -27759,6 +27995,7 @@ def _typecheckingstub__7e64b5e53f029b5753785385b8477bb5c760876cfc7efe1b7fa47a5f7
     assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     jsonata_item_selector: typing.Optional[builtins.str] = None,
+    jsonata_max_concurrency: typing.Optional[builtins.str] = None,
     max_concurrency: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
@@ -29056,6 +29293,7 @@ def _typecheckingstub__ec64abf9bcf7fc88fbbd0e8dea491d0fe3b15022e0a3a15ff395d55b0
     assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     jsonata_item_selector: typing.Optional[builtins.str] = None,
+    jsonata_max_concurrency: typing.Optional[builtins.str] = None,
     max_concurrency: typing.Optional[jsii.Number] = None,
     input_path: typing.Optional[builtins.str] = None,
     output_path: typing.Optional[builtins.str] = None,
@@ -29085,6 +29323,7 @@ def _typecheckingstub__81ff0c38557baaa35eb92b4d57e31ecde27db396059124470432c8292
     assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     jsonata_item_selector: typing.Optional[builtins.str] = None,
+    jsonata_max_concurrency: typing.Optional[builtins.str] = None,
     max_concurrency: typing.Optional[jsii.Number] = None,
     outputs: typing.Any = None,
     items: typing.Optional[ProvideItems] = None,
@@ -29222,6 +29461,7 @@ def _typecheckingstub__0d25d492eb753f17d954200a30dfae328a6f5710335312d1b5ffe0113
     state_name: typing.Optional[builtins.str] = None,
     item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     jsonata_item_selector: typing.Optional[builtins.str] = None,
+    jsonata_max_concurrency: typing.Optional[builtins.str] = None,
     max_concurrency: typing.Optional[jsii.Number] = None,
     items_path: typing.Optional[builtins.str] = None,
     max_concurrency_path: typing.Optional[builtins.str] = None,
@@ -29256,6 +29496,7 @@ def _typecheckingstub__123fd5cef3e54859ea847c1cc590a95cd39ecae394611b5e8add5b44b
     assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     jsonata_item_selector: typing.Optional[builtins.str] = None,
+    jsonata_max_concurrency: typing.Optional[builtins.str] = None,
     max_concurrency: typing.Optional[jsii.Number] = None,
     input_path: typing.Optional[builtins.str] = None,
     output_path: typing.Optional[builtins.str] = None,
@@ -29277,6 +29518,7 @@ def _typecheckingstub__1418bfef4d27a80b418f4fccfa22e0abfc4cf5008b74d8c088c96b991
     assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     jsonata_item_selector: typing.Optional[builtins.str] = None,
+    jsonata_max_concurrency: typing.Optional[builtins.str] = None,
     max_concurrency: typing.Optional[jsii.Number] = None,
     input_path: typing.Optional[builtins.str] = None,
     output_path: typing.Optional[builtins.str] = None,
@@ -29297,6 +29539,7 @@ def _typecheckingstub__a2445c2dd683291fecf01b56e77d0cbe2d0d8486f7f01b558c189426a
     assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     jsonata_item_selector: typing.Optional[builtins.str] = None,
+    jsonata_max_concurrency: typing.Optional[builtins.str] = None,
     max_concurrency: typing.Optional[jsii.Number] = None,
     outputs: typing.Any = None,
     items: typing.Optional[ProvideItems] = None,
@@ -29313,6 +29556,7 @@ def _typecheckingstub__841961f24272e2df479ccf3f591259c5dbc7bf471c2a6e11c7c7d61bf
     assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     jsonata_item_selector: typing.Optional[builtins.str] = None,
+    jsonata_max_concurrency: typing.Optional[builtins.str] = None,
     max_concurrency: typing.Optional[jsii.Number] = None,
     input_path: typing.Optional[builtins.str] = None,
     output_path: typing.Optional[builtins.str] = None,
@@ -29605,6 +29849,7 @@ def _typecheckingstub__64f7d4222fc9728237ee261157ec268cfd8f396c371bc6402ec7a1a4e
     tolerated_failure_percentage_path: typing.Optional[builtins.str] = None,
     item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     jsonata_item_selector: typing.Optional[builtins.str] = None,
+    jsonata_max_concurrency: typing.Optional[builtins.str] = None,
     max_concurrency: typing.Optional[jsii.Number] = None,
     items_path: typing.Optional[builtins.str] = None,
     max_concurrency_path: typing.Optional[builtins.str] = None,
@@ -29645,6 +29890,7 @@ def _typecheckingstub__571881b9fd1e6c545891d3d8e303faaf2af3b7abf8dedfe7af5b088c9
     state_name: typing.Optional[builtins.str] = None,
     item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     jsonata_item_selector: typing.Optional[builtins.str] = None,
+    jsonata_max_concurrency: typing.Optional[builtins.str] = None,
     max_concurrency: typing.Optional[jsii.Number] = None,
     items: typing.Optional[ProvideItems] = None,
     assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
@@ -29672,6 +29918,7 @@ def _typecheckingstub__9a2f34bdddff2f64215983e3f128e7644b5b5bf72fc9af9b5b0c0e3b3
     state_name: typing.Optional[builtins.str] = None,
     item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     jsonata_item_selector: typing.Optional[builtins.str] = None,
+    jsonata_max_concurrency: typing.Optional[builtins.str] = None,
     max_concurrency: typing.Optional[jsii.Number] = None,
     items_path: typing.Optional[builtins.str] = None,
     max_concurrency_path: typing.Optional[builtins.str] = None,
@@ -29724,6 +29971,7 @@ def _typecheckingstub__e484af477b46c0e70f635ed9610c7183f70c2184fd7a48f091a5477df
     assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     jsonata_item_selector: typing.Optional[builtins.str] = None,
+    jsonata_max_concurrency: typing.Optional[builtins.str] = None,
     max_concurrency: typing.Optional[jsii.Number] = None,
     input_path: typing.Optional[builtins.str] = None,
     output_path: typing.Optional[builtins.str] = None,
@@ -29754,6 +30002,7 @@ def _typecheckingstub__78d28fbd908923a38f00f8f82b2387552ae3a53fe5d860d66d336f49b
     parameters: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     jsonata_item_selector: typing.Optional[builtins.str] = None,
+    jsonata_max_concurrency: typing.Optional[builtins.str] = None,
     max_concurrency: typing.Optional[jsii.Number] = None,
     comment: typing.Optional[builtins.str] = None,
     query_language: typing.Optional[QueryLanguage] = None,
@@ -29781,6 +30030,7 @@ def _typecheckingstub__117dd132ca8c26f59efc69b8fbd2855fd633da22be9b9bbcfc5209542
     state_name: typing.Optional[builtins.str] = None,
     item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     jsonata_item_selector: typing.Optional[builtins.str] = None,
+    jsonata_max_concurrency: typing.Optional[builtins.str] = None,
     max_concurrency: typing.Optional[jsii.Number] = None,
     items: typing.Optional[ProvideItems] = None,
     assign: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
@@ -29799,6 +30049,7 @@ def _typecheckingstub__27e601e2ac6be39a50ef90276193f9993e276497c1482cf6fe3ebf359
     state_name: typing.Optional[builtins.str] = None,
     item_selector: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     jsonata_item_selector: typing.Optional[builtins.str] = None,
+    jsonata_max_concurrency: typing.Optional[builtins.str] = None,
     max_concurrency: typing.Optional[jsii.Number] = None,
     items_path: typing.Optional[builtins.str] = None,
     max_concurrency_path: typing.Optional[builtins.str] = None,

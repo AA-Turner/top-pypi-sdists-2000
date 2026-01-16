@@ -1323,10 +1323,12 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-from ..aws_certificatemanager import ICertificate as _ICertificate_c194c70b
 from ..aws_iam import Grant as _Grant_a7ae64f8, IGrantable as _IGrantable_71c4f5de
 from ..aws_lambda import IFunction as _IFunction_6adb0ab8
 from ..aws_pinpoint import CfnApp as _CfnApp_e8bac60b
+from ..interfaces.aws_certificatemanager import (
+    ICertificateRef as _ICertificateRef_1878d79b
+)
 from ..interfaces.aws_cognito import (
     IIdentityPoolPrincipalTagRef as _IIdentityPoolPrincipalTagRef_9e692705,
     IIdentityPoolRef as _IIdentityPoolRef_5cf45895,
@@ -14946,7 +14948,7 @@ class CustomDomainOptions:
     def __init__(
         self,
         *,
-        certificate: "_ICertificate_c194c70b",
+        certificate: "_ICertificateRef_1878d79b",
         domain_name: builtins.str,
     ) -> None:
         '''Options while specifying custom domain.
@@ -14987,11 +14989,11 @@ class CustomDomainOptions:
         }
 
     @builtins.property
-    def certificate(self) -> "_ICertificate_c194c70b":
+    def certificate(self) -> "_ICertificateRef_1878d79b":
         '''The certificate to associate with this domain.'''
         result = self._values.get("certificate")
         assert result is not None, "Required property 'certificate' is missing"
-        return typing.cast("_ICertificate_c194c70b", result)
+        return typing.cast("_ICertificateRef_1878d79b", result)
 
     @builtins.property
     def domain_name(self) -> builtins.str:
@@ -15229,7 +15231,11 @@ typing.cast(typing.Any, ICustomAttribute).__jsii_proxy_class__ = lambda : _ICust
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cognito.IUserPool")
-class IUserPool(_IResource_c80c4260, typing_extensions.Protocol):
+class IUserPool(
+    _IResource_c80c4260,
+    _IUserPoolRef_0b7d02b5,
+    typing_extensions.Protocol,
+):
     '''Represents a Cognito UserPool.'''
 
     @builtins.property
@@ -15389,7 +15395,10 @@ class IUserPool(_IResource_c80c4260, typing_extensions.Protocol):
         ...
 
     @jsii.member(jsii_name="registerIdentityProvider")
-    def register_identity_provider(self, provider: "IUserPoolIdentityProvider") -> None:
+    def register_identity_provider(
+        self,
+        provider: "_IUserPoolIdentityProviderRef_935eed62",
+    ) -> None:
         '''Register an identity provider with this user pool.
 
         :param provider: -
@@ -15399,6 +15408,7 @@ class IUserPool(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IUserPoolProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IUserPoolRef_0b7d02b5), # type: ignore[misc]
 ):
     '''Represents a Cognito UserPool.'''
 
@@ -15616,7 +15626,10 @@ class _IUserPoolProxy(
         return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="registerIdentityProvider")
-    def register_identity_provider(self, provider: "IUserPoolIdentityProvider") -> None:
+    def register_identity_provider(
+        self,
+        provider: "_IUserPoolIdentityProviderRef_935eed62",
+    ) -> None:
         '''Register an identity provider with this user pool.
 
         :param provider: -
@@ -15631,7 +15644,11 @@ typing.cast(typing.Any, IUserPool).__jsii_proxy_class__ = lambda : _IUserPoolPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cognito.IUserPoolClient")
-class IUserPoolClient(_IResource_c80c4260, typing_extensions.Protocol):
+class IUserPoolClient(
+    _IResource_c80c4260,
+    _IUserPoolClientRef_4466eeba,
+    typing_extensions.Protocol,
+):
     '''Represents a Cognito user pool client.'''
 
     @builtins.property
@@ -15657,6 +15674,7 @@ class IUserPoolClient(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IUserPoolClientProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IUserPoolClientRef_4466eeba), # type: ignore[misc]
 ):
     '''Represents a Cognito user pool client.'''
 
@@ -15687,7 +15705,11 @@ typing.cast(typing.Any, IUserPoolClient).__jsii_proxy_class__ = lambda : _IUserP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cognito.IUserPoolDomain")
-class IUserPoolDomain(_IResource_c80c4260, typing_extensions.Protocol):
+class IUserPoolDomain(
+    _IResource_c80c4260,
+    _IUserPoolDomainRef_2fa54b0c,
+    typing_extensions.Protocol,
+):
     '''Represents a user pool domain.'''
 
     @builtins.property
@@ -15705,6 +15727,7 @@ class IUserPoolDomain(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IUserPoolDomainProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IUserPoolDomainRef_2fa54b0c), # type: ignore[misc]
 ):
     '''Represents a user pool domain.'''
 
@@ -15727,7 +15750,11 @@ typing.cast(typing.Any, IUserPoolDomain).__jsii_proxy_class__ = lambda : _IUserP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cognito.IUserPoolGroup")
-class IUserPoolGroup(_IResource_c80c4260, typing_extensions.Protocol):
+class IUserPoolGroup(
+    _IResource_c80c4260,
+    _IUserPoolGroupRef_89b16d48,
+    typing_extensions.Protocol,
+):
     '''Represents a user pool group.'''
 
     @builtins.property
@@ -15742,6 +15769,7 @@ class IUserPoolGroup(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IUserPoolGroupProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IUserPoolGroupRef_89b16d48), # type: ignore[misc]
 ):
     '''Represents a user pool group.'''
 
@@ -15761,7 +15789,11 @@ typing.cast(typing.Any, IUserPoolGroup).__jsii_proxy_class__ = lambda : _IUserPo
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cognito.IUserPoolIdentityProvider")
-class IUserPoolIdentityProvider(_IResource_c80c4260, typing_extensions.Protocol):
+class IUserPoolIdentityProvider(
+    _IResource_c80c4260,
+    _IUserPoolIdentityProviderRef_935eed62,
+    typing_extensions.Protocol,
+):
     '''Represents a UserPoolIdentityProvider.'''
 
     @builtins.property
@@ -15776,6 +15808,7 @@ class IUserPoolIdentityProvider(_IResource_c80c4260, typing_extensions.Protocol)
 
 class _IUserPoolIdentityProviderProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IUserPoolIdentityProviderRef_935eed62), # type: ignore[misc]
 ):
     '''Represents a UserPoolIdentityProvider.'''
 
@@ -15795,7 +15828,11 @@ typing.cast(typing.Any, IUserPoolIdentityProvider).__jsii_proxy_class__ = lambda
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cognito.IUserPoolResourceServer")
-class IUserPoolResourceServer(_IResource_c80c4260, typing_extensions.Protocol):
+class IUserPoolResourceServer(
+    _IResource_c80c4260,
+    _IUserPoolResourceServerRef_fda874c5,
+    typing_extensions.Protocol,
+):
     '''Represents a Cognito user pool resource server.'''
 
     @builtins.property
@@ -15810,6 +15847,7 @@ class IUserPoolResourceServer(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IUserPoolResourceServerProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IUserPoolResourceServerRef_fda874c5), # type: ignore[misc]
 ):
     '''Represents a Cognito user pool resource server.'''
 
@@ -19065,7 +19103,7 @@ class UserPool(
         grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
     ) -> "_Grant_a7ae64f8":
-        '''Adds an IAM policy statement associated with this user pool to an IAM principal's policy.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         :param actions: -
@@ -19077,7 +19115,10 @@ class UserPool(
         return typing.cast("_Grant_a7ae64f8", jsii.invoke(self, "grant", [grantee, *actions]))
 
     @jsii.member(jsii_name="registerIdentityProvider")
-    def register_identity_provider(self, provider: "IUserPoolIdentityProvider") -> None:
+    def register_identity_provider(
+        self,
+        provider: "_IUserPoolIdentityProviderRef_935eed62",
+    ) -> None:
         '''Register an identity provider with this user pool.
 
         :param provider: -
@@ -19129,6 +19170,12 @@ class UserPool(
         '''
         return typing.cast(builtins.str, jsii.get(self, "userPoolProviderUrl"))
 
+    @builtins.property
+    @jsii.member(jsii_name="userPoolRef")
+    def user_pool_ref(self) -> "_UserPoolReference_0ef20aae":
+        '''A reference to a UserPool resource.'''
+        return typing.cast("_UserPoolReference_0ef20aae", jsii.get(self, "userPoolRef"))
+
 
 @jsii.implements(IUserPoolClient)
 class UserPoolClient(
@@ -19163,7 +19210,7 @@ class UserPoolClient(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        user_pool: "IUserPool",
+        user_pool: "_IUserPoolRef_0b7d02b5",
         access_token_validity: typing.Optional["_Duration_4839e8c3"] = None,
         analytics: typing.Optional[typing.Union["AnalyticsConfiguration", typing.Dict[builtins.str, typing.Any]]] = None,
         auth_flows: typing.Optional[typing.Union["AuthFlow", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -19275,6 +19322,12 @@ class UserPoolClient(
     def user_pool_client_name(self) -> builtins.str:
         '''The client name that was specified via the ``userPoolClientName`` property during initialization, throws an error otherwise.'''
         return typing.cast(builtins.str, jsii.get(self, "userPoolClientName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="userPoolClientRef")
+    def user_pool_client_ref(self) -> "_UserPoolClientReference_2e04ee48":
+        '''A reference to a UserPoolClient resource.'''
+        return typing.cast("_UserPoolClientReference_2e04ee48", jsii.get(self, "userPoolClientRef"))
 
     @builtins.property
     @jsii.member(jsii_name="userPoolClientSecret")
@@ -19764,7 +19817,7 @@ class UserPoolClientProps(UserPoolClientOptions):
         supported_identity_providers: typing.Optional[typing.Sequence["UserPoolClientIdentityProvider"]] = None,
         user_pool_client_name: typing.Optional[builtins.str] = None,
         write_attributes: typing.Optional["ClientAttributes"] = None,
-        user_pool: "IUserPool",
+        user_pool: "_IUserPoolRef_0b7d02b5",
     ) -> None:
         '''Properties for the UserPoolClient construct.
 
@@ -20080,11 +20133,11 @@ class UserPoolClientProps(UserPoolClientOptions):
         return typing.cast(typing.Optional["ClientAttributes"], result)
 
     @builtins.property
-    def user_pool(self) -> "IUserPool":
+    def user_pool(self) -> "_IUserPoolRef_0b7d02b5":
         '''The UserPool resource this client will have access to.'''
         result = self._values.get("user_pool")
         assert result is not None, "Required property 'user_pool' is missing"
-        return typing.cast("IUserPool", result)
+        return typing.cast("_IUserPoolRef_0b7d02b5", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -20132,7 +20185,7 @@ class UserPoolDomain(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        user_pool: "IUserPool",
+        user_pool: "_IUserPoolRef_0b7d02b5",
         cognito_domain: typing.Optional[typing.Union["CognitoDomainOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         custom_domain: typing.Optional[typing.Union["CustomDomainOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         managed_login_version: typing.Optional["ManagedLoginVersion"] = None,
@@ -20248,6 +20301,12 @@ class UserPoolDomain(
         If the ``cognitoDomain`` was used, it contains the prefix to the Cognito hosted domain.
         '''
         return typing.cast(builtins.str, jsii.get(self, "domainName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="userPoolDomainRef")
+    def user_pool_domain_ref(self) -> "_UserPoolDomainReference_8e0aecda":
+        '''A reference to a UserPoolDomain resource.'''
+        return typing.cast("_UserPoolDomainReference_8e0aecda", jsii.get(self, "userPoolDomainRef"))
 
 
 @jsii.data_type(
@@ -20376,7 +20435,7 @@ class UserPoolDomainProps(UserPoolDomainOptions):
         cognito_domain: typing.Optional[typing.Union["CognitoDomainOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         custom_domain: typing.Optional[typing.Union["CustomDomainOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         managed_login_version: typing.Optional["ManagedLoginVersion"] = None,
-        user_pool: "IUserPool",
+        user_pool: "_IUserPoolRef_0b7d02b5",
     ) -> None:
         '''Props for UserPoolDomain construct.
 
@@ -20503,11 +20562,11 @@ class UserPoolDomainProps(UserPoolDomainOptions):
         return typing.cast(typing.Optional["ManagedLoginVersion"], result)
 
     @builtins.property
-    def user_pool(self) -> "IUserPool":
+    def user_pool(self) -> "_IUserPoolRef_0b7d02b5":
         '''The user pool to which this domain should be associated.'''
         result = self._values.get("user_pool")
         assert result is not None, "Required property 'user_pool' is missing"
-        return typing.cast("IUserPool", result)
+        return typing.cast("_IUserPoolRef_0b7d02b5", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -20758,7 +20817,7 @@ class UserPoolGroup(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        user_pool: "IUserPool",
+        user_pool: "_IUserPoolRef_0b7d02b5",
         description: typing.Optional[builtins.str] = None,
         group_name: typing.Optional[builtins.str] = None,
         precedence: typing.Optional[jsii.Number] = None,
@@ -20819,6 +20878,12 @@ class UserPoolGroup(
     def group_name(self) -> builtins.str:
         '''The user group name.'''
         return typing.cast(builtins.str, jsii.get(self, "groupName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="userPoolGroupRef")
+    def user_pool_group_ref(self) -> "_UserPoolGroupReference_5e435fdd":
+        '''A reference to a UserPoolGroup resource.'''
+        return typing.cast("_UserPoolGroupReference_5e435fdd", jsii.get(self, "userPoolGroupRef"))
 
 
 @jsii.data_type(
@@ -20963,7 +21028,7 @@ class UserPoolGroupProps(UserPoolGroupOptions):
         group_name: typing.Optional[builtins.str] = None,
         precedence: typing.Optional[jsii.Number] = None,
         role: typing.Optional["_IRoleRef_8400221f"] = None,
-        user_pool: "IUserPool",
+        user_pool: "_IUserPoolRef_0b7d02b5",
     ) -> None:
         '''Props for UserPoolGroup construct.
 
@@ -21062,11 +21127,11 @@ class UserPoolGroupProps(UserPoolGroupOptions):
         return typing.cast(typing.Optional["_IRoleRef_8400221f"], result)
 
     @builtins.property
-    def user_pool(self) -> "IUserPool":
+    def user_pool(self) -> "_IUserPoolRef_0b7d02b5":
         '''The user pool to which this group is associated.'''
         result = self._values.get("user_pool")
         assert result is not None, "Required property 'user_pool' is missing"
-        return typing.cast("IUserPool", result)
+        return typing.cast("_IUserPoolRef_0b7d02b5", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -21187,6 +21252,14 @@ class UserPoolIdentityProviderAmazon(
         '''The primary identifier of this identity provider.'''
         return typing.cast(builtins.str, jsii.get(self, "providerName"))
 
+    @builtins.property
+    @jsii.member(jsii_name="userPoolIdentityProviderRef")
+    def user_pool_identity_provider_ref(
+        self,
+    ) -> "_UserPoolIdentityProviderReference_a5d59f88":
+        '''A reference to a UserPoolIdentityProvider resource.'''
+        return typing.cast("_UserPoolIdentityProviderReference_a5d59f88", jsii.get(self, "userPoolIdentityProviderRef"))
+
 
 @jsii.implements(IUserPoolIdentityProvider)
 class UserPoolIdentityProviderApple(
@@ -21305,6 +21378,14 @@ class UserPoolIdentityProviderApple(
         '''The primary identifier of this identity provider.'''
         return typing.cast(builtins.str, jsii.get(self, "providerName"))
 
+    @builtins.property
+    @jsii.member(jsii_name="userPoolIdentityProviderRef")
+    def user_pool_identity_provider_ref(
+        self,
+    ) -> "_UserPoolIdentityProviderReference_a5d59f88":
+        '''A reference to a UserPoolIdentityProvider resource.'''
+        return typing.cast("_UserPoolIdentityProviderReference_a5d59f88", jsii.get(self, "userPoolIdentityProviderRef"))
+
 
 @jsii.implements(IUserPoolIdentityProvider)
 class UserPoolIdentityProviderFacebook(
@@ -21413,6 +21494,14 @@ class UserPoolIdentityProviderFacebook(
         '''The primary identifier of this identity provider.'''
         return typing.cast(builtins.str, jsii.get(self, "providerName"))
 
+    @builtins.property
+    @jsii.member(jsii_name="userPoolIdentityProviderRef")
+    def user_pool_identity_provider_ref(
+        self,
+    ) -> "_UserPoolIdentityProviderReference_a5d59f88":
+        '''A reference to a UserPoolIdentityProvider resource.'''
+        return typing.cast("_UserPoolIdentityProviderReference_a5d59f88", jsii.get(self, "userPoolIdentityProviderRef"))
+
 
 @jsii.implements(IUserPoolIdentityProvider)
 class UserPoolIdentityProviderGoogle(
@@ -21491,6 +21580,14 @@ class UserPoolIdentityProviderGoogle(
     def provider_name(self) -> builtins.str:
         '''The primary identifier of this identity provider.'''
         return typing.cast(builtins.str, jsii.get(self, "providerName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="userPoolIdentityProviderRef")
+    def user_pool_identity_provider_ref(
+        self,
+    ) -> "_UserPoolIdentityProviderReference_a5d59f88":
+        '''A reference to a UserPoolIdentityProvider resource.'''
+        return typing.cast("_UserPoolIdentityProviderReference_a5d59f88", jsii.get(self, "userPoolIdentityProviderRef"))
 
 
 @jsii.implements(IUserPoolIdentityProvider)
@@ -21620,6 +21717,14 @@ class UserPoolIdentityProviderOidc(
     def provider_name(self) -> builtins.str:
         '''The primary identifier of this identity provider.'''
         return typing.cast(builtins.str, jsii.get(self, "providerName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="userPoolIdentityProviderRef")
+    def user_pool_identity_provider_ref(
+        self,
+    ) -> "_UserPoolIdentityProviderReference_a5d59f88":
+        '''A reference to a UserPoolIdentityProvider resource.'''
+        return typing.cast("_UserPoolIdentityProviderReference_a5d59f88", jsii.get(self, "userPoolIdentityProviderRef"))
 
 
 @jsii.data_type(
@@ -21814,6 +21919,14 @@ class UserPoolIdentityProviderSaml(
     def provider_name(self) -> builtins.str:
         '''The primary identifier of this identity provider.'''
         return typing.cast(builtins.str, jsii.get(self, "providerName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="userPoolIdentityProviderRef")
+    def user_pool_identity_provider_ref(
+        self,
+    ) -> "_UserPoolIdentityProviderReference_a5d59f88":
+        '''A reference to a UserPoolIdentityProvider resource.'''
+        return typing.cast("_UserPoolIdentityProviderReference_a5d59f88", jsii.get(self, "userPoolIdentityProviderRef"))
 
 
 class UserPoolIdentityProviderSamlMetadata(
@@ -22922,7 +23035,7 @@ class UserPoolResourceServer(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        user_pool: "IUserPool",
+        user_pool: "_IUserPoolRef_0b7d02b5",
         identifier: builtins.str,
         scopes: typing.Optional[typing.Sequence["ResourceServerScope"]] = None,
         user_pool_resource_server_name: typing.Optional[builtins.str] = None,
@@ -22980,6 +23093,14 @@ class UserPoolResourceServer(
     def user_pool_resource_server_id(self) -> builtins.str:
         '''Resource server id.'''
         return typing.cast(builtins.str, jsii.get(self, "userPoolResourceServerId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="userPoolResourceServerRef")
+    def user_pool_resource_server_ref(
+        self,
+    ) -> "_UserPoolResourceServerReference_5b196bf5":
+        '''A reference to a UserPoolResourceServer resource.'''
+        return typing.cast("_UserPoolResourceServerReference_5b196bf5", jsii.get(self, "userPoolResourceServerRef"))
 
 
 @jsii.data_type(
@@ -23102,7 +23223,7 @@ class UserPoolResourceServerProps(UserPoolResourceServerOptions):
         identifier: builtins.str,
         scopes: typing.Optional[typing.Sequence["ResourceServerScope"]] = None,
         user_pool_resource_server_name: typing.Optional[builtins.str] = None,
-        user_pool: "IUserPool",
+        user_pool: "_IUserPoolRef_0b7d02b5",
     ) -> None:
         '''Properties for the UserPoolResourceServer construct.
 
@@ -23118,13 +23239,14 @@ class UserPoolResourceServerProps(UserPoolResourceServerOptions):
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cognito as cognito
+            from aws_cdk.interfaces import aws_cognito as interfaces_cognito
             
             # resource_server_scope: cognito.ResourceServerScope
-            # user_pool: cognito.UserPool
+            # user_pool_ref: interfaces_cognito.IUserPoolRef
             
             user_pool_resource_server_props = cognito.UserPoolResourceServerProps(
                 identifier="identifier",
-                user_pool=user_pool,
+                user_pool=user_pool_ref,
             
                 # the properties below are optional
                 scopes=[resource_server_scope],
@@ -23172,11 +23294,11 @@ class UserPoolResourceServerProps(UserPoolResourceServerOptions):
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def user_pool(self) -> "IUserPool":
+    def user_pool(self) -> "_IUserPoolRef_0b7d02b5":
         '''The user pool to add this resource server to.'''
         result = self._values.get("user_pool")
         assert result is not None, "Required property 'user_pool' is missing"
-        return typing.cast("IUserPool", result)
+        return typing.cast("_IUserPoolRef_0b7d02b5", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -26877,7 +26999,7 @@ def _typecheckingstub__10625133998d7d4e7fac2876192aae9fef70ad558e321a4d1d6e442f4
 
 def _typecheckingstub__3849940c95623161d3f30b88c048744039d927bcb31494b462f19441b4be2cbe(
     *,
-    certificate: _ICertificate_c194c70b,
+    certificate: _ICertificateRef_1878d79b,
     domain_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -26962,7 +27084,7 @@ def _typecheckingstub__d3a4c5e8a4da82b394a07fc77ae4614ba300e995b69a268ebd9c41430
     pass
 
 def _typecheckingstub__2136c7c5f1f487c9abafff099214714783c966a26ecba5010a34c74ee3f5cb01(
-    provider: IUserPoolIdentityProvider,
+    provider: _IUserPoolIdentityProviderRef_935eed62,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -27306,7 +27428,7 @@ def _typecheckingstub__c56e3605a4e5dd37206172217b5910f257caaebfe4e87e39c11375862
     pass
 
 def _typecheckingstub__b7cd7e47ca8ab5f3e133bc16c7dce60dea0ac59f9973766e02d16d28c19ec2b1(
-    provider: IUserPoolIdentityProvider,
+    provider: _IUserPoolIdentityProviderRef_935eed62,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -27315,7 +27437,7 @@ def _typecheckingstub__e654de9921a676ab8214720f2ab2c7f212d67a62531595c721560e88c
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    user_pool: IUserPool,
+    user_pool: _IUserPoolRef_0b7d02b5,
     access_token_validity: typing.Optional[_Duration_4839e8c3] = None,
     analytics: typing.Optional[typing.Union[AnalyticsConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
     auth_flows: typing.Optional[typing.Union[AuthFlow, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -27393,7 +27515,7 @@ def _typecheckingstub__95c8cad8419f2fd5def82ad39281b322b9ec6b2f7d891de939bf1e903
     supported_identity_providers: typing.Optional[typing.Sequence[UserPoolClientIdentityProvider]] = None,
     user_pool_client_name: typing.Optional[builtins.str] = None,
     write_attributes: typing.Optional[ClientAttributes] = None,
-    user_pool: IUserPool,
+    user_pool: _IUserPoolRef_0b7d02b5,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -27402,7 +27524,7 @@ def _typecheckingstub__370554f0c705ae872638d9d90d00b13abf8230d3666aa0d882b882f94
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    user_pool: IUserPool,
+    user_pool: _IUserPoolRef_0b7d02b5,
     cognito_domain: typing.Optional[typing.Union[CognitoDomainOptions, typing.Dict[builtins.str, typing.Any]]] = None,
     custom_domain: typing.Optional[typing.Union[CustomDomainOptions, typing.Dict[builtins.str, typing.Any]]] = None,
     managed_login_version: typing.Optional[ManagedLoginVersion] = None,
@@ -27442,7 +27564,7 @@ def _typecheckingstub__4336d5dce146abd75b1697dd55937affe308b1524f218d9eb3835531c
     cognito_domain: typing.Optional[typing.Union[CognitoDomainOptions, typing.Dict[builtins.str, typing.Any]]] = None,
     custom_domain: typing.Optional[typing.Union[CustomDomainOptions, typing.Dict[builtins.str, typing.Any]]] = None,
     managed_login_version: typing.Optional[ManagedLoginVersion] = None,
-    user_pool: IUserPool,
+    user_pool: _IUserPoolRef_0b7d02b5,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -27468,7 +27590,7 @@ def _typecheckingstub__775ac13db76309a928c26a49c092fd74e83d97ad55358f5e3e7abc39c
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    user_pool: IUserPool,
+    user_pool: _IUserPoolRef_0b7d02b5,
     description: typing.Optional[builtins.str] = None,
     group_name: typing.Optional[builtins.str] = None,
     precedence: typing.Optional[jsii.Number] = None,
@@ -27501,7 +27623,7 @@ def _typecheckingstub__6f5beec5c4d6b11b4325b68ae8691c3f5f2eb75f4aa5ef1c6e333e5df
     group_name: typing.Optional[builtins.str] = None,
     precedence: typing.Optional[jsii.Number] = None,
     role: typing.Optional[_IRoleRef_8400221f] = None,
-    user_pool: IUserPool,
+    user_pool: _IUserPoolRef_0b7d02b5,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -27689,7 +27811,7 @@ def _typecheckingstub__45c6b182ece6db4ca44777c756fb5fb3ba678d72b113c2cec6e080042
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    user_pool: IUserPool,
+    user_pool: _IUserPoolRef_0b7d02b5,
     identifier: builtins.str,
     scopes: typing.Optional[typing.Sequence[ResourceServerScope]] = None,
     user_pool_resource_server_name: typing.Optional[builtins.str] = None,
@@ -27719,7 +27841,7 @@ def _typecheckingstub__b2a1b213c8033e469b75312545b2cadd55df48a6ef2219112676c0fb3
     identifier: builtins.str,
     scopes: typing.Optional[typing.Sequence[ResourceServerScope]] = None,
     user_pool_resource_server_name: typing.Optional[builtins.str] = None,
-    user_pool: IUserPool,
+    user_pool: _IUserPoolRef_0b7d02b5,
 ) -> None:
     """Type checking stubs"""
     pass

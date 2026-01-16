@@ -685,15 +685,14 @@ from ..aws_ec2 import (
     SubnetSelection as _SubnetSelection_e57d76df,
 )
 from ..aws_iam import IGrantable as _IGrantable_71c4f5de, IRole as _IRole_235f5d8e
-from ..aws_logs import (
-    ILogGroup as _ILogGroup_3c4fa718, RetentionDays as _RetentionDays_070f99f0
-)
+from ..aws_logs import RetentionDays as _RetentionDays_070f99f0
 from ..aws_s3 import (
     BucketAccessControl as _BucketAccessControl_466c7e1b, IBucket as _IBucket_42e086fd
 )
 from ..aws_s3_assets import AssetOptions as _AssetOptions_2aa69621
 from ..interfaces.aws_cloudfront import IDistributionRef as _IDistributionRef_36fd2094
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
+from ..interfaces.aws_logs import ILogGroupRef as _ILogGroupRef_874d025a
 
 
 class BucketDeployment(
@@ -744,7 +743,7 @@ class BucketDeployment(
         expires: typing.Optional["_Expiration_059d47d0"] = None,
         extract: typing.Optional[builtins.bool] = None,
         include: typing.Optional[typing.Sequence[builtins.str]] = None,
-        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         memory_limit: typing.Optional[jsii.Number] = None,
         metadata: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -974,7 +973,7 @@ class BucketDeploymentProps:
         expires: typing.Optional["_Expiration_059d47d0"] = None,
         extract: typing.Optional[builtins.bool] = None,
         include: typing.Optional[typing.Sequence[builtins.str]] = None,
-        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         memory_limit: typing.Optional[jsii.Number] = None,
         metadata: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -1339,7 +1338,7 @@ class BucketDeploymentProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
+    def log_group(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''The Log Group used for logging of events emitted by the custom resource's lambda function.
 
         Providing a user-controlled log group was rolled out to commercial regions on 2023-11-16.
@@ -1348,7 +1347,7 @@ class BucketDeploymentProps:
         :default: - a default log group created by AWS Lambda
         '''
         result = self._values.get("log_group")
-        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def log_retention(self) -> typing.Optional["_RetentionDays_070f99f0"]:
@@ -2626,7 +2625,7 @@ def _typecheckingstub__2544491e92aa50a255b927ef16b9cde2961eae48803afca3b5d1105bf
     expires: typing.Optional[_Expiration_059d47d0] = None,
     extract: typing.Optional[builtins.bool] = None,
     include: typing.Optional[typing.Sequence[builtins.str]] = None,
-    log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
     memory_limit: typing.Optional[jsii.Number] = None,
     metadata: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -2673,7 +2672,7 @@ def _typecheckingstub__cbabf07e8b4adfb2b2058c075c4f35512ebc580f80a6db9bf13e90589
     expires: typing.Optional[_Expiration_059d47d0] = None,
     extract: typing.Optional[builtins.bool] = None,
     include: typing.Optional[typing.Sequence[builtins.str]] = None,
-    log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
     memory_limit: typing.Optional[jsii.Number] = None,
     metadata: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,

@@ -211,6 +211,10 @@ v2](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverle
   capacity of all the instances in the cluster.
 * `ACUUtilization`: Value of the `ServerlessDatabaseCapacity`/ max ACU of the
   cluster.
+* `VolumeReadIOPs`: Cluster-level metric that represents the average number of disk read I/O operations per second.
+* `VolumeWriteIOPs`: Cluster-level metric that represents the average number of disk write I/O operations per second.
+* `ReadIOPS`: Instance-level metric that represents the average read I/O operations per second. This metric is supported by DatabaseCluster and DatabaseClusterFromSnapshot both.
+* `WriteIOPS`: Instance-level metric that represents the average write I/O operations per second. This metric is supported by DatabaseCluster and DatabaseClusterFromSnapshot both.
 
 ```python
 # vpc: ec2.Vpc
@@ -230,11 +234,45 @@ cluster.metric_serverless_database_capacity(
     threshold=1.5,
     evaluation_periods=3
 )
+
 cluster.metric_aCUUtilization(
     period=Duration.minutes(10)
 ).create_alarm(self, "alarm",
     evaluation_periods=3,
     threshold=90
+)
+
+cluster.metric_volume_read_iOPs(
+    period=Duration.minutes(10)
+).create_alarm(self, "VolumeReadIOPsAlarm",
+    threshold=1000,
+    evaluation_periods=3
+)
+
+cluster.metric_volume_write_iOPs(
+    period=Duration.minutes(10)
+).create_alarm(self, "VolumeWriteIOPsAlarm",
+    threshold=1000,
+    evaluation_periods=3
+)
+
+instance = rds.DatabaseInstance(self, "Instance",
+    engine=rds.DatabaseInstanceEngine.postgres(version=rds.PostgresEngineVersion.VER_17_6),
+    vpc=vpc
+)
+
+instance.metric_read_iOPS(
+    period=Duration.minutes(10)
+).create_alarm(self, "ReadIOPSAlarm",
+    threshold=1000,
+    evaluation_periods=3
+)
+
+instance.metric_write_iOPS(
+    period=Duration.minutes(10)
+).create_alarm(self, "WriteIOPSAlarm",
+    threshold=1000,
+    evaluation_periods=3
 )
 ```
 
@@ -1229,6 +1267,34 @@ proxy = rds.DatabaseProxy(self, "Proxy",
     vpc=vpc,
     client_password_auth_type=rds.ClientPasswordAuthType.MYSQL_NATIVE_PASSWORD
 )
+```
+
+### Default Authentication Scheme
+
+RDS Proxy supports different authentication schemes to connect to your database. You can configure the default authentication scheme using the `defaultAuthScheme` property.
+
+When using `DefaultAuthScheme.IAM_AUTH`, the proxy uses end-to-end IAM authentication to connect to the database, eliminating the need for secrets stored in AWS Secrets Manager:
+
+```python
+# vpc: ec2.Vpc
+
+instance = rds.DatabaseInstance(self, "Database",
+    engine=rds.DatabaseInstanceEngine.postgres(
+        version=rds.PostgresEngineVersion.VER_17_7
+    ),
+    vpc=vpc,
+    iam_authentication=True
+)
+
+proxy = rds.DatabaseProxy(self, "Proxy",
+    proxy_target=rds.ProxyTarget.from_instance(instance),
+    vpc=vpc,
+    default_auth_scheme=rds.DefaultAuthScheme.IAM_AUTH
+)
+
+# Grant IAM permissions for database connection
+role = iam.Role(self, "DBRole", assumed_by=iam.AccountPrincipal(self.account))
+proxy.grant_connect(role, "database-user")
 ```
 
 ### Cluster
@@ -2474,14 +2540,17 @@ class AuroraMysqlClusterEngineProps:
             
             cluster = rds.DatabaseCluster(self, "Database",
                 engine=rds.DatabaseClusterEngine.aurora_mysql(version=rds.AuroraMysqlEngineVersion.VER_3_01_0),
+                credentials=rds.Credentials.from_generated_secret("clusteradmin"),  # Optional - will default to 'admin' username and generated password
                 writer=rds.ClusterInstance.provisioned("writer",
-                    ca_certificate=rds.CaCertificate.RDS_CA_RSA2048_G1
+                    publicly_accessible=False
                 ),
                 readers=[
-                    rds.ClusterInstance.serverless_v2("reader",
-                        ca_certificate=rds.CaCertificate.of("custom-ca")
-                    )
+                    rds.ClusterInstance.provisioned("reader1", promotion_tier=1),
+                    rds.ClusterInstance.serverless_v2("reader2")
                 ],
+                vpc_subnets=ec2.SubnetSelection(
+                    subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS
+                ),
                 vpc=vpc
             )
         '''
@@ -2527,14 +2596,17 @@ class AuroraMysqlEngineVersion(
         
         cluster = rds.DatabaseCluster(self, "Database",
             engine=rds.DatabaseClusterEngine.aurora_mysql(version=rds.AuroraMysqlEngineVersion.VER_3_01_0),
+            credentials=rds.Credentials.from_generated_secret("clusteradmin"),  # Optional - will default to 'admin' username and generated password
             writer=rds.ClusterInstance.provisioned("writer",
-                ca_certificate=rds.CaCertificate.RDS_CA_RSA2048_G1
+                publicly_accessible=False
             ),
             readers=[
-                rds.ClusterInstance.serverless_v2("reader",
-                    ca_certificate=rds.CaCertificate.of("custom-ca")
-                )
+                rds.ClusterInstance.provisioned("reader1", promotion_tier=1),
+                rds.ClusterInstance.serverless_v2("reader2")
             ],
+            vpc_subnets=ec2.SubnetSelection(
+                subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS
+            ),
             vpc=vpc
         )
     '''
@@ -9607,6 +9679,7 @@ class CfnDBInstance(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
+        additional_storage_volumes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDBInstance.AdditionalStorageVolumeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         allocated_storage: typing.Optional[builtins.str] = None,
         allow_major_version_upgrade: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         apply_immediately: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
@@ -9694,6 +9767,7 @@ class CfnDBInstance(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
+        :param additional_storage_volumes: 
         :param allocated_storage: The amount of storage in gibibytes (GiB) to be initially allocated for the database instance. .. epigraph:: If any value is set in the ``Iops`` parameter, ``AllocatedStorage`` must be at least 100 GiB, which corresponds to the minimum Iops value of 1,000. If you increase the ``Iops`` value (in 1,000 IOPS increments), then you must also increase the ``AllocatedStorage`` value (in 100-GiB increments). *Amazon Aurora* Not applicable. Aurora cluster volumes automatically grow as the amount of data in your database increases, though you are only charged for the space that you use in an Aurora cluster volume. *Db2* Constraints to the amount of storage for each storage type are the following: - General Purpose (SSD) storage (gp3): Must be an integer from 20 to 64000. - Provisioned IOPS storage (io1): Must be an integer from 100 to 64000. *MySQL* Constraints to the amount of storage for each storage type are the following: - General Purpose (SSD) storage (gp2): Must be an integer from 20 to 65536. - Provisioned IOPS storage (io1): Must be an integer from 100 to 65536. - Magnetic storage (standard): Must be an integer from 5 to 3072. *MariaDB* Constraints to the amount of storage for each storage type are the following: - General Purpose (SSD) storage (gp2): Must be an integer from 20 to 65536. - Provisioned IOPS storage (io1): Must be an integer from 100 to 65536. - Magnetic storage (standard): Must be an integer from 5 to 3072. *PostgreSQL* Constraints to the amount of storage for each storage type are the following: - General Purpose (SSD) storage (gp2): Must be an integer from 20 to 65536. - Provisioned IOPS storage (io1): Must be an integer from 100 to 65536. - Magnetic storage (standard): Must be an integer from 5 to 3072. *Oracle* Constraints to the amount of storage for each storage type are the following: - General Purpose (SSD) storage (gp2): Must be an integer from 20 to 65536. - Provisioned IOPS storage (io1): Must be an integer from 100 to 65536. - Magnetic storage (standard): Must be an integer from 10 to 3072. *SQL Server* Constraints to the amount of storage for each storage type are the following: - General Purpose (SSD) storage (gp2): - Enterprise and Standard editions: Must be an integer from 20 to 16384. - Web and Express editions: Must be an integer from 20 to 16384. - Provisioned IOPS storage (io1): - Enterprise and Standard editions: Must be an integer from 20 to 16384. - Web and Express editions: Must be an integer from 20 to 16384. - Magnetic storage (standard): - Enterprise and Standard editions: Must be an integer from 20 to 1024. - Web and Express editions: Must be an integer from 20 to 1024.
         :param allow_major_version_upgrade: A value that indicates whether major version upgrades are allowed. Changing this parameter doesn't result in an outage and the change is asynchronously applied as soon as possible. Constraints: Major version upgrades must be allowed when specifying a value for the ``EngineVersion`` parameter that is a different major version than the DB instance's current version.
         :param apply_immediately: Specifies whether changes to the DB instance and any pending modifications are applied immediately, regardless of the ``PreferredMaintenanceWindow`` setting. If set to ``false`` , changes are applied during the next maintenance window. Until RDS applies the changes, the DB instance remains in a drift state. As a result, the configuration doesn't fully reflect the requested modifications and temporarily diverges from the intended state. In addition to the settings described in `Modifying a DB instance <https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.DBInstance.Modifying.html>`_ , this property also determines whether the DB instance reboots when a static parameter is modified in the associated DB parameter group. Default: ``true``
@@ -9782,6 +9856,7 @@ class CfnDBInstance(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnDBInstanceProps(
+            additional_storage_volumes=additional_storage_volumes,
             allocated_storage=allocated_storage,
             allow_major_version_upgrade=allow_major_version_upgrade,
             apply_immediately=apply_immediately,
@@ -10205,6 +10280,23 @@ class CfnDBInstance(
     def tags(self) -> "_TagManager_0a598cb3":
         '''Tag Manager which manages the tags for this resource.'''
         return typing.cast("_TagManager_0a598cb3", jsii.get(self, "tags"))
+
+    @builtins.property
+    @jsii.member(jsii_name="additionalStorageVolumes")
+    def additional_storage_volumes(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDBInstance.AdditionalStorageVolumeProperty"]]]]:
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDBInstance.AdditionalStorageVolumeProperty"]]]], jsii.get(self, "additionalStorageVolumes"))
+
+    @additional_storage_volumes.setter
+    def additional_storage_volumes(
+        self,
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDBInstance.AdditionalStorageVolumeProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__dda0bdd3fe5099dfc5cbc483ada68d64d6ac9883e0efdd60179d7ddbfe8b3a67)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "additionalStorageVolumes", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="allocatedStorage")
@@ -11428,6 +11520,146 @@ class CfnDBInstance(
         jsii.set(self, "vpcSecurityGroups", value) # pyright: ignore[reportArgumentType]
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_rds.CfnDBInstance.AdditionalStorageVolumeProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "allocated_storage": "allocatedStorage",
+            "iops": "iops",
+            "max_allocated_storage": "maxAllocatedStorage",
+            "storage_throughput": "storageThroughput",
+            "storage_type": "storageType",
+            "volume_name": "volumeName",
+        },
+    )
+    class AdditionalStorageVolumeProperty:
+        def __init__(
+            self,
+            *,
+            allocated_storage: typing.Optional[builtins.str] = None,
+            iops: typing.Optional[jsii.Number] = None,
+            max_allocated_storage: typing.Optional[jsii.Number] = None,
+            storage_throughput: typing.Optional[jsii.Number] = None,
+            storage_type: typing.Optional[builtins.str] = None,
+            volume_name: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param allocated_storage: The amount of storage allocated for the additional storage volume, in gibibytes (GiB). The minimum is 20 GiB. The maximum is 65,536 GiB (64 TiB).
+            :param iops: The number of I/O operations per second (IOPS) provisioned for the additional storage volume.
+            :param max_allocated_storage: The upper limit in gibibytes (GiB) to which RDS can automatically scale the storage of the additional storage volume.
+            :param storage_throughput: The storage throughput value for the additional storage volume, in mebibytes per second (MiBps). This setting applies only to the General Purpose SSD gp3 storage type.
+            :param storage_type: The storage type for the additional storage volume.
+            :param volume_name: The name of the additional storage volume.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rds-dbinstance-additionalstoragevolume.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_rds as rds
+                
+                additional_storage_volume_property = rds.CfnDBInstance.AdditionalStorageVolumeProperty(
+                    allocated_storage="allocatedStorage",
+                    iops=123,
+                    max_allocated_storage=123,
+                    storage_throughput=123,
+                    storage_type="storageType",
+                    volume_name="volumeName"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__28ef177d6e6f3f5068e9ea87fe85b460492bed7697b4f762562d0b338158be30)
+                check_type(argname="argument allocated_storage", value=allocated_storage, expected_type=type_hints["allocated_storage"])
+                check_type(argname="argument iops", value=iops, expected_type=type_hints["iops"])
+                check_type(argname="argument max_allocated_storage", value=max_allocated_storage, expected_type=type_hints["max_allocated_storage"])
+                check_type(argname="argument storage_throughput", value=storage_throughput, expected_type=type_hints["storage_throughput"])
+                check_type(argname="argument storage_type", value=storage_type, expected_type=type_hints["storage_type"])
+                check_type(argname="argument volume_name", value=volume_name, expected_type=type_hints["volume_name"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if allocated_storage is not None:
+                self._values["allocated_storage"] = allocated_storage
+            if iops is not None:
+                self._values["iops"] = iops
+            if max_allocated_storage is not None:
+                self._values["max_allocated_storage"] = max_allocated_storage
+            if storage_throughput is not None:
+                self._values["storage_throughput"] = storage_throughput
+            if storage_type is not None:
+                self._values["storage_type"] = storage_type
+            if volume_name is not None:
+                self._values["volume_name"] = volume_name
+
+        @builtins.property
+        def allocated_storage(self) -> typing.Optional[builtins.str]:
+            '''The amount of storage allocated for the additional storage volume, in gibibytes (GiB).
+
+            The minimum is 20 GiB. The maximum is 65,536 GiB (64 TiB).
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rds-dbinstance-additionalstoragevolume.html#cfn-rds-dbinstance-additionalstoragevolume-allocatedstorage
+            '''
+            result = self._values.get("allocated_storage")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def iops(self) -> typing.Optional[jsii.Number]:
+            '''The number of I/O operations per second (IOPS) provisioned for the additional storage volume.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rds-dbinstance-additionalstoragevolume.html#cfn-rds-dbinstance-additionalstoragevolume-iops
+            '''
+            result = self._values.get("iops")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def max_allocated_storage(self) -> typing.Optional[jsii.Number]:
+            '''The upper limit in gibibytes (GiB) to which RDS can automatically scale the storage of the additional storage volume.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rds-dbinstance-additionalstoragevolume.html#cfn-rds-dbinstance-additionalstoragevolume-maxallocatedstorage
+            '''
+            result = self._values.get("max_allocated_storage")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def storage_throughput(self) -> typing.Optional[jsii.Number]:
+            '''The storage throughput value for the additional storage volume, in mebibytes per second (MiBps).
+
+            This setting applies only to the General Purpose SSD gp3 storage type.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rds-dbinstance-additionalstoragevolume.html#cfn-rds-dbinstance-additionalstoragevolume-storagethroughput
+            '''
+            result = self._values.get("storage_throughput")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def storage_type(self) -> typing.Optional[builtins.str]:
+            '''The storage type for the additional storage volume.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rds-dbinstance-additionalstoragevolume.html#cfn-rds-dbinstance-additionalstoragevolume-storagetype
+            '''
+            result = self._values.get("storage_type")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def volume_name(self) -> typing.Optional[builtins.str]:
+            '''The name of the additional storage volume.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rds-dbinstance-additionalstoragevolume.html#cfn-rds-dbinstance-additionalstoragevolume-volumename
+            '''
+            result = self._values.get("volume_name")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AdditionalStorageVolumeProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_rds.CfnDBInstance.CertificateDetailsProperty",
         jsii_struct_bases=[],
         name_mapping={"ca_identifier": "caIdentifier", "valid_till": "validTill"},
@@ -11931,6 +12163,7 @@ class CfnDBInstance(
     jsii_type="aws-cdk-lib.aws_rds.CfnDBInstanceProps",
     jsii_struct_bases=[],
     name_mapping={
+        "additional_storage_volumes": "additionalStorageVolumes",
         "allocated_storage": "allocatedStorage",
         "allow_major_version_upgrade": "allowMajorVersionUpgrade",
         "apply_immediately": "applyImmediately",
@@ -12019,6 +12252,7 @@ class CfnDBInstanceProps:
     def __init__(
         self,
         *,
+        additional_storage_volumes: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnDBInstance.AdditionalStorageVolumeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         allocated_storage: typing.Optional[builtins.str] = None,
         allow_major_version_upgrade: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
         apply_immediately: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
@@ -12104,6 +12338,7 @@ class CfnDBInstanceProps:
     ) -> None:
         '''Properties for defining a ``CfnDBInstance``.
 
+        :param additional_storage_volumes: 
         :param allocated_storage: The amount of storage in gibibytes (GiB) to be initially allocated for the database instance. .. epigraph:: If any value is set in the ``Iops`` parameter, ``AllocatedStorage`` must be at least 100 GiB, which corresponds to the minimum Iops value of 1,000. If you increase the ``Iops`` value (in 1,000 IOPS increments), then you must also increase the ``AllocatedStorage`` value (in 100-GiB increments). *Amazon Aurora* Not applicable. Aurora cluster volumes automatically grow as the amount of data in your database increases, though you are only charged for the space that you use in an Aurora cluster volume. *Db2* Constraints to the amount of storage for each storage type are the following: - General Purpose (SSD) storage (gp3): Must be an integer from 20 to 64000. - Provisioned IOPS storage (io1): Must be an integer from 100 to 64000. *MySQL* Constraints to the amount of storage for each storage type are the following: - General Purpose (SSD) storage (gp2): Must be an integer from 20 to 65536. - Provisioned IOPS storage (io1): Must be an integer from 100 to 65536. - Magnetic storage (standard): Must be an integer from 5 to 3072. *MariaDB* Constraints to the amount of storage for each storage type are the following: - General Purpose (SSD) storage (gp2): Must be an integer from 20 to 65536. - Provisioned IOPS storage (io1): Must be an integer from 100 to 65536. - Magnetic storage (standard): Must be an integer from 5 to 3072. *PostgreSQL* Constraints to the amount of storage for each storage type are the following: - General Purpose (SSD) storage (gp2): Must be an integer from 20 to 65536. - Provisioned IOPS storage (io1): Must be an integer from 100 to 65536. - Magnetic storage (standard): Must be an integer from 5 to 3072. *Oracle* Constraints to the amount of storage for each storage type are the following: - General Purpose (SSD) storage (gp2): Must be an integer from 20 to 65536. - Provisioned IOPS storage (io1): Must be an integer from 100 to 65536. - Magnetic storage (standard): Must be an integer from 10 to 3072. *SQL Server* Constraints to the amount of storage for each storage type are the following: - General Purpose (SSD) storage (gp2): - Enterprise and Standard editions: Must be an integer from 20 to 16384. - Web and Express editions: Must be an integer from 20 to 16384. - Provisioned IOPS storage (io1): - Enterprise and Standard editions: Must be an integer from 20 to 16384. - Web and Express editions: Must be an integer from 20 to 16384. - Magnetic storage (standard): - Enterprise and Standard editions: Must be an integer from 20 to 1024. - Web and Express editions: Must be an integer from 20 to 1024.
         :param allow_major_version_upgrade: A value that indicates whether major version upgrades are allowed. Changing this parameter doesn't result in an outage and the change is asynchronously applied as soon as possible. Constraints: Major version upgrades must be allowed when specifying a value for the ``EngineVersion`` parameter that is a different major version than the DB instance's current version.
         :param apply_immediately: Specifies whether changes to the DB instance and any pending modifications are applied immediately, regardless of the ``PreferredMaintenanceWindow`` setting. If set to ``false`` , changes are applied during the next maintenance window. Until RDS applies the changes, the DB instance remains in a drift state. As a result, the configuration doesn't fully reflect the requested modifications and temporarily diverges from the intended state. In addition to the settings described in `Modifying a DB instance <https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.DBInstance.Modifying.html>`_ , this property also determines whether the DB instance reboots when a static parameter is modified in the associated DB parameter group. Default: ``true``
@@ -12198,6 +12433,14 @@ class CfnDBInstanceProps:
             from aws_cdk import aws_rds as rds
             
             cfn_dBInstance_props = rds.CfnDBInstanceProps(
+                additional_storage_volumes=[rds.CfnDBInstance.AdditionalStorageVolumeProperty(
+                    allocated_storage="allocatedStorage",
+                    iops=123,
+                    max_allocated_storage=123,
+                    storage_throughput=123,
+                    storage_type="storageType",
+                    volume_name="volumeName"
+                )],
                 allocated_storage="allocatedStorage",
                 allow_major_version_upgrade=False,
                 apply_immediately=False,
@@ -12296,6 +12539,7 @@ class CfnDBInstanceProps:
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3bddb1be0bd1f1699e3a084c5859d94d8879ff15011f2f2eaac29ec16f6eaebc)
+            check_type(argname="argument additional_storage_volumes", value=additional_storage_volumes, expected_type=type_hints["additional_storage_volumes"])
             check_type(argname="argument allocated_storage", value=allocated_storage, expected_type=type_hints["allocated_storage"])
             check_type(argname="argument allow_major_version_upgrade", value=allow_major_version_upgrade, expected_type=type_hints["allow_major_version_upgrade"])
             check_type(argname="argument apply_immediately", value=apply_immediately, expected_type=type_hints["apply_immediately"])
@@ -12379,6 +12623,8 @@ class CfnDBInstanceProps:
             check_type(argname="argument use_latest_restorable_time", value=use_latest_restorable_time, expected_type=type_hints["use_latest_restorable_time"])
             check_type(argname="argument vpc_security_groups", value=vpc_security_groups, expected_type=type_hints["vpc_security_groups"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if additional_storage_volumes is not None:
+            self._values["additional_storage_volumes"] = additional_storage_volumes
         if allocated_storage is not None:
             self._values["allocated_storage"] = allocated_storage
         if allow_major_version_upgrade is not None:
@@ -12543,6 +12789,16 @@ class CfnDBInstanceProps:
             self._values["use_latest_restorable_time"] = use_latest_restorable_time
         if vpc_security_groups is not None:
             self._values["vpc_security_groups"] = vpc_security_groups
+
+    @builtins.property
+    def additional_storage_volumes(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDBInstance.AdditionalStorageVolumeProperty"]]]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbinstance.html#cfn-rds-dbinstance-additionalstoragevolumes
+        '''
+        result = self._values.get("additional_storage_volumes")
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnDBInstance.AdditionalStorageVolumeProperty"]]]], result)
 
     @builtins.property
     def allocated_storage(self) -> typing.Optional[builtins.str]:
@@ -20563,7 +20819,7 @@ class ClusterInstanceBindOptions:
         monitoring_role: typing.Optional["_IRoleRef_8400221f"] = None,
         promotion_tier: typing.Optional[jsii.Number] = None,
         removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
-        subnet_group: typing.Optional["ISubnetGroup"] = None,
+        subnet_group: typing.Optional["_IDBSubnetGroupRef_314322e0"] = None,
     ) -> None:
         '''Options for binding the instance to the cluster.
 
@@ -20582,16 +20838,17 @@ class ClusterInstanceBindOptions:
             import aws_cdk as cdk
             from aws_cdk import aws_rds as rds
             from aws_cdk.interfaces import aws_iam as interfaces_iam
+            from aws_cdk.interfaces import aws_rds as interfaces_rds
             
+            # d_bSubnet_group_ref: interfaces_rds.IDBSubnetGroupRef
             # role_ref: interfaces_iam.IRoleRef
-            # subnet_group: rds.SubnetGroup
             
             cluster_instance_bind_options = rds.ClusterInstanceBindOptions(
                 monitoring_interval=cdk.Duration.minutes(30),
                 monitoring_role=role_ref,
                 promotion_tier=123,
                 removal_policy=cdk.RemovalPolicy.DESTROY,
-                subnet_group=subnet_group
+                subnet_group=d_bSubnet_group_ref
             )
         '''
         if __debug__:
@@ -20656,7 +20913,7 @@ class ClusterInstanceBindOptions:
         return typing.cast(typing.Optional["_RemovalPolicy_9f93c814"], result)
 
     @builtins.property
-    def subnet_group(self) -> typing.Optional["ISubnetGroup"]:
+    def subnet_group(self) -> typing.Optional["_IDBSubnetGroupRef_314322e0"]:
         '''Existing subnet group for the cluster.
 
         This is only needed when using the isFromLegacyInstanceProps
@@ -20664,7 +20921,7 @@ class ClusterInstanceBindOptions:
         :default: - cluster subnet group is used
         '''
         result = self._values.get("subnet_group")
-        return typing.cast(typing.Optional["ISubnetGroup"], result)
+        return typing.cast(typing.Optional["_IDBSubnetGroupRef_314322e0"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -22594,18 +22851,19 @@ class DatabaseClusterEngine(
         # vpc: ec2.Vpc
         
         cluster = rds.DatabaseCluster(self, "Database",
-            engine=rds.DatabaseClusterEngine.aurora_mysql(
-                version=rds.AuroraMysqlEngineVersion.VER_3_03_0
+            engine=rds.DatabaseClusterEngine.aurora_mysql(version=rds.AuroraMysqlEngineVersion.VER_3_01_0),
+            credentials=rds.Credentials.from_generated_secret("clusteradmin"),  # Optional - will default to 'admin' username and generated password
+            writer=rds.ClusterInstance.provisioned("writer",
+                publicly_accessible=False
             ),
-            writer=rds.ClusterInstance.provisioned("writer"),
+            readers=[
+                rds.ClusterInstance.provisioned("reader1", promotion_tier=1),
+                rds.ClusterInstance.serverless_v2("reader2")
+            ],
+            vpc_subnets=ec2.SubnetSelection(
+                subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS
+            ),
             vpc=vpc
-        )
-        
-        proxy = rds.DatabaseProxy(self, "Proxy",
-            proxy_target=rds.ProxyTarget.from_cluster(cluster),
-            secrets=[cluster.secret],
-            vpc=vpc,
-            client_password_auth_type=rds.ClientPasswordAuthType.MYSQL_NATIVE_PASSWORD
         )
     '''
 
@@ -22809,7 +23067,7 @@ class DatabaseClusterFromSnapshotProps:
         storage_encrypted: typing.Optional[builtins.bool] = None,
         storage_encryption_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         storage_type: typing.Optional["DBClusterStorageType"] = None,
-        subnet_group: typing.Optional["ISubnetGroup"] = None,
+        subnet_group: typing.Optional["_IDBSubnetGroupRef_314322e0"] = None,
         vpc: typing.Optional["_IVpc_f30d5663"] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
         writer: typing.Optional["IClusterInstance"] = None,
@@ -23680,13 +23938,13 @@ class DatabaseClusterFromSnapshotProps:
         return typing.cast(typing.Optional["DBClusterStorageType"], result)
 
     @builtins.property
-    def subnet_group(self) -> typing.Optional["ISubnetGroup"]:
+    def subnet_group(self) -> typing.Optional["_IDBSubnetGroupRef_314322e0"]:
         '''Existing subnet group for the cluster.
 
         :default: - a new subnet group will be created.
         '''
         result = self._values.get("subnet_group")
-        return typing.cast(typing.Optional["ISubnetGroup"], result)
+        return typing.cast(typing.Optional["_IDBSubnetGroupRef_314322e0"], result)
 
     @builtins.property
     def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
@@ -23894,7 +24152,7 @@ class DatabaseClusterProps:
         storage_encrypted: typing.Optional[builtins.bool] = None,
         storage_encryption_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         storage_type: typing.Optional["DBClusterStorageType"] = None,
-        subnet_group: typing.Optional["ISubnetGroup"] = None,
+        subnet_group: typing.Optional["_IDBSubnetGroupRef_314322e0"] = None,
         vpc: typing.Optional["_IVpc_f30d5663"] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
         writer: typing.Optional["IClusterInstance"] = None,
@@ -24747,13 +25005,13 @@ class DatabaseClusterProps:
         return typing.cast(typing.Optional["DBClusterStorageType"], result)
 
     @builtins.property
-    def subnet_group(self) -> typing.Optional["ISubnetGroup"]:
+    def subnet_group(self) -> typing.Optional["_IDBSubnetGroupRef_314322e0"]:
         '''Existing subnet group for the cluster.
 
         :default: - a new subnet group will be created.
         '''
         result = self._values.get("subnet_group")
-        return typing.cast(typing.Optional["ISubnetGroup"], result)
+        return typing.cast(typing.Optional["_IDBSubnetGroupRef_314322e0"], result)
 
     @builtins.property
     def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
@@ -25371,7 +25629,7 @@ class DatabaseInstanceNewProps:
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         storage_throughput: typing.Optional[jsii.Number] = None,
         storage_type: typing.Optional["StorageType"] = None,
-        subnet_group: typing.Optional["ISubnetGroup"] = None,
+        subnet_group: typing.Optional["_IDBSubnetGroupRef_314322e0"] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Construction properties for a DatabaseInstanceNew.
@@ -25435,9 +25693,11 @@ class DatabaseInstanceNewProps:
             from aws_cdk import aws_s3 as s3
             from aws_cdk.interfaces import aws_iam as interfaces_iam
             from aws_cdk.interfaces import aws_kms as interfaces_kms
+            from aws_cdk.interfaces import aws_rds as interfaces_rds
             
             # bucket: s3.Bucket
             # ca_certificate: rds.CaCertificate
+            # d_bSubnet_group_ref: interfaces_rds.IDBSubnetGroupRef
             # key_ref: interfaces_kms.IKeyRef
             # option_group: rds.OptionGroup
             # parameter_group: rds.ParameterGroup
@@ -25446,7 +25706,6 @@ class DatabaseInstanceNewProps:
             # security_group: ec2.SecurityGroup
             # subnet: ec2.Subnet
             # subnet_filter: ec2.SubnetFilter
-            # subnet_group: rds.SubnetGroup
             # vpc: ec2.Vpc
             
             database_instance_new_props = rds.DatabaseInstanceNewProps(
@@ -25497,7 +25756,7 @@ class DatabaseInstanceNewProps:
                 security_groups=[security_group],
                 storage_throughput=123,
                 storage_type=rds.StorageType.STANDARD,
-                subnet_group=subnet_group,
+                subnet_group=d_bSubnet_group_ref,
                 vpc_subnets=ec2.SubnetSelection(
                     availability_zones=["availabilityZones"],
                     one_per_az=False,
@@ -26142,13 +26401,13 @@ class DatabaseInstanceNewProps:
         return typing.cast(typing.Optional["StorageType"], result)
 
     @builtins.property
-    def subnet_group(self) -> typing.Optional["ISubnetGroup"]:
+    def subnet_group(self) -> typing.Optional["_IDBSubnetGroupRef_314322e0"]:
         '''Existing subnet group for the instance.
 
         :default: - a new subnet group will be created.
         '''
         result = self._values.get("subnet_group")
-        return typing.cast(typing.Optional["ISubnetGroup"], result)
+        return typing.cast(typing.Optional["_IDBSubnetGroupRef_314322e0"], result)
 
     @builtins.property
     def vpc_subnets(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
@@ -26272,7 +26531,7 @@ class DatabaseInstanceReadReplicaProps(DatabaseInstanceNewProps):
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         storage_throughput: typing.Optional[jsii.Number] = None,
         storage_type: typing.Optional["StorageType"] = None,
-        subnet_group: typing.Optional["ISubnetGroup"] = None,
+        subnet_group: typing.Optional["_IDBSubnetGroupRef_314322e0"] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
         instance_type: "_InstanceType_f64915b9",
         source_database_instance: "IDatabaseInstance",
@@ -27000,13 +27259,13 @@ class DatabaseInstanceReadReplicaProps(DatabaseInstanceNewProps):
         return typing.cast(typing.Optional["StorageType"], result)
 
     @builtins.property
-    def subnet_group(self) -> typing.Optional["ISubnetGroup"]:
+    def subnet_group(self) -> typing.Optional["_IDBSubnetGroupRef_314322e0"]:
         '''Existing subnet group for the instance.
 
         :default: - a new subnet group will be created.
         '''
         result = self._values.get("subnet_group")
-        return typing.cast(typing.Optional["ISubnetGroup"], result)
+        return typing.cast(typing.Optional["_IDBSubnetGroupRef_314322e0"], result)
 
     @builtins.property
     def vpc_subnets(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
@@ -27178,7 +27437,7 @@ class DatabaseInstanceSourceProps(DatabaseInstanceNewProps):
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         storage_throughput: typing.Optional[jsii.Number] = None,
         storage_type: typing.Optional["StorageType"] = None,
-        subnet_group: typing.Optional["ISubnetGroup"] = None,
+        subnet_group: typing.Optional["_IDBSubnetGroupRef_314322e0"] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
         engine: "IInstanceEngine",
         allocated_storage: typing.Optional[jsii.Number] = None,
@@ -27258,9 +27517,11 @@ class DatabaseInstanceSourceProps(DatabaseInstanceNewProps):
             from aws_cdk import aws_s3 as s3
             from aws_cdk.interfaces import aws_iam as interfaces_iam
             from aws_cdk.interfaces import aws_kms as interfaces_kms
+            from aws_cdk.interfaces import aws_rds as interfaces_rds
             
             # bucket: s3.Bucket
             # ca_certificate: rds.CaCertificate
+            # d_bSubnet_group_ref: interfaces_rds.IDBSubnetGroupRef
             # instance_engine: rds.IInstanceEngine
             # instance_type: ec2.InstanceType
             # key_ref: interfaces_kms.IKeyRef
@@ -27271,7 +27532,6 @@ class DatabaseInstanceSourceProps(DatabaseInstanceNewProps):
             # security_group: ec2.SecurityGroup
             # subnet: ec2.Subnet
             # subnet_filter: ec2.SubnetFilter
-            # subnet_group: rds.SubnetGroup
             # vpc: ec2.Vpc
             
             database_instance_source_props = rds.DatabaseInstanceSourceProps(
@@ -27331,7 +27591,7 @@ class DatabaseInstanceSourceProps(DatabaseInstanceNewProps):
                 security_groups=[security_group],
                 storage_throughput=123,
                 storage_type=rds.StorageType.STANDARD,
-                subnet_group=subnet_group,
+                subnet_group=d_bSubnet_group_ref,
                 timezone="timezone",
                 vpc_subnets=ec2.SubnetSelection(
                     availability_zones=["availabilityZones"],
@@ -28000,13 +28260,13 @@ class DatabaseInstanceSourceProps(DatabaseInstanceNewProps):
         return typing.cast(typing.Optional["StorageType"], result)
 
     @builtins.property
-    def subnet_group(self) -> typing.Optional["ISubnetGroup"]:
+    def subnet_group(self) -> typing.Optional["_IDBSubnetGroupRef_314322e0"]:
         '''Existing subnet group for the instance.
 
         :default: - a new subnet group will be created.
         '''
         result = self._values.get("subnet_group")
-        return typing.cast(typing.Optional["ISubnetGroup"], result)
+        return typing.cast(typing.Optional["_IDBSubnetGroupRef_314322e0"], result)
 
     @builtins.property
     def vpc_subnets(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
@@ -28430,7 +28690,7 @@ class DatabaseProxyEndpointProps(DatabaseProxyEndpointOptions):
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         target_role: typing.Optional["ProxyEndpointTargetRole"] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
-        db_proxy: "IDatabaseProxy",
+        db_proxy: "_IDBProxyRef_97300f25",
     ) -> None:
         '''Construction properties for a DatabaseProxyEndpoint.
 
@@ -28449,15 +28709,16 @@ class DatabaseProxyEndpointProps(DatabaseProxyEndpointOptions):
             # The values are placeholders you should change.
             from aws_cdk import aws_ec2 as ec2
             from aws_cdk import aws_rds as rds
+            from aws_cdk.interfaces import aws_rds as interfaces_rds
             
-            # database_proxy: rds.DatabaseProxy
+            # d_bProxy_ref: interfaces_rds.IDBProxyRef
             # security_group: ec2.SecurityGroup
             # subnet: ec2.Subnet
             # subnet_filter: ec2.SubnetFilter
             # vpc: ec2.Vpc
             
             database_proxy_endpoint_props = rds.DatabaseProxyEndpointProps(
-                db_proxy=database_proxy,
+                db_proxy=d_bProxy_ref,
                 vpc=vpc,
             
                 # the properties below are optional
@@ -28543,11 +28804,11 @@ class DatabaseProxyEndpointProps(DatabaseProxyEndpointOptions):
         return typing.cast(typing.Optional["_SubnetSelection_e57d76df"], result)
 
     @builtins.property
-    def db_proxy(self) -> "IDatabaseProxy":
+    def db_proxy(self) -> "_IDBProxyRef_97300f25":
         '''The DB proxy associated with the DB proxy endpoint.'''
         result = self._values.get("db_proxy")
         assert result is not None, "Required property 'db_proxy' is missing"
-        return typing.cast("IDatabaseProxy", result)
+        return typing.cast("_IDBProxyRef_97300f25", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -28565,12 +28826,12 @@ class DatabaseProxyEndpointProps(DatabaseProxyEndpointOptions):
     jsii_type="aws-cdk-lib.aws_rds.DatabaseProxyOptions",
     jsii_struct_bases=[],
     name_mapping={
-        "secrets": "secrets",
         "vpc": "vpc",
         "borrow_timeout": "borrowTimeout",
         "client_password_auth_type": "clientPasswordAuthType",
         "db_proxy_name": "dbProxyName",
         "debug_logging": "debugLogging",
+        "default_auth_scheme": "defaultAuthScheme",
         "iam_auth": "iamAuth",
         "idle_client_timeout": "idleClientTimeout",
         "init_query": "initQuery",
@@ -28578,6 +28839,7 @@ class DatabaseProxyEndpointProps(DatabaseProxyEndpointOptions):
         "max_idle_connections_percent": "maxIdleConnectionsPercent",
         "require_tls": "requireTLS",
         "role": "role",
+        "secrets": "secrets",
         "security_groups": "securityGroups",
         "session_pinning_filters": "sessionPinningFilters",
         "vpc_subnets": "vpcSubnets",
@@ -28587,12 +28849,12 @@ class DatabaseProxyOptions:
     def __init__(
         self,
         *,
-        secrets: typing.Sequence["_ISecret_6e020e6a"],
         vpc: "_IVpc_f30d5663",
         borrow_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         client_password_auth_type: typing.Optional["ClientPasswordAuthType"] = None,
         db_proxy_name: typing.Optional[builtins.str] = None,
         debug_logging: typing.Optional[builtins.bool] = None,
+        default_auth_scheme: typing.Optional["DefaultAuthScheme"] = None,
         iam_auth: typing.Optional[builtins.bool] = None,
         idle_client_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         init_query: typing.Optional[builtins.str] = None,
@@ -28600,18 +28862,19 @@ class DatabaseProxyOptions:
         max_idle_connections_percent: typing.Optional[jsii.Number] = None,
         require_tls: typing.Optional[builtins.bool] = None,
         role: typing.Optional["_IRole_235f5d8e"] = None,
+        secrets: typing.Optional[typing.Sequence["_ISecret_6e020e6a"]] = None,
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         session_pinning_filters: typing.Optional[typing.Sequence["SessionPinningFilter"]] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Options for a new DatabaseProxy.
 
-        :param secrets: The secret that the proxy uses to authenticate to the RDS DB instance or Aurora DB cluster. These secrets are stored within Amazon Secrets Manager. One or more secrets are required.
         :param vpc: The VPC to associate with the new proxy.
         :param borrow_timeout: The duration for a proxy to wait for a connection to become available in the connection pool. Only applies when the proxy has opened its maximum number of connections and all connections are busy with client sessions. Value must be between 1 second and 1 hour, or ``Duration.seconds(0)`` to represent unlimited. Default: cdk.Duration.seconds(120)
         :param client_password_auth_type: Specifies the details of authentication used by a proxy to log in as a specific database user. Default: - CloudFormation defaults will apply given the specified database engine.
         :param db_proxy_name: The identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens. Default: - Generated by CloudFormation (recommended)
         :param debug_logging: Whether the proxy includes detailed information about SQL statements in its logs. This information helps you to debug issues involving SQL behavior or the performance and scalability of the proxy connections. The debug information includes the text of SQL statements that you submit through the proxy. Thus, only enable this setting when needed for debugging, and only when you have security measures in place to safeguard any sensitive information that appears in the logs. Default: false
+        :param default_auth_scheme: The default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database. When set to ``DefaultAuthScheme.IAM_AUTH``, the proxy uses end-to-end IAM authentication to connect to the database. Default: DefaultAuthScheme.NONE
         :param iam_auth: Whether to require or disallow AWS Identity and Access Management (IAM) authentication for connections to the proxy. Default: false
         :param idle_client_timeout: The number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database. Default: cdk.Duration.minutes(30)
         :param init_query: One or more SQL statements for the proxy to run when opening each new database connection. Typically used with SET statements to make sure that each connection has identical settings such as time zone and character set. For multiple statements, use semicolons as the separator. You can also include multiple variables in a single SET statement, such as SET x=1, y=2. not currently supported for PostgreSQL. Default: - no initialization query
@@ -28619,6 +28882,7 @@ class DatabaseProxyOptions:
         :param max_idle_connections_percent: Controls how actively the proxy closes idle database connections in the connection pool. A high value enables the proxy to leave a high percentage of idle connections open. A low value causes the proxy to close idle client connections and return the underlying database connections to the connection pool. For Aurora MySQL, it is expressed as a percentage of the max_connections setting for the RDS DB instance or Aurora DB cluster used by the target group. between 0 and MaxConnectionsPercent Default: 50
         :param require_tls: A Boolean parameter that specifies whether Transport Layer Security (TLS) encryption is required for connections to the proxy. By enabling this setting, you can enforce encrypted TLS connections to the proxy. Default: true
         :param role: IAM role that the proxy uses to access secrets in AWS Secrets Manager. Default: - A role will automatically be created
+        :param secrets: The secret that the proxy uses to authenticate to the RDS DB instance or Aurora DB cluster. These secrets are stored within Amazon Secrets Manager. One or more secrets are required when defaultAuthScheme is ``DefaultAuthScheme.NONE``. Default: None
         :param security_groups: One or more VPC security groups to associate with the new proxy. Default: - No security groups
         :param session_pinning_filters: Each item in the list represents a class of SQL operations that normally cause all later statements in a session using a proxy to be pinned to the same underlying database connection. Including an item in the list exempts that class of SQL operations from the pinning behavior. Default: - no session pinning filters
         :param vpc_subnets: The subnets used by the proxy. Default: - the VPC default strategy if not specified.
@@ -28644,12 +28908,12 @@ class DatabaseProxyOptions:
             vpc_subnets = _SubnetSelection_e57d76df(**vpc_subnets)
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b1364fc4a6f282f0983046855ebcccd28a886dcf87529b7c1467315707b87031)
-            check_type(argname="argument secrets", value=secrets, expected_type=type_hints["secrets"])
             check_type(argname="argument vpc", value=vpc, expected_type=type_hints["vpc"])
             check_type(argname="argument borrow_timeout", value=borrow_timeout, expected_type=type_hints["borrow_timeout"])
             check_type(argname="argument client_password_auth_type", value=client_password_auth_type, expected_type=type_hints["client_password_auth_type"])
             check_type(argname="argument db_proxy_name", value=db_proxy_name, expected_type=type_hints["db_proxy_name"])
             check_type(argname="argument debug_logging", value=debug_logging, expected_type=type_hints["debug_logging"])
+            check_type(argname="argument default_auth_scheme", value=default_auth_scheme, expected_type=type_hints["default_auth_scheme"])
             check_type(argname="argument iam_auth", value=iam_auth, expected_type=type_hints["iam_auth"])
             check_type(argname="argument idle_client_timeout", value=idle_client_timeout, expected_type=type_hints["idle_client_timeout"])
             check_type(argname="argument init_query", value=init_query, expected_type=type_hints["init_query"])
@@ -28657,11 +28921,11 @@ class DatabaseProxyOptions:
             check_type(argname="argument max_idle_connections_percent", value=max_idle_connections_percent, expected_type=type_hints["max_idle_connections_percent"])
             check_type(argname="argument require_tls", value=require_tls, expected_type=type_hints["require_tls"])
             check_type(argname="argument role", value=role, expected_type=type_hints["role"])
+            check_type(argname="argument secrets", value=secrets, expected_type=type_hints["secrets"])
             check_type(argname="argument security_groups", value=security_groups, expected_type=type_hints["security_groups"])
             check_type(argname="argument session_pinning_filters", value=session_pinning_filters, expected_type=type_hints["session_pinning_filters"])
             check_type(argname="argument vpc_subnets", value=vpc_subnets, expected_type=type_hints["vpc_subnets"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "secrets": secrets,
             "vpc": vpc,
         }
         if borrow_timeout is not None:
@@ -28672,6 +28936,8 @@ class DatabaseProxyOptions:
             self._values["db_proxy_name"] = db_proxy_name
         if debug_logging is not None:
             self._values["debug_logging"] = debug_logging
+        if default_auth_scheme is not None:
+            self._values["default_auth_scheme"] = default_auth_scheme
         if iam_auth is not None:
             self._values["iam_auth"] = iam_auth
         if idle_client_timeout is not None:
@@ -28686,23 +28952,14 @@ class DatabaseProxyOptions:
             self._values["require_tls"] = require_tls
         if role is not None:
             self._values["role"] = role
+        if secrets is not None:
+            self._values["secrets"] = secrets
         if security_groups is not None:
             self._values["security_groups"] = security_groups
         if session_pinning_filters is not None:
             self._values["session_pinning_filters"] = session_pinning_filters
         if vpc_subnets is not None:
             self._values["vpc_subnets"] = vpc_subnets
-
-    @builtins.property
-    def secrets(self) -> typing.List["_ISecret_6e020e6a"]:
-        '''The secret that the proxy uses to authenticate to the RDS DB instance or Aurora DB cluster.
-
-        These secrets are stored within Amazon Secrets Manager.
-        One or more secrets are required.
-        '''
-        result = self._values.get("secrets")
-        assert result is not None, "Required property 'secrets' is missing"
-        return typing.cast(typing.List["_ISecret_6e020e6a"], result)
 
     @builtins.property
     def vpc(self) -> "_IVpc_f30d5663":
@@ -28760,6 +29017,17 @@ class DatabaseProxyOptions:
         '''
         result = self._values.get("debug_logging")
         return typing.cast(typing.Optional[builtins.bool], result)
+
+    @builtins.property
+    def default_auth_scheme(self) -> typing.Optional["DefaultAuthScheme"]:
+        '''The default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database.
+
+        When set to ``DefaultAuthScheme.IAM_AUTH``, the proxy uses end-to-end IAM authentication to connect to the database.
+
+        :default: DefaultAuthScheme.NONE
+        '''
+        result = self._values.get("default_auth_scheme")
+        return typing.cast(typing.Optional["DefaultAuthScheme"], result)
 
     @builtins.property
     def iam_auth(self) -> typing.Optional[builtins.bool]:
@@ -28847,6 +29115,18 @@ class DatabaseProxyOptions:
         '''
         result = self._values.get("role")
         return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
+
+    @builtins.property
+    def secrets(self) -> typing.Optional[typing.List["_ISecret_6e020e6a"]]:
+        '''The secret that the proxy uses to authenticate to the RDS DB instance or Aurora DB cluster.
+
+        These secrets are stored within Amazon Secrets Manager.
+        One or more secrets are required when defaultAuthScheme is ``DefaultAuthScheme.NONE``.
+
+        :default: None
+        '''
+        result = self._values.get("secrets")
+        return typing.cast(typing.Optional[typing.List["_ISecret_6e020e6a"]], result)
 
     @builtins.property
     def security_groups(
@@ -28897,12 +29177,12 @@ class DatabaseProxyOptions:
     jsii_type="aws-cdk-lib.aws_rds.DatabaseProxyProps",
     jsii_struct_bases=[DatabaseProxyOptions],
     name_mapping={
-        "secrets": "secrets",
         "vpc": "vpc",
         "borrow_timeout": "borrowTimeout",
         "client_password_auth_type": "clientPasswordAuthType",
         "db_proxy_name": "dbProxyName",
         "debug_logging": "debugLogging",
+        "default_auth_scheme": "defaultAuthScheme",
         "iam_auth": "iamAuth",
         "idle_client_timeout": "idleClientTimeout",
         "init_query": "initQuery",
@@ -28910,6 +29190,7 @@ class DatabaseProxyOptions:
         "max_idle_connections_percent": "maxIdleConnectionsPercent",
         "require_tls": "requireTLS",
         "role": "role",
+        "secrets": "secrets",
         "security_groups": "securityGroups",
         "session_pinning_filters": "sessionPinningFilters",
         "vpc_subnets": "vpcSubnets",
@@ -28920,12 +29201,12 @@ class DatabaseProxyProps(DatabaseProxyOptions):
     def __init__(
         self,
         *,
-        secrets: typing.Sequence["_ISecret_6e020e6a"],
         vpc: "_IVpc_f30d5663",
         borrow_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         client_password_auth_type: typing.Optional["ClientPasswordAuthType"] = None,
         db_proxy_name: typing.Optional[builtins.str] = None,
         debug_logging: typing.Optional[builtins.bool] = None,
+        default_auth_scheme: typing.Optional["DefaultAuthScheme"] = None,
         iam_auth: typing.Optional[builtins.bool] = None,
         idle_client_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         init_query: typing.Optional[builtins.str] = None,
@@ -28933,6 +29214,7 @@ class DatabaseProxyProps(DatabaseProxyOptions):
         max_idle_connections_percent: typing.Optional[jsii.Number] = None,
         require_tls: typing.Optional[builtins.bool] = None,
         role: typing.Optional["_IRole_235f5d8e"] = None,
+        secrets: typing.Optional[typing.Sequence["_ISecret_6e020e6a"]] = None,
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         session_pinning_filters: typing.Optional[typing.Sequence["SessionPinningFilter"]] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -28940,12 +29222,12 @@ class DatabaseProxyProps(DatabaseProxyOptions):
     ) -> None:
         '''Construction properties for a DatabaseProxy.
 
-        :param secrets: The secret that the proxy uses to authenticate to the RDS DB instance or Aurora DB cluster. These secrets are stored within Amazon Secrets Manager. One or more secrets are required.
         :param vpc: The VPC to associate with the new proxy.
         :param borrow_timeout: The duration for a proxy to wait for a connection to become available in the connection pool. Only applies when the proxy has opened its maximum number of connections and all connections are busy with client sessions. Value must be between 1 second and 1 hour, or ``Duration.seconds(0)`` to represent unlimited. Default: cdk.Duration.seconds(120)
         :param client_password_auth_type: Specifies the details of authentication used by a proxy to log in as a specific database user. Default: - CloudFormation defaults will apply given the specified database engine.
         :param db_proxy_name: The identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens. Default: - Generated by CloudFormation (recommended)
         :param debug_logging: Whether the proxy includes detailed information about SQL statements in its logs. This information helps you to debug issues involving SQL behavior or the performance and scalability of the proxy connections. The debug information includes the text of SQL statements that you submit through the proxy. Thus, only enable this setting when needed for debugging, and only when you have security measures in place to safeguard any sensitive information that appears in the logs. Default: false
+        :param default_auth_scheme: The default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database. When set to ``DefaultAuthScheme.IAM_AUTH``, the proxy uses end-to-end IAM authentication to connect to the database. Default: DefaultAuthScheme.NONE
         :param iam_auth: Whether to require or disallow AWS Identity and Access Management (IAM) authentication for connections to the proxy. Default: false
         :param idle_client_timeout: The number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database. Default: cdk.Duration.minutes(30)
         :param init_query: One or more SQL statements for the proxy to run when opening each new database connection. Typically used with SET statements to make sure that each connection has identical settings such as time zone and character set. For multiple statements, use semicolons as the separator. You can also include multiple variables in a single SET statement, such as SET x=1, y=2. not currently supported for PostgreSQL. Default: - no initialization query
@@ -28953,6 +29235,7 @@ class DatabaseProxyProps(DatabaseProxyOptions):
         :param max_idle_connections_percent: Controls how actively the proxy closes idle database connections in the connection pool. A high value enables the proxy to leave a high percentage of idle connections open. A low value causes the proxy to close idle client connections and return the underlying database connections to the connection pool. For Aurora MySQL, it is expressed as a percentage of the max_connections setting for the RDS DB instance or Aurora DB cluster used by the target group. between 0 and MaxConnectionsPercent Default: 50
         :param require_tls: A Boolean parameter that specifies whether Transport Layer Security (TLS) encryption is required for connections to the proxy. By enabling this setting, you can enforce encrypted TLS connections to the proxy. Default: true
         :param role: IAM role that the proxy uses to access secrets in AWS Secrets Manager. Default: - A role will automatically be created
+        :param secrets: The secret that the proxy uses to authenticate to the RDS DB instance or Aurora DB cluster. These secrets are stored within Amazon Secrets Manager. One or more secrets are required when defaultAuthScheme is ``DefaultAuthScheme.NONE``. Default: None
         :param security_groups: One or more VPC security groups to associate with the new proxy. Default: - No security groups
         :param session_pinning_filters: Each item in the list represents a class of SQL operations that normally cause all later statements in a session using a proxy to be pinned to the same underlying database connection. Including an item in the list exempts that class of SQL operations from the pinning behavior. Default: - no session pinning filters
         :param vpc_subnets: The subnets used by the proxy. Default: - the VPC default strategy if not specified.
@@ -28964,33 +29247,34 @@ class DatabaseProxyProps(DatabaseProxyOptions):
 
             # vpc: ec2.Vpc
             
-            cluster = rds.DatabaseCluster(self, "Database",
-                engine=rds.DatabaseClusterEngine.aurora_mysql(
-                    version=rds.AuroraMysqlEngineVersion.VER_3_03_0
+            instance = rds.DatabaseInstance(self, "Database",
+                engine=rds.DatabaseInstanceEngine.postgres(
+                    version=rds.PostgresEngineVersion.VER_17_7
                 ),
-                writer=rds.ClusterInstance.provisioned("writer"),
-                vpc=vpc
+                vpc=vpc,
+                iam_authentication=True
             )
             
             proxy = rds.DatabaseProxy(self, "Proxy",
-                proxy_target=rds.ProxyTarget.from_cluster(cluster),
-                secrets=[cluster.secret],
-                vpc=vpc
+                proxy_target=rds.ProxyTarget.from_instance(instance),
+                vpc=vpc,
+                default_auth_scheme=rds.DefaultAuthScheme.IAM_AUTH
             )
             
-            role = iam.Role(self, "DBProxyRole", assumed_by=iam.AccountPrincipal(self.account))
-            proxy.grant_connect(role, "admin")
+            # Grant IAM permissions for database connection
+            role = iam.Role(self, "DBRole", assumed_by=iam.AccountPrincipal(self.account))
+            proxy.grant_connect(role, "database-user")
         '''
         if isinstance(vpc_subnets, dict):
             vpc_subnets = _SubnetSelection_e57d76df(**vpc_subnets)
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9c2a07edd3cc888abd237aad605bd4ef9d0dcee9338dbfb923f0d5488a6fa93a)
-            check_type(argname="argument secrets", value=secrets, expected_type=type_hints["secrets"])
             check_type(argname="argument vpc", value=vpc, expected_type=type_hints["vpc"])
             check_type(argname="argument borrow_timeout", value=borrow_timeout, expected_type=type_hints["borrow_timeout"])
             check_type(argname="argument client_password_auth_type", value=client_password_auth_type, expected_type=type_hints["client_password_auth_type"])
             check_type(argname="argument db_proxy_name", value=db_proxy_name, expected_type=type_hints["db_proxy_name"])
             check_type(argname="argument debug_logging", value=debug_logging, expected_type=type_hints["debug_logging"])
+            check_type(argname="argument default_auth_scheme", value=default_auth_scheme, expected_type=type_hints["default_auth_scheme"])
             check_type(argname="argument iam_auth", value=iam_auth, expected_type=type_hints["iam_auth"])
             check_type(argname="argument idle_client_timeout", value=idle_client_timeout, expected_type=type_hints["idle_client_timeout"])
             check_type(argname="argument init_query", value=init_query, expected_type=type_hints["init_query"])
@@ -28998,12 +29282,12 @@ class DatabaseProxyProps(DatabaseProxyOptions):
             check_type(argname="argument max_idle_connections_percent", value=max_idle_connections_percent, expected_type=type_hints["max_idle_connections_percent"])
             check_type(argname="argument require_tls", value=require_tls, expected_type=type_hints["require_tls"])
             check_type(argname="argument role", value=role, expected_type=type_hints["role"])
+            check_type(argname="argument secrets", value=secrets, expected_type=type_hints["secrets"])
             check_type(argname="argument security_groups", value=security_groups, expected_type=type_hints["security_groups"])
             check_type(argname="argument session_pinning_filters", value=session_pinning_filters, expected_type=type_hints["session_pinning_filters"])
             check_type(argname="argument vpc_subnets", value=vpc_subnets, expected_type=type_hints["vpc_subnets"])
             check_type(argname="argument proxy_target", value=proxy_target, expected_type=type_hints["proxy_target"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "secrets": secrets,
             "vpc": vpc,
             "proxy_target": proxy_target,
         }
@@ -29015,6 +29299,8 @@ class DatabaseProxyProps(DatabaseProxyOptions):
             self._values["db_proxy_name"] = db_proxy_name
         if debug_logging is not None:
             self._values["debug_logging"] = debug_logging
+        if default_auth_scheme is not None:
+            self._values["default_auth_scheme"] = default_auth_scheme
         if iam_auth is not None:
             self._values["iam_auth"] = iam_auth
         if idle_client_timeout is not None:
@@ -29029,23 +29315,14 @@ class DatabaseProxyProps(DatabaseProxyOptions):
             self._values["require_tls"] = require_tls
         if role is not None:
             self._values["role"] = role
+        if secrets is not None:
+            self._values["secrets"] = secrets
         if security_groups is not None:
             self._values["security_groups"] = security_groups
         if session_pinning_filters is not None:
             self._values["session_pinning_filters"] = session_pinning_filters
         if vpc_subnets is not None:
             self._values["vpc_subnets"] = vpc_subnets
-
-    @builtins.property
-    def secrets(self) -> typing.List["_ISecret_6e020e6a"]:
-        '''The secret that the proxy uses to authenticate to the RDS DB instance or Aurora DB cluster.
-
-        These secrets are stored within Amazon Secrets Manager.
-        One or more secrets are required.
-        '''
-        result = self._values.get("secrets")
-        assert result is not None, "Required property 'secrets' is missing"
-        return typing.cast(typing.List["_ISecret_6e020e6a"], result)
 
     @builtins.property
     def vpc(self) -> "_IVpc_f30d5663":
@@ -29103,6 +29380,17 @@ class DatabaseProxyProps(DatabaseProxyOptions):
         '''
         result = self._values.get("debug_logging")
         return typing.cast(typing.Optional[builtins.bool], result)
+
+    @builtins.property
+    def default_auth_scheme(self) -> typing.Optional["DefaultAuthScheme"]:
+        '''The default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database.
+
+        When set to ``DefaultAuthScheme.IAM_AUTH``, the proxy uses end-to-end IAM authentication to connect to the database.
+
+        :default: DefaultAuthScheme.NONE
+        '''
+        result = self._values.get("default_auth_scheme")
+        return typing.cast(typing.Optional["DefaultAuthScheme"], result)
 
     @builtins.property
     def iam_auth(self) -> typing.Optional[builtins.bool]:
@@ -29190,6 +29478,18 @@ class DatabaseProxyProps(DatabaseProxyOptions):
         '''
         result = self._values.get("role")
         return typing.cast(typing.Optional["_IRole_235f5d8e"], result)
+
+    @builtins.property
+    def secrets(self) -> typing.Optional[typing.List["_ISecret_6e020e6a"]]:
+        '''The secret that the proxy uses to authenticate to the RDS DB instance or Aurora DB cluster.
+
+        These secrets are stored within Amazon Secrets Manager.
+        One or more secrets are required when defaultAuthScheme is ``DefaultAuthScheme.NONE``.
+
+        :default: None
+        '''
+        result = self._values.get("secrets")
+        return typing.cast(typing.Optional[typing.List["_ISecret_6e020e6a"]], result)
 
     @builtins.property
     def security_groups(
@@ -29583,6 +29883,41 @@ class DatabaseSecretProps:
         )
 
 
+@jsii.enum(jsii_type="aws-cdk-lib.aws_rds.DefaultAuthScheme")
+class DefaultAuthScheme(enum.Enum):
+    '''The default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        # vpc: ec2.Vpc
+        
+        instance = rds.DatabaseInstance(self, "Database",
+            engine=rds.DatabaseInstanceEngine.postgres(
+                version=rds.PostgresEngineVersion.VER_17_7
+            ),
+            vpc=vpc,
+            iam_authentication=True
+        )
+        
+        proxy = rds.DatabaseProxy(self, "Proxy",
+            proxy_target=rds.ProxyTarget.from_instance(instance),
+            vpc=vpc,
+            default_auth_scheme=rds.DefaultAuthScheme.IAM_AUTH
+        )
+        
+        # Grant IAM permissions for database connection
+        role = iam.Role(self, "DBRole", assumed_by=iam.AccountPrincipal(self.account))
+        proxy.grant_connect(role, "database-user")
+    '''
+
+    IAM_AUTH = "IAM_AUTH"
+    '''IAM authentication.'''
+    NONE = "NONE"
+    '''No default authentication.'''
+
+
 class Endpoint(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_rds.Endpoint"):
     '''Connection endpoint of a database cluster or instance.
 
@@ -29732,7 +30067,11 @@ class EngineVersion:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rds.IAuroraClusterInstance")
-class IAuroraClusterInstance(_IResource_c80c4260, typing_extensions.Protocol):
+class IAuroraClusterInstance(
+    _IResource_c80c4260,
+    _IDBInstanceRef_10d60cd7,
+    typing_extensions.Protocol,
+):
     '''An Aurora Cluster Instance.'''
 
     @builtins.property
@@ -29800,6 +30139,7 @@ class IAuroraClusterInstance(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IAuroraClusterInstanceProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IDBInstanceRef_10d60cd7), # type: ignore[misc]
 ):
     '''An Aurora Cluster Instance.'''
 
@@ -29885,7 +30225,7 @@ class IClusterInstance(typing_extensions.Protocol):
         monitoring_role: typing.Optional["_IRoleRef_8400221f"] = None,
         promotion_tier: typing.Optional[jsii.Number] = None,
         removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
-        subnet_group: typing.Optional["ISubnetGroup"] = None,
+        subnet_group: typing.Optional["_IDBSubnetGroupRef_314322e0"] = None,
     ) -> "IAuroraClusterInstance":
         '''Create the database instance within the provided cluster.
 
@@ -29915,7 +30255,7 @@ class _IClusterInstanceProxy:
         monitoring_role: typing.Optional["_IRoleRef_8400221f"] = None,
         promotion_tier: typing.Optional[jsii.Number] = None,
         removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
-        subnet_group: typing.Optional["ISubnetGroup"] = None,
+        subnet_group: typing.Optional["_IDBSubnetGroupRef_314322e0"] = None,
     ) -> "IAuroraClusterInstance":
         '''Create the database instance within the provided cluster.
 
@@ -29950,6 +30290,7 @@ class IDatabaseCluster(
     _IResource_c80c4260,
     _IConnectable_10015a05,
     _ISecretAttachmentTarget_123e2df9,
+    _IDBClusterRef_ebf419fe,
     typing_extensions.Protocol,
 ):
     '''Create a clustered database with a given number of instances.'''
@@ -30019,12 +30360,12 @@ class IDatabaseCluster(
         self,
         id: builtins.str,
         *,
-        secrets: typing.Sequence["_ISecret_6e020e6a"],
         vpc: "_IVpc_f30d5663",
         borrow_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         client_password_auth_type: typing.Optional["ClientPasswordAuthType"] = None,
         db_proxy_name: typing.Optional[builtins.str] = None,
         debug_logging: typing.Optional[builtins.bool] = None,
+        default_auth_scheme: typing.Optional["DefaultAuthScheme"] = None,
         iam_auth: typing.Optional[builtins.bool] = None,
         idle_client_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         init_query: typing.Optional[builtins.str] = None,
@@ -30032,6 +30373,7 @@ class IDatabaseCluster(
         max_idle_connections_percent: typing.Optional[jsii.Number] = None,
         require_tls: typing.Optional[builtins.bool] = None,
         role: typing.Optional["_IRole_235f5d8e"] = None,
+        secrets: typing.Optional[typing.Sequence["_ISecret_6e020e6a"]] = None,
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         session_pinning_filters: typing.Optional[typing.Sequence["SessionPinningFilter"]] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -30039,12 +30381,12 @@ class IDatabaseCluster(
         '''Add a new db proxy to this cluster.
 
         :param id: -
-        :param secrets: The secret that the proxy uses to authenticate to the RDS DB instance or Aurora DB cluster. These secrets are stored within Amazon Secrets Manager. One or more secrets are required.
         :param vpc: The VPC to associate with the new proxy.
         :param borrow_timeout: The duration for a proxy to wait for a connection to become available in the connection pool. Only applies when the proxy has opened its maximum number of connections and all connections are busy with client sessions. Value must be between 1 second and 1 hour, or ``Duration.seconds(0)`` to represent unlimited. Default: cdk.Duration.seconds(120)
         :param client_password_auth_type: Specifies the details of authentication used by a proxy to log in as a specific database user. Default: - CloudFormation defaults will apply given the specified database engine.
         :param db_proxy_name: The identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens. Default: - Generated by CloudFormation (recommended)
         :param debug_logging: Whether the proxy includes detailed information about SQL statements in its logs. This information helps you to debug issues involving SQL behavior or the performance and scalability of the proxy connections. The debug information includes the text of SQL statements that you submit through the proxy. Thus, only enable this setting when needed for debugging, and only when you have security measures in place to safeguard any sensitive information that appears in the logs. Default: false
+        :param default_auth_scheme: The default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database. When set to ``DefaultAuthScheme.IAM_AUTH``, the proxy uses end-to-end IAM authentication to connect to the database. Default: DefaultAuthScheme.NONE
         :param iam_auth: Whether to require or disallow AWS Identity and Access Management (IAM) authentication for connections to the proxy. Default: false
         :param idle_client_timeout: The number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database. Default: cdk.Duration.minutes(30)
         :param init_query: One or more SQL statements for the proxy to run when opening each new database connection. Typically used with SET statements to make sure that each connection has identical settings such as time zone and character set. For multiple statements, use semicolons as the separator. You can also include multiple variables in a single SET statement, such as SET x=1, y=2. not currently supported for PostgreSQL. Default: - no initialization query
@@ -30052,6 +30394,7 @@ class IDatabaseCluster(
         :param max_idle_connections_percent: Controls how actively the proxy closes idle database connections in the connection pool. A high value enables the proxy to leave a high percentage of idle connections open. A low value causes the proxy to close idle client connections and return the underlying database connections to the connection pool. For Aurora MySQL, it is expressed as a percentage of the max_connections setting for the RDS DB instance or Aurora DB cluster used by the target group. between 0 and MaxConnectionsPercent Default: 50
         :param require_tls: A Boolean parameter that specifies whether Transport Layer Security (TLS) encryption is required for connections to the proxy. By enabling this setting, you can enforce encrypted TLS connections to the proxy. Default: true
         :param role: IAM role that the proxy uses to access secrets in AWS Secrets Manager. Default: - A role will automatically be created
+        :param secrets: The secret that the proxy uses to authenticate to the RDS DB instance or Aurora DB cluster. These secrets are stored within Amazon Secrets Manager. One or more secrets are required when defaultAuthScheme is ``DefaultAuthScheme.NONE``. Default: None
         :param security_groups: One or more VPC security groups to associate with the new proxy. Default: - No security groups
         :param session_pinning_filters: Each item in the list represents a class of SQL operations that normally cause all later statements in a session using a proxy to be pinned to the same underlying database connection. Including an item in the list exempts that class of SQL operations from the pinning behavior. Default: - no session pinning filters
         :param vpc_subnets: The subnets used by the proxy. Default: - the VPC default strategy if not specified.
@@ -30627,6 +30970,7 @@ class _IDatabaseClusterProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
     jsii.proxy_for(_IConnectable_10015a05), # type: ignore[misc]
     jsii.proxy_for(_ISecretAttachmentTarget_123e2df9), # type: ignore[misc]
+    jsii.proxy_for(_IDBClusterRef_ebf419fe), # type: ignore[misc]
 ):
     '''Create a clustered database with a given number of instances.'''
 
@@ -30697,12 +31041,12 @@ class _IDatabaseClusterProxy(
         self,
         id: builtins.str,
         *,
-        secrets: typing.Sequence["_ISecret_6e020e6a"],
         vpc: "_IVpc_f30d5663",
         borrow_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         client_password_auth_type: typing.Optional["ClientPasswordAuthType"] = None,
         db_proxy_name: typing.Optional[builtins.str] = None,
         debug_logging: typing.Optional[builtins.bool] = None,
+        default_auth_scheme: typing.Optional["DefaultAuthScheme"] = None,
         iam_auth: typing.Optional[builtins.bool] = None,
         idle_client_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         init_query: typing.Optional[builtins.str] = None,
@@ -30710,6 +31054,7 @@ class _IDatabaseClusterProxy(
         max_idle_connections_percent: typing.Optional[jsii.Number] = None,
         require_tls: typing.Optional[builtins.bool] = None,
         role: typing.Optional["_IRole_235f5d8e"] = None,
+        secrets: typing.Optional[typing.Sequence["_ISecret_6e020e6a"]] = None,
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         session_pinning_filters: typing.Optional[typing.Sequence["SessionPinningFilter"]] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -30717,12 +31062,12 @@ class _IDatabaseClusterProxy(
         '''Add a new db proxy to this cluster.
 
         :param id: -
-        :param secrets: The secret that the proxy uses to authenticate to the RDS DB instance or Aurora DB cluster. These secrets are stored within Amazon Secrets Manager. One or more secrets are required.
         :param vpc: The VPC to associate with the new proxy.
         :param borrow_timeout: The duration for a proxy to wait for a connection to become available in the connection pool. Only applies when the proxy has opened its maximum number of connections and all connections are busy with client sessions. Value must be between 1 second and 1 hour, or ``Duration.seconds(0)`` to represent unlimited. Default: cdk.Duration.seconds(120)
         :param client_password_auth_type: Specifies the details of authentication used by a proxy to log in as a specific database user. Default: - CloudFormation defaults will apply given the specified database engine.
         :param db_proxy_name: The identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens. Default: - Generated by CloudFormation (recommended)
         :param debug_logging: Whether the proxy includes detailed information about SQL statements in its logs. This information helps you to debug issues involving SQL behavior or the performance and scalability of the proxy connections. The debug information includes the text of SQL statements that you submit through the proxy. Thus, only enable this setting when needed for debugging, and only when you have security measures in place to safeguard any sensitive information that appears in the logs. Default: false
+        :param default_auth_scheme: The default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database. When set to ``DefaultAuthScheme.IAM_AUTH``, the proxy uses end-to-end IAM authentication to connect to the database. Default: DefaultAuthScheme.NONE
         :param iam_auth: Whether to require or disallow AWS Identity and Access Management (IAM) authentication for connections to the proxy. Default: false
         :param idle_client_timeout: The number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database. Default: cdk.Duration.minutes(30)
         :param init_query: One or more SQL statements for the proxy to run when opening each new database connection. Typically used with SET statements to make sure that each connection has identical settings such as time zone and character set. For multiple statements, use semicolons as the separator. You can also include multiple variables in a single SET statement, such as SET x=1, y=2. not currently supported for PostgreSQL. Default: - no initialization query
@@ -30730,6 +31075,7 @@ class _IDatabaseClusterProxy(
         :param max_idle_connections_percent: Controls how actively the proxy closes idle database connections in the connection pool. A high value enables the proxy to leave a high percentage of idle connections open. A low value causes the proxy to close idle client connections and return the underlying database connections to the connection pool. For Aurora MySQL, it is expressed as a percentage of the max_connections setting for the RDS DB instance or Aurora DB cluster used by the target group. between 0 and MaxConnectionsPercent Default: 50
         :param require_tls: A Boolean parameter that specifies whether Transport Layer Security (TLS) encryption is required for connections to the proxy. By enabling this setting, you can enforce encrypted TLS connections to the proxy. Default: true
         :param role: IAM role that the proxy uses to access secrets in AWS Secrets Manager. Default: - A role will automatically be created
+        :param secrets: The secret that the proxy uses to authenticate to the RDS DB instance or Aurora DB cluster. These secrets are stored within Amazon Secrets Manager. One or more secrets are required when defaultAuthScheme is ``DefaultAuthScheme.NONE``. Default: None
         :param security_groups: One or more VPC security groups to associate with the new proxy. Default: - No security groups
         :param session_pinning_filters: Each item in the list represents a class of SQL operations that normally cause all later statements in a session using a proxy to be pinned to the same underlying database connection. Including an item in the list exempts that class of SQL operations from the pinning behavior. Default: - no session pinning filters
         :param vpc_subnets: The subnets used by the proxy. Default: - the VPC default strategy if not specified.
@@ -30738,12 +31084,12 @@ class _IDatabaseClusterProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__cc014f052070ff8221cfea3705aabe02b81605d77d8c0391cfd1b437b35f620e)
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         options = DatabaseProxyOptions(
-            secrets=secrets,
             vpc=vpc,
             borrow_timeout=borrow_timeout,
             client_password_auth_type=client_password_auth_type,
             db_proxy_name=db_proxy_name,
             debug_logging=debug_logging,
+            default_auth_scheme=default_auth_scheme,
             iam_auth=iam_auth,
             idle_client_timeout=idle_client_timeout,
             init_query=init_query,
@@ -30751,6 +31097,7 @@ class _IDatabaseClusterProxy(
             max_idle_connections_percent=max_idle_connections_percent,
             require_tls=require_tls,
             role=role,
+            secrets=secrets,
             security_groups=security_groups,
             session_pinning_filters=session_pinning_filters,
             vpc_subnets=vpc_subnets,
@@ -31566,6 +31913,7 @@ class IDatabaseInstance(
     _IResource_c80c4260,
     _IConnectable_10015a05,
     _ISecretAttachmentTarget_123e2df9,
+    _IDBInstanceRef_10d60cd7,
     typing_extensions.Protocol,
 ):
     '''A database instance.'''
@@ -31632,12 +31980,12 @@ class IDatabaseInstance(
         self,
         id: builtins.str,
         *,
-        secrets: typing.Sequence["_ISecret_6e020e6a"],
         vpc: "_IVpc_f30d5663",
         borrow_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         client_password_auth_type: typing.Optional["ClientPasswordAuthType"] = None,
         db_proxy_name: typing.Optional[builtins.str] = None,
         debug_logging: typing.Optional[builtins.bool] = None,
+        default_auth_scheme: typing.Optional["DefaultAuthScheme"] = None,
         iam_auth: typing.Optional[builtins.bool] = None,
         idle_client_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         init_query: typing.Optional[builtins.str] = None,
@@ -31645,6 +31993,7 @@ class IDatabaseInstance(
         max_idle_connections_percent: typing.Optional[jsii.Number] = None,
         require_tls: typing.Optional[builtins.bool] = None,
         role: typing.Optional["_IRole_235f5d8e"] = None,
+        secrets: typing.Optional[typing.Sequence["_ISecret_6e020e6a"]] = None,
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         session_pinning_filters: typing.Optional[typing.Sequence["SessionPinningFilter"]] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -31652,12 +32001,12 @@ class IDatabaseInstance(
         '''Add a new db proxy to this instance.
 
         :param id: -
-        :param secrets: The secret that the proxy uses to authenticate to the RDS DB instance or Aurora DB cluster. These secrets are stored within Amazon Secrets Manager. One or more secrets are required.
         :param vpc: The VPC to associate with the new proxy.
         :param borrow_timeout: The duration for a proxy to wait for a connection to become available in the connection pool. Only applies when the proxy has opened its maximum number of connections and all connections are busy with client sessions. Value must be between 1 second and 1 hour, or ``Duration.seconds(0)`` to represent unlimited. Default: cdk.Duration.seconds(120)
         :param client_password_auth_type: Specifies the details of authentication used by a proxy to log in as a specific database user. Default: - CloudFormation defaults will apply given the specified database engine.
         :param db_proxy_name: The identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens. Default: - Generated by CloudFormation (recommended)
         :param debug_logging: Whether the proxy includes detailed information about SQL statements in its logs. This information helps you to debug issues involving SQL behavior or the performance and scalability of the proxy connections. The debug information includes the text of SQL statements that you submit through the proxy. Thus, only enable this setting when needed for debugging, and only when you have security measures in place to safeguard any sensitive information that appears in the logs. Default: false
+        :param default_auth_scheme: The default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database. When set to ``DefaultAuthScheme.IAM_AUTH``, the proxy uses end-to-end IAM authentication to connect to the database. Default: DefaultAuthScheme.NONE
         :param iam_auth: Whether to require or disallow AWS Identity and Access Management (IAM) authentication for connections to the proxy. Default: false
         :param idle_client_timeout: The number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database. Default: cdk.Duration.minutes(30)
         :param init_query: One or more SQL statements for the proxy to run when opening each new database connection. Typically used with SET statements to make sure that each connection has identical settings such as time zone and character set. For multiple statements, use semicolons as the separator. You can also include multiple variables in a single SET statement, such as SET x=1, y=2. not currently supported for PostgreSQL. Default: - no initialization query
@@ -31665,6 +32014,7 @@ class IDatabaseInstance(
         :param max_idle_connections_percent: Controls how actively the proxy closes idle database connections in the connection pool. A high value enables the proxy to leave a high percentage of idle connections open. A low value causes the proxy to close idle client connections and return the underlying database connections to the connection pool. For Aurora MySQL, it is expressed as a percentage of the max_connections setting for the RDS DB instance or Aurora DB cluster used by the target group. between 0 and MaxConnectionsPercent Default: 50
         :param require_tls: A Boolean parameter that specifies whether Transport Layer Security (TLS) encryption is required for connections to the proxy. By enabling this setting, you can enforce encrypted TLS connections to the proxy. Default: true
         :param role: IAM role that the proxy uses to access secrets in AWS Secrets Manager. Default: - A role will automatically be created
+        :param secrets: The secret that the proxy uses to authenticate to the RDS DB instance or Aurora DB cluster. These secrets are stored within Amazon Secrets Manager. One or more secrets are required when defaultAuthScheme is ``DefaultAuthScheme.NONE``. Default: None
         :param security_groups: One or more VPC security groups to associate with the new proxy. Default: - No security groups
         :param session_pinning_filters: Each item in the list represents a class of SQL operations that normally cause all later statements in a session using a proxy to be pinned to the same underlying database connection. Including an item in the list exempts that class of SQL operations from the pinning behavior. Default: - no session pinning filters
         :param vpc_subnets: The subnets used by the proxy. Default: - the VPC default strategy if not specified.
@@ -31966,6 +32316,7 @@ class _IDatabaseInstanceProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
     jsii.proxy_for(_IConnectable_10015a05), # type: ignore[misc]
     jsii.proxy_for(_ISecretAttachmentTarget_123e2df9), # type: ignore[misc]
+    jsii.proxy_for(_IDBInstanceRef_10d60cd7), # type: ignore[misc]
 ):
     '''A database instance.'''
 
@@ -32033,12 +32384,12 @@ class _IDatabaseInstanceProxy(
         self,
         id: builtins.str,
         *,
-        secrets: typing.Sequence["_ISecret_6e020e6a"],
         vpc: "_IVpc_f30d5663",
         borrow_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         client_password_auth_type: typing.Optional["ClientPasswordAuthType"] = None,
         db_proxy_name: typing.Optional[builtins.str] = None,
         debug_logging: typing.Optional[builtins.bool] = None,
+        default_auth_scheme: typing.Optional["DefaultAuthScheme"] = None,
         iam_auth: typing.Optional[builtins.bool] = None,
         idle_client_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         init_query: typing.Optional[builtins.str] = None,
@@ -32046,6 +32397,7 @@ class _IDatabaseInstanceProxy(
         max_idle_connections_percent: typing.Optional[jsii.Number] = None,
         require_tls: typing.Optional[builtins.bool] = None,
         role: typing.Optional["_IRole_235f5d8e"] = None,
+        secrets: typing.Optional[typing.Sequence["_ISecret_6e020e6a"]] = None,
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         session_pinning_filters: typing.Optional[typing.Sequence["SessionPinningFilter"]] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -32053,12 +32405,12 @@ class _IDatabaseInstanceProxy(
         '''Add a new db proxy to this instance.
 
         :param id: -
-        :param secrets: The secret that the proxy uses to authenticate to the RDS DB instance or Aurora DB cluster. These secrets are stored within Amazon Secrets Manager. One or more secrets are required.
         :param vpc: The VPC to associate with the new proxy.
         :param borrow_timeout: The duration for a proxy to wait for a connection to become available in the connection pool. Only applies when the proxy has opened its maximum number of connections and all connections are busy with client sessions. Value must be between 1 second and 1 hour, or ``Duration.seconds(0)`` to represent unlimited. Default: cdk.Duration.seconds(120)
         :param client_password_auth_type: Specifies the details of authentication used by a proxy to log in as a specific database user. Default: - CloudFormation defaults will apply given the specified database engine.
         :param db_proxy_name: The identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens. Default: - Generated by CloudFormation (recommended)
         :param debug_logging: Whether the proxy includes detailed information about SQL statements in its logs. This information helps you to debug issues involving SQL behavior or the performance and scalability of the proxy connections. The debug information includes the text of SQL statements that you submit through the proxy. Thus, only enable this setting when needed for debugging, and only when you have security measures in place to safeguard any sensitive information that appears in the logs. Default: false
+        :param default_auth_scheme: The default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database. When set to ``DefaultAuthScheme.IAM_AUTH``, the proxy uses end-to-end IAM authentication to connect to the database. Default: DefaultAuthScheme.NONE
         :param iam_auth: Whether to require or disallow AWS Identity and Access Management (IAM) authentication for connections to the proxy. Default: false
         :param idle_client_timeout: The number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database. Default: cdk.Duration.minutes(30)
         :param init_query: One or more SQL statements for the proxy to run when opening each new database connection. Typically used with SET statements to make sure that each connection has identical settings such as time zone and character set. For multiple statements, use semicolons as the separator. You can also include multiple variables in a single SET statement, such as SET x=1, y=2. not currently supported for PostgreSQL. Default: - no initialization query
@@ -32066,6 +32418,7 @@ class _IDatabaseInstanceProxy(
         :param max_idle_connections_percent: Controls how actively the proxy closes idle database connections in the connection pool. A high value enables the proxy to leave a high percentage of idle connections open. A low value causes the proxy to close idle client connections and return the underlying database connections to the connection pool. For Aurora MySQL, it is expressed as a percentage of the max_connections setting for the RDS DB instance or Aurora DB cluster used by the target group. between 0 and MaxConnectionsPercent Default: 50
         :param require_tls: A Boolean parameter that specifies whether Transport Layer Security (TLS) encryption is required for connections to the proxy. By enabling this setting, you can enforce encrypted TLS connections to the proxy. Default: true
         :param role: IAM role that the proxy uses to access secrets in AWS Secrets Manager. Default: - A role will automatically be created
+        :param secrets: The secret that the proxy uses to authenticate to the RDS DB instance or Aurora DB cluster. These secrets are stored within Amazon Secrets Manager. One or more secrets are required when defaultAuthScheme is ``DefaultAuthScheme.NONE``. Default: None
         :param security_groups: One or more VPC security groups to associate with the new proxy. Default: - No security groups
         :param session_pinning_filters: Each item in the list represents a class of SQL operations that normally cause all later statements in a session using a proxy to be pinned to the same underlying database connection. Including an item in the list exempts that class of SQL operations from the pinning behavior. Default: - no session pinning filters
         :param vpc_subnets: The subnets used by the proxy. Default: - the VPC default strategy if not specified.
@@ -32074,12 +32427,12 @@ class _IDatabaseInstanceProxy(
             type_hints = typing.get_type_hints(_typecheckingstub__82275f6c142bc7bc61c7b1dbb8e8fef70822986e2806e0e0d4173aeb16f373aa)
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         options = DatabaseProxyOptions(
-            secrets=secrets,
             vpc=vpc,
             borrow_timeout=borrow_timeout,
             client_password_auth_type=client_password_auth_type,
             db_proxy_name=db_proxy_name,
             debug_logging=debug_logging,
+            default_auth_scheme=default_auth_scheme,
             iam_auth=iam_auth,
             idle_client_timeout=idle_client_timeout,
             init_query=init_query,
@@ -32087,6 +32440,7 @@ class _IDatabaseInstanceProxy(
             max_idle_connections_percent=max_idle_connections_percent,
             require_tls=require_tls,
             role=role,
+            secrets=secrets,
             security_groups=security_groups,
             session_pinning_filters=session_pinning_filters,
             vpc_subnets=vpc_subnets,
@@ -32512,7 +32866,11 @@ typing.cast(typing.Any, IDatabaseInstance).__jsii_proxy_class__ = lambda : _IDat
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rds.IDatabaseProxy")
-class IDatabaseProxy(_IResource_c80c4260, typing_extensions.Protocol):
+class IDatabaseProxy(
+    _IResource_c80c4260,
+    _IDBProxyRef_97300f25,
+    typing_extensions.Protocol,
+):
     '''DB Proxy.'''
 
     @builtins.property
@@ -32563,6 +32921,7 @@ class IDatabaseProxy(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IDatabaseProxyProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IDBProxyRef_97300f25), # type: ignore[misc]
 ):
     '''DB Proxy.'''
 
@@ -32622,7 +32981,11 @@ typing.cast(typing.Any, IDatabaseProxy).__jsii_proxy_class__ = lambda : _IDataba
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rds.IDatabaseProxyEndpoint")
-class IDatabaseProxyEndpoint(_IResource_c80c4260, typing_extensions.Protocol):
+class IDatabaseProxyEndpoint(
+    _IResource_c80c4260,
+    _IDBProxyEndpointRef_9d4fe7d8,
+    typing_extensions.Protocol,
+):
     '''A DB proxy endpoint.'''
 
     @builtins.property
@@ -32655,6 +33018,7 @@ class IDatabaseProxyEndpoint(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IDatabaseProxyEndpointProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IDBProxyEndpointRef_9d4fe7d8), # type: ignore[misc]
 ):
     '''A DB proxy endpoint.'''
 
@@ -33032,7 +33396,12 @@ typing.cast(typing.Any, IOptionGroup).__jsii_proxy_class__ = lambda : _IOptionGr
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rds.IParameterGroup")
-class IParameterGroup(_IResource_c80c4260, typing_extensions.Protocol):
+class IParameterGroup(
+    _IResource_c80c4260,
+    _IDBParameterGroupRef_9d70a5d3,
+    _IDBClusterParameterGroupRef_24b242bc,
+    typing_extensions.Protocol,
+):
     '''A parameter group.
 
     Represents both a cluster parameter group,
@@ -33070,6 +33439,8 @@ class IParameterGroup(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IParameterGroupProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IDBParameterGroupRef_9d70a5d3), # type: ignore[misc]
+    jsii.proxy_for(_IDBClusterParameterGroupRef_24b242bc), # type: ignore[misc]
 ):
     '''A parameter group.
 
@@ -33124,6 +33495,7 @@ class IServerlessCluster(
     _IResource_c80c4260,
     _IConnectable_10015a05,
     _ISecretAttachmentTarget_123e2df9,
+    _IDBClusterRef_ebf419fe,
     typing_extensions.Protocol,
 ):
     '''Interface representing a serverless database cluster.'''
@@ -33165,6 +33537,8 @@ class IServerlessCluster(
     ) -> "_Grant_a7ae64f8":
         '''Grant the given identity to access to the Data API.
 
+        [disable-awslint:no-grants]
+
         :param grantee: The principal to grant access to.
         '''
         ...
@@ -33174,6 +33548,7 @@ class _IServerlessClusterProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
     jsii.proxy_for(_IConnectable_10015a05), # type: ignore[misc]
     jsii.proxy_for(_ISecretAttachmentTarget_123e2df9), # type: ignore[misc]
+    jsii.proxy_for(_IDBClusterRef_ebf419fe), # type: ignore[misc]
 ):
     '''Interface representing a serverless database cluster.'''
 
@@ -33216,6 +33591,8 @@ class _IServerlessClusterProxy(
     ) -> "_Grant_a7ae64f8":
         '''Grant the given identity to access to the Data API.
 
+        [disable-awslint:no-grants]
+
         :param grantee: The principal to grant access to.
         '''
         if __debug__:
@@ -33228,7 +33605,11 @@ typing.cast(typing.Any, IServerlessCluster).__jsii_proxy_class__ = lambda : _ISe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rds.ISubnetGroup")
-class ISubnetGroup(_IResource_c80c4260, typing_extensions.Protocol):
+class ISubnetGroup(
+    _IResource_c80c4260,
+    _IDBSubnetGroupRef_314322e0,
+    typing_extensions.Protocol,
+):
     '''Interface for a subnet group.'''
 
     @builtins.property
@@ -33243,6 +33624,7 @@ class ISubnetGroup(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _ISubnetGroupProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IDBSubnetGroupRef_314322e0), # type: ignore[misc]
 ):
     '''Interface for a subnet group.'''
 
@@ -37569,6 +37951,20 @@ class ParameterGroup(
         '''Uniquely identifies this class.'''
         return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
+    @builtins.property
+    @jsii.member(jsii_name="dbClusterParameterGroupRef")
+    def db_cluster_parameter_group_ref(
+        self,
+    ) -> "_DBClusterParameterGroupReference_00fb323a":
+        '''A reference to this parameter group as a DB cluster parameter group.'''
+        return typing.cast("_DBClusterParameterGroupReference_00fb323a", jsii.get(self, "dbClusterParameterGroupRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="dbParameterGroupRef")
+    def db_parameter_group_ref(self) -> "_DBParameterGroupReference_b21fad39":
+        '''A reference to this parameter group as a DB parameter group.'''
+        return typing.cast("_DBParameterGroupReference_b21fad39", jsii.get(self, "dbParameterGroupRef"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_rds.ParameterGroupClusterBindOptions",
@@ -38056,19 +38452,23 @@ class PostgresEngineVersion(
 
         # vpc: ec2.Vpc
         
-        engine = rds.DatabaseInstanceEngine.postgres(version=rds.PostgresEngineVersion.VER_16_3)
-        my_key = kms.Key(self, "MyKey")
-        
-        rds.DatabaseInstance(self, "InstanceWithCustomizedSecret",
-            engine=engine,
+        instance = rds.DatabaseInstance(self, "Database",
+            engine=rds.DatabaseInstanceEngine.postgres(
+                version=rds.PostgresEngineVersion.VER_17_7
+            ),
             vpc=vpc,
-            credentials=rds.Credentials.from_generated_secret("postgres",
-                secret_name="my-cool-name",
-                encryption_key=my_key,
-                exclude_characters="!&*^#@()",
-                replica_regions=[secretsmanager.ReplicaRegion(region="eu-west-1"), secretsmanager.ReplicaRegion(region="eu-west-2")]
-            )
+            iam_authentication=True
         )
+        
+        proxy = rds.DatabaseProxy(self, "Proxy",
+            proxy_target=rds.ProxyTarget.from_instance(instance),
+            vpc=vpc,
+            default_auth_scheme=rds.DefaultAuthScheme.IAM_AUTH
+        )
+        
+        # Grant IAM permissions for database connection
+        role = iam.Role(self, "DBRole", assumed_by=iam.AccountPrincipal(self.account))
+        proxy.grant_connect(role, "database-user")
     '''
 
     @jsii.member(jsii_name="of")
@@ -39648,19 +40048,23 @@ class PostgresInstanceEngineProps:
 
             # vpc: ec2.Vpc
             
-            engine = rds.DatabaseInstanceEngine.postgres(version=rds.PostgresEngineVersion.VER_16_3)
-            my_key = kms.Key(self, "MyKey")
-            
-            rds.DatabaseInstance(self, "InstanceWithCustomizedSecret",
-                engine=engine,
+            instance = rds.DatabaseInstance(self, "Database",
+                engine=rds.DatabaseInstanceEngine.postgres(
+                    version=rds.PostgresEngineVersion.VER_17_7
+                ),
                 vpc=vpc,
-                credentials=rds.Credentials.from_generated_secret("postgres",
-                    secret_name="my-cool-name",
-                    encryption_key=my_key,
-                    exclude_characters="!&*^#@()",
-                    replica_regions=[secretsmanager.ReplicaRegion(region="eu-west-1"), secretsmanager.ReplicaRegion(region="eu-west-2")]
-                )
+                iam_authentication=True
             )
+            
+            proxy = rds.DatabaseProxy(self, "Proxy",
+                proxy_target=rds.ProxyTarget.from_instance(instance),
+                vpc=vpc,
+                default_auth_scheme=rds.DefaultAuthScheme.IAM_AUTH
+            )
+            
+            # Grant IAM permissions for database connection
+            role = iam.Role(self, "DBRole", assumed_by=iam.AccountPrincipal(self.account))
+            proxy.grant_connect(role, "database-user")
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__31987a389f57728e551841d3edfad55cc83832ad123f310cdfa2202c092cdcdf)
@@ -40174,22 +40578,23 @@ class ProxyTarget(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_rds.ProxyT
 
         # vpc: ec2.Vpc
         
-        cluster = rds.DatabaseCluster(self, "Database",
-            engine=rds.DatabaseClusterEngine.aurora_mysql(
-                version=rds.AuroraMysqlEngineVersion.VER_3_03_0
+        instance = rds.DatabaseInstance(self, "Database",
+            engine=rds.DatabaseInstanceEngine.postgres(
+                version=rds.PostgresEngineVersion.VER_17_7
             ),
-            writer=rds.ClusterInstance.provisioned("writer"),
-            vpc=vpc
+            vpc=vpc,
+            iam_authentication=True
         )
         
         proxy = rds.DatabaseProxy(self, "Proxy",
-            proxy_target=rds.ProxyTarget.from_cluster(cluster),
-            secrets=[cluster.secret],
-            vpc=vpc
+            proxy_target=rds.ProxyTarget.from_instance(instance),
+            vpc=vpc,
+            default_auth_scheme=rds.DefaultAuthScheme.IAM_AUTH
         )
         
-        role = iam.Role(self, "DBProxyRole", assumed_by=iam.AccountPrincipal(self.account))
-        proxy.grant_connect(role, "admin")
+        # Grant IAM permissions for database connection
+        role = iam.Role(self, "DBRole", assumed_by=iam.AccountPrincipal(self.account))
+        proxy.grant_connect(role, "database-user")
     '''
 
     @jsii.member(jsii_name="fromCluster")
@@ -40721,7 +41126,7 @@ class ServerlessCluster(
         scaling: typing.Optional[typing.Union["ServerlessScalingOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         storage_encryption_key: typing.Optional["_IKey_5f11635f"] = None,
-        subnet_group: typing.Optional["ISubnetGroup"] = None,
+        subnet_group: typing.Optional["_IDBSubnetGroupRef_314322e0"] = None,
         vpc: typing.Optional["_IVpc_f30d5663"] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
@@ -40892,6 +41297,8 @@ class ServerlessCluster(
     ) -> "_Grant_a7ae64f8":
         '''Grant the given identity to access to the Data API, including read access to the secret attached to the cluster if present.
 
+        [disable-awslint:no-grants]
+
         :param grantee: The principal to grant access to.
         '''
         if __debug__:
@@ -40934,6 +41341,12 @@ class ServerlessCluster(
     def connections(self) -> "_Connections_0f31fce8":
         '''Access to the network connections.'''
         return typing.cast("_Connections_0f31fce8", jsii.get(self, "connections"))
+
+    @builtins.property
+    @jsii.member(jsii_name="dbClusterRef")
+    def db_cluster_ref(self) -> "_DBClusterReference_cace7e0d":
+        '''A reference to this serverless cluster.'''
+        return typing.cast("_DBClusterReference_cace7e0d", jsii.get(self, "dbClusterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="newCfnProps")
@@ -41148,7 +41561,7 @@ class ServerlessClusterFromSnapshot(
         removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         scaling: typing.Optional[typing.Union["ServerlessScalingOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
-        subnet_group: typing.Optional["ISubnetGroup"] = None,
+        subnet_group: typing.Optional["_IDBSubnetGroupRef_314322e0"] = None,
         vpc: typing.Optional["_IVpc_f30d5663"] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
@@ -41209,6 +41622,8 @@ class ServerlessClusterFromSnapshot(
     ) -> "_Grant_a7ae64f8":
         '''Grant the given identity to access to the Data API, including read access to the secret attached to the cluster if present.
 
+        [disable-awslint:no-grants]
+
         :param grantee: The principal to grant access to.
         '''
         if __debug__:
@@ -41251,6 +41666,12 @@ class ServerlessClusterFromSnapshot(
     def connections(self) -> "_Connections_0f31fce8":
         '''Access to the network connections.'''
         return typing.cast("_Connections_0f31fce8", jsii.get(self, "connections"))
+
+    @builtins.property
+    @jsii.member(jsii_name="dbClusterRef")
+    def db_cluster_ref(self) -> "_DBClusterReference_cace7e0d":
+        '''A reference to this serverless cluster.'''
+        return typing.cast("_DBClusterReference_cace7e0d", jsii.get(self, "dbClusterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="newCfnProps")
@@ -41320,7 +41741,7 @@ class ServerlessClusterFromSnapshotProps:
         removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         scaling: typing.Optional[typing.Union["ServerlessScalingOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
-        subnet_group: typing.Optional["ISubnetGroup"] = None,
+        subnet_group: typing.Optional["_IDBSubnetGroupRef_314322e0"] = None,
         vpc: typing.Optional["_IVpc_f30d5663"] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
@@ -41545,7 +41966,7 @@ class ServerlessClusterFromSnapshotProps:
         return typing.cast(typing.Optional[typing.List["_ISecurityGroup_acf8a799"]], result)
 
     @builtins.property
-    def subnet_group(self) -> typing.Optional["ISubnetGroup"]:
+    def subnet_group(self) -> typing.Optional["_IDBSubnetGroupRef_314322e0"]:
         '''Existing subnet group for the cluster.
 
         :default:
@@ -41554,7 +41975,7 @@ class ServerlessClusterFromSnapshotProps:
         If the ``vpc`` property was not provided, no subnet group will be associated with the DB cluster
         '''
         result = self._values.get("subnet_group")
-        return typing.cast(typing.Optional["ISubnetGroup"], result)
+        return typing.cast(typing.Optional["_IDBSubnetGroupRef_314322e0"], result)
 
     @builtins.property
     def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
@@ -41627,7 +42048,7 @@ class ServerlessClusterProps:
         scaling: typing.Optional[typing.Union["ServerlessScalingOptions", typing.Dict[builtins.str, typing.Any]]] = None,
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         storage_encryption_key: typing.Optional["_IKey_5f11635f"] = None,
-        subnet_group: typing.Optional["ISubnetGroup"] = None,
+        subnet_group: typing.Optional["_IDBSubnetGroupRef_314322e0"] = None,
         vpc: typing.Optional["_IVpc_f30d5663"] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
@@ -41899,7 +42320,7 @@ class ServerlessClusterProps:
         return typing.cast(typing.Optional["_IKey_5f11635f"], result)
 
     @builtins.property
-    def subnet_group(self) -> typing.Optional["ISubnetGroup"]:
+    def subnet_group(self) -> typing.Optional["_IDBSubnetGroupRef_314322e0"]:
         '''Existing subnet group for the cluster.
 
         :default:
@@ -41908,7 +42329,7 @@ class ServerlessClusterProps:
         If the ``vpc`` property was not provided, no subnet group will be associated with the DB cluster
         '''
         result = self._values.get("subnet_group")
-        return typing.cast(typing.Optional["ISubnetGroup"], result)
+        return typing.cast(typing.Optional["_IDBSubnetGroupRef_314322e0"], result)
 
     @builtins.property
     def vpc(self) -> typing.Optional["_IVpc_f30d5663"]:
@@ -44159,6 +44580,12 @@ class SubnetGroup(
         return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
+    @jsii.member(jsii_name="dbSubnetGroupRef")
+    def db_subnet_group_ref(self) -> "_DBSubnetGroupReference_d9693e2b":
+        '''A reference to this subnet group.'''
+        return typing.cast("_DBSubnetGroupReference_d9693e2b", jsii.get(self, "dbSubnetGroupRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="subnetGroupName")
     def subnet_group_name(self) -> builtins.str:
         '''The name of the subnet group.'''
@@ -44522,7 +44949,7 @@ class ClusterInstance(
         monitoring_role: typing.Optional["_IRoleRef_8400221f"] = None,
         promotion_tier: typing.Optional[jsii.Number] = None,
         removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
-        subnet_group: typing.Optional["ISubnetGroup"] = None,
+        subnet_group: typing.Optional["_IDBSubnetGroupRef_314322e0"] = None,
     ) -> "IAuroraClusterInstance":
         '''Add the ClusterInstance to the cluster.
 
@@ -44593,12 +45020,12 @@ class DatabaseClusterBase(
         self,
         id: builtins.str,
         *,
-        secrets: typing.Sequence["_ISecret_6e020e6a"],
         vpc: "_IVpc_f30d5663",
         borrow_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         client_password_auth_type: typing.Optional["ClientPasswordAuthType"] = None,
         db_proxy_name: typing.Optional[builtins.str] = None,
         debug_logging: typing.Optional[builtins.bool] = None,
+        default_auth_scheme: typing.Optional["DefaultAuthScheme"] = None,
         iam_auth: typing.Optional[builtins.bool] = None,
         idle_client_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         init_query: typing.Optional[builtins.str] = None,
@@ -44606,6 +45033,7 @@ class DatabaseClusterBase(
         max_idle_connections_percent: typing.Optional[jsii.Number] = None,
         require_tls: typing.Optional[builtins.bool] = None,
         role: typing.Optional["_IRole_235f5d8e"] = None,
+        secrets: typing.Optional[typing.Sequence["_ISecret_6e020e6a"]] = None,
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         session_pinning_filters: typing.Optional[typing.Sequence["SessionPinningFilter"]] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -44613,12 +45041,12 @@ class DatabaseClusterBase(
         '''Add a new db proxy to this cluster.
 
         :param id: -
-        :param secrets: The secret that the proxy uses to authenticate to the RDS DB instance or Aurora DB cluster. These secrets are stored within Amazon Secrets Manager. One or more secrets are required.
         :param vpc: The VPC to associate with the new proxy.
         :param borrow_timeout: The duration for a proxy to wait for a connection to become available in the connection pool. Only applies when the proxy has opened its maximum number of connections and all connections are busy with client sessions. Value must be between 1 second and 1 hour, or ``Duration.seconds(0)`` to represent unlimited. Default: cdk.Duration.seconds(120)
         :param client_password_auth_type: Specifies the details of authentication used by a proxy to log in as a specific database user. Default: - CloudFormation defaults will apply given the specified database engine.
         :param db_proxy_name: The identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens. Default: - Generated by CloudFormation (recommended)
         :param debug_logging: Whether the proxy includes detailed information about SQL statements in its logs. This information helps you to debug issues involving SQL behavior or the performance and scalability of the proxy connections. The debug information includes the text of SQL statements that you submit through the proxy. Thus, only enable this setting when needed for debugging, and only when you have security measures in place to safeguard any sensitive information that appears in the logs. Default: false
+        :param default_auth_scheme: The default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database. When set to ``DefaultAuthScheme.IAM_AUTH``, the proxy uses end-to-end IAM authentication to connect to the database. Default: DefaultAuthScheme.NONE
         :param iam_auth: Whether to require or disallow AWS Identity and Access Management (IAM) authentication for connections to the proxy. Default: false
         :param idle_client_timeout: The number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database. Default: cdk.Duration.minutes(30)
         :param init_query: One or more SQL statements for the proxy to run when opening each new database connection. Typically used with SET statements to make sure that each connection has identical settings such as time zone and character set. For multiple statements, use semicolons as the separator. You can also include multiple variables in a single SET statement, such as SET x=1, y=2. not currently supported for PostgreSQL. Default: - no initialization query
@@ -44626,6 +45054,7 @@ class DatabaseClusterBase(
         :param max_idle_connections_percent: Controls how actively the proxy closes idle database connections in the connection pool. A high value enables the proxy to leave a high percentage of idle connections open. A low value causes the proxy to close idle client connections and return the underlying database connections to the connection pool. For Aurora MySQL, it is expressed as a percentage of the max_connections setting for the RDS DB instance or Aurora DB cluster used by the target group. between 0 and MaxConnectionsPercent Default: 50
         :param require_tls: A Boolean parameter that specifies whether Transport Layer Security (TLS) encryption is required for connections to the proxy. By enabling this setting, you can enforce encrypted TLS connections to the proxy. Default: true
         :param role: IAM role that the proxy uses to access secrets in AWS Secrets Manager. Default: - A role will automatically be created
+        :param secrets: The secret that the proxy uses to authenticate to the RDS DB instance or Aurora DB cluster. These secrets are stored within Amazon Secrets Manager. One or more secrets are required when defaultAuthScheme is ``DefaultAuthScheme.NONE``. Default: None
         :param security_groups: One or more VPC security groups to associate with the new proxy. Default: - No security groups
         :param session_pinning_filters: Each item in the list represents a class of SQL operations that normally cause all later statements in a session using a proxy to be pinned to the same underlying database connection. Including an item in the list exempts that class of SQL operations from the pinning behavior. Default: - no session pinning filters
         :param vpc_subnets: The subnets used by the proxy. Default: - the VPC default strategy if not specified.
@@ -44634,12 +45063,12 @@ class DatabaseClusterBase(
             type_hints = typing.get_type_hints(_typecheckingstub__9e7b9f9993460ed4933effe80545b41147c8e758c88df339423fdef3ebdbb7b7)
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         options = DatabaseProxyOptions(
-            secrets=secrets,
             vpc=vpc,
             borrow_timeout=borrow_timeout,
             client_password_auth_type=client_password_auth_type,
             db_proxy_name=db_proxy_name,
             debug_logging=debug_logging,
+            default_auth_scheme=default_auth_scheme,
             iam_auth=iam_auth,
             idle_client_timeout=idle_client_timeout,
             init_query=init_query,
@@ -44647,6 +45076,7 @@ class DatabaseClusterBase(
             max_idle_connections_percent=max_idle_connections_percent,
             require_tls=require_tls,
             role=role,
+            secrets=secrets,
             security_groups=security_groups,
             session_pinning_filters=session_pinning_filters,
             vpc_subnets=vpc_subnets,
@@ -44665,7 +45095,7 @@ class DatabaseClusterBase(
         grantee: "_IGrantable_71c4f5de",
         db_user: builtins.str,
     ) -> "_Grant_a7ae64f8":
-        '''Grant the given identity connection access to the Cluster.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         :param db_user: -
@@ -44682,6 +45112,8 @@ class DatabaseClusterBase(
         grantee: "_IGrantable_71c4f5de",
     ) -> "_Grant_a7ae64f8":
         '''Grant the given identity to access the Data API.
+
+        [disable-awslint:no-grants]
 
         :param grantee: -
         '''
@@ -45503,6 +45935,12 @@ class DatabaseClusterBase(
         ...
 
     @builtins.property
+    @jsii.member(jsii_name="dbClusterRef")
+    def db_cluster_ref(self) -> "_DBClusterReference_cace7e0d":
+        '''A reference to this database cluster.'''
+        return typing.cast("_DBClusterReference_cace7e0d", jsii.get(self, "dbClusterRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="instanceEndpoints")
     @abc.abstractmethod
     def instance_endpoints(self) -> typing.List["Endpoint"]:
@@ -45704,7 +46142,7 @@ class DatabaseClusterFromSnapshot(
         storage_encrypted: typing.Optional[builtins.bool] = None,
         storage_encryption_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         storage_type: typing.Optional["DBClusterStorageType"] = None,
-        subnet_group: typing.Optional["ISubnetGroup"] = None,
+        subnet_group: typing.Optional["_IDBSubnetGroupRef_314322e0"] = None,
         vpc: typing.Optional["_IVpc_f30d5663"] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
         writer: typing.Optional["IClusterInstance"] = None,
@@ -46012,6 +46450,116 @@ class DatabaseClusterFromSnapshot(
 
         return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricServerlessDatabaseCapacity", [props]))
 
+    @jsii.member(jsii_name="metricVolumeReadIOPs")
+    def metric_volume_read_io_ps(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''The average number of disk read I/O operations per second.
+
+        This metric is only available for Aurora database clusters.
+        For non-Aurora RDS clusters, this metric will not return any data
+        in CloudWatch.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - average over 5 minutes
+        '''
+        props = _MetricOptions_1788b62f(
+            account=account,
+            color=color,
+            dimensions_map=dimensions_map,
+            id=id,
+            label=label,
+            period=period,
+            region=region,
+            stack_account=stack_account,
+            stack_region=stack_region,
+            statistic=statistic,
+            unit=unit,
+            visible=visible,
+        )
+
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricVolumeReadIOPs", [props]))
+
+    @jsii.member(jsii_name="metricVolumeWriteIOPs")
+    def metric_volume_write_io_ps(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''The average number of disk write I/O operations per second.
+
+        This metric is only available for Aurora database clusters.
+        For non-Aurora RDS clusters, this metric will not return any data
+        in CloudWatch.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - average over 5 minutes
+        '''
+        props = _MetricOptions_1788b62f(
+            account=account,
+            color=color,
+            dimensions_map=dimensions_map,
+            id=id,
+            label=label,
+            period=period,
+            region=region,
+            stack_account=stack_account,
+            stack_region=stack_region,
+            statistic=statistic,
+            unit=unit,
+            visible=visible,
+        )
+
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricVolumeWriteIOPs", [props]))
+
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
     def PROPERTY_INJECTION_ID(cls) -> builtins.str:
@@ -46116,6 +46664,11 @@ class DatabaseClusterFromSnapshot(
     @jsii.member(jsii_name="subnetGroup")
     def _subnet_group(self) -> "ISubnetGroup":
         return typing.cast("ISubnetGroup", jsii.get(self, "subnetGroup"))
+
+    @builtins.property
+    @jsii.member(jsii_name="subnetGroupRef")
+    def _subnet_group_ref(self) -> "_IDBSubnetGroupRef_314322e0":
+        return typing.cast("_IDBSubnetGroupRef_314322e0", jsii.get(self, "subnetGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="vpc")
@@ -46335,12 +46888,12 @@ class DatabaseInstanceBase(
         self,
         id: builtins.str,
         *,
-        secrets: typing.Sequence["_ISecret_6e020e6a"],
         vpc: "_IVpc_f30d5663",
         borrow_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         client_password_auth_type: typing.Optional["ClientPasswordAuthType"] = None,
         db_proxy_name: typing.Optional[builtins.str] = None,
         debug_logging: typing.Optional[builtins.bool] = None,
+        default_auth_scheme: typing.Optional["DefaultAuthScheme"] = None,
         iam_auth: typing.Optional[builtins.bool] = None,
         idle_client_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         init_query: typing.Optional[builtins.str] = None,
@@ -46348,6 +46901,7 @@ class DatabaseInstanceBase(
         max_idle_connections_percent: typing.Optional[jsii.Number] = None,
         require_tls: typing.Optional[builtins.bool] = None,
         role: typing.Optional["_IRole_235f5d8e"] = None,
+        secrets: typing.Optional[typing.Sequence["_ISecret_6e020e6a"]] = None,
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         session_pinning_filters: typing.Optional[typing.Sequence["SessionPinningFilter"]] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -46355,12 +46909,12 @@ class DatabaseInstanceBase(
         '''Add a new db proxy to this instance.
 
         :param id: -
-        :param secrets: The secret that the proxy uses to authenticate to the RDS DB instance or Aurora DB cluster. These secrets are stored within Amazon Secrets Manager. One or more secrets are required.
         :param vpc: The VPC to associate with the new proxy.
         :param borrow_timeout: The duration for a proxy to wait for a connection to become available in the connection pool. Only applies when the proxy has opened its maximum number of connections and all connections are busy with client sessions. Value must be between 1 second and 1 hour, or ``Duration.seconds(0)`` to represent unlimited. Default: cdk.Duration.seconds(120)
         :param client_password_auth_type: Specifies the details of authentication used by a proxy to log in as a specific database user. Default: - CloudFormation defaults will apply given the specified database engine.
         :param db_proxy_name: The identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens. Default: - Generated by CloudFormation (recommended)
         :param debug_logging: Whether the proxy includes detailed information about SQL statements in its logs. This information helps you to debug issues involving SQL behavior or the performance and scalability of the proxy connections. The debug information includes the text of SQL statements that you submit through the proxy. Thus, only enable this setting when needed for debugging, and only when you have security measures in place to safeguard any sensitive information that appears in the logs. Default: false
+        :param default_auth_scheme: The default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database. When set to ``DefaultAuthScheme.IAM_AUTH``, the proxy uses end-to-end IAM authentication to connect to the database. Default: DefaultAuthScheme.NONE
         :param iam_auth: Whether to require or disallow AWS Identity and Access Management (IAM) authentication for connections to the proxy. Default: false
         :param idle_client_timeout: The number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database. Default: cdk.Duration.minutes(30)
         :param init_query: One or more SQL statements for the proxy to run when opening each new database connection. Typically used with SET statements to make sure that each connection has identical settings such as time zone and character set. For multiple statements, use semicolons as the separator. You can also include multiple variables in a single SET statement, such as SET x=1, y=2. not currently supported for PostgreSQL. Default: - no initialization query
@@ -46368,6 +46922,7 @@ class DatabaseInstanceBase(
         :param max_idle_connections_percent: Controls how actively the proxy closes idle database connections in the connection pool. A high value enables the proxy to leave a high percentage of idle connections open. A low value causes the proxy to close idle client connections and return the underlying database connections to the connection pool. For Aurora MySQL, it is expressed as a percentage of the max_connections setting for the RDS DB instance or Aurora DB cluster used by the target group. between 0 and MaxConnectionsPercent Default: 50
         :param require_tls: A Boolean parameter that specifies whether Transport Layer Security (TLS) encryption is required for connections to the proxy. By enabling this setting, you can enforce encrypted TLS connections to the proxy. Default: true
         :param role: IAM role that the proxy uses to access secrets in AWS Secrets Manager. Default: - A role will automatically be created
+        :param secrets: The secret that the proxy uses to authenticate to the RDS DB instance or Aurora DB cluster. These secrets are stored within Amazon Secrets Manager. One or more secrets are required when defaultAuthScheme is ``DefaultAuthScheme.NONE``. Default: None
         :param security_groups: One or more VPC security groups to associate with the new proxy. Default: - No security groups
         :param session_pinning_filters: Each item in the list represents a class of SQL operations that normally cause all later statements in a session using a proxy to be pinned to the same underlying database connection. Including an item in the list exempts that class of SQL operations from the pinning behavior. Default: - no session pinning filters
         :param vpc_subnets: The subnets used by the proxy. Default: - the VPC default strategy if not specified.
@@ -46376,12 +46931,12 @@ class DatabaseInstanceBase(
             type_hints = typing.get_type_hints(_typecheckingstub__1a570d3e3410884069b8a67a8efdb043b454116fb50145140aeead995d1acf19)
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         options = DatabaseProxyOptions(
-            secrets=secrets,
             vpc=vpc,
             borrow_timeout=borrow_timeout,
             client_password_auth_type=client_password_auth_type,
             db_proxy_name=db_proxy_name,
             debug_logging=debug_logging,
+            default_auth_scheme=default_auth_scheme,
             iam_auth=iam_auth,
             idle_client_timeout=idle_client_timeout,
             init_query=init_query,
@@ -46389,6 +46944,7 @@ class DatabaseInstanceBase(
             max_idle_connections_percent=max_idle_connections_percent,
             require_tls=require_tls,
             role=role,
+            secrets=secrets,
             security_groups=security_groups,
             session_pinning_filters=session_pinning_filters,
             vpc_subnets=vpc_subnets,
@@ -46407,7 +46963,7 @@ class DatabaseInstanceBase(
         grantee: "_IGrantable_71c4f5de",
         db_user: typing.Optional[builtins.str] = None,
     ) -> "_Grant_a7ae64f8":
-        '''Grant the given identity connection access to the database.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         :param db_user: -
@@ -46693,7 +47249,7 @@ class DatabaseInstanceBase(
         unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
     ) -> "_Metric_e396a4dc":
-        '''The average number of disk write I/O operations per second.
+        '''The average number of disk read I/O operations per second. The average number of disk write I/O operations per second.
 
         Average over 5 minutes
 
@@ -46709,6 +47265,8 @@ class DatabaseInstanceBase(
         :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
         :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
         :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - average over 5 minutes
         '''
         props = _MetricOptions_1788b62f(
             account=account,
@@ -46744,7 +47302,7 @@ class DatabaseInstanceBase(
         unit: typing.Optional["_Unit_61bc6f70"] = None,
         visible: typing.Optional[builtins.bool] = None,
     ) -> "_Metric_e396a4dc":
-        '''The average number of disk read I/O operations per second.
+        '''The average number of disk write I/O operations per second. The average number of disk read I/O operations per second.
 
         Average over 5 minutes
 
@@ -46760,6 +47318,8 @@ class DatabaseInstanceBase(
         :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
         :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
         :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - average over 5 minutes
         '''
         props = _MetricOptions_1788b62f(
             account=account,
@@ -46834,6 +47394,12 @@ class DatabaseInstanceBase(
     def db_instance_endpoint_port(self) -> builtins.str:
         '''The instance endpoint port.'''
         ...
+
+    @builtins.property
+    @jsii.member(jsii_name="dbInstanceRef")
+    def db_instance_ref(self) -> "_DBInstanceReference_34d4313a":
+        '''A reference to this database instance.'''
+        return typing.cast("_DBInstanceReference_34d4313a", jsii.get(self, "dbInstanceRef"))
 
     @builtins.property
     @jsii.member(jsii_name="instanceArn")
@@ -47045,7 +47611,7 @@ class DatabaseInstanceFromSnapshot(
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         storage_throughput: typing.Optional[jsii.Number] = None,
         storage_type: typing.Optional["StorageType"] = None,
-        subnet_group: typing.Optional["ISubnetGroup"] = None,
+        subnet_group: typing.Optional["_IDBSubnetGroupRef_314322e0"] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
@@ -47248,6 +47814,8 @@ class DatabaseInstanceFromSnapshot(
         db_user: typing.Optional[builtins.str] = None,
     ) -> "_Grant_a7ae64f8":
         '''Grant the given identity connection access to the database.
+
+        [disable-awslint:no-grants]
 
         :param grantee: the Principal to grant the permissions to.
         :param db_user: the name of the database user to allow connecting as to the db instance, or the default database user, obtained from the Secret, if not specified.
@@ -47480,7 +48048,7 @@ class DatabaseInstanceFromSnapshotProps(DatabaseInstanceSourceProps):
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         storage_throughput: typing.Optional[jsii.Number] = None,
         storage_type: typing.Optional["StorageType"] = None,
-        subnet_group: typing.Optional["ISubnetGroup"] = None,
+        subnet_group: typing.Optional["_IDBSubnetGroupRef_314322e0"] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
         engine: "IInstanceEngine",
         allocated_storage: typing.Optional[jsii.Number] = None,
@@ -48238,13 +48806,13 @@ class DatabaseInstanceFromSnapshotProps(DatabaseInstanceSourceProps):
         return typing.cast(typing.Optional["StorageType"], result)
 
     @builtins.property
-    def subnet_group(self) -> typing.Optional["ISubnetGroup"]:
+    def subnet_group(self) -> typing.Optional["_IDBSubnetGroupRef_314322e0"]:
         '''Existing subnet group for the instance.
 
         :default: - a new subnet group will be created.
         '''
         result = self._values.get("subnet_group")
-        return typing.cast(typing.Optional["ISubnetGroup"], result)
+        return typing.cast(typing.Optional["_IDBSubnetGroupRef_314322e0"], result)
 
     @builtins.property
     def vpc_subnets(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
@@ -48498,7 +49066,7 @@ class DatabaseInstanceProps(DatabaseInstanceSourceProps):
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         storage_throughput: typing.Optional[jsii.Number] = None,
         storage_type: typing.Optional["StorageType"] = None,
-        subnet_group: typing.Optional["ISubnetGroup"] = None,
+        subnet_group: typing.Optional["_IDBSubnetGroupRef_314322e0"] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
         engine: "IInstanceEngine",
         allocated_storage: typing.Optional[jsii.Number] = None,
@@ -49263,13 +49831,13 @@ class DatabaseInstanceProps(DatabaseInstanceSourceProps):
         return typing.cast(typing.Optional["StorageType"], result)
 
     @builtins.property
-    def subnet_group(self) -> typing.Optional["ISubnetGroup"]:
+    def subnet_group(self) -> typing.Optional["_IDBSubnetGroupRef_314322e0"]:
         '''Existing subnet group for the instance.
 
         :default: - a new subnet group will be created.
         '''
         result = self._values.get("subnet_group")
-        return typing.cast(typing.Optional["ISubnetGroup"], result)
+        return typing.cast(typing.Optional["_IDBSubnetGroupRef_314322e0"], result)
 
     @builtins.property
     def vpc_subnets(self) -> typing.Optional["_SubnetSelection_e57d76df"]:
@@ -49486,7 +50054,7 @@ class DatabaseInstanceReadReplica(
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         storage_throughput: typing.Optional[jsii.Number] = None,
         storage_type: typing.Optional["StorageType"] = None,
-        subnet_group: typing.Optional["ISubnetGroup"] = None,
+        subnet_group: typing.Optional["_IDBSubnetGroupRef_314322e0"] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
@@ -49743,12 +50311,12 @@ class DatabaseProxy(
         id: builtins.str,
         *,
         proxy_target: "ProxyTarget",
-        secrets: typing.Sequence["_ISecret_6e020e6a"],
         vpc: "_IVpc_f30d5663",
         borrow_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         client_password_auth_type: typing.Optional["ClientPasswordAuthType"] = None,
         db_proxy_name: typing.Optional[builtins.str] = None,
         debug_logging: typing.Optional[builtins.bool] = None,
+        default_auth_scheme: typing.Optional["DefaultAuthScheme"] = None,
         iam_auth: typing.Optional[builtins.bool] = None,
         idle_client_timeout: typing.Optional["_Duration_4839e8c3"] = None,
         init_query: typing.Optional[builtins.str] = None,
@@ -49756,6 +50324,7 @@ class DatabaseProxy(
         max_idle_connections_percent: typing.Optional[jsii.Number] = None,
         require_tls: typing.Optional[builtins.bool] = None,
         role: typing.Optional["_IRole_235f5d8e"] = None,
+        secrets: typing.Optional[typing.Sequence["_ISecret_6e020e6a"]] = None,
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         session_pinning_filters: typing.Optional[typing.Sequence["SessionPinningFilter"]] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -49764,12 +50333,12 @@ class DatabaseProxy(
         :param scope: -
         :param id: -
         :param proxy_target: DB proxy target: Instance or Cluster.
-        :param secrets: The secret that the proxy uses to authenticate to the RDS DB instance or Aurora DB cluster. These secrets are stored within Amazon Secrets Manager. One or more secrets are required.
         :param vpc: The VPC to associate with the new proxy.
         :param borrow_timeout: The duration for a proxy to wait for a connection to become available in the connection pool. Only applies when the proxy has opened its maximum number of connections and all connections are busy with client sessions. Value must be between 1 second and 1 hour, or ``Duration.seconds(0)`` to represent unlimited. Default: cdk.Duration.seconds(120)
         :param client_password_auth_type: Specifies the details of authentication used by a proxy to log in as a specific database user. Default: - CloudFormation defaults will apply given the specified database engine.
         :param db_proxy_name: The identifier for the proxy. This name must be unique for all proxies owned by your AWS account in the specified AWS Region. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can't end with a hyphen or contain two consecutive hyphens. Default: - Generated by CloudFormation (recommended)
         :param debug_logging: Whether the proxy includes detailed information about SQL statements in its logs. This information helps you to debug issues involving SQL behavior or the performance and scalability of the proxy connections. The debug information includes the text of SQL statements that you submit through the proxy. Thus, only enable this setting when needed for debugging, and only when you have security measures in place to safeguard any sensitive information that appears in the logs. Default: false
+        :param default_auth_scheme: The default authentication scheme that the proxy uses for client connections to the proxy and connections from the proxy to the underlying database. When set to ``DefaultAuthScheme.IAM_AUTH``, the proxy uses end-to-end IAM authentication to connect to the database. Default: DefaultAuthScheme.NONE
         :param iam_auth: Whether to require or disallow AWS Identity and Access Management (IAM) authentication for connections to the proxy. Default: false
         :param idle_client_timeout: The number of seconds that a connection to the proxy can be inactive before the proxy disconnects it. You can set this value higher or lower than the connection timeout limit for the associated database. Default: cdk.Duration.minutes(30)
         :param init_query: One or more SQL statements for the proxy to run when opening each new database connection. Typically used with SET statements to make sure that each connection has identical settings such as time zone and character set. For multiple statements, use semicolons as the separator. You can also include multiple variables in a single SET statement, such as SET x=1, y=2. not currently supported for PostgreSQL. Default: - no initialization query
@@ -49777,6 +50346,7 @@ class DatabaseProxy(
         :param max_idle_connections_percent: Controls how actively the proxy closes idle database connections in the connection pool. A high value enables the proxy to leave a high percentage of idle connections open. A low value causes the proxy to close idle client connections and return the underlying database connections to the connection pool. For Aurora MySQL, it is expressed as a percentage of the max_connections setting for the RDS DB instance or Aurora DB cluster used by the target group. between 0 and MaxConnectionsPercent Default: 50
         :param require_tls: A Boolean parameter that specifies whether Transport Layer Security (TLS) encryption is required for connections to the proxy. By enabling this setting, you can enforce encrypted TLS connections to the proxy. Default: true
         :param role: IAM role that the proxy uses to access secrets in AWS Secrets Manager. Default: - A role will automatically be created
+        :param secrets: The secret that the proxy uses to authenticate to the RDS DB instance or Aurora DB cluster. These secrets are stored within Amazon Secrets Manager. One or more secrets are required when defaultAuthScheme is ``DefaultAuthScheme.NONE``. Default: None
         :param security_groups: One or more VPC security groups to associate with the new proxy. Default: - No security groups
         :param session_pinning_filters: Each item in the list represents a class of SQL operations that normally cause all later statements in a session using a proxy to be pinned to the same underlying database connection. Including an item in the list exempts that class of SQL operations from the pinning behavior. Default: - no session pinning filters
         :param vpc_subnets: The subnets used by the proxy. Default: - the VPC default strategy if not specified.
@@ -49787,12 +50357,12 @@ class DatabaseProxy(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = DatabaseProxyProps(
             proxy_target=proxy_target,
-            secrets=secrets,
             vpc=vpc,
             borrow_timeout=borrow_timeout,
             client_password_auth_type=client_password_auth_type,
             db_proxy_name=db_proxy_name,
             debug_logging=debug_logging,
+            default_auth_scheme=default_auth_scheme,
             iam_auth=iam_auth,
             idle_client_timeout=idle_client_timeout,
             init_query=init_query,
@@ -49800,6 +50370,7 @@ class DatabaseProxy(
             max_idle_connections_percent=max_idle_connections_percent,
             require_tls=require_tls,
             role=role,
+            secrets=secrets,
             security_groups=security_groups,
             session_pinning_filters=session_pinning_filters,
             vpc_subnets=vpc_subnets,
@@ -49885,7 +50456,7 @@ class DatabaseProxy(
         grantee: "_IGrantable_71c4f5de",
         db_user: typing.Optional[builtins.str] = None,
     ) -> "_Grant_a7ae64f8":
-        '''Grant the given identity connection access to the proxy.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         :param db_user: -
@@ -49927,6 +50498,12 @@ class DatabaseProxy(
         return typing.cast(builtins.str, jsii.get(self, "dbProxyName"))
 
     @builtins.property
+    @jsii.member(jsii_name="dbProxyRef")
+    def db_proxy_ref(self) -> "_DBProxyReference_3efafda0":
+        '''A reference to this database proxy.'''
+        return typing.cast("_DBProxyReference_3efafda0", jsii.get(self, "dbProxyRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="endpoint")
     def endpoint(self) -> builtins.str:
         '''Endpoint.
@@ -49953,15 +50530,16 @@ class DatabaseProxyEndpoint(
         # The values are placeholders you should change.
         from aws_cdk import aws_ec2 as ec2
         from aws_cdk import aws_rds as rds
+        from aws_cdk.interfaces import aws_rds as interfaces_rds
         
-        # database_proxy: rds.DatabaseProxy
+        # d_bProxy_ref: interfaces_rds.IDBProxyRef
         # security_group: ec2.SecurityGroup
         # subnet: ec2.Subnet
         # subnet_filter: ec2.SubnetFilter
         # vpc: ec2.Vpc
         
         database_proxy_endpoint = rds.DatabaseProxyEndpoint(self, "MyDatabaseProxyEndpoint",
-            db_proxy=database_proxy,
+            db_proxy=d_bProxy_ref,
             vpc=vpc,
         
             # the properties below are optional
@@ -49984,7 +50562,7 @@ class DatabaseProxyEndpoint(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        db_proxy: "IDatabaseProxy",
+        db_proxy: "_IDBProxyRef_97300f25",
         vpc: "_IVpc_f30d5663",
         db_proxy_endpoint_name: typing.Optional[builtins.str] = None,
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
@@ -50070,6 +50648,12 @@ class DatabaseProxyEndpoint(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "dbProxyEndpointName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="dbProxyEndpointRef")
+    def db_proxy_endpoint_ref(self) -> "_DBProxyEndpointReference_fd3c3854":
+        '''A reference to this database proxy endpoint.'''
+        return typing.cast("_DBProxyEndpointReference_fd3c3854", jsii.get(self, "dbProxyEndpointRef"))
 
     @builtins.property
     @jsii.member(jsii_name="endpoint")
@@ -50211,18 +50795,19 @@ class DatabaseCluster(
         # vpc: ec2.Vpc
         
         cluster = rds.DatabaseCluster(self, "Database",
-            engine=rds.DatabaseClusterEngine.aurora_mysql(
-                version=rds.AuroraMysqlEngineVersion.VER_3_03_0
+            engine=rds.DatabaseClusterEngine.aurora_mysql(version=rds.AuroraMysqlEngineVersion.VER_3_01_0),
+            credentials=rds.Credentials.from_generated_secret("clusteradmin"),  # Optional - will default to 'admin' username and generated password
+            writer=rds.ClusterInstance.provisioned("writer",
+                publicly_accessible=False
             ),
-            writer=rds.ClusterInstance.provisioned("writer"),
+            readers=[
+                rds.ClusterInstance.provisioned("reader1", promotion_tier=1),
+                rds.ClusterInstance.serverless_v2("reader2")
+            ],
+            vpc_subnets=ec2.SubnetSelection(
+                subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS
+            ),
             vpc=vpc
-        )
-        
-        proxy = rds.DatabaseProxy(self, "Proxy",
-            proxy_target=rds.ProxyTarget.from_cluster(cluster),
-            secrets=[cluster.secret],
-            vpc=vpc,
-            client_password_auth_type=rds.ClientPasswordAuthType.MYSQL_NATIVE_PASSWORD
         )
     '''
 
@@ -50282,7 +50867,7 @@ class DatabaseCluster(
         storage_encrypted: typing.Optional[builtins.bool] = None,
         storage_encryption_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         storage_type: typing.Optional["DBClusterStorageType"] = None,
-        subnet_group: typing.Optional["ISubnetGroup"] = None,
+        subnet_group: typing.Optional["_IDBSubnetGroupRef_314322e0"] = None,
         vpc: typing.Optional["_IVpc_f30d5663"] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
         writer: typing.Optional["IClusterInstance"] = None,
@@ -50666,6 +51251,116 @@ class DatabaseCluster(
 
         return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricServerlessDatabaseCapacity", [props]))
 
+    @jsii.member(jsii_name="metricVolumeReadIOPs")
+    def metric_volume_read_io_ps(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''The average number of disk read I/O operations per second.
+
+        This metric is only available for Aurora database clusters.
+        For non-Aurora RDS clusters, this metric will not return any data
+        in CloudWatch.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - average over 5 minutes
+        '''
+        props = _MetricOptions_1788b62f(
+            account=account,
+            color=color,
+            dimensions_map=dimensions_map,
+            id=id,
+            label=label,
+            period=period,
+            region=region,
+            stack_account=stack_account,
+            stack_region=stack_region,
+            statistic=statistic,
+            unit=unit,
+            visible=visible,
+        )
+
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricVolumeReadIOPs", [props]))
+
+    @jsii.member(jsii_name="metricVolumeWriteIOPs")
+    def metric_volume_write_io_ps(
+        self,
+        *,
+        account: typing.Optional[builtins.str] = None,
+        color: typing.Optional[builtins.str] = None,
+        dimensions_map: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        id: typing.Optional[builtins.str] = None,
+        label: typing.Optional[builtins.str] = None,
+        period: typing.Optional["_Duration_4839e8c3"] = None,
+        region: typing.Optional[builtins.str] = None,
+        stack_account: typing.Optional[builtins.str] = None,
+        stack_region: typing.Optional[builtins.str] = None,
+        statistic: typing.Optional[builtins.str] = None,
+        unit: typing.Optional["_Unit_61bc6f70"] = None,
+        visible: typing.Optional[builtins.bool] = None,
+    ) -> "_Metric_e396a4dc":
+        '''The average number of disk write I/O operations per second.
+
+        This metric is only available for Aurora database clusters.
+        For non-Aurora RDS clusters, this metric will not return any data
+        in CloudWatch.
+
+        :param account: Account which this metric comes from. Default: - Deployment account.
+        :param color: The hex color code, prefixed with '#' (e.g. '#00ff00'), to use when this metric is rendered on a graph. The ``Color`` class has a set of standard colors that can be used here. Default: - Automatic color
+        :param dimensions_map: Dimensions of the metric. Default: - No dimensions.
+        :param id: Unique identifier for this metric when used in dashboard widgets. The id can be used as a variable to represent this metric in math expressions. Valid characters are letters, numbers, and underscore. The first character must be a lowercase letter. Default: - No ID
+        :param label: Label for this metric when added to a Graph in a Dashboard. You can use `dynamic labels <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html>`_ to show summary information about the entire displayed time series in the legend. For example, if you use:: [max: ${MAX}] MyMetric As the metric label, the maximum value in the visible range will be shown next to the time series name in the graph's legend. Default: - No label
+        :param period: The period over which the specified statistic is applied. Default: Duration.minutes(5)
+        :param region: Region which this metric comes from. Default: - Deployment region.
+        :param stack_account: Account of the stack this metric is attached to. Default: - Deployment account.
+        :param stack_region: Region of the stack this metric is attached to. Default: - Deployment region.
+        :param statistic: What function to use for aggregating. Use the ``aws_cloudwatch.Stats`` helper class to construct valid input strings. Can be one of the following: - "Minimum" | "min" - "Maximum" | "max" - "Average" | "avg" - "Sum" | "sum" - "SampleCount | "n" - "pNN.NN" - "tmNN.NN" | "tm(NN.NN%:NN.NN%)" - "iqm" - "wmNN.NN" | "wm(NN.NN%:NN.NN%)" - "tcNN.NN" | "tc(NN.NN%:NN.NN%)" - "tsNN.NN" | "ts(NN.NN%:NN.NN%)" Default: Average
+        :param unit: Unit used to filter the metric stream. Only refer to datums emitted to the metric stream with the given unit and ignore all others. Only useful when datums are being emitted to the same metric stream under different units. The default is to use all matric datums in the stream, regardless of unit, which is recommended in nearly all cases. CloudWatch does not honor this property for graphs. Default: - All metric datums in the given metric stream
+        :param visible: Whether this metric should be visible in dashboard graphs. Setting this to false is useful when you want to hide raw metrics that are used in math expressions, and show only the expression results. Default: true
+
+        :default: - average over 5 minutes
+        '''
+        props = _MetricOptions_1788b62f(
+            account=account,
+            color=color,
+            dimensions_map=dimensions_map,
+            id=id,
+            label=label,
+            period=period,
+            region=region,
+            stack_account=stack_account,
+            stack_region=stack_region,
+            statistic=statistic,
+            unit=unit,
+            visible=visible,
+        )
+
+        return typing.cast("_Metric_e396a4dc", jsii.invoke(self, "metricVolumeWriteIOPs", [props]))
+
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
     def PROPERTY_INJECTION_ID(cls) -> builtins.str:
@@ -50770,6 +51465,11 @@ class DatabaseCluster(
     @jsii.member(jsii_name="subnetGroup")
     def _subnet_group(self) -> "ISubnetGroup":
         return typing.cast("ISubnetGroup", jsii.get(self, "subnetGroup"))
+
+    @builtins.property
+    @jsii.member(jsii_name="subnetGroupRef")
+    def _subnet_group_ref(self) -> "_IDBSubnetGroupRef_314322e0":
+        return typing.cast("_IDBSubnetGroupRef_314322e0", jsii.get(self, "subnetGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="vpc")
@@ -50947,7 +51647,7 @@ class DatabaseInstance(
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         storage_throughput: typing.Optional[jsii.Number] = None,
         storage_type: typing.Optional["StorageType"] = None,
-        subnet_group: typing.Optional["ISubnetGroup"] = None,
+        subnet_group: typing.Optional["_IDBSubnetGroupRef_314322e0"] = None,
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
@@ -51152,6 +51852,8 @@ class DatabaseInstance(
         db_user: typing.Optional[builtins.str] = None,
     ) -> "_Grant_a7ae64f8":
         '''Grant the given identity connection access to the database.
+
+        [disable-awslint:no-grants]
 
         :param grantee: the Principal to grant the permissions to.
         :param db_user: the name of the database user to allow connecting as to the db instance, or the default database user, obtained from the Secret, if not specified.
@@ -51367,6 +52069,7 @@ __all__ = [
     "DatabaseProxyProps",
     "DatabaseSecret",
     "DatabaseSecretProps",
+    "DefaultAuthScheme",
     "Endpoint",
     "EngineLifecycleSupport",
     "EngineVersion",
@@ -52294,6 +52997,7 @@ def _typecheckingstub__255b0779ca741853674876540bf77279f6293bea05de2cd18724d2b92
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
+    additional_storage_volumes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBInstance.AdditionalStorageVolumeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     allocated_storage: typing.Optional[builtins.str] = None,
     allow_major_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     apply_immediately: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -52400,6 +53104,12 @@ def _typecheckingstub__3ae03ec324e0070f7cc8c2f2e303d0f6e50d95aaceae332584867e610
 
 def _typecheckingstub__21c13f3ff42101254dd0145b4f37f31574e3048d1f2f05b59ca91ffabc98da29(
     props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__dda0bdd3fe5099dfc5cbc483ada68d64d6ac9883e0efdd60179d7ddbfe8b3a67(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnDBInstance.AdditionalStorageVolumeProperty]]]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -52896,6 +53606,18 @@ def _typecheckingstub__347bbde8fcaff5958e8257d0b86319fb49d7cad9dd1f919f9270a1de1
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__28ef177d6e6f3f5068e9ea87fe85b460492bed7697b4f762562d0b338158be30(
+    *,
+    allocated_storage: typing.Optional[builtins.str] = None,
+    iops: typing.Optional[jsii.Number] = None,
+    max_allocated_storage: typing.Optional[jsii.Number] = None,
+    storage_throughput: typing.Optional[jsii.Number] = None,
+    storage_type: typing.Optional[builtins.str] = None,
+    volume_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2aa54c462c4c6282e2c878f84c54d452ef39c981551f5dcf7cdbf90ebff1ccac(
     *,
     ca_identifier: typing.Optional[builtins.str] = None,
@@ -52949,6 +53671,7 @@ def _typecheckingstub__af956ca567992aaf20ac35fd3f87f41dced1cfcec90d57a985ec068e0
 
 def _typecheckingstub__3bddb1be0bd1f1699e3a084c5859d94d8879ff15011f2f2eaac29ec16f6eaebc(
     *,
+    additional_storage_volumes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBInstance.AdditionalStorageVolumeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     allocated_storage: typing.Optional[builtins.str] = None,
     allow_major_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     apply_immediately: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -54205,7 +54928,7 @@ def _typecheckingstub__d8ef509fa2a856a5e04875e06fad6792daf0a14797f5d93ddc4c65225
     monitoring_role: typing.Optional[_IRoleRef_8400221f] = None,
     promotion_tier: typing.Optional[jsii.Number] = None,
     removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-    subnet_group: typing.Optional[ISubnetGroup] = None,
+    subnet_group: typing.Optional[_IDBSubnetGroupRef_314322e0] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -54406,7 +55129,7 @@ def _typecheckingstub__1e44b5aef872ca17869a17181382f06cd0166bdbe07e2c33701d3bf1e
     storage_encrypted: typing.Optional[builtins.bool] = None,
     storage_encryption_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
     storage_type: typing.Optional[DBClusterStorageType] = None,
-    subnet_group: typing.Optional[ISubnetGroup] = None,
+    subnet_group: typing.Optional[_IDBSubnetGroupRef_314322e0] = None,
     vpc: typing.Optional[_IVpc_f30d5663] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
     writer: typing.Optional[IClusterInstance] = None,
@@ -54474,7 +55197,7 @@ def _typecheckingstub__a32e21c90ab65d3cfdb3b7ef2a0d741ba1528ec8824cd1817d1e485b4
     storage_encrypted: typing.Optional[builtins.bool] = None,
     storage_encryption_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
     storage_type: typing.Optional[DBClusterStorageType] = None,
-    subnet_group: typing.Optional[ISubnetGroup] = None,
+    subnet_group: typing.Optional[_IDBSubnetGroupRef_314322e0] = None,
     vpc: typing.Optional[_IVpc_f30d5663] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
     writer: typing.Optional[IClusterInstance] = None,
@@ -54545,7 +55268,7 @@ def _typecheckingstub__d110b1cb0043ae6adf59fc0d1bcb136b4655ac973cfbff361a0a3e2fe
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     storage_throughput: typing.Optional[jsii.Number] = None,
     storage_type: typing.Optional[StorageType] = None,
-    subnet_group: typing.Optional[ISubnetGroup] = None,
+    subnet_group: typing.Optional[_IDBSubnetGroupRef_314322e0] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -54595,7 +55318,7 @@ def _typecheckingstub__5508238388ee4afc86f97d5f22fa50578f8a1bdeed9ade8d0210c955b
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     storage_throughput: typing.Optional[jsii.Number] = None,
     storage_type: typing.Optional[StorageType] = None,
-    subnet_group: typing.Optional[ISubnetGroup] = None,
+    subnet_group: typing.Optional[_IDBSubnetGroupRef_314322e0] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
     instance_type: _InstanceType_f64915b9,
     source_database_instance: IDatabaseInstance,
@@ -54650,7 +55373,7 @@ def _typecheckingstub__77d3b41152c4c7a3436d76bad0d83368717917e66a0f0cd849998fcd4
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     storage_throughput: typing.Optional[jsii.Number] = None,
     storage_type: typing.Optional[StorageType] = None,
-    subnet_group: typing.Optional[ISubnetGroup] = None,
+    subnet_group: typing.Optional[_IDBSubnetGroupRef_314322e0] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
     engine: IInstanceEngine,
     allocated_storage: typing.Optional[jsii.Number] = None,
@@ -54701,19 +55424,19 @@ def _typecheckingstub__f2dbc6ab92056dabb7c236159dd3fc2a49f1c021453107d70024c5244
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     target_role: typing.Optional[ProxyEndpointTargetRole] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
-    db_proxy: IDatabaseProxy,
+    db_proxy: _IDBProxyRef_97300f25,
 ) -> None:
     """Type checking stubs"""
     pass
 
 def _typecheckingstub__b1364fc4a6f282f0983046855ebcccd28a886dcf87529b7c1467315707b87031(
     *,
-    secrets: typing.Sequence[_ISecret_6e020e6a],
     vpc: _IVpc_f30d5663,
     borrow_timeout: typing.Optional[_Duration_4839e8c3] = None,
     client_password_auth_type: typing.Optional[ClientPasswordAuthType] = None,
     db_proxy_name: typing.Optional[builtins.str] = None,
     debug_logging: typing.Optional[builtins.bool] = None,
+    default_auth_scheme: typing.Optional[DefaultAuthScheme] = None,
     iam_auth: typing.Optional[builtins.bool] = None,
     idle_client_timeout: typing.Optional[_Duration_4839e8c3] = None,
     init_query: typing.Optional[builtins.str] = None,
@@ -54721,6 +55444,7 @@ def _typecheckingstub__b1364fc4a6f282f0983046855ebcccd28a886dcf87529b7c146731570
     max_idle_connections_percent: typing.Optional[jsii.Number] = None,
     require_tls: typing.Optional[builtins.bool] = None,
     role: typing.Optional[_IRole_235f5d8e] = None,
+    secrets: typing.Optional[typing.Sequence[_ISecret_6e020e6a]] = None,
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     session_pinning_filters: typing.Optional[typing.Sequence[SessionPinningFilter]] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -54730,12 +55454,12 @@ def _typecheckingstub__b1364fc4a6f282f0983046855ebcccd28a886dcf87529b7c146731570
 
 def _typecheckingstub__9c2a07edd3cc888abd237aad605bd4ef9d0dcee9338dbfb923f0d5488a6fa93a(
     *,
-    secrets: typing.Sequence[_ISecret_6e020e6a],
     vpc: _IVpc_f30d5663,
     borrow_timeout: typing.Optional[_Duration_4839e8c3] = None,
     client_password_auth_type: typing.Optional[ClientPasswordAuthType] = None,
     db_proxy_name: typing.Optional[builtins.str] = None,
     debug_logging: typing.Optional[builtins.bool] = None,
+    default_auth_scheme: typing.Optional[DefaultAuthScheme] = None,
     iam_auth: typing.Optional[builtins.bool] = None,
     idle_client_timeout: typing.Optional[_Duration_4839e8c3] = None,
     init_query: typing.Optional[builtins.str] = None,
@@ -54743,6 +55467,7 @@ def _typecheckingstub__9c2a07edd3cc888abd237aad605bd4ef9d0dcee9338dbfb923f0d5488
     max_idle_connections_percent: typing.Optional[jsii.Number] = None,
     require_tls: typing.Optional[builtins.bool] = None,
     role: typing.Optional[_IRole_235f5d8e] = None,
+    secrets: typing.Optional[typing.Sequence[_ISecret_6e020e6a]] = None,
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     session_pinning_filters: typing.Optional[typing.Sequence[SessionPinningFilter]] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -54804,7 +55529,7 @@ def _typecheckingstub__346c712f100e1162c15995aca85234c70ce1bcb56cd4fdecac93c6635
     monitoring_role: typing.Optional[_IRoleRef_8400221f] = None,
     promotion_tier: typing.Optional[jsii.Number] = None,
     removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-    subnet_group: typing.Optional[ISubnetGroup] = None,
+    subnet_group: typing.Optional[_IDBSubnetGroupRef_314322e0] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -54812,12 +55537,12 @@ def _typecheckingstub__346c712f100e1162c15995aca85234c70ce1bcb56cd4fdecac93c6635
 def _typecheckingstub__cc014f052070ff8221cfea3705aabe02b81605d77d8c0391cfd1b437b35f620e(
     id: builtins.str,
     *,
-    secrets: typing.Sequence[_ISecret_6e020e6a],
     vpc: _IVpc_f30d5663,
     borrow_timeout: typing.Optional[_Duration_4839e8c3] = None,
     client_password_auth_type: typing.Optional[ClientPasswordAuthType] = None,
     db_proxy_name: typing.Optional[builtins.str] = None,
     debug_logging: typing.Optional[builtins.bool] = None,
+    default_auth_scheme: typing.Optional[DefaultAuthScheme] = None,
     iam_auth: typing.Optional[builtins.bool] = None,
     idle_client_timeout: typing.Optional[_Duration_4839e8c3] = None,
     init_query: typing.Optional[builtins.str] = None,
@@ -54825,6 +55550,7 @@ def _typecheckingstub__cc014f052070ff8221cfea3705aabe02b81605d77d8c0391cfd1b437b
     max_idle_connections_percent: typing.Optional[jsii.Number] = None,
     require_tls: typing.Optional[builtins.bool] = None,
     role: typing.Optional[_IRole_235f5d8e] = None,
+    secrets: typing.Optional[typing.Sequence[_ISecret_6e020e6a]] = None,
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     session_pinning_filters: typing.Optional[typing.Sequence[SessionPinningFilter]] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -54867,12 +55593,12 @@ def _typecheckingstub__cb438e41c5d27e4b968b536ac8e59048e5a810f9216c9316ab7091ead
 def _typecheckingstub__82275f6c142bc7bc61c7b1dbb8e8fef70822986e2806e0e0d4173aeb16f373aa(
     id: builtins.str,
     *,
-    secrets: typing.Sequence[_ISecret_6e020e6a],
     vpc: _IVpc_f30d5663,
     borrow_timeout: typing.Optional[_Duration_4839e8c3] = None,
     client_password_auth_type: typing.Optional[ClientPasswordAuthType] = None,
     db_proxy_name: typing.Optional[builtins.str] = None,
     debug_logging: typing.Optional[builtins.bool] = None,
+    default_auth_scheme: typing.Optional[DefaultAuthScheme] = None,
     iam_auth: typing.Optional[builtins.bool] = None,
     idle_client_timeout: typing.Optional[_Duration_4839e8c3] = None,
     init_query: typing.Optional[builtins.str] = None,
@@ -54880,6 +55606,7 @@ def _typecheckingstub__82275f6c142bc7bc61c7b1dbb8e8fef70822986e2806e0e0d4173aeb1
     max_idle_connections_percent: typing.Optional[jsii.Number] = None,
     require_tls: typing.Optional[builtins.bool] = None,
     role: typing.Optional[_IRole_235f5d8e] = None,
+    secrets: typing.Optional[typing.Sequence[_ISecret_6e020e6a]] = None,
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     session_pinning_filters: typing.Optional[typing.Sequence[SessionPinningFilter]] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -55286,7 +56013,7 @@ def _typecheckingstub__87c2088bf13be01a3698e223981b7e06c3a0e51c85214043981db6f90
     scaling: typing.Optional[typing.Union[ServerlessScalingOptions, typing.Dict[builtins.str, typing.Any]]] = None,
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     storage_encryption_key: typing.Optional[_IKey_5f11635f] = None,
-    subnet_group: typing.Optional[ISubnetGroup] = None,
+    subnet_group: typing.Optional[_IDBSubnetGroupRef_314322e0] = None,
     vpc: typing.Optional[_IVpc_f30d5663] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
 ) -> None:
@@ -55362,7 +56089,7 @@ def _typecheckingstub__410a47d6864d767bbf415a7e397aab87092e12f5a984a9fd5f0e6a3fa
     removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     scaling: typing.Optional[typing.Union[ServerlessScalingOptions, typing.Dict[builtins.str, typing.Any]]] = None,
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-    subnet_group: typing.Optional[ISubnetGroup] = None,
+    subnet_group: typing.Optional[_IDBSubnetGroupRef_314322e0] = None,
     vpc: typing.Optional[_IVpc_f30d5663] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
 ) -> None:
@@ -55396,7 +56123,7 @@ def _typecheckingstub__0b526abeca9bc241a75bf54b7ffc69af0cea620868b306af4ebd42a35
     removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     scaling: typing.Optional[typing.Union[ServerlessScalingOptions, typing.Dict[builtins.str, typing.Any]]] = None,
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
-    subnet_group: typing.Optional[ISubnetGroup] = None,
+    subnet_group: typing.Optional[_IDBSubnetGroupRef_314322e0] = None,
     vpc: typing.Optional[_IVpc_f30d5663] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
 ) -> None:
@@ -55418,7 +56145,7 @@ def _typecheckingstub__4485d7767abcce549193c97b6ccd4ed8978af13f025967ffcdb4e8567
     scaling: typing.Optional[typing.Union[ServerlessScalingOptions, typing.Dict[builtins.str, typing.Any]]] = None,
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     storage_encryption_key: typing.Optional[_IKey_5f11635f] = None,
-    subnet_group: typing.Optional[ISubnetGroup] = None,
+    subnet_group: typing.Optional[_IDBSubnetGroupRef_314322e0] = None,
     vpc: typing.Optional[_IVpc_f30d5663] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
 ) -> None:
@@ -55624,7 +56351,7 @@ def _typecheckingstub__c768778f18ef24be2245b333adc9051e0e2a6ba0da1756265d169decb
     monitoring_role: typing.Optional[_IRoleRef_8400221f] = None,
     promotion_tier: typing.Optional[jsii.Number] = None,
     removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
-    subnet_group: typing.Optional[ISubnetGroup] = None,
+    subnet_group: typing.Optional[_IDBSubnetGroupRef_314322e0] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -55644,12 +56371,12 @@ def _typecheckingstub__5f621f0fc4d2860274d3a52b442cd301b03ad10c19a3340e127b28565
 def _typecheckingstub__9e7b9f9993460ed4933effe80545b41147c8e758c88df339423fdef3ebdbb7b7(
     id: builtins.str,
     *,
-    secrets: typing.Sequence[_ISecret_6e020e6a],
     vpc: _IVpc_f30d5663,
     borrow_timeout: typing.Optional[_Duration_4839e8c3] = None,
     client_password_auth_type: typing.Optional[ClientPasswordAuthType] = None,
     db_proxy_name: typing.Optional[builtins.str] = None,
     debug_logging: typing.Optional[builtins.bool] = None,
+    default_auth_scheme: typing.Optional[DefaultAuthScheme] = None,
     iam_auth: typing.Optional[builtins.bool] = None,
     idle_client_timeout: typing.Optional[_Duration_4839e8c3] = None,
     init_query: typing.Optional[builtins.str] = None,
@@ -55657,6 +56384,7 @@ def _typecheckingstub__9e7b9f9993460ed4933effe80545b41147c8e758c88df339423fdef3e
     max_idle_connections_percent: typing.Optional[jsii.Number] = None,
     require_tls: typing.Optional[builtins.bool] = None,
     role: typing.Optional[_IRole_235f5d8e] = None,
+    secrets: typing.Optional[typing.Sequence[_ISecret_6e020e6a]] = None,
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     session_pinning_filters: typing.Optional[typing.Sequence[SessionPinningFilter]] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -55758,7 +56486,7 @@ def _typecheckingstub__d1a2e259091e12a41b0f5818df495769518e049ebcc89ed340ffc7ba4
     storage_encrypted: typing.Optional[builtins.bool] = None,
     storage_encryption_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
     storage_type: typing.Optional[DBClusterStorageType] = None,
-    subnet_group: typing.Optional[ISubnetGroup] = None,
+    subnet_group: typing.Optional[_IDBSubnetGroupRef_314322e0] = None,
     vpc: typing.Optional[_IVpc_f30d5663] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
     writer: typing.Optional[IClusterInstance] = None,
@@ -55830,12 +56558,12 @@ def _typecheckingstub__48d8ddc93958bf98fee260c9c8ab8ac972c2df71e3a1baf7be3972315
 def _typecheckingstub__1a570d3e3410884069b8a67a8efdb043b454116fb50145140aeead995d1acf19(
     id: builtins.str,
     *,
-    secrets: typing.Sequence[_ISecret_6e020e6a],
     vpc: _IVpc_f30d5663,
     borrow_timeout: typing.Optional[_Duration_4839e8c3] = None,
     client_password_auth_type: typing.Optional[ClientPasswordAuthType] = None,
     db_proxy_name: typing.Optional[builtins.str] = None,
     debug_logging: typing.Optional[builtins.bool] = None,
+    default_auth_scheme: typing.Optional[DefaultAuthScheme] = None,
     iam_auth: typing.Optional[builtins.bool] = None,
     idle_client_timeout: typing.Optional[_Duration_4839e8c3] = None,
     init_query: typing.Optional[builtins.str] = None,
@@ -55843,6 +56571,7 @@ def _typecheckingstub__1a570d3e3410884069b8a67a8efdb043b454116fb50145140aeead995
     max_idle_connections_percent: typing.Optional[jsii.Number] = None,
     require_tls: typing.Optional[builtins.bool] = None,
     role: typing.Optional[_IRole_235f5d8e] = None,
+    secrets: typing.Optional[typing.Sequence[_ISecret_6e020e6a]] = None,
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     session_pinning_filters: typing.Optional[typing.Sequence[SessionPinningFilter]] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -55951,7 +56680,7 @@ def _typecheckingstub__dbf7e60a650d0a1bea1826814200716f46cd1f59eea36a42193653d7f
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     storage_throughput: typing.Optional[jsii.Number] = None,
     storage_type: typing.Optional[StorageType] = None,
-    subnet_group: typing.Optional[ISubnetGroup] = None,
+    subnet_group: typing.Optional[_IDBSubnetGroupRef_314322e0] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -56028,7 +56757,7 @@ def _typecheckingstub__f06d86058a0a7538eb7dbf55de032c8cf05f7fa7b4ab5d5c1d47f7617
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     storage_throughput: typing.Optional[jsii.Number] = None,
     storage_type: typing.Optional[StorageType] = None,
-    subnet_group: typing.Optional[ISubnetGroup] = None,
+    subnet_group: typing.Optional[_IDBSubnetGroupRef_314322e0] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
     engine: IInstanceEngine,
     allocated_storage: typing.Optional[jsii.Number] = None,
@@ -56089,7 +56818,7 @@ def _typecheckingstub__23675ebe667ec40ba6afd82bf8b65d901cc9a4bfc79be222b108037d5
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     storage_throughput: typing.Optional[jsii.Number] = None,
     storage_type: typing.Optional[StorageType] = None,
-    subnet_group: typing.Optional[ISubnetGroup] = None,
+    subnet_group: typing.Optional[_IDBSubnetGroupRef_314322e0] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
     engine: IInstanceEngine,
     allocated_storage: typing.Optional[jsii.Number] = None,
@@ -56158,7 +56887,7 @@ def _typecheckingstub__b2082895d1c502ba05a38a32c44782a7480089cd804d396ed1b41ca4a
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     storage_throughput: typing.Optional[jsii.Number] = None,
     storage_type: typing.Optional[StorageType] = None,
-    subnet_group: typing.Optional[ISubnetGroup] = None,
+    subnet_group: typing.Optional[_IDBSubnetGroupRef_314322e0] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -56175,12 +56904,12 @@ def _typecheckingstub__15a5a083e6c872f4fd6b153de10a2f345844db34e421f370cd8d33bc8
     id: builtins.str,
     *,
     proxy_target: ProxyTarget,
-    secrets: typing.Sequence[_ISecret_6e020e6a],
     vpc: _IVpc_f30d5663,
     borrow_timeout: typing.Optional[_Duration_4839e8c3] = None,
     client_password_auth_type: typing.Optional[ClientPasswordAuthType] = None,
     db_proxy_name: typing.Optional[builtins.str] = None,
     debug_logging: typing.Optional[builtins.bool] = None,
+    default_auth_scheme: typing.Optional[DefaultAuthScheme] = None,
     iam_auth: typing.Optional[builtins.bool] = None,
     idle_client_timeout: typing.Optional[_Duration_4839e8c3] = None,
     init_query: typing.Optional[builtins.str] = None,
@@ -56188,6 +56917,7 @@ def _typecheckingstub__15a5a083e6c872f4fd6b153de10a2f345844db34e421f370cd8d33bc8
     max_idle_connections_percent: typing.Optional[jsii.Number] = None,
     require_tls: typing.Optional[builtins.bool] = None,
     role: typing.Optional[_IRole_235f5d8e] = None,
+    secrets: typing.Optional[typing.Sequence[_ISecret_6e020e6a]] = None,
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     session_pinning_filters: typing.Optional[typing.Sequence[SessionPinningFilter]] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -56230,7 +56960,7 @@ def _typecheckingstub__08ee8ab949ce6d8ce9eb8ab34cc08ea3d68f53b04e7d7bae5f6cf0e65
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    db_proxy: IDatabaseProxy,
+    db_proxy: _IDBProxyRef_97300f25,
     vpc: _IVpc_f30d5663,
     db_proxy_endpoint_name: typing.Optional[builtins.str] = None,
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
@@ -56316,7 +57046,7 @@ def _typecheckingstub__c6184cbbefaa372690b9776dafecbf5857cf9bfbab91d1666aad22c56
     storage_encrypted: typing.Optional[builtins.bool] = None,
     storage_encryption_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
     storage_type: typing.Optional[DBClusterStorageType] = None,
-    subnet_group: typing.Optional[ISubnetGroup] = None,
+    subnet_group: typing.Optional[_IDBSubnetGroupRef_314322e0] = None,
     vpc: typing.Optional[_IVpc_f30d5663] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
     writer: typing.Optional[IClusterInstance] = None,
@@ -56436,7 +57166,7 @@ def _typecheckingstub__cb12c4cf0f41b623c75db1c295b846314e730919538b3374019067232
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     storage_throughput: typing.Optional[jsii.Number] = None,
     storage_type: typing.Optional[StorageType] = None,
-    subnet_group: typing.Optional[ISubnetGroup] = None,
+    subnet_group: typing.Optional[_IDBSubnetGroupRef_314322e0] = None,
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
 ) -> None:
     """Type checking stubs"""

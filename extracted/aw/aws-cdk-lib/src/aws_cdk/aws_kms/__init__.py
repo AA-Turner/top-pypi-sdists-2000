@@ -2612,6 +2612,8 @@ class Key(
         since the default CloudFormation setup for KMS keys is that the policy
         must not be empty and so default grants won't work.
 
+        [disable-awslint:no-grants]
+
         :param grantee: -
         :param actions: -
         '''
@@ -2628,6 +2630,8 @@ class Key(
         Key administrators have permissions to manage the key (e.g., change permissions, revoke), but do not have permissions
         to use the key in cryptographic operations (e.g., encrypt, decrypt).
 
+        [disable-awslint:no-grants]
+
         :param grantee: -
         '''
         if __debug__:
@@ -2639,6 +2643,8 @@ class Key(
     def grant_decrypt(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant decryption permissions using this key to the given principal.
 
+        [disable-awslint:no-grants]
+
         :param grantee: -
         '''
         if __debug__:
@@ -2649,6 +2655,8 @@ class Key(
     @jsii.member(jsii_name="grantEncrypt")
     def grant_encrypt(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant encryption permissions using this key to the given principal.
+
+        [disable-awslint:no-grants]
 
         :param grantee: -
         '''
@@ -2664,6 +2672,8 @@ class Key(
     ) -> "_Grant_a7ae64f8":
         '''Grant encryption and decryption permissions using this key to the given principal.
 
+        [disable-awslint:no-grants]
+
         :param grantee: -
         '''
         if __debug__:
@@ -2674,6 +2684,8 @@ class Key(
     @jsii.member(jsii_name="grantGenerateMac")
     def grant_generate_mac(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant permissions to generating MACs to the given principal.
+
+        [disable-awslint:no-grants]
 
         :param grantee: -
         '''
@@ -2686,6 +2698,8 @@ class Key(
     def grant_sign(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant sign permissions using this key to the given principal.
 
+        [disable-awslint:no-grants]
+
         :param grantee: -
         '''
         if __debug__:
@@ -2696,6 +2710,8 @@ class Key(
     @jsii.member(jsii_name="grantSignVerify")
     def grant_sign_verify(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant sign and verify permissions using this key to the given principal.
+
+        [disable-awslint:no-grants]
 
         :param grantee: -
         '''
@@ -2708,6 +2724,8 @@ class Key(
     def grant_verify(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant verify permissions using this key to the given principal.
 
+        [disable-awslint:no-grants]
+
         :param grantee: -
         '''
         if __debug__:
@@ -2718,6 +2736,8 @@ class Key(
     @jsii.member(jsii_name="grantVerifyMac")
     def grant_verify_mac(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant permissions to verifying MACs to the given principal.
+
+        [disable-awslint:no-grants]
 
         :param grantee: -
         '''
@@ -3531,7 +3551,7 @@ class Alias(
         grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
     ) -> "_Grant_a7ae64f8":
-        '''Grant the indicated permissions on this key to the given principal.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         :param actions: -
@@ -3544,7 +3564,7 @@ class Alias(
 
     @jsii.member(jsii_name="grantDecrypt")
     def grant_decrypt(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grant decryption permissions using this key to the given principal.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         '''
@@ -3555,7 +3575,7 @@ class Alias(
 
     @jsii.member(jsii_name="grantEncrypt")
     def grant_encrypt(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grant encryption permissions using this key to the given principal.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         '''
@@ -3569,7 +3589,7 @@ class Alias(
         self,
         grantee: "_IGrantable_71c4f5de",
     ) -> "_Grant_a7ae64f8":
-        '''Grant encryption and decryption permissions using this key to the given principal.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         '''
@@ -3580,7 +3600,7 @@ class Alias(
 
     @jsii.member(jsii_name="grantGenerateMac")
     def grant_generate_mac(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grant permissions to generating MACs to the given principal.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         '''
@@ -3591,7 +3611,7 @@ class Alias(
 
     @jsii.member(jsii_name="grantSign")
     def grant_sign(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grant sign permissions using this key to the given principal.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         '''
@@ -3602,7 +3622,7 @@ class Alias(
 
     @jsii.member(jsii_name="grantSignVerify")
     def grant_sign_verify(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grant sign and verify permissions using this key to the given principal.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         '''
@@ -3613,7 +3633,7 @@ class Alias(
 
     @jsii.member(jsii_name="grantVerify")
     def grant_verify(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grant verify permissions using this key to the given principal.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         '''
@@ -3624,7 +3644,7 @@ class Alias(
 
     @jsii.member(jsii_name="grantVerifyMac")
     def grant_verify_mac(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grant permissions to verifying MACs to the given principal.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         '''

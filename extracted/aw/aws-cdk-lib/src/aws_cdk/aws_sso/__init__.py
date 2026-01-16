@@ -924,7 +924,7 @@ class CfnAssignment(
 
     .. epigraph::
 
-       The term *principal* here refers to a user or group that is defined in IAM Identity Center .
+       The term *principal* here refers to a user or group that is defined in  .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sso-assignment.html
     :cloudformationResource: AWS::SSO::Assignment
@@ -962,7 +962,7 @@ class CfnAssignment(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param instance_arn: The ARN of the IAM Identity Center instance under which the operation will be executed. For more information about ARNs, see `Amazon Resource Names (ARNs) and AWS Service Namespaces <https://docs.aws.amazon.com//general/latest/gr/aws-arns-and-namespaces.html>`_ in the *AWS General Reference* .
+        :param instance_arn: The ARN of the instance under which the operation will be executed. For more information about ARNs, see `Amazon Resource Names (ARNs) and AWS Service Namespaces <https://docs.aws.amazon.com//general/latest/gr/aws-arns-and-namespaces.html>`_ in the *AWS General Reference* .
         :param permission_set_arn: The ARN of the permission set.
         :param principal_id: An identifier for an object in IAM Identity Center, such as a user or group. PrincipalIds are GUIDs (For example, f81d4fae-7dec-11d0-a765-00a0c91e6bf6). For more information about PrincipalIds in IAM Identity Center, see the `IAM Identity Center Identity Store API Reference <https://docs.aws.amazon.com//singlesignon/latest/IdentityStoreAPIReference/welcome.html>`_ .
         :param principal_type: The entity type for which the assignment will be created.
@@ -1040,7 +1040,7 @@ class CfnAssignment(
     @builtins.property
     @jsii.member(jsii_name="instanceArn")
     def instance_arn(self) -> builtins.str:
-        '''The ARN of the IAM Identity Center instance under which the operation will be executed.'''
+        '''The ARN of the  instance under which the operation will be executed.'''
         return typing.cast(builtins.str, jsii.get(self, "instanceArn"))
 
     @instance_arn.setter
@@ -1141,7 +1141,7 @@ class CfnAssignmentProps:
     ) -> None:
         '''Properties for defining a ``CfnAssignment``.
 
-        :param instance_arn: The ARN of the IAM Identity Center instance under which the operation will be executed. For more information about ARNs, see `Amazon Resource Names (ARNs) and AWS Service Namespaces <https://docs.aws.amazon.com//general/latest/gr/aws-arns-and-namespaces.html>`_ in the *AWS General Reference* .
+        :param instance_arn: The ARN of the instance under which the operation will be executed. For more information about ARNs, see `Amazon Resource Names (ARNs) and AWS Service Namespaces <https://docs.aws.amazon.com//general/latest/gr/aws-arns-and-namespaces.html>`_ in the *AWS General Reference* .
         :param permission_set_arn: The ARN of the permission set.
         :param principal_id: An identifier for an object in IAM Identity Center, such as a user or group. PrincipalIds are GUIDs (For example, f81d4fae-7dec-11d0-a765-00a0c91e6bf6). For more information about PrincipalIds in IAM Identity Center, see the `IAM Identity Center Identity Store API Reference <https://docs.aws.amazon.com//singlesignon/latest/IdentityStoreAPIReference/welcome.html>`_ .
         :param principal_type: The entity type for which the assignment will be created.
@@ -1185,7 +1185,7 @@ class CfnAssignmentProps:
 
     @builtins.property
     def instance_arn(self) -> builtins.str:
-        '''The ARN of the IAM Identity Center instance under which the operation will be executed.
+        '''The ARN of the  instance under which the operation will be executed.
 
         For more information about ARNs, see `Amazon Resource Names (ARNs) and AWS Service Namespaces <https://docs.aws.amazon.com//general/latest/gr/aws-arns-and-namespaces.html>`_ in the *AWS General Reference* .
 
@@ -1459,9 +1459,9 @@ class CfnInstanceAccessControlAttributeConfiguration(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_sso.CfnInstanceAccessControlAttributeConfiguration",
 ):
-    '''Enables the attribute-based access control (ABAC) feature for the specified IAM Identity Center instance.
+    '''Enables the attribute-based access control (ABAC) feature for the specified  instance.
 
-    You can also specify new attributes to add to your ABAC configuration during the enabling process. For more information about ABAC, see `Attribute-Based Access Control <https://docs.aws.amazon.com//singlesignon/latest/userguide/abac.html>`_ in the *IAM Identity Center User Guide* .
+    You can also specify new attributes to add to your ABAC configuration during the enabling process. For more information about ABAC, see `Attribute-Based Access Control <https://docs.aws.amazon.com//singlesignon/latest/userguide/abac.html>`_ in the *User Guide* .
     .. epigraph::
 
        The ``InstanceAccessControlAttributeConfiguration`` property has been deprecated but is still supported for backwards compatibility purposes. We recommend that you use the ``AccessControlAttributes`` property instead.
@@ -1510,8 +1510,8 @@ class CfnInstanceAccessControlAttributeConfiguration(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param instance_arn: The ARN of the IAM Identity Center instance under which the operation will be executed.
-        :param access_control_attributes: Lists the attributes that are configured for ABAC in the specified IAM Identity Center instance.
+        :param instance_arn: The ARN of the instance under which the operation will be executed.
+        :param access_control_attributes: Lists the attributes that are configured for ABAC in the specified instance.
         :param instance_access_control_attribute_configuration: (deprecated) The InstanceAccessControlAttributeConfiguration property has been deprecated but is still supported for backwards compatibility purposes. We recomend that you use AccessControlAttributes property instead.
         '''
         if __debug__:
@@ -1587,7 +1587,7 @@ class CfnInstanceAccessControlAttributeConfiguration(
     @builtins.property
     @jsii.member(jsii_name="instanceArn")
     def instance_arn(self) -> builtins.str:
-        '''The ARN of the IAM Identity Center instance under which the operation will be executed.'''
+        '''The ARN of the  instance under which the operation will be executed.'''
         return typing.cast(builtins.str, jsii.get(self, "instanceArn"))
 
     @instance_arn.setter
@@ -1602,7 +1602,7 @@ class CfnInstanceAccessControlAttributeConfiguration(
     def access_control_attributes(
         self,
     ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty"]]]]:
-        '''Lists the attributes that are configured for ABAC in the specified IAM Identity Center instance.'''
+        '''Lists the attributes that are configured for ABAC in the specified  instance.'''
         return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty"]]]], jsii.get(self, "accessControlAttributes"))
 
     @access_control_attributes.setter
@@ -1650,11 +1650,11 @@ class CfnInstanceAccessControlAttributeConfiguration(
             key: builtins.str,
             value: typing.Union["_IResolvable_da3f097b", typing.Union["CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeValueProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
-            '''These are IAM Identity Center identity store attributes that you can configure for use in attributes-based access control (ABAC).
+            '''These are  identity store attributes that you can configure for use in attributes-based access control (ABAC).
 
-            You can create permissions policies that determine who can access your AWS resources based upon the configured attribute values. When you enable ABAC and specify ``AccessControlAttributes`` , IAM Identity Center passes the attribute values of the authenticated user into IAM for use in policy evaluation.
+            You can create permissions policies that determine who can access your AWS resources based upon the configured attribute values. When you enable ABAC and specify ``AccessControlAttributes`` ,  passes the attribute values of the authenticated user into IAM for use in policy evaluation.
 
-            :param key: The name of the attribute associated with your identities in your identity source. This is used to map a specified attribute in your identity source with an attribute in IAM Identity Center .
+            :param key: The name of the attribute associated with your identities in your identity source. This is used to map a specified attribute in your identity source with an attribute in .
             :param value: The value used for mapping a specified attribute to an identity source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sso-instanceaccesscontrolattributeconfiguration-accesscontrolattribute.html
@@ -1686,7 +1686,7 @@ class CfnInstanceAccessControlAttributeConfiguration(
         def key(self) -> builtins.str:
             '''The name of the attribute associated with your identities in your identity source.
 
-            This is used to map a specified attribute in your identity source with an attribute in IAM Identity Center .
+            This is used to map a specified attribute in your identity source with an attribute in  .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sso-instanceaccesscontrolattributeconfiguration-accesscontrolattribute.html#cfn-sso-instanceaccesscontrolattributeconfiguration-accesscontrolattribute-key
             '''
@@ -1726,7 +1726,7 @@ class CfnInstanceAccessControlAttributeConfiguration(
         def __init__(self, *, source: typing.Sequence[builtins.str]) -> None:
             '''The value used for mapping a specified attribute to an identity source.
 
-            :param source: The identity source to use when mapping a specified attribute to IAM Identity Center .
+            :param source: The identity source to use when mapping a specified attribute to .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sso-instanceaccesscontrolattributeconfiguration-accesscontrolattributevalue.html
             :exampleMetadata: fixture=_generated
@@ -1750,7 +1750,7 @@ class CfnInstanceAccessControlAttributeConfiguration(
 
         @builtins.property
         def source(self) -> typing.List[builtins.str]:
-            '''The identity source to use when mapping a specified attribute to IAM Identity Center .
+            '''The identity source to use when mapping a specified attribute to  .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sso-instanceaccesscontrolattributeconfiguration-accesscontrolattributevalue.html#cfn-sso-instanceaccesscontrolattributeconfiguration-accesscontrolattributevalue-source
             '''
@@ -1853,8 +1853,8 @@ class CfnInstanceAccessControlAttributeConfigurationProps:
     ) -> None:
         '''Properties for defining a ``CfnInstanceAccessControlAttributeConfiguration``.
 
-        :param instance_arn: The ARN of the IAM Identity Center instance under which the operation will be executed.
-        :param access_control_attributes: Lists the attributes that are configured for ABAC in the specified IAM Identity Center instance.
+        :param instance_arn: The ARN of the instance under which the operation will be executed.
+        :param access_control_attributes: Lists the attributes that are configured for ABAC in the specified instance.
         :param instance_access_control_attribute_configuration: (deprecated) The InstanceAccessControlAttributeConfiguration property has been deprecated but is still supported for backwards compatibility purposes. We recomend that you use AccessControlAttributes property instead.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sso-instanceaccesscontrolattributeconfiguration.html
@@ -1901,7 +1901,7 @@ class CfnInstanceAccessControlAttributeConfigurationProps:
 
     @builtins.property
     def instance_arn(self) -> builtins.str:
-        '''The ARN of the IAM Identity Center instance under which the operation will be executed.
+        '''The ARN of the  instance under which the operation will be executed.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sso-instanceaccesscontrolattributeconfiguration.html#cfn-sso-instanceaccesscontrolattributeconfiguration-instancearn
         '''
@@ -1913,7 +1913,7 @@ class CfnInstanceAccessControlAttributeConfigurationProps:
     def access_control_attributes(
         self,
     ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnInstanceAccessControlAttributeConfiguration.AccessControlAttributeProperty"]]]]:
-        '''Lists the attributes that are configured for ABAC in the specified IAM Identity Center instance.
+        '''Lists the attributes that are configured for ABAC in the specified  instance.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sso-instanceaccesscontrolattributeconfiguration.html#cfn-sso-instanceaccesscontrolattributeconfiguration-accesscontrolattributes
         '''
@@ -2029,7 +2029,7 @@ class CfnPermissionSet(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_sso.CfnPermissionSet",
 ):
-    '''Specifies a permission set within a specified IAM Identity Center instance.
+    '''Specifies a permission set within a specified  instance.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sso-permissionset.html
     :cloudformationResource: AWS::SSO::PermissionSet
@@ -2096,7 +2096,7 @@ class CfnPermissionSet(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param instance_arn: The ARN of the IAM Identity Center instance under which the operation will be executed. For more information about ARNs, see `Amazon Resource Names (ARNs) and AWS Service Namespaces <https://docs.aws.amazon.com//general/latest/gr/aws-arns-and-namespaces.html>`_ in the *AWS General Reference* .
+        :param instance_arn: The ARN of the instance under which the operation will be executed. For more information about ARNs, see `Amazon Resource Names (ARNs) and AWS Service Namespaces <https://docs.aws.amazon.com//general/latest/gr/aws-arns-and-namespaces.html>`_ in the *AWS General Reference* .
         :param name: The name of the permission set.
         :param customer_managed_policy_references: Specifies the names and paths of the customer managed policies that you have attached to your permission set.
         :param description: The description of the ``PermissionSet`` .
@@ -2211,7 +2211,7 @@ class CfnPermissionSet(
     @builtins.property
     @jsii.member(jsii_name="instanceArn")
     def instance_arn(self) -> builtins.str:
-        '''The ARN of the IAM Identity Center instance under which the operation will be executed.'''
+        '''The ARN of the  instance under which the operation will be executed.'''
         return typing.cast(builtins.str, jsii.get(self, "instanceArn"))
 
     @instance_arn.setter
@@ -2549,7 +2549,7 @@ class CfnPermissionSetProps:
     ) -> None:
         '''Properties for defining a ``CfnPermissionSet``.
 
-        :param instance_arn: The ARN of the IAM Identity Center instance under which the operation will be executed. For more information about ARNs, see `Amazon Resource Names (ARNs) and AWS Service Namespaces <https://docs.aws.amazon.com//general/latest/gr/aws-arns-and-namespaces.html>`_ in the *AWS General Reference* .
+        :param instance_arn: The ARN of the instance under which the operation will be executed. For more information about ARNs, see `Amazon Resource Names (ARNs) and AWS Service Namespaces <https://docs.aws.amazon.com//general/latest/gr/aws-arns-and-namespaces.html>`_ in the *AWS General Reference* .
         :param name: The name of the permission set.
         :param customer_managed_policy_references: Specifies the names and paths of the customer managed policies that you have attached to your permission set.
         :param description: The description of the ``PermissionSet`` .
@@ -2638,7 +2638,7 @@ class CfnPermissionSetProps:
 
     @builtins.property
     def instance_arn(self) -> builtins.str:
-        '''The ARN of the IAM Identity Center instance under which the operation will be executed.
+        '''The ARN of the  instance under which the operation will be executed.
 
         For more information about ARNs, see `Amazon Resource Names (ARNs) and AWS Service Namespaces <https://docs.aws.amazon.com//general/latest/gr/aws-arns-and-namespaces.html>`_ in the *AWS General Reference* .
 

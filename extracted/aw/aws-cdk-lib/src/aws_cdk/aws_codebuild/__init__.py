@@ -16677,7 +16677,7 @@ class ReportGroup(
 
     @jsii.member(jsii_name="grantWrite")
     def grant_write(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grants the given entity permissions to write (that is, upload reports to) this report group.
+        '''[disable-awslint:no-grants].
 
         :param identity: -
         '''

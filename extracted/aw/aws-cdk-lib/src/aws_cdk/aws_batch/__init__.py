@@ -22500,7 +22500,7 @@ class Secret(
     @jsii.member(jsii_name="grantRead")
     @abc.abstractmethod
     def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grants reading the secret to a principal.
+        '''Grants reading the secret to a principal [disable-awslint:no-grants].
 
         :param grantee: -
         '''
@@ -22524,7 +22524,7 @@ class Secret(
 class _SecretProxy(Secret):
     @jsii.member(jsii_name="grantRead")
     def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grants reading the secret to a principal.
+        '''Grants reading the secret to a principal [disable-awslint:no-grants].
 
         :param grantee: -
         '''
@@ -24112,6 +24112,8 @@ class EcsJobDefinition(
         queue: "_IJobQueueRef_2f1c7bda",
     ) -> None:
         '''Grants the ``batch:submitJob`` permission to the identity on both this job definition and the ``queue``.
+
+        [disable-awslint:no-grants]
 
         :param identity: -
         :param queue: -

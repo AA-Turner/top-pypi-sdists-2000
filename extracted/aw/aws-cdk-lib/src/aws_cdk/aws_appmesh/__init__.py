@@ -23514,6 +23514,8 @@ class IVirtualGateway(
     ) -> "_Grant_a7ae64f8":
         '''Grants the given entity ``appmesh:StreamAggregatedResources``.
 
+        [disable-awslint:no-grants]
+
         :param identity: -
         '''
         ...
@@ -23580,6 +23582,8 @@ class _IVirtualGatewayProxy(
         identity: "_IGrantable_71c4f5de",
     ) -> "_Grant_a7ae64f8":
         '''Grants the given entity ``appmesh:StreamAggregatedResources``.
+
+        [disable-awslint:no-grants]
 
         :param identity: -
         '''
@@ -27579,6 +27583,8 @@ class VirtualGateway(
     ) -> "_Grant_a7ae64f8":
         '''Grants the given entity ``appmesh:StreamAggregatedResources``.
 
+        [disable-awslint:no-grants]
+
         :param identity: -
         '''
         if __debug__:
@@ -28282,6 +28288,7 @@ class VirtualNode(
     Any inbound traffic that your virtual node expects should be specified as a
     listener. Any outbound traffic that your virtual node expects to reach
     should be specified as a backend.
+    [disable-awslint:no-grants]
 
     :see: https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_nodes.html
     :exampleMetadata: infused
@@ -28429,7 +28436,7 @@ class VirtualNode(
         self,
         identity: "_IGrantable_71c4f5de",
     ) -> "_Grant_a7ae64f8":
-        '''Grants the given entity ``appmesh:StreamAggregatedResources``.
+        '''[disable-awslint:no-grants].
 
         :param identity: -
         '''

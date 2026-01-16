@@ -52,11 +52,11 @@ from ..aws_kms import IKey as _IKey_5f11635f
 from ..aws_lambda import IFunction as _IFunction_6adb0ab8
 from ..aws_s3 import IBucket as _IBucket_42e086fd
 from ..aws_ses import (
-    IReceiptRule as _IReceiptRule_20f5161a,
     IReceiptRuleAction as _IReceiptRuleAction_941d7a8d,
     ReceiptRuleActionConfig as _ReceiptRuleActionConfig_6feb97ed,
 )
 from ..aws_sns import ITopic as _ITopic_9eca4852
+from ..interfaces.aws_ses import IReceiptRuleRef as _IReceiptRuleRef_0f93d846
 
 
 @jsii.implements(_IReceiptRuleAction_941d7a8d)
@@ -115,7 +115,7 @@ class AddHeader(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _rule: "_IReceiptRule_20f5161a",
+        _rule: "_IReceiptRuleRef_0f93d846",
     ) -> "_ReceiptRuleActionConfig_6feb97ed":
         '''Returns the receipt rule action specification.
 
@@ -263,7 +263,7 @@ class Bounce(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_ses_actions.Bou
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _rule: "_IReceiptRule_20f5161a",
+        _rule: "_IReceiptRuleRef_0f93d846",
     ) -> "_ReceiptRuleActionConfig_6feb97ed":
         '''Returns the receipt rule action specification.
 
@@ -577,7 +577,7 @@ class Lambda(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_ses_actions.Lam
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        rule: "_IReceiptRule_20f5161a",
+        rule: "_IReceiptRuleRef_0f93d846",
     ) -> "_ReceiptRuleActionConfig_6feb97ed":
         '''Returns the receipt rule action specification.
 
@@ -765,7 +765,7 @@ class S3(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_ses_actions.S3"):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        rule: "_IReceiptRule_20f5161a",
+        rule: "_IReceiptRuleRef_0f93d846",
     ) -> "_ReceiptRuleActionConfig_6feb97ed":
         '''Returns the receipt rule action specification.
 
@@ -959,7 +959,7 @@ class Sns(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_ses_actions.Sns"):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _rule: "_IReceiptRule_20f5161a",
+        _rule: "_IReceiptRuleRef_0f93d846",
     ) -> "_ReceiptRuleActionConfig_6feb97ed":
         '''Returns the receipt rule action specification.
 
@@ -1093,7 +1093,7 @@ class Stop(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_ses_actions.Stop"
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _rule: "_IReceiptRule_20f5161a",
+        _rule: "_IReceiptRuleRef_0f93d846",
     ) -> "_ReceiptRuleActionConfig_6feb97ed":
         '''Returns the receipt rule action specification.
 
@@ -1204,7 +1204,7 @@ class WorkMail(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _rule: "_IReceiptRule_20f5161a",
+        _rule: "_IReceiptRuleRef_0f93d846",
     ) -> "_ReceiptRuleActionConfig_6feb97ed":
         '''Returns the receipt rule action specification.
 
@@ -1321,7 +1321,7 @@ __all__ = [
 publication.publish()
 
 def _typecheckingstub__105fc3c3cd165ab670ed7315f6f8772759f997da89c1f47dcd5abcdd5b8a67d4(
-    _rule: _IReceiptRule_20f5161a,
+    _rule: _IReceiptRuleRef_0f93d846,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1335,7 +1335,7 @@ def _typecheckingstub__8074b8d36e00e09d13e403cb0144597d401c4b4212de69cf794e357f2
     pass
 
 def _typecheckingstub__a2f996c58d36c8115f8cab70b8032eaa964550fcbc5df1791bde6faa8deaf815(
-    _rule: _IReceiptRule_20f5161a,
+    _rule: _IReceiptRuleRef_0f93d846,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1359,7 +1359,7 @@ def _typecheckingstub__14a3bcf1f5997a06acbd35725068d819e7cc13cc462249861c26d1b6c
     pass
 
 def _typecheckingstub__5d93726e71fd780c819e83cd0e14b221830680dac424ed3f6cfaf667ae223bd1(
-    rule: _IReceiptRule_20f5161a,
+    rule: _IReceiptRuleRef_0f93d846,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1374,7 +1374,7 @@ def _typecheckingstub__b90a6708b72eec383955e1dee897c153062b0d56e272e25d405eb8bb8
     pass
 
 def _typecheckingstub__2f2e6c8d98ea2e24878b8790662d46dbd681afc3be87064c425c1be30d91c1a4(
-    rule: _IReceiptRule_20f5161a,
+    rule: _IReceiptRuleRef_0f93d846,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1390,7 +1390,7 @@ def _typecheckingstub__0c3ffb5d7305f7f8cdd0eda6dbf1af4894ccfe04c1d809df6e1bc2c3d
     pass
 
 def _typecheckingstub__4ff99cf1ca046ba2b5e78b383a458654e8e7ed33211833f3e2c32db58c5fb6da(
-    _rule: _IReceiptRule_20f5161a,
+    _rule: _IReceiptRuleRef_0f93d846,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1404,7 +1404,7 @@ def _typecheckingstub__e4dd57a2c36b5d96081bf27df6a5f5dc9664fb1e62b39c68b0245127c
     pass
 
 def _typecheckingstub__7d7cfda51e1b6dca326f94431fbe823fade0f7fc9f4b9974e8c545b215ce3a8c(
-    _rule: _IReceiptRule_20f5161a,
+    _rule: _IReceiptRuleRef_0f93d846,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1417,7 +1417,7 @@ def _typecheckingstub__73591009ec257744526587f77beba227d032486c4c60371ab35e8f381
     pass
 
 def _typecheckingstub__8f080cf4ee15d472001a0397f98592fa7c3d2f44cc23e0af0b37e2d22590adb8(
-    _rule: _IReceiptRule_20f5161a,
+    _rule: _IReceiptRuleRef_0f93d846,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -22363,6 +22363,8 @@ class BucketBase(
     ) -> "_Grant_a7ae64f8":
         '''Grants s3:DeleteObject* permission to an IAM principal for objects in this bucket.
 
+        [disable-awslint:no-grants]
+
         :param identity: The principal.
         :param objects_key_pattern: Restrict the permission to a certain key pattern (default '*'). Parameter type is ``any`` but ``string`` should be passed in.
         '''
@@ -22416,6 +22418,8 @@ class BucketBase(
         managed by CloudFormation, this method will have no effect, since it's
         impossible to modify the policy of an existing bucket.
 
+        [disable-awslint:no-grants]
+
         :param key_prefix: the prefix of S3 object keys (e.g. ``home/*``). Default is "*".
         :param allowed_actions: the set of S3 actions to allow. Default is "s3:GetObject".
         '''
@@ -22436,6 +22440,8 @@ class BucketBase(
         If encryption is used, permission to use the key to encrypt the contents
         of written files will also be granted to the same principal.
 
+        [disable-awslint:no-grants]
+
         :param identity: The principal.
         :param objects_key_pattern: Restrict the permission to a certain key pattern (default '*'). Parameter type is ``any`` but ``string`` should be passed in.
         '''
@@ -22451,11 +22457,7 @@ class BucketBase(
         identity: "_IGrantable_71c4f5de",
         objects_key_pattern: typing.Optional[builtins.str] = None,
     ) -> "_Grant_a7ae64f8":
-        '''Grant the given IAM identity permissions to modify the ACLs of objects in the given Bucket.
-
-        If your application has the '@aws-cdk/aws-s3:grantWriteWithoutAcl' feature flag set,
-        calling ``grantWrite`` or ``grantReadWrite`` no longer grants permissions to modify the ACLs of the objects;
-        in this case, if you need to modify object ACLs, call this method explicitly.
+        '''[disable-awslint:no-grants].
 
         :param identity: -
         :param objects_key_pattern: -
@@ -22477,6 +22479,8 @@ class BucketBase(
         If encryption is used, permission to use the key to decrypt the contents
         of the bucket will also be granted to the same principal.
 
+        [disable-awslint:no-grants]
+
         :param identity: The principal.
         :param objects_key_pattern: Restrict the permission to a certain key pattern (default '*'). Parameter type is ``any`` but ``string`` should be passed in.
         '''
@@ -22492,18 +22496,7 @@ class BucketBase(
         identity: "_IGrantable_71c4f5de",
         objects_key_pattern: typing.Any = None,
     ) -> "_Grant_a7ae64f8":
-        '''Grants read/write permissions for this bucket and it's contents to an IAM principal (Role/Group/User).
-
-        If an encryption key is used, permission to use the key for
-        encrypt/decrypt will also be granted.
-
-        Before CDK version 1.85.0, this method granted the ``s3:PutObject*`` permission that included ``s3:PutObjectAcl``,
-        which could be used to grant read/write object access to IAM principals in other accounts.
-        If you want to get rid of that behavior, update your CDK version to 1.85.0 or later,
-        and make sure the ``@aws-cdk/aws-s3:grantWriteWithoutAcl`` feature flag is set to ``true``
-        in the ``context`` key of your cdk.json file.
-        If you've already updated, but still need the principal to have permissions to modify the ACLs,
-        use the ``grantPutAcl`` method.
+        '''[disable-awslint:no-grants].
 
         :param identity: -
         :param objects_key_pattern: -
@@ -22527,6 +22520,8 @@ class BucketBase(
         Note that when calling this function for source or destination buckets that support KMS encryption,
         you need to specify the KMS key for encryption and the KMS key for decryption, respectively.
 
+        [disable-awslint:no-grants]
+
         :param identity: The principal to grant replication permission to.
         :param destinations: The destination buckets for replication. Specify the KMS key to use for encryption if a destination bucket needs to be encrypted with a customer-managed KMS key. One or more destination buckets are required if replication configuration is enabled (i.e., ``replicationRole`` is specified). Default: - empty array (valid only if the ``replicationRole`` property is NOT specified)
         :param source_decryption_key: The KMS key used to decrypt objects in the source bucket for replication. **Required if** the source bucket is encrypted with a customer-managed KMS key. Default: - it's assumed the source bucket is not encrypted with a customer-managed KMS key.
@@ -22547,18 +22542,7 @@ class BucketBase(
         objects_key_pattern: typing.Any = None,
         allowed_action_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> "_Grant_a7ae64f8":
-        '''Grant write permissions to this bucket to an IAM principal.
-
-        If encryption is used, permission to use the key to encrypt the contents
-        of written files will also be granted to the same principal.
-
-        Before CDK version 1.85.0, this method granted the ``s3:PutObject*`` permission that included ``s3:PutObjectAcl``,
-        which could be used to grant read/write object access to IAM principals in other accounts.
-        If you want to get rid of that behavior, update your CDK version to 1.85.0 or later,
-        and make sure the ``@aws-cdk/aws-s3:grantWriteWithoutAcl`` feature flag is set to ``true``
-        in the ``context`` key of your cdk.json file.
-        If you've already updated, but still need the principal to have permissions to modify the ACLs,
-        use the ``grantPutAcl`` method.
+        '''[disable-awslint:no-grants].
 
         :param identity: -
         :param objects_key_pattern: -

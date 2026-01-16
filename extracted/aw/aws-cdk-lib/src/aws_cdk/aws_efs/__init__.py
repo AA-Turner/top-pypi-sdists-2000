@@ -5063,6 +5063,8 @@ class FileSystem(
     ) -> "_Grant_a7ae64f8":
         '''Grant the actions defined in actions to the given grantee on this File System resource.
 
+        [disable-awslint:no-grants]
+
         :param grantee: Principal to grant right to.
         :param actions: The actions to grant.
         '''
@@ -5076,6 +5078,8 @@ class FileSystem(
     def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant read permissions for this file system to an IAM principal.
 
+        [disable-awslint:no-grants]
+
         :param grantee: The principal to grant read to.
         '''
         if __debug__:
@@ -5087,6 +5091,8 @@ class FileSystem(
     def grant_read_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant read and write permissions for this file system to an IAM principal.
 
+        [disable-awslint:no-grants]
+
         :param grantee: The principal to grant read and write to.
         '''
         if __debug__:
@@ -5097,6 +5103,8 @@ class FileSystem(
     @jsii.member(jsii_name="grantRootAccess")
     def grant_root_access(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''As root user, grant read and write permissions for this file system to an IAM principal.
+
+        [disable-awslint:no-grants]
 
         :param grantee: The principal to grant root access to.
         '''

@@ -1207,10 +1207,10 @@ class CfnContainerFleet(
                 # the properties below are optional
                 location_capacity=gamelift.CfnContainerFleet.LocationCapacityProperty(
                     max_size=123,
-                    min_size=123,
         
                     # the properties below are optional
-                    desired_ec2_instances=123
+                    desired_ec2_instances=123,
+                    min_size=123
                 ),
                 stopped_actions=["stoppedActions"]
             )],
@@ -2210,8 +2210,8 @@ class CfnContainerFleet(
         jsii_struct_bases=[],
         name_mapping={
             "max_size": "maxSize",
-            "min_size": "minSize",
             "desired_ec2_instances": "desiredEc2Instances",
+            "min_size": "minSize",
         },
     )
     class LocationCapacityProperty:
@@ -2219,16 +2219,16 @@ class CfnContainerFleet(
             self,
             *,
             max_size: jsii.Number,
-            min_size: jsii.Number,
             desired_ec2_instances: typing.Optional[jsii.Number] = None,
+            min_size: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Current resource capacity settings in a specified fleet or location.
 
             The location value might refer to a fleet's remote location or its home Region.
 
             :param max_size: The maximum value that is allowed for the fleet's instance count for a location.
-            :param min_size: The minimum value allowed for the fleet's instance count for a location.
             :param desired_ec2_instances: Defaults to MinSize if not defined. The number of EC2 instances you want to maintain in the specified fleet location. This value must fall between the minimum and maximum size limits. If any auto-scaling policy is defined for the container fleet, the desired instance will only be applied once during fleet creation and will be ignored in updates to avoid conflicts with auto-scaling. During updates with any auto-scaling policy defined, if current desired instance is lower than the new MinSize, it will be increased to the new MinSize; if current desired instance is larger than the new MaxSize, it will be decreased to the new MaxSize.
+            :param min_size: The minimum value allowed for the fleet's instance count for a location.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-containerfleet-locationcapacity.html
             :exampleMetadata: fixture=_generated
@@ -2241,23 +2241,24 @@ class CfnContainerFleet(
                 
                 location_capacity_property = gamelift.CfnContainerFleet.LocationCapacityProperty(
                     max_size=123,
-                    min_size=123,
                 
                     # the properties below are optional
-                    desired_ec2_instances=123
+                    desired_ec2_instances=123,
+                    min_size=123
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__cfdc01eeb9f739a54f304b9e5cb1f66114e55233f5383f018ef7dd086a28ed10)
                 check_type(argname="argument max_size", value=max_size, expected_type=type_hints["max_size"])
-                check_type(argname="argument min_size", value=min_size, expected_type=type_hints["min_size"])
                 check_type(argname="argument desired_ec2_instances", value=desired_ec2_instances, expected_type=type_hints["desired_ec2_instances"])
+                check_type(argname="argument min_size", value=min_size, expected_type=type_hints["min_size"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "max_size": max_size,
-                "min_size": min_size,
             }
             if desired_ec2_instances is not None:
                 self._values["desired_ec2_instances"] = desired_ec2_instances
+            if min_size is not None:
+                self._values["min_size"] = min_size
 
         @builtins.property
         def max_size(self) -> jsii.Number:
@@ -2270,16 +2271,6 @@ class CfnContainerFleet(
             return typing.cast(jsii.Number, result)
 
         @builtins.property
-        def min_size(self) -> jsii.Number:
-            '''The minimum value allowed for the fleet's instance count for a location.
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-containerfleet-locationcapacity.html#cfn-gamelift-containerfleet-locationcapacity-minsize
-            '''
-            result = self._values.get("min_size")
-            assert result is not None, "Required property 'min_size' is missing"
-            return typing.cast(jsii.Number, result)
-
-        @builtins.property
         def desired_ec2_instances(self) -> typing.Optional[jsii.Number]:
             '''Defaults to MinSize if not defined.
 
@@ -2288,6 +2279,15 @@ class CfnContainerFleet(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-containerfleet-locationcapacity.html#cfn-gamelift-containerfleet-locationcapacity-desiredec2instances
             '''
             result = self._values.get("desired_ec2_instances")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def min_size(self) -> typing.Optional[jsii.Number]:
+            '''The minimum value allowed for the fleet's instance count for a location.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-containerfleet-locationcapacity.html#cfn-gamelift-containerfleet-locationcapacity-minsize
+            '''
+            result = self._values.get("min_size")
             return typing.cast(typing.Optional[jsii.Number], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -2339,10 +2339,10 @@ class CfnContainerFleet(
                     # the properties below are optional
                     location_capacity=gamelift.CfnContainerFleet.LocationCapacityProperty(
                         max_size=123,
-                        min_size=123,
                 
                         # the properties below are optional
-                        desired_ec2_instances=123
+                        desired_ec2_instances=123,
+                        min_size=123
                     ),
                     stopped_actions=["stoppedActions"]
                 )
@@ -2882,10 +2882,10 @@ class CfnContainerFleetProps:
                     # the properties below are optional
                     location_capacity=gamelift.CfnContainerFleet.LocationCapacityProperty(
                         max_size=123,
-                        min_size=123,
             
                         # the properties below are optional
-                        desired_ec2_instances=123
+                        desired_ec2_instances=123,
+                        min_size=123
                     ),
                     stopped_actions=["stoppedActions"]
                 )],
@@ -5019,10 +5019,10 @@ class CfnFleet(
                 # the properties below are optional
                 location_capacity=gamelift.CfnFleet.LocationCapacityProperty(
                     max_size=123,
-                    min_size=123,
         
                     # the properties below are optional
-                    desired_ec2_instances=123
+                    desired_ec2_instances=123,
+                    min_size=123
                 )
             )],
             log_paths=["logPaths"],
@@ -5982,8 +5982,8 @@ class CfnFleet(
         jsii_struct_bases=[],
         name_mapping={
             "max_size": "maxSize",
-            "min_size": "minSize",
             "desired_ec2_instances": "desiredEc2Instances",
+            "min_size": "minSize",
         },
     )
     class LocationCapacityProperty:
@@ -5991,8 +5991,8 @@ class CfnFleet(
             self,
             *,
             max_size: jsii.Number,
-            min_size: jsii.Number,
             desired_ec2_instances: typing.Optional[jsii.Number] = None,
+            min_size: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''Current resource capacity settings for managed EC2 fleets and managed container fleets.
 
@@ -6001,8 +6001,8 @@ class CfnFleet(
             *Returned by:* `DescribeFleetCapacity <https://docs.aws.amazon.com/gamelift/latest/apireference/API_DescribeFleetCapacity.html>`_ , `DescribeFleetLocationCapacity <https://docs.aws.amazon.com/gamelift/latest/apireference/API_DescribeFleetLocationCapacity.html>`_ , `UpdateFleetCapacity <https://docs.aws.amazon.com/gamelift/latest/apireference/API_UpdateFleetCapacity.html>`_
 
             :param max_size: The maximum number of instances that are allowed in the specified fleet location. If this parameter is not set, the default is 1.
-            :param min_size: The minimum number of instances that are allowed in the specified fleet location. If this parameter is not set, the default is 0.
             :param desired_ec2_instances: The number of Amazon EC2 instances you want to maintain in the specified fleet location. This value must fall between the minimum and maximum size limits. Changes in desired instance value can take up to 1 minute to be reflected when viewing the fleet's capacity settings.
+            :param min_size: The minimum number of instances that are allowed in the specified fleet location. If this parameter is not set, the default is 0.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-fleet-locationcapacity.html
             :exampleMetadata: fixture=_generated
@@ -6015,23 +6015,24 @@ class CfnFleet(
                 
                 location_capacity_property = gamelift.CfnFleet.LocationCapacityProperty(
                     max_size=123,
-                    min_size=123,
                 
                     # the properties below are optional
-                    desired_ec2_instances=123
+                    desired_ec2_instances=123,
+                    min_size=123
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__76847ac983ab72ef92adc1b0579d769ca62af002ef71c76165cbd879da8645fc)
                 check_type(argname="argument max_size", value=max_size, expected_type=type_hints["max_size"])
-                check_type(argname="argument min_size", value=min_size, expected_type=type_hints["min_size"])
                 check_type(argname="argument desired_ec2_instances", value=desired_ec2_instances, expected_type=type_hints["desired_ec2_instances"])
+                check_type(argname="argument min_size", value=min_size, expected_type=type_hints["min_size"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "max_size": max_size,
-                "min_size": min_size,
             }
             if desired_ec2_instances is not None:
                 self._values["desired_ec2_instances"] = desired_ec2_instances
+            if min_size is not None:
+                self._values["min_size"] = min_size
 
         @builtins.property
         def max_size(self) -> jsii.Number:
@@ -6046,18 +6047,6 @@ class CfnFleet(
             return typing.cast(jsii.Number, result)
 
         @builtins.property
-        def min_size(self) -> jsii.Number:
-            '''The minimum number of instances that are allowed in the specified fleet location.
-
-            If this parameter is not set, the default is 0.
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-fleet-locationcapacity.html#cfn-gamelift-fleet-locationcapacity-minsize
-            '''
-            result = self._values.get("min_size")
-            assert result is not None, "Required property 'min_size' is missing"
-            return typing.cast(jsii.Number, result)
-
-        @builtins.property
         def desired_ec2_instances(self) -> typing.Optional[jsii.Number]:
             '''The number of Amazon EC2 instances you want to maintain in the specified fleet location.
 
@@ -6066,6 +6055,17 @@ class CfnFleet(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-fleet-locationcapacity.html#cfn-gamelift-fleet-locationcapacity-desiredec2instances
             '''
             result = self._values.get("desired_ec2_instances")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def min_size(self) -> typing.Optional[jsii.Number]:
+            '''The minimum number of instances that are allowed in the specified fleet location.
+
+            If this parameter is not set, the default is 0.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-gamelift-fleet-locationcapacity.html#cfn-gamelift-fleet-locationcapacity-minsize
+            '''
+            result = self._values.get("min_size")
             return typing.cast(typing.Optional[jsii.Number], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -6111,10 +6111,10 @@ class CfnFleet(
                     # the properties below are optional
                     location_capacity=gamelift.CfnFleet.LocationCapacityProperty(
                         max_size=123,
-                        min_size=123,
                 
                         # the properties below are optional
-                        desired_ec2_instances=123
+                        desired_ec2_instances=123,
+                        min_size=123
                     )
                 )
             '''
@@ -6935,10 +6935,10 @@ class CfnFleetProps:
                     # the properties below are optional
                     location_capacity=gamelift.CfnFleet.LocationCapacityProperty(
                         max_size=123,
-                        min_size=123,
             
                         # the properties below are optional
-                        desired_ec2_instances=123
+                        desired_ec2_instances=123,
+                        min_size=123
                     )
                 )],
                 log_paths=["logPaths"],
@@ -10916,6 +10916,7 @@ class CfnScript(
         
             # the properties below are optional
             name="name",
+            node_js_version="nodeJsVersion",
             tags=[CfnTag(
                 key="key",
                 value="value"
@@ -10931,6 +10932,7 @@ class CfnScript(
         *,
         storage_location: typing.Union["_IResolvable_da3f097b", typing.Union["CfnScript.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
         name: typing.Optional[builtins.str] = None,
+        node_js_version: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         version: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -10940,6 +10942,7 @@ class CfnScript(
         :param id: Construct identifier for this resource (unique in its scope).
         :param storage_location: The location of the Amazon S3 bucket where a zipped file containing your Realtime scripts is stored. The storage location must specify the Amazon S3 bucket name, the zip file name (the "key"), and a role ARN that allows Amazon GameLift Servers to access the Amazon S3 storage location. The S3 bucket must be in the same Region where you want to create a new script. By default, Amazon GameLift Servers uploads the latest version of the zip file; if you have S3 object versioning turned on, you can use the ``ObjectVersion`` parameter to specify an earlier version.
         :param name: A descriptive label that is associated with a script. Script names do not need to be unique.
+        :param node_js_version: The Node.js version used for execution of the Realtime script.
         :param tags: A list of labels to assign to the new script resource. Tags are developer-defined key-value pairs. Tagging AWS resources are useful for resource management, access management and cost allocation. For more information, see `Tagging AWS Resources <https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html>`_ in the *AWS General Reference* . Once the resource is created, you can use TagResource, UntagResource, and ListTagsForResource to add, remove, and view tags. The maximum tag limit may be lower than stated. See the AWS General Reference for actual tagging limits.
         :param version: The version that is associated with a build or script. Version strings do not need to be unique.
         '''
@@ -10948,7 +10951,11 @@ class CfnScript(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnScriptProps(
-            storage_location=storage_location, name=name, tags=tags, version=version
+            storage_location=storage_location,
+            name=name,
+            node_js_version=node_js_version,
+            tags=tags,
+            version=version,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -11137,6 +11144,19 @@ class CfnScript(
         jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="nodeJsVersion")
+    def node_js_version(self) -> typing.Optional[builtins.str]:
+        '''The Node.js version used for execution of the Realtime script.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "nodeJsVersion"))
+
+    @node_js_version.setter
+    def node_js_version(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b3b02fbe618bca3821a1d4fc35525775ae653330096d75266ab6006bdcd62e61)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "nodeJsVersion", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="tagsRaw")
     def tags_raw(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
         '''A list of labels to assign to the new script resource.'''
@@ -11283,6 +11303,7 @@ class CfnScript(
     name_mapping={
         "storage_location": "storageLocation",
         "name": "name",
+        "node_js_version": "nodeJsVersion",
         "tags": "tags",
         "version": "version",
     },
@@ -11293,6 +11314,7 @@ class CfnScriptProps:
         *,
         storage_location: typing.Union["_IResolvable_da3f097b", typing.Union["CfnScript.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
         name: typing.Optional[builtins.str] = None,
+        node_js_version: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         version: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -11300,6 +11322,7 @@ class CfnScriptProps:
 
         :param storage_location: The location of the Amazon S3 bucket where a zipped file containing your Realtime scripts is stored. The storage location must specify the Amazon S3 bucket name, the zip file name (the "key"), and a role ARN that allows Amazon GameLift Servers to access the Amazon S3 storage location. The S3 bucket must be in the same Region where you want to create a new script. By default, Amazon GameLift Servers uploads the latest version of the zip file; if you have S3 object versioning turned on, you can use the ``ObjectVersion`` parameter to specify an earlier version.
         :param name: A descriptive label that is associated with a script. Script names do not need to be unique.
+        :param node_js_version: The Node.js version used for execution of the Realtime script.
         :param tags: A list of labels to assign to the new script resource. Tags are developer-defined key-value pairs. Tagging AWS resources are useful for resource management, access management and cost allocation. For more information, see `Tagging AWS Resources <https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html>`_ in the *AWS General Reference* . Once the resource is created, you can use TagResource, UntagResource, and ListTagsForResource to add, remove, and view tags. The maximum tag limit may be lower than stated. See the AWS General Reference for actual tagging limits.
         :param version: The version that is associated with a build or script. Version strings do not need to be unique.
 
@@ -11325,6 +11348,7 @@ class CfnScriptProps:
             
                 # the properties below are optional
                 name="name",
+                node_js_version="nodeJsVersion",
                 tags=[CfnTag(
                     key="key",
                     value="value"
@@ -11336,6 +11360,7 @@ class CfnScriptProps:
             type_hints = typing.get_type_hints(_typecheckingstub__f4a56c9731d882f4e0af0b136c973132c594cdb2f6c8607aa9bd92978d6d80b5)
             check_type(argname="argument storage_location", value=storage_location, expected_type=type_hints["storage_location"])
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument node_js_version", value=node_js_version, expected_type=type_hints["node_js_version"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
             check_type(argname="argument version", value=version, expected_type=type_hints["version"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -11343,6 +11368,8 @@ class CfnScriptProps:
         }
         if name is not None:
             self._values["name"] = name
+        if node_js_version is not None:
+            self._values["node_js_version"] = node_js_version
         if tags is not None:
             self._values["tags"] = tags
         if version is not None:
@@ -11371,6 +11398,15 @@ class CfnScriptProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-script.html#cfn-gamelift-script-name
         '''
         result = self._values.get("name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def node_js_version(self) -> typing.Optional[builtins.str]:
+        '''The Node.js version used for execution of the Realtime script.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-script.html#cfn-gamelift-script-nodejsversion
+        '''
+        result = self._values.get("node_js_version")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -11853,8 +11889,8 @@ def _typecheckingstub__3c74cebf3a79bd067a90f843de7a76b099cbe8aff962b812b7dcae7ad
 def _typecheckingstub__cfdc01eeb9f739a54f304b9e5cb1f66114e55233f5383f018ef7dd086a28ed10(
     *,
     max_size: jsii.Number,
-    min_size: jsii.Number,
     desired_ec2_instances: typing.Optional[jsii.Number] = None,
+    min_size: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12394,8 +12430,8 @@ def _typecheckingstub__70f885be25c9084dbab3b02a36601be0e37c43ab741ea7dd646494423
 def _typecheckingstub__76847ac983ab72ef92adc1b0579d769ca62af002ef71c76165cbd879da8645fc(
     *,
     max_size: jsii.Number,
-    min_size: jsii.Number,
     desired_ec2_instances: typing.Optional[jsii.Number] = None,
+    min_size: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -13158,6 +13194,7 @@ def _typecheckingstub__a610f7d9791794a98e26c23e6a2c7f57a2aceb363ba1a205d32cc0011
     *,
     storage_location: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScript.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]],
     name: typing.Optional[builtins.str] = None,
+    node_js_version: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     version: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -13216,6 +13253,12 @@ def _typecheckingstub__df6266bf40e8b346c6a57c12d46137c3fe4f29ca8b9c37ef0dfb5715f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__b3b02fbe618bca3821a1d4fc35525775ae653330096d75266ab6006bdcd62e61(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__59fee6448a284bb6932305c7159828353c13832415292cceb7a74453dd8177cc(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
 ) -> None:
@@ -13242,6 +13285,7 @@ def _typecheckingstub__f4a56c9731d882f4e0af0b136c973132c594cdb2f6c8607aa9bd92978
     *,
     storage_location: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScript.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]],
     name: typing.Optional[builtins.str] = None,
+    node_js_version: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     version: typing.Optional[builtins.str] = None,
 ) -> None:

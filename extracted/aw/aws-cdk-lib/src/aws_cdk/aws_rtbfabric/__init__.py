@@ -250,6 +250,14 @@ class CfnInboundExternalLink(
         return typing.cast(builtins.str, jsii.get(self, "attrCreatedTimestamp"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrDomainName")
+    def attr_domain_name(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: DomainName
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrDomainName"))
+
+    @builtins.property
     @jsii.member(jsii_name="attrLinkId")
     def attr_link_id(self) -> builtins.str:
         '''

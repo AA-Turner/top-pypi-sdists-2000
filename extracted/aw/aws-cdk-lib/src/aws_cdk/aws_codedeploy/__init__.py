@@ -6223,9 +6223,9 @@ class EcsDeploymentGroupAttributes:
     def __init__(
         self,
         *,
-        application: "IEcsApplication",
+        application: "_IApplicationRef_1ffc51d6",
         deployment_group_name: builtins.str,
-        deployment_config: typing.Optional["IEcsDeploymentConfig"] = None,
+        deployment_config: typing.Optional["_IDeploymentConfigRef_bc0b49ed"] = None,
     ) -> None:
         '''Properties of a reference to a CodeDeploy ECS Deployment Group.
 
@@ -6258,11 +6258,11 @@ class EcsDeploymentGroupAttributes:
             self._values["deployment_config"] = deployment_config
 
     @builtins.property
-    def application(self) -> "IEcsApplication":
+    def application(self) -> "_IApplicationRef_1ffc51d6":
         '''The reference to the CodeDeploy ECS Application that this Deployment Group belongs to.'''
         result = self._values.get("application")
         assert result is not None, "Required property 'application' is missing"
-        return typing.cast("IEcsApplication", result)
+        return typing.cast("_IApplicationRef_1ffc51d6", result)
 
     @builtins.property
     def deployment_group_name(self) -> builtins.str:
@@ -6272,13 +6272,13 @@ class EcsDeploymentGroupAttributes:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def deployment_config(self) -> typing.Optional["IEcsDeploymentConfig"]:
+    def deployment_config(self) -> typing.Optional["_IDeploymentConfigRef_bc0b49ed"]:
         '''The Deployment Configuration this Deployment Group uses.
 
         :default: EcsDeploymentConfig.ALL_AT_ONCE
         '''
         result = self._values.get("deployment_config")
-        return typing.cast(typing.Optional["IEcsDeploymentConfig"], result)
+        return typing.cast(typing.Optional["_IDeploymentConfigRef_bc0b49ed"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6315,9 +6315,9 @@ class EcsDeploymentGroupProps:
         blue_green_deployment_config: typing.Union["EcsBlueGreenDeploymentConfig", typing.Dict[builtins.str, typing.Any]],
         service: "_IBaseService_3fcdd913",
         alarms: typing.Optional[typing.Sequence["_IAlarmRef_2bb0e5de"]] = None,
-        application: typing.Optional["IEcsApplication"] = None,
+        application: typing.Optional["_IApplicationRef_1ffc51d6"] = None,
         auto_rollback: typing.Optional[typing.Union["AutoRollbackConfig", typing.Dict[builtins.str, typing.Any]]] = None,
-        deployment_config: typing.Optional["IEcsDeploymentConfig"] = None,
+        deployment_config: typing.Optional["_IDeploymentConfigRef_bc0b49ed"] = None,
         deployment_group_name: typing.Optional[builtins.str] = None,
         ignore_alarm_configuration: typing.Optional[builtins.bool] = None,
         ignore_poll_alarms_failure: typing.Optional[builtins.bool] = None,
@@ -6434,13 +6434,13 @@ class EcsDeploymentGroupProps:
         return typing.cast(typing.Optional[typing.List["_IAlarmRef_2bb0e5de"]], result)
 
     @builtins.property
-    def application(self) -> typing.Optional["IEcsApplication"]:
+    def application(self) -> typing.Optional["_IApplicationRef_1ffc51d6"]:
         '''The reference to the CodeDeploy ECS Application that this Deployment Group belongs to.
 
         :default: One will be created for you.
         '''
         result = self._values.get("application")
-        return typing.cast(typing.Optional["IEcsApplication"], result)
+        return typing.cast(typing.Optional["_IApplicationRef_1ffc51d6"], result)
 
     @builtins.property
     def auto_rollback(self) -> typing.Optional["AutoRollbackConfig"]:
@@ -6452,13 +6452,13 @@ class EcsDeploymentGroupProps:
         return typing.cast(typing.Optional["AutoRollbackConfig"], result)
 
     @builtins.property
-    def deployment_config(self) -> typing.Optional["IEcsDeploymentConfig"]:
+    def deployment_config(self) -> typing.Optional["_IDeploymentConfigRef_bc0b49ed"]:
         '''The Deployment Configuration this Deployment Group uses.
 
         :default: EcsDeploymentConfig.ALL_AT_ONCE
         '''
         result = self._values.get("deployment_config")
-        return typing.cast(typing.Optional["IEcsDeploymentConfig"], result)
+        return typing.cast(typing.Optional["_IDeploymentConfigRef_bc0b49ed"], result)
 
     @builtins.property
     def deployment_group_name(self) -> typing.Optional[builtins.str]:
@@ -6509,7 +6509,7 @@ class EcsDeploymentGroupProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_codedeploy.IBaseDeploymentConfig")
-class IBaseDeploymentConfig(typing_extensions.Protocol):
+class IBaseDeploymentConfig(_IDeploymentConfigRef_bc0b49ed, typing_extensions.Protocol):
     '''The base class for ServerDeploymentConfig, EcsDeploymentConfig, and LambdaDeploymentConfig deployment configurations.'''
 
     @builtins.property
@@ -6531,7 +6531,9 @@ class IBaseDeploymentConfig(typing_extensions.Protocol):
         ...
 
 
-class _IBaseDeploymentConfigProxy:
+class _IBaseDeploymentConfigProxy(
+    jsii.proxy_for(_IDeploymentConfigRef_bc0b49ed), # type: ignore[misc]
+):
     '''The base class for ServerDeploymentConfig, EcsDeploymentConfig, and LambdaDeploymentConfig deployment configurations.'''
 
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_codedeploy.IBaseDeploymentConfig"
@@ -6558,8 +6560,76 @@ class _IBaseDeploymentConfigProxy:
 typing.cast(typing.Any, IBaseDeploymentConfig).__jsii_proxy_class__ = lambda : _IBaseDeploymentConfigProxy
 
 
+@jsii.interface(jsii_type="aws-cdk-lib.aws_codedeploy.IBindableDeploymentConfig")
+class IBindableDeploymentConfig(
+    _IDeploymentConfigRef_bc0b49ed,
+    typing_extensions.Protocol,
+):
+    '''A DeploymentConfig that can specialize itself based on the target group it will be used for.
+
+    For example, this is used for AWS-managed deployment configs: these are already
+    present in every region, but we need a region-specific ARN to reference them.
+    Since we might use them in conjunction with cross-region DeploymentGroups, we
+    need to specialize the account and region to the DeploymentGroup before
+    using.
+
+    A DeploymentGroup must call ``bindEnvironment()`` first if it detects this type,
+    before reading the DeploymentConfig ARN.
+    '''
+
+    @jsii.member(jsii_name="bindEnvironment")
+    def bind_environment(
+        self,
+        deployment_group: "_IDeploymentGroupRef_120f3b25",
+    ) -> "_IDeploymentConfigRef_bc0b49ed":
+        '''Bind the predefined deployment config to the environment of the given resource.
+
+        :param deployment_group: -
+        '''
+        ...
+
+
+class _IBindableDeploymentConfigProxy(
+    jsii.proxy_for(_IDeploymentConfigRef_bc0b49ed), # type: ignore[misc]
+):
+    '''A DeploymentConfig that can specialize itself based on the target group it will be used for.
+
+    For example, this is used for AWS-managed deployment configs: these are already
+    present in every region, but we need a region-specific ARN to reference them.
+    Since we might use them in conjunction with cross-region DeploymentGroups, we
+    need to specialize the account and region to the DeploymentGroup before
+    using.
+
+    A DeploymentGroup must call ``bindEnvironment()`` first if it detects this type,
+    before reading the DeploymentConfig ARN.
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_codedeploy.IBindableDeploymentConfig"
+
+    @jsii.member(jsii_name="bindEnvironment")
+    def bind_environment(
+        self,
+        deployment_group: "_IDeploymentGroupRef_120f3b25",
+    ) -> "_IDeploymentConfigRef_bc0b49ed":
+        '''Bind the predefined deployment config to the environment of the given resource.
+
+        :param deployment_group: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ba97b3918e8b33752fcb76aaa34476f79974fb3fba51e966de959dda226b115a)
+            check_type(argname="argument deployment_group", value=deployment_group, expected_type=type_hints["deployment_group"])
+        return typing.cast("_IDeploymentConfigRef_bc0b49ed", jsii.invoke(self, "bindEnvironment", [deployment_group]))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IBindableDeploymentConfig).__jsii_proxy_class__ = lambda : _IBindableDeploymentConfigProxy
+
+
 @jsii.interface(jsii_type="aws-cdk-lib.aws_codedeploy.IEcsApplication")
-class IEcsApplication(_IResource_c80c4260, typing_extensions.Protocol):
+class IEcsApplication(
+    _IResource_c80c4260,
+    _IApplicationRef_1ffc51d6,
+    typing_extensions.Protocol,
+):
     '''Represents a reference to a CodeDeploy Application deploying to Amazon ECS.
 
     If you're managing the Application alongside the rest of your CDK resources,
@@ -6589,6 +6659,7 @@ class IEcsApplication(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IEcsApplicationProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IApplicationRef_1ffc51d6), # type: ignore[misc]
 ):
     '''Represents a reference to a CodeDeploy Application deploying to Amazon ECS.
 
@@ -6664,7 +6735,11 @@ typing.cast(typing.Any, IEcsDeploymentConfig).__jsii_proxy_class__ = lambda : _I
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_codedeploy.IEcsDeploymentGroup")
-class IEcsDeploymentGroup(_IResource_c80c4260, typing_extensions.Protocol):
+class IEcsDeploymentGroup(
+    _IResource_c80c4260,
+    _IDeploymentGroupRef_120f3b25,
+    typing_extensions.Protocol,
+):
     '''Interface for an ECS deployment group.'''
 
     @builtins.property
@@ -6700,6 +6775,7 @@ class IEcsDeploymentGroup(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IEcsDeploymentGroupProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IDeploymentGroupRef_120f3b25), # type: ignore[misc]
 ):
     '''Interface for an ECS deployment group.'''
 
@@ -6740,7 +6816,11 @@ typing.cast(typing.Any, IEcsDeploymentGroup).__jsii_proxy_class__ = lambda : _IE
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_codedeploy.ILambdaApplication")
-class ILambdaApplication(_IResource_c80c4260, typing_extensions.Protocol):
+class ILambdaApplication(
+    _IResource_c80c4260,
+    _IApplicationRef_1ffc51d6,
+    typing_extensions.Protocol,
+):
     '''Represents a reference to a CodeDeploy Application deploying to AWS Lambda.
 
     If you're managing the Application alongside the rest of your CDK resources,
@@ -6770,6 +6850,7 @@ class ILambdaApplication(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _ILambdaApplicationProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IApplicationRef_1ffc51d6), # type: ignore[misc]
 ):
     '''Represents a reference to a CodeDeploy Application deploying to AWS Lambda.
 
@@ -6845,7 +6926,11 @@ typing.cast(typing.Any, ILambdaDeploymentConfig).__jsii_proxy_class__ = lambda :
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_codedeploy.ILambdaDeploymentGroup")
-class ILambdaDeploymentGroup(_IResource_c80c4260, typing_extensions.Protocol):
+class ILambdaDeploymentGroup(
+    _IResource_c80c4260,
+    _IDeploymentGroupRef_120f3b25,
+    typing_extensions.Protocol,
+):
     '''Interface for a Lambda deployment groups.'''
 
     @builtins.property
@@ -6881,6 +6966,7 @@ class ILambdaDeploymentGroup(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _ILambdaDeploymentGroupProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IDeploymentGroupRef_120f3b25), # type: ignore[misc]
 ):
     '''Interface for a Lambda deployment groups.'''
 
@@ -6921,7 +7007,11 @@ typing.cast(typing.Any, ILambdaDeploymentGroup).__jsii_proxy_class__ = lambda : 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_codedeploy.IServerApplication")
-class IServerApplication(_IResource_c80c4260, typing_extensions.Protocol):
+class IServerApplication(
+    _IResource_c80c4260,
+    _IApplicationRef_1ffc51d6,
+    typing_extensions.Protocol,
+):
     '''Represents a reference to a CodeDeploy Application deploying to EC2/on-premise instances.
 
     If you're managing the Application alongside the rest of your CDK resources,
@@ -6951,6 +7041,7 @@ class IServerApplication(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IServerApplicationProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IApplicationRef_1ffc51d6), # type: ignore[misc]
 ):
     '''Represents a reference to a CodeDeploy Application deploying to EC2/on-premise instances.
 
@@ -7016,7 +7107,11 @@ typing.cast(typing.Any, IServerDeploymentConfig).__jsii_proxy_class__ = lambda :
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_codedeploy.IServerDeploymentGroup")
-class IServerDeploymentGroup(_IResource_c80c4260, typing_extensions.Protocol):
+class IServerDeploymentGroup(
+    _IResource_c80c4260,
+    _IDeploymentGroupRef_120f3b25,
+    typing_extensions.Protocol,
+):
     @builtins.property
     @jsii.member(jsii_name="application")
     def application(self) -> "IServerApplication":
@@ -7058,6 +7153,7 @@ class IServerDeploymentGroup(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IServerDeploymentGroupProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IDeploymentGroupRef_120f3b25), # type: ignore[misc]
 ):
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_codedeploy.IServerDeploymentGroup"
 
@@ -7288,6 +7384,12 @@ class LambdaApplication(
     @jsii.member(jsii_name="applicationName")
     def application_name(self) -> builtins.str:
         return typing.cast(builtins.str, jsii.get(self, "applicationName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="applicationRef")
+    def application_ref(self) -> "_ApplicationReference_936fe716":
+        '''A reference to a Application resource.'''
+        return typing.cast("_ApplicationReference_936fe716", jsii.get(self, "applicationRef"))
 
 
 @jsii.data_type(
@@ -7627,6 +7729,8 @@ class LambdaDeploymentGroup(
     ) -> "_Grant_a7ae64f8":
         '''Grant a principal permission to codedeploy:PutLifecycleEventHookExecutionStatus on this deployment group resource.
 
+        [disable-awslint:no-grants]
+
         :param grantee: to grant permission to.
         '''
         if __debug__:
@@ -7663,6 +7767,12 @@ class LambdaDeploymentGroup(
     def deployment_group_name(self) -> builtins.str:
         '''The name of the Deployment Group.'''
         return typing.cast(builtins.str, jsii.get(self, "deploymentGroupName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="deploymentGroupRef")
+    def deployment_group_ref(self) -> "_DeploymentGroupReference_9112f387":
+        '''A reference to a DeploymentGroup resource.'''
+        return typing.cast("_DeploymentGroupReference_9112f387", jsii.get(self, "deploymentGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="role")
@@ -8341,6 +8451,12 @@ class ServerApplication(
     def application_name(self) -> builtins.str:
         return typing.cast(builtins.str, jsii.get(self, "applicationName"))
 
+    @builtins.property
+    @jsii.member(jsii_name="applicationRef")
+    def application_ref(self) -> "_ApplicationReference_936fe716":
+        '''A reference to a Application resource.'''
+        return typing.cast("_ApplicationReference_936fe716", jsii.get(self, "applicationRef"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_codedeploy.ServerApplicationProps",
@@ -8507,10 +8623,10 @@ class ServerDeploymentGroup(
         id: builtins.str,
         *,
         alarms: typing.Optional[typing.Sequence["_IAlarmRef_2bb0e5de"]] = None,
-        application: typing.Optional["IServerApplication"] = None,
+        application: typing.Optional["_IApplicationRef_1ffc51d6"] = None,
         auto_rollback: typing.Optional[typing.Union["AutoRollbackConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         auto_scaling_groups: typing.Optional[typing.Sequence["_IAutoScalingGroup_360f1cde"]] = None,
-        deployment_config: typing.Optional["IServerDeploymentConfig"] = None,
+        deployment_config: typing.Optional["_IDeploymentConfigRef_bc0b49ed"] = None,
         deployment_group_name: typing.Optional[builtins.str] = None,
         ec2_instance_tags: typing.Optional["InstanceTagSet"] = None,
         ignore_alarm_configuration: typing.Optional[builtins.bool] = None,
@@ -8572,9 +8688,9 @@ class ServerDeploymentGroup(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        application: "IServerApplication",
+        application: "_IApplicationRef_1ffc51d6",
         deployment_group_name: builtins.str,
-        deployment_config: typing.Optional["IServerDeploymentConfig"] = None,
+        deployment_config: typing.Optional["_IDeploymentConfigRef_bc0b49ed"] = None,
     ) -> "IServerDeploymentGroup":
         '''Import an EC2/on-premise Deployment Group defined either outside the CDK app, or in a different region.
 
@@ -8649,6 +8765,12 @@ class ServerDeploymentGroup(
         return typing.cast(builtins.str, jsii.get(self, "deploymentGroupName"))
 
     @builtins.property
+    @jsii.member(jsii_name="deploymentGroupRef")
+    def deployment_group_ref(self) -> "_DeploymentGroupReference_9112f387":
+        '''A reference to a DeploymentGroup resource.'''
+        return typing.cast("_DeploymentGroupReference_9112f387", jsii.get(self, "deploymentGroupRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="autoScalingGroups")
     def auto_scaling_groups(
         self,
@@ -8675,9 +8797,9 @@ class ServerDeploymentGroupAttributes:
     def __init__(
         self,
         *,
-        application: "IServerApplication",
+        application: "_IApplicationRef_1ffc51d6",
         deployment_group_name: builtins.str,
-        deployment_config: typing.Optional["IServerDeploymentConfig"] = None,
+        deployment_config: typing.Optional["_IDeploymentConfigRef_bc0b49ed"] = None,
     ) -> None:
         '''Properties of a reference to a CodeDeploy EC2/on-premise Deployment Group.
 
@@ -8710,11 +8832,11 @@ class ServerDeploymentGroupAttributes:
             self._values["deployment_config"] = deployment_config
 
     @builtins.property
-    def application(self) -> "IServerApplication":
+    def application(self) -> "_IApplicationRef_1ffc51d6":
         '''The reference to the CodeDeploy EC2/on-premise Application that this Deployment Group belongs to.'''
         result = self._values.get("application")
         assert result is not None, "Required property 'application' is missing"
-        return typing.cast("IServerApplication", result)
+        return typing.cast("_IApplicationRef_1ffc51d6", result)
 
     @builtins.property
     def deployment_group_name(self) -> builtins.str:
@@ -8724,13 +8846,13 @@ class ServerDeploymentGroupAttributes:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def deployment_config(self) -> typing.Optional["IServerDeploymentConfig"]:
+    def deployment_config(self) -> typing.Optional["_IDeploymentConfigRef_bc0b49ed"]:
         '''The Deployment Configuration this Deployment Group uses.
 
         :default: ServerDeploymentConfig#OneAtATime
         '''
         result = self._values.get("deployment_config")
-        return typing.cast(typing.Optional["IServerDeploymentConfig"], result)
+        return typing.cast(typing.Optional["_IDeploymentConfigRef_bc0b49ed"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8770,10 +8892,10 @@ class ServerDeploymentGroupProps:
         self,
         *,
         alarms: typing.Optional[typing.Sequence["_IAlarmRef_2bb0e5de"]] = None,
-        application: typing.Optional["IServerApplication"] = None,
+        application: typing.Optional["_IApplicationRef_1ffc51d6"] = None,
         auto_rollback: typing.Optional[typing.Union["AutoRollbackConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         auto_scaling_groups: typing.Optional[typing.Sequence["_IAutoScalingGroup_360f1cde"]] = None,
-        deployment_config: typing.Optional["IServerDeploymentConfig"] = None,
+        deployment_config: typing.Optional["_IDeploymentConfigRef_bc0b49ed"] = None,
         deployment_group_name: typing.Optional[builtins.str] = None,
         ec2_instance_tags: typing.Optional["InstanceTagSet"] = None,
         ignore_alarm_configuration: typing.Optional[builtins.bool] = None,
@@ -8884,13 +9006,13 @@ class ServerDeploymentGroupProps:
         return typing.cast(typing.Optional[typing.List["_IAlarmRef_2bb0e5de"]], result)
 
     @builtins.property
-    def application(self) -> typing.Optional["IServerApplication"]:
+    def application(self) -> typing.Optional["_IApplicationRef_1ffc51d6"]:
         '''The CodeDeploy EC2/on-premise Application this Deployment Group belongs to.
 
         :default: - A new Application will be created.
         '''
         result = self._values.get("application")
-        return typing.cast(typing.Optional["IServerApplication"], result)
+        return typing.cast(typing.Optional["_IApplicationRef_1ffc51d6"], result)
 
     @builtins.property
     def auto_rollback(self) -> typing.Optional["AutoRollbackConfig"]:
@@ -8919,13 +9041,13 @@ class ServerDeploymentGroupProps:
         return typing.cast(typing.Optional[typing.List["_IAutoScalingGroup_360f1cde"]], result)
 
     @builtins.property
-    def deployment_config(self) -> typing.Optional["IServerDeploymentConfig"]:
+    def deployment_config(self) -> typing.Optional["_IDeploymentConfigRef_bc0b49ed"]:
         '''The EC2/on-premise Deployment Configuration to use for this Deployment Group.
 
         :default: ServerDeploymentConfig#OneAtATime
         '''
         result = self._values.get("deployment_config")
-        return typing.cast(typing.Optional["IServerDeploymentConfig"], result)
+        return typing.cast(typing.Optional["_IDeploymentConfigRef_bc0b49ed"], result)
 
     @builtins.property
     def deployment_group_name(self) -> typing.Optional[builtins.str]:
@@ -9587,6 +9709,12 @@ class BaseDeploymentConfig(
         '''
         return typing.cast(builtins.str, jsii.get(self, "deploymentConfigName"))
 
+    @builtins.property
+    @jsii.member(jsii_name="deploymentConfigRef")
+    def deployment_config_ref(self) -> "_DeploymentConfigReference_df2fccdb":
+        '''A reference to a DeploymentConfig resource.'''
+        return typing.cast("_DeploymentConfigReference_df2fccdb", jsii.get(self, "deploymentConfigRef"))
+
 
 class _BaseDeploymentConfigProxy(
     BaseDeploymentConfig,
@@ -9598,7 +9726,7 @@ class _BaseDeploymentConfigProxy(
 typing.cast(typing.Any, BaseDeploymentConfig).__jsii_proxy_class__ = lambda : _BaseDeploymentConfigProxy
 
 
-@jsii.implements(ILambdaDeploymentConfig)
+@jsii.implements(ILambdaDeploymentConfig, IBindableDeploymentConfig)
 class CustomLambdaDeploymentConfig(
     _Resource_45bc6135,
     metaclass=jsii.JSIIMeta,
@@ -9662,6 +9790,22 @@ class CustomLambdaDeploymentConfig(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="bindEnvironment")
+    def bind_environment(
+        self,
+        deployment_group: "_IDeploymentGroupRef_120f3b25",
+    ) -> "_IDeploymentConfigRef_bc0b49ed":
+        '''(deprecated) Bind the predefined deployment config to the environment of the given resource.
+
+        :param deployment_group: -
+
+        :stability: deprecated
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__af835e0838e9a55fd88273c0ee770a919bf24bea3d59baeffcb3d515786a87c6)
+            check_type(argname="argument deployment_group", value=deployment_group, expected_type=type_hints["deployment_group"])
+        return typing.cast("_IDeploymentConfigRef_bc0b49ed", jsii.invoke(self, "bindEnvironment", [deployment_group]))
+
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
     def PROPERTY_INJECTION_ID(cls) -> builtins.str:
@@ -9694,6 +9838,15 @@ class CustomLambdaDeploymentConfig(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "deploymentConfigName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="deploymentConfigRef")
+    def deployment_config_ref(self) -> "_DeploymentConfigReference_df2fccdb":
+        '''(deprecated) A reference to a DeploymentConfig resource.
+
+        :stability: deprecated
+        '''
+        return typing.cast("_DeploymentConfigReference_df2fccdb", jsii.get(self, "deploymentConfigRef"))
 
 
 @jsii.implements(IEcsApplication)
@@ -9798,6 +9951,12 @@ class EcsApplication(
     @jsii.member(jsii_name="applicationName")
     def application_name(self) -> builtins.str:
         return typing.cast(builtins.str, jsii.get(self, "applicationName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="applicationRef")
+    def application_ref(self) -> "_ApplicationReference_936fe716":
+        '''A reference to a Application resource.'''
+        return typing.cast("_ApplicationReference_936fe716", jsii.get(self, "applicationRef"))
 
 
 @jsii.implements(IEcsDeploymentConfig)
@@ -9977,9 +10136,9 @@ class EcsDeploymentGroup(
         blue_green_deployment_config: typing.Union["EcsBlueGreenDeploymentConfig", typing.Dict[builtins.str, typing.Any]],
         service: "_IBaseService_3fcdd913",
         alarms: typing.Optional[typing.Sequence["_IAlarmRef_2bb0e5de"]] = None,
-        application: typing.Optional["IEcsApplication"] = None,
+        application: typing.Optional["_IApplicationRef_1ffc51d6"] = None,
         auto_rollback: typing.Optional[typing.Union["AutoRollbackConfig", typing.Dict[builtins.str, typing.Any]]] = None,
-        deployment_config: typing.Optional["IEcsDeploymentConfig"] = None,
+        deployment_config: typing.Optional["_IDeploymentConfigRef_bc0b49ed"] = None,
         deployment_group_name: typing.Optional[builtins.str] = None,
         ignore_alarm_configuration: typing.Optional[builtins.bool] = None,
         ignore_poll_alarms_failure: typing.Optional[builtins.bool] = None,
@@ -10025,9 +10184,9 @@ class EcsDeploymentGroup(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        application: "IEcsApplication",
+        application: "_IApplicationRef_1ffc51d6",
         deployment_group_name: builtins.str,
-        deployment_config: typing.Optional["IEcsDeploymentConfig"] = None,
+        deployment_config: typing.Optional["_IDeploymentConfigRef_bc0b49ed"] = None,
     ) -> "IEcsDeploymentGroup":
         '''Reference an ECS Deployment Group defined outside the CDK app.
 
@@ -10093,6 +10252,12 @@ class EcsDeploymentGroup(
     def deployment_group_name(self) -> builtins.str:
         '''The name of the Deployment Group.'''
         return typing.cast(builtins.str, jsii.get(self, "deploymentGroupName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="deploymentGroupRef")
+    def deployment_group_ref(self) -> "_DeploymentGroupReference_9112f387":
+        '''A reference to a DeploymentGroup resource.'''
+        return typing.cast("_DeploymentGroupReference_9112f387", jsii.get(self, "deploymentGroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="role")
@@ -10531,6 +10696,7 @@ __all__ = [
     "EcsDeploymentGroupAttributes",
     "EcsDeploymentGroupProps",
     "IBaseDeploymentConfig",
+    "IBindableDeploymentConfig",
     "IEcsApplication",
     "IEcsDeploymentConfig",
     "IEcsDeploymentGroup",
@@ -11241,9 +11407,9 @@ def _typecheckingstub__82f77eb6fc251ed7746cecc68aaaaf5706c1f2831b79812175c6abd5b
 
 def _typecheckingstub__171917799e985d16bcafd7fcbcf48ad64ae8bcb175f7e2b8f9fe1f74316e63df(
     *,
-    application: IEcsApplication,
+    application: _IApplicationRef_1ffc51d6,
     deployment_group_name: builtins.str,
-    deployment_config: typing.Optional[IEcsDeploymentConfig] = None,
+    deployment_config: typing.Optional[_IDeploymentConfigRef_bc0b49ed] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11253,13 +11419,19 @@ def _typecheckingstub__7adf7c582969f2d223ca19321a889bd4195cc6c299e92558e985e0fdc
     blue_green_deployment_config: typing.Union[EcsBlueGreenDeploymentConfig, typing.Dict[builtins.str, typing.Any]],
     service: _IBaseService_3fcdd913,
     alarms: typing.Optional[typing.Sequence[_IAlarmRef_2bb0e5de]] = None,
-    application: typing.Optional[IEcsApplication] = None,
+    application: typing.Optional[_IApplicationRef_1ffc51d6] = None,
     auto_rollback: typing.Optional[typing.Union[AutoRollbackConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-    deployment_config: typing.Optional[IEcsDeploymentConfig] = None,
+    deployment_config: typing.Optional[_IDeploymentConfigRef_bc0b49ed] = None,
     deployment_group_name: typing.Optional[builtins.str] = None,
     ignore_alarm_configuration: typing.Optional[builtins.bool] = None,
     ignore_poll_alarms_failure: typing.Optional[builtins.bool] = None,
     role: typing.Optional[_IRole_235f5d8e] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ba97b3918e8b33752fcb76aaa34476f79974fb3fba51e966de959dda226b115a(
+    deployment_group: _IDeploymentGroupRef_120f3b25,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11493,10 +11665,10 @@ def _typecheckingstub__e0364d4b48c02675a1899e742e45b411f0e83905e634a84441d088a41
     id: builtins.str,
     *,
     alarms: typing.Optional[typing.Sequence[_IAlarmRef_2bb0e5de]] = None,
-    application: typing.Optional[IServerApplication] = None,
+    application: typing.Optional[_IApplicationRef_1ffc51d6] = None,
     auto_rollback: typing.Optional[typing.Union[AutoRollbackConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     auto_scaling_groups: typing.Optional[typing.Sequence[_IAutoScalingGroup_360f1cde]] = None,
-    deployment_config: typing.Optional[IServerDeploymentConfig] = None,
+    deployment_config: typing.Optional[_IDeploymentConfigRef_bc0b49ed] = None,
     deployment_group_name: typing.Optional[builtins.str] = None,
     ec2_instance_tags: typing.Optional[InstanceTagSet] = None,
     ignore_alarm_configuration: typing.Optional[builtins.bool] = None,
@@ -11515,9 +11687,9 @@ def _typecheckingstub__d8af8e520b8abc653e37c88dc9f6e51e7d52aa5f24d99a8bcc8765154
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    application: IServerApplication,
+    application: _IApplicationRef_1ffc51d6,
     deployment_group_name: builtins.str,
-    deployment_config: typing.Optional[IServerDeploymentConfig] = None,
+    deployment_config: typing.Optional[_IDeploymentConfigRef_bc0b49ed] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11536,9 +11708,9 @@ def _typecheckingstub__8eb5bbbb7e095997fadbddebece8f587dfbebf76e4fba6c071f9def29
 
 def _typecheckingstub__a7c78d15fd80ffece3b49e232b4a29903107350aac8446220b8caea80c448a80(
     *,
-    application: IServerApplication,
+    application: _IApplicationRef_1ffc51d6,
     deployment_group_name: builtins.str,
-    deployment_config: typing.Optional[IServerDeploymentConfig] = None,
+    deployment_config: typing.Optional[_IDeploymentConfigRef_bc0b49ed] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11546,10 +11718,10 @@ def _typecheckingstub__a7c78d15fd80ffece3b49e232b4a29903107350aac8446220b8caea80
 def _typecheckingstub__a3ad41a581be1a234fd5722299d51aa77bd7beaf51e0511c95ee742d49944018(
     *,
     alarms: typing.Optional[typing.Sequence[_IAlarmRef_2bb0e5de]] = None,
-    application: typing.Optional[IServerApplication] = None,
+    application: typing.Optional[_IApplicationRef_1ffc51d6] = None,
     auto_rollback: typing.Optional[typing.Union[AutoRollbackConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     auto_scaling_groups: typing.Optional[typing.Sequence[_IAutoScalingGroup_360f1cde]] = None,
-    deployment_config: typing.Optional[IServerDeploymentConfig] = None,
+    deployment_config: typing.Optional[_IDeploymentConfigRef_bc0b49ed] = None,
     deployment_group_name: typing.Optional[builtins.str] = None,
     ec2_instance_tags: typing.Optional[InstanceTagSet] = None,
     ignore_alarm_configuration: typing.Optional[builtins.bool] = None,
@@ -11643,6 +11815,12 @@ def _typecheckingstub__1ac867d6e5022c0be7de76fadf84363729e8cfde59c1d36f19b324981
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__af835e0838e9a55fd88273c0ee770a919bf24bea3d59baeffcb3d515786a87c6(
+    deployment_group: _IDeploymentGroupRef_120f3b25,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__4edf5fb61452170b1877882129fc1df2e63797e3a9f6b183813f1e20bf3b8854(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -11693,9 +11871,9 @@ def _typecheckingstub__1d5a27f58faebed8ad465b39d408bd717722f646f6471896e02b8ea95
     blue_green_deployment_config: typing.Union[EcsBlueGreenDeploymentConfig, typing.Dict[builtins.str, typing.Any]],
     service: _IBaseService_3fcdd913,
     alarms: typing.Optional[typing.Sequence[_IAlarmRef_2bb0e5de]] = None,
-    application: typing.Optional[IEcsApplication] = None,
+    application: typing.Optional[_IApplicationRef_1ffc51d6] = None,
     auto_rollback: typing.Optional[typing.Union[AutoRollbackConfig, typing.Dict[builtins.str, typing.Any]]] = None,
-    deployment_config: typing.Optional[IEcsDeploymentConfig] = None,
+    deployment_config: typing.Optional[_IDeploymentConfigRef_bc0b49ed] = None,
     deployment_group_name: typing.Optional[builtins.str] = None,
     ignore_alarm_configuration: typing.Optional[builtins.bool] = None,
     ignore_poll_alarms_failure: typing.Optional[builtins.bool] = None,
@@ -11708,9 +11886,9 @@ def _typecheckingstub__e21d5d2081ae62e02eb318efb6845c80afcd2a31d1f65949b88d5e28b
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    application: IEcsApplication,
+    application: _IApplicationRef_1ffc51d6,
     deployment_group_name: builtins.str,
-    deployment_config: typing.Optional[IEcsDeploymentConfig] = None,
+    deployment_config: typing.Optional[_IDeploymentConfigRef_bc0b49ed] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11779,5 +11957,5 @@ def _typecheckingstub__aa5564b995bb046b6d26e38cc462ee09779219878f550d6e7a210ed2d
     """Type checking stubs"""
     pass
 
-for cls in [IBaseDeploymentConfig, IEcsApplication, IEcsDeploymentConfig, IEcsDeploymentGroup, ILambdaApplication, ILambdaDeploymentConfig, ILambdaDeploymentGroup, IServerApplication, IServerDeploymentConfig, IServerDeploymentGroup]:
+for cls in [IBaseDeploymentConfig, IBindableDeploymentConfig, IEcsApplication, IEcsDeploymentConfig, IEcsDeploymentGroup, ILambdaApplication, ILambdaDeploymentConfig, ILambdaDeploymentGroup, IServerApplication, IServerDeploymentConfig, IServerDeploymentGroup]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

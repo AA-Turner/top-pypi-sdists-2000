@@ -5544,7 +5544,7 @@ class TopicBase(
 
     @jsii.member(jsii_name="grantPublish")
     def grant_publish(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grant topic publishing permissions to the given identity.
+        '''Grant topic publishing permissions to the given identity [disable-awslint:no-grants].
 
         :param grantee: -
         '''
@@ -5555,7 +5555,7 @@ class TopicBase(
 
     @jsii.member(jsii_name="grantSubscribe")
     def grant_subscribe(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grant topic subscribing permissions to the given identity.
+        '''Grant topic subscribing permissions to the given identity [disable-awslint:no-grants].
 
         :param grantee: -
         '''

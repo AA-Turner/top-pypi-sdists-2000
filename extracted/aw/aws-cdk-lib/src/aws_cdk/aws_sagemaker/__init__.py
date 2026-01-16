@@ -8719,7 +8719,7 @@ class CfnDomain(
     @builtins.property
     @jsii.member(jsii_name="attrSingleSignOnManagedApplicationInstanceId")
     def attr_single_sign_on_managed_application_instance_id(self) -> builtins.str:
-        '''The IAM Identity Center managed application instance ID.
+        '''The SSO managed application instance ID.
 
         :cloudformationAttribute: SingleSignOnManagedApplicationInstanceId
         '''
@@ -53236,10 +53236,10 @@ class CfnUserProfile(
 ):
     '''Creates a user profile.
 
-    A user profile represents a single user within a domain, and is the main way to reference a "person" for the purposes of sharing, reporting, and other user-oriented features. This entity is created when a user onboards to Amazon SageMaker Studio. If an administrator invites a person by email or imports them from IAM Identity Center , a user profile is automatically created. A user profile is the primary holder of settings for an individual user and has a reference to the user's private Amazon Elastic File System (EFS) home directory.
+    A user profile represents a single user within a domain, and is the main way to reference a "person" for the purposes of sharing, reporting, and other user-oriented features. This entity is created when a user onboards to Amazon SageMaker Studio. If an administrator invites a person by email or imports them from SSO , a user profile is automatically created. A user profile is the primary holder of settings for an individual user and has a reference to the user's private Amazon Elastic File System (EFS) home directory.
     .. epigraph::
 
-       If you're using IAM Identity Center authentication, a user in IAM Identity Center , or a group in IAM Identity Center containing that user, must be assigned to the Amazon SageMaker Studio application from the IAM Identity Center Console to create a user profile. For more information about application assignment, see `Assign user access <https://docs.aws.amazon.com/singlesignon/latest/userguide/assignuserstoapp.html>`_ . After assignment is complete, a user profile can be created for that user in IAM Identity Center with AWS CloudFormation.
+       If you're using SSO authentication, a user in SSO , or a group in SSO containing that user, must be assigned to the Amazon SageMaker Studio application from the SSO Console to create a user profile. For more information about application assignment, see `Assign user access <https://docs.aws.amazon.com/singlesignon/latest/userguide/assignuserstoapp.html>`_ . After assignment is complete, a user profile can be created for that user in SSO with AWS CloudFormation.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-userprofile.html
     :cloudformationResource: AWS::SageMaker::UserProfile
@@ -53415,8 +53415,8 @@ class CfnUserProfile(
         :param id: Construct identifier for this resource (unique in its scope).
         :param domain_id: The domain ID.
         :param user_profile_name: The user profile name.
-        :param single_sign_on_user_identifier: A specifier for the type of value specified in SingleSignOnUserValue. Currently, the only supported value is "UserName". If the Domain's AuthMode is IAM Identity Center , this field is required. If the Domain's AuthMode is not IAM Identity Center , this field cannot be specified.
-        :param single_sign_on_user_value: The username of the associated AWS Single Sign-On User for this UserProfile. If the Domain's AuthMode is IAM Identity Center , this field is required, and must match a valid username of a user in your directory. If the Domain's AuthMode is not IAM Identity Center , this field cannot be specified.
+        :param single_sign_on_user_identifier: A specifier for the type of value specified in SingleSignOnUserValue. Currently, the only supported value is "UserName". If the Domain's AuthMode is SSO , this field is required. If the Domain's AuthMode is not SSO , this field cannot be specified.
+        :param single_sign_on_user_value: The username of the associated AWS Single Sign-On User for this UserProfile. If the Domain's AuthMode is SSO , this field is required, and must match a valid username of a user in your directory. If the Domain's AuthMode is not SSO , this field cannot be specified.
         :param tags: An array of key-value pairs to apply to this resource. Tags that you specify for the User Profile are also added to all apps that the User Profile launches. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
         :param user_settings: A collection of settings that apply to users of Amazon SageMaker Studio.
         '''
@@ -55924,8 +55924,8 @@ class CfnUserProfileProps:
 
         :param domain_id: The domain ID.
         :param user_profile_name: The user profile name.
-        :param single_sign_on_user_identifier: A specifier for the type of value specified in SingleSignOnUserValue. Currently, the only supported value is "UserName". If the Domain's AuthMode is IAM Identity Center , this field is required. If the Domain's AuthMode is not IAM Identity Center , this field cannot be specified.
-        :param single_sign_on_user_value: The username of the associated AWS Single Sign-On User for this UserProfile. If the Domain's AuthMode is IAM Identity Center , this field is required, and must match a valid username of a user in your directory. If the Domain's AuthMode is not IAM Identity Center , this field cannot be specified.
+        :param single_sign_on_user_identifier: A specifier for the type of value specified in SingleSignOnUserValue. Currently, the only supported value is "UserName". If the Domain's AuthMode is SSO , this field is required. If the Domain's AuthMode is not SSO , this field cannot be specified.
+        :param single_sign_on_user_value: The username of the associated AWS Single Sign-On User for this UserProfile. If the Domain's AuthMode is SSO , this field is required, and must match a valid username of a user in your directory. If the Domain's AuthMode is not SSO , this field cannot be specified.
         :param tags: An array of key-value pairs to apply to this resource. Tags that you specify for the User Profile are also added to all apps that the User Profile launches. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
         :param user_settings: A collection of settings that apply to users of Amazon SageMaker Studio.
 
@@ -56128,7 +56128,7 @@ class CfnUserProfileProps:
     def single_sign_on_user_identifier(self) -> typing.Optional[builtins.str]:
         '''A specifier for the type of value specified in SingleSignOnUserValue.
 
-        Currently, the only supported value is "UserName". If the Domain's AuthMode is IAM Identity Center , this field is required. If the Domain's AuthMode is not IAM Identity Center , this field cannot be specified.
+        Currently, the only supported value is "UserName". If the Domain's AuthMode is SSO , this field is required. If the Domain's AuthMode is not SSO , this field cannot be specified.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-userprofile.html#cfn-sagemaker-userprofile-singlesignonuseridentifier
         '''
@@ -56139,7 +56139,7 @@ class CfnUserProfileProps:
     def single_sign_on_user_value(self) -> typing.Optional[builtins.str]:
         '''The username of the associated AWS Single Sign-On User for this UserProfile.
 
-        If the Domain's AuthMode is IAM Identity Center , this field is required, and must match a valid username of a user in your directory. If the Domain's AuthMode is not IAM Identity Center , this field cannot be specified.
+        If the Domain's AuthMode is SSO , this field is required, and must match a valid username of a user in your directory. If the Domain's AuthMode is not SSO , this field cannot be specified.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-userprofile.html#cfn-sagemaker-userprofile-singlesignonuservalue
         '''
@@ -56889,7 +56889,11 @@ class CfnWorkteamProps:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_sagemaker.IEndpoint")
-class IEndpoint(_IResource_c80c4260, typing_extensions.Protocol):
+class IEndpoint(
+    _IResource_c80c4260,
+    _IEndpointRef_c74991a4,
+    typing_extensions.Protocol,
+):
     '''The interface for a SageMaker Endpoint resource.'''
 
     @builtins.property
@@ -56921,6 +56925,7 @@ class IEndpoint(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IEndpointProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IEndpointRef_c74991a4), # type: ignore[misc]
 ):
     '''The interface for a SageMaker Endpoint resource.'''
 
@@ -56960,7 +56965,11 @@ typing.cast(typing.Any, IEndpoint).__jsii_proxy_class__ = lambda : _IEndpointPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_sagemaker.IPipeline")
-class IPipeline(_IResource_c80c4260, typing_extensions.Protocol):
+class IPipeline(
+    _IResource_c80c4260,
+    _IPipelineRef_682fe738,
+    typing_extensions.Protocol,
+):
     '''The interface for a SageMaker Pipeline resource.'''
 
     @builtins.property
@@ -56995,6 +57004,7 @@ class IPipeline(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IPipelineProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IPipelineRef_682fe738), # type: ignore[misc]
 ):
     '''The interface for a SageMaker Pipeline resource.'''
 

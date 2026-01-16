@@ -2655,7 +2655,7 @@ class Repository(
         grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
     ) -> "_Grant_a7ae64f8":
-        '''Grant the given principal identity permissions to perform the actions on this repository.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         :param actions: -
@@ -2668,7 +2668,7 @@ class Repository(
 
     @jsii.member(jsii_name="grantPull")
     def grant_pull(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grant the given identity permissions to pull this repository.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         '''
@@ -2679,7 +2679,7 @@ class Repository(
 
     @jsii.member(jsii_name="grantPullPush")
     def grant_pull_push(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grant the given identity permissions to pull and push this repository.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         '''
@@ -2690,7 +2690,7 @@ class Repository(
 
     @jsii.member(jsii_name="grantRead")
     def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grant the given identity permissions to read this repository.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         '''

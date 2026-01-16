@@ -2008,7 +2008,6 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-from ..aws_certificatemanager import ICertificate as _ICertificate_c194c70b
 from ..aws_cloudwatch import (
     Metric as _Metric_e396a4dc,
     MetricOptions as _MetricOptions_1788b62f,
@@ -2030,7 +2029,6 @@ from ..aws_iam import (
 )
 from ..aws_kinesisfirehose import CfnDeliveryStream as _CfnDeliveryStream_8f3b1735
 from ..aws_lambda import IFunction as _IFunction_6adb0ab8
-from ..aws_logs import ILogGroup as _ILogGroup_3c4fa718
 from ..aws_s3 import IBucket as _IBucket_42e086fd
 from ..aws_s3_assets import AssetOptions as _AssetOptions_2aa69621
 from ..aws_sagemaker import IEndpoint as _IEndpoint_58fe201a
@@ -2081,12 +2079,16 @@ from ..interfaces.aws_apigateway import (
     UsagePlanReference as _UsagePlanReference_3d3ec4d2,
     VpcLinkReference as _VpcLinkReference_cccde188,
 )
+from ..interfaces.aws_certificatemanager import (
+    ICertificateRef as _ICertificateRef_1878d79b
+)
 from ..interfaces.aws_cognito import IUserPoolRef as _IUserPoolRef_0b7d02b5
 from ..interfaces.aws_elasticloadbalancingv2 import (
     ILoadBalancerRef as _ILoadBalancerRef_13acd8f1
 )
 from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
+from ..interfaces.aws_logs import ILogGroupRef as _ILogGroupRef_874d025a
 from ..interfaces.aws_s3 import IBucketRef as _IBucketRef_3debe44e
 
 
@@ -16647,7 +16649,7 @@ class DomainNameOptions:
     def __init__(
         self,
         *,
-        certificate: "_ICertificate_c194c70b",
+        certificate: "_ICertificateRef_1878d79b",
         domain_name: builtins.str,
         base_path: typing.Optional[builtins.str] = None,
         endpoint_type: typing.Optional["EndpointType"] = None,
@@ -16700,7 +16702,7 @@ class DomainNameOptions:
             self._values["security_policy"] = security_policy
 
     @builtins.property
-    def certificate(self) -> "_ICertificate_c194c70b":
+    def certificate(self) -> "_ICertificateRef_1878d79b":
         '''The reference to an AWS-managed certificate for use by the edge-optimized endpoint for the domain name.
 
         For "EDGE" domain names, the certificate
@@ -16708,7 +16710,7 @@ class DomainNameOptions:
         '''
         result = self._values.get("certificate")
         assert result is not None, "Required property 'certificate' is missing"
-        return typing.cast("_ICertificate_c194c70b", result)
+        return typing.cast("_ICertificateRef_1878d79b", result)
 
     @builtins.property
     def domain_name(self) -> builtins.str:
@@ -16787,7 +16789,7 @@ class DomainNameProps(DomainNameOptions):
     def __init__(
         self,
         *,
-        certificate: "_ICertificate_c194c70b",
+        certificate: "_ICertificateRef_1878d79b",
         domain_name: builtins.str,
         base_path: typing.Optional[builtins.str] = None,
         endpoint_type: typing.Optional["EndpointType"] = None,
@@ -16846,7 +16848,7 @@ class DomainNameProps(DomainNameOptions):
             self._values["mapping"] = mapping
 
     @builtins.property
-    def certificate(self) -> "_ICertificate_c194c70b":
+    def certificate(self) -> "_ICertificateRef_1878d79b":
         '''The reference to an AWS-managed certificate for use by the edge-optimized endpoint for the domain name.
 
         For "EDGE" domain names, the certificate
@@ -16854,7 +16856,7 @@ class DomainNameProps(DomainNameOptions):
         '''
         result = self._values.get("certificate")
         assert result is not None, "Required property 'certificate' is missing"
-        return typing.cast("_ICertificate_c194c70b", result)
+        return typing.cast("_ICertificateRef_1878d79b", result)
 
     @builtins.property
     def domain_name(self) -> builtins.str:
@@ -20803,7 +20805,7 @@ class LogGroupLogDestination(
         )
     '''
 
-    def __init__(self, log_group: "_ILogGroup_3c4fa718") -> None:
+    def __init__(self, log_group: "_ILogGroupRef_874d025a") -> None:
         '''
         :param log_group: -
         '''
@@ -21000,6 +21002,8 @@ class Method(
     @jsii.member(jsii_name="grantExecute")
     def grant_execute(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grants an IAM principal permission to invoke this method.
+
+        [disable-awslint:no-grants]
 
         :param grantee: the principal.
         '''
@@ -23152,7 +23156,7 @@ class RateLimitedApiKey(
 
     @jsii.member(jsii_name="grantRead")
     def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Permits the IAM principal all read operations through this key.
+        '''Permits the IAM principal all read operations through this key [disable-awslint:no-grants].
 
         :param grantee: The principal to grant access to.
         '''
@@ -23163,7 +23167,7 @@ class RateLimitedApiKey(
 
     @jsii.member(jsii_name="grantReadWrite")
     def grant_read_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Permits the IAM principal all read and write operations through this key.
+        '''Permits the IAM principal all read and write operations through this key [disable-awslint:no-grants].
 
         :param grantee: The principal to grant access to.
         '''
@@ -23174,7 +23178,7 @@ class RateLimitedApiKey(
 
     @jsii.member(jsii_name="grantWrite")
     def grant_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Permits the IAM principal all write operations through this key.
+        '''Permits the IAM principal all write operations through this key [disable-awslint:no-grants].
 
         :param grantee: The principal to grant access to.
         '''
@@ -25215,7 +25219,7 @@ class RestApiBase(
         self,
         id: builtins.str,
         *,
-        certificate: "_ICertificate_c194c70b",
+        certificate: "_ICertificateRef_1878d79b",
         domain_name: builtins.str,
         base_path: typing.Optional[builtins.str] = None,
         endpoint_type: typing.Optional["EndpointType"] = None,
@@ -26007,15 +26011,15 @@ class RestApiBaseProps:
             # The values are placeholders you should change.
             import aws_cdk as cdk
             from aws_cdk import aws_apigateway as apigateway
-            from aws_cdk import aws_certificatemanager as certificatemanager
             from aws_cdk import aws_ec2 as ec2
             from aws_cdk import aws_iam as iam
             from aws_cdk import aws_s3 as s3
+            from aws_cdk.interfaces import aws_certificatemanager as interfaces_certificatemanager
             
             # access_log_destination: apigateway.IAccessLogDestination
             # access_log_format: apigateway.AccessLogFormat
             # bucket: s3.Bucket
-            # certificate: certificatemanager.Certificate
+            # certificate_ref: interfaces_certificatemanager.ICertificateRef
             # policy_document: iam.PolicyDocument
             # vpc_endpoint: ec2.VpcEndpoint
             
@@ -26060,7 +26064,7 @@ class RestApiBaseProps:
                 description="description",
                 disable_execute_api_endpoint=False,
                 domain_name=apigateway.DomainNameOptions(
-                    certificate=certificate,
+                    certificate=certificate_ref,
                     domain_name="domainName",
             
                     # the properties below are optional
@@ -31301,7 +31305,7 @@ class ApiKey(
 
     @jsii.member(jsii_name="grantRead")
     def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Permits the IAM principal all read operations through this key.
+        '''Permits the IAM principal all read operations through this key [disable-awslint:no-grants].
 
         :param grantee: The principal to grant access to.
         '''
@@ -31312,7 +31316,7 @@ class ApiKey(
 
     @jsii.member(jsii_name="grantReadWrite")
     def grant_read_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Permits the IAM principal all read and write operations through this key.
+        '''Permits the IAM principal all read and write operations through this key [disable-awslint:no-grants].
 
         :param grantee: The principal to grant access to.
         '''
@@ -31323,7 +31327,7 @@ class ApiKey(
 
     @jsii.member(jsii_name="grantWrite")
     def grant_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Permits the IAM principal all write operations through this key.
+        '''Permits the IAM principal all write operations through this key [disable-awslint:no-grants].
 
         :param grantee: The principal to grant access to.
         '''
@@ -32011,7 +32015,7 @@ class DomainName(
         id: builtins.str,
         *,
         mapping: typing.Optional["IRestApi"] = None,
-        certificate: "_ICertificate_c194c70b",
+        certificate: "_ICertificateRef_1878d79b",
         domain_name: builtins.str,
         base_path: typing.Optional[builtins.str] = None,
         endpoint_type: typing.Optional["EndpointType"] = None,
@@ -37487,7 +37491,7 @@ def _typecheckingstub__ecfb12248c0bb90b9eb6413f1a897777b3fad240fd301f464e8379fdb
 
 def _typecheckingstub__0bdcaf279d4b106d16c7f0aa0d23a9d2783cc9dcc73ee5530eac661399281730(
     *,
-    certificate: _ICertificate_c194c70b,
+    certificate: _ICertificateRef_1878d79b,
     domain_name: builtins.str,
     base_path: typing.Optional[builtins.str] = None,
     endpoint_type: typing.Optional[EndpointType] = None,
@@ -37499,7 +37503,7 @@ def _typecheckingstub__0bdcaf279d4b106d16c7f0aa0d23a9d2783cc9dcc73ee5530eac66139
 
 def _typecheckingstub__fd56e3d47a950d5babcb79f21442620ade11693af8810f3b0b64fa0292817253(
     *,
-    certificate: _ICertificate_c194c70b,
+    certificate: _ICertificateRef_1878d79b,
     domain_name: builtins.str,
     base_path: typing.Optional[builtins.str] = None,
     endpoint_type: typing.Optional[EndpointType] = None,
@@ -37813,7 +37817,7 @@ def _typecheckingstub__ce30eee1096e0566120e3d64f9e65409fa005cc047656a224902fd86c
     pass
 
 def _typecheckingstub__a84eaa748025edeb06434794d8ce0f9b8ad3d9438d71bcf66f8fe753a7fd4e9a(
-    log_group: _ILogGroup_3c4fa718,
+    log_group: _ILogGroupRef_874d025a,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -38348,7 +38352,7 @@ def _typecheckingstub__f0a5859c40e92cd2217b2036045df4f98e50fcc2e8e5daf5809ef0709
 def _typecheckingstub__8a12b95d4a36a48d1209e193238414419355802b1437b6082f336ababf9f3df6(
     id: builtins.str,
     *,
-    certificate: _ICertificate_c194c70b,
+    certificate: _ICertificateRef_1878d79b,
     domain_name: builtins.str,
     base_path: typing.Optional[builtins.str] = None,
     endpoint_type: typing.Optional[EndpointType] = None,
@@ -39008,7 +39012,7 @@ def _typecheckingstub__aeb0e10d0ef995f9c2a6135581d4faac5b0cdde97f2e1aad887d35984
     id: builtins.str,
     *,
     mapping: typing.Optional[IRestApi] = None,
-    certificate: _ICertificate_c194c70b,
+    certificate: _ICertificateRef_1878d79b,
     domain_name: builtins.str,
     base_path: typing.Optional[builtins.str] = None,
     endpoint_type: typing.Optional[EndpointType] = None,

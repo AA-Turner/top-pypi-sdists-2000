@@ -209,7 +209,7 @@ all certificates. This metric is emitted by AWS Certificates Manager once per
 day until the certificate has effectively expired.
 
 An alarm can be created to determine whether a certificate is soon due for
-renewal ussing the following code:
+renewal using the following code:
 
 ```python
 import aws_cdk.aws_cloudwatch as cloudwatch
@@ -1888,7 +1888,11 @@ class DnsValidatedCertificateProps(CertificateProps):
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_certificatemanager.ICertificate")
-class ICertificate(_IResource_c80c4260, typing_extensions.Protocol):
+class ICertificate(
+    _IResource_c80c4260,
+    _ICertificateRef_1878d79b,
+    typing_extensions.Protocol,
+):
     '''Represents a certificate in AWS Certificate Manager.'''
 
     @builtins.property
@@ -1941,6 +1945,7 @@ class ICertificate(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _ICertificateProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_ICertificateRef_1878d79b), # type: ignore[misc]
 ):
     '''Represents a certificate in AWS Certificate Manager.'''
 
@@ -2238,6 +2243,12 @@ class PrivateCertificate(
     def certificate_arn(self) -> builtins.str:
         '''The certificate's ARN.'''
         return typing.cast(builtins.str, jsii.get(self, "certificateArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="certificateRef")
+    def certificate_ref(self) -> "_CertificateReference_6d6c82cf":
+        '''A reference to a Certificate resource.'''
+        return typing.cast("_CertificateReference_6d6c82cf", jsii.get(self, "certificateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="region")
@@ -2547,6 +2558,12 @@ class Certificate(
         return typing.cast(builtins.str, jsii.get(self, "certificateArn"))
 
     @builtins.property
+    @jsii.member(jsii_name="certificateRef")
+    def certificate_ref(self) -> "_CertificateReference_6d6c82cf":
+        '''A reference to a Certificate resource.'''
+        return typing.cast("_CertificateReference_6d6c82cf", jsii.get(self, "certificateRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="region")
     def _region(self) -> typing.Optional[builtins.str]:
         '''If the certificate is provisionned in a different region than the containing stack, this should be the region in which the certificate lives so we can correctly create ``Metric`` instances.'''
@@ -2751,6 +2768,15 @@ class DnsValidatedCertificate(
         :stability: deprecated
         '''
         return typing.cast(builtins.str, jsii.get(self, "certificateArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="certificateRef")
+    def certificate_ref(self) -> "_CertificateReference_6d6c82cf":
+        '''(deprecated) A reference to a Certificate resource.
+
+        :stability: deprecated
+        '''
+        return typing.cast("_CertificateReference_6d6c82cf", jsii.get(self, "certificateRef"))
 
     @builtins.property
     @jsii.member(jsii_name="tags")

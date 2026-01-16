@@ -5731,7 +5731,7 @@ class RepositoryBase(
         grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
     ) -> "_Grant_a7ae64f8":
-        '''Grant the given principal identity permissions to perform the actions on this repository.
+        '''Grant the given principal identity permissions to perform the actions on this repository [disable-awslint:no-grants].
 
         :param grantee: -
         :param actions: -
@@ -5744,7 +5744,7 @@ class RepositoryBase(
 
     @jsii.member(jsii_name="grantPull")
     def grant_pull(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grant the given identity permissions to use the images in this repository.
+        '''Grant the given identity permissions to use the images in this repository [disable-awslint:no-grants].
 
         :param grantee: -
         '''
@@ -5757,6 +5757,8 @@ class RepositoryBase(
     def grant_pull_push(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions to pull and push images to this repository.
 
+        [disable-awslint:no-grants]
+
         :param grantee: -
         '''
         if __debug__:
@@ -5766,7 +5768,7 @@ class RepositoryBase(
 
     @jsii.member(jsii_name="grantPush")
     def grant_push(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grant the given identity permissions to use the images in this repository.
+        '''Grant the given identity permissions to use the images in this repository [disable-awslint:no-grants].
 
         :param grantee: -
         '''
@@ -5777,7 +5779,7 @@ class RepositoryBase(
 
     @jsii.member(jsii_name="grantRead")
     def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grant the given identity permissions to read the images in this repository.
+        '''Grant the given identity permissions to read the images in this repository [disable-awslint:no-grants].
 
         :param grantee: -
         '''

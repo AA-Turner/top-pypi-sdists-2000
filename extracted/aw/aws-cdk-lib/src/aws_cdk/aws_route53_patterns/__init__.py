@@ -112,8 +112,10 @@ def check_type(argname: str, value: object, expected_type: typing.Any) -> typing
 from .._jsii import *
 
 import constructs as _constructs_77d1e7e8
-from ..aws_certificatemanager import ICertificate as _ICertificate_c194c70b
 from ..aws_route53 import IHostedZone as _IHostedZone_9a6907ad
+from ..interfaces.aws_certificatemanager import (
+    ICertificateRef as _ICertificateRef_1878d79b
+)
 
 
 class HttpsRedirect(
@@ -146,7 +148,7 @@ class HttpsRedirect(
         *,
         target_domain: builtins.str,
         zone: "_IHostedZone_9a6907ad",
-        certificate: typing.Optional["_ICertificate_c194c70b"] = None,
+        certificate: typing.Optional["_ICertificateRef_1878d79b"] = None,
         record_names: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''
@@ -187,7 +189,7 @@ class HttpsRedirectProps:
         *,
         target_domain: builtins.str,
         zone: "_IHostedZone_9a6907ad",
-        certificate: typing.Optional["_ICertificate_c194c70b"] = None,
+        certificate: typing.Optional["_ICertificateRef_1878d79b"] = None,
         record_names: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Properties to configure an HTTPS Redirect.
@@ -253,7 +255,7 @@ class HttpsRedirectProps:
         return typing.cast("_IHostedZone_9a6907ad", result)
 
     @builtins.property
-    def certificate(self) -> typing.Optional["_ICertificate_c194c70b"]:
+    def certificate(self) -> typing.Optional["_ICertificateRef_1878d79b"]:
         '''The AWS Certificate Manager (ACM) certificate that will be associated with the CloudFront distribution that will be created.
 
         If provided, the certificate must be
@@ -262,7 +264,7 @@ class HttpsRedirectProps:
         :default: - A new certificate is created in us-east-1 (N. Virginia)
         '''
         result = self._values.get("certificate")
-        return typing.cast(typing.Optional["_ICertificate_c194c70b"], result)
+        return typing.cast(typing.Optional["_ICertificateRef_1878d79b"], result)
 
     @builtins.property
     def record_names(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -298,7 +300,7 @@ def _typecheckingstub__ff68f7e0dc1eec5dad60ae4c71e2f21e862d0a1879bb52d096b241017
     *,
     target_domain: builtins.str,
     zone: _IHostedZone_9a6907ad,
-    certificate: typing.Optional[_ICertificate_c194c70b] = None,
+    certificate: typing.Optional[_ICertificateRef_1878d79b] = None,
     record_names: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -308,7 +310,7 @@ def _typecheckingstub__72f6f834d63b74800825b794cdf644f1464edeeadd63af405be3512f2
     *,
     target_domain: builtins.str,
     zone: _IHostedZone_9a6907ad,
-    certificate: typing.Optional[_ICertificate_c194c70b] = None,
+    certificate: typing.Optional[_ICertificateRef_1878d79b] = None,
     record_names: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""

@@ -11619,6 +11619,7 @@ class TableBase(
 
         If ``encryptionKey`` is present, appropriate grants to the key needs to be added
         separately using the ``table.encryptionKey.grant*`` methods.
+        [disable-awslint:no-grants]
 
         :param grantee: The principal (no-op if undefined).
         :param actions: The set of actions to allow (i.e. "dynamodb:PutItem", "dynamodb:GetItem", ...).
@@ -11635,6 +11636,8 @@ class TableBase(
 
         Appropriate grants will also be added to the customer-managed KMS key
         if one was configured.
+
+        [disable-awslint:no-grants]
 
         :param grantee: The principal to grant access to.
         '''
@@ -11667,6 +11670,8 @@ class TableBase(
         Appropriate grants will also be added to the customer-managed KMS key
         if one was configured.
 
+        [disable-awslint:no-grants]
+
         :param grantee: The principal to grant access to.
         '''
         if __debug__:
@@ -11687,6 +11692,8 @@ class TableBase(
         Appropriate grants will also be added to the customer-managed KMS key
         if one was configured.
 
+        [disable-awslint:no-grants]
+
         :param grantee: The principal to grant access to.
         '''
         if __debug__:
@@ -11705,6 +11712,8 @@ class TableBase(
         If ``encryptionKey`` is present, appropriate grants to the key needs to be added
         separately using the ``table.encryptionKey.grant*`` methods.
 
+        [disable-awslint:no-grants]
+
         :param grantee: The principal (no-op if undefined).
         :param actions: The set of actions to allow (i.e. "dynamodb:DescribeStream", "dynamodb:GetRecords", ...).
         '''
@@ -11721,6 +11730,8 @@ class TableBase(
         Appropriate grants will also be added to the customer-managed KMS key
         if one was configured.
 
+        [disable-awslint:no-grants]
+
         :param grantee: The principal to grant access to.
         '''
         if __debug__:
@@ -11735,6 +11746,8 @@ class TableBase(
     ) -> "_Grant_a7ae64f8":
         '''Permits an IAM Principal to list streams attached to current dynamodb table.
 
+        [disable-awslint:no-grants]
+
         :param grantee: The principal (no-op if undefined).
         '''
         if __debug__:
@@ -11748,6 +11761,8 @@ class TableBase(
 
         Appropriate grants will also be added to the customer-managed KMS key
         if one was configured.
+
+        [disable-awslint:no-grants]
 
         :param grantee: The principal to grant access to.
         '''
@@ -12603,6 +12618,8 @@ class TableBaseV2(
         Note: If ``encryptionKey`` is present, appropriate grants to the key needs to be added
         separately using the ``table.encryptionKey.grant*`` methods.
 
+        [disable-awslint:no-grants]
+
         :param grantee: the principal (no-op if undefined).
         :param actions: the set of actions to allow (i.e., 'dynamodb:PutItem', 'dynamodb:GetItem', etc.).
         '''
@@ -12619,6 +12636,8 @@ class TableBaseV2(
         Note: Appropriate grants will also be added to the customer-managed KMS keys associated with this
         table if one was configured.
 
+        [disable-awslint:no-grants]
+
         :param grantee: the principal to grant access to.
         '''
         if __debug__:
@@ -12634,6 +12653,8 @@ class TableBaseV2(
 
         Note: Appropriate grants will also be added to the customer-managed KMS keys associated with this
         table if one was configured.
+
+        [disable-awslint:no-grants]
 
         :param grantee: the principal to grant access to.
         '''
@@ -12655,6 +12676,8 @@ class TableBaseV2(
         Note: Appropriate grants will also be added to the customer-managed KMS keys associated with this
         table if one was configured.
 
+        [disable-awslint:no-grants]
+
         :param grantee: the principal to grant access to.
         '''
         if __debug__:
@@ -12672,6 +12695,8 @@ class TableBaseV2(
 
         Note: If ``encryptionKey`` is present, appropriate grants to the key needs to be added
         separately using the ``table.encryptionKey.grant*`` methods.
+
+        [disable-awslint:no-grants]
 
         :param grantee: the principal (no-op if undefined).
         :param actions: the set of actions to allow (i.e., 'dynamodb:DescribeStream', 'dynamodb:GetRecords', etc.).
@@ -12691,6 +12716,8 @@ class TableBaseV2(
         Note: Appropriate grants will also be added to the customer-managed KMS keys associated with this
         table if one was configured.
 
+        [disable-awslint:no-grants]
+
         :param grantee: the principal to grant access to.
         '''
         if __debug__:
@@ -12704,6 +12731,8 @@ class TableBaseV2(
         grantee: "_IGrantable_71c4f5de",
     ) -> "_Grant_a7ae64f8":
         '''Permits an IAM principal to list streams attached to this table.
+
+        [disable-awslint:no-grants]
 
         :param grantee: the principal to grant access to.
         '''
@@ -12720,6 +12749,8 @@ class TableBaseV2(
 
         Note: Appropriate grants will also be added to the customer-managed KMS keys associated with this
         table if one was configured.
+
+        [disable-awslint:no-grants]
 
         :param grantee: the principal to grant access to.
         '''

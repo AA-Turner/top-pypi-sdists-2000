@@ -1140,9 +1140,9 @@ class CfnIdentitySource(
             region: builtins.str,
             approval_portal_url: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''AWS IAM Identity Center credentials.
+            '''SSOlong credentials.
 
-            For more information see, `AWS IAM Identity Center <https://docs.aws.amazon.com/identity-center/>`_ .
+            For more information see, `SSOlong <https://docs.aws.amazon.com/identity-center/>`_ .
 
             :param instance_arn: Amazon Resource Name (ARN) for the IAM Identity Center instance.
             :param region: AWS Region where the IAM Identity Center instance is located.
@@ -1232,7 +1232,7 @@ class CfnIdentitySource(
 
             For example, an IAM Identity Center instance.
 
-            :param iam_identity_center: AWS IAM Identity Center credentials.
+            :param iam_identity_center: SSOlong credentials.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mpa-identitysource-identitysourceparameters.html
             :exampleMetadata: fixture=_generated
@@ -1264,7 +1264,7 @@ class CfnIdentitySource(
         def iam_identity_center(
             self,
         ) -> typing.Union["_IResolvable_da3f097b", "CfnIdentitySource.IamIdentityCenterProperty"]:
-            '''AWS IAM Identity Center credentials.
+            '''SSOlong credentials.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mpa-identitysource-identitysourceparameters.html#cfn-mpa-identitysource-identitysourceparameters-iamidentitycenter
             '''

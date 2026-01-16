@@ -153,7 +153,39 @@ domain = Domain(self, "Domain",
 
 This sets up the domain with node to node encryption and encryption at
 rest. You can also choose to supply your own KMS key to use for encryption at
-rest.
+rest:
+
+```python
+from aws_cdk.aws_opensearchservice import EncryptionAtRestOptions
+import aws_cdk.aws_kms as kms
+
+
+encryption_key = kms.Key(self, "EncryptionKey")
+
+domain = Domain(self, "Domain",
+    version=EngineVersion.OPENSEARCH_1_0,
+    encryption_at_rest=EncryptionAtRestOptions(
+        kms_key=encryption_key
+    )
+)
+```
+
+The construct also supports using cross-account KMS keys for encryption at rest:
+
+```python
+from aws_cdk.aws_opensearchservice import EncryptionAtRestOptions
+import aws_cdk.aws_kms as kms
+
+
+cross_account_key = kms.Key.from_key_arn(self, "CrossAccountKey", "arn:aws:kms:us-east-1:111111111111:key/12345678-1234-1234-1234-123456789012")
+
+domain = Domain(self, "Domain",
+    version=EngineVersion.OPENSEARCH_1_0,
+    encryption_at_rest=EncryptionAtRestOptions(
+        kms_key=cross_account_key
+    )
+)
+```
 
 ## VPC Support
 
@@ -613,7 +645,6 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-from ..aws_certificatemanager import ICertificate as _ICertificate_c194c70b
 from ..aws_cloudwatch import (
     Metric as _Metric_e396a4dc,
     MetricOptions as _MetricOptions_1788b62f,
@@ -634,8 +665,12 @@ from ..aws_iam import (
 )
 from ..aws_logs import ILogGroup as _ILogGroup_3c4fa718
 from ..aws_route53 import IHostedZone as _IHostedZone_9a6907ad
+from ..interfaces.aws_certificatemanager import (
+    ICertificateRef as _ICertificateRef_1878d79b
+)
 from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
+from ..interfaces.aws_logs import ILogGroupRef as _ILogGroupRef_874d025a
 from ..interfaces.aws_opensearchservice import (
     ApplicationReference as _ApplicationReference_41b9a662,
     DomainReference as _DomainReference_37396432,
@@ -5959,7 +5994,7 @@ class CustomEndpointOptions:
         self,
         *,
         domain_name: builtins.str,
-        certificate: typing.Optional["_ICertificate_c194c70b"] = None,
+        certificate: typing.Optional["_ICertificateRef_1878d79b"] = None,
         hosted_zone: typing.Optional["_IHostedZone_9a6907ad"] = None,
     ) -> None:
         '''Configures a custom domain endpoint for the Amazon OpenSearch Service domain.
@@ -6001,13 +6036,13 @@ class CustomEndpointOptions:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def certificate(self) -> typing.Optional["_ICertificate_c194c70b"]:
+    def certificate(self) -> typing.Optional["_ICertificateRef_1878d79b"]:
         '''The certificate to use.
 
         :default: - create a new one
         '''
         result = self._values.get("certificate")
-        return typing.cast(typing.Optional["_ICertificate_c194c70b"], result)
+        return typing.cast(typing.Optional["_ICertificateRef_1878d79b"], result)
 
     @builtins.property
     def hosted_zone(self) -> typing.Optional["_IHostedZone_9a6907ad"]:
@@ -6887,29 +6922,23 @@ class EncryptionAtRestOptions:
 
         Example::
 
-            import aws_cdk.aws_opensearchservice as opensearch
-            
-            
-            domain = opensearch.Domain(self, "Domain",
-                version=opensearch.EngineVersion.OPENSEARCH_2_17,
-                encryption_at_rest=opensearch.EncryptionAtRestOptions(
+            from aws_cdk.aws_opensearchservice import EncryptionAtRestOptions, AdvancedSecurityOptions, SAMLOptionsProperty
+            domain = Domain(self, "Domain",
+                version=EngineVersion.OPENSEARCH_1_0,
+                enforce_https=True,
+                node_to_node_encryption=True,
+                encryption_at_rest=EncryptionAtRestOptions(
                     enabled=True
                 ),
-                node_to_node_encryption=True,
-                enforce_https=True,
-                capacity=opensearch.CapacityConfig(
-                    multi_az_with_standby_enabled=False
-                ),
-                ebs=opensearch.EbsOptions(
-                    enabled=True,
-                    volume_size=10
+                fine_grained_access_control=AdvancedSecurityOptions(
+                    master_user_name="master-user",
+                    saml_authentication_enabled=True,
+                    saml_authentication_options=SAMLOptionsProperty(
+                        idp_entity_id="entity-id",
+                        idp_metadata_content="metadata-content-with-quotes-escaped"
+                    )
                 )
             )
-            api = appsync.EventApi(self, "EventApiOpenSearch",
-                api_name="OpenSearchEventApi"
-            )
-            
-            data_source = api.add_open_search_data_source("opensearchds", domain)
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b5973f04ac98b9a2d9bddce35a01a16416d58b7f8a10bd553cfabe3909eb2523)
@@ -8987,13 +9016,13 @@ class LoggingOptions:
         self,
         *,
         app_log_enabled: typing.Optional[builtins.bool] = None,
-        app_log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        app_log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         audit_log_enabled: typing.Optional[builtins.bool] = None,
-        audit_log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        audit_log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         slow_index_log_enabled: typing.Optional[builtins.bool] = None,
-        slow_index_log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        slow_index_log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         slow_search_log_enabled: typing.Optional[builtins.bool] = None,
-        slow_search_log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        slow_search_log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
     ) -> None:
         '''Configures log settings for the domain.
 
@@ -9070,13 +9099,13 @@ class LoggingOptions:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def app_log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
+    def app_log_group(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''Log Amazon OpenSearch Service application logs to this log group.
 
         :default: - a new log group is created if app logging is enabled
         '''
         result = self._values.get("app_log_group")
-        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def audit_log_enabled(self) -> typing.Optional[builtins.bool]:
@@ -9090,13 +9119,13 @@ class LoggingOptions:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def audit_log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
+    def audit_log_group(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''Log Amazon OpenSearch Service audit logs to this log group.
 
         :default: - a new log group is created if audit logging is enabled
         '''
         result = self._values.get("audit_log_group")
-        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def slow_index_log_enabled(self) -> typing.Optional[builtins.bool]:
@@ -9111,13 +9140,13 @@ class LoggingOptions:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def slow_index_log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
+    def slow_index_log_group(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''Log slow indices to this log group.
 
         :default: - a new log group is created if slow index logging is enabled
         '''
         result = self._values.get("slow_index_log_group")
-        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def slow_search_log_enabled(self) -> typing.Optional[builtins.bool]:
@@ -9132,13 +9161,13 @@ class LoggingOptions:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def slow_search_log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
+    def slow_search_log_group(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''Log slow searches to this log group.
 
         :default: - a new log group is created if slow search logging is enabled
         '''
         result = self._values.get("slow_search_log_group")
-        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9879,6 +9908,8 @@ class Domain(
     ) -> "_Grant_a7ae64f8":
         '''Grant read permissions for an index in this domain to an IAM principal (Role/Group/User).
 
+        [disable-awslint:no-grants]
+
         :param index: The index to grant permissions for.
         :param identity: The principal.
         '''
@@ -9895,6 +9926,8 @@ class Domain(
         identity: "_IGrantable_71c4f5de",
     ) -> "_Grant_a7ae64f8":
         '''Grant read/write permissions for an index in this domain to an IAM principal (Role/Group/User).
+
+        [disable-awslint:no-grants]
 
         :param index: The index to grant permissions for.
         :param identity: The principal.
@@ -9913,6 +9946,8 @@ class Domain(
     ) -> "_Grant_a7ae64f8":
         '''Grant write permissions for an index in this domain to an IAM principal (Role/Group/User).
 
+        [disable-awslint:no-grants]
+
         :param index: The index to grant permissions for.
         :param identity: The principal.
         '''
@@ -9929,6 +9964,8 @@ class Domain(
         identity: "_IGrantable_71c4f5de",
     ) -> "_Grant_a7ae64f8":
         '''Grant read permissions for a specific path in this domain to an IAM principal (Role/Group/User).
+
+        [disable-awslint:no-grants]
 
         :param path: The path to grant permissions for.
         :param identity: The principal.
@@ -9947,6 +9984,8 @@ class Domain(
     ) -> "_Grant_a7ae64f8":
         '''Grant read/write permissions for a specific path in this domain to an IAM principal (Role/Group/User).
 
+        [disable-awslint:no-grants]
+
         :param path: The path to grant permissions for.
         :param identity: The principal.
         '''
@@ -9964,6 +10003,8 @@ class Domain(
     ) -> "_Grant_a7ae64f8":
         '''Grant write permissions for a specific path in this domain to an IAM principal (Role/Group/User).
 
+        [disable-awslint:no-grants]
+
         :param path: The path to grant permissions for.
         :param identity: The principal.
         '''
@@ -9977,6 +10018,8 @@ class Domain(
     def grant_read(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant read permissions for this domain and its contents to an IAM principal (Role/Group/User).
 
+        [disable-awslint:no-grants]
+
         :param identity: The principal.
         '''
         if __debug__:
@@ -9988,6 +10031,8 @@ class Domain(
     def grant_read_write(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant read/write permissions for this domain and its contents to an IAM principal (Role/Group/User).
 
+        [disable-awslint:no-grants]
+
         :param identity: The principal.
         '''
         if __debug__:
@@ -9998,6 +10043,8 @@ class Domain(
     @jsii.member(jsii_name="grantWrite")
     def grant_write(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant write permissions for this domain and its contents to an IAM principal (Role/Group/User).
+
+        [disable-awslint:no-grants]
 
         :param identity: The principal.
         '''
@@ -11581,7 +11628,7 @@ def _typecheckingstub__4ac57cf9250cdb4adb2c04b922ca15a9a5d18b8e118cff3f08ab7d117
 def _typecheckingstub__4bfcfb0c951977f30c9119dd53a7307c78b4a3185828104fe4e4d17628ef7d24(
     *,
     domain_name: builtins.str,
-    certificate: typing.Optional[_ICertificate_c194c70b] = None,
+    certificate: typing.Optional[_ICertificateRef_1878d79b] = None,
     hosted_zone: typing.Optional[_IHostedZone_9a6907ad] = None,
 ) -> None:
     """Type checking stubs"""
@@ -11766,13 +11813,13 @@ def _typecheckingstub__ed477ecf16b0f23884f9eb3a0a90df530d2486e08c8dd662432a14ff4
 def _typecheckingstub__6f2efbcf1fc757504a748851740a44deb59ed98ee9c1d8c213d60960f900a593(
     *,
     app_log_enabled: typing.Optional[builtins.bool] = None,
-    app_log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    app_log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     audit_log_enabled: typing.Optional[builtins.bool] = None,
-    audit_log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    audit_log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     slow_index_log_enabled: typing.Optional[builtins.bool] = None,
-    slow_index_log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    slow_index_log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     slow_search_log_enabled: typing.Optional[builtins.bool] = None,
-    slow_search_log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    slow_search_log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
 ) -> None:
     """Type checking stubs"""
     pass

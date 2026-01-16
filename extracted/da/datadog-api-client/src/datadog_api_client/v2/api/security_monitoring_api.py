@@ -36,6 +36,9 @@ from datadog_api_client.v2.model.finding import Finding
 from datadog_api_client.v2.model.bulk_mute_findings_response import BulkMuteFindingsResponse
 from datadog_api_client.v2.model.bulk_mute_findings_request import BulkMuteFindingsRequest
 from datadog_api_client.v2.model.get_finding_response import GetFindingResponse
+from datadog_api_client.v2.model.list_security_findings_response import ListSecurityFindingsResponse
+from datadog_api_client.v2.model.security_findings_sort import SecurityFindingsSort
+from datadog_api_client.v2.model.security_findings_data import SecurityFindingsData
 from datadog_api_client.v2.model.detach_case_request import DetachCaseRequest
 from datadog_api_client.v2.model.finding_case_response_array import FindingCaseResponseArray
 from datadog_api_client.v2.model.create_case_request_array import CreateCaseRequestArray
@@ -43,6 +46,7 @@ from datadog_api_client.v2.model.finding_case_response import FindingCaseRespons
 from datadog_api_client.v2.model.attach_case_request import AttachCaseRequest
 from datadog_api_client.v2.model.attach_jira_issue_request import AttachJiraIssueRequest
 from datadog_api_client.v2.model.create_jira_issue_request_array import CreateJiraIssueRequestArray
+from datadog_api_client.v2.model.security_findings_search_request import SecurityFindingsSearchRequest
 from datadog_api_client.v2.model.list_assets_sbo_ms_response import ListAssetsSBOMsResponse
 from datadog_api_client.v2.model.asset_type import AssetType
 from datadog_api_client.v2.model.sbom_component_license_type import SBOMComponentLicenseType
@@ -60,6 +64,18 @@ from datadog_api_client.v2.model.vulnerability_status import VulnerabilityStatus
 from datadog_api_client.v2.model.vulnerability_tool import VulnerabilityTool
 from datadog_api_client.v2.model.vulnerability_ecosystem import VulnerabilityEcosystem
 from datadog_api_client.v2.model.list_vulnerable_assets_response import ListVulnerableAssetsResponse
+from datadog_api_client.v2.model.security_monitoring_critical_assets_response import (
+    SecurityMonitoringCriticalAssetsResponse,
+)
+from datadog_api_client.v2.model.security_monitoring_critical_asset_response import (
+    SecurityMonitoringCriticalAssetResponse,
+)
+from datadog_api_client.v2.model.security_monitoring_critical_asset_create_request import (
+    SecurityMonitoringCriticalAssetCreateRequest,
+)
+from datadog_api_client.v2.model.security_monitoring_critical_asset_update_request import (
+    SecurityMonitoringCriticalAssetUpdateRequest,
+)
 from datadog_api_client.v2.model.security_filters_response import SecurityFiltersResponse
 from datadog_api_client.v2.model.security_filter_response import SecurityFilterResponse
 from datadog_api_client.v2.model.security_filter_create_request import SecurityFilterCreateRequest
@@ -342,6 +358,26 @@ class SecurityMonitoringApi:
             api_client=api_client,
         )
 
+        self._create_security_monitoring_critical_asset_endpoint = _Endpoint(
+            settings={
+                "response_type": (SecurityMonitoringCriticalAssetResponse,),
+                "auth": ["apiKeyAuth", "appKeyAuth", "AuthZ"],
+                "endpoint_path": "/api/v2/security_monitoring/configuration/critical_assets",
+                "operation_id": "create_security_monitoring_critical_asset",
+                "http_method": "POST",
+                "version": "v2",
+            },
+            params_map={
+                "body": {
+                    "required": True,
+                    "openapi_types": (SecurityMonitoringCriticalAssetCreateRequest,),
+                    "location": "body",
+                },
+            },
+            headers_map={"accept": ["application/json"], "content_type": ["application/json"]},
+            api_client=api_client,
+        )
+
         self._create_security_monitoring_rule_endpoint = _Endpoint(
             settings={
                 "response_type": (SecurityMonitoringRuleResponse,),
@@ -465,6 +501,29 @@ class SecurityMonitoringApi:
                     "required": True,
                     "openapi_types": (str,),
                     "attribute": "security_filter_id",
+                    "location": "path",
+                },
+            },
+            headers_map={
+                "accept": ["*/*"],
+            },
+            api_client=api_client,
+        )
+
+        self._delete_security_monitoring_critical_asset_endpoint = _Endpoint(
+            settings={
+                "response_type": None,
+                "auth": ["apiKeyAuth", "appKeyAuth", "AuthZ"],
+                "endpoint_path": "/api/v2/security_monitoring/configuration/critical_assets/{critical_asset_id}",
+                "operation_id": "delete_security_monitoring_critical_asset",
+                "http_method": "DELETE",
+                "version": "v2",
+            },
+            params_map={
+                "critical_asset_id": {
+                    "required": True,
+                    "openapi_types": (str,),
+                    "attribute": "critical_asset_id",
                     "location": "path",
                 },
             },
@@ -687,6 +746,29 @@ class SecurityMonitoringApi:
             api_client=api_client,
         )
 
+        self._get_critical_assets_affecting_rule_endpoint = _Endpoint(
+            settings={
+                "response_type": (SecurityMonitoringCriticalAssetsResponse,),
+                "auth": ["apiKeyAuth", "appKeyAuth", "AuthZ"],
+                "endpoint_path": "/api/v2/security_monitoring/configuration/critical_assets/rules/{rule_id}",
+                "operation_id": "get_critical_assets_affecting_rule",
+                "http_method": "GET",
+                "version": "v2",
+            },
+            params_map={
+                "rule_id": {
+                    "required": True,
+                    "openapi_types": (str,),
+                    "attribute": "rule_id",
+                    "location": "path",
+                },
+            },
+            headers_map={
+                "accept": ["application/json"],
+            },
+            api_client=api_client,
+        )
+
         self._get_custom_framework_endpoint = _Endpoint(
             settings={
                 "response_type": (GetCustomFrameworkResponse,),
@@ -881,6 +963,29 @@ class SecurityMonitoringApi:
                     "required": True,
                     "openapi_types": (str,),
                     "attribute": "security_filter_id",
+                    "location": "path",
+                },
+            },
+            headers_map={
+                "accept": ["application/json"],
+            },
+            api_client=api_client,
+        )
+
+        self._get_security_monitoring_critical_asset_endpoint = _Endpoint(
+            settings={
+                "response_type": (SecurityMonitoringCriticalAssetResponse,),
+                "auth": ["apiKeyAuth", "appKeyAuth", "AuthZ"],
+                "endpoint_path": "/api/v2/security_monitoring/configuration/critical_assets/{critical_asset_id}",
+                "operation_id": "get_security_monitoring_critical_asset",
+                "http_method": "GET",
+                "version": "v2",
+            },
+            params_map={
+                "critical_asset_id": {
+                    "required": True,
+                    "openapi_types": (str,),
+                    "attribute": "critical_asset_id",
                     "location": "path",
                 },
             },
@@ -1461,6 +1566,69 @@ class SecurityMonitoringApi:
             api_client=api_client,
         )
 
+        self._list_security_findings_endpoint = _Endpoint(
+            settings={
+                "response_type": (ListSecurityFindingsResponse,),
+                "auth": ["apiKeyAuth", "appKeyAuth", "AuthZ"],
+                "endpoint_path": "/api/v2/security/findings",
+                "operation_id": "list_security_findings",
+                "http_method": "GET",
+                "version": "v2",
+            },
+            params_map={
+                "filter_query": {
+                    "openapi_types": (str,),
+                    "attribute": "filter[query]",
+                    "location": "query",
+                },
+                "page_cursor": {
+                    "openapi_types": (str,),
+                    "attribute": "page[cursor]",
+                    "location": "query",
+                },
+                "page_limit": {
+                    "validation": {
+                        "inclusive_maximum": 150,
+                        "inclusive_minimum": 1,
+                    },
+                    "openapi_types": (int,),
+                    "attribute": "page[limit]",
+                    "location": "query",
+                },
+                "sort": {
+                    "openapi_types": (SecurityFindingsSort,),
+                    "attribute": "sort",
+                    "location": "query",
+                },
+            },
+            headers_map={
+                "accept": ["application/json"],
+            },
+            api_client=api_client,
+        )
+
+        self._list_security_monitoring_critical_assets_endpoint = _Endpoint(
+            settings={
+                "response_type": (SecurityMonitoringCriticalAssetsResponse,),
+                "auth": ["apiKeyAuth", "appKeyAuth", "AuthZ"],
+                "endpoint_path": "/api/v2/security_monitoring/configuration/critical_assets",
+                "operation_id": "list_security_monitoring_critical_assets",
+                "http_method": "GET",
+                "version": "v2",
+            },
+            params_map={
+                "query": {
+                    "openapi_types": (str,),
+                    "attribute": "query",
+                    "location": "query",
+                },
+            },
+            headers_map={
+                "accept": ["application/json"],
+            },
+            api_client=api_client,
+        )
+
         self._list_security_monitoring_histsignals_endpoint = _Endpoint(
             settings={
                 "response_type": (SecurityMonitoringSignalsListResponse,),
@@ -1529,6 +1697,11 @@ class SecurityMonitoringApi:
                 "page_number": {
                     "openapi_types": (int,),
                     "attribute": "page[number]",
+                    "location": "query",
+                },
+                "query": {
+                    "openapi_types": (str,),
+                    "attribute": "query",
                     "location": "query",
                 },
             },
@@ -2091,6 +2264,26 @@ class SecurityMonitoringApi:
             api_client=api_client,
         )
 
+        self._search_security_findings_endpoint = _Endpoint(
+            settings={
+                "response_type": (ListSecurityFindingsResponse,),
+                "auth": ["apiKeyAuth", "appKeyAuth", "AuthZ"],
+                "endpoint_path": "/api/v2/security/findings/search",
+                "operation_id": "search_security_findings",
+                "http_method": "POST",
+                "version": "v2",
+            },
+            params_map={
+                "body": {
+                    "required": True,
+                    "openapi_types": (SecurityFindingsSearchRequest,),
+                    "location": "body",
+                },
+            },
+            headers_map={"accept": ["application/json"], "content_type": ["application/json"]},
+            api_client=api_client,
+        )
+
         self._search_security_monitoring_histsignals_endpoint = _Endpoint(
             settings={
                 "response_type": (SecurityMonitoringSignalsListResponse,),
@@ -2246,6 +2439,32 @@ class SecurityMonitoringApi:
                 "body": {
                     "required": True,
                     "openapi_types": (SecurityFilterUpdateRequest,),
+                    "location": "body",
+                },
+            },
+            headers_map={"accept": ["application/json"], "content_type": ["application/json"]},
+            api_client=api_client,
+        )
+
+        self._update_security_monitoring_critical_asset_endpoint = _Endpoint(
+            settings={
+                "response_type": (SecurityMonitoringCriticalAssetResponse,),
+                "auth": ["apiKeyAuth", "appKeyAuth", "AuthZ"],
+                "endpoint_path": "/api/v2/security_monitoring/configuration/critical_assets/{critical_asset_id}",
+                "operation_id": "update_security_monitoring_critical_asset",
+                "http_method": "PATCH",
+                "version": "v2",
+            },
+            params_map={
+                "critical_asset_id": {
+                    "required": True,
+                    "openapi_types": (str,),
+                    "attribute": "critical_asset_id",
+                    "location": "path",
+                },
+                "body": {
+                    "required": True,
+                    "openapi_types": (SecurityMonitoringCriticalAssetUpdateRequest,),
                     "location": "body",
                 },
             },
@@ -2538,6 +2757,23 @@ class SecurityMonitoringApi:
 
         return self._create_security_filter_endpoint.call_with_http_info(**kwargs)
 
+    def create_security_monitoring_critical_asset(
+        self,
+        body: SecurityMonitoringCriticalAssetCreateRequest,
+    ) -> SecurityMonitoringCriticalAssetResponse:
+        """Create a critical asset.
+
+        Create a new critical asset.
+
+        :param body: The definition of the new critical asset.
+        :type body: SecurityMonitoringCriticalAssetCreateRequest
+        :rtype: SecurityMonitoringCriticalAssetResponse
+        """
+        kwargs: Dict[str, Any] = {}
+        kwargs["body"] = body
+
+        return self._create_security_monitoring_critical_asset_endpoint.call_with_http_info(**kwargs)
+
     def create_security_monitoring_rule(
         self,
         body: Union[
@@ -2650,6 +2886,23 @@ class SecurityMonitoringApi:
         kwargs["security_filter_id"] = security_filter_id
 
         return self._delete_security_filter_endpoint.call_with_http_info(**kwargs)
+
+    def delete_security_monitoring_critical_asset(
+        self,
+        critical_asset_id: str,
+    ) -> None:
+        """Delete a critical asset.
+
+        Delete a specific critical asset.
+
+        :param critical_asset_id: The ID of the critical asset.
+        :type critical_asset_id: str
+        :rtype: None
+        """
+        kwargs: Dict[str, Any] = {}
+        kwargs["critical_asset_id"] = critical_asset_id
+
+        return self._delete_security_monitoring_critical_asset_endpoint.call_with_http_info(**kwargs)
 
     def delete_security_monitoring_rule(
         self,
@@ -2818,6 +3071,23 @@ class SecurityMonitoringApi:
         kwargs["body"] = body
 
         return self._edit_security_monitoring_signal_state_endpoint.call_with_http_info(**kwargs)
+
+    def get_critical_assets_affecting_rule(
+        self,
+        rule_id: str,
+    ) -> SecurityMonitoringCriticalAssetsResponse:
+        """Get critical assets affecting a specific rule.
+
+        Get the list of critical assets that affect a specific existing rule by the rule's ID.
+
+        :param rule_id: The ID of the rule.
+        :type rule_id: str
+        :rtype: SecurityMonitoringCriticalAssetsResponse
+        """
+        kwargs: Dict[str, Any] = {}
+        kwargs["rule_id"] = rule_id
+
+        return self._get_critical_assets_affecting_rule_endpoint.call_with_http_info(**kwargs)
 
     def get_custom_framework(
         self,
@@ -2992,6 +3262,23 @@ class SecurityMonitoringApi:
         kwargs["security_filter_id"] = security_filter_id
 
         return self._get_security_filter_endpoint.call_with_http_info(**kwargs)
+
+    def get_security_monitoring_critical_asset(
+        self,
+        critical_asset_id: str,
+    ) -> SecurityMonitoringCriticalAssetResponse:
+        """Get a critical asset.
+
+        Get the details of a specific critical asset.
+
+        :param critical_asset_id: The ID of the critical asset.
+        :type critical_asset_id: str
+        :rtype: SecurityMonitoringCriticalAssetResponse
+        """
+        kwargs: Dict[str, Any] = {}
+        kwargs["critical_asset_id"] = critical_asset_id
+
+        return self._get_security_monitoring_critical_asset_endpoint.call_with_http_info(**kwargs)
 
     def get_security_monitoring_histsignal(
         self,
@@ -3739,6 +4026,118 @@ class SecurityMonitoringApi:
         kwargs: Dict[str, Any] = {}
         return self._list_security_filters_endpoint.call_with_http_info(**kwargs)
 
+    def list_security_findings(
+        self,
+        *,
+        filter_query: Union[str, UnsetType] = unset,
+        page_cursor: Union[str, UnsetType] = unset,
+        page_limit: Union[int, UnsetType] = unset,
+        sort: Union[SecurityFindingsSort, UnsetType] = unset,
+    ) -> ListSecurityFindingsResponse:
+        """List security findings.
+
+        Get a list of security findings that match a search query. `See the schema for security findings <https://docs.datadoghq.com/security/guide/findings-schema/>`_.
+
+        **Query Syntax**
+
+        This endpoint uses the logs query syntax. Findings attributes (living in the attributes.attributes. namespace) are prefixed by @ when queried. Tags are queried without a prefix.
+
+        Example: ``@severity:(critical OR high) @status:open team:platform``
+
+        :param filter_query: The search query following log search syntax.
+        :type filter_query: str, optional
+        :param page_cursor: Get the next page of results with a cursor provided in the previous query.
+        :type page_cursor: str, optional
+        :param page_limit: The maximum number of findings in the response.
+        :type page_limit: int, optional
+        :param sort: Sorts by @detection_changed_at.
+        :type sort: SecurityFindingsSort, optional
+        :rtype: ListSecurityFindingsResponse
+        """
+        kwargs: Dict[str, Any] = {}
+        if filter_query is not unset:
+            kwargs["filter_query"] = filter_query
+
+        if page_cursor is not unset:
+            kwargs["page_cursor"] = page_cursor
+
+        if page_limit is not unset:
+            kwargs["page_limit"] = page_limit
+
+        if sort is not unset:
+            kwargs["sort"] = sort
+
+        return self._list_security_findings_endpoint.call_with_http_info(**kwargs)
+
+    def list_security_findings_with_pagination(
+        self,
+        *,
+        filter_query: Union[str, UnsetType] = unset,
+        page_cursor: Union[str, UnsetType] = unset,
+        page_limit: Union[int, UnsetType] = unset,
+        sort: Union[SecurityFindingsSort, UnsetType] = unset,
+    ) -> collections.abc.Iterable[SecurityFindingsData]:
+        """List security findings.
+
+        Provide a paginated version of :meth:`list_security_findings`, returning all items.
+
+        :param filter_query: The search query following log search syntax.
+        :type filter_query: str, optional
+        :param page_cursor: Get the next page of results with a cursor provided in the previous query.
+        :type page_cursor: str, optional
+        :param page_limit: The maximum number of findings in the response.
+        :type page_limit: int, optional
+        :param sort: Sorts by @detection_changed_at.
+        :type sort: SecurityFindingsSort, optional
+
+        :return: A generator of paginated results.
+        :rtype: collections.abc.Iterable[SecurityFindingsData]
+        """
+        kwargs: Dict[str, Any] = {}
+        if filter_query is not unset:
+            kwargs["filter_query"] = filter_query
+
+        if page_cursor is not unset:
+            kwargs["page_cursor"] = page_cursor
+
+        if page_limit is not unset:
+            kwargs["page_limit"] = page_limit
+
+        if sort is not unset:
+            kwargs["sort"] = sort
+
+        local_page_size = get_attribute_from_path(kwargs, "page_limit", 10)
+        endpoint = self._list_security_findings_endpoint
+        set_attribute_from_path(kwargs, "page_limit", local_page_size, endpoint.params_map)
+        pagination = {
+            "limit_value": local_page_size,
+            "results_path": "data",
+            "cursor_param": "page_cursor",
+            "cursor_path": "meta.page.after",
+            "endpoint": endpoint,
+            "kwargs": kwargs,
+        }
+        return endpoint.call_with_http_info_paginated(pagination)
+
+    def list_security_monitoring_critical_assets(
+        self,
+        *,
+        query: Union[str, UnsetType] = unset,
+    ) -> SecurityMonitoringCriticalAssetsResponse:
+        """Get all critical assets.
+
+        Get the list of all critical assets.
+
+        :param query: Query string.
+        :type query: str, optional
+        :rtype: SecurityMonitoringCriticalAssetsResponse
+        """
+        kwargs: Dict[str, Any] = {}
+        if query is not unset:
+            kwargs["query"] = query
+
+        return self._list_security_monitoring_critical_assets_endpoint.call_with_http_info(**kwargs)
+
     def list_security_monitoring_histsignals(
         self,
         *,
@@ -3793,6 +4192,7 @@ class SecurityMonitoringApi:
         *,
         page_size: Union[int, UnsetType] = unset,
         page_number: Union[int, UnsetType] = unset,
+        query: Union[str, UnsetType] = unset,
     ) -> SecurityMonitoringListRulesResponse:
         """List rules.
 
@@ -3802,6 +4202,8 @@ class SecurityMonitoringApi:
         :type page_size: int, optional
         :param page_number: Specific page number to return.
         :type page_number: int, optional
+        :param query: A search query to filter security rules. You can filter by attributes such as ``type`` , ``source`` , ``tags``.
+        :type query: str, optional
         :rtype: SecurityMonitoringListRulesResponse
         """
         kwargs: Dict[str, Any] = {}
@@ -3810,6 +4212,9 @@ class SecurityMonitoringApi:
 
         if page_number is not unset:
             kwargs["page_number"] = page_number
+
+        if query is not unset:
+            kwargs["query"] = query
 
         return self._list_security_monitoring_rules_endpoint.call_with_http_info(**kwargs)
 
@@ -4553,6 +4958,57 @@ class SecurityMonitoringApi:
 
         return self._run_threat_hunting_job_endpoint.call_with_http_info(**kwargs)
 
+    def search_security_findings(
+        self,
+        body: SecurityFindingsSearchRequest,
+    ) -> ListSecurityFindingsResponse:
+        """Search security findings.
+
+        Get a list of security findings that match a search query. `See the schema for security findings <https://docs.datadoghq.com/security/guide/findings-schema/>`_.
+
+        **Query Syntax**
+
+        The API uses the logs query syntax. Findings attributes (living in the attributes.attributes. namespace) are prefixed by @ when queried. Tags are queried without a prefix.
+
+        Example: ``@severity:(critical OR high) @status:open team:platform``
+
+        :type body: SecurityFindingsSearchRequest
+        :rtype: ListSecurityFindingsResponse
+        """
+        kwargs: Dict[str, Any] = {}
+        kwargs["body"] = body
+
+        return self._search_security_findings_endpoint.call_with_http_info(**kwargs)
+
+    def search_security_findings_with_pagination(
+        self,
+        body: SecurityFindingsSearchRequest,
+    ) -> collections.abc.Iterable[SecurityFindingsData]:
+        """Search security findings.
+
+        Provide a paginated version of :meth:`search_security_findings`, returning all items.
+
+        :type body: SecurityFindingsSearchRequest
+
+        :return: A generator of paginated results.
+        :rtype: collections.abc.Iterable[SecurityFindingsData]
+        """
+        kwargs: Dict[str, Any] = {}
+        kwargs["body"] = body
+
+        local_page_size = get_attribute_from_path(kwargs, "body.data.attributes.page.limit", 10)
+        endpoint = self._search_security_findings_endpoint
+        set_attribute_from_path(kwargs, "body.data.attributes.page.limit", local_page_size, endpoint.params_map)
+        pagination = {
+            "limit_value": local_page_size,
+            "results_path": "data",
+            "cursor_param": "body.data.attributes.page.cursor",
+            "cursor_path": "meta.page.after",
+            "endpoint": endpoint,
+            "kwargs": kwargs,
+        }
+        return endpoint.call_with_http_info_paginated(pagination)
+
     def search_security_monitoring_histsignals(
         self,
         *,
@@ -4723,6 +5179,28 @@ class SecurityMonitoringApi:
         kwargs["body"] = body
 
         return self._update_security_filter_endpoint.call_with_http_info(**kwargs)
+
+    def update_security_monitoring_critical_asset(
+        self,
+        critical_asset_id: str,
+        body: SecurityMonitoringCriticalAssetUpdateRequest,
+    ) -> SecurityMonitoringCriticalAssetResponse:
+        """Update a critical asset.
+
+        Update a specific critical asset.
+
+        :param critical_asset_id: The ID of the critical asset.
+        :type critical_asset_id: str
+        :param body: New definition of the critical asset. Supports partial updates.
+        :type body: SecurityMonitoringCriticalAssetUpdateRequest
+        :rtype: SecurityMonitoringCriticalAssetResponse
+        """
+        kwargs: Dict[str, Any] = {}
+        kwargs["critical_asset_id"] = critical_asset_id
+
+        kwargs["body"] = body
+
+        return self._update_security_monitoring_critical_asset_endpoint.call_with_http_info(**kwargs)
 
     def update_security_monitoring_rule(
         self,

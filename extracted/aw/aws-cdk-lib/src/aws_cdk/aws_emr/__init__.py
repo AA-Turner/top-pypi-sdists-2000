@@ -10658,7 +10658,7 @@ class CfnStudio(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param auth_mode: Specifies whether the Studio authenticates users using IAM Identity Center or IAM.
+        :param auth_mode: Specifies whether the Studio authenticates users using SSO or IAM.
         :param default_s3_location: The Amazon S3 location to back up EMR Studio Workspaces and notebook files.
         :param engine_security_group_id: The ID of the Amazon EMR Studio Engine security group. The Engine security group allows inbound network traffic from the Workspace security group, and it must be in the same VPC specified by ``VpcId`` .
         :param name: A descriptive name for the Amazon EMR Studio.
@@ -10850,7 +10850,7 @@ class CfnStudio(
     @builtins.property
     @jsii.member(jsii_name="authMode")
     def auth_mode(self) -> builtins.str:
-        '''Specifies whether the Studio authenticates users using IAM Identity Center or IAM.'''
+        '''Specifies whether the Studio authenticates users using SSO or IAM.'''
         return typing.cast(builtins.str, jsii.get(self, "authMode"))
 
     @auth_mode.setter
@@ -11124,7 +11124,7 @@ class CfnStudioProps:
     ) -> None:
         '''Properties for defining a ``CfnStudio``.
 
-        :param auth_mode: Specifies whether the Studio authenticates users using IAM Identity Center or IAM.
+        :param auth_mode: Specifies whether the Studio authenticates users using SSO or IAM.
         :param default_s3_location: The Amazon S3 location to back up EMR Studio Workspaces and notebook files.
         :param engine_security_group_id: The ID of the Amazon EMR Studio Engine security group. The Engine security group allows inbound network traffic from the Workspace security group, and it must be in the same VPC specified by ``VpcId`` .
         :param name: A descriptive name for the Amazon EMR Studio.
@@ -11227,7 +11227,7 @@ class CfnStudioProps:
 
     @builtins.property
     def auth_mode(self) -> builtins.str:
-        '''Specifies whether the Studio authenticates users using IAM Identity Center or IAM.
+        '''Specifies whether the Studio authenticates users using SSO or IAM.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-studio.html#cfn-emr-studio-authmode
         '''
@@ -11468,7 +11468,7 @@ class CfnStudioSessionMapping(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param identity_name: The name of the user or group. For more information, see `UserName <https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_User.html#singlesignon-Type-User-UserName>`_ and `DisplayName <https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_Group.html#singlesignon-Type-Group-DisplayName>`_ in the *IAM Identity Center Identity Store API Reference* .
+        :param identity_name: The name of the user or group. For more information, see `UserName <https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_User.html#singlesignon-Type-User-UserName>`_ and `DisplayName <https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_Group.html#singlesignon-Type-Group-DisplayName>`_ in the *Identity Store API Reference* .
         :param identity_type: Specifies whether the identity to map to the Amazon EMR Studio is a user or a group.
         :param session_policy_arn: The Amazon Resource Name (ARN) for the session policy that will be applied to the user or group. Session policies refine Studio user permissions without the need to use multiple IAM user roles. For more information, see `Create an EMR Studio user role with session policies <https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-studio-user-role.html>`_ in the *Amazon EMR Management Guide* .
         :param studio_id: The ID of the Amazon EMR Studio to which the user or group will be mapped.
@@ -11613,7 +11613,7 @@ class CfnStudioSessionMappingProps:
     ) -> None:
         '''Properties for defining a ``CfnStudioSessionMapping``.
 
-        :param identity_name: The name of the user or group. For more information, see `UserName <https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_User.html#singlesignon-Type-User-UserName>`_ and `DisplayName <https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_Group.html#singlesignon-Type-Group-DisplayName>`_ in the *IAM Identity Center Identity Store API Reference* .
+        :param identity_name: The name of the user or group. For more information, see `UserName <https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_User.html#singlesignon-Type-User-UserName>`_ and `DisplayName <https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_Group.html#singlesignon-Type-Group-DisplayName>`_ in the *Identity Store API Reference* .
         :param identity_type: Specifies whether the identity to map to the Amazon EMR Studio is a user or a group.
         :param session_policy_arn: The Amazon Resource Name (ARN) for the session policy that will be applied to the user or group. Session policies refine Studio user permissions without the need to use multiple IAM user roles. For more information, see `Create an EMR Studio user role with session policies <https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-studio-user-role.html>`_ in the *Amazon EMR Management Guide* .
         :param studio_id: The ID of the Amazon EMR Studio to which the user or group will be mapped.
@@ -11651,7 +11651,7 @@ class CfnStudioSessionMappingProps:
     def identity_name(self) -> builtins.str:
         '''The name of the user or group.
 
-        For more information, see `UserName <https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_User.html#singlesignon-Type-User-UserName>`_ and `DisplayName <https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_Group.html#singlesignon-Type-Group-DisplayName>`_ in the *IAM Identity Center Identity Store API Reference* .
+        For more information, see `UserName <https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_User.html#singlesignon-Type-User-UserName>`_ and `DisplayName <https://docs.aws.amazon.com/singlesignon/latest/IdentityStoreAPIReference/API_Group.html#singlesignon-Type-Group-DisplayName>`_ in the *Identity Store API Reference* .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-studiosessionmapping.html#cfn-emr-studiosessionmapping-identityname
         '''

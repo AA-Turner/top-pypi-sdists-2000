@@ -5635,7 +5635,7 @@ class CfnWebApp(
             instance_arn: typing.Optional[builtins.str] = None,
             role: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''A structure that describes the values to use for the IAM Identity Center settings when you create or update a web app.
+            '''A structure that describes the values to use for the SSO settings when you create or update a web app.
 
             :param application_arn: The Amazon Resource Name (ARN) for the IAM Identity Center application: this value is set automatically when you create your web app.
             :param instance_arn: The Amazon Resource Name (ARN) for the IAM Identity Center used for the web app.

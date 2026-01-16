@@ -318,11 +318,6 @@ from ..aws_iam import (
     PolicyDocument as _PolicyDocument_3ac34393,
     PolicyStatement as _PolicyStatement_0fe33853,
 )
-from ..aws_rds import (
-    IDatabaseCluster as _IDatabaseCluster_6554c32b,
-    IDatabaseInstance as _IDatabaseInstance_e4cb03a8,
-    IServerlessCluster as _IServerlessCluster_adbbb720,
-)
 from ..aws_sns import ITopic as _ITopic_9eca4852
 from ..interfaces.aws_backup import (
     BackupPlanReference as _BackupPlanReference_43879719,
@@ -346,6 +341,10 @@ from ..interfaces.aws_dynamodb import ITableRef as _ITableRef_4478f0ad
 from ..interfaces.aws_ec2 import IInstanceRef as _IInstanceRef_b97803cb
 from ..interfaces.aws_efs import IFileSystemRef as _IFileSystemRef_3dcf8b98
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
+from ..interfaces.aws_rds import (
+    IDBClusterRef as _IDBClusterRef_ebf419fe,
+    IDBInstanceRef as _IDBInstanceRef_10d60cd7,
+)
 
 
 @jsii.data_type(
@@ -1049,7 +1048,7 @@ class BackupResource(
     @builtins.classmethod
     def from_rds_database_cluster(
         cls,
-        cluster: "_IDatabaseCluster_6554c32b",
+        cluster: "_IDBClusterRef_ebf419fe",
     ) -> "BackupResource":
         '''A RDS database cluter.
 
@@ -1064,7 +1063,7 @@ class BackupResource(
     @builtins.classmethod
     def from_rds_database_instance(
         cls,
-        instance: "_IDatabaseInstance_e4cb03a8",
+        instance: "_IDBInstanceRef_10d60cd7",
     ) -> "BackupResource":
         '''A RDS database instance.
 
@@ -1079,7 +1078,7 @@ class BackupResource(
     @builtins.classmethod
     def from_rds_serverless_cluster(
         cls,
-        cluster: "_IServerlessCluster_adbbb720",
+        cluster: "_IDBClusterRef_ebf419fe",
     ) -> "BackupResource":
         '''An Aurora database instance.
 
@@ -8080,6 +8079,8 @@ class BackupVault(
     ) -> "_Grant_a7ae64f8":
         '''Grant the actions defined in actions to the given grantee on this Backup Vault resource.
 
+        [disable-awslint:no-grants]
+
         :param grantee: Principal to grant right to.
         :param actions: The actions to grant.
         '''
@@ -8257,19 +8258,19 @@ def _typecheckingstub__2a724b31752318e43681480d257f284af035f11db8b7b91a2712b0a19
     pass
 
 def _typecheckingstub__2043352654f5d7b0272be6002773b2263d7a3a58bb3ca681d050846773b6a7a4(
-    cluster: _IDatabaseCluster_6554c32b,
+    cluster: _IDBClusterRef_ebf419fe,
 ) -> None:
     """Type checking stubs"""
     pass
 
 def _typecheckingstub__a3a85f96e06b0e43fed194c604af81aa14d506827b7f57b6fef4f8e0191d38d1(
-    instance: _IDatabaseInstance_e4cb03a8,
+    instance: _IDBInstanceRef_10d60cd7,
 ) -> None:
     """Type checking stubs"""
     pass
 
 def _typecheckingstub__a96658ef472d54f85f9fb6dfeffb763befda835ec279615ad329c159e5acf1a6(
-    cluster: _IServerlessCluster_adbbb720,
+    cluster: _IDBClusterRef_ebf419fe,
 ) -> None:
     """Type checking stubs"""
     pass

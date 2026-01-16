@@ -355,7 +355,7 @@ class CfnApplication(
     @builtins.property
     @jsii.member(jsii_name="attrIdentityCenterApplicationArn")
     def attr_identity_center_application_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the AWS IAM Identity Center instance attached to your Amazon Q Business application.
+        '''The Amazon Resource Name (ARN) of the AWS SSO instance attached to your Amazon Q Business application.
 
         :cloudformationAttribute: IdentityCenterApplicationArn
         '''

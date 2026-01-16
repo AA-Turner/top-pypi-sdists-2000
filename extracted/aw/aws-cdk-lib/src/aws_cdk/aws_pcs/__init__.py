@@ -94,7 +94,7 @@ class CfnCluster(
 ):
     '''Creates an AWS PCS cluster resource.
 
-    For more information, see `Creating a cluster in AWS Parallel Computing Service <https://docs.aws.amazon.com/pcs/latest/userguide/working-with_clusters_create.html>`_ in the *AWS PCS User Guide* .
+    For more information, see `Creating a cluster in Parallel Computing Service <https://docs.aws.amazon.com/pcs/latest/userguide/working-with_clusters_create.html>`_ in the *AWS PCS User Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pcs-cluster.html
     :cloudformationResource: AWS::PCS::Cluster

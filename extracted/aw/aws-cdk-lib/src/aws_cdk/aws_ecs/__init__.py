@@ -1327,6 +1327,7 @@ Currently Supported Log Drivers:
 * syslog
 * awsfirelens
 * Generic
+* none
 
 ### awslogs Log Driver
 
@@ -1501,6 +1502,20 @@ task_definition.add_container("TheContainer",
             "tag": "example-tag"
         }
     )
+)
+```
+
+### none Log Driver
+
+The none log driver disables logging for the container (Docker `none` driver).
+
+```python
+# Create a Task Definition for the container to start
+task_definition = ecs.Ec2TaskDefinition(self, "TaskDef")
+task_definition.add_container("TheContainer",
+    image=ecs.ContainerImage.from_registry("example-image"),
+    memory_limit_mi_b=256,
+    logging=ecs.LogDrivers.none()
 )
 ```
 
@@ -1714,8 +1729,14 @@ Option 1: Let CDK create the role and instance profile automatically
 
 cluster = ecs.Cluster(self, "Cluster", vpc=vpc)
 
+security_group = ec2.SecurityGroup(self, "SecurityGroup",
+    vpc=vpc,
+    description="Security group for managed instances"
+)
+
 mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProvider",
     subnets=vpc.private_subnets,
+    security_groups=[security_group],
     instance_requirements=ec2.InstanceRequirementsConfig(
         v_cpu_count_min=1,
         memory_min=Size.gibibytes(2)
@@ -1788,10 +1809,16 @@ custom_infrastructure_role.add_to_policy(iam.PolicyStatement(
     }
 ))
 
+security_group = ec2.SecurityGroup(self, "SecurityGroup",
+    vpc=vpc,
+    description="Security group for managed instances"
+)
+
 mi_capacity_provider_custom = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProviderCustomRoles",
     infrastructure_role=custom_infrastructure_role,
     ec2_instance_profile=custom_instance_profile,
-    subnets=vpc.private_subnets
+    subnets=vpc.private_subnets,
+    security_groups=[security_group]
 )
 
 # Add the capacity provider to the cluster
@@ -1828,8 +1855,14 @@ You can specify detailed instance requirements to control which types of instanc
 # vpc: ec2.Vpc
 
 
+security_group = ec2.SecurityGroup(self, "SecurityGroup",
+    vpc=vpc,
+    description="Security group for managed instances"
+)
+
 mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProvider",
     subnets=vpc.private_subnets,
+    security_groups=[security_group],
     instance_requirements=ec2.InstanceRequirementsConfig(
         # Required: CPU and memory constraints
         v_cpu_count_min=2,
@@ -2566,6 +2599,7 @@ from ..interfaces.aws_elasticloadbalancingv2 import (
 )
 from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
+from ..interfaces.aws_logs import ILogGroupRef as _ILogGroupRef_874d025a
 
 
 @jsii.data_type(
@@ -5167,7 +5201,7 @@ class AwsLogDriverProps:
         *,
         stream_prefix: builtins.str,
         datetime_format: typing.Optional[builtins.str] = None,
-        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         max_buffer_size: typing.Optional["_Size_7b441c34"] = None,
         mode: typing.Optional["AwsLogDriverMode"] = None,
@@ -5257,13 +5291,13 @@ class AwsLogDriverProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
+    def log_group(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''The log group to log to.
 
         :default: - A log group is automatically created.
         '''
         result = self._values.get("log_group")
-        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def log_retention(self) -> typing.Optional["_RetentionDays_070f99f0"]:
@@ -6901,10 +6935,8 @@ class CfnCapacityProvider(
                 instance_launch_template=ecs.CfnCapacityProvider.InstanceLaunchTemplateProperty(
                     ec2_instance_profile_arn="ec2InstanceProfileArn",
                     network_configuration=ecs.CfnCapacityProvider.ManagedInstancesNetworkConfigurationProperty(
-                        subnets=["subnets"],
-        
-                        # the properties below are optional
-                        security_groups=["securityGroups"]
+                        security_groups=["securityGroups"],
+                        subnets=["subnets"]
                     ),
         
                     # the properties below are optional
@@ -7656,10 +7688,8 @@ class CfnCapacityProvider(
                 instance_launch_template_property = ecs.CfnCapacityProvider.InstanceLaunchTemplateProperty(
                     ec2_instance_profile_arn="ec2InstanceProfileArn",
                     network_configuration=ecs.CfnCapacityProvider.ManagedInstancesNetworkConfigurationProperty(
-                        subnets=["subnets"],
-                
-                        # the properties below are optional
-                        security_groups=["securityGroups"]
+                        security_groups=["securityGroups"],
+                        subnets=["subnets"]
                     ),
                 
                     # the properties below are optional
@@ -8387,21 +8417,21 @@ class CfnCapacityProvider(
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_ecs.CfnCapacityProvider.ManagedInstancesNetworkConfigurationProperty",
         jsii_struct_bases=[],
-        name_mapping={"subnets": "subnets", "security_groups": "securityGroups"},
+        name_mapping={"security_groups": "securityGroups", "subnets": "subnets"},
     )
     class ManagedInstancesNetworkConfigurationProperty:
         def __init__(
             self,
             *,
+            security_groups: typing.Sequence[builtins.str],
             subnets: typing.Sequence[builtins.str],
-            security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
             '''The network configuration for Amazon ECS Managed Instances.
 
             This specifies the VPC subnets and security groups that instances use for network connectivity. Amazon ECS Managed Instances support multiple network modes including ``awsvpc`` (instances receive ENIs for task isolation), ``host`` (instances share network namespace with tasks), and ``none`` (no external network connectivity), ensuring backward compatibility for migrating workloads from Fargate or Amazon EC2.
 
-            :param subnets: The list of subnet IDs where Amazon ECS can launch Amazon ECS Managed Instances. Instances are distributed across the specified subnets for high availability. All subnets must be in the same VPC.
             :param security_groups: The list of security group IDs to apply to Amazon ECS Managed Instances. These security groups control the network traffic allowed to and from the instances.
+            :param subnets: The list of subnet IDs where Amazon ECS can launch Amazon ECS Managed Instances. Instances are distributed across the specified subnets for high availability. All subnets must be in the same VPC.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesnetworkconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -8413,21 +8443,30 @@ class CfnCapacityProvider(
                 from aws_cdk import aws_ecs as ecs
                 
                 managed_instances_network_configuration_property = ecs.CfnCapacityProvider.ManagedInstancesNetworkConfigurationProperty(
-                    subnets=["subnets"],
-                
-                    # the properties below are optional
-                    security_groups=["securityGroups"]
+                    security_groups=["securityGroups"],
+                    subnets=["subnets"]
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__b8cf486af6edb309081654dbba3fcab445314c93a7a69231f0ca16b32fff9ae0)
-                check_type(argname="argument subnets", value=subnets, expected_type=type_hints["subnets"])
                 check_type(argname="argument security_groups", value=security_groups, expected_type=type_hints["security_groups"])
+                check_type(argname="argument subnets", value=subnets, expected_type=type_hints["subnets"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
+                "security_groups": security_groups,
                 "subnets": subnets,
             }
-            if security_groups is not None:
-                self._values["security_groups"] = security_groups
+
+        @builtins.property
+        def security_groups(self) -> typing.List[builtins.str]:
+            '''The list of security group IDs to apply to Amazon ECS Managed Instances.
+
+            These security groups control the network traffic allowed to and from the instances.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesnetworkconfiguration.html#cfn-ecs-capacityprovider-managedinstancesnetworkconfiguration-securitygroups
+            '''
+            result = self._values.get("security_groups")
+            assert result is not None, "Required property 'security_groups' is missing"
+            return typing.cast(typing.List[builtins.str], result)
 
         @builtins.property
         def subnets(self) -> typing.List[builtins.str]:
@@ -8440,17 +8479,6 @@ class CfnCapacityProvider(
             result = self._values.get("subnets")
             assert result is not None, "Required property 'subnets' is missing"
             return typing.cast(typing.List[builtins.str], result)
-
-        @builtins.property
-        def security_groups(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''The list of security group IDs to apply to Amazon ECS Managed Instances.
-
-            These security groups control the network traffic allowed to and from the instances.
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesnetworkconfiguration.html#cfn-ecs-capacityprovider-managedinstancesnetworkconfiguration-securitygroups
-            '''
-            result = self._values.get("security_groups")
-            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8505,10 +8533,8 @@ class CfnCapacityProvider(
                     instance_launch_template=ecs.CfnCapacityProvider.InstanceLaunchTemplateProperty(
                         ec2_instance_profile_arn="ec2InstanceProfileArn",
                         network_configuration=ecs.CfnCapacityProvider.ManagedInstancesNetworkConfigurationProperty(
-                            subnets=["subnets"],
-                
-                            # the properties below are optional
-                            security_groups=["securityGroups"]
+                            security_groups=["securityGroups"],
+                            subnets=["subnets"]
                         ),
                 
                         # the properties below are optional
@@ -9377,10 +9403,8 @@ class CfnCapacityProviderProps:
                     instance_launch_template=ecs.CfnCapacityProvider.InstanceLaunchTemplateProperty(
                         ec2_instance_profile_arn="ec2InstanceProfileArn",
                         network_configuration=ecs.CfnCapacityProvider.ManagedInstancesNetworkConfigurationProperty(
-                            subnets=["subnets"],
-            
-                            # the properties below are optional
-                            security_groups=["securityGroups"]
+                            security_groups=["securityGroups"],
+                            subnets=["subnets"]
                         ),
             
                         # the properties below are optional
@@ -26260,14 +26284,14 @@ class ClusterAttributes:
             from aws_cdk import aws_ec2 as ec2
             from aws_cdk import aws_ecs as ecs
             from aws_cdk import aws_kms as kms
-            from aws_cdk import aws_logs as logs
             from aws_cdk import aws_s3 as s3
             from aws_cdk import aws_servicediscovery as servicediscovery
+            from aws_cdk.interfaces import aws_logs as interfaces_logs
             
             # auto_scaling_group: autoscaling.AutoScalingGroup
             # bucket: s3.Bucket
             # key: kms.Key
-            # log_group: logs.LogGroup
+            # log_group_ref: interfaces_logs.ILogGroupRef
             # namespace: servicediscovery.INamespace
             # security_group: ec2.SecurityGroup
             # vpc: ec2.Vpc
@@ -26284,7 +26308,7 @@ class ClusterAttributes:
                     kms_key=key,
                     log_configuration=ecs.ExecuteCommandLogConfiguration(
                         cloud_watch_encryption_enabled=False,
-                        cloud_watch_log_group=log_group,
+                        cloud_watch_log_group=log_group_ref,
                         s3_bucket=bucket,
                         s3_encryption_enabled=False,
                         s3_key_prefix="s3KeyPrefix"
@@ -32897,7 +32921,7 @@ class ExecuteCommandLogConfiguration:
         self,
         *,
         cloud_watch_encryption_enabled: typing.Optional[builtins.bool] = None,
-        cloud_watch_log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        cloud_watch_log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         s3_bucket: typing.Optional["_IBucket_42e086fd"] = None,
         s3_encryption_enabled: typing.Optional[builtins.bool] = None,
         s3_key_prefix: typing.Optional[builtins.str] = None,
@@ -32975,7 +32999,7 @@ class ExecuteCommandLogConfiguration:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def cloud_watch_log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
+    def cloud_watch_log_group(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''The name of the CloudWatch log group to send logs to.
 
         The CloudWatch log group must already be created.
@@ -32983,7 +33007,7 @@ class ExecuteCommandLogConfiguration:
         :default: - none
         '''
         result = self._values.get("cloud_watch_log_group")
-        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def s3_bucket(self) -> typing.Optional["_IBucket_42e086fd"]:
@@ -38295,7 +38319,7 @@ typing.cast(typing.Any, IEcsLoadBalancerTarget).__jsii_proxy_class__ = lambda : 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ecs.IService")
-class IService(_IResource_c80c4260, typing_extensions.Protocol):
+class IService(_IResource_c80c4260, _IServiceRef_adcb3d02, typing_extensions.Protocol):
     '''The interface for a service.'''
 
     @builtins.property
@@ -38319,6 +38343,7 @@ class IService(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IServiceProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IServiceRef_adcb3d02), # type: ignore[misc]
 ):
     '''The interface for a service.'''
 
@@ -38347,7 +38372,11 @@ typing.cast(typing.Any, IService).__jsii_proxy_class__ = lambda : _IServiceProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ecs.ITaskDefinition")
-class ITaskDefinition(_IResource_c80c4260, typing_extensions.Protocol):
+class ITaskDefinition(
+    _IResource_c80c4260,
+    _ITaskDefinitionRef_8091fc1c,
+    typing_extensions.Protocol,
+):
     '''The interface for all task definitions.'''
 
     @builtins.property
@@ -38410,6 +38439,7 @@ class ITaskDefinition(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _ITaskDefinitionProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_ITaskDefinitionRef_8091fc1c), # type: ignore[misc]
 ):
     '''The interface for all task definitions.'''
 
@@ -39592,7 +39622,7 @@ class LogDriver(
         *,
         stream_prefix: builtins.str,
         datetime_format: typing.Optional[builtins.str] = None,
-        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         max_buffer_size: typing.Optional["_Size_7b441c34"] = None,
         mode: typing.Optional["AwsLogDriverMode"] = None,
@@ -39798,7 +39828,7 @@ class LogDrivers(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_ecs.LogDriv
         *,
         stream_prefix: builtins.str,
         datetime_format: typing.Optional[builtins.str] = None,
-        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         max_buffer_size: typing.Optional["_Size_7b441c34"] = None,
         mode: typing.Optional["AwsLogDriverMode"] = None,
@@ -40007,6 +40037,12 @@ class LogDrivers(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_ecs.LogDriv
 
         return typing.cast("LogDriver", jsii.sinvoke(cls, "jsonFile", [props]))
 
+    @jsii.member(jsii_name="none")
+    @builtins.classmethod
+    def none(cls) -> "LogDriver":
+        '''Creates a log driver configuration that disables logging (Docker ``none`` driver).'''
+        return typing.cast("LogDriver", jsii.sinvoke(cls, "none", []))
+
     @jsii.member(jsii_name="splunk")
     @builtins.classmethod
     def splunk(
@@ -40179,8 +40215,14 @@ class ManagedInstancesCapacityProvider(
         
         cluster = ecs.Cluster(self, "Cluster", vpc=vpc)
         
+        security_group = ec2.SecurityGroup(self, "SecurityGroup",
+            vpc=vpc,
+            description="Security group for managed instances"
+        )
+        
         mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProvider",
             subnets=vpc.private_subnets,
+            security_groups=[security_group],
             instance_requirements=ec2.InstanceRequirementsConfig(
                 v_cpu_count_min=1,
                 memory_min=Size.gibibytes(2)
@@ -40222,6 +40264,7 @@ class ManagedInstancesCapacityProvider(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
+        security_groups: typing.Sequence["_ISecurityGroup_acf8a799"],
         subnets: typing.Sequence["_ISubnet_d57d1229"],
         capacity_provider_name: typing.Optional[builtins.str] = None,
         ec2_instance_profile: typing.Optional["_IInstanceProfile_10d5ce2c"] = None,
@@ -40229,12 +40272,12 @@ class ManagedInstancesCapacityProvider(
         instance_requirements: typing.Optional[typing.Union["_InstanceRequirementsConfig_1b353659", typing.Dict[builtins.str, typing.Any]]] = None,
         monitoring: typing.Optional["InstanceMonitoring"] = None,
         propagate_tags: typing.Optional["PropagateManagedInstancesTags"] = None,
-        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         task_volume_storage: typing.Optional["_Size_7b441c34"] = None,
     ) -> None:
         '''
         :param scope: -
         :param id: -
+        :param security_groups: The security groups to associate with the launched EC2 instances. These security groups control the network traffic allowed to and from the instances.
         :param subnets: The VPC subnets where EC2 instances will be launched. This array must be non-empty and should contain subnets from the VPC where you want the managed instances to be deployed.
         :param capacity_provider_name: The name of the capacity provider. If a name is specified, it cannot start with ``aws``, ``ecs``, or ``fargate``. If no name is specified, a default name in the CFNStackName-CFNResourceName-RandomString format is used. If the stack name starts with ``aws``, ``ecs``, or ``fargate``, a unique resource name is generated that starts with ``cp-``. Default: CloudFormation-generated name
         :param ec2_instance_profile: The EC2 instance profile that will be attached to instances launched by this capacity provider. This instance profile must contain the necessary IAM permissions for ECS container instances to register with the cluster and run tasks. At minimum, it should include permissions for ECS agent communication, ECR image pulling, and CloudWatch logging. If you are using Amazon ECS Managed Instances with the AWS-managed Infrastructure policy (``AmazonECSInfrastructureRolePolicyForManagedInstances``), the instance profile must be prefixed with ``ecsInstanceRole`` for the built in PassRole policy to apply. If you are using a custom policy for the Infrastructure role, the instance profile can have an alternative name. Default: - A new instance profile prefixed with 'ecsInstanceRole' will be created
@@ -40242,7 +40285,6 @@ class ManagedInstancesCapacityProvider(
         :param instance_requirements: The instance requirements configuration for EC2 instance selection. This allows you to specify detailed requirements for instance selection including vCPU count ranges, memory ranges, CPU manufacturers (Intel, AMD, AWS Graviton), instance generations, network performance requirements, and many other criteria. ECS will automatically select appropriate instance types that meet these requirements. Default: - no specific instance requirements, ECS will choose appropriate instances
         :param monitoring: The CloudWatch monitoring configuration for the EC2 instances. Determines the granularity of CloudWatch metrics collection for the instances. Detailed monitoring incurs additional costs but provides better observability. Default: - no enhanced monitoring (basic monitoring only)
         :param propagate_tags: Specifies whether to propagate tags from the capacity provider to the launched instances. When set to CAPACITY_PROVIDER, tags applied to the capacity provider resource will be automatically applied to all EC2 instances launched by this capacity provider. Default: PropagateManagedInstancesTags.NONE - no tag propagation
-        :param security_groups: The security groups to associate with the launched EC2 instances. These security groups control the network traffic allowed to and from the instances. If not specified, the default security group of the VPC containing the subnets will be used. Default: - default security group of the VPC
         :param task_volume_storage: The size of the task volume storage attached to each instance. This storage is used for container images, container logs, and temporary files. Larger storage may be needed for workloads with large container images or applications that generate significant temporary data. Default: Size.gibibytes(80)
         '''
         if __debug__:
@@ -40250,6 +40292,7 @@ class ManagedInstancesCapacityProvider(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = ManagedInstancesCapacityProviderProps(
+            security_groups=security_groups,
             subnets=subnets,
             capacity_provider_name=capacity_provider_name,
             ec2_instance_profile=ec2_instance_profile,
@@ -40257,7 +40300,6 @@ class ManagedInstancesCapacityProvider(
             instance_requirements=instance_requirements,
             monitoring=monitoring,
             propagate_tags=propagate_tags,
-            security_groups=security_groups,
             task_volume_storage=task_volume_storage,
         )
 
@@ -40317,6 +40359,7 @@ class ManagedInstancesCapacityProvider(
     jsii_type="aws-cdk-lib.aws_ecs.ManagedInstancesCapacityProviderProps",
     jsii_struct_bases=[],
     name_mapping={
+        "security_groups": "securityGroups",
         "subnets": "subnets",
         "capacity_provider_name": "capacityProviderName",
         "ec2_instance_profile": "ec2InstanceProfile",
@@ -40324,7 +40367,6 @@ class ManagedInstancesCapacityProvider(
         "instance_requirements": "instanceRequirements",
         "monitoring": "monitoring",
         "propagate_tags": "propagateTags",
-        "security_groups": "securityGroups",
         "task_volume_storage": "taskVolumeStorage",
     },
 )
@@ -40332,6 +40374,7 @@ class ManagedInstancesCapacityProviderProps:
     def __init__(
         self,
         *,
+        security_groups: typing.Sequence["_ISecurityGroup_acf8a799"],
         subnets: typing.Sequence["_ISubnet_d57d1229"],
         capacity_provider_name: typing.Optional[builtins.str] = None,
         ec2_instance_profile: typing.Optional["_IInstanceProfile_10d5ce2c"] = None,
@@ -40339,11 +40382,11 @@ class ManagedInstancesCapacityProviderProps:
         instance_requirements: typing.Optional[typing.Union["_InstanceRequirementsConfig_1b353659", typing.Dict[builtins.str, typing.Any]]] = None,
         monitoring: typing.Optional["InstanceMonitoring"] = None,
         propagate_tags: typing.Optional["PropagateManagedInstancesTags"] = None,
-        security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         task_volume_storage: typing.Optional["_Size_7b441c34"] = None,
     ) -> None:
         '''The options for creating a Managed Instances Capacity Provider.
 
+        :param security_groups: The security groups to associate with the launched EC2 instances. These security groups control the network traffic allowed to and from the instances.
         :param subnets: The VPC subnets where EC2 instances will be launched. This array must be non-empty and should contain subnets from the VPC where you want the managed instances to be deployed.
         :param capacity_provider_name: The name of the capacity provider. If a name is specified, it cannot start with ``aws``, ``ecs``, or ``fargate``. If no name is specified, a default name in the CFNStackName-CFNResourceName-RandomString format is used. If the stack name starts with ``aws``, ``ecs``, or ``fargate``, a unique resource name is generated that starts with ``cp-``. Default: CloudFormation-generated name
         :param ec2_instance_profile: The EC2 instance profile that will be attached to instances launched by this capacity provider. This instance profile must contain the necessary IAM permissions for ECS container instances to register with the cluster and run tasks. At minimum, it should include permissions for ECS agent communication, ECR image pulling, and CloudWatch logging. If you are using Amazon ECS Managed Instances with the AWS-managed Infrastructure policy (``AmazonECSInfrastructureRolePolicyForManagedInstances``), the instance profile must be prefixed with ``ecsInstanceRole`` for the built in PassRole policy to apply. If you are using a custom policy for the Infrastructure role, the instance profile can have an alternative name. Default: - A new instance profile prefixed with 'ecsInstanceRole' will be created
@@ -40351,7 +40394,6 @@ class ManagedInstancesCapacityProviderProps:
         :param instance_requirements: The instance requirements configuration for EC2 instance selection. This allows you to specify detailed requirements for instance selection including vCPU count ranges, memory ranges, CPU manufacturers (Intel, AMD, AWS Graviton), instance generations, network performance requirements, and many other criteria. ECS will automatically select appropriate instance types that meet these requirements. Default: - no specific instance requirements, ECS will choose appropriate instances
         :param monitoring: The CloudWatch monitoring configuration for the EC2 instances. Determines the granularity of CloudWatch metrics collection for the instances. Detailed monitoring incurs additional costs but provides better observability. Default: - no enhanced monitoring (basic monitoring only)
         :param propagate_tags: Specifies whether to propagate tags from the capacity provider to the launched instances. When set to CAPACITY_PROVIDER, tags applied to the capacity provider resource will be automatically applied to all EC2 instances launched by this capacity provider. Default: PropagateManagedInstancesTags.NONE - no tag propagation
-        :param security_groups: The security groups to associate with the launched EC2 instances. These security groups control the network traffic allowed to and from the instances. If not specified, the default security group of the VPC containing the subnets will be used. Default: - default security group of the VPC
         :param task_volume_storage: The size of the task volume storage attached to each instance. This storage is used for container images, container logs, and temporary files. Larger storage may be needed for workloads with large container images or applications that generate significant temporary data. Default: Size.gibibytes(80)
 
         :exampleMetadata: infused
@@ -40363,8 +40405,14 @@ class ManagedInstancesCapacityProviderProps:
             
             cluster = ecs.Cluster(self, "Cluster", vpc=vpc)
             
+            security_group = ec2.SecurityGroup(self, "SecurityGroup",
+                vpc=vpc,
+                description="Security group for managed instances"
+            )
+            
             mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProvider",
                 subnets=vpc.private_subnets,
+                security_groups=[security_group],
                 instance_requirements=ec2.InstanceRequirementsConfig(
                     v_cpu_count_min=1,
                     memory_min=Size.gibibytes(2)
@@ -40404,6 +40452,7 @@ class ManagedInstancesCapacityProviderProps:
             instance_requirements = _InstanceRequirementsConfig_1b353659(**instance_requirements)
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__efa15b9a00384128ebdb40ffd56f7e66e8863f1c3a6b8d4cf8bc61fb9e822e92)
+            check_type(argname="argument security_groups", value=security_groups, expected_type=type_hints["security_groups"])
             check_type(argname="argument subnets", value=subnets, expected_type=type_hints["subnets"])
             check_type(argname="argument capacity_provider_name", value=capacity_provider_name, expected_type=type_hints["capacity_provider_name"])
             check_type(argname="argument ec2_instance_profile", value=ec2_instance_profile, expected_type=type_hints["ec2_instance_profile"])
@@ -40411,9 +40460,9 @@ class ManagedInstancesCapacityProviderProps:
             check_type(argname="argument instance_requirements", value=instance_requirements, expected_type=type_hints["instance_requirements"])
             check_type(argname="argument monitoring", value=monitoring, expected_type=type_hints["monitoring"])
             check_type(argname="argument propagate_tags", value=propagate_tags, expected_type=type_hints["propagate_tags"])
-            check_type(argname="argument security_groups", value=security_groups, expected_type=type_hints["security_groups"])
             check_type(argname="argument task_volume_storage", value=task_volume_storage, expected_type=type_hints["task_volume_storage"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
+            "security_groups": security_groups,
             "subnets": subnets,
         }
         if capacity_provider_name is not None:
@@ -40428,10 +40477,18 @@ class ManagedInstancesCapacityProviderProps:
             self._values["monitoring"] = monitoring
         if propagate_tags is not None:
             self._values["propagate_tags"] = propagate_tags
-        if security_groups is not None:
-            self._values["security_groups"] = security_groups
         if task_volume_storage is not None:
             self._values["task_volume_storage"] = task_volume_storage
+
+    @builtins.property
+    def security_groups(self) -> typing.List["_ISecurityGroup_acf8a799"]:
+        '''The security groups to associate with the launched EC2 instances.
+
+        These security groups control the network traffic allowed to and from the instances.
+        '''
+        result = self._values.get("security_groups")
+        assert result is not None, "Required property 'security_groups' is missing"
+        return typing.cast(typing.List["_ISecurityGroup_acf8a799"], result)
 
     @builtins.property
     def subnets(self) -> typing.List["_ISubnet_d57d1229"]:
@@ -40530,20 +40587,6 @@ class ManagedInstancesCapacityProviderProps:
         '''
         result = self._values.get("propagate_tags")
         return typing.cast(typing.Optional["PropagateManagedInstancesTags"], result)
-
-    @builtins.property
-    def security_groups(
-        self,
-    ) -> typing.Optional[typing.List["_ISecurityGroup_acf8a799"]]:
-        '''The security groups to associate with the launched EC2 instances.
-
-        These security groups control the network traffic allowed to and from the instances.
-        If not specified, the default security group of the VPC containing the subnets will be used.
-
-        :default: - default security group of the VPC
-        '''
-        result = self._values.get("security_groups")
-        return typing.cast(typing.Optional[typing.List["_ISecurityGroup_acf8a799"]], result)
 
     @builtins.property
     def task_volume_storage(self) -> typing.Optional["_Size_7b441c34"]:
@@ -40903,8 +40946,14 @@ class NetworkMode(enum.Enum):
         
         cluster = ecs.Cluster(self, "Cluster", vpc=vpc)
         
+        security_group = ec2.SecurityGroup(self, "SecurityGroup",
+            vpc=vpc,
+            description="Security group for managed instances"
+        )
+        
         mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProvider",
             subnets=vpc.private_subnets,
+            security_groups=[security_group],
             instance_requirements=ec2.InstanceRequirementsConfig(
                 v_cpu_count_min=1,
                 memory_min=Size.gibibytes(2)
@@ -40955,6 +41004,46 @@ class NetworkMode(enum.Enum):
     '''
     NAT = "NAT"
     '''The task utilizes Docker's built-in virtual network which runs inside each Windows container instance.'''
+
+
+class NoneLogDriver(
+    LogDriver,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_ecs.NoneLogDriver",
+):
+    '''A log driver that sets the log driver to ``none`` (no logs collected).
+
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_ecs as ecs
+        
+        none_log_driver = ecs.NoneLogDriver()
+    '''
+
+    def __init__(self) -> None:
+        '''Constructs a new instance of the NoneLogDriver class.'''
+        jsii.create(self.__class__, self, [])
+
+    @jsii.member(jsii_name="bind")
+    def bind(
+        self,
+        _scope: "_constructs_77d1e7e8.Construct",
+        _container_definition: "ContainerDefinition",
+    ) -> "LogDriverConfig":
+        '''Called when the log driver is configured on a container.
+
+        :param _scope: -
+        :param _container_definition: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3acf8dec565094cce1f082ec2dc298a89893031d5fb40f9b520668a334916c27)
+            check_type(argname="argument _scope", value=_scope, expected_type=type_hints["_scope"])
+            check_type(argname="argument _container_definition", value=_container_definition, expected_type=type_hints["_container_definition"])
+        return typing.cast("LogDriverConfig", jsii.invoke(self, "bind", [_scope, _container_definition]))
 
 
 class OperatingSystemFamily(
@@ -42745,6 +42834,8 @@ class Secret(metaclass=jsii.JSIIAbstractClass, jsii_type="aws-cdk-lib.aws_ecs.Se
     def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grants reading the secret to a principal.
 
+        [disable-awslint:no-grants]
+
         :param grantee: -
         '''
         ...
@@ -42768,6 +42859,8 @@ class _SecretProxy(Secret):
     @jsii.member(jsii_name="grantRead")
     def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grants reading the secret to a principal.
+
+        [disable-awslint:no-grants]
 
         :param grantee: -
         '''
@@ -45545,6 +45638,8 @@ class TaskDefinition(
         - ecs:RunTask
         - iam:PassRole
 
+        [disable-awslint:no-grants]
+
         :param grantee: Principal to grant consume rights to.
         '''
         if __debug__:
@@ -45628,6 +45723,12 @@ class TaskDefinition(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "taskDefinitionArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="taskDefinitionRef")
+    def task_definition_ref(self) -> "_TaskDefinitionReference_b050a42a":
+        '''A reference to this task definition.'''
+        return typing.cast("_TaskDefinitionReference_b050a42a", jsii.get(self, "taskDefinitionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="taskRole")
@@ -47425,7 +47526,7 @@ class AwsLogDriver(
         *,
         stream_prefix: builtins.str,
         datetime_format: typing.Optional[builtins.str] = None,
-        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         max_buffer_size: typing.Optional["_Size_7b441c34"] = None,
         mode: typing.Optional["AwsLogDriverMode"] = None,
@@ -47899,6 +48000,7 @@ class Cluster(
 
         This method provides a streamlined way to assign the 'ecs:UpdateTaskProtection'
         permission, enabling the grantee to manage task protection in the ECS cluster.
+        [disable-awslint:no-grants]
 
         :param grantee: The entity (e.g., IAM role or user) to grant the permissions to.
         '''
@@ -49604,6 +49706,12 @@ class BaseService(
         return typing.cast(builtins.str, jsii.get(self, "serviceName"))
 
     @builtins.property
+    @jsii.member(jsii_name="serviceRef")
+    def service_ref(self) -> "_ServiceReference_4a98722c":
+        '''A reference to this service.'''
+        return typing.cast("_ServiceReference_4a98722c", jsii.get(self, "serviceRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="taskDefinition")
     def task_definition(self) -> "TaskDefinition":
         '''The task definition to use for tasks in the service.'''
@@ -51279,6 +51387,7 @@ __all__ = [
     "MemoryUtilizationScalingProps",
     "MountPoint",
     "NetworkMode",
+    "NoneLogDriver",
     "OperatingSystemFamily",
     "PidMode",
     "PlacementConstraint",
@@ -51536,7 +51645,7 @@ def _typecheckingstub__896fbbf9fdadbf59606c3a005d089549f308bf995f12c3ee79981c98b
     *,
     stream_prefix: builtins.str,
     datetime_format: typing.Optional[builtins.str] = None,
-    log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
     max_buffer_size: typing.Optional[_Size_7b441c34] = None,
     mode: typing.Optional[AwsLogDriverMode] = None,
@@ -51807,8 +51916,8 @@ def _typecheckingstub__d2fd7f319e7a3e49a0d45d342ee067f3719bf8c8519bbab1a3a3c81f4
 
 def _typecheckingstub__b8cf486af6edb309081654dbba3fcab445314c93a7a69231f0ca16b32fff9ae0(
     *,
+    security_groups: typing.Sequence[builtins.str],
     subnets: typing.Sequence[builtins.str],
-    security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -54419,7 +54528,7 @@ def _typecheckingstub__dbaa652de4c496be8e88e85c63d7338973d99bff8c4403729f7cdea3d
 def _typecheckingstub__b73c7e186dd5ae9ae5fc5618d009b1cf22bf3fe066bf01f432f470d27bd7c321(
     *,
     cloud_watch_encryption_enabled: typing.Optional[builtins.bool] = None,
-    cloud_watch_log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    cloud_watch_log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     s3_bucket: typing.Optional[_IBucket_42e086fd] = None,
     s3_encryption_enabled: typing.Optional[builtins.bool] = None,
     s3_key_prefix: typing.Optional[builtins.str] = None,
@@ -54973,6 +55082,7 @@ def _typecheckingstub__718bb820f1409b5f15556f2e394659a060bda46e302dbb4e973a6484f
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
+    security_groups: typing.Sequence[_ISecurityGroup_acf8a799],
     subnets: typing.Sequence[_ISubnet_d57d1229],
     capacity_provider_name: typing.Optional[builtins.str] = None,
     ec2_instance_profile: typing.Optional[_IInstanceProfile_10d5ce2c] = None,
@@ -54980,7 +55090,6 @@ def _typecheckingstub__718bb820f1409b5f15556f2e394659a060bda46e302dbb4e973a6484f
     instance_requirements: typing.Optional[typing.Union[_InstanceRequirementsConfig_1b353659, typing.Dict[builtins.str, typing.Any]]] = None,
     monitoring: typing.Optional[InstanceMonitoring] = None,
     propagate_tags: typing.Optional[PropagateManagedInstancesTags] = None,
-    security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     task_volume_storage: typing.Optional[_Size_7b441c34] = None,
 ) -> None:
     """Type checking stubs"""
@@ -54994,6 +55103,7 @@ def _typecheckingstub__86f1df235e6255faeece6081f964f386186a84532c53bb8fad57fd4ab
 
 def _typecheckingstub__efa15b9a00384128ebdb40ffd56f7e66e8863f1c3a6b8d4cf8bc61fb9e822e92(
     *,
+    security_groups: typing.Sequence[_ISecurityGroup_acf8a799],
     subnets: typing.Sequence[_ISubnet_d57d1229],
     capacity_provider_name: typing.Optional[builtins.str] = None,
     ec2_instance_profile: typing.Optional[_IInstanceProfile_10d5ce2c] = None,
@@ -55001,7 +55111,6 @@ def _typecheckingstub__efa15b9a00384128ebdb40ffd56f7e66e8863f1c3a6b8d4cf8bc61fb9
     instance_requirements: typing.Optional[typing.Union[_InstanceRequirementsConfig_1b353659, typing.Dict[builtins.str, typing.Any]]] = None,
     monitoring: typing.Optional[InstanceMonitoring] = None,
     propagate_tags: typing.Optional[PropagateManagedInstancesTags] = None,
-    security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     task_volume_storage: typing.Optional[_Size_7b441c34] = None,
 ) -> None:
     """Type checking stubs"""
@@ -55031,6 +55140,13 @@ def _typecheckingstub__97e80271f26e6e02bf60018c9ff7b7e0e42981b366ad2369ee9a7119d
     container_path: builtins.str,
     read_only: builtins.bool,
     source_volume: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3acf8dec565094cce1f082ec2dc298a89893031d5fb40f9b520668a334916c27(
+    _scope: _constructs_77d1e7e8.Construct,
+    _container_definition: ContainerDefinition,
 ) -> None:
     """Type checking stubs"""
     pass

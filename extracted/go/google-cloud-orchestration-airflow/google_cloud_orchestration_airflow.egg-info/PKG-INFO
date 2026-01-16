@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: google-cloud-orchestration-airflow
-Version: 1.18.0
+Version: 1.19.0
 Summary: Google Cloud Orchestration Airflow API client library
 Home-page: https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-orchestration-airflow
 Author: Google LLC

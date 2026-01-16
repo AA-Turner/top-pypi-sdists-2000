@@ -35,6 +35,87 @@ from .. import IEnvironmentAware as _IEnvironmentAware_f39049ee
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_quicksight.ActionConnectorReference",
+    jsii_struct_bases=[],
+    name_mapping={
+        "action_connector_arn": "actionConnectorArn",
+        "action_connector_id": "actionConnectorId",
+        "aws_account_id": "awsAccountId",
+    },
+)
+class ActionConnectorReference:
+    def __init__(
+        self,
+        *,
+        action_connector_arn: builtins.str,
+        action_connector_id: builtins.str,
+        aws_account_id: builtins.str,
+    ) -> None:
+        '''A reference to a ActionConnector resource.
+
+        :param action_connector_arn: The ARN of the ActionConnector resource.
+        :param action_connector_id: The ActionConnectorId of the ActionConnector resource.
+        :param aws_account_id: The AwsAccountId of the ActionConnector resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_quicksight as interfaces_quicksight
+            
+            action_connector_reference = interfaces_quicksight.ActionConnectorReference(
+                action_connector_arn="actionConnectorArn",
+                action_connector_id="actionConnectorId",
+                aws_account_id="awsAccountId"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__31055bc274e952c4fc3166d11f0fbbc107ed08b00575ccf7d73fa07a9e5f9f9f)
+            check_type(argname="argument action_connector_arn", value=action_connector_arn, expected_type=type_hints["action_connector_arn"])
+            check_type(argname="argument action_connector_id", value=action_connector_id, expected_type=type_hints["action_connector_id"])
+            check_type(argname="argument aws_account_id", value=aws_account_id, expected_type=type_hints["aws_account_id"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "action_connector_arn": action_connector_arn,
+            "action_connector_id": action_connector_id,
+            "aws_account_id": aws_account_id,
+        }
+
+    @builtins.property
+    def action_connector_arn(self) -> builtins.str:
+        '''The ARN of the ActionConnector resource.'''
+        result = self._values.get("action_connector_arn")
+        assert result is not None, "Required property 'action_connector_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def action_connector_id(self) -> builtins.str:
+        '''The ActionConnectorId of the ActionConnector resource.'''
+        result = self._values.get("action_connector_id")
+        assert result is not None, "Required property 'action_connector_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def aws_account_id(self) -> builtins.str:
+        '''The AwsAccountId of the ActionConnector resource.'''
+        result = self._values.get("aws_account_id")
+        assert result is not None, "Required property 'aws_account_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "ActionConnectorReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_quicksight.AnalysisReference",
     jsii_struct_bases=[],
     name_mapping={
@@ -518,6 +599,51 @@ class FolderReference:
         return "FolderReference(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
+
+
+@jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_quicksight.IActionConnectorRef")
+class IActionConnectorRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a ActionConnector.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="actionConnectorRef")
+    def action_connector_ref(self) -> "ActionConnectorReference":
+        '''(experimental) A reference to a ActionConnector resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _IActionConnectorRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a ActionConnector.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_quicksight.IActionConnectorRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="actionConnectorRef")
+    def action_connector_ref(self) -> "ActionConnectorReference":
+        '''(experimental) A reference to a ActionConnector resource.
+
+        :stability: experimental
+        '''
+        return typing.cast("ActionConnectorReference", jsii.get(self, "actionConnectorRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IActionConnectorRef).__jsii_proxy_class__ = lambda : _IActionConnectorRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_quicksight.IAnalysisRef")
@@ -1436,12 +1562,14 @@ class VPCConnectionReference:
 
 
 __all__ = [
+    "ActionConnectorReference",
     "AnalysisReference",
     "CustomPermissionsReference",
     "DashboardReference",
     "DataSetReference",
     "DataSourceReference",
     "FolderReference",
+    "IActionConnectorRef",
     "IAnalysisRef",
     "ICustomPermissionsRef",
     "IDashboardRef",
@@ -1461,6 +1589,15 @@ __all__ = [
 ]
 
 publication.publish()
+
+def _typecheckingstub__31055bc274e952c4fc3166d11f0fbbc107ed08b00575ccf7d73fa07a9e5f9f9f(
+    *,
+    action_connector_arn: builtins.str,
+    action_connector_id: builtins.str,
+    aws_account_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
 
 def _typecheckingstub__79dd570d6da6d3fe7b5ab82dcad552abbb17b11f076a26256bed0f162c545988(
     *,
@@ -1562,5 +1699,5 @@ def _typecheckingstub__8a94c806f9f5d8f329e5fe8025b2cd7112ef5f8d032fce0a9cf2e9f64
     """Type checking stubs"""
     pass
 
-for cls in [IAnalysisRef, ICustomPermissionsRef, IDashboardRef, IDataSetRef, IDataSourceRef, IFolderRef, IRefreshScheduleRef, ITemplateRef, IThemeRef, ITopicRef, IVPCConnectionRef]:
+for cls in [IActionConnectorRef, IAnalysisRef, ICustomPermissionsRef, IDashboardRef, IDataSetRef, IDataSourceRef, IFolderRef, IRefreshScheduleRef, ITemplateRef, IThemeRef, ITopicRef, IVPCConnectionRef]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

@@ -150,6 +150,34 @@ class OrganizationSecurityPoliciesClient(
     _DEFAULT_ENDPOINT_TEMPLATE = "compute.{UNIVERSE_DOMAIN}"
     _DEFAULT_UNIVERSE = "googleapis.com"
 
+    @staticmethod
+    def _use_client_cert_effective():
+        """Returns whether client certificate should be used for mTLS if the
+        google-auth version supports should_use_client_cert automatic mTLS enablement.
+
+        Alternatively, read from the GOOGLE_API_USE_CLIENT_CERTIFICATE env var.
+
+        Returns:
+            bool: whether client certificate should be used for mTLS
+        Raises:
+            ValueError: (If using a version of google-auth without should_use_client_cert and
+            GOOGLE_API_USE_CLIENT_CERTIFICATE is set to an unexpected value.)
+        """
+        # check if google-auth version supports should_use_client_cert for automatic mTLS enablement
+        if hasattr(mtls, "should_use_client_cert"):  # pragma: NO COVER
+            return mtls.should_use_client_cert()
+        else:  # pragma: NO COVER
+            # if unsupported, fallback to reading from env var
+            use_client_cert_str = os.getenv(
+                "GOOGLE_API_USE_CLIENT_CERTIFICATE", "false"
+            ).lower()
+            if use_client_cert_str not in ("true", "false"):
+                raise ValueError(
+                    "Environment variable `GOOGLE_API_USE_CLIENT_CERTIFICATE` must be"
+                    " either `true` or `false`"
+                )
+            return use_client_cert_str == "true"
+
     @classmethod
     def from_service_account_info(cls, info: dict, *args, **kwargs):
         """Creates an instance of this client using the provided credentials
@@ -315,12 +343,10 @@ class OrganizationSecurityPoliciesClient(
         )
         if client_options is None:
             client_options = client_options_lib.ClientOptions()
-        use_client_cert = os.getenv("GOOGLE_API_USE_CLIENT_CERTIFICATE", "false")
+        use_client_cert = (
+            OrganizationSecurityPoliciesClient._use_client_cert_effective()
+        )
         use_mtls_endpoint = os.getenv("GOOGLE_API_USE_MTLS_ENDPOINT", "auto")
-        if use_client_cert not in ("true", "false"):
-            raise ValueError(
-                "Environment variable `GOOGLE_API_USE_CLIENT_CERTIFICATE` must be either `true` or `false`"
-            )
         if use_mtls_endpoint not in ("auto", "never", "always"):
             raise MutualTLSChannelError(
                 "Environment variable `GOOGLE_API_USE_MTLS_ENDPOINT` must be `never`, `auto` or `always`"
@@ -328,7 +354,7 @@ class OrganizationSecurityPoliciesClient(
 
         # Figure out the client cert source to use.
         client_cert_source = None
-        if use_client_cert == "true":
+        if use_client_cert:
             if client_options.client_cert_source:
                 client_cert_source = client_options.client_cert_source
             elif mtls.has_default_client_cert_source():
@@ -360,20 +386,16 @@ class OrganizationSecurityPoliciesClient(
             google.auth.exceptions.MutualTLSChannelError: If GOOGLE_API_USE_MTLS_ENDPOINT
                 is not any of ["auto", "never", "always"].
         """
-        use_client_cert = os.getenv(
-            "GOOGLE_API_USE_CLIENT_CERTIFICATE", "false"
-        ).lower()
+        use_client_cert = (
+            OrganizationSecurityPoliciesClient._use_client_cert_effective()
+        )
         use_mtls_endpoint = os.getenv("GOOGLE_API_USE_MTLS_ENDPOINT", "auto").lower()
         universe_domain_env = os.getenv("GOOGLE_CLOUD_UNIVERSE_DOMAIN")
-        if use_client_cert not in ("true", "false"):
-            raise ValueError(
-                "Environment variable `GOOGLE_API_USE_CLIENT_CERTIFICATE` must be either `true` or `false`"
-            )
         if use_mtls_endpoint not in ("auto", "never", "always"):
             raise MutualTLSChannelError(
                 "Environment variable `GOOGLE_API_USE_MTLS_ENDPOINT` must be `never`, `auto` or `always`"
             )
-        return use_client_cert == "true", use_mtls_endpoint, universe_domain_env
+        return use_client_cert, use_mtls_endpoint, universe_domain_env
 
     @staticmethod
     def _get_client_cert_source(provided_cert_source, use_cert_flag):
@@ -720,12 +742,17 @@ class OrganizationSecurityPoliciesClient(
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> compute.Operation:
         r"""Inserts an association for the specified security
-        policy. This has billing implications. Projects in the
+        policy.
+        This has billing implications.  Projects in the
         hierarchy with effective hierarchical security policies
         will be automatically enrolled into Cloud Armor
-        Enterprise if not already enrolled. Use of this API to
-        modify firewall policies is deprecated. Use
-        firewallPolicies.addAssociation instead if possible.
+        Enterprise if not already enrolled.
+
+        Use this API to modify Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to modify
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.addAssociation
+        instead.
 
         .. code-block:: python
 
@@ -853,12 +880,17 @@ class OrganizationSecurityPoliciesClient(
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> extended_operation.ExtendedOperation:
         r"""Inserts an association for the specified security
-        policy. This has billing implications. Projects in the
+        policy.
+        This has billing implications.  Projects in the
         hierarchy with effective hierarchical security policies
         will be automatically enrolled into Cloud Armor
-        Enterprise if not already enrolled. Use of this API to
-        modify firewall policies is deprecated. Use
-        firewallPolicies.addAssociation instead if possible.
+        Enterprise if not already enrolled.
+
+        Use this API to modify Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to modify
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.addAssociation
+        instead.
 
         .. code-block:: python
 
@@ -1008,6 +1040,11 @@ class OrganizationSecurityPoliciesClient(
     ) -> compute.Operation:
         r"""Inserts a rule into a security policy.
 
+        Use this API to modify Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to modify
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.addRule instead.
+
         .. code-block:: python
 
             # This snippet has been automatically generated and should be regarded as a
@@ -1128,6 +1165,11 @@ class OrganizationSecurityPoliciesClient(
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> extended_operation.ExtendedOperation:
         r"""Inserts a rule into a security policy.
+
+        Use this API to modify Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to modify
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.addRule instead.
 
         .. code-block:: python
 
@@ -1270,9 +1312,12 @@ class OrganizationSecurityPoliciesClient(
         timeout: Union[float, object] = gapic_v1.method.DEFAULT,
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> compute.Operation:
-        r"""Copies rules to the specified security policy. Use of
-        this API to modify firewall policies is deprecated. Use
-        firewallPolicies.copyRules instead.
+        r"""Copies rules to the specified security policy.
+
+        Use this API to modify Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to modify
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.cloneRules instead.
 
         .. code-block:: python
 
@@ -1385,9 +1430,12 @@ class OrganizationSecurityPoliciesClient(
         timeout: Union[float, object] = gapic_v1.method.DEFAULT,
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> extended_operation.ExtendedOperation:
-        r"""Copies rules to the specified security policy. Use of
-        this API to modify firewall policies is deprecated. Use
-        firewallPolicies.copyRules instead.
+        r"""Copies rules to the specified security policy.
+
+        Use this API to modify Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to modify
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.cloneRules instead.
 
         .. code-block:: python
 
@@ -1523,9 +1571,12 @@ class OrganizationSecurityPoliciesClient(
         timeout: Union[float, object] = gapic_v1.method.DEFAULT,
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> compute.Operation:
-        r"""Deletes the specified policy. Use of this API to
-        remove firewall policies is deprecated. Use
-        firewallPolicies.delete instead.
+        r"""Deletes the specified policy.
+
+        Use this API to remove Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to remove
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.delete instead.
 
         .. code-block:: python
 
@@ -1638,9 +1689,12 @@ class OrganizationSecurityPoliciesClient(
         timeout: Union[float, object] = gapic_v1.method.DEFAULT,
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> extended_operation.ExtendedOperation:
-        r"""Deletes the specified policy. Use of this API to
-        remove firewall policies is deprecated. Use
-        firewallPolicies.delete instead.
+        r"""Deletes the specified policy.
+
+        Use this API to remove Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to remove
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.delete instead.
 
         .. code-block:: python
 
@@ -1777,9 +1831,11 @@ class OrganizationSecurityPoliciesClient(
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> compute.SecurityPolicy:
         r"""List all of the ordered rules present in a single
-        specified policy. Use of this API to read firewall
-        policies is deprecated. Use firewallPolicies.get
-        instead.
+        specified policy.
+        Use this API to read Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to read
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.get instead.
 
         .. code-block:: python
 
@@ -1828,11 +1884,11 @@ class OrganizationSecurityPoliciesClient(
         Returns:
             google.cloud.compute_v1.types.SecurityPolicy:
                 Represents a Google Cloud Armor
-                security policy resource. Only external
-                backend services that use load balancers
-                can reference a security policy. For
-                more information, see Google Cloud Armor
-                security policy overview.
+                security policy resource.
+                Only external backend services that use
+                load balancers can reference a security
+                policy. For more information, see Google
+                Cloud Armor security policy overview.
 
         """
         # Create or coerce a protobuf request object.
@@ -1894,9 +1950,13 @@ class OrganizationSecurityPoliciesClient(
         timeout: Union[float, object] = gapic_v1.method.DEFAULT,
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> compute.SecurityPolicyAssociation:
-        r"""Gets an association with the specified name. Use of
-        this API to read firewall policies is deprecated. Use
-        firewallPolicies.getAssociation instead if possible.
+        r"""Gets an association with the specified name.
+
+        Use this API to read Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to read
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.getAssociation
+        instead.
 
         .. code-block:: python
 
@@ -2009,9 +2069,12 @@ class OrganizationSecurityPoliciesClient(
         timeout: Union[float, object] = gapic_v1.method.DEFAULT,
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> compute.SecurityPolicyRule:
-        r"""Gets a rule at the specified priority. Use of this
-        API to read firewall policies is deprecated. Use
-        firewallPolicies.getRule instead.
+        r"""Gets a rule at the specified priority.
+
+        Use this API to read Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to read
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.getRule instead.
 
         .. code-block:: python
 
@@ -2126,10 +2189,13 @@ class OrganizationSecurityPoliciesClient(
         timeout: Union[float, object] = gapic_v1.method.DEFAULT,
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> compute.Operation:
-        r"""Creates a new policy in the specified project using
-        the data included in the request. Use of this API to
-        insert firewall policies is deprecated. Use
-        firewallPolicies.insert instead.
+        r"""Creates a new policy in the specified organization
+        using the data included in the request.
+
+        Use this API to add Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to add
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.insert instead.
 
         .. code-block:: python
 
@@ -2231,10 +2297,13 @@ class OrganizationSecurityPoliciesClient(
         timeout: Union[float, object] = gapic_v1.method.DEFAULT,
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> extended_operation.ExtendedOperation:
-        r"""Creates a new policy in the specified project using
-        the data included in the request. Use of this API to
-        insert firewall policies is deprecated. Use
-        firewallPolicies.insert instead.
+        r"""Creates a new policy in the specified organization
+        using the data included in the request.
+
+        Use this API to add Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to add
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.insert instead.
 
         .. code-block:: python
 
@@ -2360,9 +2429,12 @@ class OrganizationSecurityPoliciesClient(
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> pagers.ListPager:
         r"""List all the policies that have been configured for
-        the specified project. Use of this API to read firewall
-        policies is deprecated. Use firewallPolicies.list
-        instead.
+        the specified organization.
+
+        Use this API to read Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to read
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.list instead.
 
         .. code-block:: python
 
@@ -2456,9 +2528,12 @@ class OrganizationSecurityPoliciesClient(
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> compute.OrganizationSecurityPoliciesListAssociationsResponse:
         r"""Lists associations of a specified target, i.e.,
-        organization or folder. Use of this API to read firewall
-        policies is deprecated. Use
-        firewallPolicies.listAssociations instead if possible.
+        organization or folder.
+        Use this API to read Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to read
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.listAssociations
+        instead.
 
         .. code-block:: python
 
@@ -2628,9 +2703,12 @@ class OrganizationSecurityPoliciesClient(
         timeout: Union[float, object] = gapic_v1.method.DEFAULT,
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> compute.Operation:
-        r"""Moves the specified security policy. Use of this API
-        to modify firewall policies is deprecated. Use
-        firewallPolicies.move instead.
+        r"""Moves the specified security policy.
+
+        Use this API to modify Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to modify
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.move instead.
 
         .. code-block:: python
 
@@ -2743,9 +2821,12 @@ class OrganizationSecurityPoliciesClient(
         timeout: Union[float, object] = gapic_v1.method.DEFAULT,
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> extended_operation.ExtendedOperation:
-        r"""Moves the specified security policy. Use of this API
-        to modify firewall policies is deprecated. Use
-        firewallPolicies.move instead.
+        r"""Moves the specified security policy.
+
+        Use this API to modify Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to modify
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.move instead.
 
         .. code-block:: python
 
@@ -2884,9 +2965,11 @@ class OrganizationSecurityPoliciesClient(
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> compute.Operation:
         r"""Patches the specified policy with the data included
-        in the request. Use of this API to modify firewall
-        policies is deprecated. Use firewallPolicies.patch
-        instead.
+        in the request.
+        Use this API to modify Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to modify
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.patch instead.
 
         .. code-block:: python
 
@@ -3008,9 +3091,11 @@ class OrganizationSecurityPoliciesClient(
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> extended_operation.ExtendedOperation:
         r"""Patches the specified policy with the data included
-        in the request. Use of this API to modify firewall
-        policies is deprecated. Use firewallPolicies.patch
-        instead.
+        in the request.
+        Use this API to modify Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to modify
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.patch instead.
 
         .. code-block:: python
 
@@ -3154,9 +3239,12 @@ class OrganizationSecurityPoliciesClient(
         timeout: Union[float, object] = gapic_v1.method.DEFAULT,
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> compute.Operation:
-        r"""Patches a rule at the specified priority. Use of this
-        API to modify firewall policies is deprecated. Use
-        firewallPolicies.patchRule instead.
+        r"""Patches a rule at the specified priority.
+
+        Use this API to modify Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to modify
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.patchRule instead.
 
         .. code-block:: python
 
@@ -3277,9 +3365,12 @@ class OrganizationSecurityPoliciesClient(
         timeout: Union[float, object] = gapic_v1.method.DEFAULT,
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> extended_operation.ExtendedOperation:
-        r"""Patches a rule at the specified priority. Use of this
-        API to modify firewall policies is deprecated. Use
-        firewallPolicies.patchRule instead.
+        r"""Patches a rule at the specified priority.
+
+        Use this API to modify Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to modify
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.patchRule instead.
 
         .. code-block:: python
 
@@ -3423,9 +3514,12 @@ class OrganizationSecurityPoliciesClient(
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> compute.Operation:
         r"""Removes an association for the specified security
-        policy. Use of this API to modify firewall policies is
-        deprecated. Use firewallPolicies.removeAssociation
-        instead if possible.
+        policy.
+        Use this API to modify Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to modify
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.removeAssociation
+        instead.
 
         .. code-block:: python
 
@@ -3543,9 +3637,12 @@ class OrganizationSecurityPoliciesClient(
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> extended_operation.ExtendedOperation:
         r"""Removes an association for the specified security
-        policy. Use of this API to modify firewall policies is
-        deprecated. Use firewallPolicies.removeAssociation
-        instead if possible.
+        policy.
+        Use this API to modify Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to modify
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.removeAssociation
+        instead.
 
         .. code-block:: python
 
@@ -3687,6 +3784,11 @@ class OrganizationSecurityPoliciesClient(
     ) -> compute.Operation:
         r"""Deletes a rule at the specified priority.
 
+        Use this API to modify Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to modify
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.removeRule instead.
+
         .. code-block:: python
 
             # This snippet has been automatically generated and should be regarded as a
@@ -3799,6 +3901,11 @@ class OrganizationSecurityPoliciesClient(
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> extended_operation.ExtendedOperation:
         r"""Deletes a rule at the specified priority.
+
+        Use this API to modify Cloud Armor policies. Previously,
+        alpha and beta versions of this API were used to modify
+        firewall policies. This usage is now disabled for most
+        organizations. Use firewallPolicies.removeRule instead.
 
         .. code-block:: python
 

@@ -1279,7 +1279,6 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-from ..aws_certificatemanager import ICertificate as _ICertificate_c194c70b
 from ..aws_cloudwatch import (
     Metric as _Metric_e396a4dc,
     MetricOptions as _MetricOptions_1788b62f,
@@ -1298,6 +1297,9 @@ from ..aws_ec2 import (
 from ..aws_iam import IPrincipal as _IPrincipal_539bb2fd
 from ..aws_s3 import IBucket as _IBucket_42e086fd
 from ..interfaces import ResourceEnvironment as _ResourceEnvironment_603baf00
+from ..interfaces.aws_certificatemanager import (
+    ICertificateRef as _ICertificateRef_1878d79b
+)
 from ..interfaces.aws_ec2 import (
     ISecurityGroupRef as _ISecurityGroupRef_efa4ff18,
     ISubnetRef as _ISubnetRef_ac31e361,
@@ -18368,7 +18370,7 @@ class ListenerCertificate(
     @builtins.classmethod
     def from_certificate_manager(
         cls,
-        acm_certificate: "_ICertificate_c194c70b",
+        acm_certificate: "_ICertificateRef_1878d79b",
     ) -> "ListenerCertificate":
         '''Use an ACM certificate as a listener certificate.
 
@@ -30522,7 +30524,7 @@ def _typecheckingstub__865dac94d71e206bfcb9a780588fba567c5ba02d3a44a2a3368502f6c
     pass
 
 def _typecheckingstub__742590919eef2852244729790b1773eca3f144a470fe471af2fb62431a9f7443(
-    acm_certificate: _ICertificate_c194c70b,
+    acm_certificate: _ICertificateRef_1878d79b,
 ) -> None:
     """Type checking stubs"""
     pass

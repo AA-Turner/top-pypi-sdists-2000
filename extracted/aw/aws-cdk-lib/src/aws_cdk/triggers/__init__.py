@@ -181,15 +181,14 @@ from ..aws_lambda import (
     Tracing as _Tracing_9fe8e2bb,
     VersionOptions as _VersionOptions_981bb3c0,
 )
-from ..aws_logs import (
-    ILogGroup as _ILogGroup_3c4fa718, RetentionDays as _RetentionDays_070f99f0
-)
+from ..aws_logs import RetentionDays as _RetentionDays_070f99f0
 from ..aws_sns import ITopic as _ITopic_9eca4852
 from ..aws_sqs import IQueue as _IQueue_7ed6f679
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 from ..interfaces.aws_lambda import (
     ICodeSigningConfigRef as _ICodeSigningConfigRef_1d909622
 )
+from ..interfaces.aws_logs import ILogGroupRef as _ILogGroupRef_874d025a
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.triggers.ITrigger")
@@ -453,7 +452,7 @@ class TriggerFunction(
         layers: typing.Optional[typing.Sequence["_ILayerVersion_5ac127c8"]] = None,
         log_format: typing.Optional[builtins.str] = None,
         logging_format: typing.Optional["_LoggingFormat_30be8e01"] = None,
-        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         log_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         log_retention_retry_options: typing.Optional[typing.Union["_LogRetentionRetryOptions_ad797a7a", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -1019,7 +1018,7 @@ class TriggerFunctionProps(_FunctionProps_a308e854, TriggerOptions):
         layers: typing.Optional[typing.Sequence["_ILayerVersion_5ac127c8"]] = None,
         log_format: typing.Optional[builtins.str] = None,
         logging_format: typing.Optional["_LoggingFormat_30be8e01"] = None,
-        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         log_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         log_retention_retry_options: typing.Optional[typing.Union["_LogRetentionRetryOptions_ad797a7a", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -1650,7 +1649,7 @@ class TriggerFunctionProps(_FunctionProps_a308e854, TriggerOptions):
         return typing.cast(typing.Optional["_LoggingFormat_30be8e01"], result)
 
     @builtins.property
-    def log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
+    def log_group(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''The log group the function sends logs to.
 
         By default, Lambda functions send logs to an automatically created default log group named /aws/lambda/.
@@ -1664,7 +1663,7 @@ class TriggerFunctionProps(_FunctionProps_a308e854, TriggerOptions):
         :default: ``/aws/lambda/${this.functionName}`` - default log group created by Lambda
         '''
         result = self._values.get("log_group")
-        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def log_removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
@@ -2137,7 +2136,7 @@ def _typecheckingstub__6f34c5ba084706d20d6ef37a7f59673b20ed3425ffc7035fc8ea888e9
     layers: typing.Optional[typing.Sequence[_ILayerVersion_5ac127c8]] = None,
     log_format: typing.Optional[builtins.str] = None,
     logging_format: typing.Optional[_LoggingFormat_30be8e01] = None,
-    log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     log_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
     log_retention_retry_options: typing.Optional[typing.Union[_LogRetentionRetryOptions_ad797a7a, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -2232,7 +2231,7 @@ def _typecheckingstub__b2f4b009b0160d566d798bfa6d813ccc8440e1a9e0f75c99449184a2f
     layers: typing.Optional[typing.Sequence[_ILayerVersion_5ac127c8]] = None,
     log_format: typing.Optional[builtins.str] = None,
     logging_format: typing.Optional[_LoggingFormat_30be8e01] = None,
-    log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     log_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
     log_retention_retry_options: typing.Optional[typing.Union[_LogRetentionRetryOptions_ad797a7a, typing.Dict[builtins.str, typing.Any]]] = None,

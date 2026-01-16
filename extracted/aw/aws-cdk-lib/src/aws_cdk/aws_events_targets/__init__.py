@@ -865,13 +865,14 @@ from ..aws_kinesisfirehose import (
     IDeliveryStream as _IDeliveryStream_8f118861,
 )
 from ..aws_lambda import IFunction as _IFunction_6adb0ab8
-from ..aws_logs import ILogGroup as _ILogGroup_3c4fa718
 from ..aws_secretsmanager import ISecret as _ISecret_6e020e6a
 from ..aws_sns import ITopic as _ITopic_9eca4852
 from ..aws_sqs import IQueue as _IQueue_7ed6f679
 from ..aws_stepfunctions import IStateMachine as _IStateMachine_73e8d2b0
 from ..interfaces.aws_codebuild import IProjectRef as _IProjectRef_7528e639
 from ..interfaces.aws_codepipeline import IPipelineRef as _IPipelineRef_fb1b56f9
+from ..interfaces.aws_events import IRuleRef as _IRuleRef_4038a611
+from ..interfaces.aws_logs import ILogGroupRef as _ILogGroupRef_874d025a
 
 
 @jsii.implements(_IRuleTarget_7a91f454)
@@ -945,19 +946,19 @@ class ApiDestination(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _rule: "_IRule_af9e3d28",
+        rule: "_IRuleRef_4038a611",
         _id: typing.Optional[builtins.str] = None,
     ) -> "_RuleTargetConfig_4e70fe03":
         '''Returns a RuleTarget that can be used to trigger API destinations from an EventBridge event.
 
-        :param _rule: -
+        :param rule: -
         :param _id: -
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7fc3c1c0cf00ea5f22f33bc5b97cb9290363f2ca57adb35a3ef3345ba3c4ee26)
-            check_type(argname="argument _rule", value=_rule, expected_type=type_hints["_rule"])
+            check_type(argname="argument rule", value=rule, expected_type=type_hints["rule"])
             check_type(argname="argument _id", value=_id, expected_type=type_hints["_id"])
-        return typing.cast("_RuleTargetConfig_4e70fe03", jsii.invoke(self, "bind", [_rule, _id]))
+        return typing.cast("_RuleTargetConfig_4e70fe03", jsii.invoke(self, "bind", [rule, _id]))
 
 
 @jsii.implements(_IRuleTarget_7a91f454)
@@ -1057,7 +1058,7 @@ class ApiGateway(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        rule: "_IRule_af9e3d28",
+        rule: "_IRuleRef_4038a611",
         _id: typing.Optional[builtins.str] = None,
     ) -> "_RuleTargetConfig_4e70fe03":
         '''Returns a RuleTarget that can be used to trigger this API Gateway REST APIs as a result from an EventBridge event.
@@ -1162,7 +1163,7 @@ class ApiGatewayV2(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        rule: "_IRule_af9e3d28",
+        rule: "_IRuleRef_4038a611",
         _id: typing.Optional[builtins.str] = None,
     ) -> "_RuleTargetConfig_4e70fe03":
         '''Returns a RuleTarget that can be used to trigger this API Gateway HTTP APIs as a result from an EventBridge event.
@@ -1256,7 +1257,7 @@ class AppSync(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        rule: "_IRule_af9e3d28",
+        rule: "_IRuleRef_4038a611",
         _id: typing.Optional[builtins.str] = None,
     ) -> "_RuleTargetConfig_4e70fe03":
         '''Returns a RuleTarget that can be used to trigger this AppSync GraphQL API as a result from an EventBridge event.
@@ -1328,7 +1329,7 @@ class AwsApi(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        rule: "_IRule_af9e3d28",
+        rule: "_IRuleRef_4038a611",
         id: typing.Optional[builtins.str] = None,
     ) -> "_RuleTargetConfig_4e70fe03":
         '''Returns a RuleTarget that can be used to trigger this AwsApi as a result from an EventBridge event.
@@ -1734,7 +1735,7 @@ class BatchJob(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        rule: "_IRule_af9e3d28",
+        rule: "_IRuleRef_4038a611",
         _id: typing.Optional[builtins.str] = None,
     ) -> "_RuleTargetConfig_4e70fe03":
         '''Returns a RuleTarget that can be used to trigger queue this batch job as a result from an EventBridge event.
@@ -1776,7 +1777,7 @@ class CloudWatchLogGroup(
 
     def __init__(
         self,
-        log_group: "_ILogGroup_3c4fa718",
+        log_group: "_ILogGroupRef_874d025a",
         *,
         event: typing.Optional["_RuleTargetInput_6beca786"] = None,
         install_latest_aws_sdk: typing.Optional[builtins.bool] = None,
@@ -1811,7 +1812,7 @@ class CloudWatchLogGroup(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        rule: "_IRule_af9e3d28",
+        rule: "_IRuleRef_4038a611",
         _id: typing.Optional[builtins.str] = None,
     ) -> "_RuleTargetConfig_4e70fe03":
         '''Returns a RuleTarget that can be used to log an event into a CloudWatch LogGroup.
@@ -1891,7 +1892,7 @@ class CodeBuildProject(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _rule: "_IRule_af9e3d28",
+        _rule: "_IRuleRef_4038a611",
         _id: typing.Optional[builtins.str] = None,
     ) -> "_RuleTargetConfig_4e70fe03":
         '''Allows using build projects as event rule targets.
@@ -1962,7 +1963,7 @@ class CodePipeline(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _rule: "_IRule_af9e3d28",
+        _rule: "_IRuleRef_4038a611",
         _id: typing.Optional[builtins.str] = None,
     ) -> "_RuleTargetConfig_4e70fe03":
         '''Returns the rule target specification.
@@ -2227,7 +2228,7 @@ class EcsTask(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        rule: "_IRule_af9e3d28",
+        rule: "_IRuleRef_4038a611",
         _id: typing.Optional[builtins.str] = None,
     ) -> "_RuleTargetConfig_4e70fe03":
         '''Allows using tasks as target of EventBridge events.
@@ -2348,7 +2349,7 @@ class EventBus(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        rule: "_IRule_af9e3d28",
+        rule: "_IRuleRef_4038a611",
         _id: typing.Optional[builtins.str] = None,
     ) -> "_RuleTargetConfig_4e70fe03":
         '''Returns the rule target specification.
@@ -2492,7 +2493,7 @@ class FirehoseDeliveryStream(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _rule: "_IRule_af9e3d28",
+        _rule: "_IRuleRef_4038a611",
         _id: typing.Optional[builtins.str] = None,
     ) -> "_RuleTargetConfig_4e70fe03":
         '''Returns a RuleTarget that can be used to trigger this Firehose Stream as a result from a Event Bridge event.
@@ -2746,7 +2747,7 @@ class KinesisFirehoseStream(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _rule: "_IRule_af9e3d28",
+        _rule: "_IRuleRef_4038a611",
         _id: typing.Optional[builtins.str] = None,
     ) -> "_RuleTargetConfig_4e70fe03":
         '''(deprecated) Returns a RuleTarget that can be used to trigger this Firehose Stream as a result from a Event Bridge event.
@@ -2877,7 +2878,7 @@ class KinesisFirehoseStreamV2(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _rule: "_IRule_af9e3d28",
+        _rule: "_IRuleRef_4038a611",
         _id: typing.Optional[builtins.str] = None,
     ) -> "_RuleTargetConfig_4e70fe03":
         '''(deprecated) Returns a RuleTarget that can be used to trigger this Firehose Stream as a result from a Event Bridge event.
@@ -2942,7 +2943,7 @@ class KinesisStream(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _rule: "_IRule_af9e3d28",
+        _rule: "_IRuleRef_4038a611",
         _id: typing.Optional[builtins.str] = None,
     ) -> "_RuleTargetConfig_4e70fe03":
         '''Returns a RuleTarget that can be used to trigger this Kinesis Stream as a result from a CloudWatch event.
@@ -3023,7 +3024,7 @@ class LambdaFunction(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        rule: "_IRule_af9e3d28",
+        rule: "_IRuleRef_4038a611",
         _id: typing.Optional[builtins.str] = None,
     ) -> "_RuleTargetConfig_4e70fe03":
         '''Returns a RuleTarget that can be used to trigger this Lambda as a result from an EventBridge event.
@@ -3290,7 +3291,7 @@ class RedshiftQuery(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        rule: "_IRule_af9e3d28",
+        rule: "_IRuleRef_4038a611",
         _id: typing.Optional[builtins.str] = None,
     ) -> "_RuleTargetConfig_4e70fe03":
         '''Returns the rule target specification.
@@ -3572,21 +3573,21 @@ class SfnStateMachine(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _rule: "_IRule_af9e3d28",
+        rule: "_IRuleRef_4038a611",
         _id: typing.Optional[builtins.str] = None,
     ) -> "_RuleTargetConfig_4e70fe03":
         '''Returns a properties that are used in an Rule to trigger this State Machine.
 
-        :param _rule: -
+        :param rule: -
         :param _id: -
 
         :see: https://docs.aws.amazon.com/eventbridge/latest/userguide/resource-based-policies-eventbridge.html#sns-permissions
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0e0733fbe09a8310edfc7237ca759e925b3db6d25ad43627fcf4f165c2efe942)
-            check_type(argname="argument _rule", value=_rule, expected_type=type_hints["_rule"])
+            check_type(argname="argument rule", value=rule, expected_type=type_hints["rule"])
             check_type(argname="argument _id", value=_id, expected_type=type_hints["_id"])
-        return typing.cast("_RuleTargetConfig_4e70fe03", jsii.invoke(self, "bind", [_rule, _id]))
+        return typing.cast("_RuleTargetConfig_4e70fe03", jsii.invoke(self, "bind", [rule, _id]))
 
     @builtins.property
     @jsii.member(jsii_name="machine")
@@ -3647,21 +3648,21 @@ class SnsTopic(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        _rule: "_IRule_af9e3d28",
+        rule: "_IRuleRef_4038a611",
         _id: typing.Optional[builtins.str] = None,
     ) -> "_RuleTargetConfig_4e70fe03":
         '''Returns a RuleTarget that can be used to trigger this SNS topic as a result from an EventBridge event.
 
-        :param _rule: -
+        :param rule: -
         :param _id: -
 
         :see: https://docs.aws.amazon.com/eventbridge/latest/userguide/resource-based-policies-eventbridge.html#sns-permissions
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6de2339b649dec356056a716737bfe488b0873abee2d224f4a18f7ad162d83f6)
-            check_type(argname="argument _rule", value=_rule, expected_type=type_hints["_rule"])
+            check_type(argname="argument rule", value=rule, expected_type=type_hints["rule"])
             check_type(argname="argument _id", value=_id, expected_type=type_hints["_id"])
-        return typing.cast("_RuleTargetConfig_4e70fe03", jsii.invoke(self, "bind", [_rule, _id]))
+        return typing.cast("_RuleTargetConfig_4e70fe03", jsii.invoke(self, "bind", [rule, _id]))
 
     @builtins.property
     @jsii.member(jsii_name="topic")
@@ -3717,7 +3718,7 @@ class SqsQueue(
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        rule: "_IRule_af9e3d28",
+        rule: "_IRuleRef_4038a611",
         _id: typing.Optional[builtins.str] = None,
     ) -> "_RuleTargetConfig_4e70fe03":
         '''Returns a RuleTarget that can be used to trigger this SQS queue as a result from an EventBridge event.
@@ -6396,7 +6397,7 @@ def _typecheckingstub__1d106eb32ee82e64ee59c0904873ef15fb598d1b5613440afd038509c
     pass
 
 def _typecheckingstub__7fc3c1c0cf00ea5f22f33bc5b97cb9290363f2ca57adb35a3ef3345ba3c4ee26(
-    _rule: _IRule_af9e3d28,
+    rule: _IRuleRef_4038a611,
     _id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -6421,7 +6422,7 @@ def _typecheckingstub__4351ee68d84b56105dfaf7566e76bf0350931a4945a4f9e2599f6310f
     pass
 
 def _typecheckingstub__f34d8ba93048cf243454dc97d2236199033c050fc0bbc6ff84e18fa6033ee8b0(
-    rule: _IRule_af9e3d28,
+    rule: _IRuleRef_4038a611,
     _id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -6446,7 +6447,7 @@ def _typecheckingstub__383729f98d86a6617d8a045270e12ac1a082325deb3e0e67276cb84f8
     pass
 
 def _typecheckingstub__278e3545966677d368a504247d212e49fccdecf42a63bdd56101b78bbeed205d(
-    rule: _IRule_af9e3d28,
+    rule: _IRuleRef_4038a611,
     _id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -6466,14 +6467,14 @@ def _typecheckingstub__56a99cbd83a0d7a956b68eb6ee5cedd89a2b1c37754c2dc7f5a5ea2cc
     pass
 
 def _typecheckingstub__6b1999a517525e35ef54e6129e3396c11b46ecb394388d3f908c6d627c051c4f(
-    rule: _IRule_af9e3d28,
+    rule: _IRuleRef_4038a611,
     _id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
 
 def _typecheckingstub__a41bcbfd7e37d2d2cf83a8f636d325a2a328da0a83ef4d994f0be12782f7d357(
-    rule: _IRule_af9e3d28,
+    rule: _IRuleRef_4038a611,
     id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -6520,14 +6521,14 @@ def _typecheckingstub__47158c034f7c0f0c69db5367db77245ba70cbcc56ed81ec05ad80116f
     pass
 
 def _typecheckingstub__154b5229eec4b919f6367b1ffec428480b40785475052bfd94fade237bd22597(
-    rule: _IRule_af9e3d28,
+    rule: _IRuleRef_4038a611,
     _id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
 
 def _typecheckingstub__c7cd04d50c1c36eb2be36abb3fbdf553a534c7ae5d60f1c9cac6b5cf6428d284(
-    log_group: _ILogGroup_3c4fa718,
+    log_group: _ILogGroupRef_874d025a,
     *,
     event: typing.Optional[_RuleTargetInput_6beca786] = None,
     install_latest_aws_sdk: typing.Optional[builtins.bool] = None,
@@ -6540,7 +6541,7 @@ def _typecheckingstub__c7cd04d50c1c36eb2be36abb3fbdf553a534c7ae5d60f1c9cac6b5cf6
     pass
 
 def _typecheckingstub__5583066efc6b7b2980bfbfbf33e6491271f5faf3b97e5d2ae998d1fe4189d1d4(
-    rule: _IRule_af9e3d28,
+    rule: _IRuleRef_4038a611,
     _id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -6559,7 +6560,7 @@ def _typecheckingstub__3a8679d207265b7ec6863cf63c5b8aaaa8577dce8b9b2c6ec8d9a52c6
     pass
 
 def _typecheckingstub__c864909db0683c496942d72c9b834b03e1082bec9e20c368a204df37449c6e48(
-    _rule: _IRule_af9e3d28,
+    _rule: _IRuleRef_4038a611,
     _id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -6577,7 +6578,7 @@ def _typecheckingstub__daa7b4e77a0ef964ea3cdb54ce57cc8f475d7342b57d85f348e63fff7
     pass
 
 def _typecheckingstub__add42f3c28d5f6651e451885b955fd84ad865300b4e6606be36174db4f3d8c73(
-    _rule: _IRule_af9e3d28,
+    _rule: _IRuleRef_4038a611,
     _id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -6596,7 +6597,7 @@ def _typecheckingstub__c13bb1641d81a866856c7cdeae6fa612e09bb941bc83053a19b901e30
     pass
 
 def _typecheckingstub__8ad199a8641f171a0447e974756bbddd91b00aaa9bcf33d231826916b85b8166(
-    rule: _IRule_af9e3d28,
+    rule: _IRuleRef_4038a611,
     _id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -6619,7 +6620,7 @@ def _typecheckingstub__e6012a31db9ac91c35876daca0265cba4fbb81bfdf8acd148b6278650
     pass
 
 def _typecheckingstub__00d16e4ddfa6305196a715a56432c551f3ba5a905dead2e6a85f30bad692c31f(
-    rule: _IRule_af9e3d28,
+    rule: _IRuleRef_4038a611,
     _id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -6642,7 +6643,7 @@ def _typecheckingstub__e8b83537633e15491c91cd6cebe1eddb6bc388617c53b754a40f318f4
     pass
 
 def _typecheckingstub__45499f815ce457b36825c13b8a0a6ffd1d6994523698febc614678776c341fb7(
-    _rule: _IRule_af9e3d28,
+    _rule: _IRuleRef_4038a611,
     _id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -6672,7 +6673,7 @@ def _typecheckingstub__c6dba8ed5e351380147a927ce30f4c9095bc69a54a2de45039c2a1d82
     pass
 
 def _typecheckingstub__b38a65da97645536b57df6537ab7a5b06cf8910d4235008699171e7ced62c584(
-    _rule: _IRule_af9e3d28,
+    _rule: _IRuleRef_4038a611,
     _id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -6694,7 +6695,7 @@ def _typecheckingstub__e8230487c5e79599a4ad63af004c2c8350c2b25e209491350274d3801
     pass
 
 def _typecheckingstub__3467ab0e593ed64d775dafc3b3fc1b1835fa2853c7ee8685668bf081dd189e44(
-    _rule: _IRule_af9e3d28,
+    _rule: _IRuleRef_4038a611,
     _id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -6713,7 +6714,7 @@ def _typecheckingstub__47a9d917a1971c5aa11b68bf823d9f34a57a7b1e7653b0f82809c0630
     pass
 
 def _typecheckingstub__ae222f596f043d31f56819c2cb64c58ef12e8e3d35bce41fa6f0cd929c2db58a(
-    _rule: _IRule_af9e3d28,
+    _rule: _IRuleRef_4038a611,
     _id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -6731,7 +6732,7 @@ def _typecheckingstub__1ed39c6222adc3f41ac8913ef4f7e22134443e2aa19c19114f6650e1d
     pass
 
 def _typecheckingstub__906b4fb6301e027a5cc5111944bf8d3844e211a5f528e71002c42bebd068aad6(
-    rule: _IRule_af9e3d28,
+    rule: _IRuleRef_4038a611,
     _id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -6768,7 +6769,7 @@ def _typecheckingstub__6f991f630fb494b0dbf6dd8dd11dec71e3b3618d520bce2a1761a0562
     pass
 
 def _typecheckingstub__39a86a8b0444f7c45c252e76fda9d4157fe34d2c363d4a99075556e92c234689(
-    rule: _IRule_af9e3d28,
+    rule: _IRuleRef_4038a611,
     _id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -6802,7 +6803,7 @@ def _typecheckingstub__257316eeebae5ef658a5b570361035fdfb5ab37e96962b24c2e814b07
     pass
 
 def _typecheckingstub__0e0733fbe09a8310edfc7237ca759e925b3db6d25ad43627fcf4f165c2efe942(
-    _rule: _IRule_af9e3d28,
+    rule: _IRuleRef_4038a611,
     _id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -6822,7 +6823,7 @@ def _typecheckingstub__b58aa74b2a717b90ef291556746b786df8882b8158b4b3255bf88691d
     pass
 
 def _typecheckingstub__6de2339b649dec356056a716737bfe488b0873abee2d224f4a18f7ad162d83f6(
-    _rule: _IRule_af9e3d28,
+    rule: _IRuleRef_4038a611,
     _id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -6841,7 +6842,7 @@ def _typecheckingstub__26484816bdcb2fef6d100370a28b06c1fd038591b98fcbe847383a512
     pass
 
 def _typecheckingstub__d7bbb7c546d67f5f999da3b2a71dc36c03ae5d8723a592b50de5b0193d62ebe6(
-    rule: _IRule_af9e3d28,
+    rule: _IRuleRef_4038a611,
     _id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""

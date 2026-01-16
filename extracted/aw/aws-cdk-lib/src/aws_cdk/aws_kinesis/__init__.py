@@ -4297,6 +4297,8 @@ class Stream(
     ) -> "_Grant_a7ae64f8":
         '''Grant the indicated permissions on this stream to the given IAM principal (Role/Group/User).
 
+        [disable-awslint:no-grants]
+
         :param grantee: -
         :param actions: -
         '''
@@ -4313,6 +4315,8 @@ class Stream(
         If an encryption key is used, permission to ues the key to decrypt the
         contents of the stream will also be granted.
 
+        [disable-awslint:no-grants]
+
         :param grantee: -
         '''
         if __debug__:
@@ -4327,6 +4331,8 @@ class Stream(
         If an encryption key is used, permission to use the key for
         encrypt/decrypt will also be granted.
 
+        [disable-awslint:no-grants]
+
         :param grantee: -
         '''
         if __debug__:
@@ -4340,6 +4346,8 @@ class Stream(
 
         If an encryption key is used, permission to ues the key to encrypt the
         contents of the stream will also be granted.
+
+        [disable-awslint:no-grants]
 
         :param grantee: -
         '''
@@ -5646,6 +5654,8 @@ class StreamConsumer(
     ) -> "_Grant_a7ae64f8":
         '''Grant the indicated permissions on this stream consumer to the given IAM principal (Role/Group/User).
 
+        [disable-awslint:no-grants]
+
         :param grantee: -
         :param actions: -
         '''
@@ -5658,6 +5668,8 @@ class StreamConsumer(
     @jsii.member(jsii_name="grantRead")
     def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Grant read permissions for this stream consumer and its associated stream to an IAM principal (Role/Group/User).
+
+        [disable-awslint:no-grants]
 
         :param grantee: -
         '''

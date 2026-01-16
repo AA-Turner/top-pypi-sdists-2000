@@ -226,7 +226,9 @@ clickhouse_dialect.replace(
             r"[a-zA-Z_][0-9a-zA-Z_]*",
             IdentifierSegment,
             type="naked_identifier",
-            anti_template=r"^(" + r"|".join(dialect.sets("reserved_keywords")) + r")$",
+            anti_template=r"^("
+            + r"|".join(sorted(dialect.sets("reserved_keywords")))
+            + r")$",
         )
     ),
     SingleIdentifierGrammar=OneOf(
@@ -2234,6 +2236,29 @@ class LimitClauseSegment(ansi.LimitClauseSegment):
             ),
         ),
         Dedent,
+    )
+
+
+class FunctionContentsSegment(BaseSegment):
+    """A function contents segment that supports parametric aggregate functions.
+
+    https://clickhouse.com/docs/sql-reference/aggregate-functions/parametric-functions
+    """
+
+    type = "function_contents"
+
+    match_grammar: Matchable = OneOf(
+        # Double parentheses pattern: func(params)(args)
+        Sequence(
+            Bracketed(
+                Ref("FunctionContentsGrammar"),
+            ),
+            Bracketed(
+                Ref("FunctionContentsGrammar"),
+            ),
+        ),
+        # Standard ANSI single parentheses
+        ansi.FunctionContentsSegment.match_grammar,
     )
 
 

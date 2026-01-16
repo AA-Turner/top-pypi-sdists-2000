@@ -5070,7 +5070,7 @@ class ScheduleGroup(
         grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
     ) -> "_Grant_a7ae64f8":
-        '''Grant the indicated permissions on this schedule group to the given principal.
+        '''Grant the indicated permissions on this schedule group to the given principal [disable-awslint:no-grants].
 
         :param grantee: -
         :param actions: -
@@ -5086,7 +5086,7 @@ class ScheduleGroup(
         self,
         identity: "_IGrantable_71c4f5de",
     ) -> "_Grant_a7ae64f8":
-        '''Grant delete schedule permission for schedules in this group to the given principal.
+        '''Grant delete schedule permission for schedules in this group to the given principal [disable-awslint:no-grants].
 
         :param identity: -
         '''
@@ -5100,7 +5100,7 @@ class ScheduleGroup(
         self,
         identity: "_IGrantable_71c4f5de",
     ) -> "_Grant_a7ae64f8":
-        '''Grant list and get schedule permissions for schedules in this group to the given principal.
+        '''Grant list and get schedule permissions for schedules in this group to the given principal [disable-awslint:no-grants].
 
         :param identity: -
         '''
@@ -5114,7 +5114,7 @@ class ScheduleGroup(
         self,
         identity: "_IGrantable_71c4f5de",
     ) -> "_Grant_a7ae64f8":
-        '''Grant create and update schedule permissions for schedules in this group to the given principal.
+        '''Grant create and update schedule permissions for schedules in this group to the given principal [disable-awslint:no-grants].
 
         :param identity: -
         '''

@@ -13,22 +13,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+import sys
+
+import google.api_core as api_core
+
 from google.cloud.compute_v1 import gapic_version as package_version
 
 __version__ = package_version.__version__
 
+if sys.version_info >= (3, 8):  # pragma: NO COVER
+    from importlib import metadata
+else:  # pragma: NO COVER
+    # TODO(https://github.com/googleapis/python-api-core/issues/835): Remove
+    # this code path once we drop support for Python 3.7
+    import importlib_metadata as metadata
 
 from .services.accelerator_types import AcceleratorTypesClient
 from .services.addresses import AddressesClient
+from .services.advice import AdviceClient
 from .services.autoscalers import AutoscalersClient
 from .services.backend_buckets import BackendBucketsClient
 from .services.backend_services import BackendServicesClient
+from .services.cross_site_networks import CrossSiteNetworksClient
 from .services.disk_types import DiskTypesClient
 from .services.disks import DisksClient
 from .services.external_vpn_gateways import ExternalVpnGatewaysClient
 from .services.firewall_policies import FirewallPoliciesClient
 from .services.firewalls import FirewallsClient
 from .services.forwarding_rules import ForwardingRulesClient
+from .services.future_reservations import FutureReservationsClient
 from .services.global_addresses import GlobalAddressesClient
 from .services.global_forwarding_rules import GlobalForwardingRulesClient
 from .services.global_network_endpoint_groups import GlobalNetworkEndpointGroupsClient
@@ -127,6 +140,7 @@ from .services.target_vpn_gateways import TargetVpnGatewaysClient
 from .services.url_maps import UrlMapsClient
 from .services.vpn_gateways import VpnGatewaysClient
 from .services.vpn_tunnels import VpnTunnelsClient
+from .services.wire_groups import WireGroupsClient
 from .services.zone_operations import ZoneOperationsClient
 from .services.zones import ZonesClient
 from .types.compute import (
@@ -134,6 +148,9 @@ from .types.compute import (
     AbandonInstancesRegionInstanceGroupManagerRequest,
     AcceleratorConfig,
     Accelerators,
+    AcceleratorTopologiesInfo,
+    AcceleratorTopologiesInfoAcceleratorTopologyInfo,
+    AcceleratorTopologiesInfoAcceleratorTopologyInfoInfoPerTopologyState,
     AcceleratorType,
     AcceleratorTypeAggregatedList,
     AcceleratorTypeList,
@@ -174,6 +191,7 @@ from .types.compute import (
     AggregatedListDisksRequest,
     AggregatedListDiskTypesRequest,
     AggregatedListForwardingRulesRequest,
+    AggregatedListFutureReservationsRequest,
     AggregatedListGlobalOperationsRequest,
     AggregatedListHealthChecksRequest,
     AggregatedListInstanceGroupManagersRequest,
@@ -304,6 +322,11 @@ from .types.compute import (
     BulkZoneSetLabelsRequest,
     CacheInvalidationRule,
     CacheKeyPolicy,
+    CalendarModeAdviceRequest,
+    CalendarModeAdviceResponse,
+    CalendarModeAdviceRpcRequest,
+    CalendarModeRecommendation,
+    CancelFutureReservationRequest,
     CancelInstanceGroupManagerResizeRequestRequest,
     CircuitBreakers,
     CloneRulesFirewallPolicyRequest,
@@ -325,6 +348,8 @@ from .types.compute import (
     CreateMembersInterconnectGroupRequest,
     CreateSnapshotDiskRequest,
     CreateSnapshotRegionDiskRequest,
+    CrossSiteNetwork,
+    CrossSiteNetworkList,
     CustomerEncryptionKey,
     CustomerEncryptionKeyProtectedDisk,
     CustomErrorResponsePolicy,
@@ -336,11 +361,13 @@ from .types.compute import (
     DeleteAutoscalerRequest,
     DeleteBackendBucketRequest,
     DeleteBackendServiceRequest,
+    DeleteCrossSiteNetworkRequest,
     DeleteDiskRequest,
     DeleteExternalVpnGatewayRequest,
     DeleteFirewallPolicyRequest,
     DeleteFirewallRequest,
     DeleteForwardingRuleRequest,
+    DeleteFutureReservationRequest,
     DeleteGlobalAddressRequest,
     DeleteGlobalForwardingRuleRequest,
     DeleteGlobalNetworkEndpointGroupRequest,
@@ -425,6 +452,7 @@ from .types.compute import (
     DeleteUrlMapRequest,
     DeleteVpnGatewayRequest,
     DeleteVpnTunnelRequest,
+    DeleteWireGroupRequest,
     DeleteZoneOperationRequest,
     DeleteZoneOperationResponse,
     Denied,
@@ -488,12 +516,34 @@ from .types.compute import (
     FirewallPolicyRuleMatcherLayer4Config,
     FirewallPolicyRuleSecureTag,
     FixedOrPercent,
+    FlexibleTimeRange,
     ForwardingRule,
     ForwardingRuleAggregatedList,
     ForwardingRuleList,
     ForwardingRuleReference,
     ForwardingRuleServiceDirectoryRegistration,
     ForwardingRulesScopedList,
+    FutureReservation,
+    FutureReservationCommitmentInfo,
+    FutureReservationsAggregatedListResponse,
+    FutureReservationsListResponse,
+    FutureReservationSpecificSKUProperties,
+    FutureReservationsScopedList,
+    FutureReservationStatus,
+    FutureReservationStatusExistingMatchingUsageInfo,
+    FutureReservationStatusLastKnownGoodState,
+    FutureReservationStatusLastKnownGoodStateFutureReservationSpecs,
+    FutureReservationStatusSpecificSKUProperties,
+    FutureReservationTimeWindow,
+    FutureResourcesRecommendation,
+    FutureResourcesRecommendationOtherLocation,
+    FutureResourcesSpec,
+    FutureResourcesSpecAggregateResources,
+    FutureResourcesSpecLocalSsdPartition,
+    FutureResourcesSpecLocationPolicy,
+    FutureResourcesSpecLocationPolicyLocation,
+    FutureResourcesSpecSpecificSKUResources,
+    FutureResourcesSpecTargetResources,
     GetAcceleratorTypeRequest,
     GetAddressRequest,
     GetAssociationFirewallPolicyRequest,
@@ -503,6 +553,7 @@ from .types.compute import (
     GetAutoscalerRequest,
     GetBackendBucketRequest,
     GetBackendServiceRequest,
+    GetCrossSiteNetworkRequest,
     GetDiagnosticsInterconnectRequest,
     GetDiskRequest,
     GetDiskTypeRequest,
@@ -516,6 +567,7 @@ from .types.compute import (
     GetFirewallRequest,
     GetForwardingRuleRequest,
     GetFromFamilyImageRequest,
+    GetFutureReservationRequest,
     GetGlobalAddressRequest,
     GetGlobalForwardingRuleRequest,
     GetGlobalNetworkEndpointGroupRequest,
@@ -547,7 +599,9 @@ from .types.compute import (
     GetIamPolicyRegionDiskRequest,
     GetIamPolicyRegionInstantSnapshotRequest,
     GetIamPolicyRegionNetworkFirewallPolicyRequest,
+    GetIamPolicyReservationBlockRequest,
     GetIamPolicyReservationRequest,
+    GetIamPolicyReservationSubBlockRequest,
     GetIamPolicyResourcePolicyRequest,
     GetIamPolicyServiceAttachmentRequest,
     GetIamPolicySnapshotRequest,
@@ -654,6 +708,7 @@ from .types.compute import (
     GetUrlMapRequest,
     GetVpnGatewayRequest,
     GetVpnTunnelRequest,
+    GetWireGroupRequest,
     GetXpnHostProjectRequest,
     GetXpnResourcesProjectsRequest,
     GetZoneOperationRequest,
@@ -666,6 +721,7 @@ from .types.compute import (
     GlobalSetPolicyRequest,
     GroupMaintenanceInfo,
     GRPCHealthCheck,
+    GRPCTLSHealthCheck,
     GuestAttributes,
     GuestAttributesEntry,
     GuestAttributesValue,
@@ -708,11 +764,13 @@ from .types.compute import (
     InsertAutoscalerRequest,
     InsertBackendBucketRequest,
     InsertBackendServiceRequest,
+    InsertCrossSiteNetworkRequest,
     InsertDiskRequest,
     InsertExternalVpnGatewayRequest,
     InsertFirewallPolicyRequest,
     InsertFirewallRequest,
     InsertForwardingRuleRequest,
+    InsertFutureReservationRequest,
     InsertGlobalAddressRequest,
     InsertGlobalForwardingRuleRequest,
     InsertGlobalNetworkEndpointGroupRequest,
@@ -783,6 +841,7 @@ from .types.compute import (
     InsertUrlMapRequest,
     InsertVpnGatewayRequest,
     InsertVpnTunnelRequest,
+    InsertWireGroupRequest,
     Instance,
     InstanceAggregatedList,
     InstanceConsumptionData,
@@ -899,7 +958,12 @@ from .types.compute import (
     InterconnectAttachmentGroupsListResponse,
     InterconnectAttachmentGroupsOperationalStatus,
     InterconnectAttachmentGroupsOperationalStatusAttachmentStatus,
+    InterconnectAttachmentL2Forwarding,
+    InterconnectAttachmentL2ForwardingApplianceMapping,
+    InterconnectAttachmentL2ForwardingApplianceMappingInnerVlanToApplianceMapping,
+    InterconnectAttachmentL2ForwardingGeneveHeader,
     InterconnectAttachmentList,
+    InterconnectAttachmentParams,
     InterconnectAttachmentPartnerMetadata,
     InterconnectAttachmentPrivateInfo,
     InterconnectAttachmentsScopedList,
@@ -929,6 +993,7 @@ from .types.compute import (
     InterconnectGroupsOperationalStatusInterconnectStatus,
     InterconnectList,
     InterconnectLocation,
+    InterconnectLocationCrossSiteInterconnectInfo,
     InterconnectLocationList,
     InterconnectLocationRegionInfo,
     InterconnectMacsec,
@@ -936,6 +1001,7 @@ from .types.compute import (
     InterconnectMacsecConfigPreSharedKey,
     InterconnectMacsecPreSharedKey,
     InterconnectOutageNotification,
+    InterconnectParams,
     InterconnectRemoteLocation,
     InterconnectRemoteLocationConstraints,
     InterconnectRemoteLocationConstraintsSubnetLengthRange,
@@ -961,6 +1027,7 @@ from .types.compute import (
     ListBackendBucketsRequest,
     ListBackendServicesRequest,
     ListBgpRoutesRoutersRequest,
+    ListCrossSiteNetworksRequest,
     ListDisksRequest,
     ListDisksStoragePoolsRequest,
     ListDiskTypesRequest,
@@ -970,6 +1037,7 @@ from .types.compute import (
     ListFirewallPoliciesRequest,
     ListFirewallsRequest,
     ListForwardingRulesRequest,
+    ListFutureReservationsRequest,
     ListGlobalAddressesRequest,
     ListGlobalForwardingRulesRequest,
     ListGlobalNetworkEndpointGroupsRequest,
@@ -1073,6 +1141,7 @@ from .types.compute import (
     ListUsableSubnetworksRequest,
     ListVpnGatewaysRequest,
     ListVpnTunnelsRequest,
+    ListWireGroupsRequest,
     ListXpnHostsProjectsRequest,
     ListZoneOperationsRequest,
     ListZonesRequest,
@@ -1195,6 +1264,7 @@ from .types.compute import (
     PatchAutoscalerRequest,
     PatchBackendBucketRequest,
     PatchBackendServiceRequest,
+    PatchCrossSiteNetworkRequest,
     PatchFirewallPolicyRequest,
     PatchFirewallRequest,
     PatchForwardingRuleRequest,
@@ -1248,6 +1318,7 @@ from .types.compute import (
     PatchTargetHttpProxyRequest,
     PatchTargetHttpsProxyRequest,
     PatchUrlMapRequest,
+    PatchWireGroupRequest,
     PathMatcher,
     PathRule,
     PerformMaintenanceInstanceRequest,
@@ -1405,6 +1476,7 @@ from .types.compute import (
     ResourceStatus,
     ResourceStatusEffectiveInstanceMetadata,
     ResourceStatusPhysicalHostTopology,
+    ResourceStatusReservationConsumptionInfo,
     ResourceStatusScheduling,
     ResumeInstanceRequest,
     ResumeInstancesInstanceGroupManagerRequest,
@@ -1528,7 +1600,9 @@ from .types.compute import (
     SetIamPolicyRegionDiskRequest,
     SetIamPolicyRegionInstantSnapshotRequest,
     SetIamPolicyRegionNetworkFirewallPolicyRequest,
+    SetIamPolicyReservationBlockRequest,
     SetIamPolicyReservationRequest,
+    SetIamPolicyReservationSubBlockRequest,
     SetIamPolicyResourcePolicyRequest,
     SetIamPolicyServiceAttachmentRequest,
     SetIamPolicySnapshotRequest,
@@ -1643,6 +1717,7 @@ from .types.compute import (
     StoragePool,
     StoragePoolAggregatedList,
     StoragePoolDisk,
+    StoragePoolExapoolProvisionedCapacityGb,
     StoragePoolList,
     StoragePoolListDisks,
     StoragePoolResourceStatus,
@@ -1721,6 +1796,7 @@ from .types.compute import (
     TestIamPermissionsDiskRequest,
     TestIamPermissionsExternalVpnGatewayRequest,
     TestIamPermissionsFirewallPolicyRequest,
+    TestIamPermissionsFirewallRequest,
     TestIamPermissionsGlobalAddressRequest,
     TestIamPermissionsImageRequest,
     TestIamPermissionsInstanceGroupRequest,
@@ -1743,7 +1819,9 @@ from .types.compute import (
     TestIamPermissionsRegionInstanceGroupRequest,
     TestIamPermissionsRegionInstantSnapshotRequest,
     TestIamPermissionsRegionNetworkFirewallPolicyRequest,
+    TestIamPermissionsReservationBlockRequest,
     TestIamPermissionsReservationRequest,
+    TestIamPermissionsReservationSubBlockRequest,
     TestIamPermissionsResourcePolicyRequest,
     TestIamPermissionsServiceAttachmentRequest,
     TestIamPermissionsSnapshotRequest,
@@ -1763,6 +1841,7 @@ from .types.compute import (
     UpdateDiskRequest,
     UpdateDisplayDeviceInstanceRequest,
     UpdateFirewallRequest,
+    UpdateFutureReservationRequest,
     UpdateHealthCheckRequest,
     UpdateInstanceRequest,
     UpdateLicenseRequest,
@@ -1829,6 +1908,15 @@ from .types.compute import (
     Warning,
     Warnings,
     WeightedBackendService,
+    Wire,
+    WireEndpoint,
+    WireGroup,
+    WireGroupEndpoint,
+    WireGroupEndpointInterconnect,
+    WireGroupList,
+    WireGroupTopology,
+    WireGroupTopologyEndpoint,
+    WireProperties,
     WithdrawPublicAdvertisedPrefixeRequest,
     WithdrawPublicDelegatedPrefixeRequest,
     XpnHostList,
@@ -1836,14 +1924,112 @@ from .types.compute import (
     Zone,
     ZoneList,
     ZoneSetLabelsRequest,
+    ZoneSetNestedPolicyRequest,
     ZoneSetPolicyRequest,
 )
+
+if hasattr(api_core, "check_python_version") and hasattr(
+    api_core, "check_dependency_versions"
+):  # pragma: NO COVER
+    api_core.check_python_version("google.cloud.compute_v1")  # type: ignore
+    api_core.check_dependency_versions("google.cloud.compute_v1")  # type: ignore
+else:  # pragma: NO COVER
+    # An older version of api_core is installed which does not define the
+    # functions above. We do equivalent checks manually.
+    try:
+        import sys
+        import warnings
+
+        _py_version_str = sys.version.split()[0]
+        _package_label = "google.cloud.compute_v1"
+        if sys.version_info < (3, 9):
+            warnings.warn(
+                "You are using a non-supported Python version "
+                + f"({_py_version_str}).  Google will not post any further "
+                + f"updates to {_package_label} supporting this Python version. "
+                + "Please upgrade to the latest Python version, or at "
+                + f"least to Python 3.9, and then update {_package_label}.",
+                FutureWarning,
+            )
+        if sys.version_info[:2] == (3, 9):
+            warnings.warn(
+                f"You are using a Python version ({_py_version_str}) "
+                + f"which Google will stop supporting in {_package_label} in "
+                + "January 2026. Please "
+                + "upgrade to the latest Python version, or at "
+                + "least to Python 3.10, before then, and "
+                + f"then update {_package_label}.",
+                FutureWarning,
+            )
+
+        def parse_version_to_tuple(version_string: str):
+            """Safely converts a semantic version string to a comparable tuple of integers.
+            Example: "4.25.8" -> (4, 25, 8)
+            Ignores non-numeric parts and handles common version formats.
+            Args:
+                version_string: Version string in the format "x.y.z" or "x.y.z<suffix>"
+            Returns:
+                Tuple of integers for the parsed version string.
+            """
+            parts = []
+            for part in version_string.split("."):
+                try:
+                    parts.append(int(part))
+                except ValueError:
+                    # If it's a non-numeric part (e.g., '1.0.0b1' -> 'b1'), stop here.
+                    # This is a simplification compared to 'packaging.parse_version', but sufficient
+                    # for comparing strictly numeric semantic versions.
+                    break
+            return tuple(parts)
+
+        def _get_version(dependency_name):
+            try:
+                version_string: str = metadata.version(dependency_name)
+                parsed_version = parse_version_to_tuple(version_string)
+                return (parsed_version, version_string)
+            except Exception:
+                # Catch exceptions from metadata.version() (e.g., PackageNotFoundError)
+                # or errors during parse_version_to_tuple
+                return (None, "--")
+
+        _dependency_package = "google.protobuf"
+        _next_supported_version = "4.25.8"
+        _next_supported_version_tuple = (4, 25, 8)
+        _recommendation = " (we recommend 6.x)"
+        (_version_used, _version_used_string) = _get_version(_dependency_package)
+        if _version_used and _version_used < _next_supported_version_tuple:
+            warnings.warn(
+                f"Package {_package_label} depends on "
+                + f"{_dependency_package}, currently installed at version "
+                + f"{_version_used_string}. Future updates to "
+                + f"{_package_label} will require {_dependency_package} at "
+                + f"version {_next_supported_version} or higher{_recommendation}."
+                + " Please ensure "
+                + "that either (a) your Python environment doesn't pin the "
+                + f"version of {_dependency_package}, so that updates to "
+                + f"{_package_label} can require the higher version, or "
+                + "(b) you manually update your Python environment to use at "
+                + f"least version {_next_supported_version} of "
+                + f"{_dependency_package}.",
+                FutureWarning,
+            )
+    except Exception:
+        warnings.warn(
+            "Could not determine the version of Python "
+            + "currently being used. To continue receiving "
+            + "updates for {_package_label}, ensure you are "
+            + "using a supported version of Python; see "
+            + "https://devguide.python.org/versions/"
+        )
 
 __all__ = (
     "AWSV4Signature",
     "AbandonInstancesInstanceGroupManagerRequest",
     "AbandonInstancesRegionInstanceGroupManagerRequest",
     "AcceleratorConfig",
+    "AcceleratorTopologiesInfo",
+    "AcceleratorTopologiesInfoAcceleratorTopologyInfo",
+    "AcceleratorTopologiesInfoAcceleratorTopologyInfoInfoPerTopologyState",
     "AcceleratorType",
     "AcceleratorTypeAggregatedList",
     "AcceleratorTypeList",
@@ -1880,6 +2066,7 @@ __all__ = (
     "AddressesClient",
     "AddressesScopedList",
     "AdvancedMachineFeatures",
+    "AdviceClient",
     "AggregatedListAcceleratorTypesRequest",
     "AggregatedListAddressesRequest",
     "AggregatedListAutoscalersRequest",
@@ -1887,6 +2074,7 @@ __all__ = (
     "AggregatedListDiskTypesRequest",
     "AggregatedListDisksRequest",
     "AggregatedListForwardingRulesRequest",
+    "AggregatedListFutureReservationsRequest",
     "AggregatedListGlobalOperationsRequest",
     "AggregatedListHealthChecksRequest",
     "AggregatedListInstanceGroupManagersRequest",
@@ -2019,6 +2207,11 @@ __all__ = (
     "BulkZoneSetLabelsRequest",
     "CacheInvalidationRule",
     "CacheKeyPolicy",
+    "CalendarModeAdviceRequest",
+    "CalendarModeAdviceResponse",
+    "CalendarModeAdviceRpcRequest",
+    "CalendarModeRecommendation",
+    "CancelFutureReservationRequest",
     "CancelInstanceGroupManagerResizeRequestRequest",
     "CircuitBreakers",
     "CloneRulesFirewallPolicyRequest",
@@ -2040,6 +2233,9 @@ __all__ = (
     "CreateMembersInterconnectGroupRequest",
     "CreateSnapshotDiskRequest",
     "CreateSnapshotRegionDiskRequest",
+    "CrossSiteNetwork",
+    "CrossSiteNetworkList",
+    "CrossSiteNetworksClient",
     "CustomErrorResponsePolicy",
     "CustomErrorResponsePolicyCustomErrorResponseRule",
     "CustomerEncryptionKey",
@@ -2051,11 +2247,13 @@ __all__ = (
     "DeleteAutoscalerRequest",
     "DeleteBackendBucketRequest",
     "DeleteBackendServiceRequest",
+    "DeleteCrossSiteNetworkRequest",
     "DeleteDiskRequest",
     "DeleteExternalVpnGatewayRequest",
     "DeleteFirewallPolicyRequest",
     "DeleteFirewallRequest",
     "DeleteForwardingRuleRequest",
+    "DeleteFutureReservationRequest",
     "DeleteGlobalAddressRequest",
     "DeleteGlobalForwardingRuleRequest",
     "DeleteGlobalNetworkEndpointGroupRequest",
@@ -2140,6 +2338,7 @@ __all__ = (
     "DeleteUrlMapRequest",
     "DeleteVpnGatewayRequest",
     "DeleteVpnTunnelRequest",
+    "DeleteWireGroupRequest",
     "DeleteZoneOperationRequest",
     "DeleteZoneOperationResponse",
     "Denied",
@@ -2208,6 +2407,7 @@ __all__ = (
     "FirewallPolicyRuleSecureTag",
     "FirewallsClient",
     "FixedOrPercent",
+    "FlexibleTimeRange",
     "ForwardingRule",
     "ForwardingRuleAggregatedList",
     "ForwardingRuleList",
@@ -2215,7 +2415,30 @@ __all__ = (
     "ForwardingRuleServiceDirectoryRegistration",
     "ForwardingRulesClient",
     "ForwardingRulesScopedList",
+    "FutureReservation",
+    "FutureReservationCommitmentInfo",
+    "FutureReservationSpecificSKUProperties",
+    "FutureReservationStatus",
+    "FutureReservationStatusExistingMatchingUsageInfo",
+    "FutureReservationStatusLastKnownGoodState",
+    "FutureReservationStatusLastKnownGoodStateFutureReservationSpecs",
+    "FutureReservationStatusSpecificSKUProperties",
+    "FutureReservationTimeWindow",
+    "FutureReservationsAggregatedListResponse",
+    "FutureReservationsClient",
+    "FutureReservationsListResponse",
+    "FutureReservationsScopedList",
+    "FutureResourcesRecommendation",
+    "FutureResourcesRecommendationOtherLocation",
+    "FutureResourcesSpec",
+    "FutureResourcesSpecAggregateResources",
+    "FutureResourcesSpecLocalSsdPartition",
+    "FutureResourcesSpecLocationPolicy",
+    "FutureResourcesSpecLocationPolicyLocation",
+    "FutureResourcesSpecSpecificSKUResources",
+    "FutureResourcesSpecTargetResources",
     "GRPCHealthCheck",
+    "GRPCTLSHealthCheck",
     "GetAcceleratorTypeRequest",
     "GetAddressRequest",
     "GetAssociationFirewallPolicyRequest",
@@ -2225,6 +2448,7 @@ __all__ = (
     "GetAutoscalerRequest",
     "GetBackendBucketRequest",
     "GetBackendServiceRequest",
+    "GetCrossSiteNetworkRequest",
     "GetDiagnosticsInterconnectRequest",
     "GetDiskRequest",
     "GetDiskTypeRequest",
@@ -2238,6 +2462,7 @@ __all__ = (
     "GetFirewallRequest",
     "GetForwardingRuleRequest",
     "GetFromFamilyImageRequest",
+    "GetFutureReservationRequest",
     "GetGlobalAddressRequest",
     "GetGlobalForwardingRuleRequest",
     "GetGlobalNetworkEndpointGroupRequest",
@@ -2269,7 +2494,9 @@ __all__ = (
     "GetIamPolicyRegionDiskRequest",
     "GetIamPolicyRegionInstantSnapshotRequest",
     "GetIamPolicyRegionNetworkFirewallPolicyRequest",
+    "GetIamPolicyReservationBlockRequest",
     "GetIamPolicyReservationRequest",
+    "GetIamPolicyReservationSubBlockRequest",
     "GetIamPolicyResourcePolicyRequest",
     "GetIamPolicyServiceAttachmentRequest",
     "GetIamPolicySnapshotRequest",
@@ -2376,6 +2603,7 @@ __all__ = (
     "GetUrlMapRequest",
     "GetVpnGatewayRequest",
     "GetVpnTunnelRequest",
+    "GetWireGroupRequest",
     "GetXpnHostProjectRequest",
     "GetXpnResourcesProjectsRequest",
     "GetZoneOperationRequest",
@@ -2438,11 +2666,13 @@ __all__ = (
     "InsertAutoscalerRequest",
     "InsertBackendBucketRequest",
     "InsertBackendServiceRequest",
+    "InsertCrossSiteNetworkRequest",
     "InsertDiskRequest",
     "InsertExternalVpnGatewayRequest",
     "InsertFirewallPolicyRequest",
     "InsertFirewallRequest",
     "InsertForwardingRuleRequest",
+    "InsertFutureReservationRequest",
     "InsertGlobalAddressRequest",
     "InsertGlobalForwardingRuleRequest",
     "InsertGlobalNetworkEndpointGroupRequest",
@@ -2513,6 +2743,7 @@ __all__ = (
     "InsertUrlMapRequest",
     "InsertVpnGatewayRequest",
     "InsertVpnTunnelRequest",
+    "InsertWireGroupRequest",
     "Instance",
     "InstanceAggregatedList",
     "InstanceConsumptionData",
@@ -2637,7 +2868,12 @@ __all__ = (
     "InterconnectAttachmentGroupsListResponse",
     "InterconnectAttachmentGroupsOperationalStatus",
     "InterconnectAttachmentGroupsOperationalStatusAttachmentStatus",
+    "InterconnectAttachmentL2Forwarding",
+    "InterconnectAttachmentL2ForwardingApplianceMapping",
+    "InterconnectAttachmentL2ForwardingApplianceMappingInnerVlanToApplianceMapping",
+    "InterconnectAttachmentL2ForwardingGeneveHeader",
     "InterconnectAttachmentList",
+    "InterconnectAttachmentParams",
     "InterconnectAttachmentPartnerMetadata",
     "InterconnectAttachmentPrivateInfo",
     "InterconnectAttachmentsClient",
@@ -2669,6 +2905,7 @@ __all__ = (
     "InterconnectGroupsOperationalStatusInterconnectStatus",
     "InterconnectList",
     "InterconnectLocation",
+    "InterconnectLocationCrossSiteInterconnectInfo",
     "InterconnectLocationList",
     "InterconnectLocationRegionInfo",
     "InterconnectLocationsClient",
@@ -2677,6 +2914,7 @@ __all__ = (
     "InterconnectMacsecConfigPreSharedKey",
     "InterconnectMacsecPreSharedKey",
     "InterconnectOutageNotification",
+    "InterconnectParams",
     "InterconnectRemoteLocation",
     "InterconnectRemoteLocationConstraints",
     "InterconnectRemoteLocationConstraintsSubnetLengthRange",
@@ -2706,6 +2944,7 @@ __all__ = (
     "ListBackendBucketsRequest",
     "ListBackendServicesRequest",
     "ListBgpRoutesRoutersRequest",
+    "ListCrossSiteNetworksRequest",
     "ListDiskTypesRequest",
     "ListDisksRequest",
     "ListDisksStoragePoolsRequest",
@@ -2715,6 +2954,7 @@ __all__ = (
     "ListFirewallPoliciesRequest",
     "ListFirewallsRequest",
     "ListForwardingRulesRequest",
+    "ListFutureReservationsRequest",
     "ListGlobalAddressesRequest",
     "ListGlobalForwardingRulesRequest",
     "ListGlobalNetworkEndpointGroupsRequest",
@@ -2818,6 +3058,7 @@ __all__ = (
     "ListUsableSubnetworksRequest",
     "ListVpnGatewaysRequest",
     "ListVpnTunnelsRequest",
+    "ListWireGroupsRequest",
     "ListXpnHostsProjectsRequest",
     "ListZoneOperationsRequest",
     "ListZonesRequest",
@@ -2953,6 +3194,7 @@ __all__ = (
     "PatchAutoscalerRequest",
     "PatchBackendBucketRequest",
     "PatchBackendServiceRequest",
+    "PatchCrossSiteNetworkRequest",
     "PatchFirewallPolicyRequest",
     "PatchFirewallRequest",
     "PatchForwardingRuleRequest",
@@ -3006,6 +3248,7 @@ __all__ = (
     "PatchTargetHttpProxyRequest",
     "PatchTargetHttpsProxyRequest",
     "PatchUrlMapRequest",
+    "PatchWireGroupRequest",
     "PathMatcher",
     "PathRule",
     "PerInstanceConfig",
@@ -3196,6 +3439,7 @@ __all__ = (
     "ResourceStatus",
     "ResourceStatusEffectiveInstanceMetadata",
     "ResourceStatusPhysicalHostTopology",
+    "ResourceStatusReservationConsumptionInfo",
     "ResourceStatusScheduling",
     "ResumeInstanceRequest",
     "ResumeInstancesInstanceGroupManagerRequest",
@@ -3324,7 +3568,9 @@ __all__ = (
     "SetIamPolicyRegionDiskRequest",
     "SetIamPolicyRegionInstantSnapshotRequest",
     "SetIamPolicyRegionNetworkFirewallPolicyRequest",
+    "SetIamPolicyReservationBlockRequest",
     "SetIamPolicyReservationRequest",
+    "SetIamPolicyReservationSubBlockRequest",
     "SetIamPolicyResourcePolicyRequest",
     "SetIamPolicyServiceAttachmentRequest",
     "SetIamPolicySnapshotRequest",
@@ -3442,6 +3688,7 @@ __all__ = (
     "StoragePool",
     "StoragePoolAggregatedList",
     "StoragePoolDisk",
+    "StoragePoolExapoolProvisionedCapacityGb",
     "StoragePoolList",
     "StoragePoolListDisks",
     "StoragePoolResourceStatus",
@@ -3531,6 +3778,7 @@ __all__ = (
     "TestIamPermissionsDiskRequest",
     "TestIamPermissionsExternalVpnGatewayRequest",
     "TestIamPermissionsFirewallPolicyRequest",
+    "TestIamPermissionsFirewallRequest",
     "TestIamPermissionsGlobalAddressRequest",
     "TestIamPermissionsImageRequest",
     "TestIamPermissionsInstanceGroupRequest",
@@ -3553,7 +3801,9 @@ __all__ = (
     "TestIamPermissionsRegionInstanceGroupRequest",
     "TestIamPermissionsRegionInstantSnapshotRequest",
     "TestIamPermissionsRegionNetworkFirewallPolicyRequest",
+    "TestIamPermissionsReservationBlockRequest",
     "TestIamPermissionsReservationRequest",
+    "TestIamPermissionsReservationSubBlockRequest",
     "TestIamPermissionsResourcePolicyRequest",
     "TestIamPermissionsServiceAttachmentRequest",
     "TestIamPermissionsSnapshotRequest",
@@ -3573,6 +3823,7 @@ __all__ = (
     "UpdateDiskRequest",
     "UpdateDisplayDeviceInstanceRequest",
     "UpdateFirewallRequest",
+    "UpdateFutureReservationRequest",
     "UpdateHealthCheckRequest",
     "UpdateInstanceRequest",
     "UpdateLicenseRequest",
@@ -3642,6 +3893,16 @@ __all__ = (
     "Warning",
     "Warnings",
     "WeightedBackendService",
+    "Wire",
+    "WireEndpoint",
+    "WireGroup",
+    "WireGroupEndpoint",
+    "WireGroupEndpointInterconnect",
+    "WireGroupList",
+    "WireGroupTopology",
+    "WireGroupTopologyEndpoint",
+    "WireGroupsClient",
+    "WireProperties",
     "WithdrawPublicAdvertisedPrefixeRequest",
     "WithdrawPublicDelegatedPrefixeRequest",
     "XpnHostList",
@@ -3650,6 +3911,7 @@ __all__ = (
     "ZoneList",
     "ZoneOperationsClient",
     "ZoneSetLabelsRequest",
+    "ZoneSetNestedPolicyRequest",
     "ZoneSetPolicyRequest",
     "ZonesClient",
 )

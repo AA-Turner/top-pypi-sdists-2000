@@ -420,7 +420,6 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-from ..aws_events import IEventBus as _IEventBus_88d13111
 from ..aws_iam import (
     Grant as _Grant_a7ae64f8,
     IGrantable as _IGrantable_71c4f5de,
@@ -429,6 +428,7 @@ from ..aws_iam import (
 from ..aws_kinesisfirehose import IDeliveryStream as _IDeliveryStream_8f118861
 from ..aws_route53 import IPublicHostedZone as _IPublicHostedZone_9b6e7da4
 from ..aws_sns import ITopic as _ITopic_9eca4852
+from ..interfaces.aws_events import IEventBusRef as _IEventBusRef_aa86e9b4
 from ..interfaces.aws_ses import (
     ConfigurationSetEventDestinationReference as _ConfigurationSetEventDestinationReference_122c29c6,
     ConfigurationSetReference as _ConfigurationSetReference_07006bc6,
@@ -894,7 +894,17 @@ class CfnConfigurationSet(
                 sending_enabled=False
             ),
             suppression_options=ses.CfnConfigurationSet.SuppressionOptionsProperty(
-                suppressed_reasons=["suppressedReasons"]
+                suppressed_reasons=["suppressedReasons"],
+                validation_options=ses.CfnConfigurationSet.ValidationOptionsProperty(
+                    condition_threshold=ses.CfnConfigurationSet.ConditionThresholdProperty(
+                        condition_threshold_enabled="conditionThresholdEnabled",
+        
+                        # the properties below are optional
+                        overall_confidence_threshold=ses.CfnConfigurationSet.OverallConfidenceThresholdProperty(
+                            confidence_verdict_threshold="confidenceVerdictThreshold"
+                        )
+                    )
+                )
             ),
             tags=[CfnTag(
                 key="key",
@@ -1191,6 +1201,86 @@ class CfnConfigurationSet(
         jsii.set(self, "vdmOptions", value) # pyright: ignore[reportArgumentType]
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ses.CfnConfigurationSet.ConditionThresholdProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "condition_threshold_enabled": "conditionThresholdEnabled",
+            "overall_confidence_threshold": "overallConfidenceThreshold",
+        },
+    )
+    class ConditionThresholdProperty:
+        def __init__(
+            self,
+            *,
+            condition_threshold_enabled: builtins.str,
+            overall_confidence_threshold: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSet.OverallConfidenceThresholdProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''The condition threshold settings for suppression validation.
+
+            :param condition_threshold_enabled: Whether the condition threshold is enabled or disabled.
+            :param overall_confidence_threshold: The overall confidence threshold settings.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-configurationset-conditionthreshold.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ses as ses
+                
+                condition_threshold_property = ses.CfnConfigurationSet.ConditionThresholdProperty(
+                    condition_threshold_enabled="conditionThresholdEnabled",
+                
+                    # the properties below are optional
+                    overall_confidence_threshold=ses.CfnConfigurationSet.OverallConfidenceThresholdProperty(
+                        confidence_verdict_threshold="confidenceVerdictThreshold"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__3bd7cfef5b77c938973f3ba95098801eddfbe74e3f05b89c64ce9101abba9e4e)
+                check_type(argname="argument condition_threshold_enabled", value=condition_threshold_enabled, expected_type=type_hints["condition_threshold_enabled"])
+                check_type(argname="argument overall_confidence_threshold", value=overall_confidence_threshold, expected_type=type_hints["overall_confidence_threshold"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "condition_threshold_enabled": condition_threshold_enabled,
+            }
+            if overall_confidence_threshold is not None:
+                self._values["overall_confidence_threshold"] = overall_confidence_threshold
+
+        @builtins.property
+        def condition_threshold_enabled(self) -> builtins.str:
+            '''Whether the condition threshold is enabled or disabled.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-configurationset-conditionthreshold.html#cfn-ses-configurationset-conditionthreshold-conditionthresholdenabled
+            '''
+            result = self._values.get("condition_threshold_enabled")
+            assert result is not None, "Required property 'condition_threshold_enabled' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def overall_confidence_threshold(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.OverallConfidenceThresholdProperty"]]:
+            '''The overall confidence threshold settings.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-configurationset-conditionthreshold.html#cfn-ses-configurationset-conditionthreshold-overallconfidencethreshold
+            '''
+            result = self._values.get("overall_confidence_threshold")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.OverallConfidenceThresholdProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ConditionThresholdProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_ses.CfnConfigurationSet.DashboardOptionsProperty",
         jsii_struct_bases=[],
         name_mapping={"engagement_metrics": "engagementMetrics"},
@@ -1394,6 +1484,58 @@ class CfnConfigurationSet(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ses.CfnConfigurationSet.OverallConfidenceThresholdProperty",
+        jsii_struct_bases=[],
+        name_mapping={"confidence_verdict_threshold": "confidenceVerdictThreshold"},
+    )
+    class OverallConfidenceThresholdProperty:
+        def __init__(self, *, confidence_verdict_threshold: builtins.str) -> None:
+            '''The overall confidence threshold settings.
+
+            :param confidence_verdict_threshold: The confidence verdict threshold level.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-configurationset-overallconfidencethreshold.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ses as ses
+                
+                overall_confidence_threshold_property = ses.CfnConfigurationSet.OverallConfidenceThresholdProperty(
+                    confidence_verdict_threshold="confidenceVerdictThreshold"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__d1f6f28524e2176fa5dd889536525c3adb3d5a5d9c20ee8939a816f9bc2e9b7b)
+                check_type(argname="argument confidence_verdict_threshold", value=confidence_verdict_threshold, expected_type=type_hints["confidence_verdict_threshold"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "confidence_verdict_threshold": confidence_verdict_threshold,
+            }
+
+        @builtins.property
+        def confidence_verdict_threshold(self) -> builtins.str:
+            '''The confidence verdict threshold level.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-configurationset-overallconfidencethreshold.html#cfn-ses-configurationset-overallconfidencethreshold-confidenceverdictthreshold
+            '''
+            result = self._values.get("confidence_verdict_threshold")
+            assert result is not None, "Required property 'confidence_verdict_threshold' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "OverallConfidenceThresholdProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_ses.CfnConfigurationSet.ReputationOptionsProperty",
         jsii_struct_bases=[],
         name_mapping={"reputation_metrics_enabled": "reputationMetricsEnabled"},
@@ -1514,17 +1656,22 @@ class CfnConfigurationSet(
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_ses.CfnConfigurationSet.SuppressionOptionsProperty",
         jsii_struct_bases=[],
-        name_mapping={"suppressed_reasons": "suppressedReasons"},
+        name_mapping={
+            "suppressed_reasons": "suppressedReasons",
+            "validation_options": "validationOptions",
+        },
     )
     class SuppressionOptionsProperty:
         def __init__(
             self,
             *,
             suppressed_reasons: typing.Optional[typing.Sequence[builtins.str]] = None,
+            validation_options: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSet.ValidationOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''An object that contains information about the suppression list preferences for your account.
 
             :param suppressed_reasons: A list that contains the reasons that email addresses are automatically added to the suppression list for your account. This list can contain any or all of the following: - ``COMPLAINT`` – Amazon SES adds an email address to the suppression list for your account when a message sent to that address results in a complaint. - ``BOUNCE`` – Amazon SES adds an email address to the suppression list for your account when a message sent to that address results in a hard bounce.
+            :param validation_options: An object that contains information about the validation options for your account.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-configurationset-suppressionoptions.html
             :exampleMetadata: fixture=_generated
@@ -1536,15 +1683,28 @@ class CfnConfigurationSet(
                 from aws_cdk import aws_ses as ses
                 
                 suppression_options_property = ses.CfnConfigurationSet.SuppressionOptionsProperty(
-                    suppressed_reasons=["suppressedReasons"]
+                    suppressed_reasons=["suppressedReasons"],
+                    validation_options=ses.CfnConfigurationSet.ValidationOptionsProperty(
+                        condition_threshold=ses.CfnConfigurationSet.ConditionThresholdProperty(
+                            condition_threshold_enabled="conditionThresholdEnabled",
+                
+                            # the properties below are optional
+                            overall_confidence_threshold=ses.CfnConfigurationSet.OverallConfidenceThresholdProperty(
+                                confidence_verdict_threshold="confidenceVerdictThreshold"
+                            )
+                        )
+                    )
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__8d9a9f4a0b048a750b42ffb05bbf2f29193ab82552fe268e651a27bc5bf661be)
                 check_type(argname="argument suppressed_reasons", value=suppressed_reasons, expected_type=type_hints["suppressed_reasons"])
+                check_type(argname="argument validation_options", value=validation_options, expected_type=type_hints["validation_options"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if suppressed_reasons is not None:
                 self._values["suppressed_reasons"] = suppressed_reasons
+            if validation_options is not None:
+                self._values["validation_options"] = validation_options
 
         @builtins.property
         def suppressed_reasons(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1559,6 +1719,17 @@ class CfnConfigurationSet(
             '''
             result = self._values.get("suppressed_reasons")
             return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def validation_options(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.ValidationOptionsProperty"]]:
+            '''An object that contains information about the validation options for your account.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-configurationset-suppressionoptions.html#cfn-ses-configurationset-suppressionoptions-validationoptions
+            '''
+            result = self._values.get("validation_options")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.ValidationOptionsProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1647,6 +1818,71 @@ class CfnConfigurationSet(
 
         def __repr__(self) -> str:
             return "TrackingOptionsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ses.CfnConfigurationSet.ValidationOptionsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"condition_threshold": "conditionThreshold"},
+    )
+    class ValidationOptionsProperty:
+        def __init__(
+            self,
+            *,
+            condition_threshold: typing.Union["_IResolvable_da3f097b", typing.Union["CfnConfigurationSet.ConditionThresholdProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''An object that contains information about the validation options for your account.
+
+            :param condition_threshold: The condition threshold settings for suppression validation.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-configurationset-validationoptions.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ses as ses
+                
+                validation_options_property = ses.CfnConfigurationSet.ValidationOptionsProperty(
+                    condition_threshold=ses.CfnConfigurationSet.ConditionThresholdProperty(
+                        condition_threshold_enabled="conditionThresholdEnabled",
+                
+                        # the properties below are optional
+                        overall_confidence_threshold=ses.CfnConfigurationSet.OverallConfidenceThresholdProperty(
+                            confidence_verdict_threshold="confidenceVerdictThreshold"
+                        )
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__f216e55cbc608a35466db76c5902896415705befe41a4d13cf4958599c21e18c)
+                check_type(argname="argument condition_threshold", value=condition_threshold, expected_type=type_hints["condition_threshold"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "condition_threshold": condition_threshold,
+            }
+
+        @builtins.property
+        def condition_threshold(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.ConditionThresholdProperty"]:
+            '''The condition threshold settings for suppression validation.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ses-configurationset-validationoptions.html#cfn-ses-configurationset-validationoptions-conditionthreshold
+            '''
+            result = self._values.get("condition_threshold")
+            assert result is not None, "Required property 'condition_threshold' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnConfigurationSet.ConditionThresholdProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ValidationOptionsProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -2626,7 +2862,17 @@ class CfnConfigurationSetProps:
                     sending_enabled=False
                 ),
                 suppression_options=ses.CfnConfigurationSet.SuppressionOptionsProperty(
-                    suppressed_reasons=["suppressedReasons"]
+                    suppressed_reasons=["suppressedReasons"],
+                    validation_options=ses.CfnConfigurationSet.ValidationOptionsProperty(
+                        condition_threshold=ses.CfnConfigurationSet.ConditionThresholdProperty(
+                            condition_threshold_enabled="conditionThresholdEnabled",
+            
+                            # the properties below are optional
+                            overall_confidence_threshold=ses.CfnConfigurationSet.OverallConfidenceThresholdProperty(
+                                confidence_verdict_threshold="confidenceVerdictThreshold"
+                            )
+                        )
+                    )
                 ),
                 tags=[CfnTag(
                     key="key",
@@ -15893,7 +16139,7 @@ class ConfigurationSetEventDestinationProps(ConfigurationSetEventDestinationOpti
         configuration_set_event_destination_name: typing.Optional[builtins.str] = None,
         enabled: typing.Optional[builtins.bool] = None,
         events: typing.Optional[typing.Sequence["EmailSendingEvent"]] = None,
-        configuration_set: "IConfigurationSet",
+        configuration_set: "_IConfigurationSetRef_c4f30d41",
     ) -> None:
         '''Properties for a configuration set event destination.
 
@@ -15910,12 +16156,13 @@ class ConfigurationSetEventDestinationProps(ConfigurationSetEventDestinationOpti
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ses as ses
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
             
-            # configuration_set: ses.ConfigurationSet
+            # configuration_set_ref: interfaces_ses.IConfigurationSetRef
             # event_destination: ses.EventDestination
             
             configuration_set_event_destination_props = ses.ConfigurationSetEventDestinationProps(
-                configuration_set=configuration_set,
+                configuration_set=configuration_set_ref,
                 destination=event_destination,
             
                 # the properties below are optional
@@ -15977,11 +16224,11 @@ class ConfigurationSetEventDestinationProps(ConfigurationSetEventDestinationOpti
         return typing.cast(typing.Optional[typing.List["EmailSendingEvent"]], result)
 
     @builtins.property
-    def configuration_set(self) -> "IConfigurationSet":
+    def configuration_set(self) -> "_IConfigurationSetRef_c4f30d41":
         '''The configuration set that contains the event destination.'''
         result = self._values.get("configuration_set")
         assert result is not None, "Required property 'configuration_set' is missing"
-        return typing.cast("IConfigurationSet", result)
+        return typing.cast("_IConfigurationSetRef_c4f30d41", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -16019,7 +16266,7 @@ class ConfigurationSetProps:
         configuration_set_name: typing.Optional[builtins.str] = None,
         custom_tracking_https_policy: typing.Optional["HttpsPolicy"] = None,
         custom_tracking_redirect_domain: typing.Optional[builtins.str] = None,
-        dedicated_ip_pool: typing.Optional["IDedicatedIpPool"] = None,
+        dedicated_ip_pool: typing.Optional["_IDedicatedIpPoolRef_c0fd271c"] = None,
         disable_suppression_list: typing.Optional[builtins.bool] = None,
         max_delivery_duration: typing.Optional["_Duration_4839e8c3"] = None,
         reputation_metrics: typing.Optional[builtins.bool] = None,
@@ -16118,13 +16365,13 @@ class ConfigurationSetProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def dedicated_ip_pool(self) -> typing.Optional["IDedicatedIpPool"]:
+    def dedicated_ip_pool(self) -> typing.Optional["_IDedicatedIpPoolRef_c0fd271c"]:
         '''The dedicated IP pool to associate with the configuration set.
 
         :default: - do not use a dedicated IP pool
         '''
         result = self._values.get("dedicated_ip_pool")
-        return typing.cast(typing.Optional["IDedicatedIpPool"], result)
+        return typing.cast(typing.Optional["_IDedicatedIpPoolRef_c0fd271c"], result)
 
     @builtins.property
     def disable_suppression_list(self) -> typing.Optional[builtins.bool]:
@@ -16581,17 +16828,18 @@ class DropSpamReceiptRule(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ses as ses
+        from aws_cdk.interfaces import aws_ses as interfaces_ses
         
-        # receipt_rule: ses.ReceiptRule
         # receipt_rule_action: ses.IReceiptRuleAction
-        # receipt_rule_set: ses.ReceiptRuleSet
+        # receipt_rule_ref: interfaces_ses.IReceiptRuleRef
+        # receipt_rule_set_ref: interfaces_ses.IReceiptRuleSetRef
         
         drop_spam_receipt_rule = ses.DropSpamReceiptRule(self, "MyDropSpamReceiptRule",
-            rule_set=receipt_rule_set,
+            rule_set=receipt_rule_set_ref,
         
             # the properties below are optional
             actions=[receipt_rule_action],
-            after=receipt_rule,
+            after=receipt_rule_ref,
             enabled=False,
             receipt_rule_name="receiptRuleName",
             recipients=["recipients"],
@@ -16605,9 +16853,9 @@ class DropSpamReceiptRule(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        rule_set: "IReceiptRuleSet",
+        rule_set: "_IReceiptRuleSetRef_f6b881e9",
         actions: typing.Optional[typing.Sequence["IReceiptRuleAction"]] = None,
-        after: typing.Optional["IReceiptRule"] = None,
+        after: typing.Optional["_IReceiptRuleRef_0f93d846"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         receipt_rule_name: typing.Optional[builtins.str] = None,
         recipients: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -16683,7 +16931,7 @@ class EmailIdentityProps:
         self,
         *,
         identity: "Identity",
-        configuration_set: typing.Optional["IConfigurationSet"] = None,
+        configuration_set: typing.Optional["_IConfigurationSetRef_c4f30d41"] = None,
         dkim_identity: typing.Optional["DkimIdentity"] = None,
         dkim_signing: typing.Optional[builtins.bool] = None,
         feedback_forwarding: typing.Optional[builtins.bool] = None,
@@ -16747,13 +16995,13 @@ class EmailIdentityProps:
         return typing.cast("Identity", result)
 
     @builtins.property
-    def configuration_set(self) -> typing.Optional["IConfigurationSet"]:
+    def configuration_set(self) -> typing.Optional["_IConfigurationSetRef_c4f30d41"]:
         '''The configuration set to associate with the email identity.
 
         :default: - do not use a specific configuration set
         '''
         result = self._values.get("configuration_set")
-        return typing.cast(typing.Optional["IConfigurationSet"], result)
+        return typing.cast(typing.Optional["_IConfigurationSetRef_c4f30d41"], result)
 
     @builtins.property
     def dkim_identity(self) -> typing.Optional["DkimIdentity"]:
@@ -16916,7 +17164,7 @@ class EventDestination(
 
     @jsii.member(jsii_name="eventBus")
     @builtins.classmethod
-    def event_bus(cls, event_bus: "_IEventBus_88d13111") -> "EventDestination":
+    def event_bus(cls, event_bus: "_IEventBusRef_aa86e9b4") -> "EventDestination":
         '''Use Event Bus as event destination.
 
         :param event_bus: -
@@ -16960,7 +17208,7 @@ class EventDestination(
     @builtins.property
     @jsii.member(jsii_name="bus")
     @abc.abstractmethod
-    def bus(self) -> typing.Optional["_IEventBus_88d13111"]:
+    def bus(self) -> typing.Optional["_IEventBusRef_aa86e9b4"]:
         '''Use Event Bus as event destination.
 
         :default: - do not send events to Event bus
@@ -17001,12 +17249,12 @@ class EventDestination(
 class _EventDestinationProxy(EventDestination):
     @builtins.property
     @jsii.member(jsii_name="bus")
-    def bus(self) -> typing.Optional["_IEventBus_88d13111"]:
+    def bus(self) -> typing.Optional["_IEventBusRef_aa86e9b4"]:
         '''Use Event Bus as event destination.
 
         :default: - do not send events to Event bus
         '''
-        return typing.cast(typing.Optional["_IEventBus_88d13111"], jsii.get(self, "bus"))
+        return typing.cast(typing.Optional["_IEventBusRef_aa86e9b4"], jsii.get(self, "bus"))
 
     @builtins.property
     @jsii.member(jsii_name="dimensions")
@@ -17150,7 +17398,11 @@ class HttpsPolicy(enum.Enum):
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IConfigurationSet")
-class IConfigurationSet(_IResource_c80c4260, typing_extensions.Protocol):
+class IConfigurationSet(
+    _IResource_c80c4260,
+    _IConfigurationSetRef_c4f30d41,
+    typing_extensions.Protocol,
+):
     '''A configuration set.'''
 
     @builtins.property
@@ -17165,6 +17417,7 @@ class IConfigurationSet(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IConfigurationSetProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IConfigurationSetRef_c4f30d41), # type: ignore[misc]
 ):
     '''A configuration set.'''
 
@@ -17186,6 +17439,7 @@ typing.cast(typing.Any, IConfigurationSet).__jsii_proxy_class__ = lambda : _ICon
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IConfigurationSetEventDestination")
 class IConfigurationSetEventDestination(
     _IResource_c80c4260,
+    _IConfigurationSetEventDestinationRef_937b7110,
     typing_extensions.Protocol,
 ):
     '''A configuration set event destination.'''
@@ -17202,6 +17456,7 @@ class IConfigurationSetEventDestination(
 
 class _IConfigurationSetEventDestinationProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IConfigurationSetEventDestinationRef_937b7110), # type: ignore[misc]
 ):
     '''A configuration set event destination.'''
 
@@ -17221,7 +17476,11 @@ typing.cast(typing.Any, IConfigurationSetEventDestination).__jsii_proxy_class__ 
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IDedicatedIpPool")
-class IDedicatedIpPool(_IResource_c80c4260, typing_extensions.Protocol):
+class IDedicatedIpPool(
+    _IResource_c80c4260,
+    _IDedicatedIpPoolRef_c0fd271c,
+    typing_extensions.Protocol,
+):
     '''A dedicated IP pool.'''
 
     @builtins.property
@@ -17236,6 +17495,7 @@ class IDedicatedIpPool(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IDedicatedIpPoolProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IDedicatedIpPoolRef_c0fd271c), # type: ignore[misc]
 ):
     '''A dedicated IP pool.'''
 
@@ -17255,7 +17515,11 @@ typing.cast(typing.Any, IDedicatedIpPool).__jsii_proxy_class__ = lambda : _IDedi
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IEmailIdentity")
-class IEmailIdentity(_IResource_c80c4260, typing_extensions.Protocol):
+class IEmailIdentity(
+    _IResource_c80c4260,
+    _IEmailIdentityRef_317356c6,
+    typing_extensions.Protocol,
+):
     '''An email identity.'''
 
     @builtins.property
@@ -17302,6 +17566,7 @@ class IEmailIdentity(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IEmailIdentityProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IEmailIdentityRef_317356c6), # type: ignore[misc]
 ):
     '''An email identity.'''
 
@@ -17360,7 +17625,11 @@ typing.cast(typing.Any, IEmailIdentity).__jsii_proxy_class__ = lambda : _IEmailI
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IReceiptRule")
-class IReceiptRule(_IResource_c80c4260, typing_extensions.Protocol):
+class IReceiptRule(
+    _IResource_c80c4260,
+    _IReceiptRuleRef_0f93d846,
+    typing_extensions.Protocol,
+):
     '''A receipt rule.'''
 
     @builtins.property
@@ -17375,6 +17644,7 @@ class IReceiptRule(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IReceiptRuleProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IReceiptRuleRef_0f93d846), # type: ignore[misc]
 ):
     '''A receipt rule.'''
 
@@ -17398,7 +17668,10 @@ class IReceiptRuleAction(typing_extensions.Protocol):
     '''An abstract action for a receipt rule.'''
 
     @jsii.member(jsii_name="bind")
-    def bind(self, receipt_rule: "IReceiptRule") -> "ReceiptRuleActionConfig":
+    def bind(
+        self,
+        receipt_rule: "_IReceiptRuleRef_0f93d846",
+    ) -> "ReceiptRuleActionConfig":
         '''Returns the receipt rule action specification.
 
         :param receipt_rule: -
@@ -17412,7 +17685,10 @@ class _IReceiptRuleActionProxy:
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_ses.IReceiptRuleAction"
 
     @jsii.member(jsii_name="bind")
-    def bind(self, receipt_rule: "IReceiptRule") -> "ReceiptRuleActionConfig":
+    def bind(
+        self,
+        receipt_rule: "_IReceiptRuleRef_0f93d846",
+    ) -> "ReceiptRuleActionConfig":
         '''Returns the receipt rule action specification.
 
         :param receipt_rule: -
@@ -17427,7 +17703,11 @@ typing.cast(typing.Any, IReceiptRuleAction).__jsii_proxy_class__ = lambda : _IRe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IReceiptRuleSet")
-class IReceiptRuleSet(_IResource_c80c4260, typing_extensions.Protocol):
+class IReceiptRuleSet(
+    _IResource_c80c4260,
+    _IReceiptRuleSetRef_f6b881e9,
+    typing_extensions.Protocol,
+):
     '''A receipt rule set.'''
 
     @builtins.property
@@ -17445,7 +17725,7 @@ class IReceiptRuleSet(_IResource_c80c4260, typing_extensions.Protocol):
         id: builtins.str,
         *,
         actions: typing.Optional[typing.Sequence["IReceiptRuleAction"]] = None,
-        after: typing.Optional["IReceiptRule"] = None,
+        after: typing.Optional["_IReceiptRuleRef_0f93d846"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         receipt_rule_name: typing.Optional[builtins.str] = None,
         recipients: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -17471,6 +17751,7 @@ class IReceiptRuleSet(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IReceiptRuleSetProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IReceiptRuleSetRef_f6b881e9), # type: ignore[misc]
 ):
     '''A receipt rule set.'''
 
@@ -17491,7 +17772,7 @@ class _IReceiptRuleSetProxy(
         id: builtins.str,
         *,
         actions: typing.Optional[typing.Sequence["IReceiptRuleAction"]] = None,
-        after: typing.Optional["IReceiptRule"] = None,
+        after: typing.Optional["_IReceiptRuleRef_0f93d846"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         receipt_rule_name: typing.Optional[builtins.str] = None,
         recipients: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -17532,7 +17813,11 @@ typing.cast(typing.Any, IReceiptRuleSet).__jsii_proxy_class__ = lambda : _IRecei
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ses.IVdmAttributes")
-class IVdmAttributes(_IResource_c80c4260, typing_extensions.Protocol):
+class IVdmAttributes(
+    _IResource_c80c4260,
+    _IVdmAttributesRef_2d5b2489,
+    typing_extensions.Protocol,
+):
     '''Virtual Deliverability Manager (VDM) attributes.'''
 
     @builtins.property
@@ -17547,6 +17832,7 @@ class IVdmAttributes(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IVdmAttributesProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IVdmAttributesRef_2d5b2489), # type: ignore[misc]
 ):
     '''Virtual Deliverability Manager (VDM) attributes.'''
 
@@ -17950,9 +18236,9 @@ class ReceiptRule(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        rule_set: "IReceiptRuleSet",
+        rule_set: "_IReceiptRuleSetRef_f6b881e9",
         actions: typing.Optional[typing.Sequence["IReceiptRuleAction"]] = None,
-        after: typing.Optional["IReceiptRule"] = None,
+        after: typing.Optional["_IReceiptRuleRef_0f93d846"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         receipt_rule_name: typing.Optional[builtins.str] = None,
         recipients: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -18030,6 +18316,12 @@ class ReceiptRule(
     def receipt_rule_name(self) -> builtins.str:
         '''The name of the receipt rule.'''
         return typing.cast(builtins.str, jsii.get(self, "receiptRuleName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="receiptRuleRef")
+    def receipt_rule_ref(self) -> "_ReceiptRuleReference_2b9e9bb2":
+        '''A reference to a ReceiptRule resource.'''
+        return typing.cast("_ReceiptRuleReference_2b9e9bb2", jsii.get(self, "receiptRuleRef"))
 
 
 @jsii.data_type(
@@ -18233,7 +18525,7 @@ class ReceiptRuleOptions:
         self,
         *,
         actions: typing.Optional[typing.Sequence["IReceiptRuleAction"]] = None,
-        after: typing.Optional["IReceiptRule"] = None,
+        after: typing.Optional["_IReceiptRuleRef_0f93d846"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         receipt_rule_name: typing.Optional[builtins.str] = None,
         recipients: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -18295,13 +18587,13 @@ class ReceiptRuleOptions:
         return typing.cast(typing.Optional[typing.List["IReceiptRuleAction"]], result)
 
     @builtins.property
-    def after(self) -> typing.Optional["IReceiptRule"]:
+    def after(self) -> typing.Optional["_IReceiptRuleRef_0f93d846"]:
         '''An existing rule after which the new rule will be placed.
 
         :default: - The new rule is inserted at the beginning of the rule list.
         '''
         result = self._values.get("after")
-        return typing.cast(typing.Optional["IReceiptRule"], result)
+        return typing.cast(typing.Optional["_IReceiptRuleRef_0f93d846"], result)
 
     @builtins.property
     def enabled(self) -> typing.Optional[builtins.bool]:
@@ -18379,13 +18671,13 @@ class ReceiptRuleProps(ReceiptRuleOptions):
         self,
         *,
         actions: typing.Optional[typing.Sequence["IReceiptRuleAction"]] = None,
-        after: typing.Optional["IReceiptRule"] = None,
+        after: typing.Optional["_IReceiptRuleRef_0f93d846"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         receipt_rule_name: typing.Optional[builtins.str] = None,
         recipients: typing.Optional[typing.Sequence[builtins.str]] = None,
         scan_enabled: typing.Optional[builtins.bool] = None,
         tls_policy: typing.Optional["TlsPolicy"] = None,
-        rule_set: "IReceiptRuleSet",
+        rule_set: "_IReceiptRuleSetRef_f6b881e9",
     ) -> None:
         '''Construction properties for a ReceiptRule.
 
@@ -18405,17 +18697,18 @@ class ReceiptRuleProps(ReceiptRuleOptions):
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ses as ses
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
             
-            # receipt_rule: ses.ReceiptRule
             # receipt_rule_action: ses.IReceiptRuleAction
-            # receipt_rule_set: ses.ReceiptRuleSet
+            # receipt_rule_ref: interfaces_ses.IReceiptRuleRef
+            # receipt_rule_set_ref: interfaces_ses.IReceiptRuleSetRef
             
             receipt_rule_props = ses.ReceiptRuleProps(
-                rule_set=receipt_rule_set,
+                rule_set=receipt_rule_set_ref,
             
                 # the properties below are optional
                 actions=[receipt_rule_action],
-                after=receipt_rule,
+                after=receipt_rule_ref,
                 enabled=False,
                 receipt_rule_name="receiptRuleName",
                 recipients=["recipients"],
@@ -18461,13 +18754,13 @@ class ReceiptRuleProps(ReceiptRuleOptions):
         return typing.cast(typing.Optional[typing.List["IReceiptRuleAction"]], result)
 
     @builtins.property
-    def after(self) -> typing.Optional["IReceiptRule"]:
+    def after(self) -> typing.Optional["_IReceiptRuleRef_0f93d846"]:
         '''An existing rule after which the new rule will be placed.
 
         :default: - The new rule is inserted at the beginning of the rule list.
         '''
         result = self._values.get("after")
-        return typing.cast(typing.Optional["IReceiptRule"], result)
+        return typing.cast(typing.Optional["_IReceiptRuleRef_0f93d846"], result)
 
     @builtins.property
     def enabled(self) -> typing.Optional[builtins.bool]:
@@ -18515,11 +18808,11 @@ class ReceiptRuleProps(ReceiptRuleOptions):
         return typing.cast(typing.Optional["TlsPolicy"], result)
 
     @builtins.property
-    def rule_set(self) -> "IReceiptRuleSet":
+    def rule_set(self) -> "_IReceiptRuleSetRef_f6b881e9":
         '''The name of the rule set that the receipt rule will be added to.'''
         result = self._values.get("rule_set")
         assert result is not None, "Required property 'rule_set' is missing"
-        return typing.cast("IReceiptRuleSet", result)
+        return typing.cast("_IReceiptRuleSetRef_f6b881e9", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -18612,7 +18905,7 @@ class ReceiptRuleSet(
         id: builtins.str,
         *,
         actions: typing.Optional[typing.Sequence["IReceiptRuleAction"]] = None,
-        after: typing.Optional["IReceiptRule"] = None,
+        after: typing.Optional["_IReceiptRuleRef_0f93d846"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         receipt_rule_name: typing.Optional[builtins.str] = None,
         recipients: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -18659,6 +18952,12 @@ class ReceiptRuleSet(
     def receipt_rule_set_name(self) -> builtins.str:
         '''The receipt rule set name.'''
         return typing.cast(builtins.str, jsii.get(self, "receiptRuleSetName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="receiptRuleSetRef")
+    def receipt_rule_set_ref(self) -> "_ReceiptRuleSetReference_0daf31cb":
+        '''A reference to a ReceiptRuleSet resource.'''
+        return typing.cast("_ReceiptRuleSetReference_0daf31cb", jsii.get(self, "receiptRuleSetRef"))
 
 
 @jsii.data_type(
@@ -19160,6 +19459,12 @@ class VdmAttributes(
         return typing.cast(builtins.str, jsii.get(self, "vdmAttributesName"))
 
     @builtins.property
+    @jsii.member(jsii_name="vdmAttributesRef")
+    def vdm_attributes_ref(self) -> "_VdmAttributesReference_007eac2c":
+        '''A reference to a VdmAttributes resource.'''
+        return typing.cast("_VdmAttributesReference_007eac2c", jsii.get(self, "vdmAttributesRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="vdmAttributesResourceId")
     def vdm_attributes_resource_id(self) -> builtins.str:
         '''Resource ID for the Virtual Deliverability Manager attributes.
@@ -19414,7 +19719,7 @@ class ConfigurationSet(
         configuration_set_name: typing.Optional[builtins.str] = None,
         custom_tracking_https_policy: typing.Optional["HttpsPolicy"] = None,
         custom_tracking_redirect_domain: typing.Optional[builtins.str] = None,
-        dedicated_ip_pool: typing.Optional["IDedicatedIpPool"] = None,
+        dedicated_ip_pool: typing.Optional["_IDedicatedIpPoolRef_c0fd271c"] = None,
         disable_suppression_list: typing.Optional[builtins.bool] = None,
         max_delivery_duration: typing.Optional["_Duration_4839e8c3"] = None,
         reputation_metrics: typing.Optional[builtins.bool] = None,
@@ -19521,6 +19826,12 @@ class ConfigurationSet(
         '''The name of the configuration set.'''
         return typing.cast(builtins.str, jsii.get(self, "configurationSetName"))
 
+    @builtins.property
+    @jsii.member(jsii_name="configurationSetRef")
+    def configuration_set_ref(self) -> "_ConfigurationSetReference_07006bc6":
+        '''A reference to a ConfigurationSet resource.'''
+        return typing.cast("_ConfigurationSetReference_07006bc6", jsii.get(self, "configurationSetRef"))
+
 
 @jsii.implements(IConfigurationSetEventDestination)
 class ConfigurationSetEventDestination(
@@ -19537,12 +19848,13 @@ class ConfigurationSetEventDestination(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ses as ses
+        from aws_cdk.interfaces import aws_ses as interfaces_ses
         
-        # configuration_set: ses.ConfigurationSet
+        # configuration_set_ref: interfaces_ses.IConfigurationSetRef
         # event_destination: ses.EventDestination
         
         configuration_set_event_destination = ses.ConfigurationSetEventDestination(self, "MyConfigurationSetEventDestination",
-            configuration_set=configuration_set,
+            configuration_set=configuration_set_ref,
             destination=event_destination,
         
             # the properties below are optional
@@ -19557,7 +19869,7 @@ class ConfigurationSetEventDestination(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        configuration_set: "IConfigurationSet",
+        configuration_set: "_IConfigurationSetRef_c4f30d41",
         destination: "EventDestination",
         configuration_set_event_destination_name: typing.Optional[builtins.str] = None,
         enabled: typing.Optional[builtins.bool] = None,
@@ -19618,6 +19930,14 @@ class ConfigurationSetEventDestination(
     def configuration_set_event_destination_id(self) -> builtins.str:
         '''The ID of the configuration set event destination.'''
         return typing.cast(builtins.str, jsii.get(self, "configurationSetEventDestinationId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="configurationSetEventDestinationRef")
+    def configuration_set_event_destination_ref(
+        self,
+    ) -> "_ConfigurationSetEventDestinationReference_122c29c6":
+        '''A reference to a ConfigurationSetEventDestination resource.'''
+        return typing.cast("_ConfigurationSetEventDestinationReference_122c29c6", jsii.get(self, "configurationSetEventDestinationRef"))
 
 
 @jsii.implements(IDedicatedIpPool)
@@ -19695,6 +20015,12 @@ class DedicatedIpPool(
         '''The name of the dedicated IP pool.'''
         return typing.cast(builtins.str, jsii.get(self, "dedicatedIpPoolName"))
 
+    @builtins.property
+    @jsii.member(jsii_name="dedicatedIpPoolRef")
+    def dedicated_ip_pool_ref(self) -> "_DedicatedIpPoolReference_05fca49e":
+        '''A reference to a DedicatedIpPool resource.'''
+        return typing.cast("_DedicatedIpPoolReference_05fca49e", jsii.get(self, "dedicatedIpPoolRef"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_ses.DropSpamReceiptRuleProps",
@@ -19715,13 +20041,13 @@ class DropSpamReceiptRuleProps(ReceiptRuleProps):
         self,
         *,
         actions: typing.Optional[typing.Sequence["IReceiptRuleAction"]] = None,
-        after: typing.Optional["IReceiptRule"] = None,
+        after: typing.Optional["_IReceiptRuleRef_0f93d846"] = None,
         enabled: typing.Optional[builtins.bool] = None,
         receipt_rule_name: typing.Optional[builtins.str] = None,
         recipients: typing.Optional[typing.Sequence[builtins.str]] = None,
         scan_enabled: typing.Optional[builtins.bool] = None,
         tls_policy: typing.Optional["TlsPolicy"] = None,
-        rule_set: "IReceiptRuleSet",
+        rule_set: "_IReceiptRuleSetRef_f6b881e9",
     ) -> None:
         '''
         :param actions: An ordered list of actions to perform on messages that match at least one of the recipient email addresses or domains specified in the receipt rule. Default: - No actions.
@@ -19740,17 +20066,18 @@ class DropSpamReceiptRuleProps(ReceiptRuleProps):
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_ses as ses
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
             
-            # receipt_rule: ses.ReceiptRule
             # receipt_rule_action: ses.IReceiptRuleAction
-            # receipt_rule_set: ses.ReceiptRuleSet
+            # receipt_rule_ref: interfaces_ses.IReceiptRuleRef
+            # receipt_rule_set_ref: interfaces_ses.IReceiptRuleSetRef
             
             drop_spam_receipt_rule_props = ses.DropSpamReceiptRuleProps(
-                rule_set=receipt_rule_set,
+                rule_set=receipt_rule_set_ref,
             
                 # the properties below are optional
                 actions=[receipt_rule_action],
-                after=receipt_rule,
+                after=receipt_rule_ref,
                 enabled=False,
                 receipt_rule_name="receiptRuleName",
                 recipients=["recipients"],
@@ -19796,13 +20123,13 @@ class DropSpamReceiptRuleProps(ReceiptRuleProps):
         return typing.cast(typing.Optional[typing.List["IReceiptRuleAction"]], result)
 
     @builtins.property
-    def after(self) -> typing.Optional["IReceiptRule"]:
+    def after(self) -> typing.Optional["_IReceiptRuleRef_0f93d846"]:
         '''An existing rule after which the new rule will be placed.
 
         :default: - The new rule is inserted at the beginning of the rule list.
         '''
         result = self._values.get("after")
-        return typing.cast(typing.Optional["IReceiptRule"], result)
+        return typing.cast(typing.Optional["_IReceiptRuleRef_0f93d846"], result)
 
     @builtins.property
     def enabled(self) -> typing.Optional[builtins.bool]:
@@ -19850,11 +20177,11 @@ class DropSpamReceiptRuleProps(ReceiptRuleProps):
         return typing.cast(typing.Optional["TlsPolicy"], result)
 
     @builtins.property
-    def rule_set(self) -> "IReceiptRuleSet":
+    def rule_set(self) -> "_IReceiptRuleSetRef_f6b881e9":
         '''The name of the rule set that the receipt rule will be added to.'''
         result = self._values.get("rule_set")
         assert result is not None, "Required property 'rule_set' is missing"
-        return typing.cast("IReceiptRuleSet", result)
+        return typing.cast("_IReceiptRuleSetRef_f6b881e9", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -19897,7 +20224,7 @@ class EmailIdentity(
         id: builtins.str,
         *,
         identity: "Identity",
-        configuration_set: typing.Optional["IConfigurationSet"] = None,
+        configuration_set: typing.Optional["_IConfigurationSetRef_c4f30d41"] = None,
         dkim_identity: typing.Optional["DkimIdentity"] = None,
         dkim_signing: typing.Optional[builtins.bool] = None,
         feedback_forwarding: typing.Optional[builtins.bool] = None,
@@ -19981,6 +20308,8 @@ class EmailIdentity(
     ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this email identity to an IAM principal's policy.
 
+        [disable-awslint:no-grants]
+
         :param grantee: the principal (no-op if undefined).
         :param actions: the set of actions to allow.
         '''
@@ -19995,6 +20324,8 @@ class EmailIdentity(
         '''Permits an IAM principal the send email action.
 
         Actions: SendEmail, SendRawEmail.
+
+        [disable-awslint:no-grants]
 
         :param grantee: the principal to grant access to.
         '''
@@ -20080,6 +20411,12 @@ class EmailIdentity(
     def email_identity_name(self) -> builtins.str:
         '''The name of the email identity.'''
         return typing.cast(builtins.str, jsii.get(self, "emailIdentityName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="emailIdentityRef")
+    def email_identity_ref(self) -> "_EmailIdentityReference_f9b00141":
+        '''A reference to a EmailIdentity resource.'''
+        return typing.cast("_EmailIdentityReference_f9b00141", jsii.get(self, "emailIdentityRef"))
 
 
 __all__ = [
@@ -20324,6 +20661,14 @@ def _typecheckingstub__3f115779032dd22d020f87b590d89ccdd0a4fc3f269b15bbecfde29ad
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__3bd7cfef5b77c938973f3ba95098801eddfbe74e3f05b89c64ce9101abba9e4e(
+    *,
+    condition_threshold_enabled: builtins.str,
+    overall_confidence_threshold: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationSet.OverallConfidenceThresholdProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e8d48d16888f580be3782790c85806d5e5ef5c592f9390a1048567593c281148(
     *,
     engagement_metrics: builtins.str,
@@ -20347,6 +20692,13 @@ def _typecheckingstub__cabe5bd3bd3cb84baab32735da66eedb8e560e50da24718ab0d87b340
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d1f6f28524e2176fa5dd889536525c3adb3d5a5d9c20ee8939a816f9bc2e9b7b(
+    *,
+    confidence_verdict_threshold: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__66f701bd9f49ad0c515c9634599b8e0616f4f3b15f2e4f6b9f906f2542e78676(
     *,
     reputation_metrics_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -20364,6 +20716,7 @@ def _typecheckingstub__a548843fec9d94e10684140077e38c05264eb17e9e2997b3e7a864cb1
 def _typecheckingstub__8d9a9f4a0b048a750b42ffb05bbf2f29193ab82552fe268e651a27bc5bf661be(
     *,
     suppressed_reasons: typing.Optional[typing.Sequence[builtins.str]] = None,
+    validation_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationSet.ValidationOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20372,6 +20725,13 @@ def _typecheckingstub__9cb3a7d8357d451a88f3bdd86fea15ef7d167ba61579a61a8e1fe9eb6
     *,
     custom_redirect_domain: typing.Optional[builtins.str] = None,
     https_policy: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f216e55cbc608a35466db76c5902896415705befe41a4d13cf4958599c21e18c(
+    *,
+    condition_threshold: typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationSet.ConditionThresholdProperty, typing.Dict[builtins.str, typing.Any]]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -22360,7 +22720,7 @@ def _typecheckingstub__dd3ac4f1af1f2fe9c11fa8894b2eae0f4b13c464b826cffda8b6937f4
     configuration_set_event_destination_name: typing.Optional[builtins.str] = None,
     enabled: typing.Optional[builtins.bool] = None,
     events: typing.Optional[typing.Sequence[EmailSendingEvent]] = None,
-    configuration_set: IConfigurationSet,
+    configuration_set: _IConfigurationSetRef_c4f30d41,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -22370,7 +22730,7 @@ def _typecheckingstub__fb010161f6c1e40b88122d9cb7754dae093e9cbe5bbfc72b19737729a
     configuration_set_name: typing.Optional[builtins.str] = None,
     custom_tracking_https_policy: typing.Optional[HttpsPolicy] = None,
     custom_tracking_redirect_domain: typing.Optional[builtins.str] = None,
-    dedicated_ip_pool: typing.Optional[IDedicatedIpPool] = None,
+    dedicated_ip_pool: typing.Optional[_IDedicatedIpPoolRef_c0fd271c] = None,
     disable_suppression_list: typing.Optional[builtins.bool] = None,
     max_delivery_duration: typing.Optional[_Duration_4839e8c3] = None,
     reputation_metrics: typing.Optional[builtins.bool] = None,
@@ -22424,9 +22784,9 @@ def _typecheckingstub__620f8d2305a209eeebb24bd2358ba969bde0f80c50a46c3fa91e56d81
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    rule_set: IReceiptRuleSet,
+    rule_set: _IReceiptRuleSetRef_f6b881e9,
     actions: typing.Optional[typing.Sequence[IReceiptRuleAction]] = None,
-    after: typing.Optional[IReceiptRule] = None,
+    after: typing.Optional[_IReceiptRuleRef_0f93d846] = None,
     enabled: typing.Optional[builtins.bool] = None,
     receipt_rule_name: typing.Optional[builtins.str] = None,
     recipients: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -22439,7 +22799,7 @@ def _typecheckingstub__620f8d2305a209eeebb24bd2358ba969bde0f80c50a46c3fa91e56d81
 def _typecheckingstub__53e1ee2f3b565a95ed952bf4ad2ae80cb7388ac4bd51d6eab5219f8a733ca030(
     *,
     identity: Identity,
-    configuration_set: typing.Optional[IConfigurationSet] = None,
+    configuration_set: typing.Optional[_IConfigurationSetRef_c4f30d41] = None,
     dkim_identity: typing.Optional[DkimIdentity] = None,
     dkim_signing: typing.Optional[builtins.bool] = None,
     feedback_forwarding: typing.Optional[builtins.bool] = None,
@@ -22456,7 +22816,7 @@ def _typecheckingstub__48f9cce8b82649ed9874f37f0ed571721b324063ca98764a07bb10a45
     pass
 
 def _typecheckingstub__78ca2ceff9eadb6d2fd3c462d34cb7f67a24ade525c2a3315a2817370e1d2567(
-    event_bus: _IEventBus_88d13111,
+    event_bus: _IEventBusRef_aa86e9b4,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -22489,7 +22849,7 @@ def _typecheckingstub__de0a61fcbbcb2828db9308241fcd8e74a52c411c11c743cbfe9e2e4d3
     pass
 
 def _typecheckingstub__1c0b08f3a2fda3c68a4ad951604e55664aeae1537b8b8eb996f95b6feedcf9b5(
-    receipt_rule: IReceiptRule,
+    receipt_rule: _IReceiptRuleRef_0f93d846,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -22498,7 +22858,7 @@ def _typecheckingstub__122fb3fdbd3a8f500e0f61c3d2533bd2f3c984f5adc4220663c7c60a5
     id: builtins.str,
     *,
     actions: typing.Optional[typing.Sequence[IReceiptRuleAction]] = None,
-    after: typing.Optional[IReceiptRule] = None,
+    after: typing.Optional[_IReceiptRuleRef_0f93d846] = None,
     enabled: typing.Optional[builtins.bool] = None,
     receipt_rule_name: typing.Optional[builtins.str] = None,
     recipients: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -22559,9 +22919,9 @@ def _typecheckingstub__a6538ae0354b52c95d3f59e885aa37e670088031cd04d3731f535129e
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    rule_set: IReceiptRuleSet,
+    rule_set: _IReceiptRuleSetRef_f6b881e9,
     actions: typing.Optional[typing.Sequence[IReceiptRuleAction]] = None,
-    after: typing.Optional[IReceiptRule] = None,
+    after: typing.Optional[_IReceiptRuleRef_0f93d846] = None,
     enabled: typing.Optional[builtins.bool] = None,
     receipt_rule_name: typing.Optional[builtins.str] = None,
     recipients: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -22601,7 +22961,7 @@ def _typecheckingstub__e54c86543028b77ffed9d64cfee35a01463cb4a33a112de436e67beaf
 def _typecheckingstub__699a2986fda0df5077b1242432999d4d4b894d3e4dd15df070152fae49160eab(
     *,
     actions: typing.Optional[typing.Sequence[IReceiptRuleAction]] = None,
-    after: typing.Optional[IReceiptRule] = None,
+    after: typing.Optional[_IReceiptRuleRef_0f93d846] = None,
     enabled: typing.Optional[builtins.bool] = None,
     receipt_rule_name: typing.Optional[builtins.str] = None,
     recipients: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -22614,13 +22974,13 @@ def _typecheckingstub__699a2986fda0df5077b1242432999d4d4b894d3e4dd15df070152fae4
 def _typecheckingstub__1b6d8cc8ec3dfcf989e29bcbab39380e799bee428bb33c1fe79ab53debbc056b(
     *,
     actions: typing.Optional[typing.Sequence[IReceiptRuleAction]] = None,
-    after: typing.Optional[IReceiptRule] = None,
+    after: typing.Optional[_IReceiptRuleRef_0f93d846] = None,
     enabled: typing.Optional[builtins.bool] = None,
     receipt_rule_name: typing.Optional[builtins.str] = None,
     recipients: typing.Optional[typing.Sequence[builtins.str]] = None,
     scan_enabled: typing.Optional[builtins.bool] = None,
     tls_policy: typing.Optional[TlsPolicy] = None,
-    rule_set: IReceiptRuleSet,
+    rule_set: _IReceiptRuleSetRef_f6b881e9,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -22648,7 +23008,7 @@ def _typecheckingstub__8cd532ef11b279fc4ddb81d21e2fd9962d1cc828cc92e5f4985bb2451
     id: builtins.str,
     *,
     actions: typing.Optional[typing.Sequence[IReceiptRuleAction]] = None,
-    after: typing.Optional[IReceiptRule] = None,
+    after: typing.Optional[_IReceiptRuleRef_0f93d846] = None,
     enabled: typing.Optional[builtins.bool] = None,
     receipt_rule_name: typing.Optional[builtins.str] = None,
     recipients: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -22742,7 +23102,7 @@ def _typecheckingstub__52b42851a408d3eb2b07399f2b34603200cef443be5e9f913f4a1d80a
     configuration_set_name: typing.Optional[builtins.str] = None,
     custom_tracking_https_policy: typing.Optional[HttpsPolicy] = None,
     custom_tracking_redirect_domain: typing.Optional[builtins.str] = None,
-    dedicated_ip_pool: typing.Optional[IDedicatedIpPool] = None,
+    dedicated_ip_pool: typing.Optional[_IDedicatedIpPoolRef_c0fd271c] = None,
     disable_suppression_list: typing.Optional[builtins.bool] = None,
     max_delivery_duration: typing.Optional[_Duration_4839e8c3] = None,
     reputation_metrics: typing.Optional[builtins.bool] = None,
@@ -22777,7 +23137,7 @@ def _typecheckingstub__cf213dc05e866bbe3e9422388bafa084e54ef674803fa10657e5b96b9
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    configuration_set: IConfigurationSet,
+    configuration_set: _IConfigurationSetRef_c4f30d41,
     destination: EventDestination,
     configuration_set_event_destination_name: typing.Optional[builtins.str] = None,
     enabled: typing.Optional[builtins.bool] = None,
@@ -22815,13 +23175,13 @@ def _typecheckingstub__6d620bd493f43394b0479d58a02acf7d3c1644c63cc64fc186abe29e7
 def _typecheckingstub__f78c7c8898fbe6486ab42279bd1b1abce1f0305e2d0cc19d79400e08c909951f(
     *,
     actions: typing.Optional[typing.Sequence[IReceiptRuleAction]] = None,
-    after: typing.Optional[IReceiptRule] = None,
+    after: typing.Optional[_IReceiptRuleRef_0f93d846] = None,
     enabled: typing.Optional[builtins.bool] = None,
     receipt_rule_name: typing.Optional[builtins.str] = None,
     recipients: typing.Optional[typing.Sequence[builtins.str]] = None,
     scan_enabled: typing.Optional[builtins.bool] = None,
     tls_policy: typing.Optional[TlsPolicy] = None,
-    rule_set: IReceiptRuleSet,
+    rule_set: _IReceiptRuleSetRef_f6b881e9,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -22831,7 +23191,7 @@ def _typecheckingstub__a0d44bf733be67b29d51a6c681c3faafee6103884474147b68d4b466a
     id: builtins.str,
     *,
     identity: Identity,
-    configuration_set: typing.Optional[IConfigurationSet] = None,
+    configuration_set: typing.Optional[_IConfigurationSetRef_c4f30d41] = None,
     dkim_identity: typing.Optional[DkimIdentity] = None,
     dkim_signing: typing.Optional[builtins.bool] = None,
     feedback_forwarding: typing.Optional[builtins.bool] = None,

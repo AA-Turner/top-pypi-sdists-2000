@@ -3257,35 +3257,29 @@ class CfnGatewayTarget(
         # schema_definition_property_: bedrockagentcore.CfnGatewayTarget.SchemaDefinitionProperty
         
         cfn_gateway_target = bedrockagentcore.CfnGatewayTarget(self, "MyCfnGatewayTarget",
-            credential_provider_configurations=[bedrockagentcore.CfnGatewayTarget.CredentialProviderConfigurationProperty(
-                credential_provider_type="credentialProviderType",
-        
-                # the properties below are optional
-                credential_provider=bedrockagentcore.CfnGatewayTarget.CredentialProviderProperty(
-                    api_key_credential_provider=bedrockagentcore.CfnGatewayTarget.ApiKeyCredentialProviderProperty(
-                        provider_arn="providerArn",
-        
-                        # the properties below are optional
-                        credential_location="credentialLocation",
-                        credential_parameter_name="credentialParameterName",
-                        credential_prefix="credentialPrefix"
-                    ),
-                    oauth_credential_provider=bedrockagentcore.CfnGatewayTarget.OAuthCredentialProviderProperty(
-                        provider_arn="providerArn",
-                        scopes=["scopes"],
-        
-                        # the properties below are optional
-                        custom_parameters={
-                            "custom_parameters_key": "customParameters"
-                        },
-                        default_return_url="defaultReturnUrl",
-                        grant_type="grantType"
-                    )
-                )
-            )],
             name="name",
             target_configuration=bedrockagentcore.CfnGatewayTarget.TargetConfigurationProperty(
                 mcp=bedrockagentcore.CfnGatewayTarget.McpTargetConfigurationProperty(
+                    api_gateway=bedrockagentcore.CfnGatewayTarget.ApiGatewayTargetConfigurationProperty(
+                        api_gateway_tool_configuration=bedrockagentcore.CfnGatewayTarget.ApiGatewayToolConfigurationProperty(
+                            tool_filters=[bedrockagentcore.CfnGatewayTarget.ApiGatewayToolFilterProperty(
+                                filter_path="filterPath",
+                                methods=["methods"]
+                            )],
+        
+                            # the properties below are optional
+                            tool_overrides=[bedrockagentcore.CfnGatewayTarget.ApiGatewayToolOverrideProperty(
+                                method="method",
+                                name="name",
+                                path="path",
+        
+                                # the properties below are optional
+                                description="description"
+                            )]
+                        ),
+                        rest_api_id="restApiId",
+                        stage="stage"
+                    ),
                     lambda_=bedrockagentcore.CfnGatewayTarget.McpLambdaTargetConfigurationProperty(
                         lambda_arn="lambdaArn",
                         tool_schema=bedrockagentcore.CfnGatewayTarget.ToolSchemaProperty(
@@ -3344,6 +3338,32 @@ class CfnGatewayTarget(
             ),
         
             # the properties below are optional
+            credential_provider_configurations=[bedrockagentcore.CfnGatewayTarget.CredentialProviderConfigurationProperty(
+                credential_provider_type="credentialProviderType",
+        
+                # the properties below are optional
+                credential_provider=bedrockagentcore.CfnGatewayTarget.CredentialProviderProperty(
+                    api_key_credential_provider=bedrockagentcore.CfnGatewayTarget.ApiKeyCredentialProviderProperty(
+                        provider_arn="providerArn",
+        
+                        # the properties below are optional
+                        credential_location="credentialLocation",
+                        credential_parameter_name="credentialParameterName",
+                        credential_prefix="credentialPrefix"
+                    ),
+                    oauth_credential_provider=bedrockagentcore.CfnGatewayTarget.OAuthCredentialProviderProperty(
+                        provider_arn="providerArn",
+                        scopes=["scopes"],
+        
+                        # the properties below are optional
+                        custom_parameters={
+                            "custom_parameters_key": "customParameters"
+                        },
+                        default_return_url="defaultReturnUrl",
+                        grant_type="grantType"
+                    )
+                )
+            )],
             description="description",
             gateway_identifier="gatewayIdentifier",
             metadata_configuration=bedrockagentcore.CfnGatewayTarget.MetadataConfigurationProperty(
@@ -3359,9 +3379,9 @@ class CfnGatewayTarget(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        credential_provider_configurations: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.CredentialProviderConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]],
         name: builtins.str,
         target_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.TargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        credential_provider_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.CredentialProviderConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
         gateway_identifier: typing.Optional[builtins.str] = None,
         metadata_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.MetadataConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -3370,9 +3390,9 @@ class CfnGatewayTarget(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param credential_provider_configurations: The OAuth credential provider configuration.
         :param name: The name for the gateway target.
         :param target_configuration: The target configuration for the Smithy model target.
+        :param credential_provider_configurations: The OAuth credential provider configuration.
         :param description: The description for the gateway target.
         :param gateway_identifier: The gateway ID for the gateway target.
         :param metadata_configuration: 
@@ -3382,9 +3402,9 @@ class CfnGatewayTarget(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnGatewayTargetProps(
-            credential_provider_configurations=credential_provider_configurations,
             name=name,
             target_configuration=target_configuration,
+            credential_provider_configurations=credential_provider_configurations,
             description=description,
             gateway_identifier=gateway_identifier,
             metadata_configuration=metadata_configuration,
@@ -3507,24 +3527,6 @@ class CfnGatewayTarget(
         return typing.cast("_GatewayTargetReference_8759ec47", jsii.get(self, "gatewayTargetRef"))
 
     @builtins.property
-    @jsii.member(jsii_name="credentialProviderConfigurations")
-    def credential_provider_configurations(
-        self,
-    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.CredentialProviderConfigurationProperty"]]]:
-        '''The OAuth credential provider configuration.'''
-        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.CredentialProviderConfigurationProperty"]]], jsii.get(self, "credentialProviderConfigurations"))
-
-    @credential_provider_configurations.setter
-    def credential_provider_configurations(
-        self,
-        value: typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.CredentialProviderConfigurationProperty"]]],
-    ) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__087a7adedbf9e4e0e6abc10f84df215c78eebc146c64c53668096978e91820bd)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "credentialProviderConfigurations", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
     @jsii.member(jsii_name="name")
     def name(self) -> builtins.str:
         '''The name for the gateway target.'''
@@ -3554,6 +3556,24 @@ class CfnGatewayTarget(
             type_hints = typing.get_type_hints(_typecheckingstub__b8d18e620b511ca77468615f894540073998d43a19f84c7bd4555618e80c9a3d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "targetConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="credentialProviderConfigurations")
+    def credential_provider_configurations(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.CredentialProviderConfigurationProperty"]]]]:
+        '''The OAuth credential provider configuration.'''
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.CredentialProviderConfigurationProperty"]]]], jsii.get(self, "credentialProviderConfigurations"))
+
+    @credential_provider_configurations.setter
+    def credential_provider_configurations(
+        self,
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.CredentialProviderConfigurationProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__087a7adedbf9e4e0e6abc10f84df215c78eebc146c64c53668096978e91820bd)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "credentialProviderConfigurations", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="description")
@@ -3597,6 +3617,367 @@ class CfnGatewayTarget(
             type_hints = typing.get_type_hints(_typecheckingstub__00f16ea27eb83e4b32e092f110d089664b10c9e879d89f80aef450f9dc884a25)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "metadataConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnGatewayTarget.ApiGatewayTargetConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "api_gateway_tool_configuration": "apiGatewayToolConfiguration",
+            "rest_api_id": "restApiId",
+            "stage": "stage",
+        },
+    )
+    class ApiGatewayTargetConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            api_gateway_tool_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.ApiGatewayToolConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            rest_api_id: builtins.str,
+            stage: builtins.str,
+        ) -> None:
+            '''
+            :param api_gateway_tool_configuration: 
+            :param rest_api_id: 
+            :param stage: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-apigatewaytargetconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrockagentcore as bedrockagentcore
+                
+                api_gateway_target_configuration_property = bedrockagentcore.CfnGatewayTarget.ApiGatewayTargetConfigurationProperty(
+                    api_gateway_tool_configuration=bedrockagentcore.CfnGatewayTarget.ApiGatewayToolConfigurationProperty(
+                        tool_filters=[bedrockagentcore.CfnGatewayTarget.ApiGatewayToolFilterProperty(
+                            filter_path="filterPath",
+                            methods=["methods"]
+                        )],
+                
+                        # the properties below are optional
+                        tool_overrides=[bedrockagentcore.CfnGatewayTarget.ApiGatewayToolOverrideProperty(
+                            method="method",
+                            name="name",
+                            path="path",
+                
+                            # the properties below are optional
+                            description="description"
+                        )]
+                    ),
+                    rest_api_id="restApiId",
+                    stage="stage"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__cd9d5dad412e0ebe1edd2df618041d10540bb992843eb766dfcbf3cfc4a59471)
+                check_type(argname="argument api_gateway_tool_configuration", value=api_gateway_tool_configuration, expected_type=type_hints["api_gateway_tool_configuration"])
+                check_type(argname="argument rest_api_id", value=rest_api_id, expected_type=type_hints["rest_api_id"])
+                check_type(argname="argument stage", value=stage, expected_type=type_hints["stage"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "api_gateway_tool_configuration": api_gateway_tool_configuration,
+                "rest_api_id": rest_api_id,
+                "stage": stage,
+            }
+
+        @builtins.property
+        def api_gateway_tool_configuration(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.ApiGatewayToolConfigurationProperty"]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-apigatewaytargetconfiguration.html#cfn-bedrockagentcore-gatewaytarget-apigatewaytargetconfiguration-apigatewaytoolconfiguration
+            '''
+            result = self._values.get("api_gateway_tool_configuration")
+            assert result is not None, "Required property 'api_gateway_tool_configuration' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.ApiGatewayToolConfigurationProperty"], result)
+
+        @builtins.property
+        def rest_api_id(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-apigatewaytargetconfiguration.html#cfn-bedrockagentcore-gatewaytarget-apigatewaytargetconfiguration-restapiid
+            '''
+            result = self._values.get("rest_api_id")
+            assert result is not None, "Required property 'rest_api_id' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def stage(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-apigatewaytargetconfiguration.html#cfn-bedrockagentcore-gatewaytarget-apigatewaytargetconfiguration-stage
+            '''
+            result = self._values.get("stage")
+            assert result is not None, "Required property 'stage' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ApiGatewayTargetConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnGatewayTarget.ApiGatewayToolConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "tool_filters": "toolFilters",
+            "tool_overrides": "toolOverrides",
+        },
+    )
+    class ApiGatewayToolConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            tool_filters: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.ApiGatewayToolFilterProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            tool_overrides: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.ApiGatewayToolOverrideProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ) -> None:
+            '''
+            :param tool_filters: 
+            :param tool_overrides: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-apigatewaytoolconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrockagentcore as bedrockagentcore
+                
+                api_gateway_tool_configuration_property = bedrockagentcore.CfnGatewayTarget.ApiGatewayToolConfigurationProperty(
+                    tool_filters=[bedrockagentcore.CfnGatewayTarget.ApiGatewayToolFilterProperty(
+                        filter_path="filterPath",
+                        methods=["methods"]
+                    )],
+                
+                    # the properties below are optional
+                    tool_overrides=[bedrockagentcore.CfnGatewayTarget.ApiGatewayToolOverrideProperty(
+                        method="method",
+                        name="name",
+                        path="path",
+                
+                        # the properties below are optional
+                        description="description"
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__c2555658d10c3f76b5e73f49cc83804d6ab06bb7d23b35ffd199342c484c2e7f)
+                check_type(argname="argument tool_filters", value=tool_filters, expected_type=type_hints["tool_filters"])
+                check_type(argname="argument tool_overrides", value=tool_overrides, expected_type=type_hints["tool_overrides"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "tool_filters": tool_filters,
+            }
+            if tool_overrides is not None:
+                self._values["tool_overrides"] = tool_overrides
+
+        @builtins.property
+        def tool_filters(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.ApiGatewayToolFilterProperty"]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-apigatewaytoolconfiguration.html#cfn-bedrockagentcore-gatewaytarget-apigatewaytoolconfiguration-toolfilters
+            '''
+            result = self._values.get("tool_filters")
+            assert result is not None, "Required property 'tool_filters' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.ApiGatewayToolFilterProperty"]]], result)
+
+        @builtins.property
+        def tool_overrides(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.ApiGatewayToolOverrideProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-apigatewaytoolconfiguration.html#cfn-bedrockagentcore-gatewaytarget-apigatewaytoolconfiguration-tooloverrides
+            '''
+            result = self._values.get("tool_overrides")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.ApiGatewayToolOverrideProperty"]]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ApiGatewayToolConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnGatewayTarget.ApiGatewayToolFilterProperty",
+        jsii_struct_bases=[],
+        name_mapping={"filter_path": "filterPath", "methods": "methods"},
+    )
+    class ApiGatewayToolFilterProperty:
+        def __init__(
+            self,
+            *,
+            filter_path: builtins.str,
+            methods: typing.Sequence[builtins.str],
+        ) -> None:
+            '''
+            :param filter_path: 
+            :param methods: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-apigatewaytoolfilter.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrockagentcore as bedrockagentcore
+                
+                api_gateway_tool_filter_property = bedrockagentcore.CfnGatewayTarget.ApiGatewayToolFilterProperty(
+                    filter_path="filterPath",
+                    methods=["methods"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__dda3c870c61fb6006992eac9669c748230298d7c2b484443727b9e07c21f2f6e)
+                check_type(argname="argument filter_path", value=filter_path, expected_type=type_hints["filter_path"])
+                check_type(argname="argument methods", value=methods, expected_type=type_hints["methods"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "filter_path": filter_path,
+                "methods": methods,
+            }
+
+        @builtins.property
+        def filter_path(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-apigatewaytoolfilter.html#cfn-bedrockagentcore-gatewaytarget-apigatewaytoolfilter-filterpath
+            '''
+            result = self._values.get("filter_path")
+            assert result is not None, "Required property 'filter_path' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def methods(self) -> typing.List[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-apigatewaytoolfilter.html#cfn-bedrockagentcore-gatewaytarget-apigatewaytoolfilter-methods
+            '''
+            result = self._values.get("methods")
+            assert result is not None, "Required property 'methods' is missing"
+            return typing.cast(typing.List[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ApiGatewayToolFilterProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnGatewayTarget.ApiGatewayToolOverrideProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "method": "method",
+            "name": "name",
+            "path": "path",
+            "description": "description",
+        },
+    )
+    class ApiGatewayToolOverrideProperty:
+        def __init__(
+            self,
+            *,
+            method: builtins.str,
+            name: builtins.str,
+            path: builtins.str,
+            description: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param method: 
+            :param name: 
+            :param path: 
+            :param description: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-apigatewaytooloverride.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrockagentcore as bedrockagentcore
+                
+                api_gateway_tool_override_property = bedrockagentcore.CfnGatewayTarget.ApiGatewayToolOverrideProperty(
+                    method="method",
+                    name="name",
+                    path="path",
+                
+                    # the properties below are optional
+                    description="description"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__00479c551dd620558403acae09d625ae65f82b950181b59baa770ce5504b9141)
+                check_type(argname="argument method", value=method, expected_type=type_hints["method"])
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+                check_type(argname="argument path", value=path, expected_type=type_hints["path"])
+                check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "method": method,
+                "name": name,
+                "path": path,
+            }
+            if description is not None:
+                self._values["description"] = description
+
+        @builtins.property
+        def method(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-apigatewaytooloverride.html#cfn-bedrockagentcore-gatewaytarget-apigatewaytooloverride-method
+            '''
+            result = self._values.get("method")
+            assert result is not None, "Required property 'method' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def name(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-apigatewaytooloverride.html#cfn-bedrockagentcore-gatewaytarget-apigatewaytooloverride-name
+            '''
+            result = self._values.get("name")
+            assert result is not None, "Required property 'name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def path(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-apigatewaytooloverride.html#cfn-bedrockagentcore-gatewaytarget-apigatewaytooloverride-path
+            '''
+            result = self._values.get("path")
+            assert result is not None, "Required property 'path' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def description(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-apigatewaytooloverride.html#cfn-bedrockagentcore-gatewaytarget-apigatewaytooloverride-description
+            '''
+            result = self._values.get("description")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ApiGatewayToolOverrideProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnGatewayTarget.ApiKeyCredentialProviderProperty",
@@ -4134,6 +4515,7 @@ class CfnGatewayTarget(
         jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnGatewayTarget.McpTargetConfigurationProperty",
         jsii_struct_bases=[],
         name_mapping={
+            "api_gateway": "apiGateway",
             "lambda_": "lambda",
             "mcp_server": "mcpServer",
             "open_api_schema": "openApiSchema",
@@ -4144,6 +4526,7 @@ class CfnGatewayTarget(
         def __init__(
             self,
             *,
+            api_gateway: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.ApiGatewayTargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             lambda_: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.McpLambdaTargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             mcp_server: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.McpServerTargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             open_api_schema: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.ApiSchemaConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -4151,6 +4534,7 @@ class CfnGatewayTarget(
         ) -> None:
             '''The MCP target configuration for the gateway target.
 
+            :param api_gateway: 
             :param lambda_: The Lambda MCP configuration for the gateway target.
             :param mcp_server: 
             :param open_api_schema: The OpenApi schema for the gateway target MCP configuration.
@@ -4168,6 +4552,26 @@ class CfnGatewayTarget(
                 # schema_definition_property_: bedrockagentcore.CfnGatewayTarget.SchemaDefinitionProperty
                 
                 mcp_target_configuration_property = bedrockagentcore.CfnGatewayTarget.McpTargetConfigurationProperty(
+                    api_gateway=bedrockagentcore.CfnGatewayTarget.ApiGatewayTargetConfigurationProperty(
+                        api_gateway_tool_configuration=bedrockagentcore.CfnGatewayTarget.ApiGatewayToolConfigurationProperty(
+                            tool_filters=[bedrockagentcore.CfnGatewayTarget.ApiGatewayToolFilterProperty(
+                                filter_path="filterPath",
+                                methods=["methods"]
+                            )],
+                
+                            # the properties below are optional
+                            tool_overrides=[bedrockagentcore.CfnGatewayTarget.ApiGatewayToolOverrideProperty(
+                                method="method",
+                                name="name",
+                                path="path",
+                
+                                # the properties below are optional
+                                description="description"
+                            )]
+                        ),
+                        rest_api_id="restApiId",
+                        stage="stage"
+                    ),
                     lambda_=bedrockagentcore.CfnGatewayTarget.McpLambdaTargetConfigurationProperty(
                         lambda_arn="lambdaArn",
                         tool_schema=bedrockagentcore.CfnGatewayTarget.ToolSchemaProperty(
@@ -4226,11 +4630,14 @@ class CfnGatewayTarget(
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__0b1d88210caa384ede03a06bee42d13165c8bf4cc4206a236d795c44da216e3c)
+                check_type(argname="argument api_gateway", value=api_gateway, expected_type=type_hints["api_gateway"])
                 check_type(argname="argument lambda_", value=lambda_, expected_type=type_hints["lambda_"])
                 check_type(argname="argument mcp_server", value=mcp_server, expected_type=type_hints["mcp_server"])
                 check_type(argname="argument open_api_schema", value=open_api_schema, expected_type=type_hints["open_api_schema"])
                 check_type(argname="argument smithy_model", value=smithy_model, expected_type=type_hints["smithy_model"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if api_gateway is not None:
+                self._values["api_gateway"] = api_gateway
             if lambda_ is not None:
                 self._values["lambda_"] = lambda_
             if mcp_server is not None:
@@ -4239,6 +4646,16 @@ class CfnGatewayTarget(
                 self._values["open_api_schema"] = open_api_schema
             if smithy_model is not None:
                 self._values["smithy_model"] = smithy_model
+
+        @builtins.property
+        def api_gateway(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.ApiGatewayTargetConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrockagentcore-gatewaytarget-mcptargetconfiguration.html#cfn-bedrockagentcore-gatewaytarget-mcptargetconfiguration-apigateway
+            '''
+            result = self._values.get("api_gateway")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.ApiGatewayTargetConfigurationProperty"]], result)
 
         @builtins.property
         def lambda_(
@@ -4739,6 +5156,26 @@ class CfnGatewayTarget(
                 
                 target_configuration_property = bedrockagentcore.CfnGatewayTarget.TargetConfigurationProperty(
                     mcp=bedrockagentcore.CfnGatewayTarget.McpTargetConfigurationProperty(
+                        api_gateway=bedrockagentcore.CfnGatewayTarget.ApiGatewayTargetConfigurationProperty(
+                            api_gateway_tool_configuration=bedrockagentcore.CfnGatewayTarget.ApiGatewayToolConfigurationProperty(
+                                tool_filters=[bedrockagentcore.CfnGatewayTarget.ApiGatewayToolFilterProperty(
+                                    filter_path="filterPath",
+                                    methods=["methods"]
+                                )],
+                
+                                # the properties below are optional
+                                tool_overrides=[bedrockagentcore.CfnGatewayTarget.ApiGatewayToolOverrideProperty(
+                                    method="method",
+                                    name="name",
+                                    path="path",
+                
+                                    # the properties below are optional
+                                    description="description"
+                                )]
+                            ),
+                            rest_api_id="restApiId",
+                            stage="stage"
+                        ),
                         lambda_=bedrockagentcore.CfnGatewayTarget.McpLambdaTargetConfigurationProperty(
                             lambda_arn="lambdaArn",
                             tool_schema=bedrockagentcore.CfnGatewayTarget.ToolSchemaProperty(
@@ -5070,9 +5507,9 @@ class CfnGatewayTarget(
     jsii_type="aws-cdk-lib.aws_bedrockagentcore.CfnGatewayTargetProps",
     jsii_struct_bases=[],
     name_mapping={
-        "credential_provider_configurations": "credentialProviderConfigurations",
         "name": "name",
         "target_configuration": "targetConfiguration",
+        "credential_provider_configurations": "credentialProviderConfigurations",
         "description": "description",
         "gateway_identifier": "gatewayIdentifier",
         "metadata_configuration": "metadataConfiguration",
@@ -5082,18 +5519,18 @@ class CfnGatewayTargetProps:
     def __init__(
         self,
         *,
-        credential_provider_configurations: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.CredentialProviderConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]],
         name: builtins.str,
         target_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.TargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        credential_provider_configurations: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.CredentialProviderConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         description: typing.Optional[builtins.str] = None,
         gateway_identifier: typing.Optional[builtins.str] = None,
         metadata_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnGatewayTarget.MetadataConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnGatewayTarget``.
 
-        :param credential_provider_configurations: The OAuth credential provider configuration.
         :param name: The name for the gateway target.
         :param target_configuration: The target configuration for the Smithy model target.
+        :param credential_provider_configurations: The OAuth credential provider configuration.
         :param description: The description for the gateway target.
         :param gateway_identifier: The gateway ID for the gateway target.
         :param metadata_configuration: 
@@ -5110,35 +5547,29 @@ class CfnGatewayTargetProps:
             # schema_definition_property_: bedrockagentcore.CfnGatewayTarget.SchemaDefinitionProperty
             
             cfn_gateway_target_props = bedrockagentcore.CfnGatewayTargetProps(
-                credential_provider_configurations=[bedrockagentcore.CfnGatewayTarget.CredentialProviderConfigurationProperty(
-                    credential_provider_type="credentialProviderType",
-            
-                    # the properties below are optional
-                    credential_provider=bedrockagentcore.CfnGatewayTarget.CredentialProviderProperty(
-                        api_key_credential_provider=bedrockagentcore.CfnGatewayTarget.ApiKeyCredentialProviderProperty(
-                            provider_arn="providerArn",
-            
-                            # the properties below are optional
-                            credential_location="credentialLocation",
-                            credential_parameter_name="credentialParameterName",
-                            credential_prefix="credentialPrefix"
-                        ),
-                        oauth_credential_provider=bedrockagentcore.CfnGatewayTarget.OAuthCredentialProviderProperty(
-                            provider_arn="providerArn",
-                            scopes=["scopes"],
-            
-                            # the properties below are optional
-                            custom_parameters={
-                                "custom_parameters_key": "customParameters"
-                            },
-                            default_return_url="defaultReturnUrl",
-                            grant_type="grantType"
-                        )
-                    )
-                )],
                 name="name",
                 target_configuration=bedrockagentcore.CfnGatewayTarget.TargetConfigurationProperty(
                     mcp=bedrockagentcore.CfnGatewayTarget.McpTargetConfigurationProperty(
+                        api_gateway=bedrockagentcore.CfnGatewayTarget.ApiGatewayTargetConfigurationProperty(
+                            api_gateway_tool_configuration=bedrockagentcore.CfnGatewayTarget.ApiGatewayToolConfigurationProperty(
+                                tool_filters=[bedrockagentcore.CfnGatewayTarget.ApiGatewayToolFilterProperty(
+                                    filter_path="filterPath",
+                                    methods=["methods"]
+                                )],
+            
+                                # the properties below are optional
+                                tool_overrides=[bedrockagentcore.CfnGatewayTarget.ApiGatewayToolOverrideProperty(
+                                    method="method",
+                                    name="name",
+                                    path="path",
+            
+                                    # the properties below are optional
+                                    description="description"
+                                )]
+                            ),
+                            rest_api_id="restApiId",
+                            stage="stage"
+                        ),
                         lambda_=bedrockagentcore.CfnGatewayTarget.McpLambdaTargetConfigurationProperty(
                             lambda_arn="lambdaArn",
                             tool_schema=bedrockagentcore.CfnGatewayTarget.ToolSchemaProperty(
@@ -5197,6 +5628,32 @@ class CfnGatewayTargetProps:
                 ),
             
                 # the properties below are optional
+                credential_provider_configurations=[bedrockagentcore.CfnGatewayTarget.CredentialProviderConfigurationProperty(
+                    credential_provider_type="credentialProviderType",
+            
+                    # the properties below are optional
+                    credential_provider=bedrockagentcore.CfnGatewayTarget.CredentialProviderProperty(
+                        api_key_credential_provider=bedrockagentcore.CfnGatewayTarget.ApiKeyCredentialProviderProperty(
+                            provider_arn="providerArn",
+            
+                            # the properties below are optional
+                            credential_location="credentialLocation",
+                            credential_parameter_name="credentialParameterName",
+                            credential_prefix="credentialPrefix"
+                        ),
+                        oauth_credential_provider=bedrockagentcore.CfnGatewayTarget.OAuthCredentialProviderProperty(
+                            provider_arn="providerArn",
+                            scopes=["scopes"],
+            
+                            # the properties below are optional
+                            custom_parameters={
+                                "custom_parameters_key": "customParameters"
+                            },
+                            default_return_url="defaultReturnUrl",
+                            grant_type="grantType"
+                        )
+                    )
+                )],
                 description="description",
                 gateway_identifier="gatewayIdentifier",
                 metadata_configuration=bedrockagentcore.CfnGatewayTarget.MetadataConfigurationProperty(
@@ -5208,35 +5665,24 @@ class CfnGatewayTargetProps:
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__367178269f9a78c89b5ba5e07b10a309050b4b3eaefd55c5ee6f30ddad20209f)
-            check_type(argname="argument credential_provider_configurations", value=credential_provider_configurations, expected_type=type_hints["credential_provider_configurations"])
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument target_configuration", value=target_configuration, expected_type=type_hints["target_configuration"])
+            check_type(argname="argument credential_provider_configurations", value=credential_provider_configurations, expected_type=type_hints["credential_provider_configurations"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
             check_type(argname="argument gateway_identifier", value=gateway_identifier, expected_type=type_hints["gateway_identifier"])
             check_type(argname="argument metadata_configuration", value=metadata_configuration, expected_type=type_hints["metadata_configuration"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
-            "credential_provider_configurations": credential_provider_configurations,
             "name": name,
             "target_configuration": target_configuration,
         }
+        if credential_provider_configurations is not None:
+            self._values["credential_provider_configurations"] = credential_provider_configurations
         if description is not None:
             self._values["description"] = description
         if gateway_identifier is not None:
             self._values["gateway_identifier"] = gateway_identifier
         if metadata_configuration is not None:
             self._values["metadata_configuration"] = metadata_configuration
-
-    @builtins.property
-    def credential_provider_configurations(
-        self,
-    ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.CredentialProviderConfigurationProperty"]]]:
-        '''The OAuth credential provider configuration.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-gatewaytarget.html#cfn-bedrockagentcore-gatewaytarget-credentialproviderconfigurations
-        '''
-        result = self._values.get("credential_provider_configurations")
-        assert result is not None, "Required property 'credential_provider_configurations' is missing"
-        return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.CredentialProviderConfigurationProperty"]]], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -5259,6 +5705,17 @@ class CfnGatewayTargetProps:
         result = self._values.get("target_configuration")
         assert result is not None, "Required property 'target_configuration' is missing"
         return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.TargetConfigurationProperty"], result)
+
+    @builtins.property
+    def credential_provider_configurations(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.CredentialProviderConfigurationProperty"]]]]:
+        '''The OAuth credential provider configuration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrockagentcore-gatewaytarget.html#cfn-bedrockagentcore-gatewaytarget-credentialproviderconfigurations
+        '''
+        result = self._values.get("credential_provider_configurations")
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnGatewayTarget.CredentialProviderConfigurationProperty"]]]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -11652,9 +12109,9 @@ def _typecheckingstub__2ca4172cb2708dfeb7420a18b960df15915d2da8589b9495c034bd700
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    credential_provider_configurations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGatewayTarget.CredentialProviderConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]],
     name: builtins.str,
     target_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnGatewayTarget.TargetConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    credential_provider_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGatewayTarget.CredentialProviderConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     description: typing.Optional[builtins.str] = None,
     gateway_identifier: typing.Optional[builtins.str] = None,
     metadata_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGatewayTarget.MetadataConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -11680,12 +12137,6 @@ def _typecheckingstub__0f55ddaf00701b9be96b4083ffcf99e108df2b912a7fa6a0930aacc49
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__087a7adedbf9e4e0e6abc10f84df215c78eebc146c64c53668096978e91820bd(
-    value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGatewayTarget.CredentialProviderConfigurationProperty]]],
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__ac4fb979142cd31fef07a02c2a4b5e3d0eb49bf962781821346eac630d16fcc8(
     value: builtins.str,
 ) -> None:
@@ -11694,6 +12145,12 @@ def _typecheckingstub__ac4fb979142cd31fef07a02c2a4b5e3d0eb49bf962781821346eac630
 
 def _typecheckingstub__b8d18e620b511ca77468615f894540073998d43a19f84c7bd4555618e80c9a3d(
     value: typing.Union[_IResolvable_da3f097b, CfnGatewayTarget.TargetConfigurationProperty],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__087a7adedbf9e4e0e6abc10f84df215c78eebc146c64c53668096978e91820bd(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnGatewayTarget.CredentialProviderConfigurationProperty]]]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11712,6 +12169,41 @@ def _typecheckingstub__e4c9f5798e9b6c54f5080d4aef35f1a5d286541a90ad283e95cae82b7
 
 def _typecheckingstub__00f16ea27eb83e4b32e092f110d089664b10c9e879d89f80aef450f9dc884a25(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGatewayTarget.MetadataConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__cd9d5dad412e0ebe1edd2df618041d10540bb992843eb766dfcbf3cfc4a59471(
+    *,
+    api_gateway_tool_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnGatewayTarget.ApiGatewayToolConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    rest_api_id: builtins.str,
+    stage: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c2555658d10c3f76b5e73f49cc83804d6ab06bb7d23b35ffd199342c484c2e7f(
+    *,
+    tool_filters: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGatewayTarget.ApiGatewayToolFilterProperty, typing.Dict[builtins.str, typing.Any]]]]],
+    tool_overrides: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGatewayTarget.ApiGatewayToolOverrideProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__dda3c870c61fb6006992eac9669c748230298d7c2b484443727b9e07c21f2f6e(
+    *,
+    filter_path: builtins.str,
+    methods: typing.Sequence[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__00479c551dd620558403acae09d625ae65f82b950181b59baa770ce5504b9141(
+    *,
+    method: builtins.str,
+    name: builtins.str,
+    path: builtins.str,
+    description: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11767,6 +12259,7 @@ def _typecheckingstub__d73da9473e37697d875f5f3c74a1ab3e3ace8090917b37837b0019969
 
 def _typecheckingstub__0b1d88210caa384ede03a06bee42d13165c8bf4cc4206a236d795c44da216e3c(
     *,
+    api_gateway: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGatewayTarget.ApiGatewayTargetConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     lambda_: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGatewayTarget.McpLambdaTargetConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     mcp_server: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGatewayTarget.McpServerTargetConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     open_api_schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGatewayTarget.ApiSchemaConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -11841,9 +12334,9 @@ def _typecheckingstub__3ff8fed96fdad56eb717513408b41cd94cf1c34461313bbb4de520c38
 
 def _typecheckingstub__367178269f9a78c89b5ba5e07b10a309050b4b3eaefd55c5ee6f30ddad20209f(
     *,
-    credential_provider_configurations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGatewayTarget.CredentialProviderConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]],
     name: builtins.str,
     target_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnGatewayTarget.TargetConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    credential_provider_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGatewayTarget.CredentialProviderConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     description: typing.Optional[builtins.str] = None,
     gateway_identifier: typing.Optional[builtins.str] = None,
     metadata_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGatewayTarget.MetadataConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,

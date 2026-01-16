@@ -44,10 +44,10 @@ from ..aws_kinesis import IStream as _IStream_4e2457d2
 from ..aws_kinesisfirehose import IDeliveryStream as _IDeliveryStream_8f118861
 from ..aws_lambda import IFunction as _IFunction_6adb0ab8
 from ..aws_logs import (
-    ILogGroup as _ILogGroup_3c4fa718,
     ILogSubscriptionDestination as _ILogSubscriptionDestination_99a12804,
     LogSubscriptionDestinationConfig as _LogSubscriptionDestinationConfig_15877ced,
 )
+from ..interfaces.aws_logs import ILogGroupRef as _ILogGroupRef_874d025a
 
 
 @jsii.implements(_ILogSubscriptionDestination_99a12804)
@@ -96,7 +96,7 @@ class FirehoseDestination(
     def bind(
         self,
         scope: "_constructs_77d1e7e8.Construct",
-        _source_log_group: "_ILogGroup_3c4fa718",
+        _source_log_group: "_ILogGroupRef_874d025a",
     ) -> "_LogSubscriptionDestinationConfig_15877ced":
         '''Return the properties required to send subscription events to this destination.
 
@@ -219,7 +219,7 @@ class KinesisDestination(
     def bind(
         self,
         scope: "_constructs_77d1e7e8.Construct",
-        _source_log_group: "_ILogGroup_3c4fa718",
+        _source_log_group: "_ILogGroupRef_874d025a",
     ) -> "_LogSubscriptionDestinationConfig_15877ced":
         '''Return the properties required to send subscription events to this destination.
 
@@ -341,7 +341,7 @@ class LambdaDestination(
     def bind(
         self,
         scope: "_constructs_77d1e7e8.Construct",
-        log_group: "_ILogGroup_3c4fa718",
+        log_group: "_ILogGroupRef_874d025a",
     ) -> "_LogSubscriptionDestinationConfig_15877ced":
         '''Return the properties required to send subscription events to this destination.
 
@@ -438,7 +438,7 @@ def _typecheckingstub__4cb4e49bfe3a6c7ef67778da7a93e24765ed8e25b0e86da6e92e1d520
 
 def _typecheckingstub__b48d2560b01f38d75fb9bf3c773ce107d4b79363d6f0dced504bd870eebb715b(
     scope: _constructs_77d1e7e8.Construct,
-    _source_log_group: _ILogGroup_3c4fa718,
+    _source_log_group: _ILogGroupRef_874d025a,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -460,7 +460,7 @@ def _typecheckingstub__6f4422231f62d5490fdbb0217f4c6e73134c1c066522144d9488224a6
 
 def _typecheckingstub__a07b9b6b39b3253620357aaea5f2db6340db83e8acaeadc70a521c3ba7ff8bc8(
     scope: _constructs_77d1e7e8.Construct,
-    _source_log_group: _ILogGroup_3c4fa718,
+    _source_log_group: _ILogGroupRef_874d025a,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -482,7 +482,7 @@ def _typecheckingstub__c47e3ce3069e1b69399c7a089486d831f48b9af53861d0ad449aab3b9
 
 def _typecheckingstub__7a6c995782d33f0fc9c3b09e6ca3ad1d26c953c729ccc6f6ce6e0c48579dac67(
     scope: _constructs_77d1e7e8.Construct,
-    log_group: _ILogGroup_3c4fa718,
+    log_group: _ILogGroupRef_874d025a,
 ) -> None:
     """Type checking stubs"""
     pass

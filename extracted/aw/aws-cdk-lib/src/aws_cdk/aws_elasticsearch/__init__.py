@@ -474,7 +474,6 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-from ..aws_certificatemanager import ICertificate as _ICertificate_c194c70b
 from ..aws_cloudwatch import (
     Metric as _Metric_e396a4dc,
     MetricOptions as _MetricOptions_1788b62f,
@@ -496,10 +495,14 @@ from ..aws_iam import (
 )
 from ..aws_logs import ILogGroup as _ILogGroup_3c4fa718
 from ..aws_route53 import IHostedZone as _IHostedZone_9a6907ad
+from ..interfaces.aws_certificatemanager import (
+    ICertificateRef as _ICertificateRef_1878d79b
+)
 from ..interfaces.aws_elasticsearch import (
     DomainReference as _DomainReference_fe98c4cd, IDomainRef as _IDomainRef_67910ee2
 )
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
+from ..interfaces.aws_logs import ILogGroupRef as _ILogGroupRef_874d025a
 
 
 @jsii.data_type(
@@ -3216,7 +3219,7 @@ class CustomEndpointOptions:
         self,
         *,
         domain_name: builtins.str,
-        certificate: typing.Optional["_ICertificate_c194c70b"] = None,
+        certificate: typing.Optional["_ICertificateRef_1878d79b"] = None,
         hosted_zone: typing.Optional["_IHostedZone_9a6907ad"] = None,
     ) -> None:
         '''(deprecated) Configures a custom domain endpoint for the ES domain.
@@ -3265,7 +3268,7 @@ class CustomEndpointOptions:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def certificate(self) -> typing.Optional["_ICertificate_c194c70b"]:
+    def certificate(self) -> typing.Optional["_ICertificateRef_1878d79b"]:
         '''(deprecated) The certificate to use.
 
         :default: - create a new one
@@ -3275,7 +3278,7 @@ class CustomEndpointOptions:
         :stability: deprecated
         '''
         result = self._values.get("certificate")
-        return typing.cast(typing.Optional["_ICertificate_c194c70b"], result)
+        return typing.cast(typing.Optional["_ICertificateRef_1878d79b"], result)
 
     @builtins.property
     def hosted_zone(self) -> typing.Optional["_IHostedZone_9a6907ad"]:
@@ -6323,13 +6326,13 @@ class LoggingOptions:
         self,
         *,
         app_log_enabled: typing.Optional[builtins.bool] = None,
-        app_log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        app_log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         audit_log_enabled: typing.Optional[builtins.bool] = None,
-        audit_log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        audit_log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         slow_index_log_enabled: typing.Optional[builtins.bool] = None,
-        slow_index_log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        slow_index_log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         slow_search_log_enabled: typing.Optional[builtins.bool] = None,
-        slow_search_log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        slow_search_log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
     ) -> None:
         '''(deprecated) Configures log settings for the domain.
 
@@ -6412,7 +6415,7 @@ class LoggingOptions:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def app_log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
+    def app_log_group(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''(deprecated) Log Elasticsearch application logs to this log group.
 
         :default: - a new log group is created if app logging is enabled
@@ -6422,7 +6425,7 @@ class LoggingOptions:
         :stability: deprecated
         '''
         result = self._values.get("app_log_group")
-        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def audit_log_enabled(self) -> typing.Optional[builtins.bool]:
@@ -6440,7 +6443,7 @@ class LoggingOptions:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def audit_log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
+    def audit_log_group(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''(deprecated) Log Elasticsearch audit logs to this log group.
 
         :default: - a new log group is created if audit logging is enabled
@@ -6450,7 +6453,7 @@ class LoggingOptions:
         :stability: deprecated
         '''
         result = self._values.get("audit_log_group")
-        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def slow_index_log_enabled(self) -> typing.Optional[builtins.bool]:
@@ -6468,7 +6471,7 @@ class LoggingOptions:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def slow_index_log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
+    def slow_index_log_group(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''(deprecated) Log slow indices to this log group.
 
         :default: - a new log group is created if slow index logging is enabled
@@ -6478,7 +6481,7 @@ class LoggingOptions:
         :stability: deprecated
         '''
         result = self._values.get("slow_index_log_group")
-        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def slow_search_log_enabled(self) -> typing.Optional[builtins.bool]:
@@ -6496,7 +6499,7 @@ class LoggingOptions:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def slow_search_log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
+    def slow_search_log_group(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''(deprecated) Log slow searches to this log group.
 
         :default: - a new log group is created if slow search logging is enabled
@@ -6506,7 +6509,7 @@ class LoggingOptions:
         :stability: deprecated
         '''
         result = self._values.get("slow_search_log_group")
-        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6843,6 +6846,8 @@ class Domain(
     ) -> "_Grant_a7ae64f8":
         '''(deprecated) Grant read permissions for an index in this domain to an IAM principal (Role/Group/User).
 
+        [disable-awslint:no-grants]
+
         :param index: The index to grant permissions for.
         :param identity: The principal.
 
@@ -6863,6 +6868,8 @@ class Domain(
         identity: "_IGrantable_71c4f5de",
     ) -> "_Grant_a7ae64f8":
         '''(deprecated) Grant read/write permissions for an index in this domain to an IAM principal (Role/Group/User).
+
+        [disable-awslint:no-grants]
 
         :param index: The index to grant permissions for.
         :param identity: The principal.
@@ -6885,6 +6892,8 @@ class Domain(
     ) -> "_Grant_a7ae64f8":
         '''(deprecated) Grant write permissions for an index in this domain to an IAM principal (Role/Group/User).
 
+        [disable-awslint:no-grants]
+
         :param index: The index to grant permissions for.
         :param identity: The principal.
 
@@ -6905,6 +6914,8 @@ class Domain(
         identity: "_IGrantable_71c4f5de",
     ) -> "_Grant_a7ae64f8":
         '''(deprecated) Grant read permissions for a specific path in this domain to an IAM principal (Role/Group/User).
+
+        [disable-awslint:no-grants]
 
         :param path: The path to grant permissions for.
         :param identity: The principal.
@@ -6927,6 +6938,8 @@ class Domain(
     ) -> "_Grant_a7ae64f8":
         '''(deprecated) Grant read/write permissions for a specific path in this domain to an IAM principal (Role/Group/User).
 
+        [disable-awslint:no-grants]
+
         :param path: The path to grant permissions for.
         :param identity: The principal.
 
@@ -6948,6 +6961,8 @@ class Domain(
     ) -> "_Grant_a7ae64f8":
         '''(deprecated) Grant write permissions for a specific path in this domain to an IAM principal (Role/Group/User).
 
+        [disable-awslint:no-grants]
+
         :param path: The path to grant permissions for.
         :param identity: The principal.
 
@@ -6965,6 +6980,8 @@ class Domain(
     def grant_read(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''(deprecated) Grant read permissions for this domain and its contents to an IAM principal (Role/Group/User).
 
+        [disable-awslint:no-grants]
+
         :param identity: The principal.
 
         :deprecated: use opensearchservice module instead
@@ -6980,6 +6997,8 @@ class Domain(
     def grant_read_write(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''(deprecated) Grant read/write permissions for this domain and its contents to an IAM principal (Role/Group/User).
 
+        [disable-awslint:no-grants]
+
         :param identity: The principal.
 
         :deprecated: use opensearchservice module instead
@@ -6994,6 +7013,8 @@ class Domain(
     @jsii.member(jsii_name="grantWrite")
     def grant_write(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''(deprecated) Grant write permissions for this domain and its contents to an IAM principal (Role/Group/User).
+
+        [disable-awslint:no-grants]
 
         :param identity: The principal.
 
@@ -8379,7 +8400,7 @@ def _typecheckingstub__b524e8e96dadc613c3ade2864195ce643f52df86cc22205eeea1f5a1b
 def _typecheckingstub__3ea711a6b742c02c3c27fa537028f874f857943b01e96d2167b14a0d27de9a54(
     *,
     domain_name: builtins.str,
-    certificate: typing.Optional[_ICertificate_c194c70b] = None,
+    certificate: typing.Optional[_ICertificateRef_1878d79b] = None,
     hosted_zone: typing.Optional[_IHostedZone_9a6907ad] = None,
 ) -> None:
     """Type checking stubs"""
@@ -8551,13 +8572,13 @@ def _typecheckingstub__d57eb3601bc759c24057dad569672fc2cb9079f04ceb6aebc5be032bb
 def _typecheckingstub__1dda0d8a76f54b8392ae9f0570bfa9e5b2abb8a42412783d369ed3f3a3648d67(
     *,
     app_log_enabled: typing.Optional[builtins.bool] = None,
-    app_log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    app_log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     audit_log_enabled: typing.Optional[builtins.bool] = None,
-    audit_log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    audit_log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     slow_index_log_enabled: typing.Optional[builtins.bool] = None,
-    slow_index_log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    slow_index_log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     slow_search_log_enabled: typing.Optional[builtins.bool] = None,
-    slow_search_log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    slow_search_log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
 ) -> None:
     """Type checking stubs"""
     pass

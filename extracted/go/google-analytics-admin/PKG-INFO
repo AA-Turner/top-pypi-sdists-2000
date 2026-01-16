@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: google-analytics-admin
-Version: 0.26.0
+Version: 0.27.0
 Summary: Google Analytics Admin API client library
 Home-page: https://github.com/googleapis/google-cloud-python/tree/main/packages/google-analytics-admin
 Author: Google LLC

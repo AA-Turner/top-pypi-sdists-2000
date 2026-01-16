@@ -1471,7 +1471,6 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-from ..aws_certificatemanager import ICertificate as _ICertificate_c194c70b
 from ..aws_cognito import IUserPool as _IUserPool_1f1029e2
 from ..aws_dynamodb import ITable as _ITable_504fd401
 from ..aws_elasticsearch import IDomain as _IDomain_0c9006b4
@@ -1519,6 +1518,9 @@ from ..interfaces.aws_appsync import (
     ISourceApiAssociationRef as _ISourceApiAssociationRef_c89e9f16,
     ResolverReference as _ResolverReference_1c237cfb,
     SourceApiAssociationReference as _SourceApiAssociationReference_1d1f2085,
+)
+from ..interfaces.aws_certificatemanager import (
+    ICertificateRef as _ICertificateRef_1878d79b
 )
 from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
@@ -2338,7 +2340,7 @@ class AppSyncDomainOptions:
     def __init__(
         self,
         *,
-        certificate: "_ICertificate_c194c70b",
+        certificate: "_ICertificateRef_1878d79b",
         domain_name: builtins.str,
     ) -> None:
         '''Domain name configuration for AppSync.
@@ -2397,11 +2399,11 @@ class AppSyncDomainOptions:
         }
 
     @builtins.property
-    def certificate(self) -> "_ICertificate_c194c70b":
+    def certificate(self) -> "_ICertificateRef_1878d79b":
         '''The certificate to use with the domain name.'''
         result = self._values.get("certificate")
         assert result is not None, "Required property 'certificate' is missing"
-        return typing.cast("_ICertificate_c194c70b", result)
+        return typing.cast("_ICertificateRef_1878d79b", result)
 
     @builtins.property
     def domain_name(self) -> builtins.str:
@@ -15125,7 +15127,7 @@ class DomainOptions:
     def __init__(
         self,
         *,
-        certificate: "_ICertificate_c194c70b",
+        certificate: "_ICertificateRef_1878d79b",
         domain_name: builtins.str,
     ) -> None:
         '''Domain name configuration for AppSync.
@@ -15180,11 +15182,11 @@ class DomainOptions:
         }
 
     @builtins.property
-    def certificate(self) -> "_ICertificate_c194c70b":
+    def certificate(self) -> "_ICertificateRef_1878d79b":
         '''The certificate to use with the domain name.'''
         result = self._values.get("certificate")
         assert result is not None, "Required property 'certificate' is missing"
-        return typing.cast("_ICertificate_c194c70b", result)
+        return typing.cast("_ICertificateRef_1878d79b", result)
 
     @builtins.property
     def domain_name(self) -> builtins.str:
@@ -23567,6 +23569,8 @@ class ChannelNamespace(
     def grant_publish(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for EventPublish access to this channel namespace to an IAM principal's policy.
 
+        [disable-awslint:no-grants]
+
         :param grantee: The principal.
         '''
         if __debug__:
@@ -23581,6 +23585,8 @@ class ChannelNamespace(
     ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for EventPublish and EventSubscribe access to this channel namespace to an IAM principal's policy.
 
+        [disable-awslint:no-grants]
+
         :param grantee: The principal.
         '''
         if __debug__:
@@ -23591,6 +23597,8 @@ class ChannelNamespace(
     @jsii.member(jsii_name="grantSubscribe")
     def grant_subscribe(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for EventSubscribe access to this channel namespace to an IAM principal's policy.
+
+        [disable-awslint:no-grants]
 
         :param grantee: The principal.
         '''
@@ -24323,6 +24331,8 @@ class EventApiBase(
     ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this Event API to an IAM principal's policy.
 
+        [disable-awslint:no-grants]
+
         :param grantee: The principal.
         :param resources: The set of resources to allow (i.e. ...:[region]:[accountId]:apis/EventApiId/...).
         :param actions: The actions that should be granted to the principal (i.e. appsync:EventPublish ).
@@ -24338,6 +24348,8 @@ class EventApiBase(
     def grant_connect(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for EventConnect access to this EventApi to an IAM principal's policy.
 
+        [disable-awslint:no-grants]
+
         :param grantee: The principal.
         '''
         if __debug__:
@@ -24350,6 +24362,7 @@ class EventApiBase(
         '''Adds an IAM policy statement for EventPublish access to this EventApi to an IAM principal's policy.
 
         This grants publish permission for all channels within the API.
+        [disable-awslint:no-grants]
 
         :param grantee: The principal.
         '''
@@ -24366,6 +24379,7 @@ class EventApiBase(
         '''Adds an IAM policy statement to publish and subscribe to this API for an IAM principal's policy.
 
         This grants publish & subscribe permission for all channels within the API.
+        [disable-awslint:no-grants]
 
         :param grantee: The principal.
         '''
@@ -24379,6 +24393,7 @@ class EventApiBase(
         '''Adds an IAM policy statement for EventSubscribe access to this EventApi to an IAM principal's policy.
 
         This grants subscribe permission for all channels within the API.
+        [disable-awslint:no-grants]
 
         :param grantee: The principal.
         '''
@@ -24980,6 +24995,8 @@ class GraphqlApiBase(
     ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this GraphQLApi to an IAM principal's policy.
 
+        [disable-awslint:no-grants]
+
         :param grantee: The principal.
         :param resources: The set of resources to allow (i.e. ...:[region]:[accountId]:apis/GraphQLId/...).
         :param actions: The actions that should be granted to the principal (i.e. appsync:graphql ).
@@ -24999,6 +25016,8 @@ class GraphqlApiBase(
     ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for Mutation access to this GraphQLApi to an IAM principal's policy.
 
+        [disable-awslint:no-grants]
+
         :param grantee: The principal.
         :param fields: The fields to grant access to that are Mutations (leave blank for all).
         '''
@@ -25016,6 +25035,8 @@ class GraphqlApiBase(
     ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for Query access to this GraphQLApi to an IAM principal's policy.
 
+        [disable-awslint:no-grants]
+
         :param grantee: The principal.
         :param fields: The fields to grant access to that are Queries (leave blank for all).
         '''
@@ -25032,6 +25053,8 @@ class GraphqlApiBase(
         *fields: builtins.str,
     ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement for Subscription access to this GraphQLApi to an IAM principal's policy.
+
+        [disable-awslint:no-grants]
 
         :param grantee: The principal.
         :param fields: The fields to grant access to that are Subscriptions (leave blank for all).
@@ -26925,7 +26948,7 @@ def _typecheckingstub__d4e890d2a8faf7c2137db999331361511f3634ef2833d6e1703e1880a
 
 def _typecheckingstub__afb981cb287a40ec7f356fab08ac0cfb25513af1c8c161b74b14fd488be36e9e(
     *,
-    certificate: _ICertificate_c194c70b,
+    certificate: _ICertificateRef_1878d79b,
     domain_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -28822,7 +28845,7 @@ def _typecheckingstub__45047d8eff66faac12b7947ae55c06352bc0604c421b8db5c437dd926
 
 def _typecheckingstub__666cedee7b74b7e32381dd1603bff8d92b24dd381d5f493f478126fb394ef687(
     *,
-    certificate: _ICertificate_c194c70b,
+    certificate: _ICertificateRef_1878d79b,
     domain_name: builtins.str,
 ) -> None:
     """Type checking stubs"""

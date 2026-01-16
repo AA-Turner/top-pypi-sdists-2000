@@ -1124,7 +1124,7 @@ class AssertionsProvider(
 
     @jsii.member(jsii_name="grantInvoke")
     def grant_invoke(self, principal_arn: builtins.str) -> None:
-        '''(experimental) Grant a principal access to invoke the assertion provider lambda function.
+        '''(experimental) Grant a principal access to invoke the assertion provider lambda function [disable-awslint:no-grants].
 
         :param principal_arn: the ARN of the principal that should be given permission to invoke the assertion provider.
 

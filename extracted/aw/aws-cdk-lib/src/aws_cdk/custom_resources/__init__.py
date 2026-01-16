@@ -1083,11 +1083,10 @@ from ..aws_lambda import (
     IFunction as _IFunction_6adb0ab8,
     Runtime as _Runtime_b4eaa844,
 )
-from ..aws_logs import (
-    ILogGroup as _ILogGroup_3c4fa718, RetentionDays as _RetentionDays_070f99f0
-)
+from ..aws_logs import RetentionDays as _RetentionDays_070f99f0
 from ..aws_stepfunctions import LogLevel as _LogLevel_be1990fe
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
+from ..interfaces.aws_logs import ILogGroupRef as _ILogGroupRef_874d025a
 
 
 @jsii.implements(_IGrantable_71c4f5de)
@@ -1135,7 +1134,7 @@ class AwsCustomResource(
         *,
         function_name: typing.Optional[builtins.str] = None,
         install_latest_aws_sdk: typing.Optional[builtins.bool] = None,
-        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         memory_size: typing.Optional[jsii.Number] = None,
         on_create: typing.Optional[typing.Union["AwsSdkCall", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -1370,7 +1369,7 @@ class AwsCustomResourceProps:
         *,
         function_name: typing.Optional[builtins.str] = None,
         install_latest_aws_sdk: typing.Optional[builtins.bool] = None,
-        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         memory_size: typing.Optional[jsii.Number] = None,
         on_create: typing.Optional[typing.Union["AwsSdkCall", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -1522,7 +1521,7 @@ class AwsCustomResourceProps:
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
+    def log_group(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''The Log Group used for logging of events emitted by the custom resource's lambda function.
 
         Providing a user-controlled log group was rolled out to commercial regions on 2023-11-16.
@@ -1531,7 +1530,7 @@ class AwsCustomResourceProps:
         :default: - a default log group created by AWS Lambda
         '''
         result = self._values.get("log_group")
-        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def log_retention(self) -> typing.Optional["_RetentionDays_070f99f0"]:
@@ -2176,7 +2175,7 @@ class LogOptions:
     def __init__(
         self,
         *,
-        destination: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        destination: typing.Optional["_ILogGroupRef_874d025a"] = None,
         include_execution_data: typing.Optional[builtins.bool] = None,
         level: typing.Optional["_LogLevel_be1990fe"] = None,
     ) -> None:
@@ -2192,14 +2191,14 @@ class LogOptions:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk import aws_logs as logs
             from aws_cdk import aws_stepfunctions as stepfunctions
             from aws_cdk import custom_resources
+            from aws_cdk.interfaces import aws_logs as interfaces_logs
             
-            # log_group: logs.LogGroup
+            # log_group_ref: interfaces_logs.ILogGroupRef
             
             log_options = custom_resources.LogOptions(
-                destination=log_group,
+                destination=log_group_ref,
                 include_execution_data=False,
                 level=stepfunctions.LogLevel.OFF
             )
@@ -2218,13 +2217,13 @@ class LogOptions:
             self._values["level"] = level
 
     @builtins.property
-    def destination(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
+    def destination(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''The log group where the execution history events will be logged.
 
         :default: - a new log group will be created
         '''
         result = self._values.get("destination")
-        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def include_execution_data(self) -> typing.Optional[builtins.bool]:
@@ -2567,7 +2566,7 @@ class Provider(
         framework_lambda_logging_level: typing.Optional["_ApplicationLogLevel_cd92660a"] = None,
         framework_on_event_role: typing.Optional["_IRole_235f5d8e"] = None,
         is_complete_handler: typing.Optional["_IFunction_6adb0ab8"] = None,
-        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         provider_function_env_encryption: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         provider_function_name: typing.Optional[builtins.str] = None,
@@ -2684,7 +2683,7 @@ class ProviderProps:
         framework_lambda_logging_level: typing.Optional["_ApplicationLogLevel_cd92660a"] = None,
         framework_on_event_role: typing.Optional["_IRole_235f5d8e"] = None,
         is_complete_handler: typing.Optional["_IFunction_6adb0ab8"] = None,
-        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         provider_function_env_encryption: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         provider_function_name: typing.Optional[builtins.str] = None,
@@ -2887,7 +2886,7 @@ class ProviderProps:
         return typing.cast(typing.Optional["_IFunction_6adb0ab8"], result)
 
     @builtins.property
-    def log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
+    def log_group(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''The Log Group used for logging of events emitted by the custom resource's lambda function.
 
         Providing a user-controlled log group was rolled out to commercial regions on 2023-11-16.
@@ -2896,7 +2895,7 @@ class ProviderProps:
         :default: - a default log group created by AWS Lambda
         '''
         result = self._values.get("log_group")
-        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def log_retention(self) -> typing.Optional["_RetentionDays_070f99f0"]:
@@ -3118,12 +3117,12 @@ class WaiterStateMachine(
         # The values are placeholders you should change.
         import aws_cdk as cdk
         from aws_cdk import aws_lambda as lambda_
-        from aws_cdk import aws_logs as logs
         from aws_cdk import aws_stepfunctions as stepfunctions
         from aws_cdk import custom_resources
+        from aws_cdk.interfaces import aws_logs as interfaces_logs
         
         # function_: lambda.Function
-        # log_group: logs.LogGroup
+        # log_group_ref: interfaces_logs.ILogGroupRef
         
         waiter_state_machine = custom_resources.WaiterStateMachine(self, "MyWaiterStateMachine",
             backoff_rate=123,
@@ -3135,7 +3134,7 @@ class WaiterStateMachine(
             # the properties below are optional
             disable_logging=False,
             log_options=custom_resources.LogOptions(
-                destination=log_group,
+                destination=log_group_ref,
                 include_execution_data=False,
                 level=stepfunctions.LogLevel.OFF
             )
@@ -3188,6 +3187,8 @@ class WaiterStateMachine(
         identity: "_IGrantable_71c4f5de",
     ) -> "_Grant_a7ae64f8":
         '''Grant the given identity permissions on StartExecution of the state machine.
+
+        [disable-awslint:no-grants]
 
         :param identity: -
         '''
@@ -3252,12 +3253,12 @@ class WaiterStateMachineProps:
             # The values are placeholders you should change.
             import aws_cdk as cdk
             from aws_cdk import aws_lambda as lambda_
-            from aws_cdk import aws_logs as logs
             from aws_cdk import aws_stepfunctions as stepfunctions
             from aws_cdk import custom_resources
+            from aws_cdk.interfaces import aws_logs as interfaces_logs
             
             # function_: lambda.Function
-            # log_group: logs.LogGroup
+            # log_group_ref: interfaces_logs.ILogGroupRef
             
             waiter_state_machine_props = custom_resources.WaiterStateMachineProps(
                 backoff_rate=123,
@@ -3269,7 +3270,7 @@ class WaiterStateMachineProps:
                 # the properties below are optional
                 disable_logging=False,
                 log_options=custom_resources.LogOptions(
-                    destination=log_group,
+                    destination=log_group_ref,
                     include_execution_data=False,
                     level=stepfunctions.LogLevel.OFF
                 )
@@ -3392,7 +3393,7 @@ def _typecheckingstub__4b163f566913e92c7adaa1ea97e50050b801bd514d3b2f5e3ddf86c11
     *,
     function_name: typing.Optional[builtins.str] = None,
     install_latest_aws_sdk: typing.Optional[builtins.bool] = None,
-    log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
     memory_size: typing.Optional[jsii.Number] = None,
     on_create: typing.Optional[typing.Union[AwsSdkCall, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -3432,7 +3433,7 @@ def _typecheckingstub__2b5a9dace9a09081edfef936656f2d5670f198fb300a32c31957c93e5
     *,
     function_name: typing.Optional[builtins.str] = None,
     install_latest_aws_sdk: typing.Optional[builtins.bool] = None,
-    log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
     memory_size: typing.Optional[jsii.Number] = None,
     on_create: typing.Optional[typing.Union[AwsSdkCall, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -3529,7 +3530,7 @@ def _typecheckingstub__b25638ab024a9c20a9f0e648bced71eb09bda8705a26cd9e81b3c7611
 
 def _typecheckingstub__2622296f61199d2b10825c21d976c0578e9488ad1b2b7635565f604c598734b7(
     *,
-    destination: typing.Optional[_ILogGroup_3c4fa718] = None,
+    destination: typing.Optional[_ILogGroupRef_874d025a] = None,
     include_execution_data: typing.Optional[builtins.bool] = None,
     level: typing.Optional[_LogLevel_be1990fe] = None,
 ) -> None:
@@ -3571,7 +3572,7 @@ def _typecheckingstub__29415d7bf7977fcf110b77ce69cec309dcf0404601944735020770ddf
     framework_lambda_logging_level: typing.Optional[_ApplicationLogLevel_cd92660a] = None,
     framework_on_event_role: typing.Optional[_IRole_235f5d8e] = None,
     is_complete_handler: typing.Optional[_IFunction_6adb0ab8] = None,
-    log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
     provider_function_env_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
     provider_function_name: typing.Optional[builtins.str] = None,
@@ -3594,7 +3595,7 @@ def _typecheckingstub__32b03803ee02437d8d83814282c700ede5633030e4d9f7ebdaf3b9d07
     framework_lambda_logging_level: typing.Optional[_ApplicationLogLevel_cd92660a] = None,
     framework_on_event_role: typing.Optional[_IRole_235f5d8e] = None,
     is_complete_handler: typing.Optional[_IFunction_6adb0ab8] = None,
-    log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
     provider_function_env_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
     provider_function_name: typing.Optional[builtins.str] = None,

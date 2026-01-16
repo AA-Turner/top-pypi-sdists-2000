@@ -382,17 +382,34 @@ class EventBusReference:
         :param event_bus_arn: The ARN of the EventBus resource.
         :param event_bus_name: The Name of the EventBus resource.
 
-        :exampleMetadata: fixture=_generated
+        :exampleMetadata: infused
 
         Example::
 
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_events as interfaces_events
+            import aws_cdk.aws_events as events
+            from aws_cdk.aws_apigatewayv2_integrations import HttpEventBridgeIntegration
             
-            event_bus_reference = interfaces_events.EventBusReference(
-                event_bus_arn="eventBusArn",
-                event_bus_name="eventBusName"
+            # bus: events.IEventBus
+            # http_api: apigwv2.HttpApi
+            
+            
+            # default integration (PutEvents)
+            http_api.add_routes(
+                path="/default",
+                methods=[apigwv2.HttpMethod.POST],
+                integration=HttpEventBridgeIntegration("DefaultEventBridgeIntegration",
+                    event_bus_ref=bus.event_bus_ref
+                )
+            )
+            
+            # explicit subtype
+            http_api.add_routes(
+                path="/put-events",
+                methods=[apigwv2.HttpMethod.POST],
+                integration=HttpEventBridgeIntegration("ExplicitSubtypeIntegration",
+                    event_bus_ref=bus.event_bus_ref,
+                    subtype=apigwv2.HttpIntegrationSubtype.EVENTBRIDGE_PUT_EVENTS
+                )
             )
         '''
         if __debug__:

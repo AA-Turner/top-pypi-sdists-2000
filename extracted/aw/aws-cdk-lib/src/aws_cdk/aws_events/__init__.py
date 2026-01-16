@@ -54,7 +54,12 @@ commit is pushed to the "master" branch of a CodeCommit repository:
 
 on_commit_rule = repo.on_commit("OnCommit",
     target=targets.CodeBuildProject(project),
-    branches=["master"]
+    event_pattern=events.EventPattern(
+        detail={
+            "reference_type": ["branch"]
+        }
+    ),
+    branches=events.Match.prefix("main")
 )
 ```
 
@@ -470,7 +475,7 @@ class ApiDestinationAttributes:
         self,
         *,
         api_destination_arn: builtins.str,
-        connection: "IConnection",
+        connection: "_IConnectionRef_bea3332b",
         api_destination_arn_for_policy: typing.Optional[builtins.str] = None,
     ) -> None:
         '''The properties to import an existing Api Destination.
@@ -518,11 +523,11 @@ class ApiDestinationAttributes:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def connection(self) -> "IConnection":
+    def connection(self) -> "_IConnectionRef_bea3332b":
         '''The Connection to associate with the Api Destination.'''
         result = self._values.get("connection")
         assert result is not None, "Required property 'connection' is missing"
-        return typing.cast("IConnection", result)
+        return typing.cast("_IConnectionRef_bea3332b", result)
 
     @builtins.property
     def api_destination_arn_for_policy(self) -> typing.Optional[builtins.str]:
@@ -561,7 +566,7 @@ class ApiDestinationProps:
     def __init__(
         self,
         *,
-        connection: "IConnection",
+        connection: "_IConnectionRef_bea3332b",
         endpoint: builtins.str,
         api_destination_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
@@ -619,11 +624,11 @@ class ApiDestinationProps:
             self._values["rate_limit_per_second"] = rate_limit_per_second
 
     @builtins.property
-    def connection(self) -> "IConnection":
+    def connection(self) -> "_IConnectionRef_bea3332b":
         '''The ARN of the connection to use for the API destination.'''
         result = self._values.get("connection")
         assert result is not None, "Required property 'connection' is missing"
-        return typing.cast("IConnection", result)
+        return typing.cast("_IConnectionRef_bea3332b", result)
 
     @builtins.property
     def endpoint(self) -> builtins.str:
@@ -716,7 +721,7 @@ class Archive(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        source_event_bus: "IEventBus",
+        source_event_bus: "_IEventBusRef_aa86e9b4",
         event_pattern: typing.Union["EventPattern", typing.Dict[builtins.str, typing.Any]],
         archive_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
@@ -5564,7 +5569,7 @@ class CfnRule(
         
         events.Rule(scope, "Rule",
             event_pattern=bucket_events.object_created_pattern(
-                object=BucketEvents.ObjectCreated.ObjectType(key=["uploads/*"])
+                object=BucketEvents.ObjectCreated.ObjectType(key=events.Match.wildcard("uploads/*"))
             ),
             targets=[targets.LambdaFunction(fn)]
         )
@@ -5576,7 +5581,7 @@ class CfnRule(
         events.CfnRule(scope, "CfnRule",
             state="ENABLED",
             event_pattern=cfn_bucket_events.object_created_pattern(
-                object=BucketEvents.ObjectCreated.ObjectType(key=["uploads/*"])
+                object=BucketEvents.ObjectCreated.ObjectType(key=events.Match.wildcard("uploads/*"))
             ),
             targets=[events.CfnRule.TargetProperty(arn=fn.function_arn, id="L1")]
         )
@@ -8381,7 +8386,7 @@ class CfnRuleProps:
             
             events.Rule(scope, "Rule",
                 event_pattern=bucket_events.object_created_pattern(
-                    object=BucketEvents.ObjectCreated.ObjectType(key=["uploads/*"])
+                    object=BucketEvents.ObjectCreated.ObjectType(key=events.Match.wildcard("uploads/*"))
                 ),
                 targets=[targets.LambdaFunction(fn)]
             )
@@ -8393,7 +8398,7 @@ class CfnRuleProps:
             events.CfnRule(scope, "CfnRule",
                 state="ENABLED",
                 event_pattern=cfn_bucket_events.object_created_pattern(
-                    object=BucketEvents.ObjectCreated.ObjectType(key=["uploads/*"])
+                    object=BucketEvents.ObjectCreated.ObjectType(key=events.Match.wildcard("uploads/*"))
                 ),
                 targets=[events.CfnRule.TargetProperty(arn=fn.function_arn, id="L1")]
             )
@@ -9999,7 +10004,11 @@ typing.cast(typing.Any, HttpParameter).__jsii_proxy_class__ = lambda : _HttpPara
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_events.IApiDestination")
-class IApiDestination(_IResource_c80c4260, typing_extensions.Protocol):
+class IApiDestination(
+    _IResource_c80c4260,
+    _IApiDestinationRef_8cd0a954,
+    typing_extensions.Protocol,
+):
     '''Interface for API Destinations.'''
 
     @builtins.property
@@ -10033,6 +10042,7 @@ class IApiDestination(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IApiDestinationProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IApiDestinationRef_8cd0a954), # type: ignore[misc]
 ):
     '''Interface for API Destinations.'''
 
@@ -10071,7 +10081,11 @@ typing.cast(typing.Any, IApiDestination).__jsii_proxy_class__ = lambda : _IApiDe
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_events.IConnection")
-class IConnection(_IResource_c80c4260, typing_extensions.Protocol):
+class IConnection(
+    _IResource_c80c4260,
+    _IConnectionRef_bea3332b,
+    typing_extensions.Protocol,
+):
     '''Interface for EventBus Connections.'''
 
     @builtins.property
@@ -10104,6 +10118,7 @@ class IConnection(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IConnectionProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IConnectionRef_bea3332b), # type: ignore[misc]
 ):
     '''Interface for EventBus Connections.'''
 
@@ -10331,7 +10346,7 @@ typing.cast(typing.Any, IEventBus).__jsii_proxy_class__ = lambda : _IEventBusPro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_events.IRule")
-class IRule(_IResource_c80c4260, typing_extensions.Protocol):
+class IRule(_IResource_c80c4260, _IRuleRef_4038a611, typing_extensions.Protocol):
     '''Represents an EventBridge Rule.'''
 
     @builtins.property
@@ -10355,6 +10370,7 @@ class IRule(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IRuleProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IRuleRef_4038a611), # type: ignore[misc]
 ):
     '''Represents an EventBridge Rule.'''
 
@@ -10389,7 +10405,7 @@ class IRuleTarget(typing_extensions.Protocol):
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        rule: "IRule",
+        rule: "_IRuleRef_4038a611",
         id: typing.Optional[builtins.str] = None,
     ) -> "RuleTargetConfig":
         '''Returns the rule target specification.
@@ -10410,7 +10426,7 @@ class _IRuleTargetProxy:
     @jsii.member(jsii_name="bind")
     def bind(
         self,
-        rule: "IRule",
+        rule: "_IRuleRef_4038a611",
         id: typing.Optional[builtins.str] = None,
     ) -> "RuleTargetConfig":
         '''Returns the rule target specification.
@@ -11287,7 +11303,7 @@ class Rule(
         id: builtins.str,
         *,
         enabled: typing.Optional[builtins.bool] = None,
-        event_bus: typing.Optional["IEventBus"] = None,
+        event_bus: typing.Optional["_IEventBusRef_aa86e9b4"] = None,
         role: typing.Optional["_IRoleRef_8400221f"] = None,
         schedule: typing.Optional["Schedule"] = None,
         targets: typing.Optional[typing.Sequence["IRuleTarget"]] = None,
@@ -11454,6 +11470,12 @@ class Rule(
         '''The name event rule.'''
         return typing.cast(builtins.str, jsii.get(self, "ruleName"))
 
+    @builtins.property
+    @jsii.member(jsii_name="ruleRef")
+    def rule_ref(self) -> "_RuleReference_38eeaae2":
+        '''A reference to a Rule resource.'''
+        return typing.cast("_RuleReference_38eeaae2", jsii.get(self, "ruleRef"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_events.RuleProps",
@@ -11479,7 +11501,7 @@ class RuleProps(EventCommonOptions):
         event_pattern: typing.Optional[typing.Union["EventPattern", typing.Dict[builtins.str, typing.Any]]] = None,
         rule_name: typing.Optional[builtins.str] = None,
         enabled: typing.Optional[builtins.bool] = None,
-        event_bus: typing.Optional["IEventBus"] = None,
+        event_bus: typing.Optional["_IEventBusRef_aa86e9b4"] = None,
         role: typing.Optional["_IRoleRef_8400221f"] = None,
         schedule: typing.Optional["Schedule"] = None,
         targets: typing.Optional[typing.Sequence["IRuleTarget"]] = None,
@@ -11604,13 +11626,13 @@ class RuleProps(EventCommonOptions):
         return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
-    def event_bus(self) -> typing.Optional["IEventBus"]:
+    def event_bus(self) -> typing.Optional["_IEventBusRef_aa86e9b4"]:
         '''The event bus to associate with this rule.
 
         :default: - The default event bus.
         '''
         result = self._values.get("event_bus")
-        return typing.cast(typing.Optional["IEventBus"], result)
+        return typing.cast(typing.Optional["_IEventBusRef_aa86e9b4"], result)
 
     @builtins.property
     def role(self) -> typing.Optional["_IRoleRef_8400221f"]:
@@ -12149,7 +12171,7 @@ class RuleTargetInput(
 
     @jsii.member(jsii_name="bind")
     @abc.abstractmethod
-    def bind(self, rule: "IRule") -> "RuleTargetInputProperties":
+    def bind(self, rule: "_IRuleRef_4038a611") -> "RuleTargetInputProperties":
         '''Return the input properties for this input object.
 
         :param rule: -
@@ -12159,7 +12181,7 @@ class RuleTargetInput(
 
 class _RuleTargetInputProxy(RuleTargetInput):
     @jsii.member(jsii_name="bind")
-    def bind(self, rule: "IRule") -> "RuleTargetInputProperties":
+    def bind(self, rule: "_IRuleRef_4038a611") -> "RuleTargetInputProperties":
         '''Return the input properties for this input object.
 
         :param rule: -
@@ -12431,7 +12453,7 @@ class ApiDestination(
         scope: "_constructs_77d1e7e8.Construct",
         id: builtins.str,
         *,
-        connection: "IConnection",
+        connection: "_IConnectionRef_bea3332b",
         endpoint: builtins.str,
         api_destination_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
@@ -12471,9 +12493,9 @@ class ApiDestination(
         id: builtins.str,
         *,
         api_destination_arn: builtins.str,
-        connection: "IConnection",
+        connection: "_IConnectionRef_bea3332b",
         api_destination_arn_for_policy: typing.Optional[builtins.str] = None,
-    ) -> "ApiDestination":
+    ) -> "IApiDestination":
         '''Create an Api Destination construct from an existing Api Destination ARN.
 
         :param scope: The scope creating construct (usually ``this``).
@@ -12492,7 +12514,7 @@ class ApiDestination(
             api_destination_arn_for_policy=api_destination_arn_for_policy,
         )
 
-        return typing.cast("ApiDestination", jsii.sinvoke(cls, "fromApiDestinationAttributes", [scope, id, attrs]))
+        return typing.cast("IApiDestination", jsii.sinvoke(cls, "fromApiDestinationAttributes", [scope, id, attrs]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -12517,6 +12539,12 @@ class ApiDestination(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "apiDestinationName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="apiDestinationRef")
+    def api_destination_ref(self) -> "_ApiDestinationReference_6371608b":
+        '''A reference to a ApiDestination resource.'''
+        return typing.cast("_ApiDestinationReference_6371608b", jsii.get(self, "apiDestinationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="connection")
@@ -12555,7 +12583,7 @@ class ArchiveProps(BaseArchiveProps):
         description: typing.Optional[builtins.str] = None,
         kms_key: typing.Optional["_IKey_5f11635f"] = None,
         retention: typing.Optional["_Duration_4839e8c3"] = None,
-        source_event_bus: "IEventBus",
+        source_event_bus: "_IEventBusRef_aa86e9b4",
     ) -> None:
         '''The event archive properties.
 
@@ -12657,11 +12685,11 @@ class ArchiveProps(BaseArchiveProps):
         return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
 
     @builtins.property
-    def source_event_bus(self) -> "IEventBus":
+    def source_event_bus(self) -> "_IEventBusRef_aa86e9b4":
         '''The event source associated with the archive.'''
         result = self._values.get("source_event_bus")
         assert result is not None, "Required property 'source_event_bus' is missing"
-        return typing.cast("IEventBus", result)
+        return typing.cast("_IEventBusRef_aa86e9b4", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -12820,6 +12848,12 @@ class Connection(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "connectionName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="connectionRef")
+    def connection_ref(self) -> "_ConnectionReference_d427d036":
+        '''A reference to a Connection resource.'''
+        return typing.cast("_ConnectionReference_d427d036", jsii.get(self, "connectionRef"))
 
     @builtins.property
     @jsii.member(jsii_name="connectionSecretArn")
@@ -13037,7 +13071,7 @@ class EventBus(
         grantee: "_IGrantable_71c4f5de",
         sid: typing.Optional[builtins.str] = None,
     ) -> "_Grant_a7ae64f8":
-        '''Grants an IAM Principal to send custom events to the eventBus so that they can be matched to rules.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         :param sid: -
@@ -13152,7 +13186,7 @@ publication.publish()
 def _typecheckingstub__803612bfb0a8da2a8e0ca427792d066e933032d6f722156869f61949617c8303(
     *,
     api_destination_arn: builtins.str,
-    connection: IConnection,
+    connection: _IConnectionRef_bea3332b,
     api_destination_arn_for_policy: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -13160,7 +13194,7 @@ def _typecheckingstub__803612bfb0a8da2a8e0ca427792d066e933032d6f722156869f619496
 
 def _typecheckingstub__ce93e81ddac7a0ebc3fe6cf2783ea61dde8338f099332864ff087db25f7e83f2(
     *,
-    connection: IConnection,
+    connection: _IConnectionRef_bea3332b,
     endpoint: builtins.str,
     api_destination_name: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
@@ -13174,7 +13208,7 @@ def _typecheckingstub__3d354e4791ce999debd366401bf6abece64fe39da3a499dafa6b3996b
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    source_event_bus: IEventBus,
+    source_event_bus: _IEventBusRef_aa86e9b4,
     event_pattern: typing.Union[EventPattern, typing.Dict[builtins.str, typing.Any]],
     archive_name: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
@@ -14453,7 +14487,7 @@ def _typecheckingstub__d2c68164c7bcf711cce4fa768eb0c26c773cd00ae54af79587f28c0ff
     pass
 
 def _typecheckingstub__ee62e84f884e0e5476947339e584feca527844abc70d56b2fe2d048cc2ce09bb(
-    rule: IRule,
+    rule: _IRuleRef_4038a611,
     id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -14635,7 +14669,7 @@ def _typecheckingstub__15ada85ef5f1cb4f0237eff6253e200138049f1bebbea7163294d28f9
     id: builtins.str,
     *,
     enabled: typing.Optional[builtins.bool] = None,
-    event_bus: typing.Optional[IEventBus] = None,
+    event_bus: typing.Optional[_IEventBusRef_aa86e9b4] = None,
     role: typing.Optional[_IRoleRef_8400221f] = None,
     schedule: typing.Optional[Schedule] = None,
     targets: typing.Optional[typing.Sequence[IRuleTarget]] = None,
@@ -14668,7 +14702,7 @@ def _typecheckingstub__26677a946da4037892c1c589c005b7536d8ffed632ca92c5c52a92586
     event_pattern: typing.Optional[typing.Union[EventPattern, typing.Dict[builtins.str, typing.Any]]] = None,
     rule_name: typing.Optional[builtins.str] = None,
     enabled: typing.Optional[builtins.bool] = None,
-    event_bus: typing.Optional[IEventBus] = None,
+    event_bus: typing.Optional[_IEventBusRef_aa86e9b4] = None,
     role: typing.Optional[_IRoleRef_8400221f] = None,
     schedule: typing.Optional[Schedule] = None,
     targets: typing.Optional[typing.Sequence[IRuleTarget]] = None,
@@ -14721,7 +14755,7 @@ def _typecheckingstub__05328d14dd500c7543f34d114d767ff9dcf0aee068923e6100cb3d38f
     pass
 
 def _typecheckingstub__554a6befa684166f7830738df013ecfd45ccc95505b8b0c19659656cbf45fba6(
-    rule: IRule,
+    rule: _IRuleRef_4038a611,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -14752,7 +14786,7 @@ def _typecheckingstub__1aa3407b00276436e9ed372bbdc08c6dfd1419e8730d4851ceddeade8
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    connection: IConnection,
+    connection: _IConnectionRef_bea3332b,
     endpoint: builtins.str,
     api_destination_name: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
@@ -14767,7 +14801,7 @@ def _typecheckingstub__e49376311071a64effa3b8c1dd1bd3ee0e1b2ef0514b800dd0053110f
     id: builtins.str,
     *,
     api_destination_arn: builtins.str,
-    connection: IConnection,
+    connection: _IConnectionRef_bea3332b,
     api_destination_arn_for_policy: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -14780,7 +14814,7 @@ def _typecheckingstub__3e9e21c5f043688b8d785343f3fca5b1c769d309ab6d381af52c9421a
     description: typing.Optional[builtins.str] = None,
     kms_key: typing.Optional[_IKey_5f11635f] = None,
     retention: typing.Optional[_Duration_4839e8c3] = None,
-    source_event_bus: IEventBus,
+    source_event_bus: _IEventBusRef_aa86e9b4,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -4619,6 +4619,19 @@ class Runtime(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_synthetics.Run
         jsii.create(self.__class__, self, [name, family])
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="SYNTHETICS_NODEJS_3_0")
+    def SYNTHETICS_NODEJS_3_0(cls) -> "Runtime":
+        '''``syn-nodejs-3.0`` includes the following: - Lambda runtime Node.js 20.x.
+
+        New Features:
+
+        - **Multi-checks blueprint**: Supports the multi-checks blueprint for creating complex synthetic monitoring scenarios.
+
+        :see: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Library_Nodejs.html
+        '''
+        return typing.cast("Runtime", jsii.sget(cls, "SYNTHETICS_NODEJS_3_0"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="SYNTHETICS_NODEJS_PLAYWRIGHT_1_0")
     def SYNTHETICS_NODEJS_PLAYWRIGHT_1_0(cls) -> "Runtime":
         '''``syn-nodejs-playwright-1.0`` includes the following: - Lambda runtime Node.js 20.x - Playwright version 1.45 - Chromium version 126.0.6478.126.
@@ -4652,7 +4665,7 @@ class Runtime(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_synthetics.Run
     @jsii.python.classproperty
     @jsii.member(jsii_name="SYNTHETICS_NODEJS_PLAYWRIGHT_3_0")
     def SYNTHETICS_NODEJS_PLAYWRIGHT_3_0(cls) -> "Runtime":
-        '''``syn-nodejs-playwright-2.0`` includes the following: - Lambda runtime Node.js 20.x - Playwright version 1.53.0 - Chromium version 138.0.7204.168.
+        '''``syn-nodejs-playwright-3.0`` includes the following: - Lambda runtime Node.js 20.x - Playwright version 1.53.0 - Chromium version 138.0.7204.168.
 
         New Features:
 
@@ -4662,6 +4675,32 @@ class Runtime(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_synthetics.Run
         :see: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Library_nodejs_playwright.html#Synthetics_runtimeversion-syn-nodejs-playwright-3.0
         '''
         return typing.cast("Runtime", jsii.sget(cls, "SYNTHETICS_NODEJS_PLAYWRIGHT_3_0"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="SYNTHETICS_NODEJS_PLAYWRIGHT_4_0")
+    def SYNTHETICS_NODEJS_PLAYWRIGHT_4_0(cls) -> "Runtime":
+        '''``syn-nodejs-playwright-4.0`` includes the following: - Lambda runtime Node.js 22.x - Playwright version 1.55.0 - Chromium version 140.0.7339.16 - Firefox version 141.0.
+
+        New Features:
+
+        - Applied security patches and updated Playwright and browser versions.
+
+        :see: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Library_nodejs_playwright.html#Synthetics_runtimeversion-syn-nodejs-playwright-4.0
+        '''
+        return typing.cast("Runtime", jsii.sget(cls, "SYNTHETICS_NODEJS_PLAYWRIGHT_4_0"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="SYNTHETICS_NODEJS_PLAYWRIGHT_5_0")
+    def SYNTHETICS_NODEJS_PLAYWRIGHT_5_0(cls) -> "Runtime":
+        '''``syn-nodejs-playwright-5.0`` includes the following: - Lambda runtime Node.js 22.x - Playwright version 1.57.0 - Chromium version 143.0.7499.4 - Firefox version 142.0.1.
+
+        New Features:
+
+        - Applied security patches and updated Playwright and browser versions.
+
+        :see: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Library_nodejs_playwright.html#Synthetics_runtimeversion-syn-nodejs-playwright-5.0
+        '''
+        return typing.cast("Runtime", jsii.sget(cls, "SYNTHETICS_NODEJS_PLAYWRIGHT_5_0"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="SYNTHETICS_NODEJS_PUPPETEER_10_0")

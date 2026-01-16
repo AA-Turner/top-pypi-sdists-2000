@@ -102,9 +102,7 @@ from ...aws_lambda import (
     VersionOptions as _VersionOptions_981bb3c0,
     VersionWeight as _VersionWeight_64df085b,
 )
-from ...aws_logs import (
-    ILogGroup as _ILogGroup_3c4fa718, RetentionDays as _RetentionDays_070f99f0
-)
+from ...aws_logs import RetentionDays as _RetentionDays_070f99f0
 from ...aws_sns import ITopic as _ITopic_9eca4852
 from ...aws_sqs import IQueue as _IQueue_7ed6f679
 from ...interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
@@ -113,6 +111,7 @@ from ...interfaces.aws_lambda import (
     ICodeSigningConfigRef as _ICodeSigningConfigRef_1d909622,
     VersionReference as _VersionReference_91666182,
 )
+from ...interfaces.aws_logs import ILogGroupRef as _ILogGroupRef_874d025a
 
 
 @jsii.implements(_IVersion_faf7234e)
@@ -189,7 +188,7 @@ class EdgeFunction(
         layers: typing.Optional[typing.Sequence["_ILayerVersion_5ac127c8"]] = None,
         log_format: typing.Optional[builtins.str] = None,
         logging_format: typing.Optional["_LoggingFormat_30be8e01"] = None,
-        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         log_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         log_retention_retry_options: typing.Optional[typing.Union["_LogRetentionRetryOptions_ad797a7a", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -584,7 +583,7 @@ class EdgeFunction(
 
     @jsii.member(jsii_name="grantInvoke")
     def grant_invoke(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grant the given identity permissions to invoke this Lambda.
+        '''[disable-awslint:no-grants].
 
         :param identity: -
         '''
@@ -598,7 +597,7 @@ class EdgeFunction(
         self,
         composite_principal: "_CompositePrincipal_c2fe180a",
     ) -> typing.List["_Grant_a7ae64f8"]:
-        '''Grant multiple principals the ability to invoke this Lambda via CompositePrincipal.
+        '''[disable-awslint:no-grants].
 
         :param composite_principal: -
         '''
@@ -612,7 +611,7 @@ class EdgeFunction(
         self,
         identity: "_IGrantable_71c4f5de",
     ) -> "_Grant_a7ae64f8":
-        '''Grant the given identity permissions to invoke the $LATEST version or unqualified version of this Lambda.
+        '''[disable-awslint:no-grants].
 
         :param identity: -
         '''
@@ -623,7 +622,7 @@ class EdgeFunction(
 
     @jsii.member(jsii_name="grantInvokeUrl")
     def grant_invoke_url(self, identity: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grant the given identity permissions to invoke this Lambda Function URL.
+        '''[disable-awslint:no-grants].
 
         :param identity: -
         '''
@@ -638,7 +637,7 @@ class EdgeFunction(
         identity: "_IGrantable_71c4f5de",
         version: "_IVersion_faf7234e",
     ) -> "_Grant_a7ae64f8":
-        '''Grant the given identity permissions to invoke the given version of this Lambda.
+        '''[disable-awslint:no-grants].
 
         :param identity: -
         :param version: -
@@ -1124,7 +1123,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         layers: typing.Optional[typing.Sequence["_ILayerVersion_5ac127c8"]] = None,
         log_format: typing.Optional[builtins.str] = None,
         logging_format: typing.Optional["_LoggingFormat_30be8e01"] = None,
-        log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         log_removal_policy: typing.Optional["_RemovalPolicy_9f93c814"] = None,
         log_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         log_retention_retry_options: typing.Optional[typing.Union["_LogRetentionRetryOptions_ad797a7a", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -1755,7 +1754,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         return typing.cast(typing.Optional["_LoggingFormat_30be8e01"], result)
 
     @builtins.property
-    def log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
+    def log_group(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''The log group the function sends logs to.
 
         By default, Lambda functions send logs to an automatically created default log group named /aws/lambda/.
@@ -1769,7 +1768,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :default: ``/aws/lambda/${this.functionName}`` - default log group created by Lambda
         '''
         result = self._values.get("log_group")
-        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def log_removal_policy(self) -> typing.Optional["_RemovalPolicy_9f93c814"]:
@@ -2163,7 +2162,7 @@ def _typecheckingstub__b2f96e5632f259adb036f7aba2bbc7c19fd9840c647d67a10a8135cb3
     layers: typing.Optional[typing.Sequence[_ILayerVersion_5ac127c8]] = None,
     log_format: typing.Optional[builtins.str] = None,
     logging_format: typing.Optional[_LoggingFormat_30be8e01] = None,
-    log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     log_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
     log_retention_retry_options: typing.Optional[typing.Union[_LogRetentionRetryOptions_ad797a7a, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -2348,7 +2347,7 @@ def _typecheckingstub__709cdcb05c7a5fc7f7bcd1d72557097c39c5c534076a00b6b8db807bd
     layers: typing.Optional[typing.Sequence[_ILayerVersion_5ac127c8]] = None,
     log_format: typing.Optional[builtins.str] = None,
     logging_format: typing.Optional[_LoggingFormat_30be8e01] = None,
-    log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     log_removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     log_retention: typing.Optional[_RetentionDays_070f99f0] = None,
     log_retention_retry_options: typing.Optional[typing.Union[_LogRetentionRetryOptions_ad797a7a, typing.Dict[builtins.str, typing.Any]]] = None,

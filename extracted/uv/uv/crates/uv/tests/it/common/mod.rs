@@ -40,7 +40,7 @@ pub const PACKSE_VERSION: &str = "0.3.53";
 pub const DEFAULT_PYTHON_VERSION: &str = "3.12";
 
 // The expected latest patch version for each Python minor version.
-pub const LATEST_PYTHON_3_15: &str = "3.15.0a4";
+pub const LATEST_PYTHON_3_15: &str = "3.15.0a5";
 pub const LATEST_PYTHON_3_14: &str = "3.14.2";
 pub const LATEST_PYTHON_3_13: &str = "3.13.11";
 pub const LATEST_PYTHON_3_12: &str = "3.12.12";
@@ -1444,6 +1444,9 @@ impl TestContext {
         command
     }
 
+    /// The path to the Python interpreter in the venv.
+    ///
+    /// Don't use this for `Command::new`, use `Self::python_command` instead.
     pub fn interpreter(&self) -> PathBuf {
         let venv = &self.venv;
         if cfg!(unix) {
@@ -1726,8 +1729,39 @@ impl TestContext {
 
     /// Creates a new `Command` that is intended to be suitable for use in
     /// all tests, but with the given binary.
+    ///
+    /// Clears environment variables defined in [`EnvVars`] to avoid reading
+    /// test host settings.
     fn new_command_with(bin: &Path) -> Command {
-        Command::new(bin)
+        let mut command = Command::new(bin);
+
+        let passthrough = [
+            // For debugging tests.
+            EnvVars::RUST_LOG,
+            EnvVars::RUST_BACKTRACE,
+            // Windows System configuration.
+            EnvVars::SYSTEMDRIVE,
+            // Work around small default stack sizes and large futures in debug builds.
+            EnvVars::RUST_MIN_STACK,
+            EnvVars::UV_STACK_SIZE,
+            // Allow running tests with custom network settings.
+            EnvVars::ALL_PROXY,
+            EnvVars::HTTPS_PROXY,
+            EnvVars::HTTP_PROXY,
+            EnvVars::NO_PROXY,
+            EnvVars::SSL_CERT_DIR,
+            EnvVars::SSL_CERT_FILE,
+            EnvVars::UV_NATIVE_TLS,
+        ];
+
+        for env_var in EnvVars::all_names()
+            .iter()
+            .filter(|name| !passthrough.contains(name))
+        {
+            command.env_remove(env_var);
+        }
+
+        command
     }
 }
 
@@ -1790,7 +1824,7 @@ pub fn get_python(version: &PythonVersion) -> PathBuf {
 
 /// Create a virtual environment at the given path.
 pub fn create_venv_from_executable<P: AsRef<Path>>(path: P, cache_dir: &ChildPath, python: &Path) {
-    assert_cmd::Command::new(get_bin())
+    TestContext::new_command_with(&get_bin())
         .arg("venv")
         .arg(path.as_ref().as_os_str())
         .arg("--clear")
@@ -2115,6 +2149,46 @@ pub async fn download_to_disk(url: &str, path: &Path) {
         file.write_all(&chunk.unwrap()).await.unwrap();
     }
     file.sync_all().await.unwrap();
+}
+
+/// A guard that sets a directory to read-only and restores original permissions when dropped.
+///
+/// This is useful for tests that need to make a directory read-only and ensure
+/// the permissions are restored even if the test panics.
+#[cfg(unix)]
+pub struct ReadOnlyDirectoryGuard {
+    path: PathBuf,
+    original_mode: u32,
+}
+
+#[cfg(unix)]
+impl ReadOnlyDirectoryGuard {
+    /// Sets the directory to read-only (removes write permission) and returns a guard
+    /// that will restore the original permissions when dropped.
+    pub fn new(path: impl Into<PathBuf>) -> std::io::Result<Self> {
+        use std::os::unix::fs::PermissionsExt;
+        let path = path.into();
+        let metadata = fs_err::metadata(&path)?;
+        let original_mode = metadata.permissions().mode();
+        // Remove write permissions (keep read and execute)
+        let readonly_mode = original_mode & !0o222;
+        fs_err::set_permissions(&path, std::fs::Permissions::from_mode(readonly_mode))?;
+        Ok(Self {
+            path,
+            original_mode,
+        })
+    }
+}
+
+#[cfg(unix)]
+impl Drop for ReadOnlyDirectoryGuard {
+    fn drop(&mut self) {
+        use std::os::unix::fs::PermissionsExt;
+        let _ = fs_err::set_permissions(
+            &self.path,
+            std::fs::Permissions::from_mode(self.original_mode),
+        );
+    }
 }
 
 /// Utility macro to return the name of the current function.

@@ -12703,10 +12703,7 @@ class KinesisStreamSource(
 
     @jsii.member(jsii_name="grantRead")
     def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grant read permissions for this source resource and its contents to an IAM principal (the delivery stream).
-
-        If an encryption key is used, permission to use the key to decrypt the
-        contents of the stream will also be granted.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         '''
@@ -14780,7 +14777,7 @@ class DeliveryStream(
         grantee: "_IGrantable_71c4f5de",
         *actions: builtins.str,
     ) -> "_Grant_a7ae64f8":
-        '''Grant the ``grantee`` identity permissions to perform ``actions``.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         :param actions: -
@@ -14793,7 +14790,7 @@ class DeliveryStream(
 
     @jsii.member(jsii_name="grantPutRecords")
     def grant_put_records(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grant the ``grantee`` identity permissions to perform ``firehose:PutRecord`` and ``firehose:PutRecordBatch`` actions on this delivery stream.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         '''

@@ -8875,7 +8875,7 @@ class StringListParameter(
 
     @jsii.member(jsii_name="grantRead")
     def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grants read (DescribeParameter, GetParameters, GetParameter, GetParameterHistory) permissions on the SSM Parameter.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         '''
@@ -8886,7 +8886,7 @@ class StringListParameter(
 
     @jsii.member(jsii_name="grantWrite")
     def grant_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grants write (PutParameter) permissions on the SSM Parameter.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         '''
@@ -9432,7 +9432,7 @@ class StringParameter(
 
     @jsii.member(jsii_name="grantRead")
     def grant_read(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grants read (DescribeParameter, GetParameters, GetParameter, GetParameterHistory) permissions on the SSM Parameter.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         '''
@@ -9443,7 +9443,7 @@ class StringParameter(
 
     @jsii.member(jsii_name="grantWrite")
     def grant_write(self, grantee: "_IGrantable_71c4f5de") -> "_Grant_a7ae64f8":
-        '''Grants write (PutParameter) permissions on the SSM Parameter.
+        '''[disable-awslint:no-grants].
 
         :param grantee: -
         '''

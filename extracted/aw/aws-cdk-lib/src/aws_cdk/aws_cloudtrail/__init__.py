@@ -5015,7 +5015,7 @@ class Trail(
         id: builtins.str,
         *,
         bucket: typing.Optional["_IBucket_42e086fd"] = None,
-        cloud_watch_log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        cloud_watch_log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         cloud_watch_logs_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         enable_file_validation: typing.Optional[builtins.bool] = None,
         encryption_key: typing.Optional["_IKey_5f11635f"] = None,
@@ -5332,7 +5332,7 @@ class TrailProps:
         self,
         *,
         bucket: typing.Optional["_IBucket_42e086fd"] = None,
-        cloud_watch_log_group: typing.Optional["_ILogGroup_3c4fa718"] = None,
+        cloud_watch_log_group: typing.Optional["_ILogGroupRef_874d025a"] = None,
         cloud_watch_logs_retention: typing.Optional["_RetentionDays_070f99f0"] = None,
         enable_file_validation: typing.Optional[builtins.bool] = None,
         encryption_key: typing.Optional["_IKey_5f11635f"] = None,
@@ -5433,7 +5433,7 @@ class TrailProps:
         return typing.cast(typing.Optional["_IBucket_42e086fd"], result)
 
     @builtins.property
-    def cloud_watch_log_group(self) -> typing.Optional["_ILogGroup_3c4fa718"]:
+    def cloud_watch_log_group(self) -> typing.Optional["_ILogGroupRef_874d025a"]:
         '''Log Group to which CloudTrail to push logs to.
 
         Ignored if sendToCloudWatchLogs is set to false.
@@ -5441,7 +5441,7 @@ class TrailProps:
         :default: - a new log group is created and used.
         '''
         result = self._values.get("cloud_watch_log_group")
-        return typing.cast(typing.Optional["_ILogGroup_3c4fa718"], result)
+        return typing.cast(typing.Optional["_ILogGroupRef_874d025a"], result)
 
     @builtins.property
     def cloud_watch_logs_retention(self) -> typing.Optional["_RetentionDays_070f99f0"]:
@@ -6331,7 +6331,7 @@ def _typecheckingstub__7b48a378f80b4a1726c79900e866bb932a0819e2b9124d6c5818259bf
     id: builtins.str,
     *,
     bucket: typing.Optional[_IBucket_42e086fd] = None,
-    cloud_watch_log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    cloud_watch_log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     cloud_watch_logs_retention: typing.Optional[_RetentionDays_070f99f0] = None,
     enable_file_validation: typing.Optional[builtins.bool] = None,
     encryption_key: typing.Optional[_IKey_5f11635f] = None,
@@ -6396,7 +6396,7 @@ def _typecheckingstub__4675fde35c881f97ed3c098123c51ad64ff5ae73a4d353d16fd977d99
 def _typecheckingstub__c5ff27b267882181cdb7a08f4ac78fe9eaffb7f3b50db3ce4f2dc9ce929af6f7(
     *,
     bucket: typing.Optional[_IBucket_42e086fd] = None,
-    cloud_watch_log_group: typing.Optional[_ILogGroup_3c4fa718] = None,
+    cloud_watch_log_group: typing.Optional[_ILogGroupRef_874d025a] = None,
     cloud_watch_logs_retention: typing.Optional[_RetentionDays_070f99f0] = None,
     enable_file_validation: typing.Optional[builtins.bool] = None,
     encryption_key: typing.Optional[_IKey_5f11635f] = None,

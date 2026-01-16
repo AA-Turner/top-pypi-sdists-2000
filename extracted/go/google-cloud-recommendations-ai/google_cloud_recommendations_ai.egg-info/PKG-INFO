@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: google-cloud-recommendations-ai
-Version: 0.11.0
+Version: 0.12.0
 Summary: Google Cloud Recommendations Ai API client library
 Home-page: https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-recommendations-ai
 Author: Google LLC

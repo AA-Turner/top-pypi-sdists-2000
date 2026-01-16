@@ -1664,7 +1664,6 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-from ..aws_certificatemanager import ICertificate as _ICertificate_c194c70b
 from ..aws_cloudwatch import (
     Metric as _Metric_e396a4dc,
     MetricOptions as _MetricOptions_1788b62f,
@@ -1685,6 +1684,9 @@ from ..aws_kinesis import IStream as _IStream_4e2457d2
 from ..aws_lambda import IVersion as _IVersion_faf7234e
 from ..aws_s3 import IBucket as _IBucket_42e086fd
 from ..aws_s3_assets import AssetOptions as _AssetOptions_2aa69621
+from ..interfaces.aws_certificatemanager import (
+    ICertificateRef as _ICertificateRef_1878d79b
+)
 from ..interfaces.aws_cloudfront import (
     AnycastIpListReference as _AnycastIpListReference_dcca9827,
     CachePolicyReference as _CachePolicyReference_3d9838b6,
@@ -15055,7 +15057,7 @@ class CfnKeyGroupProps:
         )
 
 
-@jsii.implements(_IInspectable_c2943556, _IKeyValueStoreRef_332470ca)
+@jsii.implements(_IInspectable_c2943556, _IKeyValueStoreRef_332470ca, _ITaggableV2_4e6798f8)
 class CfnKeyValueStore(
     _CfnResource_9df397a6,
     metaclass=jsii.JSIIMeta,
@@ -15071,6 +15073,7 @@ class CfnKeyValueStore(
 
     Example::
 
+        from aws_cdk import CfnTag
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cloudfront as cloudfront
@@ -15083,7 +15086,11 @@ class CfnKeyValueStore(
             import_source=cloudfront.CfnKeyValueStore.ImportSourceProperty(
                 source_arn="sourceArn",
                 source_type="sourceType"
-            )
+            ),
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
         )
     '''
 
@@ -15095,6 +15102,7 @@ class CfnKeyValueStore(
         name: builtins.str,
         comment: typing.Optional[builtins.str] = None,
         import_source: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKeyValueStore.ImportSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CloudFront::KeyValueStore``.
 
@@ -15103,13 +15111,14 @@ class CfnKeyValueStore(
         :param name: The name of the key value store.
         :param comment: A comment for the key value store.
         :param import_source: The import source for the key value store.
+        :param tags: 
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__39a9c43a6e994ac270417da8b032b21384dbcc2f5eb680a69e9a420bb725c8a3)
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnKeyValueStoreProps(
-            name=name, comment=comment, import_source=import_source
+            name=name, comment=comment, import_source=import_source, tags=tags
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -15200,6 +15209,12 @@ class CfnKeyValueStore(
         return typing.cast(builtins.str, jsii.get(self, "attrStatus"))
 
     @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> "_TagManager_0a598cb3":
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast("_TagManager_0a598cb3", jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
     @jsii.member(jsii_name="cfnProperties")
     def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
         return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
@@ -15253,6 +15268,18 @@ class CfnKeyValueStore(
             type_hints = typing.get_type_hints(_typecheckingstub__bfd48a97d25e7b681206f3f821672b491cdb6e27eb4858257cc5f853e5674c56)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "importSource", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List["_CfnTag_f6864754"]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9c88f367ad914ee64fa713b8b0ce72ead6f57eff5fb92453a2f77a39db475e44)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_cloudfront.CfnKeyValueStore.ImportSourceProperty",
@@ -15333,6 +15360,7 @@ class CfnKeyValueStore(
         "name": "name",
         "comment": "comment",
         "import_source": "importSource",
+        "tags": "tags",
     },
 )
 class CfnKeyValueStoreProps:
@@ -15342,18 +15370,21 @@ class CfnKeyValueStoreProps:
         name: builtins.str,
         comment: typing.Optional[builtins.str] = None,
         import_source: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnKeyValueStore.ImportSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnKeyValueStore``.
 
         :param name: The name of the key value store.
         :param comment: A comment for the key value store.
         :param import_source: The import source for the key value store.
+        :param tags: 
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-keyvaluestore.html
         :exampleMetadata: fixture=_generated
 
         Example::
 
+            from aws_cdk import CfnTag
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cloudfront as cloudfront
@@ -15366,7 +15397,11 @@ class CfnKeyValueStoreProps:
                 import_source=cloudfront.CfnKeyValueStore.ImportSourceProperty(
                     source_arn="sourceArn",
                     source_type="sourceType"
-                )
+                ),
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
             )
         '''
         if __debug__:
@@ -15374,6 +15409,7 @@ class CfnKeyValueStoreProps:
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
             check_type(argname="argument import_source", value=import_source, expected_type=type_hints["import_source"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "name": name,
         }
@@ -15381,6 +15417,8 @@ class CfnKeyValueStoreProps:
             self._values["comment"] = comment
         if import_source is not None:
             self._values["import_source"] = import_source
+        if tags is not None:
+            self._values["tags"] = tags
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -15411,6 +15449,14 @@ class CfnKeyValueStoreProps:
         '''
         result = self._values.get("import_source")
         return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnKeyValueStore.ImportSourceProperty"]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List["_CfnTag_f6864754"]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-keyvaluestore.html#cfn-cloudfront-keyvaluestore-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List["_CfnTag_f6864754"]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -22096,7 +22142,7 @@ class DistributionProps:
         *,
         default_behavior: typing.Union["BehaviorOptions", typing.Dict[builtins.str, typing.Any]],
         additional_behaviors: typing.Optional[typing.Mapping[builtins.str, typing.Union["BehaviorOptions", typing.Dict[builtins.str, typing.Any]]]] = None,
-        certificate: typing.Optional["_ICertificate_c194c70b"] = None,
+        certificate: typing.Optional["_ICertificateRef_1878d79b"] = None,
         comment: typing.Optional[builtins.str] = None,
         default_root_object: typing.Optional[builtins.str] = None,
         domain_names: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -22243,7 +22289,7 @@ class DistributionProps:
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, "BehaviorOptions"]], result)
 
     @builtins.property
-    def certificate(self) -> typing.Optional["_ICertificate_c194c70b"]:
+    def certificate(self) -> typing.Optional["_ICertificateRef_1878d79b"]:
         '''A certificate to associate with the distribution.
 
         The certificate must be located in N. Virginia (us-east-1).
@@ -22251,7 +22297,7 @@ class DistributionProps:
         :default: - the CloudFront wildcard certificate (*.cloudfront.net) will be used.
         '''
         result = self._values.get("certificate")
-        return typing.cast(typing.Optional["_ICertificate_c194c70b"], result)
+        return typing.cast(typing.Optional["_ICertificateRef_1878d79b"], result)
 
     @builtins.property
     def comment(self) -> typing.Optional[builtins.str]:
@@ -29666,7 +29712,7 @@ class ViewerCertificate(
     @builtins.classmethod
     def from_acm_certificate(
         cls,
-        certificate: "_ICertificate_c194c70b",
+        certificate: "_ICertificateRef_1878d79b",
         *,
         aliases: typing.Optional[typing.Sequence[builtins.str]] = None,
         security_policy: typing.Optional["SecurityPolicyProtocol"] = None,
@@ -30999,6 +31045,8 @@ class CloudFrontWebDistribution(
     ) -> "_Grant_a7ae64f8":
         '''(deprecated) Adds an IAM policy statement associated with this distribution to an IAM principal's policy.
 
+        [disable-awslint:no-grants]
+
         :param identity: The principal.
         :param actions: The set of actions to allow (i.e. "cloudfront:ListInvalidations").
 
@@ -31016,6 +31064,8 @@ class CloudFrontWebDistribution(
         identity: "_IGrantable_71c4f5de",
     ) -> "_Grant_a7ae64f8":
         '''(deprecated) Grant to create invalidations for this bucket to an IAM principal (Role/Group/User).
+
+        [disable-awslint:no-grants]
 
         :param identity: The principal.
 
@@ -31131,7 +31181,7 @@ class Distribution(
         *,
         default_behavior: typing.Union["BehaviorOptions", typing.Dict[builtins.str, typing.Any]],
         additional_behaviors: typing.Optional[typing.Mapping[builtins.str, typing.Union["BehaviorOptions", typing.Dict[builtins.str, typing.Any]]]] = None,
-        certificate: typing.Optional["_ICertificate_c194c70b"] = None,
+        certificate: typing.Optional["_ICertificateRef_1878d79b"] = None,
         comment: typing.Optional[builtins.str] = None,
         default_root_object: typing.Optional[builtins.str] = None,
         domain_names: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -31311,6 +31361,8 @@ class Distribution(
     ) -> "_Grant_a7ae64f8":
         '''Adds an IAM policy statement associated with this distribution to an IAM principal's policy.
 
+        [disable-awslint:no-grants]
+
         :param identity: The principal.
         :param actions: The set of actions to allow (i.e. "cloudfront:ListInvalidations").
         '''
@@ -31326,6 +31378,8 @@ class Distribution(
         identity: "_IGrantable_71c4f5de",
     ) -> "_Grant_a7ae64f8":
         '''Grant to create invalidations for this bucket to an IAM principal (Role/Group/User).
+
+        [disable-awslint:no-grants]
 
         :param identity: The principal.
         '''
@@ -34083,6 +34137,7 @@ def _typecheckingstub__39a9c43a6e994ac270417da8b032b21384dbcc2f5eb680a69e9a420bb
     name: builtins.str,
     comment: typing.Optional[builtins.str] = None,
     import_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnKeyValueStore.ImportSourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -34129,6 +34184,12 @@ def _typecheckingstub__bfd48a97d25e7b681206f3f821672b491cdb6e27eb4858257cc5f853e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__9c88f367ad914ee64fa713b8b0ce72ead6f57eff5fb92453a2f77a39db475e44(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__c607ebfca7e05fb52f9d41898246334c1bd226fe4d739e9e3061836324174f88(
     *,
     source_arn: builtins.str,
@@ -34142,6 +34203,7 @@ def _typecheckingstub__46271f68955fd8497d5300c52e033d659758a0ba193251ef2f5c50bdd
     name: builtins.str,
     comment: typing.Optional[builtins.str] = None,
     import_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnKeyValueStore.ImportSourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -34981,7 +35043,7 @@ def _typecheckingstub__c72abdcdfdddafd2ae88355978fb7eb563a14866cc02f8396484e058a
     *,
     default_behavior: typing.Union[BehaviorOptions, typing.Dict[builtins.str, typing.Any]],
     additional_behaviors: typing.Optional[typing.Mapping[builtins.str, typing.Union[BehaviorOptions, typing.Dict[builtins.str, typing.Any]]]] = None,
-    certificate: typing.Optional[_ICertificate_c194c70b] = None,
+    certificate: typing.Optional[_ICertificateRef_1878d79b] = None,
     comment: typing.Optional[builtins.str] = None,
     default_root_object: typing.Optional[builtins.str] = None,
     domain_names: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -35669,7 +35731,7 @@ def _typecheckingstub__ccea0761c172529885c07d5e167927d1ae78b92776ef8b892c36faadf
     pass
 
 def _typecheckingstub__32c93e9d34723e934bcd1fe5aa6cff4345177cac1db5a7d27edb46ee71a3039b(
-    certificate: _ICertificate_c194c70b,
+    certificate: _ICertificateRef_1878d79b,
     *,
     aliases: typing.Optional[typing.Sequence[builtins.str]] = None,
     security_policy: typing.Optional[SecurityPolicyProtocol] = None,
@@ -35887,7 +35949,7 @@ def _typecheckingstub__7aacedff6241d454506db6fd614d1052310e1396435b71669cb481c94
     *,
     default_behavior: typing.Union[BehaviorOptions, typing.Dict[builtins.str, typing.Any]],
     additional_behaviors: typing.Optional[typing.Mapping[builtins.str, typing.Union[BehaviorOptions, typing.Dict[builtins.str, typing.Any]]]] = None,
-    certificate: typing.Optional[_ICertificate_c194c70b] = None,
+    certificate: typing.Optional[_ICertificateRef_1878d79b] = None,
     comment: typing.Optional[builtins.str] = None,
     default_root_object: typing.Optional[builtins.str] = None,
     domain_names: typing.Optional[typing.Sequence[builtins.str]] = None,

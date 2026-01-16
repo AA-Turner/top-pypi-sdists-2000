@@ -210,7 +210,9 @@ bigquery_dialect.add(
             r"[A-Z_][A-Z0-9_]*",
             IdentifierSegment,
             type="naked_identifier",
-            anti_template=r"^(" + r"|".join(dialect.sets("reserved_keywords")) + r")$",
+            anti_template=r"^("
+            + r"|".join(sorted(dialect.sets("reserved_keywords")))
+            + r")$",
         )
     ),
     QuotedCSIdentifierSegment=TypedParser(
@@ -286,8 +288,44 @@ bigquery_dialect.replace(
             r"[A-Z_][A-Z0-9_]*",
             IdentifierSegment,
             type="naked_identifier",
-            anti_template=r"^(" + r"|".join(dialect.sets("reserved_keywords")) + r")$",
+            anti_template=r"^("
+            + r"|".join(sorted(dialect.sets("reserved_keywords")))
+            + r")$",
             casefold=str.upper,
+        )
+    ),
+    DatatypeIdentifierSegment=SegmentGenerator(
+        lambda dialect: MultiStringParser(
+            [
+                "INT64",
+                "INT",
+                "SMALLINT",
+                "INTEGER",
+                "BIGINT",
+                "TINYINT",
+                "BYTEINT",
+                "FLOAT64",
+                "NUMERIC",
+                "DECIMAL",
+                "BIGNUMERIC",
+                "BIGDECIMAL",
+                "BOOL",
+                "BOOLEAN",
+                "STRING",
+                "BYTES",
+                "DATE",
+                "DATETIME",
+                "TIME",
+                "TIMESTAMP",
+                "GEOGRAPHY",
+                "INTERVAL",
+                "JSON",
+                "RANGE",
+                "ARRAY",
+                "STRUCT",
+            ],
+            CodeSegment,
+            type="data_type_identifier",
         )
     ),
     FunctionContentsExpressionGrammar=OneOf(
@@ -299,6 +337,24 @@ bigquery_dialect.replace(
         ),
         Sequence(Ref("ExpressionSegment"), "HAVING", OneOf("MIN", "MAX")),
         Ref("NamedArgumentSegment"),
+    ),
+    # Extend the ANSI FunctionContentsGrammar to allow a FORMAT clause
+    # after the CAST-style "AS <datatype>" pattern, e.g.:
+    #   CAST(x AS STRING FORMAT 'ASCII')
+    FunctionContentsGrammar=ansi_dialect.get_grammar("FunctionContentsGrammar").copy(
+        insert=[
+            Sequence(
+                Ref("ExpressionSegment"),
+                "AS",
+                Ref("DatatypeSegment"),
+                Sequence(
+                    Ref.keyword("FORMAT"),
+                    Ref("QuotedLiteralSegment"),
+                    Ref("TimeZoneGrammar", optional=True),
+                    optional=True,
+                ),
+            )
+        ]
     ),
     TrimParametersGrammar=Nothing(),
     # BigQuery allows underscore in parameter names, and also anything if quoted in
@@ -463,7 +519,7 @@ bigquery_dialect.bracket_sets("angle_bracket_pairs").update(
 class ArrayTypeSegment(ansi.ArrayTypeSegment):
     """Prefix for array literals specifying the type."""
 
-    type = "array_type"
+    type = "data_type"
     match_grammar = Sequence(
         "ARRAY",
         Bracketed(
@@ -1369,6 +1425,7 @@ class DatatypeSegment(ansi.DatatypeSegment):
 class StructTypeSegment(ansi.StructTypeSegment):
     """Expression to construct a STRUCT datatype."""
 
+    type = "data_type"
     match_grammar = Sequence(
         "STRUCT",
         Ref("StructTypeSchemaSegment", optional=True),
