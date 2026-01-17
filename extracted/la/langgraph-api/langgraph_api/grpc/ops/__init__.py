@@ -122,20 +122,27 @@ def _map_sort_order(sort_order: str | None) -> Any:
 
 
 def _handle_grpc_error(error: AioRpcError) -> None:
-    """Handle gRPC errors and convert to appropriate exceptions."""
-    details: dict[str, Any] = {}
+    """Handle gRPC errors and convert to appropriate exceptions.
+
+    We get two types of exception back from GRPC:
+    - A JSON string that contains a message body. These we want to just return the message.
+    - A string. This we can return verbatim.
+    Always return detail as a string here.
+    """
     error_details = error.details()
     if error_details is not None:
         try:
             details = orjson.loads(error_details)
+            error_details = orjson.dumps(details.get("message", "")).decode()
         except orjson.JSONDecodeError:
-            logger.exception("Failed to decode gRPC error details: %s", error_details)
+            # error details is not json, so just retun it as is
+            pass
 
     raise HTTPException(
         status_code=GRPC_STATUS_TO_HTTP_STATUS.get(
             error.code(), HTTPStatus.INTERNAL_SERVER_ERROR
         ),
-        detail=orjson.dumps({"detail": details.get("message", "")}).decode(),
+        detail=error_details,
     )
 
 

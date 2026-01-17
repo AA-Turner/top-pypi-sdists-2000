@@ -539,6 +539,11 @@ class ThreadsStub(object):
                 request_serializer=core__api__pb2.SweepThreadsTTLRequest.SerializeToString,
                 response_deserializer=core__api__pb2.SweepThreadsTTLResponse.FromString,
                 _registered_method=True)
+        self.GetGraphID = channel.unary_unary(
+                '/coreApi.Threads/GetGraphID',
+                request_serializer=core__api__pb2.GetGraphIDRequest.SerializeToString,
+                response_deserializer=core__api__pb2.GetGraphIDResponse.FromString,
+                _registered_method=True)
 
 
 class ThreadsServicer(object):
@@ -613,6 +618,13 @@ class ThreadsServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetGraphID(self, request, context):
+        """Get graph ID for the latest run in a thread (internal method, no auth).
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ThreadsServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -670,6 +682,11 @@ def add_ThreadsServicer_to_server(servicer, server):
                     servicer.SweepTTL,
                     request_deserializer=core__api__pb2.SweepThreadsTTLRequest.FromString,
                     response_serializer=core__api__pb2.SweepThreadsTTLResponse.SerializeToString,
+            ),
+            'GetGraphID': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetGraphID,
+                    request_deserializer=core__api__pb2.GetGraphIDRequest.FromString,
+                    response_serializer=core__api__pb2.GetGraphIDResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -979,6 +996,33 @@ class Threads(object):
             metadata,
             _registered_method=True)
 
+    @staticmethod
+    def GetGraphID(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/coreApi.Threads/GetGraphID',
+            core__api__pb2.GetGraphIDRequest.SerializeToString,
+            core__api__pb2.GetGraphIDResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
 
 class RunsStub(object):
     """Missing associated documentation comment in .proto file."""
@@ -1038,6 +1082,11 @@ class RunsStub(object):
                 '/coreApi.Runs/Stats',
                 request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
                 response_deserializer=core__api__pb2.RunStats.FromString,
+                _registered_method=True)
+        self.Count = channel.unary_unary(
+                '/coreApi.Runs/Count',
+                request_serializer=core__api__pb2.CountRunsRequest.SerializeToString,
+                response_deserializer=core__api__pb2.CountResponse.FromString,
                 _registered_method=True)
         self.Next = channel.unary_unary(
                 '/coreApi.Runs/Next',
@@ -1113,14 +1162,21 @@ class RunsServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def Stats(self, request, context):
-        """Get run statistics (internal method)
+        """Get run statistics (internal method, no auth)
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Count(self, request, context):
+        """Count runs matching criteria (internal method, no auth)
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def Next(self, request, context):
-        """Get next run from queue (internal worker method)
+        """Get next run from queue (internal worker method, no auth)
         TODO: come back
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -1128,7 +1184,7 @@ class RunsServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def Sweep(self, request, context):
-        """Sweep abandoned runs (internal method)
+        """Sweep abandoned runs (internal method, no auth)
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -1186,6 +1242,11 @@ def add_RunsServicer_to_server(servicer, server):
                     servicer.Stats,
                     request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                     response_serializer=core__api__pb2.RunStats.SerializeToString,
+            ),
+            'Count': grpc.unary_unary_rpc_method_handler(
+                    servicer.Count,
+                    request_deserializer=core__api__pb2.CountRunsRequest.FromString,
+                    response_serializer=core__api__pb2.CountResponse.SerializeToString,
             ),
             'Next': grpc.unary_unary_rpc_method_handler(
                     servicer.Next,
@@ -1468,6 +1529,33 @@ class Runs(object):
             '/coreApi.Runs/Stats',
             google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             core__api__pb2.RunStats.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def Count(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/coreApi.Runs/Count',
+            core__api__pb2.CountRunsRequest.SerializeToString,
+            core__api__pb2.CountResponse.FromString,
             options,
             channel_credentials,
             insecure,

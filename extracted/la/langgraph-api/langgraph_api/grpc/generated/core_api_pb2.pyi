@@ -834,6 +834,14 @@ class SweepRunsResponse(_message.Message):
     run_ids: _containers.RepeatedCompositeFieldContainer[UUID]
     def __init__(self, run_ids: _Optional[_Iterable[_Union[UUID, _Mapping]]] = ...) -> None: ...
 
+class CountRunsRequest(_message.Message):
+    __slots__ = ("thread_id", "statuses")
+    THREAD_ID_FIELD_NUMBER: _ClassVar[int]
+    STATUSES_FIELD_NUMBER: _ClassVar[int]
+    thread_id: UUID
+    statuses: _containers.RepeatedScalarFieldContainer[str]
+    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., statuses: _Optional[_Iterable[str]] = ...) -> None: ...
+
 class StreamRunRequest(_message.Message):
     __slots__ = ("thread_id", "run_id", "filters", "last_event_id", "stream_modes", "ignore_run_not_found", "cancel_on_disconnect")
     THREAD_ID_FIELD_NUMBER: _ClassVar[int]
@@ -871,6 +879,18 @@ class MarkRunDoneRequest(_message.Message):
     thread_id: UUID
     resumable: bool
     def __init__(self, run_id: _Optional[_Union[UUID, _Mapping]] = ..., thread_id: _Optional[_Union[UUID, _Mapping]] = ..., resumable: bool = ...) -> None: ...
+
+class GetGraphIDRequest(_message.Message):
+    __slots__ = ("thread_id",)
+    THREAD_ID_FIELD_NUMBER: _ClassVar[int]
+    thread_id: UUID
+    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ...) -> None: ...
+
+class GetGraphIDResponse(_message.Message):
+    __slots__ = ("graph_id",)
+    GRAPH_ID_FIELD_NUMBER: _ClassVar[int]
+    graph_id: str
+    def __init__(self, graph_id: _Optional[str] = ...) -> None: ...
 
 class CreateRunResponse(_message.Message):
     __slots__ = ("runs",)

@@ -279,6 +279,34 @@ class Runs(Authenticated):
         return generate_results()
 
     @staticmethod
+    async def count(
+        *,
+        thread_id: UUID | str,
+        statuses: list[str] | None = None,
+    ) -> int:
+        """Count runs matching criteria.
+
+        This is an internal method with no auth - used for checking
+        if a thread has pending/running runs.
+
+        Args:
+            thread_id: Thread ID to count runs for
+            statuses: Optional list of statuses to filter by (e.g., ["pending", "running"])
+
+        Returns:
+            Count of matching runs
+        """
+        request = pb.CountRunsRequest(
+            thread_id=pb.UUID(value=str(thread_id)),
+            statuses=statuses or [],
+        )
+
+        client = await get_shared_client()
+        response = await client.runs.Count(request)
+
+        return int(response.count)
+
+    @staticmethod
     async def get(
         conn,  # Not used in gRPC implementation
         run_id: UUID,

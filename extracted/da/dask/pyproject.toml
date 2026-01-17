@@ -24,6 +24,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Scientific/Engineering",
     "Topic :: System :: Distributed Computing",
 ]
@@ -43,6 +44,8 @@ dependencies = [
     # importlib.metadata has the following bugs fixed in 3.10.9 and 3.11.1
     # https://github.com/python/cpython/issues/99130
     # https://github.com/python/cpython/issues/98706
+    # Additionally, importlib.metadata.entry_points changed return type in 3.12
+    # https://docs.python.org/3/library/importlib.metadata.html#importlib.metadata.entry_points
     "importlib_metadata >= 4.13.0; python_version < '3.12' ",
 ]
 dynamic = ["version"]
@@ -56,9 +59,9 @@ bag = []
 dataframe = [
     "dask[array]",
     "pandas >= 2.0",
-    "pyarrow>=14.0.1",
+    "pyarrow >= 14.0.1",
 ]
-distributed = ["distributed >= 2025.12.0,<2025.12.1"]
+distributed = ["distributed >= 2026.1.1,<2026.1.2"]
 diagnostics = [
     "bokeh >= 3.1.0",
     "jinja2 >= 2.10.3",
@@ -231,6 +234,7 @@ source = ["dask"]
 [tool.coverage.report]
 # Regexes for lines to exclude from consideration
 exclude_lines = [
+    "if TYPE_CHECKING:",
     "pragma: no cover",
     "raise AssertionError",
     "raise NotImplementedError",

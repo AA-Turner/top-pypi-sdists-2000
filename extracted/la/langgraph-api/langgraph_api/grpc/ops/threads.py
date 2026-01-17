@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+from contextlib import AsyncExitStack
 from datetime import UTC
 from http import HTTPStatus
 from typing import TYPE_CHECKING, Any, Literal
@@ -13,8 +14,14 @@ if TYPE_CHECKING:
 
 import orjson
 import structlog
+from langgraph.checkpoint.serde.jsonplus import _msgpack_ext_hook_to_json
+from langgraph.types import StateSnapshot, StateUpdate
+from langgraph_sdk import Auth
 from starlette.exceptions import HTTPException
 
+from langgraph_api import store as api_store
+from langgraph_api.command import map_cmd
+from langgraph_api.graph import get_graph
 from langgraph_api.grpc.client import get_shared_client
 from langgraph_api.grpc.generated import checkpointer_pb2
 from langgraph_api.grpc.generated import core_api_pb2 as pb
@@ -25,8 +32,12 @@ from langgraph_api.grpc.ops import (
     grpc_error_guard,
     map_if_exists,
 )
+from langgraph_api.grpc.ops.runs import Runs
+from langgraph_api.schema import ThreadUpdateResponse
 from langgraph_api.serde import json_dumpb, json_dumpb_optional, json_loads
-from langgraph_api.state import patch_interrupt
+from langgraph_api.state import patch_interrupt, state_snapshot_to_thread_state
+from langgraph_api.utils import fetchone
+from langgraph_runtime.checkpoint import Checkpointer
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
@@ -40,6 +51,14 @@ if TYPE_CHECKING:
     )
 
 logger = structlog.stdlib.get_logger(__name__)
+
+
+def _snapshot_defaults():
+    """Support older versions of langgraph that don't have interrupts field."""
+    if not hasattr(StateSnapshot, "interrupts"):
+        return {}
+    return {"interrupts": tuple()}
+
 
 THREAD_STATUS_TO_PB = {
     "idle": enum_thread_status.idle,
@@ -377,7 +396,8 @@ class Threads(Authenticated):
     async def get(
         conn,  # Not used
         thread_id: UUID | str,
-        ctx: Any = None,
+        ctx: Auth.types.BaseAuthContext | None = None,
+        filters: Auth.types.FilterType | None = None,
         include_ttl: bool = False,
     ) -> AsyncIterator[Thread]:  # type: ignore[return-value]
         """Get a thread by ID.
@@ -386,11 +406,16 @@ class Threads(Authenticated):
             conn: Not used (required for interface compatibility)
             thread_id: Thread ID
             ctx: Auth context
+            filters: Additional auth filters to merge with auth context filters
             include_ttl: Not yet supported in gRPC - parameter ignored.
         """
         auth_filters = await Threads.handle_event(
             ctx, "read", {"thread_id": str(thread_id)}
         )
+        # Merge auth filters with any additional parent filters provided.
+        # (Parent filters take precedence.)
+        if filters:
+            auth_filters = {**(auth_filters or {}), **(filters or {})}
 
         request = pb.GetThreadRequest(
             thread_id=pb.UUID(value=_normalize_uuid(thread_id)),
@@ -622,16 +647,14 @@ class Threads(Authenticated):
         return generate_result()
 
     @staticmethod
-    async def _set_status(
+    async def set_status(
         conn,  # Not used in gRPC implementation
         thread_id: UUID | str,
         checkpoint: dict[str, Any] | None,
         exception: BaseException | dict[str, Any] | None,
         expected_status: ThreadStatus | Sequence[ThreadStatus] | None = None,
     ) -> None:
-        """Set thread status.
-
-        This is an internal method (no auth) used in `Threads.State`.
+        """Set thread status via gRPC.
 
         Args:
             conn: Not used (required for interface compatibility)
@@ -674,3 +697,317 @@ class Threads(Authenticated):
 
         client = await get_shared_client()
         await client.threads.SetStatus(pb.SetThreadStatusRequest(**request_kwargs))
+
+    @staticmethod
+    async def get_graph_id(
+        thread_id: UUID | str,
+    ) -> str | None:
+        """Get the graph ID for the latest run in a thread."""
+        request = pb.GetGraphIDRequest(
+            thread_id=pb.UUID(value=_normalize_uuid(thread_id)),
+        )
+
+        client = await get_shared_client()
+        response = await client.threads.GetGraphID(request)
+
+        return response.graph_id if response.graph_id else None
+
+    class State(Authenticated):
+        # treat this like threads resource
+        resource = "threads"
+
+        @staticmethod
+        async def get(
+            conn,  # Still needed for checkpointer
+            config: dict[str, Any],
+            subgraphs: bool,
+            ctx: Any = None,
+        ) -> StateSnapshot:
+            """Get state snapshot for a thread (*internal only*, no auth)."""
+            checkpointer = Checkpointer(conn, unpack_hook=_msgpack_ext_hook_to_json)
+            thread_id = config["configurable"]["thread_id"]
+
+            async with conn.pipeline():
+                thread, checkpoint, graph_id = await asyncio.gather(
+                    Threads.get(conn, thread_id, ctx=ctx),
+                    checkpointer.aget_iter(config),
+                    Threads.get_graph_id(thread_id),
+                )
+
+            thread = await fetchone(thread)
+            metadata = json_loads(thread["metadata"])
+            thread_config = json_loads(thread["config"])
+            thread_config = {
+                **thread_config,
+                "configurable": {
+                    **thread_config.get("configurable", {}),
+                    **config.get("configurable", {}),
+                },
+            }
+            graph_id = graph_id or metadata.get("graph_id")
+
+            if graph_id:
+                # format latest checkpoint for response
+                checkpointer.latest_iter = checkpoint
+                async with get_graph(
+                    graph_id,
+                    thread_config,
+                    checkpointer=checkpointer,
+                    store=(await api_store.get_store()),
+                ) as graph:
+                    return await graph.aget_state(config, subgraphs=subgraphs)
+            else:
+                _kwargs: dict[str, Any] = {
+                    "values": {},
+                    "next": tuple(),
+                    "config": None,
+                    "metadata": None,
+                    "created_at": None,
+                    "parent_config": None,
+                    "tasks": tuple(),
+                }
+                _kwargs.update(_snapshot_defaults())
+                return StateSnapshot(**_kwargs)  # type: ignore[missing-argument]
+
+        @staticmethod
+        async def post(
+            conn,  # Still needed for checkpointer and run count check
+            config: dict[str, Any],
+            values: Any,
+            as_node: str | None = None,
+            ctx: Any = None,
+        ) -> ThreadUpdateResponse:
+            """Update thread state."""
+            thread_id = UUID(config["configurable"]["thread_id"])
+            filters = await Threads.State.handle_event(
+                ctx,
+                "update",
+                Auth.types.ThreadsUpdate(thread_id=thread_id),
+            )
+
+            checkpointer = Checkpointer(conn, use_direct_connection=True)
+            async with conn.pipeline():
+                thread, checkpoint, graph_id, run_count = await asyncio.gather(
+                    Threads.get(conn, thread_id, ctx=ctx, filters=filters),
+                    checkpointer.aget_iter(config),
+                    Threads.get_graph_id(thread_id),
+                    Runs.count(thread_id=thread_id, statuses=["pending", "running"]),
+                )
+
+            thread = await fetchone(thread)
+            metadata = json_loads(thread["metadata"])
+            thread_config = json_loads(thread["config"])
+            graph_id = graph_id or metadata.get("graph_id")
+
+            # Check if thread is busy before allowing state update
+            if run_count > 0:
+                raise HTTPException(
+                    status_code=409,
+                    detail="Thread is busy with a running job. Cannot update state.",
+                )
+
+            if graph_id:
+                # update state
+                config["configurable"].setdefault("graph_id", graph_id)
+                checkpointer.latest_iter = checkpoint
+                async with AsyncExitStack() as stack:
+                    graph = await stack.enter_async_context(
+                        get_graph(
+                            graph_id,
+                            thread_config,
+                            checkpointer=checkpointer,
+                            store=(await api_store.get_store()),
+                            is_for_execution=False,
+                        )
+                    )
+                    await stack.enter_async_context(conn.transaction())
+                    next_config = await graph.aupdate_state(
+                        config, values, as_node=as_node
+                    )
+                    # update thread values
+                    state = await Threads.State.get(
+                        conn, config, subgraphs=False, ctx=ctx
+                    )
+                    await Threads.set_status(
+                        conn,
+                        thread_id,
+                        state_snapshot_to_thread_state(state),
+                        None,
+                        # Accept if NOT busy
+                        expected_status=("interrupted", "idle", "error"),
+                    )
+
+                    # Publish state update event
+                    event_data = {
+                        "state": state_snapshot_to_thread_state(state),
+                        "thread_id": str(thread_id),
+                    }
+                    await Runs.Stream.publish(
+                        "*",
+                        "state_update",
+                        json_dumpb(event_data),
+                        thread_id=thread_id,
+                        resumable=True,
+                    )
+
+                    return {
+                        "checkpoint": next_config["configurable"],
+                        # below are deprecated
+                        **next_config,
+                        "checkpoint_id": next_config["configurable"]["checkpoint_id"],
+                    }
+            else:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Thread '{thread['thread_id']}' has no assigned graph ID. This usually occurs when no runs have been made on this particular thread."
+                    " This operation requires a graph ID. Please ensure a run has been made for the thread or manually update the thread metadata (by setting the 'graph_id' field) before running this operation.",
+                )
+
+        @staticmethod
+        async def bulk(
+            conn,  # Still needed for checkpointer
+            config: dict[str, Any],
+            supersteps: Any,
+            ctx: Any = None,
+        ) -> ThreadUpdateResponse:
+            """Update a thread with a batch of state updates."""
+            thread_id = UUID(config["configurable"]["thread_id"])
+            filters = await Threads.State.handle_event(
+                ctx,
+                "update",
+                Auth.types.ThreadsUpdate(thread_id=thread_id),
+            )
+
+            checkpointer = Checkpointer(conn)
+
+            async with conn.pipeline():
+                thread, graph_id = await asyncio.gather(
+                    Threads.get(conn, thread_id, ctx=ctx, filters=filters),
+                    Threads.get_graph_id(config["configurable"]["thread_id"]),
+                )
+            thread = await fetchone(thread)
+            thread_config = json_loads(thread["config"])
+            metadata = json_loads(thread["metadata"])
+            graph_id = graph_id or metadata.get("graph_id")
+
+            if graph_id:
+                # update state
+                config["configurable"].setdefault("graph_id", graph_id)
+                config["configurable"].setdefault("checkpoint_ns", "")
+
+                async with AsyncExitStack() as stack:
+                    graph = await stack.enter_async_context(
+                        get_graph(
+                            graph_id,
+                            thread_config,
+                            checkpointer=checkpointer,
+                            store=(await api_store.get_store()),
+                            is_for_execution=False,
+                        )
+                    )
+
+                    await stack.enter_async_context(conn.transaction())
+                    next_config = await graph.abulk_update_state(
+                        config,
+                        [
+                            [
+                                StateUpdate(
+                                    (
+                                        map_cmd(update.get("command"))
+                                        if update.get("command")
+                                        else update.get("values")
+                                    ),
+                                    update.get("as_node"),
+                                )
+                                for update in superstep.get("updates", [])
+                            ]
+                            for superstep in supersteps
+                        ],
+                    )
+
+                    # update thread values
+                    state = await Threads.State.get(
+                        conn, config, subgraphs=False, ctx=ctx
+                    )
+
+                    await Threads.set_status(
+                        conn,
+                        thread_id,
+                        state_snapshot_to_thread_state(state),
+                        None,
+                    )
+
+                    # Publish state update event
+                    event_data = {
+                        "state": state_snapshot_to_thread_state(state),
+                        "thread_id": str(thread_id),
+                    }
+                    await Runs.Stream.publish(
+                        "*",
+                        "state_update",
+                        json_dumpb(event_data),
+                        thread_id=thread_id,
+                        resumable=True,
+                    )
+
+                    return ThreadUpdateResponse(checkpoint=next_config["configurable"])
+            else:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Thread '{thread['thread_id']}' has no assigned graph ID. This usually occurs when no runs have been made on this particular thread."
+                    " This operation requires a graph ID. Please ensure a run has been made for the thread or manually update the thread metadata (by setting the 'graph_id' field) before running this operation.",
+                )
+
+        @staticmethod
+        async def list(
+            conn,  # Still needed for checkpointer
+            *,
+            config: dict[str, Any],
+            limit: int = 1,
+            before: Any = None,
+            metadata: Any = None,
+            ctx: Any = None,
+        ) -> list[StateSnapshot]:
+            """Get the history of a thread."""
+            async with conn.pipeline():
+                thread, graph_id = await asyncio.gather(
+                    Threads.get(conn, config["configurable"]["thread_id"], ctx=ctx),
+                    Threads.get_graph_id(config["configurable"]["thread_id"]),
+                )
+            thread = await fetchone(thread)
+            thread_metadata = json_loads(thread["metadata"])
+            thread_config = json_loads(thread["config"])
+            thread_config = {
+                **thread_config,
+                "configurable": {
+                    **thread_config.get("configurable", {}),
+                    **config.get("configurable", {}),
+                },
+            }
+            graph_id = graph_id or thread_metadata.get("graph_id")
+
+            if graph_id:
+                async with get_graph(
+                    graph_id,
+                    thread_config,
+                    checkpointer=Checkpointer(
+                        conn, unpack_hook=_msgpack_ext_hook_to_json
+                    ),
+                    store=(await api_store.get_store()),
+                    is_for_execution=False,
+                ) as graph:
+                    return [
+                        c
+                        async for c in graph.aget_state_history(
+                            config,
+                            limit=limit,
+                            filter=metadata,
+                            before=(
+                                {"configurable": {"checkpoint_id": before}}
+                                if isinstance(before, str)
+                                else before
+                            ),
+                        )
+                    ]
+            else:
+                return []

@@ -2,12 +2,13 @@
 use std::borrow::Cow;
 use std::collections::BTreeMap;
 use std::fmt::Display;
-use std::ops::{Deref, RangeInclusive};
+use std::ops::RangeInclusive;
 use std::path::Path;
 use std::sync::LazyLock;
 
 use anyhow::Result;
 use fancy_regex::Regex;
+use globset::{Glob, GlobSet, GlobSetBuilder};
 use itertools::Itertools;
 use prek_consts::{ALT_CONFIG_FILE, CONFIG_FILE};
 use rustc_hash::FxHashMap;
@@ -19,56 +20,145 @@ use crate::version;
 use crate::warn_user;
 use crate::{identify, yaml};
 
-#[derive(Clone)]
-pub(crate) struct SerdeRegex(Regex);
-
-impl Deref for SerdeRegex {
-    type Target = Regex;
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-
-#[cfg(feature = "schemars")]
-impl schemars::JsonSchema for SerdeRegex {
-    fn schema_name() -> Cow<'static, str> {
-        Cow::Borrowed("SerdeRegex")
-    }
-
-    fn json_schema(_gen: &mut schemars::generate::SchemaGenerator) -> schemars::Schema {
-        schemars::json_schema!({
-            "type": "string",
-            "description": "A regular expression string",
-        })
-    }
-}
-
-impl std::fmt::Debug for SerdeRegex {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.debug_tuple("SerdeRegex").field(&self.0.as_str()).finish()
-    }
-}
-
-impl<'de> Deserialize<'de> for SerdeRegex {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        let s = String::deserialize(deserializer)?;
-        Regex::new(&s)
-            .map(SerdeRegex)
-            .map_err(serde::de::Error::custom)
-    }
-}
-
-pub(crate) static CONFIG_FILE_REGEX: LazyLock<SerdeRegex> = LazyLock::new(|| {
+pub(crate) static CONFIG_FILE_REGEX: LazyLock<Regex> = LazyLock::new(|| {
     let pattern = format!(
         "^{}|{}$",
         fancy_regex::escape(CONFIG_FILE),
         fancy_regex::escape(ALT_CONFIG_FILE)
     );
-    SerdeRegex(Regex::new(&pattern).expect("config regex must compile"))
+    Regex::new(&pattern).expect("config regex must compile")
 });
+
+#[derive(Debug, Clone)]
+pub(crate) struct GlobPatterns {
+    patterns: Vec<String>,
+    set: GlobSet,
+}
+
+impl GlobPatterns {
+    fn new(patterns: Vec<String>) -> Result<Self, globset::Error> {
+        let mut builder = GlobSetBuilder::new();
+        for pattern in &patterns {
+            builder.add(Glob::new(pattern)?);
+        }
+        let set = builder.build()?;
+        Ok(Self { patterns, set })
+    }
+
+    fn is_match(&self, value: &str) -> bool {
+        self.set.is_match(Path::new(value))
+    }
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(untagged)]
+enum FilePatternWire {
+    Glob { glob: String },
+    GlobList { glob: Vec<String> },
+    Regex(String),
+}
+
+#[derive(Debug, thiserror::Error)]
+enum FilePatternWireError {
+    #[error(transparent)]
+    Glob(#[from] globset::Error),
+
+    #[error(transparent)]
+    Regex(#[from] fancy_regex::Error),
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(try_from = "FilePatternWire")]
+pub(crate) enum FilePattern {
+    Regex(Regex),
+    Glob(GlobPatterns),
+}
+
+#[cfg(feature = "schemars")]
+impl schemars::JsonSchema for FilePattern {
+    fn schema_name() -> Cow<'static, str> {
+        Cow::Borrowed("FilePattern")
+    }
+
+    fn json_schema(_gen: &mut schemars::generate::SchemaGenerator) -> schemars::Schema {
+        schemars::json_schema!({
+            "type": "object",
+            "description": "A file pattern, either a regex or glob pattern(s).",
+            "oneOf": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "regex": {
+                            "type": "string",
+                            "description": "A regular expression pattern.",
+                        }
+                    },
+                    "required": ["regex"],
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "glob": {
+                            "oneOf": [
+                                {
+                                    "type": "string",
+                                    "description": "A glob pattern.",
+                                },
+                                {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string",
+                                    },
+                                    "description": "A list of glob patterns.",
+                                }
+                            ]
+                        }
+                    },
+                    "required": ["glob"],
+                }
+            ],
+        })
+    }
+}
+
+impl FilePattern {
+    pub(crate) fn is_match(&self, str: &str) -> bool {
+        match self {
+            FilePattern::Regex(regex) => regex.is_match(str).unwrap_or(false),
+            FilePattern::Glob(globs) => globs.is_match(str),
+        }
+    }
+}
+
+impl Display for FilePattern {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            FilePattern::Regex(regex) => write!(f, "regex: {}", regex.as_str()),
+            FilePattern::Glob(globs) => {
+                let patterns = globs.patterns.iter().join(", ");
+                write!(f, "glob: [{patterns}]")
+            }
+        }
+    }
+}
+
+impl From<Regex> for FilePattern {
+    fn from(regex: Regex) -> Self {
+        FilePattern::Regex(regex)
+    }
+}
+
+impl TryFrom<FilePatternWire> for FilePattern {
+    type Error = FilePatternWireError;
+
+    fn try_from(value: FilePatternWire) -> Result<Self, Self::Error> {
+        match value {
+            FilePatternWire::Glob { glob } => Ok(Self::Glob(GlobPatterns::new(vec![glob])?)),
+            FilePatternWire::GlobList { glob } => Ok(Self::Glob(GlobPatterns::new(glob)?)),
+            FilePatternWire::Regex(pattern) => Ok(Self::Regex(Regex::new(&pattern)?)),
+        }
+    }
+}
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Deserialize, Serialize, clap::ValueEnum)]
 #[serde(rename_all = "snake_case")]
@@ -272,10 +362,10 @@ pub(crate) struct HookOptions {
     /// Not documented in the official docs.
     pub alias: Option<String>,
     /// The pattern of files to run on.
-    pub files: Option<SerdeRegex>,
+    pub files: Option<FilePattern>,
     /// Exclude files that were matched by `files`.
     /// Default is `$^`, which matches nothing.
-    pub exclude: Option<SerdeRegex>,
+    pub exclude: Option<FilePattern>,
     /// List of file types to run on (AND).
     /// Default is `[file]`, which matches all files.
     #[serde(deserialize_with = "deserialize_and_validate_tags", default)]
@@ -427,29 +517,35 @@ pub(crate) type LocalHook = ManifestHook;
 /// A meta hook predefined in pre-commit.
 ///
 /// It's the same as the manifest hook definition but with only a few predefined id allowed.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deserialize)]
 #[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
+#[serde(try_from = "RemoteHook")]
 pub(crate) struct MetaHook(pub(crate) ManifestHook);
 
-impl<'de> Deserialize<'de> for MetaHook {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        let hook_options = RemoteHook::deserialize(deserializer)?;
-        let mut meta_hook = MetaHook::from_id(&hook_options.id).map_err(|()| {
-            serde::de::Error::custom(format!("unknown meta hook id `{}`", &hook_options.id))
-        })?;
+#[derive(Debug, thiserror::Error)]
+pub(crate) enum MetaHookWireError {
+    #[error("unknown meta hook id `{0}`")]
+    UnknownId(String),
+
+    #[error("language must be `system` for meta hooks")]
+    InvalidLanguage,
+
+    #[error("entry is not allowed for meta hooks")]
+    EntryNotAllowed,
+}
+
+impl TryFrom<RemoteHook> for MetaHook {
+    type Error = MetaHookWireError;
+
+    fn try_from(hook_options: RemoteHook) -> std::result::Result<Self, Self::Error> {
+        let mut meta_hook = MetaHook::from_id(&hook_options.id)
+            .map_err(|()| MetaHookWireError::UnknownId(hook_options.id.clone()))?;
 
         if hook_options.language.is_some_and(|l| l != Language::System) {
-            return Err(serde::de::Error::custom(
-                "language must be `system` for meta hooks",
-            ));
+            return Err(MetaHookWireError::InvalidLanguage);
         }
         if hook_options.entry.is_some() {
-            return Err(serde::de::Error::custom(
-                "entry is not allowed for meta hooks",
-            ));
+            return Err(MetaHookWireError::EntryNotAllowed);
         }
 
         if let Some(name) = &hook_options.name {
@@ -469,29 +565,35 @@ impl From<MetaHook> for ManifestHook {
 
 /// A builtin hook predefined in prek.
 /// Basically the same as meta hooks, but defined under `builtin` repo, and do other non-meta checks.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deserialize)]
 #[cfg_attr(feature = "schemars", derive(schemars::JsonSchema))]
+#[serde(try_from = "RemoteHook")]
 pub(crate) struct BuiltinHook(pub(crate) ManifestHook);
 
-impl<'de> Deserialize<'de> for BuiltinHook {
-    fn deserialize<D>(deserializer: D) -> std::result::Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        let hook_options = RemoteHook::deserialize(deserializer)?;
-        let mut builtin_hook = BuiltinHook::from_id(&hook_options.id).map_err(|()| {
-            serde::de::Error::custom(format!("unknown builtin hook id `{}`", &hook_options.id))
-        })?;
+#[derive(Debug, thiserror::Error)]
+pub(crate) enum BuiltinHookWireError {
+    #[error("unknown builtin hook id `{0}`")]
+    UnknownId(String),
+
+    #[error("language must be `system` for builtin hooks")]
+    InvalidLanguage,
+
+    #[error("entry is not allowed for builtin hooks")]
+    EntryNotAllowed,
+}
+
+impl TryFrom<RemoteHook> for BuiltinHook {
+    type Error = BuiltinHookWireError;
+
+    fn try_from(hook_options: RemoteHook) -> std::result::Result<Self, Self::Error> {
+        let mut builtin_hook = BuiltinHook::from_id(&hook_options.id)
+            .map_err(|()| BuiltinHookWireError::UnknownId(hook_options.id.clone()))?;
 
         if hook_options.language.is_some_and(|l| l != Language::System) {
-            return Err(serde::de::Error::custom(
-                "language must be `system` for builtin hooks",
-            ));
+            return Err(BuiltinHookWireError::InvalidLanguage);
         }
         if hook_options.entry.is_some() {
-            return Err(serde::de::Error::custom(
-                "entry is not allowed for builtin hooks",
-            ));
+            return Err(BuiltinHookWireError::EntryNotAllowed);
         }
 
         if let Some(name) = &hook_options.name {
@@ -596,12 +698,34 @@ pub(crate) struct BuiltinRepo {
     _unused_keys: BTreeMap<String, serde_json::Value>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deserialize)]
+#[serde(try_from = "serde_json::Value")]
 pub(crate) enum Repo {
     Remote(RemoteRepo),
     Local(LocalRepo),
     Meta(MetaRepo),
     Builtin(BuiltinRepo),
+}
+
+#[derive(Debug, thiserror::Error)]
+pub(crate) enum RepoWireError {
+    #[error("missing field `repo`")]
+    MissingRepo,
+
+    #[error("repo must be a string")]
+    RepoNotString,
+
+    #[error("Invalid local repo: {0}")]
+    InvalidLocal(String),
+
+    #[error("Invalid meta repo: {0}")]
+    InvalidMeta(String),
+
+    #[error("Invalid builtin repo: {0}")]
+    InvalidBuiltin(String),
+
+    #[error("Invalid remote repo: {0}")]
+    InvalidRemote(String),
 }
 
 #[cfg(feature = "schemars")]
@@ -629,40 +753,30 @@ impl schemars::JsonSchema for Repo {
     }
 }
 
-impl<'de> Deserialize<'de> for Repo {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        let repo_wire = serde_json::Value::deserialize(deserializer)?;
+impl TryFrom<serde_json::Value> for Repo {
+    type Error = RepoWireError;
+
+    fn try_from(repo_wire: serde_json::Value) -> std::result::Result<Self, Self::Error> {
         let repo_location = repo_wire
             .get("repo")
-            .ok_or_else(|| serde::de::Error::missing_field("repo"))?
+            .ok_or(RepoWireError::MissingRepo)?
             .as_str()
-            .ok_or_else(|| serde::de::Error::custom("repo must be a string"))?;
+            .ok_or(RepoWireError::RepoNotString)?
+            .to_string();
 
-        match repo_location {
-            "local" => {
-                let repo = LocalRepo::deserialize(repo_wire)
-                    .map_err(|e| serde::de::Error::custom(format!("Invalid local repo: {e}")))?;
-                Ok(Repo::Local(repo))
-            }
-            "meta" => {
-                let repo = MetaRepo::deserialize(repo_wire)
-                    .map_err(|e| serde::de::Error::custom(format!("Invalid meta repo: {e}")))?;
-                Ok(Repo::Meta(repo))
-            }
-            "builtin" => {
-                let repo = BuiltinRepo::deserialize(repo_wire)
-                    .map_err(|e| serde::de::Error::custom(format!("Invalid builtin repo: {e}")))?;
-                Ok(Repo::Builtin(repo))
-            }
-            _ => {
-                let repo = RemoteRepo::deserialize(repo_wire)
-                    .map_err(|e| serde::de::Error::custom(format!("Invalid remote repo: {e}")))?;
-
-                Ok(Repo::Remote(repo))
-            }
+        match repo_location.as_str() {
+            "local" => LocalRepo::deserialize(repo_wire)
+                .map(Repo::Local)
+                .map_err(|e| RepoWireError::InvalidLocal(e.to_string())),
+            "meta" => MetaRepo::deserialize(repo_wire)
+                .map(Repo::Meta)
+                .map_err(|e| RepoWireError::InvalidMeta(e.to_string())),
+            "builtin" => BuiltinRepo::deserialize(repo_wire)
+                .map(Repo::Builtin)
+                .map_err(|e| RepoWireError::InvalidBuiltin(e.to_string())),
+            _ => RemoteRepo::deserialize(repo_wire)
+                .map(Repo::Remote)
+                .map_err(|e| RepoWireError::InvalidRemote(e.to_string())),
         }
     }
 }
@@ -682,9 +796,9 @@ pub(crate) struct Config {
     /// Default to all stages.
     pub default_stages: Option<Vec<Stage>>,
     /// Global file include pattern.
-    pub files: Option<SerdeRegex>,
+    pub files: Option<FilePattern>,
     /// Global file exclude pattern.
-    pub exclude: Option<SerdeRegex>,
+    pub exclude: Option<FilePattern>,
     /// Set to true to have prek stop running hooks after the first failure.
     /// Default is false.
     pub fail_fast: Option<bool>,
@@ -863,7 +977,6 @@ pub(crate) fn read_config(path: &Path) -> Result<Config, Error> {
         let msg = repos_has_mutable_rev
             .iter()
             .map(|repo| format!("{}: {}", repo.repo.cyan(), repo.rev.yellow()))
-            .collect::<Vec<_>>()
             .join("\n");
 
         warn_user!(
@@ -873,7 +986,7 @@ pub(crate) fn read_config(path: &Path) -> Result<Config, Error> {
             {}
             Mutable references are never updated after first install and are not supported.
             See https://pre-commit.com/#using-the-latest-version-for-a-repository for more details.
-            Hint: `prek autoupdate` often fixes this",
+            Hint: `prek auto-update` often fixes this",
             "#,
             msg
             }
@@ -947,6 +1060,98 @@ where
 mod tests {
     use super::*;
     use std::io::Write as _;
+
+    #[test]
+    fn parse_file_patterns_regex_and_glob() {
+        #[derive(Debug, Deserialize)]
+        struct Wrapper {
+            files: FilePattern,
+            exclude: FilePattern,
+        }
+
+        let regex_yaml = indoc::indoc! {r"
+            files: ^src/
+            exclude: ^target/
+        "};
+        let parsed: Wrapper =
+            serde_yaml::from_str(regex_yaml).expect("regex patterns should parse");
+        assert!(
+            matches!(parsed.files, FilePattern::Regex(_)),
+            "expected regex pattern"
+        );
+        assert!(parsed.files.is_match("src/main.rs"));
+        assert!(!parsed.files.is_match("other/main.rs"));
+        assert!(parsed.exclude.is_match("target/debug/app"));
+
+        let glob_yaml = indoc::indoc! {r"
+            files:
+              glob: src/**/*.rs
+            exclude:
+              glob: target/**
+        "};
+        let parsed: Wrapper = serde_yaml::from_str(glob_yaml).expect("glob patterns should parse");
+        assert!(
+            matches!(parsed.files, FilePattern::Glob(_)),
+            "expected glob pattern"
+        );
+        assert!(parsed.files.is_match("src/lib/main.rs"));
+        assert!(!parsed.files.is_match("src/lib/main.py"));
+        assert!(parsed.exclude.is_match("target/debug/app"));
+        assert!(!parsed.exclude.is_match("src/lib/main.rs"));
+
+        let glob_list_yaml = indoc::indoc! {r"
+            files:
+              glob:
+                - src/**/*.rs
+                - crates/**/src/**/*.rs
+            exclude:
+              glob:
+                - target/**
+                - dist/**
+        "};
+        let parsed: Wrapper =
+            serde_yaml::from_str(glob_list_yaml).expect("glob list patterns should parse");
+        assert!(parsed.files.is_match("src/lib/main.rs"));
+        assert!(parsed.files.is_match("crates/foo/src/lib.rs"));
+        assert!(!parsed.files.is_match("tests/main.rs"));
+        assert!(parsed.exclude.is_match("target/debug/app"));
+        assert!(parsed.exclude.is_match("dist/app"));
+    }
+
+    #[test]
+    fn file_patterns_expose_sources_and_display() {
+        let pattern: FilePattern = serde_yaml::from_str(indoc::indoc! {r"
+            glob:
+              - src/**/*.rs
+              - crates/**/src/**/*.rs
+        "})
+        .expect("glob list should parse");
+        assert_eq!(
+            pattern.to_string(),
+            "glob: [src/**/*.rs, crates/**/src/**/*.rs]"
+        );
+        assert!(pattern.is_match("src/main.rs"));
+        assert!(pattern.is_match("crates/foo/src/lib.rs"));
+        assert!(!pattern.is_match("tests/main.rs"));
+    }
+
+    #[test]
+    fn empty_glob_list_matches_nothing() {
+        let pattern = serde_yaml::from_str::<FilePattern>("glob: []").unwrap();
+        assert!(!pattern.is_match("any/file.rs"));
+        assert!(!pattern.is_match(""));
+    }
+
+    #[test]
+    fn invalid_glob_pattern_errors() {
+        let err = serde_yaml::from_str::<FilePattern>("glob: \"[\"")
+            .expect_err("invalid glob should fail");
+        let msg = err.to_string().to_lowercase();
+        assert!(
+            msg.contains("glob"),
+            "error should mention glob issues: {msg}"
+        );
+    }
 
     #[test]
     fn parse_repos() {
@@ -1271,8 +1476,8 @@ mod tests {
                                         options: HookOptions {
                                             alias: None,
                                             files: Some(
-                                                SerdeRegex(
-                                                    "^\\.pre-commit-config\\.yaml|\\.pre-commit-config\\.yml$",
+                                                Regex(
+                                                    ^\.pre-commit-config\.yaml|\.pre-commit-config\.yml$,
                                                 ),
                                             ),
                                             exclude: None,
@@ -1306,8 +1511,8 @@ mod tests {
                                         options: HookOptions {
                                             alias: None,
                                             files: Some(
-                                                SerdeRegex(
-                                                    "^\\.pre-commit-config\\.yaml|\\.pre-commit-config\\.yml$",
+                                                Regex(
+                                                    ^\.pre-commit-config\.yaml|\.pre-commit-config\.yml$,
                                                 ),
                                             ),
                                             exclude: None,

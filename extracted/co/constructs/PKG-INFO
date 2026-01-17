@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: constructs
-Version: 10.4.4
+Version: 10.4.5
 Summary: A programming model for software-defined state
 Home-page: https://github.com/aws/constructs
 Author: Amazon Web Services<aws-cdk-dev@amazon.com>
@@ -20,7 +20,7 @@ Requires-Python: ~=3.9
 Description-Content-Type: text/markdown
 License-File: LICENSE
 License-File: NOTICE
-Requires-Dist: jsii<2.0.0,>=1.121.0
+Requires-Dist: jsii<2.0.0,>=1.125.0
 Requires-Dist: publication>=0.0.3
 Requires-Dist: typeguard==2.13.3
 
@@ -32,7 +32,7 @@ Requires-Dist: typeguard==2.13.3
 [![npm version](https://badge.fury.io/js/constructs.svg)](https://badge.fury.io/js/constructs)
 [![PyPI version](https://badge.fury.io/py/constructs.svg)](https://badge.fury.io/py/constructs)
 [![NuGet version](https://badge.fury.io/nu/Constructs.svg)](https://badge.fury.io/nu/Constructs)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/software.constructs/constructs/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/software.constructs/constructs)
+[![Maven Central](https://maven-badges.sml.io/maven-central/software.constructs/constructs/badge.svg?style=plastic)](https://maven-badges.sml.io/maven-central/software.constructs/constructs)
 
 ## What are constructs?
 

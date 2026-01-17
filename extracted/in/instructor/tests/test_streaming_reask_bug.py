@@ -7,8 +7,9 @@ because they expect a ChatCompletion but receive a Stream object.
 GitHub Issue: https://github.com/jxnl/instructor/issues/1991
 """
 
+from typing import Any, Optional
+
 import pytest
-from unittest.mock import MagicMock
 from pydantic import ValidationError, BaseModel, field_validator
 
 from instructor.mode import Mode
@@ -23,6 +24,35 @@ class MockStream:
 
     def __next__(self):
         raise StopIteration
+
+
+class MockResponsesToolCall:
+    """Mock tool call item in a responses output list."""
+
+    def __init__(
+        self,
+        arguments: str,
+        name: Optional[str] = None,
+        call_id: Optional[str] = None,
+        item_type: str = "function_call",
+    ) -> None:
+        self.arguments = arguments
+        self.name = name
+        self.call_id = call_id
+        self.type = item_type
+
+
+class MockResponsesReasoningItem:
+    """Mock reasoning item in a responses output list."""
+
+    type = "reasoning"
+
+
+class MockResponsesResponse:
+    """Mock Responses API response with output items."""
+
+    def __init__(self, output: list[Any]) -> None:
+        self.output = output
 
 
 def create_mock_validation_error():
@@ -105,6 +135,36 @@ class TestStreamingReaskBug:
 
         assert "messages" in result
 
+    def test_reask_responses_tools_skips_reasoning_items_and_includes_details(self):
+        """Test responses reask ignores reasoning items and adds tool details."""
+        mock_response = MockResponsesResponse(
+            output=[
+                MockResponsesReasoningItem(),
+                MockResponsesToolCall(
+                    arguments='{"name": "Jane"}',
+                    name="extract_person",
+                    call_id="call_123",
+                ),
+            ]
+        )
+        kwargs = {
+            "messages": [{"role": "user", "content": "test"}],
+        }
+        exception = create_mock_validation_error()
+
+        result = handle_reask_kwargs(
+            kwargs=kwargs,
+            mode=Mode.RESPONSES_TOOLS,
+            response=mock_response,
+            exception=exception,
+        )
+
+        assert "messages" in result
+        assert len(result["messages"]) == 2
+        reask_content = result["messages"][-1]["content"]
+        assert "tool call name=extract_person, id=call_123" in reask_content
+        assert '{"name": "Jane"}' in reask_content
+
     def test_reask_md_json_with_stream_object(self):
         """Test that MD_JSON reask handler handles Stream objects."""
         mock_stream = MockStream()
@@ -144,21 +204,25 @@ class TestStreamingReaskIntegration:
         return instructor.from_openai(OpenAI())
 
     def test_streaming_with_retries_and_failing_validator(self, client):
-        """Test that streaming with retries doesn't crash on validation failure."""
+        """Test that streaming with retries doesn't crash on validation failure.
 
-        class StrictUser(BaseModel):
-            name: str
-            age: int
+        This test verifies that the reask handler doesn't crash with
+        "'Stream' object has no attribute 'choices'" when validation fails
+        during streaming. The actual validation outcome depends on LLM behavior.
+        """
 
-            @field_validator("name")
+        class ImpossibleModel(BaseModel):
+            """Model with a validator that always fails."""
+
+            value: str
+
+            @field_validator("value")
             @classmethod
-            def name_must_have_space(cls, v: str) -> str:
-                if v and " " not in v:
-                    raise ValueError("Name must have first and last name")
-                return v
+            def always_fail(cls, v: str) -> str:  # noqa: ARG003
+                raise ValueError("This validator always fails for testing")
 
-        # This should not crash with AttributeError
-        # It may raise InstructorRetryException after retries exhausted, which is expected
+        # This should not crash with AttributeError about Stream.choices
+        # It should raise InstructorRetryException after retries are exhausted
         from instructor.core.exceptions import InstructorRetryException
 
         with pytest.raises(InstructorRetryException):
@@ -169,9 +233,9 @@ class TestStreamingReaskIntegration:
                     messages=[
                         {
                             "role": "user",
-                            "content": "Extract: John is 25. Return name='John' (no last name).",
+                            "content": "Return value='test'",
                         }
                     ],
-                    response_model=StrictUser,
+                    response_model=ImpossibleModel,
                 )
             )

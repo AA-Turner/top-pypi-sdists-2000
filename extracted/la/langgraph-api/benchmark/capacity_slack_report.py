@@ -75,14 +75,14 @@ def format_target(value: int | None) -> str:
     return str(value)
 
 
-def generate_capacity_table(results: list[dict]) -> tuple[str, bool]:
-    """Generate a formatted table for capacity benchmark results.
+def generate_capacity_table(results: list[dict]) -> tuple[list[str], bool]:
+    """Generate formatted table sections from capacity results, one per workload.
 
     Returns:
-        tuple[str, bool]: (table string, has_missing_data)
+        tuple[list[str], bool]: (list of workload sections, has_missing_data)
     """
     if not results:
-        return "*No capacity results collected*", False
+        return ["*No capacity results collected*"], False
 
     # Group by workload, then by cluster
     by_workload = defaultdict(dict)
@@ -91,13 +91,14 @@ def generate_capacity_table(results: list[dict]) -> tuple[str, bool]:
         cluster = r["clusterName"]
         by_workload[workload][cluster] = r
 
-    lines = ["*📊 Capacity Benchmark Results*\n"]
+    workload_sections = []
     has_missing_data = False
 
     sizes = ["1-node", "3-node", "5-node", "7-node", "10-node", "15-node", "20-node"]
 
     for workload in sorted(by_workload.keys()):
         clusters_data = by_workload[workload]
+        lines = []
         lines.append(f"\n*Workload: `{workload}`*")
         lines.append("```")
 
@@ -191,25 +192,10 @@ def generate_capacity_table(results: list[dict]) -> tuple[str, bool]:
 
         lines.append("```")
 
-    # Add explanation
-    lines.append("")
-    lines.append("📖 *Metrics Explanation:*")
-    lines.append(
-        "• *Max Runs*: Maximum number of concurrent runs the cluster can handle successfully"
-    )
-    lines.append(
-        "• *Latency*: Average(mean) execution time across all maximum successful runs (lower is better)"
-    )
-    lines.append("• 🏆: Winner in the comparison (higher Max Runs or lower Latency)")
+        # Add this workload section to our list
+        workload_sections.append("\n".join(lines))
 
-    # Add warning if there's missing data
-    if has_missing_data:
-        lines.append("")
-        lines.append(
-            "⚠️  *Note*: Some clusters marked with ❌ failed to complete even the iniital target concurrent runs(no data collected)."
-        )
-
-    return "\n".join(lines), has_missing_data
+    return workload_sections, has_missing_data
 
 
 def send_to_slack(message: str, channel: str, token: str) -> bool:
@@ -255,10 +241,14 @@ def send_to_slack(message: str, channel: str, token: str) -> bool:
         return False
 
 
-def generate_slack_message(results: list[dict], run_url: str) -> str:
-    """Generate the complete Slack message."""
-    # Generate capacity table and check if there's missing data
-    capacity_table, has_missing_data = generate_capacity_table(results)
+def generate_slack_messages(results: list[dict], run_url: str) -> list[str]:
+    """Generate Slack messages, splitting into multiple if needed to stay under 4000 chars.
+
+    Returns:
+        list[str]: List of message strings, split at workload boundaries
+    """
+    # Generate capacity table sections (one per workload) and check if there's missing data
+    workload_sections, has_missing_data = generate_capacity_table(results)
 
     # Determine status based on results
     if not results:
@@ -271,18 +261,78 @@ def generate_slack_message(results: list[dict], run_url: str) -> str:
         status_emoji = "🟢"
         status = "Completed"
 
-    lines = [
+    # Header for first message
+    header = [
         f"📊 *Capacity Benchmark Summary* {status_emoji}",
         f"*Status*: {status}",
         "",
-        capacity_table,
-        "",
-        f"📁 *GitHub Actions Run*: <{run_url}|View Details>",
-        "",
-        f"🕐 *Run Completed Time*: {datetime.now(ZoneInfo('America/Los_Angeles')).strftime('%Y-%m-%d %H:%M %Z')}",
+        "*📊 Capacity Benchmark Results*\n",
     ]
 
-    return "\n".join(lines)
+    # Footer with explanation
+    footer = [
+        "",
+        "📖 *Metrics Explanation:*",
+        "• *Max Runs*: Maximum number of concurrent runs the cluster can handle successfully",
+        "• *Latency*: Average(mean) execution time across all maximum successful runs (lower is better)",
+        "• 🏆: Winner in the comparison (higher Max Runs or lower Latency)",
+    ]
+
+    if has_missing_data:
+        footer.extend(
+            [
+                "",
+                "⚠️  *Note*: Some clusters marked with ❌ failed to complete even the iniital target concurrent runs(no data collected).",
+            ]
+        )
+
+    footer.extend(
+        [
+            "",
+            f"📁 *GitHub Actions Run*: <{run_url}|View Details>",
+            "",
+            f"🕐 *Run Completed Time*: {datetime.now(ZoneInfo('America/Los_Angeles')).strftime('%Y-%m-%d %H:%M %Z')}",
+        ]
+    )
+
+    # Split messages at workload boundaries, keeping under 4000 chars per message
+    MAX_CHARS = 3800  # Leave some buffer below 4000
+    messages = []
+
+    header_text = "\n".join(header)
+    footer_text = "\n".join(footer)
+
+    current_message_parts = [header_text]
+    current_length = len(header_text)
+
+    for section in workload_sections:
+        section_length = len(section) + 1  # +1 for newline
+
+        # Check if adding this section would exceed the limit
+        # Account for footer that will be added at the end
+        if (
+            current_length + section_length + len(footer_text) + 2 > MAX_CHARS
+            and len(current_message_parts) > 1
+        ):
+            # Finalize current message with footer
+            current_message_parts.append(footer_text)
+            messages.append("\n".join(current_message_parts))
+
+            # Start new message with continuation header
+            continuation_header = f"📊 *Capacity Benchmark Summary (continued {len(messages) + 1})* {status_emoji}\n"
+            current_message_parts = [continuation_header, section]
+            current_length = len(continuation_header) + section_length
+        else:
+            # Add section to current message
+            current_message_parts.append(section)
+            current_length += section_length
+
+    # Finalize the last message
+    if current_message_parts:
+        current_message_parts.append(footer_text)
+        messages.append("\n".join(current_message_parts))
+
+    return messages
 
 
 if __name__ == "__main__":
@@ -311,14 +361,24 @@ if __name__ == "__main__":
     # Load results
     results = load_capacity_results(results_dir)
 
-    # Generate message
-    message = generate_slack_message(results, run_url)
+    # Generate messages (may be split into multiple messages)
+    messages = generate_slack_messages(results, run_url)
 
     # Determine which channel to use based on results
     target_channel = (
         cast("str", slack_channel) if results else cast("str", slack_alert_channel)
     )
 
-    # Send to Slack
-    if not send_to_slack(message, target_channel, cast("str", slack_token)):
+    # Send all messages to Slack
+    print(f"📤 Sending {len(messages)} message(s) to Slack...")  # noqa: T201
+    all_succeeded = True
+    for i, message in enumerate(messages, 1):
+        print(f"📨 Sending message {i}/{len(messages)} ({len(message)} chars)...")  # noqa: T201
+        if not send_to_slack(message, target_channel, cast("str", slack_token)):
+            all_succeeded = False
+            print(f"❌ Failed to send message {i}/{len(messages)}", file=sys.stderr)  # noqa: T201
+
+    if not all_succeeded:
         sys.exit(1)
+
+    print(f"✅ All {len(messages)} message(s) sent successfully")  # noqa: T201

@@ -19,9 +19,9 @@ async def http_exception_handler(request: Request, exc: HTTPException) -> Respon
         return Response(status_code=exc.status_code, headers=headers)
 
     detail = exc.detail
-    if not isinstance(detail, str):
+    if not detail or not isinstance(detail, str):
         logger.warning(
-            "HTTPException detail is not a string",
+            "HTTPException detail is not a string or was not set",
             detail_type=type(detail).__name__,
             status_code=exc.status_code,
         )
