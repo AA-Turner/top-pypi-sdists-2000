@@ -14,12 +14,15 @@ from starlette.responses import Response
 from starlette.routing import BaseRoute
 
 from langgraph_api import store as api_store
-from langgraph_api.api.encryption_middleware import (
+from langgraph_api.encryption.middleware import (
     decrypt_response,
     decrypt_responses,
     encrypt_request,
 )
-from langgraph_api.feature_flags import FF_USE_CORE_API, USE_RUNTIME_CONTEXT_API
+from langgraph_api.feature_flags import (
+    IS_POSTGRES_OR_GRPC_BACKEND,
+    USE_RUNTIME_CONTEXT_API,
+)
 from langgraph_api.graph import get_assistant_id, get_graph
 from langgraph_api.grpc.ops import Assistants as GrpcAssistants
 from langgraph_api.js.base import BaseRemotePregel
@@ -44,14 +47,18 @@ from langgraph_api.validation import (
 )
 from langgraph_runtime.checkpoint import Checkpointer
 from langgraph_runtime.database import connect as base_connect
-from langgraph_runtime.ops import Assistants
 from langgraph_runtime.retry import retry_db
 
 logger = structlog.stdlib.get_logger(__name__)
 
-CrudAssistants = GrpcAssistants if FF_USE_CORE_API else Assistants
+if IS_POSTGRES_OR_GRPC_BACKEND:
+    CrudAssistants = GrpcAssistants
+else:
+    from langgraph_runtime.ops import Assistants
 
-connect = partial(base_connect, supports_core_api=FF_USE_CORE_API)
+    CrudAssistants = Assistants
+
+connect = partial(base_connect, supports_core_api=IS_POSTGRES_OR_GRPC_BACKEND)
 
 EXCLUDED_CONFIG_SCHEMA = (
     "__pregel_checkpointer",

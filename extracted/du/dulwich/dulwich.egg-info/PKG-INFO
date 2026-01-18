@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: dulwich
-Version: 0.25.2
+Version: 1.0.0
 Summary: Python Git Library
 Author-email: Jelmer Vernooij <jelmer@jelmer.uk>
 License-Expression: Apache-2.0 OR GPL-2.0-or-later
@@ -9,7 +9,7 @@ Project-URL: Repository, https://www.dulwich.io/code/
 Project-URL: GitHub, https://github.com/dulwich/dulwich
 Project-URL: Bug Tracker, https://github.com/dulwich/dulwich/issues
 Keywords: vcs,git
-Classifier: Development Status :: 4 - Beta
+Classifier: Development Status :: 5 - Production/Stable
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12

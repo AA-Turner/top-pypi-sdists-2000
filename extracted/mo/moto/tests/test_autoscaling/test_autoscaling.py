@@ -140,20 +140,17 @@ def test_create_autoscaling_group_from_invalid_instance_id():
 # Create LaunchTemplate first, and delete it last
 # If we first delete the Launch Template and then delete the AutoScalingGroup, AWS will show a notification in the console (even if it's only for a few milliseconds)
 @ec2_aws_verified(
-    create_vpc=True,
-    create_subnet=True,
     create_launch_template=True,
     launch_template_data={"ImageId": get_valid_ami(), "InstanceType": "t2.medium"},
     return_launch_template_details=True,
 )
-@autoscaling_aws_verified(get_group_name=True)
+# Instances are created in the Subnet - wait until the instances are terminated at the end, otherwise subsequent Subnet deletion fails (because of dangling resources)
+@autoscaling_aws_verified(get_group_name=True, wait_for_instance_termination=True)
 @pytest.mark.aws_verified
 def test_create_autoscaling_group_from_template(
     autoscaling_client=None,
     autoscaling_group_name=None,
     ec2_client=None,
-    vpc_id=None,
-    subnet_id=None,
     launch_template_name=None,
     launch_template_details=None,
 ):
@@ -167,7 +164,7 @@ def test_create_autoscaling_group_from_template(
         MinSize=1,
         MaxSize=3,
         DesiredCapacity=2,
-        VPCZoneIdentifier=subnet_id,
+        AvailabilityZones=["us-east-1a"],
         NewInstancesProtectedFromScaleIn=False,
     )
     assert response["ResponseMetadata"]["HTTPStatusCode"] == 200
@@ -1056,8 +1053,6 @@ def test_create_autoscaling_policy_with_predictive_scaling_config():
 
 
 @ec2_aws_verified(
-    create_vpc=True,
-    create_subnet=True,
     create_launch_template=True,
     return_launch_template_details=True,
     launch_template_data={"ImageId": get_valid_ami(), "InstanceType": "t2.medium"},
@@ -1070,8 +1065,6 @@ def test_create_auto_scaling_group_with_mixed_instances_policy(
     autoscaling_client=None,
     autoscaling_group_name=None,
     ec2_client=None,
-    vpc_id=None,
-    subnet_id=None,
     launch_template_name=None,
     launch_template_details=None,
 ):
@@ -1097,7 +1090,7 @@ def test_create_auto_scaling_group_with_mixed_instances_policy(
         AutoScalingGroupName=autoscaling_group_name,
         MinSize=2,
         MaxSize=2,
-        VPCZoneIdentifier=subnet_id,
+        AvailabilityZones=["us-east-1a"],
     )
 
     # Assert we can describe MixedInstancesPolicy
@@ -1143,6 +1136,9 @@ def test_create_auto_scaling_group_with_mixed_instances_policy(
     instances = autoscaling_client.describe_auto_scaling_instances()[
         "AutoScalingInstances"
     ]
+    instances = [
+        i for i in instances if i["AutoScalingGroupName"] == autoscaling_group_name
+    ]
     assert len(instances) == 2
     for instance in instances:
         assert instance["LaunchTemplate"] == {
@@ -1153,8 +1149,6 @@ def test_create_auto_scaling_group_with_mixed_instances_policy(
 
 
 @ec2_aws_verified(
-    create_vpc=True,
-    create_subnet=True,
     create_launch_template=True,
     return_launch_template_details=True,
     launch_template_data={"ImageId": get_valid_ami(), "InstanceType": "t2.medium"},
@@ -1165,8 +1159,6 @@ def test_create_auto_scaling_group_with_mixed_instances_policy_overrides(
     autoscaling_client=None,
     autoscaling_group_name=None,
     ec2_client=None,
-    vpc_id=None,
-    subnet_id=None,
     launch_template_name=None,
     launch_template_details=None,
 ):
@@ -1176,7 +1168,7 @@ def test_create_auto_scaling_group_with_mixed_instances_policy_overrides(
             "LaunchTemplate": {
                 "LaunchTemplateSpecification": {
                     "LaunchTemplateName": launch_template_name,
-                    "Version": "$DEFAULT",
+                    "Version": "$Default",
                 },
                 "Overrides": [
                     {
@@ -1189,7 +1181,7 @@ def test_create_auto_scaling_group_with_mixed_instances_policy_overrides(
         AutoScalingGroupName=autoscaling_group_name,
         MinSize=2,
         MaxSize=2,
-        VPCZoneIdentifier=subnet_id,
+        AvailabilityZones=["us-east-1a"],
     )
 
     # Assert we can describe MixedInstancesPolicy
@@ -1198,11 +1190,18 @@ def test_create_auto_scaling_group_with_mixed_instances_policy_overrides(
     )
     group = response["AutoScalingGroups"][0]
     assert group["MixedInstancesPolicy"] == {
+        "InstancesDistribution": {
+            "OnDemandAllocationStrategy": "prioritized",
+            "OnDemandBaseCapacity": 0,
+            "OnDemandPercentageAboveBaseCapacity": 100,
+            "SpotAllocationStrategy": "lowest-price",
+            "SpotInstancePools": 2,
+        },
         "LaunchTemplate": {
             "LaunchTemplateSpecification": {
                 "LaunchTemplateId": lt["LaunchTemplateId"],
                 "LaunchTemplateName": launch_template_name,
-                "Version": "$DEFAULT",
+                "Version": "$Default",
             },
             "Overrides": [
                 {
@@ -1210,8 +1209,68 @@ def test_create_auto_scaling_group_with_mixed_instances_policy_overrides(
                     "WeightedCapacity": "50",
                 }
             ],
-        }
+        },
     }
+
+
+@ec2_aws_verified(
+    create_launch_template=True,
+    launch_template_data={"ImageId": get_valid_ami(), "InstanceType": "t2.medium"},
+)
+@autoscaling_aws_verified(get_group_name=True, wait_for_instance_termination=False)
+@pytest.mark.aws_verified
+def test_update_mixed_instances_policy(
+    autoscaling_client=None,
+    autoscaling_group_name=None,
+    ec2_client=None,
+    launch_template_name=None,
+):
+    autoscaling_client.create_auto_scaling_group(
+        MixedInstancesPolicy={
+            "LaunchTemplate": {
+                "LaunchTemplateSpecification": {
+                    "LaunchTemplateName": launch_template_name,
+                    "Version": "$Default",
+                },
+            }
+        },
+        AutoScalingGroupName=autoscaling_group_name,
+        MinSize=2,
+        MaxSize=2,
+        AvailabilityZones=["us-east-1a"],
+    )
+
+    new_launch_template = ec2_client.create_launch_template_version(
+        LaunchTemplateName=launch_template_name,
+        SourceVersion="$Default",
+        LaunchTemplateData={
+            "InstanceType": "t2.large",
+        },
+    )["LaunchTemplateVersion"]
+    new_version = new_launch_template["VersionNumber"]
+
+    # Update MixedInstancesPolicy
+    autoscaling_client.update_auto_scaling_group(
+        AutoScalingGroupName=autoscaling_group_name,
+        MixedInstancesPolicy={
+            "LaunchTemplate": {
+                "LaunchTemplateSpecification": {
+                    "LaunchTemplateName": launch_template_name,
+                    "Version": str(new_launch_template["VersionNumber"]),
+                }
+            }
+        },
+    )
+
+    # Assert the MixedInstancesPolicy has an updated LaunchTemplateVersion
+    response = autoscaling_client.describe_auto_scaling_groups(
+        AutoScalingGroupNames=[autoscaling_group_name]
+    )
+    group = response["AutoScalingGroups"][0]
+    template = group["MixedInstancesPolicy"]["LaunchTemplate"]
+    template_spec = template["LaunchTemplateSpecification"]
+    assert template_spec["LaunchTemplateName"] == launch_template_name
+    assert template_spec["Version"] == str(new_version)
 
 
 @mock_aws

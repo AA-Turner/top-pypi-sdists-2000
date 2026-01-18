@@ -5,7 +5,7 @@ from typing import cast
 import structlog
 
 from langgraph_api import config
-from langgraph_api.api.encryption_middleware import decrypt_response
+from langgraph_api.encryption.middleware import decrypt_response
 from langgraph_api.models.run import create_valid_run
 from langgraph_api.serde import json_loads
 from langgraph_api.utils import next_cron_date

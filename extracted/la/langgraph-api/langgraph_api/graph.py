@@ -26,7 +26,10 @@ from starlette.exceptions import HTTPException
 
 from langgraph_api import config as lg_api_config
 from langgraph_api import timing
-from langgraph_api.feature_flags import FF_USE_CORE_API, USE_RUNTIME_CONTEXT_API
+from langgraph_api.feature_flags import (
+    IS_POSTGRES_OR_GRPC_BACKEND,
+    USE_RUNTIME_CONTEXT_API,
+)
 from langgraph_api.js.base import BaseRemotePregel, is_js_path
 from langgraph_api.schema import Config
 from langgraph_api.timing import profiled_import
@@ -53,11 +56,12 @@ async def register_graph(
     description: str | None = None,
 ) -> None:
     """Register a graph."""
-    from langgraph_api.grpc.ops import Assistants as AssistantsGrpc
     from langgraph_runtime.database import connect
-    from langgraph_runtime.ops import Assistants as AssistantsRuntime
 
-    Assistants = AssistantsGrpc if FF_USE_CORE_API else AssistantsRuntime
+    if IS_POSTGRES_OR_GRPC_BACKEND:
+        from langgraph_api.grpc.ops import Assistants
+    else:
+        from langgraph_runtime.ops import Assistants
 
     GRAPHS[graph_id] = graph
     if callable(graph):

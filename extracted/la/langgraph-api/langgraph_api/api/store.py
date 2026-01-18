@@ -4,12 +4,12 @@ from langgraph_sdk.auth import Auth
 from starlette.responses import Response
 from starlette.routing import BaseRoute
 
-from langgraph_api.api.encryption_middleware import (
+from langgraph_api.auth.custom import handle_event as _handle_event
+from langgraph_api.encryption.middleware import (
     decrypt_response,
     decrypt_responses,
     encrypt_request,
 )
-from langgraph_api.auth.custom import handle_event as _handle_event
 from langgraph_api.route import ApiRequest, ApiResponse, ApiRoute
 from langgraph_api.schema import STORE_ENCRYPTION_FIELDS
 from langgraph_api.store import get_store

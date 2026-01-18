@@ -5,7 +5,7 @@ from starlette.exceptions import HTTPException
 from starlette.responses import Response
 from starlette.routing import BaseRoute
 
-from langgraph_api.api.encryption_middleware import (
+from langgraph_api.encryption.middleware import (
     decrypt_response,
     decrypt_responses,
     encrypt_request,

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: apache-airflow-providers-common-sql
-Version: 1.30.2
+Version: 1.30.3
 Summary: Provider package apache-airflow-providers-common-sql for Apache Airflow
 Keywords: airflow-provider,common.sql,airflow,integration
 Author-email: Apache Software Foundation <dev@airflow.apache.org>
@@ -23,7 +23,7 @@ Classifier: Topic :: System :: Monitoring
 License-File: LICENSE
 License-File: NOTICE
 Requires-Dist: apache-airflow>=2.11.0
-Requires-Dist: apache-airflow-providers-common-compat>=1.11.0
+Requires-Dist: apache-airflow-providers-common-compat>=1.12.0
 Requires-Dist: sqlparse>=0.5.1
 Requires-Dist: more-itertools>=9.0.0
 Requires-Dist: methodtools>=0.4.7
@@ -31,9 +31,10 @@ Requires-Dist: apache-airflow-providers-openlineage ; extra == "openlineage"
 Requires-Dist: pandas[sql-other]>=2.1.2 ; extra == "pandas" and ( python_version <"3.13")
 Requires-Dist: pandas>=2.2.3 ; extra == "pandas" and ( python_version >="3.13")
 Requires-Dist: polars>=1.26.0 ; extra == "polars"
+Requires-Dist: sqlalchemy>=1.4.49 ; extra == "sqlalchemy"
 Project-URL: Bug Tracker, https://github.com/apache/airflow/issues
-Project-URL: Changelog, https://airflow.apache.org/docs/apache-airflow-providers-common-sql/1.30.2/changelog.html
-Project-URL: Documentation, https://airflow.apache.org/docs/apache-airflow-providers-common-sql/1.30.2
+Project-URL: Changelog, https://airflow.apache.org/docs/apache-airflow-providers-common-sql/1.30.3/changelog.html
+Project-URL: Documentation, https://airflow.apache.org/docs/apache-airflow-providers-common-sql/1.30.3
 Project-URL: Mastodon, https://fosstodon.org/@airflow
 Project-URL: Slack Chat, https://s.apache.org/airflow-slack
 Project-URL: Source Code, https://github.com/apache/airflow
@@ -41,6 +42,7 @@ Project-URL: YouTube, https://www.youtube.com/channel/UCSXwxpWZQ7XZ1WL3wqevChA/
 Provides-Extra: openlineage
 Provides-Extra: pandas
 Provides-Extra: polars
+Provides-Extra: sqlalchemy
 
 
 .. Licensed to the Apache Software Foundation (ASF) under one
@@ -67,7 +69,7 @@ Provides-Extra: polars
 
 Package ``apache-airflow-providers-common-sql``
 
-Release: ``1.30.2``
+Release: ``1.30.3``
 
 
 `Common SQL Provider <https://en.wikipedia.org/wiki/SQL>`__
@@ -80,7 +82,7 @@ This is a provider package for ``common.sql`` provider. All classes for this pro
 are in ``airflow.providers.common.sql`` python package.
 
 You can find package information and changelog for the provider
-in the `documentation <https://airflow.apache.org/docs/apache-airflow-providers-common-sql/1.30.2/>`_.
+in the `documentation <https://airflow.apache.org/docs/apache-airflow-providers-common-sql/1.30.3/>`_.
 
 Installation
 ------------
@@ -133,8 +135,9 @@ Extra            Dependencies
 ``pandas``       ``pandas[sql-other]>=2.1.2; python_version <"3.13"``, ``pandas>=2.2.3; python_version >="3.13"``
 ``openlineage``  ``apache-airflow-providers-openlineage``
 ``polars``       ``polars>=1.26.0``
+``sqlalchemy``   ``sqlalchemy>=1.4.49``
 ===============  ================================================================================================
 
 The changelog for the provider package can be found in the
-`changelog <https://airflow.apache.org/docs/apache-airflow-providers-common-sql/1.30.2/changelog.html>`_.
+`changelog <https://airflow.apache.org/docs/apache-airflow-providers-common-sql/1.30.3/changelog.html>`_.
 

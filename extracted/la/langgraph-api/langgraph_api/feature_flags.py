@@ -16,6 +16,11 @@ FF_USE_CORE_API = os.getenv("FF_USE_CORE_API", "false").lower() in (
     "1",
     "yes",
 )
+
+# Runtime edition detection
+_RUNTIME_EDITION = os.getenv("LANGGRAPH_RUNTIME_EDITION", "inmem")
+IS_POSTGRES_BACKEND = _RUNTIME_EDITION == "postgres"
+IS_POSTGRES_OR_GRPC_BACKEND = IS_POSTGRES_BACKEND or FF_USE_CORE_API
 # Feature flag for using the JS native API
 FF_USE_JS_API = os.getenv("FF_USE_JS_API", "false").lower() in (
     "true",

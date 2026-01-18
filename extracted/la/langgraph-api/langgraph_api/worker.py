@@ -11,10 +11,6 @@ from starlette.exceptions import HTTPException
 from typing_extensions import TypedDict
 
 import langgraph_api.logging as lg_logging
-from langgraph_api.api.encryption_middleware import (
-    decrypt_response,
-    extract_blob_encryption_context,
-)
 from langgraph_api.auth.custom import SimpleUser, normalize_user
 from langgraph_api.config import (
     BG_JOB_ISOLATED_LOOPS,
@@ -22,6 +18,10 @@ from langgraph_api.config import (
     BG_JOB_TIMEOUT_SECS,
 )
 from langgraph_api.encryption.context import set_encryption_context
+from langgraph_api.encryption.middleware import (
+    decrypt_response,
+    extract_blob_encryption_context,
+)
 from langgraph_api.errors import UserInterrupt, UserRollback, UserTimeout
 from langgraph_api.feature_flags import FF_USE_CORE_API
 from langgraph_api.grpc.ops import Runs as GrpcRuns

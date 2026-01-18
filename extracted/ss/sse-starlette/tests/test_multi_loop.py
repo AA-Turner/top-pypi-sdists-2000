@@ -167,6 +167,36 @@ class TestIssue149HandleExitSignaling:
         )
 
     @pytest.mark.asyncio
+    async def test_manual_shutdown_ignores_signal(self):
+        """Test that manually setting should_exit wakes waiting tasks."""
+        task_exited = asyncio.Event()
+
+        async def wait_for_exit():
+            await EventSourceResponse._listen_for_exit_signal()
+            task_exited.set()
+
+        task = asyncio.create_task(wait_for_exit())
+        await asyncio.sleep(0.1)  # Let task start
+        original_drain = AppStatus.enable_automatic_graceful_drain
+        original_handler = AppStatus.original_handler
+        try:
+            AppStatus.disable_automatic_graceful_drain()
+            AppStatus.original_handler = None
+            AppStatus.handle_exit()
+            await asyncio.sleep(1.0)
+            assert not task_exited.is_set(), (
+                "Task woke up despite automatic signaling being disabled."
+            )
+            AppStatus.should_exit = True  # Manually signal shutdown
+            await asyncio.wait([task], timeout=1.0)
+            assert task_exited.is_set(), (
+                "Task did not wake up after manual shutdown signal."
+            )
+        finally:
+            AppStatus.enable_automatic_graceful_drain = original_drain
+            AppStatus.original_handler = original_handler
+
+    @pytest.mark.asyncio
     async def test_all_tasks_share_same_shutdown_state(self):
         """
         Verify that all tasks created with asyncio.create_task() in the same thread
@@ -188,3 +218,62 @@ class TestIssue149HandleExitSignaling:
             f"Expected all tasks to share one state, but found {len(unique_ids)} unique states. "
             f"This indicates threading.local is not working as expected."
         )
+
+
+class TestUvicornIntrospection:
+    """Tests for uvicorn server introspection bypass when auto-drain is disabled."""
+
+    @pytest.mark.asyncio
+    async def test_uvicorn_should_exit_ignored_when_disabled(self):
+        """
+        Test that uvicorn's should_exit flag is ignored when automatic draining
+        is disabled.
+
+        The _shutdown_watcher checks uvicorn_server.should_exit as a fallback
+        (Issue #132 fix), but this check should be bypassed when the user has
+        disabled automatic draining.
+        """
+        from unittest.mock import MagicMock, patch
+
+        # Create a mock uvicorn server with should_exit=True
+        mock_server = MagicMock()
+        mock_server.should_exit = True
+
+        # IMPORTANT: Disable automatic draining BEFORE starting the watcher
+        # In production, users call this at app startup, before any SSE connections
+        AppStatus.disable_automatic_graceful_drain()
+
+        # Mock _get_uvicorn_server to return our mock
+        with patch("sse_starlette.sse._get_uvicorn_server", return_value=mock_server):
+            task_exited = asyncio.Event()
+
+            async def wait_for_exit():
+                await EventSourceResponse._listen_for_exit_signal()
+                task_exited.set()
+
+            task = asyncio.create_task(wait_for_exit())
+            await asyncio.sleep(0.1)  # Let task start and watcher begin
+
+            # Wait beyond the watcher poll interval (0.5s)
+            # If the uvicorn check weren't bypassed, task would wake up
+            await asyncio.sleep(1.0)
+
+            assert not task_exited.is_set(), (
+                "Task woke up from uvicorn.should_exit despite auto-drain being disabled."
+            )
+
+            # Now manually signal shutdown
+            AppStatus.should_exit = True
+
+            # Wait for watcher to pick up manual signal
+            try:
+                await asyncio.wait_for(task_exited.wait(), timeout=1.0)
+            except asyncio.TimeoutError:
+                task.cancel()
+                try:
+                    await task
+                except asyncio.CancelledError:
+                    pass
+                pytest.fail(
+                    "Task did not wake up after manual AppStatus.should_exit = True"
+                )

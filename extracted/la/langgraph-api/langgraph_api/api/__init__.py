@@ -31,7 +31,7 @@ from langgraph_api.config import (
     MIGRATIONS_PATH,
     MOUNT_PREFIX,
 )
-from langgraph_api.feature_flags import FF_USE_CORE_API
+from langgraph_api.feature_flags import IS_POSTGRES_OR_GRPC_BACKEND
 from langgraph_api.graph import js_bg_tasks
 from langgraph_api.grpc.client import get_shared_client
 from langgraph_api.js.base import is_js_path
@@ -43,7 +43,7 @@ logger = structlog.stdlib.get_logger(__name__)
 
 
 async def grpc_healthcheck():
-    """Check the health of the gRPC server (used when FF_USE_CORE_API is enabled)."""
+    """Check the health of the gRPC server."""
     try:
         client = await get_shared_client()
         await client.healthcheck()
@@ -75,7 +75,8 @@ async def ok(request: Request, *, disabled: bool = False):
 
         healthcheck_coroutines.append(js_healthcheck())
 
-    if FF_USE_CORE_API:
+    # Check `core-api` server health
+    if IS_POSTGRES_OR_GRPC_BACKEND:
         healthcheck_coroutines.append(grpc_healthcheck())
 
     await asyncio.gather(*healthcheck_coroutines)
@@ -107,7 +108,7 @@ middleware_for_protected_routes = [auth_middleware]
 
 # Add encryption context middleware if encryption is configured
 if LANGGRAPH_ENCRYPTION:
-    from langgraph_api.api.encryption_middleware import EncryptionContextMiddleware
+    from langgraph_api.encryption.middleware import EncryptionContextMiddleware
 
     middleware_for_protected_routes.append(Middleware(EncryptionContextMiddleware))
 

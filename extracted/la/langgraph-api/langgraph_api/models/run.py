@@ -10,7 +10,7 @@ import structlog
 from starlette.exceptions import HTTPException
 from typing_extensions import TypedDict
 
-from langgraph_api.api.encryption_middleware import encrypt_request
+from langgraph_api.encryption.middleware import encrypt_request
 from langgraph_api.feature_flags import FF_USE_CORE_API
 from langgraph_api.graph import GRAPHS, get_assistant_id
 from langgraph_api.grpc.ops import Runs as GrpcRuns

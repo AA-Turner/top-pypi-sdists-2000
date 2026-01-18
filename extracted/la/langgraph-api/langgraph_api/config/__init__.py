@@ -50,7 +50,18 @@ RESUMABLE_STREAM_TTL_SECONDS = env(
 )
 
 
-def _get_encryption_key(key_str: str | None):
+def _parse_aes_key(key_str: str | None) -> bytes | None:
+    """Parse and validate the AES encryption key from string.
+
+    Args:
+        key_str: The key string from LANGGRAPH_AES_KEY env var
+
+    Returns:
+        The key as bytes, or None if not set
+
+    Raises:
+        ValueError: If key is not 16, 24, or 32 bytes (AES-128/192/256)
+    """
     if not key_str:
         return None
     key = key_str.encode(encoding="utf-8")
@@ -59,7 +70,56 @@ def _get_encryption_key(key_str: str | None):
     return key
 
 
-LANGGRAPH_AES_KEY = env("LANGGRAPH_AES_KEY", default=None, cast=_get_encryption_key)
+LANGGRAPH_AES_KEY = env("LANGGRAPH_AES_KEY", default=None, cast=_parse_aes_key)
+
+# System-populated fields that cannot be encrypted (would break functionality)
+AES_JSON_DISALLOWED_KEYS = frozenset(
+    {
+        "langgraph_version",
+        "langgraph_api_version",
+        "langgraph_plan",
+        "langgraph_host",
+        "langgraph_api_url",
+        "langgraph_request_id",
+        "langgraph_auth_user_id",
+        "langgraph_auth_permissions",
+    }
+)
+
+
+def _get_aes_json_keys(keys_str: str | None) -> frozenset[str] | None:
+    """Parse LANGGRAPH_AES_JSON_KEYS comma-separated list.
+
+    Validates:
+    - No disallowed system keys
+    - LANGGRAPH_AES_KEY must be set
+    """
+    if not keys_str:
+        return None
+    keys = frozenset(k.strip() for k in keys_str.split(",") if k.strip())
+    if not keys:
+        return None
+
+    # Check for disallowed keys
+    disallowed = keys & AES_JSON_DISALLOWED_KEYS
+    if disallowed:
+        raise ValueError(
+            f"LANGGRAPH_AES_JSON_KEYS contains disallowed system keys: {sorted(disallowed)}. "
+            f"These keys are used internally and cannot be encrypted. Remove them from LANGGRAPH_AES_JSON_KEYS"
+        )
+
+    # Require AES key to be set
+    if LANGGRAPH_AES_KEY is None:
+        raise ValueError(
+            "LANGGRAPH_AES_JSON_KEYS requires LANGGRAPH_AES_KEY to be set."
+        )
+
+    return keys
+
+
+LANGGRAPH_AES_JSON_KEYS: frozenset[str] | None = env(
+    "LANGGRAPH_AES_JSON_KEYS", default=None, cast=_get_aes_json_keys
+)
 
 # redis
 REDIS_URI = env("REDIS_URI", cast=str)
@@ -389,6 +449,7 @@ if not os.getenv("LANGCHAIN_REVISION_ID") and (
 traceblock.patch_requests()
 
 __all__ = [
+    "AES_JSON_DISALLOWED_KEYS",
     "ALLOW_PRIVATE_NETWORK",
     "API_VARIANT",
     "BG_JOB_HEARTBEAT",
@@ -417,6 +478,7 @@ __all__ = [
     "IS_EXECUTOR_ENTRYPOINT",
     "IS_QUEUE_ENTRYPOINT",
     "JSON_THREAD_POOL_MINIMUM_SIZE_BYTES",
+    "LANGGRAPH_AES_JSON_KEYS",
     "LANGGRAPH_AES_KEY",
     "LANGGRAPH_AUTH",
     "LANGGRAPH_AUTH_TYPE",

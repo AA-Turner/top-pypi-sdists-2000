@@ -290,6 +290,19 @@ def tags_from_cloudformation_tags_list(
     return tags
 
 
+def ensure_boolean(val: Any) -> bool:
+    """Ensures a boolean value if a string or boolean is provided
+
+    For strings, the value for True/False is case-insensitive.
+    """
+    if isinstance(val, bool):
+        return val
+    elif isinstance(val, str):
+        return val.lower() == "true"
+    else:
+        return False
+
+
 def remap_nested_keys(root: Any, key_transform: Callable[[str], str]) -> Any:
     """This remap ("recursive map") function is used to traverse and
     transform the dictionary keys of arbitrarily nested structures.
@@ -433,10 +446,21 @@ def get_equivalent_url_in_aws_domain(url: str) -> tuple[ParseResult, bool]:
         return (result, True)
 
 
+def _load_service_model(service_name: str, model_name: str) -> dict[str, Any]:
+    loader = create_loader()
+    model = loader.load_service_model(service_name, model_name)
+    return model
+
+
+@cache
+def get_pagination_model(service_name: str) -> dict[str, Any]:  # type: ignore[misc]
+    pagination_model = _load_service_model(service_name, "paginators-1")
+    return pagination_model["pagination"]
+
+
 @cache
 def get_service_model(service_name: str) -> ServiceModel:
-    loader = create_loader()
-    model = loader.load_service_model(service_name, "service-2")
+    model = _load_service_model(service_name, "service-2")
     service_model = ServiceModel(model, service_name)
     return service_model
 
@@ -468,3 +492,23 @@ def _get_value_for_key(obj: Any, key: int | str, default: Any) -> Any:
         return obj[key]
     except (KeyError, IndexError, TypeError, AttributeError):
         return default
+
+
+def set_value(obj: Any, key: str, value: Any) -> None:
+    """Helper for adding a keyed value to various types of objects.
+
+    A key containing a dot (e.g. `parent.child`) will be treated as a
+    path to traverse to get to the desired value.
+    """
+    if "." in key:
+        key_path = key.split(".")
+        obj = get_value(obj, ".".join(key_path[:-1]))
+        key = key_path[-1]
+    _set_value_for_key(obj, key, value)
+
+
+def _set_value_for_key(obj: Any, key: str, value: Any) -> None:
+    try:
+        obj[key] = value
+    except (KeyError, IndexError, TypeError, AttributeError):
+        setattr(obj, key, value)

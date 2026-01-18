@@ -9,12 +9,12 @@ from starlette.exceptions import HTTPException
 from starlette.responses import Response, StreamingResponse
 
 from langgraph_api import config
-from langgraph_api.api.encryption_middleware import (
+from langgraph_api.asyncio import ValueEvent
+from langgraph_api.encryption.middleware import (
     decrypt_response,
     decrypt_responses,
     encrypt_request,
 )
-from langgraph_api.asyncio import ValueEvent
 from langgraph_api.feature_flags import FF_USE_CORE_API
 from langgraph_api.graph import _validate_assistant_id
 from langgraph_api.grpc.ops import Runs as GrpcRuns
