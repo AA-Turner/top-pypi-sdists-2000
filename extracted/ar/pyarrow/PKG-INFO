@@ -1,14 +1,13 @@
 Metadata-Version: 2.4
 Name: pyarrow
-Version: 22.0.0
+Version: 23.0.0
 Summary: Python library for Apache Arrow
 Maintainer-email: Apache Arrow Developers <dev@arrow.apache.org>
-License: Apache Software License
+License-Expression: Apache-2.0
 Project-URL: Homepage, https://arrow.apache.org/
 Project-URL: Documentation, https://arrow.apache.org/docs/python
 Project-URL: Repository, https://github.com/apache/arrow
 Project-URL: Issues, https://github.com/apache/arrow/issues
-Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
@@ -17,7 +16,6 @@ Classifier: Programming Language :: Python :: 3.14
 Classifier: Programming Language :: Python :: Free Threading :: 2 - Beta
 Requires-Python: >=3.10
 Description-Content-Type: text/markdown
-Dynamic: license-file
 
 <!---
   Licensed to the Apache Software Foundation (ASF) under one
@@ -40,7 +38,7 @@ Dynamic: license-file
 
 ## Python library for Apache Arrow
 
-[![pypi](https://img.shields.io/pypi/v/pyarrow.svg)](https://pypi.org/project/pyarrow/) [![conda-forge](https://img.shields.io/conda/vn/conda-forge/pyarrow.svg)](https://anaconda.org/conda-forge/pyarrow)
+[![pypi](https://img.shields.io/pypi/v/pyarrow.svg)](https://pypi.org/project/pyarrow/) [![conda-forge](https://anaconda.org/conda-forge/pyarrow/badges/version.svg)](https://anaconda.org/conda-forge/pyarrow)
 
 This library provides a Python API for functionality provided by the Arrow C++
 libraries, along with tools for Arrow integration and interoperability with
@@ -63,7 +61,7 @@ pip install pyarrow
 ```
 
 If you encounter any issues importing the pip wheels on Windows, you may need
-to install the latest [Visual C++ Redistributable for Visual Studio][6].
+to install the latest [Visual C++ Redistributable for Visual Studio][3].
 
 ## Development
 
@@ -74,7 +72,5 @@ See [Python Development][2] in the documentation subproject.
 See [documentation build instructions][1] in the documentation subproject.
 
 [1]: https://github.com/apache/arrow/blob/main/docs/source/developers/documentation.rst
-[2]: https://arrow.apache.org/docs/developers/python.html
-[3]: https://github.com/pandas-dev/pandas
-[5]: https://arrow.apache.org/docs/latest/python/benchmarks.html
-[6]: https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version
+[2]: https://arrow.apache.org/docs/developers/python/index.html
+[3]: https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version

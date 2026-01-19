@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: ormsgpack
-Version: 1.12.1
+Version: 1.12.2
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Intended Audience :: Developers
 Classifier: License :: OSI Approved :: Apache Software License
@@ -28,7 +28,7 @@ Author-email: Aviram Hassan <aviramyhassan@gmail.com>, Emanuele Giaquinta <emanu
 License-Expression: Apache-2.0 OR MIT
 Requires-Python: >=3.10
 Description-Content-Type: text/markdown; charset=UTF-8; variant=GFM
-Project-URL: Homepage, https://github.com/aviramha/ormsgpack
+Project-URL: Homepage, https://github.com/ormsgpack/ormsgpack
 
 # ormsgpack
 
@@ -44,7 +44,7 @@ ormsgpack follows semantic versioning and supports CPython, PyPy and GraalPy.
 
 Links:
 
-- [Repository](https://github.com/aviramha/ormsgpack)
+- [Repository](https://github.com/ormsgpack/ormsgpack)
 - [Documentation](https://ormsgpack.readthedocs.io/)
 
 ## Installation
