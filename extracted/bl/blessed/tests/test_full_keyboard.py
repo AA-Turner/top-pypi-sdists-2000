@@ -24,7 +24,8 @@ from .accessories import (SEMAPHORE,
                           read_until_eof,
                           read_until_semaphore,
                           init_subproc_coverage,
-                          pty_test)
+                          pty_test,
+                          PCT_MAXWAIT_KEYSTROKE)
 
 got_sigwinch = False
 
@@ -558,6 +559,64 @@ def test_get_location_timeout():
     child()
 
 
+@pytest.mark.parametrize('cpr1,cpr2,expected', [
+    ('\x1b[1;10R', '\x1b[1;11R', 1),
+    ('\x1b[1;10R', '\x1b[1;12R', 2),
+    ('\x1b[1;10R', '\x1b[1;10R', 1),
+    ('\x1b[1;10R', '\x1b[1;13R', 1),
+])
+def test_detect_ambiguous_width(cpr1, cpr2, expected):
+    """Test detect_ambiguous_width with various CPR responses."""
+    @as_subprocess
+    def child():
+        term = TestTerminal(stream=StringIO(), force_styling=True, is_a_tty=True)
+        term.ungetch(cpr1)
+        term.ungetch(cpr2)
+        result = term.detect_ambiguous_width(timeout=0.1, fallback=1)
+        assert result == expected
+    child()
+
+
+def test_detect_ambiguous_width_not_a_tty():
+    """Test detect_ambiguous_width returns fallback when not a TTY."""
+    @as_subprocess
+    def child():
+        term = TestTerminal(stream=StringIO(), force_styling=True)
+        term._is_a_tty = False
+        assert term.detect_ambiguous_width(timeout=0.01, fallback=42) == 42
+    child()
+
+
+def test_detect_ambiguous_width_first_timeout():
+    """Test detect_ambiguous_width returns fallback when first get_location times out."""
+    def child(term):
+        with term.cbreak():
+            result = term.detect_ambiguous_width(timeout=0.01, fallback=99)
+            return f'RESULT={result}'.encode('ascii')
+
+    output = pty_test(child, parent_func=None,
+                      test_name='test_detect_ambiguous_width_first_timeout')
+    assert 'RESULT=99' in output
+
+
+def test_detect_ambiguous_width_second_timeout():
+    """Test detect_ambiguous_width returns fallback when second get_location times out."""
+    def child(term):
+        os.write(sys.__stdout__.fileno(), SEMAPHORE)
+        with term.cbreak():
+            result = term.detect_ambiguous_width(timeout=0.1, fallback=77)
+            return f'RESULT={result}'.encode('ascii')
+
+    def parent(master_fd):
+        read_until_semaphore(master_fd, semaphore=RECV_SEMAPHORE)
+        time.sleep(0.01)
+        os.write(master_fd, b'\x1b[1;10R')
+
+    output = pty_test(child, parent,
+                      test_name='test_detect_ambiguous_width_second_timeout')
+    assert 'RESULT=77' in output
+
+
 def test_get_fgcolor_0s():
     """0-second get_fgcolor call without response."""
     @as_subprocess
@@ -578,7 +637,7 @@ def test_get_fgcolor_0s_reply_via_ungetch():
         stime = time.time()
         term.ungetch('\x1b]10;rgb:a0/52/2d\x07')  # sienna
 
-        rgb = term.get_fgcolor(timeout=0.01)
+        rgb = term.get_fgcolor(timeout=0.01, bits=8)
         assert math.floor(time.time() - stime) == 0.0
         assert rgb == (160, 82, 45)
     child()
@@ -590,13 +649,24 @@ def test_get_fgcolor_styling_indifferent():
     def child():
         term = TestTerminal(stream=StringIO(), force_styling=True, is_a_tty=True)
         term.ungetch('\x1b]10;rgb:d2/b4/8c\x07')  # tan
-        rgb = term.get_fgcolor(timeout=0.01)
+        rgb = term.get_fgcolor(timeout=0.01, bits=8)
         assert rgb == (210, 180, 140)
 
         term = TestTerminal(stream=StringIO(), force_styling=False, is_a_tty=True)
         term.ungetch('\x1b]10;rgb:40/e0/d0\x07')  # turquoise
-        rgb = term.get_fgcolor(timeout=0.01)
+        rgb = term.get_fgcolor(timeout=0.01, bits=8)
         assert rgb == (64, 224, 208)
+    child()
+
+
+def test_get_fgcolor_16bit_reply_via_ungetch():
+    """get_fgcolor call with default 16-bit response."""
+    @as_subprocess
+    def child():
+        term = TestTerminal(stream=StringIO(), force_styling=True, is_a_tty=True)
+        term.ungetch('\x1b]10;rgb:a099/5277/2d44\x07')  # sienna-ish
+        rgb = term.get_fgcolor(timeout=0.01)
+        assert rgb == (0xa099, 0x5277, 0x2d44)
     child()
 
 
@@ -620,7 +690,7 @@ def test_get_bgcolor_0s_reply_via_ungetch():
         stime = time.time()
         term.ungetch('\x1b]11;rgb:99/32/cc\x07')  # darkorchid
 
-        rgb = term.get_bgcolor(timeout=0.01)
+        rgb = term.get_bgcolor(timeout=0.01, bits=8)
         assert math.floor(time.time() - stime) == 0.0
         assert rgb == (153, 50, 204)
     child()
@@ -632,13 +702,24 @@ def test_get_bgcolor_styling_indifferent():
     def child():
         term = TestTerminal(stream=StringIO(), force_styling=True, is_a_tty=True)
         term.ungetch('\x1b]11;rgb:ff/e4/c4\x07')  # bisque
-        rgb = term.get_bgcolor(timeout=0.01)
+        rgb = term.get_bgcolor(timeout=0.01, bits=8)
         assert rgb == (255, 228, 196)
 
         term = TestTerminal(stream=StringIO(), force_styling=False, is_a_tty=True)
         term.ungetch('\x1b]11;rgb:de/b8/87\x07')  # burlywood
-        rgb = term.get_bgcolor(timeout=0.01)
+        rgb = term.get_bgcolor(timeout=0.01, bits=8)
         assert rgb == (222, 184, 135)
+    child()
+
+
+def test_get_bgcolor_16bit_reply_via_ungetch():
+    """get_bgcolor call with default 16-bit response."""
+    @as_subprocess
+    def child():
+        term = TestTerminal(stream=StringIO(), force_styling=True, is_a_tty=True)
+        term.ungetch('\x1b]11;rgb:9988/3255/cc11\x07')  # darkorchid-ish
+        rgb = term.get_bgcolor(timeout=0.01)
+        assert rgb == (0x9988, 0x3255, 0xcc11)
     child()
 
 
@@ -877,7 +958,7 @@ def test_esc_delay_long_sequence_prefix_slow_complete():
     # Duration should be at least the time to receive all bytes, but faster than full esc_delay
     # (since we recognize the complete pattern before the delay expires)
     assert (int(100 * interval * len(sequence) * 0.95) <= int(duration_ms) <=
-            int(100 * esc_delay * 1.1))
+            int(100 * esc_delay * PCT_MAXWAIT_KEYSTROKE))
 
 
 @pytest.mark.skipif(TEST_QUICK, reason="TEST_QUICK specified")
@@ -914,4 +995,5 @@ def test_esc_delay_incomplete_known_sequence():
     # (the \x1b[ part) after esc_delay, with the rest in remaining
     assert keystroke == 'CSI'
     assert remaining == repr('15 ... never completes!')
-    assert int(100 * esc_delay * 0.95) <= int(duration_ms) <= int(100 * esc_delay * 1.1)
+    assert (int(100 * esc_delay * 0.95) <= int(duration_ms) <=
+            int(100 * esc_delay * PCT_MAXWAIT_KEYSTROKE))

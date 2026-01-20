@@ -22,11 +22,11 @@ from __future__ import annotations
 import math
 from typing import Any
 from typing import TYPE_CHECKING
-import warnings
 
 import numpy as np
 
 from optuna._gp.scipy_blas_thread_patch import single_blas_thread_if_scipy_v1_15_or_newer
+from optuna._warnings import optuna_warn
 from optuna.logging import get_logger
 
 
@@ -49,7 +49,7 @@ def warn_and_convert_inf(values: np.ndarray) -> np.ndarray:
     if np.all(is_values_finite):
         return values
 
-    warnings.warn("Clip non-finite values to the min/max finite values for GP fittings.")
+    optuna_warn("Clip non-finite values to the min/max finite values for GP fittings.")
     is_any_finite = np.any(is_values_finite, axis=0)
     # NOTE(nabenabe): values cannot include nan to apply np.clip properly, but Optuna anyways won't
     # pass nan in values by design.
@@ -117,14 +117,14 @@ class GPRegressor:
 
     @property
     def length_scales(self) -> np.ndarray:
-        return 1.0 / np.sqrt(self.inverse_squared_lengthscales.detach().numpy())
+        return 1.0 / np.sqrt(self.inverse_squared_lengthscales.detach().cpu().numpy())
 
     def _cache_matrix(self) -> None:
-        assert (
-            self._cov_Y_Y_chol is None and self._cov_Y_Y_inv_Y is None
-        ), "Cannot call cache_matrix more than once."
+        assert self._cov_Y_Y_chol is None and self._cov_Y_Y_inv_Y is None, (
+            "Cannot call cache_matrix more than once."
+        )
         with torch.no_grad():
-            cov_Y_Y = self.kernel().detach().numpy()
+            cov_Y_Y = self.kernel().detach().cpu().numpy()
 
         cov_Y_Y[np.diag_indices(self._X_train.shape[0])] += self.noise_var.item()
         cov_Y_Y_chol = np.linalg.cholesky(cov_Y_Y)
@@ -133,7 +133,7 @@ class GPRegressor:
         # cf. https://github.com/optuna/optuna/issues/6230
         cov_Y_Y_inv_Y = scipy.linalg.solve_triangular(
             cov_Y_Y_chol.T,
-            scipy.linalg.solve_triangular(cov_Y_Y_chol, self._y_train.numpy(), lower=True),
+            scipy.linalg.solve_triangular(cov_Y_Y_chol, self._y_train.cpu().numpy(), lower=True),
             lower=False,
         )
         # NOTE(nabenabe): Here we use NumPy to guarantee the reproducibility from the past.
@@ -188,9 +188,9 @@ class GPRegressor:
 
         Please note that we clamp the variance to avoid negative values due to numerical errors.
         """
-        assert (
-            self._cov_Y_Y_chol is not None and self._cov_Y_Y_inv_Y is not None
-        ), "Call cache_matrix before calling posterior."
+        assert self._cov_Y_Y_chol is not None and self._cov_Y_Y_inv_Y is not None, (
+            "Call cache_matrix before calling posterior."
+        )
         is_single_point = x.ndim == 1
         x_ = x if not is_single_point else x.unsqueeze(0)
         mean = torch.linalg.vecdot(cov_fx_fX := self.kernel(x_), self._cov_Y_Y_inv_Y)
@@ -264,7 +264,7 @@ class GPRegressor:
         # pathological behavior of maximum likelihood estimation.
         initial_raw_params = np.concatenate(
             [
-                np.log(self.inverse_squared_lengthscales.detach().numpy()),
+                np.log(self.inverse_squared_lengthscales.detach().cpu().numpy()),
                 [
                     np.log(self.kernel_scale.item()),
                     # We add 0.01 * minimum_noise to initial noise_var to avoid instability.
@@ -288,7 +288,7 @@ class GPRegressor:
                 # scipy.minimize requires all the gradients to be zero for termination.
                 raw_noise_var_grad = raw_params_tensor.grad[n_params + 1]  # type: ignore
                 assert not deterministic_objective or raw_noise_var_grad == 0
-            return loss.item(), raw_params_tensor.grad.detach().numpy()  # type: ignore
+            return loss.item(), raw_params_tensor.grad.detach().cpu().numpy()  # type: ignore
 
         with single_blas_thread_if_scipy_v1_15_or_newer():
             # jac=True means loss_func returns the gradient for gradient descent.

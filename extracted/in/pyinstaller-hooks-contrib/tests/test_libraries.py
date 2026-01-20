@@ -3159,3 +3159,35 @@ def test_pymeshlab(pyi_builder, tmp_path):
         pyi_args=['--windowed'] if is_darwin else [],
         app_args=[str(tmp_path / 'output.ply')],
     )
+
+
+@importorskip("fake_useragent")
+def test_fakeuseragent(pyi_builder):
+    pyi_builder.test_source("""
+        import fake_useragent
+
+        ua = fake_useragent.UserAgent()
+        print(ua.random)
+    """)
+
+
+@importorskip("ddgs")
+def test_ddgs(pyi_builder):
+    pyi_builder.test_source("""
+        import ddgs
+
+        results = ddgs.DDGS().text("PyInstaller", max_results=5)
+
+        # NOTE: do not try to print the results, as they may contain
+        # characters that are incompatible with encoding used on Windows
+        # for redirected stdout/stderr!
+        #for result in results:
+        #    print(result)
+    """)
+
+
+@importorskip("pytokens")
+def test_pytokens(pyi_builder):
+    pyi_builder.test_source("""
+        import pytokens
+    """)

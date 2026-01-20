@@ -137,7 +137,7 @@ def other_colors(token):
 def outline_color(token):
     if get_keyword(token) == 'invert':
         return 'currentcolor'
-    else:
+    elif parse_color(token):
         return token
 
 
@@ -161,7 +161,7 @@ def color(token):
     result = parse_color(token)
     if result == 'currentcolor':
         return 'inherit'
-    else:
+    elif result:
         return token
 
 
@@ -849,7 +849,7 @@ def font_feature_settings(tokens):
             tokens, token = tokens[:-1], tokens[-1]
             if token.type == 'ident':
                 value = {'on': 1, 'off': 0}.get(token.value)
-            elif number := get_number(token, negative=False):
+            elif number := get_number(token, negative=False, integer=True):
                 value = number.value
         elif len(tokens) == 1:
             value = 1
@@ -1211,7 +1211,7 @@ def text_decoration_thickness(token):
     """``text-decoration-thickness`` property validation."""
     if length := get_length(token, percentage=True):
         return length
-    elif keyword := get_keyword(token) in ('auto', 'from-font'):
+    elif (keyword := get_keyword(token)) in ('auto', 'from-font'):
         return keyword
 
 

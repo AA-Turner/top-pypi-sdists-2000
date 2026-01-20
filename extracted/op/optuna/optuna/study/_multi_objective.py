@@ -2,14 +2,18 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from typing import cast
+from typing import TYPE_CHECKING
 
 import numpy as np
 
 import optuna
 from optuna.study._constrained_optimization import _get_feasible_trials
 from optuna.study._study_direction import StudyDirection
-from optuna.trial import FrozenTrial
 from optuna.trial import TrialState
+
+
+if TYPE_CHECKING:
+    from optuna.trial import FrozenTrial
 
 
 def _get_pareto_front_trials_by_trials(
@@ -128,6 +132,7 @@ def _is_pareto_front_nd(unique_lexsorted_loss_values: np.ndarray) -> np.ndarray:
     n_trials = loss_values.shape[0]
     on_front = np.zeros(n_trials, dtype=bool)
     remaining_indices: np.ndarray[tuple[int], np.dtype[np.signedinteger]] = np.arange(n_trials)
+    # NOTE(nabenabe): Please check `_compute_exclusive_hv` in wfg.py when you modify this function.
     while len(remaining_indices):
         # NOTE: trials[j] cannot dominate trials[i] for i < j because of lexsort.
         # Therefore, remaining_indices[0] is always non-dominated.

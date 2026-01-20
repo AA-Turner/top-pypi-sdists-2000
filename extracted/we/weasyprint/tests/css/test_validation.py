@@ -196,6 +196,7 @@ def test_size_invalid(rule):
     ('none', ()),
     ('translate(6px) rotate(90deg)', (
         ('translate', ((6, 'px'), (0, 'px'))), ('rotate', pi / 2))),
+    ('rotate(0)', (('rotate', 0),)),
     ('translate(-4px, 0)', (('translate', ((-4, 'px'), (0, None))),)),
     ('translate(6px, 20%)', (('translate', ((6, 'px'), (20, '%'))),)),
     ('scale(2)', (('scale', (2, 2)),)),
@@ -612,6 +613,11 @@ def test_mask_border_mode_invalid(rule):
         ('test1', (('string', 'string'),)),
         ('test2', (('string', 'string'),)))),
     ('test attr(class)', (('test', (('attr()', ('class', 'string', '')),)),)),
+    ('test attr(class url)', (('test', (('attr()', ('class', 'url', '')),)),)),
+    ('test attr(class, "test")', (
+        ('test', (('attr()', ('class', 'string', 'test')),)),)),
+    ('test attr(class string, "test")', (
+        ('test', (('attr()', ('class', 'string', 'test')),)),)),
     ('test counter(count)', (
         ('test', (('counter()', ('count', 'decimal')),)),)),
     ('test counter(count, upper-roman)', (
@@ -1265,6 +1271,24 @@ def test_justify_self(rule, value):
 ])
 def test_justify_self_invalid(rule):
     assert_invalid(f'justify-self: {rule}')
+
+
+@assert_no_logs
+@pytest.mark.parametrize('rule', [
+    'color',
+    'background',
+    'background-color',
+    'border-color',
+    'border-left-color',
+    'outline-color',
+])
+@pytest.mark.parametrize('value', [
+    'rgb()',
+    'device-cmyk(0%, 0%, 0%, 30%)',
+    '#abcde',
+])
+def test_colors_invalid(rule, value):
+    assert_invalid(f'{rule}: {value}')
 
 
 @assert_no_logs

@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 import enum
 import string
-from typing import Iterator, NewType
+from typing import ClassVar, Iterator
 
 
 class TokenizeError(Exception): ...
@@ -29,10 +29,10 @@ class UnexpectedEOF(TokenizeError): ...
 class UnexpectedCharacterAfterBackslash(TokenizeError): ...
 
 
-class NotAnIndent(AssertionError): ...
+class NotAnIndent(Exception): ...
 
 
-class Underflow(AssertionError): ...
+class Underflow(Exception): ...
 
 
 class TokenType(enum.IntEnum):
@@ -123,18 +123,16 @@ class Token:
 
 
 class FStringState:
-    State = NewType("State", int)
-
-    not_fstring = State(1)
-    at_fstring_middle = State(2)
-    at_fstring_lbrace = State(3)
-    in_fstring_expr = State(4)
-    in_fstring_expr_modifier = State(5)
-    at_fstring_end = State(6)
+    not_fstring: ClassVar[int] = 1
+    at_fstring_middle: ClassVar[int] = 2
+    at_fstring_lbrace: ClassVar[int] = 3
+    in_fstring_expr: ClassVar[int] = 4
+    in_fstring_expr_modifier: ClassVar[int] = 5
+    at_fstring_end: ClassVar[int] = 6
 
     def __init__(self) -> None:
         self.state = FStringState.not_fstring
-        self.stack: list[FStringState.State] = []
+        self.stack: list[int] = []
 
     def enter_fstring(self) -> None:
         self.stack.append(self.state)
@@ -794,15 +792,16 @@ class TokenIterator:
 
         # According to PEP 3131, any non-ascii character is valid in a NAME token.
         # But if we see any non-identifier ASCII character we should stop.
-        remaining = self.source[self.current_index :]
-        for index, char in enumerate(remaining):
-            if ord(char) < 128 and not str.isalnum(char) and char != "_":
-                length = index
+        source = self.source
+        index = self.current_index
+        end = len(source)
+        while index < end:
+            char = source[index]
+            if ord(char) < 128 and not char.isalnum() and char != "_":
                 break
-        else:
-            length = len(remaining)
+            index += 1
 
-        self.advance_by(length)
+        self.advance_by(index - self.current_index)
         return self.make_token(TokenType.identifier)
 
     def __iter__(self) -> TokenIterator:

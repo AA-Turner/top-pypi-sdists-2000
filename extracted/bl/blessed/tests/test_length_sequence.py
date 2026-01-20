@@ -37,18 +37,15 @@ def test_length_cjk():
     child()
 
 
-def test_length_with_zwj_is_wrong():
-    """Because of the way Zero-Width Joiner (ZWJ) is measured, blessed gets this wrong"""
-    # But for the time being, so do many terminals (~85%), so its not a huge deal..
-    # https://ucs-detect.readthedocs.io/results.html
+def test_length_with_zwj():
+    """Test that ZWJ sequences are measured correctly like wcswidth()."""
     @as_subprocess
     def child():
         term = TestTerminal()
         # RGI_Emoji_ZWJ_Sequence  ; family: woman, woman, girl, boy
         given = term.bold_red('\U0001F469\u200D\U0001F469\u200D\U0001F467\u200D\U0001F466')
-        expected = sum((2, 0, 2, 0, 2, 0, 2))
+        expected = 2
 
-        # exercise,
         assert term.length(given) == expected
     child()
 
@@ -286,6 +283,9 @@ def test_sequence_length(all_terms):
         # though columns 2-11 are non-destructive space
         assert term.length('x\b') == 0
         assert term.strip('x\b') == ''
+
+        # characters where wcwidth returns -1
+        assert term.length('\x00\x01\x02\x03\x04\x05') == 0
 
         # XXX why are some terminals width of 9 here ??
         assert term.length('\t') in {8, 9}

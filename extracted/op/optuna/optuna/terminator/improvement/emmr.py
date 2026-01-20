@@ -4,17 +4,16 @@ import math
 import sys
 from typing import cast
 from typing import TYPE_CHECKING
-import warnings
 
 import numpy as np
 
 from optuna._experimental import experimental_class
+from optuna._warnings import optuna_warn
 from optuna.samplers._lazy_random_state import LazyRandomState
 from optuna.search_space import intersection_search_space
 from optuna.study import StudyDirection
 from optuna.terminator.improvement.evaluator import _compute_standardized_regret_bound
 from optuna.terminator.improvement.evaluator import BaseImprovementEvaluator
-from optuna.trial import FrozenTrial
 from optuna.trial import TrialState
 
 
@@ -26,6 +25,7 @@ if TYPE_CHECKING:
     from optuna._gp import gp
     from optuna._gp import prior
     from optuna._gp import search_space as gp_search_space
+    from optuna.trial import FrozenTrial
 else:
     from optuna._imports import _LazyImport
 
@@ -121,7 +121,6 @@ class EMMREvaluator(BaseImprovementEvaluator):
         self._rng = LazyRandomState(seed)
 
     def evaluate(self, trials: list[FrozenTrial], study_direction: StudyDirection) -> float:
-
         optuna_search_space = intersection_search_space(trials)
         complete_trials = [t for t in trials if t.state == TrialState.COMPLETE]
 
@@ -131,7 +130,7 @@ class EMMREvaluator(BaseImprovementEvaluator):
         search_space = gp_search_space.SearchSpace(optuna_search_space)
         normalized_params = search_space.get_normalized_params(complete_trials)
         if not search_space.dim:
-            warnings.warn(
+            optuna_warn(
                 f"{self.__class__.__name__} cannot consider any search space."
                 "Termination will never occur in this study."
             )
@@ -247,7 +246,6 @@ def _compute_gp_posterior(x_params: np.ndarray, gpr: gp.GPRegressor) -> tuple[fl
 def _compute_gp_posterior_cov_two_thetas(
     normalized_params: np.ndarray, gpr: gp.GPRegressor, theta1_index: int, theta2_index: int
 ) -> float:  # cov
-
     if theta1_index == theta2_index:
         return _compute_gp_posterior(normalized_params[theta1_index], gpr)[1]
 

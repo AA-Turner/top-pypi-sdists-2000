@@ -8,6 +8,7 @@ import traceback
 import contextlib
 import time
 import signal
+import warnings
 
 # local
 from blessed import Terminal
@@ -25,6 +26,9 @@ else:
     import termios
 
 MAX_SUBPROC_TIME_SECONDS = 2  # no test should ever take over 2 seconds
+# extra time given for timeout-related tests for CI/slow machines, by percent
+PCT_MAXWAIT_KEYSTROKE = 1.2
+
 test_kind = 'vtwin10' if IS_WINDOWS else 'xterm-256color'
 
 
@@ -92,7 +96,10 @@ class as_subprocess():  # pylint: disable=too-few-public-methods
             return
 
         pid_testrunner = os.getpid()
-        pid, master_fd = pty.fork()  # pylint: disable=possibly-used-before-assignment
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", category=DeprecationWarning)
+            pid, master_fd = pty.fork()  # pylint: disable=possibly-used-before-assignment
+
         if pid == self._CHILD_PID:
             # child process executes function, raises exception
             # if failed, causing a non-zero exit code, using the
@@ -286,6 +293,8 @@ def pty_test(child_func, parent_func=None, test_name=None, rows=24, cols=80):
     """
     Wrapper for PTY-based tests to reduce boilerplate.
 
+    Note that TTY-alike behaviors, such as terminal window size does not work with Windows
+
     Handles the common pattern of forking a PTY, running test code in the child
     process with coverage tracking, and optionally running parent-side code.
 
@@ -321,12 +330,12 @@ def pty_test(child_func, parent_func=None, test_name=None, rows=24, cols=80):
         result = child_func(term)
         return result.decode('utf-8') if isinstance(result, bytes) else (result or '')
 
-    import pty as pty_module  # pylint: disable=import-outside-toplevel
-
     if test_name is None:
         test_name = getattr(child_func, '__name__', 'pty_test')
 
-    pid, master_fd = pty_module.fork()
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=DeprecationWarning)
+        pid, master_fd = pty.fork()
 
     # Set PTY window size in parent before child starts reading
     if pid != 0:

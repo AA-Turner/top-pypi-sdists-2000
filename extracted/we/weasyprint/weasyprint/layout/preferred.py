@@ -101,9 +101,32 @@ def _block_content_width(context, box, function, outer):
             function(context, child, outer=True) for child in box.children
             if not child.is_absolutely_positioned()]
         width = max(children_widths) if children_widths else 0
-    else:
-        assert width.unit.lower() == 'px'
+    elif box.style['box_sizing'] == 'content-box':
         width = width.value
+    else:
+        width = width.value
+        percentages = 0
+
+        for value in ('padding_left', 'padding_right'):
+            style_value = box.style[value]
+            if style_value != 'auto':
+                if style_value.unit.lower() == 'px':
+                    width -= style_value.value
+                else:
+                    assert style_value.unit == '%'
+                    percentages += style_value.value
+
+        # Same as margin_width().
+        collapse = box.style['border_collapse'] == 'collapse'
+        if collapse and hasattr(box, 'border_left_width'):
+            width -= box.border_left_width
+        else:
+            width -= box.style['border_left_width']
+        if collapse and hasattr(box, 'border_right_width'):
+            width -= box.border_right_width
+        else:
+            width -= box.style['border_right_width']
+        width = (100 - min(100, percentages)) * max(0, width) / 100
 
     return adjust(box, outer, width)
 
@@ -362,7 +385,17 @@ def inline_line_widths(context, box, outer, is_line_start, minimum, skip_stack=N
             # "By default, there is a break opportunity
             #  both before and after any inline object."
             if minimum:
-                lines = [None, min_content_width(context, child), None]
+                # "For soft wrap opportunities defined by the boundary between two
+                # characters or atomic inlines, the white-space property on the nearest
+                # common ancestor of the two characters controls breaking; which
+                # elements’ line-break, word-break, and overflow-wrap properties control
+                # the determination of soft wrap opportunities at such boundaries is
+                # undefined in this level." We choose to always follow the parent’s
+                # value here, other parts of the line-breaking algorithm do the same.
+                if box.style['white_space'] in ('normal', 'pre-wrap', 'pre-line'):
+                    lines = [None, min_content_width(context, child), None]
+                else:
+                    lines = [min_content_width(context, child)]
             else:
                 lines = [max_content_width(context, child)]
         # The first text line goes on the current line.

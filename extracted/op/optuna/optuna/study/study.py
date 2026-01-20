@@ -1,18 +1,17 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from collections.abc import Container
 from collections.abc import Iterable
 from collections.abc import Mapping
+from collections.abc import Sequence
 import copy
 from numbers import Real
 import threading
 from typing import Any
-from typing import Callable
 from typing import cast
-from typing import Sequence
 from typing import TYPE_CHECKING
 from typing import Union
-import warnings
 
 import numpy as np
 
@@ -27,6 +26,7 @@ from optuna._deprecated import deprecated_func
 from optuna._experimental import experimental_func
 from optuna._imports import _LazyImport
 from optuna._typing import JSONSerializable
+from optuna._warnings import optuna_warn
 from optuna.distributions import _convert_old_distribution_to_new_distribution
 from optuna.distributions import BaseDistribution
 from optuna.storages._heartbeat import is_heartbeat_enabled
@@ -564,7 +564,7 @@ class Study:
         """
 
         if not self._thread_local.in_optimize_loop and is_heartbeat_enabled(self._storage):
-            warnings.warn("Heartbeat of storage is supposed to be used with Study.optimize.")
+            optuna_warn("Heartbeat of storage is supposed to be used with Study.optimize.")
 
         fixed_distributions = fixed_distributions or {}
         fixed_distributions = {
@@ -1150,7 +1150,7 @@ class Study:
                 trial_value = {metric_names[0]: values[0]}
 
             message = (
-                f"Trial {number} finished with value: {trial_value} and parameters: " f"{params}."
+                f"Trial {number} finished with value: {trial_value} and parameters: {params}."
             )
             try:
                 best_trial = self._get_best_trial(deepcopy=False)
@@ -1300,8 +1300,7 @@ def create_study(
             assert study_name is not None
 
             _logger.info(
-                f"Using an existing study with name '{study_name}' instead of "
-                "creating a new one."
+                f"Using an existing study with name '{study_name}' instead of creating a new one."
             )
             study_id = storage.get_study_id_from_name(study_name)
         else:

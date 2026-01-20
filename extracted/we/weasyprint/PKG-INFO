@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: weasyprint
-Version: 67.0
+Version: 68.0
 Summary: The Awesome Document Factory
 Keywords: html,css,pdf,converter
 Author-email: Simon Sapin <simon.sapin@exyr.org>
@@ -37,6 +37,7 @@ Requires-Dist: sphinx ; extra == "doc"
 Requires-Dist: furo ; extra == "doc"
 Requires-Dist: pytest ; extra == "test"
 Requires-Dist: ruff ; extra == "test"
+Requires-Dist: Pillow >=12.1.0 ; extra == "test"
 Project-URL: Changelog, https://github.com/Kozea/WeasyPrint/releases
 Project-URL: Code, https://github.com/Kozea/WeasyPrint
 Project-URL: Documentation, https://doc.courtbouillon.org/weasyprint/

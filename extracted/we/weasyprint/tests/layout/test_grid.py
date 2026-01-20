@@ -948,6 +948,72 @@ def test_grid_border():
 
 
 @assert_no_logs
+def test_grid_border_box():
+    page, = render_pages('''
+      <style>
+        article {
+          display: grid;
+          font-family: weasyprint;
+          font-size: 2px;
+          grid-template-rows: auto 1fr;
+          grid-template-columns: auto 1fr;
+          line-height: 1;
+          width: 14px;
+        }
+        div { box-sizing: border-box }
+      </style>
+      <article>
+        <div style="border: 1px solid; width: 7px">a</div> <div>b</div>
+        <div>c</div> <div style="padding: 2px; height: 7px">d</div>
+      </article>
+    ''')
+    html, = page.children
+    body, = html.children
+    article, = body.children
+    div_a, div_b, div_c, div_d = article.children
+    assert div_a.position_x == div_c.position_x == div_c.padding_box_x() == 0
+    assert div_a.padding_box_x() == 1
+    assert div_b.position_x == div_b.padding_box_x() == div_d.position_x == 7
+    assert div_d.content_box_x() == 9
+    assert div_a.width == 5
+    assert div_b.width == 7
+    assert div_c.width == 7
+    assert div_d.width == 3
+    assert article.width == 14
+    assert div_a.position_y == div_b.position_y == div_b.padding_box_y() == 0
+    assert div_a.padding_box_y() == 1
+    assert div_c.position_y == div_c.padding_box_y() == div_d.position_y == 4
+    assert div_d.content_box_y() == 6
+    assert div_a.height == 2
+    assert div_b.height == 4
+    assert div_c.height == 7
+    assert div_d.height == 3
+    assert article.height == 11
+
+
+@assert_no_logs
+def test_grid_item_border_box():
+    page, = render_pages('''
+      <style>
+        @page { size: 50px }
+      </style>
+      <article style="display: grid">
+        <section style="box-sizing: border-box; padding: 5px">
+          <div>
+    ''')
+    html, = page.children
+    body, = html.children
+    article, = body.children
+    section, = article.children
+    assert section.margin_width() == 50
+    assert section.width == 40
+    assert section.position_x == section.position_y == 0
+    div, = section.children
+    assert div.width == div.margin_width() == 40
+    assert div.position_x == div.position_y == 5
+
+
+@assert_no_logs
 def test_grid_border_split():
     page1, page2 = render_pages('''
       <style>
@@ -1726,3 +1792,74 @@ def test_grid_bottom_page():
     html, = page2.children
     body, = html.children
     section, = body.children
+
+
+@assert_no_logs
+def test_grid_in_grid():
+    # Regression test for #2626.
+    page1, page2, = render_pages('''
+      <style>
+        @page { size: 10px }
+        body { font: 2px / 1 weasyprint }
+        section { display: grid; grid-template-columns: 1fr 1fr }
+      </style>
+      <div style="height: 7px"></div>
+      <section>
+        <section>
+          <div>1 2</div>
+          <div>3 4</div>
+        </section>
+        <section>
+          <div>5 6</div>
+          <div>7 8</div>
+        </section>
+      </section>
+    ''')
+    html, = page1.children
+    body, = html.children
+    div, section = body.children
+    subsection1, subsection2 = section.children
+    div1, div2 = subsection1.children
+    assert div1.children[0].children[0].text == '1'
+    assert div2.children[0].children[0].text == '3'
+    div3, div4 = subsection2.children
+    assert div3.children[0].children[0].text == '5'
+    assert div4.children[0].children[0].text == '7'
+
+    html, = page2.children
+    body, = html.children
+    section, = body.children
+    subsection1, subsection2 = section.children
+    div1, div2 = subsection1.children
+    assert div1.children[0].children[0].text == '2'
+    assert div2.children[0].children[0].text == '4'
+    div3, div4 = subsection2.children
+    assert div3.children[0].children[0].text == '6'
+    assert div4.children[0].children[0].text == '8'
+
+
+@assert_no_logs
+def test_grid_in_flex_after_full_height():
+    # Regression test for #2629.
+    page1, page2, = render_pages('''
+      <style>
+        @page { size: 10px }
+      </style>
+      <div style="height: 15px"></div>
+      <div style="display: flex; flex-direction: column">
+        <div style="display: grid">
+          <div></div>
+        </div>
+      </div>
+    ''')
+    html, = page1.children
+    body, = html.children
+    div, = body.children
+    assert not div.children
+
+    html, = page2.children
+    body, = html.children
+    flex, = body.children
+    grid, = flex.children
+    grid_item, = grid.children
+    assert not grid_item.children

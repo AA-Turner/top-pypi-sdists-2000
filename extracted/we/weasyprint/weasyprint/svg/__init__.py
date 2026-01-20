@@ -155,6 +155,14 @@ class Node:
                 for name, value in declarations:
                     child.attrib[name] = value.strip()
 
+        # Expand
+        # TODO: simplified expanders, use CSS expander code instead.
+        if font := child.attrib.pop('font', None):
+            parts = font.strip().split(maxsplit=1)
+            if len(parts) == 2:
+                child.attrib['font-size'] = parts[0]
+                child.attrib['font-family'] = parts[1]
+
         # Replace 'currentColor' value
         for key in COLOR_ATTRIBUTES:
             if child.get(key) == 'currentColor':
@@ -219,6 +227,8 @@ class Node:
 
     def get_child(self, id_):
         """Get a child with given id in the whole child tree."""
+        if self._etree_node.find(f'.//*[@id="{id_}"]') is None:
+            return
         for child in self:
             if child.get('id') == id_:
                 return child
@@ -324,23 +334,52 @@ class Node:
         svg.inner_diagonal = hypot(svg.inner_width, svg.inner_height) / sqrt(2)
 
 
+class LazyDefs:
+    def __init__(self, name, svg):
+        self._name = name
+        self._svg = svg
+        self._data = {}
+
+    def __getitem__(self, name):
+        return self.get(name)
+
+    def get(self, name):
+        if not name:
+            return
+        if name in self._data:
+            return self._data[name]
+        node = self._svg.tree.get_child(name)
+        if node is not None and self._name in node.tag.lower():
+            self._data[name] = node
+            if self._name in ('gradient', 'pattern'):
+                self._svg.inherit_element(node, self)
+        else:
+            self._data[name] = None
+        return self._data[name]
+
+    def __contains__(self, name):
+        return self.get(name)
+
+
 class SVG:
     """An SVG document."""
 
-    def __init__(self, tree, url, font_config):
+    def __init__(self, tree, url, font_config, url_fetcher=None):
         wrapper = ElementWrapper.from_xml_root(tree)
-        style = parse_stylesheets(wrapper, url)
+        style = parse_stylesheets(wrapper, url, font_config, url_fetcher)
         self.tree = Node(wrapper, style)
         self.font_config = font_config
+        self.url_fetcher = url_fetcher
         self.url = url
-        self.filters = {}
-        self.gradients = {}
-        self.images = {}
-        self.markers = {}
-        self.masks = {}
-        self.patterns = {}
-        self.paths = {}
-        self.symbols = {}
+
+        self.filters = LazyDefs('filter', self)
+        self.gradients = LazyDefs('gradient', self)
+        self.images = LazyDefs('image', self)
+        self.markers = LazyDefs('marker', self)
+        self.masks = LazyDefs('mask', self)
+        self.patterns = LazyDefs('pattern', self)
+        self.paths = LazyDefs('path', self)
+        self.symbols = LazyDefs('symbol', self)
 
         self.use_cache = {}
 
@@ -349,8 +388,6 @@ class SVG:
         self.text_path_width = 0
 
         self.tree.cascade(self.tree)
-        self.parse_defs(self.tree)
-        self.inherit_defs()
 
     def get_intrinsic_size(self, font_size):
         """Get intrinsic size of the image."""
@@ -382,15 +419,13 @@ class SVG:
         """Compute size of an arbirtary attribute."""
         return size(length, font_size, self.inner_diagonal)
 
-    def draw(self, stream, concrete_width, concrete_height, base_url,
-             url_fetcher, context):
+    def draw(self, stream, concrete_width, concrete_height, base_url, context):
         """Draw image on a stream."""
         self.stream = stream
 
         self.tree.set_svg_size(self, concrete_width, concrete_height)
 
         self.base_url = base_url
-        self.url_fetcher = url_fetcher
         self.context = context
 
         self.draw_node(self.tree, size('12pt'))
@@ -796,20 +831,6 @@ class SVG:
         if matrix.determinant:
             self.stream.transform(*matrix.values)
 
-    def parse_defs(self, node):
-        """Parse defs included in a tree."""
-        for def_type in DEF_TYPES:
-            if def_type in node.tag.lower() and 'id' in node.attrib:
-                getattr(self, f'{def_type}s')[node.attrib['id']] = node
-        for child in node:
-            self.parse_defs(child)
-
-    def inherit_defs(self):
-        """Handle inheritance of different defined elements lists."""
-        for defs in (self.gradients, self.patterns):
-            for element in defs.values():
-                self.inherit_element(element, defs)
-
     def inherit_element(self, element, defs):
         """Recursively handle inheritance of defined element."""
         href = element.get_href(self.url)
@@ -840,7 +861,7 @@ class SVG:
 class Pattern(SVG):
     """SVG node applied as a pattern."""
     def __init__(self, tree, svg):
-        super().__init__(tree._etree_node, svg.url, svg.font_config)
+        super().__init__(tree._etree_node, svg.url, svg.font_config, svg.url_fetcher)
         self.svg = svg
         self.tree = tree
 

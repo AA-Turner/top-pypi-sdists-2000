@@ -60,7 +60,8 @@ def initialize_page_maker(context, root_box):
         # Shared mutable objects:
         [0],  # quote_depth: single integer
         {'pages': [0]},
-        [{'pages'}]  # counter_scopes
+        [{'pages'}],  # counter_scopes
+        [] # page_groups
     )
 
     # Initial values

@@ -81,7 +81,7 @@ RE_PATTERN_RESIZE = re.compile(r'\x1b\[48;(?P<height_chars>\d+);(?P<width_chars>
                                r';(?P<height_pixels>\d+);(?P<width_pixels>\d+)t')
 
 # DEC event pattern container
-DECEventPattern = functools.namedtuple("DEC_EVENT_PATTERN", ["mode", "pattern"])
+DECEventPattern = namedtuple("DECEventPattern", ["mode", "pattern"])
 
 # DEC event patterns - compiled regexes with metadata of the 'mode' that
 # triggered it, this prevents searching for bracketed paste or mouse modes
@@ -292,7 +292,6 @@ class Keystroke(str):
 
         Returns name like 'KEY_CTRL_ALT_A', 'KEY_ALT_SHIFT_5', 'KEY_CTRL_J_RELEASED', etc.
         """
-        # pylint: disable=too-many-return-statements
         if self._mode != DecPrivateMode.SpecialInternalKitty:
             return None
 
@@ -887,7 +886,6 @@ class Keystroke(str):
         Handles Alt+printable, Alt-only special keys, and Ctrl+Alt sequences. Returns the base
         character or empty string for application keys.
         """
-        # pylint: disable=too-many-return-statements
         if not self._is_escape_sequence():
             return None
 
@@ -1081,7 +1079,6 @@ class Keystroke(str):
     def _mode_values(self) -> Optional[typing.Union[BracketedPasteEvent,
                                                     MouseSGREvent, MouseLegacyEvent, FocusEvent,
                                                     ResizeEvent]]:
-        # pylint: disable=too-many-return-statements
         """
         Return structured data for DEC private mode events (private API).
 
@@ -1186,7 +1183,7 @@ def get_keyboard_codes() -> Dict[int, str]:
     # Merge in homemade KEY_TAB, KEY_KP_*, KEY_MENU added to our module space
     # Exclude *_PUA constants since they're internal implementation details
     # that will be remapped via KITTY_PUA_KEYCODE_OVERRIDE_MIXIN.
-    # Make sure to copy globals() since other threads might create or 
+    # Make sure to copy globals() since other threads might create or
     # destroy globals while we iterate.
     keycodes.update((k, v) for k, v in globals().copy().items()
                     if k.startswith('KEY_') and not k.endswith('_PUA'))
@@ -2058,7 +2055,7 @@ KITTY_PUA_KEYCODE_OVERRIDE_MIXIN = (
 #: escape sequences.  This is too long for modern applications, so we set it to
 #: 350ms, or 0.35 seconds. It is still a bit conservative, for remote telnet or
 #: ssh servers, for example.
-DEFAULT_ESCDELAY = 0.35  # pylint: disable=invalid-name
+DEFAULT_ESCDELAY = 0.35
 
 
 def _reinit_escdelay() -> None:
