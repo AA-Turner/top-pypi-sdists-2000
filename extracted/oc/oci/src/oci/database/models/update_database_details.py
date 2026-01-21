@@ -54,6 +54,10 @@ class UpdateDatabaseDetails(object):
             The value to assign to the defined_tags property of this UpdateDatabaseDetails.
         :type defined_tags: dict(str, dict(str, object))
 
+        :param patch_options:
+            The value to assign to the patch_options property of this UpdateDatabaseDetails.
+        :type patch_options: oci.database.models.PatchOptions
+
         """
         self.swagger_types = {
             'db_backup_config': 'DbBackupConfig',
@@ -63,7 +67,8 @@ class UpdateDatabaseDetails(object):
             'new_tde_wallet_password': 'str',
             'storage_size_details': 'DatabaseStorageSizeDetails',
             'freeform_tags': 'dict(str, str)',
-            'defined_tags': 'dict(str, dict(str, object))'
+            'defined_tags': 'dict(str, dict(str, object))',
+            'patch_options': 'PatchOptions'
         }
         self.attribute_map = {
             'db_backup_config': 'dbBackupConfig',
@@ -73,7 +78,8 @@ class UpdateDatabaseDetails(object):
             'new_tde_wallet_password': 'newTdeWalletPassword',
             'storage_size_details': 'storageSizeDetails',
             'freeform_tags': 'freeformTags',
-            'defined_tags': 'definedTags'
+            'defined_tags': 'definedTags',
+            'patch_options': 'patchOptions'
         }
         self._db_backup_config = None
         self._db_home_id = None
@@ -83,6 +89,7 @@ class UpdateDatabaseDetails(object):
         self._storage_size_details = None
         self._freeform_tags = None
         self._defined_tags = None
+        self._patch_options = None
 
     @property
     def db_backup_config(self):
@@ -287,6 +294,26 @@ class UpdateDatabaseDetails(object):
         :type: dict(str, dict(str, object))
         """
         self._defined_tags = defined_tags
+
+    @property
+    def patch_options(self):
+        """
+        Gets the patch_options of this UpdateDatabaseDetails.
+
+        :return: The patch_options of this UpdateDatabaseDetails.
+        :rtype: oci.database.models.PatchOptions
+        """
+        return self._patch_options
+
+    @patch_options.setter
+    def patch_options(self, patch_options):
+        """
+        Sets the patch_options of this UpdateDatabaseDetails.
+
+        :param patch_options: The patch_options of this UpdateDatabaseDetails.
+        :type: oci.database.models.PatchOptions
+        """
+        self._patch_options = patch_options
 
     def __repr__(self):
         return formatted_flat_dict(self)

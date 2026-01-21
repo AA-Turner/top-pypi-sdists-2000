@@ -1,3 +1,4 @@
+import copy
 from typing import TYPE_CHECKING
 
 import sentry_sdk
@@ -7,6 +8,7 @@ from sentry_sdk.ai.utils import (
     get_start_span_function,
     set_data_normalized,
     truncate_and_annotate_messages,
+    transform_openai_content_part,
 )
 from sentry_sdk.consts import SPANDATA
 from sentry_sdk.integrations import DidNotEnable, Integration
@@ -14,11 +16,12 @@ from sentry_sdk.scope import should_send_default_pii
 from sentry_sdk.utils import event_from_exception
 
 if TYPE_CHECKING:
-    from typing import Any, Dict
+    from typing import Any, Dict, List
     from datetime import datetime
 
 try:
     import litellm  # type: ignore[import-not-found]
+    from litellm import input_callback, success_callback, failure_callback
 except ImportError:
     raise DidNotEnable("LiteLLM not installed")
 
@@ -33,6 +36,33 @@ def _get_metadata_dict(kwargs: "Dict[str, Any]") -> "Dict[str, Any]":
         metadata = {}
         litellm_params["metadata"] = metadata
     return metadata
+
+
+def _convert_message_parts(messages: "List[Dict[str, Any]]") -> "List[Dict[str, Any]]":
+    """
+    Convert the message parts from OpenAI format to the `gen_ai.request.messages` format
+    using the OpenAI-specific transformer (LiteLLM uses OpenAI's message format).
+
+    Deep copies messages to avoid mutating original kwargs.
+    """
+    # Deep copy to avoid mutating original messages from kwargs
+    messages = copy.deepcopy(messages)
+
+    for message in messages:
+        if not isinstance(message, dict):
+            continue
+        content = message.get("content")
+        if isinstance(content, (list, tuple)):
+            transformed = []
+            for item in content:
+                if isinstance(item, dict):
+                    result = transform_openai_content_part(item)
+                    # If transformation succeeded, use the result; otherwise keep original
+                    transformed.append(result if result is not None else item)
+                else:
+                    transformed.append(item)
+            message["content"] = transformed
+    return messages
 
 
 def _input_callback(kwargs: "Dict[str, Any]") -> None:
@@ -101,6 +131,7 @@ def _input_callback(kwargs: "Dict[str, Any]") -> None:
             messages = kwargs.get("messages", [])
             if messages:
                 scope = sentry_sdk.get_current_scope()
+                messages = _convert_message_parts(messages)
                 messages_data = truncate_and_annotate_messages(messages, span, scope)
                 if messages_data is not None:
                     set_data_normalized(
@@ -278,14 +309,14 @@ class LiteLLMIntegration(Integration):
     @staticmethod
     def setup_once() -> None:
         """Set up LiteLLM callbacks for monitoring."""
-        litellm.input_callback = litellm.input_callback or []
+        litellm.input_callback = input_callback or []
         if _input_callback not in litellm.input_callback:
             litellm.input_callback.append(_input_callback)
 
-        litellm.success_callback = litellm.success_callback or []
+        litellm.success_callback = success_callback or []
         if _success_callback not in litellm.success_callback:
             litellm.success_callback.append(_success_callback)
 
-        litellm.failure_callback = litellm.failure_callback or []
+        litellm.failure_callback = failure_callback or []
         if _failure_callback not in litellm.failure_callback:
             litellm.failure_callback.append(_failure_callback)

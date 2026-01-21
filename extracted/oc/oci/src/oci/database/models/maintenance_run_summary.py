@@ -51,6 +51,10 @@ class MaintenanceRunSummary(object):
     #: This constant has a value of "CANCELED"
     LIFECYCLE_STATE_CANCELED = "CANCELED"
 
+    #: A constant which can be used with the lifecycle_state property of a MaintenanceRunSummary.
+    #: This constant has a value of "PARTIAL_SUCCESS"
+    LIFECYCLE_STATE_PARTIAL_SUCCESS = "PARTIAL_SUCCESS"
+
     #: A constant which can be used with the target_resource_type property of a MaintenanceRunSummary.
     #: This constant has a value of "AUTONOMOUS_EXADATA_INFRASTRUCTURE"
     TARGET_RESOURCE_TYPE_AUTONOMOUS_EXADATA_INFRASTRUCTURE = "AUTONOMOUS_EXADATA_INFRASTRUCTURE"
@@ -147,6 +151,14 @@ class MaintenanceRunSummary(object):
     #: This constant has a value of "SCHEDULED"
     PATCHING_STATUS_SCHEDULED = "SCHEDULED"
 
+    #: A constant which can be used with the patching_status property of a MaintenanceRunSummary.
+    #: This constant has a value of "COMPLETE"
+    PATCHING_STATUS_COMPLETE = "COMPLETE"
+
+    #: A constant which can be used with the patching_status property of a MaintenanceRunSummary.
+    #: This constant has a value of "FAILED"
+    PATCHING_STATUS_FAILED = "FAILED"
+
     def __init__(self, **kwargs):
         """
         Initializes a new MaintenanceRunSummary object with values from keyword arguments.
@@ -170,7 +182,7 @@ class MaintenanceRunSummary(object):
 
         :param lifecycle_state:
             The value to assign to the lifecycle_state property of this MaintenanceRunSummary.
-            Allowed values for this property are: "SCHEDULED", "IN_PROGRESS", "SUCCEEDED", "SKIPPED", "FAILED", "UPDATING", "DELETING", "DELETED", "CANCELED", 'UNKNOWN_ENUM_VALUE'.
+            Allowed values for this property are: "SCHEDULED", "IN_PROGRESS", "SUCCEEDED", "SKIPPED", "FAILED", "UPDATING", "DELETING", "DELETED", "CANCELED", "PARTIAL_SUCCESS", 'UNKNOWN_ENUM_VALUE'.
             Any unrecognized values returned by a service will be mapped to 'UNKNOWN_ENUM_VALUE'.
         :type lifecycle_state: str
 
@@ -260,7 +272,7 @@ class MaintenanceRunSummary(object):
 
         :param patching_status:
             The value to assign to the patching_status property of this MaintenanceRunSummary.
-            Allowed values for this property are: "PATCHING", "WAITING", "SCHEDULED", 'UNKNOWN_ENUM_VALUE'.
+            Allowed values for this property are: "PATCHING", "WAITING", "SCHEDULED", "COMPLETE", "FAILED", 'UNKNOWN_ENUM_VALUE'.
             Any unrecognized values returned by a service will be mapped to 'UNKNOWN_ENUM_VALUE'.
         :type patching_status: str
 
@@ -510,7 +522,7 @@ class MaintenanceRunSummary(object):
         **[Required]** Gets the lifecycle_state of this MaintenanceRunSummary.
         The current state of the maintenance run. For Autonomous AI Database Serverless instances, valid states are IN_PROGRESS, SUCCEEDED, and FAILED.
 
-        Allowed values for this property are: "SCHEDULED", "IN_PROGRESS", "SUCCEEDED", "SKIPPED", "FAILED", "UPDATING", "DELETING", "DELETED", "CANCELED", 'UNKNOWN_ENUM_VALUE'.
+        Allowed values for this property are: "SCHEDULED", "IN_PROGRESS", "SUCCEEDED", "SKIPPED", "FAILED", "UPDATING", "DELETING", "DELETED", "CANCELED", "PARTIAL_SUCCESS", 'UNKNOWN_ENUM_VALUE'.
         Any unrecognized values returned by a service will be mapped to 'UNKNOWN_ENUM_VALUE'.
 
 
@@ -529,7 +541,7 @@ class MaintenanceRunSummary(object):
         :param lifecycle_state: The lifecycle_state of this MaintenanceRunSummary.
         :type: str
         """
-        allowed_values = ["SCHEDULED", "IN_PROGRESS", "SUCCEEDED", "SKIPPED", "FAILED", "UPDATING", "DELETING", "DELETED", "CANCELED"]
+        allowed_values = ["SCHEDULED", "IN_PROGRESS", "SUCCEEDED", "SKIPPED", "FAILED", "UPDATING", "DELETING", "DELETED", "CANCELED", "PARTIAL_SUCCESS"]
         if not value_allowed_none_or_none_sentinel(lifecycle_state, allowed_values):
             lifecycle_state = 'UNKNOWN_ENUM_VALUE'
         self._lifecycle_state = lifecycle_state
@@ -1034,7 +1046,7 @@ class MaintenanceRunSummary(object):
         Gets the patching_status of this MaintenanceRunSummary.
         The status of the patching operation.
 
-        Allowed values for this property are: "PATCHING", "WAITING", "SCHEDULED", 'UNKNOWN_ENUM_VALUE'.
+        Allowed values for this property are: "PATCHING", "WAITING", "SCHEDULED", "COMPLETE", "FAILED", 'UNKNOWN_ENUM_VALUE'.
         Any unrecognized values returned by a service will be mapped to 'UNKNOWN_ENUM_VALUE'.
 
 
@@ -1053,7 +1065,7 @@ class MaintenanceRunSummary(object):
         :param patching_status: The patching_status of this MaintenanceRunSummary.
         :type: str
         """
-        allowed_values = ["PATCHING", "WAITING", "SCHEDULED"]
+        allowed_values = ["PATCHING", "WAITING", "SCHEDULED", "COMPLETE", "FAILED"]
         if not value_allowed_none_or_none_sentinel(patching_status, allowed_values):
             patching_status = 'UNKNOWN_ENUM_VALUE'
         self._patching_status = patching_status

@@ -246,6 +246,10 @@ class CreateAutonomousDatabaseDetails(CreateAutonomousDatabaseBase):
             The value to assign to the secret_version_number property of this CreateAutonomousDatabaseDetails.
         :type secret_version_number: int
 
+        :param transportable_tablespace:
+            The value to assign to the transportable_tablespace property of this CreateAutonomousDatabaseDetails.
+        :type transportable_tablespace: oci.database.models.ImportTransportableTablespaceDetails
+
         """
         self.swagger_types = {
             'subscription_id': 'str',
@@ -302,7 +306,8 @@ class CreateAutonomousDatabaseDetails(CreateAutonomousDatabaseBase):
             'db_tools_details': 'list[DatabaseTool]',
             'is_backup_retention_locked': 'bool',
             'secret_id': 'str',
-            'secret_version_number': 'int'
+            'secret_version_number': 'int',
+            'transportable_tablespace': 'ImportTransportableTablespaceDetails'
         }
         self.attribute_map = {
             'subscription_id': 'subscriptionId',
@@ -359,7 +364,8 @@ class CreateAutonomousDatabaseDetails(CreateAutonomousDatabaseBase):
             'db_tools_details': 'dbToolsDetails',
             'is_backup_retention_locked': 'isBackupRetentionLocked',
             'secret_id': 'secretId',
-            'secret_version_number': 'secretVersionNumber'
+            'secret_version_number': 'secretVersionNumber',
+            'transportable_tablespace': 'transportableTablespace'
         }
         self._subscription_id = None
         self._compartment_id = None
@@ -416,6 +422,7 @@ class CreateAutonomousDatabaseDetails(CreateAutonomousDatabaseBase):
         self._is_backup_retention_locked = None
         self._secret_id = None
         self._secret_version_number = None
+        self._transportable_tablespace = None
         self._source = 'NONE'
 
     def __repr__(self):

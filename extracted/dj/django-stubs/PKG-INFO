@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: django-stubs
-Version: 5.2.8
+Version: 5.2.9
 Summary: Mypy stubs for Django
 Author: Maksim Kurnikov
 Author-email: Maksim Kurnikov <maxim.kurnikov@gmail.com>
@@ -17,7 +17,7 @@ Classifier: Framework :: Django :: 5.0
 Classifier: Framework :: Django :: 5.1
 Classifier: Framework :: Django :: 5.2
 Requires-Dist: django
-Requires-Dist: django-stubs-ext>=5.2.8
+Requires-Dist: django-stubs-ext>=5.2.9
 Requires-Dist: tomli ; python_full_version < '3.11'
 Requires-Dist: types-pyyaml
 Requires-Dist: typing-extensions>=4.11.0
@@ -28,8 +28,8 @@ Requires-Dist: types-redis ; extra == 'redis'
 Maintainer: Marti Raudsepp, Nikita Sobolev, Petter Friberg, Adam Johnson
 Maintainer-email: Marti Raudsepp <marti@juffo.org>, Nikita Sobolev <mail@sobolevn.me>, Petter Friberg <petter_friberg@hotmail.com>, Adam Johnson <me@adamj.eu>
 Requires-Python: >=3.10
-Project-URL: Funding, https://github.com/sponsors/typeddjango
 Project-URL: Homepage, https://github.com/typeddjango/django-stubs
+Project-URL: Funding, https://github.com/sponsors/typeddjango
 Project-URL: Release notes, https://github.com/typeddjango/django-stubs/releases
 Provides-Extra: compatible-mypy
 Provides-Extra: oracle
@@ -86,6 +86,7 @@ We rely on different `django` and `mypy` versions:
 
 | django-stubs   | Mypy version | Django version | Django partial support | Python version |
 |----------------|--------------|----------------|------------------------|----------------|
+| 5.2.9          | 1.13 - 1.19  | 5.2            | 5.1, 5.0               | 3.10 - 3.13    |
 | 5.2.8          | 1.13 - 1.19  | 5.2            | 5.1, 5.0               | 3.10 - 3.13    |
 | 5.2.7          | 1.13 - 1.18  | 5.2            | 5.1, 5.0               | 3.10 - 3.13    |
 | 5.2.6          | 1.13 - 1.18  | 5.2            | 5.1, 5.0               | 3.10 - 3.13    |

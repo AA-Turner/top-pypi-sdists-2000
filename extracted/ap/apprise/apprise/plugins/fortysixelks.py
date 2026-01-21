@@ -64,7 +64,7 @@ class Notify46Elks(NotifyBase):
     secure_protocol = ("46elks", "elks")
 
     # A URL that takes you to the setup/help of the specific protocol
-    setup_url = "https://github.com/caronc/apprise/wiki/Notify_46elks"
+    setup_url = "https://appriseit.com/services/46elks/"
 
     # 46elksAPI Request URLs
     notify_url = "https://api.46elks.com/a1/sms"
@@ -246,7 +246,8 @@ class Notify46Elks(NotifyBase):
                         )
                     )
 
-                    self.logger.debug(f"Response Details:\r\n{r.content}")
+                    self.logger.debug(
+                        "Response Details:\r\n%r", (r.content or b"")[:2000])
 
                     # Mark our failure
                     has_error = True

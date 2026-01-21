@@ -472,7 +472,7 @@ class CreateExascaleDbStorageVaultDetails(object):
     def autoscale_limit_in_gbs(self):
         """
         Gets the autoscale_limit_in_gbs of this CreateExascaleDbStorageVaultDetails.
-        Maximum limit storage size in gigabytes, that is applicable for the Database Storage Vault.
+        The maximum limit, in gigabytes, to which the Vault storage size can automatically scale when auto scaling is enabled for the Database Storage Vault
 
 
         :return: The autoscale_limit_in_gbs of this CreateExascaleDbStorageVaultDetails.
@@ -484,7 +484,7 @@ class CreateExascaleDbStorageVaultDetails(object):
     def autoscale_limit_in_gbs(self, autoscale_limit_in_gbs):
         """
         Sets the autoscale_limit_in_gbs of this CreateExascaleDbStorageVaultDetails.
-        Maximum limit storage size in gigabytes, that is applicable for the Database Storage Vault.
+        The maximum limit, in gigabytes, to which the Vault storage size can automatically scale when auto scaling is enabled for the Database Storage Vault
 
 
         :param autoscale_limit_in_gbs: The autoscale_limit_in_gbs of this CreateExascaleDbStorageVaultDetails.

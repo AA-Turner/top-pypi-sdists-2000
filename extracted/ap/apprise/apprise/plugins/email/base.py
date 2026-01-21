@@ -76,7 +76,7 @@ class NotifyEmail(NotifyBase):
     secure_protocol = "mailtos"
 
     # A URL that takes you to the setup/help of the specific protocol
-    setup_url = "https://github.com/caronc/apprise/wiki/Notify_email"
+    setup_url = "https://appriseit.com/services/email/"
 
     # Support attachments
     attachment_support = True
@@ -462,8 +462,9 @@ class NotifyEmail(NotifyBase):
 
         for i in range(len(templates.EMAIL_TEMPLATES)):  # pragma: no branch
             self.logger.trace(
-                f"Scanning {from_addr} "
-                f"against {templates.EMAIL_TEMPLATES[i][0]}")
+                "Scanning %s against %s",
+                from_addr, templates.EMAIL_TEMPLATES[i][0])
+
             match = templates.EMAIL_TEMPLATES[i][1].match(from_addr)
             if match:
                 self.logger.info(

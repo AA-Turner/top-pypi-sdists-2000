@@ -39,6 +39,7 @@ from jax._src.pallas.mosaic.pipeline import emit_pipeline as emit_pipeline
 from jax._src.pallas.mosaic.pipeline import emit_pipeline_with_allocations as emit_pipeline_with_allocations
 from jax._src.pallas.mosaic.pipeline import get_pipeline_schedule as get_pipeline_schedule
 from jax._src.pallas.mosaic.pipeline import make_pipeline_allocations as make_pipeline_allocations
+from jax._src.pallas.mosaic.pipeline import Tiling as Tiling
 from jax._src.pallas.mosaic.primitives import async_copy as async_copy
 from jax._src.pallas.mosaic.primitives import async_remote_copy as async_remote_copy
 from jax._src.pallas.mosaic.primitives import bitcast as bitcast
@@ -54,6 +55,7 @@ from jax._src.pallas.mosaic.primitives import roll as roll
 from jax._src.pallas.mosaic.primitives import stochastic_round as stochastic_round
 from jax._src.pallas.mosaic.primitives import store as store
 from jax._src.pallas.mosaic.primitives import touch as touch
+from jax._src.pallas.mosaic.primitives import trace_value as trace_value
 from jax._src.pallas.mosaic.primitives import unpack_elementwise as unpack_elementwise
 from jax._src.pallas.mosaic.primitives import with_memory_space_constraint as with_memory_space_constraint
 from jax._src.pallas.mosaic.random import sample_block as sample_block

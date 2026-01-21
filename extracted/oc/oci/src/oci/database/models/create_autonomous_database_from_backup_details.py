@@ -258,6 +258,10 @@ class CreateAutonomousDatabaseFromBackupDetails(CreateAutonomousDatabaseBase):
             The value to assign to the secret_version_number property of this CreateAutonomousDatabaseFromBackupDetails.
         :type secret_version_number: int
 
+        :param transportable_tablespace:
+            The value to assign to the transportable_tablespace property of this CreateAutonomousDatabaseFromBackupDetails.
+        :type transportable_tablespace: oci.database.models.ImportTransportableTablespaceDetails
+
         :param autonomous_database_backup_id:
             The value to assign to the autonomous_database_backup_id property of this CreateAutonomousDatabaseFromBackupDetails.
         :type autonomous_database_backup_id: str
@@ -328,6 +332,7 @@ class CreateAutonomousDatabaseFromBackupDetails(CreateAutonomousDatabaseBase):
             'is_backup_retention_locked': 'bool',
             'secret_id': 'str',
             'secret_version_number': 'int',
+            'transportable_tablespace': 'ImportTransportableTablespaceDetails',
             'autonomous_database_backup_id': 'str',
             'clone_type': 'str',
             'clone_table_space_list': 'list[int]'
@@ -388,6 +393,7 @@ class CreateAutonomousDatabaseFromBackupDetails(CreateAutonomousDatabaseBase):
             'is_backup_retention_locked': 'isBackupRetentionLocked',
             'secret_id': 'secretId',
             'secret_version_number': 'secretVersionNumber',
+            'transportable_tablespace': 'transportableTablespace',
             'autonomous_database_backup_id': 'autonomousDatabaseBackupId',
             'clone_type': 'cloneType',
             'clone_table_space_list': 'cloneTableSpaceList'
@@ -447,6 +453,7 @@ class CreateAutonomousDatabaseFromBackupDetails(CreateAutonomousDatabaseBase):
         self._is_backup_retention_locked = None
         self._secret_id = None
         self._secret_version_number = None
+        self._transportable_tablespace = None
         self._autonomous_database_backup_id = None
         self._clone_type = None
         self._clone_table_space_list = None

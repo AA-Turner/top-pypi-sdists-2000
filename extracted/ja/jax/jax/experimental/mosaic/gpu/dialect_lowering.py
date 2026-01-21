@@ -14,6 +14,10 @@
 
 """Lowering rules and pass for the MLIR Mosaic GPU dialect."""
 
+# mypy has been causing more problems than it solves here. Disable it for these
+# files. We have pytype checks anyway.
+# mypy: ignore-errors
+
 from collections.abc import Callable, Iterable, Sequence
 import dataclasses
 import functools
@@ -25,7 +29,6 @@ from typing import Any, Protocol, cast
 from jax._src.interpreters import mlir as mlir_interpreter
 from jax._src.lib import mosaic_gpu_dialect as mgpu
 from jax._src.lib.mlir import ir
-from jax._src.lib.mlir.dialects import _gpu_ops_gen
 from jax._src.lib.mlir.dialects import arith
 from jax._src.lib.mlir.dialects import builtin
 from jax._src.lib.mlir.dialects import func
@@ -182,7 +185,7 @@ def _default_is_signed(dtype: ir.Type) -> bool | None:
   When converting from Pallas dtype to IR type, we lose the `is_signed`
   information. We can default to `False` for most use cases.
   """
-  return False if ir.IntegerType.isinstance(dtype) else None
+  return False if isinstance(dtype, ir.IntegerType) else None
 
 
 def _fragmented_array_from_ir(
@@ -208,7 +211,7 @@ def _fragmented_array_from_ir(
     [attr.value for attr in conversion_cast.attributes["registers_shape"]]
   )
 
-  if ir.IntegerType.isinstance(conversion_cast.outputs[0].type.element_type):
+  if isinstance(conversion_cast.outputs[0].type.element_type, ir.IntegerType):
     is_signed = False if is_signed is None else is_signed
 
   return fa.FragmentedArray(
@@ -294,7 +297,9 @@ def _optimization_barrier_op_lowering_rule(
     _: LoweringContext,
     op: mgpu.OptimizationBarrierOp,
 ) -> Sequence[ir.Value]:
-  if not all(ir.VectorType.isinstance(operand.type) for operand in op.operands):
+  if not all(
+      isinstance(operand.type, ir.VectorType) for operand in op.operands
+  ):
     raise NotImplementedError(
         f"Optimization barrier op {op} has non-vector operands."
     )
@@ -317,7 +322,7 @@ def _optimization_barrier_op_lowering_rule(
 def _arith_constant_op_lowering_rule(
     _: LoweringContext, op: arith.ConstantOp
 ) -> Sequence[ir.Value]:
-  if not ir.DenseElementsAttr.isinstance(op.value):
+  if not isinstance(op.value, ir.DenseElementsAttr):
     raise NotImplementedError(f"Unsupported constant op: {op}")
 
   value = ir.DenseElementsAttr(op.value)
@@ -578,7 +583,7 @@ def _print_layout_op_lowering_rule(
     ctx: LoweringContext, op: mgpu.PrintLayoutOp
 ) -> Sequence[ir.Value]:
   del ctx
-  if ir.VectorType.isinstance(op.value.type):
+  if isinstance(op.value.type, ir.VectorType):
     (layout,) = inference_utils.in_layouts(op)
     a = _fragmented_array_from_ir(op.value, layout)
     print(op.format.value.format(pprint_layout(a)))
@@ -659,31 +664,74 @@ def _vector_extract_strided_slice_op_lowering_rule(
   return [fragmented_array_to_ir(result, out_vec_ty)]
 
 
+@_register_lowering(vector.ExtractOp)
+def _vector_extract_op_lowering_rule(
+    ctx: LoweringContext, op: vector.ExtractOp
+) -> Sequence[ir.Value]:
+  del ctx
+  if op.dynamic_position:
+    raise NotImplementedError("Only slicing with static indices allowed.")
+
+  [in_layout] = inference_utils.in_layouts(op)
+  a = _fragmented_array_from_ir(op.source, in_layout)
+
+  if not isinstance(op.result.type, ir.VectorType):  # scalar result
+    result = a[tuple(op.static_position)]
+    assert isinstance(result.layout, fa.WGSplatFragLayout)
+    return [result.registers.item()]
+
+  [out_layout] = inference_utils.out_layouts(op)
+  assert in_layout == out_layout
+  a = _fragmented_array_from_ir(op.source, in_layout)
+  result_type = ir.VectorType(op.result.type)
+  slices = tuple(slice(i, i + 1) for i in op.static_position)
+  # TODO(allanrenucci): Add direct support for indexing to FragmentedArray.
+  result = a[slices].reshape(tuple(result_type.shape))
+  assert result.layout == layouts.from_layout_attr(out_layout)
+  return [fragmented_array_to_ir(result, result_type)]
+
+
+def _combining_kind(attr: ir.Attribute) -> vector.CombiningKind:
+  return vector.CombiningKind[
+      str(attr).removeprefix("#vector.kind<").removesuffix(">").upper()
+  ]
+
+
 @_register_lowering(vector.ReductionOp)
 def _vector_reduction_op_lowering_rule(
     ctx: LoweringContext, op: vector.ReductionOp
 ) -> Sequence[ir.Value]:
   del ctx  # Unused.
   [layout] = inference_utils.in_layouts(op)
-  element_type = ir.VectorType(op.vector.type).element_type
-  # TODO(b/415721295): Derive `is_signed` from attributes.
-  is_signed = None
-  a = _fragmented_array_from_ir(op.vector, layout, is_signed)
-  match str(op.kind):
-    case "#vector.kind<add>":
-      scratch = _slice_smem(
-          ir.MemRefType.get([4], element_type, memory_space=utils.smem()),
-          arith.constant(None, op.attributes["offset"]),
-      )
-      result = a.reduce("add", range(len(a.shape)), scratch)
-    case (
-        "#vector.kind<maxsi>" | "#vector.kind<maxui>" | "#vector.kind<maximumf>"
-    ):
-      # TODO(slebedev): Implement this and remove the raise below.
-      raise NotImplementedError(f"Unsupported reduction kind: {op.kind}")
+  element_type = op.vector.type.element_type
+  scratch = _slice_smem(
+      ir.MemRefType.get([4], element_type, memory_space=utils.smem()),
+      arith.constant(None, op.attributes["offset"]),
+  )
+  axes = range(op.vector.type.rank)
+  op_kind = _combining_kind(op.kind)
+  match op_kind:
+    case vector.CombiningKind.ADD:
+      a = _fragmented_array_from_ir(op.vector, layout)
+      result = a.reduce("add", axes, scratch)
+    case vector.CombiningKind.MAXSI | vector.CombiningKind.MAXUI:
+      is_signed = op_kind == vector.CombiningKind.MAXSI
+      a = _fragmented_array_from_ir(op.vector, layout, is_signed)
+      result = a.reduce("max", axes, scratch)
+    case vector.CombiningKind.MAXIMUMF:
+      a = _fragmented_array_from_ir(op.vector, layout)
+      result = a.reduce("max", axes, scratch)
+    case vector.CombiningKind.MINUI | vector.CombiningKind.MINSI:
+      is_signed = op_kind == vector.CombiningKind.MINSI
+      a = _fragmented_array_from_ir(op.vector, layout, is_signed)
+      result = a.reduce("min", axes, scratch)
+    case vector.CombiningKind.MINIMUMF:
+      a = _fragmented_array_from_ir(op.vector, layout)
+      result = a.reduce("min", axes, scratch)
     case _:
       raise NotImplementedError(f"Unsupported reduction kind: {op.kind}")
-  return [fragmented_array_to_ir(result, op.result.type)]
+  assert isinstance(result.layout, fa.WGSplatFragLayout)
+  return [result.registers.item()]
 
 @_register_lowering(vector.MultiDimReductionOp)
 def _vector_multi_dim_reduction_op_lowering_rule(
@@ -693,38 +741,47 @@ def _vector_multi_dim_reduction_op_lowering_rule(
 
   [in_layout, acc_layout] = inference_utils.in_layouts(op)
   [out_layout] = inference_utils.out_layouts(op)
-  if layouts.from_layout_attr(in_layout) != fa.WGMMA_LAYOUT:
-    raise NotImplementedError(f"Unsupported input layout: {in_layout}")
-  if layouts.from_layout_attr(out_layout) not in {
-      fa.WGMMA_ROW_LAYOUT,
-      fa.WGMMA_COL_LAYOUT,
-  }:
-    raise NotImplementedError(f"Unsupported output layout: {out_layout}")
   if out_layout != acc_layout:
     raise ValueError(
         f"Output layout {out_layout} must match the accumulator layout"
         f" {acc_layout}"
     )
 
-  # TODO(b/415721295): Derive `is_signed` from attributes.
-  is_signed = None
-  source_fa = _fragmented_array_from_ir(op.source, in_layout, is_signed)
-  acc_fa = _fragmented_array_from_ir(op.acc, acc_layout, is_signed)
-  match vector.CombiningKind[
-      str(op.kind).removeprefix("#vector.kind<").removesuffix(">").upper()
-  ]:
+  if len(op.reduction_dims) != 1:
+    raise NotImplementedError("Only 1 reduction dimension is supported.")
+
+  op_kind = _combining_kind(op.kind)
+  match op_kind:
     case vector.CombiningKind.ADD:
-      result = source_fa.reduce("add", op.reduction_dims[0])
-      result += acc_fa
-    case (
-        vector.CombiningKind.MAXIMUMF
-        | vector.CombiningKind.MAXSI
-        | vector.CombiningKind.MAXUI
-    ):
-      result = source_fa.reduce("max", op.reduction_dims[0])
-      result = result.max(acc_fa)
+      src = _fragmented_array_from_ir(op.source, in_layout)
+      acc = _fragmented_array_from_ir(op.acc, acc_layout)
+      result = src.reduce("add", op.reduction_dims[0])
+      result += acc
+    case vector.CombiningKind.MAXSI | vector.CombiningKind.MAXUI:
+      is_signed = op_kind == vector.CombiningKind.MAXSI
+      src = _fragmented_array_from_ir(op.source, in_layout, is_signed)
+      acc = _fragmented_array_from_ir(op.acc, acc_layout, is_signed)
+      result = src.reduce("max", op.reduction_dims[0])
+      result = result.max(acc)
+    case vector.CombiningKind.MAXIMUMF:
+      src = _fragmented_array_from_ir(op.source, in_layout)
+      acc = _fragmented_array_from_ir(op.acc, acc_layout)
+      result = src.reduce("max", op.reduction_dims[0])
+      result = result.max(acc)
+    case vector.CombiningKind.MINUI | vector.CombiningKind.MINSI:
+      is_signed = op_kind == vector.CombiningKind.MINSI
+      src = _fragmented_array_from_ir(op.source, in_layout, is_signed)
+      acc = _fragmented_array_from_ir(op.acc, acc_layout, is_signed)
+      result = src.reduce("min", op.reduction_dims[0])
+      result = result.min(acc)
+    case vector.CombiningKind.MINIMUMF:
+      src = _fragmented_array_from_ir(op.source, in_layout)
+      acc = _fragmented_array_from_ir(op.acc, acc_layout)
+      result = src.reduce("min", op.reduction_dims[0])
+      result = result.min(acc)
     case _:
       raise NotImplementedError(f"Unsupported reduction kind: {op.kind}")
+  assert result.layout == layouts.from_layout_attr(out_layout)  # pytype: disable=attribute-error
   return [fragmented_array_to_ir(result, op.result.type)]
 
 
@@ -806,8 +863,7 @@ def transformed_smem_ref_type(
 ) -> ir.MemRefType:
   """Returns the transformed ref type for the given logical ref and transforms.
   """
-  transposed = utils.is_memref_transposed(ref_ty)
-  if not transforms and not transposed:
+  if not transforms:
     return ref_ty
 
   if not utils.is_smem_ref(ref_ty):
@@ -815,6 +871,7 @@ def transformed_smem_ref_type(
 
   shape = ref_ty.shape
   strides, offset = ref_ty.get_strides_and_offset()
+  transposed = utils.is_memref_transposed(ref_ty)
   if transposed:
     if len(shape) != 2:
       raise NotImplementedError(
@@ -879,6 +936,32 @@ def reinterpret_smem_ref(
   return new_ref
 
 
+def _gmem_slice_and_predicate(
+    ctx: LoweringContext,
+    op: mgpu.AsyncLoadOp | mgpu.AsyncPrefetchOp | mgpu.AsyncStoreOp,
+) -> tuple[
+    tuple[ir.Value | fa.FragmentedArray | utils.DynamicSlice, ...],
+    dict[str, ir.Value],
+]:
+  """Returns the GMEM slice and predicate for the given async op."""
+  gmem_slice = []
+  predicate = dict(predicate=ctx.single_thread_per_warpgroup_predicate)
+  for idx, size in zip(op.indices, op.slice_lengths, strict=True):
+    if isinstance(idx.type, ir.IntegerType):
+      idx_int = arith.index_cast(ir.IndexType.get(), idx)
+      v = idx_int if size < 0 else utils.DynamicSlice(idx_int, size)
+      gmem_slice.append(v)
+    elif isinstance(idx.type, ir.VectorType):
+      layout = inference_utils.in_layouts(op)[0]
+      assert layouts.from_layout_attr(layout) == fa.TMA_GATHER_INDICES_LAYOUT
+      idx_fa = _fragmented_array_from_ir(idx, layout)
+      gmem_slice.append(idx_fa)
+      predicate = dict()
+    else:
+      raise TypeError(f"Unsupported index type: {idx.type}")
+  return tuple(gmem_slice), predicate
+
+
 @_register_lowering(mgpu.AsyncLoadOp)
 def _mgpu_async_load_op_lowering_rule(
     ctx: LoweringContext, load_op: mgpu.AsyncLoadOp
@@ -890,15 +973,25 @@ def _mgpu_async_load_op_lowering_rule(
   swizzle, transforms = swizzle_and_transforms_from_transforms_attr(
       transforms_attr
   )
-  unwrapped_destination = unwrap_transformed_memref(
+
+  unwrapped_dst = unwrap_transformed_memref(
       load_op.destination, transforms_attr
   )
 
-  gmem_slice = []
-  for idx_i32, size in zip(load_op.indices, load_op.slice_lengths, strict=True):
-    idx = arith.index_cast(ir.IndexType.get(), idx_i32)
-    v = idx if size < 0 else utils.DynamicSlice(idx, size)
-    gmem_slice.append(v)
+  if utils.is_memref_transposed(unwrapped_dst.type):
+    strides, _ = ir.MemRefType(unwrapped_dst.type).get_strides_and_offset()
+    permutation = tuple(
+        sorted(range(len(strides)), key=lambda i: strides[i], reverse=True)
+    )
+    # We undo the tranpose and apply it as a transform.
+    unwrapped_dst = utils.memref_transpose(
+        unwrapped_dst, permutation
+    )
+    if transforms:
+      raise NotImplementedError("Can't transpose transformed refs.")
+    transforms = (launch_context.TransposeTransform(permutation),)
+
+  gmem_slice, predicate = _gmem_slice_and_predicate(ctx, load_op)
 
   collective = [
       gpu.Dimension(ir.IntegerAttr(axis).value)
@@ -916,14 +1009,14 @@ def _mgpu_async_load_op_lowering_rule(
     mgpu_utils.warpgroup_barrier()  # Make sure the writes have completed.
   ctx.launch_context.async_copy(
       src_ref=load_op.source,
-      dst_ref=unwrapped_destination,
-      gmem_slice=tuple(gmem_slice),
+      dst_ref=unwrapped_dst,
+      gmem_slice=gmem_slice,
       barrier=barrier.barrier_ref,
       collective=collective,
       arrive=False,
       swizzle=swizzle,
       gmem_transform=transforms,
-      predicate=ctx.single_thread_per_warpgroup_predicate,
+      **predicate,
   )
   return []
 
@@ -934,21 +1027,17 @@ def _mgpu_async_prefetch_op_lowering_rule(
 ) -> Sequence[ir.Value]:
   assert ctx.launch_context is not None
 
-  gmem_slice = []
-  for idx_i32, size in zip(load_op.indices, load_op.slice_lengths, strict=True):
-    idx = arith.index_cast(ir.IndexType.get(), idx_i32)
-    v = idx if size < 0 else utils.DynamicSlice(idx, size)
-    gmem_slice.append(v)
+  gmem_slice, predicate = _gmem_slice_and_predicate(ctx, load_op)
 
   if load_op.collective:
     raise NotImplementedError("Collective prefetches are not supported yet.")
 
   ctx.launch_context.async_prefetch(
       gmem_ref=load_op.source,
-      gmem_slice=tuple(gmem_slice),
+      gmem_slice=gmem_slice,
       swizzle=None,
       gmem_transform=(),
-      predicate=ctx.single_thread_per_warpgroup_predicate,
+      **predicate,
   )
   return []
 
@@ -964,12 +1053,20 @@ def _mgpu_async_store_op_lowering_rule(
       transforms_attr
   )
   unwrapped_source = unwrap_transformed_memref(store_op.source, transforms_attr)
+  if utils.is_memref_transposed(unwrapped_source.type):
+    strides, _ = ir.MemRefType(unwrapped_source.type).get_strides_and_offset()
+    permutation = tuple(
+        sorted(range(len(strides)), key=lambda i: strides[i], reverse=True)
+    )
+    # We undo the tranpose and apply it as a transform.
+    unwrapped_source = utils.memref_transpose(
+        unwrapped_source, permutation
+    )
+    if transforms:
+      raise NotImplementedError("Can't transpose transformed refs.")
+    transforms = (launch_context.TransposeTransform(permutation),)
 
-  gmem_slice = []
-  for idx_i32, size in zip(store_op.indices, store_op.slice_lengths):
-    idx = arith.index_cast(ir.IndexType.get(), idx_i32)
-    v = idx if size < 0 else utils.DynamicSlice(idx, size)
-    gmem_slice.append(v)
+  gmem_slice, predicate = _gmem_slice_and_predicate(ctx, store_op)
 
   # TODO(dasenov): async_copy requires all GMEM strides except the last one
   # to be a multiple of 16 bytes. This restriction could be loosned with
@@ -987,10 +1084,10 @@ def _mgpu_async_store_op_lowering_rule(
   ctx.launch_context.async_copy(
       src_ref=unwrapped_source,
       dst_ref=store_op.destination,
-      gmem_slice=tuple(gmem_slice),
+      gmem_slice=gmem_slice,
       swizzle=swizzle,
       gmem_transform=transforms,
-      predicate=ctx.single_thread_per_warpgroup_predicate,
+      **predicate,
       arrive=store_op.commit_group,
       reduction_op=reduction_op,
   )
@@ -1073,8 +1170,10 @@ def _unary_op_lowering_rule(
     raise ValueError("Layout mismatch")
   a = _fragmented_array_from_ir(op.operand, layout, is_signed)
   if hasattr(op, "fastmath"):
-    approx = op.fastmath == ir.Attribute.parse("#arith.fastmath<afn>")
-    result_fa = impl(a, approx=approx)
+    if op.fastmath == ir.Attribute.parse("#arith.fastmath<afn>"):
+      result_fa = impl(a, approx=True)
+    else:
+      result_fa = impl(a)
   else:
     result_fa = impl(a)
 
@@ -1089,6 +1188,11 @@ for op, unary_impl, is_signed in [
     (mlir_math.CosOp, fa.FragmentedArray.cos, None),
     (mlir_math.LogOp, fa.FragmentedArray.log, None),
     (mlir_math.TanhOp, fa.FragmentedArray.tanh, None),
+    (mlir_math.AbsFOp, fa.FragmentedArray.abs, None),
+    (mlir_math.AbsIOp, fa.FragmentedArray.abs, True),
+    (mlir_math.RoundOp, fa.FragmentedArray.round, None),
+    (mlir_math.RoundEvenOp, fa.FragmentedArray.round_even, None),
+    (mlir_math.ErfOp, fa.FragmentedArray.erf, None),
 ]:
   _lowerings[op.OPERATION_NAME] = functools.partial(
       _unary_op_lowering_rule, impl=unary_impl, is_signed=is_signed
@@ -1134,6 +1238,8 @@ for op, binary_impl, is_signed in [
     (arith.MinSIOp, fa.FragmentedArray.min, True),
     (arith.MinUIOp, fa.FragmentedArray.min, False),
     (arith.MinimumFOp, fa.FragmentedArray.min, None),
+    (mlir_math.Atan2Op, fa.FragmentedArray.atan2, None),
+    (mlir_math.CopySignOp, fa.FragmentedArray.copysign, None),
 ]:
   _lowerings[op.OPERATION_NAME] = functools.partial(
       _binary_op_lowering_rule, impl=binary_impl, is_signed=is_signed
@@ -1209,6 +1315,22 @@ def _bitcast_op_lowering_rule(
   return [fragmented_array_to_ir(out, op.result.type)]
 
 
+@_register_lowering(arith.SelectOp)
+def _select_op_lowering_rule(
+    ctx: LoweringContext, op: arith.SelectOp
+) -> Sequence[ir.Value]:
+  del ctx
+  in_layouts = inference_utils.in_layouts(op)
+  [layout] = inference_utils.out_layouts(op)
+  if any(in_layout != layout for in_layout in in_layouts):
+    raise ValueError("Layout mismatch")
+  pred = _fragmented_array_from_ir(op.condition, layout)
+  true_value = _fragmented_array_from_ir(op.true_value, layout)
+  false_value = _fragmented_array_from_ir(op.false_value, layout)
+  result = pred.select(true_value, false_value)
+  return [fragmented_array_to_ir(result, op.result.type)]
+
+
 @_register_lowering(mgpu.WGMMAOp)
 def _mgpu_wgmma_op_lowering_rule(
     _: LoweringContext, wgmma_op: mgpu.WGMMAOp
@@ -1220,7 +1342,7 @@ def _mgpu_wgmma_op_lowering_rule(
 
   # s8/i8 WGMMA expects signed integer accumulator.
   element_type = wgmma_op.a.type.element_type
-  is_signed = True if ir.IntegerType.isinstance(element_type) else None
+  is_signed = True if isinstance(element_type, ir.IntegerType) else None
   # TODO(dasenov): Move the value -> accumulator conversion outside of wgmma.
   # The associated fence could be a little expensive and is not needed if the
   # result a wgmma feeds into another wgmma (even in another loop step).
@@ -1229,7 +1351,7 @@ def _mgpu_wgmma_op_lowering_rule(
   )
   acc = wgmma.WGMMAAccumulator.from_registers(regs)
 
-  if ir.VectorType.isinstance(wgmma_op.a.type):
+  if isinstance(wgmma_op.a.type, ir.VectorType):
     a_transforms = None
     b_transforms = inference_utils.in_transforms(wgmma_op)[0]
     unwrapped_a_ref = None
@@ -1247,10 +1369,10 @@ def _mgpu_wgmma_op_lowering_rule(
       ir.MemRefType(wgmma_op.b.type), b_transforms, b_swizzle, minimum_swizzle
   )
 
-  if ir.VectorType.isinstance(wgmma_op.a.type):
+  if isinstance(wgmma_op.a.type, ir.VectorType):
     expected_a_layout = (
         fa.WGMMA_LAYOUT_8BIT
-        if element_type == ir.IntegerType.get_signless(8)
+        if utils.bitwidth(element_type) == 8
         else fa.WGMMA_LAYOUT
     )
     assert in_layouts[1] == layouts.to_layout_attr(expected_a_layout)
@@ -1372,7 +1494,7 @@ def _slice_smem(result: ir.Type, offset: ir.Value):
   )
   offset = arith.index_cast(ir.IndexType.get(), offset)
   lowered_result_type = result
-  if ir.MemRefType.isinstance(result):
+  if isinstance(result, ir.MemRefType):
     memref_ty = ir.MemRefType(result)
     if memref_ty.element_type == ir.Type.parse("!mosaic_gpu.barrier"):
       lowered_result_type = ir.MemRefType.get(
@@ -1625,18 +1747,19 @@ def _memref_transpose_op_lowering_rule(
   in_transforms = inference_utils.in_transforms(op)[0]
   unwrapped_in_ref = unwrap_transformed_memref(op.in_, in_transforms)
   in_transformed_ty = ir.MemRefType(unwrapped_in_ref.type)
-  if len(in_transformed_ty.shape) == 2:
+  if in_transformed_ty.rank == op.in_.type.rank:
     new_permutation = op.permutation
-  elif len(in_transformed_ty.shape) == 4:
+  elif in_transformed_ty.rank == 4:
     if op.permutation == _permutation_to_affine_map_attr([0, 1]):
       new_permutation = _permutation_to_affine_map_attr([0, 1, 2, 3])
     elif op.permutation == _permutation_to_affine_map_attr([1, 0]):
       new_permutation = _permutation_to_affine_map_attr([1, 0, 3, 2])
     else:
-      raise NotImplementedError("Unsupported permutation.")
+      raise NotImplementedError(f"Unsupported permutation={op.permutation}.")
   else:
     raise NotImplementedError(
-        "TransposeOp only supports transposing 2D and 4D memrefs."
+        "TransposeOp only supports transposing 4D tiled memrefs and untiled"
+        " memrefs."
     )
 
   out_transforms = inference_utils.out_transforms(op)[0]
@@ -1814,7 +1937,7 @@ def _tmem_ref_from_ir(
 
   Throws an error if the annotated layout does not match the expected layout.
   """
-  if not ir.MemRefType.isinstance(ref.type):
+  if not isinstance(ref.type, ir.MemRefType):
     raise ValueError(f"{ref} is not a memref.")
   mem_ref_ty = ir.MemRefType(ref.type)
 
@@ -1969,7 +2092,7 @@ def _flatten_ir_values(
   result: list[ir.Value] = []
   templates: list[_VectorTemplate | None] = []
   for v in values:
-    if ir.VectorType.isinstance(v.type):
+    if isinstance(v.type, ir.VectorType):
       fa = _fragmented_array_from_ir(v, next(fa_layouts_it))
       result.extend(fa.registers.flat)
       templates.append((fa.registers.shape, fa.layout, ir.VectorType(v.type)))
@@ -2159,7 +2282,7 @@ def _infer_flat_result_types(
   result_types: list[ir.Type] = []
   out_layouts_it = iter(out_layouts)
   for r in op.results:
-    if not ir.VectorType.isinstance(r.type):
+    if not isinstance(r.type, ir.VectorType):
       result_types.append(r.type)
       continue
     vec_type = ir.VectorType(r.type)
@@ -2208,7 +2331,7 @@ def _index_switch_op_lowering_rule(
 
 
 @_register_lowering(func.FuncOp)
-@_register_lowering(_gpu_ops_gen.LaunchOp)
+@_register_lowering(gpu.LaunchOp)
 def _traverse_op_lowering_rule(
     ctx: LoweringContext, op: ir.OpView
 ) -> MlirLoweringRuleResult:

@@ -23,7 +23,7 @@ class GenericChatResponse(BaseChatResponse):
 
         :param api_format:
             The value to assign to the api_format property of this GenericChatResponse.
-            Allowed values for this property are: "COHERE", "GENERIC"
+            Allowed values for this property are: "COHERE", "GENERIC", "COHEREV2"
         :type api_format: str
 
         :param time_created:

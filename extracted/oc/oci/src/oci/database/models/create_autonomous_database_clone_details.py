@@ -258,6 +258,10 @@ class CreateAutonomousDatabaseCloneDetails(CreateAutonomousDatabaseBase):
             The value to assign to the secret_version_number property of this CreateAutonomousDatabaseCloneDetails.
         :type secret_version_number: int
 
+        :param transportable_tablespace:
+            The value to assign to the transportable_tablespace property of this CreateAutonomousDatabaseCloneDetails.
+        :type transportable_tablespace: oci.database.models.ImportTransportableTablespaceDetails
+
         :param source_id:
             The value to assign to the source_id property of this CreateAutonomousDatabaseCloneDetails.
         :type source_id: str
@@ -324,6 +328,7 @@ class CreateAutonomousDatabaseCloneDetails(CreateAutonomousDatabaseBase):
             'is_backup_retention_locked': 'bool',
             'secret_id': 'str',
             'secret_version_number': 'int',
+            'transportable_tablespace': 'ImportTransportableTablespaceDetails',
             'source_id': 'str',
             'clone_type': 'str'
         }
@@ -383,6 +388,7 @@ class CreateAutonomousDatabaseCloneDetails(CreateAutonomousDatabaseBase):
             'is_backup_retention_locked': 'isBackupRetentionLocked',
             'secret_id': 'secretId',
             'secret_version_number': 'secretVersionNumber',
+            'transportable_tablespace': 'transportableTablespace',
             'source_id': 'sourceId',
             'clone_type': 'cloneType'
         }
@@ -441,6 +447,7 @@ class CreateAutonomousDatabaseCloneDetails(CreateAutonomousDatabaseBase):
         self._is_backup_retention_locked = None
         self._secret_id = None
         self._secret_version_number = None
+        self._transportable_tablespace = None
         self._source_id = None
         self._clone_type = None
         self._source = 'DATABASE'

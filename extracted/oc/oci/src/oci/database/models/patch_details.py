@@ -43,20 +43,27 @@ class PatchDetails(object):
             Allowed values for this property are: "APPLY", "PRECHECK"
         :type action: str
 
+        :param patch_options:
+            The value to assign to the patch_options property of this PatchDetails.
+        :type patch_options: oci.database.models.PatchOptions
+
         """
         self.swagger_types = {
             'patch_id': 'str',
             'database_software_image_id': 'str',
-            'action': 'str'
+            'action': 'str',
+            'patch_options': 'PatchOptions'
         }
         self.attribute_map = {
             'patch_id': 'patchId',
             'database_software_image_id': 'databaseSoftwareImageId',
-            'action': 'action'
+            'action': 'action',
+            'patch_options': 'patchOptions'
         }
         self._patch_id = None
         self._database_software_image_id = None
         self._action = None
+        self._patch_options = None
 
     @property
     def patch_id(self):
@@ -144,6 +151,26 @@ class PatchDetails(object):
                 f"Invalid value for `action`, must be None or one of {allowed_values}"
             )
         self._action = action
+
+    @property
+    def patch_options(self):
+        """
+        Gets the patch_options of this PatchDetails.
+
+        :return: The patch_options of this PatchDetails.
+        :rtype: oci.database.models.PatchOptions
+        """
+        return self._patch_options
+
+    @patch_options.setter
+    def patch_options(self, patch_options):
+        """
+        Sets the patch_options of this PatchDetails.
+
+        :param patch_options: The patch_options of this PatchDetails.
+        :type: oci.database.models.PatchOptions
+        """
+        self._patch_options = patch_options
 
     def __repr__(self):
         return formatted_flat_dict(self)

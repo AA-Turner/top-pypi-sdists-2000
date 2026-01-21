@@ -9305,6 +9305,94 @@ class DatabaseClientCompositeOperations(object):
         except Exception as e:
             raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
 
+    def import_transportable_tablespace_and_wait_for_work_request(self, autonomous_database_id, import_transportable_tablespace_details, work_request_states=[], operation_kwargs={}, waiter_kwargs={}):
+        """
+        Calls :py:func:`~oci.database.DatabaseClient.import_transportable_tablespace` and waits for the oci.work_requests.models.WorkRequest
+        to enter the given state(s).
+
+        :param str autonomous_database_id: (required)
+            The database `OCID`__.
+
+            __ https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm
+
+        :param oci.database.models.ImportTransportableTablespaceDetails import_transportable_tablespace_details: (required)
+            Details for importing transportable tablespace for the Autonomous AI Database.
+
+        :param list[str] work_request_states: (optional)
+            An array of work requests states to wait on. These should be valid values for :py:attr:`~oci.work_requests.models.WorkRequest.status`
+            Default values are termination states: [STATUS_SUCCEEDED, STATUS_FAILED, STATUS_CANCELED]
+
+        :param dict operation_kwargs:
+            A dictionary of keyword arguments to pass to :py:func:`~oci.database.DatabaseClient.import_transportable_tablespace`
+
+        :param dict waiter_kwargs:
+            A dictionary of keyword arguments to pass to the :py:func:`oci.wait_until` function. For example, you could pass ``max_interval_seconds`` or ``max_interval_seconds``
+            as dictionary keys to modify how long the waiter function will wait between retries and the maximum amount of time it will wait
+        """
+        operation_result = self.client.import_transportable_tablespace(autonomous_database_id, import_transportable_tablespace_details, **operation_kwargs)
+        work_request_states = work_request_states if work_request_states else oci.waiter._WORK_REQUEST_TERMINATION_STATES
+        lowered_work_request_states = [w.lower() for w in work_request_states]
+        if 'opc-work-request-id' not in operation_result.headers:
+            return operation_result
+        work_request_id = operation_result.headers['opc-work-request-id']
+        try:
+            waiter_result = oci.wait_until(
+                self._work_request_client,
+                self._work_request_client.get_work_request(work_request_id),
+                evaluate_response=lambda r: getattr(r.data, 'status') and getattr(r.data, 'status').lower() in lowered_work_request_states,
+                **waiter_kwargs
+            )
+            return waiter_result
+        except Exception as e:
+            raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
+
+    def import_transportable_tablespace_and_wait_for_state(self, autonomous_database_id, import_transportable_tablespace_details, wait_for_states=[], operation_kwargs={}, waiter_kwargs={}):
+        """
+        Calls :py:func:`~oci.database.DatabaseClient.import_transportable_tablespace` and waits for the :py:class:`~oci.database.models.AutonomousDatabase` acted upon
+        to enter the given state(s).
+
+        :param str autonomous_database_id: (required)
+            The database `OCID`__.
+
+            __ https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm
+
+        :param oci.database.models.ImportTransportableTablespaceDetails import_transportable_tablespace_details: (required)
+            Details for importing transportable tablespace for the Autonomous AI Database.
+
+        :param list[str] wait_for_states:
+            An array of states to wait on. These should be valid values for :py:attr:`~oci.database.models.AutonomousDatabase.lifecycle_state`
+
+        :param dict operation_kwargs:
+            A dictionary of keyword arguments to pass to :py:func:`~oci.database.DatabaseClient.import_transportable_tablespace`
+
+        :param dict waiter_kwargs:
+            A dictionary of keyword arguments to pass to the :py:func:`oci.wait_until` function. For example, you could pass ``max_interval_seconds`` or ``max_interval_seconds``
+            as dictionary keys to modify how long the waiter function will wait between retries and the maximum amount of time it will wait
+        """
+        operation_result = self.client.import_transportable_tablespace(autonomous_database_id, import_transportable_tablespace_details, **operation_kwargs)
+        if not wait_for_states:
+            return operation_result
+        lowered_wait_for_states = [w.lower() for w in wait_for_states]
+        autonomous_database_id = operation_result.data.id
+
+        try:
+            waiter_result = oci.wait_until(
+                self.client,
+                self.client.get_autonomous_database(autonomous_database_id),  # noqa: F821
+                evaluate_response=lambda r: getattr(r.data, 'lifecycle_state') and getattr(r.data, 'lifecycle_state').lower() in lowered_wait_for_states,
+                **waiter_kwargs
+            )
+            result_to_return = waiter_result
+
+            return result_to_return
+        except (NameError, TypeError) as e:
+            if not e.args:
+                e.args = ('',)
+            e.args = e.args + ('This composite operation is currently not supported in the SDK. Please use the operation from the service client and use waiters as an alternative. For more information on waiters, visit: "https://docs.oracle.com/en-us/iaas/tools/python/latest/api/waiters.html"', )
+            raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
+        except Exception as e:
+            raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
+
     def launch_autonomous_exadata_infrastructure_and_wait_for_work_request(self, launch_autonomous_exadata_infrastructure_details, work_request_states=[], operation_kwargs={}, waiter_kwargs={}):
         """
         Calls :py:func:`~oci.database.DatabaseClient.launch_autonomous_exadata_infrastructure` and waits for the oci.work_requests.models.WorkRequest
@@ -10411,6 +10499,47 @@ class DatabaseClientCompositeOperations(object):
             as dictionary keys to modify how long the waiter function will wait between retries and the maximum amount of time it will wait
         """
         operation_result = self.client.register_autonomous_database_data_safe(autonomous_database_id, **operation_kwargs)
+        work_request_states = work_request_states if work_request_states else oci.waiter._WORK_REQUEST_TERMINATION_STATES
+        lowered_work_request_states = [w.lower() for w in work_request_states]
+        if 'opc-work-request-id' not in operation_result.headers:
+            return operation_result
+        work_request_id = operation_result.headers['opc-work-request-id']
+        try:
+            waiter_result = oci.wait_until(
+                self._work_request_client,
+                self._work_request_client.get_work_request(work_request_id),
+                evaluate_response=lambda r: getattr(r.data, 'status') and getattr(r.data, 'status').lower() in lowered_work_request_states,
+                **waiter_kwargs
+            )
+            return waiter_result
+        except Exception as e:
+            raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
+
+    def register_cloud_autonomous_vm_cluster_pkcs_and_wait_for_work_request(self, cloud_autonomous_vm_cluster_id, register_cloud_autonomous_vm_cluster_pkcs_details, work_request_states=[], operation_kwargs={}, waiter_kwargs={}):
+        """
+        Calls :py:func:`~oci.database.DatabaseClient.register_cloud_autonomous_vm_cluster_pkcs` and waits for the oci.work_requests.models.WorkRequest
+        to enter the given state(s).
+
+        :param str cloud_autonomous_vm_cluster_id: (required)
+            The Cloud VM cluster `OCID`__.
+
+            __ https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm
+
+        :param oci.database.models.RegisterCloudAutonomousVmClusterPkcsDetails register_cloud_autonomous_vm_cluster_pkcs_details: (required)
+            Details of registering PKCS11 driver.
+
+        :param list[str] work_request_states: (optional)
+            An array of work requests states to wait on. These should be valid values for :py:attr:`~oci.work_requests.models.WorkRequest.status`
+            Default values are termination states: [STATUS_SUCCEEDED, STATUS_FAILED, STATUS_CANCELED]
+
+        :param dict operation_kwargs:
+            A dictionary of keyword arguments to pass to :py:func:`~oci.database.DatabaseClient.register_cloud_autonomous_vm_cluster_pkcs`
+
+        :param dict waiter_kwargs:
+            A dictionary of keyword arguments to pass to the :py:func:`oci.wait_until` function. For example, you could pass ``max_interval_seconds`` or ``max_interval_seconds``
+            as dictionary keys to modify how long the waiter function will wait between retries and the maximum amount of time it will wait
+        """
+        operation_result = self.client.register_cloud_autonomous_vm_cluster_pkcs(cloud_autonomous_vm_cluster_id, register_cloud_autonomous_vm_cluster_pkcs_details, **operation_kwargs)
         work_request_states = work_request_states if work_request_states else oci.waiter._WORK_REQUEST_TERMINATION_STATES
         lowered_work_request_states = [w.lower() for w in work_request_states]
         if 'opc-work-request-id' not in operation_result.headers:
@@ -12312,6 +12441,88 @@ class DatabaseClientCompositeOperations(object):
         except Exception as e:
             raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
 
+    def run_data_patch_and_wait_for_work_request(self, database_id, work_request_states=[], operation_kwargs={}, waiter_kwargs={}):
+        """
+        Calls :py:func:`~oci.database.DatabaseClient.run_data_patch` and waits for the oci.work_requests.models.WorkRequest
+        to enter the given state(s).
+
+        :param str database_id: (required)
+            The database `OCID`__.
+
+            __ https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm
+
+        :param list[str] work_request_states: (optional)
+            An array of work requests states to wait on. These should be valid values for :py:attr:`~oci.work_requests.models.WorkRequest.status`
+            Default values are termination states: [STATUS_SUCCEEDED, STATUS_FAILED, STATUS_CANCELED]
+
+        :param dict operation_kwargs:
+            A dictionary of keyword arguments to pass to :py:func:`~oci.database.DatabaseClient.run_data_patch`
+
+        :param dict waiter_kwargs:
+            A dictionary of keyword arguments to pass to the :py:func:`oci.wait_until` function. For example, you could pass ``max_interval_seconds`` or ``max_interval_seconds``
+            as dictionary keys to modify how long the waiter function will wait between retries and the maximum amount of time it will wait
+        """
+        operation_result = self.client.run_data_patch(database_id, **operation_kwargs)
+        work_request_states = work_request_states if work_request_states else oci.waiter._WORK_REQUEST_TERMINATION_STATES
+        lowered_work_request_states = [w.lower() for w in work_request_states]
+        if 'opc-work-request-id' not in operation_result.headers:
+            return operation_result
+        work_request_id = operation_result.headers['opc-work-request-id']
+        try:
+            waiter_result = oci.wait_until(
+                self._work_request_client,
+                self._work_request_client.get_work_request(work_request_id),
+                evaluate_response=lambda r: getattr(r.data, 'status') and getattr(r.data, 'status').lower() in lowered_work_request_states,
+                **waiter_kwargs
+            )
+            return waiter_result
+        except Exception as e:
+            raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
+
+    def run_data_patch_and_wait_for_state(self, database_id, wait_for_states=[], operation_kwargs={}, waiter_kwargs={}):
+        """
+        Calls :py:func:`~oci.database.DatabaseClient.run_data_patch` and waits for the :py:class:`~oci.database.models.Database` acted upon
+        to enter the given state(s).
+
+        :param str database_id: (required)
+            The database `OCID`__.
+
+            __ https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm
+
+        :param list[str] wait_for_states:
+            An array of states to wait on. These should be valid values for :py:attr:`~oci.database.models.Database.lifecycle_state`
+
+        :param dict operation_kwargs:
+            A dictionary of keyword arguments to pass to :py:func:`~oci.database.DatabaseClient.run_data_patch`
+
+        :param dict waiter_kwargs:
+            A dictionary of keyword arguments to pass to the :py:func:`oci.wait_until` function. For example, you could pass ``max_interval_seconds`` or ``max_interval_seconds``
+            as dictionary keys to modify how long the waiter function will wait between retries and the maximum amount of time it will wait
+        """
+        operation_result = self.client.run_data_patch(database_id, **operation_kwargs)
+        if not wait_for_states:
+            return operation_result
+        lowered_wait_for_states = [w.lower() for w in wait_for_states]
+        database_id = operation_result.data.id
+
+        try:
+            waiter_result = oci.wait_until(
+                self.client,
+                self.client.get_database(database_id),  # noqa: F821
+                evaluate_response=lambda r: getattr(r.data, 'lifecycle_state') and getattr(r.data, 'lifecycle_state').lower() in lowered_wait_for_states,
+                **waiter_kwargs
+            )
+            result_to_return = waiter_result
+
+            return result_to_return
+        except (NameError, TypeError) as e:
+            if not e.args:
+                e.args = ('',)
+            e.args = e.args + ('This composite operation is currently not supported in the SDK. Please use the operation from the service client and use waiters as an alternative. For more information on waiters, visit: "https://docs.oracle.com/en-us/iaas/tools/python/latest/api/waiters.html"', )
+            raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
+        except Exception as e:
+            raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
+
     def scan_external_container_database_pluggable_databases_and_wait_for_work_request(self, external_container_database_id, external_database_connector_id, work_request_states=[], operation_kwargs={}, waiter_kwargs={}):
         """
         Calls :py:func:`~oci.database.DatabaseClient.scan_external_container_database_pluggable_databases` and waits for the oci.work_requests.models.WorkRequest
@@ -13583,6 +13794,47 @@ class DatabaseClientCompositeOperations(object):
                 e.args = ('',)
             e.args = e.args + ('This composite operation is currently not supported in the SDK. Please use the operation from the service client and use waiters as an alternative. For more information on waiters, visit: "https://docs.oracle.com/en-us/iaas/tools/python/latest/api/waiters.html"', )
             raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
+        except Exception as e:
+            raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
+
+    def unregister_cloud_autonomous_vm_cluster_pkcs_and_wait_for_work_request(self, cloud_autonomous_vm_cluster_id, unregister_cloud_autonomous_vm_cluster_pkcs_details, work_request_states=[], operation_kwargs={}, waiter_kwargs={}):
+        """
+        Calls :py:func:`~oci.database.DatabaseClient.unregister_cloud_autonomous_vm_cluster_pkcs` and waits for the oci.work_requests.models.WorkRequest
+        to enter the given state(s).
+
+        :param str cloud_autonomous_vm_cluster_id: (required)
+            The Cloud VM cluster `OCID`__.
+
+            __ https://docs.cloud.oracle.com/Content/General/Concepts/identifiers.htm
+
+        :param oci.database.models.UnregisterCloudAutonomousVmClusterPkcsDetails unregister_cloud_autonomous_vm_cluster_pkcs_details: (required)
+            Details of unregistering PKCS11 driver.
+
+        :param list[str] work_request_states: (optional)
+            An array of work requests states to wait on. These should be valid values for :py:attr:`~oci.work_requests.models.WorkRequest.status`
+            Default values are termination states: [STATUS_SUCCEEDED, STATUS_FAILED, STATUS_CANCELED]
+
+        :param dict operation_kwargs:
+            A dictionary of keyword arguments to pass to :py:func:`~oci.database.DatabaseClient.unregister_cloud_autonomous_vm_cluster_pkcs`
+
+        :param dict waiter_kwargs:
+            A dictionary of keyword arguments to pass to the :py:func:`oci.wait_until` function. For example, you could pass ``max_interval_seconds`` or ``max_interval_seconds``
+            as dictionary keys to modify how long the waiter function will wait between retries and the maximum amount of time it will wait
+        """
+        operation_result = self.client.unregister_cloud_autonomous_vm_cluster_pkcs(cloud_autonomous_vm_cluster_id, unregister_cloud_autonomous_vm_cluster_pkcs_details, **operation_kwargs)
+        work_request_states = work_request_states if work_request_states else oci.waiter._WORK_REQUEST_TERMINATION_STATES
+        lowered_work_request_states = [w.lower() for w in work_request_states]
+        if 'opc-work-request-id' not in operation_result.headers:
+            return operation_result
+        work_request_id = operation_result.headers['opc-work-request-id']
+        try:
+            waiter_result = oci.wait_until(
+                self._work_request_client,
+                self._work_request_client.get_work_request(work_request_id),
+                evaluate_response=lambda r: getattr(r.data, 'status') and getattr(r.data, 'status').lower() in lowered_work_request_states,
+                **waiter_kwargs
+            )
+            return waiter_result
         except Exception as e:
             raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
 

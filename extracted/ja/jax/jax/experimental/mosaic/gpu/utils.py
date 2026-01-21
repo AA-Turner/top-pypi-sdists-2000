@@ -27,7 +27,6 @@ from jax import numpy as jnp
 from jax._src.lib import mosaic_gpu_dialect as dialect  # noqa: F401
 from jax.interpreters import mlir
 from jaxlib.mlir import ir
-from jaxlib.mlir.dialects import _gpu_ops_gen
 from jaxlib.mlir.dialects import arith
 from jaxlib.mlir.dialects import builtin
 from jaxlib.mlir.dialects import gpu
@@ -121,13 +120,13 @@ def get_contiguous_strides(xs):
 
 
 def c(val: int | float, ty):
-  if ir.IntegerType.isinstance(ty) or ir.IndexType.isinstance(ty):
+  if isinstance(ty, ir.IntegerType) or isinstance(ty, ir.IndexType):
     if not isinstance(val, (int, np.integer)):
       raise TypeError(type(val))
     attr = ir.IntegerAttr.get(ty, val)
-  elif ir.FloatType.isinstance(ty):
+  elif isinstance(ty, ir.FloatType):
     attr = ir.FloatAttr.get(ty, val)
-  elif ir.VectorType.isinstance(ty):
+  elif isinstance(ty, ir.VectorType):
     return vector.broadcast(ty, c(val, ir.VectorType(ty).element_type))
   else:
     raise NotImplementedError(ty)
@@ -135,15 +134,15 @@ def c(val: int | float, ty):
 
 
 def _debug_scalar_ty_format(arg):
-  if ir.IndexType.isinstance(arg.type):
+  if isinstance(arg.type, ir.IndexType):
     return "%llu", arg
-  if ir.IntegerType.isinstance(arg.type):
+  if isinstance(arg.type, ir.IntegerType):
     if ir.IntegerType(arg.type).width < 64:
       arg = arith.extui(ir.IntegerType.get_signless(64), arg)
     return "%llu", arg
-  if ir.F32Type.isinstance(arg.type):
+  if isinstance(arg.type, ir.F32Type):
     return "%f", arg
-  if ir.BF16Type.isinstance(arg.type) or ir.F16Type.isinstance(arg.type):
+  if isinstance(arg.type, ir.BF16Type) or isinstance(arg.type, ir.F16Type):
     arg = arith.extf(ir.F32Type.get(), arg)
     return "%f", arg
   raise NotImplementedError(f"Can't print the type {arg.type}")
@@ -157,7 +156,7 @@ def debug_print(fmt, *args, uniform=True, scope=None):
   type_formats = []
   new_args = []
   for arg in args:
-    if ir.VectorType.isinstance(arg.type):
+    if isinstance(arg.type, ir.VectorType):
       index = ir.IndexType.get()
       vec_ty = ir.VectorType(arg.type)
       if len(vec_ty.shape) > 1:
@@ -189,7 +188,7 @@ def debug_print(fmt, *args, uniform=True, scope=None):
       else contextlib.nullcontext
   )
   with ctx():
-    _gpu_ops_gen.printf(fmt.format(*type_formats) + "\n", new_args)
+    gpu.printf(fmt.format(*type_formats) + "\n", *new_args)
 
 
 @dataclasses.dataclass(frozen=True)
@@ -244,13 +243,13 @@ def multimem_load_reduce(
   i32 = ir.IntegerType.get_signless(32)
   if bitwidth(ty) not in {32, 64, 128}:
     raise ValueError("Only 32-, 64- and 128-bit loads are supported")
-  if ir.VectorType.isinstance(ty):
+  if isinstance(ty, ir.VectorType):
     vty = ir.VectorType(ty)
     if len(vty.shape) > 1:
       raise ValueError("Only 1D vectors are supported")
     vector_length = vty.shape[0]
     vector_i32_length = vector_length * bitwidth(vty.element_type) // 32
-    if ir.IntegerType.isinstance(vty.element_type):
+    if isinstance(vty.element_type, ir.IntegerType):
       # TODO(apaszke): Emulate this by unrolling.
       if vector_length != 1:
         raise NotImplementedError(
@@ -271,20 +270,20 @@ def multimem_load_reduce(
         ptx_ty = f"{'s' if is_signed else 'u'}{bitwidth(vty.element_type)}"
       else:
         raise ValueError(f"Unsupported reduction operation: {reduction}")
-    elif ir.FloatType.isinstance(vty.element_type):
+    elif isinstance(vty.element_type, ir.FloatType):
       if reduction not in {"add", "min", "max"}:
         raise ValueError("Only add, min and max are supported for floats")
-      if ir.F32Type.isinstance(vty.element_type):
+      if isinstance(vty.element_type, ir.F32Type):
         if reduction != "add":
           raise ValueError("Only add is supported for f32")
         ptx_ty = "f32"
-      elif ir.BF16Type.isinstance(vty.element_type):
+      elif isinstance(vty.element_type, ir.BF16Type):
         ptx_ty = "bf16x2"
-      elif ir.F16Type.isinstance(vty.element_type):
+      elif isinstance(vty.element_type, ir.F16Type):
         ptx_ty = "f16x2"
-      elif ir.Float8E5M2Type.isinstance(vty.element_type):
+      elif isinstance(vty.element_type, ir.Float8E5M2Type):
         ptx_ty = "e5m2x4"
-      elif ir.Float8E4M3FNType.isinstance(vty.element_type):
+      elif isinstance(vty.element_type, ir.Float8E4M3FNType):
         ptx_ty = "e4m3x4"
       else:
         raise NotImplementedError(vty.element_type)
@@ -517,15 +516,15 @@ def bitwidth_impl(ty: ir.Type):
   # 32 bits for compatibility reasons. TF32 used to be 32 bits wide in upstream
   # MLIR, but it changed in
   # https://github.com/llvm/llvm-project/commit/67a1fdb014790a38a205d28e1748634de34471dd.
-  if ir.FloatTF32Type.isinstance(ty):
+  if isinstance(ty, ir.FloatTF32Type):
     return 32
-  if ir.IntegerType.isinstance(ty):
+  if isinstance(ty, ir.IntegerType):
     return ir.IntegerType(ty).width
-  if ir.FloatType.isinstance(ty):
+  if isinstance(ty, ir.FloatType):
     return ir.FloatType(ty).width
   if dialect is not None and ty == ir.Type.parse("!mosaic_gpu.barrier"):
     return MBARRIER_BYTES * 8
-  if ir.VectorType.isinstance(ty):
+  if isinstance(ty, ir.VectorType):
     vty = ir.VectorType(ty)
     return math.prod(vty.shape) * bitwidth(vty.element_type)
   raise NotImplementedError(ty)
@@ -591,7 +590,7 @@ def _is_contiguous_shape_slice(
     ref_ty: ir.MemRefType, dim_slice: slice | None = slice(None)
 ):
   # If it's not a strided layout then we are definitely contiguous.
-  if not ir.StridedLayoutAttr.isinstance(ref_ty.layout):
+  if not isinstance(ref_ty.layout, ir.StridedLayoutAttr):
     return True
 
   strides = ir.StridedLayoutAttr(ref_ty.layout).strides[dim_slice]
@@ -921,7 +920,7 @@ def parse_indices(
       slice_shape.append(idx.length)
       is_squeezed.append(False)
     elif isinstance(idx, ir.Value):
-      if not ir.IndexType.isinstance(idx.type):
+      if not isinstance(idx.type, ir.IndexType):
         raise ValueError("Expected an index-typed index")
       base_indices.append(idx)
       slice_shape.append(1)
@@ -999,7 +998,7 @@ class BarrierRef:
       if offset >= self.num_barriers:
         raise IndexError(f"Barrier offset {offset} is out of bounds")
       offset = c(offset, i32)
-    elif ir.IndexType.isinstance(offset.type):
+    elif isinstance(offset.type, ir.IndexType):
       offset = arith.index_castui(i32, offset)
     elif offset.type != i32:
       raise ValueError(f"Expected a dynamic index or an integer, got {offset}")
@@ -1080,11 +1079,33 @@ class BarrierRef:
   ):
     if isinstance(bytes, int):
       bytes = c(bytes, ir.IntegerType.get_signless(32))
-    elif ir.IndexType.isinstance(bytes.type):
+    elif isinstance(bytes.type, ir.IndexType):
       i32 = ir.IntegerType.get_signless(32)
       bytes = arith.index_cast(i32, bytes)
     nvvm_mbarrier_arrive_expect_tx(
         self.get_ptr(), bytes, predicate=predicate
+    )
+
+  def complete_tx(
+      self, bytes: int | ir.Value, predicate: ir.Value | None = None
+  ):
+    if isinstance(bytes, int):
+      bytes = c(bytes, ir.IntegerType.get_signless(32))
+    elif isinstance(bytes.type, ir.IndexType):
+      i32 = ir.IntegerType.get_signless(32)
+      bytes = arith.index_cast(i32, bytes)
+
+    pred_ptx = pred_constraint = ""
+    if predicate is not None:
+      pred_ptx = "@$2"
+      pred_constraint = ",b"
+
+    llvm.inline_asm(
+        ir.Type.parse("!llvm.void"),
+        [self.get_ptr(), bytes] + ([predicate] if predicate is not None else []),
+        f"{pred_ptx} mbarrier.complete_tx.shared::cta.b64 [$0], $1;",
+        "l,r" + pred_constraint,
+        has_side_effects=True,
     )
 
   def get_ptr(self):
@@ -1743,6 +1764,34 @@ def shfl_bfly(x: ir.Value, distance: int | ir.Value):
   return bitcast(y, result_type)
 
 
+def redux(x: ir.Value, mask: ir.Value, kind: nvvm.ReduxKind):
+  i32 = ir.IntegerType.get_signless(32)
+  if isinstance(vec_ty := x.type, ir.VectorType):
+    if bitwidth(vec_ty.element_type) != 32:
+      raise ValueError("Only 32-bit types supported")
+    [vec_len] = vec_ty.shape
+    result = llvm.mlir_undef(x.type)
+    for i in range(vec_len):
+      xi = llvm.extractelement(x, arith.constant(i32, i))
+      yi = redux(xi, mask, kind)
+      result = llvm.insertelement(result, yi, arith.constant(i32, i))
+    return result
+  if bitwidth(x.type) != 32:
+    raise ValueError("Only 32-bit scalar types supported")
+  if isinstance(x.type, ir.IntegerType):
+    pass
+  elif isinstance(x.type, ir.F32Type):
+    if get_arch().major != 10:
+      raise ValueError("F32 redux only supported on Blackwell GPUs")
+  else:
+    raise NotImplementedError(x.type)
+  assert mask.type == i32
+  extra_kwargs = {}
+  if kind == nvvm.ReduxKind.FMAX or kind == nvvm.ReduxKind.FMIN:
+    extra_kwargs = dict(nan=True)
+  return nvvm.redux_sync(x.type, x, kind, mask, **extra_kwargs)
+
+
 def prmt(high: ir.Value, low: ir.Value, permutation: ir.Value):
   i32 = ir.IntegerType.get_signless(32)
   if (result_type := high.type) != low.type:
@@ -1767,7 +1816,7 @@ def bitcast(x: ir.Value, new_type: ir.Type):
         f"Can't bitcast {x.type} (of bitwidth {x_bw}) to {new_type} (of"
         f" bitwidth {new_bw})"
     )
-  if ir.VectorType.isinstance(x.type) and ir.IntegerType.isinstance(new_type):
+  if isinstance(x.type, ir.VectorType) and isinstance(new_type, ir.IntegerType):
     new_type = ir.IntegerType(new_type)
     x_ty = ir.VectorType(x.type)
     assert new_type.width == bitwidth(x_ty.element_type) * math.prod(x_ty.shape)
@@ -1776,7 +1825,7 @@ def bitcast(x: ir.Value, new_type: ir.Type):
         dynamic_position=[],
         static_position=ir.DenseI64ArrayAttr.get([0]),
     )
-  if ir.IntegerType.isinstance(x.type) and ir.VectorType.isinstance(new_type):
+  if isinstance(x.type, ir.IntegerType) and isinstance(new_type, ir.VectorType):
     new_type = ir.VectorType(new_type)
     x_ty = ir.IntegerType(x.type)
     assert x_ty.width == bitwidth(new_type.element_type) * math.prod(
@@ -1785,17 +1834,17 @@ def bitcast(x: ir.Value, new_type: ir.Type):
     return vector.bitcast(
         new_type, vector.broadcast(ir.VectorType.get((1,), x_ty), x)
     )
-  if ir.VectorType.isinstance(x.type) and ir.VectorType.isinstance(new_type):
+  if isinstance(x.type, ir.VectorType) and isinstance(new_type, ir.VectorType):
     x_ty = ir.VectorType(x.type)
     new_ty = ir.VectorType(new_type)
     if bitwidth(x_ty) != bitwidth(new_ty):
       raise ValueError(f"Can't bitcast {x.type} to {new_type}")
     return vector.bitcast(new_type, x)
-  if ir.IntegerType.isinstance(x.type) and ir.FloatType.isinstance(new_type):
+  if isinstance(x.type, ir.IntegerType) and isinstance(new_type, ir.FloatType):
     return arith.bitcast(new_type, x)
-  if ir.FloatType.isinstance(x.type) and ir.IntegerType.isinstance(new_type):
+  if isinstance(x.type, ir.FloatType) and isinstance(new_type, ir.IntegerType):
     return arith.bitcast(new_type, x)
-  if ir.FloatType.isinstance(x.type) and ir.FloatType.isinstance(new_type):
+  if isinstance(x.type, ir.FloatType) and isinstance(new_type, ir.FloatType):
     return arith.bitcast(new_type, x)
   raise ValueError(f"Can't bitcast {x.type} to {new_type}")
 
@@ -1823,14 +1872,16 @@ def vector_concat(vectors: Sequence[ir.Value]) -> ir.Value:
   if not vectors:
     raise ValueError("Cannot concatenate an empty list of vectors")
   vty = vectors[0].type
-  if not ir.VectorType.isinstance(vty):
+  if not isinstance(vty, ir.VectorType):
     raise ValueError("Cannot concatenate non-vector values")
   vty = ir.VectorType(vty)
   if vty.rank != 1:
     raise NotImplementedError("Only 1D vectors are supported")
   for v in vectors:
-    if v.type != vty:
-      raise ValueError("Cannot concatenate vectors of different types")
+    if v.type.element_type != vty.element_type:
+      raise ValueError("Cannot concatenate vectors of different element types")
+    if v.type.rank != 1:
+      raise ValueError("Can only concatenate 1D vectors")
   return _vector_concat_rec(vectors)
 
 
@@ -1854,7 +1905,7 @@ def is_known_divisible(value, divisor, max_depth=10) -> bool:
   """Returns True if the value is statically known to be divisible by the divisor."""
   if divisor == 1:
     return True
-  if max_depth < 0 or not isinstance(value.owner, ir.Operation):
+  if max_depth < 0 or not isinstance(value.owner, ir.OpView):
     return False
 
   new_depth = max_depth - 1
@@ -1911,7 +1962,7 @@ def is_smem_ref(ref: ir.Value | ir.Type) -> bool:
   """
   if isinstance(ref, ir.Value):
     ref = ref.type
-  if not ir.MemRefType.isinstance(ref):
+  if not isinstance(ref, ir.MemRefType):
     raise ValueError(f"Expected a memref type but got {ref}")
   ref = ir.MemRefType(ref)
   return ref.memory_space is not None and ref.memory_space == smem()
@@ -1924,7 +1975,7 @@ def is_tmem_ref(ref: ir.Value | ir.Type) -> bool:
   """
   if isinstance(ref, ir.Value):
     ref = ref.type
-  if not ir.MemRefType.isinstance(ref):
+  if not isinstance(ref, ir.MemRefType):
     raise ValueError(f"Expected a memref type but got {ref}")
   ref = ir.MemRefType(ref)
   return ref.memory_space is not None and ref.memory_space == tmem()
@@ -2007,3 +2058,45 @@ def nvvm_mbarrier_arrive_expect_tx(barrier: ir.Value, expect_tx: ir.Value, predi
     return nvvm.mbarrier_arrive_expect_tx(None, barrier, expect_tx, predicate=predicate)  # type: ignore
   except TypeError:
     return nvvm.mbarrier_arrive_expect_tx(barrier, expect_tx, predicate=predicate)  # pytype: disable=missing-parameter
+
+
+def elements_to_bytes(offset: ir.Value, element_bitwidth: int) -> ir.Value:
+  """Convert an element-based linear offset to a byte-based offset."""
+  index_ty = offset.type
+
+  if element_bitwidth > 8:
+    return arith.muli(offset, c(element_bitwidth // 8, index_ty))
+  elif element_bitwidth < 8:
+    return arith.divsi(offset, c(8 // element_bitwidth, index_ty))
+  else:
+    return offset
+
+
+def get_cluster_ptr(ptr: ir.Value, cluster_block: ir.Value):
+  i32 = ir.IntegerType.get_signless(32)
+  assert cluster_block.type == i32, cluster_block.type
+  assert ptr.type == ir.Type.parse("!llvm.ptr<3>"), ptr.type
+  mapped_smem_ptr = nvvm.mapa(ir.Type.parse("!llvm.ptr<7>"), ptr, cluster_block)
+  return llvm.addrspacecast(ir.Type.parse("!llvm.ptr"), mapped_smem_ptr)
+
+
+@dataclasses.dataclass(frozen=True)
+class Arch:
+  major: int
+  minor: int
+
+
+def get_arch() -> Arch:
+  ip = ir.InsertionPoint.current
+  if ip is None:
+    raise ValueError("Cannot retrieve the architecture without an insertion point")
+  block = ip.block
+  op = block.owner
+  while op is not None:
+    if op.name == "builtin.module":
+      return Arch(
+          op.attributes["mosaic_gpu.arch_major"].value,
+          op.attributes["mosaic_gpu.arch_minor"].value,
+      )
+    op = op.parent
+  raise ValueError("Cannot retrieve the architecture: no module found")

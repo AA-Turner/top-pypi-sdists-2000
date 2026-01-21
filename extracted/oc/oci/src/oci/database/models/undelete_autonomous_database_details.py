@@ -246,6 +246,10 @@ class UndeleteAutonomousDatabaseDetails(CreateAutonomousDatabaseBase):
             The value to assign to the secret_version_number property of this UndeleteAutonomousDatabaseDetails.
         :type secret_version_number: int
 
+        :param transportable_tablespace:
+            The value to assign to the transportable_tablespace property of this UndeleteAutonomousDatabaseDetails.
+        :type transportable_tablespace: oci.database.models.ImportTransportableTablespaceDetails
+
         :param source_id:
             The value to assign to the source_id property of this UndeleteAutonomousDatabaseDetails.
         :type source_id: str
@@ -307,6 +311,7 @@ class UndeleteAutonomousDatabaseDetails(CreateAutonomousDatabaseBase):
             'is_backup_retention_locked': 'bool',
             'secret_id': 'str',
             'secret_version_number': 'int',
+            'transportable_tablespace': 'ImportTransportableTablespaceDetails',
             'source_id': 'str'
         }
         self.attribute_map = {
@@ -365,6 +370,7 @@ class UndeleteAutonomousDatabaseDetails(CreateAutonomousDatabaseBase):
             'is_backup_retention_locked': 'isBackupRetentionLocked',
             'secret_id': 'secretId',
             'secret_version_number': 'secretVersionNumber',
+            'transportable_tablespace': 'transportableTablespace',
             'source_id': 'sourceId'
         }
         self._subscription_id = None
@@ -422,6 +428,7 @@ class UndeleteAutonomousDatabaseDetails(CreateAutonomousDatabaseBase):
         self._is_backup_retention_locked = None
         self._secret_id = None
         self._secret_version_number = None
+        self._transportable_tablespace = None
         self._source_id = None
         self._source = 'UNDELETE_ADB'
 

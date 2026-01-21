@@ -51,7 +51,7 @@ class CohereChatRequest(BaseChatRequest):
 
         :param api_format:
             The value to assign to the api_format property of this CohereChatRequest.
-            Allowed values for this property are: "COHERE", "GENERIC"
+            Allowed values for this property are: "COHERE", "COHEREV2", "GENERIC"
         :type api_format: str
 
         :param message:

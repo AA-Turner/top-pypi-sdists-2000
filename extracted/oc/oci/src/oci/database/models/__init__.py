@@ -21,6 +21,7 @@ from .application_vip import ApplicationVip
 from .application_vip_summary import ApplicationVipSummary
 from .associated_database_details import AssociatedDatabaseDetails
 from .associated_long_term_backup import AssociatedLongTermBackup
+from .associated_resource_details import AssociatedResourceDetails
 from .automated_mount_details import AutomatedMountDetails
 from .autonomous_container_database import AutonomousContainerDatabase
 from .autonomous_container_database_backup import AutonomousContainerDatabaseBackup
@@ -100,6 +101,7 @@ from .change_cloud_vm_cluster_compartment_details import ChangeCloudVmClusterCom
 from .change_cloud_vm_cluster_subscription_details import ChangeCloudVmClusterSubscriptionDetails
 from .change_compartment_details import ChangeCompartmentDetails
 from .change_dataguard_role_details import ChangeDataguardRoleDetails
+from .change_db_connection_bundle_compartment_details import ChangeDbConnectionBundleCompartmentDetails
 from .change_disaster_recovery_configuration_details import ChangeDisasterRecoveryConfigurationDetails
 from .change_exadata_infrastructure_compartment_details import ChangeExadataInfrastructureCompartmentDetails
 from .change_exadb_vm_cluster_compartment_details import ChangeExadbVmClusterCompartmentDetails
@@ -178,6 +180,7 @@ from .create_database_from_backup_details import CreateDatabaseFromBackupDetails
 from .create_database_from_database import CreateDatabaseFromDatabase
 from .create_database_from_db_system_details import CreateDatabaseFromDbSystemDetails
 from .create_database_software_image_details import CreateDatabaseSoftwareImageDetails
+from .create_db_connection_bundle_details import CreateDbConnectionBundleDetails
 from .create_db_home_base import CreateDbHomeBase
 from .create_db_home_details import CreateDbHomeDetails
 from .create_db_home_from_backup_details import CreateDbHomeFromBackupDetails
@@ -228,6 +231,7 @@ from .data_guard_association import DataGuardAssociation
 from .data_guard_association_summary import DataGuardAssociationSummary
 from .data_guard_group import DataGuardGroup
 from .data_guard_group_member import DataGuardGroupMember
+from .data_patch_options import DataPatchOptions
 from .database import Database
 from .database_connection_credentials import DatabaseConnectionCredentials
 from .database_connection_credentials_by_details import DatabaseConnectionCredentialsByDetails
@@ -252,6 +256,8 @@ from .database_upgrade_with_db_home_details import DatabaseUpgradeWithDbHomeDeta
 from .database_upgrade_with_db_version_details import DatabaseUpgradeWithDbVersionDetails
 from .day_of_week import DayOfWeek
 from .db_backup_config import DbBackupConfig
+from .db_connection_bundle import DbConnectionBundle
+from .db_connection_bundle_summary import DbConnectionBundleSummary
 from .db_home import DbHome
 from .db_home_from_agent_resource_id import DbHomeFromAgentResourceId
 from .db_home_summary import DbHomeSummary
@@ -282,6 +288,7 @@ from .defined_file_system_configuration import DefinedFileSystemConfiguration
 from .deregister_autonomous_database_data_safe_details import DeregisterAutonomousDatabaseDataSafeDetails
 from .disaster_recovery_configuration import DisasterRecoveryConfiguration
 from .disk_performance_details import DiskPerformanceDetails
+from .download_db_connection_bundle_details import DownloadDbConnectionBundleDetails
 from .download_oneoff_patch import DownloadOneoffPatch
 from .dr_scan_details import DrScanDetails
 from .edit_autonomous_container_database_dataguard_details import EditAutonomousContainerDatabaseDataguardDetails
@@ -353,6 +360,7 @@ from .gi_version_summary import GiVersionSummary
 from .google_cloud_provider_encryption_key_details import GoogleCloudProviderEncryptionKeyDetails
 from .granular_maintenance_history_details import GranularMaintenanceHistoryDetails
 from .identity_connector_details import IdentityConnectorDetails
+from .import_transportable_tablespace_details import ImportTransportableTablespaceDetails
 from .info_for_network_gen_details import InfoForNetworkGenDetails
 from .infrastructure_target_version import InfrastructureTargetVersion
 from .infrastructure_target_version_summary import InfrastructureTargetVersionSummary
@@ -396,6 +404,7 @@ from .patch import Patch
 from .patch_details import PatchDetails
 from .patch_history_entry import PatchHistoryEntry
 from .patch_history_entry_summary import PatchHistoryEntrySummary
+from .patch_options import PatchOptions
 from .patch_summary import PatchSummary
 from .pdb_conversion_history_entry import PdbConversionHistoryEntry
 from .pdb_conversion_history_entry_summary import PdbConversionHistoryEntrySummary
@@ -415,6 +424,7 @@ from .recovery_appliance_details import RecoveryApplianceDetails
 from .refreshable_clone_collection import RefreshableCloneCollection
 from .refreshable_clone_summary import RefreshableCloneSummary
 from .register_autonomous_database_data_safe_details import RegisterAutonomousDatabaseDataSafeDetails
+from .register_cloud_autonomous_vm_cluster_pkcs_details import RegisterCloudAutonomousVmClusterPkcsDetails
 from .register_cloud_vm_cluster_pkcs_details import RegisterCloudVmClusterPkcsDetails
 from .reinstate_data_guard_association_details import ReinstateDataGuardAssociationDetails
 from .reinstate_data_guard_details import ReinstateDataGuardDetails
@@ -438,6 +448,7 @@ from .rotate_autonomous_vm_cluster_ords_certs_details import RotateAutonomousVmC
 from .rotate_autonomous_vm_cluster_ssl_certs_details import RotateAutonomousVmClusterSslCertsDetails
 from .rotate_cloud_autonomous_vm_cluster_ords_certs_details import RotateCloudAutonomousVmClusterOrdsCertsDetails
 from .rotate_cloud_autonomous_vm_cluster_ssl_certs_details import RotateCloudAutonomousVmClusterSslCertsDetails
+from .run_data_patch_details import RunDataPatchDetails
 from .saas_admin_user_configuration import SaasAdminUserConfiguration
 from .saas_admin_user_status import SaasAdminUserStatus
 from .scan_details import ScanDetails
@@ -465,6 +476,7 @@ from .system_version_minor_version_summary import SystemVersionMinorVersionSumma
 from .system_version_summary import SystemVersionSummary
 from .undelete_autonomous_database_details import UndeleteAutonomousDatabaseDetails
 from .unmount_dbnode_snapshot_details import UnmountDbnodeSnapshotDetails
+from .unregister_cloud_autonomous_vm_cluster_pkcs_details import UnregisterCloudAutonomousVmClusterPkcsDetails
 from .unregister_cloud_vm_cluster_pkcs_details import UnregisterCloudVmClusterPkcsDetails
 from .update import Update
 from .update_autonomous_container_database_data_guard_association_details import UpdateAutonomousContainerDatabaseDataGuardAssociationDetails
@@ -486,6 +498,7 @@ from .update_data_guard_association_details import UpdateDataGuardAssociationDet
 from .update_data_guard_details import UpdateDataGuardDetails
 from .update_database_details import UpdateDatabaseDetails
 from .update_database_software_image_details import UpdateDatabaseSoftwareImageDetails
+from .update_db_connection_bundle_details import UpdateDbConnectionBundleDetails
 from .update_db_home_details import UpdateDbHomeDetails
 from .update_db_node_details import UpdateDbNodeDetails
 from .update_db_system_details import UpdateDbSystemDetails
@@ -548,6 +561,7 @@ database_type_mapping = {
     "ApplicationVipSummary": ApplicationVipSummary,
     "AssociatedDatabaseDetails": AssociatedDatabaseDetails,
     "AssociatedLongTermBackup": AssociatedLongTermBackup,
+    "AssociatedResourceDetails": AssociatedResourceDetails,
     "AutomatedMountDetails": AutomatedMountDetails,
     "AutonomousContainerDatabase": AutonomousContainerDatabase,
     "AutonomousContainerDatabaseBackup": AutonomousContainerDatabaseBackup,
@@ -627,6 +641,7 @@ database_type_mapping = {
     "ChangeCloudVmClusterSubscriptionDetails": ChangeCloudVmClusterSubscriptionDetails,
     "ChangeCompartmentDetails": ChangeCompartmentDetails,
     "ChangeDataguardRoleDetails": ChangeDataguardRoleDetails,
+    "ChangeDbConnectionBundleCompartmentDetails": ChangeDbConnectionBundleCompartmentDetails,
     "ChangeDisasterRecoveryConfigurationDetails": ChangeDisasterRecoveryConfigurationDetails,
     "ChangeExadataInfrastructureCompartmentDetails": ChangeExadataInfrastructureCompartmentDetails,
     "ChangeExadbVmClusterCompartmentDetails": ChangeExadbVmClusterCompartmentDetails,
@@ -705,6 +720,7 @@ database_type_mapping = {
     "CreateDatabaseFromDatabase": CreateDatabaseFromDatabase,
     "CreateDatabaseFromDbSystemDetails": CreateDatabaseFromDbSystemDetails,
     "CreateDatabaseSoftwareImageDetails": CreateDatabaseSoftwareImageDetails,
+    "CreateDbConnectionBundleDetails": CreateDbConnectionBundleDetails,
     "CreateDbHomeBase": CreateDbHomeBase,
     "CreateDbHomeDetails": CreateDbHomeDetails,
     "CreateDbHomeFromBackupDetails": CreateDbHomeFromBackupDetails,
@@ -755,6 +771,7 @@ database_type_mapping = {
     "DataGuardAssociationSummary": DataGuardAssociationSummary,
     "DataGuardGroup": DataGuardGroup,
     "DataGuardGroupMember": DataGuardGroupMember,
+    "DataPatchOptions": DataPatchOptions,
     "Database": Database,
     "DatabaseConnectionCredentials": DatabaseConnectionCredentials,
     "DatabaseConnectionCredentialsByDetails": DatabaseConnectionCredentialsByDetails,
@@ -779,6 +796,8 @@ database_type_mapping = {
     "DatabaseUpgradeWithDbVersionDetails": DatabaseUpgradeWithDbVersionDetails,
     "DayOfWeek": DayOfWeek,
     "DbBackupConfig": DbBackupConfig,
+    "DbConnectionBundle": DbConnectionBundle,
+    "DbConnectionBundleSummary": DbConnectionBundleSummary,
     "DbHome": DbHome,
     "DbHomeFromAgentResourceId": DbHomeFromAgentResourceId,
     "DbHomeSummary": DbHomeSummary,
@@ -809,6 +828,7 @@ database_type_mapping = {
     "DeregisterAutonomousDatabaseDataSafeDetails": DeregisterAutonomousDatabaseDataSafeDetails,
     "DisasterRecoveryConfiguration": DisasterRecoveryConfiguration,
     "DiskPerformanceDetails": DiskPerformanceDetails,
+    "DownloadDbConnectionBundleDetails": DownloadDbConnectionBundleDetails,
     "DownloadOneoffPatch": DownloadOneoffPatch,
     "DrScanDetails": DrScanDetails,
     "EditAutonomousContainerDatabaseDataguardDetails": EditAutonomousContainerDatabaseDataguardDetails,
@@ -880,6 +900,7 @@ database_type_mapping = {
     "GoogleCloudProviderEncryptionKeyDetails": GoogleCloudProviderEncryptionKeyDetails,
     "GranularMaintenanceHistoryDetails": GranularMaintenanceHistoryDetails,
     "IdentityConnectorDetails": IdentityConnectorDetails,
+    "ImportTransportableTablespaceDetails": ImportTransportableTablespaceDetails,
     "InfoForNetworkGenDetails": InfoForNetworkGenDetails,
     "InfrastructureTargetVersion": InfrastructureTargetVersion,
     "InfrastructureTargetVersionSummary": InfrastructureTargetVersionSummary,
@@ -923,6 +944,7 @@ database_type_mapping = {
     "PatchDetails": PatchDetails,
     "PatchHistoryEntry": PatchHistoryEntry,
     "PatchHistoryEntrySummary": PatchHistoryEntrySummary,
+    "PatchOptions": PatchOptions,
     "PatchSummary": PatchSummary,
     "PdbConversionHistoryEntry": PdbConversionHistoryEntry,
     "PdbConversionHistoryEntrySummary": PdbConversionHistoryEntrySummary,
@@ -942,6 +964,7 @@ database_type_mapping = {
     "RefreshableCloneCollection": RefreshableCloneCollection,
     "RefreshableCloneSummary": RefreshableCloneSummary,
     "RegisterAutonomousDatabaseDataSafeDetails": RegisterAutonomousDatabaseDataSafeDetails,
+    "RegisterCloudAutonomousVmClusterPkcsDetails": RegisterCloudAutonomousVmClusterPkcsDetails,
     "RegisterCloudVmClusterPkcsDetails": RegisterCloudVmClusterPkcsDetails,
     "ReinstateDataGuardAssociationDetails": ReinstateDataGuardAssociationDetails,
     "ReinstateDataGuardDetails": ReinstateDataGuardDetails,
@@ -965,6 +988,7 @@ database_type_mapping = {
     "RotateAutonomousVmClusterSslCertsDetails": RotateAutonomousVmClusterSslCertsDetails,
     "RotateCloudAutonomousVmClusterOrdsCertsDetails": RotateCloudAutonomousVmClusterOrdsCertsDetails,
     "RotateCloudAutonomousVmClusterSslCertsDetails": RotateCloudAutonomousVmClusterSslCertsDetails,
+    "RunDataPatchDetails": RunDataPatchDetails,
     "SaasAdminUserConfiguration": SaasAdminUserConfiguration,
     "SaasAdminUserStatus": SaasAdminUserStatus,
     "ScanDetails": ScanDetails,
@@ -992,6 +1016,7 @@ database_type_mapping = {
     "SystemVersionSummary": SystemVersionSummary,
     "UndeleteAutonomousDatabaseDetails": UndeleteAutonomousDatabaseDetails,
     "UnmountDbnodeSnapshotDetails": UnmountDbnodeSnapshotDetails,
+    "UnregisterCloudAutonomousVmClusterPkcsDetails": UnregisterCloudAutonomousVmClusterPkcsDetails,
     "UnregisterCloudVmClusterPkcsDetails": UnregisterCloudVmClusterPkcsDetails,
     "Update": Update,
     "UpdateAutonomousContainerDatabaseDataGuardAssociationDetails": UpdateAutonomousContainerDatabaseDataGuardAssociationDetails,
@@ -1013,6 +1038,7 @@ database_type_mapping = {
     "UpdateDataGuardDetails": UpdateDataGuardDetails,
     "UpdateDatabaseDetails": UpdateDatabaseDetails,
     "UpdateDatabaseSoftwareImageDetails": UpdateDatabaseSoftwareImageDetails,
+    "UpdateDbConnectionBundleDetails": UpdateDbConnectionBundleDetails,
     "UpdateDbHomeDetails": UpdateDbHomeDetails,
     "UpdateDbNodeDetails": UpdateDbNodeDetails,
     "UpdateDbSystemDetails": UpdateDbSystemDetails,

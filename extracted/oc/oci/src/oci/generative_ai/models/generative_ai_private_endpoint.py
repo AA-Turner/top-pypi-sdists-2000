@@ -82,6 +82,10 @@ class GenerativeAiPrivateEndpoint(object):
             The value to assign to the fqdn property of this GenerativeAiPrivateEndpoint.
         :type fqdn: str
 
+        :param is_allow_on_demand:
+            The value to assign to the is_allow_on_demand property of this GenerativeAiPrivateEndpoint.
+        :type is_allow_on_demand: bool
+
         :param private_endpoint_ip:
             The value to assign to the private_endpoint_ip property of this GenerativeAiPrivateEndpoint.
         :type private_endpoint_ip: str
@@ -121,6 +125,7 @@ class GenerativeAiPrivateEndpoint(object):
             'lifecycle_details': 'str',
             'nsg_ids': 'list[str]',
             'fqdn': 'str',
+            'is_allow_on_demand': 'bool',
             'private_endpoint_ip': 'str',
             'time_created': 'datetime',
             'time_updated': 'datetime',
@@ -139,6 +144,7 @@ class GenerativeAiPrivateEndpoint(object):
             'lifecycle_details': 'lifecycleDetails',
             'nsg_ids': 'nsgIds',
             'fqdn': 'fqdn',
+            'is_allow_on_demand': 'isAllowOnDemand',
             'private_endpoint_ip': 'privateEndpointIp',
             'time_created': 'timeCreated',
             'time_updated': 'timeUpdated',
@@ -156,6 +162,7 @@ class GenerativeAiPrivateEndpoint(object):
         self._lifecycle_details = None
         self._nsg_ids = None
         self._fqdn = None
+        self._is_allow_on_demand = None
         self._private_endpoint_ip = None
         self._time_created = None
         self._time_updated = None
@@ -385,6 +392,30 @@ class GenerativeAiPrivateEndpoint(object):
         :type: str
         """
         self._fqdn = fqdn
+
+    @property
+    def is_allow_on_demand(self):
+        """
+        Gets the is_allow_on_demand of this GenerativeAiPrivateEndpoint.
+        Flag that allows access to on-demand models using this private endpoint.
+
+
+        :return: The is_allow_on_demand of this GenerativeAiPrivateEndpoint.
+        :rtype: bool
+        """
+        return self._is_allow_on_demand
+
+    @is_allow_on_demand.setter
+    def is_allow_on_demand(self, is_allow_on_demand):
+        """
+        Sets the is_allow_on_demand of this GenerativeAiPrivateEndpoint.
+        Flag that allows access to on-demand models using this private endpoint.
+
+
+        :param is_allow_on_demand: The is_allow_on_demand of this GenerativeAiPrivateEndpoint.
+        :type: bool
+        """
+        self._is_allow_on_demand = is_allow_on_demand
 
     @property
     def private_endpoint_ip(self):

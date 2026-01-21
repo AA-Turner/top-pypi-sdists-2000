@@ -209,6 +209,10 @@ class DatabaseSummary(object):
             The value to assign to the storage_size_details property of this DatabaseSummary.
         :type storage_size_details: oci.database.models.DatabaseStorageSizeResponseDetails
 
+        :param patch_version:
+            The value to assign to the patch_version property of this DatabaseSummary.
+        :type patch_version: str
+
         """
         self.swagger_types = {
             'id': 'str',
@@ -245,7 +249,8 @@ class DatabaseSummary(object):
             'key_store_wallet_name': 'str',
             'data_guard_group': 'DataGuardGroup',
             'encryption_key_location_details': 'EncryptionKeyLocationDetails',
-            'storage_size_details': 'DatabaseStorageSizeResponseDetails'
+            'storage_size_details': 'DatabaseStorageSizeResponseDetails',
+            'patch_version': 'str'
         }
         self.attribute_map = {
             'id': 'id',
@@ -282,7 +287,8 @@ class DatabaseSummary(object):
             'key_store_wallet_name': 'keyStoreWalletName',
             'data_guard_group': 'dataGuardGroup',
             'encryption_key_location_details': 'encryptionKeyLocationDetails',
-            'storage_size_details': 'storageSizeDetails'
+            'storage_size_details': 'storageSizeDetails',
+            'patch_version': 'patchVersion'
         }
         self._id = None
         self._compartment_id = None
@@ -319,6 +325,7 @@ class DatabaseSummary(object):
         self._data_guard_group = None
         self._encryption_key_location_details = None
         self._storage_size_details = None
+        self._patch_version = None
 
     @property
     def id(self):
@@ -1211,6 +1218,30 @@ class DatabaseSummary(object):
         :type: oci.database.models.DatabaseStorageSizeResponseDetails
         """
         self._storage_size_details = storage_size_details
+
+    @property
+    def patch_version(self):
+        """
+        Gets the patch_version of this DatabaseSummary.
+        The patch version of the database.
+
+
+        :return: The patch_version of this DatabaseSummary.
+        :rtype: str
+        """
+        return self._patch_version
+
+    @patch_version.setter
+    def patch_version(self, patch_version):
+        """
+        Sets the patch_version of this DatabaseSummary.
+        The patch version of the database.
+
+
+        :param patch_version: The patch_version of this DatabaseSummary.
+        :type: str
+        """
+        self._patch_version = patch_version
 
     def __repr__(self):
         return formatted_flat_dict(self)

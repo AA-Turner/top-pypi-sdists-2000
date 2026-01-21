@@ -36,6 +36,10 @@ class UpdateGenerativeAiPrivateEndpointDetails(object):
             The value to assign to the nsg_ids property of this UpdateGenerativeAiPrivateEndpointDetails.
         :type nsg_ids: list[str]
 
+        :param is_allow_on_demand:
+            The value to assign to the is_allow_on_demand property of this UpdateGenerativeAiPrivateEndpointDetails.
+        :type is_allow_on_demand: bool
+
         :param freeform_tags:
             The value to assign to the freeform_tags property of this UpdateGenerativeAiPrivateEndpointDetails.
         :type freeform_tags: dict(str, str)
@@ -50,6 +54,7 @@ class UpdateGenerativeAiPrivateEndpointDetails(object):
             'display_name': 'str',
             'dns_prefix': 'str',
             'nsg_ids': 'list[str]',
+            'is_allow_on_demand': 'bool',
             'freeform_tags': 'dict(str, str)',
             'defined_tags': 'dict(str, dict(str, object))'
         }
@@ -58,6 +63,7 @@ class UpdateGenerativeAiPrivateEndpointDetails(object):
             'display_name': 'displayName',
             'dns_prefix': 'dnsPrefix',
             'nsg_ids': 'nsgIds',
+            'is_allow_on_demand': 'isAllowOnDemand',
             'freeform_tags': 'freeformTags',
             'defined_tags': 'definedTags'
         }
@@ -65,6 +71,7 @@ class UpdateGenerativeAiPrivateEndpointDetails(object):
         self._display_name = None
         self._dns_prefix = None
         self._nsg_ids = None
+        self._is_allow_on_demand = None
         self._freeform_tags = None
         self._defined_tags = None
 
@@ -163,6 +170,30 @@ class UpdateGenerativeAiPrivateEndpointDetails(object):
         :type: list[str]
         """
         self._nsg_ids = nsg_ids
+
+    @property
+    def is_allow_on_demand(self):
+        """
+        Gets the is_allow_on_demand of this UpdateGenerativeAiPrivateEndpointDetails.
+        Flag that allows access to on-demand models using this private endpoint.
+
+
+        :return: The is_allow_on_demand of this UpdateGenerativeAiPrivateEndpointDetails.
+        :rtype: bool
+        """
+        return self._is_allow_on_demand
+
+    @is_allow_on_demand.setter
+    def is_allow_on_demand(self, is_allow_on_demand):
+        """
+        Sets the is_allow_on_demand of this UpdateGenerativeAiPrivateEndpointDetails.
+        Flag that allows access to on-demand models using this private endpoint.
+
+
+        :param is_allow_on_demand: The is_allow_on_demand of this UpdateGenerativeAiPrivateEndpointDetails.
+        :type: bool
+        """
+        self._is_allow_on_demand = is_allow_on_demand
 
     @property
     def freeform_tags(self):

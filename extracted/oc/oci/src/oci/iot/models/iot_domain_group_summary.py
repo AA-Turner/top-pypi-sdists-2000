@@ -15,6 +15,14 @@ class IotDomainGroupSummary(object):
     Summary information about an IoT Domain Group.
     """
 
+    #: A constant which can be used with the type property of a IotDomainGroupSummary.
+    #: This constant has a value of "STANDARD"
+    TYPE_STANDARD = "STANDARD"
+
+    #: A constant which can be used with the type property of a IotDomainGroupSummary.
+    #: This constant has a value of "LIGHTWEIGHT"
+    TYPE_LIGHTWEIGHT = "LIGHTWEIGHT"
+
     def __init__(self, **kwargs):
         """
         Initializes a new IotDomainGroupSummary object with values from keyword arguments.
@@ -27,6 +35,12 @@ class IotDomainGroupSummary(object):
         :param compartment_id:
             The value to assign to the compartment_id property of this IotDomainGroupSummary.
         :type compartment_id: str
+
+        :param type:
+            The value to assign to the type property of this IotDomainGroupSummary.
+            Allowed values for this property are: "STANDARD", "LIGHTWEIGHT", 'UNKNOWN_ENUM_VALUE'.
+            Any unrecognized values returned by a service will be mapped to 'UNKNOWN_ENUM_VALUE'.
+        :type type: str
 
         :param display_name:
             The value to assign to the display_name property of this IotDomainGroupSummary.
@@ -64,6 +78,7 @@ class IotDomainGroupSummary(object):
         self.swagger_types = {
             'id': 'str',
             'compartment_id': 'str',
+            'type': 'str',
             'display_name': 'str',
             'description': 'str',
             'lifecycle_state': 'str',
@@ -76,6 +91,7 @@ class IotDomainGroupSummary(object):
         self.attribute_map = {
             'id': 'id',
             'compartment_id': 'compartmentId',
+            'type': 'type',
             'display_name': 'displayName',
             'description': 'description',
             'lifecycle_state': 'lifecycleState',
@@ -87,6 +103,7 @@ class IotDomainGroupSummary(object):
         }
         self._id = None
         self._compartment_id = None
+        self._type = None
         self._display_name = None
         self._description = None
         self._lifecycle_state = None
@@ -151,6 +168,38 @@ class IotDomainGroupSummary(object):
         :type: str
         """
         self._compartment_id = compartment_id
+
+    @property
+    def type(self):
+        """
+        **[Required]** Gets the type of this IotDomainGroupSummary.
+        Type of the domain group. LIGHTWEIGHT uses fewer resources and has a higher Recovery Time Objective (RTO),
+        making it suitable for development and testing. STANDARD is recommended for production.
+
+        Allowed values for this property are: "STANDARD", "LIGHTWEIGHT", 'UNKNOWN_ENUM_VALUE'.
+        Any unrecognized values returned by a service will be mapped to 'UNKNOWN_ENUM_VALUE'.
+
+
+        :return: The type of this IotDomainGroupSummary.
+        :rtype: str
+        """
+        return self._type
+
+    @type.setter
+    def type(self, type):
+        """
+        Sets the type of this IotDomainGroupSummary.
+        Type of the domain group. LIGHTWEIGHT uses fewer resources and has a higher Recovery Time Objective (RTO),
+        making it suitable for development and testing. STANDARD is recommended for production.
+
+
+        :param type: The type of this IotDomainGroupSummary.
+        :type: str
+        """
+        allowed_values = ["STANDARD", "LIGHTWEIGHT"]
+        if not value_allowed_none_or_none_sentinel(type, allowed_values):
+            type = 'UNKNOWN_ENUM_VALUE'
+        self._type = type
 
     @property
     def display_name(self):

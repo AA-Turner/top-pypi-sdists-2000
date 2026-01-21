@@ -23,13 +23,15 @@ import logging
 import os
 import sys
 from typing import Any, Generic, NoReturn, Optional, Protocol, Type, TypeVar, cast
+import warnings
 
 from jax._src import deprecations
+from jax._src import logging_config
 from jax._src.lib import _jax
 from jax._src.lib import guard_lib
 from jax._src.lib import jax_jit
+from jax._src.lib import jaxlib_extension_version
 from jax._src.lib import xla_client
-from jax._src import logging_config
 
 config_ext = xla_client._xla.config
 
@@ -1227,11 +1229,32 @@ log_checkpoint_residuals = bool_state(
           'partially evaluated (e.g. for autodiff), printing what residuals '
           'are saved.'))
 
+# Since we want a deprecation warning regardless of value, we need an
+# exemption for when config.py is first loaded.
+_pmap_shmap_merge_initialized = False
+
+
+def _default_pmap_shmap_merge(new_val):
+  del new_val
+  global _pmap_shmap_merge_initialized
+  if _pmap_shmap_merge_initialized:
+    deprecations.warn(
+        'jax-pmap-shmap-merge',
+        (
+            'Setting `jax_pmap_shmap_merge` is deprecated in JAX v0.9.0 and '
+            'will be removed in JAX v0.10.0.'
+        ),
+        stacklevel=3,
+    )
+  _pmap_shmap_merge_initialized = True
+
 pmap_shmap_merge = bool_state(
     name='jax_pmap_shmap_merge',
     default=True,
     upgrade=True,
-    help='If True, pmap and shard_map API will be merged.')
+    help='If True, pmap and shard_map API will be merged.',
+    validator=_default_pmap_shmap_merge,
+)
 
 
 distributed_debug = bool_state(
@@ -1247,27 +1270,6 @@ random_seed_offset = int_state(
     help=('Offset to all random seeds (e.g. argument to jax.random.key()).'),
     include_in_jit_key=True,
     include_in_trace_context=True,
-)
-
-def _safer_randint_deprecation(new_val):
-  if not new_val:
-    deprecations.warn(
-      'safer-randint-config',
-      (
-        'The jax_safer_randint configuration is deprecated in JAX v0.7.2'
-        ' and will be removed in JAX v0.9.0.'
-      ),
-      stacklevel=4
-    )
-
-# TODO(jakevdp): remove this flag.
-safer_randint = bool_state(
-    name='jax_safer_randint',
-    default=True,
-    help='Use a safer randint algorithm for 8-bit and 16-bit dtypes.',
-    include_in_jit_key=True,
-    upgrade=True,
-    validator=_safer_randint_deprecation
 )
 
 class LegacyPrngKeyState(enum.StrEnum):
@@ -1548,25 +1550,23 @@ remove_custom_partitioning_ptr_from_cache_key = bool_state(
           'what they are trying to achieve should set it.'),
 )
 
-def _default_dtype_bits_deprecation(new_val):
-  if new_val != '64':
-    deprecations.warn(
-      'default-dtype-bits-config',
-      (
-        'The jax_default_dtype_bits configuration is deprecated in JAX v0.7.1'
-        ' and will be removed in JAX v0.9.0.'
-      ),
-      stacklevel=4
-    )
+def _default_dtype_bits_deprecation(val):
+  if val != '_default':
+    warnings.warn(
+        (
+          'The jax_default_dtype_bits configuration is deprecated in JAX v0.7.1'
+          ' and has no effect as of JAX v0.9.0. It will be removed in JAX v0.10.0.'
+        ),
+        category=DeprecationWarning,
+        stacklevel=4)
 
 
 default_dtype_bits = enum_state(
     name='jax_default_dtype_bits',
-    enum_values=['32', '64'],
-    default='64',
-    help=('[deprecated]. This flag was an experiment in allowing users to specify the'
-          ' default bit width. It was never fully supported or tested. It will '
-          ' have no effect after JAX v0.9.0, and be removed entirely in JAX v0.10.0.'),
+    enum_values=['_default', '32', '64'],
+    default='_default',
+    help=('[deprecated]. This has no effect starting with JAX v0.9.0, and'
+          ' will be removed in JAX v0.10.0.'),
     extra_validator=_default_dtype_bits_deprecation)
 
 
@@ -1832,6 +1832,13 @@ refs_to_pins = bool_state(
     upgrade=True,
     help='Lower refs to pinned buffers in HLO.')
 
+# TODO(mattjj, yashkatariya): remove once we land box plumbing
+disable_bwd_checks = bool_state(
+    name='jax_disable_bwd_checks',
+    default=False,
+    upgrade=True,
+    help='Disables all bwd pass checks')
+
 xla_runtime_errors = bool_state(
     name='jax_experimental_unsafe_xla_runtime_errors',
     default=False,
@@ -2018,6 +2025,22 @@ array_garbage_collection_guard = optional_enum_state(
     ),
 )
 
+if jaxlib_extension_version >= 395:
+  thread_guard = bool_state(
+      name='jax_thread_guard',
+      default=False,
+      help=(
+          'If True, an error will be raised at runtime if a multi-process JAX '
+          'operation is called from a thread other than the one in which the '
+          'thread guard was set. This is useful for detecting cases where '
+          'threads may schedule operations in different orders in different '
+          'processes, leading to non-deterministic crashes.'
+      ),
+      update_thread_local_hook=(
+          # If the state is None, set it to False.
+          lambda val: guard_lib.update_thread_guard_global_state(val or False)),
+  )
+
 # TODO(nbasile): Remove hasattr checks after jaxlib 0.8.1 release
 if hasattr(_jax, 'RuntimeTracebackMode'):
   class RuntimeTracebackMode(enum.StrEnum):
@@ -2077,27 +2100,7 @@ optional_enum_state(
       logging_config.update_logging_level_global(logging_level=logging_level)
 )
 
-def _default_pmap_no_rank_reduction(new_val):
-  if not new_val:
-    deprecations.warn(
-        'jax-pmap-no-rank-reduction',
-        (
-            'Setting `jax_pmap_no_rank_reduction` to `False` is deprecated in '
-            'JAX v0.7.2 and will be removed in JAX v0.9.0.'
-        ),
-        stacklevel=3,
-    )
 
-pmap_no_rank_reduction = bool_state(
-    name='jax_pmap_no_rank_reduction',
-    default=True,
-    help=(
-        '[deprecated] If True, pmap shards have the same rank as their '
-        'enclosing array. Setting to `False` is deprecated and in the future '
-        'all `pmap` calls will proceed without rank reduction.'
-    ),
-    validator=_default_pmap_no_rank_reduction,
-)
 
 use_shardy_partitioner = bool_state(
     name='jax_use_shardy_partitioner',
@@ -2217,12 +2220,6 @@ jax_ragged_dot_use_ragged_dot_instruction = bool_state(
         ' lowering. Otherwise, rely on the rollout logic in lowering rule for'
         ' ragged_dot_general_p.'
     ),
-)
-
-jax_collectives_common_channel_id = bool_flag(
-    name='jax_collectives_common_channel_id',
-    default=True,
-    help="Should collectives use a common channel ID? Temporary feature flag.",
 )
 
 jax_pallas_verbose_errors = bool_flag(

@@ -129,7 +129,7 @@ class NotifyNotificationAPI(NotifyBase):
     secure_protocol = ("napi", "notificationapi")
 
     # A URL that takes you to the setup/help of the specific protocol
-    setup_url = "https://github.com/caronc/apprise/wiki/Notify_notificationapi"
+    setup_url = "https://appriseit.com/services/notificationapi/"
 
     # If no NotificationAPI Message Type is specified, then the following is
     # used
@@ -805,7 +805,7 @@ class NotifyNotificationAPI(NotifyBase):
                     self.logger.warning(
                         "Invalid response from NotificationAPI server.")
                     self.logger.debug(
-                        "Response Details:\r\n{}".format(r.content))
+                        "Response Details:\r\n%r", (r.content or b"")[:2000])
 
                     # Record our failure
                     has_error = True
@@ -828,8 +828,9 @@ class NotifyNotificationAPI(NotifyBase):
                         status_str,
                         ", " if status_str else "",
                         status_code)
+
                     self.logger.debug(
-                        "Response Details:\r\n%s", str(r.content))
+                        "Response Details:\r\n%r", (r.content or b"")[:2000])
 
                     # Record our failure
                     has_error = True

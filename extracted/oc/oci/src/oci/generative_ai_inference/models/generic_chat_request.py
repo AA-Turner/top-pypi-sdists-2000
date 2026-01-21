@@ -16,6 +16,10 @@ class GenericChatRequest(BaseChatRequest):
     """
 
     #: A constant which can be used with the reasoning_effort property of a GenericChatRequest.
+    #: This constant has a value of "NONE"
+    REASONING_EFFORT_NONE = "NONE"
+
+    #: A constant which can be used with the reasoning_effort property of a GenericChatRequest.
     #: This constant has a value of "MINIMAL"
     REASONING_EFFORT_MINIMAL = "MINIMAL"
 
@@ -63,7 +67,7 @@ class GenericChatRequest(BaseChatRequest):
 
         :param api_format:
             The value to assign to the api_format property of this GenericChatRequest.
-            Allowed values for this property are: "COHERE", "GENERIC"
+            Allowed values for this property are: "COHERE", "COHEREV2", "GENERIC"
         :type api_format: str
 
         :param messages:
@@ -72,7 +76,7 @@ class GenericChatRequest(BaseChatRequest):
 
         :param reasoning_effort:
             The value to assign to the reasoning_effort property of this GenericChatRequest.
-            Allowed values for this property are: "MINIMAL", "LOW", "MEDIUM", "HIGH"
+            Allowed values for this property are: "NONE", "MINIMAL", "LOW", "MEDIUM", "HIGH"
         :type reasoning_effort: str
 
         :param verbosity:
@@ -291,7 +295,7 @@ class GenericChatRequest(BaseChatRequest):
         Gets the reasoning_effort of this GenericChatRequest.
         Constrains effort on reasoning for reasoning models. Currently supported values are minimal, low, medium, and high. Reducing reasoning effort can result in faster responses and fewer tokens used on reasoning in a response.
 
-        Allowed values for this property are: "MINIMAL", "LOW", "MEDIUM", "HIGH"
+        Allowed values for this property are: "NONE", "MINIMAL", "LOW", "MEDIUM", "HIGH"
 
 
         :return: The reasoning_effort of this GenericChatRequest.
@@ -309,7 +313,7 @@ class GenericChatRequest(BaseChatRequest):
         :param reasoning_effort: The reasoning_effort of this GenericChatRequest.
         :type: str
         """
-        allowed_values = ["MINIMAL", "LOW", "MEDIUM", "HIGH"]
+        allowed_values = ["NONE", "MINIMAL", "LOW", "MEDIUM", "HIGH"]
         if not value_allowed_none_or_none_sentinel(reasoning_effort, allowed_values):
             raise ValueError(
                 f"Invalid value for `reasoning_effort`, must be None or one of {allowed_values}"

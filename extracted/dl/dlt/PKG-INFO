@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: dlt
-Version: 1.20.0
+Version: 1.21.0
 Summary: dlt is an open-source python-first scalable data loading library that does not require any backend to run.
 Project-URL: Homepage, https://github.com/dlt-hub
 Project-URL: Repository, https://github.com/dlt-hub/dlt
@@ -92,6 +92,10 @@ Requires-Dist: duckdb>=0.9; extra == 'duckdb'
 Provides-Extra: ducklake
 Requires-Dist: duckdb>=1.2.0; extra == 'ducklake'
 Requires-Dist: pyarrow>=16.0.0; extra == 'ducklake'
+Provides-Extra: fabric
+Requires-Dist: adlfs>=2024.7.0; extra == 'fabric'
+Requires-Dist: pyarrow>=16.0.0; extra == 'fabric'
+Requires-Dist: pyodbc>=4.0.39; extra == 'fabric'
 Provides-Extra: filesystem
 Requires-Dist: botocore>=1.28; extra == 'filesystem'
 Requires-Dist: s3fs>=2022.4.0; extra == 'filesystem'
@@ -105,17 +109,20 @@ Requires-Dist: gcsfs>=2022.4.0; extra == 'gs'
 Provides-Extra: http
 Requires-Dist: aiohttp>3.9.0; extra == 'http'
 Provides-Extra: hub
-Requires-Dist: dlt-runtime<0.21,>=0.20.0a0; (python_version >= '3.10') and extra == 'hub'
-Requires-Dist: dlthub<0.21,>=0.20.0a1; (python_version >= '3.10') and extra == 'hub'
+Requires-Dist: dlt-runtime<0.22,>=0.20.0; (python_version >= '3.10') and extra == 'hub'
+Requires-Dist: dlthub<0.22,>=0.20.0; (python_version >= '3.10') and extra == 'hub'
 Provides-Extra: lancedb
-Requires-Dist: lancedb>=0.22.0; (python_version < '3.13') and extra == 'lancedb'
+Requires-Dist: duckdb>=1.4.3; extra == 'lancedb'
+Requires-Dist: ibis-framework>=11.0.0; extra == 'lancedb'
+Requires-Dist: lancedb>=0.22.0; extra == 'lancedb'
 Requires-Dist: pyarrow>=16.0.0; extra == 'lancedb'
-Requires-Dist: tantivy>=0.22.0; extra == 'lancedb'
 Provides-Extra: motherduck
 Requires-Dist: duckdb>=0.9; extra == 'motherduck'
 Requires-Dist: pyarrow>=16.0.0; extra == 'motherduck'
 Provides-Extra: mssql
 Requires-Dist: pyodbc>=4.0.39; extra == 'mssql'
+Provides-Extra: oracle
+Requires-Dist: oracledb>=3.4.1; extra == 'oracle'
 Provides-Extra: parquet
 Requires-Dist: pyarrow>=16.0.0; extra == 'parquet'
 Provides-Extra: postgis
@@ -124,6 +131,7 @@ Provides-Extra: postgres
 Requires-Dist: psycopg2-binary>=2.9.1; extra == 'postgres'
 Provides-Extra: pyiceberg
 Requires-Dist: pyarrow>=16.0.0; extra == 'pyiceberg'
+Requires-Dist: pyiceberg-core>=0.6.0; extra == 'pyiceberg'
 Requires-Dist: pyiceberg>=0.9.1; extra == 'pyiceberg'
 Requires-Dist: sqlalchemy>=1.4; extra == 'pyiceberg'
 Provides-Extra: qdrant
@@ -147,7 +155,7 @@ Requires-Dist: adlfs>=2024.7.0; extra == 'synapse'
 Requires-Dist: pyarrow>=16.0.0; extra == 'synapse'
 Requires-Dist: pyodbc>=4.0.39; extra == 'synapse'
 Provides-Extra: weaviate
-Requires-Dist: weaviate-client<4.0.0,>=3.26.7; extra == 'weaviate'
+Requires-Dist: weaviate-client<5.0.0,>=4.0.0; extra == 'weaviate'
 Provides-Extra: workspace
 Requires-Dist: duckdb>=0.9; extra == 'workspace'
 Requires-Dist: ibis-framework>=10.5.0; (python_version >= '3.10') and extra == 'workspace'

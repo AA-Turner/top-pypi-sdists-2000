@@ -224,6 +224,10 @@ class AutonomousContainerDatabaseSummary(object):
             The value to assign to the key_history_entry property of this AutonomousContainerDatabaseSummary.
         :type key_history_entry: list[oci.database.models.AutonomousDatabaseKeyHistoryEntry]
 
+        :param encryption_key_location_details:
+            The value to assign to the encryption_key_location_details property of this AutonomousContainerDatabaseSummary.
+        :type encryption_key_location_details: oci.database.models.EncryptionKeyLocationDetails
+
         :param lifecycle_state:
             The value to assign to the lifecycle_state property of this AutonomousContainerDatabaseSummary.
             Allowed values for this property are: "PROVISIONING", "AVAILABLE", "UPDATING", "TERMINATING", "TERMINATED", "FAILED", "BACKUP_IN_PROGRESS", "RESTORING", "RESTORE_FAILED", "RESTARTING", "MAINTENANCE_IN_PROGRESS", "ROLE_CHANGE_IN_PROGRESS", "ENABLING_AUTONOMOUS_DATA_GUARD", "UNAVAILABLE", 'UNKNOWN_ENUM_VALUE'.
@@ -436,6 +440,7 @@ class AutonomousContainerDatabaseSummary(object):
             'vault_id': 'str',
             'kms_key_version_id': 'str',
             'key_history_entry': 'list[AutonomousDatabaseKeyHistoryEntry]',
+            'encryption_key_location_details': 'EncryptionKeyLocationDetails',
             'lifecycle_state': 'str',
             'lifecycle_details': 'str',
             'time_created': 'datetime',
@@ -499,6 +504,7 @@ class AutonomousContainerDatabaseSummary(object):
             'vault_id': 'vaultId',
             'kms_key_version_id': 'kmsKeyVersionId',
             'key_history_entry': 'keyHistoryEntry',
+            'encryption_key_location_details': 'encryptionKeyLocationDetails',
             'lifecycle_state': 'lifecycleState',
             'lifecycle_details': 'lifecycleDetails',
             'time_created': 'timeCreated',
@@ -561,6 +567,7 @@ class AutonomousContainerDatabaseSummary(object):
         self._vault_id = None
         self._kms_key_version_id = None
         self._key_history_entry = None
+        self._encryption_key_location_details = None
         self._lifecycle_state = None
         self._lifecycle_details = None
         self._time_created = None
@@ -1012,6 +1019,26 @@ class AutonomousContainerDatabaseSummary(object):
         :type: list[oci.database.models.AutonomousDatabaseKeyHistoryEntry]
         """
         self._key_history_entry = key_history_entry
+
+    @property
+    def encryption_key_location_details(self):
+        """
+        Gets the encryption_key_location_details of this AutonomousContainerDatabaseSummary.
+
+        :return: The encryption_key_location_details of this AutonomousContainerDatabaseSummary.
+        :rtype: oci.database.models.EncryptionKeyLocationDetails
+        """
+        return self._encryption_key_location_details
+
+    @encryption_key_location_details.setter
+    def encryption_key_location_details(self, encryption_key_location_details):
+        """
+        Sets the encryption_key_location_details of this AutonomousContainerDatabaseSummary.
+
+        :param encryption_key_location_details: The encryption_key_location_details of this AutonomousContainerDatabaseSummary.
+        :type: oci.database.models.EncryptionKeyLocationDetails
+        """
+        self._encryption_key_location_details = encryption_key_location_details
 
     @property
     def lifecycle_state(self):

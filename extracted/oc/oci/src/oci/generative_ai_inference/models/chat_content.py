@@ -30,6 +30,7 @@ class ChatContent(object):
 
         * :class:`~oci.generative_ai_inference.models.VideoContent`
         * :class:`~oci.generative_ai_inference.models.ImageContent`
+        * :class:`~oci.generative_ai_inference.models.DocumentContent`
         * :class:`~oci.generative_ai_inference.models.AudioContent`
         * :class:`~oci.generative_ai_inference.models.TextContent`
 
@@ -63,6 +64,9 @@ class ChatContent(object):
 
         if type == 'IMAGE':
             return 'ImageContent'
+
+        if type == 'DOCUMENT':
+            return 'DocumentContent'
 
         if type == 'AUDIO':
             return 'AudioContent'

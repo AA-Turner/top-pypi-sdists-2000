@@ -49,6 +49,10 @@ class AssistantMessage(Message):
             The value to assign to the annotations property of this AssistantMessage.
         :type annotations: list[oci.generative_ai_inference.models.Annotation]
 
+        :param reasoning_content:
+            The value to assign to the reasoning_content property of this AssistantMessage.
+        :type reasoning_content: str
+
         """
         self.swagger_types = {
             'role': 'str',
@@ -56,7 +60,8 @@ class AssistantMessage(Message):
             'name': 'str',
             'refusal': 'str',
             'tool_calls': 'list[ToolCall]',
-            'annotations': 'list[Annotation]'
+            'annotations': 'list[Annotation]',
+            'reasoning_content': 'str'
         }
         self.attribute_map = {
             'role': 'role',
@@ -64,7 +69,8 @@ class AssistantMessage(Message):
             'name': 'name',
             'refusal': 'refusal',
             'tool_calls': 'toolCalls',
-            'annotations': 'annotations'
+            'annotations': 'annotations',
+            'reasoning_content': 'reasoningContent'
         }
         self._role = None
         self._content = None
@@ -72,6 +78,7 @@ class AssistantMessage(Message):
         self._refusal = None
         self._tool_calls = None
         self._annotations = None
+        self._reasoning_content = None
         self._role = 'ASSISTANT'
 
     @property
@@ -169,6 +176,30 @@ class AssistantMessage(Message):
         :type: list[oci.generative_ai_inference.models.Annotation]
         """
         self._annotations = annotations
+
+    @property
+    def reasoning_content(self):
+        """
+        Gets the reasoning_content of this AssistantMessage.
+        Internal reasoning trace generated during response computation.
+
+
+        :return: The reasoning_content of this AssistantMessage.
+        :rtype: str
+        """
+        return self._reasoning_content
+
+    @reasoning_content.setter
+    def reasoning_content(self, reasoning_content):
+        """
+        Sets the reasoning_content of this AssistantMessage.
+        Internal reasoning trace generated during response computation.
+
+
+        :param reasoning_content: The reasoning_content of this AssistantMessage.
+        :type: str
+        """
+        self._reasoning_content = reasoning_content
 
     def __repr__(self):
         return formatted_flat_dict(self)

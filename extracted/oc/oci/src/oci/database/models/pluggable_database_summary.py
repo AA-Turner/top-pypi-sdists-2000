@@ -169,6 +169,10 @@ class PluggableDatabaseSummary(object):
             The value to assign to the pdb_node_level_details property of this PluggableDatabaseSummary.
         :type pdb_node_level_details: list[oci.database.models.PluggableDatabaseNodeLevelDetails]
 
+        :param patch_version:
+            The value to assign to the patch_version property of this PluggableDatabaseSummary.
+        :type patch_version: str
+
         """
         self.swagger_types = {
             'id': 'str',
@@ -188,7 +192,8 @@ class PluggableDatabaseSummary(object):
             'kms_key_id': 'str',
             'kms_key_version_id': 'str',
             'refreshable_clone_config': 'PluggableDatabaseRefreshableCloneConfig',
-            'pdb_node_level_details': 'list[PluggableDatabaseNodeLevelDetails]'
+            'pdb_node_level_details': 'list[PluggableDatabaseNodeLevelDetails]',
+            'patch_version': 'str'
         }
         self.attribute_map = {
             'id': 'id',
@@ -208,7 +213,8 @@ class PluggableDatabaseSummary(object):
             'kms_key_id': 'kmsKeyId',
             'kms_key_version_id': 'kmsKeyVersionId',
             'refreshable_clone_config': 'refreshableCloneConfig',
-            'pdb_node_level_details': 'pdbNodeLevelDetails'
+            'pdb_node_level_details': 'pdbNodeLevelDetails',
+            'patch_version': 'patchVersion'
         }
         self._id = None
         self._container_database_id = None
@@ -228,6 +234,7 @@ class PluggableDatabaseSummary(object):
         self._kms_key_version_id = None
         self._refreshable_clone_config = None
         self._pdb_node_level_details = None
+        self._patch_version = None
 
     @property
     def id(self):
@@ -700,6 +707,30 @@ class PluggableDatabaseSummary(object):
         :type: list[oci.database.models.PluggableDatabaseNodeLevelDetails]
         """
         self._pdb_node_level_details = pdb_node_level_details
+
+    @property
+    def patch_version(self):
+        """
+        Gets the patch_version of this PluggableDatabaseSummary.
+        The patch version of the pluggable database.
+
+
+        :return: The patch_version of this PluggableDatabaseSummary.
+        :rtype: str
+        """
+        return self._patch_version
+
+    @patch_version.setter
+    def patch_version(self, patch_version):
+        """
+        Sets the patch_version of this PluggableDatabaseSummary.
+        The patch version of the pluggable database.
+
+
+        :param patch_version: The patch_version of this PluggableDatabaseSummary.
+        :type: str
+        """
+        self._patch_version = patch_version
 
     def __repr__(self):
         return formatted_flat_dict(self)

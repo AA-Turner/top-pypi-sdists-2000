@@ -15,6 +15,14 @@ class CreateIotDomainGroupDetails(object):
     The information about new IoT domain group to be created.
     """
 
+    #: A constant which can be used with the type property of a CreateIotDomainGroupDetails.
+    #: This constant has a value of "STANDARD"
+    TYPE_STANDARD = "STANDARD"
+
+    #: A constant which can be used with the type property of a CreateIotDomainGroupDetails.
+    #: This constant has a value of "LIGHTWEIGHT"
+    TYPE_LIGHTWEIGHT = "LIGHTWEIGHT"
+
     def __init__(self, **kwargs):
         """
         Initializes a new CreateIotDomainGroupDetails object with values from keyword arguments.
@@ -23,6 +31,11 @@ class CreateIotDomainGroupDetails(object):
         :param compartment_id:
             The value to assign to the compartment_id property of this CreateIotDomainGroupDetails.
         :type compartment_id: str
+
+        :param type:
+            The value to assign to the type property of this CreateIotDomainGroupDetails.
+            Allowed values for this property are: "STANDARD", "LIGHTWEIGHT"
+        :type type: str
 
         :param display_name:
             The value to assign to the display_name property of this CreateIotDomainGroupDetails.
@@ -43,6 +56,7 @@ class CreateIotDomainGroupDetails(object):
         """
         self.swagger_types = {
             'compartment_id': 'str',
+            'type': 'str',
             'display_name': 'str',
             'description': 'str',
             'freeform_tags': 'dict(str, str)',
@@ -50,12 +64,14 @@ class CreateIotDomainGroupDetails(object):
         }
         self.attribute_map = {
             'compartment_id': 'compartmentId',
+            'type': 'type',
             'display_name': 'displayName',
             'description': 'description',
             'freeform_tags': 'freeformTags',
             'defined_tags': 'definedTags'
         }
         self._compartment_id = None
+        self._type = None
         self._display_name = None
         self._description = None
         self._freeform_tags = None
@@ -88,6 +104,39 @@ class CreateIotDomainGroupDetails(object):
         :type: str
         """
         self._compartment_id = compartment_id
+
+    @property
+    def type(self):
+        """
+        Gets the type of this CreateIotDomainGroupDetails.
+        Type of the domain group. LIGHTWEIGHT uses fewer resources and has a higher Recovery Time Objective (RTO),
+        making it suitable for development and testing. STANDARD is recommended for production.
+
+        Allowed values for this property are: "STANDARD", "LIGHTWEIGHT"
+
+
+        :return: The type of this CreateIotDomainGroupDetails.
+        :rtype: str
+        """
+        return self._type
+
+    @type.setter
+    def type(self, type):
+        """
+        Sets the type of this CreateIotDomainGroupDetails.
+        Type of the domain group. LIGHTWEIGHT uses fewer resources and has a higher Recovery Time Objective (RTO),
+        making it suitable for development and testing. STANDARD is recommended for production.
+
+
+        :param type: The type of this CreateIotDomainGroupDetails.
+        :type: str
+        """
+        allowed_values = ["STANDARD", "LIGHTWEIGHT"]
+        if not value_allowed_none_or_none_sentinel(type, allowed_values):
+            raise ValueError(
+                f"Invalid value for `type`, must be None or one of {allowed_values}"
+            )
+        self._type = type
 
     @property
     def display_name(self):

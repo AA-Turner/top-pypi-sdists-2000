@@ -636,12 +636,15 @@ def _iter_paths(tree: PyTreeDef, specs: Specs, fails: list[T | NoFail]
                 ) -> list[tuple[tuple[KeyPath, P], tuple[KeyPath, T]]]:
   failures = tree_unflatten(tree, fails)
   failures_aug = generate_key_paths(failures)
-  specs_ = tree_unflatten(tree_structure(specs), generate_key_paths(specs))
-  leaf = lambda x: x is None or type(x) is tuple and len(x) == 2 and type(x[1]) is P
-  specs_aug = broadcast_prefix(specs_, failures, is_leaf=leaf)
+  specs_ = tree_unflatten(tree_structure(specs), map(Tup, generate_key_paths(specs)))
+  specs_aug = broadcast_prefix(specs_, failures, is_leaf=lambda x: x is None)
   return [(s, (fail_key, fail_data)) for s, (fail_key, fail_data)
           in zip(specs_aug, failures_aug)
           if s is not None and fail_data is not no_fail]
+
+class Tup:
+  def __init__(self, vals): self.vals = vals
+  def __iter__(self): return iter(self.vals)
 
 # Primitive
 
@@ -717,7 +720,9 @@ def _shard_map_staging(
                   in_avals)
   with (_extend_axis_env(mesh, manual_axes), use_abstract_mesh(inner_mesh),
         config._check_vma(check_vma)):
-    jaxpr, out_avals_, consts = pe.trace_to_jaxpr_dynamic(f, in_avals_)
+    jaxpr, out_avals_, consts = pe.trace_to_jaxpr_dynamic(
+        f, in_avals_, lower=trace.requires_low)
+
   _check_names(out_specs_thunk(), out_avals_)
   if check_vma:
     out_vma = [v.aval.vma for v in jaxpr.outvars]
@@ -734,6 +739,7 @@ def _shard_map_staging(
                 check_vma=check_vma, manual_axes=manual_axes)
   effs = core.filter_named_axis_effects(jaxpr.effects, mesh.axis_names)
   const_tracers = map(to_jaxpr_tracer, consts)
+  trace.frame.is_high |= jaxpr.is_high
   return trace.emit_eqn([*const_tracers, *in_tracers], out_avals, prim, params,
                          effs, source_info)
 pe.DynamicJaxprTrace.process_shard_map = _shard_map_staging
@@ -1707,8 +1713,7 @@ def _shard_map_transpose(out_cts, *args,
         jaxpr_unknown.jaxpr, False, (), (*res_reshaped, *undefs), out_cts
     )[len(res_reshaped):]
     _, in_ct_specs = partition_list(in_undef, in_specs)
-    in_cts = [ad.Zero(unshard_aval(mesh, check_vma, sp, x.aval))
-              if type(x) is ad.Zero else x if check_vma
+    in_cts = [ad.Zero(x.aval) if type(x) is ad.Zero else x if check_vma
               else lax_parallel.psum(x, tuple(_unmentioned2(mesh, sp, manual_axes)))
               for sp, x in zip(in_ct_specs, in_cts)]
     res_zeros = [ad_util.zero_from_primal(r) for r in res]
@@ -1754,7 +1759,9 @@ def _shard_map_transpose(out_cts, *args,
       msg = _inout_vma_error(
           fun_trans, mesh, out_tree(), list(new_out_specs_thunk()), fails)
       raise ValueError(msg) from None
-  return tree_unflatten(out_tree(), out_flat)
+  in_cts = tree_unflatten(out_tree(), out_flat)
+  return [ad.Zero(unshard_aval(mesh, check_vma, sp, x.aval))
+          if type(x) is ad.Zero else x for sp, x in zip(in_specs, in_cts)]
 ad.primitive_transposes[shard_map_p] = _shard_map_transpose
 
 # Remat
@@ -1798,7 +1805,7 @@ def _partial_eval_jaxpr_custom_rule(
       staged_in_res_specs.append(rn)
   if check_vma:
     out_res_specs_known = [P(order_wrt_mesh(mesh, var.aval.vma))  # type: ignore
-                           for var, o in zip(res_vars, out_fwd) if o is None]
+                           for var, w in zip(res_vars, which) if w]
   else:
     out_res_specs_known = [
         P(_all_newly_manual_mesh_names(mesh, manual_axes))] * sum(which)

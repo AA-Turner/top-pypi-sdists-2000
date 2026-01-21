@@ -1047,22 +1047,6 @@ def _is_valid_grid_dim(dim: int | jax_typing.Array) -> bool:
   return jax_core.is_dim(dim)
 
 
-def _max_shape_from_aval(array_aval: jax_core.ShapedArray):
-  array_aval_shape = list(array_aval.shape)
-  for i, s in enumerate(array_aval.shape):
-    try:
-      aval = jax_core.get_aval(s)
-    except OverflowError as e:
-      # Note - there are annoying cases where on 32 bit hardware,
-      # a flattened index space may overflow - for these cases,
-      # we just take the shape as is.
-      # In most places, this is totally sound to do.
-      # For ragged/jumble inputs, this will fail downstream.
-      return array_aval.shape
-
-  return tuple(array_aval_shape)
-
-
 def _convert_block_spec_to_block_mapping(
     block_spec: BlockSpec,
     origin: OriginStr,
@@ -1357,7 +1341,9 @@ def _get_sds(aval: jax_core.AbstractValue):
     case ShapedArrayWithMemorySpace():
       return aval.memory_space(aval.shape, aval.dtype)
     case jax_core.ShapedArray():
-      return jax_core.ShapeDtypeStruct(aval.shape, aval.dtype, vma=aval.vma)
+      return jax_core.ShapeDtypeStruct(
+          aval.shape, aval.dtype, vma=aval.vma, sharding=aval.sharding
+      )
     case _:
       raise ValueError(f"Unsupported abstract value: {aval}")
 
@@ -1461,6 +1447,8 @@ effects.control_flow_allowed_effects.add_type(CommsEffect)
 effects.remat_allowed_effects.add_type(CommsEffect)
 effects.custom_derivatives_allowed_effects.add_type(CommsEffect)
 
+kernel_local_effects: effects.EffectTypeSet = effects.EffectTypeSet()
+
 
 @core_map_p.def_effectful_abstract_eval
 def _core_map_abstract_eval(*args, jaxpr, mesh, **kwargs):
@@ -1476,8 +1464,16 @@ def _core_map_abstract_eval(*args, jaxpr, mesh, **kwargs):
         effs = mosaic_tpu_interpret.get_interpret_effects()
     except ImportError:
       pass
+    try:
+      from jax._src.pallas.mosaic_gpu.interpret import interpret_pallas_call as mosaic_gpu_interpret  # Avoid circular dependency.
+      if isinstance(interpret, mosaic_gpu_interpret.InterpretParams):
+        effs = mosaic_gpu_interpret.get_interpret_effects()
+    except ImportError:
+      pass
   for eff in jaxpr.effects:
     if mesh.discharges_effect(eff) or isinstance(eff, CommsEffect):
+      continue
+    if kernel_local_effects.contains(eff):
       continue
     if not isinstance(eff, jax_core.NamedAxisEffect):
       effs.add(eff)
@@ -1668,8 +1664,16 @@ def _core_map_typecheck_rule(_, *in_atoms, jaxpr, mesh, **kwargs):
         effs = mosaic_tpu_interpret.get_interpret_effects()
     except ImportError:
       pass
+    try:
+      from jax._src.pallas.mosaic_gpu.interpret import interpret_pallas_call as mosaic_gpu_interpret  # Avoid circular dependency.
+      if isinstance(interpret, mosaic_gpu_interpret.InterpretParams):
+        effs = mosaic_gpu_interpret.get_interpret_effects()
+    except ImportError:
+      pass
   for eff in jaxpr.effects:
     if mesh.discharges_effect(eff) or isinstance(eff, CommsEffect):
+      continue
+    if kernel_local_effects.contains(eff):
       continue
     if not isinstance(eff, jax_core.NamedAxisEffect):
       effs.add(eff)

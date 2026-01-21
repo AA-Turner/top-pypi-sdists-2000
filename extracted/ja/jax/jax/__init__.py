@@ -44,6 +44,8 @@ from jax._src.basearray import Array as Array
 from jax import tree as tree
 from jax import typing as typing
 
+from jax._src.lib import jaxlib_extension_version
+
 from jax._src.config import (
   config as config,
   enable_checks as enable_checks,
@@ -75,6 +77,10 @@ from jax._src.config import (
   make_user_context as make_user_context,
   remove_size_one_mesh_axis_from_type as remove_size_one_mesh_axis_from_type,
 )
+if jaxlib_extension_version >= 395:
+  from jax._src.config import thread_guard as thread_guard
+del jaxlib_extension_version
+
 from jax._src.core import ensure_compile_time_eval as ensure_compile_time_eval
 from jax._src.environment_info import print_environment_info as print_environment_info
 
@@ -189,14 +195,14 @@ import jax.experimental.compilation_cache.compilation_cache as _ccache
 del _ccache
 
 _deprecations = {
-  # Added for v0.8.0
+  # Remove in v0.10.0
   "array_ref": (
-    "jax.array_ref is deprecated; use jax.new_ref instead.",
-    new_ref
+    "jax.array_ref was removed in JAX v0.9.0; use jax.new_ref instead.",
+    None,
   ),
   "ArrayRef": (
-    "jax.ArrayRef is deprecated; use jax.Ref instead.",
-    Ref
+    "jax.ArrayRef was removed in JAX v0.9.0; use jax.Ref instead.",
+    None
   ),
   # Added for v0.8.1
   "device_put_replicated": (
@@ -208,47 +214,10 @@ _deprecations = {
     "jax.device_put_sharded is deprecated; use jax.device_put instead.",
     _deprecated_device_put_sharded
   ),
-  # Finalized 2025-03-25; remove after 2025-06-25
-  "treedef_is_leaf": (
-    "jax.treedef_is_leaf was removed in JAX v0.6.0: use jax.tree_util.treedef_is_leaf.",
-    None
-  ),
-  "tree_flatten": (
-    "jax.tree_flatten was removed in JAX v0.6.0: use jax.tree.flatten (jax v0.4.25 or newer) "
-    "or jax.tree_util.tree_flatten (any JAX version).",
-    None
-  ),
-  "tree_leaves": (
-    "jax.tree_leaves was removed in JAX v0.6.0: use jax.tree.leaves (jax v0.4.25 or newer) "
-    "or jax.tree_util.tree_leaves (any JAX version).",
-    None
-  ),
-  "tree_structure": (
-    "jax.tree_structure was removed in JAX v0.6.0: use jax.tree.structure (jax v0.4.25 or newer) "
-    "or jax.tree_util.tree_structure (any JAX version).",
-    None
-  ),
-  "tree_transpose": (
-    "jax.tree_transpose was removed in JAX v0.6.0: use jax.tree.transpose (jax v0.4.25 or newer) "
-    "or jax.tree_util.tree_transpose (any JAX version).",
-    None
-  ),
-  "tree_unflatten": (
-    "jax.tree_unflatten was removed in JAX v0.6.0: use jax.tree.unflatten (jax v0.4.25 or newer) "
-    "or jax.tree_util.tree_unflatten (any JAX version).",
-    None
-  ),
-  "tree_map": (
-    "jax.tree_map was removed in JAX v0.6.0: use jax.tree.map (jax v0.4.25 or newer) "
-    "or jax.tree_util.tree_map (any JAX version).",
-    None
-  ),
 }
 
 import typing as _typing
 if _typing.TYPE_CHECKING:
-  array_ref = new_ref
-  ArrayRef = Ref
   device_put_replicated = _deprecated_device_put_replicated
   device_put_sharded = _deprecated_device_put_sharded
 else:

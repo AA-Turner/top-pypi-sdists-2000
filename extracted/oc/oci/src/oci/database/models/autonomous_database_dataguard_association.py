@@ -173,6 +173,10 @@ class AutonomousDatabaseDataguardAssociation(object):
     #: This constant has a value of "STANDBY"
     PEER_AUTONOMOUS_DATABASE_LIFE_CYCLE_STATE_STANDBY = "STANDBY"
 
+    #: A constant which can be used with the peer_autonomous_database_life_cycle_state property of a AutonomousDatabaseDataguardAssociation.
+    #: This constant has a value of "TRANSPORTING"
+    PEER_AUTONOMOUS_DATABASE_LIFE_CYCLE_STATE_TRANSPORTING = "TRANSPORTING"
+
     #: A constant which can be used with the protection_mode property of a AutonomousDatabaseDataguardAssociation.
     #: This constant has a value of "MAXIMUM_AVAILABILITY"
     PROTECTION_MODE_MAXIMUM_AVAILABILITY = "MAXIMUM_AVAILABILITY"
@@ -222,7 +226,7 @@ class AutonomousDatabaseDataguardAssociation(object):
 
         :param peer_autonomous_database_life_cycle_state:
             The value to assign to the peer_autonomous_database_life_cycle_state property of this AutonomousDatabaseDataguardAssociation.
-            Allowed values for this property are: "PROVISIONING", "AVAILABLE", "STOPPING", "STOPPED", "STARTING", "TERMINATING", "TERMINATED", "UNAVAILABLE", "RESTORE_IN_PROGRESS", "RESTORE_FAILED", "BACKUP_IN_PROGRESS", "SCALE_IN_PROGRESS", "AVAILABLE_NEEDS_ATTENTION", "UPDATING", "MAINTENANCE_IN_PROGRESS", "RESTARTING", "RECREATING", "ROLE_CHANGE_IN_PROGRESS", "UPGRADING", "INACCESSIBLE", "STANDBY", 'UNKNOWN_ENUM_VALUE'.
+            Allowed values for this property are: "PROVISIONING", "AVAILABLE", "STOPPING", "STOPPED", "STARTING", "TERMINATING", "TERMINATED", "UNAVAILABLE", "RESTORE_IN_PROGRESS", "RESTORE_FAILED", "BACKUP_IN_PROGRESS", "SCALE_IN_PROGRESS", "AVAILABLE_NEEDS_ATTENTION", "UPDATING", "MAINTENANCE_IN_PROGRESS", "RESTARTING", "RECREATING", "ROLE_CHANGE_IN_PROGRESS", "UPGRADING", "INACCESSIBLE", "STANDBY", "TRANSPORTING", 'UNKNOWN_ENUM_VALUE'.
             Any unrecognized values returned by a service will be mapped to 'UNKNOWN_ENUM_VALUE'.
         :type peer_autonomous_database_life_cycle_state: str
 
@@ -514,7 +518,7 @@ class AutonomousDatabaseDataguardAssociation(object):
         Gets the peer_autonomous_database_life_cycle_state of this AutonomousDatabaseDataguardAssociation.
         The current state of the Autonomous AI Database.
 
-        Allowed values for this property are: "PROVISIONING", "AVAILABLE", "STOPPING", "STOPPED", "STARTING", "TERMINATING", "TERMINATED", "UNAVAILABLE", "RESTORE_IN_PROGRESS", "RESTORE_FAILED", "BACKUP_IN_PROGRESS", "SCALE_IN_PROGRESS", "AVAILABLE_NEEDS_ATTENTION", "UPDATING", "MAINTENANCE_IN_PROGRESS", "RESTARTING", "RECREATING", "ROLE_CHANGE_IN_PROGRESS", "UPGRADING", "INACCESSIBLE", "STANDBY", 'UNKNOWN_ENUM_VALUE'.
+        Allowed values for this property are: "PROVISIONING", "AVAILABLE", "STOPPING", "STOPPED", "STARTING", "TERMINATING", "TERMINATED", "UNAVAILABLE", "RESTORE_IN_PROGRESS", "RESTORE_FAILED", "BACKUP_IN_PROGRESS", "SCALE_IN_PROGRESS", "AVAILABLE_NEEDS_ATTENTION", "UPDATING", "MAINTENANCE_IN_PROGRESS", "RESTARTING", "RECREATING", "ROLE_CHANGE_IN_PROGRESS", "UPGRADING", "INACCESSIBLE", "STANDBY", "TRANSPORTING", 'UNKNOWN_ENUM_VALUE'.
         Any unrecognized values returned by a service will be mapped to 'UNKNOWN_ENUM_VALUE'.
 
 
@@ -533,7 +537,7 @@ class AutonomousDatabaseDataguardAssociation(object):
         :param peer_autonomous_database_life_cycle_state: The peer_autonomous_database_life_cycle_state of this AutonomousDatabaseDataguardAssociation.
         :type: str
         """
-        allowed_values = ["PROVISIONING", "AVAILABLE", "STOPPING", "STOPPED", "STARTING", "TERMINATING", "TERMINATED", "UNAVAILABLE", "RESTORE_IN_PROGRESS", "RESTORE_FAILED", "BACKUP_IN_PROGRESS", "SCALE_IN_PROGRESS", "AVAILABLE_NEEDS_ATTENTION", "UPDATING", "MAINTENANCE_IN_PROGRESS", "RESTARTING", "RECREATING", "ROLE_CHANGE_IN_PROGRESS", "UPGRADING", "INACCESSIBLE", "STANDBY"]
+        allowed_values = ["PROVISIONING", "AVAILABLE", "STOPPING", "STOPPED", "STARTING", "TERMINATING", "TERMINATED", "UNAVAILABLE", "RESTORE_IN_PROGRESS", "RESTORE_FAILED", "BACKUP_IN_PROGRESS", "SCALE_IN_PROGRESS", "AVAILABLE_NEEDS_ATTENTION", "UPDATING", "MAINTENANCE_IN_PROGRESS", "RESTARTING", "RECREATING", "ROLE_CHANGE_IN_PROGRESS", "UPGRADING", "INACCESSIBLE", "STANDBY", "TRANSPORTING"]
         if not value_allowed_none_or_none_sentinel(peer_autonomous_database_life_cycle_state, allowed_values):
             peer_autonomous_database_life_cycle_state = 'UNKNOWN_ENUM_VALUE'
         self._peer_autonomous_database_life_cycle_state = peer_autonomous_database_life_cycle_state

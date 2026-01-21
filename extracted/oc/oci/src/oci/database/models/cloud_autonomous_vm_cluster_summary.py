@@ -59,6 +59,22 @@ class CloudAutonomousVmClusterSummary(object):
     #: This constant has a value of "BRING_YOUR_OWN_LICENSE"
     LICENSE_MODEL_BRING_YOUR_OWN_LICENSE = "BRING_YOUR_OWN_LICENSE"
 
+    #: A constant which can be used with the tde_key_store_type property of a CloudAutonomousVmClusterSummary.
+    #: This constant has a value of "AZURE"
+    TDE_KEY_STORE_TYPE_AZURE = "AZURE"
+
+    #: A constant which can be used with the tde_key_store_type property of a CloudAutonomousVmClusterSummary.
+    #: This constant has a value of "OCI"
+    TDE_KEY_STORE_TYPE_OCI = "OCI"
+
+    #: A constant which can be used with the tde_key_store_type property of a CloudAutonomousVmClusterSummary.
+    #: This constant has a value of "GCP"
+    TDE_KEY_STORE_TYPE_GCP = "GCP"
+
+    #: A constant which can be used with the tde_key_store_type property of a CloudAutonomousVmClusterSummary.
+    #: This constant has a value of "AWS"
+    TDE_KEY_STORE_TYPE_AWS = "AWS"
+
     def __init__(self, **kwargs):
         """
         Initializes a new CloudAutonomousVmClusterSummary object with values from keyword arguments.
@@ -314,6 +330,16 @@ class CloudAutonomousVmClusterSummary(object):
             The value to assign to the subscription_id property of this CloudAutonomousVmClusterSummary.
         :type subscription_id: str
 
+        :param multi_cloud_identity_connector_configs:
+            The value to assign to the multi_cloud_identity_connector_configs property of this CloudAutonomousVmClusterSummary.
+        :type multi_cloud_identity_connector_configs: list[oci.database.models.IdentityConnectorDetails]
+
+        :param tde_key_store_type:
+            The value to assign to the tde_key_store_type property of this CloudAutonomousVmClusterSummary.
+            Allowed values for this property are: "AZURE", "OCI", "GCP", "AWS", 'UNKNOWN_ENUM_VALUE'.
+            Any unrecognized values returned by a service will be mapped to 'UNKNOWN_ENUM_VALUE'.
+        :type tde_key_store_type: str
+
         """
         self.swagger_types = {
             'id': 'str',
@@ -376,7 +402,9 @@ class CloudAutonomousVmClusterSummary(object):
             'ocpus_lowest_scaled_value': 'int',
             'max_acds_lowest_scaled_value': 'int',
             'system_tags': 'dict(str, dict(str, object))',
-            'subscription_id': 'str'
+            'subscription_id': 'str',
+            'multi_cloud_identity_connector_configs': 'list[IdentityConnectorDetails]',
+            'tde_key_store_type': 'str'
         }
         self.attribute_map = {
             'id': 'id',
@@ -439,7 +467,9 @@ class CloudAutonomousVmClusterSummary(object):
             'ocpus_lowest_scaled_value': 'ocpusLowestScaledValue',
             'max_acds_lowest_scaled_value': 'maxAcdsLowestScaledValue',
             'system_tags': 'systemTags',
-            'subscription_id': 'subscriptionId'
+            'subscription_id': 'subscriptionId',
+            'multi_cloud_identity_connector_configs': 'multiCloudIdentityConnectorConfigs',
+            'tde_key_store_type': 'tdeKeyStoreType'
         }
         self._id = None
         self._compartment_id = None
@@ -502,6 +532,8 @@ class CloudAutonomousVmClusterSummary(object):
         self._max_acds_lowest_scaled_value = None
         self._system_tags = None
         self._subscription_id = None
+        self._multi_cloud_identity_connector_configs = None
+        self._tde_key_store_type = None
 
     @property
     def id(self):
@@ -2090,6 +2122,60 @@ class CloudAutonomousVmClusterSummary(object):
         :type: str
         """
         self._subscription_id = subscription_id
+
+    @property
+    def multi_cloud_identity_connector_configs(self):
+        """
+        Gets the multi_cloud_identity_connector_configs of this CloudAutonomousVmClusterSummary.
+        Details of the multi cloud identity connectors of the VM cluster.
+
+
+        :return: The multi_cloud_identity_connector_configs of this CloudAutonomousVmClusterSummary.
+        :rtype: list[oci.database.models.IdentityConnectorDetails]
+        """
+        return self._multi_cloud_identity_connector_configs
+
+    @multi_cloud_identity_connector_configs.setter
+    def multi_cloud_identity_connector_configs(self, multi_cloud_identity_connector_configs):
+        """
+        Sets the multi_cloud_identity_connector_configs of this CloudAutonomousVmClusterSummary.
+        Details of the multi cloud identity connectors of the VM cluster.
+
+
+        :param multi_cloud_identity_connector_configs: The multi_cloud_identity_connector_configs of this CloudAutonomousVmClusterSummary.
+        :type: list[oci.database.models.IdentityConnectorDetails]
+        """
+        self._multi_cloud_identity_connector_configs = multi_cloud_identity_connector_configs
+
+    @property
+    def tde_key_store_type(self):
+        """
+        Gets the tde_key_store_type of this CloudAutonomousVmClusterSummary.
+        TDE keystore type
+
+        Allowed values for this property are: "AZURE", "OCI", "GCP", "AWS", 'UNKNOWN_ENUM_VALUE'.
+        Any unrecognized values returned by a service will be mapped to 'UNKNOWN_ENUM_VALUE'.
+
+
+        :return: The tde_key_store_type of this CloudAutonomousVmClusterSummary.
+        :rtype: str
+        """
+        return self._tde_key_store_type
+
+    @tde_key_store_type.setter
+    def tde_key_store_type(self, tde_key_store_type):
+        """
+        Sets the tde_key_store_type of this CloudAutonomousVmClusterSummary.
+        TDE keystore type
+
+
+        :param tde_key_store_type: The tde_key_store_type of this CloudAutonomousVmClusterSummary.
+        :type: str
+        """
+        allowed_values = ["AZURE", "OCI", "GCP", "AWS"]
+        if not value_allowed_none_or_none_sentinel(tde_key_store_type, allowed_values):
+            tde_key_store_type = 'UNKNOWN_ENUM_VALUE'
+        self._tde_key_store_type = tde_key_store_type
 
     def __repr__(self):
         return formatted_flat_dict(self)

@@ -113,7 +113,13 @@ def lower_jaxpr_to_module(
     raise NotImplementedError(
         "Dynamic shape replacement is not supported for SparseCore."
     )
-  if not grid_mapping.grid:
+  if (
+      lowering_context.is_forward_compat()
+      or tc_lowering.is_cloud_tpu_older_than(
+          2026, 1, 18, lowering_context.module_context.backend
+      )
+  ) and not grid_mapping.grid:
+    # TODO(slebedev): Remove this branch after Jan 18th 2026.
     index_map_avals, index_map_tree = tree_util.tree_flatten(
         ((jax_core.ShapedArray((), jnp.int32),), {})
     )
@@ -128,7 +134,9 @@ def lower_jaxpr_to_module(
       def new_index_map(*args, bm=bm):
         return jax_core.eval_jaxpr(
             # Discard the leading grid index.
-            bm.index_map_jaxpr.jaxpr, bm.index_map_jaxpr.consts, *args[1:]
+            bm.index_map_jaxpr.jaxpr,
+            bm.index_map_jaxpr.consts,
+            *args[1:],
         )
 
       debug_info = bm.index_map_jaxpr.jaxpr.debug_info
@@ -189,6 +197,9 @@ def lower_jaxpr_to_module(
   func_op.attributes["dimension_semantics"] = (
       mosaic_grid_mapping.get_dimension_semantics()
   )
+  if not mosaic_grid_mapping.grid:
+    # No need for "window_params" if the grid is empty.
+    return m
   window_params = []
   for i, bm in enumerate(grid_mapping.block_mappings):
     func_name = f"transform_{i}"
@@ -553,7 +564,7 @@ def _debug_print_lowering_rule(
   match args:
     case []:
       tpu.log(inputs=[], tag=fmt)
-    case [arg] if ir.MemRefType.isinstance(arg.type):
+    case [arg] if isinstance(arg.type, ir.MemRefType):
       tpu.log_buffer(arg, ctx.avals_in[0].shape, fmt)  # pytype: disable=attribute-error
     case [arg]:
       tpu.log(inputs=[arg], tag=fmt)
@@ -783,8 +794,8 @@ def _extract_indirect_offsets_from_indexer(
   match indexer.indices:
     case [ir.Value() as offsets, *_] if (
         # fmt: off
-        ir.MemRefType.isinstance(offsets.type) or
-        ir.VectorType.isinstance(offsets.type)
+        isinstance(offsets.type, ir.MemRefType) or
+        isinstance(offsets.type, ir.VectorType)
     ):  # fmt: on
       shape = indexer.get_indexer_shape()
       if expected_shape is not None and shape != expected_shape:
@@ -809,7 +820,7 @@ def _extract_indirect_offsets_from_indexer(
     case _:
       return None
 
-  if ir.MemRefType.isinstance(offsets.type):
+  if isinstance(offsets.type, ir.MemRefType):
     offsets_memory_space = _memref_memory_space(offsets)
     if offsets_memory_space is not MemorySpace.VMEM:
       raise NotImplementedError(

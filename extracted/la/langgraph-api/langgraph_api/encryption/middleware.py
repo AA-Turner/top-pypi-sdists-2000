@@ -17,6 +17,7 @@ from starlette.exceptions import HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request  # noqa: TC002
 
+from langgraph_api.auth.noop import UnauthenticatedUser
 from langgraph_api.config import LANGGRAPH_ENCRYPTION
 from langgraph_api.encryption.aes_json import (
     AesEncryptionInstance,
@@ -64,7 +65,8 @@ def _serialize_user_for_encryption(user: BaseUser) -> dict[str, Any]:
     Returns:
         A JSON-serializable dict with user data
     """
-    # ProxyUser has model_dump() which preserves extra fields from the wrapped user
+    # If the auth function returns a pydantic object as the User object, we
+    # want to preserve the additional fields
     if hasattr(user, "model_dump") and callable(user.model_dump):
         return cast("dict[str, Any]", user.model_dump())
 
@@ -94,7 +96,10 @@ def _prepare_data_for_encryption(data: dict[str, Any]) -> dict[str, Any]:
     user = data["langgraph_auth_user"]
     if isinstance(user, BaseUser):
         data = dict(data)  # shallow copy
-        data["langgraph_auth_user"] = _serialize_user_for_encryption(user)
+        if isinstance(user, UnauthenticatedUser):
+            data["langgraph_auth_user"] = None
+        else:
+            data["langgraph_auth_user"] = _serialize_user_for_encryption(user)
 
     return data
 

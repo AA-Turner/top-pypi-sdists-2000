@@ -6,6 +6,11 @@
 
 from __future__ import absolute_import
 
+from .api_key import ApiKey
+from .api_key_collection import ApiKeyCollection
+from .api_key_item import ApiKeyItem
+from .api_key_summary import ApiKeySummary
+from .change_api_key_compartment_details import ChangeApiKeyCompartmentDetails
 from .change_dedicated_ai_cluster_compartment_details import ChangeDedicatedAiClusterCompartmentDetails
 from .change_endpoint_compartment_details import ChangeEndpointCompartmentDetails
 from .change_generative_ai_private_endpoint_compartment_details import ChangeGenerativeAiPrivateEndpointCompartmentDetails
@@ -13,6 +18,7 @@ from .change_imported_model_compartment_details import ChangeImportedModelCompar
 from .change_model_compartment_details import ChangeModelCompartmentDetails
 from .chat_model_metrics import ChatModelMetrics
 from .content_moderation_config import ContentModerationConfig
+from .create_api_key_details import CreateApiKeyDetails
 from .create_dedicated_ai_cluster_details import CreateDedicatedAiClusterDetails
 from .create_endpoint_details import CreateEndpointDetails
 from .create_generative_ai_private_endpoint_details import CreateGenerativeAiPrivateEndpointDetails
@@ -35,6 +41,7 @@ from .hugging_face_model import HuggingFaceModel
 from .imported_model import ImportedModel
 from .imported_model_collection import ImportedModelCollection
 from .imported_model_summary import ImportedModelSummary
+from .key_details import KeyDetails
 from .lora_training_config import LoraTrainingConfig
 from .model import Model
 from .model_collection import ModelCollection
@@ -43,9 +50,14 @@ from .model_metrics import ModelMetrics
 from .model_summary import ModelSummary
 from .object_storage_dataset import ObjectStorageDataset
 from .object_storage_object import ObjectStorageObject
+from .pii_detection_config import PiiDetectionConfig
+from .prompt_injection_config import PromptInjectionConfig
+from .renew_api_key_details import RenewApiKeyDetails
+from .set_api_key_state_details import SetApiKeyStateDetails
 from .t_few_training_config import TFewTrainingConfig
 from .text_generation_model_metrics import TextGenerationModelMetrics
 from .training_config import TrainingConfig
+from .update_api_key_details import UpdateApiKeyDetails
 from .update_dedicated_ai_cluster_details import UpdateDedicatedAiClusterDetails
 from .update_endpoint_details import UpdateEndpointDetails
 from .update_generative_ai_private_endpoint_details import UpdateGenerativeAiPrivateEndpointDetails
@@ -63,6 +75,11 @@ from .work_request_summary_collection import WorkRequestSummaryCollection
 
 # Maps type names to classes for generative_ai services.
 generative_ai_type_mapping = {
+    "ApiKey": ApiKey,
+    "ApiKeyCollection": ApiKeyCollection,
+    "ApiKeyItem": ApiKeyItem,
+    "ApiKeySummary": ApiKeySummary,
+    "ChangeApiKeyCompartmentDetails": ChangeApiKeyCompartmentDetails,
     "ChangeDedicatedAiClusterCompartmentDetails": ChangeDedicatedAiClusterCompartmentDetails,
     "ChangeEndpointCompartmentDetails": ChangeEndpointCompartmentDetails,
     "ChangeGenerativeAiPrivateEndpointCompartmentDetails": ChangeGenerativeAiPrivateEndpointCompartmentDetails,
@@ -70,6 +87,7 @@ generative_ai_type_mapping = {
     "ChangeModelCompartmentDetails": ChangeModelCompartmentDetails,
     "ChatModelMetrics": ChatModelMetrics,
     "ContentModerationConfig": ContentModerationConfig,
+    "CreateApiKeyDetails": CreateApiKeyDetails,
     "CreateDedicatedAiClusterDetails": CreateDedicatedAiClusterDetails,
     "CreateEndpointDetails": CreateEndpointDetails,
     "CreateGenerativeAiPrivateEndpointDetails": CreateGenerativeAiPrivateEndpointDetails,
@@ -92,6 +110,7 @@ generative_ai_type_mapping = {
     "ImportedModel": ImportedModel,
     "ImportedModelCollection": ImportedModelCollection,
     "ImportedModelSummary": ImportedModelSummary,
+    "KeyDetails": KeyDetails,
     "LoraTrainingConfig": LoraTrainingConfig,
     "Model": Model,
     "ModelCollection": ModelCollection,
@@ -100,9 +119,14 @@ generative_ai_type_mapping = {
     "ModelSummary": ModelSummary,
     "ObjectStorageDataset": ObjectStorageDataset,
     "ObjectStorageObject": ObjectStorageObject,
+    "PiiDetectionConfig": PiiDetectionConfig,
+    "PromptInjectionConfig": PromptInjectionConfig,
+    "RenewApiKeyDetails": RenewApiKeyDetails,
+    "SetApiKeyStateDetails": SetApiKeyStateDetails,
     "TFewTrainingConfig": TFewTrainingConfig,
     "TextGenerationModelMetrics": TextGenerationModelMetrics,
     "TrainingConfig": TrainingConfig,
+    "UpdateApiKeyDetails": UpdateApiKeyDetails,
     "UpdateDedicatedAiClusterDetails": UpdateDedicatedAiClusterDetails,
     "UpdateEndpointDetails": UpdateEndpointDetails,
     "UpdateGenerativeAiPrivateEndpointDetails": UpdateGenerativeAiPrivateEndpointDetails,

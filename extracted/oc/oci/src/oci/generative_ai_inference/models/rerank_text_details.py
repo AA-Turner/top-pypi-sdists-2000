@@ -48,6 +48,10 @@ class RerankTextDetails(object):
             The value to assign to the max_chunks_per_document property of this RerankTextDetails.
         :type max_chunks_per_document: int
 
+        :param max_tokens_per_document:
+            The value to assign to the max_tokens_per_document property of this RerankTextDetails.
+        :type max_tokens_per_document: int
+
         """
         self.swagger_types = {
             'input': 'str',
@@ -56,7 +60,8 @@ class RerankTextDetails(object):
             'documents': 'list[str]',
             'top_n': 'int',
             'is_echo': 'bool',
-            'max_chunks_per_document': 'int'
+            'max_chunks_per_document': 'int',
+            'max_tokens_per_document': 'int'
         }
         self.attribute_map = {
             'input': 'input',
@@ -65,7 +70,8 @@ class RerankTextDetails(object):
             'documents': 'documents',
             'top_n': 'topN',
             'is_echo': 'isEcho',
-            'max_chunks_per_document': 'maxChunksPerDocument'
+            'max_chunks_per_document': 'maxChunksPerDocument',
+            'max_tokens_per_document': 'maxTokensPerDocument'
         }
         self._input = None
         self._compartment_id = None
@@ -74,6 +80,7 @@ class RerankTextDetails(object):
         self._top_n = None
         self._is_echo = None
         self._max_chunks_per_document = None
+        self._max_tokens_per_document = None
 
     @property
     def input(self):
@@ -238,6 +245,30 @@ class RerankTextDetails(object):
         :type: int
         """
         self._max_chunks_per_document = max_chunks_per_document
+
+    @property
+    def max_tokens_per_document(self):
+        """
+        Gets the max_tokens_per_document of this RerankTextDetails.
+        Used to truncate the long documents with the specified no of tokens.
+
+
+        :return: The max_tokens_per_document of this RerankTextDetails.
+        :rtype: int
+        """
+        return self._max_tokens_per_document
+
+    @max_tokens_per_document.setter
+    def max_tokens_per_document(self, max_tokens_per_document):
+        """
+        Sets the max_tokens_per_document of this RerankTextDetails.
+        Used to truncate the long documents with the specified no of tokens.
+
+
+        :param max_tokens_per_document: The max_tokens_per_document of this RerankTextDetails.
+        :type: int
+        """
+        self._max_tokens_per_document = max_tokens_per_document
 
     def __repr__(self):
         return formatted_flat_dict(self)

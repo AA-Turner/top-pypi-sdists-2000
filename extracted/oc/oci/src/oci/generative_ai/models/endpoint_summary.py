@@ -68,6 +68,14 @@ class EndpointSummary(object):
             The value to assign to the content_moderation_config property of this EndpointSummary.
         :type content_moderation_config: oci.generative_ai.models.ContentModerationConfig
 
+        :param prompt_injection_config:
+            The value to assign to the prompt_injection_config property of this EndpointSummary.
+        :type prompt_injection_config: oci.generative_ai.models.PromptInjectionConfig
+
+        :param pii_detection_config:
+            The value to assign to the pii_detection_config property of this EndpointSummary.
+        :type pii_detection_config: oci.generative_ai.models.PiiDetectionConfig
+
         :param freeform_tags:
             The value to assign to the freeform_tags property of this EndpointSummary.
         :type freeform_tags: dict(str, str)
@@ -94,6 +102,8 @@ class EndpointSummary(object):
             'lifecycle_state': 'str',
             'lifecycle_details': 'str',
             'content_moderation_config': 'ContentModerationConfig',
+            'prompt_injection_config': 'PromptInjectionConfig',
+            'pii_detection_config': 'PiiDetectionConfig',
             'freeform_tags': 'dict(str, str)',
             'defined_tags': 'dict(str, dict(str, object))',
             'system_tags': 'dict(str, dict(str, object))'
@@ -111,6 +121,8 @@ class EndpointSummary(object):
             'lifecycle_state': 'lifecycleState',
             'lifecycle_details': 'lifecycleDetails',
             'content_moderation_config': 'contentModerationConfig',
+            'prompt_injection_config': 'promptInjectionConfig',
+            'pii_detection_config': 'piiDetectionConfig',
             'freeform_tags': 'freeformTags',
             'defined_tags': 'definedTags',
             'system_tags': 'systemTags'
@@ -127,6 +139,8 @@ class EndpointSummary(object):
         self._lifecycle_state = None
         self._lifecycle_details = None
         self._content_moderation_config = None
+        self._prompt_injection_config = None
+        self._pii_detection_config = None
         self._freeform_tags = None
         self._defined_tags = None
         self._system_tags = None
@@ -430,6 +444,46 @@ class EndpointSummary(object):
         :type: oci.generative_ai.models.ContentModerationConfig
         """
         self._content_moderation_config = content_moderation_config
+
+    @property
+    def prompt_injection_config(self):
+        """
+        Gets the prompt_injection_config of this EndpointSummary.
+
+        :return: The prompt_injection_config of this EndpointSummary.
+        :rtype: oci.generative_ai.models.PromptInjectionConfig
+        """
+        return self._prompt_injection_config
+
+    @prompt_injection_config.setter
+    def prompt_injection_config(self, prompt_injection_config):
+        """
+        Sets the prompt_injection_config of this EndpointSummary.
+
+        :param prompt_injection_config: The prompt_injection_config of this EndpointSummary.
+        :type: oci.generative_ai.models.PromptInjectionConfig
+        """
+        self._prompt_injection_config = prompt_injection_config
+
+    @property
+    def pii_detection_config(self):
+        """
+        Gets the pii_detection_config of this EndpointSummary.
+
+        :return: The pii_detection_config of this EndpointSummary.
+        :rtype: oci.generative_ai.models.PiiDetectionConfig
+        """
+        return self._pii_detection_config
+
+    @pii_detection_config.setter
+    def pii_detection_config(self, pii_detection_config):
+        """
+        Sets the pii_detection_config of this EndpointSummary.
+
+        :param pii_detection_config: The pii_detection_config of this EndpointSummary.
+        :type: oci.generative_ai.models.PiiDetectionConfig
+        """
+        self._pii_detection_config = pii_detection_config
 
     @property
     def freeform_tags(self):

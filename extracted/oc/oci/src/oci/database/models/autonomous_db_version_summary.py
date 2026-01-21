@@ -116,6 +116,9 @@ class AutonomousDbVersionSummary(object):
         """
         **[Required]** Gets the version of this AutonomousDbVersionSummary.
         A valid Oracle AI Database version for Autonomous AI Database.
+        When you specify 23ai for dbversion, the system will provision a 23ai database, but the UI will display it as 26ai.
+        When you specify 26ai for dbversion, the system will provision and display a 26ai database as expected.
+        For new databases, it is recommended to use either 19c or 26ai.
 
 
         :return: The version of this AutonomousDbVersionSummary.
@@ -128,6 +131,9 @@ class AutonomousDbVersionSummary(object):
         """
         Sets the version of this AutonomousDbVersionSummary.
         A valid Oracle AI Database version for Autonomous AI Database.
+        When you specify 23ai for dbversion, the system will provision a 23ai database, but the UI will display it as 26ai.
+        When you specify 26ai for dbversion, the system will provision and display a 26ai database as expected.
+        For new databases, it is recommended to use either 19c or 26ai.
 
 
         :param version: The version of this AutonomousDbVersionSummary.

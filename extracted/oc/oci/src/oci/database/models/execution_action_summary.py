@@ -63,6 +63,10 @@ class ExecutionActionSummary(object):
     #: This constant has a value of "RESCHEDULED"
     LIFECYCLE_SUBSTATE_RESCHEDULED = "RESCHEDULED"
 
+    #: A constant which can be used with the lifecycle_substate property of a ExecutionActionSummary.
+    #: This constant has a value of "CANCELED_BY_OPS"
+    LIFECYCLE_SUBSTATE_CANCELED_BY_OPS = "CANCELED_BY_OPS"
+
     #: A constant which can be used with the action_type property of a ExecutionActionSummary.
     #: This constant has a value of "DB_SERVER_FULL_SOFTWARE_UPDATE"
     ACTION_TYPE_DB_SERVER_FULL_SOFTWARE_UPDATE = "DB_SERVER_FULL_SOFTWARE_UPDATE"
@@ -108,7 +112,7 @@ class ExecutionActionSummary(object):
 
         :param lifecycle_substate:
             The value to assign to the lifecycle_substate property of this ExecutionActionSummary.
-            Allowed values for this property are: "DURATION_EXCEEDED", "MAINTENANCE_IN_PROGRESS", "WAITING", "RESCHEDULED", 'UNKNOWN_ENUM_VALUE'.
+            Allowed values for this property are: "DURATION_EXCEEDED", "MAINTENANCE_IN_PROGRESS", "WAITING", "RESCHEDULED", "CANCELED_BY_OPS", 'UNKNOWN_ENUM_VALUE'.
             Any unrecognized values returned by a service will be mapped to 'UNKNOWN_ENUM_VALUE'.
         :type lifecycle_substate: str
 
@@ -395,7 +399,7 @@ class ExecutionActionSummary(object):
         Gets the lifecycle_substate of this ExecutionActionSummary.
         The current sub-state of the execution action. Valid states are DURATION_EXCEEDED, MAINTENANCE_IN_PROGRESS and WAITING.
 
-        Allowed values for this property are: "DURATION_EXCEEDED", "MAINTENANCE_IN_PROGRESS", "WAITING", "RESCHEDULED", 'UNKNOWN_ENUM_VALUE'.
+        Allowed values for this property are: "DURATION_EXCEEDED", "MAINTENANCE_IN_PROGRESS", "WAITING", "RESCHEDULED", "CANCELED_BY_OPS", 'UNKNOWN_ENUM_VALUE'.
         Any unrecognized values returned by a service will be mapped to 'UNKNOWN_ENUM_VALUE'.
 
 
@@ -414,7 +418,7 @@ class ExecutionActionSummary(object):
         :param lifecycle_substate: The lifecycle_substate of this ExecutionActionSummary.
         :type: str
         """
-        allowed_values = ["DURATION_EXCEEDED", "MAINTENANCE_IN_PROGRESS", "WAITING", "RESCHEDULED"]
+        allowed_values = ["DURATION_EXCEEDED", "MAINTENANCE_IN_PROGRESS", "WAITING", "RESCHEDULED", "CANCELED_BY_OPS"]
         if not value_allowed_none_or_none_sentinel(lifecycle_substate, allowed_values):
             lifecycle_substate = 'UNKNOWN_ENUM_VALUE'
         self._lifecycle_substate = lifecycle_substate

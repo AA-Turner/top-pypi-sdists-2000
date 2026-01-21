@@ -22,31 +22,55 @@ from .chat_details import ChatDetails
 from .chat_result import ChatResult
 from .choice import Choice
 from .citation import Citation
+from .citation_options_v2 import CitationOptionsV2
+from .cohere_assistant_message_v2 import CohereAssistantMessageV2
 from .cohere_chat_bot_message import CohereChatBotMessage
 from .cohere_chat_request import CohereChatRequest
+from .cohere_chat_request_v2 import CohereChatRequestV2
 from .cohere_chat_response import CohereChatResponse
+from .cohere_chat_response_v2 import CohereChatResponseV2
+from .cohere_citation_document import CohereCitationDocument
+from .cohere_citation_source_v2 import CohereCitationSourceV2
+from .cohere_citation_tool_v2 import CohereCitationToolV2
+from .cohere_citation_v2 import CohereCitationV2
+from .cohere_content_v2 import CohereContentV2
+from .cohere_document_content_v2 import CohereDocumentContentV2
+from .cohere_image_content_v2 import CohereImageContentV2
+from .cohere_image_url_v2 import CohereImageUrlV2
 from .cohere_llm_inference_request import CohereLlmInferenceRequest
 from .cohere_llm_inference_response import CohereLlmInferenceResponse
 from .cohere_message import CohereMessage
+from .cohere_message_v2 import CohereMessageV2
 from .cohere_parameter_definition import CohereParameterDefinition
 from .cohere_response_format import CohereResponseFormat
 from .cohere_response_json_format import CohereResponseJsonFormat
 from .cohere_response_text_format import CohereResponseTextFormat
 from .cohere_system_message import CohereSystemMessage
+from .cohere_system_message_v2 import CohereSystemMessageV2
+from .cohere_text_content_v2 import CohereTextContentV2
+from .cohere_thinking_content_v2 import CohereThinkingContentV2
+from .cohere_thinking_v2 import CohereThinkingV2
 from .cohere_tool import CohereTool
 from .cohere_tool_call import CohereToolCall
+from .cohere_tool_call_v2 import CohereToolCallV2
 from .cohere_tool_message import CohereToolMessage
+from .cohere_tool_message_v2 import CohereToolMessageV2
 from .cohere_tool_result import CohereToolResult
+from .cohere_tool_v2 import CohereToolV2
 from .cohere_user_message import CohereUserMessage
+from .cohere_user_message_v2 import CohereUserMessageV2
 from .completion_tokens_details import CompletionTokensDetails
 from .content_moderation_configuration import ContentModerationConfiguration
 from .content_moderation_result import ContentModerationResult
 from .dedicated_serving_mode import DedicatedServingMode
 from .developer_message import DeveloperMessage
 from .document import Document
+from .document_content import DocumentContent
 from .document_rank import DocumentRank
+from .document_url import DocumentUrl
 from .embed_text_details import EmbedTextDetails
 from .embed_text_result import EmbedTextResult
+from .function import Function
 from .function_call import FunctionCall
 from .function_definition import FunctionDefinition
 from .generate_text_details import GenerateTextDetails
@@ -71,6 +95,7 @@ from .llama_llm_inference_request import LlamaLlmInferenceRequest
 from .llama_llm_inference_response import LlamaLlmInferenceResponse
 from .llm_inference_request import LlmInferenceRequest
 from .llm_inference_response import LlmInferenceResponse
+from .log_probability import LogProbability
 from .logprobs import Logprobs
 from .message import Message
 from .on_demand_serving_mode import OnDemandServingMode
@@ -128,31 +153,55 @@ generative_ai_inference_type_mapping = {
     "ChatResult": ChatResult,
     "Choice": Choice,
     "Citation": Citation,
+    "CitationOptionsV2": CitationOptionsV2,
+    "CohereAssistantMessageV2": CohereAssistantMessageV2,
     "CohereChatBotMessage": CohereChatBotMessage,
     "CohereChatRequest": CohereChatRequest,
+    "CohereChatRequestV2": CohereChatRequestV2,
     "CohereChatResponse": CohereChatResponse,
+    "CohereChatResponseV2": CohereChatResponseV2,
+    "CohereCitationDocument": CohereCitationDocument,
+    "CohereCitationSourceV2": CohereCitationSourceV2,
+    "CohereCitationToolV2": CohereCitationToolV2,
+    "CohereCitationV2": CohereCitationV2,
+    "CohereContentV2": CohereContentV2,
+    "CohereDocumentContentV2": CohereDocumentContentV2,
+    "CohereImageContentV2": CohereImageContentV2,
+    "CohereImageUrlV2": CohereImageUrlV2,
     "CohereLlmInferenceRequest": CohereLlmInferenceRequest,
     "CohereLlmInferenceResponse": CohereLlmInferenceResponse,
     "CohereMessage": CohereMessage,
+    "CohereMessageV2": CohereMessageV2,
     "CohereParameterDefinition": CohereParameterDefinition,
     "CohereResponseFormat": CohereResponseFormat,
     "CohereResponseJsonFormat": CohereResponseJsonFormat,
     "CohereResponseTextFormat": CohereResponseTextFormat,
     "CohereSystemMessage": CohereSystemMessage,
+    "CohereSystemMessageV2": CohereSystemMessageV2,
+    "CohereTextContentV2": CohereTextContentV2,
+    "CohereThinkingContentV2": CohereThinkingContentV2,
+    "CohereThinkingV2": CohereThinkingV2,
     "CohereTool": CohereTool,
     "CohereToolCall": CohereToolCall,
+    "CohereToolCallV2": CohereToolCallV2,
     "CohereToolMessage": CohereToolMessage,
+    "CohereToolMessageV2": CohereToolMessageV2,
     "CohereToolResult": CohereToolResult,
+    "CohereToolV2": CohereToolV2,
     "CohereUserMessage": CohereUserMessage,
+    "CohereUserMessageV2": CohereUserMessageV2,
     "CompletionTokensDetails": CompletionTokensDetails,
     "ContentModerationConfiguration": ContentModerationConfiguration,
     "ContentModerationResult": ContentModerationResult,
     "DedicatedServingMode": DedicatedServingMode,
     "DeveloperMessage": DeveloperMessage,
     "Document": Document,
+    "DocumentContent": DocumentContent,
     "DocumentRank": DocumentRank,
+    "DocumentUrl": DocumentUrl,
     "EmbedTextDetails": EmbedTextDetails,
     "EmbedTextResult": EmbedTextResult,
+    "Function": Function,
     "FunctionCall": FunctionCall,
     "FunctionDefinition": FunctionDefinition,
     "GenerateTextDetails": GenerateTextDetails,
@@ -177,6 +226,7 @@ generative_ai_inference_type_mapping = {
     "LlamaLlmInferenceResponse": LlamaLlmInferenceResponse,
     "LlmInferenceRequest": LlmInferenceRequest,
     "LlmInferenceResponse": LlmInferenceResponse,
+    "LogProbability": LogProbability,
     "Logprobs": Logprobs,
     "Message": Message,
     "OnDemandServingMode": OnDemandServingMode,

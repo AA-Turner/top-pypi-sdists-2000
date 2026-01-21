@@ -67,6 +67,48 @@ class GenerativeAiClientCompositeOperations(object):
         except Exception as e:
             raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
 
+    def create_api_key_and_wait_for_state(self, create_api_key_details, wait_for_states=[], operation_kwargs={}, waiter_kwargs={}):
+        """
+        Calls :py:func:`~oci.generative_ai.GenerativeAiClient.create_api_key` and waits for the :py:class:`~oci.generative_ai.models.ApiKey` acted upon
+        to enter the given state(s).
+
+        :param oci.generative_ai.models.CreateApiKeyDetails create_api_key_details: (required)
+            Details for the new apiKey.
+
+        :param list[str] wait_for_states:
+            An array of states to wait on. These should be valid values for :py:attr:`~oci.generative_ai.models.ApiKey.lifecycle_state`
+
+        :param dict operation_kwargs:
+            A dictionary of keyword arguments to pass to :py:func:`~oci.generative_ai.GenerativeAiClient.create_api_key`
+
+        :param dict waiter_kwargs:
+            A dictionary of keyword arguments to pass to the :py:func:`oci.wait_until` function. For example, you could pass ``max_interval_seconds`` or ``max_interval_seconds``
+            as dictionary keys to modify how long the waiter function will wait between retries and the maximum amount of time it will wait
+        """
+        operation_result = self.client.create_api_key(create_api_key_details, **operation_kwargs)
+        if not wait_for_states:
+            return operation_result
+        lowered_wait_for_states = [w.lower() for w in wait_for_states]
+        api_key_id = operation_result.data.id
+
+        try:
+            waiter_result = oci.wait_until(
+                self.client,
+                self.client.get_api_key(api_key_id),  # noqa: F821
+                evaluate_response=lambda r: getattr(r.data, 'lifecycle_state') and getattr(r.data, 'lifecycle_state').lower() in lowered_wait_for_states,
+                **waiter_kwargs
+            )
+            result_to_return = waiter_result
+
+            return result_to_return
+        except (NameError, TypeError) as e:
+            if not e.args:
+                e.args = ('',)
+            e.args = e.args + ('This composite operation is currently not supported in the SDK. Please use the operation from the service client and use waiters as an alternative. For more information on waiters, visit: "https://docs.oracle.com/en-us/iaas/tools/python/latest/api/waiters.html"', )
+            raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
+        except Exception as e:
+            raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
+
     def create_dedicated_ai_cluster_and_wait_for_state(self, create_dedicated_ai_cluster_details, wait_for_states=[], operation_kwargs={}, waiter_kwargs={}):
         """
         Calls :py:func:`~oci.generative_ai.GenerativeAiClient.create_dedicated_ai_cluster` and waits for the :py:class:`~oci.generative_ai.models.WorkRequest`
@@ -259,6 +301,67 @@ class GenerativeAiClientCompositeOperations(object):
             result_to_return = waiter_result
 
             return result_to_return
+        except Exception as e:
+            raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
+
+    def delete_api_key_and_wait_for_state(self, api_key_id, wait_for_states=[], operation_kwargs={}, waiter_kwargs={}):
+        """
+        Calls :py:func:`~oci.generative_ai.GenerativeAiClient.delete_api_key` and waits for the :py:class:`~oci.generative_ai.models.ApiKey` acted upon
+        to enter the given state(s).
+
+        :param str api_key_id: (required)
+            The `OCID`__ of the APIKey.
+
+            __ https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm
+
+        :param list[str] wait_for_states:
+            An array of states to wait on. These should be valid values for :py:attr:`~oci.generative_ai.models.ApiKey.lifecycle_state`
+
+        :param dict operation_kwargs:
+            A dictionary of keyword arguments to pass to :py:func:`~oci.generative_ai.GenerativeAiClient.delete_api_key`
+
+        :param dict waiter_kwargs:
+            A dictionary of keyword arguments to pass to the :py:func:`oci.wait_until` function. For example, you could pass ``max_interval_seconds`` or ``max_interval_seconds``
+            as dictionary keys to modify how long the waiter function will wait between retries and the maximum amount of time it will wait
+        """
+        initial_get_result = self.client.get_api_key(api_key_id)
+        operation_result = None
+        try:
+            operation_result = self.client.delete_api_key(api_key_id, **operation_kwargs)
+        except oci.exceptions.ServiceError as e:
+            if e.status == 404:
+                return WAIT_RESOURCE_NOT_FOUND
+            else:
+                raise e
+
+        if not wait_for_states:
+            return operation_result
+        lowered_wait_for_states = [w.lower() for w in wait_for_states]
+
+        try:
+            if ("succeed_on_not_found" in waiter_kwargs) and (waiter_kwargs["succeed_on_not_found"] is False):
+                self.client.base_client.logger.warning("The waiter kwarg succeed_on_not_found was passed as False for the delete composite operation delete_api_key, this would result in the operation to fail if the resource is not found! Please, do not pass this kwarg if this was not intended")
+            else:
+                """
+                If the user does not send in this value, we set it to True by default.
+                We are doing this because during a delete resource scenario and waiting on its state, the service can
+                return a 404 NOT FOUND exception as the resource was deleted and a get on its state would fail
+                """
+                waiter_kwargs["succeed_on_not_found"] = True
+            waiter_result = oci.wait_until(
+                self.client,
+                initial_get_result,  # noqa: F821
+                evaluate_response=lambda r: getattr(r.data, 'lifecycle_state') and getattr(r.data, 'lifecycle_state').lower() in lowered_wait_for_states,
+                **waiter_kwargs
+            )
+            result_to_return = waiter_result
+
+            return result_to_return
+        except (NameError, TypeError) as e:
+            if not e.args:
+                e.args = ('',)
+            e.args = e.args + ('This composite operation is currently not supported in the SDK. Please use the operation from the service client and use waiters as an alternative. For more information on waiters, visit: "https://docs.oracle.com/en-us/iaas/tools/python/latest/api/waiters.html"', )
+            raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
         except Exception as e:
             raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
 
@@ -498,6 +601,147 @@ class GenerativeAiClientCompositeOperations(object):
             result_to_return = waiter_result
 
             return result_to_return
+        except Exception as e:
+            raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
+
+    def renew_api_key_and_wait_for_state(self, api_key_id, renew_api_key_details, wait_for_states=[], operation_kwargs={}, waiter_kwargs={}):
+        """
+        Calls :py:func:`~oci.generative_ai.GenerativeAiClient.renew_api_key` and waits for the :py:class:`~oci.generative_ai.models.ApiKey` acted upon
+        to enter the given state(s).
+
+        :param str api_key_id: (required)
+            The `OCID`__ of the APIKey.
+
+            __ https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm
+
+        :param oci.generative_ai.models.RenewApiKeyDetails renew_api_key_details: (required)
+            The information to be renewed.
+
+        :param list[str] wait_for_states:
+            An array of states to wait on. These should be valid values for :py:attr:`~oci.generative_ai.models.ApiKey.lifecycle_state`
+
+        :param dict operation_kwargs:
+            A dictionary of keyword arguments to pass to :py:func:`~oci.generative_ai.GenerativeAiClient.renew_api_key`
+
+        :param dict waiter_kwargs:
+            A dictionary of keyword arguments to pass to the :py:func:`oci.wait_until` function. For example, you could pass ``max_interval_seconds`` or ``max_interval_seconds``
+            as dictionary keys to modify how long the waiter function will wait between retries and the maximum amount of time it will wait
+        """
+        operation_result = self.client.renew_api_key(api_key_id, renew_api_key_details, **operation_kwargs)
+        if not wait_for_states:
+            return operation_result
+        lowered_wait_for_states = [w.lower() for w in wait_for_states]
+        api_key_id = operation_result.data.id
+
+        try:
+            waiter_result = oci.wait_until(
+                self.client,
+                self.client.get_api_key(api_key_id),  # noqa: F821
+                evaluate_response=lambda r: getattr(r.data, 'lifecycle_state') and getattr(r.data, 'lifecycle_state').lower() in lowered_wait_for_states,
+                **waiter_kwargs
+            )
+            result_to_return = waiter_result
+
+            return result_to_return
+        except (NameError, TypeError) as e:
+            if not e.args:
+                e.args = ('',)
+            e.args = e.args + ('This composite operation is currently not supported in the SDK. Please use the operation from the service client and use waiters as an alternative. For more information on waiters, visit: "https://docs.oracle.com/en-us/iaas/tools/python/latest/api/waiters.html"', )
+            raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
+        except Exception as e:
+            raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
+
+    def set_api_key_state_and_wait_for_state(self, api_key_id, set_api_key_state_details, wait_for_states=[], operation_kwargs={}, waiter_kwargs={}):
+        """
+        Calls :py:func:`~oci.generative_ai.GenerativeAiClient.set_api_key_state` and waits for the :py:class:`~oci.generative_ai.models.ApiKey` acted upon
+        to enter the given state(s).
+
+        :param str api_key_id: (required)
+            The `OCID`__ of the APIKey.
+
+            __ https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm
+
+        :param oci.generative_ai.models.SetApiKeyStateDetails set_api_key_state_details: (required)
+            The information for setting key state.
+
+        :param list[str] wait_for_states:
+            An array of states to wait on. These should be valid values for :py:attr:`~oci.generative_ai.models.ApiKey.lifecycle_state`
+
+        :param dict operation_kwargs:
+            A dictionary of keyword arguments to pass to :py:func:`~oci.generative_ai.GenerativeAiClient.set_api_key_state`
+
+        :param dict waiter_kwargs:
+            A dictionary of keyword arguments to pass to the :py:func:`oci.wait_until` function. For example, you could pass ``max_interval_seconds`` or ``max_interval_seconds``
+            as dictionary keys to modify how long the waiter function will wait between retries and the maximum amount of time it will wait
+        """
+        operation_result = self.client.set_api_key_state(api_key_id, set_api_key_state_details, **operation_kwargs)
+        if not wait_for_states:
+            return operation_result
+        lowered_wait_for_states = [w.lower() for w in wait_for_states]
+        api_key_id = operation_result.data.id
+
+        try:
+            waiter_result = oci.wait_until(
+                self.client,
+                self.client.get_api_key(api_key_id),  # noqa: F821
+                evaluate_response=lambda r: getattr(r.data, 'lifecycle_state') and getattr(r.data, 'lifecycle_state').lower() in lowered_wait_for_states,
+                **waiter_kwargs
+            )
+            result_to_return = waiter_result
+
+            return result_to_return
+        except (NameError, TypeError) as e:
+            if not e.args:
+                e.args = ('',)
+            e.args = e.args + ('This composite operation is currently not supported in the SDK. Please use the operation from the service client and use waiters as an alternative. For more information on waiters, visit: "https://docs.oracle.com/en-us/iaas/tools/python/latest/api/waiters.html"', )
+            raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
+        except Exception as e:
+            raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
+
+    def update_api_key_and_wait_for_state(self, api_key_id, update_api_key_details, wait_for_states=[], operation_kwargs={}, waiter_kwargs={}):
+        """
+        Calls :py:func:`~oci.generative_ai.GenerativeAiClient.update_api_key` and waits for the :py:class:`~oci.generative_ai.models.ApiKey` acted upon
+        to enter the given state(s).
+
+        :param str api_key_id: (required)
+            The `OCID`__ of the APIKey.
+
+            __ https://docs.cloud.oracle.com/iaas/Content/General/Concepts/identifiers.htm
+
+        :param oci.generative_ai.models.UpdateApiKeyDetails update_api_key_details: (required)
+            The information to be updated.
+
+        :param list[str] wait_for_states:
+            An array of states to wait on. These should be valid values for :py:attr:`~oci.generative_ai.models.ApiKey.lifecycle_state`
+
+        :param dict operation_kwargs:
+            A dictionary of keyword arguments to pass to :py:func:`~oci.generative_ai.GenerativeAiClient.update_api_key`
+
+        :param dict waiter_kwargs:
+            A dictionary of keyword arguments to pass to the :py:func:`oci.wait_until` function. For example, you could pass ``max_interval_seconds`` or ``max_interval_seconds``
+            as dictionary keys to modify how long the waiter function will wait between retries and the maximum amount of time it will wait
+        """
+        operation_result = self.client.update_api_key(api_key_id, update_api_key_details, **operation_kwargs)
+        if not wait_for_states:
+            return operation_result
+        lowered_wait_for_states = [w.lower() for w in wait_for_states]
+        api_key_id = operation_result.data.id
+
+        try:
+            waiter_result = oci.wait_until(
+                self.client,
+                self.client.get_api_key(api_key_id),  # noqa: F821
+                evaluate_response=lambda r: getattr(r.data, 'lifecycle_state') and getattr(r.data, 'lifecycle_state').lower() in lowered_wait_for_states,
+                **waiter_kwargs
+            )
+            result_to_return = waiter_result
+
+            return result_to_return
+        except (NameError, TypeError) as e:
+            if not e.args:
+                e.args = ('',)
+            e.args = e.args + ('This composite operation is currently not supported in the SDK. Please use the operation from the service client and use waiters as an alternative. For more information on waiters, visit: "https://docs.oracle.com/en-us/iaas/tools/python/latest/api/waiters.html"', )
+            raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
         except Exception as e:
             raise oci.exceptions.CompositeOperationError(partial_results=[operation_result], cause=e)
 

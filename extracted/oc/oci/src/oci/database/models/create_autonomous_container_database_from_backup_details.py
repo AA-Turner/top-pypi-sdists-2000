@@ -166,6 +166,10 @@ class CreateAutonomousContainerDatabaseFromBackupDetails(CreateAutonomousContain
             The value to assign to the key_store_id property of this CreateAutonomousContainerDatabaseFromBackupDetails.
         :type key_store_id: str
 
+        :param encryption_key_location_details:
+            The value to assign to the encryption_key_location_details property of this CreateAutonomousContainerDatabaseFromBackupDetails.
+        :type encryption_key_location_details: oci.database.models.EncryptionKeyLocationDetails
+
         :param db_split_threshold:
             The value to assign to the db_split_threshold property of this CreateAutonomousContainerDatabaseFromBackupDetails.
         :type db_split_threshold: int
@@ -225,6 +229,7 @@ class CreateAutonomousContainerDatabaseFromBackupDetails(CreateAutonomousContain
             'kms_key_version_id': 'str',
             'vault_id': 'str',
             'key_store_id': 'str',
+            'encryption_key_location_details': 'EncryptionKeyLocationDetails',
             'db_split_threshold': 'int',
             'vm_failover_reservation': 'int',
             'distribution_affinity': 'str',
@@ -267,6 +272,7 @@ class CreateAutonomousContainerDatabaseFromBackupDetails(CreateAutonomousContain
             'kms_key_version_id': 'kmsKeyVersionId',
             'vault_id': 'vaultId',
             'key_store_id': 'keyStoreId',
+            'encryption_key_location_details': 'encryptionKeyLocationDetails',
             'db_split_threshold': 'dbSplitThreshold',
             'vm_failover_reservation': 'vmFailoverReservation',
             'distribution_affinity': 'distributionAffinity',
@@ -308,6 +314,7 @@ class CreateAutonomousContainerDatabaseFromBackupDetails(CreateAutonomousContain
         self._kms_key_version_id = None
         self._vault_id = None
         self._key_store_id = None
+        self._encryption_key_location_details = None
         self._db_split_threshold = None
         self._vm_failover_reservation = None
         self._distribution_affinity = None

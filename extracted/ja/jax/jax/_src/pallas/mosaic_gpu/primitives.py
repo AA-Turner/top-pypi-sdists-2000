@@ -28,6 +28,7 @@ import jax
 from jax._src import core as jax_core
 from jax._src import debugging
 from jax._src import dtypes
+from jax._src import literals
 from jax._src import pretty_printer as pp
 from jax._src import state
 from jax._src import tree_util
@@ -220,8 +221,11 @@ def _copy_smem_to_gmem_lowering(
   )
   src_transforms = src_transforms_treedef.unflatten(flat_src_transforms)
   dst_transforms = dst_transforms_treedef.unflatten(flat_dst_transforms)
+  handle_transposes = (
+      ctx.module_ctx.lowering_semantics == mgpu.LoweringSemantics.Warpgroup
+  )
   src, src_transforms = lowering._handle_transforms(
-      ctx, src, src_transforms, handle_transposes=False
+      ctx, src, src_transforms, handle_transposes=handle_transposes
   )
   copy_params = _extract_gmem_copy_params(
       ctx, dst_transforms, supports_multicast=True
@@ -290,9 +294,16 @@ def _split_gmem_slice(gmem_slice):
       case mgpu.DynamicSlice():
         indices.append(arith_dialect.index_cast(i32, idx.base))
         slice_lengths.append(idx.length)
-      case ir.Value():
+      case ir.Value() if isinstance(idx.type, ir.IndexType):
         indices.append(arith_dialect.index_cast(i32, idx))
         slice_lengths.append(-1)
+      case ir.Value() if isinstance(idx.type, ir.IntegerType):
+        indices.append(idx)
+        slice_lengths.append(-1)
+      case ir.Value() if isinstance(idx.type, ir.VectorType):
+        indices.append(idx)
+        [length] = ir.VectorType(idx.type).shape
+        slice_lengths.append(length)
       case _:
         raise NotImplementedError(f"Unsupported GMEM slice: {idx}")
   return indices, slice_lengths
@@ -503,17 +514,18 @@ def _copy_gmem_to_smem_lowering(
   )
   src_transforms = src_transforms_treedef.unflatten(flat_src_transforms)
   dst_transforms = dst_transforms_treedef.unflatten(flat_dst_transforms)
+  handle_transposes = (
+      ctx.module_ctx.lowering_semantics == mgpu.LoweringSemantics.Warpgroup
+  )
   dst, dst_transforms = lowering._handle_transforms(
-      ctx, dst, dst_transforms, handle_transposes=False
+      ctx, dst, dst_transforms, handle_transposes=handle_transposes
   )
   copy_params = _extract_smem_copy_params(dst_transforms) | _extract_gmem_copy_params(ctx, src_transforms)
-  barrier_indexer = _extract_barrier_indexer(
+  base_index = _extract_barrier_slice_base(
       barrier_transforms_treedef.unflatten(flat_barrier_transforms)
   )
-  if barrier_indexer is not None:
-    barrier = barrier.__getitem__(
-        *map(lowering._as_index, barrier_indexer.indices)
-    )
+  if base_index is not None:
+    barrier = barrier[base_index]
   collective = None
   if collective_axes is not None:
     collective = tuple(
@@ -823,26 +835,34 @@ def async_prefetch(
   return None
 
 
-def _extract_barrier_indexer(transforms) -> indexing.NDIndexer | None:
+def _extract_barrier_slice_base(transforms) -> ir.Value | None:
   if not transforms:
     return None
-  match transforms:
-    case [indexing.NDIndexer(indices=[idx]) as indexer]:
-      if not isinstance(idx, indexing.Slice):
-        return indexer
-      if indexing.Slice.from_slice(slice(None), *indexer.shape) == idx:
-        # Special-case: the whole slice.
-        return None
-      else:
-        raise ValueError(
-            f"Barrier can only be indexed with an integer, got {idx}"
-        )
-    case [indexing.NDIndexer()]:
-      raise NotImplementedError("Barrier does not support multiple indices")
-    case []:
-      return None
-    case _:
-      raise ValueError("Barrier does not support arbitrary transforms")
+  base_index = None
+  while transforms:
+    match transforms:
+      case [indexing.NDIndexer(indices=[idx]) as indexer, *transforms]:
+        if isinstance(idx, indexing.Slice):
+          if indexing.Slice.from_slice(slice(None), *indexer.shape) == idx:
+            # Special-case: the whole slice.
+            continue
+          idx = idx.start
+        if isinstance(
+            idx, (int, ir.Value, mgpu.FragmentedArray, literals.TypedNdArray)
+        ):
+          if base_index is None:
+            base_index = lowering._as_index(idx)
+          else:
+            base_index = arith_dialect.addi(base_index, lowering._as_index(idx))
+        else:
+          raise ValueError(
+              f"Barrier can only be indexed with integers or slices, got {idx}"
+          )
+      case [indexing.NDIndexer(), *_]:
+        raise NotImplementedError("Barrier does not support multiple indices")
+      case _:
+        raise ValueError("Barrier does not support arbitrary transforms")
+  return base_index
 
 
 barrier_arrive_p = jax_core.Primitive("barrier_arrive")
@@ -884,9 +904,9 @@ def _barrier_arrive_lowering(
     transforms_treedef,
 ):
   transforms = transforms_treedef.unflatten(flat_transforms)
-  indexer = _extract_barrier_indexer(transforms)
-  if indexer is not None:
-    barrier = barrier.__getitem__(*map(lowering._as_index, indexer.indices))
+  base_index = _extract_barrier_slice_base(transforms)
+  if base_index is not None:
+    barrier = barrier[base_index]
   sem_dtype = ctx.avals_in[0].inner_aval.dtype  # type: ignore
   orders_tensor_core = getattr(sem_dtype, "orders_tensor_core", False)
   if orders_tensor_core:
@@ -963,12 +983,12 @@ def _barrier_wait_lowering(
 ):
   barrier_aval = ctx.avals_in[0]
   transforms = transforms_treedef.unflatten(flat_transforms)
-  indexer = _extract_barrier_indexer(transforms)
   orders_tensor_core = getattr(
       barrier_aval.inner_aval.dtype, "orders_tensor_core", False  # type: ignore
   )
-  if indexer is not None:
-    barrier = barrier.__getitem__(*map(lowering._as_index, indexer.indices))
+  base_index = _extract_barrier_slice_base(transforms)
+  if base_index is not None:
+    barrier = barrier[base_index]
   barrier.wait(orders_tensor_core=orders_tensor_core)
   return ()
 
@@ -1736,11 +1756,9 @@ def _tcgen05_mma_lowering(
     barrier_transforms = barrier_transforms_tree.unflatten(
         barrier_transforms_leaves
     )
-    indexer = _extract_barrier_indexer(barrier_transforms)
-    if indexer is not None:
-      barrier_ref = barrier_ref.__getitem__(
-          *map(lowering._as_index, indexer.indices)
-      )
+    base_index = _extract_barrier_slice_base(barrier_transforms)
+    if base_index is not None:
+      barrier_ref = barrier_ref[base_index]
 
   if lhs_swizzle is None:
     lhs_swizzle = rhs_swizzle
@@ -1910,11 +1928,9 @@ def _tcgen05_mma_lowering_wg(
     barrier_transforms = barrier_transforms_tree.unflatten(
         barrier_transforms_leaves
     )
-    indexer = _extract_barrier_indexer(barrier_transforms)
-    if indexer is not None:
-      barrier_ref = barrier_ref.__getitem__(
-          *map(lowering._as_index, indexer.indices)
-      )
+    base_index = _extract_barrier_slice_base(barrier_transforms)
+    if base_index is not None:
+      barrier_ref = barrier_ref[base_index]
 
   predicate_ctx: contextlib.AbstractContextManager[None]
   if collective_axis is not None:
@@ -2002,11 +2018,9 @@ def _tcgen05_commit_arrive_lowering(
     barrier_transforms = barrier_transforms_tree.unflatten(
         barrier_transforms_leaves
     )
-    indexer = _extract_barrier_indexer(barrier_transforms)
-    if indexer is not None:
-      barrier_ref = barrier_ref.__getitem__(
-          *map(lowering._as_index, indexer.indices)
-      )
+    base_index = _extract_barrier_slice_base(barrier_transforms)
+    if base_index is not None:
+      barrier_ref = barrier_ref[base_index]
 
   predicate = ctx.module_ctx.single_lane_predicate
   if collective_axis is not None:
@@ -2037,11 +2051,9 @@ def _tcgen05_commit_arrive_lowering_wg(
     barrier_transforms = barrier_transforms_tree.unflatten(
         barrier_transforms_leaves
     )
-    indexer = _extract_barrier_indexer(barrier_transforms)
-    if indexer is not None:
-      barrier_ref = barrier_ref.__getitem__(
-          *map(lowering._as_index, indexer.indices)
-      )
+    base_index = _extract_barrier_slice_base(barrier_transforms)
+    if base_index is not None:
+      barrier_ref = barrier_ref[base_index]
 
   predicate_ctx: contextlib.AbstractContextManager[None]
   if collective_axis is not None:
@@ -2508,7 +2520,7 @@ def _inline_mgpu_discharge(*args, **kwargs):
 
 def _type_check_mgpu_lane_semantics(v, ty):
   match (ty, v):
-    case (RefType(), ir.Value()) if ir.MemRefType.isinstance(v.type):
+    case (RefType(), ir.Value()) if isinstance(v.type, ir.MemRefType):
       pass
     case (ShapeDtypeStruct(), mgpu.FragmentedArray()):
       mlir_dtype = mgpu_utils.dtype_to_ir_type(ty.dtype)
@@ -2658,9 +2670,9 @@ def _clone_custom_op_with_extra_args(
   with this function is therefore required to restore the isolation property.
   """
   for arg in extra_args:
-    if ir.MemRefType.isinstance(arg.type) and mgpu_utils.is_smem_ref(arg.type):
+    if isinstance(arg.type, ir.MemRefType) and mgpu_utils.is_smem_ref(arg.type):
       raise ValueError(f"Extra arg {arg} must not be an SMEM ref.")
-    if ir.VectorType.isinstance(arg.type):
+    if isinstance(arg.type, ir.VectorType):
       raise ValueError(f"Extra arg {arg} must not have a vector type.")
 
   new_operands = list(custom_op.operands) + list(extra_args)
@@ -2773,7 +2785,7 @@ def _populate_custom_primitive_op_block(
     in_transforms_it = iter(in_transforms)
     avals_in = ctx.avals_in[:pytree_args.num_leaves]
     for arg, aval in zip(block.arguments, avals_in, strict=True):
-      if ir.MemRefType.isinstance(arg.type):
+      if isinstance(arg.type, ir.MemRefType):
         memref_ty = ir.MemRefType(arg.type)
         if not mgpu_utils.is_smem_ref(memref_ty):
           fn_inputs.append(arg)
@@ -2795,7 +2807,7 @@ def _populate_custom_primitive_op_block(
             [transformed_type], [arg]
         )
         fn_inputs.append(conversion_cast.result)
-      elif ir.VectorType.isinstance(arg.type):
+      elif isinstance(arg.type, ir.VectorType):
         layout_attr = next(in_layouts_it)
         layout = mgpu.layouts.from_layout_attr(layout_attr)
 
@@ -2837,7 +2849,7 @@ def _populate_custom_primitive_op_block(
     ):
       if not isinstance(fa, mgpu.FragmentedArray):
         raise ValueError(f"Expected a FragmentedArray, but got: {fa}")
-      if ir.VectorType.isinstance(result_ty):
+      if isinstance(result_ty, ir.VectorType):
         result_shape = ir.VectorType(result_ty).shape
         if fa.shape != tuple(result_shape):
           raise ValueError(f"Expected {result_shape} but got {fa.shape}")
@@ -3078,7 +3090,7 @@ def _async_load_tmem_lowering_rule_wg(
     ctx: lowering.LoweringRuleContext, x_ref: ir.Value, *leaves, tree
 ):
   assert isinstance(x_ref, ir.Value)
-  assert ir.MemRefType.isinstance(x_ref.type)
+  assert isinstance(x_ref.type, ir.MemRefType)
 
   transforms = jax.tree.unflatten(tree, leaves)
   x_tmem, transforms = lowering._handle_transforms(
@@ -3180,9 +3192,9 @@ def _async_store_tmem_lowering_rule_wg(
     tree,
 ):
   assert isinstance(x_ref, ir.Value)
-  assert ir.MemRefType.isinstance(x_ref.type)
+  assert isinstance(x_ref.type, ir.MemRefType)
   assert isinstance(value, ir.Value)
-  assert ir.VectorType.isinstance(value.type)
+  assert isinstance(value.type, ir.VectorType)
 
   transforms = jax.tree.unflatten(tree, leaves)
   x_tmem, transforms = lowering._handle_transforms(
@@ -3485,13 +3497,11 @@ def try_cluster_cancel_lowering(
     barrier_transforms_leaves = transforms_leaves  # type: ignore
 
   if barrier_transforms_tree is not None:
-    barrier_indexer = _extract_barrier_indexer(
+    base_index = _extract_barrier_slice_base(
         barrier_transforms_tree.unflatten(barrier_transforms_leaves)
     )
-    if barrier_indexer is not None:
-      barrier = barrier.__getitem__(
-          *map(lowering._as_index, barrier_indexer.indices)
-      )
+    if base_index is not None:
+      barrier = barrier[base_index]
 
   result_ty = ir.MemRefType(result_ref.type)
   bits = math.prod(result_ty.shape) * mgpu.bitwidth(result_ty.element_type)
@@ -3520,7 +3530,6 @@ def try_cluster_cancel_lowering(
             mgpu.c(0, ir.IndexType.get()),
         ),
     )
-
 
   mgpu.try_cluster_cancel(
       result_ref,

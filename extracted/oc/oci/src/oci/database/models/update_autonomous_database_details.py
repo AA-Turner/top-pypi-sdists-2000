@@ -1578,6 +1578,9 @@ class UpdateAutonomousDatabaseDetails(object):
         """
         Gets the db_version of this UpdateAutonomousDatabaseDetails.
         A valid Oracle AI Database version for Autonomous AI Database.
+        When you specify 23ai for dbversion, the system will provision a 23ai database, but the UI will display it as 26ai.
+        When you specify 26ai for dbversion, the system will provision and display a 26ai database as expected.
+        For new databases, it is recommended to use either 19c or 26ai.
 
 
         :return: The db_version of this UpdateAutonomousDatabaseDetails.
@@ -1590,6 +1593,9 @@ class UpdateAutonomousDatabaseDetails(object):
         """
         Sets the db_version of this UpdateAutonomousDatabaseDetails.
         A valid Oracle AI Database version for Autonomous AI Database.
+        When you specify 23ai for dbversion, the system will provision a 23ai database, but the UI will display it as 26ai.
+        When you specify 26ai for dbversion, the system will provision and display a 26ai database as expected.
+        For new databases, it is recommended to use either 19c or 26ai.
 
 
         :param db_version: The db_version of this UpdateAutonomousDatabaseDetails.
@@ -2054,7 +2060,7 @@ class UpdateAutonomousDatabaseDetails(object):
     def time_maintenance_pause_until(self):
         """
         Gets the time_maintenance_pause_until of this UpdateAutonomousDatabaseDetails.
-        The date until which maintenance of Autonomous AI Database is temporarily paused.
+        The date until which Autonomous AI Database maintenance is temporarily paused.
 
 
         :return: The time_maintenance_pause_until of this UpdateAutonomousDatabaseDetails.
@@ -2066,7 +2072,7 @@ class UpdateAutonomousDatabaseDetails(object):
     def time_maintenance_pause_until(self, time_maintenance_pause_until):
         """
         Sets the time_maintenance_pause_until of this UpdateAutonomousDatabaseDetails.
-        The date until which maintenance of Autonomous AI Database is temporarily paused.
+        The date until which Autonomous AI Database maintenance is temporarily paused.
 
 
         :param time_maintenance_pause_until: The time_maintenance_pause_until of this UpdateAutonomousDatabaseDetails.

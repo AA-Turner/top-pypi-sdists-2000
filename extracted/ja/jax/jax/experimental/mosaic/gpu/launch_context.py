@@ -23,7 +23,6 @@ from typing import Any, Literal
 
 from jax._src.lib import mosaic_gpu_dialect as mgpu_dialect
 from jaxlib.mlir import ir
-from jaxlib.mlir.dialects import _gpu_ops_gen
 from jaxlib.mlir.dialects import arith
 from jaxlib.mlir.dialects import builtin
 from jaxlib.mlir.dialects import func
@@ -322,7 +321,7 @@ class Scratch:
              : (!llvm.array<256 x i8>) -> !llvm.ptr
 
   """
-  def __init__(self, gpu_launch_op: _gpu_ops_gen.LaunchOp):
+  def __init__(self, gpu_launch_op: gpu.LaunchOp):
     self.next_offset: int = 0
     self.host_init: list[Callable[[ir.Value], None]] = []
     self._ops_created = False
@@ -482,7 +481,7 @@ def _tma_dma_type(
     reduction_op: TMAReductionOp | None,
 ) -> int:
   """Returns the TMA DMA type for the given element type and signedness."""
-  if ir.IntegerType.isinstance(element_type):
+  if isinstance(element_type, ir.IntegerType):
     bitwidth = utils.bitwidth_impl(element_type)
     if bitwidth == 2:
       tma_dtype = 8
@@ -498,20 +497,20 @@ def _tma_dma_type(
       tma_dtype = 10 if reduction_op in ("smin", "smax") else 4
     else:
       raise ValueError(f"Unsupported integer bitwidth: {bitwidth}")
-  elif ir.F16Type.isinstance(element_type):
+  elif isinstance(element_type, ir.F16Type):
     tma_dtype = 5
-  elif ir.F32Type.isinstance(element_type):
+  elif isinstance(element_type, ir.F32Type):
     tma_dtype = 6
-  elif ir.BF16Type.isinstance(element_type):
+  elif isinstance(element_type, ir.BF16Type):
     tma_dtype = 7
   # We treat narrow floats as integers
-  elif ir.Float8E5M2Type.isinstance(element_type):
+  elif isinstance(element_type, ir.Float8E5M2Type):
     tma_dtype = 1
-  elif ir.Float8E4M3FNType.isinstance(element_type):
+  elif isinstance(element_type, ir.Float8E4M3FNType):
     tma_dtype = 1
-  elif ir.Float8E8M0FNUType.isinstance(element_type):
+  elif isinstance(element_type, ir.Float8E8M0FNUType):
     tma_dtype = 1
-  elif ir.Float4E2M1FNType.isinstance(element_type):
+  elif isinstance(element_type, ir.Float4E2M1FNType):
     tma_dtype = 0
   else:
     raise ValueError(f"unsupported TMA dtype {element_type}")
@@ -544,22 +543,60 @@ class LaunchContext:
       yield
 
   def cluster_idx(
-      self, dim: gpu.Dimension | Sequence[gpu.Dimension] | None = None
+      self,
+      dim: gpu.Dimension | Sequence[gpu.Dimension] | None = None,
+      dim_idx: ir.Value | Sequence[ir.Value] | None = None,
   ) -> ir.Value:
-    """Returns the index of a block within a subset of the cluster spanned by the given dimensions."""
+    """Returns the linear index of a block within a subset of the cluster spanned by the given dimensions.
+
+    dim_idx can be used to specify the index of another block along the selected
+    dimensions. If not provided, the current block's index is used.
+    """
     if dim is None:
       dim = gpu.Dimension
     elif isinstance(dim, gpu.Dimension):
       dim = (dim,)
+    if dim_idx is None:
+      dim_idx = [gpu.cluster_block_id(d) for d in dim]
+    elif isinstance(dim_idx, ir.Value):
+      if len(dim) != 1:
+        raise ValueError(
+            "Expected a single dimension when passing a single index"
+        )
+      dim_idx = [dim_idx]
     index = ir.IndexType.get()
     stride = 1
-    idx = c(0, index)
-    for d in sorted(dim):
+    lin_idx = c(0, index)
+    for d, idx in sorted(zip(dim, dim_idx, strict=True), key=lambda x: x[0]):
       if self.cluster_size[d] == 1:  # Optimize a multiply by 0.
         continue
-      idx = arith.addi(idx, arith.muli(gpu.cluster_block_id(d), c(stride, index)))
+      lin_idx = arith.addi(lin_idx, arith.muli(idx, c(stride, index)))
       stride *= self.cluster_size[d]
-    return idx
+    return lin_idx
+
+  def get_cluster_ref(self, ref: ir.Value, dim: gpu.Dimension, idx: ir.Value):
+    i32 = ir.IntegerType.get_signless(32)
+    # We replace the offset in the ref type by 0, because memref_ptr always
+    # folds the offset into the pointer.
+    ref_ty = ir.MemRefType(ref.type)
+    strides, _ = ref_ty.get_strides_and_offset()
+    result_type = ir.MemRefType.get(
+        ref_ty.shape,
+        ref_ty.element_type,
+        ir.StridedLayoutAttr.get(0, strides),
+        None,
+    )
+    if ref_ty.memory_space != ir.Attribute.parse("#gpu.address_space<workgroup>"):
+      raise ValueError(f"Expected SMEM but got: {ref.memory_space}")
+    idxs = [gpu.cluster_block_id(d) for d in gpu.Dimension]
+    idxs[dim] = idx
+    flat_block = arith.index_cast(i32, self.cluster_idx(gpu.Dimension, idxs))  # type: ignore
+    return utils.ptr_as_memref(
+        utils.get_cluster_ptr(
+            utils.memref_ptr(ref, memory_space=3), flat_block
+        ),
+        result_type,
+    )
 
   def _alloc_scratch(
       self,
@@ -732,7 +769,10 @@ class LaunchContext:
       if len(gather_indices.shape) != 1:
         raise ValueError("Gather/scatter indices must be 1D")
       idx_dtype = gather_indices.mlir_dtype
-      if not ir.IntegerType.isinstance(idx_dtype) or utils.bitwidth(idx_dtype) > 32:
+      if (
+          not isinstance(idx_dtype, ir.IntegerType)
+          or utils.bitwidth(idx_dtype) > 32
+      ):
         raise ValueError("Gather/scatter indices must be integers that are at most 32-bit wide")
       if gather_indices.is_signed:
         raise ValueError("Gather/scatter indices must be unsigned")
@@ -1105,7 +1145,10 @@ class LaunchContext:
       offset_scale = 1 if element_bitwidth >= 8 else 8 // element_bitwidth
       if element_bitwidth < 8:
         gep_type = i8
-      elif ir.FloatType.isinstance(element_type) and ir.FloatType(element_type).width == 8:
+      elif (
+          isinstance(element_type, ir.FloatType)
+          and ir.FloatType(element_type).width == 8
+      ):
         gep_type = i8  # LLVM has no support for f8.
       else:
         gep_type = element_type
@@ -1506,7 +1549,7 @@ class LaunchContext:
 
   def to_remote(self, ref: ir.Value, peer: ir.Value):
     self._ensure_nvshmem_decls()
-    if ir.MemRefType.isinstance(ref.type):
+    if isinstance(ref.type, ir.MemRefType):
       # We replace the offset in the ref type by 0, because memref_ptr always
       # folds the offset into the pointer.
       ref_ty = ir.MemRefType(ref.type)
@@ -1529,7 +1572,7 @@ class LaunchContext:
   def to_remote_multicast(self, ref: ir.Value):
     i32 = ir.IntegerType.get_signless(32)
     self._ensure_nvshmem_decls()
-    if not ir.MemRefType.isinstance(ref.type):
+    if not isinstance(ref.type, ir.MemRefType):
       raise ValueError(f"Unsupported type for to_remote_multicast: {ref.type}")
       # We replace the offset in the ref type by 0, because memref_ptr always
       # folds the offset into the pointer.

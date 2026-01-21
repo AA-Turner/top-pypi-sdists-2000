@@ -131,8 +131,7 @@ def to_default_dtype(arr: ArrayLike) -> np.ndarray:
   """Convert a value to an array with JAX's default dtype.
 
   This is generally used for type conversions of values returned by numpy functions,
-  to make their dtypes take into account the state of the ``jax_enable_x64`` and
-  ``jax_default_dtype_bits`` flags.
+  to make their dtypes take into account the state of the ``jax_enable_x64`` flag.
   """
   arr = np.asarray(arr)
   dtype_fn = _dtypes.default_types.get(arr.dtype.kind)
@@ -143,8 +142,7 @@ def with_jax_dtype_defaults(func: Callable[..., Any], use_defaults: bool = True)
 
   This is generally used to wrap numpy functions within tests, in order to make
   their default output dtypes match those of corresponding JAX functions, taking
-  into account the state of the ``jax_enable_x64`` and ``jax_default_dtype_bits``
-  flags.
+  into account the state of the ``jax_enable_x64`` flag.
 
   Args:
     use_defaults : whether to convert any given output to the default dtype. May be
@@ -264,13 +262,6 @@ def event_listener(name, *args):
   elif name == "batched_device_put_end":
     thread_local_state.nested_device_put_count -= 1
 
-  elif name == "pjit._infer_params_impl":
-    # For infer_params, we collect per-function data, but only while a context
-    # manager is active.
-    infer_counts = thread_local_state.infer_params_fun_counts
-    if infer_counts is not None:
-      (fun,) = args
-      infer_counts[fun] += 1
   elif name == "lower_jaxpr_to_fun":
     # For infer_params, we collect per-function data, but only while a context
     # manager is active.
@@ -298,7 +289,7 @@ def count_events(event):
 count_device_put = count_events("batched_device_put")
 count_device_put_fast_path_hit = count_events("batched_copy_array")
 count_pjit_cpp_cache_miss = count_events("jit_cpp_cache_miss")
-count_jit_tracing_cache_miss = count_events("create_pjit_jaxpr")
+count_jit_tracing_cache_miss = count_events("trace_to_jaxpr")
 count_aot_jit_cpp_cache_miss = count_events("stages_compiled_call")
 count_jit_and_pmap_lowerings = count_events("lower_jaxpr_to_module")
 count_jit_compilation_cache_miss = count_events("pxla_cached_compilation")
@@ -331,8 +322,12 @@ def count_subjaxpr_to_hlo_conversion(fun_name):
   assert thread_local_state.lower_jaxpr_to_fun_counts is None
   counts = collections.Counter()
   thread_local_state.lower_jaxpr_to_fun_counts = counts
+  def get():
+    key, *others = {k for k in counts if fun_name in k}  # type: ignore
+    if others: raise Exception(f"ambiguous name: {fun_name}")
+    return counts[key]
   try:
-    yield lambda: counts[fun_name]
+    yield get
   finally:
     thread_local_state.lower_jaxpr_to_fun_counts = None
 
@@ -426,6 +421,15 @@ def is_tsan():
 
 def is_sanitized():
   return _jaxlib._jax.is_sanitized()
+
+def is_gil_disabled() -> bool:
+  return not sys._is_gil_enabled() if hasattr(sys, "_is_gil_enabled") else False
+
+def is_test_rbe():
+  """Check for a variable set by the RBE toolchain under testing."""
+  return (
+      os.getenv("IS_JAX_RBE_TESTING", "").lower() in {"true", "1", "yes", "y"}
+      )
 
 # Returns True if it is not cloud TPU. If it is cloud TPU, returns True if it is
 # built at least `date``.

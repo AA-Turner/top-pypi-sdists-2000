@@ -226,6 +226,10 @@ class CreateAutonomousContainerDatabaseBase(object):
             The value to assign to the key_store_id property of this CreateAutonomousContainerDatabaseBase.
         :type key_store_id: str
 
+        :param encryption_key_location_details:
+            The value to assign to the encryption_key_location_details property of this CreateAutonomousContainerDatabaseBase.
+        :type encryption_key_location_details: oci.database.models.EncryptionKeyLocationDetails
+
         :param db_split_threshold:
             The value to assign to the db_split_threshold property of this CreateAutonomousContainerDatabaseBase.
         :type db_split_threshold: int
@@ -281,6 +285,7 @@ class CreateAutonomousContainerDatabaseBase(object):
             'kms_key_version_id': 'str',
             'vault_id': 'str',
             'key_store_id': 'str',
+            'encryption_key_location_details': 'EncryptionKeyLocationDetails',
             'db_split_threshold': 'int',
             'vm_failover_reservation': 'int',
             'distribution_affinity': 'str',
@@ -322,6 +327,7 @@ class CreateAutonomousContainerDatabaseBase(object):
             'kms_key_version_id': 'kmsKeyVersionId',
             'vault_id': 'vaultId',
             'key_store_id': 'keyStoreId',
+            'encryption_key_location_details': 'encryptionKeyLocationDetails',
             'db_split_threshold': 'dbSplitThreshold',
             'vm_failover_reservation': 'vmFailoverReservation',
             'distribution_affinity': 'distributionAffinity',
@@ -362,6 +368,7 @@ class CreateAutonomousContainerDatabaseBase(object):
         self._kms_key_version_id = None
         self._vault_id = None
         self._key_store_id = None
+        self._encryption_key_location_details = None
         self._db_split_threshold = None
         self._vm_failover_reservation = None
         self._distribution_affinity = None
@@ -1307,6 +1314,26 @@ class CreateAutonomousContainerDatabaseBase(object):
         :type: str
         """
         self._key_store_id = key_store_id
+
+    @property
+    def encryption_key_location_details(self):
+        """
+        Gets the encryption_key_location_details of this CreateAutonomousContainerDatabaseBase.
+
+        :return: The encryption_key_location_details of this CreateAutonomousContainerDatabaseBase.
+        :rtype: oci.database.models.EncryptionKeyLocationDetails
+        """
+        return self._encryption_key_location_details
+
+    @encryption_key_location_details.setter
+    def encryption_key_location_details(self, encryption_key_location_details):
+        """
+        Sets the encryption_key_location_details of this CreateAutonomousContainerDatabaseBase.
+
+        :param encryption_key_location_details: The encryption_key_location_details of this CreateAutonomousContainerDatabaseBase.
+        :type: oci.database.models.EncryptionKeyLocationDetails
+        """
+        self._encryption_key_location_details = encryption_key_location_details
 
     @property
     def db_split_threshold(self):

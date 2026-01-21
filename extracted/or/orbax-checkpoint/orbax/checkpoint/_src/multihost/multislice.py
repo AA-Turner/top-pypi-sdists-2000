@@ -136,12 +136,6 @@ def in_replica(
   )
 
 
-@functools.partial(jax.jit, static_argnums=(0, 1, 2))
-def fake_zero_data(sharding, shape, dtype=jnp.float32) -> jax.Array:
-  x = jnp.zeros(shape, dtype=dtype)
-  return jax.lax.with_sharding_constraint(x, sharding)
-
-
 def get_device_memory() -> int:
   """Returns HBM capacity of the device on which the code is running(in bytes)."""
   device = jax.devices()[0]
@@ -153,6 +147,7 @@ def get_device_memory() -> int:
       'TPU v5 lite': int(16e9),  # one core per chip with 16 GB HBM
       'TPU v5': int(96e9),  # one megacore per chip with 96 GB HBM
       'TPU v6 lite': int(32e9),  # one core per chip with 32 GB HBM
+      'TPU 7x': int(96e9),  # two cores per chip each with 96 GB HBM
       'NVIDIA H100 80GB HBM3': int(80e9),
       'NVIDIA H200': int(144e9),
       'NVIDIA B200': int(183e9),
@@ -259,14 +254,9 @@ def _globalize_single_replica_arrays(
 
   source_device_map = {}
 
-  @jax.jit
-  def _expand_dims(x: jax.Array):
-    return jnp.expand_dims(x, axis=0)
-
-  inp = _expand_dims(inp)
   if is_source:
     for s in inp.addressable_shards:
-      source_device_map[s.device] = s.data
+      source_device_map[s.device] = jnp.expand_dims(s.data, axis=0)
 
   device_buffers = []
   for d, index in global_sharding.addressable_devices_indices_map(
@@ -275,10 +265,11 @@ def _globalize_single_replica_arrays(
     if d in source_device_map:
       device_buffers.append(source_device_map[d])
     else:
-      zero_data = np.zeros(
-          _get_slice_shape(index, global_shape), dtype=inp.dtype
-      )
-      device_buffers.append(jax.device_put(zero_data, d))
+      # Use jax.numpy.zeros to allocate directly on device
+      # to avoid Host RAM spike.
+      slice_shape = _get_slice_shape(index, global_shape)
+      zero_data = jnp.zeros(slice_shape, dtype=inp.dtype, device=d)
+      device_buffers.append(zero_data)
 
   logging.vlog(
       1,

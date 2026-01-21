@@ -58,7 +58,6 @@ from jax._src.layout import Format, AutoLayout
 from jax._src.memory import Space as MemorySpace
 from jax._src.lib import _jax
 from jax._src.lib import jax_jit
-from jax._src.lib import jaxlib_extension_version
 from jax._src.lib import xla_client
 from jax._src import traceback_util
 from jax._src.typing import Array, ArrayLike, DimSize, Shape
@@ -895,7 +894,7 @@ def _aval_property(name):
   return property(lambda self: getattr(self.aval, name))
 
 
-if TYPE_CHECKING or jaxlib_extension_version < 388:
+if TYPE_CHECKING:
   # We want Python type checkers to accept `some_tracer: jax.Array`, even though
   # tracers can represent non-arrays. That is, ideally we would only accept that
   # annotation when the Tracer instance has a ShapedArray aval, but we can't
@@ -909,10 +908,7 @@ else:
 
 class Tracer(TracerBase, metaclass=TracerMeta):
   __array_priority__ = 1000
-  if jaxlib_extension_version >= 388:
-    __slots__ = ['__weakref__', '_trace', '_line_info']
-  else:
-    __slots__ = ['_trace', '_line_info']
+  __slots__ = ['__weakref__', '_trace', '_line_info']
   __hash__ = None  # type: ignore
 
   _trace: Trace
@@ -1181,8 +1177,7 @@ class Tracer(TracerBase, metaclass=TracerMeta):
       f"The unsafe_buffer_pointer() method was called on {self._error_repr()}."
       f"{self._origin_msg()}")
 
-if jaxlib_extension_version >= 388:
-  _jax.set_tracer_class(Tracer)
+_jax.set_tracer_class(Tracer)
 
 # these can be used to set up forwarding of properties and instance methods from
 # Tracer instances to the underlying avals
@@ -2194,6 +2189,7 @@ class ShapedArray(AbstractValue):
     self.shape = canonicalize_shape(shape)
     self.dtype = _dtype_object(dtype)
     self.weak_type = weak_type
+    # The ShapedArray.sharding.memory_kind is always None; use memory_space.
     self.sharding = get_sharding(sharding, self.shape)
     # short for varying_manual_axes. See docs at
     # https://docs.jax.dev/en/latest/notebooks/shard_map.html#tracking-how-values-vary-over-manual-mesh-axes-and-check-vma-true
@@ -2365,13 +2361,16 @@ def pvary(x, axis_name):
   axes = (axis_name,) if not isinstance(axis_name, tuple) else axis_name
   if not axis_name:
     return x
-  # TODO(yashkatariya): Maybe move `order_wrt_mesh` to pvary_transpose_rule?
-  # Across hosts we should have the same order of axes during lowering time and
-  # pvary_p transposes to psum_invariant_p.
   cur_mesh = mesh_lib.get_abstract_mesh()
   new_axes = axes if cur_mesh.empty else order_wrt_mesh(cur_mesh, axes)
   assert set(new_axes) == set(axes)
   del axes
+  # TODO(yashkatariya): Remove this handling and remove_size_one_mesh_axis_from_type
+  # generally from JAX.
+  if config.remove_size_one_mesh_axis_from_type.value and not cur_mesh.empty:
+    new_axes = tuple(i for i in new_axes if cur_mesh.shape[i] != 1)
+    if not new_axes:
+      return x
   return tree_map(lambda leaf: pvary_p.bind(leaf, axes=new_axes), x)
 
 pvary_p = Primitive('pvary')

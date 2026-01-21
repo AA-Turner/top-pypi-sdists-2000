@@ -99,6 +99,10 @@ class AutonomousDwDatabase(object):
     #: This constant has a value of "STANDBY"
     LIFECYCLE_STATE_STANDBY = "STANDBY"
 
+    #: A constant which can be used with the lifecycle_state property of a AutonomousDwDatabase.
+    #: This constant has a value of "TRANSPORTING"
+    LIFECYCLE_STATE_TRANSPORTING = "TRANSPORTING"
+
     #: A constant which can be used with the compute_model property of a AutonomousDwDatabase.
     #: This constant has a value of "ECPU"
     COMPUTE_MODEL_ECPU = "ECPU"
@@ -334,7 +338,7 @@ class AutonomousDwDatabase(object):
 
         :param lifecycle_state:
             The value to assign to the lifecycle_state property of this AutonomousDwDatabase.
-            Allowed values for this property are: "PROVISIONING", "AVAILABLE", "STOPPING", "STOPPED", "STARTING", "TERMINATING", "TERMINATED", "UNAVAILABLE", "RESTORE_IN_PROGRESS", "RESTORE_FAILED", "BACKUP_IN_PROGRESS", "SCALE_IN_PROGRESS", "AVAILABLE_NEEDS_ATTENTION", "UPDATING", "MAINTENANCE_IN_PROGRESS", "RESTARTING", "RECREATING", "ROLE_CHANGE_IN_PROGRESS", "UPGRADING", "INACCESSIBLE", "STANDBY"
+            Allowed values for this property are: "PROVISIONING", "AVAILABLE", "STOPPING", "STOPPED", "STARTING", "TERMINATING", "TERMINATED", "UNAVAILABLE", "RESTORE_IN_PROGRESS", "RESTORE_FAILED", "BACKUP_IN_PROGRESS", "SCALE_IN_PROGRESS", "AVAILABLE_NEEDS_ATTENTION", "UPDATING", "MAINTENANCE_IN_PROGRESS", "RESTARTING", "RECREATING", "ROLE_CHANGE_IN_PROGRESS", "UPGRADING", "INACCESSIBLE", "STANDBY", "TRANSPORTING"
         :type lifecycle_state: str
 
         :param lifecycle_details:
@@ -360,6 +364,10 @@ class AutonomousDwDatabase(object):
         :param kms_key_version_id:
             The value to assign to the kms_key_version_id property of this AutonomousDwDatabase.
         :type kms_key_version_id: str
+
+        :param encryption_key_location_details:
+            The value to assign to the encryption_key_location_details property of this AutonomousDwDatabase.
+        :type encryption_key_location_details: oci.database.models.EncryptionKeyLocationDetails
 
         :param db_name:
             The value to assign to the db_name property of this AutonomousDwDatabase.
@@ -899,6 +907,7 @@ class AutonomousDwDatabase(object):
             'kms_key_lifecycle_details': 'str',
             'encryption_key': 'AutonomousDatabaseEncryptionKeyDetails',
             'kms_key_version_id': 'str',
+            'encryption_key_location_details': 'EncryptionKeyLocationDetails',
             'db_name': 'str',
             'character_set': 'str',
             'ncharacter_set': 'str',
@@ -1038,6 +1047,7 @@ class AutonomousDwDatabase(object):
             'kms_key_lifecycle_details': 'kmsKeyLifecycleDetails',
             'encryption_key': 'encryptionKey',
             'kms_key_version_id': 'kmsKeyVersionId',
+            'encryption_key_location_details': 'encryptionKeyLocationDetails',
             'db_name': 'dbName',
             'character_set': 'characterSet',
             'ncharacter_set': 'ncharacterSet',
@@ -1176,6 +1186,7 @@ class AutonomousDwDatabase(object):
         self._kms_key_lifecycle_details = None
         self._encryption_key = None
         self._kms_key_version_id = None
+        self._encryption_key_location_details = None
         self._db_name = None
         self._character_set = None
         self._ncharacter_set = None
@@ -1394,7 +1405,7 @@ class AutonomousDwDatabase(object):
         **[Required]** Gets the lifecycle_state of this AutonomousDwDatabase.
         The current state of the Autonomous AI Database.
 
-        Allowed values for this property are: "PROVISIONING", "AVAILABLE", "STOPPING", "STOPPED", "STARTING", "TERMINATING", "TERMINATED", "UNAVAILABLE", "RESTORE_IN_PROGRESS", "RESTORE_FAILED", "BACKUP_IN_PROGRESS", "SCALE_IN_PROGRESS", "AVAILABLE_NEEDS_ATTENTION", "UPDATING", "MAINTENANCE_IN_PROGRESS", "RESTARTING", "RECREATING", "ROLE_CHANGE_IN_PROGRESS", "UPGRADING", "INACCESSIBLE", "STANDBY"
+        Allowed values for this property are: "PROVISIONING", "AVAILABLE", "STOPPING", "STOPPED", "STARTING", "TERMINATING", "TERMINATED", "UNAVAILABLE", "RESTORE_IN_PROGRESS", "RESTORE_FAILED", "BACKUP_IN_PROGRESS", "SCALE_IN_PROGRESS", "AVAILABLE_NEEDS_ATTENTION", "UPDATING", "MAINTENANCE_IN_PROGRESS", "RESTARTING", "RECREATING", "ROLE_CHANGE_IN_PROGRESS", "UPGRADING", "INACCESSIBLE", "STANDBY", "TRANSPORTING"
 
 
         :return: The lifecycle_state of this AutonomousDwDatabase.
@@ -1412,7 +1423,7 @@ class AutonomousDwDatabase(object):
         :param lifecycle_state: The lifecycle_state of this AutonomousDwDatabase.
         :type: str
         """
-        allowed_values = ["PROVISIONING", "AVAILABLE", "STOPPING", "STOPPED", "STARTING", "TERMINATING", "TERMINATED", "UNAVAILABLE", "RESTORE_IN_PROGRESS", "RESTORE_FAILED", "BACKUP_IN_PROGRESS", "SCALE_IN_PROGRESS", "AVAILABLE_NEEDS_ATTENTION", "UPDATING", "MAINTENANCE_IN_PROGRESS", "RESTARTING", "RECREATING", "ROLE_CHANGE_IN_PROGRESS", "UPGRADING", "INACCESSIBLE", "STANDBY"]
+        allowed_values = ["PROVISIONING", "AVAILABLE", "STOPPING", "STOPPED", "STARTING", "TERMINATING", "TERMINATED", "UNAVAILABLE", "RESTORE_IN_PROGRESS", "RESTORE_FAILED", "BACKUP_IN_PROGRESS", "SCALE_IN_PROGRESS", "AVAILABLE_NEEDS_ATTENTION", "UPDATING", "MAINTENANCE_IN_PROGRESS", "RESTARTING", "RECREATING", "ROLE_CHANGE_IN_PROGRESS", "UPGRADING", "INACCESSIBLE", "STANDBY", "TRANSPORTING"]
         if not value_allowed_none_or_none_sentinel(lifecycle_state, allowed_values):
             raise ValueError(
                 f"Invalid value for `lifecycle_state`, must be None or one of {allowed_values}"
@@ -1564,6 +1575,26 @@ class AutonomousDwDatabase(object):
         :type: str
         """
         self._kms_key_version_id = kms_key_version_id
+
+    @property
+    def encryption_key_location_details(self):
+        """
+        Gets the encryption_key_location_details of this AutonomousDwDatabase.
+
+        :return: The encryption_key_location_details of this AutonomousDwDatabase.
+        :rtype: oci.database.models.EncryptionKeyLocationDetails
+        """
+        return self._encryption_key_location_details
+
+    @encryption_key_location_details.setter
+    def encryption_key_location_details(self, encryption_key_location_details):
+        """
+        Sets the encryption_key_location_details of this AutonomousDwDatabase.
+
+        :param encryption_key_location_details: The encryption_key_location_details of this AutonomousDwDatabase.
+        :type: oci.database.models.EncryptionKeyLocationDetails
+        """
+        self._encryption_key_location_details = encryption_key_location_details
 
     @property
     def db_name(self):
@@ -3021,6 +3052,9 @@ class AutonomousDwDatabase(object):
         """
         Gets the db_version of this AutonomousDwDatabase.
         A valid Oracle AI Database version for Autonomous AI Database.
+        When you specify 23ai for dbversion, the system will provision a 23ai database, but the UI will display it as 26ai.
+        When you specify 26ai for dbversion, the system will provision and display a 26ai database as expected.
+        For new databases, it is recommended to use either 19c or 26ai.
 
 
         :return: The db_version of this AutonomousDwDatabase.
@@ -3033,6 +3067,9 @@ class AutonomousDwDatabase(object):
         """
         Sets the db_version of this AutonomousDwDatabase.
         A valid Oracle AI Database version for Autonomous AI Database.
+        When you specify 23ai for dbversion, the system will provision a 23ai database, but the UI will display it as 26ai.
+        When you specify 26ai for dbversion, the system will provision and display a 26ai database as expected.
+        For new databases, it is recommended to use either 19c or 26ai.
 
 
         :param db_version: The db_version of this AutonomousDwDatabase.
@@ -4519,7 +4556,7 @@ class AutonomousDwDatabase(object):
     def time_maintenance_pause_until(self):
         """
         Gets the time_maintenance_pause_until of this AutonomousDwDatabase.
-        The date until which maintenance of Autonomous AI Database is temporarily paused.
+        The date until which Autonomous AI Database maintenance is temporarily paused.
 
 
         :return: The time_maintenance_pause_until of this AutonomousDwDatabase.
@@ -4531,7 +4568,7 @@ class AutonomousDwDatabase(object):
     def time_maintenance_pause_until(self, time_maintenance_pause_until):
         """
         Sets the time_maintenance_pause_until of this AutonomousDwDatabase.
-        The date until which maintenance of Autonomous AI Database is temporarily paused.
+        The date until which Autonomous AI Database maintenance is temporarily paused.
 
 
         :param time_maintenance_pause_until: The time_maintenance_pause_until of this AutonomousDwDatabase.

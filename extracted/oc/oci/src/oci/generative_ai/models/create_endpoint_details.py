@@ -48,6 +48,14 @@ class CreateEndpointDetails(object):
             The value to assign to the content_moderation_config property of this CreateEndpointDetails.
         :type content_moderation_config: oci.generative_ai.models.ContentModerationConfig
 
+        :param prompt_injection_config:
+            The value to assign to the prompt_injection_config property of this CreateEndpointDetails.
+        :type prompt_injection_config: oci.generative_ai.models.PromptInjectionConfig
+
+        :param pii_detection_config:
+            The value to assign to the pii_detection_config property of this CreateEndpointDetails.
+        :type pii_detection_config: oci.generative_ai.models.PiiDetectionConfig
+
         :param freeform_tags:
             The value to assign to the freeform_tags property of this CreateEndpointDetails.
         :type freeform_tags: dict(str, str)
@@ -65,6 +73,8 @@ class CreateEndpointDetails(object):
             'dedicated_ai_cluster_id': 'str',
             'generative_ai_private_endpoint_id': 'str',
             'content_moderation_config': 'ContentModerationConfig',
+            'prompt_injection_config': 'PromptInjectionConfig',
+            'pii_detection_config': 'PiiDetectionConfig',
             'freeform_tags': 'dict(str, str)',
             'defined_tags': 'dict(str, dict(str, object))'
         }
@@ -76,6 +86,8 @@ class CreateEndpointDetails(object):
             'dedicated_ai_cluster_id': 'dedicatedAiClusterId',
             'generative_ai_private_endpoint_id': 'generativeAiPrivateEndpointId',
             'content_moderation_config': 'contentModerationConfig',
+            'prompt_injection_config': 'promptInjectionConfig',
+            'pii_detection_config': 'piiDetectionConfig',
             'freeform_tags': 'freeformTags',
             'defined_tags': 'definedTags'
         }
@@ -86,6 +98,8 @@ class CreateEndpointDetails(object):
         self._dedicated_ai_cluster_id = None
         self._generative_ai_private_endpoint_id = None
         self._content_moderation_config = None
+        self._prompt_injection_config = None
+        self._pii_detection_config = None
         self._freeform_tags = None
         self._defined_tags = None
 
@@ -252,6 +266,46 @@ class CreateEndpointDetails(object):
         :type: oci.generative_ai.models.ContentModerationConfig
         """
         self._content_moderation_config = content_moderation_config
+
+    @property
+    def prompt_injection_config(self):
+        """
+        Gets the prompt_injection_config of this CreateEndpointDetails.
+
+        :return: The prompt_injection_config of this CreateEndpointDetails.
+        :rtype: oci.generative_ai.models.PromptInjectionConfig
+        """
+        return self._prompt_injection_config
+
+    @prompt_injection_config.setter
+    def prompt_injection_config(self, prompt_injection_config):
+        """
+        Sets the prompt_injection_config of this CreateEndpointDetails.
+
+        :param prompt_injection_config: The prompt_injection_config of this CreateEndpointDetails.
+        :type: oci.generative_ai.models.PromptInjectionConfig
+        """
+        self._prompt_injection_config = prompt_injection_config
+
+    @property
+    def pii_detection_config(self):
+        """
+        Gets the pii_detection_config of this CreateEndpointDetails.
+
+        :return: The pii_detection_config of this CreateEndpointDetails.
+        :rtype: oci.generative_ai.models.PiiDetectionConfig
+        """
+        return self._pii_detection_config
+
+    @pii_detection_config.setter
+    def pii_detection_config(self, pii_detection_config):
+        """
+        Sets the pii_detection_config of this CreateEndpointDetails.
+
+        :param pii_detection_config: The pii_detection_config of this CreateEndpointDetails.
+        :type: oci.generative_ai.models.PiiDetectionConfig
+        """
+        self._pii_detection_config = pii_detection_config
 
     @property
     def freeform_tags(self):

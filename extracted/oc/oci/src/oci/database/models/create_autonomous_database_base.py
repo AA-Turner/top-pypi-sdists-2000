@@ -340,6 +340,10 @@ class CreateAutonomousDatabaseBase(object):
             The value to assign to the secret_version_number property of this CreateAutonomousDatabaseBase.
         :type secret_version_number: int
 
+        :param transportable_tablespace:
+            The value to assign to the transportable_tablespace property of this CreateAutonomousDatabaseBase.
+        :type transportable_tablespace: oci.database.models.ImportTransportableTablespaceDetails
+
         """
         self.swagger_types = {
             'subscription_id': 'str',
@@ -396,7 +400,8 @@ class CreateAutonomousDatabaseBase(object):
             'db_tools_details': 'list[DatabaseTool]',
             'is_backup_retention_locked': 'bool',
             'secret_id': 'str',
-            'secret_version_number': 'int'
+            'secret_version_number': 'int',
+            'transportable_tablespace': 'ImportTransportableTablespaceDetails'
         }
         self.attribute_map = {
             'subscription_id': 'subscriptionId',
@@ -453,7 +458,8 @@ class CreateAutonomousDatabaseBase(object):
             'db_tools_details': 'dbToolsDetails',
             'is_backup_retention_locked': 'isBackupRetentionLocked',
             'secret_id': 'secretId',
-            'secret_version_number': 'secretVersionNumber'
+            'secret_version_number': 'secretVersionNumber',
+            'transportable_tablespace': 'transportableTablespace'
         }
         self._subscription_id = None
         self._compartment_id = None
@@ -510,6 +516,7 @@ class CreateAutonomousDatabaseBase(object):
         self._is_backup_retention_locked = None
         self._secret_id = None
         self._secret_version_number = None
+        self._transportable_tablespace = None
 
     @staticmethod
     def get_subtype(object_dictionary):
@@ -1804,6 +1811,9 @@ class CreateAutonomousDatabaseBase(object):
         """
         Gets the db_version of this CreateAutonomousDatabaseBase.
         A valid Oracle AI Database version for Autonomous AI Database.
+        When you specify 23ai for dbversion, the system will provision a 23ai database, but the UI will display it as 26ai.
+        When you specify 26ai for dbversion, the system will provision and display a 26ai database as expected.
+        For new databases, it is recommended to use either 19c or 26ai.
 
 
         :return: The db_version of this CreateAutonomousDatabaseBase.
@@ -1816,6 +1826,9 @@ class CreateAutonomousDatabaseBase(object):
         """
         Sets the db_version of this CreateAutonomousDatabaseBase.
         A valid Oracle AI Database version for Autonomous AI Database.
+        When you specify 23ai for dbversion, the system will provision a 23ai database, but the UI will display it as 26ai.
+        When you specify 26ai for dbversion, the system will provision and display a 26ai database as expected.
+        For new databases, it is recommended to use either 19c or 26ai.
 
 
         :param db_version: The db_version of this CreateAutonomousDatabaseBase.
@@ -2212,6 +2225,26 @@ class CreateAutonomousDatabaseBase(object):
         :type: int
         """
         self._secret_version_number = secret_version_number
+
+    @property
+    def transportable_tablespace(self):
+        """
+        Gets the transportable_tablespace of this CreateAutonomousDatabaseBase.
+
+        :return: The transportable_tablespace of this CreateAutonomousDatabaseBase.
+        :rtype: oci.database.models.ImportTransportableTablespaceDetails
+        """
+        return self._transportable_tablespace
+
+    @transportable_tablespace.setter
+    def transportable_tablespace(self, transportable_tablespace):
+        """
+        Sets the transportable_tablespace of this CreateAutonomousDatabaseBase.
+
+        :param transportable_tablespace: The transportable_tablespace of this CreateAutonomousDatabaseBase.
+        :type: oci.database.models.ImportTransportableTablespaceDetails
+        """
+        self._transportable_tablespace = transportable_tablespace
 
     def __repr__(self):
         return formatted_flat_dict(self)

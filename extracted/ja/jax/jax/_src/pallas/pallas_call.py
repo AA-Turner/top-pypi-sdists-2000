@@ -18,6 +18,7 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping, Sequence
 import contextlib
 import enum
+import math
 from functools import partial, reduce
 import types
 from typing import Any
@@ -37,6 +38,7 @@ from jax._src import state
 from jax._src.traceback_util import api_boundary
 from jax._src import tree_util
 from jax._src import typing as jax_typing
+from jax._src.mesh import get_abstract_mesh
 from jax._src.frozen_dict import FrozenDict
 from jax._src.interpreters import ad
 from jax._src.interpreters import batching
@@ -46,6 +48,7 @@ from jax._src.pallas import core as pallas_core
 from jax._src.pallas import hlo_interpreter
 from jax._src.pallas import primitives
 from jax._src.state import discharge as state_discharge
+from jax._src.shard_map import shard_map, P, _as_manual_mesh
 from jax._src.state import types as state_types
 from jax._src.util import (
     safe_map,
@@ -96,8 +99,12 @@ def _pallas_call_abstract_eval(
 ):
   if isinstance(interpret, mosaic_tpu_interpret.InterpretParams):
     # Report effects that will be introduced when running/lowering
-    # mosaic_tpu_interpret.mosaic_tpu_interpret.interpret_pallas_call .
+    # mosaic_tpu_interpret.interpret_pallas_call .
     effs = mosaic_tpu_interpret.get_interpret_effects()
+  elif isinstance(interpret, mosaic_gpu_interpret.InterpretParams):
+    # Report effects that will be introduced when running/lowering
+    # mosaic_gpu_interpret.interpret_pallas_call .
+    effs = mosaic_gpu_interpret.get_interpret_effects()
   elif getattr(params.get('compiler_params', None), 'has_side_effects', False):
     effs = jax_core.GenericEffect(pallas_call_p)
   else:
@@ -115,13 +122,26 @@ def _pallas_call_abstract_eval(
     raise ValueError(f"input pinned buffers without input_output_aliases:"
                      f"{missing}")
   outin_aliases = {out_idx: in_idx for in_idx, out_idx in inout_aliases.items()}
+  # Make sure we don't return ShapedArrayWithMemorySpace to the outside world.
   out_avals = [jax_core.ShapedArray(a.shape, a.dtype, a.weak_type,
                                     sharding=a.sharding)
                if isinstance(a, pallas_core.ShapedArrayWithMemorySpace) else
                avals[outin_aliases[out_idx]] if out_idx in outin_aliases
                else a for out_idx, a in enumerate(out_avals)]
+  # TODO(mattjj,yashkatariya): if we hide vmapped away mesh axes, use this:
+  # if not (all(a.sharding.mesh.are_all_axes_manual for a in avals) and
+  #         all(a.sharding.mesh.are_all_axes_manual for a in out_avals) and
+  #         get_abstract_mesh().are_all_axes_manual):
+  #   raise ValueError("pallas_call requires all mesh axes to be Manual, "
+  #                    f"got {get_abstract_mesh().axis_types}")
 
-  # Make sure we don't return ShapedArrayWithMemorySpace to the outside world.
+  # NOTE(mattjj,yashkatariya): this doesn't catch auto-mode non-manual axes
+  if not (all(p is None for a in avals if isinstance(a, jax_core.ShapedArray)
+              for p in a.sharding.spec) and
+          all(p is None for a in out_avals if isinstance(a, jax_core.ShapedArray)
+              for p in a.sharding.spec)):
+    raise ValueError("pallas_call requires all mesh axes to be Manual, "
+                     f"got {get_abstract_mesh().axis_types}")
   return out_avals, effs
 
 
@@ -516,6 +536,7 @@ def _batch_with_explicit_loop(
 
 
 def _pallas_call_batching_rule(
+    axis_data,
     args,
     dims,
     *,
@@ -537,34 +558,39 @@ def _pallas_call_batching_rule(
         "pallas_call with a mesh does not support batching"
     )
 
-  def _maybe_squeeze_out_bdim(
-      x: jax_typing.Array, bdim: int | batching.NotMapped
-  ) -> jax_typing.Array:
-    if bdim is batching.not_mapped:
-      return x
-    return jnp.squeeze(x, axis=bdim)
+  def _maybe_squeeze_out_bdim(x: jax_typing.Array, bdim: int | batching.NotMapped
+                              ) -> jax_typing.Array:
+    return x if bdim is batching.not_mapped else jnp.squeeze(x, axis=bdim)
 
-  axis_size, = {x.shape[d] for i, (x, d) in enumerate(zip(args, dims))
-                if d is not batching.not_mapped}
+  # this is the _global_ axis size if axis_data.explicit_mesh_axis is not None
+  # we want to convert it to the local axis size
+  axis_size = axis_data.size
+  ema = axis_data.explicit_mesh_axis
+  abs_mesh = get_abstract_mesh()
+  if ema:
+    mesh_size = math.prod(abs_mesh.shape[i] for i in ema)
+    axis_size, ragged = divmod(axis_size, mesh_size)
+    assert not ragged
+
   if axis_size == 1:
     # Why are we even vmapping?
-    args = map(_maybe_squeeze_out_bdim, args, dims)
-    out = pallas_call_p.bind(
-        *args,
-        jaxpr=jaxpr,
-        grid_mapping=grid_mapping,
-        mesh=mesh,
-        input_output_aliases=input_output_aliases,
-        debug=debug,
-        interpret=interpret,
-        compiler_params=compiler_params,
-        cost_estimate=cost_estimate,
-        out_avals=out_avals,
-        backend=backend,
-        metadata=metadata,
-        name=name,
-    )
-    return [jnp.expand_dims(x, 0) for x in out], (0,) * len(out)
+    manual_out_avals = [
+        o.update(sharding=o.sharding.update(mesh=_as_manual_mesh(o.sharding.mesh, ema)))
+        for o in out_avals] if ema else out_avals
+    def temp_f(*args):
+      args = map(_maybe_squeeze_out_bdim, args, dims)
+      out = pallas_call_p.bind(
+          *args, jaxpr=jaxpr, grid_mapping=grid_mapping, mesh=mesh,
+          input_output_aliases=input_output_aliases, debug=debug,
+          interpret=interpret, compiler_params=compiler_params,
+          cost_estimate=cost_estimate, out_avals=tuple(manual_out_avals),
+          backend=backend, metadata=metadata, name=name)
+      return [jnp.expand_dims(x, 0) for x in out]
+    if ema:
+      temp_f = remove_explicit(ema)(shard_map(
+          temp_f, out_specs=P(ema), axis_names=set(ema)))
+    out = temp_f(*args)
+    return out, (0,) * len(out)
 
   # The first num_dynamic_grid_bounds arguments are size-1 arrays that store
   # the size of the dynamic bounds.
@@ -584,6 +610,8 @@ def _pallas_call_batching_rule(
   elif any(bdim is not batching.not_mapped for bdim in dynamic_grid_dims):
     # TODO(amagni, sharadmv): Explore possibility of batching dynamic grid
     # bounds.
+    if ema:
+      raise NotImplementedError()
     return _batch_with_explicit_loop(
         args=dynamic_grid_args + args,
         dims=dynamic_grid_dims + dims,
@@ -621,6 +649,8 @@ def _pallas_call_batching_rule(
     else:
       # TODO(amagni,sharadmv,apaszke): enable efficient batching over
       # prefetched scalar args.
+      if ema:
+        raise NotImplementedError()
       return _batch_with_explicit_loop(
           args=scalar_args + args,
           dims=scalar_bdims + bdims,
@@ -705,31 +735,43 @@ def _pallas_call_batching_rule(
 
   batched_out_avals = []
   for aval in out_avals:
-    sharding = aval.sharding.update(spec=tuple_insert(aval.sharding.spec, 0, None))
+    manual_mesh = (_as_manual_mesh(aval.sharding.mesh, ema) if ema else
+                   aval.sharding.mesh)
+    sharding = aval.sharding.update(
+        mesh=manual_mesh, spec=tuple_insert(aval.sharding.spec, 0, None))
     shape = tuple_insert(aval.shape, 0, axis_size)
     batched_out_avals.append(aval.update(shape=shape, sharding=sharding))
   batched_out_avals = tuple(batched_out_avals)
 
-  out = pallas_call_p.bind(
-      *dynamic_grid_args,
-      *args,
-      jaxpr=jaxpr,
-      grid_mapping=batched_grid_mapping,
-      mesh=mesh,
-      input_output_aliases=input_output_aliases,
-      debug=debug,
-      interpret=interpret,
-      compiler_params=compiler_params,
-      cost_estimate=batched_cost_estimate,
-      out_avals=batched_out_avals,
-      backend=backend,
-      metadata=metadata,
-      name=name,
-  )
+  bind = partial(
+      pallas_call_p.bind, jaxpr=jaxpr, grid_mapping=batched_grid_mapping,
+      mesh=mesh, input_output_aliases=input_output_aliases, debug=debug,
+      interpret=interpret, compiler_params=compiler_params,
+      cost_estimate=batched_cost_estimate, out_avals=batched_out_avals,
+      backend=backend, metadata=metadata, name=name)
+
+  if ema:
+    # TODO all batching rules should probably be in outer mesh ctx
+    bind = remove_explicit(ema)(shard_map(
+        bind, out_specs=P(ema), axis_names=set(ema)))
+
+  out = bind(*dynamic_grid_args, *args)
   return out, (0,) * len(out)
 
+batching.fancy_primitive_batchers[pallas_call_p] = _pallas_call_batching_rule
+batching.skippable_batchers[pallas_call_p] = lambda _: ()
 
-batching.primitive_batchers[pallas_call_p] = _pallas_call_batching_rule
+
+@contextlib.contextmanager
+def remove_explicit(ema):
+  prev = jax_core.trace_ctx.axis_env
+  # assert set(prev.explicit_mesh_axis_names) == set(ema)
+  new = jax_core.AxisEnv(prev.axis_sizes, prev.spmd_axis_names, set())
+  try:
+    jax_core.trace_ctx.set_axis_env(new)
+    yield
+  finally:
+    jax_core.trace_ctx.set_axis_env(prev)
 
 
 def checkify_pallas_kernel_body_jaxpr(
@@ -1033,7 +1075,7 @@ def _trace_kernel_to_jaxpr(
 
 _PALLAS_USE_MOSAIC_GPU = config.bool_state(
     "jax_pallas_use_mosaic_gpu",
-    default=config.bool_env("JAX_PALLAS_USE_MOSAIC_GPU", False),
+    default=config.bool_env("JAX_PALLAS_USE_MOSAIC_GPU", True),
     help=(
         "If True, lower Pallas kernels to the experimental Mosaic GPU"
         " dialect, instead of Triton IR."
@@ -1062,6 +1104,10 @@ def _pallas_call_lowering(
   if interpret:
     if isinstance(interpret, mosaic_tpu_interpret.InterpretParams):
       impl = partial(mosaic_tpu_interpret.interpret_pallas_call,
+                     interpret_params=interpret,
+                     **params)
+    elif isinstance(interpret, mosaic_gpu_interpret.InterpretParams):
+      impl = partial(mosaic_gpu_interpret.interpret_pallas_call,
                      interpret_params=interpret,
                      **params)
     else:
@@ -1616,5 +1662,12 @@ try:
   from jax._src.pallas.mosaic.interpret import interpret_pallas_call as mosaic_tpu_interpret
 except ImportError:
   mosaic_tpu_interpret = types.SimpleNamespace(  # type: ignore
-      InterpretParams=types.new_class('_NoInstances', (enum.Enum,)),
+      InterpretParams=types.new_class("_NoInstances", (enum.Enum,)),
+  )
+
+try:
+  from jax._src.pallas.mosaic_gpu.interpret import interpret_pallas_call as mosaic_gpu_interpret
+except ImportError:
+  mosaic_gpu_interpret = types.SimpleNamespace(  # type: ignore
+      InterpretParams=types.new_class("_NoInstances", (enum.Enum,)),
   )

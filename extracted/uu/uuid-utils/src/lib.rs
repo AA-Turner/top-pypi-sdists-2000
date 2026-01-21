@@ -1,5 +1,5 @@
 use ahash::AHasher;
-use mac_address::get_mac_address;
+use mac_address::MacAddressIterator;
 use pyo3::{
     IntoPyObjectExt,
     exceptions::{PyOSError, PyTypeError, PyValueError},
@@ -87,7 +87,7 @@ impl UUID {
     }
 
     fn __repr__(&self) -> String {
-        format!("UUID('{}')", self.__str__())
+        format!("UUID('{}')", self.uuid.hyphenated())
     }
 
     fn __richcmp__(&self, other: UUID, op: CompareOp) -> PyResult<bool> {
@@ -135,8 +135,8 @@ impl UUID {
     }
 
     #[getter]
-    fn hex(&self) -> PyResult<String> {
-        Ok(self.uuid.simple().to_string())
+    fn hex(&self) -> String {
+        self.uuid.simple().to_string()
     }
 
     #[getter]
@@ -146,12 +146,7 @@ impl UUID {
 
     #[getter]
     fn bytes_le<'py>(&self, py: Python<'py>) -> Bound<'py, PyBytes> {
-        let b = self.uuid.as_bytes();
-        let bytes: [u8; 16] = [
-            b[3], b[2], b[1], b[0], b[5], b[4], b[7], b[6], b[8], b[9], b[10], b[11], b[12], b[13],
-            b[14], b[15],
-        ];
-        PyBytes::new(py, &bytes)
+        PyBytes::new(py, &self.uuid.to_bytes_le())
     }
 
     #[getter]
@@ -160,8 +155,8 @@ impl UUID {
     }
 
     #[getter]
-    fn urn(&self) -> PyResult<String> {
-        Ok(self.uuid.urn().to_string())
+    fn urn(&self) -> String {
+        self.uuid.urn().to_string()
     }
 
     #[getter]
@@ -237,15 +232,16 @@ impl UUID {
     }
 
     #[getter]
-    fn fields(&self) -> PyResult<(u32, u16, u16, u8, u8, u64)> {
-        Ok((
-            self.time_low(),
-            self.time_mid(),
-            self.time_hi_version(),
-            self.clock_seq_hi_variant(),
-            self.clock_seq_low(),
-            self.node(),
-        ))
+    fn fields(&self) -> (u32, u16, u16, u8, u8, u64) {
+        let int = self.uuid.as_u128();
+        (
+            int.wrapping_shr(96) as u32,              // time_low
+            ((int.wrapping_shr(80)) & 0xffff) as u16, // time_mid
+            ((int.wrapping_shr(64)) & 0xffff) as u16, // time_hi_version
+            ((int.wrapping_shr(56)) & 0xff) as u8,    // clock_seq_hi_variant
+            ((int.wrapping_shr(48)) & 0xff) as u8,    // clock_seq_low
+            (int & 0xffffffffffff) as u64,            // node
+        )
     }
 
     #[staticmethod]
@@ -407,21 +403,38 @@ fn _getnode() -> u64 {
         return cached;
     }
 
-    let bytes: [u8; 6] = match get_mac_address() {
-        Ok(Some(mac)) => mac.bytes(),
-        _ => {
-            let mut bytes = rand::random::<[u8; 6]>();
-            bytes[0] |= 0x01;
-            bytes
-        }
-    };
+    fn _is_universal(mac: u64) -> bool {
+        (mac & (1 << 41)) == 0
+    }
 
-    let node = ((bytes[0] as u64) << 40)
-        | ((bytes[1] as u64) << 32)
-        | ((bytes[2] as u64) << 24)
-        | ((bytes[3] as u64) << 16)
-        | ((bytes[4] as u64) << 8)
-        | (bytes[5] as u64);
+    let mut first_local_mac: Option<u64> = None;
+    if let Ok(iter) = MacAddressIterator::new() {
+        for mac in iter {
+            let bytes = mac.bytes();
+            let node = u64::from_be_bytes([
+                0, 0, bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5],
+            ]);
+
+            if node == 0 {
+                continue;
+            }
+
+            if _is_universal(node) {
+                NODE.store(node, Ordering::Relaxed);
+                return node;
+            } else if first_local_mac.is_none() {
+                first_local_mac = Some(node);
+            }
+        }
+    }
+
+    let node = first_local_mac.unwrap_or_else(|| {
+        let mut bytes = rand::random::<[u8; 6]>();
+        bytes[0] |= 0x01;
+        u64::from_be_bytes([
+            0, 0, bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5],
+        ])
+    });
 
     NODE.store(node, Ordering::Relaxed);
     node
@@ -436,7 +449,7 @@ fn getnode() -> PyResult<u64> {
 }
 
 #[pyfunction]
-fn reseed_rng() -> PyResult<()> {
+fn reseed() -> PyResult<()> {
     rand::rng()
         .reseed()
         .map_err(|err| PyOSError::new_err(err.to_string()))
@@ -466,7 +479,7 @@ fn _uuid_utils(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(uuid7, m)?)?;
     m.add_function(wrap_pyfunction!(uuid8, m)?)?;
     m.add_function(wrap_pyfunction!(getnode, m)?)?;
-    m.add_function(wrap_pyfunction!(reseed_rng, m)?)?;
+    m.add_function(wrap_pyfunction!(reseed, m)?)?;
     m.add("NAMESPACE_DNS", UUID::NAMESPACE_DNS)?;
     m.add("NAMESPACE_URL", UUID::NAMESPACE_URL)?;
     m.add("NAMESPACE_OID", UUID::NAMESPACE_OID)?;

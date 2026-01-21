@@ -47,7 +47,7 @@ class CohereChatResponse(BaseChatResponse):
 
         :param api_format:
             The value to assign to the api_format property of this CohereChatResponse.
-            Allowed values for this property are: "COHERE", "GENERIC", 'UNKNOWN_ENUM_VALUE'.
+            Allowed values for this property are: "COHERE", "GENERIC", "COHEREV2", 'UNKNOWN_ENUM_VALUE'.
             Any unrecognized values returned by a service will be mapped to 'UNKNOWN_ENUM_VALUE'.
         :type api_format: str
 

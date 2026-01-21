@@ -265,6 +265,10 @@ class CreateCrossRegionDisasterRecoveryDetails(CreateAutonomousDatabaseBase):
             The value to assign to the secret_version_number property of this CreateCrossRegionDisasterRecoveryDetails.
         :type secret_version_number: int
 
+        :param transportable_tablespace:
+            The value to assign to the transportable_tablespace property of this CreateCrossRegionDisasterRecoveryDetails.
+        :type transportable_tablespace: oci.database.models.ImportTransportableTablespaceDetails
+
         :param source_id:
             The value to assign to the source_id property of this CreateCrossRegionDisasterRecoveryDetails.
         :type source_id: str
@@ -334,6 +338,7 @@ class CreateCrossRegionDisasterRecoveryDetails(CreateAutonomousDatabaseBase):
             'is_backup_retention_locked': 'bool',
             'secret_id': 'str',
             'secret_version_number': 'int',
+            'transportable_tablespace': 'ImportTransportableTablespaceDetails',
             'source_id': 'str',
             'remote_disaster_recovery_type': 'str',
             'is_replicate_automatic_backups': 'bool'
@@ -394,6 +399,7 @@ class CreateCrossRegionDisasterRecoveryDetails(CreateAutonomousDatabaseBase):
             'is_backup_retention_locked': 'isBackupRetentionLocked',
             'secret_id': 'secretId',
             'secret_version_number': 'secretVersionNumber',
+            'transportable_tablespace': 'transportableTablespace',
             'source_id': 'sourceId',
             'remote_disaster_recovery_type': 'remoteDisasterRecoveryType',
             'is_replicate_automatic_backups': 'isReplicateAutomaticBackups'
@@ -453,6 +459,7 @@ class CreateCrossRegionDisasterRecoveryDetails(CreateAutonomousDatabaseBase):
         self._is_backup_retention_locked = None
         self._secret_id = None
         self._secret_version_number = None
+        self._transportable_tablespace = None
         self._source_id = None
         self._remote_disaster_recovery_type = None
         self._is_replicate_automatic_backups = None
