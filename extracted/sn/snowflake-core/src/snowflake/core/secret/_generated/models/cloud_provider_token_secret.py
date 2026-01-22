@@ -19,7 +19,7 @@ import re
 from datetime import datetime
 from typing import Any, Optional
 
-from pydantic import Field, field_validator
+from pydantic import ConfigDict, Field, field_validator
 from typing_extensions import Annotated
 
 from snowflake.core.secret._generated.models.secret import Secret
@@ -42,19 +42,19 @@ class CloudProviderTokenSecret(Secret):
         user comment associated to an object in the dictionary
 
     created_on : datetime, optional
-        Date and time when the secret was created.
+        Date and time when the secret was created — **Read-only:** *any user-provided value will be ignored.*
 
     database_name : str, optional
-        Database in which the secret is stored
+        Database in which the secret is stored — **Read-only:** *any user-provided value will be ignored.*
 
     schema_name : str, optional
-        Schema in which the secret is stored
+        Schema in which the secret is stored — **Read-only:** *any user-provided value will be ignored.*
 
     owner : str, optional
-        Role that owns the secret
+        Role that owns the secret — **Read-only:** *any user-provided value will be ignored.*
 
     owner_role_type : str, optional
-        The type of role that owns the secret
+        The type of role that owns the secret — **Read-only:** *any user-provided value will be ignored.*
     """
 
     api_authentication: Annotated[str, Field(strict=True)]
@@ -67,9 +67,10 @@ class CloudProviderTokenSecret(Secret):
             raise ValueError(r"""must validate the regular expression /^"([^"]|"")+"|[a-zA-Z_][a-zA-Z0-9_$]*$/""")
         return v
 
-    class Config:
-        populate_by_name = True
-        validate_assignment = True
+    model_config = ConfigDict(
+        validate_by_name=True,
+        validate_assignment=True,
+    )
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias."""
@@ -94,7 +95,7 @@ class CloudProviderTokenSecret(Secret):
         if hide_readonly_properties:
             exclude_properties.update({})
 
-        _dict = dict(self._iter(to_dict=True, by_alias=True, exclude=exclude_properties, exclude_none=True))
+        _dict = self.model_dump(serialize_as_any=True, by_alias=True, exclude=exclude_properties, exclude_none=True)
 
         _dict["type"] = Secret.get_child_model_discriminator_value("CloudProviderTokenSecret")
 
@@ -111,9 +112,9 @@ class CloudProviderTokenSecret(Secret):
             return None
 
         if type(obj) is not dict:
-            return CloudProviderTokenSecret.parse_obj(obj)
+            return CloudProviderTokenSecret.model_validate(obj)
 
-        _obj = CloudProviderTokenSecret.parse_obj(
+        _obj = CloudProviderTokenSecret.model_validate(
             {
                 "comment": obj.get("comment"),
                 "name": obj.get("name"),

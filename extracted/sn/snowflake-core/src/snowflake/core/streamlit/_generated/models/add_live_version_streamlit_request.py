@@ -18,7 +18,7 @@ import re  # noqa: F401
 
 from typing import Any, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from snowflake.core.streamlit._generated.models.add_live_version_streamlit_request_version import (
     AddLiveVersionStreamlitRequestVersion,
@@ -40,9 +40,10 @@ class AddLiveVersionStreamlitRequest(BaseModel):
 
     __properties = ["version"]
 
-    class Config:
-        populate_by_name = True
-        validate_assignment = True
+    model_config = ConfigDict(
+        validate_by_name=True,
+        validate_assignment=True,
+    )
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias."""
@@ -67,7 +68,7 @@ class AddLiveVersionStreamlitRequest(BaseModel):
         if hide_readonly_properties:
             exclude_properties.update({})
 
-        _dict = dict(self._iter(to_dict=True, by_alias=True, exclude=exclude_properties, exclude_none=True))
+        _dict = self.model_dump(serialize_as_any=True, by_alias=True, exclude=exclude_properties, exclude_none=True)
 
         # override the default output from pydantic by calling `to_dict()` of version
         if self.version:
@@ -86,9 +87,9 @@ class AddLiveVersionStreamlitRequest(BaseModel):
             return None
 
         if type(obj) is not dict:
-            return AddLiveVersionStreamlitRequest.parse_obj(obj)
+            return AddLiveVersionStreamlitRequest.model_validate(obj)
 
-        _obj = AddLiveVersionStreamlitRequest.parse_obj(
+        _obj = AddLiveVersionStreamlitRequest.model_validate(
             {
                 "version": AddLiveVersionStreamlitRequestVersion.from_dict(obj.get("version"))
                 if obj.get("version") is not None

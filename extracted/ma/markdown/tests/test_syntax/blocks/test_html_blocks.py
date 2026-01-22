@@ -1684,3 +1684,25 @@ class TestHTMLBlocks(TestCase):
                 """
             )
         )
+
+    def test_multiple_bogus_comments_no_hang(self):
+        """Test that multiple bogus comments (</` patterns) don't cause infinite loop."""
+        self.assertMarkdownRenders(
+            '`</` and `</`',
+            '<p><code>&lt;/</code> and <code>&lt;/</code></p>'
+        )
+
+    def test_multiple_unclosed_comments_no_hang(self):
+        """Test that multiple unclosed comments don't cause infinite loop."""
+        self.assertMarkdownRenders(
+            '<!-- and <!--',
+            '<p>&lt;!-- and &lt;!--</p>'
+        )
+
+    def test_no_hang_issue_1586(self):
+        """Test no hang condition for issue #1586."""
+
+        self.assertMarkdownRenders(
+            'Test `<!--[if mso]>` and `<!--[if !mso]>`',
+            '<p>Test <code>&lt;!--[if mso]&gt;</code> and <code>&lt;!--[if !mso]&gt;</code></p>'
+        )

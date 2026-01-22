@@ -15,6 +15,7 @@ use crate::config::{HookType, Language, Stage};
 
 mod auto_update;
 mod cache_clean;
+mod cache_gc;
 mod cache_size;
 mod completion;
 mod hook_impl;
@@ -30,6 +31,7 @@ mod validate;
 
 pub(crate) use auto_update::auto_update;
 pub(crate) use cache_clean::cache_clean;
+pub(crate) use cache_gc::cache_gc;
 pub(crate) use cache_size::cache_size;
 use completion::selector_completer;
 pub(crate) use hook_impl::hook_impl;
@@ -225,7 +227,7 @@ pub(crate) enum Command {
     Cache(CacheNamespace),
     /// Clean unused cached repos.
     #[command(hide = true)]
-    GC,
+    GC(CacheGcArgs),
     /// Remove all prek cached data.
     #[command(hide = true)]
     Clean,
@@ -359,11 +361,11 @@ pub(crate) struct RunExtraArgs {
     pub(crate) remote_branch: Option<String>,
     #[arg(long, hide = true)]
     pub(crate) local_branch: Option<String>,
-    #[arg(long, hide = true, required_if_eq("hook_stage", "pre-rebase"))]
+    #[arg(long, hide = true, required_if_eq("stage", "pre-rebase"))]
     pub(crate) pre_rebase_upstream: Option<String>,
     #[arg(long, hide = true)]
     pub(crate) pre_rebase_branch: Option<String>,
-    #[arg(long, hide = true, required_if_eq_any = [("hook_stage", "prepare-commit-msg"), ("hook_stage", "commit-msg")])]
+    #[arg(long, hide = true, required_if_eq_any = [("stage", "prepare-commit-msg"), ("stage", "commit-msg")])]
     pub(crate) commit_msg_filename: Option<String>,
     #[arg(long, hide = true)]
     pub(crate) prepare_commit_message_source: Option<String>,
@@ -467,8 +469,8 @@ pub(crate) struct RunArgs {
     /// `pre-commit`, or `pre-commit`) will run.
     /// Defaults to `pre-commit` if not specified.
     /// For hooks specified directly in the command line, fallback to `manual` stage if no hooks found for `pre-commit` stage.
-    #[arg(long, value_enum)]
-    pub(crate) hook_stage: Option<Stage>,
+    #[arg(long, value_enum, alias = "hook-stage")]
+    pub(crate) stage: Option<Stage>,
 
     /// When hooks fail, run `git diff` directly afterward.
     #[arg(long)]
@@ -665,7 +667,7 @@ pub(crate) enum CacheCommand {
     /// Show the location of the prek cache.
     Dir,
     /// Remove unused cached repositories, hook environments, and other data.
-    GC,
+    GC(CacheGcArgs),
     /// Remove all prek cached data.
     Clean,
     /// Show the size of the prek cache.
@@ -677,6 +679,13 @@ pub struct SizeArgs {
     /// Display the cache size in human-readable format (e.g., `1.2 GiB` instead of raw bytes).
     #[arg(long = "human", short = 'H', alias = "human-readable")]
     pub(crate) human: bool,
+}
+
+#[derive(Debug, Args)]
+pub(crate) struct CacheGcArgs {
+    /// Print what would be removed, but do not delete anything.
+    #[arg(long)]
+    pub(crate) dry_run: bool,
 }
 
 #[derive(Debug, Args)]
@@ -699,7 +708,7 @@ pub(crate) struct SelfUpdateArgs {
 
     /// A GitHub token for authentication.
     /// A token is not required but can be used to reduce the chance of encountering rate limits.
-    #[arg(long, env = "GITHUB_TOKEN")]
+    #[arg(long, env = EnvVars::GITHUB_TOKEN)]
     pub token: Option<String>,
 }
 
@@ -730,7 +739,6 @@ pub(crate) struct InitTemplateDirArgs {
     pub(crate) hook_types: Vec<HookType>,
 }
 
-#[cfg(unix)]
 #[cfg(test)]
 mod _gen {
     use crate::cli::Cli;
@@ -764,6 +772,13 @@ mod _gen {
 
         output.push_str("# CLI Reference\n\n");
         generate_command(&mut output, &cmd, &mut parents);
+
+        let mut output = output.replace("\r\n", "\n");
+        // Trim trailing whitespace
+        while output.ends_with('\n') {
+            output.pop();
+        }
+        output.push('\n');
 
         output
     }
@@ -861,7 +876,7 @@ mod _gen {
                     let id = format!("{name_key}--{}", arg.get_id());
                     output.push_str(&format!("<dt id=\"{id}\">"));
                     output.push_str(&format!(
-                        "<a href=\"#{id}\"<code>{}</code></a>",
+                        "<a href=\"#{id}\"><code>{}</code></a>",
                         arg.get_value_names()
                             .unwrap()
                             .iter()
@@ -1022,20 +1037,22 @@ mod _gen {
             Mode::DryRun => {
                 anstream::println!("{reference_string}");
             }
-            Mode::Check => match fs_err::read_to_string(reference_path) {
+            Mode::Check => match fs_err::read_to_string(&reference_path) {
                 Ok(current) => {
                     if current == reference_string {
                         anstream::println!("Up-to-date: {filename}");
                     } else {
                         let comparison = StrComparison::new(&current, &reference_string);
-                        bail!("{filename} changed, please run `mise run generate`:\n{comparison}");
+                        bail!(
+                            "{filename} changed, please run `mise run generate` to update:\n{comparison}"
+                        );
                     }
                 }
                 Err(err) if err.kind() == std::io::ErrorKind::NotFound => {
-                    bail!("{filename} not found, please run `mise run generate`");
+                    bail!("{filename} not found, please run `mise run generate` to generate");
                 }
                 Err(err) => {
-                    bail!("{filename} changed, please run `mise run generate`:\n{err}");
+                    bail!("{filename} changed, please run `mise run generate` to update:\n{err}");
                 }
             },
             Mode::Write => match fs_err::read_to_string(&reference_path) {

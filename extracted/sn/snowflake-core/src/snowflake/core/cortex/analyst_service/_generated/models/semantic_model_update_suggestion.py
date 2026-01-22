@@ -18,7 +18,7 @@ import re  # noqa: F401
 
 from typing import Any, List, Optional
 
-from pydantic import BaseModel, StrictInt
+from pydantic import BaseModel, ConfigDict, StrictInt
 
 from snowflake.core.cortex.analyst_service._generated.models.semantic_model_change import (
     SemanticModelChange,
@@ -45,9 +45,10 @@ class SemanticModelUpdateSuggestion(BaseModel):
 
     __properties = ["changes", "version"]
 
-    class Config:  # noqa: D106
-        populate_by_name = True
-        validate_assignment = True
+    model_config = ConfigDict(
+        validate_by_name=True,
+        validate_assignment=True,
+    )
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias."""
@@ -72,7 +73,7 @@ class SemanticModelUpdateSuggestion(BaseModel):
         if hide_readonly_properties:
             exclude_properties.update({})
 
-        _dict = dict(self._iter(to_dict=True, by_alias=True, exclude=exclude_properties, exclude_none=True))
+        _dict = self.model_dump(serialize_as_any=True, by_alias=True, exclude=exclude_properties, exclude_none=True)
 
         # override the default output from pydantic by calling `to_dict()` of each item in changes (list)
         _items = []
@@ -95,9 +96,9 @@ class SemanticModelUpdateSuggestion(BaseModel):
             return None
 
         if type(obj) is not dict:
-            return SemanticModelUpdateSuggestion.parse_obj(obj)
+            return SemanticModelUpdateSuggestion.model_validate(obj)
 
-        _obj = SemanticModelUpdateSuggestion.parse_obj(
+        _obj = SemanticModelUpdateSuggestion.model_validate(
             {
                 "changes": [SemanticModelChange.from_dict(_item) for _item in obj.get("changes")]
                 if obj.get("changes") is not None

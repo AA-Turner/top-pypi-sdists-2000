@@ -323,7 +323,7 @@ class SparkConnectApi:
         # process the body parameter
         _body_params = None
 
-        if _params["body"]:
+        if _params["body"] is not None:
             _body_params = _params["body"]
 
         # set the HTTP header `Accept`
@@ -501,7 +501,7 @@ class SparkConnectApi:
         # process the body parameter
         _body_params = None
 
-        if _params["body"]:
+        if _params["body"] is not None:
             _body_params = _params["body"]
 
         # set the HTTP header `Accept`
@@ -679,7 +679,7 @@ class SparkConnectApi:
         # process the body parameter
         _body_params = None
 
-        if _params["body"]:
+        if _params["body"] is not None:
             _body_params = _params["body"]
 
         # set the HTTP header `Accept`
@@ -855,7 +855,7 @@ class SparkConnectApi:
         # process the body parameter
         _body_params = None
 
-        if _params["body"]:
+        if _params["body"] is not None:
             _body_params = _params["body"]
 
         # set the HTTP header `Accept`
@@ -1033,7 +1033,7 @@ class SparkConnectApi:
         # process the body parameter
         _body_params = None
 
-        if _params["body"]:
+        if _params["body"] is not None:
             _body_params = _params["body"]
 
         # set the HTTP header `Accept`
@@ -1211,7 +1211,7 @@ class SparkConnectApi:
         # process the body parameter
         _body_params = None
 
-        if _params["body"]:
+        if _params["body"] is not None:
             _body_params = _params["body"]
 
         # set the HTTP header `Accept`
@@ -1383,7 +1383,7 @@ class SparkConnectApi:
         # process the body parameter
         _body_params = None
 
-        if _params["body"]:
+        if _params["body"] is not None:
             _body_params = _params["body"]
 
         # set the HTTP header `Accept`
@@ -1553,7 +1553,7 @@ class SparkConnectApi:
         # process the body parameter
         _body_params = None
 
-        if _params["body"]:
+        if _params["body"] is not None:
             _body_params = _params["body"]
 
         # set the HTTP header `Accept`
@@ -1729,7 +1729,7 @@ class SparkConnectApi:
         # process the body parameter
         _body_params = None
 
-        if _params["body"]:
+        if _params["body"] is not None:
             _body_params = _params["body"]
 
         # set the HTTP header `Accept`
@@ -1907,7 +1907,7 @@ class SparkConnectApi:
         # process the body parameter
         _body_params = None
 
-        if _params["body"]:
+        if _params["body"] is not None:
             _body_params = _params["body"]
 
         # set the HTTP header `Accept`

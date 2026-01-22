@@ -466,7 +466,7 @@ class SequenceApi:
         # process the body parameter
         _body_params = None
 
-        if _params["sequence"]:
+        if _params["sequence"] is not None:
             _body_params = _params["sequence"]
 
         # set the HTTP header `Accept`
@@ -866,7 +866,7 @@ class SequenceApi:
         # process the body parameter
         _body_params = None
 
-        if _params["sequence"]:
+        if _params["sequence"] is not None:
             _body_params = _params["sequence"]
 
         # set the HTTP header `Accept`

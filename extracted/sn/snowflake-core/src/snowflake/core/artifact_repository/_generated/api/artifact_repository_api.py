@@ -470,7 +470,7 @@ class ArtifactRepositoryApi:
         # process the body parameter
         _body_params = None
 
-        if _params["artifact_repository"]:
+        if _params["artifact_repository"] is not None:
             _body_params = _params["artifact_repository"]
 
         # set the HTTP header `Accept`
@@ -767,7 +767,7 @@ class ArtifactRepositoryApi:
         # process the body parameter
         _body_params = None
 
-        if _params["artifact_repository"]:
+        if _params["artifact_repository"] is not None:
             _body_params = _params["artifact_repository"]
 
         # set the HTTP header `Accept`

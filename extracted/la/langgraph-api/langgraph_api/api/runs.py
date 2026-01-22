@@ -119,12 +119,14 @@ def _run_result_body(
     async def consume() -> None:
         vchunk: bytes | None = None
         try:
-            async for mode, chunk, _ in Runs.Stream.join(
+            async for mode, chunk, _ in CrudRuns.Stream.join(
                 run_id,
                 stream_channel=sub,
                 cancel_on_disconnect=cancel_on_disconnect,
                 thread_id=thread_id,
                 ignore_404=ignore_404,
+                # gRPC subscribe() is a no-op, so we need to replay from cache
+                last_event_id="-" if FF_USE_CORE_API else None,
             ):
                 if mode == b"values" or (
                     mode == b"updates" and b"__interrupt__" in chunk
@@ -260,12 +262,14 @@ async def stream_run(
 
     async def body():
         try:
-            async for event, message, stream_id in Runs.Stream.join(
+            async for event, message, stream_id in CrudRuns.Stream.join(
                 run["run_id"],
                 thread_id=thread_id,
                 cancel_on_disconnect=on_disconnect == "cancel",
                 stream_channel=sub,
-                last_event_id=None,
+                # When using gRPC, the subscription happens after the run is created,
+                # so we need to replay from cache to catch early events.
+                last_event_id="-" if FF_USE_CORE_API else None,
             ):
                 yield event, message, stream_id
         finally:
@@ -310,13 +314,15 @@ async def stream_run_stateless(
 
     async def body():
         try:
-            async for event, message, stream_id in Runs.Stream.join(
+            async for event, message, stream_id in CrudRuns.Stream.join(
                 run["run_id"],
                 thread_id=run["thread_id"],
                 ignore_404=True,
                 cancel_on_disconnect=on_disconnect == "cancel",
                 stream_channel=sub,
-                last_event_id=None,
+                # When using gRPC, the subscription happens after the run is created,
+                # so we need to replay from cache to catch early events.
+                last_event_id="-" if FF_USE_CORE_API else None,
             ):
                 yield event, message, stream_id
         finally:
@@ -527,10 +533,14 @@ async def join_run_stream(request: ApiRequest):
     validate_uuid(run_id, "Invalid run ID: must be a UUID")
     stream_mode = request.query_params.get("stream_mode") or []
     last_event_id = request.headers.get("last-event-id") or None
+    # For gRPC, subscribe() is a no-op so we need to replay from cache.
+    # If no last_event_id provided, default to "-" (start of stream) for gRPC.
+    if FF_USE_CORE_API and last_event_id is None:
+        last_event_id = "-"
 
     async def body():
         async with await Runs.Stream.subscribe(run_id, thread_id) as sub:
-            async for event, message, stream_id in Runs.Stream.join(
+            async for event, message, stream_id in CrudRuns.Stream.join(
                 run_id,
                 thread_id=thread_id,
                 cancel_on_disconnect=cancel_on_disconnect,

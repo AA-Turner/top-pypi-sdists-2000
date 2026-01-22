@@ -17,9 +17,10 @@ use thiserror::Error;
 use tracing::{debug, error, instrument, trace};
 
 use crate::cli::run::Selectors;
-use crate::config::{self, Config, ManifestHook, read_config};
+use crate::config::{self, Config, read_config};
 use crate::fs::Simplified;
 use crate::git::GIT_ROOT;
+use crate::hook::HookSpec;
 use crate::hook::{self, Hook, HookBuilder, Repo};
 use crate::run::CONCURRENCY;
 use crate::store::{CacheBucket, Store};
@@ -59,7 +60,7 @@ pub(crate) trait HookInitReporter {
     fn on_complete(&self);
 }
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub(crate) struct Project {
     /// The absolute path of the project directory.
     root: PathBuf,
@@ -71,6 +72,17 @@ pub(crate) struct Project {
     idx: usize,
     config: Config,
     repos: Vec<Arc<Repo>>,
+}
+
+impl std::fmt::Debug for Project {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Project")
+            .field("relative_path", &self.relative_path)
+            .field("idx", &self.idx)
+            .field("config", &self.config)
+            .field("repos", &self.repos)
+            .finish_non_exhaustive()
+    }
 }
 
 impl Display for Project {
@@ -109,15 +121,32 @@ impl Project {
             "Loading project configuration"
         );
 
-        let config = read_config(&config_path)?;
+        let mut config = read_config(&config_path)?;
         let size = config.repos.len();
 
-        let root = root.unwrap_or_else(|| {
-            config_path
-                .parent()
-                .expect("config file must have a parent")
-                .to_path_buf()
-        });
+        let config_dir = config_path
+            .parent()
+            .expect("config file must have a parent");
+
+        // Resolve relative repo paths against the config file's directory.
+        // This ensures paths like `../hook-repo` are resolved from where the
+        // config file lives, not from the process's current working directory.
+        for repo in &mut config.repos {
+            if let config::Repo::Remote(remote) = repo {
+                let repo_path = Path::new(&remote.repo);
+                if !remote.repo.starts_with("http://")
+                    && !remote.repo.starts_with("https://")
+                    && repo_path.is_relative()
+                {
+                    let resolved = config_dir.join(repo_path);
+                    if resolved.is_dir() {
+                        remote.repo = resolved.to_string_lossy().into_owned();
+                    }
+                }
+            }
+        }
+
+        let root = root.unwrap_or_else(|| config_dir.to_path_buf());
 
         Ok(Self {
             root,
@@ -268,7 +297,7 @@ impl Project {
 
                     Ok::<(), Error>(())
                 })
-                .buffer_unordered(5);
+                .buffer_unordered(*CONCURRENCY);
 
         while let Some(result) = tasks.next().await {
             result?;
@@ -314,55 +343,69 @@ impl Project {
                 config::Repo::Remote(repo_config) => {
                     for hook_config in &repo_config.hooks {
                         // Check hook id is valid.
-                        let Some(hook) = repo.get_hook(&hook_config.id) else {
+                        let Some(manifest_hook) = repo.get_hook(&hook_config.id) else {
                             return Err(Error::HookNotFound {
                                 hook: hook_config.id.clone(),
                                 repo: repo.to_string(),
                             });
                         };
 
-                        let repo = Arc::clone(repo);
-                        let mut builder =
-                            HookBuilder::new(self.clone(), repo, hook.clone(), hooks.len());
-                        builder.update(hook_config);
-                        builder.combine(&self.config);
+                        let mut hook_spec = manifest_hook.clone();
+                        hook_spec.apply_remote_hook_overrides(hook_config);
 
+                        let builder = HookBuilder::new(
+                            self.clone(),
+                            Arc::clone(repo),
+                            hook_spec,
+                            hooks.len(),
+                        );
                         let hook = builder.build().await?;
+
                         hooks.push(hook);
                     }
                 }
                 config::Repo::Local(repo_config) => {
                     for hook_config in &repo_config.hooks {
-                        let repo = Arc::clone(repo);
-                        let mut builder =
-                            HookBuilder::new(self.clone(), repo, hook_config.clone(), hooks.len());
-                        builder.combine(&self.config);
+                        let hook_spec = HookSpec::from(hook_config.clone());
 
+                        let builder = HookBuilder::new(
+                            self.clone(),
+                            Arc::clone(repo),
+                            hook_spec,
+                            hooks.len(),
+                        );
                         let hook = builder.build().await?;
+
                         hooks.push(hook);
                     }
                 }
                 config::Repo::Meta(repo_config) => {
                     for hook_config in &repo_config.hooks {
-                        let repo = Arc::clone(repo);
-                        let hook_config = ManifestHook::from(hook_config.clone());
-                        let mut builder =
-                            HookBuilder::new(self.clone(), repo, hook_config, hooks.len());
-                        builder.combine(&self.config);
+                        let hook_spec = HookSpec::from(hook_config.clone());
 
+                        let builder = HookBuilder::new(
+                            self.clone(),
+                            Arc::clone(repo),
+                            hook_spec,
+                            hooks.len(),
+                        );
                         let hook = builder.build().await?;
+
                         hooks.push(hook);
                     }
                 }
                 config::Repo::Builtin(repo_config) => {
                     for hook_config in &repo_config.hooks {
-                        let repo = Arc::clone(repo);
-                        let hook_config = ManifestHook::from(hook_config.clone());
-                        let mut builder =
-                            HookBuilder::new(self.clone(), repo, hook_config, hooks.len());
-                        builder.combine(&self.config);
+                        let hook_spec = HookSpec::from(hook_config.clone());
 
+                        let builder = HookBuilder::new(
+                            self.clone(),
+                            Arc::clone(repo),
+                            hook_spec,
+                            hooks.len(),
+                        );
                         let hook = builder.build().await?;
+
                         hooks.push(hook);
                     }
                 }
@@ -386,7 +429,7 @@ struct CachedConfigFile {
 
 /// Workspace discovery cache
 #[derive(Debug, Clone, Serialize, Deserialize)]
-struct WorkspaceCache {
+pub(crate) struct WorkspaceCache {
     /// Cache version for compatibility
     version: u32,
     /// Workspace root path
@@ -530,6 +573,66 @@ impl WorkspaceCache {
         let content = serde_json::to_string_pretty(self)?;
         std::fs::write(&cache_path, content)?;
         Ok(())
+    }
+
+    /// Best-effort source of config paths for bootstrapping config tracking.
+    ///
+    /// This is used on upgrades from older versions that didn't track configs yet.
+    /// It reads all cached workspace discovery entries under `cache/prek/workspace/*`
+    /// and collects any config file paths they mention.
+    pub(crate) fn cached_config_paths(store: &Store) -> FxHashSet<PathBuf> {
+        let mut paths: FxHashSet<PathBuf> = FxHashSet::default();
+
+        let workspace_cache_root = store.cache_path(CacheBucket::Prek).join("workspace");
+        let entries = match fs_err::read_dir(&workspace_cache_root) {
+            Ok(entries) => entries,
+            Err(err) if err.kind() == std::io::ErrorKind::NotFound => return paths,
+            Err(err) => {
+                debug!(path = %workspace_cache_root.display(), %err, "Failed to read workspace cache directory for tracking bootstrap");
+                return paths;
+            }
+        };
+
+        for entry in entries {
+            let entry = match entry {
+                Ok(entry) => entry,
+                Err(err) => {
+                    debug!(%err, "Failed to read workspace cache entry for tracking bootstrap");
+                    continue;
+                }
+            };
+
+            let path = entry.path();
+            if !path.is_file() {
+                continue;
+            }
+
+            let content = match fs_err::read_to_string(&path) {
+                Ok(content) => content,
+                Err(err) => {
+                    debug!(path = %path.display(), %err, "Failed to read workspace cache file for tracking bootstrap");
+                    continue;
+                }
+            };
+
+            let cache: WorkspaceCache = match serde_json::from_str(&content) {
+                Ok(cache) => cache,
+                Err(err) => {
+                    debug!(path = %path.display(), %err, "Failed to parse workspace cache file for tracking bootstrap");
+                    continue;
+                }
+            };
+
+            if cache.version != WorkspaceCache::CURRENT_VERSION {
+                continue;
+            }
+
+            for file in cache.config_files {
+                paths.insert(file.path);
+            }
+        }
+
+        paths
     }
 }
 

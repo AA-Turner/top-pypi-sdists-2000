@@ -1,4 +1,8 @@
-import pytest as pytest
+from pathlib import Path
+from tempfile import TemporaryDirectory
+from typing import Iterator
+
+import pytest
 
 from snowflake.core._common import CreateMode
 from snowflake.core.exceptions import APIError, ConflictError
@@ -15,9 +19,29 @@ from snowflake.core.procedure import (
     SQLFunction,
 )
 from snowflake.core.procedure._generated import FunctionLanguage
+from tests.utils import random_string
 
 
-pytestmark = [pytest.mark.min_sf_ver("8.38.0")]
+@pytest.fixture
+def temp_dir() -> Iterator[Path]:
+    with TemporaryDirectory() as temp_dir:
+        yield Path(temp_dir)
+
+
+@pytest.fixture
+def staged_handler(temp_dir, temp_stage) -> Iterator[tuple[str, str]]:
+    handler_path = temp_dir / "handler.py"
+    with open(handler_path, "w") as handler:
+        handler.write("""
+def run():
+    return 'OK'
+        """)
+    temp_stage.put(handler_path, "/")
+    stage_fqn = f"{temp_stage.database.name.upper()}.{temp_stage.schema.name.upper()}.{temp_stage.name.upper()}"
+    yield (
+        f"@{stage_fqn}/handler.py",
+        "handler.run",
+    )
 
 
 def test_create_javascript_proc(procedures):
@@ -379,6 +403,39 @@ def test_create_java_proc(procedures, maven_snowpark_jar_available):
         assert proc_fetch_result.is_secure is False
     finally:
         proc.drop()
+
+
+@pytest.mark.min_sf_ver("9.39.0")
+def test_create_and_fetch_python_proc_staged_handler(procedures, staged_handler):
+    proc_name = random_string(10, "python_proc_staged_handler_")
+    file_path, handler = staged_handler
+    language_config = PythonFunction(
+        runtime_version="3.13", handler=handler, packages=["snowflake-snowpark-python"], imports=[file_path]
+    )
+    python_proc_staged_handler = Procedure(
+        name=proc_name,
+        arguments=[],
+        return_type=ReturnDataType(datatype="VARCHAR"),
+        language_config=language_config,
+        execute_as="OWNER",
+    )
+    try:
+        proc = procedures.create(python_proc_staged_handler)
+        fetched_proc = proc.fetch()
+        assert fetched_proc.name == proc_name.upper()
+        assert fetched_proc.arguments == []
+        assert fetched_proc.return_type == ReturnDataType(datatype="VARCHAR", nullable=True)
+        assert fetched_proc.language_config.runtime_version == language_config.runtime_version
+        assert fetched_proc.language_config.handler == language_config.handler
+        assert fetched_proc.language_config.packages == language_config.packages
+        assert fetched_proc.language_config.imports == language_config.imports
+        assert fetched_proc.execute_as == "OWNER"
+        assert fetched_proc.comment is None
+        assert fetched_proc.body is None
+        assert fetched_proc.schema_name == procedures.schema.name.upper()
+        assert fetched_proc.database_name == procedures.database.name.upper()
+    finally:
+        procedures[f"{proc_name}()"].drop(if_exists=True)
 
 
 def test_create_python_proc(procedures, anaconda_package_available):

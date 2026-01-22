@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: comfyui_workflow_templates
-Version: 0.8.16
+Version: 0.8.17
 Summary: ComfyUI workflow templates package
 Author: Comfy-Org
 License: MIT
@@ -9,24 +9,24 @@ Classifier: Operating System :: OS Independent
 Requires-Python: >=3.9
 Description-Content-Type: text/markdown
 License-File: LICENSE
-Requires-Dist: comfyui-workflow-templates-core==0.3.102
+Requires-Dist: comfyui-workflow-templates-core==0.3.103
 Requires-Dist: comfyui-workflow-templates-media-api==0.3.46
 Requires-Dist: comfyui-workflow-templates-media-video==0.3.40
-Requires-Dist: comfyui-workflow-templates-media-image==0.3.67
-Requires-Dist: comfyui-workflow-templates-media-other==0.3.89
+Requires-Dist: comfyui-workflow-templates-media-image==0.3.68
+Requires-Dist: comfyui-workflow-templates-media-other==0.3.90
 Provides-Extra: api
 Requires-Dist: comfyui-workflow-templates-media-api==0.3.46; extra == "api"
 Provides-Extra: video
 Requires-Dist: comfyui-workflow-templates-media-video==0.3.40; extra == "video"
 Provides-Extra: image
-Requires-Dist: comfyui-workflow-templates-media-image==0.3.67; extra == "image"
+Requires-Dist: comfyui-workflow-templates-media-image==0.3.68; extra == "image"
 Provides-Extra: other
-Requires-Dist: comfyui-workflow-templates-media-other==0.3.89; extra == "other"
+Requires-Dist: comfyui-workflow-templates-media-other==0.3.90; extra == "other"
 Provides-Extra: all
 Requires-Dist: comfyui-workflow-templates-media-api==0.3.46; extra == "all"
 Requires-Dist: comfyui-workflow-templates-media-video==0.3.40; extra == "all"
-Requires-Dist: comfyui-workflow-templates-media-image==0.3.67; extra == "all"
-Requires-Dist: comfyui-workflow-templates-media-other==0.3.89; extra == "all"
+Requires-Dist: comfyui-workflow-templates-media-image==0.3.68; extra == "all"
+Requires-Dist: comfyui-workflow-templates-media-other==0.3.90; extra == "all"
 Dynamic: license-file
 
 # workflow_templates

@@ -19,7 +19,7 @@ import re
 from datetime import datetime
 from typing import Any, ClassVar, Dict, Optional, Union
 
-from pydantic import BaseModel, Field, StrictStr, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
 from typing_extensions import Annotated
 
 import snowflake.core.secret._generated.models
@@ -39,15 +39,15 @@ class Secret(BaseModel):
     comment : str, optional
         user comment associated to an object in the dictionary
     created_on : datetime, optional
-        Date and time when the secret was created.
+        Date and time when the secret was created — **Read-only:** *any user-provided value will be ignored.*
     database_name : str, optional
-        Database in which the secret is stored
+        Database in which the secret is stored — **Read-only:** *any user-provided value will be ignored.*
     schema_name : str, optional
-        Schema in which the secret is stored
+        Schema in which the secret is stored — **Read-only:** *any user-provided value will be ignored.*
     owner : str, optional
-        Role that owns the secret
+        Role that owns the secret — **Read-only:** *any user-provided value will be ignored.*
     owner_role_type : str, optional
-        The type of role that owns the secret
+        The type of role that owns the secret — **Read-only:** *any user-provided value will be ignored.*
     """
 
     comment: Optional[StrictStr] = None
@@ -96,9 +96,10 @@ class Secret(BaseModel):
             raise ValueError(r"""must validate the regular expression /^"([^"]|"")+"|[a-zA-Z_][a-zA-Z0-9_$]*$/""")
         return v
 
-    class Config:
-        populate_by_name = True
-        validate_assignment = True
+    model_config = ConfigDict(
+        validate_by_name=True,
+        validate_assignment=True,
+    )
 
     # JSON field name that stores the object type
     __discriminator_property_name: ClassVar[str] = "type"
@@ -175,7 +176,7 @@ class Secret(BaseModel):
                 }
             )
 
-        _dict = dict(self._iter(to_dict=True, by_alias=True, exclude=exclude_properties, exclude_none=True))
+        _dict = self.model_dump(serialize_as_any=True, by_alias=True, exclude=exclude_properties, exclude_none=True)
 
         return _dict
 

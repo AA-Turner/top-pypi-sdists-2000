@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: ty
-Version: 0.0.12
+Version: 0.0.13
 Classifier: Development Status :: 4 - Beta
 Classifier: Environment :: Console
 Classifier: Intended Audience :: Developers
@@ -27,10 +27,10 @@ Home-Page: https://github.com/astral-sh/ty/
 Author-email: "Astral Software Inc." <hey@astral.sh>
 Requires-Python: >=3.8
 Description-Content-Type: text/markdown; charset=UTF-8; variant=GFM
-Project-URL: Repository, https://github.com/astral-sh/ty
 Project-URL: Changelog, https://github.com/astral-sh/ty/blob/main/CHANGELOG.md
-Project-URL: Releases, https://github.com/astral-sh/ty/releases
 Project-URL: Discord, https://discord.gg/astral-sh
+Project-URL: Releases, https://github.com/astral-sh/ty/releases
+Project-URL: Repository, https://github.com/astral-sh/ty
 
 # ty
 
@@ -99,7 +99,7 @@ at this time. Please [open pull requests](https://github.com/astral-sh/ruff/pull
 to anything in the `ruff` submodule (which includes all of the Rust source code).
 
 See the
-[contributing guide](https://github.com/astral-sh/ty/blob/0.0.12/CONTRIBUTING.md) for more details.
+[contributing guide](https://github.com/astral-sh/ty/blob/0.0.13/CONTRIBUTING.md) for more details.
 
 ## FAQ
 
@@ -123,7 +123,7 @@ Just "ty", please.
 
 ## License
 
-ty is licensed under the MIT license ([LICENSE](https://github.com/astral-sh/ty/blob/0.0.12/LICENSE) or
+ty is licensed under the MIT license ([LICENSE](https://github.com/astral-sh/ty/blob/0.0.13/LICENSE) or
 <https://opensource.org/licenses/MIT>).
 
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in ty

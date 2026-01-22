@@ -470,9 +470,7 @@ class ContinuousRunner:
                 completed_thread_ids.append(thread_id)
 
                 # Build tags for this run
-                tags = [f"deployment:{self.deployment_name}", f"thread_id:{thread_id}"]
-                if metrics.run_id:
-                    tags.append(f"run_id:{metrics.run_id}")
+                tags = [f"deployment:{self.deployment_name}"]
 
                 # Send all count metrics for this completed run
                 count_metrics = [

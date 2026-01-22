@@ -466,7 +466,7 @@ class NetworkRuleApi:
         # process the body parameter
         _body_params = None
 
-        if _params["network_rule"]:
+        if _params["network_rule"] is not None:
             _body_params = _params["network_rule"]
 
         # set the HTTP header `Accept`

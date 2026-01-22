@@ -1068,6 +1068,11 @@ class RunsStub(object):
                 request_serializer=core__api__pb2.StreamRunRequest.SerializeToString,
                 response_deserializer=core__api__pb2.StreamEvent.FromString,
                 _registered_method=True)
+        self.Publish = channel.unary_unary(
+                '/coreApi.Runs/Publish',
+                request_serializer=core__api__pb2.PublishStreamEventRequest.SerializeToString,
+                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                _registered_method=True)
         self.Enter = channel.unary_stream(
                 '/coreApi.Runs/Enter',
                 request_serializer=core__api__pb2.EnterRunRequest.SerializeToString,
@@ -1141,6 +1146,13 @@ class RunsServicer(object):
 
     def Stream(self, request, context):
         """Stream run events.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Publish(self, request, context):
+        """Publish a stream event for a run
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -1227,6 +1239,11 @@ def add_RunsServicer_to_server(servicer, server):
                     servicer.Stream,
                     request_deserializer=core__api__pb2.StreamRunRequest.FromString,
                     response_serializer=core__api__pb2.StreamEvent.SerializeToString,
+            ),
+            'Publish': grpc.unary_unary_rpc_method_handler(
+                    servicer.Publish,
+                    request_deserializer=core__api__pb2.PublishStreamEventRequest.FromString,
+                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'Enter': grpc.unary_stream_rpc_method_handler(
                     servicer.Enter,
@@ -1448,6 +1465,33 @@ class Runs(object):
             '/coreApi.Runs/Stream',
             core__api__pb2.StreamRunRequest.SerializeToString,
             core__api__pb2.StreamEvent.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def Publish(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/coreApi.Runs/Publish',
+            core__api__pb2.PublishStreamEventRequest.SerializeToString,
+            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options,
             channel_credentials,
             insecure,

@@ -18,7 +18,7 @@ import re  # noqa: F401
 
 from typing import Any
 
-from pydantic import BaseModel, StrictStr
+from pydantic import BaseModel, ConfigDict, StrictStr
 
 from snowflake.core.streamlit._generated.models.streamlit_version_for_git import (
     StreamlitVersionForGit,
@@ -45,9 +45,10 @@ class AddVersionFromGitStreamlitRequest(BaseModel):
 
     __properties = ["version", "git_ref"]
 
-    class Config:
-        populate_by_name = True
-        validate_assignment = True
+    model_config = ConfigDict(
+        validate_by_name=True,
+        validate_assignment=True,
+    )
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias."""
@@ -72,7 +73,7 @@ class AddVersionFromGitStreamlitRequest(BaseModel):
         if hide_readonly_properties:
             exclude_properties.update({})
 
-        _dict = dict(self._iter(to_dict=True, by_alias=True, exclude=exclude_properties, exclude_none=True))
+        _dict = self.model_dump(serialize_as_any=True, by_alias=True, exclude=exclude_properties, exclude_none=True)
 
         # override the default output from pydantic by calling `to_dict()` of version
         if self.version:
@@ -91,9 +92,9 @@ class AddVersionFromGitStreamlitRequest(BaseModel):
             return None
 
         if type(obj) is not dict:
-            return AddVersionFromGitStreamlitRequest.parse_obj(obj)
+            return AddVersionFromGitStreamlitRequest.model_validate(obj)
 
-        _obj = AddVersionFromGitStreamlitRequest.parse_obj(
+        _obj = AddVersionFromGitStreamlitRequest.model_validate(
             {
                 "version": StreamlitVersionForGit.from_dict(obj.get("version"))
                 if obj.get("version") is not None

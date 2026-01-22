@@ -30,6 +30,12 @@ from snowflake.core.cortex.analyst_service._generated.models.create_agentic_opti
 from snowflake.core.cortex.analyst_service._generated.models.create_agentic_optimization_response import (
     CreateAgenticOptimizationResponse,
 )
+from snowflake.core.cortex.analyst_service._generated.models.create_analyst_eval_optimization_request import (
+    CreateAnalystEvalOptimizationRequest,
+)
+from snowflake.core.cortex.analyst_service._generated.models.create_analyst_eval_optimization_response import (
+    CreateAnalystEvalOptimizationResponse,
+)
 from snowflake.core.cortex.analyst_service._generated.models.error_response import ErrorResponse
 from snowflake.core.cortex.analyst_service._generated.models.fast_generation_request import FastGenerationRequest
 from snowflake.core.cortex.analyst_service._generated.models.fast_generation_response import FastGenerationResponse
@@ -120,6 +126,8 @@ __all__ = [
     "Confidence",
     "CreateAgenticOptimizationRequest",
     "CreateAgenticOptimizationResponse",
+    "CreateAnalystEvalOptimizationRequest",
+    "CreateAnalystEvalOptimizationResponse",
     "ErrorResponse",
     "FastGenerationRequest",
     "FastGenerationResponse",

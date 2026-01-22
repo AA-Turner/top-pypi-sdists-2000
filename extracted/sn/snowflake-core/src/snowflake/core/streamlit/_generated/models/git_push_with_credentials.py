@@ -18,7 +18,7 @@ import re  # noqa: F401
 
 from typing import Any, Optional
 
-from pydantic import StrictStr
+from pydantic import ConfigDict, StrictStr
 
 from snowflake.core.streamlit._generated.models.streamlit_push_options import (
     StreamlitPushOptions,
@@ -56,9 +56,10 @@ class GitPushWithCredentials(StreamlitPushOptions):
 
     __properties = ["auth_type"]
 
-    class Config:
-        populate_by_name = True
-        validate_assignment = True
+    model_config = ConfigDict(
+        validate_by_name=True,
+        validate_assignment=True,
+    )
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias."""
@@ -83,7 +84,7 @@ class GitPushWithCredentials(StreamlitPushOptions):
         if hide_readonly_properties:
             exclude_properties.update({})
 
-        _dict = dict(self._iter(to_dict=True, by_alias=True, exclude=exclude_properties, exclude_none=True))
+        _dict = self.model_dump(serialize_as_any=True, by_alias=True, exclude=exclude_properties, exclude_none=True)
 
         _dict["auth_type"] = StreamlitPushOptions.get_child_model_discriminator_value("GitPushWithCredentials")
 
@@ -100,9 +101,9 @@ class GitPushWithCredentials(StreamlitPushOptions):
             return None
 
         if type(obj) is not dict:
-            return GitPushWithCredentials.parse_obj(obj)
+            return GitPushWithCredentials.model_validate(obj)
 
-        _obj = GitPushWithCredentials.parse_obj(
+        _obj = GitPushWithCredentials.model_validate(
             {
                 "git_credentials": obj.get("git_credentials"),
                 "git_author_name": obj.get("git_author_name"),

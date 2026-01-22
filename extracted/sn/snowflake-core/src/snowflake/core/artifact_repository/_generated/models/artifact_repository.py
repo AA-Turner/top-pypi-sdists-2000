@@ -19,7 +19,7 @@ import re
 from datetime import datetime
 from typing import Any, Optional
 
-from pydantic import BaseModel, Field, StrictStr, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
 from typing_extensions import Annotated
 
 
@@ -39,15 +39,15 @@ class ArtifactRepository(BaseModel):
     comment : str, optional
         user comment associated to an object in the dictionary
     created_on : datetime, optional
-        Date and time when the artifact repository was created.
+        Date and time when the artifact repository was created — **Read-only:** *any user-provided value will be ignored.*
     database_name : str, optional
-        Database in which the artifact repository is stored
+        Database in which the artifact repository is stored — **Read-only:** *any user-provided value will be ignored.*
     schema_name : str, optional
-        Schema in which the artifact repository is stored
+        Schema in which the artifact repository is stored — **Read-only:** *any user-provided value will be ignored.*
     owner : str, optional
-        Role that owns the artifact repository
+        Role that owns the artifact repository — **Read-only:** *any user-provided value will be ignored.*
     owner_role_type : str, optional
-        The type of role that owns the artifact repository
+        The type of role that owns the artifact repository — **Read-only:** *any user-provided value will be ignored.*
     """
 
     name: Annotated[str, Field(strict=True)]
@@ -124,9 +124,10 @@ class ArtifactRepository(BaseModel):
             raise ValueError(r"""must validate the regular expression /^"([^"]|"")+"|[a-zA-Z_][a-zA-Z0-9_$]*$/""")
         return v
 
-    class Config:
-        populate_by_name = True
-        validate_assignment = True
+    model_config = ConfigDict(
+        validate_by_name=True,
+        validate_assignment=True,
+    )
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias."""
@@ -159,7 +160,7 @@ class ArtifactRepository(BaseModel):
                 }
             )
 
-        _dict = dict(self._iter(to_dict=True, by_alias=True, exclude=exclude_properties, exclude_none=True))
+        _dict = self.model_dump(serialize_as_any=True, by_alias=True, exclude=exclude_properties, exclude_none=True)
 
         return _dict
 
@@ -174,9 +175,9 @@ class ArtifactRepository(BaseModel):
             return None
 
         if type(obj) is not dict:
-            return ArtifactRepository.parse_obj(obj)
+            return ArtifactRepository.model_validate(obj)
 
-        _obj = ArtifactRepository.parse_obj(
+        _obj = ArtifactRepository.model_validate(
             {
                 "name": obj.get("name"),
                 "type": obj.get("type"),

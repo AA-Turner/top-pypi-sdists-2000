@@ -926,7 +926,7 @@ class InsertManyValuesTest(fixtures.RemovesEvents, fixtures.TablesTest):
 
     @testing.requires.provisioned_upsert
     def test_upsert_w_returning(self, connection):
-        """test cases that will execise SQL similar to that of
+        """test cases that will exercise SQL similar to that of
         test/orm/dml/test_bulk_statements.py
 
         """
@@ -1102,7 +1102,7 @@ class InsertManyValuesTest(fixtures.RemovesEvents, fixtures.TablesTest):
         multiple parameter sets, i.e. "INSERT INTO table (anycol) VALUES
         (DEFAULT) (DEFAULT) (DEFAULT) ... RETURNING col"
 
-        if the database doesnt support this (like SQLite, mssql), it
+        if the database doesn't support this (like SQLite, mssql), it
         actually runs the statement that many times on the cursor.
         This is much less efficient, but is still more efficient than
         how it worked previously where we'd run the statement that many

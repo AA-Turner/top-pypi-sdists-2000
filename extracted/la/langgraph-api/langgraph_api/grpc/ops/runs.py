@@ -39,9 +39,15 @@ from langgraph_api.grpc.generated import (
 )
 from langgraph_api.grpc.ops import (
     Authenticated,
+    _handle_grpc_error,
     grpc_error_guard,
 )
-from langgraph_api.serde import json_dumpb, json_dumpb_optional, json_loads_optional
+from langgraph_api.serde import (
+    json_dumpb,
+    json_dumpb_optional,
+    json_loads,
+    json_loads_optional,
+)
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator, Sequence
@@ -611,16 +617,18 @@ class Runs(Authenticated):
         ):
             """Subscribe to the run stream, returning a stream handler.
 
-            The stream handler must be passed to `join` to receive messages.
+            For gRPC implementation, this is a no-op for API compatibility.
+            The actual streaming happens in join().
             """
-            # TODO: Implement gRPC streaming subscription
-            raise NotImplementedError("Stream.subscribe not yet implemented for gRPC")
+            # For gRPC, we don't need a separate subscribe step
+            # The gRPC Stream RPC call handles everything
+            return None
 
         @staticmethod
         async def join(
             run_id: UUID,
             *,
-            stream_channel,
+            stream_channel,  # Unused in gRPC implementation
             thread_id: UUID,
             ignore_404: bool = False,
             cancel_on_disconnect: bool = False,
@@ -628,9 +636,88 @@ class Runs(Authenticated):
             last_event_id: str | None = None,
             ctx: Any = None,
         ):
-            """Stream the run output."""
-            # TODO: Implement gRPC streaming join
-            raise NotImplementedError("Stream.join not yet implemented for gRPC")
+            """Stream the run output via gRPC.
+
+            Yields tuples of (event_bytes, message_bytes, stream_id_bytes|None).
+            """
+            auth_filters = await Runs.Stream.handle_event(
+                ctx,
+                "read",
+                Auth.types.ThreadsRead(run_id=run_id, thread_id=thread_id),
+            )
+
+            request_kwargs: dict[str, Any] = {
+                "run_id": pb.UUID(value=str(run_id)),
+                "thread_id": pb.UUID(value=str(thread_id)),
+                "filters": auth_filters,
+            }
+
+            if ignore_404:
+                request_kwargs["ignore_run_not_found"] = True
+
+            if cancel_on_disconnect:
+                request_kwargs["cancel_on_disconnect"] = True
+
+            if last_event_id is not None:
+                request_kwargs["last_event_id"] = last_event_id
+
+            # Map stream_mode to protobuf enum list
+            if stream_mode is not None:
+                if isinstance(stream_mode, str):
+                    stream_mode = [stream_mode]
+
+                stream_modes = []
+                for mode in stream_mode:
+                    proto_mode = STREAM_MODE_TO_PB.get(mode)
+                    if proto_mode is None:
+                        sanitized_mode = str(mode)[:50] if mode else ""
+                        if len(mode) > 50:
+                            sanitized_mode = sanitized_mode + "..."
+                        logger.error(
+                            "Got invalid stream mode '%s', ignoring", sanitized_mode
+                        )
+                    else:
+                        stream_modes.append(proto_mode)
+
+                if stream_modes:
+                    request_kwargs["stream_modes"] = stream_modes
+
+            client = await get_shared_client()
+            request = pb.StreamRunRequest(**request_kwargs)
+
+            try:
+                async for event in client.runs.Stream(request):
+                    # Convert protobuf StreamEvent to tuple format
+                    event_bytes = event.event_type.encode("utf-8")
+                    message_bytes = event.message
+                    stream_id_bytes = (
+                        event.stream_id.encode("utf-8")
+                        if event.HasField("stream_id")
+                        else None
+                    )
+
+                    # Transform error events from gRPC format to older Python format
+                    if event.event_type == "error" and message_bytes:
+                        try:
+                            error_data = json_loads(message_bytes)
+                            if "status_code" in error_data and "message" in error_data:
+                                message_bytes = json_dumpb(
+                                    HTTPException(
+                                        status_code=error_data["status_code"],
+                                        detail=error_data["message"],
+                                    )
+                                )
+                        except Exception:
+                            pass  # Keep original message if transformation fails
+
+                    yield (event_bytes, message_bytes, stream_id_bytes)
+
+            except AioRpcError as e:
+                # Special handling for NOT_FOUND when ignore_404 is set
+                if e.code() == StatusCode.NOT_FOUND and ignore_404:
+                    return  # Return empty stream
+                # Convert all other gRPC errors to HTTP exceptions
+                _handle_grpc_error(e)
 
         @staticmethod
         async def check_run_stream_auth(
@@ -638,24 +725,60 @@ class Runs(Authenticated):
             thread_id: UUID,
             ctx: Any = None,
         ) -> None:
-            """Check auth for streaming a run."""
-            # TODO: Implement auth check for gRPC streaming
-            raise NotImplementedError(
-                "Stream.check_run_stream_auth not yet implemented for gRPC"
+            """Check auth for streaming a run.
+
+            Verifies the run exists and auth passes before starting the stream.
+            This ensures 404/403 errors are raised before the streaming response.
+            """
+            auth_filters = await Runs.Stream.handle_event(
+                ctx,
+                "read",
+                Auth.types.ThreadsRead(run_id=run_id, thread_id=thread_id),
             )
+
+            client = await get_shared_client()
+            request = pb.GetRunRequest(
+                run_id=pb.UUID(value=str(run_id)),
+                thread_id=pb.UUID(value=str(thread_id)),
+                filters=auth_filters,
+            )
+
+            try:
+                await client.runs.Get(request)
+            except AioRpcError as e:
+                _handle_grpc_error(e)
 
         @staticmethod
         async def publish(
             run_id: UUID | str,
             event: str,
             message: bytes,
+            thread_id: UUID | str,
             *,
-            thread_id: UUID | str | None = None,
             resumable: bool = False,
         ) -> None:
-            """Publish a message to the run stream."""
-            # TODO: Implement gRPC stream publishing
-            raise NotImplementedError("Stream.publish not yet implemented for gRPC")
+            """Publish a message to the run stream via gRPC.
+
+            Args:
+                run_id: The run ID
+                event: Event type (e.g. 'values', 'updates', 'messages', etc.)
+                message: Event payload (serialized JSON or raw bytes)
+                thread_id: The thread ID
+                resumable: If true, message will be cached with TTL for resumable streaming
+            """
+
+            client = await get_shared_client()
+            request = pb.PublishStreamEventRequest(
+                run_id=pb.UUID(value=str(run_id)),
+                thread_id=pb.UUID(value=str(thread_id)),
+                event_type=event,
+                message=message,
+                resumable=resumable,
+            )
+            try:
+                await client.runs.Publish(request)
+            except AioRpcError as e:
+                _handle_grpc_error(e)
 
     @staticmethod
     def enter(

@@ -18,7 +18,7 @@ import re  # noqa: F401
 
 from typing import Any, List, Optional
 
-from pydantic import BaseModel, StrictStr
+from pydantic import BaseModel, ConfigDict, StrictStr
 
 from snowflake.core.cortex.analyst_service._generated.models.table_columns import TableColumns, TableColumnsModel
 from snowflake.core.cortex.analyst_service._generated.models.warning import Warning, WarningModel
@@ -51,9 +51,10 @@ class PreSelectionResponse(BaseModel):
 
     __properties = ["request_id", "tables", "warnings", "experimental"]
 
-    class Config:  # noqa: D106
-        populate_by_name = True
-        validate_assignment = True
+    model_config = ConfigDict(
+        validate_by_name=True,
+        validate_assignment=True,
+    )
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias."""
@@ -78,7 +79,7 @@ class PreSelectionResponse(BaseModel):
         if hide_readonly_properties:
             exclude_properties.update({})
 
-        _dict = dict(self._iter(to_dict=True, by_alias=True, exclude=exclude_properties, exclude_none=True))
+        _dict = self.model_dump(serialize_as_any=True, by_alias=True, exclude=exclude_properties, exclude_none=True)
 
         # override the default output from pydantic by calling `to_dict()` of each item in tables (list)
         _items = []
@@ -109,9 +110,9 @@ class PreSelectionResponse(BaseModel):
             return None
 
         if type(obj) is not dict:
-            return PreSelectionResponse.parse_obj(obj)
+            return PreSelectionResponse.model_validate(obj)
 
-        _obj = PreSelectionResponse.parse_obj(
+        _obj = PreSelectionResponse.model_validate(
             {
                 "request_id": obj.get("request_id"),
                 "tables": [TableColumns.from_dict(_item) for _item in obj.get("tables")]

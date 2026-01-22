@@ -19,7 +19,7 @@ import re
 from datetime import datetime
 from typing import Any, List, Optional
 
-from pydantic import BaseModel, Field, StrictStr, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
 from typing_extensions import Annotated
 
 from snowflake.core.streamlit._generated.models.version_details_streamlit import (
@@ -44,7 +44,7 @@ class Streamlit(BaseModel):
     external_access_integrations : list[str], optional
         List of external access integrations needed in order for the Streamlit app code to access external networks.
     external_access_secrets : str, optional
-        Secrets needed for the Streamlit app code to access external networks.
+        Secrets needed for the Streamlit app code to access external networks — **Read-only:** *any user-provided value will be ignored.*
     title : str, optional
         User-facing title of the Streamlit app.
     main_file : str, optional
@@ -54,29 +54,29 @@ class Streamlit(BaseModel):
     default_version : str, optional
         The default version name of Streamlit. Valid values are "first" (first version), "last" (latest version), or "version$N" (specific version, e.g., "version$1"). Custom names are not supported.
     created_on : datetime, optional
-        Date and time when the Streamlit was created.
+        Date and time when the Streamlit was created — **Read-only:** *any user-provided value will be ignored.*
     default_version_details : VersionDetailsStreamlit, optional
 
     last_version_details : VersionDetailsStreamlit, optional
 
     database_name : str, optional
-        Database in which the Streamlit is stored
+        Database in which the Streamlit is stored — **Read-only:** *any user-provided value will be ignored.*
     schema_name : str, optional
-        Schema in which the Streamlit is stored
+        Schema in which the Streamlit is stored — **Read-only:** *any user-provided value will be ignored.*
     owner : str, optional
-        Role that owns the Streamlit
+        Role that owns the Streamlit — **Read-only:** *any user-provided value will be ignored.*
     owner_role_type : str, optional
-        The type of role that owns the Streamlit
+        The type of role that owns the Streamlit — **Read-only:** *any user-provided value will be ignored.*
     source_location : str, optional
         The stage from which the source files are copied to initialize the Streamlit app.
     url_id : str, optional
-        A unique ID associated with the Streamlit object's URL.
+        A unique ID associated with the Streamlit object's URL — **Read-only:** *any user-provided value will be ignored.*
     default_packages : list[str], optional
-        Default Python packages for Streamlit apps.
+        Default Python packages for Streamlit apps — **Read-only:** *any user-provided value will be ignored.*
     user_packages : list[str], optional
-        Python packages specified in the environment.yml file.
+        Python packages specified in the environment.yml file — **Read-only:** *any user-provided value will be ignored.*
     live_version_location_uri : str, optional
-        The location of the Streamlit object's live version files.
+        The location of the Streamlit object's live version files — **Read-only:** *any user-provided value will be ignored.*
     """
 
     name: Annotated[str, Field(strict=True)]
@@ -183,9 +183,10 @@ class Streamlit(BaseModel):
             raise ValueError(r"""must validate the regular expression /^"([^"]|"")+"|[a-zA-Z_][a-zA-Z0-9_$]*$/""")
         return v
 
-    class Config:
-        populate_by_name = True
-        validate_assignment = True
+    model_config = ConfigDict(
+        validate_by_name=True,
+        validate_assignment=True,
+    )
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias."""
@@ -223,7 +224,7 @@ class Streamlit(BaseModel):
                 }
             )
 
-        _dict = dict(self._iter(to_dict=True, by_alias=True, exclude=exclude_properties, exclude_none=True))
+        _dict = self.model_dump(serialize_as_any=True, by_alias=True, exclude=exclude_properties, exclude_none=True)
 
         # override the default output from pydantic by calling `to_dict()` of default_version_details
         if self.default_version_details:
@@ -246,9 +247,9 @@ class Streamlit(BaseModel):
             return None
 
         if type(obj) is not dict:
-            return Streamlit.parse_obj(obj)
+            return Streamlit.model_validate(obj)
 
-        _obj = Streamlit.parse_obj(
+        _obj = Streamlit.model_validate(
             {
                 "name": obj.get("name"),
                 "comment": obj.get("comment"),

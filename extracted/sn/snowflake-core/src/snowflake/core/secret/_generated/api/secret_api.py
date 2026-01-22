@@ -464,7 +464,7 @@ class SecretApi:
         # process the body parameter
         _body_params = None
 
-        if _params["secret"]:
+        if _params["secret"] is not None:
             _body_params = _params["secret"]
 
         # set the HTTP header `Accept`

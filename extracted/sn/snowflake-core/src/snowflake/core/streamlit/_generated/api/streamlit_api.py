@@ -473,7 +473,7 @@ class StreamlitApi:
         # process the body parameter
         _body_params = None
 
-        if _params["streamlit"]:
+        if _params["streamlit"] is not None:
             _body_params = _params["streamlit"]
 
         # set the HTTP header `Accept`
@@ -1060,7 +1060,7 @@ class StreamlitApi:
         # process the body parameter
         _body_params = None
 
-        if _params["add_live_version_streamlit_request"]:
+        if _params["add_live_version_streamlit_request"] is not None:
             _body_params = _params["add_live_version_streamlit_request"]
 
         # set the HTTP header `Accept`
@@ -1357,7 +1357,7 @@ class StreamlitApi:
         # process the body parameter
         _body_params = None
 
-        if _params["add_version_from_git_streamlit_request"]:
+        if _params["add_version_from_git_streamlit_request"] is not None:
             _body_params = _params["add_version_from_git_streamlit_request"]
 
         # set the HTTP header `Accept`
@@ -1652,7 +1652,7 @@ class StreamlitApi:
         # process the body parameter
         _body_params = None
 
-        if _params["add_version_streamlit_request"]:
+        if _params["add_version_streamlit_request"] is not None:
             _body_params = _params["add_version_streamlit_request"]
 
         # set the HTTP header `Accept`
@@ -1943,7 +1943,7 @@ class StreamlitApi:
         # process the body parameter
         _body_params = None
 
-        if _params["commit_streamlit_request"]:
+        if _params["commit_streamlit_request"] is not None:
             _body_params = _params["commit_streamlit_request"]
 
         # set the HTTP header `Accept`
@@ -3176,7 +3176,7 @@ class StreamlitApi:
         # process the body parameter
         _body_params = None
 
-        if _params["streamlit_push_options"]:
+        if _params["streamlit_push_options"] is not None:
             _body_params = _params["streamlit_push_options"]
 
         # set the HTTP header `Accept`

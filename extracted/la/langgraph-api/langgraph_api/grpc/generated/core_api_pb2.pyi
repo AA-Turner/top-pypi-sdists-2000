@@ -880,6 +880,20 @@ class MarkRunDoneRequest(_message.Message):
     resumable: bool
     def __init__(self, run_id: _Optional[_Union[UUID, _Mapping]] = ..., thread_id: _Optional[_Union[UUID, _Mapping]] = ..., resumable: bool = ...) -> None: ...
 
+class PublishStreamEventRequest(_message.Message):
+    __slots__ = ("run_id", "thread_id", "event_type", "message", "resumable")
+    RUN_ID_FIELD_NUMBER: _ClassVar[int]
+    THREAD_ID_FIELD_NUMBER: _ClassVar[int]
+    EVENT_TYPE_FIELD_NUMBER: _ClassVar[int]
+    MESSAGE_FIELD_NUMBER: _ClassVar[int]
+    RESUMABLE_FIELD_NUMBER: _ClassVar[int]
+    run_id: UUID
+    thread_id: UUID
+    event_type: str
+    message: bytes
+    resumable: bool
+    def __init__(self, run_id: _Optional[_Union[UUID, _Mapping]] = ..., thread_id: _Optional[_Union[UUID, _Mapping]] = ..., event_type: _Optional[str] = ..., message: _Optional[bytes] = ..., resumable: bool = ...) -> None: ...
+
 class GetGraphIDRequest(_message.Message):
     __slots__ = ("thread_id",)
     THREAD_ID_FIELD_NUMBER: _ClassVar[int]

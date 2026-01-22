@@ -32,11 +32,13 @@ from langgraph_api import store as api_store
 from langgraph_api.asyncio import ValueEvent, wait_if_not_done
 from langgraph_api.command import map_cmd
 from langgraph_api.feature_flags import (
+    FF_USE_CORE_API,
     UPDATES_NEEDED_FOR_INTERRUPTS,
     USE_DURABILITY,
     USE_RUNTIME_CONTEXT_API,
 )
 from langgraph_api.graph import get_graph
+from langgraph_api.grpc.ops import Runs as GrpcRuns
 from langgraph_api.js.base import BaseRemotePregel
 from langgraph_api.metadata import HOST, PLAN, USER_API_URL, incr_nodes
 from langgraph_api.schema import Run, StreamMode
@@ -44,6 +46,8 @@ from langgraph_api.serde import json_dumpb
 from langgraph_api.utils.config import run_in_executor
 from langgraph_runtime.checkpoint import Checkpointer
 from langgraph_runtime.ops import Runs
+
+CrudRuns = GrpcRuns if FF_USE_CORE_API else Runs
 
 if TYPE_CHECKING:
     from langchain_core.runnables import RunnableConfig
@@ -476,7 +480,7 @@ async def consume(
     resumable: bool = False,
     stream_modes: set[StreamMode] | None = None,
     *,
-    thread_id: str | uuid.UUID | None = None,
+    thread_id: str | uuid.UUID,
 ) -> None:
     stream_modes = stream_modes or set()
     if "messages-tuple" in stream_modes:
@@ -486,7 +490,7 @@ async def consume(
     async with aclosing(stream):  # type: ignore[invalid-argument-type]
         try:
             async for mode, payload in stream:
-                await Runs.Stream.publish(
+                await CrudRuns.Stream.publish(
                     run_id,
                     mode,
                     await run_in_executor(None, json_dumpb, payload),
@@ -496,7 +500,7 @@ async def consume(
         except Exception as e:
             if isinstance(e, ExceptionGroup):
                 e = e.exceptions[0]
-            await Runs.Stream.publish(
+            await CrudRuns.Stream.publish(
                 run_id,
                 "error",
                 await run_in_executor(None, json_dumpb, e),

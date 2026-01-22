@@ -46,6 +46,102 @@ pub(crate) enum Error {
     TmpDir(#[from] std::io::Error),
 }
 
+/// A hook specification that all hook types can be converted into.
+#[derive(Debug, Clone)]
+pub(crate) struct HookSpec {
+    pub id: String,
+    pub name: String,
+    pub entry: String,
+    pub language: Language,
+    pub priority: Option<u32>,
+    pub options: HookOptions,
+}
+
+impl HookSpec {
+    pub(crate) fn apply_remote_hook_overrides(&mut self, config: &RemoteHook) {
+        if let Some(name) = &config.name {
+            self.name.clone_from(name);
+        }
+        if let Some(entry) = &config.entry {
+            self.entry.clone_from(entry);
+        }
+        if let Some(language) = &config.language {
+            self.language.clone_from(language);
+        }
+        if let Some(priority) = config.priority {
+            self.priority = Some(priority);
+        }
+
+        self.options.update(&config.options);
+    }
+
+    pub(crate) fn apply_project_defaults(&mut self, config: &Config) {
+        let language = self.language;
+        if self.options.language_version.is_none() {
+            self.options.language_version = config
+                .default_language_version
+                .as_ref()
+                .and_then(|v| v.get(&language).cloned());
+        }
+
+        if self.options.stages.is_none() {
+            self.options.stages.clone_from(&config.default_stages);
+        }
+    }
+}
+
+impl From<ManifestHook> for HookSpec {
+    fn from(hook: ManifestHook) -> Self {
+        Self {
+            id: hook.id,
+            name: hook.name,
+            entry: hook.entry,
+            language: hook.language,
+            priority: None,
+            options: hook.options,
+        }
+    }
+}
+
+impl From<LocalHook> for HookSpec {
+    fn from(hook: LocalHook) -> Self {
+        Self {
+            id: hook.id,
+            name: hook.name,
+            entry: hook.entry,
+            language: hook.language,
+            priority: hook.priority,
+            options: hook.options,
+        }
+    }
+}
+
+impl From<MetaHook> for HookSpec {
+    fn from(hook: MetaHook) -> Self {
+        Self {
+            id: hook.id,
+            name: hook.name,
+            entry: String::new(),
+            language: Language::System,
+            priority: hook.priority,
+            options: hook.options,
+        }
+    }
+}
+
+impl From<BuiltinHook> for HookSpec {
+    fn from(hook: BuiltinHook) -> Self {
+        Self {
+            id: hook.id,
+            name: hook.name,
+            entry: hook.entry,
+            language: Language::System,
+            priority: hook.priority,
+            options: hook.options,
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub(crate) enum Repo {
     Remote {
@@ -53,16 +149,16 @@ pub(crate) enum Repo {
         path: PathBuf,
         url: String,
         rev: String,
-        hooks: Vec<ManifestHook>,
+        hooks: Vec<HookSpec>,
     },
     Local {
-        hooks: Vec<ManifestHook>,
+        hooks: Vec<HookSpec>,
     },
     Meta {
-        hooks: Vec<ManifestHook>,
+        hooks: Vec<HookSpec>,
     },
     Builtin {
-        hooks: Vec<ManifestHook>,
+        hooks: Vec<HookSpec>,
     },
 }
 
@@ -73,7 +169,7 @@ impl Repo {
             repo: url.clone(),
             error: e,
         })?;
-        let hooks = manifest.hooks;
+        let hooks = manifest.hooks.into_iter().map(Into::into).collect();
 
         Ok(Self::Remote {
             path,
@@ -85,20 +181,22 @@ impl Repo {
 
     /// Construct a local repo from a list of hooks.
     pub(crate) fn local(hooks: Vec<LocalHook>) -> Self {
-        Self::Local { hooks }
+        Self::Local {
+            hooks: hooks.into_iter().map(Into::into).collect(),
+        }
     }
 
     /// Construct a meta repo.
     pub(crate) fn meta(hooks: Vec<MetaHook>) -> Self {
         Self::Meta {
-            hooks: hooks.into_iter().map(ManifestHook::from).collect(),
+            hooks: hooks.into_iter().map(Into::into).collect(),
         }
     }
 
     /// Construct a builtin repo.
     pub(crate) fn builtin(hooks: Vec<BuiltinHook>) -> Self {
         Self::Builtin {
-            hooks: hooks.into_iter().map(ManifestHook::from).collect(),
+            hooks: hooks.into_iter().map(Into::into).collect(),
         }
     }
 
@@ -111,7 +209,7 @@ impl Repo {
     }
 
     /// Get a hook by id.
-    pub(crate) fn get_hook(&self, id: &str) -> Option<&ManifestHook> {
+    pub(crate) fn get_hook(&self, id: &str) -> Option<&HookSpec> {
         let hooks = match self {
             Repo::Remote { hooks, .. } => hooks,
             Repo::Local { hooks } => hooks,
@@ -136,7 +234,7 @@ impl Display for Repo {
 pub(crate) struct HookBuilder {
     project: Arc<Project>,
     repo: Arc<Repo>,
-    config: ManifestHook,
+    hook_spec: HookSpec,
     // The index of the hook in the project configuration.
     idx: usize,
 }
@@ -145,53 +243,20 @@ impl HookBuilder {
     pub(crate) fn new(
         project: Arc<Project>,
         repo: Arc<Repo>,
-        config: ManifestHook,
+        hook_spec: HookSpec,
         idx: usize,
     ) -> Self {
         Self {
             project,
             repo,
-            config,
+            hook_spec,
             idx,
-        }
-    }
-
-    /// Update the hook from the project level hook configuration.
-    pub(crate) fn update(&mut self, config: &RemoteHook) -> &mut Self {
-        if let Some(name) = &config.name {
-            self.config.name.clone_from(name);
-        }
-        if let Some(entry) = &config.entry {
-            self.config.entry.clone_from(entry);
-        }
-        if let Some(language) = &config.language {
-            self.config.language.clone_from(language);
-        }
-
-        self.config.options.update(&config.options);
-
-        self
-    }
-
-    /// Combine the hook configuration with the project level configuration.
-    pub(crate) fn combine(&mut self, config: &Config) {
-        let options = &mut self.config.options;
-        let language = self.config.language;
-        if options.language_version.is_none() {
-            options.language_version = config
-                .default_language_version
-                .as_ref()
-                .and_then(|v| v.get(&language).cloned());
-        }
-
-        if options.stages.is_none() {
-            options.stages.clone_from(&config.default_stages);
         }
     }
 
     /// Fill in the default values for the hook configuration.
     fn fill_in_defaults(&mut self) {
-        let options = &mut self.config.options;
+        let options = &mut self.hook_spec.options;
         options.language_version.get_or_insert_default();
         options.alias.get_or_insert_default();
         options.args.get_or_insert_default();
@@ -209,12 +274,12 @@ impl HookBuilder {
 
     /// Check the hook configuration.
     fn check(&self) -> Result<(), Error> {
-        let language = self.config.language;
+        let language = self.hook_spec.language;
         let HookOptions {
             language_version,
             additional_dependencies,
             ..
-        } = &self.config.options;
+        } = &self.hook_spec.options;
 
         let additional_dependencies = additional_dependencies
             .as_ref()
@@ -223,7 +288,7 @@ impl HookBuilder {
         if !additional_dependencies.is_empty() {
             if !language.supports_install_env() {
                 return Err(Error::Hook {
-                    hook: self.config.id.clone(),
+                    hook: self.hook_spec.id.clone(),
                     error: anyhow::anyhow!(
                         "Hook specified `additional_dependencies: {}` but the language `{}` does not install an environment",
                         additional_dependencies.join(", "),
@@ -234,7 +299,7 @@ impl HookBuilder {
 
             if !language.supports_dependency() {
                 return Err(Error::Hook {
-                    hook: self.config.id.clone(),
+                    hook: self.hook_spec.id.clone(),
                     error: anyhow::anyhow!(
                         "Hook specified `additional_dependencies: {}` but the language `{}` does not support installing dependencies for now",
                         additional_dependencies.join(", "),
@@ -249,7 +314,7 @@ impl HookBuilder {
                 && language_version != "default"
             {
                 return Err(Error::Hook {
-                    hook: self.config.id.clone(),
+                    hook: self.hook_spec.id.clone(),
                     error: anyhow::anyhow!(
                         "Hook specified `language_version: {language_version}` but the language `{language}` does not support toolchain installation for now",
                     ),
@@ -262,18 +327,22 @@ impl HookBuilder {
 
     /// Build the hook.
     pub(crate) async fn build(mut self) -> Result<Hook, Error> {
+        // Ensure project-level defaults are applied in one place.
+        // This makes call sites simpler and avoids accidental divergence.
+        self.hook_spec.apply_project_defaults(self.project.config());
+
         self.check()?;
         self.fill_in_defaults();
 
-        let options = self.config.options;
+        let options = self.hook_spec.options;
         let language_version = options.language_version.expect("language_version not set");
-        let language_request = LanguageRequest::parse(self.config.language, &language_version)
+        let language_request = LanguageRequest::parse(self.hook_spec.language, &language_version)
             .map_err(|e| Error::Hook {
-                hook: self.config.id.clone(),
-                error: anyhow::anyhow!(e),
-            })?;
+            hook: self.hook_spec.id.clone(),
+            error: anyhow::anyhow!(e),
+        })?;
 
-        let entry = Entry::new(self.config.id.clone(), self.config.entry);
+        let entry = Entry::new(self.hook_spec.id.clone(), self.hook_spec.entry);
 
         let additional_dependencies = options
             .additional_dependencies
@@ -293,7 +362,8 @@ impl HookBuilder {
             None => Stages::All,
         };
 
-        let priority = options
+        let priority = self
+            .hook_spec
             .priority
             .unwrap_or(u32::try_from(self.idx).expect("idx too large"));
 
@@ -306,9 +376,9 @@ impl HookBuilder {
             project: self.project,
             repo: self.repo,
             idx: self.idx,
-            id: self.config.id,
-            name: self.config.name,
-            language: self.config.language,
+            id: self.hook_spec.id,
+            name: self.hook_spec.name,
+            language: self.hook_spec.language,
             alias: options.alias.expect("alias not set"),
             files: options.files,
             exclude: options.exclude,
@@ -498,14 +568,22 @@ impl Hook {
             return &self.additional_dependencies;
         }
         self.dependencies.get_or_init(|| {
-            // For remote hooks, itself is an implicit dependency of the hook.
-            let mut deps = FxHashSet::with_capacity_and_hasher(
-                self.additional_dependencies.len() + 1,
-                FxBuildHasher,
-            );
-            deps.extend(self.additional_dependencies.clone());
-            deps.insert(self.repo.to_string());
-            deps
+            env_key_dependencies(&self.additional_dependencies, Some(&self.repo.to_string()))
+        })
+    }
+
+    /// Returns a lightweight view of the hook environment identity used for reusing installs.
+    ///
+    /// Returns `None` for languages that do not install an environment.
+    pub(crate) fn env_key(&self) -> Option<HookEnvKeyRef<'_>> {
+        if !self.language.supports_install_env() {
+            return None;
+        }
+
+        Some(HookEnvKeyRef {
+            language: self.language,
+            dependencies: self.env_key_dependencies(),
+            language_request: &self.language_request,
         })
     }
 
@@ -521,6 +599,120 @@ impl Hook {
         } else {
             Cow::Borrowed(&self.additional_dependencies)
         }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub(crate) struct HookEnvKey {
+    pub(crate) language: Language,
+    pub(crate) dependencies: FxHashSet<String>,
+    pub(crate) language_request: LanguageRequest,
+}
+
+/// Borrowed form of [`HookEnvKey`] for comparing a hook to an existing installation
+/// without allocating/cloning dependency sets.
+#[derive(Debug, Clone, Copy)]
+pub(crate) struct HookEnvKeyRef<'a> {
+    pub(crate) language: Language,
+    pub(crate) dependencies: &'a FxHashSet<String>,
+    pub(crate) language_request: &'a LanguageRequest,
+}
+
+/// Builds the dependency set used to identify a hook environment.
+///
+/// For remote hooks, `remote_repo_dependency` is included so environments from different
+/// repositories are not reused accidentally.
+fn env_key_dependencies(
+    additional_dependencies: &FxHashSet<String>,
+    remote_repo_dependency: Option<&str>,
+) -> FxHashSet<String> {
+    let mut deps = FxHashSet::with_capacity_and_hasher(
+        additional_dependencies.len() + usize::from(remote_repo_dependency.is_some()),
+        FxBuildHasher,
+    );
+    deps.extend(additional_dependencies.iter().cloned());
+    if let Some(dep) = remote_repo_dependency {
+        deps.insert(dep.to_string());
+    }
+    deps
+}
+
+/// Shared matching logic between a computed hook env key (owned or borrowed) and an installed
+/// environment described by [`InstallInfo`].
+fn matches_install_info(
+    language: Language,
+    dependencies: &FxHashSet<String>,
+    language_request: &LanguageRequest,
+    info: &InstallInfo,
+) -> bool {
+    info.language == language
+        && info.dependencies == *dependencies
+        && language_request.satisfied_by(info)
+}
+
+impl HookEnvKey {
+    /// Compute the key used to match an installed hook environment.
+    ///
+    /// Returns `Ok(None)` if this hook does not install an environment.
+    pub(crate) fn from_hook_spec(
+        config: &Config,
+        mut hook_spec: HookSpec,
+        remote_repo_dependency: Option<&str>,
+    ) -> Result<Option<Self>> {
+        let language = hook_spec.language;
+        if !language.supports_install_env() {
+            return Ok(None);
+        }
+
+        hook_spec.apply_project_defaults(config);
+        hook_spec.options.language_version.get_or_insert_default();
+        hook_spec
+            .options
+            .additional_dependencies
+            .get_or_insert_default();
+
+        let request = hook_spec.options.language_version.as_deref().unwrap_or("");
+        let language_request = LanguageRequest::parse(language, request).with_context(|| {
+            format!(
+                "Invalid language_version `{request}` for hook `{}`",
+                hook_spec.id
+            )
+        })?;
+
+        let additional_dependencies: FxHashSet<String> = hook_spec
+            .options
+            .additional_dependencies
+            .as_ref()
+            .map_or_else(FxHashSet::default, |deps| deps.iter().cloned().collect());
+
+        let dependencies = env_key_dependencies(&additional_dependencies, remote_repo_dependency);
+
+        Ok(Some(Self {
+            language,
+            dependencies,
+            language_request,
+        }))
+    }
+
+    pub(crate) fn matches_install_info(&self, info: &InstallInfo) -> bool {
+        matches_install_info(
+            self.language,
+            &self.dependencies,
+            &self.language_request,
+            info,
+        )
+    }
+}
+
+impl HookEnvKeyRef<'_> {
+    /// Returns true if this env key matches the given installed environment.
+    pub(crate) fn matches_install_info(&self, info: &InstallInfo) -> bool {
+        matches_install_info(
+            self.language,
+            self.dependencies,
+            self.language_request,
+            info,
+        )
     }
 }
 
@@ -551,7 +743,7 @@ impl Display for InstalledHook {
     }
 }
 
-const HOOK_MARKER: &str = ".prek-hook.json";
+pub(crate) const HOOK_MARKER: &str = ".prek-hook.json";
 
 impl InstalledHook {
     /// Get the path to the environment where the hook is installed.
@@ -672,8 +864,176 @@ impl InstallInfo {
     }
 
     pub(crate) fn matches(&self, hook: &Hook) -> bool {
-        self.language == hook.language
-            && &self.dependencies == hook.env_key_dependencies()
-            && hook.language_request.satisfied_by(self)
+        hook.env_key()
+            .is_some_and(|key| key.matches_install_info(self))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::borrow::Cow;
+    use std::sync::Arc;
+
+    use anyhow::Result;
+    use prek_consts::CONFIG_FILE;
+    use rustc_hash::FxHashMap;
+
+    use crate::config::{HookOptions, Language, RemoteHook};
+    use crate::hook::HookSpec;
+    use crate::workspace::Project;
+
+    use super::{HookBuilder, Repo};
+
+    #[tokio::test]
+    async fn hook_builder_build_fills_and_merges_attributes() -> Result<()> {
+        let temp = tempfile::tempdir()?;
+        let config_path = temp.path().join(CONFIG_FILE);
+
+        // Ensure `combine()` can supply defaults for stages and language_version.
+        fs_err::write(
+            &config_path,
+            indoc::indoc! {r"
+                repos: []
+                default_language_version:
+                  python: python3.12
+                default_stages: [manual]
+            "},
+        )?;
+
+        let project = Arc::new(Project::from_config_file(
+            Cow::Borrowed(&config_path),
+            None,
+        )?);
+        let repo = Arc::new(Repo::Local { hooks: vec![] });
+
+        // Base hook spec (e.g. from a manifest): minimal options, one env var.
+        let mut base_env = FxHashMap::default();
+        base_env.insert("BASE".to_string(), "1".to_string());
+
+        let mut hook_spec = HookSpec {
+            id: "test-hook".to_string(),
+            name: "original-name".to_string(),
+            entry: "python3 -c 'print(1)'".to_string(),
+            language: Language::Python,
+            priority: None,
+            options: HookOptions {
+                env: Some(base_env),
+                ..Default::default()
+            },
+        };
+
+        // Project config overrides (e.g. from `.pre-commit-config.yaml`).
+        let mut override_env = FxHashMap::default();
+        override_env.insert("OVERRIDE".to_string(), "2".to_string());
+
+        let hook_override = RemoteHook {
+            id: "test-hook".to_string(),
+            name: Some("override-name".to_string()),
+            entry: Some("python3 -c 'print(2)'".to_string()),
+            language: None,
+            priority: Some(42),
+            options: HookOptions {
+                alias: Some("alias-1".to_string()),
+                types: Some(vec!["text".to_string()]),
+                args: Some(vec!["--flag".to_string()]),
+                env: Some(override_env),
+                always_run: Some(true),
+                pass_filenames: Some(false),
+                verbose: Some(true),
+                description: Some("desc".to_string()),
+                ..Default::default()
+            },
+        };
+
+        hook_spec.apply_remote_hook_overrides(&hook_override);
+        hook_spec.apply_project_defaults(project.config());
+
+        let builder = HookBuilder::new(project.clone(), repo, hook_spec, 7);
+        let hook = builder.build().await?;
+
+        insta::assert_debug_snapshot!(hook, @r#"
+        Hook {
+            project: Project {
+                relative_path: "",
+                idx: 0,
+                config: Config {
+                    repos: [],
+                    default_install_hook_types: None,
+                    default_language_version: Some(
+                        {
+                            Python: "python3.12",
+                        },
+                    ),
+                    default_stages: Some(
+                        [
+                            Manual,
+                        ],
+                    ),
+                    files: None,
+                    exclude: None,
+                    fail_fast: None,
+                    minimum_prek_version: None,
+                    orphan: None,
+                    _unused_keys: {},
+                },
+                repos: [],
+                ..
+            },
+            repo: Local {
+                hooks: [],
+            },
+            dependencies: OnceLock(
+                <uninit>,
+            ),
+            idx: 7,
+            id: "test-hook",
+            name: "override-name",
+            entry: Entry {
+                hook: "test-hook",
+                entry: "python3 -c 'print(2)'",
+            },
+            language: Python,
+            alias: "alias-1",
+            files: None,
+            exclude: None,
+            types: [
+                "text",
+            ],
+            types_or: [],
+            exclude_types: [],
+            additional_dependencies: {},
+            args: [
+                "--flag",
+            ],
+            env: {
+                "BASE": "1",
+                "OVERRIDE": "2",
+            },
+            always_run: true,
+            fail_fast: false,
+            pass_filenames: false,
+            description: Some(
+                "desc",
+            ),
+            language_request: Python(
+                MajorMinor(
+                    3,
+                    12,
+                ),
+            ),
+            log_file: None,
+            require_serial: false,
+            stages: Some(
+                {
+                    Manual,
+                },
+            ),
+            verbose: true,
+            minimum_prek_version: None,
+            priority: 42,
+        }
+        "#);
+
+        Ok(())
     }
 }

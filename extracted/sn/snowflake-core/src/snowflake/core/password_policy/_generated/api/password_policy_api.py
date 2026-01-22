@@ -468,7 +468,7 @@ class PasswordPolicyApi:
         # process the body parameter
         _body_params = None
 
-        if _params["password_policy"]:
+        if _params["password_policy"] is not None:
             _body_params = _params["password_policy"]
 
         # set the HTTP header `Accept`

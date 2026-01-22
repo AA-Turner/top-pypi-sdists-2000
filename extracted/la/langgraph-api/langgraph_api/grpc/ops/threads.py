@@ -21,6 +21,8 @@ from starlette.exceptions import HTTPException
 
 from langgraph_api import store as api_store
 from langgraph_api.command import map_cmd
+from langgraph_api.encryption.middleware import encrypt_json_if_needed
+from langgraph_api.encryption.shared import get_encryption
 from langgraph_api.graph import get_graph
 from langgraph_api.grpc.client import get_shared_client
 from langgraph_api.grpc.generated import checkpointer_pb2
@@ -210,22 +212,54 @@ def _normalize_uuid(value: UUID | str) -> str:
     return str(value) if isinstance(value, UUID) else str(UUID(str(value)))
 
 
-def _thread_status_checkpoint_to_proto(
+async def _serialize_exception(
+    exception: BaseException | dict[str, Any] | None,
+) -> bytes | None:
+    """Serialize (and optionally encrypt) an exception for storage."""
+    if exception is None:
+        return None
+
+    # JSON roundtrip handles BaseException via serde.default handler
+    exception_dict = json_loads(json_dumpb(exception))
+
+    enc = get_encryption()
+    if enc:
+        exception_dict = (
+            await encrypt_json_if_needed(exception_dict, enc, "thread", field="error")
+            or exception_dict
+        )
+
+    return json_dumpb(exception_dict)
+
+
+async def _thread_status_checkpoint_to_proto(
     checkpoint: dict[str, Any] | None,
 ) -> pb.ThreadStatusCheckpoint | None:
-    """Convert checkpoint dict to ThreadStatusCheckpoint proto."""
+    """Convert checkpoint dict to ThreadStatusCheckpoint proto (with optional encryption)."""
     if checkpoint is None:
         return None
 
-    # Compute interrupts map from tasks (same logic as storage_postgres/ops.py)
+    values = checkpoint.get("values", {})
+
+    # Compute interrupts map from tasks
     interrupts = {
         t["id"]: [patch_interrupt(i) for i in t["interrupts"]]
         for t in checkpoint.get("tasks", [])
         if t.get("interrupts")
     }
 
+    # Encrypt if encryption is enabled
+    enc = get_encryption()
+    if enc:
+        if values:
+            values = await encrypt_json_if_needed(values, enc, "thread", field="values")
+        if interrupts:
+            interrupts = await encrypt_json_if_needed(
+                interrupts, enc, "thread", field="interrupts"
+            )
+
     return pb.ThreadStatusCheckpoint(
-        values_json=json_dumpb(checkpoint.get("values", {})),
+        values_json=json_dumpb(values),
         next=list(checkpoint.get("next", [])),
         interrupts_json=json_dumpb(interrupts),
     )
@@ -667,21 +701,15 @@ class Threads(Authenticated):
             "thread_id": pb.UUID(value=_normalize_uuid(thread_id)),
         }
 
-        # Map checkpoint to proto
-        checkpoint_proto = _thread_status_checkpoint_to_proto(checkpoint)
+        # Map checkpoint to proto (with optional encryption)
+        checkpoint_proto = await _thread_status_checkpoint_to_proto(checkpoint)
         if checkpoint_proto is not None:
             request_kwargs["checkpoint"] = checkpoint_proto
 
-        # Map exception to JSON bytes
-        if exception is not None:
-            if isinstance(exception, BaseException):
-                exception_dict = {
-                    "type": type(exception).__name__,
-                    "message": str(exception),
-                }
-            else:
-                exception_dict = exception
-            request_kwargs["exception_json"] = json_dumpb(exception_dict)
+        # Map exception to JSON bytes (with optional encryption)
+        exception_json = await _serialize_exception(exception)
+        if exception_json is not None:
+            request_kwargs["exception_json"] = exception_json
 
         # Map expected_status to enum values
         if expected_status:

@@ -19,7 +19,7 @@ import re  # noqa: F401
 from datetime import datetime
 from typing import Any, Optional
 
-from pydantic import StrictStr
+from pydantic import ConfigDict, StrictStr
 
 from snowflake.core.secret._generated.models.secret import Secret
 
@@ -43,19 +43,19 @@ class PasswordSecret(Secret):
         user comment associated to an object in the dictionary
 
     created_on : datetime, optional
-        Date and time when the secret was created.
+        Date and time when the secret was created — **Read-only:** *any user-provided value will be ignored.*
 
     database_name : str, optional
-        Database in which the secret is stored
+        Database in which the secret is stored — **Read-only:** *any user-provided value will be ignored.*
 
     schema_name : str, optional
-        Schema in which the secret is stored
+        Schema in which the secret is stored — **Read-only:** *any user-provided value will be ignored.*
 
     owner : str, optional
-        Role that owns the secret
+        Role that owns the secret — **Read-only:** *any user-provided value will be ignored.*
 
     owner_role_type : str, optional
-        The type of role that owns the secret
+        The type of role that owns the secret — **Read-only:** *any user-provided value will be ignored.*
     """
 
     username: StrictStr
@@ -64,9 +64,10 @@ class PasswordSecret(Secret):
 
     __properties = ["type", "comment", "name", "created_on", "database_name", "schema_name", "owner", "owner_role_type"]
 
-    class Config:
-        populate_by_name = True
-        validate_assignment = True
+    model_config = ConfigDict(
+        validate_by_name=True,
+        validate_assignment=True,
+    )
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias."""
@@ -91,7 +92,7 @@ class PasswordSecret(Secret):
         if hide_readonly_properties:
             exclude_properties.update({})
 
-        _dict = dict(self._iter(to_dict=True, by_alias=True, exclude=exclude_properties, exclude_none=True))
+        _dict = self.model_dump(serialize_as_any=True, by_alias=True, exclude=exclude_properties, exclude_none=True)
 
         _dict["type"] = Secret.get_child_model_discriminator_value("PasswordSecret")
 
@@ -108,9 +109,9 @@ class PasswordSecret(Secret):
             return None
 
         if type(obj) is not dict:
-            return PasswordSecret.parse_obj(obj)
+            return PasswordSecret.model_validate(obj)
 
-        _obj = PasswordSecret.parse_obj(
+        _obj = PasswordSecret.model_validate(
             {
                 "comment": obj.get("comment"),
                 "name": obj.get("name"),

@@ -19,7 +19,7 @@ import re
 from datetime import datetime
 from typing import Any, Optional
 
-from pydantic import BaseModel, Field, StrictInt, StrictStr, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr, field_validator
 from typing_extensions import Annotated
 
 
@@ -57,15 +57,15 @@ class PasswordPolicy(BaseModel):
     password_history : int, optional
         Number of distinct passwords that a user must create before re-using a previous password
     created_on : datetime, optional
-        Date and time when the password policy was created.
+        Date and time when the password policy was created — **Read-only:** *any user-provided value will be ignored.*
     database_name : str, optional
-        Database in which the password policy is stored
+        Database in which the password policy is stored — **Read-only:** *any user-provided value will be ignored.*
     schema_name : str, optional
-        Schema in which the password policy is stored
+        Schema in which the password policy is stored — **Read-only:** *any user-provided value will be ignored.*
     owner : str, optional
-        Role that owns the password policy
+        Role that owns the password policy — **Read-only:** *any user-provided value will be ignored.*
     owner_role_type : str, optional
-        The type of role that owns the password policy
+        The type of role that owns the password policy — **Read-only:** *any user-provided value will be ignored.*
     """
 
     comment: Optional[StrictStr] = None
@@ -155,9 +155,10 @@ class PasswordPolicy(BaseModel):
             raise ValueError(r"""must validate the regular expression /^"([^"]|"")+"|[a-zA-Z_][a-zA-Z0-9_$]*$/""")
         return v
 
-    class Config:
-        populate_by_name = True
-        validate_assignment = True
+    model_config = ConfigDict(
+        validate_by_name=True,
+        validate_assignment=True,
+    )
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias."""
@@ -190,7 +191,7 @@ class PasswordPolicy(BaseModel):
                 }
             )
 
-        _dict = dict(self._iter(to_dict=True, by_alias=True, exclude=exclude_properties, exclude_none=True))
+        _dict = self.model_dump(serialize_as_any=True, by_alias=True, exclude=exclude_properties, exclude_none=True)
 
         return _dict
 
@@ -205,9 +206,9 @@ class PasswordPolicy(BaseModel):
             return None
 
         if type(obj) is not dict:
-            return PasswordPolicy.parse_obj(obj)
+            return PasswordPolicy.model_validate(obj)
 
-        _obj = PasswordPolicy.parse_obj(
+        _obj = PasswordPolicy.model_validate(
             {
                 "comment": obj.get("comment"),
                 "password_min_length": obj.get("password_min_length"),

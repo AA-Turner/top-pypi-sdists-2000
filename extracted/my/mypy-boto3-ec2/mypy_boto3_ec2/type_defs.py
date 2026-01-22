@@ -1812,6 +1812,7 @@ __all__ = (
     "DnsServersOptionsModifyStructureTypeDef",
     "EbsBlockDeviceResponseTypeDef",
     "EbsBlockDeviceTypeDef",
+    "EbsCardInfoTypeDef",
     "EbsInfoTypeDef",
     "EbsInstanceBlockDeviceSpecificationTypeDef",
     "EbsInstanceBlockDeviceTypeDef",
@@ -3654,6 +3655,7 @@ class AttachVerifiedAccessTrustProviderRequestTypeDef(TypedDict):
 class AttachVolumeRequestInstanceAttachVolumeTypeDef(TypedDict):
     Device: str
     VolumeId: str
+    EbsCardIndex: NotRequired[int]
     DryRun: NotRequired[bool]
 
 
@@ -3661,12 +3663,14 @@ class AttachVolumeRequestTypeDef(TypedDict):
     Device: str
     InstanceId: str
     VolumeId: str
+    EbsCardIndex: NotRequired[int]
     DryRun: NotRequired[bool]
 
 
 class AttachVolumeRequestVolumeAttachToInstanceTypeDef(TypedDict):
     Device: str
     InstanceId: str
+    EbsCardIndex: NotRequired[int]
     DryRun: NotRequired[bool]
 
 
@@ -3771,6 +3775,7 @@ class EbsBlockDeviceTypeDef(TypedDict):
     Encrypted: NotRequired[bool]
     VolumeInitializationRate: NotRequired[int]
     AvailabilityZoneId: NotRequired[str]
+    EbsCardIndex: NotRequired[int]
 
 
 class BlockPublicAccessStatesTypeDef(TypedDict):
@@ -6168,6 +6173,16 @@ class DnsServersOptionsModifyStructureTypeDef(TypedDict):
     Enabled: NotRequired[bool]
 
 
+class EbsCardInfoTypeDef(TypedDict):
+    EbsCardIndex: NotRequired[int]
+    BaselineBandwidthInMbps: NotRequired[int]
+    BaselineThroughputInMBps: NotRequired[float]
+    BaselineIops: NotRequired[int]
+    MaximumBandwidthInMbps: NotRequired[int]
+    MaximumThroughputInMBps: NotRequired[float]
+    MaximumIops: NotRequired[int]
+
+
 class EbsOptimizedInfoTypeDef(TypedDict):
     BaselineBandwidthInMbps: NotRequired[int]
     BaselineThroughputInMBps: NotRequired[float]
@@ -7389,6 +7404,7 @@ class LaunchTemplateEbsBlockDeviceRequestTypeDef(TypedDict):
     VolumeType: NotRequired[VolumeTypeType]
     Throughput: NotRequired[int]
     VolumeInitializationRate: NotRequired[int]
+    EbsCardIndex: NotRequired[int]
 
 
 class LaunchTemplateEbsBlockDeviceTypeDef(TypedDict):
@@ -7401,6 +7417,7 @@ class LaunchTemplateEbsBlockDeviceTypeDef(TypedDict):
     VolumeType: NotRequired[VolumeTypeType]
     Throughput: NotRequired[int]
     VolumeInitializationRate: NotRequired[int]
+    EbsCardIndex: NotRequired[int]
 
 
 class LaunchTemplateCpuOptionsRequestTypeDef(TypedDict):
@@ -9131,6 +9148,7 @@ class VolumeAttachmentTypeDef(TypedDict):
     DeleteOnTermination: NotRequired[bool]
     AssociatedResource: NotRequired[str]
     InstanceOwningService: NotRequired[str]
+    EbsCardIndex: NotRequired[int]
     VolumeId: NotRequired[str]
     InstanceId: NotRequired[str]
     Device: NotRequired[str]
@@ -10069,6 +10087,7 @@ class VolumeAttachmentResponseTypeDef(TypedDict):
     DeleteOnTermination: bool
     AssociatedResource: str
     InstanceOwningService: str
+    EbsCardIndex: int
     VolumeId: str
     InstanceId: str
     Device: str
@@ -15356,6 +15375,8 @@ class EbsInfoTypeDef(TypedDict):
     NvmeSupport: NotRequired[EbsNvmeSupportType]
     MaximumEbsAttachments: NotRequired[int]
     AttachmentLimitType: NotRequired[AttachmentLimitTypeType]
+    MaximumEbsCards: NotRequired[int]
+    EbsCards: NotRequired[list[EbsCardInfoTypeDef]]
 
 
 class InstanceBlockDeviceMappingSpecificationTypeDef(TypedDict):
@@ -15373,6 +15394,7 @@ class EbsInstanceBlockDeviceTypeDef(TypedDict):
     AssociatedResource: NotRequired[str]
     VolumeOwnerId: NotRequired[str]
     Operator: NotRequired[OperatorResponseTypeDef]
+    EbsCardIndex: NotRequired[int]
 
 
 class LaunchTemplateTypeDef(TypedDict):

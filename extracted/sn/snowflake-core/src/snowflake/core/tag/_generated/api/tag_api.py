@@ -439,7 +439,7 @@ class TagApi:
         # process the body parameter
         _body_params = None
 
-        if _params["tag"]:
+        if _params["tag"] is not None:
             _body_params = _params["tag"]
 
         # set the HTTP header `Accept`
@@ -753,7 +753,7 @@ class TagApi:
         # process the body parameter
         _body_params = None
 
-        if _params["tag"]:
+        if _params["tag"] is not None:
             _body_params = _params["tag"]
 
         # set the HTTP header `Accept`
