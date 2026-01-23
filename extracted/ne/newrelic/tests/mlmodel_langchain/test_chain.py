@@ -184,7 +184,6 @@ chat_completion_recorded_events_runnable_invoke = [
         {"type": "LlmChatCompletionMessage"},
         {
             "id": None,
-            "timestamp": None,
             "llm.conversation_id": "my-awesome-id",
             "llm.foo": "bar",
             "request_id": None,
@@ -244,7 +243,6 @@ chat_completion_recorded_events_invoke = [
         {"type": "LlmChatCompletionMessage"},
         {
             "id": None,
-            "timestamp": None,
             "llm.conversation_id": "my-awesome-id",
             "llm.foo": "bar",
             "request_id": None,
@@ -302,7 +300,6 @@ chat_completion_recorded_events_runnable_invoke_no_metadata_or_tags = [
         {"type": "LlmChatCompletionMessage"},
         {
             "id": None,
-            "timestamp": None,
             "llm.conversation_id": "my-awesome-id",
             "llm.foo": "bar",
             "request_id": None,
@@ -360,7 +357,6 @@ chat_completion_recorded_events_invoke_no_metadata_or_tags = [
         {"type": "LlmChatCompletionMessage"},
         {
             "id": None,
-            "timestamp": None,
             "llm.conversation_id": "my-awesome-id",
             "llm.foo": "bar",
             "request_id": None,
@@ -456,7 +452,6 @@ recorded_events_retrieval_chain_response = [
         {"type": "LlmChatCompletionMessage"},
         {
             "id": None,
-            "timestamp": None,
             "request_id": None,
             "span_id": None,
             "trace_id": "trace-id",
@@ -534,7 +529,6 @@ recorded_events_retrieval_chain_response = [
         {"type": "LlmChatCompletionMessage"},
         {
             "id": None,
-            "timestamp": None,
             "request_id": None,
             "span_id": None,
             "trace_id": "trace-id",
@@ -569,7 +563,6 @@ recorded_events_retrieval_chain_response = [
         {"type": "LlmChatCompletionMessage"},
         {
             "id": None,
-            "timestamp": None,
             "request_id": None,
             "span_id": None,
             "trace_id": "trace-id",
@@ -587,7 +580,6 @@ recorded_events_retrieval_chain_response = [
         {"type": "LlmChatCompletionMessage"},
         {
             "id": None,
-            "timestamp": None,
             "request_id": None,
             "span_id": None,
             "trace_id": "trace-id",
@@ -645,7 +637,6 @@ chat_completion_recorded_events_str_response = [
         {"type": "LlmChatCompletionMessage"},
         {
             "id": None,
-            "timestamp": None,
             "llm.conversation_id": "my-awesome-id",
             "llm.foo": "bar",
             "request_id": None,
@@ -704,7 +695,6 @@ chat_completion_recorded_events_list_response = [
         {"type": "LlmChatCompletionMessage"},
         {
             "id": None,
-            "timestamp": None,
             "llm.conversation_id": "my-awesome-id",
             "llm.foo": "bar",
             "request_id": None,
@@ -1640,90 +1630,6 @@ def test_async_langchain_chain_outside_transaction(
     runnable = create_function(json_schema, chat_openai_client, prompt)
 
     loop.run_until_complete(getattr(runnable, call_function)(input_))
-
-
-@pytest.mark.parametrize(
-    "create_function,call_function,call_function_args,call_function_kwargs,expected_events",
-    (
-        pytest.param(
-            create_structured_output_runnable,
-            "ainvoke",
-            ({"input": "Sally is 13"},),
-            {"config": {"tags": ["bar"], "metadata": {"id": "123"}}},
-            chat_completion_recorded_events_runnable_invoke,
-            id="runnable_chain.ainvoke-with-args-and-kwargs",
-        ),
-        pytest.param(
-            create_structured_output_chain,
-            "ainvoke",
-            ({"input": "Sally is 13"},),
-            {"config": {"tags": ["bar"], "metadata": {"id": "123"}}, "return_only_outputs": True},
-            chat_completion_recorded_events_invoke,
-            id="chain.ainvoke-with-args-and-kwargs",
-        ),
-    ),
-)
-def test_multiple_async_langchain_chain(
-    set_trace_info,
-    json_schema,
-    prompt,
-    chat_openai_client,
-    create_function,
-    call_function,
-    call_function_args,
-    call_function_kwargs,
-    expected_events,
-    loop,
-):
-    call1 = events_with_context_attrs(expected_events.copy())
-    call1[0][1]["request_id"] = "b1883d9d-10d6-4b67-a911-f72849704e92"
-    call1[1][1]["request_id"] = "b1883d9d-10d6-4b67-a911-f72849704e92"
-    call1[2][1]["request_id"] = "b1883d9d-10d6-4b67-a911-f72849704e92"
-    call2 = events_with_context_attrs(expected_events.copy())
-    call2[0][1]["request_id"] = "a58aa0c0-c854-4657-9e7b-4cce442f3b61"
-    call2[1][1]["request_id"] = "a58aa0c0-c854-4657-9e7b-4cce442f3b61"
-    call2[2][1]["request_id"] = "a58aa0c0-c854-4657-9e7b-4cce442f3b61"
-
-    @reset_core_stats_engine()
-    @validate_custom_events(call1 + call2)
-    # 3 langchain events and 5 openai events.
-    @validate_custom_event_count(count=16)
-    @validate_transaction_metrics(
-        name="test_chain:test_multiple_async_langchain_chain.<locals>._test",
-        scoped_metrics=[(f"Llm/chain/LangChain/{call_function}", 2)],
-        rollup_metrics=[(f"Llm/chain/LangChain/{call_function}", 2)],
-        custom_metrics=[(f"Supportability/Python/ML/LangChain/{langchain.__version__}", 1)],
-        background_task=True,
-    )
-    @background_task()
-    def _test():
-        with patch("langchain_core.callbacks.manager.uuid", autospec=True) as mock_uuid:
-            mock_uuid.uuid4.side_effect = [
-                uuid.UUID("b1883d9d-10d6-4b67-a911-f72849704e92"),  # first call
-                uuid.UUID("a58aa0c0-c854-4657-9e7b-4cce442f3b61"),
-                uuid.UUID("a58aa0c0-c854-4657-9e7b-4cce442f3b61"),  # second call
-                uuid.UUID("a58aa0c0-c854-4657-9e7b-4cce442f3b63"),
-                uuid.UUID("b1883d9d-10d6-4b67-a911-f72849704e93"),
-                uuid.UUID("a58aa0c0-c854-4657-9e7b-4cce442f3b64"),
-                uuid.UUID("a58aa0c0-c854-4657-9e7b-4cce442f3b65"),
-                uuid.UUID("a58aa0c0-c854-4657-9e7b-4cce442f3b66"),
-            ]
-            set_trace_info()
-            add_custom_attribute("llm.conversation_id", "my-awesome-id")
-            add_custom_attribute("llm.foo", "bar")
-            add_custom_attribute("non_llm_attr", "python-agent")
-
-            runnable = create_function(json_schema, chat_openai_client, prompt)
-            with WithLlmCustomAttributes({"context": "attr"}):
-                call1 = asyncio.ensure_future(
-                    getattr(runnable, call_function)(*call_function_args, **call_function_kwargs), loop=loop
-                )
-                call2 = asyncio.ensure_future(
-                    getattr(runnable, call_function)(*call_function_args, **call_function_kwargs), loop=loop
-                )
-                loop.run_until_complete(asyncio.gather(call1, call2))
-
-    _test()
 
 
 @reset_core_stats_engine()

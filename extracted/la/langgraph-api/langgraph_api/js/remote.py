@@ -520,10 +520,10 @@ class PassthroughSerialiser(SerializerProtocol):
         return _safe_json_loads(payload)
 
 
-def _get_passthrough_checkpointer():
-    from langgraph_runtime.checkpoint import Checkpointer
+async def _get_passthrough_checkpointer():
+    from langgraph_api import _checkpointer as api_checkpointer
 
-    checkpointer = Checkpointer()
+    checkpointer = await api_checkpointer.get_checkpointer()
     # This checkpointer does not attempt to revive LC-objects.
     # Instead, it will pass through the JSON values as-is.
     checkpointer.serde = PassthroughSerialiser()
@@ -542,7 +542,7 @@ async def run_remote_checkpointer():
         """Search checkpoints"""
 
         result = []
-        checkpointer = _get_passthrough_checkpointer()
+        checkpointer = await _get_passthrough_checkpointer()
         async for item in checkpointer.alist(
             config=payload.get("config"),
             limit=int(payload.get("limit") or 10),
@@ -556,7 +556,7 @@ async def run_remote_checkpointer():
     async def checkpointer_put(payload: dict):
         """Put the new checkpoint metadata"""
 
-        checkpointer = _get_passthrough_checkpointer()
+        checkpointer = await _get_passthrough_checkpointer()
         return await checkpointer.aput(
             payload["config"],
             payload["checkpoint"],
@@ -566,13 +566,13 @@ async def run_remote_checkpointer():
 
     async def checkpointer_get_tuple(payload: dict):
         """Get actual checkpoint values (reads)"""
-        checkpointer = _get_passthrough_checkpointer()
+        checkpointer = await _get_passthrough_checkpointer()
         return await checkpointer.aget_tuple(config=payload["config"])
 
     async def checkpointer_put_writes(payload: dict):
         """Put actual checkpoint values (writes)"""
 
-        checkpointer = _get_passthrough_checkpointer()
+        checkpointer = await _get_passthrough_checkpointer()
         return await checkpointer.aput_writes(
             payload["config"],
             payload["writes"],

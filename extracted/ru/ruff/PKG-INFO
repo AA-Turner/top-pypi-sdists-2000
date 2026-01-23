@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: ruff
-Version: 0.14.13
+Version: 0.14.14
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Environment :: Console
 Classifier: Intended Audience :: Developers
@@ -26,9 +26,9 @@ Home-Page: https://docs.astral.sh/ruff
 Author-email: "Astral Software Inc." <hey@astral.sh>
 Requires-Python: >=3.7
 Description-Content-Type: text/markdown; charset=UTF-8; variant=GFM
-Project-URL: Repository, https://github.com/astral-sh/ruff
-Project-URL: Documentation, https://docs.astral.sh/ruff/
 Project-URL: Changelog, https://github.com/astral-sh/ruff/blob/main/CHANGELOG.md
+Project-URL: Documentation, https://docs.astral.sh/ruff/
+Project-URL: Repository, https://github.com/astral-sh/ruff
 
 <!-- Begin section: Overview -->
 
@@ -178,8 +178,8 @@ curl -LsSf https://astral.sh/ruff/install.sh | sh
 powershell -c "irm https://astral.sh/ruff/install.ps1 | iex"
 
 # For a specific version.
-curl -LsSf https://astral.sh/ruff/0.14.13/install.sh | sh
-powershell -c "irm https://astral.sh/ruff/0.14.13/install.ps1 | iex"
+curl -LsSf https://astral.sh/ruff/0.14.14/install.sh | sh
+powershell -c "irm https://astral.sh/ruff/0.14.14/install.ps1 | iex"
 ```
 
 You can also install Ruff via [Homebrew](https://formulae.brew.sh/formula/ruff), [Conda](https://anaconda.org/conda-forge/ruff),
@@ -212,7 +212,7 @@ Ruff can also be used as a [pre-commit](https://pre-commit.com/) hook via [`ruff
 ```yaml
 - repo: https://github.com/astral-sh/ruff-pre-commit
   # Ruff version.
-  rev: v0.14.13
+  rev: v0.14.14
   hooks:
     # Run the linter.
     - id: ruff-check

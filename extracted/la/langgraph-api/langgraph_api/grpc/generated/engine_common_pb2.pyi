@@ -407,7 +407,7 @@ class Checkpoint(_message.Message):
     def __init__(self, v: _Optional[int] = ..., id: _Optional[str] = ..., channel_values: _Optional[_Mapping[str, ChannelValue]] = ..., channel_versions: _Optional[_Mapping[str, str]] = ..., versions_seen: _Optional[_Mapping[str, ChannelVersions]] = ..., ts: _Optional[str] = ..., updated_channels: _Optional[_Iterable[str]] = ...) -> None: ...
 
 class CheckpointMetadata(_message.Message):
-    __slots__ = ("source", "step", "parents", "run_id")
+    __slots__ = ("source", "step", "parents", "run_id", "extras")
     class CheckpointSource(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
         __slots__ = ()
         unknown: _ClassVar[CheckpointMetadata.CheckpointSource]
@@ -427,15 +427,24 @@ class CheckpointMetadata(_message.Message):
         key: str
         value: str
         def __init__(self, key: _Optional[str] = ..., value: _Optional[str] = ...) -> None: ...
+    class ExtrasEntry(_message.Message):
+        __slots__ = ("key", "value")
+        KEY_FIELD_NUMBER: _ClassVar[int]
+        VALUE_FIELD_NUMBER: _ClassVar[int]
+        key: str
+        value: bytes
+        def __init__(self, key: _Optional[str] = ..., value: _Optional[bytes] = ...) -> None: ...
     SOURCE_FIELD_NUMBER: _ClassVar[int]
     STEP_FIELD_NUMBER: _ClassVar[int]
     PARENTS_FIELD_NUMBER: _ClassVar[int]
     RUN_ID_FIELD_NUMBER: _ClassVar[int]
+    EXTRAS_FIELD_NUMBER: _ClassVar[int]
     source: CheckpointMetadata.CheckpointSource
     step: int
     parents: _containers.ScalarMap[str, str]
     run_id: str
-    def __init__(self, source: _Optional[_Union[CheckpointMetadata.CheckpointSource, str]] = ..., step: _Optional[int] = ..., parents: _Optional[_Mapping[str, str]] = ..., run_id: _Optional[str] = ...) -> None: ...
+    extras: _containers.ScalarMap[str, bytes]
+    def __init__(self, source: _Optional[_Union[CheckpointMetadata.CheckpointSource, str]] = ..., step: _Optional[int] = ..., parents: _Optional[_Mapping[str, str]] = ..., run_id: _Optional[str] = ..., extras: _Optional[_Mapping[str, bytes]] = ...) -> None: ...
 
 class CheckpointTuple(_message.Message):
     __slots__ = ("config", "checkpoint", "metadata", "parent_config", "pending_writes")

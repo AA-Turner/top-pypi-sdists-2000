@@ -54,7 +54,7 @@ class Textbox(FormComponent):
     Creates a textarea for user to enter string input or display string output.
 
     Demos: hello_world, diff_texts, sentence_builder
-    Guides: creating-a-chatbot, real-time-speech-recognition
+    Guides: quickstart
     """
 
     EVENTS = [

@@ -40,6 +40,18 @@ class PutWritesRequest(_message.Message):
     task_path: str
     def __init__(self, config: _Optional[_Union[_engine_common_pb2.EngineRunnableConfig, _Mapping]] = ..., writes: _Optional[_Iterable[_Union[_engine_common_pb2.Write, _Mapping]]] = ..., task_id: _Optional[str] = ..., task_path: _Optional[str] = ...) -> None: ...
 
+class Capabilities(_message.Message):
+    __slots__ = ("supports_delete_thread", "supports_prune", "supports_delete_for_runs", "supports_copy_thread")
+    SUPPORTS_DELETE_THREAD_FIELD_NUMBER: _ClassVar[int]
+    SUPPORTS_PRUNE_FIELD_NUMBER: _ClassVar[int]
+    SUPPORTS_DELETE_FOR_RUNS_FIELD_NUMBER: _ClassVar[int]
+    SUPPORTS_COPY_THREAD_FIELD_NUMBER: _ClassVar[int]
+    supports_delete_thread: bool
+    supports_prune: bool
+    supports_delete_for_runs: bool
+    supports_copy_thread: bool
+    def __init__(self, supports_delete_thread: bool = ..., supports_prune: bool = ..., supports_delete_for_runs: bool = ..., supports_copy_thread: bool = ...) -> None: ...
+
 class ListRequest(_message.Message):
     __slots__ = ("config", "filter_json", "before", "limit")
     CONFIG_FIELD_NUMBER: _ClassVar[int]
@@ -57,6 +69,20 @@ class DeleteThreadRequest(_message.Message):
     THREAD_ID_FIELD_NUMBER: _ClassVar[int]
     thread_id: str
     def __init__(self, thread_id: _Optional[str] = ...) -> None: ...
+
+class DeleteForRunsRequest(_message.Message):
+    __slots__ = ("run_ids",)
+    RUN_IDS_FIELD_NUMBER: _ClassVar[int]
+    run_ids: _containers.RepeatedScalarFieldContainer[str]
+    def __init__(self, run_ids: _Optional[_Iterable[str]] = ...) -> None: ...
+
+class CopyThreadRequest(_message.Message):
+    __slots__ = ("from_thread_id", "to_thread_id")
+    FROM_THREAD_ID_FIELD_NUMBER: _ClassVar[int]
+    TO_THREAD_ID_FIELD_NUMBER: _ClassVar[int]
+    from_thread_id: str
+    to_thread_id: str
+    def __init__(self, from_thread_id: _Optional[str] = ..., to_thread_id: _Optional[str] = ...) -> None: ...
 
 class PruneRequest(_message.Message):
     __slots__ = ("thread_ids", "strategy")

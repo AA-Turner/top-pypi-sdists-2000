@@ -210,10 +210,10 @@ class RunConfig:
     agent. See the documentation in `Handoff.input_filter` for more details.
     """
 
-    nest_handoff_history: bool = True
-    """Wrap prior run history in a single assistant message before handing off when no custom
-    input filter is set. Set to False to preserve the raw transcript behavior from previous
-    releases.
+    nest_handoff_history: bool = False
+    """Opt-in beta: wrap prior run history in a single assistant message before handing off when no
+    custom input filter is set. This is disabled by default while we stabilize nested handoffs; set
+    to True to enable the collapsed transcript behavior.
     """
 
     handoff_history_mapper: HandoffHistoryMapper | None = None
@@ -2056,16 +2056,6 @@ class AgentRunner:
         if session is None:
             return input
 
-        # If the user doesn't specify an input callback and pass a list as input
-        if isinstance(input, list) and not session_input_callback:
-            raise UserError(
-                "When using session memory, list inputs require a "
-                "`RunConfig.session_input_callback` to define how they should be merged "
-                "with the conversation history. If you don't want to use a callback, "
-                "provide your input as a string instead, or disable session memory "
-                "(session=None) and pass a list to manage the history manually."
-            )
-
         # Get previous conversation history
         history = await session.get_items()
 
@@ -2073,6 +2063,8 @@ class AgentRunner:
         new_input_list = ItemHelpers.input_to_new_input_list(input)
 
         if session_input_callback is None:
+            # Historically we rejected list inputs without an explicit callback to avoid
+            # ambiguous merges; the default now appends new items to history for ergonomics.
             return history + new_input_list
         elif callable(session_input_callback):
             res = session_input_callback(history, new_input_list)

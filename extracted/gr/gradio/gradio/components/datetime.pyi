@@ -21,6 +21,8 @@ from gradio.events import Dependency
 class DateTime(FormComponent):
     """
     Component to select a date and (optionally) a time.
+
+    Guides: time-plots
     """
 
     EVENTS = [

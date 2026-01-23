@@ -25,6 +25,7 @@ from langgraph_api.encryption.middleware import (
 from langgraph_api.errors import UserInterrupt, UserRollback, UserTimeout
 from langgraph_api.feature_flags import FF_USE_CORE_API
 from langgraph_api.grpc.ops import Runs as GrpcRuns
+from langgraph_api.grpc.ops import Threads as GrpcThreads
 from langgraph_api.js.errors import RemoteException
 from langgraph_api.metadata import incr_runs
 from langgraph_api.otel_context import restore_otel_trace_context
@@ -37,6 +38,7 @@ from langgraph_runtime.ops import Runs, Threads
 from langgraph_runtime.retry import RETRIABLE_EXCEPTIONS
 
 CrudRuns = GrpcRuns if FF_USE_CORE_API else Runs
+CrudThreads = GrpcThreads if FF_USE_CORE_API else Threads
 
 logger = structlog.stdlib.get_logger(__name__)
 
@@ -276,8 +278,8 @@ async def worker(
                         run_attempt=attempt,
                     )
                     try:
-                        state_snapshot = await Threads.State.get(
-                            conn, run["kwargs"]["config"]
+                        state_snapshot = await CrudThreads.State.get(
+                            conn, run["kwargs"]["config"], subgraphs=False
                         )
                         checkpoint = state_snapshot_to_thread_state(state_snapshot)
                     except Exception:
@@ -288,7 +290,7 @@ async def worker(
                             run_attempt=attempt,
                         )
                 if not temporary:
-                    await Threads.set_joint_status(
+                    await CrudThreads.set_joint_status(
                         conn,
                         run["thread_id"],
                         run_id,
@@ -303,7 +305,7 @@ async def worker(
                     **log_info,
                 )
                 if not temporary:
-                    await Threads.set_joint_status(
+                    await CrudThreads.set_joint_status(
                         conn,
                         run["thread_id"],
                         run_id,
@@ -316,7 +318,7 @@ async def worker(
                 status = "rollback"
                 if not temporary:
                     try:
-                        await Threads.set_joint_status(
+                        await CrudThreads.set_joint_status(
                             conn,
                             run["thread_id"],
                             run_id,
@@ -345,7 +347,7 @@ async def worker(
                     **log_info,
                 )
                 if not temporary:
-                    await Threads.set_joint_status(
+                    await CrudThreads.set_joint_status(
                         conn,
                         run["thread_id"],
                         run_id,
@@ -376,7 +378,7 @@ async def worker(
                     **log_info,
                 )
                 if not temporary:
-                    await Threads.set_joint_status(
+                    await CrudThreads.set_joint_status(
                         conn,
                         run["thread_id"],
                         run_id,
@@ -388,7 +390,7 @@ async def worker(
 
             # delete thread if it's temporary and we don't want to retry
             if temporary and not isinstance(exception, ALL_RETRIABLE_EXCEPTIONS):
-                await Threads._delete_with_run(conn, run["thread_id"], run_id)
+                await CrudThreads.delete(conn, run["thread_id"])
 
         if isinstance(exception, ALL_RETRIABLE_EXCEPTIONS):
             await logger.awarning("RETRYING", exc_info=exception)

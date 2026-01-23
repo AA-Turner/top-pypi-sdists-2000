@@ -3,7 +3,7 @@ Type annotations for dynamodb service Client.
 
 [Documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_dynamodb/client/)
 
-Copyright 2025 Vlad Emelianov
+Copyright 2026 Vlad Emelianov
 
 Usage::
 
@@ -145,7 +145,14 @@ from .type_defs import (
     UpdateTimeToLiveInputTypeDef,
     UpdateTimeToLiveOutputTypeDef,
 )
-from .waiter import TableExistsWaiter, TableNotExistsWaiter
+from .waiter import (
+    ContributorInsightsEnabledWaiter,
+    ExportCompletedWaiter,
+    ImportCompletedWaiter,
+    KinesisStreamingDestinationActiveWaiter,
+    TableExistsWaiter,
+    TableNotExistsWaiter,
+)
 
 if sys.version_info >= (3, 12):
     from typing import Literal, Unpack
@@ -849,6 +856,50 @@ class DynamoDBClient(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/dynamodb/client/get_paginator.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_dynamodb/client/#get_paginator)
+        """
+
+    @overload  # type: ignore[override]
+    def get_waiter(  # type: ignore[override]
+        self, waiter_name: Literal["contributor_insights_enabled"]
+    ) -> ContributorInsightsEnabledWaiter:
+        """
+        Returns an object that can wait for some condition.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/dynamodb/client/get_waiter.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_dynamodb/client/#get_waiter)
+        """
+
+    @overload  # type: ignore[override]
+    def get_waiter(  # type: ignore[override]
+        self, waiter_name: Literal["export_completed"]
+    ) -> ExportCompletedWaiter:
+        """
+        Returns an object that can wait for some condition.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/dynamodb/client/get_waiter.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_dynamodb/client/#get_waiter)
+        """
+
+    @overload  # type: ignore[override]
+    def get_waiter(  # type: ignore[override]
+        self, waiter_name: Literal["import_completed"]
+    ) -> ImportCompletedWaiter:
+        """
+        Returns an object that can wait for some condition.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/dynamodb/client/get_waiter.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_dynamodb/client/#get_waiter)
+        """
+
+    @overload  # type: ignore[override]
+    def get_waiter(  # type: ignore[override]
+        self, waiter_name: Literal["kinesis_streaming_destination_active"]
+    ) -> KinesisStreamingDestinationActiveWaiter:
+        """
+        Returns an object that can wait for some condition.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/dynamodb/client/get_waiter.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_dynamodb/client/#get_waiter)
         """
 
     @overload  # type: ignore[override]

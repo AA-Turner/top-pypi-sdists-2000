@@ -2,14 +2,12 @@ import asyncio
 import importlib
 import logging
 from contextlib import asynccontextmanager
-from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from types import TracebackType
 from typing import (
     AsyncGenerator,
     Awaitable,
     Callable,
-    Collection,
     Hashable,
     Iterable,
     Mapping,
@@ -22,20 +20,31 @@ from typing import (
     overload,
 )
 
-from key_value.aio.stores.base import BaseContextManagerStore
+import redis.exceptions
+from key_value.aio.protocols.key_value import AsyncKeyValue
+from opentelemetry import trace
+from redis.asyncio import Redis
+from redis.asyncio.client import PubSub
+from redis.asyncio.cluster import RedisCluster
 from typing_extensions import Self
 
-import redis.exceptions
-from opentelemetry import trace
-from redis.asyncio import ConnectionPool, Redis
-
-from ._redis import connection_pool_from_url
+from ._docket_snapshot import DocketSnapshot as DocketSnapshot
+from ._docket_snapshot import DocketSnapshotMixin
+from ._docket_snapshot import RunningExecution as RunningExecution
+from ._docket_snapshot import WorkerInfo as WorkerInfo
+from ._redis import RedisConnection
+from ._result_store import ResultStorage
 from ._uuid7 import uuid7
-
 from .execution import (
     Execution,
-    ExecutionState,
     TaskFunction,
+)
+from .instrumentation import (
+    TASKS_ADDED,
+    TASKS_CANCELLED,
+    TASKS_REPLACED,
+    TASKS_SCHEDULED,
+    TASKS_STRICKEN,
 )
 from .strikelist import (
     LiteralOperator,
@@ -43,16 +52,6 @@ from .strikelist import (
     Restore,
     Strike,
     StrikeList,
-)
-from key_value.aio.protocols.key_value import AsyncKeyValue
-from key_value.aio.stores.redis import RedisStore
-
-from .instrumentation import (
-    TASKS_ADDED,
-    TASKS_CANCELLED,
-    TASKS_REPLACED,
-    TASKS_SCHEDULED,
-    TASKS_STRICKEN,
 )
 
 logger: logging.Logger = logging.getLogger(__name__)
@@ -85,56 +84,7 @@ class RedisStreamPendingMessage(TypedDict):
     times_delivered: int
 
 
-@dataclass
-class WorkerInfo:
-    name: str
-    last_seen: datetime
-    tasks: set[str]
-
-
-class RunningExecution(Execution):
-    worker: str
-    started: datetime
-
-    def __init__(
-        self,
-        execution: Execution,
-        worker: str,
-        started: datetime,
-    ) -> None:
-        # Call parent constructor to properly initialize immutable fields
-        super().__init__(
-            docket=execution.docket,
-            function=execution.function,
-            args=execution.args,
-            kwargs=execution.kwargs,
-            key=execution.key,
-            when=execution.when,
-            attempt=execution.attempt,
-            trace_context=execution.trace_context,
-            redelivered=execution.redelivered,
-        )
-        # Copy over mutable state fields
-        self.state: ExecutionState = execution.state
-        self.started_at: datetime | None = execution.started_at
-        self.completed_at: datetime | None = execution.completed_at
-        self.error: str | None = execution.error
-        self.result_key: str | None = execution.result_key
-        # Set RunningExecution-specific fields
-        self.worker = worker
-        self.started = started
-
-
-@dataclass
-class DocketSnapshot:
-    taken: datetime
-    total_tasks: int
-    future: Sequence[Execution]
-    running: Sequence[RunningExecution]
-    workers: Collection[WorkerInfo]
-
-
-class Docket:
+class Docket(DocketSnapshotMixin):
     """A Docket represents a collection of tasks that may be scheduled for later
     execution.  With a Docket, you can add, replace, and cancel tasks.
     Example:
@@ -152,7 +102,8 @@ class Docket:
     tasks: dict[str, TaskFunction]
     strike_list: StrikeList
 
-    _connection_pool: ConnectionPool
+    _redis: RedisConnection
+    _result_storage: ResultStorage | None
     _cancel_task_script: _cancel_task | None
 
     def __init__(
@@ -192,6 +143,7 @@ class Docket:
         self.enable_internal_instrumentation = enable_internal_instrumentation
         self._cancel_task_script = None
         self._user_result_storage = result_storage
+        self._redis = RedisConnection(url)
 
         from .tasks import standard_tasks
 
@@ -206,8 +158,11 @@ class Docket:
         """Return the key prefix for this docket.
 
         All Redis keys for this docket are prefixed with this value.
+
+        For Redis Cluster mode, returns a hash-tagged prefix like "{myapp}"
+        to ensure all keys hash to the same slot.
         """
-        return self.name
+        return self._redis.prefix(self.name)
 
     def key(self, suffix: str) -> str:
         """Return a Redis key with the docket prefix.
@@ -227,32 +182,23 @@ class Docket:
             enable_internal_instrumentation=self.enable_internal_instrumentation,
         )
 
-        self._connection_pool = await connection_pool_from_url(self.url)
+        # Connect to Redis (handles cluster vs standalone)
+        await self._redis.__aenter__()
 
         # Connect the strike list to Redis and start monitoring
-        await self.strike_list.connect()
+        await self.strike_list.__aenter__()
 
         # Initialize result storage
-        # We use a separate connection pool for result storage because RedisStore
-        # requires decode_responses=True while Docket's internal Redis usage
-        # expects bytes (decode_responses=False). We also pass a client to
-        # RedisStore to work around a py-key-value bug that ignores username
-        # in URLs (github.com/strawgate/py-key-value/issues/254).
         if self._user_result_storage is not None:
             self.result_storage: AsyncKeyValue = self._user_result_storage
+            self._result_storage = None
+            # User-provided storage should handle its own initialization
+            if hasattr(self.result_storage, "setup"):
+                await self.result_storage.setup()  # type: ignore[union-attr]
         else:
-            self._result_storage_pool = await connection_pool_from_url(
-                self.url, decode_responses=True
-            )
-            result_client = Redis(connection_pool=self._result_storage_pool)
-            self.result_storage = RedisStore(
-                client=result_client, default_collection=self.results_collection
-            )
-
-        if isinstance(self.result_storage, BaseContextManagerStore):
-            await self.result_storage.__aenter__()
-        else:
-            await self.result_storage.setup()
+            self._result_storage = ResultStorage(self._redis, self.results_collection)
+            await self._result_storage.__aenter__()
+            self.result_storage = self._result_storage
         return self
 
     async def __aexit__(
@@ -261,29 +207,48 @@ class Docket:
         exc_value: BaseException | None,
         traceback: TracebackType | None,
     ) -> None:
-        if isinstance(self.result_storage, BaseContextManagerStore):
-            await self.result_storage.__aexit__(exc_type, exc_value, traceback)
-
-        # Close the result storage pool if we created it
-        if hasattr(self, "_result_storage_pool"):
-            await asyncio.shield(self._result_storage_pool.disconnect())
-            del self._result_storage_pool
+        if self._result_storage is not None:
+            try:
+                await asyncio.shield(
+                    self._result_storage.__aexit__(exc_type, exc_value, traceback)
+                )
+            except (Exception, asyncio.CancelledError):
+                logger.warning("Failed to close result storage", exc_info=True)
+            finally:
+                self._result_storage = None
 
         # Close the strike list (stops monitoring and disconnects)
-        await self.strike_list.close()
+        await self.strike_list.__aexit__(exc_type, exc_value, traceback)
         del self.strike_list
 
-        await asyncio.shield(self._connection_pool.disconnect())
-        del self._connection_pool
+        try:
+            await asyncio.shield(self._redis.__aexit__(exc_type, exc_value, traceback))
+        except (Exception, asyncio.CancelledError):
+            logger.warning("Failed to close docket Redis connection", exc_info=True)
 
     @asynccontextmanager
-    async def redis(self) -> AsyncGenerator[Redis, None]:
-        r = Redis(connection_pool=self._connection_pool)
-        await r.__aenter__()
-        try:
+    async def redis(self) -> AsyncGenerator[Redis | RedisCluster, None]:
+        async with self._redis.client() as r:
             yield r
-        finally:
-            await asyncio.shield(r.__aexit__(None, None, None))
+
+    @asynccontextmanager
+    async def _pubsub(self) -> AsyncGenerator[PubSub, None]:
+        async with self._redis.pubsub() as pubsub:
+            yield pubsub
+
+    async def _publish(self, channel: str, message: str) -> int:
+        """Publish a message to a pub/sub channel.
+
+        This handles both standalone and cluster modes transparently.
+
+        Args:
+            channel: The pub/sub channel to publish to
+            message: The message to publish
+
+        Returns:
+            Number of subscribers that received the message
+        """
+        return await self._redis.publish(channel, message)
 
     def register(self, function: TaskFunction, names: list[str] | None = None) -> None:
         """Register a task with the Docket.
@@ -388,25 +353,33 @@ class Docket:
                 function_name=function_name,
             )
 
-            # Check if task is stricken before scheduling
-            if self.strike_list.is_stricken(execution):
-                logger.warning(
-                    "%r is stricken, skipping schedule of %r",
-                    execution.function_name,
-                    execution.key,
-                )
-                TASKS_STRICKEN.add(
-                    1,
-                    {
-                        **self.labels(),
-                        **execution.general_labels(),
-                        "docket.where": "docket",
-                    },
-                )
-                return execution
+            with tracer.start_as_current_span(
+                "docket.add",
+                attributes={
+                    **self.labels(),
+                    **execution.specific_labels(),
+                    "code.function.name": execution.function_name,
+                },
+            ):
+                # Check if task is stricken before scheduling
+                if self.strike_list.is_stricken(execution):
+                    logger.warning(
+                        "%r is stricken, skipping schedule of %r",
+                        execution.function_name,
+                        execution.key,
+                    )
+                    TASKS_STRICKEN.add(
+                        1,
+                        {
+                            **self.labels(),
+                            **execution.general_labels(),
+                            "docket.where": "docket",
+                        },
+                    )
+                    return execution
 
-            # Schedule atomically (includes state record write)
-            await execution.schedule(replace=False)
+                # Schedule atomically (includes state record write)
+                await execution.schedule(replace=False)
 
             TASKS_ADDED.add(1, {**self.labels(), **execution.general_labels()})
             TASKS_SCHEDULED.add(1, {**self.labels(), **execution.general_labels()})
@@ -477,25 +450,33 @@ class Docket:
                 function_name=function_name,
             )
 
-            # Check if task is stricken before scheduling
-            if self.strike_list.is_stricken(execution):
-                logger.warning(
-                    "%r is stricken, skipping schedule of %r",
-                    execution.function_name,
-                    execution.key,
-                )
-                TASKS_STRICKEN.add(
-                    1,
-                    {
-                        **self.labels(),
-                        **execution.general_labels(),
-                        "docket.where": "docket",
-                    },
-                )
-                return execution
+            with tracer.start_as_current_span(
+                "docket.replace",
+                attributes={
+                    **self.labels(),
+                    **execution.specific_labels(),
+                    "code.function.name": execution.function_name,
+                },
+            ):
+                # Check if task is stricken before scheduling
+                if self.strike_list.is_stricken(execution):
+                    logger.warning(
+                        "%r is stricken, skipping schedule of %r",
+                        execution.function_name,
+                        execution.key,
+                    )
+                    TASKS_STRICKEN.add(
+                        1,
+                        {
+                            **self.labels(),
+                            **execution.general_labels(),
+                            "docket.where": "docket",
+                        },
+                    )
+                    return execution
 
-            # Schedule atomically (includes state record write)
-            await execution.schedule(replace=True)
+                # Schedule atomically (includes state record write)
+                await execution.schedule(replace=True)
 
             TASKS_REPLACED.add(1, {**self.labels(), **execution.general_labels()})
             TASKS_CANCELLED.add(1, {**self.labels(), **execution.general_labels()})
@@ -555,8 +536,8 @@ class Docket:
             async with self.redis() as redis:
                 await self._cancel(redis, key)
 
-                # Publish cancellation signal for running tasks (best-effort)
-                await redis.publish(self.cancel_channel(key), key)
+            # Publish cancellation signal for running tasks (best-effort)
+            await self._publish(self.cancel_channel(key), key)
 
         TASKS_CANCELLED.add(1, self.labels())
 
@@ -593,16 +574,6 @@ class Docket:
             args_data = data.get(b"args")
             kwargs_data = data.get(b"kwargs")
 
-            # TODO: Remove in next breaking release (v0.14.0) - fallback for 0.13.0 compatibility
-            # Check parked hash if runs hash incomplete (0.13.0 didn't store task data in runs hash)
-            if not function_name or not args_data or not kwargs_data:
-                parked_key = self.parked_task_key(key)
-                parked_data = await redis.hgetall(parked_key)
-                if parked_data:
-                    function_name = parked_data.get(b"function")
-                    args_data = parked_data.get(b"args")
-                    kwargs_data = parked_data.get(b"kwargs")
-
             if not function_name or not args_data or not kwargs_data:
                 return None
 
@@ -624,7 +595,7 @@ class Docket:
 
             # Extract scheduling metadata
             when_str = data.get(b"when")
-            if not when_str:
+            if not when_str:  # pragma: no cover
                 return None
             when = datetime.fromtimestamp(float(when_str.decode()), tz=timezone.utc)
 
@@ -695,7 +666,7 @@ class Docket:
             if "BUSYGROUP" not in str(e):
                 raise  # pragma: no cover
 
-    async def _cancel(self, redis: Redis, key: str) -> None:
+    async def _cancel(self, redis: Redis | RedisCluster, key: str) -> None:
         """Cancel a task atomically.
 
         Handles cancellation regardless of task location:
@@ -831,182 +802,6 @@ class Docket:
         scheduling automatic perpetual tasks.
         """
         await self.strike_list.wait_for_strikes_loaded()
-
-    async def snapshot(self) -> DocketSnapshot:
-        """Get a snapshot of the Docket, including which tasks are scheduled or currently
-        running, as well as which workers are active.
-
-        Returns:
-            A snapshot of the Docket.
-        """
-        # For memory:// URLs (fakeredis), ensure the group exists upfront. This
-        # avoids a fakeredis bug where xpending_range raises TypeError instead
-        # of NOGROUP when the consumer group doesn't exist.
-        if self.url.startswith("memory://"):
-            await self._ensure_stream_and_group()
-
-        running: list[RunningExecution] = []
-        future: list[Execution] = []
-
-        async with self.redis() as r:
-            async with r.pipeline() as pipeline:
-                pipeline.xlen(self.stream_key)
-
-                pipeline.zcard(self.queue_key)
-
-                pipeline.xpending_range(
-                    self.stream_key,
-                    self.worker_group_name,
-                    min="-",
-                    max="+",
-                    count=1000,
-                )
-
-                pipeline.xrange(self.stream_key, "-", "+", count=1000)
-
-                pipeline.zrange(self.queue_key, 0, -1)
-
-                total_stream_messages: int
-                total_schedule_messages: int
-                pending_messages: list[RedisStreamPendingMessage]
-                stream_messages: list[tuple[RedisMessageID, RedisMessage]]
-                scheduled_task_keys: list[bytes]
-
-                now = datetime.now(timezone.utc)
-                try:
-                    (
-                        total_stream_messages,
-                        total_schedule_messages,
-                        pending_messages,
-                        stream_messages,
-                        scheduled_task_keys,
-                    ) = await pipeline.execute()
-                except redis.exceptions.ResponseError as e:
-                    # Check for NOGROUP error. Also check for XPENDING because
-                    # redis-py 7.0 has a bug where pipeline errors lose the
-                    # original NOGROUP message (shows "{exception.args}" instead).
-                    error_str = str(e)
-                    if "NOGROUP" in error_str or "XPENDING" in error_str:
-                        await self._ensure_stream_and_group()
-                        return await self.snapshot()
-                    raise  # pragma: no cover
-
-                for task_key in scheduled_task_keys:
-                    pipeline.hgetall(self.parked_task_key(task_key.decode()))
-
-                # Because these are two separate pipeline commands, it's possible that
-                # a message has been moved from the schedule to the stream in the
-                # meantime, which would end up being an empty `{}` message
-                queued_messages: list[RedisMessage] = [
-                    m for m in await pipeline.execute() if m
-                ]
-
-        total_tasks = total_stream_messages + total_schedule_messages
-
-        pending_lookup: dict[RedisMessageID, RedisStreamPendingMessage] = {
-            pending["message_id"]: pending for pending in pending_messages
-        }
-
-        for message_id, message in stream_messages:
-            execution = await Execution.from_message(self, message)
-            if message_id in pending_lookup:
-                worker_name = pending_lookup[message_id]["consumer"].decode()
-                started = now - timedelta(
-                    milliseconds=pending_lookup[message_id]["time_since_delivered"]
-                )
-                running.append(RunningExecution(execution, worker_name, started))
-            else:
-                future.append(execution)  # pragma: no cover
-
-        for message in queued_messages:
-            execution = await Execution.from_message(self, message)
-            future.append(execution)
-
-        workers = await self.workers()
-
-        return DocketSnapshot(now, total_tasks, future, running, workers)
-
-    @property
-    def workers_set(self) -> str:
-        return self.key("workers")
-
-    def worker_tasks_set(self, worker_name: str) -> str:
-        return self.key(f"worker-tasks:{worker_name}")
-
-    def task_workers_set(self, task_name: str) -> str:
-        return self.key(f"task-workers:{task_name}")
-
-    async def workers(self) -> Collection[WorkerInfo]:
-        """Get a list of all workers that have sent heartbeats to the Docket.
-
-        Returns:
-            A list of all workers that have sent heartbeats to the Docket.
-        """
-        workers: list[WorkerInfo] = []
-
-        oldest = datetime.now(timezone.utc).timestamp() - (
-            self.heartbeat_interval.total_seconds() * self.missed_heartbeats
-        )
-
-        async with self.redis() as r:
-            await r.zremrangebyscore(self.workers_set, 0, oldest)
-
-            worker_name_bytes: bytes
-            last_seen_timestamp: float
-
-            for worker_name_bytes, last_seen_timestamp in await r.zrange(
-                self.workers_set, 0, -1, withscores=True
-            ):
-                worker_name = worker_name_bytes.decode()
-                last_seen = datetime.fromtimestamp(last_seen_timestamp, timezone.utc)
-
-                task_names: set[str] = {
-                    task_name_bytes.decode()
-                    for task_name_bytes in cast(
-                        set[bytes], await r.smembers(self.worker_tasks_set(worker_name))
-                    )
-                }
-
-                workers.append(WorkerInfo(worker_name, last_seen, task_names))
-
-        return workers
-
-    async def task_workers(self, task_name: str) -> Collection[WorkerInfo]:
-        """Get a list of all workers that are able to execute a given task.
-
-        Args:
-            task_name: The name of the task.
-
-        Returns:
-            A list of all workers that are able to execute the given task.
-        """
-        workers: list[WorkerInfo] = []
-        oldest = datetime.now(timezone.utc).timestamp() - (
-            self.heartbeat_interval.total_seconds() * self.missed_heartbeats
-        )
-
-        async with self.redis() as r:
-            await r.zremrangebyscore(self.task_workers_set(task_name), 0, oldest)
-
-            worker_name_bytes: bytes
-            last_seen_timestamp: float
-
-            for worker_name_bytes, last_seen_timestamp in await r.zrange(
-                self.task_workers_set(task_name), 0, -1, withscores=True
-            ):
-                worker_name = worker_name_bytes.decode()
-                last_seen = datetime.fromtimestamp(last_seen_timestamp, timezone.utc)
-
-                task_names: set[str] = {
-                    task_name_bytes.decode()
-                    for task_name_bytes in cast(
-                        set[bytes], await r.smembers(self.worker_tasks_set(worker_name))
-                    )
-                }
-
-                workers.append(WorkerInfo(worker_name, last_seen, task_names))
-
-        return workers
 
     async def clear(self) -> int:
         """Clear all queued and scheduled tasks from the docket.

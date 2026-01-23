@@ -48,6 +48,11 @@ class CheckpointerStub(object):
                 request_serializer=checkpointer__pb2.PutWritesRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 _registered_method=True)
+        self.GetCapabilities = channel.unary_unary(
+                '/checkpointer.Checkpointer/GetCapabilities',
+                request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+                response_deserializer=checkpointer__pb2.Capabilities.FromString,
+                _registered_method=True)
         self.List = channel.unary_unary(
                 '/checkpointer.Checkpointer/List',
                 request_serializer=checkpointer__pb2.ListRequest.SerializeToString,
@@ -61,6 +66,16 @@ class CheckpointerStub(object):
         self.DeleteThread = channel.unary_unary(
                 '/checkpointer.Checkpointer/DeleteThread',
                 request_serializer=checkpointer__pb2.DeleteThreadRequest.SerializeToString,
+                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                _registered_method=True)
+        self.DeleteForRuns = channel.unary_unary(
+                '/checkpointer.Checkpointer/DeleteForRuns',
+                request_serializer=checkpointer__pb2.DeleteForRunsRequest.SerializeToString,
+                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                _registered_method=True)
+        self.CopyThread = channel.unary_unary(
+                '/checkpointer.Checkpointer/CopyThread',
+                request_serializer=checkpointer__pb2.CopyThreadRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 _registered_method=True)
         self.Prune = channel.unary_unary(
@@ -91,6 +106,13 @@ class CheckpointerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetCapabilities(self, request, context):
+        """GetCapabilities returns supported operations and batching limits.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def List(self, request, context):
         """List returns checkpoints that match a given configuration and filter criteria.
         """
@@ -107,6 +129,21 @@ class CheckpointerServicer(object):
 
     def DeleteThread(self, request, context):
         """DeleteThread deletes all checkpoints and writes for a thread.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def DeleteForRuns(self, request, context):
+        """DeleteForRuns deletes all checkpoints and writes for a set of runs.
+        This is used for **rollbacks** (either from run cancellation or multitasking).
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def CopyThread(self, request, context):
+        """CopyThread copies checkpoint data from one thread to another.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -132,6 +169,11 @@ def add_CheckpointerServicer_to_server(servicer, server):
                     request_deserializer=checkpointer__pb2.PutWritesRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
+            'GetCapabilities': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetCapabilities,
+                    request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                    response_serializer=checkpointer__pb2.Capabilities.SerializeToString,
+            ),
             'List': grpc.unary_unary_rpc_method_handler(
                     servicer.List,
                     request_deserializer=checkpointer__pb2.ListRequest.FromString,
@@ -145,6 +187,16 @@ def add_CheckpointerServicer_to_server(servicer, server):
             'DeleteThread': grpc.unary_unary_rpc_method_handler(
                     servicer.DeleteThread,
                     request_deserializer=checkpointer__pb2.DeleteThreadRequest.FromString,
+                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            ),
+            'DeleteForRuns': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeleteForRuns,
+                    request_deserializer=checkpointer__pb2.DeleteForRunsRequest.FromString,
+                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            ),
+            'CopyThread': grpc.unary_unary_rpc_method_handler(
+                    servicer.CopyThread,
+                    request_deserializer=checkpointer__pb2.CopyThreadRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'Prune': grpc.unary_unary_rpc_method_handler(
@@ -210,6 +262,33 @@ class Checkpointer(object):
             '/checkpointer.Checkpointer/PutWrites',
             checkpointer__pb2.PutWritesRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetCapabilities(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/checkpointer.Checkpointer/GetCapabilities',
+            google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            checkpointer__pb2.Capabilities.FromString,
             options,
             channel_credentials,
             insecure,
@@ -290,6 +369,60 @@ class Checkpointer(object):
             target,
             '/checkpointer.Checkpointer/DeleteThread',
             checkpointer__pb2.DeleteThreadRequest.SerializeToString,
+            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def DeleteForRuns(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/checkpointer.Checkpointer/DeleteForRuns',
+            checkpointer__pb2.DeleteForRunsRequest.SerializeToString,
+            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def CopyThread(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/checkpointer.Checkpointer/CopyThread',
+            checkpointer__pb2.CopyThreadRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options,
             channel_credentials,

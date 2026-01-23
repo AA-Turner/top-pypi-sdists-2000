@@ -1531,15 +1531,35 @@ class Elements(google.protobuf.message.Message):
         DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
         DRAIN_FIELD_NUMBER: builtins.int
+        TRACEPARENT_FIELD_NUMBER: builtins.int
+        TRACESTATE_FIELD_NUMBER: builtins.int
         drain: global___Elements.DrainMode.Enum.ValueType
+        traceparent: builtins.str
+        """(Optional) As part of https://www.w3.org/TR/trace-context/ we are forwarding a trace and participating in it.
+        Traceparent header represents the incoming request in a tracing system in a common format.
+        Example value: 00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01
+        """
+        tracestate: builtins.str
+        """(Optional) tracestate extends traceparent with open telemetry data represented by a set of name/value pairs.
+        Format specified https://www.w3.org/TR/trace-context/#list for interoperability and commonly used
+        across IOs - Kafka, PubSub, http.
+        Example value: congo=t61rcWkgMzE
+        """
         def __init__(
             self,
             *,
             drain: global___Elements.DrainMode.Enum.ValueType | None = ...,
+            traceparent: builtins.str | None = ...,
+            tracestate: builtins.str | None = ...,
         ) -> None: ...
-        def HasField(self, field_name: typing_extensions.Literal["_drain", b"_drain", "drain", b"drain"]) -> builtins.bool: ...
-        def ClearField(self, field_name: typing_extensions.Literal["_drain", b"_drain", "drain", b"drain"]) -> None: ...
+        def HasField(self, field_name: typing_extensions.Literal["_drain", b"_drain", "_traceparent", b"_traceparent", "_tracestate", b"_tracestate", "drain", b"drain", "traceparent", b"traceparent", "tracestate", b"tracestate"]) -> builtins.bool: ...
+        def ClearField(self, field_name: typing_extensions.Literal["_drain", b"_drain", "_traceparent", b"_traceparent", "_tracestate", b"_tracestate", "drain", b"drain", "traceparent", b"traceparent", "tracestate", b"tracestate"]) -> None: ...
+        @typing.overload
         def WhichOneof(self, oneof_group: typing_extensions.Literal["_drain", b"_drain"]) -> typing_extensions.Literal["drain"] | None: ...
+        @typing.overload
+        def WhichOneof(self, oneof_group: typing_extensions.Literal["_traceparent", b"_traceparent"]) -> typing_extensions.Literal["traceparent"] | None: ...
+        @typing.overload
+        def WhichOneof(self, oneof_group: typing_extensions.Literal["_tracestate", b"_tracestate"]) -> typing_extensions.Literal["tracestate"] | None: ...
 
     @typing_extensions.final
     class Timers(google.protobuf.message.Message):

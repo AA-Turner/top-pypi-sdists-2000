@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pydocket
-Version: 0.16.6
+Version: 0.17.1
 Summary: A distributed background task system for Python functions
 Project-URL: Homepage, https://github.com/chrisguidry/docket
 Project-URL: Bug Tracker, https://github.com/chrisguidry/docket/issues
@@ -30,8 +30,6 @@ Requires-Dist: cloudpickle>=3.1.1
 Requires-Dist: exceptiongroup>=1.2.0; python_version < '3.11'
 Requires-Dist: fakeredis[lua]>=2.32.1
 Requires-Dist: opentelemetry-api>=1.33.0
-Requires-Dist: opentelemetry-exporter-prometheus>=0.60b0
-Requires-Dist: opentelemetry-instrumentation>=0.60b0
 Requires-Dist: prometheus-client>=0.21.1
 Requires-Dist: py-key-value-aio[memory,redis]>=0.3.0
 Requires-Dist: python-json-logger>=2.0.7
@@ -39,6 +37,8 @@ Requires-Dist: redis>=5
 Requires-Dist: rich>=13.9.4
 Requires-Dist: typer>=0.15.1
 Requires-Dist: typing-extensions>=4.12.0
+Provides-Extra: metrics
+Requires-Dist: opentelemetry-sdk>=1.33.0; extra == 'metrics'
 Description-Content-Type: text/markdown
 
 Docket is a distributed background task system for Python functions with a focus
@@ -125,9 +125,13 @@ pip install pydocket
 ```
 
 Docket requires a [Redis](http://redis.io/) server with Streams support (which was
-introduced in Redis 5.0.0). Docket is tested with Redis 6, 7, and 8.
+introduced in Redis 5.0.0). Docket is tested with:
 
-For testing without Redis, Docket includes [fakeredis](https://github.com/cunla/fakeredis-py) for in-memory operation:
+- Redis 6.2, 7.4, and 8.0 (standalone and cluster modes)
+- [Valkey](https://valkey.io/) 8.0
+- In-memory backend via [fakeredis](https://github.com/cunla/fakeredis-py) for testing
+
+For testing without Redis, use the in-memory backend:
 
 ```python
 from docket import Docket

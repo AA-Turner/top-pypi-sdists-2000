@@ -28,19 +28,23 @@ class Branch:
     """A timestamp indicating when the branch was created."""
 
     name: Optional[str] = None
-    """The resource name of the branch. Format: projects/{project_id}/branches/{branch_id}"""
+    """Output only. The full resource path of the branch. Format:
+    projects/{project_id}/branches/{branch_id}"""
 
     parent: Optional[str] = None
-    """The project containing this branch. Format: projects/{project_id}"""
+    """The project containing this branch (API resource hierarchy). Format: projects/{project_id}
+    
+    Note: This field indicates where the branch exists in the resource hierarchy. For point-in-time
+    branching from another branch, see `status.source_branch`."""
 
     spec: Optional[BranchSpec] = None
-    """The desired state of a Branch."""
+    """The spec contains the branch configuration."""
 
     status: Optional[BranchStatus] = None
     """The current status of a Branch."""
 
     uid: Optional[str] = None
-    """System generated unique ID for the branch."""
+    """System-generated unique ID for the branch."""
 
     update_time: Optional[Timestamp] = None
     """A timestamp indicating when the branch was last updated."""
@@ -117,14 +121,20 @@ class BranchOperationMetadata:
 
 @dataclass
 class BranchSpec:
-    default: Optional[bool] = None
-    """Whether the branch is the project's default branch."""
+    expire_time: Optional[Timestamp] = None
+    """Absolute expiration timestamp. When set, the branch will expire at this time."""
 
     is_protected: Optional[bool] = None
-    """Whether the branch is protected."""
+    """When set to true, protects the branch from deletion and reset. Associated compute endpoints and
+    the project cannot be deleted while the branch is protected."""
+
+    no_expiry: Optional[bool] = None
+    """Explicitly disable expiration. When set to true, the branch will not expire. If set to false,
+    the request is invalid; provide either ttl or expire_time instead."""
 
     source_branch: Optional[str] = None
-    """The name of the source branch from which this branch was created. Format:
+    """The name of the source branch from which this branch was created (data lineage for point-in-time
+    recovery). If not specified, defaults to the project's default branch. Format:
     projects/{project_id}/branches/{branch_id}"""
 
     source_branch_lsn: Optional[str] = None
@@ -133,45 +143,58 @@ class BranchSpec:
     source_branch_time: Optional[Timestamp] = None
     """The point in time on the source branch from which this branch was created."""
 
+    ttl: Optional[Duration] = None
+    """Relative time-to-live duration. When set, the branch will expire at creation_time + ttl."""
+
     def as_dict(self) -> dict:
         """Serializes the BranchSpec into a dictionary suitable for use as a JSON request body."""
         body = {}
-        if self.default is not None:
-            body["default"] = self.default
+        if self.expire_time is not None:
+            body["expire_time"] = self.expire_time.ToJsonString()
         if self.is_protected is not None:
             body["is_protected"] = self.is_protected
+        if self.no_expiry is not None:
+            body["no_expiry"] = self.no_expiry
         if self.source_branch is not None:
             body["source_branch"] = self.source_branch
         if self.source_branch_lsn is not None:
             body["source_branch_lsn"] = self.source_branch_lsn
         if self.source_branch_time is not None:
             body["source_branch_time"] = self.source_branch_time.ToJsonString()
+        if self.ttl is not None:
+            body["ttl"] = self.ttl.ToJsonString()
         return body
 
     def as_shallow_dict(self) -> dict:
         """Serializes the BranchSpec into a shallow dictionary of its immediate attributes."""
         body = {}
-        if self.default is not None:
-            body["default"] = self.default
+        if self.expire_time is not None:
+            body["expire_time"] = self.expire_time
         if self.is_protected is not None:
             body["is_protected"] = self.is_protected
+        if self.no_expiry is not None:
+            body["no_expiry"] = self.no_expiry
         if self.source_branch is not None:
             body["source_branch"] = self.source_branch
         if self.source_branch_lsn is not None:
             body["source_branch_lsn"] = self.source_branch_lsn
         if self.source_branch_time is not None:
             body["source_branch_time"] = self.source_branch_time
+        if self.ttl is not None:
+            body["ttl"] = self.ttl
         return body
 
     @classmethod
     def from_dict(cls, d: Dict[str, Any]) -> BranchSpec:
         """Deserializes the BranchSpec from a dictionary."""
         return cls(
-            default=d.get("default", None),
+            expire_time=_timestamp(d, "expire_time"),
             is_protected=d.get("is_protected", None),
+            no_expiry=d.get("no_expiry", None),
             source_branch=d.get("source_branch", None),
             source_branch_lsn=d.get("source_branch_lsn", None),
             source_branch_time=_timestamp(d, "source_branch_time"),
+            ttl=_duration(d, "ttl"),
         )
 
 
@@ -182,6 +205,9 @@ class BranchStatus:
 
     default: Optional[bool] = None
     """Whether the branch is the project's default branch."""
+
+    expire_time: Optional[Timestamp] = None
+    """Absolute expiration time for the branch. Empty if expiration is disabled."""
 
     is_protected: Optional[bool] = None
     """Whether the branch is protected."""
@@ -212,6 +238,8 @@ class BranchStatus:
             body["current_state"] = self.current_state.value
         if self.default is not None:
             body["default"] = self.default
+        if self.expire_time is not None:
+            body["expire_time"] = self.expire_time.ToJsonString()
         if self.is_protected is not None:
             body["is_protected"] = self.is_protected
         if self.logical_size_bytes is not None:
@@ -235,6 +263,8 @@ class BranchStatus:
             body["current_state"] = self.current_state
         if self.default is not None:
             body["default"] = self.default
+        if self.expire_time is not None:
+            body["expire_time"] = self.expire_time
         if self.is_protected is not None:
             body["is_protected"] = self.is_protected
         if self.logical_size_bytes is not None:
@@ -257,6 +287,7 @@ class BranchStatus:
         return cls(
             current_state=_enum(d, "current_state", BranchStatusState),
             default=d.get("default", None),
+            expire_time=_timestamp(d, "expire_time"),
             is_protected=d.get("is_protected", None),
             logical_size_bytes=d.get("logical_size_bytes", None),
             pending_state=_enum(d, "pending_state", BranchStatusState),
@@ -268,13 +299,45 @@ class BranchStatus:
 
 
 class BranchStatusState(Enum):
-    """The state of the database branch."""
+    """The state of the branch."""
 
     ARCHIVED = "ARCHIVED"
     IMPORTING = "IMPORTING"
     INIT = "INIT"
     READY = "READY"
     RESETTING = "RESETTING"
+
+
+@dataclass
+class DatabaseCredential:
+    expire_time: Optional[Timestamp] = None
+    """Timestamp in UTC of when this credential expires."""
+
+    token: Optional[str] = None
+    """The OAuth token that can be used as a password when connecting to a database."""
+
+    def as_dict(self) -> dict:
+        """Serializes the DatabaseCredential into a dictionary suitable for use as a JSON request body."""
+        body = {}
+        if self.expire_time is not None:
+            body["expire_time"] = self.expire_time.ToJsonString()
+        if self.token is not None:
+            body["token"] = self.token
+        return body
+
+    def as_shallow_dict(self) -> dict:
+        """Serializes the DatabaseCredential into a shallow dictionary of its immediate attributes."""
+        body = {}
+        if self.expire_time is not None:
+            body["expire_time"] = self.expire_time
+        if self.token is not None:
+            body["token"] = self.token
+        return body
+
+    @classmethod
+    def from_dict(cls, d: Dict[str, Any]) -> DatabaseCredential:
+        """Deserializes the DatabaseCredential from a dictionary."""
+        return cls(expire_time=_timestamp(d, "expire_time"), token=d.get("token", None))
 
 
 @dataclass
@@ -332,20 +395,22 @@ class Endpoint:
     """A timestamp indicating when the compute endpoint was created."""
 
     name: Optional[str] = None
-    """The resource name of the endpoint. Format:
+    """Output only. The full resource path of the endpoint. Format:
     projects/{project_id}/branches/{branch_id}/endpoints/{endpoint_id}"""
 
     parent: Optional[str] = None
-    """The branch containing this endpoint. Format: projects/{project_id}/branches/{branch_id}"""
+    """The branch containing this endpoint (API resource hierarchy). Format:
+    projects/{project_id}/branches/{branch_id}"""
 
     spec: Optional[EndpointSpec] = None
-    """The desired state of an Endpoint."""
+    """The spec contains the compute endpoint configuration, including autoscaling limits, suspend
+    timeout, and disabled state."""
 
     status: Optional[EndpointStatus] = None
-    """The current status of an Endpoint."""
+    """Current operational status of the compute endpoint."""
 
     uid: Optional[str] = None
-    """System generated unique ID for the endpoint."""
+    """System-generated unique ID for the endpoint."""
 
     update_time: Optional[Timestamp] = None
     """A timestamp indicating when the compute endpoint was last updated."""
@@ -403,6 +468,35 @@ class Endpoint:
 
 
 @dataclass
+class EndpointHosts:
+    """Encapsulates various hostnames (r/w or r/o, pooled or not) for an endpoint."""
+
+    host: Optional[str] = None
+    """The hostname to connect to this endpoint. For read-write endpoints, this is a read-write
+    hostname which connects to the primary compute. For read-only endpoints, this is a read-only
+    hostname which allows read-only operations."""
+
+    def as_dict(self) -> dict:
+        """Serializes the EndpointHosts into a dictionary suitable for use as a JSON request body."""
+        body = {}
+        if self.host is not None:
+            body["host"] = self.host
+        return body
+
+    def as_shallow_dict(self) -> dict:
+        """Serializes the EndpointHosts into a shallow dictionary of its immediate attributes."""
+        body = {}
+        if self.host is not None:
+            body["host"] = self.host
+        return body
+
+    @classmethod
+    def from_dict(cls, d: Dict[str, Any]) -> EndpointHosts:
+        """Deserializes the EndpointHosts from a dictionary."""
+        return cls(host=d.get("host", None))
+
+
+@dataclass
 class EndpointOperationMetadata:
     def as_dict(self) -> dict:
         """Serializes the EndpointOperationMetadata into a dictionary suitable for use as a JSON request body."""
@@ -453,20 +547,25 @@ class EndpointSpec:
     """The endpoint type. A branch can only have one READ_WRITE endpoint."""
 
     autoscaling_limit_max_cu: Optional[float] = None
-    """The maximum number of Compute Units."""
+    """The maximum number of Compute Units. Minimum value is 0.5."""
 
     autoscaling_limit_min_cu: Optional[float] = None
-    """The minimum number of Compute Units."""
+    """The minimum number of Compute Units. Minimum value is 0.5."""
 
     disabled: Optional[bool] = None
     """Whether to restrict connections to the compute endpoint. Enabling this option schedules a
     suspend compute operation. A disabled compute endpoint cannot be enabled by a connection or
     console action."""
 
+    no_suspension: Optional[bool] = None
+    """When set to true, explicitly disables automatic suspension (never suspend). Should be set to
+    true when provided."""
+
     settings: Optional[EndpointSettings] = None
 
     suspend_timeout_duration: Optional[Duration] = None
-    """Duration of inactivity after which the compute endpoint is automatically suspended."""
+    """Duration of inactivity after which the compute endpoint is automatically suspended. If specified
+    should be between 60s and 604800s (1 minute to 1 week)."""
 
     def as_dict(self) -> dict:
         """Serializes the EndpointSpec into a dictionary suitable for use as a JSON request body."""
@@ -479,6 +578,8 @@ class EndpointSpec:
             body["disabled"] = self.disabled
         if self.endpoint_type is not None:
             body["endpoint_type"] = self.endpoint_type.value
+        if self.no_suspension is not None:
+            body["no_suspension"] = self.no_suspension
         if self.settings:
             body["settings"] = self.settings.as_dict()
         if self.suspend_timeout_duration is not None:
@@ -496,6 +597,8 @@ class EndpointSpec:
             body["disabled"] = self.disabled
         if self.endpoint_type is not None:
             body["endpoint_type"] = self.endpoint_type
+        if self.no_suspension is not None:
+            body["no_suspension"] = self.no_suspension
         if self.settings:
             body["settings"] = self.settings
         if self.suspend_timeout_duration is not None:
@@ -510,6 +613,7 @@ class EndpointSpec:
             autoscaling_limit_min_cu=d.get("autoscaling_limit_min_cu", None),
             disabled=d.get("disabled", None),
             endpoint_type=_enum(d, "endpoint_type", EndpointType),
+            no_suspension=d.get("no_suspension", None),
             settings=_from_dict(d, "settings", EndpointSettings),
             suspend_timeout_duration=_duration(d, "suspend_timeout_duration"),
         )
@@ -533,22 +637,12 @@ class EndpointStatus:
     endpoint_type: Optional[EndpointType] = None
     """The endpoint type. A branch can only have one READ_WRITE endpoint."""
 
-    host: Optional[str] = None
-    """The hostname of the compute endpoint. This is the hostname specified when connecting to a
-    database."""
-
-    last_active_time: Optional[Timestamp] = None
-    """A timestamp indicating when the compute endpoint was last active."""
+    hosts: Optional[EndpointHosts] = None
+    """Contains host information for connecting to the endpoint."""
 
     pending_state: Optional[EndpointStatusState] = None
 
     settings: Optional[EndpointSettings] = None
-
-    start_time: Optional[Timestamp] = None
-    """A timestamp indicating when the compute endpoint was last started."""
-
-    suspend_time: Optional[Timestamp] = None
-    """A timestamp indicating when the compute endpoint was last suspended."""
 
     suspend_timeout_duration: Optional[Duration] = None
     """Duration of inactivity after which the compute endpoint is automatically suspended."""
@@ -566,18 +660,12 @@ class EndpointStatus:
             body["disabled"] = self.disabled
         if self.endpoint_type is not None:
             body["endpoint_type"] = self.endpoint_type.value
-        if self.host is not None:
-            body["host"] = self.host
-        if self.last_active_time is not None:
-            body["last_active_time"] = self.last_active_time.ToJsonString()
+        if self.hosts:
+            body["hosts"] = self.hosts.as_dict()
         if self.pending_state is not None:
             body["pending_state"] = self.pending_state.value
         if self.settings:
             body["settings"] = self.settings.as_dict()
-        if self.start_time is not None:
-            body["start_time"] = self.start_time.ToJsonString()
-        if self.suspend_time is not None:
-            body["suspend_time"] = self.suspend_time.ToJsonString()
         if self.suspend_timeout_duration is not None:
             body["suspend_timeout_duration"] = self.suspend_timeout_duration.ToJsonString()
         return body
@@ -595,18 +683,12 @@ class EndpointStatus:
             body["disabled"] = self.disabled
         if self.endpoint_type is not None:
             body["endpoint_type"] = self.endpoint_type
-        if self.host is not None:
-            body["host"] = self.host
-        if self.last_active_time is not None:
-            body["last_active_time"] = self.last_active_time
+        if self.hosts:
+            body["hosts"] = self.hosts
         if self.pending_state is not None:
             body["pending_state"] = self.pending_state
         if self.settings:
             body["settings"] = self.settings
-        if self.start_time is not None:
-            body["start_time"] = self.start_time
-        if self.suspend_time is not None:
-            body["suspend_time"] = self.suspend_time
         if self.suspend_timeout_duration is not None:
             body["suspend_timeout_duration"] = self.suspend_timeout_duration
         return body
@@ -620,12 +702,9 @@ class EndpointStatus:
             current_state=_enum(d, "current_state", EndpointStatusState),
             disabled=d.get("disabled", None),
             endpoint_type=_enum(d, "endpoint_type", EndpointType),
-            host=d.get("host", None),
-            last_active_time=_timestamp(d, "last_active_time"),
+            hosts=_from_dict(d, "hosts", EndpointHosts),
             pending_state=_enum(d, "pending_state", EndpointStatusState),
             settings=_from_dict(d, "settings", EndpointSettings),
-            start_time=_timestamp(d, "start_time"),
-            suspend_time=_timestamp(d, "suspend_time"),
             suspend_timeout_duration=_duration(d, "suspend_timeout_duration"),
         )
 
@@ -641,8 +720,8 @@ class EndpointStatusState(Enum):
 class EndpointType(Enum):
     """The compute endpoint type. Either `read_write` or `read_only`."""
 
-    READ_ONLY = "READ_ONLY"
-    READ_WRITE = "READ_WRITE"
+    ENDPOINT_TYPE_READ_ONLY = "ENDPOINT_TYPE_READ_ONLY"
+    ENDPOINT_TYPE_READ_WRITE = "ENDPOINT_TYPE_READ_WRITE"
 
 
 class ErrorCode(Enum):
@@ -736,10 +815,10 @@ class ErrorCode(Enum):
 @dataclass
 class ListBranchesResponse:
     branches: Optional[List[Branch]] = None
-    """List of branches."""
+    """List of branches in the project."""
 
     next_page_token: Optional[str] = None
-    """Pagination token to request the next page of branches."""
+    """Token to request the next page of branches."""
 
     def as_dict(self) -> dict:
         """Serializes the ListBranchesResponse into a dictionary suitable for use as a JSON request body."""
@@ -768,10 +847,10 @@ class ListBranchesResponse:
 @dataclass
 class ListEndpointsResponse:
     endpoints: Optional[List[Endpoint]] = None
-    """List of endpoints."""
+    """List of compute endpoints in the branch."""
 
     next_page_token: Optional[str] = None
-    """Pagination token to request the next page of endpoints."""
+    """Token to request the next page of compute endpoints."""
 
     def as_dict(self) -> dict:
         """Serializes the ListEndpointsResponse into a dictionary suitable for use as a JSON request body."""
@@ -800,10 +879,10 @@ class ListEndpointsResponse:
 @dataclass
 class ListProjectsResponse:
     next_page_token: Optional[str] = None
-    """Pagination token to request the next page of projects."""
+    """Token to request the next page of projects."""
 
     projects: Optional[List[Project]] = None
-    """List of projects."""
+    """List of all projects in the workspace that the user has permission to access."""
 
     def as_dict(self) -> dict:
         """Serializes the ListProjectsResponse into a dictionary suitable for use as a JSON request body."""
@@ -832,10 +911,10 @@ class ListProjectsResponse:
 @dataclass
 class ListRolesResponse:
     next_page_token: Optional[str] = None
-    """Pagination token to request the next page of roles."""
+    """Token to request the next page of Postgres roles."""
 
     roles: Optional[List[Role]] = None
-    """List of roles."""
+    """List of Postgres roles in the branch."""
 
     def as_dict(self) -> dict:
         """Serializes the ListRolesResponse into a dictionary suitable for use as a JSON request body."""
@@ -933,16 +1012,17 @@ class Project:
     """A timestamp indicating when the project was created."""
 
     name: Optional[str] = None
-    """The resource name of the project. Format: projects/{project_id}"""
+    """Output only. The full resource path of the project. Format: projects/{project_id}"""
 
     spec: Optional[ProjectSpec] = None
-    """The desired state of a Project."""
+    """The spec contains the project configuration, including display_name, pg_version (Postgres
+    version), history_retention_duration, and default_endpoint_settings."""
 
     status: Optional[ProjectStatus] = None
     """The current status of a Project."""
 
     uid: Optional[str] = None
-    """System generated unique ID for the project."""
+    """System-generated unique ID for the project."""
 
     update_time: Optional[Timestamp] = None
     """A timestamp indicating when the project was last updated."""
@@ -999,16 +1079,21 @@ class ProjectDefaultEndpointSettings:
     """A collection of settings for a compute endpoint."""
 
     autoscaling_limit_max_cu: Optional[float] = None
-    """The maximum number of Compute Units."""
+    """The maximum number of Compute Units. Minimum value is 0.5."""
 
     autoscaling_limit_min_cu: Optional[float] = None
-    """The minimum number of Compute Units."""
+    """The minimum number of Compute Units. Minimum value is 0.5."""
+
+    no_suspension: Optional[bool] = None
+    """When set to true, explicitly disables automatic suspension (never suspend). Should be set to
+    true when provided."""
 
     pg_settings: Optional[Dict[str, str]] = None
     """A raw representation of Postgres settings."""
 
     suspend_timeout_duration: Optional[Duration] = None
-    """Duration of inactivity after which the compute endpoint is automatically suspended."""
+    """Duration of inactivity after which the compute endpoint is automatically suspended. If specified
+    should be between 60s and 604800s (1 minute to 1 week)."""
 
     def as_dict(self) -> dict:
         """Serializes the ProjectDefaultEndpointSettings into a dictionary suitable for use as a JSON request body."""
@@ -1017,6 +1102,8 @@ class ProjectDefaultEndpointSettings:
             body["autoscaling_limit_max_cu"] = self.autoscaling_limit_max_cu
         if self.autoscaling_limit_min_cu is not None:
             body["autoscaling_limit_min_cu"] = self.autoscaling_limit_min_cu
+        if self.no_suspension is not None:
+            body["no_suspension"] = self.no_suspension
         if self.pg_settings:
             body["pg_settings"] = self.pg_settings
         if self.suspend_timeout_duration is not None:
@@ -1030,6 +1117,8 @@ class ProjectDefaultEndpointSettings:
             body["autoscaling_limit_max_cu"] = self.autoscaling_limit_max_cu
         if self.autoscaling_limit_min_cu is not None:
             body["autoscaling_limit_min_cu"] = self.autoscaling_limit_min_cu
+        if self.no_suspension is not None:
+            body["no_suspension"] = self.no_suspension
         if self.pg_settings:
             body["pg_settings"] = self.pg_settings
         if self.suspend_timeout_duration is not None:
@@ -1042,6 +1131,7 @@ class ProjectDefaultEndpointSettings:
         return cls(
             autoscaling_limit_max_cu=d.get("autoscaling_limit_max_cu", None),
             autoscaling_limit_min_cu=d.get("autoscaling_limit_min_cu", None),
+            no_suspension=d.get("no_suspension", None),
             pg_settings=d.get("pg_settings", None),
             suspend_timeout_duration=_duration(d, "suspend_timeout_duration"),
         )
@@ -1066,46 +1156,18 @@ class ProjectOperationMetadata:
 
 
 @dataclass
-class ProjectSettings:
-    enable_logical_replication: Optional[bool] = None
-    """Sets wal_level=logical for all compute endpoints in this project. All active endpoints will be
-    suspended. Once enabled, logical replication cannot be disabled."""
-
-    def as_dict(self) -> dict:
-        """Serializes the ProjectSettings into a dictionary suitable for use as a JSON request body."""
-        body = {}
-        if self.enable_logical_replication is not None:
-            body["enable_logical_replication"] = self.enable_logical_replication
-        return body
-
-    def as_shallow_dict(self) -> dict:
-        """Serializes the ProjectSettings into a shallow dictionary of its immediate attributes."""
-        body = {}
-        if self.enable_logical_replication is not None:
-            body["enable_logical_replication"] = self.enable_logical_replication
-        return body
-
-    @classmethod
-    def from_dict(cls, d: Dict[str, Any]) -> ProjectSettings:
-        """Deserializes the ProjectSettings from a dictionary."""
-        return cls(enable_logical_replication=d.get("enable_logical_replication", None))
-
-
-@dataclass
 class ProjectSpec:
     default_endpoint_settings: Optional[ProjectDefaultEndpointSettings] = None
 
     display_name: Optional[str] = None
-    """Human-readable project name."""
+    """Human-readable project name. Length should be between 1 and 256 characters."""
 
     history_retention_duration: Optional[Duration] = None
     """The number of seconds to retain the shared history for point in time recovery for all branches
-    in this project."""
+    in this project. Value should be between 0s and 2592000s (up to 30 days)."""
 
     pg_version: Optional[int] = None
-    """The major Postgres version number."""
-
-    settings: Optional[ProjectSettings] = None
+    """The major Postgres version number. Supported versions are 16 and 17."""
 
     def as_dict(self) -> dict:
         """Serializes the ProjectSpec into a dictionary suitable for use as a JSON request body."""
@@ -1118,8 +1180,6 @@ class ProjectSpec:
             body["history_retention_duration"] = self.history_retention_duration.ToJsonString()
         if self.pg_version is not None:
             body["pg_version"] = self.pg_version
-        if self.settings:
-            body["settings"] = self.settings.as_dict()
         return body
 
     def as_shallow_dict(self) -> dict:
@@ -1133,8 +1193,6 @@ class ProjectSpec:
             body["history_retention_duration"] = self.history_retention_duration
         if self.pg_version is not None:
             body["pg_version"] = self.pg_version
-        if self.settings:
-            body["settings"] = self.settings
         return body
 
     @classmethod
@@ -1145,7 +1203,6 @@ class ProjectSpec:
             display_name=d.get("display_name", None),
             history_retention_duration=_duration(d, "history_retention_duration"),
             pg_version=d.get("pg_version", None),
-            settings=_from_dict(d, "settings", ProjectSettings),
         )
 
 
@@ -1153,9 +1210,6 @@ class ProjectSpec:
 class ProjectStatus:
     branch_logical_size_limit_bytes: Optional[int] = None
     """The logical size limit for a branch."""
-
-    compute_last_active_time: Optional[Timestamp] = None
-    """The most recent time when any endpoint of this project was active."""
 
     default_endpoint_settings: Optional[ProjectDefaultEndpointSettings] = None
     """The effective default endpoint settings."""
@@ -1166,11 +1220,11 @@ class ProjectStatus:
     history_retention_duration: Optional[Duration] = None
     """The effective number of seconds to retain the shared history for point in time recovery."""
 
+    owner: Optional[str] = None
+    """The email of the project owner."""
+
     pg_version: Optional[int] = None
     """The effective major Postgres version number."""
-
-    settings: Optional[ProjectSettings] = None
-    """The effective project settings."""
 
     synthetic_storage_size_bytes: Optional[int] = None
     """The current space occupied by the project in storage."""
@@ -1180,18 +1234,16 @@ class ProjectStatus:
         body = {}
         if self.branch_logical_size_limit_bytes is not None:
             body["branch_logical_size_limit_bytes"] = self.branch_logical_size_limit_bytes
-        if self.compute_last_active_time is not None:
-            body["compute_last_active_time"] = self.compute_last_active_time.ToJsonString()
         if self.default_endpoint_settings:
             body["default_endpoint_settings"] = self.default_endpoint_settings.as_dict()
         if self.display_name is not None:
             body["display_name"] = self.display_name
         if self.history_retention_duration is not None:
             body["history_retention_duration"] = self.history_retention_duration.ToJsonString()
+        if self.owner is not None:
+            body["owner"] = self.owner
         if self.pg_version is not None:
             body["pg_version"] = self.pg_version
-        if self.settings:
-            body["settings"] = self.settings.as_dict()
         if self.synthetic_storage_size_bytes is not None:
             body["synthetic_storage_size_bytes"] = self.synthetic_storage_size_bytes
         return body
@@ -1201,18 +1253,16 @@ class ProjectStatus:
         body = {}
         if self.branch_logical_size_limit_bytes is not None:
             body["branch_logical_size_limit_bytes"] = self.branch_logical_size_limit_bytes
-        if self.compute_last_active_time is not None:
-            body["compute_last_active_time"] = self.compute_last_active_time
         if self.default_endpoint_settings:
             body["default_endpoint_settings"] = self.default_endpoint_settings
         if self.display_name is not None:
             body["display_name"] = self.display_name
         if self.history_retention_duration is not None:
             body["history_retention_duration"] = self.history_retention_duration
+        if self.owner is not None:
+            body["owner"] = self.owner
         if self.pg_version is not None:
             body["pg_version"] = self.pg_version
-        if self.settings:
-            body["settings"] = self.settings
         if self.synthetic_storage_size_bytes is not None:
             body["synthetic_storage_size_bytes"] = self.synthetic_storage_size_bytes
         return body
@@ -1222,13 +1272,82 @@ class ProjectStatus:
         """Deserializes the ProjectStatus from a dictionary."""
         return cls(
             branch_logical_size_limit_bytes=d.get("branch_logical_size_limit_bytes", None),
-            compute_last_active_time=_timestamp(d, "compute_last_active_time"),
             default_endpoint_settings=_from_dict(d, "default_endpoint_settings", ProjectDefaultEndpointSettings),
             display_name=d.get("display_name", None),
             history_retention_duration=_duration(d, "history_retention_duration"),
+            owner=d.get("owner", None),
             pg_version=d.get("pg_version", None),
-            settings=_from_dict(d, "settings", ProjectSettings),
             synthetic_storage_size_bytes=d.get("synthetic_storage_size_bytes", None),
+        )
+
+
+@dataclass
+class RequestedClaims:
+    permission_set: Optional[RequestedClaimsPermissionSet] = None
+
+    resources: Optional[List[RequestedResource]] = None
+
+    def as_dict(self) -> dict:
+        """Serializes the RequestedClaims into a dictionary suitable for use as a JSON request body."""
+        body = {}
+        if self.permission_set is not None:
+            body["permission_set"] = self.permission_set.value
+        if self.resources:
+            body["resources"] = [v.as_dict() for v in self.resources]
+        return body
+
+    def as_shallow_dict(self) -> dict:
+        """Serializes the RequestedClaims into a shallow dictionary of its immediate attributes."""
+        body = {}
+        if self.permission_set is not None:
+            body["permission_set"] = self.permission_set
+        if self.resources:
+            body["resources"] = self.resources
+        return body
+
+    @classmethod
+    def from_dict(cls, d: Dict[str, Any]) -> RequestedClaims:
+        """Deserializes the RequestedClaims from a dictionary."""
+        return cls(
+            permission_set=_enum(d, "permission_set", RequestedClaimsPermissionSet),
+            resources=_repeated_dict(d, "resources", RequestedResource),
+        )
+
+
+class RequestedClaimsPermissionSet(Enum):
+
+    READ_ONLY = "READ_ONLY"
+
+
+@dataclass
+class RequestedResource:
+    table_name: Optional[str] = None
+
+    unspecified_resource_name: Optional[str] = None
+
+    def as_dict(self) -> dict:
+        """Serializes the RequestedResource into a dictionary suitable for use as a JSON request body."""
+        body = {}
+        if self.table_name is not None:
+            body["table_name"] = self.table_name
+        if self.unspecified_resource_name is not None:
+            body["unspecified_resource_name"] = self.unspecified_resource_name
+        return body
+
+    def as_shallow_dict(self) -> dict:
+        """Serializes the RequestedResource into a shallow dictionary of its immediate attributes."""
+        body = {}
+        if self.table_name is not None:
+            body["table_name"] = self.table_name
+        if self.unspecified_resource_name is not None:
+            body["unspecified_resource_name"] = self.unspecified_resource_name
+        return body
+
+    @classmethod
+    def from_dict(cls, d: Dict[str, Any]) -> RequestedResource:
+        """Deserializes the RequestedResource from a dictionary."""
+        return cls(
+            table_name=d.get("table_name", None), unspecified_resource_name=d.get("unspecified_resource_name", None)
         )
 
 
@@ -1239,16 +1358,19 @@ class Role:
     create_time: Optional[Timestamp] = None
 
     name: Optional[str] = None
-    """The resource name of the role. Format: projects/{project_id}/branch/{branch_id}/roles/{role_id}"""
+    """Output only. The full resource path of the role. Format:
+    projects/{project_id}/branches/{branch_id}/roles/{role_id}"""
 
     parent: Optional[str] = None
     """The Branch where this Role exists. Format: projects/{project_id}/branches/{branch_id}"""
 
     spec: Optional[RoleRoleSpec] = None
-    """The desired state of the Role."""
+    """The spec contains the role configuration, including identity type, authentication method, and
+    role attributes."""
 
     status: Optional[RoleRoleStatus] = None
-    """The observed state of the Role."""
+    """Current status of the role, including its identity type, authentication method, and role
+    attributes."""
 
     update_time: Optional[Timestamp] = None
 
@@ -1345,7 +1467,7 @@ class RoleRoleSpec:
     instead for the GROUP identity type."""
 
     identity_type: Optional[RoleIdentityType] = None
-    """The type of the role. When specifying a managed-identity, the chosen role_id must be a valid:
+    """The type of role. When specifying a managed-identity, the chosen role_id must be a valid:
     
     * application ID for SERVICE_PRINCIPAL * user email for USER * group name for GROUP"""
 
@@ -1411,22 +1533,34 @@ class RoleRoleStatus:
 
 
 class PostgresAPI:
-    """The Postgres API provides access to a Postgres database via REST API or direct SQL."""
+    """Use the Postgres API to create and manage Lakebase Autoscaling Postgres infrastructure, including
+    projects, branches, compute endpoints, and roles.
+
+    This API manages database infrastructure only. To query or modify data, use the Data API or direct SQL
+    connections.
+
+    **About resource IDs and names**
+
+    Resources are identified by hierarchical resource names like
+    `projects/{project_id}/branches/{branch_id}/endpoints/{endpoint_id}`. The `name` field on each resource
+    contains this full path and is output-only. Note that `name` refers to this resource path, not the
+    user-visible `display_name`."""
 
     def __init__(self, api_client):
         self._api = api_client
 
-    def create_branch(self, parent: str, branch: Branch, *, branch_id: Optional[str] = None) -> CreateBranchOperation:
-        """Create a Branch.
+    def create_branch(self, parent: str, branch: Branch, branch_id: str) -> CreateBranchOperation:
+        """Creates a new database branch in the project.
 
         :param parent: str
           The Project where this Branch will be created. Format: projects/{project_id}
         :param branch: :class:`Branch`
           The Branch to create.
-        :param branch_id: str (optional)
-          The ID to use for the Branch, which will become the final component of the branch's resource name.
-
-          This value should be 4-63 characters, and valid characters are /[a-z][0-9]-/.
+        :param branch_id: str
+          The ID to use for the Branch. This becomes the final component of the branch's resource name. The ID
+          is required and must be 1-63 characters long, start with a lowercase letter, and contain only
+          lowercase letters, numbers, and hyphens. For example, `development` becomes
+          `projects/my-app/branches/development`.
 
         :returns: :class:`Operation`
         """
@@ -1444,20 +1578,18 @@ class PostgresAPI:
         operation = Operation.from_dict(res)
         return CreateBranchOperation(self, operation)
 
-    def create_endpoint(
-        self, parent: str, endpoint: Endpoint, *, endpoint_id: Optional[str] = None
-    ) -> CreateEndpointOperation:
-        """Create an Endpoint.
+    def create_endpoint(self, parent: str, endpoint: Endpoint, endpoint_id: str) -> CreateEndpointOperation:
+        """Creates a new compute endpoint in the branch.
 
         :param parent: str
           The Branch where this Endpoint will be created. Format: projects/{project_id}/branches/{branch_id}
         :param endpoint: :class:`Endpoint`
           The Endpoint to create.
-        :param endpoint_id: str (optional)
-          The ID to use for the Endpoint, which will become the final component of the endpoint's resource
-          name.
-
-          This value should be 4-63 characters, and valid characters are /[a-z][0-9]-/.
+        :param endpoint_id: str
+          The ID to use for the Endpoint. This becomes the final component of the endpoint's resource name.
+          The ID is required and must be 1-63 characters long, start with a lowercase letter, and contain only
+          lowercase letters, numbers, and hyphens. For example, `primary` becomes
+          `projects/my-app/branches/development/endpoints/primary`.
 
         :returns: :class:`Operation`
         """
@@ -1475,15 +1607,16 @@ class PostgresAPI:
         operation = Operation.from_dict(res)
         return CreateEndpointOperation(self, operation)
 
-    def create_project(self, project: Project, *, project_id: Optional[str] = None) -> CreateProjectOperation:
-        """Create a Project.
+    def create_project(self, project: Project, project_id: str) -> CreateProjectOperation:
+        """Creates a new Lakebase Autoscaling Postgres database project, which contains branches and compute
+        endpoints.
 
         :param project: :class:`Project`
           The Project to create.
-        :param project_id: str (optional)
-          The ID to use for the Project, which will become the final component of the project's resource name.
-
-          This value should be 4-63 characters, and valid characters are /[a-z][0-9]-/.
+        :param project_id: str
+          The ID to use for the Project. This becomes the final component of the project's resource name. The
+          ID is required and must be 1-63 characters long, start with a lowercase letter, and contain only
+          lowercase letters, numbers, and hyphens. For example, `my-app` becomes `projects/my-app`.
 
         :returns: :class:`Operation`
         """
@@ -1502,18 +1635,18 @@ class PostgresAPI:
         return CreateProjectOperation(self, operation)
 
     def create_role(self, parent: str, role: Role, role_id: str) -> CreateRoleOperation:
-        """Create a role for a branch.
+        """Creates a new Postgres role in the branch.
 
         :param parent: str
           The Branch where this Role is created. Format: projects/{project_id}/branches/{branch_id}
         :param role: :class:`Role`
           The desired specification of a Role.
         :param role_id: str
-          The ID to use for the Role, which will become the final component of the branch's resource name.
-          This ID becomes the role in postgres.
+          The ID to use for the Role, which will become the final component of the role's resource name. This
+          ID becomes the role in Postgres.
 
-          This value should be 4-63 characters, and only use characters available in DNS names, as defined by
-          RFC-1123
+          This value should be 4-63 characters, and valid characters are lowercase letters, numbers, and
+          hyphens, as defined by RFC 1123.
 
         :returns: :class:`Operation`
         """
@@ -1532,10 +1665,10 @@ class PostgresAPI:
         return CreateRoleOperation(self, operation)
 
     def delete_branch(self, name: str) -> DeleteBranchOperation:
-        """Delete a Branch.
+        """Deletes the specified database branch.
 
         :param name: str
-          The name of the Branch to delete. Format: projects/{project_id}/branches/{branch_id}
+          The full resource path of the branch to delete. Format: projects/{project_id}/branches/{branch_id}
 
         :returns: :class:`Operation`
         """
@@ -1549,10 +1682,10 @@ class PostgresAPI:
         return DeleteBranchOperation(self, operation)
 
     def delete_endpoint(self, name: str) -> DeleteEndpointOperation:
-        """Delete an Endpoint.
+        """Deletes the specified compute endpoint.
 
         :param name: str
-          The name of the Endpoint to delete. Format:
+          The full resource path of the endpoint to delete. Format:
           projects/{project_id}/branches/{branch_id}/endpoints/{endpoint_id}
 
         :returns: :class:`Operation`
@@ -1567,10 +1700,10 @@ class PostgresAPI:
         return DeleteEndpointOperation(self, operation)
 
     def delete_project(self, name: str) -> DeleteProjectOperation:
-        """Delete a Project.
+        """Deletes the specified database project.
 
         :param name: str
-          The name of the Project to delete. Format: projects/{project_id}
+          The full resource path of the project to delete. Format: projects/{project_id}
 
         :returns: :class:`Operation`
         """
@@ -1584,11 +1717,11 @@ class PostgresAPI:
         return DeleteProjectOperation(self, operation)
 
     def delete_role(self, name: str, *, reassign_owned_to: Optional[str] = None) -> DeleteRoleOperation:
-        """Delete a role in a branch.
+        """Deletes the specified Postgres role.
 
         :param name: str
-          The resource name of the postgres role. Format:
-          projects/{project_id}/branch/{branch_id}/roles/{role_id}
+          The full resource path of the role to delete. Format:
+          projects/{project_id}/branches/{branch_id}/roles/{role_id}
         :param reassign_owned_to: str (optional)
           Reassign objects. If this is set, all objects owned by the role are reassigned to the role specified
           in this parameter.
@@ -1612,11 +1745,38 @@ class PostgresAPI:
         operation = Operation.from_dict(res)
         return DeleteRoleOperation(self, operation)
 
+    def generate_database_credential(
+        self, endpoint: str, *, claims: Optional[List[RequestedClaims]] = None
+    ) -> DatabaseCredential:
+        """Generate OAuth credentials for a Postgres database.
+
+        :param endpoint: str
+          This field is not yet supported. The endpoint for which this credential will be generated. Format:
+          projects/{project_id}/branches/{branch_id}/endpoints/{endpoint_id}
+        :param claims: List[:class:`RequestedClaims`] (optional)
+          The returned token will be scoped to UC tables with the specified permissions.
+
+        :returns: :class:`DatabaseCredential`
+        """
+
+        body = {}
+        if claims is not None:
+            body["claims"] = [v.as_dict() for v in claims]
+        if endpoint is not None:
+            body["endpoint"] = endpoint
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        }
+
+        res = self._api.do("POST", "/api/2.0/postgres/credentials", body=body, headers=headers)
+        return DatabaseCredential.from_dict(res)
+
     def get_branch(self, name: str) -> Branch:
-        """Get a Branch.
+        """Retrieves information about the specified database branch.
 
         :param name: str
-          The name of the Branch to retrieve. Format: projects/{project_id}/branches/{branch_id}
+          The full resource path of the branch to retrieve. Format: projects/{project_id}/branches/{branch_id}
 
         :returns: :class:`Branch`
         """
@@ -1629,10 +1789,11 @@ class PostgresAPI:
         return Branch.from_dict(res)
 
     def get_endpoint(self, name: str) -> Endpoint:
-        """Get an Endpoint.
+        """Retrieves information about the specified compute endpoint, including its connection details and
+        operational state.
 
         :param name: str
-          The name of the Endpoint to retrieve. Format:
+          The full resource path of the endpoint to retrieve. Format:
           projects/{project_id}/branches/{branch_id}/endpoints/{endpoint_id}
 
         :returns: :class:`Endpoint`
@@ -1646,7 +1807,7 @@ class PostgresAPI:
         return Endpoint.from_dict(res)
 
     def get_operation(self, name: str) -> Operation:
-        """Get an Operation.
+        """Retrieves the status of a long-running operation.
 
         :param name: str
           The name of the operation resource.
@@ -1662,10 +1823,10 @@ class PostgresAPI:
         return Operation.from_dict(res)
 
     def get_project(self, name: str) -> Project:
-        """Get a Project.
+        """Retrieves information about the specified database project.
 
         :param name: str
-          The name of the Project to retrieve. Format: projects/{project_id}
+          The full resource path of the project to retrieve. Format: projects/{project_id}
 
         :returns: :class:`Project`
         """
@@ -1678,10 +1839,12 @@ class PostgresAPI:
         return Project.from_dict(res)
 
     def get_role(self, name: str) -> Role:
-        """Get a Role.
+        """Retrieves information about the specified Postgres role, including its authentication method and
+        permissions.
 
         :param name: str
-          The name of the Role to retrieve. Format: projects/{project_id}/branches/{branch_id}/roles/{role_id}
+          The full resource path of the role to retrieve. Format:
+          projects/{project_id}/branches/{branch_id}/roles/{role_id}
 
         :returns: :class:`Role`
         """
@@ -1696,14 +1859,14 @@ class PostgresAPI:
     def list_branches(
         self, parent: str, *, page_size: Optional[int] = None, page_token: Optional[str] = None
     ) -> Iterator[Branch]:
-        """List Branches.
+        """Returns a paginated list of database branches in the project.
 
         :param parent: str
           The Project that owns this collection of branches. Format: projects/{project_id}
         :param page_size: int (optional)
-          Upper bound for items returned.
+          Upper bound for items returned. Cannot be negative.
         :param page_token: str (optional)
-          Pagination token to go to the next page of Branches. Requests first page if absent.
+          Page token from a previous response. If not provided, returns the first page.
 
         :returns: Iterator over :class:`Branch`
         """
@@ -1729,15 +1892,15 @@ class PostgresAPI:
     def list_endpoints(
         self, parent: str, *, page_size: Optional[int] = None, page_token: Optional[str] = None
     ) -> Iterator[Endpoint]:
-        """List Endpoints.
+        """Returns a paginated list of compute endpoints in the branch.
 
         :param parent: str
           The Branch that owns this collection of endpoints. Format:
           projects/{project_id}/branches/{branch_id}
         :param page_size: int (optional)
-          Upper bound for items returned.
+          Upper bound for items returned. Cannot be negative.
         :param page_token: str (optional)
-          Pagination token to go to the next page of Endpoints. Requests first page if absent.
+          Page token from a previous response. If not provided, returns the first page.
 
         :returns: Iterator over :class:`Endpoint`
         """
@@ -1761,12 +1924,12 @@ class PostgresAPI:
             query["page_token"] = json["next_page_token"]
 
     def list_projects(self, *, page_size: Optional[int] = None, page_token: Optional[str] = None) -> Iterator[Project]:
-        """List Projects.
+        """Returns a paginated list of database projects in the workspace that the user has permission to access.
 
         :param page_size: int (optional)
-          Upper bound for items returned.
+          Upper bound for items returned. Cannot be negative.
         :param page_token: str (optional)
-          Pagination token to go to the next page of Projects. Requests first page if absent.
+          Page token from a previous response. If not provided, returns the first page.
 
         :returns: Iterator over :class:`Project`
         """
@@ -1792,14 +1955,14 @@ class PostgresAPI:
     def list_roles(
         self, parent: str, *, page_size: Optional[int] = None, page_token: Optional[str] = None
     ) -> Iterator[Role]:
-        """List Roles.
+        """Returns a paginated list of Postgres roles in the branch.
 
         :param parent: str
           The Branch that owns this collection of roles. Format: projects/{project_id}/branches/{branch_id}
         :param page_size: int (optional)
-          Upper bound for items returned.
+          Upper bound for items returned. Cannot be negative.
         :param page_token: str (optional)
-          Pagination token to go to the next page of Roles. Requests first page if absent.
+          Page token from a previous response. If not provided, returns the first page.
 
         :returns: Iterator over :class:`Role`
         """
@@ -1823,10 +1986,12 @@ class PostgresAPI:
             query["page_token"] = json["next_page_token"]
 
     def update_branch(self, name: str, branch: Branch, update_mask: FieldMask) -> UpdateBranchOperation:
-        """Update a Branch.
+        """Updates the specified database branch. You can set this branch as the project's default branch, or
+        protect/unprotect it.
 
         :param name: str
-          The resource name of the branch. Format: projects/{project_id}/branches/{branch_id}
+          Output only. The full resource path of the branch. Format:
+          projects/{project_id}/branches/{branch_id}
         :param branch: :class:`Branch`
           The Branch to update.
 
@@ -1852,10 +2017,11 @@ class PostgresAPI:
         return UpdateBranchOperation(self, operation)
 
     def update_endpoint(self, name: str, endpoint: Endpoint, update_mask: FieldMask) -> UpdateEndpointOperation:
-        """Update an Endpoint.
+        """Updates the specified compute endpoint. You can update autoscaling limits, suspend timeout, or
+        enable/disable the compute endpoint.
 
         :param name: str
-          The resource name of the endpoint. Format:
+          Output only. The full resource path of the endpoint. Format:
           projects/{project_id}/branches/{branch_id}/endpoints/{endpoint_id}
         :param endpoint: :class:`Endpoint`
           The Endpoint to update.
@@ -1882,10 +2048,10 @@ class PostgresAPI:
         return UpdateEndpointOperation(self, operation)
 
     def update_project(self, name: str, project: Project, update_mask: FieldMask) -> UpdateProjectOperation:
-        """Update a Project.
+        """Updates the specified database project.
 
         :param name: str
-          The resource name of the project. Format: projects/{project_id}
+          Output only. The full resource path of the project. Format: projects/{project_id}
         :param project: :class:`Project`
           The Project to update.
 

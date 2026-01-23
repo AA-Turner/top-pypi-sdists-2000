@@ -13,6 +13,7 @@ from starlette.exceptions import HTTPException
 from starlette.responses import Response
 from starlette.routing import BaseRoute
 
+from langgraph_api import _checkpointer as api_checkpointer
 from langgraph_api import store as api_store
 from langgraph_api.encryption.middleware import (
     decrypt_response,
@@ -45,7 +46,6 @@ from langgraph_api.validation import (
     AssistantVersionsSearchRequest,
     ConfigValidator,
 )
-from langgraph_runtime.checkpoint import Checkpointer
 from langgraph_runtime.database import connect as base_connect
 from langgraph_runtime.retry import retry_db
 
@@ -311,7 +311,7 @@ async def get_assistant_graph(
     async with get_graph(
         assistant["graph_id"],
         config,
-        checkpointer=Checkpointer(),
+        checkpointer=(await api_checkpointer.get_checkpointer()),
         store=(await api_store.get_store()),
         is_for_execution=False,
     ) as graph:
@@ -369,7 +369,7 @@ async def get_assistant_subgraphs(
     async with get_graph(
         assistant["graph_id"],
         config,
-        checkpointer=Checkpointer(),
+        checkpointer=(await api_checkpointer.get_checkpointer()),
         store=(await api_store.get_store()),
         is_for_execution=False,
     ) as graph:
@@ -418,7 +418,7 @@ async def get_assistant_schemas(
     async with get_graph(
         assistant["graph_id"],
         config,
-        checkpointer=Checkpointer(),
+        checkpointer=(await api_checkpointer.get_checkpointer()),
         store=(await api_store.get_store()),
         is_for_execution=False,
     ) as graph:

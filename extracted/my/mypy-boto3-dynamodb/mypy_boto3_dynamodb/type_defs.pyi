@@ -3,7 +3,7 @@ Type annotations for dynamodb service type definitions.
 
 [Documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_dynamodb/type_defs/)
 
-Copyright 2025 Vlad Emelianov
+Copyright 2026 Vlad Emelianov
 
 Usage::
 
@@ -150,17 +150,21 @@ __all__ = (
     "DescribeContinuousBackupsInputTypeDef",
     "DescribeContinuousBackupsOutputTypeDef",
     "DescribeContributorInsightsInputTypeDef",
+    "DescribeContributorInsightsInputWaitTypeDef",
     "DescribeContributorInsightsOutputTypeDef",
     "DescribeEndpointsResponseTypeDef",
     "DescribeExportInputTypeDef",
+    "DescribeExportInputWaitTypeDef",
     "DescribeExportOutputTypeDef",
     "DescribeGlobalTableInputTypeDef",
     "DescribeGlobalTableOutputTypeDef",
     "DescribeGlobalTableSettingsInputTypeDef",
     "DescribeGlobalTableSettingsOutputTypeDef",
     "DescribeImportInputTypeDef",
+    "DescribeImportInputWaitTypeDef",
     "DescribeImportOutputTypeDef",
     "DescribeKinesisStreamingDestinationInputTypeDef",
+    "DescribeKinesisStreamingDestinationInputWaitTypeDef",
     "DescribeKinesisStreamingDestinationOutputTypeDef",
     "DescribeLimitsOutputTypeDef",
     "DescribeTableInputTypeDef",
@@ -577,6 +581,10 @@ class DescribeContributorInsightsInputTypeDef(TypedDict):
     TableName: str
     IndexName: NotRequired[str]
 
+class WaiterConfigTypeDef(TypedDict):
+    Delay: NotRequired[int]
+    MaxAttempts: NotRequired[int]
+
 class FailureExceptionTypeDef(TypedDict):
     ExceptionName: NotRequired[str]
     ExceptionDescription: NotRequired[str]
@@ -608,10 +616,6 @@ class KinesisDataStreamDestinationTypeDef(TypedDict):
 
 class DescribeTableInputTypeDef(TypedDict):
     TableName: str
-
-class WaiterConfigTypeDef(TypedDict):
-    Delay: NotRequired[int]
-    MaxAttempts: NotRequired[int]
 
 class DescribeTableReplicaAutoScalingInputTypeDef(TypedDict):
     TableName: str
@@ -989,6 +993,31 @@ class ReplicaUpdateTypeDef(TypedDict):
     Create: NotRequired[CreateReplicaActionTypeDef]
     Delete: NotRequired[DeleteReplicaActionTypeDef]
 
+class DescribeContributorInsightsInputWaitTypeDef(TypedDict):
+    TableName: str
+    IndexName: NotRequired[str]
+    WaiterConfig: NotRequired[WaiterConfigTypeDef]
+
+class DescribeExportInputWaitTypeDef(TypedDict):
+    ExportArn: str
+    WaiterConfig: NotRequired[WaiterConfigTypeDef]
+
+class DescribeImportInputWaitTypeDef(TypedDict):
+    ImportArn: str
+    WaiterConfig: NotRequired[WaiterConfigTypeDef]
+
+class DescribeKinesisStreamingDestinationInputWaitTypeDef(TypedDict):
+    TableName: str
+    WaiterConfig: NotRequired[WaiterConfigTypeDef]
+
+class DescribeTableInputWaitExtraTypeDef(TypedDict):
+    TableName: str
+    WaiterConfig: NotRequired[WaiterConfigTypeDef]
+
+class DescribeTableInputWaitTypeDef(TypedDict):
+    TableName: str
+    WaiterConfig: NotRequired[WaiterConfigTypeDef]
+
 class DescribeContributorInsightsOutputTypeDef(TypedDict):
     TableName: str
     IndexName: str
@@ -1007,14 +1036,6 @@ class DescribeKinesisStreamingDestinationOutputTypeDef(TypedDict):
     TableName: str
     KinesisDataStreamDestinations: list[KinesisDataStreamDestinationTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
-
-class DescribeTableInputWaitExtraTypeDef(TypedDict):
-    TableName: str
-    WaiterConfig: NotRequired[WaiterConfigTypeDef]
-
-class DescribeTableInputWaitTypeDef(TypedDict):
-    TableName: str
-    WaiterConfig: NotRequired[WaiterConfigTypeDef]
 
 class DescribeTimeToLiveOutputTypeDef(TypedDict):
     TimeToLiveDescription: TimeToLiveDescriptionTypeDef

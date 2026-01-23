@@ -9,11 +9,11 @@ from typing import Callable, ClassVar, Optional
 from google.protobuf.message import Message
 from typing_extensions import Self
 
-from modal._traceback import suppress_tb_frames
+from modal._traceback import suppress_tb_frame
 
 from ._load_context import LoadContext
 from ._resolver import Resolver
-from ._utils.async_utils import aclosing
+from ._utils.async_utils import TaskContext, aclosing
 from ._utils.deprecation import deprecation_warning
 from .client import _Client
 from .config import config, logger
@@ -127,9 +127,11 @@ class _Object:
         assert isinstance(object_id, str) and self._type_prefix is not None
         if not object_id.startswith(self._type_prefix):
             raise ExecutionError(
-                f"Can not hydrate {type(self)}:"
+                f"Can not hydrate {type(self)}: "
                 f" it has type prefix {self._type_prefix}"
-                f" but the object_id starts with {object_id[:3]}"
+                f" but the object_id starts with {object_id[:3]}. "
+                "This usually means the object name was previously used for a different type. "
+                "Rename the object/app or stop the previous deployment and redeploy."
             )
         self._object_id = object_id
         self._client = client
@@ -137,7 +139,7 @@ class _Object:
         self._is_hydrated = True
 
     def _hydrate_metadata(self, metadata: Optional[Message]):
-        # override this is subclasses that need additional data (other than an object_id) for a functioning Handle
+        # override this if it's a subclass that needs additional data (other than an object_id) for a functioning Handle
         pass
 
     def _get_metadata(self) -> Optional[Message]:
@@ -314,9 +316,10 @@ class _Object:
                     self._is_hydrated = False  # un-hydrate and re-resolve
                     # we don't set an explicit Client here, relying on the default
                     # env client to be applied by LoadContext.apply_default
-                    root_load_context = LoadContext.empty()
                     resolver = Resolver()
-                    await resolver.load(typing.cast(_Object, self), root_load_context)
+                    async with TaskContext() as tc:
+                        root_load_context = LoadContext(task_context=tc)
+                        await resolver.load(typing.cast(_Object, self), root_load_context)
                 else:
                     logger.debug(f"reloading non-lazy {self} by replacing client")
                     self._client = client or await _Client.from_env()
@@ -325,11 +328,13 @@ class _Object:
         elif not self._hydrate_lazily:
             self._validate_is_hydrated()
         else:
-            # Set the client on LoadContext before loading
-            root_load_context = LoadContext(client=client)
+            # Set the client on LoadContext before loading, with a TaskContext for proper
+            # exception handling when loading shared dependencies
             resolver = Resolver()
-            with suppress_tb_frames(1):  # skip this frame by default
-                await resolver.load(self, root_load_context)
+            async with TaskContext() as tc:
+                root_load_context = LoadContext(client=client, task_context=tc)
+                with suppress_tb_frame():  # skip this frame by default
+                    await resolver.load(self, root_load_context)
         return self
 
 

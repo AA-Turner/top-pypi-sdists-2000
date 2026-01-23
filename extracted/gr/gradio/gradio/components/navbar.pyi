@@ -38,6 +38,7 @@ class Navbar(Component):
 
         demo.launch()
         ```
+    Guides: multipage-apps
     """
 
     EVENTS = [Events.change]

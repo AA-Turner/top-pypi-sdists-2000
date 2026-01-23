@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: dagster
-Version: 1.12.11
+Version: 1.12.12
 Summary: Dagster is an orchestration platform for the development, production, and observation of data assets.
 Author: Dagster Labs
 Author-email: hello@dagsterlabs.com
@@ -60,8 +60,8 @@ Requires-Dist: universal_pathlib; python_version < "3.12"
 Requires-Dist: universal_pathlib>=0.2.0; python_version >= "3.12"
 Requires-Dist: rich
 Requires-Dist: filelock
-Requires-Dist: dagster-pipes==1.12.11
-Requires-Dist: dagster-shared==1.12.11
+Requires-Dist: dagster-pipes==1.12.12
+Requires-Dist: dagster-shared==1.12.12
 Requires-Dist: antlr4-python3-runtime
 Provides-Extra: docker
 Requires-Dist: docker; extra == "docker"
@@ -88,7 +88,7 @@ Requires-Dist: ruff==0.11.5; extra == "test"
 Provides-Extra: test-components
 Requires-Dist: tomlkit; extra == "test-components"
 Requires-Dist: jsonschema; extra == "test-components"
-Requires-Dist: pandas; extra == "test-components"
+Requires-Dist: pandas<3.0.0; extra == "test-components"
 Requires-Dist: duckdb; extra == "test-components"
 Provides-Extra: mypy
 Requires-Dist: mypy==1.8.0; extra == "mypy"

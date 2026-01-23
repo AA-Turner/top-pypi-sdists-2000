@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: sagemaker-core
-Version: 2.3.1
+Version: 2.4.0
 Summary: An python package for sagemaker core functionalities
 Author-email: AWS <sagemaker-interests@amazon.com>
 Project-URL: Homepage, https://github.com/aws/sagemaker-python-sdk
@@ -27,7 +27,7 @@ Requires-Dist: pytz>=2021.1
 Requires-Dist: requests<3.0.0,>=2.20.0
 Requires-Dist: attrs>=20.3.0
 Requires-Dist: packaging>=20.0
-Requires-Dist: protobuf<5.0,>=3.12
+Requires-Dist: protobuf<7.0.0,>=3.12
 Requires-Dist: pandas>=1.0.0
 Requires-Dist: numpy>=1.9.0
 Requires-Dist: smdebug_rulesconfig>=1.0.1

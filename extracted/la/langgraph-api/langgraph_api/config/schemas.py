@@ -239,6 +239,16 @@ class CheckpointerConfig(TypedDict, total=False):
     If omitted, no checkpointer is set up (the object store will still be present, however).
     """
 
+    path: str
+    """Import path to a custom `BaseCheckpointSaver` or a callable returning one.
+
+    Examples:
+    - "./my_checkpointer.py:create_checkpointer"
+    - "my_package.checkpointer:Checkpointer"
+
+    When provided, this replaces the default checkpointer.
+    """
+
     ttl: ThreadTTLConfig | None
     """Optional. Defines the TTL (time-to-live) behavior configuration.
     

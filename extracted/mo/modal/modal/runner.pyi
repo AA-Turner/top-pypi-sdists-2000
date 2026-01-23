@@ -30,7 +30,11 @@ async def _create_all_objects(
     local_app_state: modal.app._LocalAppState,
     load_context: modal._load_context.LoadContext,
 ) -> None:
-    """Create objects that have been defined but not created on the server."""
+    """Create objects that have been defined but not created on the server.
+
+    The load_context must have a task_context set for proper exception handling
+    when loading shared dependencies.
+    """
     ...
 
 async def _publish_app(

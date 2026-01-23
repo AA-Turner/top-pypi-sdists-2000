@@ -30,12 +30,18 @@ from ._partial_function import (
     _PartialFunctionFlags,
     verify_concurrent_params,
 )
+from ._server import _Server, validate_http_server_config
 from ._utils.async_utils import synchronize_api
 from ._utils.deprecation import (
     deprecation_warning,
     warn_on_renamed_autoscaler_settings,
 )
-from ._utils.function_utils import FunctionInfo, is_flash_object, is_global_object, is_method_fn
+from ._utils.function_utils import (
+    FunctionInfo,
+    is_flash_object,
+    is_global_object,
+    is_method_fn,
+)
 from ._utils.mount_utils import validate_volumes
 from ._utils.name_utils import check_object_name, check_tag_dict
 from .client import _Client
@@ -431,7 +437,7 @@ class _App:
     ) -> typing_extensions.Self:
         """Deploy the App so that it is available persistently.
 
-        Deployed Apps will be avaible for lookup or web-based invocations until they are stopped.
+        Deployed Apps will be available for lookup or web-based invocations until they are stopped.
         Unlike with `App.run`, this method will return as soon as the deployment completes.
 
         This method is a programmatic alternative to the `modal deploy` CLI command.
@@ -690,9 +696,7 @@ class _App:
         schedule: Optional[Schedule] = None,  # An optional Modal Schedule for the function
         env: Optional[dict[str, Optional[str]]] = None,  # Environment variables to set in the container
         secrets: Optional[Collection[_Secret]] = None,  # Secrets to inject into the container as environment variables
-        gpu: Union[
-            GPU_T, list[GPU_T]
-        ] = None,  # GPU request as string ("any", "T4", ...), object (`modal.GPU.A100()`, ...), or a list of either
+        gpu: Union[GPU_T, list[GPU_T]] = None,  # GPU request; either a single GPU type or a list of types
         serialized: bool = False,  # Whether to send the function over using cloudpickle.
         network_file_systems: dict[
             Union[str, PurePosixPath], _NetworkFileSystem
@@ -815,7 +819,6 @@ class _App:
 
             if isinstance(f, _PartialFunction):
                 # typically for @function-wrapped @web_endpoint, @asgi_app, or @batched
-                f.registered = True
 
                 # but we don't support @app.function wrapping a method.
                 if is_method_fn(f.raw_f.__qualname__):
@@ -951,9 +954,7 @@ class _App:
         image: Optional[_Image] = None,  # The image to run as the container for the function
         env: Optional[dict[str, Optional[str]]] = None,  # Environment variables to set in the container
         secrets: Optional[Collection[_Secret]] = None,  # Secrets to inject into the container as environment variables
-        gpu: Union[
-            GPU_T, list[GPU_T]
-        ] = None,  # GPU request as string ("any", "T4", ...), object (`modal.GPU.A100()`, ...), or a list of either
+        gpu: Union[GPU_T, list[GPU_T]] = None,  # GPU request; either a single GPU type or a list of types
         serialized: bool = False,  # Whether to send the function over using cloudpickle.
         network_file_systems: dict[
             Union[str, PurePosixPath], _NetworkFileSystem
@@ -1056,7 +1057,6 @@ class _App:
             # Check if the decorated object is a class
             http_config = None
             if isinstance(wrapped_cls, _PartialFunction):
-                wrapped_cls.registered = True
                 user_cls = wrapped_cls.user_cls
                 if wrapped_cls.flags & _PartialFunctionFlags.HTTP_WEB_INTERFACE:
                     http_config = wrapped_cls.params.http_config
@@ -1114,7 +1114,6 @@ class _App:
                 raise InvalidError("A class must have `enable_memory_snapshot=True` to use `snap=True` on its methods.")
 
             for method in _find_partial_methods_for_user_cls(user_cls, _PartialFunctionFlags.CONCURRENT).values():
-                method.registered = True  # Avoid warning about not registering the method (hacky!)
                 raise InvalidError(
                     "The `@modal.concurrent` decorator cannot be used on methods; decorate the class instead."
                 )
@@ -1122,7 +1121,6 @@ class _App:
             for method in _find_partial_methods_for_user_cls(
                 user_cls, _PartialFunctionFlags.HTTP_WEB_INTERFACE
             ).values():
-                method.registered = True  # Avoid warning about not registering the method (hacky!)
                 raise InvalidError(
                     "The `@modal.http_server` decorator cannot be used on methods; decorate the class instead."
                 )
@@ -1131,7 +1129,6 @@ class _App:
                 for method in _find_partial_methods_for_user_cls(
                     user_cls, _PartialFunctionFlags.CALLABLE_INTERFACE
                 ).values():
-                    method.registered = True  # Avoid warning about not registering the method (hacky!)
                     raise InvalidError("Callable decorators cannot be combined with web interface decorators.")
 
             info = FunctionInfo(None, serialized=serialized, user_cls=user_cls)
@@ -1186,11 +1183,159 @@ class _App:
                 if partial_function.params.webhook_config is not None:
                     full_name = f"{user_cls.__name__}.{method_name}"
                     local_state.web_endpoints.append(full_name)
-                partial_function.registered = True
 
             tag: str = user_cls.__name__
             self._add_class(tag, cls)
             return cls  # type: ignore  # a _Cls instance "simulates" being the user provided class
+
+        return wrapper
+
+    def _experimental_server(
+        self,
+        _warn_parentheses_missing=None,  # mdmd:line-hidden
+        *,
+        image: Optional[_Image] = None,  # The image to run as the container for the server
+        env: Optional[dict[str, Optional[str]]] = None,  # Environment variables to set in the container
+        secrets: Optional[Collection[_Secret]] = None,  # Secrets to inject into the container as environment variables
+        gpu: Union[GPU_T, list[GPU_T]] = None,  # GPU request; either a single GPU type or a list of types
+        serialized: bool = False,  # Whether to send the server class over using cloudpickle.
+        volumes: dict[
+            Union[str, PurePosixPath], Union[_Volume, _CloudBucketMount]
+        ] = {},  # Mount points for Modal Volumes & CloudBucketMounts
+        cpu: Optional[Union[float, tuple[float, float]]] = None,  # CPU cores to request
+        memory: Optional[Union[int, tuple[int, int]]] = None,  # Memory in MiB to request
+        ephemeral_disk: Optional[int] = None,  # Ephemeral disk size in MiB
+        min_containers: Optional[int] = None,  # Minimum number of containers to keep warm
+        max_containers: Optional[int] = None,  # Maximum number of containers
+        buffer_containers: Optional[int] = None,  # Additional idle containers under active load
+        scaledown_window: Optional[int] = None,  # Max idle time before scaling down (seconds)
+        proxy: Optional[_Proxy] = None,  # Modal Proxy to use in front of this server
+        port: int = 8000,  # Port the HTTP server listens on
+        startup_timeout: int = 30,  # Maximum startup time in seconds
+        exit_grace_period: int = 0,  # Grace period for in-flight requests on shutdown
+        proxy_regions: Optional[Sequence[str]] = ["us-east"],  # Required: Regions to deploy proxy endpoints
+        h2_enabled: bool = False,  # Enable HTTP/2
+        target_concurrency: Optional[int] = None,  # Target concurrency for the server
+        cloud: Optional[str] = None,  # Cloud provider (aws, gcp, oci, auto)
+        region: Optional[Union[str, Sequence[str]]] = None,  # Region(s) to run on
+        nonpreemptible: bool = False,  # Whether to use non-preemptible instances
+        enable_memory_snapshot: bool = False,  # Enable memory checkpointing
+        i6pn: Optional[bool] = None,  # Enable IPv6 container networking
+        include_source: Optional[bool] = None,  # Whether to add source to container
+        # Experimental options
+        experimental_options: Optional[dict[str, Any]] = None,
+    ) -> Callable[[Union[CLS_T, _PartialFunction]], _Server]:
+        """
+        Decorator to register a new Modal Server with this App.
+
+        Servers run HTTP servers that are started in an `@enter` method.
+        Unlike `@app.cls()`, servers only expose HTTP endpoints and do not
+        support `.remote()` method calls.
+
+        Example:
+
+        ```python
+        @app._experimental_server(port=8000, proxy_regions=["us-east"])
+        class MyServer:
+            @modal.enter()
+            def start(self):
+                self.proc = subprocess.Popen(["python3", "-m", "http.server", "8000"])
+
+            @modal.exit()
+            def stop(self):
+                self.proc.terminate()
+        ```
+        """
+        if _warn_parentheses_missing:
+            raise InvalidError("Did you forget parentheses? Suggestion: `@app._experimental_server()`.")
+
+        # Validate HTTP server config
+        validate_http_server_config(
+            port=port,
+            proxy_regions=proxy_regions,
+            startup_timeout=startup_timeout,
+            exit_grace_period=exit_grace_period,
+        )
+
+        if target_concurrency is not None:
+            if not isinstance(target_concurrency, int) or target_concurrency < 1:
+                raise InvalidError("The `target_concurrency` argument must be a positive integer.")
+
+        http_config = api_pb2.HTTPConfig(
+            port=port,
+            proxy_regions=proxy_regions,
+            startup_timeout=startup_timeout,
+            exit_grace_period=exit_grace_period,
+            h2_enabled=h2_enabled,
+        )
+
+        # Build secrets list
+        secrets_list: list[_Secret] = list(secrets) if secrets else []
+        if env:
+            secrets_list.append(_Secret.from_dict(env))
+
+        def wrapper(wrapped_user_cls: Union[CLS_T, _PartialFunction, Callable]) -> _Server:
+            _Server._validate_wrapped_user_cls_decorators(wrapped_user_cls, enable_memory_snapshot)
+
+            # Validate the server class
+            _Server._validate_construction_mechanism(wrapped_user_cls)
+
+            # Extract the underlying class if wrapped in a _PartialFunction (e.g., from @modal.clustered())
+            cluster_size = None
+            rdma = None
+            user_cls = wrapped_user_cls
+
+            if isinstance(wrapped_user_cls, _PartialFunction):
+                user_cls = wrapped_user_cls.user_cls
+                if wrapped_user_cls.flags & _PartialFunctionFlags.CLUSTERED:
+                    cluster_size = wrapped_user_cls.params.cluster_size
+                    rdma = wrapped_user_cls.params.rdma
+
+            local_state = self._local_state
+
+            # Create the FunctionInfo for the server, note we treat FunctionInfo as a class for servers
+            info = FunctionInfo(None, serialized=serialized, user_cls=user_cls, name_override=user_cls.__name__)
+            # Create the service function
+            service_function = _Function.from_local(
+                info,
+                app=self,
+                image=image or self._get_default_image(),
+                secrets=[*local_state.secrets_default, *secrets_list],
+                gpu=gpu,
+                network_file_systems={},  # Deprecated: No support for Server level network file systems
+                volumes={**local_state.volumes_default, **volumes},
+                cpu=cpu,
+                memory=memory,
+                ephemeral_disk=ephemeral_disk,
+                min_containers=min_containers,
+                max_containers=max_containers,
+                buffer_containers=buffer_containers,
+                scaledown_window=scaledown_window,
+                proxy=proxy,
+                retries=None,  # No support for Server level retries
+                max_concurrent_inputs=None,  # No support for Server level concurrent inputs
+                target_concurrent_inputs=target_concurrency,  # No support for Server level concurrent inputs
+                batch_max_size=None,  # No support for Server level batching
+                batch_wait_ms=None,  # No support for Server level batching
+                startup_timeout=startup_timeout,
+                cloud=cloud,
+                region=region,
+                nonpreemptible=nonpreemptible,
+                enable_memory_snapshot=enable_memory_snapshot,
+                single_use_containers=False,  # No support for single-use server containers
+                http_config=http_config,
+                is_server=True,
+                i6pn_enabled=i6pn or (cluster_size is not None),
+                cluster_size=cluster_size,
+                rdma=rdma,
+                include_source=include_source if include_source is not None else local_state.include_source_default,
+                experimental_options={k: str(v) for k, v in (experimental_options or {}).items()},
+                restrict_output=False,
+            )
+
+            self._add_function(service_function, is_web_endpoint=False)
+            server: _Server = _Server._from_local(wrapped_user_cls, self, service_function)
+            return server
 
         return wrapper
 

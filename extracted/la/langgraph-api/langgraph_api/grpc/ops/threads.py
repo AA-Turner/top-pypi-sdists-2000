@@ -19,6 +19,7 @@ from langgraph.types import StateSnapshot, StateUpdate
 from langgraph_sdk import Auth
 from starlette.exceptions import HTTPException
 
+from langgraph_api import _checkpointer as api_checkpointer
 from langgraph_api import store as api_store
 from langgraph_api.command import map_cmd
 from langgraph_api.encryption.middleware import encrypt_json_if_needed
@@ -39,7 +40,6 @@ from langgraph_api.schema import ThreadUpdateResponse
 from langgraph_api.serde import json_dumpb, json_dumpb_optional, json_loads
 from langgraph_api.state import patch_interrupt, state_snapshot_to_thread_state
 from langgraph_api.utils import fetchone
-from langgraph_runtime.checkpoint import Checkpointer
 
 if TYPE_CHECKING:
     from collections.abc import AsyncIterator
@@ -53,13 +53,6 @@ if TYPE_CHECKING:
     )
 
 logger = structlog.stdlib.get_logger(__name__)
-
-
-def _snapshot_defaults():
-    """Support older versions of langgraph that don't have interrupts field."""
-    if not hasattr(StateSnapshot, "interrupts"):
-        return {}
-    return {"interrupts": tuple()}
 
 
 THREAD_STATUS_TO_PB = {
@@ -83,6 +76,13 @@ THREAD_TTL_STRATEGY_MAP = {
     "delete": pb.ThreadTTLStrategy.THREAD_TTL_STRATEGY_DELETE,
     "keep_latest": pb.ThreadTTLStrategy.THREAD_TTL_STRATEGY_KEEP_LATEST,
 }
+
+
+def _snapshot_defaults():
+    """Support older versions of langgraph that don't have interrupts field."""
+    if not hasattr(StateSnapshot, "interrupts"):
+        return {}
+    return {"interrupts": tuple()}
 
 
 def _map_thread_status(
@@ -727,6 +727,54 @@ class Threads(Authenticated):
         await client.threads.SetStatus(pb.SetThreadStatusRequest(**request_kwargs))
 
     @staticmethod
+    async def set_joint_status(
+        conn,  # Not used in gRPC implementation
+        thread_id: UUID | str,
+        run_id: UUID | str,
+        run_status: str,  # RunStatus enum value or "rollback"
+        graph_id: str,
+        checkpoint: dict[str, Any] | None = None,
+        exception: BaseException | dict[str, Any] | None = None,
+    ) -> None:
+        """Set thread and run status atomically via gRPC.
+
+        This is used to update both thread and run status in a single atomic
+        operation, minimizing round trips and ensuring consistency.
+
+        Args:
+            conn: Not used (required for interface compatibility)
+            thread_id: Thread ID
+            run_id: Run ID
+            run_status: New run status (e.g., "pending", "running", "error",
+                        "success", "rollback"). "rollback" is a special value
+                        that deletes the run and its checkpoints.
+            graph_id: Graph ID to store in thread metadata
+            checkpoint: Checkpoint payload containing values, next, tasks, etc.
+            exception: Exception to store on thread (BaseException or serialized dict)
+        """
+        request_kwargs: dict[str, Any] = {
+            "thread_id": pb.UUID(value=_normalize_uuid(thread_id)),
+            "run_id": pb.UUID(value=_normalize_uuid(run_id)),
+            "run_status": run_status,
+            "graph_id": graph_id,
+        }
+
+        # Map checkpoint to proto if provided (reuses same helper as set_status)
+        checkpoint_proto = await _thread_status_checkpoint_to_proto(checkpoint)
+        if checkpoint_proto is not None:
+            request_kwargs["checkpoint"] = checkpoint_proto
+
+        # Map exception to JSON bytes
+        exception_json = await _serialize_exception(exception)
+        if exception_json is not None:
+            request_kwargs["exception_json"] = exception_json
+
+        client = await get_shared_client()
+        await client.threads.SetJointStatus(
+            pb.SetThreadJointStatusRequest(**request_kwargs)
+        )
+
+    @staticmethod
     async def get_graph_id(
         thread_id: UUID | str,
     ) -> str | None:
@@ -752,7 +800,10 @@ class Threads(Authenticated):
             ctx: Any = None,
         ) -> StateSnapshot:
             """Get state snapshot for a thread (*internal only*, no auth)."""
-            checkpointer = Checkpointer(conn, unpack_hook=_msgpack_ext_hook_to_json)
+            checkpointer = await api_checkpointer.get_checkpointer(
+                conn=conn, unpack_hook=_msgpack_ext_hook_to_json
+            )
+
             thread_id = config["configurable"]["thread_id"]
 
             async with conn.pipeline():
@@ -813,7 +864,10 @@ class Threads(Authenticated):
                 Auth.types.ThreadsUpdate(thread_id=thread_id),
             )
 
-            checkpointer = Checkpointer(conn, use_direct_connection=True)
+            checkpointer = await api_checkpointer.get_checkpointer(
+                conn=conn, use_direct_connection=True
+            )
+
             async with conn.pipeline():
                 thread, checkpoint, graph_id, run_count = await asyncio.gather(
                     Threads.get(conn, thread_id, ctx=ctx, filters=filters),
@@ -906,7 +960,7 @@ class Threads(Authenticated):
                 Auth.types.ThreadsUpdate(thread_id=thread_id),
             )
 
-            checkpointer = Checkpointer(conn)
+            checkpointer = await api_checkpointer.get_checkpointer(conn=conn)
 
             async with conn.pipeline():
                 thread, graph_id = await asyncio.gather(
@@ -1018,8 +1072,8 @@ class Threads(Authenticated):
                 async with get_graph(
                     graph_id,
                     thread_config,
-                    checkpointer=Checkpointer(
-                        conn, unpack_hook=_msgpack_ext_hook_to_json
+                    checkpointer=await api_checkpointer.get_checkpointer(
+                        conn=conn, unpack_hook=_msgpack_ext_hook_to_json
                     ),
                     store=(await api_store.get_store()),
                     is_for_execution=False,

@@ -112,8 +112,8 @@ setup(
         "universal_pathlib>=0.2.0; python_version>='3.12'",
         "rich",
         "filelock",
-        "dagster-pipes==1.12.11",
-        "dagster-shared==1.12.11",
+        "dagster-pipes==1.12.12",
+        "dagster-shared==1.12.12",
         "antlr4-python3-runtime",
     ],
     extras_require={
@@ -142,7 +142,7 @@ setup(
         "test-components": [
             "tomlkit",
             "jsonschema",
-            "pandas",
+            "pandas<3.0.0",
             "duckdb",
         ],
         "mypy": ["mypy==1.8.0"],

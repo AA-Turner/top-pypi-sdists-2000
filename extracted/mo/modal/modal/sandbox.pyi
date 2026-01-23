@@ -118,6 +118,7 @@ class _Sandbox(modal._object._Object):
         experimental_options: typing.Optional[dict[str, bool]] = None,
         enable_snapshot: bool = False,
         verbose: bool = False,
+        custom_domain: typing.Optional[str] = None,
     ) -> _Sandbox:
         """mdmd:hidden"""
         ...
@@ -156,6 +157,7 @@ class _Sandbox(modal._object._Object):
         client: typing.Optional[modal.client._Client] = None,
         environment_name: typing.Optional[str] = None,
         pty_info: typing.Optional[modal_proto.api_pb2.PTYInfo] = None,
+        custom_domain: typing.Optional[str] = None,
     ) -> _Sandbox:
         """Create a new Sandbox to run untrusted, arbitrary code.
 
@@ -206,6 +208,7 @@ class _Sandbox(modal._object._Object):
         client: typing.Optional[modal.client._Client] = None,
         verbose: bool = False,
         pty_info: typing.Optional[modal_proto.api_pb2.PTYInfo] = None,
+        custom_domain: typing.Optional[str] = None,
     ):
         """Private method used internally.
 
@@ -528,6 +531,7 @@ class Sandbox(modal.object.Object):
         experimental_options: typing.Optional[dict[str, bool]] = None,
         enable_snapshot: bool = False,
         verbose: bool = False,
+        custom_domain: typing.Optional[str] = None,
     ) -> Sandbox:
         """mdmd:hidden"""
         ...
@@ -570,6 +574,7 @@ class Sandbox(modal.object.Object):
             client: typing.Optional[modal.client.Client] = None,
             environment_name: typing.Optional[str] = None,
             pty_info: typing.Optional[modal_proto.api_pb2.PTYInfo] = None,
+            custom_domain: typing.Optional[str] = None,
         ) -> Sandbox:
             """Create a new Sandbox to run untrusted, arbitrary code.
 
@@ -623,6 +628,7 @@ class Sandbox(modal.object.Object):
             client: typing.Optional[modal.client.Client] = None,
             environment_name: typing.Optional[str] = None,
             pty_info: typing.Optional[modal_proto.api_pb2.PTYInfo] = None,
+            custom_domain: typing.Optional[str] = None,
         ) -> Sandbox:
             """Create a new Sandbox to run untrusted, arbitrary code.
 
@@ -679,6 +685,7 @@ class Sandbox(modal.object.Object):
             client: typing.Optional[modal.client.Client] = None,
             verbose: bool = False,
             pty_info: typing.Optional[modal_proto.api_pb2.PTYInfo] = None,
+            custom_domain: typing.Optional[str] = None,
         ):
             """Private method used internally.
 
@@ -725,6 +732,7 @@ class Sandbox(modal.object.Object):
             client: typing.Optional[modal.client.Client] = None,
             verbose: bool = False,
             pty_info: typing.Optional[modal_proto.api_pb2.PTYInfo] = None,
+            custom_domain: typing.Optional[str] = None,
         ):
             """Private method used internally.
 

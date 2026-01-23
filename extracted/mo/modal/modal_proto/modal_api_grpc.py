@@ -171,6 +171,7 @@ class ModalClientModal:
         self.TaskResult = modal._grpc_client.UnaryUnaryWrapper(grpclib_stub.TaskResult, client, server_url)
         self.TokenFlowCreate = modal._grpc_client.UnaryUnaryWrapper(grpclib_stub.TokenFlowCreate, client, server_url)
         self.TokenFlowWait = modal._grpc_client.UnaryUnaryWrapper(grpclib_stub.TokenFlowWait, client, server_url)
+        self.TokenInfoGet = modal._grpc_client.UnaryUnaryWrapper(grpclib_stub.TokenInfoGet, client, server_url)
         self.TunnelStart = modal._grpc_client.UnaryUnaryWrapper(grpclib_stub.TunnelStart, client, server_url)
         self.TunnelStop = modal._grpc_client.UnaryUnaryWrapper(grpclib_stub.TunnelStop, client, server_url)
         self.VolumeCommit = modal._grpc_client.UnaryUnaryWrapper(grpclib_stub.VolumeCommit, client, server_url)

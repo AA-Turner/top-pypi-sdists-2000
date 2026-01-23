@@ -28,6 +28,7 @@ from pydantic import ValidationError
 from pydantic.v1 import ValidationError as ValidationErrorLegacy
 
 from langgraph_api import __version__
+from langgraph_api import _checkpointer as api_checkpointer
 from langgraph_api import store as api_store
 from langgraph_api.asyncio import ValueEvent, wait_if_not_done
 from langgraph_api.command import map_cmd
@@ -44,7 +45,6 @@ from langgraph_api.metadata import HOST, PLAN, USER_API_URL, incr_nodes
 from langgraph_api.schema import Run, StreamMode
 from langgraph_api.serde import json_dumpb
 from langgraph_api.utils.config import run_in_executor
-from langgraph_runtime.checkpoint import Checkpointer
 from langgraph_runtime.ops import Runs
 
 CrudRuns = GrpcRuns if FF_USE_CORE_API else Runs
@@ -166,7 +166,9 @@ async def astream_state(
             configurable["graph_id"],
             config,
             store=(await api_store.get_store()),
-            checkpointer=None if temporary else Checkpointer(),
+            checkpointer=None
+            if temporary
+            else await api_checkpointer.get_checkpointer(),
             is_for_execution=True,
         )
     )

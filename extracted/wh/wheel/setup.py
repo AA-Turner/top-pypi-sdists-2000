@@ -23,7 +23,7 @@ entry_points = \
  'distutils.commands': ['bdist_wheel = wheel.bdist_wheel:bdist_wheel']}
 
 setup(name='wheel',
-      version='0.46.2',
+      version='0.46.3',
       description='Command line tool for manipulating wheel files',
       author=None,
       author_email='Daniel Holth <dholth@fastmail.fm>',

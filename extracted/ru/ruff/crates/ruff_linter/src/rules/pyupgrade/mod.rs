@@ -100,6 +100,7 @@ mod tests {
     #[test_case(Rule::UnicodeKindPrefix, Path::new("UP025.py"))]
     #[test_case(Rule::UnnecessaryBuiltinImport, Path::new("UP029_0.py"))]
     #[test_case(Rule::UnnecessaryBuiltinImport, Path::new("UP029_2.py"))]
+    #[test_case(Rule::UnnecessaryBuiltinImport, Path::new("UP029_3.py"))]
     #[test_case(Rule::UnnecessaryClassParentheses, Path::new("UP039.py"))]
     #[test_case(Rule::UnnecessaryDefaultTypeArgs, Path::new("UP043.py"))]
     #[test_case(Rule::UnnecessaryEncodeUTF8, Path::new("UP012.py"))]
@@ -450,6 +451,19 @@ mod tests {
             },
         )?;
         assert_diagnostics!(snapshot, diagnostics);
+        Ok(())
+    }
+
+    #[test]
+    fn up045_future_annotations_py39() -> Result<()> {
+        let diagnostics = test_path(
+            Path::new("pyupgrade/UP045_py39.py"),
+            &settings::LinterSettings {
+                unresolved_target_version: PythonVersion::PY39.into(),
+                ..settings::LinterSettings::for_rule(Rule::NonPEP604AnnotationOptional)
+            },
+        )?;
+        assert_diagnostics!(diagnostics);
         Ok(())
     }
 }

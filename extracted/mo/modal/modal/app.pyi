@@ -2,6 +2,7 @@ import collections.abc
 import modal._functions
 import modal._load_context
 import modal._partial_function
+import modal._server
 import modal._utils.function_utils
 import modal.client
 import modal.cloud_bucket_mount
@@ -17,6 +18,7 @@ import modal.running_app
 import modal.schedule
 import modal.scheduler_placement
 import modal.secret
+import modal.server
 import modal.volume
 import pathlib
 import synchronicity.combined_types
@@ -310,7 +312,7 @@ class _App:
     ) -> typing_extensions.Self:
         """Deploy the App so that it is available persistently.
 
-        Deployed Apps will be avaible for lookup or web-based invocations until they are stopped.
+        Deployed Apps will be available for lookup or web-based invocations until they are stopped.
         Unlike with `App.run`, this method will return as soon as the deployment completes.
 
         This method is a programmatic alternative to the `modal deploy` CLI command.
@@ -562,6 +564,65 @@ class _App:
         _experimental_scheduler_placement: typing.Optional[modal.scheduler_placement.SchedulerPlacement] = None,
     ) -> collections.abc.Callable[[typing.Union[CLS_T, modal._partial_function._PartialFunction]], CLS_T]:
         """Decorator to register a new Modal [Cls](https://modal.com/docs/reference/modal.Cls) with this App."""
+        ...
+
+    def _experimental_server(
+        self,
+        _warn_parentheses_missing=None,
+        *,
+        image: typing.Optional[modal.image._Image] = None,
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret._Secret]] = None,
+        gpu: typing.Union[None, str, modal.gpu._GPUConfig, list[typing.Union[None, str, modal.gpu._GPUConfig]]] = None,
+        serialized: bool = False,
+        volumes: dict[
+            typing.Union[str, pathlib.PurePosixPath],
+            typing.Union[modal.volume._Volume, modal.cloud_bucket_mount._CloudBucketMount],
+        ] = {},
+        cpu: typing.Union[float, tuple[float, float], None] = None,
+        memory: typing.Union[int, tuple[int, int], None] = None,
+        ephemeral_disk: typing.Optional[int] = None,
+        min_containers: typing.Optional[int] = None,
+        max_containers: typing.Optional[int] = None,
+        buffer_containers: typing.Optional[int] = None,
+        scaledown_window: typing.Optional[int] = None,
+        proxy: typing.Optional[modal.proxy._Proxy] = None,
+        port: int = 8000,
+        startup_timeout: int = 30,
+        exit_grace_period: int = 0,
+        proxy_regions: typing.Optional[collections.abc.Sequence[str]] = ["us-east"],
+        h2_enabled: bool = False,
+        target_concurrency: typing.Optional[int] = None,
+        cloud: typing.Optional[str] = None,
+        region: typing.Union[str, collections.abc.Sequence[str], None] = None,
+        nonpreemptible: bool = False,
+        enable_memory_snapshot: bool = False,
+        i6pn: typing.Optional[bool] = None,
+        include_source: typing.Optional[bool] = None,
+        experimental_options: typing.Optional[dict[str, typing.Any]] = None,
+    ) -> collections.abc.Callable[
+        [typing.Union[CLS_T, modal._partial_function._PartialFunction]], modal._server._Server
+    ]:
+        """Decorator to register a new Modal Server with this App.
+
+        Servers run HTTP servers that are started in an `@enter` method.
+        Unlike `@app.cls()`, servers only expose HTTP endpoints and do not
+        support `.remote()` method calls.
+
+        Example:
+
+        ```python
+        @app._experimental_server(port=8000, proxy_regions=["us-east"])
+        class MyServer:
+            @modal.enter()
+            def start(self):
+                self.proc = subprocess.Popen(["python3", "-m", "http.server", "8000"])
+
+            @modal.exit()
+            def stop(self):
+                self.proc.terminate()
+        ```
+        """
         ...
 
     def include(self, /, other_app: _App, inherit_tags: bool = True) -> typing_extensions.Self:
@@ -921,7 +982,7 @@ class App:
         ) -> SUPERSELF:
             """Deploy the App so that it is available persistently.
 
-            Deployed Apps will be avaible for lookup or web-based invocations until they are stopped.
+            Deployed Apps will be available for lookup or web-based invocations until they are stopped.
             Unlike with `App.run`, this method will return as soon as the deployment completes.
 
             This method is a programmatic alternative to the `modal deploy` CLI command.
@@ -973,7 +1034,7 @@ class App:
         ) -> SUPERSELF:
             """Deploy the App so that it is available persistently.
 
-            Deployed Apps will be avaible for lookup or web-based invocations until they are stopped.
+            Deployed Apps will be available for lookup or web-based invocations until they are stopped.
             Unlike with `App.run`, this method will return as soon as the deployment completes.
 
             This method is a programmatic alternative to the `modal deploy` CLI command.
@@ -1227,6 +1288,63 @@ class App:
         _experimental_scheduler_placement: typing.Optional[modal.scheduler_placement.SchedulerPlacement] = None,
     ) -> collections.abc.Callable[[typing.Union[CLS_T, modal.partial_function.PartialFunction]], CLS_T]:
         """Decorator to register a new Modal [Cls](https://modal.com/docs/reference/modal.Cls) with this App."""
+        ...
+
+    def _experimental_server(
+        self,
+        _warn_parentheses_missing=None,
+        *,
+        image: typing.Optional[modal.image.Image] = None,
+        env: typing.Optional[dict[str, typing.Optional[str]]] = None,
+        secrets: typing.Optional[collections.abc.Collection[modal.secret.Secret]] = None,
+        gpu: typing.Union[None, str, modal.gpu._GPUConfig, list[typing.Union[None, str, modal.gpu._GPUConfig]]] = None,
+        serialized: bool = False,
+        volumes: dict[
+            typing.Union[str, pathlib.PurePosixPath],
+            typing.Union[modal.volume.Volume, modal.cloud_bucket_mount.CloudBucketMount],
+        ] = {},
+        cpu: typing.Union[float, tuple[float, float], None] = None,
+        memory: typing.Union[int, tuple[int, int], None] = None,
+        ephemeral_disk: typing.Optional[int] = None,
+        min_containers: typing.Optional[int] = None,
+        max_containers: typing.Optional[int] = None,
+        buffer_containers: typing.Optional[int] = None,
+        scaledown_window: typing.Optional[int] = None,
+        proxy: typing.Optional[modal.proxy.Proxy] = None,
+        port: int = 8000,
+        startup_timeout: int = 30,
+        exit_grace_period: int = 0,
+        proxy_regions: typing.Optional[collections.abc.Sequence[str]] = ["us-east"],
+        h2_enabled: bool = False,
+        target_concurrency: typing.Optional[int] = None,
+        cloud: typing.Optional[str] = None,
+        region: typing.Union[str, collections.abc.Sequence[str], None] = None,
+        nonpreemptible: bool = False,
+        enable_memory_snapshot: bool = False,
+        i6pn: typing.Optional[bool] = None,
+        include_source: typing.Optional[bool] = None,
+        experimental_options: typing.Optional[dict[str, typing.Any]] = None,
+    ) -> collections.abc.Callable[[typing.Union[CLS_T, modal.partial_function.PartialFunction]], modal.server.Server]:
+        """Decorator to register a new Modal Server with this App.
+
+        Servers run HTTP servers that are started in an `@enter` method.
+        Unlike `@app.cls()`, servers only expose HTTP endpoints and do not
+        support `.remote()` method calls.
+
+        Example:
+
+        ```python
+        @app._experimental_server(port=8000, proxy_regions=["us-east"])
+        class MyServer:
+            @modal.enter()
+            def start(self):
+                self.proc = subprocess.Popen(["python3", "-m", "http.server", "8000"])
+
+            @modal.exit()
+            def stop(self):
+                self.proc.terminate()
+        ```
+        """
         ...
 
     def include(self, /, other_app: App, inherit_tags: bool = True) -> typing_extensions.Self:

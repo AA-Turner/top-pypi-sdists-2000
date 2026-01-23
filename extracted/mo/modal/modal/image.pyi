@@ -34,10 +34,14 @@ def _validate_python_version(
     python_version: typing.Optional[str],
     builder_version: typing.Literal["2023.12", "2024.04", "2024.10", "2025.06", "PREVIEW"],
     allow_micro_granularity: bool = True,
+    allow_free_threading: bool = False,
+    caller_name: str = "",
 ) -> str: ...
 def _dockerhub_python_version(
     builder_version: typing.Literal["2023.12", "2024.04", "2024.10", "2025.06", "PREVIEW"],
     python_version: typing.Optional[str] = None,
+    allow_free_threading: bool = False,
+    caller_name: str = "",
 ) -> str: ...
 def _base_image_config(
     group: str, builder_version: typing.Literal["2023.12", "2024.04", "2024.10", "2025.06", "PREVIEW"]

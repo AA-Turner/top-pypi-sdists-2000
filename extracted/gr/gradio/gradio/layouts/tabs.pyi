@@ -14,6 +14,7 @@ from gradio.events import Dependency
 class Tabs(BlockContext, metaclass=ComponentMeta):
     """
     Tabs is a layout element within Blocks that can contain multiple "Tab" Components.
+    Guides: controlling-layout
     """
 
     EVENTS = [Events.change, Events.select]

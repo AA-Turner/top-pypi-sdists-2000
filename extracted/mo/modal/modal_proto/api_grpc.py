@@ -632,6 +632,10 @@ class ModalClientBase(abc.ABC):
         pass
 
     @abc.abstractmethod
+    async def TokenInfoGet(self, stream: 'grpclib.server.Stream[modal_proto.api_pb2.TokenInfoGetRequest, modal_proto.api_pb2.TokenInfoGetResponse]') -> None:
+        pass
+
+    @abc.abstractmethod
     async def TunnelStart(self, stream: 'grpclib.server.Stream[modal_proto.api_pb2.TunnelStartRequest, modal_proto.api_pb2.TunnelStartResponse]') -> None:
         pass
 
@@ -1634,6 +1638,12 @@ class ModalClientBase(abc.ABC):
                 grpclib.const.Cardinality.UNARY_UNARY,
                 modal_proto.api_pb2.TokenFlowWaitRequest,
                 modal_proto.api_pb2.TokenFlowWaitResponse,
+            ),
+            '/modal.client.ModalClient/TokenInfoGet': grpclib.const.Handler(
+                self.TokenInfoGet,
+                grpclib.const.Cardinality.UNARY_UNARY,
+                modal_proto.api_pb2.TokenInfoGetRequest,
+                modal_proto.api_pb2.TokenInfoGetResponse,
             ),
             '/modal.client.ModalClient/TunnelStart': grpclib.const.Handler(
                 self.TunnelStart,
@@ -2684,6 +2694,12 @@ class ModalClientStub:
             '/modal.client.ModalClient/TokenFlowWait',
             modal_proto.api_pb2.TokenFlowWaitRequest,
             modal_proto.api_pb2.TokenFlowWaitResponse,
+        )
+        self.TokenInfoGet = grpclib.client.UnaryUnaryMethod(
+            channel,
+            '/modal.client.ModalClient/TokenInfoGet',
+            modal_proto.api_pb2.TokenInfoGetRequest,
+            modal_proto.api_pb2.TokenInfoGetResponse,
         )
         self.TunnelStart = grpclib.client.UnaryUnaryMethod(
             channel,

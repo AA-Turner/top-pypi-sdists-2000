@@ -155,7 +155,11 @@ GRPC_CLIENT_MAX_RECV_MSG_BYTES = env(
 GRPC_CLIENT_MAX_SEND_MSG_BYTES = env(
     "GRPC_CLIENT_MAX_SEND_MSG_BYTES", cast=int, default=300 * 1024 * 1024
 )
-GRPC_SERVER_ADDRESS = env("GRPC_SERVER_ADDRESS", cast=str, default="localhost:50051")
+GRPC_SERVER_ADDRESS = env(
+    "GRPC_SERVER_ADDRESS",
+    cast=str,
+    default="127.0.0.1:50051",
+)
 
 # Minimum payload size to use the dedicated thread pool for JSON parsing.
 # (Otherwise, the payload is parsed directly in the event loop.)
@@ -254,8 +258,13 @@ MAX_STREAM_CHUNK_SIZE_BYTES = env(
 )
 
 
-CHECKPOINTER_CONFIG = env(
+CHECKPOINTER_CONFIG: CheckpointerConfig | None = env(
     "LANGGRAPH_CHECKPOINTER", cast=_parse.parse_schema(CheckpointerConfig), default=None
+)
+USE_CUSTOM_CHECKPOINTER = bool(
+    CHECKPOINTER_CONFIG is not None
+    and "path" in CHECKPOINTER_CONFIG
+    and CHECKPOINTER_CONFIG["path"].strip()
 )
 SERDE: SerdeConfig | None = (
     CHECKPOINTER_CONFIG["serde"]
@@ -359,23 +368,24 @@ LANGSMITH_CONTROL_PLANE_API_KEY = env(
     "LANGSMITH_CONTROL_PLANE_API_KEY", cast=str, default=LANGSMITH_API_KEY
 )
 
+
 # if langsmith api key is set, enable tracing unless explicitly disabled
+def _first_defined(*values):
+    for value in values:
+        if value is not None:
+            return value
+    return None
 
-if (
-    LANGSMITH_CONTROL_PLANE_API_KEY
-    and not getenv("LANGCHAIN_TRACING_V2")
-    and not getenv("LANGCHAIN_TRACING")
-    and not getenv("LANGSMITH_TRACING_V2")
-    and not getenv("LANGSMITH_TRACING")
-):
-    environ["LANGCHAIN_TRACING_V2"] = "true"
 
-TRACING = (
-    env("LANGCHAIN_TRACING_V2", cast=bool, default=None)
-    or env("LANGCHAIN_TRACING", cast=bool, default=None)
-    or env("LANGSMITH_TRACING_V2", cast=bool, default=None)
-    or env("LANGSMITH_TRACING", cast=bool, default=None)
+TRACING = _first_defined(
+    env("LANGSMITH_TRACING", cast=bool, default=None),
+    env("LANGSMITH_TRACING_V2", cast=bool, default=None),
+    env("LANGCHAIN_TRACING_V2", cast=bool, default=None),
+    env("LANGCHAIN_TRACING", cast=bool, default=None),
 )
+if LANGSMITH_CONTROL_PLANE_API_KEY and TRACING is None:
+    environ["LANGSMITH_TRACING"] = "true"
+    TRACING = True
 
 # OpenTelemetry
 # Centralized enablement flag so app code does not read raw env vars.

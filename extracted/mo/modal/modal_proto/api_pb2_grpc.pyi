@@ -651,6 +651,10 @@ class ModalClientStub:
         modal_proto.api_pb2.TokenFlowWaitRequest,
         modal_proto.api_pb2.TokenFlowWaitResponse,
     ]
+    TokenInfoGet: grpc.UnaryUnaryMultiCallable[
+        modal_proto.api_pb2.TokenInfoGetRequest,
+        modal_proto.api_pb2.TokenInfoGetResponse,
+    ]
     TunnelStart: grpc.UnaryUnaryMultiCallable[
         modal_proto.api_pb2.TunnelStartRequest,
         modal_proto.api_pb2.TunnelStartResponse,
@@ -1687,6 +1691,12 @@ class ModalClientServicer(metaclass=abc.ABCMeta):
         request: modal_proto.api_pb2.TokenFlowWaitRequest,
         context: grpc.ServicerContext,
     ) -> modal_proto.api_pb2.TokenFlowWaitResponse: ...
+    @abc.abstractmethod
+    def TokenInfoGet(
+        self,
+        request: modal_proto.api_pb2.TokenInfoGetRequest,
+        context: grpc.ServicerContext,
+    ) -> modal_proto.api_pb2.TokenInfoGetResponse: ...
     @abc.abstractmethod
     def TunnelStart(
         self,

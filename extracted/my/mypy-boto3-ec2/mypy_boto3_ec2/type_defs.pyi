@@ -13917,6 +13917,9 @@ class GpuDeviceInfoTypeDef(TypedDict):
     Name: NotRequired[str]
     Manufacturer: NotRequired[str]
     Count: NotRequired[int]
+    LogicalGpuCount: NotRequired[int]
+    GpuPartitionSize: NotRequired[float]
+    Workloads: NotRequired[list[str]]
     MemoryInfo: NotRequired[GpuDeviceMemoryInfoTypeDef]
 
 class IamInstanceProfileAssociationTypeDef(TypedDict):

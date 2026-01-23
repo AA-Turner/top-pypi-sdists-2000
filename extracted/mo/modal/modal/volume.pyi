@@ -1483,7 +1483,7 @@ class _VolumeUploadContextManager2(_AbstractVolumeUploadContextManager):
         client: modal.client._Client,
         progress_cb: typing.Optional[collections.abc.Callable[..., typing.Any]] = None,
         force: bool = False,
-        hash_concurrency: int = 4,
+        hash_concurrency: int = 2,
         put_concurrency: int = 128,
     ):
         """mdmd:hidden"""
@@ -1542,7 +1542,7 @@ class VolumeUploadContextManager2(AbstractVolumeUploadContextManager):
         client: modal.client.Client,
         progress_cb: typing.Optional[collections.abc.Callable[..., typing.Any]] = None,
         force: bool = False,
-        hash_concurrency: int = 4,
+        hash_concurrency: int = 2,
         put_concurrency: int = 128,
     ):
         """mdmd:hidden"""

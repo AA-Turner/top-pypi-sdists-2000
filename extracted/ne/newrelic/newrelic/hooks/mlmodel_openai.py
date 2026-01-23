@@ -216,8 +216,6 @@ def create_chat_completion_message_event(
 
             if settings.ai_monitoring.record_content.enabled:
                 chat_completion_output_message_dict["content"] = message_content
-            if request_timestamp:
-                chat_completion_output_message_dict["timestamp"] = request_timestamp
 
             chat_completion_output_message_dict.update(llm_metadata)
 
@@ -303,7 +301,7 @@ def _record_embedding_success(transaction, embedding_id, linking_metadata, kwarg
             "duration": ft.duration * 1000,
             "response.model": response_model,
             "response.organization": organization,
-            "response.headers.llmVersion": response_headers.get("openai-version"),
+            "response.headers.llmVersion": response_headers.get("openai-version") or None,
             "response.headers.ratelimitLimitRequests": check_rate_limit_header(
                 response_headers, "x-ratelimit-limit-requests", True
             ),
@@ -459,7 +457,7 @@ def _handle_completion_success(
             return_val._nr_openai_attrs = getattr(return_val, "_nr_openai_attrs", {})
             return_val._nr_openai_attrs["messages"] = kwargs.get("messages", [])
             return_val._nr_openai_attrs["temperature"] = kwargs.get("temperature")
-            return_val._nr_openai_attrs["max_tokens"] = kwargs.get("max_tokens")
+            return_val._nr_openai_attrs["max_tokens"] = kwargs.get("max_tokens") or kwargs.get("max_completion_tokens")
             return_val._nr_openai_attrs["model"] = kwargs.get("model") or kwargs.get("engine")
             return
         except Exception:
@@ -532,7 +530,8 @@ def _record_completion_success(
             "trace_id": trace_id,
             "request.model": request_model,
             "request.temperature": kwargs.get("temperature"),
-            "request.max_tokens": kwargs.get("max_tokens"),
+            # Later gpt models may use "max_completion_tokens" instead of "max_tokens"
+            "request.max_tokens": kwargs.get("max_tokens") or kwargs.get("max_completion_tokens"),
             "vendor": "openai",
             "ingest_source": "Python",
             "request_id": request_id,
@@ -648,7 +647,7 @@ def _record_completion_error(transaction, linking_metadata, completion_id, kwarg
             "response.number_of_messages": len(request_message_list),
             "request.model": request_model,
             "request.temperature": kwargs.get("temperature"),
-            "request.max_tokens": kwargs.get("max_tokens"),
+            "request.max_tokens": kwargs.get("max_tokens") or kwargs.get("max_completion_tokens"),
             "vendor": "openai",
             "ingest_source": "Python",
             "response.organization": exc_organization,

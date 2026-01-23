@@ -1,7 +1,7 @@
 Metadata-Version: 2.4
 Name: mypy-boto3-dynamodb
-Version: 1.42.3
-Summary: Type annotations for boto3 DynamoDB 1.42.3 service generated with mypy-boto3-builder 8.12.0
+Version: 1.42.33
+Summary: Type annotations for boto3 DynamoDB 1.42.33 service generated with mypy-boto3-builder 8.12.0
 Author-email: Vlad Emelianov <vlad.emelianov.nz@gmail.com>
 License-Expression: MIT
 Project-URL: Homepage, https://github.com/youtype/mypy_boto3_builder
@@ -42,7 +42,7 @@ Dynamic: license-file
 
 ![boto3.typed](https://github.com/youtype/mypy_boto3_builder/raw/main/logo.png)
 
-Type annotations for [boto3 DynamoDB 1.42.3](https://pypi.org/project/boto3/)
+Type annotations for [boto3 DynamoDB 1.42.33](https://pypi.org/project/boto3/)
 compatible with [VSCode](https://code.visualstudio.com/),
 [PyCharm](https://www.jetbrains.com/pycharm/),
 [Emacs](https://www.gnu.org/software/emacs/),
@@ -109,7 +109,7 @@ You can generate type annotations for `boto3` package locally with
 isolation.
 
 1. Run mypy-boto3-builder in your package root directory:
-   `uvx --with 'boto3==1.42.3' mypy-boto3-builder`
+   `uvx --with 'boto3==1.42.33' mypy-boto3-builder`
 2. Select `boto3-stubs` AWS SDK.
 3. Add `DynamoDB` service.
 4. Use provided commands to install generated packages.
@@ -398,12 +398,27 @@ scan_paginator: ScanPaginator = client.get_paginator("scan")
 from boto3.session import Session
 
 from mypy_boto3_dynamodb import DynamoDBClient
-from mypy_boto3_dynamodb.waiter import TableExistsWaiter, TableNotExistsWaiter
+from mypy_boto3_dynamodb.waiter import (
+    ContributorInsightsEnabledWaiter,
+    ExportCompletedWaiter,
+    ImportCompletedWaiter,
+    KinesisStreamingDestinationActiveWaiter,
+    TableExistsWaiter,
+    TableNotExistsWaiter,
+)
 
 client: DynamoDBClient = Session().client("dynamodb")
 
 # Explicit type annotations are optional here
 # Types should be correctly discovered by mypy and IDEs
+contributor_insights_enabled_waiter: ContributorInsightsEnabledWaiter = client.get_waiter(
+    "contributor_insights_enabled"
+)
+export_completed_waiter: ExportCompletedWaiter = client.get_waiter("export_completed")
+import_completed_waiter: ImportCompletedWaiter = client.get_waiter("import_completed")
+kinesis_streaming_destination_active_waiter: KinesisStreamingDestinationActiveWaiter = (
+    client.get_waiter("kinesis_streaming_destination_active")
+)
 table_exists_waiter: TableExistsWaiter = client.get_waiter("table_exists")
 table_not_exists_waiter: TableNotExistsWaiter = client.get_waiter("table_not_exists")
 ```

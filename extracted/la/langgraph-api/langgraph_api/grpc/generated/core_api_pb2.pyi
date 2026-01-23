@@ -614,9 +614,9 @@ class SetThreadJointStatusRequest(_message.Message):
     run_id: UUID
     run_status: str
     graph_id: str
-    checkpoint: CheckpointPayload
+    checkpoint: ThreadStatusCheckpoint
     exception_json: bytes
-    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., run_id: _Optional[_Union[UUID, _Mapping]] = ..., run_status: _Optional[str] = ..., graph_id: _Optional[str] = ..., checkpoint: _Optional[_Union[CheckpointPayload, _Mapping]] = ..., exception_json: _Optional[bytes] = ...) -> None: ...
+    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., run_id: _Optional[_Union[UUID, _Mapping]] = ..., run_status: _Optional[str] = ..., graph_id: _Optional[str] = ..., checkpoint: _Optional[_Union[ThreadStatusCheckpoint, _Mapping]] = ..., exception_json: _Optional[bytes] = ...) -> None: ...
 
 class StreamThreadRequest(_message.Message):
     __slots__ = ("thread_id", "filters", "last_event_id", "stream_modes")

@@ -23,6 +23,42 @@ _LOG = logging.getLogger("databricks.sdk")
 
 
 @dataclass
+class AutoFullRefreshPolicy:
+    """Policy for auto full refresh."""
+
+    enabled: bool
+    """(Required, Mutable) Whether to enable auto full refresh or not."""
+
+    min_interval_hours: Optional[int] = None
+    """(Optional, Mutable) Specify the minimum interval in hours between the timestamp at which a table
+    was last full refreshed and the current timestamp for triggering auto full If unspecified and
+    autoFullRefresh is enabled then by default min_interval_hours is 24 hours."""
+
+    def as_dict(self) -> dict:
+        """Serializes the AutoFullRefreshPolicy into a dictionary suitable for use as a JSON request body."""
+        body = {}
+        if self.enabled is not None:
+            body["enabled"] = self.enabled
+        if self.min_interval_hours is not None:
+            body["min_interval_hours"] = self.min_interval_hours
+        return body
+
+    def as_shallow_dict(self) -> dict:
+        """Serializes the AutoFullRefreshPolicy into a shallow dictionary of its immediate attributes."""
+        body = {}
+        if self.enabled is not None:
+            body["enabled"] = self.enabled
+        if self.min_interval_hours is not None:
+            body["min_interval_hours"] = self.min_interval_hours
+        return body
+
+    @classmethod
+    def from_dict(cls, d: Dict[str, Any]) -> AutoFullRefreshPolicy:
+        """Deserializes the AutoFullRefreshPolicy from a dictionary."""
+        return cls(enabled=d.get("enabled", None), min_interval_hours=d.get("min_interval_hours", None))
+
+
+@dataclass
 class ClonePipelineResponse:
     pipeline_id: Optional[str] = None
     """The pipeline id of the cloned pipeline"""
@@ -664,8 +700,17 @@ class IngestionGatewayPipelineDefinition:
 @dataclass
 class IngestionPipelineDefinition:
     connection_name: Optional[str] = None
-    """Immutable. The Unity Catalog connection that this ingestion pipeline uses to communicate with
-    the source. This is used with connectors for applications like Salesforce, Workday, and so on."""
+    """The Unity Catalog connection that this ingestion pipeline uses to communicate with the source.
+    This is used with both connectors for applications like Salesforce, Workday, and so on, and also
+    database connectors like Oracle, (connector_type = QUERY_BASED OR connector_type = CDC). If
+    connection name corresponds to database connectors like Oracle, and connector_type is not
+    provided then connector_type defaults to QUERY_BASED. If connector_type is passed as CDC we use
+    Combined Cdc Managed Ingestion pipeline. Under certain conditions, this can be replaced with
+    ingestion_gateway_id to change the connector to Cdc Managed Ingestion Pipeline with Gateway
+    pipeline."""
+
+    full_refresh_window: Optional[OperationTimeWindow] = None
+    """(Optional) A window that specifies a set of time ranges for snapshot queries in CDC."""
 
     ingest_from_uc_foreign_catalog: Optional[bool] = None
     """Immutable. If set to true, the pipeline will ingest tables from the UC foreign catalogs directly
@@ -673,8 +718,10 @@ class IngestionPipelineDefinition:
     objects of IngestionConfig are interpreted as the UC foreign catalogs to ingest from."""
 
     ingestion_gateway_id: Optional[str] = None
-    """Immutable. Identifier for the gateway that is used by this ingestion pipeline to communicate
-    with the source database. This is used with connectors to databases like SQL Server."""
+    """Identifier for the gateway that is used by this ingestion pipeline to communicate with the
+    source database. This is used with CDC connectors to databases like SQL Server using a gateway
+    pipeline (connector_type = CDC). Under certain conditions, this can be replaced with
+    connection_name to change the connector to Combined Cdc Managed Ingestion Pipeline."""
 
     netsuite_jar_path: Optional[str] = None
     """Netsuite only configuration. When the field is set for a netsuite connector, the jar stored in
@@ -699,6 +746,8 @@ class IngestionPipelineDefinition:
         body = {}
         if self.connection_name is not None:
             body["connection_name"] = self.connection_name
+        if self.full_refresh_window:
+            body["full_refresh_window"] = self.full_refresh_window.as_dict()
         if self.ingest_from_uc_foreign_catalog is not None:
             body["ingest_from_uc_foreign_catalog"] = self.ingest_from_uc_foreign_catalog
         if self.ingestion_gateway_id is not None:
@@ -720,6 +769,8 @@ class IngestionPipelineDefinition:
         body = {}
         if self.connection_name is not None:
             body["connection_name"] = self.connection_name
+        if self.full_refresh_window:
+            body["full_refresh_window"] = self.full_refresh_window
         if self.ingest_from_uc_foreign_catalog is not None:
             body["ingest_from_uc_foreign_catalog"] = self.ingest_from_uc_foreign_catalog
         if self.ingestion_gateway_id is not None:
@@ -741,6 +792,7 @@ class IngestionPipelineDefinition:
         """Deserializes the IngestionPipelineDefinition from a dictionary."""
         return cls(
             connection_name=d.get("connection_name", None),
+            full_refresh_window=_from_dict(d, "full_refresh_window", OperationTimeWindow),
             ingest_from_uc_foreign_catalog=d.get("ingest_from_uc_foreign_catalog", None),
             ingestion_gateway_id=d.get("ingestion_gateway_id", None),
             netsuite_jar_path=d.get("netsuite_jar_path", None),
@@ -1120,6 +1172,54 @@ class Notifications:
     def from_dict(cls, d: Dict[str, Any]) -> Notifications:
         """Deserializes the Notifications from a dictionary."""
         return cls(alerts=d.get("alerts", None), email_recipients=d.get("email_recipients", None))
+
+
+@dataclass
+class OperationTimeWindow:
+    """Proto representing a window"""
+
+    start_hour: int
+    """An integer between 0 and 23 denoting the start hour for the window in the 24-hour day."""
+
+    days_of_week: Optional[List[DayOfWeek]] = None
+    """Days of week in which the window is allowed to happen If not specified all days of the week will
+    be used."""
+
+    time_zone_id: Optional[str] = None
+    """Time zone id of window. See
+    https://docs.databricks.com/sql/language-manual/sql-ref-syntax-aux-conf-mgmt-set-timezone.html
+    for details. If not specified, UTC will be used."""
+
+    def as_dict(self) -> dict:
+        """Serializes the OperationTimeWindow into a dictionary suitable for use as a JSON request body."""
+        body = {}
+        if self.days_of_week:
+            body["days_of_week"] = [v.value for v in self.days_of_week]
+        if self.start_hour is not None:
+            body["start_hour"] = self.start_hour
+        if self.time_zone_id is not None:
+            body["time_zone_id"] = self.time_zone_id
+        return body
+
+    def as_shallow_dict(self) -> dict:
+        """Serializes the OperationTimeWindow into a shallow dictionary of its immediate attributes."""
+        body = {}
+        if self.days_of_week:
+            body["days_of_week"] = self.days_of_week
+        if self.start_hour is not None:
+            body["start_hour"] = self.start_hour
+        if self.time_zone_id is not None:
+            body["time_zone_id"] = self.time_zone_id
+        return body
+
+    @classmethod
+    def from_dict(cls, d: Dict[str, Any]) -> OperationTimeWindow:
+        """Deserializes the OperationTimeWindow from a dictionary."""
+        return cls(
+            days_of_week=_repeated_enum(d, "days_of_week", DayOfWeek),
+            start_hour=d.get("start_hour", None),
+            time_zone_id=d.get("time_zone_id", None),
+        )
 
 
 @dataclass
@@ -3112,6 +3212,13 @@ class TableSpec:
 
 @dataclass
 class TableSpecificConfig:
+    auto_full_refresh_policy: Optional[AutoFullRefreshPolicy] = None
+    """(Optional, Mutable) Policy for auto full refresh, if enabled pipeline will automatically try to
+    fix issues by doing a full refresh on the table in the retry run. auto_full_refresh_policy in
+    table configuration will override the above level auto_full_refresh_policy. For example, {
+    "auto_full_refresh_policy": { "enabled": true, "min_interval_hours": 23, } } If unspecified,
+    auto full refresh is disabled."""
+
     exclude_columns: Optional[List[str]] = None
     """A list of column names to be excluded for the ingestion. When not specified, include_columns
     fully controls what columns to be ingested. When specified, all other columns including future
@@ -3152,6 +3259,8 @@ class TableSpecificConfig:
     def as_dict(self) -> dict:
         """Serializes the TableSpecificConfig into a dictionary suitable for use as a JSON request body."""
         body = {}
+        if self.auto_full_refresh_policy:
+            body["auto_full_refresh_policy"] = self.auto_full_refresh_policy.as_dict()
         if self.exclude_columns:
             body["exclude_columns"] = [v for v in self.exclude_columns]
         if self.include_columns:
@@ -3175,6 +3284,8 @@ class TableSpecificConfig:
     def as_shallow_dict(self) -> dict:
         """Serializes the TableSpecificConfig into a shallow dictionary of its immediate attributes."""
         body = {}
+        if self.auto_full_refresh_policy:
+            body["auto_full_refresh_policy"] = self.auto_full_refresh_policy
         if self.exclude_columns:
             body["exclude_columns"] = self.exclude_columns
         if self.include_columns:
@@ -3199,6 +3310,7 @@ class TableSpecificConfig:
     def from_dict(cls, d: Dict[str, Any]) -> TableSpecificConfig:
         """Deserializes the TableSpecificConfig from a dictionary."""
         return cls(
+            auto_full_refresh_policy=_from_dict(d, "auto_full_refresh_policy", AutoFullRefreshPolicy),
             exclude_columns=d.get("exclude_columns", None),
             include_columns=d.get("include_columns", None),
             primary_keys=d.get("primary_keys", None),
@@ -3888,20 +4000,26 @@ class PipelinesAPI:
         res = self._api.do("POST", "/api/2.0/pipelines", body=body, headers=headers)
         return CreatePipelineResponse.from_dict(res)
 
-    def delete(self, pipeline_id: str):
+    def delete(self, pipeline_id: str, *, force: Optional[bool] = None):
         """Deletes a pipeline. If the pipeline publishes to Unity Catalog, pipeline deletion will cascade to all
         pipeline tables. Please reach out to Databricks support for assistance to undo this action.
 
         :param pipeline_id: str
+        :param force: bool (optional)
+          If true, deletion will proceed even if resource cleanup fails. By default, deletion will fail if
+          resources cleanup is required but fails.
 
 
         """
 
+        query = {}
+        if force is not None:
+            query["force"] = force
         headers = {
             "Accept": "application/json",
         }
 
-        self._api.do("DELETE", f"/api/2.0/pipelines/{pipeline_id}", headers=headers)
+        self._api.do("DELETE", f"/api/2.0/pipelines/{pipeline_id}", query=query, headers=headers)
 
     def get(self, pipeline_id: str) -> GetPipelineResponse:
         """Get a pipeline.

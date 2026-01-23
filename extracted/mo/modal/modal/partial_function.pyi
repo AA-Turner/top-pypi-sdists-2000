@@ -18,7 +18,6 @@ class PartialFunction(
     user_cls: typing.Optional[type]
     flags: modal._partial_function._PartialFunctionFlags
     params: modal._partial_function._PartialFunctionParams
-    registered: bool
 
     def __init__(
         self,

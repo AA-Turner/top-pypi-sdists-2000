@@ -780,6 +780,11 @@ class ModalClientStub(object):
                 request_serializer=modal__proto_dot_api__pb2.TokenFlowWaitRequest.SerializeToString,
                 response_deserializer=modal__proto_dot_api__pb2.TokenFlowWaitResponse.FromString,
                 )
+        self.TokenInfoGet = channel.unary_unary(
+                '/modal.client.ModalClient/TokenInfoGet',
+                request_serializer=modal__proto_dot_api__pb2.TokenInfoGetRequest.SerializeToString,
+                response_deserializer=modal__proto_dot_api__pb2.TokenInfoGetResponse.FromString,
+                )
         self.TunnelStart = channel.unary_unary(
                 '/modal.client.ModalClient/TunnelStart',
                 request_serializer=modal__proto_dot_api__pb2.TunnelStartRequest.SerializeToString,
@@ -1837,6 +1842,12 @@ class ModalClientServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def TokenInfoGet(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def TunnelStart(self, request, context):
         """Tunnels
         """
@@ -2733,6 +2744,11 @@ def add_ModalClientServicer_to_server(servicer, server):
                     servicer.TokenFlowWait,
                     request_deserializer=modal__proto_dot_api__pb2.TokenFlowWaitRequest.FromString,
                     response_serializer=modal__proto_dot_api__pb2.TokenFlowWaitResponse.SerializeToString,
+            ),
+            'TokenInfoGet': grpc.unary_unary_rpc_method_handler(
+                    servicer.TokenInfoGet,
+                    request_deserializer=modal__proto_dot_api__pb2.TokenInfoGetRequest.FromString,
+                    response_serializer=modal__proto_dot_api__pb2.TokenInfoGetResponse.SerializeToString,
             ),
             'TunnelStart': grpc.unary_unary_rpc_method_handler(
                     servicer.TunnelStart,
@@ -5447,6 +5463,23 @@ class ModalClient(object):
         return grpc.experimental.unary_unary(request, target, '/modal.client.ModalClient/TokenFlowWait',
             modal__proto_dot_api__pb2.TokenFlowWaitRequest.SerializeToString,
             modal__proto_dot_api__pb2.TokenFlowWaitResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def TokenInfoGet(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/modal.client.ModalClient/TokenInfoGet',
+            modal__proto_dot_api__pb2.TokenInfoGetRequest.SerializeToString,
+            modal__proto_dot_api__pb2.TokenInfoGetResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
