@@ -66,67 +66,86 @@ For stateful or otherwise non-interruption-tolerant workflows, omit `spot` or se
 
 #### Choosing Your Instance Types
 
-Batch allows you to choose most up-to-date instance classes based on your region.
-This example configures your `ComputeEnvironment` to use only ARM64 instance:
+There are several ways to configure instance types for your compute environment:
+
+##### Using Default Instance Classes (Recommended)
+
+AWS Batch provides default instance classes that automatically select cost-effective, up-to-date instances based on your region.
+This is the recommended approach for new projects:
 
 ```python
-vpc = ec2.Vpc(self, "VPC")
+vpc = ec2.Vpc(self, "Vpc")
 
-batch.ManagedEc2EcsComputeEnvironment(self, "myEc2ComputeEnv",
+# Use ARM64 instances (e.g., m6g, c6g, r6g, c7g families)
+batch.ManagedEc2EcsComputeEnvironment(self, "Arm64Ec2ComputeEnv",
     vpc=vpc,
     default_instance_classes=[batch.DefaultInstanceClass.ARM64]
 )
+
+# Use x86_64 instances (e.g., m6i, c6i, r6i, c7i families)
+batch.ManagedEc2EcsComputeEnvironment(self, "X86_64Ec2ComputeEnv",
+    vpc=vpc,
+    default_instance_classes=[batch.DefaultInstanceClass.X86_64]
+)
 ```
 
-This example configures your `ComputeEnvironment` to use only the `M5AD.large` instance:
+The `default_x86_64` and `default_arm64` categories are dynamically updated by AWS as new instance families become available in your region.
+
+##### Using Specific Instance Types Only
+
+To use only specific instance types without any automatic defaults, set `useOptimalInstanceClasses: false`:
 
 ```python
-vpc = ec2.Vpc(self, "VPC")
+vpc = ec2.Vpc(self, "Vpc")
 
-batch.ManagedEc2EcsComputeEnvironment(self, "myEc2ComputeEnv",
+# Use only R4 instance class (Batch chooses the size)
+batch.ManagedEc2EcsComputeEnvironment(self, "R4Ec2ComputeEnv",
     vpc=vpc,
+    use_optimal_instance_classes=False,
+    instance_classes=[ec2.InstanceClass.R4]
+)
+
+# Use only a specific instance type
+batch.ManagedEc2EcsComputeEnvironment(self, "M5AdLargeEc2ComputeEnv",
+    vpc=vpc,
+    use_optimal_instance_classes=False,
     instance_types=[ec2.InstanceType.of(ec2.InstanceClass.M5AD, ec2.InstanceSize.LARGE)]
 )
 ```
 
-Batch allows you to specify only the instance class and to let it choose the size, which you can do like this:
+##### Using Optimal Instance Classes
 
-```python
-# compute_env: batch.IManagedEc2EcsComputeEnvironment
-vpc = ec2.Vpc(self, "VPC")
-compute_env.add_instance_class(ec2.InstanceClass.M5AD)
-# Or, specify it on the constructor:
-batch.ManagedEc2EcsComputeEnvironment(self, "myEc2ComputeEnv",
-    vpc=vpc,
-    instance_classes=[ec2.InstanceClass.R4]
-)
-```
+By default, `useOptimalInstanceClasses` is `true`, which adds the `optimal` instance type.
 
-> [!WARNING]
-> `useOptimalInstanceClasses` is deprecated! Use `defaultInstanceClasses` instead.
+**Note**: Since November 2025, `optimal` behaves the same as `default_x86_64` and is dynamically updated as AWS introduces new instance families. Both options automatically select cost-effective x86_64 instance types (from the m6i, c6i, r6i, and c7i families) based on your region.
 
-Unless you explicitly specify `useOptimalInstanceClasses: false`, this compute environment will use `'optimal'` instances,
-which tells Batch to pick an instance from the C4, M4, and R4 instance families.
-*Note*: Batch does not allow specifying instance types or classes with different architectures.
-For example, `InstanceClass.A1` cannot be specified alongside `'optimal'`,
-because `A1` uses ARM and `'optimal'` uses x86_64.
-You can specify both `'optimal'` alongside several different instance types in the same compute environment:
+You can combine this with additional instance types:
 
 ```python
 # vpc: ec2.IVpc
 
 
-compute_env = batch.ManagedEc2EcsComputeEnvironment(self, "myEc2ComputeEnv",
-    instance_types=[ec2.InstanceType.of(ec2.InstanceClass.M5AD, ec2.InstanceSize.LARGE)],
-    use_optimal_instance_classes=True,  # default
-    vpc=vpc
+compute_env = batch.ManagedEc2EcsComputeEnvironment(self, "Ec2ComputeEnv",
+    vpc=vpc,
+    instance_types=[ec2.InstanceType.of(ec2.InstanceClass.M5AD, ec2.InstanceSize.LARGE)]
 )
-# Note: this is equivalent to specifying
-compute_env.add_instance_type(ec2.InstanceType.of(ec2.InstanceClass.M5AD, ec2.InstanceSize.LARGE))
-compute_env.add_instance_class(ec2.InstanceClass.C4)
-compute_env.add_instance_class(ec2.InstanceClass.M4)
-compute_env.add_instance_class(ec2.InstanceClass.R4)
 ```
+
+##### Instance Type Configuration Reference
+
+| Goal | Configuration |
+|------|---------------|
+| Use latest x86_64 instances | `defaultInstanceClasses: [DefaultInstanceClass.X86_64]` or no configuration (default) |
+| Use latest ARM64 instances | `defaultInstanceClasses: [DefaultInstanceClass.ARM64]` |
+| Use only specific instance classes | `useOptimalInstanceClasses: false` + `instanceClasses: [...]` |
+| Use only specific instance types | `useOptimalInstanceClasses: false` + `instanceTypes: [...]` |
+| Use optimal + additional instances | `instanceClasses: [...]` or `instanceTypes: [...]` |
+
+**Note**: Batch does not allow specifying instance types or classes with different architectures.
+For example, `InstanceClass.A1` (ARM) cannot be specified alongside `optimal` (x86_64).
+When using ARM-based instances (e.g., Graviton), use `defaultInstanceClasses: [DefaultInstanceClass.ARM64]`, or set `useOptimalInstanceClasses: false` and explicitly specify ARM instance classes/types.
+
+**Note**: `useOptimalInstanceClasses` and `defaultInstanceClasses` cannot be used together.
 
 #### Configure AMIs
 
@@ -12793,11 +12812,18 @@ class DefaultInstanceClass(enum.Enum):
 
     Example::
 
-        vpc = ec2.Vpc(self, "VPC")
+        vpc = ec2.Vpc(self, "Vpc")
         
-        batch.ManagedEc2EcsComputeEnvironment(self, "myEc2ComputeEnv",
+        # Use ARM64 instances (e.g., m6g, c6g, r6g, c7g families)
+        batch.ManagedEc2EcsComputeEnvironment(self, "Arm64Ec2ComputeEnv",
             vpc=vpc,
             default_instance_classes=[batch.DefaultInstanceClass.ARM64]
+        )
+        
+        # Use x86_64 instances (e.g., m6i, c6i, r6i, c7i families)
+        batch.ManagedEc2EcsComputeEnvironment(self, "X86_64Ec2ComputeEnv",
+            vpc=vpc,
+            default_instance_classes=[batch.DefaultInstanceClass.X86_64]
         )
     '''
 
@@ -19729,13 +19755,12 @@ class ManagedEc2EcsComputeEnvironment(
 
     Example::
 
-        # compute_env: batch.IManagedEc2EcsComputeEnvironment
-        vpc = ec2.Vpc(self, "VPC")
-        compute_env.add_instance_class(ec2.InstanceClass.M5AD)
-        # Or, specify it on the constructor:
-        batch.ManagedEc2EcsComputeEnvironment(self, "myEc2ComputeEnv",
+        # vpc: ec2.IVpc
+        
+        
+        compute_env = batch.ManagedEc2EcsComputeEnvironment(self, "Ec2ComputeEnv",
             vpc=vpc,
-            instance_classes=[ec2.InstanceClass.R4]
+            instance_types=[ec2.InstanceType.of(ec2.InstanceClass.M5AD, ec2.InstanceSize.LARGE)]
         )
     '''
 
@@ -19783,7 +19808,7 @@ class ManagedEc2EcsComputeEnvironment(
         :param placement_group: The EC2 placement group to associate with your compute resources. If you intend to submit multi-node parallel jobs to this Compute Environment, you should consider creating a cluster placement group and associate it with your compute resources. This keeps your multi-node parallel job on a logical grouping of instances within a single Availability Zone with high network flow potential. Default: - no placement group
         :param spot_bid_percentage: The maximum percentage that a Spot Instance price can be when compared with the On-Demand price for that instance type before instances are launched. For example, if your maximum percentage is 20%, the Spot price must be less than 20% of the current On-Demand price for that Instance. You always pay the lowest market price and never more than your maximum percentage. For most use cases, Batch recommends leaving this field empty. Implies ``spot == true`` if set Default: 100%
         :param spot_fleet_role: The service-linked role that Spot Fleet needs to launch instances on your behalf. Default: - a new role will be created
-        :param use_optimal_instance_classes: (deprecated) Whether or not to use batch's optimal instance type. The optimal instance type is equivalent to adding the C4, M4, and R4 instance classes. You can specify other instance classes (of the same architecture) in addition to the optimal instance classes. Default: true
+        :param use_optimal_instance_classes: Whether or not to use batch's optimal instance type. The optimal instance type is equivalent to adding the C4, M4, and R4 instance classes. You can specify other instance classes (of the same architecture) in addition to the optimal instance classes. Default: true
         :param vpc: VPC in which this Compute Environment will launch Instances.
         :param maxv_cpus: The maximum vCpus this ``ManagedComputeEnvironment`` can scale up to. Each vCPU is equivalent to 1024 CPU shares. *Note*: if this Compute Environment uses EC2 resources (not Fargate) with either ``AllocationStrategy.BEST_FIT_PROGRESSIVE`` or ``AllocationStrategy.SPOT_CAPACITY_OPTIMIZED``, or ``AllocationStrategy.BEST_FIT`` with Spot instances, The scheduler may exceed this number by at most one of the instances specified in ``instanceTypes`` or ``instanceClasses``. Default: 256
         :param replace_compute_environment: Specifies whether this Compute Environment is replaced if an update is made that requires replacing its instances. To enable more properties to be updated, set this property to ``false``. When changing the value of this property to false, do not change any other properties at the same time. If other properties are changed at the same time, and the change needs to be rolled back but it can't, it's possible for the stack to go into the UPDATE_ROLLBACK_FAILED state. You can't update a stack that is in the UPDATE_ROLLBACK_FAILED state. However, if you can continue to roll it back, you can return the stack to its original settings and then try to update it again. The properties which require a replacement of the Compute Environment are: Default: false
@@ -20187,19 +20212,18 @@ class ManagedEc2EcsComputeEnvironmentProps(ManagedComputeEnvironmentProps):
         :param placement_group: The EC2 placement group to associate with your compute resources. If you intend to submit multi-node parallel jobs to this Compute Environment, you should consider creating a cluster placement group and associate it with your compute resources. This keeps your multi-node parallel job on a logical grouping of instances within a single Availability Zone with high network flow potential. Default: - no placement group
         :param spot_bid_percentage: The maximum percentage that a Spot Instance price can be when compared with the On-Demand price for that instance type before instances are launched. For example, if your maximum percentage is 20%, the Spot price must be less than 20% of the current On-Demand price for that Instance. You always pay the lowest market price and never more than your maximum percentage. For most use cases, Batch recommends leaving this field empty. Implies ``spot == true`` if set Default: 100%
         :param spot_fleet_role: The service-linked role that Spot Fleet needs to launch instances on your behalf. Default: - a new role will be created
-        :param use_optimal_instance_classes: (deprecated) Whether or not to use batch's optimal instance type. The optimal instance type is equivalent to adding the C4, M4, and R4 instance classes. You can specify other instance classes (of the same architecture) in addition to the optimal instance classes. Default: true
+        :param use_optimal_instance_classes: Whether or not to use batch's optimal instance type. The optimal instance type is equivalent to adding the C4, M4, and R4 instance classes. You can specify other instance classes (of the same architecture) in addition to the optimal instance classes. Default: true
 
         :exampleMetadata: infused
 
         Example::
 
-            # compute_env: batch.IManagedEc2EcsComputeEnvironment
-            vpc = ec2.Vpc(self, "VPC")
-            compute_env.add_instance_class(ec2.InstanceClass.M5AD)
-            # Or, specify it on the constructor:
-            batch.ManagedEc2EcsComputeEnvironment(self, "myEc2ComputeEnv",
+            # vpc: ec2.IVpc
+            
+            
+            compute_env = batch.ManagedEc2EcsComputeEnvironment(self, "Ec2ComputeEnv",
                 vpc=vpc,
-                instance_classes=[ec2.InstanceClass.R4]
+                instance_types=[ec2.InstanceType.of(ec2.InstanceClass.M5AD, ec2.InstanceSize.LARGE)]
             )
         '''
         if isinstance(vpc_subnets, dict):
@@ -20584,17 +20608,13 @@ class ManagedEc2EcsComputeEnvironmentProps(ManagedComputeEnvironmentProps):
 
     @builtins.property
     def use_optimal_instance_classes(self) -> typing.Optional[builtins.bool]:
-        '''(deprecated) Whether or not to use batch's optimal instance type.
+        '''Whether or not to use batch's optimal instance type.
 
         The optimal instance type is equivalent to adding the
         C4, M4, and R4 instance classes. You can specify other instance classes
         (of the same architecture) in addition to the optimal instance classes.
 
         :default: true
-
-        :deprecated: use defaultInstanceClasses instead
-
-        :stability: deprecated
         '''
         result = self._values.get("use_optimal_instance_classes")
         return typing.cast(typing.Optional[builtins.bool], result)
@@ -20731,7 +20751,7 @@ class ManagedEc2EksComputeEnvironment(
         :param minv_cpus: The minimum vCPUs that an environment should maintain, even if the compute environment is DISABLED. Default: 0
         :param placement_group: The EC2 placement group to associate with your compute resources. If you intend to submit multi-node parallel jobs to this Compute Environment, you should consider creating a cluster placement group and associate it with your compute resources. This keeps your multi-node parallel job on a logical grouping of instances within a single Availability Zone with high network flow potential. Default: - no placement group
         :param spot_bid_percentage: The maximum percentage that a Spot Instance price can be when compared with the On-Demand price for that instance type before instances are launched. For example, if your maximum percentage is 20%, the Spot price must be less than 20% of the current On-Demand price for that Instance. You always pay the lowest market price and never more than your maximum percentage. For most use cases, Batch recommends leaving this field empty. Implies ``spot == true`` if set Default: - 100%
-        :param use_optimal_instance_classes: (deprecated) Whether or not to use batch's optimal instance type. The optimal instance type is equivalent to adding the C4, M4, and R4 instance classes. You can specify other instance classes (of the same architecture) in addition to the optimal instance classes. Default: true
+        :param use_optimal_instance_classes: Whether or not to use batch's optimal instance type. The optimal instance type is equivalent to adding the C4, M4, and R4 instance classes. You can specify other instance classes (of the same architecture) in addition to the optimal instance classes. Default: true
         :param vpc: VPC in which this Compute Environment will launch Instances.
         :param maxv_cpus: The maximum vCpus this ``ManagedComputeEnvironment`` can scale up to. Each vCPU is equivalent to 1024 CPU shares. *Note*: if this Compute Environment uses EC2 resources (not Fargate) with either ``AllocationStrategy.BEST_FIT_PROGRESSIVE`` or ``AllocationStrategy.SPOT_CAPACITY_OPTIMIZED``, or ``AllocationStrategy.BEST_FIT`` with Spot instances, The scheduler may exceed this number by at most one of the instances specified in ``instanceTypes`` or ``instanceClasses``. Default: 256
         :param replace_compute_environment: Specifies whether this Compute Environment is replaced if an update is made that requires replacing its instances. To enable more properties to be updated, set this property to ``false``. When changing the value of this property to false, do not change any other properties at the same time. If other properties are changed at the same time, and the change needs to be rolled back but it can't, it's possible for the stack to go into the UPDATE_ROLLBACK_FAILED state. You can't update a stack that is in the UPDATE_ROLLBACK_FAILED state. However, if you can continue to roll it back, you can return the stack to its original settings and then try to update it again. The properties which require a replacement of the Compute Environment are: Default: false
@@ -21134,7 +21154,7 @@ class ManagedEc2EksComputeEnvironmentProps(ManagedComputeEnvironmentProps):
         :param minv_cpus: The minimum vCPUs that an environment should maintain, even if the compute environment is DISABLED. Default: 0
         :param placement_group: The EC2 placement group to associate with your compute resources. If you intend to submit multi-node parallel jobs to this Compute Environment, you should consider creating a cluster placement group and associate it with your compute resources. This keeps your multi-node parallel job on a logical grouping of instances within a single Availability Zone with high network flow potential. Default: - no placement group
         :param spot_bid_percentage: The maximum percentage that a Spot Instance price can be when compared with the On-Demand price for that instance type before instances are launched. For example, if your maximum percentage is 20%, the Spot price must be less than 20% of the current On-Demand price for that Instance. You always pay the lowest market price and never more than your maximum percentage. For most use cases, Batch recommends leaving this field empty. Implies ``spot == true`` if set Default: - 100%
-        :param use_optimal_instance_classes: (deprecated) Whether or not to use batch's optimal instance type. The optimal instance type is equivalent to adding the C4, M4, and R4 instance classes. You can specify other instance classes (of the same architecture) in addition to the optimal instance classes. Default: true
+        :param use_optimal_instance_classes: Whether or not to use batch's optimal instance type. The optimal instance type is equivalent to adding the C4, M4, and R4 instance classes. You can specify other instance classes (of the same architecture) in addition to the optimal instance classes. Default: true
 
         :exampleMetadata: fixture=_generated
 
@@ -21596,17 +21616,13 @@ class ManagedEc2EksComputeEnvironmentProps(ManagedComputeEnvironmentProps):
 
     @builtins.property
     def use_optimal_instance_classes(self) -> typing.Optional[builtins.bool]:
-        '''(deprecated) Whether or not to use batch's optimal instance type.
+        '''Whether or not to use batch's optimal instance type.
 
         The optimal instance type is equivalent to adding the
         C4, M4, and R4 instance classes. You can specify other instance classes
         (of the same architecture) in addition to the optimal instance classes.
 
         :default: true
-
-        :deprecated: use defaultInstanceClasses instead
-
-        :stability: deprecated
         '''
         result = self._values.get("use_optimal_instance_classes")
         return typing.cast(typing.Optional[builtins.bool], result)

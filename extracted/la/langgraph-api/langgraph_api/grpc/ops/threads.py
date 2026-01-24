@@ -22,6 +22,7 @@ from starlette.exceptions import HTTPException
 from langgraph_api import _checkpointer as api_checkpointer
 from langgraph_api import store as api_store
 from langgraph_api.command import map_cmd
+from langgraph_api.config import THREAD_TTL
 from langgraph_api.encryption.middleware import encrypt_json_if_needed
 from langgraph_api.encryption.shared import get_encryption
 from langgraph_api.graph import get_graph
@@ -493,9 +494,10 @@ class Threads(Authenticated):
             if_exists=map_if_exists(if_exists),
             metadata_json=json_dumpb_optional(metadata),
         )
-        ttl_config = _map_thread_ttl(ttl)
-        if ttl_config is not None:
-            request.ttl.CopyFrom(ttl_config)
+        ttl_config = ttl if ttl is not None else THREAD_TTL
+        mapped_ttl_config = _map_thread_ttl(ttl_config)
+        if mapped_ttl_config is not None:
+            request.ttl.CopyFrom(mapped_ttl_config)
 
         client = await get_shared_client()
         response = await client.threads.Create(request)

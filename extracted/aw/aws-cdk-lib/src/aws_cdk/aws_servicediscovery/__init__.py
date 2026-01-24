@@ -4209,6 +4209,13 @@ typing.cast(typing.Any, IInstance).__jsii_proxy_class__ = lambda : _IInstancePro
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_servicediscovery.INamespace")
 class INamespace(_IResource_c80c4260, typing_extensions.Protocol):
+    '''A type of namespace.
+
+    One of private, public or HTTP namespace.
+
+    [awslint:interface-extends-ref]
+    '''
+
     @builtins.property
     @jsii.member(jsii_name="namespaceArn")
     def namespace_arn(self) -> builtins.str:
@@ -4246,6 +4253,13 @@ class INamespace(_IResource_c80c4260, typing_extensions.Protocol):
 class _INamespaceProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
 ):
+    '''A type of namespace.
+
+    One of private, public or HTTP namespace.
+
+    [awslint:interface-extends-ref]
+    '''
+
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_servicediscovery.INamespace"
 
     @builtins.property

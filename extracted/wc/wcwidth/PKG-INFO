@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: wcwidth
-Version: 0.3.1
+Version: 0.3.2
 Summary: Measures the displayed width of unicode strings in a terminal
 Project-URL: Homepage, https://github.com/jquast/wcwidth
 Author-email: Jeff Quast <contact@jeffquast.com>
@@ -471,6 +471,9 @@ languages.
 History
 =======
 
+0.3.2 *2026-01-23*
+  * **Updated** type hinting for full ``mympy --strict`` compliance. `PR #183`_.
+
 0.3.1 *2026-01-22*
   * **Performance** improvement up to 30% in `width()_`. `PR #181`_.
 
@@ -627,6 +630,7 @@ https://www.cl.cam.ac.uk/~mgk25/ucs/wcwidth.c::
 .. _`PR #174`: https://github.com/jquast/wcwidth/pull/174
 .. _`PR #175`: https://github.com/jquast/wcwidth/pull/175
 .. _`PR #181`: https://github.com/jquast/wcwidth/pull/181
+.. _`PR #183`: https://github.com/jquast/wcwidth/pull/183
 .. _`Issue #101`: https://github.com/jquast/wcwidth/issues/101
 .. _`jquast/blessed`: https://github.com/jquast/blessed
 .. _`selectel/pyte`: https://github.com/selectel/pyte

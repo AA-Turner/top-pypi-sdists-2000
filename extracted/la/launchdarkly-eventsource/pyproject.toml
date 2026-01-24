@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "launchdarkly-eventsource"
-version = "1.5.0"
+version = "1.5.1"
 description = "LaunchDarkly SSE Client"
 authors = ["LaunchDarkly <dev@launchdarkly.com>"]
 license = "Apache-2.0"
 readme = "README.md"
 homepage = "https://docs.launchdarkly.com/sdk/server-side/python"
 repository = "https://github.com/launchdarkly/python-eventsource"
-documentation = "https://launchdarkly-python-sdk.readthedocs.io/en/latest/"
+documentation = "https://launchdarkly-sse-client-library.readthedocs.io/en/latest/"
 classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: Apache Software License",

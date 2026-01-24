@@ -8894,7 +8894,10 @@ typing.cast(typing.Any, IAccessKey).__jsii_proxy_class__ = lambda : _IAccessKeyP
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IEncryptedResource")
 class IEncryptedResource(_IResource_c80c4260, typing_extensions.Protocol):
-    '''A resource that contains data that can be encrypted, using a KMS key.'''
+    '''A resource that contains data that can be encrypted, using a KMS key.
+
+    [awslint:interface-extends-ref]
+    '''
 
     @jsii.member(jsii_name="grantOnKey")
     def grant_on_key(
@@ -8913,7 +8916,10 @@ class IEncryptedResource(_IResource_c80c4260, typing_extensions.Protocol):
 class _IEncryptedResourceProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
 ):
-    '''A resource that contains data that can be encrypted, using a KMS key.'''
+    '''A resource that contains data that can be encrypted, using a KMS key.
+
+    [awslint:interface-extends-ref]
+    '''
 
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_iam.IEncryptedResource"
 
@@ -11418,34 +11424,24 @@ class PolicyStatement(
 ):
     '''Represents a statement in an IAM policy document.
 
-    :exampleMetadata: lit=aws-ec2/test/integ.vpc-endpoint.lit.ts infused
+    :exampleMetadata: infused
 
     Example::
 
-        # Add gateway endpoints when creating the VPC
-        vpc = ec2.Vpc(self, "MyVpc",
-            gateway_endpoints={
-                "S3": cdk.aws_ec2.GatewayVpcEndpointOptions(
-                    service=ec2.GatewayVpcEndpointAwsService.S3
-                )
-            }
+        access_logs_bucket = s3.Bucket(self, "AccessLogsBucket",
+            object_ownership=s3.ObjectOwnership.BUCKET_OWNER_ENFORCED
         )
         
-        # Alternatively gateway endpoints can be added on the VPC
-        dynamo_db_endpoint = vpc.add_gateway_endpoint("DynamoDbEndpoint",
-            service=ec2.GatewayVpcEndpointAwsService.DYNAMODB
-        )
+        access_logs_bucket.add_to_resource_policy(
+            iam.PolicyStatement(
+                actions=["s3:*"],
+                resources=[access_logs_bucket.bucket_arn, access_logs_bucket.arn_for_objects("*")],
+                principals=[iam.AnyPrincipal()]
+            ))
         
-        # This allows to customize the endpoint policy
-        dynamo_db_endpoint.add_to_policy(
-            iam.PolicyStatement( # Restrict to listing and describing tables
-                principals=[iam.AnyPrincipal()],
-                actions=["dynamodb:DescribeTable", "dynamodb:ListTables"],
-                resources=["*"]))
-        
-        # Add an interface endpoint
-        vpc.add_interface_endpoint("EcrDockerEndpoint",
-            service=ec2.InterfaceVpcEndpointAwsService.ECR_DOCKER
+        bucket = s3.Bucket(self, "MyBucket",
+            server_access_logs_bucket=access_logs_bucket,
+            server_access_logs_prefix="logs"
         )
     '''
 
@@ -13692,7 +13688,10 @@ typing.cast(typing.Any, IComparablePrincipal).__jsii_proxy_class__ = lambda : _I
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IIdentity")
 class IIdentity(IPrincipal, _IResource_c80c4260, typing_extensions.Protocol):
-    '''A construct that represents an IAM principal, such as a user, group or role.'''
+    '''A construct that represents an IAM principal, such as a user, group or role.
+
+    [awslint:interface-extends-ref]
+    '''
 
     @jsii.member(jsii_name="addManagedPolicy")
     def add_managed_policy(self, policy: "IManagedPolicy") -> None:
@@ -13717,7 +13716,10 @@ class _IIdentityProxy(
     jsii.proxy_for(IPrincipal), # type: ignore[misc]
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
 ):
-    '''A construct that represents an IAM principal, such as a user, group or role.'''
+    '''A construct that represents an IAM principal, such as a user, group or role.
+
+    [awslint:interface-extends-ref]
+    '''
 
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_iam.IIdentity"
 

@@ -30,6 +30,7 @@ from langgraph_api.route import ApiRequest, ApiRoute
 from langgraph_api.schema import RunCommand
 from langgraph_api.sse import EventSourceResponse
 from langgraph_api.utils.cache import LRUCache
+from langgraph_api.utils.uuids import uuid7
 
 logger = structlog.stdlib.get_logger(__name__)
 
@@ -373,7 +374,9 @@ async def _maybe_promote_resume_to_command(
 
 
 def _process_a2a_message_parts(
-    parts: list[dict[str, Any]], message_role: str
+    parts: list[dict[str, Any]],
+    message_role: str,
+    message_id: str,
 ) -> dict[str, Any]:
     """Convert A2A message parts to LangChain messages format.
 
@@ -400,7 +403,9 @@ def _process_a2a_message_parts(
 
             # Map A2A role to LangGraph role
             langgraph_role = "human" if message_role == "user" else "assistant"
-            messages.append({"role": langgraph_role, "content": part["text"]})
+            messages.append(
+                {"role": langgraph_role, "content": part["text"], "id": message_id}
+            )
 
         elif part_kind == "data":
             # Data parts become structured input parameters
@@ -740,6 +745,7 @@ def _convert_messages_to_a2a_format(
             msg_type = msg.get("type", "ai")
             msg_role = msg.get("role", "")
             content = msg.get("content", "")
+            id = msg.get("id") or str(uuid7())
 
             # Support both LangChain style (type: "human"/"ai") and OpenAI style (role: "user"/"assistant")
             # Map to A2A roles: "human"/"user" -> "user", everything else -> "agent"
@@ -748,7 +754,7 @@ def _convert_messages_to_a2a_format(
             a2a_message = {
                 "role": a2a_role,
                 "parts": [{"kind": "text", "text": str(content)}],
-                "messageId": str(uuid.uuid4()),
+                "messageId": id,
                 "taskId": task_id,
                 "contextId": context_id,
                 "kind": "message",
@@ -1198,7 +1204,7 @@ async def handle_message_send(
             message_role = message.get(
                 "role", "user"
             )  # Default to "user" if role not specified
-            input_content = _process_a2a_message_parts(parts, message_role)
+            input_content = _process_a2a_message_parts(parts, message_role, message_id)
         except ValueError as e:
             return {
                 "error": {
@@ -1918,7 +1924,9 @@ async def handle_message_stream(
             # Process A2A message parts into LangChain messages format
             try:
                 message_role = message.get("role", "user")
-                input_content = _process_a2a_message_parts(parts, message_role)
+                input_content = _process_a2a_message_parts(
+                    parts, message_role, message_id
+                )
             except ValueError as e:
                 yield (
                     b"message",

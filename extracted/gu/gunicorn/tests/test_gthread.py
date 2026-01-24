@@ -5,19 +5,17 @@
 """Tests for the gthread worker."""
 
 import errno
+import fcntl
 import os
-import queue
 import selectors
 import threading
 import time
 from collections import deque
 from concurrent import futures
-from functools import partial
 from unittest import mock
 
 import pytest
 
-from gunicorn import http
 from gunicorn.config import Config
 from gunicorn.workers import gthread
 
@@ -85,7 +83,7 @@ class TestTConn:
         sock = FakeSocket()
         sock.setblocking(True)
 
-        conn = gthread.TConn(cfg, sock, ('127.0.0.1', 12345), ('127.0.0.1', 8000))
+        gthread.TConn(cfg, sock, ('127.0.0.1', 12345), ('127.0.0.1', 8000))
 
         # TConn sets socket to non-blocking in __init__
         assert sock.blocking is False
@@ -147,7 +145,7 @@ class TestPollableMethodQueue:
         q.init()
 
         results = []
-        q.defer(lambda x: results.append(x), 42)
+        q.defer(results.append, 42)
 
         # Simulate the selector reading from the pipe
         q.run_callbacks(None)
@@ -162,7 +160,7 @@ class TestPollableMethodQueue:
 
         results = []
         for i in range(5):
-            q.defer(lambda x: results.append(x), i)
+            q.defer(results.append, i)
 
         q.run_callbacks(None)
 
@@ -220,9 +218,6 @@ class TestPollableMethodQueue:
 
     def test_queue_nonblocking_pipe(self):
         """Test that pipe is non-blocking (BSD compatibility)."""
-        import os
-        import fcntl
-
         q = gthread.PollableMethodQueue()
         q.init()
 
@@ -889,18 +884,22 @@ class TestWorkerLiveness:
         # Track notify calls
         notify_calls = []
         original_notify = worker.notify
+
         def tracking_notify():
             notify_calls.append(time.monotonic())
             original_notify()
+
         worker.notify = tracking_notify
 
         # Mock poller.select to exit after first iteration
         call_count = [0]
+
         def mock_select(timeout):
             call_count[0] += 1
             if call_count[0] > 1:
                 worker.alive = False
             return []
+
         worker.poller.select.side_effect = mock_select
 
         # Mock is_parent_alive to return True
@@ -1010,6 +1009,7 @@ class TestSignalHandling:
 
         # Track iterations
         iterations = [0]
+
         def mock_select(timeout):
             iterations[0] += 1
             if iterations[0] == 1:
@@ -1022,6 +1022,7 @@ class TestSignalHandling:
                 # Connection finishes
                 worker.nr_conns = 0
             return []
+
         worker.poller.select.side_effect = mock_select
         worker.is_parent_alive = mock.Mock(return_value=True)
 
@@ -1096,9 +1097,11 @@ class TestWorkerArbiterIntegration:
         worker.ppid = 99999999  # Invalid ppid
 
         iterations = [0]
+
         def mock_select(timeout):
             iterations[0] += 1
             return []
+
         worker.poller.select.side_effect = mock_select
 
         worker.run()
@@ -1282,3 +1285,232 @@ class TestSignalInteraction:
         assert worker.alive is False  # But shutting down
 
         worker.method_queue.close()
+
+
+class TestKeepaliveBlockingMode:
+    """Tests for socket blocking mode on keepalive connections (issue #3448)."""
+
+    def create_worker(self):
+        """Create a worker for testing."""
+        cfg = Config()
+        cfg.set('workers', 1)
+        cfg.set('threads', 4)
+        cfg.set('worker_connections', 1000)
+        cfg.set('keepalive', 2)
+
+        worker = gthread.ThreadWorker(
+            age=1,
+            ppid=os.getpid(),
+            sockets=[],
+            app=mock.Mock(),
+            timeout=30,
+            cfg=cfg,
+            log=mock.Mock(),
+        )
+        return worker
+
+    def test_handle_sets_blocking_on_keepalive_connection(self):
+        """Test that handle() sets socket to blocking mode on keepalive connections.
+
+        On keepalive connections, the socket is in non-blocking mode (set by
+        finish_request() for the selector). handle() must set it back to blocking
+        before reading request/body to avoid SSLWantReadError on SSL connections.
+        """
+        worker = self.create_worker()
+        worker.wsgi = mock.Mock(return_value=[b'response'])
+
+        # Create a connection that simulates a keepalive reuse
+        cfg = Config()
+        sock = FakeSocket()
+        conn = gthread.TConn(cfg, sock, ('127.0.0.1', 12345), ('127.0.0.1', 8000))
+
+        # Simulate the state after finish_request() for keepalive:
+        # - socket is non-blocking (for selector registration)
+        # - connection is already initialized
+        conn.init()  # First request initialized the connection
+        sock.setblocking(False)  # finish_request() set non-blocking for selector
+        assert sock.blocking is False
+        assert conn.initialized is True
+
+        # Verify that handle() sets the socket to blocking mode
+        # Mock the parser to avoid actually parsing
+        mock_parser = mock.Mock()
+        mock_parser.__next__ = mock.Mock(return_value=None)  # No request
+        conn.parser = mock_parser
+
+        worker.handle(conn)
+
+        # Socket should be set to blocking mode by handle()
+        assert sock.blocking is True
+
+    def test_handle_sets_blocking_before_body_read(self):
+        """Test that socket is blocking before WSGI app reads request body.
+
+        This is the core fix for issue #3448: Flask's request.get_json()
+        reads the body, which triggers socket.recv(). If the socket is
+        non-blocking, this raises SSLWantReadError on SSL connections.
+        """
+        worker = self.create_worker()
+
+        cfg = Config()
+        sock = FakeSocket()
+        conn = gthread.TConn(cfg, sock, ('127.0.0.1', 12345), ('127.0.0.1', 8000))
+
+        # Simulate keepalive state
+        conn.init()
+        sock.setblocking(False)
+
+        # Track when blocking is set vs when body would be read
+        blocking_state_at_body_read = [None]
+
+        def mock_wsgi(environ, start_response):
+            # This simulates Flask's request.get_json() reading the body
+            # The socket must be blocking at this point
+            blocking_state_at_body_read[0] = sock.blocking
+            start_response('200 OK', [])
+            return [b'response']
+
+        worker.wsgi = mock_wsgi
+
+        # Mock parser to return a request
+        mock_request = mock.Mock()
+        mock_request.headers = []
+        mock_request.unreader = mock.Mock()
+        mock_request.body = mock.Mock()
+        mock_request.body.read.return_value = b''
+
+        mock_parser = mock.Mock()
+        mock_parser.__next__ = mock.Mock(return_value=mock_request)
+        mock_parser.finish_body = mock.Mock()
+        conn.parser = mock_parser
+
+        # Mock handle_request to invoke wsgi
+        _ = worker.handle_request  # save reference before overwriting
+
+        def mock_handle_request(req, conn):
+            # Simplified version that just calls wsgi
+            worker.wsgi({}, lambda s, h: None)
+            return True
+
+        worker.handle_request = mock_handle_request
+
+        worker.handle(conn)
+
+        # Socket must be blocking when WSGI app reads body
+        assert blocking_state_at_body_read[0] is True
+
+
+class TestFinishBodySSL:
+    """Tests for SSL error handling in finish_body()."""
+
+    def test_finish_body_handles_ssl_want_read_error(self):
+        """Test that finish_body() handles SSLWantReadError gracefully.
+
+        When discarding unread body data on SSL connections, the socket
+        may raise SSLWantReadError if there's no application data available.
+        This should be treated as "no more data" rather than an error.
+        """
+        import ssl
+        from gunicorn.http.parser import RequestParser
+
+        # Create a mock SSL socket that raises SSLWantReadError on recv
+        class MockSSLSocket:
+            def __init__(self):
+                self._fileno = 123
+
+            def fileno(self):
+                return self._fileno
+
+            def recv(self, size):
+                raise ssl.SSLWantReadError("The operation did not complete")
+
+            def setblocking(self, blocking):
+                pass
+
+        cfg = Config()
+        sock = MockSSLSocket()
+        parser = RequestParser(cfg, sock, ('127.0.0.1', 12345))
+
+        # Create a mock message with a body that will trigger socket read
+        mock_body = mock.Mock()
+        mock_body.read.side_effect = ssl.SSLWantReadError("The operation did not complete")
+
+        mock_mesg = mock.Mock()
+        mock_mesg.body = mock_body
+        parser.mesg = mock_mesg
+
+        # finish_body() should handle SSLWantReadError without raising
+        parser.finish_body()  # Should not raise
+
+        # Verify body.read was called
+        mock_body.read.assert_called_once_with(1024)
+
+    def test_finish_body_reads_all_data_before_ssl_error(self):
+        """Test that finish_body() reads all available data before SSLWantReadError."""
+        import ssl
+        from gunicorn.http.parser import RequestParser
+
+        cfg = Config()
+
+        # Create a mock socket
+        class MockSocket:
+            def recv(self, size):
+                return b''
+
+            def setblocking(self, blocking):
+                pass
+
+        sock = MockSocket()
+        parser = RequestParser(cfg, sock, ('127.0.0.1', 12345))
+
+        # Create a mock message body that returns data then raises SSLWantReadError
+        call_count = [0]
+
+        def mock_read(size):
+            call_count[0] += 1
+            if call_count[0] <= 2:
+                return b'x' * size  # Return data first two times
+            raise ssl.SSLWantReadError("The operation did not complete")
+
+        mock_body = mock.Mock()
+        mock_body.read.side_effect = mock_read
+
+        mock_mesg = mock.Mock()
+        mock_mesg.body = mock_body
+        parser.mesg = mock_mesg
+
+        # finish_body() should read all data and handle SSLWantReadError
+        parser.finish_body()  # Should not raise
+
+        # Verify body.read was called multiple times (2 data reads + 1 error)
+        assert call_count[0] == 3
+
+    def test_finish_body_normal_operation(self):
+        """Test that finish_body() works normally when no SSL error occurs."""
+        from gunicorn.http.parser import RequestParser
+
+        cfg = Config()
+
+        class MockSocket:
+            def recv(self, size):
+                return b''
+
+            def setblocking(self, blocking):
+                pass
+
+        sock = MockSocket()
+        parser = RequestParser(cfg, sock, ('127.0.0.1', 12345))
+
+        # Create a mock message body that returns empty (end of data)
+        mock_body = mock.Mock()
+        mock_body.read.return_value = b''
+
+        mock_mesg = mock.Mock()
+        mock_mesg.body = mock_body
+        parser.mesg = mock_mesg
+
+        # finish_body() should work normally
+        parser.finish_body()
+
+        # Verify body.read was called once and returned empty
+        mock_body.read.assert_called_once_with(1024)

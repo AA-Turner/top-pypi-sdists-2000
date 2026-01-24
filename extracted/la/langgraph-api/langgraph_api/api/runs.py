@@ -1,6 +1,6 @@
 import asyncio
 from collections.abc import AsyncIterator, Awaitable, Callable
-from typing import Literal, cast
+from typing import Any, Literal, cast
 from uuid import UUID, uuid4
 
 import orjson
@@ -49,12 +49,18 @@ from langgraph_api.validation import (
 from langgraph_api.webhook import validate_webhook_url_or_raise
 from langgraph_license.validation import plus_features_enabled
 from langgraph_runtime.database import connect
-from langgraph_runtime.ops import Crons, Runs, StreamHandler, Threads
+from langgraph_runtime.ops import Crons, Runs, Threads
 from langgraph_runtime.retry import retry_db
 
 CrudRuns = GrpcRuns if FF_USE_CORE_API else Runs
 
 logger = structlog.stdlib.get_logger(__name__)
+
+
+# Type alias for stream handlers (GrpcStreamHandler or ContextQueue).
+# CrudRuns is selected at runtime, and the implementations have different
+# type signatures, so we use Any for compatibility.
+_StreamHandler = Any
 
 
 _RunResultFallback = Callable[[], Awaitable[bytes]]
@@ -108,7 +114,7 @@ def _run_result_body(
     *,
     run_id: UUID,
     thread_id: UUID,
-    sub: StreamHandler,
+    sub: _StreamHandler,
     cancel_on_disconnect: bool = False,
     ignore_404: bool = False,
     fallback: _RunResultFallback | None = None,
@@ -125,8 +131,6 @@ def _run_result_body(
                 cancel_on_disconnect=cancel_on_disconnect,
                 thread_id=thread_id,
                 ignore_404=ignore_404,
-                # gRPC subscribe() is a no-op, so we need to replay from cache
-                last_event_id="-" if FF_USE_CORE_API else None,
             ):
                 if mode == b"values" or (
                     mode == b"updates" and b"__interrupt__" in chunk
@@ -141,7 +145,6 @@ def _run_result_body(
             else:
                 last_chunk.set(b"{}")
         finally:
-            # Make sure to always clean up the pubsub
             await sub.__aexit__(None, None, None)
 
     # keep the connection open by sending whitespace every 5 seconds
@@ -244,7 +247,7 @@ async def stream_run(
     on_disconnect = payload.get("on_disconnect", "continue")
     run_id = uuid7()
 
-    sub = await Runs.Stream.subscribe(run_id, thread_id)
+    sub = await CrudRuns.Stream.subscribe(run_id, thread_id)
     try:
         async with connect() as conn:
             run = await create_valid_run(
@@ -256,7 +259,7 @@ async def stream_run(
                 request_start_time=request.scope.get("request_start_time_ms"),
             )
     except Exception:
-        # Clean up the pubsub on errors
+        # Clean up the stream handler on errors
         await sub.__aexit__(None, None, None)
         raise
 
@@ -266,14 +269,11 @@ async def stream_run(
                 run["run_id"],
                 thread_id=thread_id,
                 cancel_on_disconnect=on_disconnect == "cancel",
-                stream_channel=sub,
-                # When using gRPC, the subscription happens after the run is created,
-                # so we need to replay from cache to catch early events.
-                last_event_id="-" if FF_USE_CORE_API else None,
+                stream_channel=cast("_StreamHandler", sub),
             ):
                 yield event, message, stream_id
         finally:
-            # Make sure to always clean up the pubsub
+            # Clean up the stream handler
             await sub.__aexit__(None, None, None)
 
     return EventSourceResponse(
@@ -295,7 +295,7 @@ async def stream_run_stateless(
     run_id = uuid7()
     thread_id = uuid4()
 
-    sub = await Runs.Stream.subscribe(run_id, thread_id)
+    sub = await CrudRuns.Stream.subscribe(run_id, thread_id)
     try:
         async with connect() as conn:
             run = await create_valid_run(
@@ -308,7 +308,7 @@ async def stream_run_stateless(
                 temporary=True,
             )
     except Exception:
-        # Clean up the pubsub on errors
+        # Clean up the stream handler on errors
         await sub.__aexit__(None, None, None)
         raise
 
@@ -319,14 +319,11 @@ async def stream_run_stateless(
                 thread_id=run["thread_id"],
                 ignore_404=True,
                 cancel_on_disconnect=on_disconnect == "cancel",
-                stream_channel=sub,
-                # When using gRPC, the subscription happens after the run is created,
-                # so we need to replay from cache to catch early events.
-                last_event_id="-" if FF_USE_CORE_API else None,
+                stream_channel=cast("_StreamHandler", sub),
             ):
                 yield event, message, stream_id
         finally:
-            # Make sure to always clean up the pubsub
+            # Clean up the stream handler
             await sub.__aexit__(None, None, None)
 
     return EventSourceResponse(
@@ -345,7 +342,7 @@ async def wait_run(request: ApiRequest):
     payload = await request.json(RunCreateStateful)
     on_disconnect = payload.get("on_disconnect", "continue")
     run_id = uuid7()
-    sub = await Runs.Stream.subscribe(run_id, thread_id)
+    sub = await CrudRuns.Stream.subscribe(run_id, thread_id)
     try:
         async with connect() as conn:
             run = await create_valid_run(
@@ -357,7 +354,7 @@ async def wait_run(request: ApiRequest):
                 request_start_time=request.scope.get("request_start_time_ms"),
             )
     except Exception:
-        # Clean up the pubsub on errors
+        # Clean up the stream handler on errors
         await sub.__aexit__(None, None, None)
         raise
 
@@ -388,7 +385,7 @@ async def wait_run_stateless(request: ApiRequest):
     run_id = uuid7()
     thread_id = uuid4()
 
-    sub = await Runs.Stream.subscribe(run_id, thread_id)
+    sub = await CrudRuns.Stream.subscribe(run_id, thread_id)
     try:
         async with connect() as conn:
             run = await create_valid_run(
@@ -401,7 +398,7 @@ async def wait_run_stateless(request: ApiRequest):
                 temporary=True,
             )
     except Exception:
-        # Clean up the pubsub on errors
+        # Clean up the stream handler on errors
         await sub.__aexit__(None, None, None)
         raise
 
@@ -503,8 +500,8 @@ async def join_run(request: ApiRequest):
     validate_uuid(run_id, "Invalid run ID: must be a UUID")
 
     # A touch redundant, but to meet the existing signature of join, we need to throw any 404s before we enter the streaming body
-    await Runs.Stream.check_run_stream_auth(run_id, thread_id)
-    sub = await Runs.Stream.subscribe(run_id, thread_id)
+    await CrudRuns.Stream.check_run_stream_auth(run_id, thread_id)
+    sub = await CrudRuns.Stream.subscribe(run_id, thread_id)
     body = _run_result_body(
         run_id=run_id,
         thread_id=thread_id,
@@ -533,22 +530,22 @@ async def join_run_stream(request: ApiRequest):
     validate_uuid(run_id, "Invalid run ID: must be a UUID")
     stream_mode = request.query_params.get("stream_mode") or []
     last_event_id = request.headers.get("last-event-id") or None
-    # For gRPC, subscribe() is a no-op so we need to replay from cache.
-    # If no last_event_id provided, default to "-" (start of stream) for gRPC.
-    if FF_USE_CORE_API and last_event_id is None:
-        last_event_id = "-"
 
     async def body():
-        async with await Runs.Stream.subscribe(run_id, thread_id) as sub:
+        sub = await CrudRuns.Stream.subscribe(run_id, thread_id)
+        try:
             async for event, message, stream_id in CrudRuns.Stream.join(
                 run_id,
                 thread_id=thread_id,
                 cancel_on_disconnect=cancel_on_disconnect,
-                stream_channel=sub,
+                stream_channel=cast("_StreamHandler", sub),
                 stream_mode=stream_mode,
                 last_event_id=last_event_id,
             ):
                 yield event, message, stream_id
+        finally:
+            # Clean up the stream handler
+            await sub.__aexit__(None, None, None)
 
     return EventSourceResponse(
         body(),
@@ -576,7 +573,7 @@ async def cancel_run(
         action_str if action_str in {"interrupt", "rollback"} else "interrupt",
     )
 
-    sub = await Runs.Stream.subscribe(run_id, thread_id) if wait else None
+    sub = await CrudRuns.Stream.subscribe(run_id, thread_id) if wait else None
     try:
         async with connect() as conn:
             await CrudRuns.cancel(
@@ -589,7 +586,7 @@ async def cancel_run(
         if sub is not None:
             await sub.__aexit__(None, None, None)
         raise
-    if not wait:
+    if not wait or sub is None:
         return Response(status_code=202)
 
     body = _run_result_body(

@@ -906,19 +906,13 @@ class ProfilingGroup(
     @builtins.property
     @jsii.member(jsii_name="profilingGroupArn")
     def profiling_group_arn(self) -> builtins.str:
-        '''The ARN of the Profiling Group.
-
-        :attribute: true
-        '''
+        '''The ARN of the profiling group.'''
         return typing.cast(builtins.str, jsii.get(self, "profilingGroupArn"))
 
     @builtins.property
     @jsii.member(jsii_name="profilingGroupName")
     def profiling_group_name(self) -> builtins.str:
-        '''The name of the Profiling Group.
-
-        :attribute: true
-        '''
+        '''The name of the profiling group.'''
         return typing.cast(builtins.str, jsii.get(self, "profilingGroupName"))
 
     @builtins.property

@@ -494,3 +494,139 @@ class GetServerInfoResponse(_message.Message):
     server_type: str
     start_time: _timestamp_pb2.Timestamp
     def __init__(self, server_args: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., scheduler_info: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., active_requests: _Optional[int] = ..., is_paused: bool = ..., last_receive_timestamp: _Optional[float] = ..., uptime_seconds: _Optional[float] = ..., sglang_version: _Optional[str] = ..., server_type: _Optional[str] = ..., start_time: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
+
+class GetLoadsRequest(_message.Message):
+    __slots__ = ("dp_rank", "include")
+    DP_RANK_FIELD_NUMBER: _ClassVar[int]
+    INCLUDE_FIELD_NUMBER: _ClassVar[int]
+    dp_rank: int
+    include: _containers.RepeatedScalarFieldContainer[str]
+    def __init__(self, dp_rank: _Optional[int] = ..., include: _Optional[_Iterable[str]] = ...) -> None: ...
+
+class GetLoadsResponse(_message.Message):
+    __slots__ = ("timestamp", "version", "dp_rank_count", "loads", "aggregate")
+    TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
+    VERSION_FIELD_NUMBER: _ClassVar[int]
+    DP_RANK_COUNT_FIELD_NUMBER: _ClassVar[int]
+    LOADS_FIELD_NUMBER: _ClassVar[int]
+    AGGREGATE_FIELD_NUMBER: _ClassVar[int]
+    timestamp: str
+    version: str
+    dp_rank_count: int
+    loads: _containers.RepeatedCompositeFieldContainer[SchedulerLoad]
+    aggregate: AggregateMetrics
+    def __init__(self, timestamp: _Optional[str] = ..., version: _Optional[str] = ..., dp_rank_count: _Optional[int] = ..., loads: _Optional[_Iterable[_Union[SchedulerLoad, _Mapping]]] = ..., aggregate: _Optional[_Union[AggregateMetrics, _Mapping]] = ...) -> None: ...
+
+class SchedulerLoad(_message.Message):
+    __slots__ = ("dp_rank", "num_running_reqs", "num_waiting_reqs", "num_total_reqs", "num_used_tokens", "max_total_num_tokens", "token_usage", "gen_throughput", "cache_hit_rate", "utilization", "max_running_requests", "memory", "speculative", "lora", "disaggregation", "queues")
+    DP_RANK_FIELD_NUMBER: _ClassVar[int]
+    NUM_RUNNING_REQS_FIELD_NUMBER: _ClassVar[int]
+    NUM_WAITING_REQS_FIELD_NUMBER: _ClassVar[int]
+    NUM_TOTAL_REQS_FIELD_NUMBER: _ClassVar[int]
+    NUM_USED_TOKENS_FIELD_NUMBER: _ClassVar[int]
+    MAX_TOTAL_NUM_TOKENS_FIELD_NUMBER: _ClassVar[int]
+    TOKEN_USAGE_FIELD_NUMBER: _ClassVar[int]
+    GEN_THROUGHPUT_FIELD_NUMBER: _ClassVar[int]
+    CACHE_HIT_RATE_FIELD_NUMBER: _ClassVar[int]
+    UTILIZATION_FIELD_NUMBER: _ClassVar[int]
+    MAX_RUNNING_REQUESTS_FIELD_NUMBER: _ClassVar[int]
+    MEMORY_FIELD_NUMBER: _ClassVar[int]
+    SPECULATIVE_FIELD_NUMBER: _ClassVar[int]
+    LORA_FIELD_NUMBER: _ClassVar[int]
+    DISAGGREGATION_FIELD_NUMBER: _ClassVar[int]
+    QUEUES_FIELD_NUMBER: _ClassVar[int]
+    dp_rank: int
+    num_running_reqs: int
+    num_waiting_reqs: int
+    num_total_reqs: int
+    num_used_tokens: int
+    max_total_num_tokens: int
+    token_usage: float
+    gen_throughput: float
+    cache_hit_rate: float
+    utilization: float
+    max_running_requests: int
+    memory: MemoryMetrics
+    speculative: SpeculativeMetrics
+    lora: LoRAMetrics
+    disaggregation: DisaggregationMetrics
+    queues: QueueMetrics
+    def __init__(self, dp_rank: _Optional[int] = ..., num_running_reqs: _Optional[int] = ..., num_waiting_reqs: _Optional[int] = ..., num_total_reqs: _Optional[int] = ..., num_used_tokens: _Optional[int] = ..., max_total_num_tokens: _Optional[int] = ..., token_usage: _Optional[float] = ..., gen_throughput: _Optional[float] = ..., cache_hit_rate: _Optional[float] = ..., utilization: _Optional[float] = ..., max_running_requests: _Optional[int] = ..., memory: _Optional[_Union[MemoryMetrics, _Mapping]] = ..., speculative: _Optional[_Union[SpeculativeMetrics, _Mapping]] = ..., lora: _Optional[_Union[LoRAMetrics, _Mapping]] = ..., disaggregation: _Optional[_Union[DisaggregationMetrics, _Mapping]] = ..., queues: _Optional[_Union[QueueMetrics, _Mapping]] = ...) -> None: ...
+
+class MemoryMetrics(_message.Message):
+    __slots__ = ("weight_gb", "kv_cache_gb", "graph_gb", "token_capacity")
+    WEIGHT_GB_FIELD_NUMBER: _ClassVar[int]
+    KV_CACHE_GB_FIELD_NUMBER: _ClassVar[int]
+    GRAPH_GB_FIELD_NUMBER: _ClassVar[int]
+    TOKEN_CAPACITY_FIELD_NUMBER: _ClassVar[int]
+    weight_gb: float
+    kv_cache_gb: float
+    graph_gb: float
+    token_capacity: int
+    def __init__(self, weight_gb: _Optional[float] = ..., kv_cache_gb: _Optional[float] = ..., graph_gb: _Optional[float] = ..., token_capacity: _Optional[int] = ...) -> None: ...
+
+class SpeculativeMetrics(_message.Message):
+    __slots__ = ("accept_length", "accept_rate")
+    ACCEPT_LENGTH_FIELD_NUMBER: _ClassVar[int]
+    ACCEPT_RATE_FIELD_NUMBER: _ClassVar[int]
+    accept_length: float
+    accept_rate: float
+    def __init__(self, accept_length: _Optional[float] = ..., accept_rate: _Optional[float] = ...) -> None: ...
+
+class LoRAMetrics(_message.Message):
+    __slots__ = ("slots_used", "slots_total", "utilization")
+    SLOTS_USED_FIELD_NUMBER: _ClassVar[int]
+    SLOTS_TOTAL_FIELD_NUMBER: _ClassVar[int]
+    UTILIZATION_FIELD_NUMBER: _ClassVar[int]
+    slots_used: int
+    slots_total: int
+    utilization: float
+    def __init__(self, slots_used: _Optional[int] = ..., slots_total: _Optional[int] = ..., utilization: _Optional[float] = ...) -> None: ...
+
+class DisaggregationMetrics(_message.Message):
+    __slots__ = ("mode", "prefill_prealloc_queue_reqs", "prefill_inflight_queue_reqs", "decode_prealloc_queue_reqs", "decode_transfer_queue_reqs", "decode_retracted_queue_reqs", "kv_transfer_speed_gb_s", "kv_transfer_latency_ms")
+    MODE_FIELD_NUMBER: _ClassVar[int]
+    PREFILL_PREALLOC_QUEUE_REQS_FIELD_NUMBER: _ClassVar[int]
+    PREFILL_INFLIGHT_QUEUE_REQS_FIELD_NUMBER: _ClassVar[int]
+    DECODE_PREALLOC_QUEUE_REQS_FIELD_NUMBER: _ClassVar[int]
+    DECODE_TRANSFER_QUEUE_REQS_FIELD_NUMBER: _ClassVar[int]
+    DECODE_RETRACTED_QUEUE_REQS_FIELD_NUMBER: _ClassVar[int]
+    KV_TRANSFER_SPEED_GB_S_FIELD_NUMBER: _ClassVar[int]
+    KV_TRANSFER_LATENCY_MS_FIELD_NUMBER: _ClassVar[int]
+    mode: str
+    prefill_prealloc_queue_reqs: int
+    prefill_inflight_queue_reqs: int
+    decode_prealloc_queue_reqs: int
+    decode_transfer_queue_reqs: int
+    decode_retracted_queue_reqs: int
+    kv_transfer_speed_gb_s: float
+    kv_transfer_latency_ms: float
+    def __init__(self, mode: _Optional[str] = ..., prefill_prealloc_queue_reqs: _Optional[int] = ..., prefill_inflight_queue_reqs: _Optional[int] = ..., decode_prealloc_queue_reqs: _Optional[int] = ..., decode_transfer_queue_reqs: _Optional[int] = ..., decode_retracted_queue_reqs: _Optional[int] = ..., kv_transfer_speed_gb_s: _Optional[float] = ..., kv_transfer_latency_ms: _Optional[float] = ...) -> None: ...
+
+class QueueMetrics(_message.Message):
+    __slots__ = ("waiting", "grammar", "paused", "retracted")
+    WAITING_FIELD_NUMBER: _ClassVar[int]
+    GRAMMAR_FIELD_NUMBER: _ClassVar[int]
+    PAUSED_FIELD_NUMBER: _ClassVar[int]
+    RETRACTED_FIELD_NUMBER: _ClassVar[int]
+    waiting: int
+    grammar: int
+    paused: int
+    retracted: int
+    def __init__(self, waiting: _Optional[int] = ..., grammar: _Optional[int] = ..., paused: _Optional[int] = ..., retracted: _Optional[int] = ...) -> None: ...
+
+class AggregateMetrics(_message.Message):
+    __slots__ = ("total_running_reqs", "total_waiting_reqs", "total_reqs", "avg_token_usage", "avg_throughput", "avg_utilization")
+    TOTAL_RUNNING_REQS_FIELD_NUMBER: _ClassVar[int]
+    TOTAL_WAITING_REQS_FIELD_NUMBER: _ClassVar[int]
+    TOTAL_REQS_FIELD_NUMBER: _ClassVar[int]
+    AVG_TOKEN_USAGE_FIELD_NUMBER: _ClassVar[int]
+    AVG_THROUGHPUT_FIELD_NUMBER: _ClassVar[int]
+    AVG_UTILIZATION_FIELD_NUMBER: _ClassVar[int]
+    total_running_reqs: int
+    total_waiting_reqs: int
+    total_reqs: int
+    avg_token_usage: float
+    avg_throughput: float
+    avg_utilization: float
+    def __init__(self, total_running_reqs: _Optional[int] = ..., total_waiting_reqs: _Optional[int] = ..., total_reqs: _Optional[int] = ..., avg_token_usage: _Optional[float] = ..., avg_throughput: _Optional[float] = ..., avg_utilization: _Optional[float] = ...) -> None: ...

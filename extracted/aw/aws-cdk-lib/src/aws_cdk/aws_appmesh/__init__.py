@@ -23113,7 +23113,11 @@ class HttpVirtualNodeListenerOptions:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appmesh.IGatewayRoute")
-class IGatewayRoute(_IResource_c80c4260, typing_extensions.Protocol):
+class IGatewayRoute(
+    _IResource_c80c4260,
+    _IGatewayRouteRef_d8d24af4,
+    typing_extensions.Protocol,
+):
     '''Interface for which all GatewayRoute based classes MUST implement.'''
 
     @builtins.property
@@ -23143,6 +23147,7 @@ class IGatewayRoute(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IGatewayRouteProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IGatewayRouteRef_d8d24af4), # type: ignore[misc]
 ):
     '''Interface for which all GatewayRoute based classes MUST implement.'''
 
@@ -23177,7 +23182,7 @@ typing.cast(typing.Any, IGatewayRoute).__jsii_proxy_class__ = lambda : _IGateway
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appmesh.IMesh")
-class IMesh(_IResource_c80c4260, typing_extensions.Protocol):
+class IMesh(_IResource_c80c4260, _IMeshRef_1eeeb336, typing_extensions.Protocol):
     '''Interface which all Mesh based classes MUST implement.'''
 
     @builtins.property
@@ -23270,6 +23275,7 @@ class IMesh(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IMeshProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IMeshRef_1eeeb336), # type: ignore[misc]
 ):
     '''Interface which all Mesh based classes MUST implement.'''
 
@@ -23396,7 +23402,7 @@ typing.cast(typing.Any, IMesh).__jsii_proxy_class__ = lambda : _IMeshProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appmesh.IRoute")
-class IRoute(_IResource_c80c4260, typing_extensions.Protocol):
+class IRoute(_IResource_c80c4260, _IRouteRef_c5013f61, typing_extensions.Protocol):
     '''Interface for which all Route based classes MUST implement.'''
 
     @builtins.property
@@ -23426,6 +23432,7 @@ class IRoute(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IRouteProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IRouteRef_c5013f61), # type: ignore[misc]
 ):
     '''Interface for which all Route based classes MUST implement.'''
 
@@ -23699,7 +23706,11 @@ typing.cast(typing.Any, IVirtualNode).__jsii_proxy_class__ = lambda : _IVirtualN
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appmesh.IVirtualRouter")
-class IVirtualRouter(_IResource_c80c4260, typing_extensions.Protocol):
+class IVirtualRouter(
+    _IResource_c80c4260,
+    _IVirtualRouterRef_ff2b1aff,
+    typing_extensions.Protocol,
+):
     '''Interface which all VirtualRouter based classes MUST implement.'''
 
     @builtins.property
@@ -23745,6 +23756,7 @@ class IVirtualRouter(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IVirtualRouterProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IVirtualRouterRef_ff2b1aff), # type: ignore[misc]
 ):
     '''Interface which all VirtualRouter based classes MUST implement.'''
 
@@ -23800,7 +23812,11 @@ typing.cast(typing.Any, IVirtualRouter).__jsii_proxy_class__ = lambda : _IVirtua
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appmesh.IVirtualService")
-class IVirtualService(_IResource_c80c4260, typing_extensions.Protocol):
+class IVirtualService(
+    _IResource_c80c4260,
+    _IVirtualServiceRef_828d7b93,
+    typing_extensions.Protocol,
+):
     '''Represents the interface which all VirtualService based classes MUST implement.'''
 
     @builtins.property
@@ -23830,6 +23846,7 @@ class IVirtualService(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IVirtualServiceProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IVirtualServiceRef_828d7b93), # type: ignore[misc]
 ):
     '''Represents the interface which all VirtualService based classes MUST implement.'''
 
@@ -24384,6 +24401,12 @@ class Mesh(
     def mesh_name(self) -> builtins.str:
         '''The name of the AppMesh mesh.'''
         return typing.cast(builtins.str, jsii.get(self, "meshName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="meshRef")
+    def mesh_ref(self) -> "_MeshReference_dbc186f5":
+        '''A reference to a Mesh resource.'''
+        return typing.cast("_MeshReference_dbc186f5", jsii.get(self, "meshRef"))
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_appmesh.MeshFilterType")
@@ -25058,6 +25081,12 @@ class Route(
     def route_name(self) -> builtins.str:
         '''The name of the Route.'''
         return typing.cast(builtins.str, jsii.get(self, "routeName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="routeRef")
+    def route_ref(self) -> "_RouteReference_1c57e2c9":
+        '''A reference to a Route resource.'''
+        return typing.cast("_RouteReference_1c57e2c9", jsii.get(self, "routeRef"))
 
     @builtins.property
     @jsii.member(jsii_name="virtualRouter")
@@ -29430,6 +29459,12 @@ class VirtualRouter(
         '''The name of the VirtualRouter.'''
         return typing.cast(builtins.str, jsii.get(self, "virtualRouterName"))
 
+    @builtins.property
+    @jsii.member(jsii_name="virtualRouterRef")
+    def virtual_router_ref(self) -> "_VirtualRouterReference_e8341579":
+        '''A reference to a VirtualRouter resource.'''
+        return typing.cast("_VirtualRouterReference_e8341579", jsii.get(self, "virtualRouterRef"))
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_appmesh.VirtualRouterAttributes",
@@ -29952,6 +29987,12 @@ class VirtualService(
     def virtual_service_name(self) -> builtins.str:
         '''The name of the VirtualService, it is recommended this follows the fully-qualified domain name format.'''
         return typing.cast(builtins.str, jsii.get(self, "virtualServiceName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="virtualServiceRef")
+    def virtual_service_ref(self) -> "_VirtualServiceReference_a0686b6e":
+        '''A reference to a VirtualService resource.'''
+        return typing.cast("_VirtualServiceReference_a0686b6e", jsii.get(self, "virtualServiceRef"))
 
 
 @jsii.data_type(
@@ -30589,6 +30630,12 @@ class GatewayRoute(
     def gateway_route_name(self) -> builtins.str:
         '''The name of the GatewayRoute.'''
         return typing.cast(builtins.str, jsii.get(self, "gatewayRouteName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="gatewayRouteRef")
+    def gateway_route_ref(self) -> "_GatewayRouteReference_89558e9e":
+        '''A reference to a GatewayRoute resource.'''
+        return typing.cast("_GatewayRouteReference_89558e9e", jsii.get(self, "gatewayRouteRef"))
 
     @builtins.property
     @jsii.member(jsii_name="virtualGateway")

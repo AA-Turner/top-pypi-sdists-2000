@@ -3131,7 +3131,11 @@ class CronOptionsWithTimezone(_CronOptions_6401a7a0):
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_scheduler.ISchedule")
-class ISchedule(_IResource_c80c4260, typing_extensions.Protocol):
+class ISchedule(
+    _IResource_c80c4260,
+    _IScheduleRef_5286fcb6,
+    typing_extensions.Protocol,
+):
     '''Interface representing a created or an imported ``Schedule``.'''
 
     @builtins.property
@@ -3161,6 +3165,7 @@ class ISchedule(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IScheduleProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IScheduleRef_5286fcb6), # type: ignore[misc]
 ):
     '''Interface representing a created or an imported ``Schedule``.'''
 
@@ -4789,6 +4794,12 @@ class Schedule(
     def schedule_name(self) -> builtins.str:
         '''The name of the schedule.'''
         return typing.cast(builtins.str, jsii.get(self, "scheduleName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="scheduleRef")
+    def schedule_ref(self) -> "_ScheduleReference_c219736f":
+        '''A reference to a Schedule resource.'''
+        return typing.cast("_ScheduleReference_c219736f", jsii.get(self, "scheduleRef"))
 
     @builtins.property
     @jsii.member(jsii_name="key")

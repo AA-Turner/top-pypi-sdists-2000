@@ -8692,12 +8692,12 @@ class IAlarmAction(typing_extensions.Protocol):
     def bind(
         self,
         scope: "_constructs_77d1e7e8.Construct",
-        alarm: "_IAlarmRef_2bb0e5de",
+        alarm: "IAlarm",
     ) -> "AlarmActionConfig":
         '''Return the properties required to send alarm actions to this CloudWatch alarm.
 
         :param scope: root Construct that allows creating new Constructs.
-        :param alarm: CloudWatch alarm that the action will target.
+        :param alarm: CloudWatch alarm that the action will target [disable-awslint:prefer-ref-interface].
         '''
         ...
 
@@ -8711,12 +8711,12 @@ class _IAlarmActionProxy:
     def bind(
         self,
         scope: "_constructs_77d1e7e8.Construct",
-        alarm: "_IAlarmRef_2bb0e5de",
+        alarm: "IAlarm",
     ) -> "AlarmActionConfig":
         '''Return the properties required to send alarm actions to this CloudWatch alarm.
 
         :param scope: root Construct that allows creating new Constructs.
-        :param alarm: CloudWatch alarm that the action will target.
+        :param alarm: CloudWatch alarm that the action will target [disable-awslint:prefer-ref-interface].
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__19a88cc904e70d7841abfa1406b71edcf34c316b173c37c2881e75702bc0c75a)
@@ -18310,7 +18310,7 @@ def _typecheckingstub__590b09336dca786909b6d40a91a4108f1ce6787811718cd6151f7cd2d
 
 def _typecheckingstub__19a88cc904e70d7841abfa1406b71edcf34c316b173c37c2881e75702bc0c75a(
     scope: _constructs_77d1e7e8.Construct,
-    alarm: _IAlarmRef_2bb0e5de,
+    alarm: IAlarm,
 ) -> None:
     """Type checking stubs"""
     pass

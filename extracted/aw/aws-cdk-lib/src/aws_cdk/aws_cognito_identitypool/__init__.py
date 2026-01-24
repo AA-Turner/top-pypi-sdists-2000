@@ -425,7 +425,11 @@ from ..aws_cognito import (
     IUserPoolClient as _IUserPoolClient_75623ba4,
 )
 from ..aws_iam import IRole as _IRole_235f5d8e
-from ..interfaces.aws_cognito import IUserPoolClientRef as _IUserPoolClientRef_4466eeba
+from ..interfaces.aws_cognito import (
+    IIdentityPoolRef as _IIdentityPoolRef_5cf45895,
+    IUserPoolClientRef as _IUserPoolClientRef_4466eeba,
+    IdentityPoolReference as _IdentityPoolReference_3ad34644,
+)
 from ..interfaces.aws_iam import (
     IOIDCProviderRef as _IOIDCProviderRef_a866c7c8,
     ISAMLProviderRef as _ISAMLProviderRef_6e369856,
@@ -433,7 +437,11 @@ from ..interfaces.aws_iam import (
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_cognito_identitypool.IIdentityPool")
-class IIdentityPool(_IResource_c80c4260, typing_extensions.Protocol):
+class IIdentityPool(
+    _IResource_c80c4260,
+    _IIdentityPoolRef_5cf45895,
+    typing_extensions.Protocol,
+):
     '''Represents a Cognito Identity Pool.'''
 
     @builtins.property
@@ -466,6 +474,7 @@ class IIdentityPool(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IIdentityPoolProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IIdentityPoolRef_5cf45895), # type: ignore[misc]
 ):
     '''Represents a Cognito Identity Pool.'''
 
@@ -720,6 +729,12 @@ class IdentityPool(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "identityPoolName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="identityPoolRef")
+    def identity_pool_ref(self) -> "_IdentityPoolReference_3ad34644":
+        '''A reference to a IdentityPool resource.'''
+        return typing.cast("_IdentityPoolReference_3ad34644", jsii.get(self, "identityPoolRef"))
 
     @builtins.property
     @jsii.member(jsii_name="roleAttachment")

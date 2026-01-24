@@ -1715,6 +1715,8 @@ ecs.Ec2Service(self, "EC2Service",
 
 Managed Instances Capacity Providers allow you to use AWS-managed EC2 instances for your ECS tasks while providing more control over instance selection than standard Fargate. AWS handles the instance lifecycle, patching, and maintenance while you can specify detailed instance requirements. You can  define detailed instance requirements to control which types of instances are used for your workloads.
 
+Capacity Option Type provides the purchasing option for the EC2 instances used in the capacity provider. Determines whether to use On-Demand or Spot instances. Valid values are `ON_DEMAND` and `SPOT`. Defaults to `ON_DEMAND` when not specified. Changing this value will trigger replacement of the capacity provider. For more information, see [Amazon EC2 billing and purchasing options](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html) in the Amazon EC2 User Guide.
+
 See [ECS documentation for Managed Instances Capacity Provider](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/managed-instances-capacity-providers-concept.html) for more documentation.
 
 #### IAM Roles Setup
@@ -1735,6 +1737,7 @@ security_group = ec2.SecurityGroup(self, "SecurityGroup",
 )
 
 mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProvider",
+    capacity_option_type=ecs.CapacityOptionType.SPOT,
     subnets=vpc.private_subnets,
     security_groups=[security_group],
     instance_requirements=ec2.InstanceRequirementsConfig(
@@ -2397,6 +2400,88 @@ target = service.load_balancer_target(
 
 target.attach_to_application_target_group(blue_target_group)
 ```
+
+## Buil-in Linear and Canary Deployments
+
+Amazon ECS supports progressive deployment strategies that allow you to validate new service revisions before shifting all production traffic. Both strategies require an Application Load Balancer (ALB) with target groups for traffic routing.
+
+### Linear Deployment
+
+Linear deployment strategy shifts production traffic in equal percentage increments with configurable wait times between each step:
+
+```python
+# cluster: ecs.Cluster
+# task_definition: ecs.TaskDefinition
+# blue_target_group: elbv2.ApplicationTargetGroup
+# green_target_group: elbv2.ApplicationTargetGroup
+# prod_listener_rule: elbv2.ApplicationListenerRule
+
+
+service = ecs.FargateService(self, "Service",
+    cluster=cluster,
+    task_definition=task_definition,
+    deployment_strategy=ecs.DeploymentStrategy.LINEAR,
+    linear_configuration=ecs.TrafficShiftConfig(
+        step_percent=10,
+        step_bake_time=Duration.minutes(5)
+    )
+)
+
+target = service.load_balancer_target(
+    container_name="web",
+    container_port=80,
+    alternate_target=ecs.AlternateTarget("AlternateTarget",
+        alternate_target_group=green_target_group,
+        production_listener=ecs.ListenerRuleConfiguration.application_listener_rule(prod_listener_rule)
+    )
+)
+
+target.attach_to_application_target_group(blue_target_group)
+```
+
+Valid values:
+
+* `stepPercent`: 3.0 to 100.0 (multiples of 0.1). Default: 10.0
+* `stepBakeTime`: 0 to 1440 minutes (24 hours). Default: 6 minutes
+
+### Canary Deployment
+
+Canary deployment strategy shifts a fixed percentage of traffic to the new service revision for testing, then shifts the remaining traffic after a bake period:
+
+```python
+# cluster: ecs.Cluster
+# task_definition: ecs.TaskDefinition
+# blue_target_group: elbv2.ApplicationTargetGroup
+# green_target_group: elbv2.ApplicationTargetGroup
+# prod_listener_rule: elbv2.ApplicationListenerRule
+
+
+service = ecs.FargateService(self, "Service",
+    cluster=cluster,
+    task_definition=task_definition,
+    deployment_strategy=ecs.DeploymentStrategy.CANARY,
+    canary_configuration=ecs.TrafficShiftConfig(
+        step_percent=5,
+        step_bake_time=Duration.minutes(10)
+    )
+)
+
+target = service.load_balancer_target(
+    container_name="web",
+    container_port=80,
+    alternate_target=ecs.AlternateTarget("AlternateTarget",
+        alternate_target_group=green_target_group,
+        production_listener=ecs.ListenerRuleConfiguration.application_listener_rule(prod_listener_rule)
+    )
+)
+
+target.attach_to_application_target_group(blue_target_group)
+```
+
+Valid values:
+
+* `stepPercent`: 0.1 to 100.0 (multiples of 0.1). Default: 5.0
+* `stepBakeTime`: 0 to 1440 minutes (24 hours). Default: 10 minutes
 
 ## Daemon Scheduling Strategy
 
@@ -3681,11 +3766,8 @@ class AlternateTargetProps(AlternateTargetOptions):
 
         Example::
 
-            import aws_cdk.aws_lambda as lambda_
-            
             # cluster: ecs.Cluster
             # task_definition: ecs.TaskDefinition
-            # lambda_hook: lambda.Function
             # blue_target_group: elbv2.ApplicationTargetGroup
             # green_target_group: elbv2.ApplicationTargetGroup
             # prod_listener_rule: elbv2.ApplicationListenerRule
@@ -3694,17 +3776,16 @@ class AlternateTargetProps(AlternateTargetOptions):
             service = ecs.FargateService(self, "Service",
                 cluster=cluster,
                 task_definition=task_definition,
-                deployment_strategy=ecs.DeploymentStrategy.BLUE_GREEN
+                deployment_strategy=ecs.DeploymentStrategy.LINEAR,
+                linear_configuration=ecs.TrafficShiftConfig(
+                    step_percent=10,
+                    step_bake_time=Duration.minutes(5)
+                )
             )
             
-            service.add_lifecycle_hook(ecs.DeploymentLifecycleLambdaTarget(lambda_hook, "PreScaleHook",
-                lifecycle_stages=[ecs.DeploymentLifecycleStage.PRE_SCALE_UP]
-            ))
-            
             target = service.load_balancer_target(
-                container_name="nginx",
+                container_name="web",
                 container_port=80,
-                protocol=ecs.Protocol.TCP,
                 alternate_target=ecs.AlternateTarget("AlternateTarget",
                     alternate_target_group=green_target_group,
                     production_listener=ecs.ListenerRuleConfiguration.application_listener_rule(prod_listener_rule)
@@ -5547,6 +5628,7 @@ class BaseMountPoint:
     name_mapping={
         "cluster": "cluster",
         "bake_time": "bakeTime",
+        "canary_configuration": "canaryConfiguration",
         "capacity_provider_strategies": "capacityProviderStrategies",
         "circuit_breaker": "circuitBreaker",
         "cloud_map_options": "cloudMapOptions",
@@ -5558,6 +5640,7 @@ class BaseMountPoint:
         "enable_execute_command": "enableExecuteCommand",
         "health_check_grace_period": "healthCheckGracePeriod",
         "lifecycle_hooks": "lifecycleHooks",
+        "linear_configuration": "linearConfiguration",
         "max_healthy_percent": "maxHealthyPercent",
         "min_healthy_percent": "minHealthyPercent",
         "propagate_tags": "propagateTags",
@@ -5573,6 +5656,7 @@ class BaseServiceOptions:
         *,
         cluster: "ICluster",
         bake_time: typing.Optional["_Duration_4839e8c3"] = None,
+        canary_configuration: typing.Optional[typing.Union["TrafficShiftConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         capacity_provider_strategies: typing.Optional[typing.Sequence[typing.Union["CapacityProviderStrategy", typing.Dict[builtins.str, typing.Any]]]] = None,
         circuit_breaker: typing.Optional[typing.Union["DeploymentCircuitBreaker", typing.Dict[builtins.str, typing.Any]]] = None,
         cloud_map_options: typing.Optional[typing.Union["CloudMapOptions", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -5584,6 +5668,7 @@ class BaseServiceOptions:
         enable_execute_command: typing.Optional[builtins.bool] = None,
         health_check_grace_period: typing.Optional["_Duration_4839e8c3"] = None,
         lifecycle_hooks: typing.Optional[typing.Sequence["IDeploymentLifecycleHookTarget"]] = None,
+        linear_configuration: typing.Optional[typing.Union["TrafficShiftConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         max_healthy_percent: typing.Optional[jsii.Number] = None,
         min_healthy_percent: typing.Optional[jsii.Number] = None,
         propagate_tags: typing.Optional["PropagatedTagSource"] = None,
@@ -5596,6 +5681,7 @@ class BaseServiceOptions:
 
         :param cluster: The name of the cluster that hosts the service.
         :param bake_time: bake time minutes for service. Default: - none
+        :param canary_configuration: Configuration for canary deployment strategy. Only valid when deploymentStrategy is set to CANARY. Default: - no canary configuration
         :param capacity_provider_strategies: A list of Capacity Provider strategies used to place a service. Default: - undefined
         :param circuit_breaker: Whether to enable the deployment circuit breaker. If this property is defined, circuit breaker will be implicitly enabled. Default: - disabled
         :param cloud_map_options: The options for configuring an Amazon ECS service to use service discovery. Default: - AWS Cloud Map service discovery is not enabled.
@@ -5607,6 +5693,7 @@ class BaseServiceOptions:
         :param enable_execute_command: Whether to enable the ability to execute into a container. Default: - undefined
         :param health_check_grace_period: The period of time, in seconds, that the Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing target health checks after a task has first started. Default: - defaults to 60 seconds if at least one load balancer is in-use and it is not already set
         :param lifecycle_hooks: The lifecycle hooks to execute during deployment stages. Default: - none;
+        :param linear_configuration: Configuration for linear deployment strategy. Only valid when deploymentStrategy is set to LINEAR. Default: - no linear configuration
         :param max_healthy_percent: The maximum number of tasks, specified as a percentage of the Amazon ECS service's DesiredCount value, that can run in a service during a deployment. Default: - 100 if daemon, otherwise 200
         :param min_healthy_percent: The minimum number of tasks, specified as a percentage of the Amazon ECS service's DesiredCount value, that must continue to run and remain healthy during a deployment. Default: - 0 if daemon, otherwise 50
         :param propagate_tags: Specifies whether to propagate the tags from the task definition or the service to the tasks in the service. Valid values are: PropagatedTagSource.SERVICE, PropagatedTagSource.TASK_DEFINITION or PropagatedTagSource.NONE Default: PropagatedTagSource.NONE
@@ -5642,6 +5729,10 @@ class BaseServiceOptions:
             
                 # the properties below are optional
                 bake_time=cdk.Duration.minutes(30),
+                canary_configuration=ecs.TrafficShiftConfig(
+                    step_bake_time=cdk.Duration.minutes(30),
+                    step_percent=123
+                ),
                 capacity_provider_strategies=[ecs.CapacityProviderStrategy(
                     capacity_provider="capacityProvider",
             
@@ -5677,6 +5768,10 @@ class BaseServiceOptions:
                 enable_execute_command=False,
                 health_check_grace_period=cdk.Duration.minutes(30),
                 lifecycle_hooks=[deployment_lifecycle_hook_target],
+                linear_configuration=ecs.TrafficShiftConfig(
+                    step_bake_time=cdk.Duration.minutes(30),
+                    step_percent=123
+                ),
                 max_healthy_percent=123,
                 min_healthy_percent=123,
                 propagate_tags=ecs.PropagatedTagSource.SERVICE,
@@ -5705,6 +5800,8 @@ class BaseServiceOptions:
                 volume_configurations=[service_managed_volume]
             )
         '''
+        if isinstance(canary_configuration, dict):
+            canary_configuration = TrafficShiftConfig(**canary_configuration)
         if isinstance(circuit_breaker, dict):
             circuit_breaker = DeploymentCircuitBreaker(**circuit_breaker)
         if isinstance(cloud_map_options, dict):
@@ -5713,12 +5810,15 @@ class BaseServiceOptions:
             deployment_alarms = DeploymentAlarmConfig(**deployment_alarms)
         if isinstance(deployment_controller, dict):
             deployment_controller = DeploymentController(**deployment_controller)
+        if isinstance(linear_configuration, dict):
+            linear_configuration = TrafficShiftConfig(**linear_configuration)
         if isinstance(service_connect_configuration, dict):
             service_connect_configuration = ServiceConnectProps(**service_connect_configuration)
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c2e0ba28c74987301a54b0d197b791a6a94084b5f40d15304ffabf113b3f7daa)
             check_type(argname="argument cluster", value=cluster, expected_type=type_hints["cluster"])
             check_type(argname="argument bake_time", value=bake_time, expected_type=type_hints["bake_time"])
+            check_type(argname="argument canary_configuration", value=canary_configuration, expected_type=type_hints["canary_configuration"])
             check_type(argname="argument capacity_provider_strategies", value=capacity_provider_strategies, expected_type=type_hints["capacity_provider_strategies"])
             check_type(argname="argument circuit_breaker", value=circuit_breaker, expected_type=type_hints["circuit_breaker"])
             check_type(argname="argument cloud_map_options", value=cloud_map_options, expected_type=type_hints["cloud_map_options"])
@@ -5730,6 +5830,7 @@ class BaseServiceOptions:
             check_type(argname="argument enable_execute_command", value=enable_execute_command, expected_type=type_hints["enable_execute_command"])
             check_type(argname="argument health_check_grace_period", value=health_check_grace_period, expected_type=type_hints["health_check_grace_period"])
             check_type(argname="argument lifecycle_hooks", value=lifecycle_hooks, expected_type=type_hints["lifecycle_hooks"])
+            check_type(argname="argument linear_configuration", value=linear_configuration, expected_type=type_hints["linear_configuration"])
             check_type(argname="argument max_healthy_percent", value=max_healthy_percent, expected_type=type_hints["max_healthy_percent"])
             check_type(argname="argument min_healthy_percent", value=min_healthy_percent, expected_type=type_hints["min_healthy_percent"])
             check_type(argname="argument propagate_tags", value=propagate_tags, expected_type=type_hints["propagate_tags"])
@@ -5742,6 +5843,8 @@ class BaseServiceOptions:
         }
         if bake_time is not None:
             self._values["bake_time"] = bake_time
+        if canary_configuration is not None:
+            self._values["canary_configuration"] = canary_configuration
         if capacity_provider_strategies is not None:
             self._values["capacity_provider_strategies"] = capacity_provider_strategies
         if circuit_breaker is not None:
@@ -5764,6 +5867,8 @@ class BaseServiceOptions:
             self._values["health_check_grace_period"] = health_check_grace_period
         if lifecycle_hooks is not None:
             self._values["lifecycle_hooks"] = lifecycle_hooks
+        if linear_configuration is not None:
+            self._values["linear_configuration"] = linear_configuration
         if max_healthy_percent is not None:
             self._values["max_healthy_percent"] = max_healthy_percent
         if min_healthy_percent is not None:
@@ -5794,6 +5899,17 @@ class BaseServiceOptions:
         '''
         result = self._values.get("bake_time")
         return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
+
+    @builtins.property
+    def canary_configuration(self) -> typing.Optional["TrafficShiftConfig"]:
+        '''Configuration for canary deployment strategy.
+
+        Only valid when deploymentStrategy is set to CANARY.
+
+        :default: - no canary configuration
+        '''
+        result = self._values.get("canary_configuration")
+        return typing.cast(typing.Optional["TrafficShiftConfig"], result)
 
     @builtins.property
     def capacity_provider_strategies(
@@ -5909,6 +6025,17 @@ class BaseServiceOptions:
         '''
         result = self._values.get("lifecycle_hooks")
         return typing.cast(typing.Optional[typing.List["IDeploymentLifecycleHookTarget"]], result)
+
+    @builtins.property
+    def linear_configuration(self) -> typing.Optional["TrafficShiftConfig"]:
+        '''Configuration for linear deployment strategy.
+
+        Only valid when deploymentStrategy is set to LINEAR.
+
+        :default: - no linear configuration
+        '''
+        result = self._values.get("linear_configuration")
+        return typing.cast(typing.Optional["TrafficShiftConfig"], result)
 
     @builtins.property
     def max_healthy_percent(self) -> typing.Optional[jsii.Number]:
@@ -6001,6 +6128,7 @@ class BaseServiceOptions:
     name_mapping={
         "cluster": "cluster",
         "bake_time": "bakeTime",
+        "canary_configuration": "canaryConfiguration",
         "capacity_provider_strategies": "capacityProviderStrategies",
         "circuit_breaker": "circuitBreaker",
         "cloud_map_options": "cloudMapOptions",
@@ -6012,6 +6140,7 @@ class BaseServiceOptions:
         "enable_execute_command": "enableExecuteCommand",
         "health_check_grace_period": "healthCheckGracePeriod",
         "lifecycle_hooks": "lifecycleHooks",
+        "linear_configuration": "linearConfiguration",
         "max_healthy_percent": "maxHealthyPercent",
         "min_healthy_percent": "minHealthyPercent",
         "propagate_tags": "propagateTags",
@@ -6028,6 +6157,7 @@ class BaseServiceProps(BaseServiceOptions):
         *,
         cluster: "ICluster",
         bake_time: typing.Optional["_Duration_4839e8c3"] = None,
+        canary_configuration: typing.Optional[typing.Union["TrafficShiftConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         capacity_provider_strategies: typing.Optional[typing.Sequence[typing.Union["CapacityProviderStrategy", typing.Dict[builtins.str, typing.Any]]]] = None,
         circuit_breaker: typing.Optional[typing.Union["DeploymentCircuitBreaker", typing.Dict[builtins.str, typing.Any]]] = None,
         cloud_map_options: typing.Optional[typing.Union["CloudMapOptions", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -6039,6 +6169,7 @@ class BaseServiceProps(BaseServiceOptions):
         enable_execute_command: typing.Optional[builtins.bool] = None,
         health_check_grace_period: typing.Optional["_Duration_4839e8c3"] = None,
         lifecycle_hooks: typing.Optional[typing.Sequence["IDeploymentLifecycleHookTarget"]] = None,
+        linear_configuration: typing.Optional[typing.Union["TrafficShiftConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         max_healthy_percent: typing.Optional[jsii.Number] = None,
         min_healthy_percent: typing.Optional[jsii.Number] = None,
         propagate_tags: typing.Optional["PropagatedTagSource"] = None,
@@ -6052,6 +6183,7 @@ class BaseServiceProps(BaseServiceOptions):
 
         :param cluster: The name of the cluster that hosts the service.
         :param bake_time: bake time minutes for service. Default: - none
+        :param canary_configuration: Configuration for canary deployment strategy. Only valid when deploymentStrategy is set to CANARY. Default: - no canary configuration
         :param capacity_provider_strategies: A list of Capacity Provider strategies used to place a service. Default: - undefined
         :param circuit_breaker: Whether to enable the deployment circuit breaker. If this property is defined, circuit breaker will be implicitly enabled. Default: - disabled
         :param cloud_map_options: The options for configuring an Amazon ECS service to use service discovery. Default: - AWS Cloud Map service discovery is not enabled.
@@ -6063,6 +6195,7 @@ class BaseServiceProps(BaseServiceOptions):
         :param enable_execute_command: Whether to enable the ability to execute into a container. Default: - undefined
         :param health_check_grace_period: The period of time, in seconds, that the Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing target health checks after a task has first started. Default: - defaults to 60 seconds if at least one load balancer is in-use and it is not already set
         :param lifecycle_hooks: The lifecycle hooks to execute during deployment stages. Default: - none;
+        :param linear_configuration: Configuration for linear deployment strategy. Only valid when deploymentStrategy is set to LINEAR. Default: - no linear configuration
         :param max_healthy_percent: The maximum number of tasks, specified as a percentage of the Amazon ECS service's DesiredCount value, that can run in a service during a deployment. Default: - 100 if daemon, otherwise 200
         :param min_healthy_percent: The minimum number of tasks, specified as a percentage of the Amazon ECS service's DesiredCount value, that must continue to run and remain healthy during a deployment. Default: - 0 if daemon, otherwise 50
         :param propagate_tags: Specifies whether to propagate the tags from the task definition or the service to the tasks in the service. Valid values are: PropagatedTagSource.SERVICE, PropagatedTagSource.TASK_DEFINITION or PropagatedTagSource.NONE Default: PropagatedTagSource.NONE
@@ -6100,6 +6233,10 @@ class BaseServiceProps(BaseServiceOptions):
             
                 # the properties below are optional
                 bake_time=cdk.Duration.minutes(30),
+                canary_configuration=ecs.TrafficShiftConfig(
+                    step_bake_time=cdk.Duration.minutes(30),
+                    step_percent=123
+                ),
                 capacity_provider_strategies=[ecs.CapacityProviderStrategy(
                     capacity_provider="capacityProvider",
             
@@ -6135,6 +6272,10 @@ class BaseServiceProps(BaseServiceOptions):
                 enable_execute_command=False,
                 health_check_grace_period=cdk.Duration.minutes(30),
                 lifecycle_hooks=[deployment_lifecycle_hook_target],
+                linear_configuration=ecs.TrafficShiftConfig(
+                    step_bake_time=cdk.Duration.minutes(30),
+                    step_percent=123
+                ),
                 max_healthy_percent=123,
                 min_healthy_percent=123,
                 propagate_tags=ecs.PropagatedTagSource.SERVICE,
@@ -6163,6 +6304,8 @@ class BaseServiceProps(BaseServiceOptions):
                 volume_configurations=[service_managed_volume]
             )
         '''
+        if isinstance(canary_configuration, dict):
+            canary_configuration = TrafficShiftConfig(**canary_configuration)
         if isinstance(circuit_breaker, dict):
             circuit_breaker = DeploymentCircuitBreaker(**circuit_breaker)
         if isinstance(cloud_map_options, dict):
@@ -6171,12 +6314,15 @@ class BaseServiceProps(BaseServiceOptions):
             deployment_alarms = DeploymentAlarmConfig(**deployment_alarms)
         if isinstance(deployment_controller, dict):
             deployment_controller = DeploymentController(**deployment_controller)
+        if isinstance(linear_configuration, dict):
+            linear_configuration = TrafficShiftConfig(**linear_configuration)
         if isinstance(service_connect_configuration, dict):
             service_connect_configuration = ServiceConnectProps(**service_connect_configuration)
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3ecfd95265b873c2042a9d5cb8465a48f9e325e2271c18461e2b266333563d84)
             check_type(argname="argument cluster", value=cluster, expected_type=type_hints["cluster"])
             check_type(argname="argument bake_time", value=bake_time, expected_type=type_hints["bake_time"])
+            check_type(argname="argument canary_configuration", value=canary_configuration, expected_type=type_hints["canary_configuration"])
             check_type(argname="argument capacity_provider_strategies", value=capacity_provider_strategies, expected_type=type_hints["capacity_provider_strategies"])
             check_type(argname="argument circuit_breaker", value=circuit_breaker, expected_type=type_hints["circuit_breaker"])
             check_type(argname="argument cloud_map_options", value=cloud_map_options, expected_type=type_hints["cloud_map_options"])
@@ -6188,6 +6334,7 @@ class BaseServiceProps(BaseServiceOptions):
             check_type(argname="argument enable_execute_command", value=enable_execute_command, expected_type=type_hints["enable_execute_command"])
             check_type(argname="argument health_check_grace_period", value=health_check_grace_period, expected_type=type_hints["health_check_grace_period"])
             check_type(argname="argument lifecycle_hooks", value=lifecycle_hooks, expected_type=type_hints["lifecycle_hooks"])
+            check_type(argname="argument linear_configuration", value=linear_configuration, expected_type=type_hints["linear_configuration"])
             check_type(argname="argument max_healthy_percent", value=max_healthy_percent, expected_type=type_hints["max_healthy_percent"])
             check_type(argname="argument min_healthy_percent", value=min_healthy_percent, expected_type=type_hints["min_healthy_percent"])
             check_type(argname="argument propagate_tags", value=propagate_tags, expected_type=type_hints["propagate_tags"])
@@ -6202,6 +6349,8 @@ class BaseServiceProps(BaseServiceOptions):
         }
         if bake_time is not None:
             self._values["bake_time"] = bake_time
+        if canary_configuration is not None:
+            self._values["canary_configuration"] = canary_configuration
         if capacity_provider_strategies is not None:
             self._values["capacity_provider_strategies"] = capacity_provider_strategies
         if circuit_breaker is not None:
@@ -6224,6 +6373,8 @@ class BaseServiceProps(BaseServiceOptions):
             self._values["health_check_grace_period"] = health_check_grace_period
         if lifecycle_hooks is not None:
             self._values["lifecycle_hooks"] = lifecycle_hooks
+        if linear_configuration is not None:
+            self._values["linear_configuration"] = linear_configuration
         if max_healthy_percent is not None:
             self._values["max_healthy_percent"] = max_healthy_percent
         if min_healthy_percent is not None:
@@ -6254,6 +6405,17 @@ class BaseServiceProps(BaseServiceOptions):
         '''
         result = self._values.get("bake_time")
         return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
+
+    @builtins.property
+    def canary_configuration(self) -> typing.Optional["TrafficShiftConfig"]:
+        '''Configuration for canary deployment strategy.
+
+        Only valid when deploymentStrategy is set to CANARY.
+
+        :default: - no canary configuration
+        '''
+        result = self._values.get("canary_configuration")
+        return typing.cast(typing.Optional["TrafficShiftConfig"], result)
 
     @builtins.property
     def capacity_provider_strategies(
@@ -6369,6 +6531,17 @@ class BaseServiceProps(BaseServiceOptions):
         '''
         result = self._values.get("lifecycle_hooks")
         return typing.cast(typing.Optional[typing.List["IDeploymentLifecycleHookTarget"]], result)
+
+    @builtins.property
+    def linear_configuration(self) -> typing.Optional["TrafficShiftConfig"]:
+        '''Configuration for linear deployment strategy.
+
+        Only valid when deploymentStrategy is set to LINEAR.
+
+        :default: - no linear configuration
+        '''
+        result = self._values.get("linear_configuration")
+        return typing.cast(typing.Optional["TrafficShiftConfig"], result)
 
     @builtins.property
     def max_healthy_percent(self) -> typing.Optional[jsii.Number]:
@@ -6798,6 +6971,70 @@ class Capability(enum.Enum):
     WAKE_ALARM = "WAKE_ALARM"
 
 
+@jsii.enum(jsii_type="aws-cdk-lib.aws_ecs.CapacityOptionType")
+class CapacityOptionType(enum.Enum):
+    '''The capacity option type for instances launched by a Managed Instances Capacity Provider.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        # vpc: ec2.Vpc
+        
+        
+        cluster = ecs.Cluster(self, "Cluster", vpc=vpc)
+        
+        security_group = ec2.SecurityGroup(self, "SecurityGroup",
+            vpc=vpc,
+            description="Security group for managed instances"
+        )
+        
+        mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProvider",
+            capacity_option_type=ecs.CapacityOptionType.SPOT,
+            subnets=vpc.private_subnets,
+            security_groups=[security_group],
+            instance_requirements=ec2.InstanceRequirementsConfig(
+                v_cpu_count_min=1,
+                memory_min=Size.gibibytes(2)
+            )
+        )
+        
+        # Optionally configure security group rules using IConnectable interface
+        mi_capacity_provider.connections.allow_from(ec2.Peer.ipv4(vpc.vpc_cidr_block), ec2.Port.tcp(80))
+        
+        # Add the capacity provider to the cluster
+        cluster.add_managed_instances_capacity_provider(mi_capacity_provider)
+        
+        task_definition = ecs.TaskDefinition(self, "TaskDef",
+            memory_mi_b="512",
+            cpu="256",
+            network_mode=ecs.NetworkMode.AWS_VPC,
+            compatibility=ecs.Compatibility.MANAGED_INSTANCES
+        )
+        
+        task_definition.add_container("web",
+            image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
+            memory_reservation_mi_b=256
+        )
+        
+        ecs.FargateService(self, "FargateService",
+            cluster=cluster,
+            task_definition=task_definition,
+            min_healthy_percent=100,
+            capacity_provider_strategies=[ecs.CapacityProviderStrategy(
+                capacity_provider=mi_capacity_provider.capacity_provider_name,
+                weight=1
+            )
+            ]
+        )
+    '''
+
+    ON_DEMAND = "ON_DEMAND"
+    '''Launch instances as On-Demand instances.'''
+    SPOT = "SPOT"
+    '''Launch instances as Spot instances.'''
+
+
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_ecs.CapacityProviderStrategy",
     jsii_struct_bases=[],
@@ -6941,6 +7178,7 @@ class CfnCapacityProvider(
         
                     # the properties below are optional
                     capacity_option_type="capacityOptionType",
+                    fips_enabled=False,
                     instance_requirements=ecs.CfnCapacityProvider.InstanceRequirementsRequestProperty(
                         memory_mi_b=ecs.CfnCapacityProvider.MemoryMiBRequestProperty(
                             min=123,
@@ -7649,6 +7887,7 @@ class CfnCapacityProvider(
             "ec2_instance_profile_arn": "ec2InstanceProfileArn",
             "network_configuration": "networkConfiguration",
             "capacity_option_type": "capacityOptionType",
+            "fips_enabled": "fipsEnabled",
             "instance_requirements": "instanceRequirements",
             "monitoring": "monitoring",
             "storage_configuration": "storageConfiguration",
@@ -7661,6 +7900,7 @@ class CfnCapacityProvider(
             ec2_instance_profile_arn: builtins.str,
             network_configuration: typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapacityProvider.ManagedInstancesNetworkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
             capacity_option_type: typing.Optional[builtins.str] = None,
+            fips_enabled: typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]] = None,
             instance_requirements: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapacityProvider.InstanceRequirementsRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             monitoring: typing.Optional[builtins.str] = None,
             storage_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnCapacityProvider.ManagedInstancesStorageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -7672,6 +7912,7 @@ class CfnCapacityProvider(
             :param ec2_instance_profile_arn: The Amazon Resource Name (ARN) of the instance profile that Amazon ECS applies to Amazon ECS Managed Instances. This instance profile must include the necessary permissions for your tasks to access AWS services and resources. For more information, see `Amazon ECS instance profile for Managed Instances <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/managed-instances-instance-profile.html>`_ in the *Amazon ECS Developer Guide* .
             :param network_configuration: The network configuration for Amazon ECS Managed Instances. This specifies the subnets and security groups that instances use for network connectivity.
             :param capacity_option_type: The capacity option type. This determines whether Amazon ECS launches On-Demand or Spot Instances for your managed instance capacity provider. Valid values are: - ``ON_DEMAND`` - Launches standard On-Demand Instances. On-Demand Instances provide predictable pricing and availability. - ``SPOT`` - Launches Spot Instances that use spare Amazon EC2 capacity at reduced cost. Spot Instances can be interrupted by Amazon EC2 with a two-minute notification when the capacity is needed back. The default is On-Demand For more information about Amazon EC2 capacity options, see `Instance purchasing options <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-purchasing-options.html>`_ in the *Amazon EC2 User Guide* .
+            :param fips_enabled: 
             :param instance_requirements: The instance requirements. You can specify:. - The instance types - Instance requirements such as vCPU count, memory, network performance, and accelerator specifications Amazon ECS automatically selects the instances that match the specified criteria.
             :param monitoring: CloudWatch provides two categories of monitoring: basic monitoring and detailed monitoring. By default, your managed instance is configured for basic monitoring. You can optionally enable detailed monitoring to help you more quickly identify and act on operational issues. You can enable or turn off detailed monitoring at launch or when the managed instance is running or stopped. For more information, see `Detailed monitoring for Amazon ECS Managed Instances <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/detailed-monitoring-managed-instances.html>`_ in the Amazon ECS Developer Guide.
             :param storage_configuration: The storage configuration for Amazon ECS Managed Instances. This defines the root volume size and type for the instances.
@@ -7694,6 +7935,7 @@ class CfnCapacityProvider(
                 
                     # the properties below are optional
                     capacity_option_type="capacityOptionType",
+                    fips_enabled=False,
                     instance_requirements=ecs.CfnCapacityProvider.InstanceRequirementsRequestProperty(
                         memory_mi_b=ecs.CfnCapacityProvider.MemoryMiBRequestProperty(
                             min=123,
@@ -7764,6 +8006,7 @@ class CfnCapacityProvider(
                 check_type(argname="argument ec2_instance_profile_arn", value=ec2_instance_profile_arn, expected_type=type_hints["ec2_instance_profile_arn"])
                 check_type(argname="argument network_configuration", value=network_configuration, expected_type=type_hints["network_configuration"])
                 check_type(argname="argument capacity_option_type", value=capacity_option_type, expected_type=type_hints["capacity_option_type"])
+                check_type(argname="argument fips_enabled", value=fips_enabled, expected_type=type_hints["fips_enabled"])
                 check_type(argname="argument instance_requirements", value=instance_requirements, expected_type=type_hints["instance_requirements"])
                 check_type(argname="argument monitoring", value=monitoring, expected_type=type_hints["monitoring"])
                 check_type(argname="argument storage_configuration", value=storage_configuration, expected_type=type_hints["storage_configuration"])
@@ -7773,6 +8016,8 @@ class CfnCapacityProvider(
             }
             if capacity_option_type is not None:
                 self._values["capacity_option_type"] = capacity_option_type
+            if fips_enabled is not None:
+                self._values["fips_enabled"] = fips_enabled
             if instance_requirements is not None:
                 self._values["instance_requirements"] = instance_requirements
             if monitoring is not None:
@@ -7827,6 +8072,16 @@ class CfnCapacityProvider(
             '''
             result = self._values.get("capacity_option_type")
             return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def fips_enabled(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-instancelaunchtemplate.html#cfn-ecs-capacityprovider-instancelaunchtemplate-fipsenabled
+            '''
+            result = self._values.get("fips_enabled")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, "_IResolvable_da3f097b"]], result)
 
         @builtins.property
         def instance_requirements(
@@ -8539,6 +8794,7 @@ class CfnCapacityProvider(
                 
                         # the properties below are optional
                         capacity_option_type="capacityOptionType",
+                        fips_enabled=False,
                         instance_requirements=ecs.CfnCapacityProvider.InstanceRequirementsRequestProperty(
                             memory_mi_b=ecs.CfnCapacityProvider.MemoryMiBRequestProperty(
                                 min=123,
@@ -9409,6 +9665,7 @@ class CfnCapacityProviderProps:
             
                         # the properties below are optional
                         capacity_option_type="capacityOptionType",
+                        fips_enabled=False,
                         instance_requirements=ecs.CfnCapacityProvider.InstanceRequirementsRequestProperty(
                             memory_mi_b=ecs.CfnCapacityProvider.MemoryMiBRequestProperty(
                                 min=123,
@@ -30486,11 +30743,8 @@ class DeploymentStrategy(enum.Enum):
 
     Example::
 
-        import aws_cdk.aws_lambda as lambda_
-        
         # cluster: ecs.Cluster
         # task_definition: ecs.TaskDefinition
-        # lambda_hook: lambda.Function
         # blue_target_group: elbv2.ApplicationTargetGroup
         # green_target_group: elbv2.ApplicationTargetGroup
         # prod_listener_rule: elbv2.ApplicationListenerRule
@@ -30499,17 +30753,16 @@ class DeploymentStrategy(enum.Enum):
         service = ecs.FargateService(self, "Service",
             cluster=cluster,
             task_definition=task_definition,
-            deployment_strategy=ecs.DeploymentStrategy.BLUE_GREEN
+            deployment_strategy=ecs.DeploymentStrategy.LINEAR,
+            linear_configuration=ecs.TrafficShiftConfig(
+                step_percent=10,
+                step_bake_time=Duration.minutes(5)
+            )
         )
         
-        service.add_lifecycle_hook(ecs.DeploymentLifecycleLambdaTarget(lambda_hook, "PreScaleHook",
-            lifecycle_stages=[ecs.DeploymentLifecycleStage.PRE_SCALE_UP]
-        ))
-        
         target = service.load_balancer_target(
-            container_name="nginx",
+            container_name="web",
             container_port=80,
-            protocol=ecs.Protocol.TCP,
             alternate_target=ecs.AlternateTarget("AlternateTarget",
                 alternate_target_group=green_target_group,
                 production_listener=ecs.ListenerRuleConfiguration.application_listener_rule(prod_listener_rule)
@@ -30523,6 +30776,10 @@ class DeploymentStrategy(enum.Enum):
     '''Rolling update deployment.'''
     BLUE_GREEN = "BLUE_GREEN"
     '''Blue/green deployment.'''
+    LINEAR = "LINEAR"
+    '''Linear deployment with progressive traffic shifting.'''
+    CANARY = "CANARY"
+    '''Canary deployment with fixed traffic percentage testing.'''
 
 
 @jsii.data_type(
@@ -31128,6 +31385,7 @@ class Ec2ServiceAttributes:
     name_mapping={
         "cluster": "cluster",
         "bake_time": "bakeTime",
+        "canary_configuration": "canaryConfiguration",
         "capacity_provider_strategies": "capacityProviderStrategies",
         "circuit_breaker": "circuitBreaker",
         "cloud_map_options": "cloudMapOptions",
@@ -31139,6 +31397,7 @@ class Ec2ServiceAttributes:
         "enable_execute_command": "enableExecuteCommand",
         "health_check_grace_period": "healthCheckGracePeriod",
         "lifecycle_hooks": "lifecycleHooks",
+        "linear_configuration": "linearConfiguration",
         "max_healthy_percent": "maxHealthyPercent",
         "min_healthy_percent": "minHealthyPercent",
         "propagate_tags": "propagateTags",
@@ -31162,6 +31421,7 @@ class Ec2ServiceProps(BaseServiceOptions):
         *,
         cluster: "ICluster",
         bake_time: typing.Optional["_Duration_4839e8c3"] = None,
+        canary_configuration: typing.Optional[typing.Union["TrafficShiftConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         capacity_provider_strategies: typing.Optional[typing.Sequence[typing.Union["CapacityProviderStrategy", typing.Dict[builtins.str, typing.Any]]]] = None,
         circuit_breaker: typing.Optional[typing.Union["DeploymentCircuitBreaker", typing.Dict[builtins.str, typing.Any]]] = None,
         cloud_map_options: typing.Optional[typing.Union["CloudMapOptions", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -31173,6 +31433,7 @@ class Ec2ServiceProps(BaseServiceOptions):
         enable_execute_command: typing.Optional[builtins.bool] = None,
         health_check_grace_period: typing.Optional["_Duration_4839e8c3"] = None,
         lifecycle_hooks: typing.Optional[typing.Sequence["IDeploymentLifecycleHookTarget"]] = None,
+        linear_configuration: typing.Optional[typing.Union["TrafficShiftConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         max_healthy_percent: typing.Optional[jsii.Number] = None,
         min_healthy_percent: typing.Optional[jsii.Number] = None,
         propagate_tags: typing.Optional["PropagatedTagSource"] = None,
@@ -31193,6 +31454,7 @@ class Ec2ServiceProps(BaseServiceOptions):
 
         :param cluster: The name of the cluster that hosts the service.
         :param bake_time: bake time minutes for service. Default: - none
+        :param canary_configuration: Configuration for canary deployment strategy. Only valid when deploymentStrategy is set to CANARY. Default: - no canary configuration
         :param capacity_provider_strategies: A list of Capacity Provider strategies used to place a service. Default: - undefined
         :param circuit_breaker: Whether to enable the deployment circuit breaker. If this property is defined, circuit breaker will be implicitly enabled. Default: - disabled
         :param cloud_map_options: The options for configuring an Amazon ECS service to use service discovery. Default: - AWS Cloud Map service discovery is not enabled.
@@ -31204,6 +31466,7 @@ class Ec2ServiceProps(BaseServiceOptions):
         :param enable_execute_command: Whether to enable the ability to execute into a container. Default: - undefined
         :param health_check_grace_period: The period of time, in seconds, that the Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing target health checks after a task has first started. Default: - defaults to 60 seconds if at least one load balancer is in-use and it is not already set
         :param lifecycle_hooks: The lifecycle hooks to execute during deployment stages. Default: - none;
+        :param linear_configuration: Configuration for linear deployment strategy. Only valid when deploymentStrategy is set to LINEAR. Default: - no linear configuration
         :param max_healthy_percent: The maximum number of tasks, specified as a percentage of the Amazon ECS service's DesiredCount value, that can run in a service during a deployment. Default: - 100 if daemon, otherwise 200
         :param min_healthy_percent: The minimum number of tasks, specified as a percentage of the Amazon ECS service's DesiredCount value, that must continue to run and remain healthy during a deployment. Default: - 0 if daemon, otherwise 50
         :param propagate_tags: Specifies whether to propagate the tags from the task definition or the service to the tasks in the service. Valid values are: PropagatedTagSource.SERVICE, PropagatedTagSource.TASK_DEFINITION or PropagatedTagSource.NONE Default: PropagatedTagSource.NONE
@@ -31250,6 +31513,8 @@ class Ec2ServiceProps(BaseServiceOptions):
                 min_healthy_percent=100
             )
         '''
+        if isinstance(canary_configuration, dict):
+            canary_configuration = TrafficShiftConfig(**canary_configuration)
         if isinstance(circuit_breaker, dict):
             circuit_breaker = DeploymentCircuitBreaker(**circuit_breaker)
         if isinstance(cloud_map_options, dict):
@@ -31258,6 +31523,8 @@ class Ec2ServiceProps(BaseServiceOptions):
             deployment_alarms = DeploymentAlarmConfig(**deployment_alarms)
         if isinstance(deployment_controller, dict):
             deployment_controller = DeploymentController(**deployment_controller)
+        if isinstance(linear_configuration, dict):
+            linear_configuration = TrafficShiftConfig(**linear_configuration)
         if isinstance(service_connect_configuration, dict):
             service_connect_configuration = ServiceConnectProps(**service_connect_configuration)
         if isinstance(vpc_subnets, dict):
@@ -31266,6 +31533,7 @@ class Ec2ServiceProps(BaseServiceOptions):
             type_hints = typing.get_type_hints(_typecheckingstub__95634258086aa3448fbdfd9896017a2cbeb858f382deb61186bb9e22b1ccd366)
             check_type(argname="argument cluster", value=cluster, expected_type=type_hints["cluster"])
             check_type(argname="argument bake_time", value=bake_time, expected_type=type_hints["bake_time"])
+            check_type(argname="argument canary_configuration", value=canary_configuration, expected_type=type_hints["canary_configuration"])
             check_type(argname="argument capacity_provider_strategies", value=capacity_provider_strategies, expected_type=type_hints["capacity_provider_strategies"])
             check_type(argname="argument circuit_breaker", value=circuit_breaker, expected_type=type_hints["circuit_breaker"])
             check_type(argname="argument cloud_map_options", value=cloud_map_options, expected_type=type_hints["cloud_map_options"])
@@ -31277,6 +31545,7 @@ class Ec2ServiceProps(BaseServiceOptions):
             check_type(argname="argument enable_execute_command", value=enable_execute_command, expected_type=type_hints["enable_execute_command"])
             check_type(argname="argument health_check_grace_period", value=health_check_grace_period, expected_type=type_hints["health_check_grace_period"])
             check_type(argname="argument lifecycle_hooks", value=lifecycle_hooks, expected_type=type_hints["lifecycle_hooks"])
+            check_type(argname="argument linear_configuration", value=linear_configuration, expected_type=type_hints["linear_configuration"])
             check_type(argname="argument max_healthy_percent", value=max_healthy_percent, expected_type=type_hints["max_healthy_percent"])
             check_type(argname="argument min_healthy_percent", value=min_healthy_percent, expected_type=type_hints["min_healthy_percent"])
             check_type(argname="argument propagate_tags", value=propagate_tags, expected_type=type_hints["propagate_tags"])
@@ -31298,6 +31567,8 @@ class Ec2ServiceProps(BaseServiceOptions):
         }
         if bake_time is not None:
             self._values["bake_time"] = bake_time
+        if canary_configuration is not None:
+            self._values["canary_configuration"] = canary_configuration
         if capacity_provider_strategies is not None:
             self._values["capacity_provider_strategies"] = capacity_provider_strategies
         if circuit_breaker is not None:
@@ -31320,6 +31591,8 @@ class Ec2ServiceProps(BaseServiceOptions):
             self._values["health_check_grace_period"] = health_check_grace_period
         if lifecycle_hooks is not None:
             self._values["lifecycle_hooks"] = lifecycle_hooks
+        if linear_configuration is not None:
+            self._values["linear_configuration"] = linear_configuration
         if max_healthy_percent is not None:
             self._values["max_healthy_percent"] = max_healthy_percent
         if min_healthy_percent is not None:
@@ -31364,6 +31637,17 @@ class Ec2ServiceProps(BaseServiceOptions):
         '''
         result = self._values.get("bake_time")
         return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
+
+    @builtins.property
+    def canary_configuration(self) -> typing.Optional["TrafficShiftConfig"]:
+        '''Configuration for canary deployment strategy.
+
+        Only valid when deploymentStrategy is set to CANARY.
+
+        :default: - no canary configuration
+        '''
+        result = self._values.get("canary_configuration")
+        return typing.cast(typing.Optional["TrafficShiftConfig"], result)
 
     @builtins.property
     def capacity_provider_strategies(
@@ -31479,6 +31763,17 @@ class Ec2ServiceProps(BaseServiceOptions):
         '''
         result = self._values.get("lifecycle_hooks")
         return typing.cast(typing.Optional[typing.List["IDeploymentLifecycleHookTarget"]], result)
+
+    @builtins.property
+    def linear_configuration(self) -> typing.Optional["TrafficShiftConfig"]:
+        '''Configuration for linear deployment strategy.
+
+        Only valid when deploymentStrategy is set to LINEAR.
+
+        :default: - no linear configuration
+        '''
+        result = self._values.get("linear_configuration")
+        return typing.cast(typing.Optional["TrafficShiftConfig"], result)
 
     @builtins.property
     def max_healthy_percent(self) -> typing.Optional[jsii.Number]:
@@ -33199,6 +33494,7 @@ class ExternalServiceAttributes:
     name_mapping={
         "cluster": "cluster",
         "bake_time": "bakeTime",
+        "canary_configuration": "canaryConfiguration",
         "capacity_provider_strategies": "capacityProviderStrategies",
         "circuit_breaker": "circuitBreaker",
         "cloud_map_options": "cloudMapOptions",
@@ -33210,6 +33506,7 @@ class ExternalServiceAttributes:
         "enable_execute_command": "enableExecuteCommand",
         "health_check_grace_period": "healthCheckGracePeriod",
         "lifecycle_hooks": "lifecycleHooks",
+        "linear_configuration": "linearConfiguration",
         "max_healthy_percent": "maxHealthyPercent",
         "min_healthy_percent": "minHealthyPercent",
         "propagate_tags": "propagateTags",
@@ -33228,6 +33525,7 @@ class ExternalServiceProps(BaseServiceOptions):
         *,
         cluster: "ICluster",
         bake_time: typing.Optional["_Duration_4839e8c3"] = None,
+        canary_configuration: typing.Optional[typing.Union["TrafficShiftConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         capacity_provider_strategies: typing.Optional[typing.Sequence[typing.Union["CapacityProviderStrategy", typing.Dict[builtins.str, typing.Any]]]] = None,
         circuit_breaker: typing.Optional[typing.Union["DeploymentCircuitBreaker", typing.Dict[builtins.str, typing.Any]]] = None,
         cloud_map_options: typing.Optional[typing.Union["CloudMapOptions", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -33239,6 +33537,7 @@ class ExternalServiceProps(BaseServiceOptions):
         enable_execute_command: typing.Optional[builtins.bool] = None,
         health_check_grace_period: typing.Optional["_Duration_4839e8c3"] = None,
         lifecycle_hooks: typing.Optional[typing.Sequence["IDeploymentLifecycleHookTarget"]] = None,
+        linear_configuration: typing.Optional[typing.Union["TrafficShiftConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         max_healthy_percent: typing.Optional[jsii.Number] = None,
         min_healthy_percent: typing.Optional[jsii.Number] = None,
         propagate_tags: typing.Optional["PropagatedTagSource"] = None,
@@ -33254,6 +33553,7 @@ class ExternalServiceProps(BaseServiceOptions):
 
         :param cluster: The name of the cluster that hosts the service.
         :param bake_time: bake time minutes for service. Default: - none
+        :param canary_configuration: Configuration for canary deployment strategy. Only valid when deploymentStrategy is set to CANARY. Default: - no canary configuration
         :param capacity_provider_strategies: A list of Capacity Provider strategies used to place a service. Default: - undefined
         :param circuit_breaker: Whether to enable the deployment circuit breaker. If this property is defined, circuit breaker will be implicitly enabled. Default: - disabled
         :param cloud_map_options: The options for configuring an Amazon ECS service to use service discovery. Default: - AWS Cloud Map service discovery is not enabled.
@@ -33265,6 +33565,7 @@ class ExternalServiceProps(BaseServiceOptions):
         :param enable_execute_command: Whether to enable the ability to execute into a container. Default: - undefined
         :param health_check_grace_period: The period of time, in seconds, that the Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing target health checks after a task has first started. Default: - defaults to 60 seconds if at least one load balancer is in-use and it is not already set
         :param lifecycle_hooks: The lifecycle hooks to execute during deployment stages. Default: - none;
+        :param linear_configuration: Configuration for linear deployment strategy. Only valid when deploymentStrategy is set to LINEAR. Default: - no linear configuration
         :param max_healthy_percent: The maximum number of tasks, specified as a percentage of the Amazon ECS service's DesiredCount value, that can run in a service during a deployment. Default: - 100 if daemon, otherwise 200
         :param min_healthy_percent: The minimum number of tasks, specified as a percentage of the Amazon ECS service's DesiredCount value, that must continue to run and remain healthy during a deployment. Default: - 0 if daemon, otherwise 50
         :param propagate_tags: Specifies whether to propagate the tags from the task definition or the service to the tasks in the service. Valid values are: PropagatedTagSource.SERVICE, PropagatedTagSource.TASK_DEFINITION or PropagatedTagSource.NONE Default: PropagatedTagSource.NONE
@@ -33296,6 +33597,8 @@ class ExternalServiceProps(BaseServiceOptions):
                 daemon=True
             )
         '''
+        if isinstance(canary_configuration, dict):
+            canary_configuration = TrafficShiftConfig(**canary_configuration)
         if isinstance(circuit_breaker, dict):
             circuit_breaker = DeploymentCircuitBreaker(**circuit_breaker)
         if isinstance(cloud_map_options, dict):
@@ -33304,12 +33607,15 @@ class ExternalServiceProps(BaseServiceOptions):
             deployment_alarms = DeploymentAlarmConfig(**deployment_alarms)
         if isinstance(deployment_controller, dict):
             deployment_controller = DeploymentController(**deployment_controller)
+        if isinstance(linear_configuration, dict):
+            linear_configuration = TrafficShiftConfig(**linear_configuration)
         if isinstance(service_connect_configuration, dict):
             service_connect_configuration = ServiceConnectProps(**service_connect_configuration)
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3cc413964caae89bfcfbcabff8356ffe5c054f46824be99731a77b64ec052a8a)
             check_type(argname="argument cluster", value=cluster, expected_type=type_hints["cluster"])
             check_type(argname="argument bake_time", value=bake_time, expected_type=type_hints["bake_time"])
+            check_type(argname="argument canary_configuration", value=canary_configuration, expected_type=type_hints["canary_configuration"])
             check_type(argname="argument capacity_provider_strategies", value=capacity_provider_strategies, expected_type=type_hints["capacity_provider_strategies"])
             check_type(argname="argument circuit_breaker", value=circuit_breaker, expected_type=type_hints["circuit_breaker"])
             check_type(argname="argument cloud_map_options", value=cloud_map_options, expected_type=type_hints["cloud_map_options"])
@@ -33321,6 +33627,7 @@ class ExternalServiceProps(BaseServiceOptions):
             check_type(argname="argument enable_execute_command", value=enable_execute_command, expected_type=type_hints["enable_execute_command"])
             check_type(argname="argument health_check_grace_period", value=health_check_grace_period, expected_type=type_hints["health_check_grace_period"])
             check_type(argname="argument lifecycle_hooks", value=lifecycle_hooks, expected_type=type_hints["lifecycle_hooks"])
+            check_type(argname="argument linear_configuration", value=linear_configuration, expected_type=type_hints["linear_configuration"])
             check_type(argname="argument max_healthy_percent", value=max_healthy_percent, expected_type=type_hints["max_healthy_percent"])
             check_type(argname="argument min_healthy_percent", value=min_healthy_percent, expected_type=type_hints["min_healthy_percent"])
             check_type(argname="argument propagate_tags", value=propagate_tags, expected_type=type_hints["propagate_tags"])
@@ -33337,6 +33644,8 @@ class ExternalServiceProps(BaseServiceOptions):
         }
         if bake_time is not None:
             self._values["bake_time"] = bake_time
+        if canary_configuration is not None:
+            self._values["canary_configuration"] = canary_configuration
         if capacity_provider_strategies is not None:
             self._values["capacity_provider_strategies"] = capacity_provider_strategies
         if circuit_breaker is not None:
@@ -33359,6 +33668,8 @@ class ExternalServiceProps(BaseServiceOptions):
             self._values["health_check_grace_period"] = health_check_grace_period
         if lifecycle_hooks is not None:
             self._values["lifecycle_hooks"] = lifecycle_hooks
+        if linear_configuration is not None:
+            self._values["linear_configuration"] = linear_configuration
         if max_healthy_percent is not None:
             self._values["max_healthy_percent"] = max_healthy_percent
         if min_healthy_percent is not None:
@@ -33393,6 +33704,17 @@ class ExternalServiceProps(BaseServiceOptions):
         '''
         result = self._values.get("bake_time")
         return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
+
+    @builtins.property
+    def canary_configuration(self) -> typing.Optional["TrafficShiftConfig"]:
+        '''Configuration for canary deployment strategy.
+
+        Only valid when deploymentStrategy is set to CANARY.
+
+        :default: - no canary configuration
+        '''
+        result = self._values.get("canary_configuration")
+        return typing.cast(typing.Optional["TrafficShiftConfig"], result)
 
     @builtins.property
     def capacity_provider_strategies(
@@ -33508,6 +33830,17 @@ class ExternalServiceProps(BaseServiceOptions):
         '''
         result = self._values.get("lifecycle_hooks")
         return typing.cast(typing.Optional[typing.List["IDeploymentLifecycleHookTarget"]], result)
+
+    @builtins.property
+    def linear_configuration(self) -> typing.Optional["TrafficShiftConfig"]:
+        '''Configuration for linear deployment strategy.
+
+        Only valid when deploymentStrategy is set to LINEAR.
+
+        :default: - no linear configuration
+        '''
+        result = self._values.get("linear_configuration")
+        return typing.cast(typing.Optional["TrafficShiftConfig"], result)
 
     @builtins.property
     def max_healthy_percent(self) -> typing.Optional[jsii.Number]:
@@ -34093,6 +34426,7 @@ class FargateServiceAttributes:
     name_mapping={
         "cluster": "cluster",
         "bake_time": "bakeTime",
+        "canary_configuration": "canaryConfiguration",
         "capacity_provider_strategies": "capacityProviderStrategies",
         "circuit_breaker": "circuitBreaker",
         "cloud_map_options": "cloudMapOptions",
@@ -34104,6 +34438,7 @@ class FargateServiceAttributes:
         "enable_execute_command": "enableExecuteCommand",
         "health_check_grace_period": "healthCheckGracePeriod",
         "lifecycle_hooks": "lifecycleHooks",
+        "linear_configuration": "linearConfiguration",
         "max_healthy_percent": "maxHealthyPercent",
         "min_healthy_percent": "minHealthyPercent",
         "propagate_tags": "propagateTags",
@@ -34125,6 +34460,7 @@ class FargateServiceProps(BaseServiceOptions):
         *,
         cluster: "ICluster",
         bake_time: typing.Optional["_Duration_4839e8c3"] = None,
+        canary_configuration: typing.Optional[typing.Union["TrafficShiftConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         capacity_provider_strategies: typing.Optional[typing.Sequence[typing.Union["CapacityProviderStrategy", typing.Dict[builtins.str, typing.Any]]]] = None,
         circuit_breaker: typing.Optional[typing.Union["DeploymentCircuitBreaker", typing.Dict[builtins.str, typing.Any]]] = None,
         cloud_map_options: typing.Optional[typing.Union["CloudMapOptions", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -34136,6 +34472,7 @@ class FargateServiceProps(BaseServiceOptions):
         enable_execute_command: typing.Optional[builtins.bool] = None,
         health_check_grace_period: typing.Optional["_Duration_4839e8c3"] = None,
         lifecycle_hooks: typing.Optional[typing.Sequence["IDeploymentLifecycleHookTarget"]] = None,
+        linear_configuration: typing.Optional[typing.Union["TrafficShiftConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         max_healthy_percent: typing.Optional[jsii.Number] = None,
         min_healthy_percent: typing.Optional[jsii.Number] = None,
         propagate_tags: typing.Optional["PropagatedTagSource"] = None,
@@ -34154,6 +34491,7 @@ class FargateServiceProps(BaseServiceOptions):
 
         :param cluster: The name of the cluster that hosts the service.
         :param bake_time: bake time minutes for service. Default: - none
+        :param canary_configuration: Configuration for canary deployment strategy. Only valid when deploymentStrategy is set to CANARY. Default: - no canary configuration
         :param capacity_provider_strategies: A list of Capacity Provider strategies used to place a service. Default: - undefined
         :param circuit_breaker: Whether to enable the deployment circuit breaker. If this property is defined, circuit breaker will be implicitly enabled. Default: - disabled
         :param cloud_map_options: The options for configuring an Amazon ECS service to use service discovery. Default: - AWS Cloud Map service discovery is not enabled.
@@ -34165,6 +34503,7 @@ class FargateServiceProps(BaseServiceOptions):
         :param enable_execute_command: Whether to enable the ability to execute into a container. Default: - undefined
         :param health_check_grace_period: The period of time, in seconds, that the Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing target health checks after a task has first started. Default: - defaults to 60 seconds if at least one load balancer is in-use and it is not already set
         :param lifecycle_hooks: The lifecycle hooks to execute during deployment stages. Default: - none;
+        :param linear_configuration: Configuration for linear deployment strategy. Only valid when deploymentStrategy is set to LINEAR. Default: - no linear configuration
         :param max_healthy_percent: The maximum number of tasks, specified as a percentage of the Amazon ECS service's DesiredCount value, that can run in a service during a deployment. Default: - 100 if daemon, otherwise 200
         :param min_healthy_percent: The minimum number of tasks, specified as a percentage of the Amazon ECS service's DesiredCount value, that must continue to run and remain healthy during a deployment. Default: - 0 if daemon, otherwise 50
         :param propagate_tags: Specifies whether to propagate the tags from the task definition or the service to the tasks in the service. Valid values are: PropagatedTagSource.SERVICE, PropagatedTagSource.TASK_DEFINITION or PropagatedTagSource.NONE Default: PropagatedTagSource.NONE
@@ -34218,6 +34557,8 @@ class FargateServiceProps(BaseServiceOptions):
                 behavior=ecs.AlarmBehavior.FAIL_ON_ALARM
             )
         '''
+        if isinstance(canary_configuration, dict):
+            canary_configuration = TrafficShiftConfig(**canary_configuration)
         if isinstance(circuit_breaker, dict):
             circuit_breaker = DeploymentCircuitBreaker(**circuit_breaker)
         if isinstance(cloud_map_options, dict):
@@ -34226,6 +34567,8 @@ class FargateServiceProps(BaseServiceOptions):
             deployment_alarms = DeploymentAlarmConfig(**deployment_alarms)
         if isinstance(deployment_controller, dict):
             deployment_controller = DeploymentController(**deployment_controller)
+        if isinstance(linear_configuration, dict):
+            linear_configuration = TrafficShiftConfig(**linear_configuration)
         if isinstance(service_connect_configuration, dict):
             service_connect_configuration = ServiceConnectProps(**service_connect_configuration)
         if isinstance(vpc_subnets, dict):
@@ -34234,6 +34577,7 @@ class FargateServiceProps(BaseServiceOptions):
             type_hints = typing.get_type_hints(_typecheckingstub__8290283f61f3e2d289b7e7f81cad1a5d1e9ed9dbc07ccce2b57604682a42ded7)
             check_type(argname="argument cluster", value=cluster, expected_type=type_hints["cluster"])
             check_type(argname="argument bake_time", value=bake_time, expected_type=type_hints["bake_time"])
+            check_type(argname="argument canary_configuration", value=canary_configuration, expected_type=type_hints["canary_configuration"])
             check_type(argname="argument capacity_provider_strategies", value=capacity_provider_strategies, expected_type=type_hints["capacity_provider_strategies"])
             check_type(argname="argument circuit_breaker", value=circuit_breaker, expected_type=type_hints["circuit_breaker"])
             check_type(argname="argument cloud_map_options", value=cloud_map_options, expected_type=type_hints["cloud_map_options"])
@@ -34245,6 +34589,7 @@ class FargateServiceProps(BaseServiceOptions):
             check_type(argname="argument enable_execute_command", value=enable_execute_command, expected_type=type_hints["enable_execute_command"])
             check_type(argname="argument health_check_grace_period", value=health_check_grace_period, expected_type=type_hints["health_check_grace_period"])
             check_type(argname="argument lifecycle_hooks", value=lifecycle_hooks, expected_type=type_hints["lifecycle_hooks"])
+            check_type(argname="argument linear_configuration", value=linear_configuration, expected_type=type_hints["linear_configuration"])
             check_type(argname="argument max_healthy_percent", value=max_healthy_percent, expected_type=type_hints["max_healthy_percent"])
             check_type(argname="argument min_healthy_percent", value=min_healthy_percent, expected_type=type_hints["min_healthy_percent"])
             check_type(argname="argument propagate_tags", value=propagate_tags, expected_type=type_hints["propagate_tags"])
@@ -34264,6 +34609,8 @@ class FargateServiceProps(BaseServiceOptions):
         }
         if bake_time is not None:
             self._values["bake_time"] = bake_time
+        if canary_configuration is not None:
+            self._values["canary_configuration"] = canary_configuration
         if capacity_provider_strategies is not None:
             self._values["capacity_provider_strategies"] = capacity_provider_strategies
         if circuit_breaker is not None:
@@ -34286,6 +34633,8 @@ class FargateServiceProps(BaseServiceOptions):
             self._values["health_check_grace_period"] = health_check_grace_period
         if lifecycle_hooks is not None:
             self._values["lifecycle_hooks"] = lifecycle_hooks
+        if linear_configuration is not None:
+            self._values["linear_configuration"] = linear_configuration
         if max_healthy_percent is not None:
             self._values["max_healthy_percent"] = max_healthy_percent
         if min_healthy_percent is not None:
@@ -34326,6 +34675,17 @@ class FargateServiceProps(BaseServiceOptions):
         '''
         result = self._values.get("bake_time")
         return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
+
+    @builtins.property
+    def canary_configuration(self) -> typing.Optional["TrafficShiftConfig"]:
+        '''Configuration for canary deployment strategy.
+
+        Only valid when deploymentStrategy is set to CANARY.
+
+        :default: - no canary configuration
+        '''
+        result = self._values.get("canary_configuration")
+        return typing.cast(typing.Optional["TrafficShiftConfig"], result)
 
     @builtins.property
     def capacity_provider_strategies(
@@ -34441,6 +34801,17 @@ class FargateServiceProps(BaseServiceOptions):
         '''
         result = self._values.get("lifecycle_hooks")
         return typing.cast(typing.Optional[typing.List["IDeploymentLifecycleHookTarget"]], result)
+
+    @builtins.property
+    def linear_configuration(self) -> typing.Optional["TrafficShiftConfig"]:
+        '''Configuration for linear deployment strategy.
+
+        Only valid when deploymentStrategy is set to LINEAR.
+
+        :default: - no linear configuration
+        '''
+        result = self._values.get("linear_configuration")
+        return typing.cast(typing.Optional["TrafficShiftConfig"], result)
 
     @builtins.property
     def max_healthy_percent(self) -> typing.Optional[jsii.Number]:
@@ -39404,11 +39775,8 @@ class ListenerRuleConfiguration(
 
     Example::
 
-        import aws_cdk.aws_lambda as lambda_
-        
         # cluster: ecs.Cluster
         # task_definition: ecs.TaskDefinition
-        # lambda_hook: lambda.Function
         # blue_target_group: elbv2.ApplicationTargetGroup
         # green_target_group: elbv2.ApplicationTargetGroup
         # prod_listener_rule: elbv2.ApplicationListenerRule
@@ -39417,17 +39785,16 @@ class ListenerRuleConfiguration(
         service = ecs.FargateService(self, "Service",
             cluster=cluster,
             task_definition=task_definition,
-            deployment_strategy=ecs.DeploymentStrategy.BLUE_GREEN
+            deployment_strategy=ecs.DeploymentStrategy.LINEAR,
+            linear_configuration=ecs.TrafficShiftConfig(
+                step_percent=10,
+                step_bake_time=Duration.minutes(5)
+            )
         )
         
-        service.add_lifecycle_hook(ecs.DeploymentLifecycleLambdaTarget(lambda_hook, "PreScaleHook",
-            lifecycle_stages=[ecs.DeploymentLifecycleStage.PRE_SCALE_UP]
-        ))
-        
         target = service.load_balancer_target(
-            container_name="nginx",
+            container_name="web",
             container_port=80,
-            protocol=ecs.Protocol.TCP,
             alternate_target=ecs.AlternateTarget("AlternateTarget",
                 alternate_target_group=green_target_group,
                 production_listener=ecs.ListenerRuleConfiguration.application_listener_rule(prod_listener_rule)
@@ -39512,16 +39879,31 @@ class LoadBalancerTargetOptions:
 
             # cluster: ecs.Cluster
             # task_definition: ecs.TaskDefinition
-            # vpc: ec2.Vpc
+            # blue_target_group: elbv2.ApplicationTargetGroup
+            # green_target_group: elbv2.ApplicationTargetGroup
+            # prod_listener_rule: elbv2.ApplicationListenerRule
             
-            service = ecs.Ec2Service(self, "Service", cluster=cluster, task_definition=task_definition, min_healthy_percent=100)
             
-            lb = elb.LoadBalancer(self, "LB", vpc=vpc)
-            lb.add_listener(external_port=80)
-            lb.add_target(service.load_balancer_target(
-                container_name="MyContainer",
-                container_port=80
-            ))
+            service = ecs.FargateService(self, "Service",
+                cluster=cluster,
+                task_definition=task_definition,
+                deployment_strategy=ecs.DeploymentStrategy.LINEAR,
+                linear_configuration=ecs.TrafficShiftConfig(
+                    step_percent=10,
+                    step_bake_time=Duration.minutes(5)
+                )
+            )
+            
+            target = service.load_balancer_target(
+                container_name="web",
+                container_port=80,
+                alternate_target=ecs.AlternateTarget("AlternateTarget",
+                    alternate_target_group=green_target_group,
+                    production_listener=ecs.ListenerRuleConfiguration.application_listener_rule(prod_listener_rule)
+                )
+            )
+            
+            target.attach_to_application_target_group(blue_target_group)
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5499166a691d3d9b788ba4a9808f921437da0987c4c4733332600e4e584bf30f)
@@ -40221,6 +40603,7 @@ class ManagedInstancesCapacityProvider(
         )
         
         mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProvider",
+            capacity_option_type=ecs.CapacityOptionType.SPOT,
             subnets=vpc.private_subnets,
             security_groups=[security_group],
             instance_requirements=ec2.InstanceRequirementsConfig(
@@ -40266,6 +40649,7 @@ class ManagedInstancesCapacityProvider(
         *,
         security_groups: typing.Sequence["_ISecurityGroup_acf8a799"],
         subnets: typing.Sequence["_ISubnet_d57d1229"],
+        capacity_option_type: typing.Optional["CapacityOptionType"] = None,
         capacity_provider_name: typing.Optional[builtins.str] = None,
         ec2_instance_profile: typing.Optional["_IInstanceProfile_10d5ce2c"] = None,
         infrastructure_role: typing.Optional["_IRole_235f5d8e"] = None,
@@ -40279,6 +40663,7 @@ class ManagedInstancesCapacityProvider(
         :param id: -
         :param security_groups: The security groups to associate with the launched EC2 instances. These security groups control the network traffic allowed to and from the instances.
         :param subnets: The VPC subnets where EC2 instances will be launched. This array must be non-empty and should contain subnets from the VPC where you want the managed instances to be deployed.
+        :param capacity_option_type: Specifies the capacity option type for instances launched by this capacity provider. This determines whether instances are launched as On-Demand or Spot instances. Default: - ``ON_DEMAND``
         :param capacity_provider_name: The name of the capacity provider. If a name is specified, it cannot start with ``aws``, ``ecs``, or ``fargate``. If no name is specified, a default name in the CFNStackName-CFNResourceName-RandomString format is used. If the stack name starts with ``aws``, ``ecs``, or ``fargate``, a unique resource name is generated that starts with ``cp-``. Default: CloudFormation-generated name
         :param ec2_instance_profile: The EC2 instance profile that will be attached to instances launched by this capacity provider. This instance profile must contain the necessary IAM permissions for ECS container instances to register with the cluster and run tasks. At minimum, it should include permissions for ECS agent communication, ECR image pulling, and CloudWatch logging. If you are using Amazon ECS Managed Instances with the AWS-managed Infrastructure policy (``AmazonECSInfrastructureRolePolicyForManagedInstances``), the instance profile must be prefixed with ``ecsInstanceRole`` for the built in PassRole policy to apply. If you are using a custom policy for the Infrastructure role, the instance profile can have an alternative name. Default: - A new instance profile prefixed with 'ecsInstanceRole' will be created
         :param infrastructure_role: The IAM role that ECS uses to manage the infrastructure for the capacity provider. This role is used by ECS to perform actions such as launching and terminating instances, managing Auto Scaling Groups, and other infrastructure operations required for the managed instances capacity provider. Default: - A new role will be created with the AmazonECSInfrastructureRolePolicyForManagedInstances managed policy
@@ -40294,6 +40679,7 @@ class ManagedInstancesCapacityProvider(
         props = ManagedInstancesCapacityProviderProps(
             security_groups=security_groups,
             subnets=subnets,
+            capacity_option_type=capacity_option_type,
             capacity_provider_name=capacity_provider_name,
             ec2_instance_profile=ec2_instance_profile,
             infrastructure_role=infrastructure_role,
@@ -40361,6 +40747,7 @@ class ManagedInstancesCapacityProvider(
     name_mapping={
         "security_groups": "securityGroups",
         "subnets": "subnets",
+        "capacity_option_type": "capacityOptionType",
         "capacity_provider_name": "capacityProviderName",
         "ec2_instance_profile": "ec2InstanceProfile",
         "infrastructure_role": "infrastructureRole",
@@ -40376,6 +40763,7 @@ class ManagedInstancesCapacityProviderProps:
         *,
         security_groups: typing.Sequence["_ISecurityGroup_acf8a799"],
         subnets: typing.Sequence["_ISubnet_d57d1229"],
+        capacity_option_type: typing.Optional["CapacityOptionType"] = None,
         capacity_provider_name: typing.Optional[builtins.str] = None,
         ec2_instance_profile: typing.Optional["_IInstanceProfile_10d5ce2c"] = None,
         infrastructure_role: typing.Optional["_IRole_235f5d8e"] = None,
@@ -40388,6 +40776,7 @@ class ManagedInstancesCapacityProviderProps:
 
         :param security_groups: The security groups to associate with the launched EC2 instances. These security groups control the network traffic allowed to and from the instances.
         :param subnets: The VPC subnets where EC2 instances will be launched. This array must be non-empty and should contain subnets from the VPC where you want the managed instances to be deployed.
+        :param capacity_option_type: Specifies the capacity option type for instances launched by this capacity provider. This determines whether instances are launched as On-Demand or Spot instances. Default: - ``ON_DEMAND``
         :param capacity_provider_name: The name of the capacity provider. If a name is specified, it cannot start with ``aws``, ``ecs``, or ``fargate``. If no name is specified, a default name in the CFNStackName-CFNResourceName-RandomString format is used. If the stack name starts with ``aws``, ``ecs``, or ``fargate``, a unique resource name is generated that starts with ``cp-``. Default: CloudFormation-generated name
         :param ec2_instance_profile: The EC2 instance profile that will be attached to instances launched by this capacity provider. This instance profile must contain the necessary IAM permissions for ECS container instances to register with the cluster and run tasks. At minimum, it should include permissions for ECS agent communication, ECR image pulling, and CloudWatch logging. If you are using Amazon ECS Managed Instances with the AWS-managed Infrastructure policy (``AmazonECSInfrastructureRolePolicyForManagedInstances``), the instance profile must be prefixed with ``ecsInstanceRole`` for the built in PassRole policy to apply. If you are using a custom policy for the Infrastructure role, the instance profile can have an alternative name. Default: - A new instance profile prefixed with 'ecsInstanceRole' will be created
         :param infrastructure_role: The IAM role that ECS uses to manage the infrastructure for the capacity provider. This role is used by ECS to perform actions such as launching and terminating instances, managing Auto Scaling Groups, and other infrastructure operations required for the managed instances capacity provider. Default: - A new role will be created with the AmazonECSInfrastructureRolePolicyForManagedInstances managed policy
@@ -40411,6 +40800,7 @@ class ManagedInstancesCapacityProviderProps:
             )
             
             mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProvider",
+                capacity_option_type=ecs.CapacityOptionType.SPOT,
                 subnets=vpc.private_subnets,
                 security_groups=[security_group],
                 instance_requirements=ec2.InstanceRequirementsConfig(
@@ -40454,6 +40844,7 @@ class ManagedInstancesCapacityProviderProps:
             type_hints = typing.get_type_hints(_typecheckingstub__efa15b9a00384128ebdb40ffd56f7e66e8863f1c3a6b8d4cf8bc61fb9e822e92)
             check_type(argname="argument security_groups", value=security_groups, expected_type=type_hints["security_groups"])
             check_type(argname="argument subnets", value=subnets, expected_type=type_hints["subnets"])
+            check_type(argname="argument capacity_option_type", value=capacity_option_type, expected_type=type_hints["capacity_option_type"])
             check_type(argname="argument capacity_provider_name", value=capacity_provider_name, expected_type=type_hints["capacity_provider_name"])
             check_type(argname="argument ec2_instance_profile", value=ec2_instance_profile, expected_type=type_hints["ec2_instance_profile"])
             check_type(argname="argument infrastructure_role", value=infrastructure_role, expected_type=type_hints["infrastructure_role"])
@@ -40465,6 +40856,8 @@ class ManagedInstancesCapacityProviderProps:
             "security_groups": security_groups,
             "subnets": subnets,
         }
+        if capacity_option_type is not None:
+            self._values["capacity_option_type"] = capacity_option_type
         if capacity_provider_name is not None:
             self._values["capacity_provider_name"] = capacity_provider_name
         if ec2_instance_profile is not None:
@@ -40500,6 +40893,17 @@ class ManagedInstancesCapacityProviderProps:
         result = self._values.get("subnets")
         assert result is not None, "Required property 'subnets' is missing"
         return typing.cast(typing.List["_ISubnet_d57d1229"], result)
+
+    @builtins.property
+    def capacity_option_type(self) -> typing.Optional["CapacityOptionType"]:
+        '''Specifies the capacity option type for instances launched by this capacity provider.
+
+        This determines whether instances are launched as On-Demand or Spot instances.
+
+        :default: - ``ON_DEMAND``
+        '''
+        result = self._values.get("capacity_option_type")
+        return typing.cast(typing.Optional["CapacityOptionType"], result)
 
     @builtins.property
     def capacity_provider_name(self) -> typing.Optional[builtins.str]:
@@ -40952,6 +41356,7 @@ class NetworkMode(enum.Enum):
         )
         
         mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityProvider",
+            capacity_option_type=ecs.CapacityOptionType.SPOT,
             subnets=vpc.private_subnets,
             security_groups=[security_group],
             instance_requirements=ec2.InstanceRequirementsConfig(
@@ -46649,6 +47054,100 @@ class TrackCustomMetricProps(_BaseTargetTrackingProps_540ba713):
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_ecs.TrafficShiftConfig",
+    jsii_struct_bases=[],
+    name_mapping={"step_bake_time": "stepBakeTime", "step_percent": "stepPercent"},
+)
+class TrafficShiftConfig:
+    def __init__(
+        self,
+        *,
+        step_bake_time: typing.Optional["_Duration_4839e8c3"] = None,
+        step_percent: typing.Optional[jsii.Number] = None,
+    ) -> None:
+        '''Configuration for traffic shift during progressive deployments.
+
+        :param step_bake_time: The duration to wait between traffic shifting steps. Valid values are 0 to 1440 minutes (24 hours). Default: - Duration.minutes(6) for linear, Duration.minutes(10) for canary
+        :param step_percent: The percentage of production traffic to shift in each step. - For linear deployment: multiples of 0.1 from 3.0 to 100.0 - For canary deployment: multiples of 0.1 from 0.1 to 100.0 Default: - 10.0 for linear, 5.0 for canary
+
+        :exampleMetadata: infused
+
+        Example::
+
+            # cluster: ecs.Cluster
+            # task_definition: ecs.TaskDefinition
+            # blue_target_group: elbv2.ApplicationTargetGroup
+            # green_target_group: elbv2.ApplicationTargetGroup
+            # prod_listener_rule: elbv2.ApplicationListenerRule
+            
+            
+            service = ecs.FargateService(self, "Service",
+                cluster=cluster,
+                task_definition=task_definition,
+                deployment_strategy=ecs.DeploymentStrategy.LINEAR,
+                linear_configuration=ecs.TrafficShiftConfig(
+                    step_percent=10,
+                    step_bake_time=Duration.minutes(5)
+                )
+            )
+            
+            target = service.load_balancer_target(
+                container_name="web",
+                container_port=80,
+                alternate_target=ecs.AlternateTarget("AlternateTarget",
+                    alternate_target_group=green_target_group,
+                    production_listener=ecs.ListenerRuleConfiguration.application_listener_rule(prod_listener_rule)
+                )
+            )
+            
+            target.attach_to_application_target_group(blue_target_group)
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e53a14fdbf9beed0d42c0905474ed03ec0032c71ca1cc5b90b8479f9c3e179c8)
+            check_type(argname="argument step_bake_time", value=step_bake_time, expected_type=type_hints["step_bake_time"])
+            check_type(argname="argument step_percent", value=step_percent, expected_type=type_hints["step_percent"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if step_bake_time is not None:
+            self._values["step_bake_time"] = step_bake_time
+        if step_percent is not None:
+            self._values["step_percent"] = step_percent
+
+    @builtins.property
+    def step_bake_time(self) -> typing.Optional["_Duration_4839e8c3"]:
+        '''The duration to wait between traffic shifting steps.
+
+        Valid values are 0 to 1440 minutes (24 hours).
+
+        :default: - Duration.minutes(6) for linear, Duration.minutes(10) for canary
+        '''
+        result = self._values.get("step_bake_time")
+        return typing.cast(typing.Optional["_Duration_4839e8c3"], result)
+
+    @builtins.property
+    def step_percent(self) -> typing.Optional[jsii.Number]:
+        '''The percentage of production traffic to shift in each step.
+
+        - For linear deployment: multiples of 0.1 from 3.0 to 100.0
+        - For canary deployment: multiples of 0.1 from 0.1 to 100.0
+
+        :default: - 10.0 for linear, 5.0 for canary
+        '''
+        result = self._values.get("step_percent")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "TrafficShiftConfig(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.aws_ecs.Ulimit",
     jsii_struct_bases=[],
     name_mapping={
@@ -47048,11 +47547,8 @@ class AlternateTarget(
 
     Example::
 
-        import aws_cdk.aws_lambda as lambda_
-        
         # cluster: ecs.Cluster
         # task_definition: ecs.TaskDefinition
-        # lambda_hook: lambda.Function
         # blue_target_group: elbv2.ApplicationTargetGroup
         # green_target_group: elbv2.ApplicationTargetGroup
         # prod_listener_rule: elbv2.ApplicationListenerRule
@@ -47061,17 +47557,16 @@ class AlternateTarget(
         service = ecs.FargateService(self, "Service",
             cluster=cluster,
             task_definition=task_definition,
-            deployment_strategy=ecs.DeploymentStrategy.BLUE_GREEN
+            deployment_strategy=ecs.DeploymentStrategy.LINEAR,
+            linear_configuration=ecs.TrafficShiftConfig(
+                step_percent=10,
+                step_bake_time=Duration.minutes(5)
+            )
         )
         
-        service.add_lifecycle_hook(ecs.DeploymentLifecycleLambdaTarget(lambda_hook, "PreScaleHook",
-            lifecycle_stages=[ecs.DeploymentLifecycleStage.PRE_SCALE_UP]
-        ))
-        
         target = service.load_balancer_target(
-            container_name="nginx",
+            container_name="web",
             container_port=80,
-            protocol=ecs.Protocol.TCP,
             alternate_target=ecs.AlternateTarget("AlternateTarget",
                 alternate_target_group=green_target_group,
                 production_listener=ecs.ListenerRuleConfiguration.application_listener_rule(prod_listener_rule)
@@ -49699,10 +50194,7 @@ class BaseService(
     @builtins.property
     @jsii.member(jsii_name="serviceName")
     def service_name(self) -> builtins.str:
-        '''The name of the service.
-
-        :attribute: true
-        '''
+        '''The name of the service.'''
         return typing.cast(builtins.str, jsii.get(self, "serviceName"))
 
     @builtins.property
@@ -49873,6 +50365,7 @@ class Ec2Service(
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
         cluster: "ICluster",
         bake_time: typing.Optional["_Duration_4839e8c3"] = None,
+        canary_configuration: typing.Optional[typing.Union["TrafficShiftConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         capacity_provider_strategies: typing.Optional[typing.Sequence[typing.Union["CapacityProviderStrategy", typing.Dict[builtins.str, typing.Any]]]] = None,
         circuit_breaker: typing.Optional[typing.Union["DeploymentCircuitBreaker", typing.Dict[builtins.str, typing.Any]]] = None,
         cloud_map_options: typing.Optional[typing.Union["CloudMapOptions", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -49884,6 +50377,7 @@ class Ec2Service(
         enable_execute_command: typing.Optional[builtins.bool] = None,
         health_check_grace_period: typing.Optional["_Duration_4839e8c3"] = None,
         lifecycle_hooks: typing.Optional[typing.Sequence["IDeploymentLifecycleHookTarget"]] = None,
+        linear_configuration: typing.Optional[typing.Union["TrafficShiftConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         max_healthy_percent: typing.Optional[jsii.Number] = None,
         min_healthy_percent: typing.Optional[jsii.Number] = None,
         propagate_tags: typing.Optional["PropagatedTagSource"] = None,
@@ -49906,6 +50400,7 @@ class Ec2Service(
         :param vpc_subnets: The subnets to associate with the service. This property is only used for tasks that use the awsvpc network mode. Default: - Public subnets if ``assignPublicIp`` is set, otherwise the first available one of Private, Isolated, Public, in that order.
         :param cluster: The name of the cluster that hosts the service.
         :param bake_time: bake time minutes for service. Default: - none
+        :param canary_configuration: Configuration for canary deployment strategy. Only valid when deploymentStrategy is set to CANARY. Default: - no canary configuration
         :param capacity_provider_strategies: A list of Capacity Provider strategies used to place a service. Default: - undefined
         :param circuit_breaker: Whether to enable the deployment circuit breaker. If this property is defined, circuit breaker will be implicitly enabled. Default: - disabled
         :param cloud_map_options: The options for configuring an Amazon ECS service to use service discovery. Default: - AWS Cloud Map service discovery is not enabled.
@@ -49917,6 +50412,7 @@ class Ec2Service(
         :param enable_execute_command: Whether to enable the ability to execute into a container. Default: - undefined
         :param health_check_grace_period: The period of time, in seconds, that the Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing target health checks after a task has first started. Default: - defaults to 60 seconds if at least one load balancer is in-use and it is not already set
         :param lifecycle_hooks: The lifecycle hooks to execute during deployment stages. Default: - none;
+        :param linear_configuration: Configuration for linear deployment strategy. Only valid when deploymentStrategy is set to LINEAR. Default: - no linear configuration
         :param max_healthy_percent: The maximum number of tasks, specified as a percentage of the Amazon ECS service's DesiredCount value, that can run in a service during a deployment. Default: - 100 if daemon, otherwise 200
         :param min_healthy_percent: The minimum number of tasks, specified as a percentage of the Amazon ECS service's DesiredCount value, that must continue to run and remain healthy during a deployment. Default: - 0 if daemon, otherwise 50
         :param propagate_tags: Specifies whether to propagate the tags from the task definition or the service to the tasks in the service. Valid values are: PropagatedTagSource.SERVICE, PropagatedTagSource.TASK_DEFINITION or PropagatedTagSource.NONE Default: PropagatedTagSource.NONE
@@ -49940,6 +50436,7 @@ class Ec2Service(
             vpc_subnets=vpc_subnets,
             cluster=cluster,
             bake_time=bake_time,
+            canary_configuration=canary_configuration,
             capacity_provider_strategies=capacity_provider_strategies,
             circuit_breaker=circuit_breaker,
             cloud_map_options=cloud_map_options,
@@ -49951,6 +50448,7 @@ class Ec2Service(
             enable_execute_command=enable_execute_command,
             health_check_grace_period=health_check_grace_period,
             lifecycle_hooks=lifecycle_hooks,
+            linear_configuration=linear_configuration,
             max_healthy_percent=max_healthy_percent,
             min_healthy_percent=min_healthy_percent,
             propagate_tags=propagate_tags,
@@ -50380,6 +50878,7 @@ class ExternalService(
         security_groups: typing.Optional[typing.Sequence["_ISecurityGroup_acf8a799"]] = None,
         cluster: "ICluster",
         bake_time: typing.Optional["_Duration_4839e8c3"] = None,
+        canary_configuration: typing.Optional[typing.Union["TrafficShiftConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         capacity_provider_strategies: typing.Optional[typing.Sequence[typing.Union["CapacityProviderStrategy", typing.Dict[builtins.str, typing.Any]]]] = None,
         circuit_breaker: typing.Optional[typing.Union["DeploymentCircuitBreaker", typing.Dict[builtins.str, typing.Any]]] = None,
         cloud_map_options: typing.Optional[typing.Union["CloudMapOptions", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -50391,6 +50890,7 @@ class ExternalService(
         enable_execute_command: typing.Optional[builtins.bool] = None,
         health_check_grace_period: typing.Optional["_Duration_4839e8c3"] = None,
         lifecycle_hooks: typing.Optional[typing.Sequence["IDeploymentLifecycleHookTarget"]] = None,
+        linear_configuration: typing.Optional[typing.Union["TrafficShiftConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         max_healthy_percent: typing.Optional[jsii.Number] = None,
         min_healthy_percent: typing.Optional[jsii.Number] = None,
         propagate_tags: typing.Optional["PropagatedTagSource"] = None,
@@ -50408,6 +50908,7 @@ class ExternalService(
         :param security_groups: The security groups to associate with the service. If you do not specify a security group, a new security group is created. Default: - A new security group is created.
         :param cluster: The name of the cluster that hosts the service.
         :param bake_time: bake time minutes for service. Default: - none
+        :param canary_configuration: Configuration for canary deployment strategy. Only valid when deploymentStrategy is set to CANARY. Default: - no canary configuration
         :param capacity_provider_strategies: A list of Capacity Provider strategies used to place a service. Default: - undefined
         :param circuit_breaker: Whether to enable the deployment circuit breaker. If this property is defined, circuit breaker will be implicitly enabled. Default: - disabled
         :param cloud_map_options: The options for configuring an Amazon ECS service to use service discovery. Default: - AWS Cloud Map service discovery is not enabled.
@@ -50419,6 +50920,7 @@ class ExternalService(
         :param enable_execute_command: Whether to enable the ability to execute into a container. Default: - undefined
         :param health_check_grace_period: The period of time, in seconds, that the Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing target health checks after a task has first started. Default: - defaults to 60 seconds if at least one load balancer is in-use and it is not already set
         :param lifecycle_hooks: The lifecycle hooks to execute during deployment stages. Default: - none;
+        :param linear_configuration: Configuration for linear deployment strategy. Only valid when deploymentStrategy is set to LINEAR. Default: - no linear configuration
         :param max_healthy_percent: The maximum number of tasks, specified as a percentage of the Amazon ECS service's DesiredCount value, that can run in a service during a deployment. Default: - 100 if daemon, otherwise 200
         :param min_healthy_percent: The minimum number of tasks, specified as a percentage of the Amazon ECS service's DesiredCount value, that must continue to run and remain healthy during a deployment. Default: - 0 if daemon, otherwise 50
         :param propagate_tags: Specifies whether to propagate the tags from the task definition or the service to the tasks in the service. Valid values are: PropagatedTagSource.SERVICE, PropagatedTagSource.TASK_DEFINITION or PropagatedTagSource.NONE Default: PropagatedTagSource.NONE
@@ -50437,6 +50939,7 @@ class ExternalService(
             security_groups=security_groups,
             cluster=cluster,
             bake_time=bake_time,
+            canary_configuration=canary_configuration,
             capacity_provider_strategies=capacity_provider_strategies,
             circuit_breaker=circuit_breaker,
             cloud_map_options=cloud_map_options,
@@ -50448,6 +50951,7 @@ class ExternalService(
             enable_execute_command=enable_execute_command,
             health_check_grace_period=health_check_grace_period,
             lifecycle_hooks=lifecycle_hooks,
+            linear_configuration=linear_configuration,
             max_healthy_percent=max_healthy_percent,
             min_healthy_percent=min_healthy_percent,
             propagate_tags=propagate_tags,
@@ -50869,6 +51373,7 @@ class FargateService(
         vpc_subnets: typing.Optional[typing.Union["_SubnetSelection_e57d76df", typing.Dict[builtins.str, typing.Any]]] = None,
         cluster: "ICluster",
         bake_time: typing.Optional["_Duration_4839e8c3"] = None,
+        canary_configuration: typing.Optional[typing.Union["TrafficShiftConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         capacity_provider_strategies: typing.Optional[typing.Sequence[typing.Union["CapacityProviderStrategy", typing.Dict[builtins.str, typing.Any]]]] = None,
         circuit_breaker: typing.Optional[typing.Union["DeploymentCircuitBreaker", typing.Dict[builtins.str, typing.Any]]] = None,
         cloud_map_options: typing.Optional[typing.Union["CloudMapOptions", typing.Dict[builtins.str, typing.Any]]] = None,
@@ -50880,6 +51385,7 @@ class FargateService(
         enable_execute_command: typing.Optional[builtins.bool] = None,
         health_check_grace_period: typing.Optional["_Duration_4839e8c3"] = None,
         lifecycle_hooks: typing.Optional[typing.Sequence["IDeploymentLifecycleHookTarget"]] = None,
+        linear_configuration: typing.Optional[typing.Union["TrafficShiftConfig", typing.Dict[builtins.str, typing.Any]]] = None,
         max_healthy_percent: typing.Optional[jsii.Number] = None,
         min_healthy_percent: typing.Optional[jsii.Number] = None,
         propagate_tags: typing.Optional["PropagatedTagSource"] = None,
@@ -50900,6 +51406,7 @@ class FargateService(
         :param vpc_subnets: The subnets to associate with the service. Default: - Public subnets if ``assignPublicIp`` is set, otherwise the first available one of Private, Isolated, Public, in that order.
         :param cluster: The name of the cluster that hosts the service.
         :param bake_time: bake time minutes for service. Default: - none
+        :param canary_configuration: Configuration for canary deployment strategy. Only valid when deploymentStrategy is set to CANARY. Default: - no canary configuration
         :param capacity_provider_strategies: A list of Capacity Provider strategies used to place a service. Default: - undefined
         :param circuit_breaker: Whether to enable the deployment circuit breaker. If this property is defined, circuit breaker will be implicitly enabled. Default: - disabled
         :param cloud_map_options: The options for configuring an Amazon ECS service to use service discovery. Default: - AWS Cloud Map service discovery is not enabled.
@@ -50911,6 +51418,7 @@ class FargateService(
         :param enable_execute_command: Whether to enable the ability to execute into a container. Default: - undefined
         :param health_check_grace_period: The period of time, in seconds, that the Amazon ECS service scheduler ignores unhealthy Elastic Load Balancing target health checks after a task has first started. Default: - defaults to 60 seconds if at least one load balancer is in-use and it is not already set
         :param lifecycle_hooks: The lifecycle hooks to execute during deployment stages. Default: - none;
+        :param linear_configuration: Configuration for linear deployment strategy. Only valid when deploymentStrategy is set to LINEAR. Default: - no linear configuration
         :param max_healthy_percent: The maximum number of tasks, specified as a percentage of the Amazon ECS service's DesiredCount value, that can run in a service during a deployment. Default: - 100 if daemon, otherwise 200
         :param min_healthy_percent: The minimum number of tasks, specified as a percentage of the Amazon ECS service's DesiredCount value, that must continue to run and remain healthy during a deployment. Default: - 0 if daemon, otherwise 50
         :param propagate_tags: Specifies whether to propagate the tags from the task definition or the service to the tasks in the service. Valid values are: PropagatedTagSource.SERVICE, PropagatedTagSource.TASK_DEFINITION or PropagatedTagSource.NONE Default: PropagatedTagSource.NONE
@@ -50932,6 +51440,7 @@ class FargateService(
             vpc_subnets=vpc_subnets,
             cluster=cluster,
             bake_time=bake_time,
+            canary_configuration=canary_configuration,
             capacity_provider_strategies=capacity_provider_strategies,
             circuit_breaker=circuit_breaker,
             cloud_map_options=cloud_map_options,
@@ -50943,6 +51452,7 @@ class FargateService(
             enable_execute_command=enable_execute_command,
             health_check_grace_period=health_check_grace_period,
             lifecycle_hooks=lifecycle_hooks,
+            linear_configuration=linear_configuration,
             max_healthy_percent=max_healthy_percent,
             min_healthy_percent=min_healthy_percent,
             propagate_tags=propagate_tags,
@@ -51245,6 +51755,7 @@ __all__ = [
     "BottlerocketEcsVariant",
     "BuiltInAttributes",
     "Capability",
+    "CapacityOptionType",
     "CapacityProviderStrategy",
     "CfnCapacityProvider",
     "CfnCapacityProviderProps",
@@ -51431,6 +51942,7 @@ __all__ = [
     "Tmpfs",
     "TmpfsMountOption",
     "TrackCustomMetricProps",
+    "TrafficShiftConfig",
     "Ulimit",
     "UlimitName",
     "VersionConsistency",
@@ -51676,6 +52188,7 @@ def _typecheckingstub__c2e0ba28c74987301a54b0d197b791a6a94084b5f40d15304ffabf113
     *,
     cluster: ICluster,
     bake_time: typing.Optional[_Duration_4839e8c3] = None,
+    canary_configuration: typing.Optional[typing.Union[TrafficShiftConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     capacity_provider_strategies: typing.Optional[typing.Sequence[typing.Union[CapacityProviderStrategy, typing.Dict[builtins.str, typing.Any]]]] = None,
     circuit_breaker: typing.Optional[typing.Union[DeploymentCircuitBreaker, typing.Dict[builtins.str, typing.Any]]] = None,
     cloud_map_options: typing.Optional[typing.Union[CloudMapOptions, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -51687,6 +52200,7 @@ def _typecheckingstub__c2e0ba28c74987301a54b0d197b791a6a94084b5f40d15304ffabf113
     enable_execute_command: typing.Optional[builtins.bool] = None,
     health_check_grace_period: typing.Optional[_Duration_4839e8c3] = None,
     lifecycle_hooks: typing.Optional[typing.Sequence[IDeploymentLifecycleHookTarget]] = None,
+    linear_configuration: typing.Optional[typing.Union[TrafficShiftConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     max_healthy_percent: typing.Optional[jsii.Number] = None,
     min_healthy_percent: typing.Optional[jsii.Number] = None,
     propagate_tags: typing.Optional[PropagatedTagSource] = None,
@@ -51702,6 +52216,7 @@ def _typecheckingstub__3ecfd95265b873c2042a9d5cb8465a48f9e325e2271c18461e2b26633
     *,
     cluster: ICluster,
     bake_time: typing.Optional[_Duration_4839e8c3] = None,
+    canary_configuration: typing.Optional[typing.Union[TrafficShiftConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     capacity_provider_strategies: typing.Optional[typing.Sequence[typing.Union[CapacityProviderStrategy, typing.Dict[builtins.str, typing.Any]]]] = None,
     circuit_breaker: typing.Optional[typing.Union[DeploymentCircuitBreaker, typing.Dict[builtins.str, typing.Any]]] = None,
     cloud_map_options: typing.Optional[typing.Union[CloudMapOptions, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -51713,6 +52228,7 @@ def _typecheckingstub__3ecfd95265b873c2042a9d5cb8465a48f9e325e2271c18461e2b26633
     enable_execute_command: typing.Optional[builtins.bool] = None,
     health_check_grace_period: typing.Optional[_Duration_4839e8c3] = None,
     lifecycle_hooks: typing.Optional[typing.Sequence[IDeploymentLifecycleHookTarget]] = None,
+    linear_configuration: typing.Optional[typing.Union[TrafficShiftConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     max_healthy_percent: typing.Optional[jsii.Number] = None,
     min_healthy_percent: typing.Optional[jsii.Number] = None,
     propagate_tags: typing.Optional[PropagatedTagSource] = None,
@@ -51877,6 +52393,7 @@ def _typecheckingstub__cb545da33f3067adee24bf90d3e903b06a7562a7e6ea6b3785f5b0ae6
     ec2_instance_profile_arn: builtins.str,
     network_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.ManagedInstancesNetworkConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
     capacity_option_type: typing.Optional[builtins.str] = None,
+    fips_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     instance_requirements: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.InstanceRequirementsRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     monitoring: typing.Optional[builtins.str] = None,
     storage_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.ManagedInstancesStorageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -54343,6 +54860,7 @@ def _typecheckingstub__95634258086aa3448fbdfd9896017a2cbeb858f382deb61186bb9e22b
     *,
     cluster: ICluster,
     bake_time: typing.Optional[_Duration_4839e8c3] = None,
+    canary_configuration: typing.Optional[typing.Union[TrafficShiftConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     capacity_provider_strategies: typing.Optional[typing.Sequence[typing.Union[CapacityProviderStrategy, typing.Dict[builtins.str, typing.Any]]]] = None,
     circuit_breaker: typing.Optional[typing.Union[DeploymentCircuitBreaker, typing.Dict[builtins.str, typing.Any]]] = None,
     cloud_map_options: typing.Optional[typing.Union[CloudMapOptions, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -54354,6 +54872,7 @@ def _typecheckingstub__95634258086aa3448fbdfd9896017a2cbeb858f382deb61186bb9e22b
     enable_execute_command: typing.Optional[builtins.bool] = None,
     health_check_grace_period: typing.Optional[_Duration_4839e8c3] = None,
     lifecycle_hooks: typing.Optional[typing.Sequence[IDeploymentLifecycleHookTarget]] = None,
+    linear_configuration: typing.Optional[typing.Union[TrafficShiftConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     max_healthy_percent: typing.Optional[jsii.Number] = None,
     min_healthy_percent: typing.Optional[jsii.Number] = None,
     propagate_tags: typing.Optional[PropagatedTagSource] = None,
@@ -54549,6 +55068,7 @@ def _typecheckingstub__3cc413964caae89bfcfbcabff8356ffe5c054f46824be99731a77b64e
     *,
     cluster: ICluster,
     bake_time: typing.Optional[_Duration_4839e8c3] = None,
+    canary_configuration: typing.Optional[typing.Union[TrafficShiftConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     capacity_provider_strategies: typing.Optional[typing.Sequence[typing.Union[CapacityProviderStrategy, typing.Dict[builtins.str, typing.Any]]]] = None,
     circuit_breaker: typing.Optional[typing.Union[DeploymentCircuitBreaker, typing.Dict[builtins.str, typing.Any]]] = None,
     cloud_map_options: typing.Optional[typing.Union[CloudMapOptions, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -54560,6 +55080,7 @@ def _typecheckingstub__3cc413964caae89bfcfbcabff8356ffe5c054f46824be99731a77b64e
     enable_execute_command: typing.Optional[builtins.bool] = None,
     health_check_grace_period: typing.Optional[_Duration_4839e8c3] = None,
     lifecycle_hooks: typing.Optional[typing.Sequence[IDeploymentLifecycleHookTarget]] = None,
+    linear_configuration: typing.Optional[typing.Union[TrafficShiftConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     max_healthy_percent: typing.Optional[jsii.Number] = None,
     min_healthy_percent: typing.Optional[jsii.Number] = None,
     propagate_tags: typing.Optional[PropagatedTagSource] = None,
@@ -54610,6 +55131,7 @@ def _typecheckingstub__8290283f61f3e2d289b7e7f81cad1a5d1e9ed9dbc07ccce2b57604682
     *,
     cluster: ICluster,
     bake_time: typing.Optional[_Duration_4839e8c3] = None,
+    canary_configuration: typing.Optional[typing.Union[TrafficShiftConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     capacity_provider_strategies: typing.Optional[typing.Sequence[typing.Union[CapacityProviderStrategy, typing.Dict[builtins.str, typing.Any]]]] = None,
     circuit_breaker: typing.Optional[typing.Union[DeploymentCircuitBreaker, typing.Dict[builtins.str, typing.Any]]] = None,
     cloud_map_options: typing.Optional[typing.Union[CloudMapOptions, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -54621,6 +55143,7 @@ def _typecheckingstub__8290283f61f3e2d289b7e7f81cad1a5d1e9ed9dbc07ccce2b57604682
     enable_execute_command: typing.Optional[builtins.bool] = None,
     health_check_grace_period: typing.Optional[_Duration_4839e8c3] = None,
     lifecycle_hooks: typing.Optional[typing.Sequence[IDeploymentLifecycleHookTarget]] = None,
+    linear_configuration: typing.Optional[typing.Union[TrafficShiftConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     max_healthy_percent: typing.Optional[jsii.Number] = None,
     min_healthy_percent: typing.Optional[jsii.Number] = None,
     propagate_tags: typing.Optional[PropagatedTagSource] = None,
@@ -55084,6 +55607,7 @@ def _typecheckingstub__718bb820f1409b5f15556f2e394659a060bda46e302dbb4e973a6484f
     *,
     security_groups: typing.Sequence[_ISecurityGroup_acf8a799],
     subnets: typing.Sequence[_ISubnet_d57d1229],
+    capacity_option_type: typing.Optional[CapacityOptionType] = None,
     capacity_provider_name: typing.Optional[builtins.str] = None,
     ec2_instance_profile: typing.Optional[_IInstanceProfile_10d5ce2c] = None,
     infrastructure_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -55105,6 +55629,7 @@ def _typecheckingstub__efa15b9a00384128ebdb40ffd56f7e66e8863f1c3a6b8d4cf8bc61fb9
     *,
     security_groups: typing.Sequence[_ISecurityGroup_acf8a799],
     subnets: typing.Sequence[_ISubnet_d57d1229],
+    capacity_option_type: typing.Optional[CapacityOptionType] = None,
     capacity_provider_name: typing.Optional[builtins.str] = None,
     ec2_instance_profile: typing.Optional[_IInstanceProfile_10d5ce2c] = None,
     infrastructure_role: typing.Optional[_IRole_235f5d8e] = None,
@@ -55821,6 +56346,14 @@ def _typecheckingstub__274984b220fcaa675c3076706c517443e3892726fe3c8dc3bee963737
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__e53a14fdbf9beed0d42c0905474ed03ec0032c71ca1cc5b90b8479f9c3e179c8(
+    *,
+    step_bake_time: typing.Optional[_Duration_4839e8c3] = None,
+    step_percent: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__16d21eb7b231448752a4893b75476d23401e84c45880928623c14237419d5999(
     *,
     hard_limit: jsii.Number,
@@ -56281,6 +56814,7 @@ def _typecheckingstub__1e578461670bd6cdf856f914534e1feff8905e31d33cd7aea2b9f5151
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
     cluster: ICluster,
     bake_time: typing.Optional[_Duration_4839e8c3] = None,
+    canary_configuration: typing.Optional[typing.Union[TrafficShiftConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     capacity_provider_strategies: typing.Optional[typing.Sequence[typing.Union[CapacityProviderStrategy, typing.Dict[builtins.str, typing.Any]]]] = None,
     circuit_breaker: typing.Optional[typing.Union[DeploymentCircuitBreaker, typing.Dict[builtins.str, typing.Any]]] = None,
     cloud_map_options: typing.Optional[typing.Union[CloudMapOptions, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -56292,6 +56826,7 @@ def _typecheckingstub__1e578461670bd6cdf856f914534e1feff8905e31d33cd7aea2b9f5151
     enable_execute_command: typing.Optional[builtins.bool] = None,
     health_check_grace_period: typing.Optional[_Duration_4839e8c3] = None,
     lifecycle_hooks: typing.Optional[typing.Sequence[IDeploymentLifecycleHookTarget]] = None,
+    linear_configuration: typing.Optional[typing.Union[TrafficShiftConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     max_healthy_percent: typing.Optional[jsii.Number] = None,
     min_healthy_percent: typing.Optional[jsii.Number] = None,
     propagate_tags: typing.Optional[PropagatedTagSource] = None,
@@ -56434,6 +56969,7 @@ def _typecheckingstub__6ceef4de126cbb6bd6f379ba0b53be2fb61c35761f50685b5d228c682
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
     cluster: ICluster,
     bake_time: typing.Optional[_Duration_4839e8c3] = None,
+    canary_configuration: typing.Optional[typing.Union[TrafficShiftConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     capacity_provider_strategies: typing.Optional[typing.Sequence[typing.Union[CapacityProviderStrategy, typing.Dict[builtins.str, typing.Any]]]] = None,
     circuit_breaker: typing.Optional[typing.Union[DeploymentCircuitBreaker, typing.Dict[builtins.str, typing.Any]]] = None,
     cloud_map_options: typing.Optional[typing.Union[CloudMapOptions, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -56445,6 +56981,7 @@ def _typecheckingstub__6ceef4de126cbb6bd6f379ba0b53be2fb61c35761f50685b5d228c682
     enable_execute_command: typing.Optional[builtins.bool] = None,
     health_check_grace_period: typing.Optional[_Duration_4839e8c3] = None,
     lifecycle_hooks: typing.Optional[typing.Sequence[IDeploymentLifecycleHookTarget]] = None,
+    linear_configuration: typing.Optional[typing.Union[TrafficShiftConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     max_healthy_percent: typing.Optional[jsii.Number] = None,
     min_healthy_percent: typing.Optional[jsii.Number] = None,
     propagate_tags: typing.Optional[PropagatedTagSource] = None,
@@ -56543,6 +57080,7 @@ def _typecheckingstub__0ddac6b19472d00f74c1777e699ce5b239dc49e62ff4ab4674c917bbe
     vpc_subnets: typing.Optional[typing.Union[_SubnetSelection_e57d76df, typing.Dict[builtins.str, typing.Any]]] = None,
     cluster: ICluster,
     bake_time: typing.Optional[_Duration_4839e8c3] = None,
+    canary_configuration: typing.Optional[typing.Union[TrafficShiftConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     capacity_provider_strategies: typing.Optional[typing.Sequence[typing.Union[CapacityProviderStrategy, typing.Dict[builtins.str, typing.Any]]]] = None,
     circuit_breaker: typing.Optional[typing.Union[DeploymentCircuitBreaker, typing.Dict[builtins.str, typing.Any]]] = None,
     cloud_map_options: typing.Optional[typing.Union[CloudMapOptions, typing.Dict[builtins.str, typing.Any]]] = None,
@@ -56554,6 +57092,7 @@ def _typecheckingstub__0ddac6b19472d00f74c1777e699ce5b239dc49e62ff4ab4674c917bbe
     enable_execute_command: typing.Optional[builtins.bool] = None,
     health_check_grace_period: typing.Optional[_Duration_4839e8c3] = None,
     lifecycle_hooks: typing.Optional[typing.Sequence[IDeploymentLifecycleHookTarget]] = None,
+    linear_configuration: typing.Optional[typing.Union[TrafficShiftConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     max_healthy_percent: typing.Optional[jsii.Number] = None,
     min_healthy_percent: typing.Optional[jsii.Number] = None,
     propagate_tags: typing.Optional[PropagatedTagSource] = None,

@@ -7226,7 +7226,7 @@ class EvaluationMode(
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_config.IRule")
-class IRule(_IResource_c80c4260, typing_extensions.Protocol):
+class IRule(_IResource_c80c4260, _IConfigRuleRef_d9037ddf, typing_extensions.Protocol):
     '''Interface representing an AWS Config rule.'''
 
     @builtins.property
@@ -7310,6 +7310,7 @@ class IRule(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IRuleProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IConfigRuleRef_d9037ddf), # type: ignore[misc]
 ):
     '''Interface representing an AWS Config rule.'''
 
@@ -7667,6 +7668,12 @@ class ManagedRule(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "configRuleName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="configRuleRef")
+    def config_rule_ref(self) -> "_ConfigRuleReference_f33c4531":
+        '''A reference to a ConfigRule resource.'''
+        return typing.cast("_ConfigRuleReference_f33c4531", jsii.get(self, "configRuleRef"))
 
     @builtins.property
     @jsii.member(jsii_name="isCustomWithChanges")
@@ -14018,6 +14025,12 @@ class CustomPolicy(
         return typing.cast(builtins.str, jsii.get(self, "configRuleName"))
 
     @builtins.property
+    @jsii.member(jsii_name="configRuleRef")
+    def config_rule_ref(self) -> "_ConfigRuleReference_f33c4531":
+        '''A reference to a ConfigRule resource.'''
+        return typing.cast("_ConfigRuleReference_f33c4531", jsii.get(self, "configRuleRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="isCustomWithChanges")
     def _is_custom_with_changes(self) -> typing.Optional[builtins.bool]:
         return typing.cast(typing.Optional[builtins.bool], jsii.get(self, "isCustomWithChanges"))
@@ -14479,6 +14492,12 @@ class CustomRule(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "configRuleName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="configRuleRef")
+    def config_rule_ref(self) -> "_ConfigRuleReference_f33c4531":
+        '''A reference to a ConfigRule resource.'''
+        return typing.cast("_ConfigRuleReference_f33c4531", jsii.get(self, "configRuleRef"))
 
     @builtins.property
     @jsii.member(jsii_name="isCustomWithChanges")

@@ -16118,19 +16118,13 @@ class TableV2(
     @builtins.property
     @jsii.member(jsii_name="tableArn")
     def table_arn(self) -> builtins.str:
-        '''The ARN of the table.
-
-        :attribute: true
-        '''
+        '''The ARN of the table.'''
         return typing.cast(builtins.str, jsii.get(self, "tableArn"))
 
     @builtins.property
     @jsii.member(jsii_name="tableName")
     def table_name(self) -> builtins.str:
-        '''The name of the table.
-
-        :attribute: true
-        '''
+        '''The name of the table.'''
         return typing.cast(builtins.str, jsii.get(self, "tableName"))
 
     @builtins.property
@@ -16147,19 +16141,13 @@ class TableV2(
     @builtins.property
     @jsii.member(jsii_name="tableId")
     def table_id(self) -> typing.Optional[builtins.str]:
-        '''The ID of the table.
-
-        :attribute: true
-        '''
+        '''The ID of the table.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "tableId"))
 
     @builtins.property
     @jsii.member(jsii_name="tableStreamArn")
     def table_stream_arn(self) -> typing.Optional[builtins.str]:
-        '''The stream ARN of the table.
-
-        :attribute: true
-        '''
+        '''The stream ARN of the table.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "tableStreamArn"))
 
     @builtins.property
@@ -18191,19 +18179,13 @@ class Table(
     @builtins.property
     @jsii.member(jsii_name="tableArn")
     def table_arn(self) -> builtins.str:
-        '''Arn of the dynamodb table.
-
-        :attribute: true
-        '''
+        '''Arn of the dynamodb table.'''
         return typing.cast(builtins.str, jsii.get(self, "tableArn"))
 
     @builtins.property
     @jsii.member(jsii_name="tableName")
     def table_name(self) -> builtins.str:
-        '''Table name of the dynamodb table.
-
-        :attribute: true
-        '''
+        '''Table name of the dynamodb table.'''
         return typing.cast(builtins.str, jsii.get(self, "tableName"))
 
     @builtins.property
@@ -18221,10 +18203,7 @@ class Table(
     @builtins.property
     @jsii.member(jsii_name="tableStreamArn")
     def table_stream_arn(self) -> typing.Optional[builtins.str]:
-        '''ARN of the table's stream, if there is one.
-
-        :attribute: true
-        '''
+        '''ARN of the table's stream, if there is one.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "tableStreamArn"))
 
     @builtins.property

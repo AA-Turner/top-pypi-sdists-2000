@@ -3257,6 +3257,11 @@ class KeySpec(enum.Enum):
 
     Valid usage: SIGN_VERIFY
     '''
+    ECC_NIST_EDWARDS25519 = "ECC_NIST_EDWARDS25519"
+    '''NIST-standard Edwards25519 (ed25519) elliptic curve key pair.
+
+    Valid usage: SIGN_VERIFY
+    '''
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_kms.KeyUsage")

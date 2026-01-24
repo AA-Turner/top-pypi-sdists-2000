@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 from contextlib import asynccontextmanager
 from datetime import UTC
 from http import HTTPStatus
@@ -137,6 +138,110 @@ GRPC_RETRIABLE_STATUS_CODES = (
 )
 
 
+class GrpcStreamHandler:
+    """Handler for a run stream (lifecycle: subscribe -> join -> close)."""
+
+    def __init__(self, run_id: UUID, thread_id: UUID):
+        self.run_id = run_id
+        self.thread_id = thread_id
+        self._stream = None
+        self._closed = False
+
+    async def start(self) -> None:
+        """Open the bidirectional stream and send a subscribe request."""
+        if self._stream is not None:
+            return
+
+        client = await get_shared_client()
+        self._stream = client.runs.Stream()
+
+        subscribe_msg = pb.StreamRunClientMessage(
+            subscribe=pb.SubscribeRunRequest(
+                thread_id=pb.UUID(value=str(self.thread_id)),
+                run_id=pb.UUID(value=str(self.run_id)),
+            )
+        )
+        await self._stream.write(subscribe_msg)
+
+    async def join(
+        self,
+        *,
+        auth_filters: list[pb.AuthFilter],
+        stream_modes: list | None = None,
+        ignore_run_not_found: bool = False,
+        cancel_on_disconnect: bool = False,
+        last_event_id: str | None = None,
+    ):
+        """Send JoinRunRequest and yield events.
+
+        Yields tuples of (event_bytes, message_bytes, stream_id_bytes|None).
+        """
+        if self._stream is None:
+            raise RuntimeError("Stream not started. Call start() first.")
+        if self._closed:
+            raise RuntimeError("Stream already closed.")
+
+        join_kwargs: dict[str, Any] = {
+            "filters": auth_filters if auth_filters else [],
+            "ignore_run_not_found": ignore_run_not_found,
+            "cancel_on_disconnect": cancel_on_disconnect,
+        }
+        if stream_modes:
+            join_kwargs["stream_modes"] = stream_modes
+        if last_event_id is not None:
+            join_kwargs["last_event_id"] = last_event_id
+
+        # Send JoinRunRequest
+        join_msg = pb.StreamRunClientMessage(join=pb.JoinRunRequest(**join_kwargs))
+        await self._stream.write(join_msg)
+
+        # Half-close: signal we're done sending client messages.
+        # Required for bidirectional streaming so the server knows to stop
+        # waiting for more messages and can begin its shutdown sequence.
+        await self._stream.done_writing()
+
+        # Yield events from the stream
+        async for event in self._stream:
+            # Convert protobuf StreamEvent to tuple format
+            event_bytes = event.event_type.encode("utf-8")
+            message_bytes = event.message
+            stream_id_bytes = (
+                event.stream_id.encode("utf-8") if event.HasField("stream_id") else None
+            )
+
+            # Transform error events from gRPC format to older Python format
+            if event.event_type == "error" and message_bytes:
+                try:
+                    error_data = json_loads(message_bytes)
+                    if "status_code" in error_data and "message" in error_data:
+                        message_bytes = json_dumpb(
+                            HTTPException(
+                                status_code=error_data["status_code"],
+                                detail=error_data["message"],
+                            )
+                        )
+                except Exception:
+                    pass  # Keep original message if transformation fails
+
+            yield (event_bytes, message_bytes, stream_id_bytes)
+
+    async def close(self) -> None:
+        """Close the stream and clean up resources."""
+        if self._closed:
+            return
+        self._closed = True
+        if self._stream is not None:
+            with contextlib.suppress(Exception):
+                self._stream.cancel()
+            self._stream = None
+
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        await self.close()
+
+
 def _map_multitask_strategy(
     strategy: MultitaskStrategy | None,
 ) -> enum_multitask_strategy.MultitaskStrategy | None:
@@ -155,6 +260,27 @@ def _map_if_not_exists(
         if if_not_exists == "create"
         else pb.CreateRunBehavior.REJECT_RUN_IF_THREAD_NOT_EXISTS
     )
+
+
+def _map_stream_modes(
+    stream_mode: str | list[str] | None,
+) -> list[enum_stream_mode.StreamMode]:
+    """Map stream mode string(s) to protobuf enum list (filtering invalid modes)."""
+    if stream_mode is None:
+        return []
+
+    modes = [stream_mode] if isinstance(stream_mode, str) else stream_mode
+    result = []
+
+    for mode in modes:
+        proto_mode = STREAM_MODE_TO_PB.get(mode)
+        if proto_mode is None:
+            sanitized = str(mode)[:50] + ("..." if len(str(mode)) > 50 else "")
+            logger.error("Got invalid stream mode '%s', ignoring", sanitized)
+        else:
+            result.append(proto_mode)
+
+    return result
 
 
 def proto_to_run(proto_run: pb.Run) -> Run:
@@ -614,21 +740,31 @@ class Runs(Authenticated):
         async def subscribe(
             run_id: UUID,
             thread_id: UUID | None = None,
-        ):
-            """Subscribe to the run stream, returning a stream handler.
+        ) -> GrpcStreamHandler:
+            """Subscribe to a run stream via bidirectional gRPC.
 
-            For gRPC implementation, this is a no-op for API compatibility.
-            The actual streaming happens in join().
+            Opens the stream and sends SubscribeRunRequest immediately so the
+            server starts buffering events. Returns a handler for join().
+
+            Args:
+                run_id: The run ID to stream
+                thread_id: The thread ID (required for gRPC)
+
+            Returns:
+                GrpcStreamHandler for use with join()
             """
-            # For gRPC, we don't need a separate subscribe step
-            # The gRPC Stream RPC call handles everything
-            return None
+            if thread_id is None:
+                raise ValueError("thread_id is required for gRPC streaming")
+
+            handler = GrpcStreamHandler(run_id, thread_id)
+            await handler.start()
+            return handler
 
         @staticmethod
         async def join(
             run_id: UUID,
             *,
-            stream_channel,  # Unused in gRPC implementation
+            stream_channel: Any,  # GrpcStreamHandler, but Any for API compatibility
             thread_id: UUID,
             ignore_404: bool = False,
             cancel_on_disconnect: bool = False,
@@ -636,88 +772,38 @@ class Runs(Authenticated):
             last_event_id: str | None = None,
             ctx: Any = None,
         ):
-            """Stream the run output via gRPC.
+            """Join the run stream and start receiving events.
+
+            Sends JoinRunRequest with auth filters and config, then yields events.
 
             Yields tuples of (event_bytes, message_bytes, stream_id_bytes|None).
             """
+            handler: GrpcStreamHandler = stream_channel
             auth_filters = await Runs.Stream.handle_event(
                 ctx,
                 "read",
                 Auth.types.ThreadsRead(run_id=run_id, thread_id=thread_id),
             )
 
-            request_kwargs: dict[str, Any] = {
-                "run_id": pb.UUID(value=str(run_id)),
-                "thread_id": pb.UUID(value=str(thread_id)),
-                "filters": auth_filters,
-            }
-
-            if ignore_404:
-                request_kwargs["ignore_run_not_found"] = True
-
-            if cancel_on_disconnect:
-                request_kwargs["cancel_on_disconnect"] = True
-
-            if last_event_id is not None:
-                request_kwargs["last_event_id"] = last_event_id
-
-            # Map stream_mode to protobuf enum list
-            if stream_mode is not None:
-                if isinstance(stream_mode, str):
-                    stream_mode = [stream_mode]
-
-                stream_modes = []
-                for mode in stream_mode:
-                    proto_mode = STREAM_MODE_TO_PB.get(mode)
-                    if proto_mode is None:
-                        sanitized_mode = str(mode)[:50] if mode else ""
-                        if len(mode) > 50:
-                            sanitized_mode = sanitized_mode + "..."
-                        logger.error(
-                            "Got invalid stream mode '%s', ignoring", sanitized_mode
-                        )
-                    else:
-                        stream_modes.append(proto_mode)
-
-                if stream_modes:
-                    request_kwargs["stream_modes"] = stream_modes
-
-            client = await get_shared_client()
-            request = pb.StreamRunRequest(**request_kwargs)
+            stream_modes_pb = _map_stream_modes(stream_mode)
 
             try:
-                async for event in client.runs.Stream(request):
-                    # Convert protobuf StreamEvent to tuple format
-                    event_bytes = event.event_type.encode("utf-8")
-                    message_bytes = event.message
-                    stream_id_bytes = (
-                        event.stream_id.encode("utf-8")
-                        if event.HasField("stream_id")
-                        else None
-                    )
-
-                    # Transform error events from gRPC format to older Python format
-                    if event.event_type == "error" and message_bytes:
-                        try:
-                            error_data = json_loads(message_bytes)
-                            if "status_code" in error_data and "message" in error_data:
-                                message_bytes = json_dumpb(
-                                    HTTPException(
-                                        status_code=error_data["status_code"],
-                                        detail=error_data["message"],
-                                    )
-                                )
-                        except Exception:
-                            pass  # Keep original message if transformation fails
-
+                async for event_bytes, message_bytes, stream_id_bytes in handler.join(
+                    auth_filters=auth_filters,
+                    stream_modes=stream_modes_pb or None,
+                    ignore_run_not_found=ignore_404,
+                    cancel_on_disconnect=cancel_on_disconnect,
+                    last_event_id=last_event_id,
+                ):
                     yield (event_bytes, message_bytes, stream_id_bytes)
-
             except AioRpcError as e:
                 # Special handling for NOT_FOUND when ignore_404 is set
                 if e.code() == StatusCode.NOT_FOUND and ignore_404:
                     return  # Return empty stream
                 # Convert all other gRPC errors to HTTP exceptions
                 _handle_grpc_error(e)
+            finally:
+                await handler.close()
 
         @staticmethod
         async def check_run_stream_auth(

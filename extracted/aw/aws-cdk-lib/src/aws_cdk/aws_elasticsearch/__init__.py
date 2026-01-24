@@ -7938,8 +7938,6 @@ class Domain(
     def domain_arn(self) -> builtins.str:
         '''(deprecated) Arn of the Elasticsearch domain.
 
-        :deprecated: use opensearchservice module instead
-
         :stability: deprecated
         '''
         return typing.cast(builtins.str, jsii.get(self, "domainArn"))
@@ -7959,8 +7957,6 @@ class Domain(
     @jsii.member(jsii_name="domainName")
     def domain_name(self) -> builtins.str:
         '''(deprecated) Domain name of the Elasticsearch domain.
-
-        :deprecated: use opensearchservice module instead
 
         :stability: deprecated
         '''

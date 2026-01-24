@@ -133,6 +133,7 @@ class CfnChannel(
         encoder_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannel.EncoderSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         input_attachments: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannel.InputAttachmentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         input_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannel.InputSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        linked_channel_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannel.LinkedChannelSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         log_level: typing.Optional[builtins.str] = None,
         maintenance: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannel.MaintenanceCreateSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
@@ -153,6 +154,7 @@ class CfnChannel(
         :param encoder_settings: The encoding configuration for the output content.
         :param input_attachments: The list of input attachments for the channel.
         :param input_specification: The input specification for this channel. It specifies the key characteristics of the inputs for this channel: the maximum bitrate, the resolution, and the codec.
+        :param linked_channel_settings: 
         :param log_level: The verbosity for logging activity for this channel. Charges for logging (which are generated through Amazon CloudWatch Logging) are higher for higher verbosities.
         :param maintenance: Maintenance settings for this channel.
         :param name: Name of channel.
@@ -174,6 +176,7 @@ class CfnChannel(
             encoder_settings=encoder_settings,
             input_attachments=input_attachments,
             input_specification=input_specification,
+            linked_channel_settings=linked_channel_settings,
             log_level=log_level,
             maintenance=maintenance,
             name=name,
@@ -482,6 +485,23 @@ class CfnChannel(
             type_hints = typing.get_type_hints(_typecheckingstub__0b5259f36c03529b4fadc479e28da22c834a5bc4672f8081bd809f8353b46ad4)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "inputSpecification", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="linkedChannelSettings")
+    def linked_channel_settings(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.LinkedChannelSettingsProperty"]]:
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.LinkedChannelSettingsProperty"]], jsii.get(self, "linkedChannelSettings"))
+
+    @linked_channel_settings.setter
+    def linked_channel_settings(
+        self,
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.LinkedChannelSettingsProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3dc913848b596deda37acf9491bb6e4a8c222dc215d0716e77dfb8b5320568c3)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "linkedChannelSettings", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="logLevel")
@@ -9184,6 +9204,76 @@ class CfnChannel(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_medialive.CfnChannel.FollowerChannelSettingsProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "linked_channel_type": "linkedChannelType",
+            "primary_channel_arn": "primaryChannelArn",
+        },
+    )
+    class FollowerChannelSettingsProperty:
+        def __init__(
+            self,
+            *,
+            linked_channel_type: typing.Optional[builtins.str] = None,
+            primary_channel_arn: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param linked_channel_type: 
+            :param primary_channel_arn: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-followerchannelsettings.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_medialive as medialive
+                
+                follower_channel_settings_property = medialive.CfnChannel.FollowerChannelSettingsProperty(
+                    linked_channel_type="linkedChannelType",
+                    primary_channel_arn="primaryChannelArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__73ed7414fbfd6de6b5ea6d0923c3a3280c4afd5641560c81905241dc399d7bda)
+                check_type(argname="argument linked_channel_type", value=linked_channel_type, expected_type=type_hints["linked_channel_type"])
+                check_type(argname="argument primary_channel_arn", value=primary_channel_arn, expected_type=type_hints["primary_channel_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if linked_channel_type is not None:
+                self._values["linked_channel_type"] = linked_channel_type
+            if primary_channel_arn is not None:
+                self._values["primary_channel_arn"] = primary_channel_arn
+
+        @builtins.property
+        def linked_channel_type(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-followerchannelsettings.html#cfn-medialive-channel-followerchannelsettings-linkedchanneltype
+            '''
+            result = self._values.get("linked_channel_type")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def primary_channel_arn(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-followerchannelsettings.html#cfn-medialive-channel-followerchannelsettings-primarychannelarn
+            '''
+            result = self._values.get("primary_channel_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "FollowerChannelSettingsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_medialive.CfnChannel.FrameCaptureCdnSettingsProperty",
         jsii_struct_bases=[],
         name_mapping={"frame_capture_s3_settings": "frameCaptureS3Settings"},
@@ -14953,6 +15043,85 @@ class CfnChannel(
 
         def __repr__(self) -> str:
             return "KeyProviderSettingsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_medialive.CfnChannel.LinkedChannelSettingsProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "follower_channel_settings": "followerChannelSettings",
+            "primary_channel_settings": "primaryChannelSettings",
+        },
+    )
+    class LinkedChannelSettingsProperty:
+        def __init__(
+            self,
+            *,
+            follower_channel_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannel.FollowerChannelSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            primary_channel_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannel.PrimaryChannelSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param follower_channel_settings: 
+            :param primary_channel_settings: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-linkedchannelsettings.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_medialive as medialive
+                
+                linked_channel_settings_property = medialive.CfnChannel.LinkedChannelSettingsProperty(
+                    follower_channel_settings=medialive.CfnChannel.FollowerChannelSettingsProperty(
+                        linked_channel_type="linkedChannelType",
+                        primary_channel_arn="primaryChannelArn"
+                    ),
+                    primary_channel_settings=medialive.CfnChannel.PrimaryChannelSettingsProperty(
+                        linked_channel_type="linkedChannelType"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__5d6ba52fb648fc46280606d4015f014397662c16f70051073428ed9c13956605)
+                check_type(argname="argument follower_channel_settings", value=follower_channel_settings, expected_type=type_hints["follower_channel_settings"])
+                check_type(argname="argument primary_channel_settings", value=primary_channel_settings, expected_type=type_hints["primary_channel_settings"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if follower_channel_settings is not None:
+                self._values["follower_channel_settings"] = follower_channel_settings
+            if primary_channel_settings is not None:
+                self._values["primary_channel_settings"] = primary_channel_settings
+
+        @builtins.property
+        def follower_channel_settings(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.FollowerChannelSettingsProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-linkedchannelsettings.html#cfn-medialive-channel-linkedchannelsettings-followerchannelsettings
+            '''
+            result = self._values.get("follower_channel_settings")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.FollowerChannelSettingsProperty"]], result)
+
+        @builtins.property
+        def primary_channel_settings(
+            self,
+        ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.PrimaryChannelSettingsProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-linkedchannelsettings.html#cfn-medialive-channel-linkedchannelsettings-primarychannelsettings
+            '''
+            result = self._values.get("primary_channel_settings")
+            return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.PrimaryChannelSettingsProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LinkedChannelSettingsProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -20982,6 +21151,59 @@ class CfnChannel(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_medialive.CfnChannel.PrimaryChannelSettingsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"linked_channel_type": "linkedChannelType"},
+    )
+    class PrimaryChannelSettingsProperty:
+        def __init__(
+            self,
+            *,
+            linked_channel_type: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param linked_channel_type: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-primarychannelsettings.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_medialive as medialive
+                
+                primary_channel_settings_property = medialive.CfnChannel.PrimaryChannelSettingsProperty(
+                    linked_channel_type="linkedChannelType"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__e7f9686b9d994824ef348763f4747c7f8585da763c6368d1d4b4be0ff70cbfd6)
+                check_type(argname="argument linked_channel_type", value=linked_channel_type, expected_type=type_hints["linked_channel_type"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if linked_channel_type is not None:
+                self._values["linked_channel_type"] = linked_channel_type
+
+        @builtins.property
+        def linked_channel_type(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-primarychannelsettings.html#cfn-medialive-channel-primarychannelsettings-linkedchanneltype
+            '''
+            result = self._values.get("linked_channel_type")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "PrimaryChannelSettingsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_medialive.CfnChannel.RawSettingsProperty",
         jsii_struct_bases=[],
         name_mapping={},
@@ -25062,6 +25284,7 @@ class CfnChannelPlacementGroupProps:
         "encoder_settings": "encoderSettings",
         "input_attachments": "inputAttachments",
         "input_specification": "inputSpecification",
+        "linked_channel_settings": "linkedChannelSettings",
         "log_level": "logLevel",
         "maintenance": "maintenance",
         "name": "name",
@@ -25083,6 +25306,7 @@ class CfnChannelProps:
         encoder_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannel.EncoderSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         input_attachments: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannel.InputAttachmentProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         input_specification: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannel.InputSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        linked_channel_settings: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannel.LinkedChannelSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         log_level: typing.Optional[builtins.str] = None,
         maintenance: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnChannel.MaintenanceCreateSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
@@ -25101,6 +25325,7 @@ class CfnChannelProps:
         :param encoder_settings: The encoding configuration for the output content.
         :param input_attachments: The list of input attachments for the channel.
         :param input_specification: The input specification for this channel. It specifies the key characteristics of the inputs for this channel: the maximum bitrate, the resolution, and the codec.
+        :param linked_channel_settings: 
         :param log_level: The verbosity for logging activity for this channel. Charges for logging (which are generated through Amazon CloudWatch Logging) are higher for higher verbosities.
         :param maintenance: Maintenance settings for this channel.
         :param name: Name of channel.
@@ -25126,6 +25351,7 @@ class CfnChannelProps:
             check_type(argname="argument encoder_settings", value=encoder_settings, expected_type=type_hints["encoder_settings"])
             check_type(argname="argument input_attachments", value=input_attachments, expected_type=type_hints["input_attachments"])
             check_type(argname="argument input_specification", value=input_specification, expected_type=type_hints["input_specification"])
+            check_type(argname="argument linked_channel_settings", value=linked_channel_settings, expected_type=type_hints["linked_channel_settings"])
             check_type(argname="argument log_level", value=log_level, expected_type=type_hints["log_level"])
             check_type(argname="argument maintenance", value=maintenance, expected_type=type_hints["maintenance"])
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
@@ -25151,6 +25377,8 @@ class CfnChannelProps:
             self._values["input_attachments"] = input_attachments
         if input_specification is not None:
             self._values["input_specification"] = input_specification
+        if linked_channel_settings is not None:
+            self._values["linked_channel_settings"] = linked_channel_settings
         if log_level is not None:
             self._values["log_level"] = log_level
         if maintenance is not None:
@@ -25261,6 +25489,16 @@ class CfnChannelProps:
         '''
         result = self._values.get("input_specification")
         return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.InputSpecificationProperty"]], result)
+
+    @builtins.property
+    def linked_channel_settings(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.LinkedChannelSettingsProperty"]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-medialive-channel.html#cfn-medialive-channel-linkedchannelsettings
+        '''
+        result = self._values.get("linked_channel_settings")
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnChannel.LinkedChannelSettingsProperty"]], result)
 
     @builtins.property
     def log_level(self) -> typing.Optional[builtins.str]:
@@ -33968,6 +34206,7 @@ def _typecheckingstub__0060427de31049849d0b954eb2d8f1219de8b4f8164b94cdfa32d6ef2
     encoder_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.EncoderSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     input_attachments: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.InputAttachmentProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     input_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.InputSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    linked_channel_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.LinkedChannelSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     log_level: typing.Optional[builtins.str] = None,
     maintenance: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.MaintenanceCreateSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     name: typing.Optional[builtins.str] = None,
@@ -34068,6 +34307,12 @@ def _typecheckingstub__21a00bae3ae031cde82b03663d2a24b4294b4b914a32c0c2f6738dd48
 
 def _typecheckingstub__0b5259f36c03529b4fadc479e28da22c834a5bc4672f8081bd809f8353b46ad4(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnChannel.InputSpecificationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3dc913848b596deda37acf9491bb6e4a8c222dc215d0716e77dfb8b5320568c3(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnChannel.LinkedChannelSettingsProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -34795,6 +35040,14 @@ def _typecheckingstub__083543bbfcc983933dcd032f2995caa7a42e85e15332719207408bfbb
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__73ed7414fbfd6de6b5ea6d0923c3a3280c4afd5641560c81905241dc399d7bda(
+    *,
+    linked_channel_type: typing.Optional[builtins.str] = None,
+    primary_channel_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__02bd05ffdb6de2491773d7ccb53d8d6f9ffc22520b2423f14dcefad239054595(
     *,
     frame_capture_s3_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.FrameCaptureS3SettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -35207,6 +35460,14 @@ def _typecheckingstub__46b07830b4df395695edac3201ef71beeaa646842d22f7da9f21c0fea
 def _typecheckingstub__f17a7a3d9400285491546fe3aa2beed1785e9839486a1ca6a046d8ce275241ba(
     *,
     static_key_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.StaticKeySettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5d6ba52fb648fc46280606d4015f014397662c16f70051073428ed9c13956605(
+    *,
+    follower_channel_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.FollowerChannelSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    primary_channel_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.PrimaryChannelSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -35627,6 +35888,13 @@ def _typecheckingstub__f51710b013df89803afb3f2517730a72a64c710d2e8f52fa7b934290b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__e7f9686b9d994824ef348763f4747c7f8585da763c6368d1d4b4be0ff70cbfd6(
+    *,
+    linked_channel_type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7f45d0853444d06099d7494d2f94e86e3388fa2fb96cc8adbbf6545a8725bfac(
     *,
     channel_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.AudioChannelMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -35987,6 +36255,7 @@ def _typecheckingstub__b13ea4bee752af01767701d05a81e0c16839b625a40da4f298a5e05d7
     encoder_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.EncoderSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     input_attachments: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.InputAttachmentProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     input_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.InputSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    linked_channel_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.LinkedChannelSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     log_level: typing.Optional[builtins.str] = None,
     maintenance: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.MaintenanceCreateSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     name: typing.Optional[builtins.str] = None,

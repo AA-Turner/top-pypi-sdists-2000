@@ -534,11 +534,6 @@ class ThreadsStub(object):
                 request_serializer=core__api__pb2.SetThreadJointStatusRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 _registered_method=True)
-        self.SweepTTL = channel.unary_unary(
-                '/coreApi.Threads/SweepTTL',
-                request_serializer=core__api__pb2.SweepThreadsTTLRequest.SerializeToString,
-                response_deserializer=core__api__pb2.SweepThreadsTTLResponse.FromString,
-                _registered_method=True)
         self.GetGraphID = channel.unary_unary(
                 '/coreApi.Threads/GetGraphID',
                 request_serializer=core__api__pb2.GetGraphIDRequest.SerializeToString,
@@ -611,13 +606,6 @@ class ThreadsServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def SweepTTL(self, request, context):
-        """Delete expired threads (based on TTL configurations).
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
     def GetGraphID(self, request, context):
         """Get graph ID for the latest run in a thread (internal method, no auth).
         """
@@ -677,11 +665,6 @@ def add_ThreadsServicer_to_server(servicer, server):
                     servicer.SetJointStatus,
                     request_deserializer=core__api__pb2.SetThreadJointStatusRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
-            ),
-            'SweepTTL': grpc.unary_unary_rpc_method_handler(
-                    servicer.SweepTTL,
-                    request_deserializer=core__api__pb2.SweepThreadsTTLRequest.FromString,
-                    response_serializer=core__api__pb2.SweepThreadsTTLResponse.SerializeToString,
             ),
             'GetGraphID': grpc.unary_unary_rpc_method_handler(
                     servicer.GetGraphID,
@@ -970,33 +953,6 @@ class Threads(object):
             _registered_method=True)
 
     @staticmethod
-    def SweepTTL(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(
-            request,
-            target,
-            '/coreApi.Threads/SweepTTL',
-            core__api__pb2.SweepThreadsTTLRequest.SerializeToString,
-            core__api__pb2.SweepThreadsTTLResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
-
-    @staticmethod
     def GetGraphID(request,
             target,
             options=(),
@@ -1063,9 +1019,9 @@ class RunsStub(object):
                 request_serializer=core__api__pb2.SetRunStatusRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 _registered_method=True)
-        self.Stream = channel.unary_stream(
+        self.Stream = channel.stream_stream(
                 '/coreApi.Runs/Stream',
-                request_serializer=core__api__pb2.StreamRunRequest.SerializeToString,
+                request_serializer=core__api__pb2.StreamRunClientMessage.SerializeToString,
                 response_deserializer=core__api__pb2.StreamEvent.FromString,
                 _registered_method=True)
         self.Publish = channel.unary_unary(
@@ -1144,8 +1100,11 @@ class RunsServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def Stream(self, request, context):
-        """Stream run events.
+    def Stream(self, request_iterator, context):
+        """Bidirectional stream for run events.
+        Client opens stream, then sends JoinRunRequest to start receiving events.
+        Server validates auth on join and starts streaming events.
+        If client disconnects and cancel_on_disconnect was set, the run is cancelled.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -1235,9 +1194,9 @@ def add_RunsServicer_to_server(servicer, server):
                     request_deserializer=core__api__pb2.SetRunStatusRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
-            'Stream': grpc.unary_stream_rpc_method_handler(
+            'Stream': grpc.stream_stream_rpc_method_handler(
                     servicer.Stream,
-                    request_deserializer=core__api__pb2.StreamRunRequest.FromString,
+                    request_deserializer=core__api__pb2.StreamRunClientMessage.FromString,
                     response_serializer=core__api__pb2.StreamEvent.SerializeToString,
             ),
             'Publish': grpc.unary_unary_rpc_method_handler(
@@ -1449,7 +1408,7 @@ class Runs(object):
             _registered_method=True)
 
     @staticmethod
-    def Stream(request,
+    def Stream(request_iterator,
             target,
             options=(),
             channel_credentials=None,
@@ -1459,11 +1418,11 @@ class Runs(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_stream(
-            request,
+        return grpc.experimental.stream_stream(
+            request_iterator,
             target,
             '/coreApi.Runs/Stream',
-            core__api__pb2.StreamRunRequest.SerializeToString,
+            core__api__pb2.StreamRunClientMessage.SerializeToString,
             core__api__pb2.StreamEvent.FromString,
             options,
             channel_credentials,

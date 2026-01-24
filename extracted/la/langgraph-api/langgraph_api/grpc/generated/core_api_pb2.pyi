@@ -574,22 +574,6 @@ class CountThreadsRequest(_message.Message):
     status: _enum_thread_status_pb2.ThreadStatus
     def __init__(self, filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., metadata_json: _Optional[bytes] = ..., values_json: _Optional[bytes] = ..., status: _Optional[_Union[_enum_thread_status_pb2.ThreadStatus, str]] = ...) -> None: ...
 
-class SweepThreadsTTLResponse(_message.Message):
-    __slots__ = ("expired", "deleted")
-    EXPIRED_FIELD_NUMBER: _ClassVar[int]
-    DELETED_FIELD_NUMBER: _ClassVar[int]
-    expired: int
-    deleted: int
-    def __init__(self, expired: _Optional[int] = ..., deleted: _Optional[int] = ...) -> None: ...
-
-class SweepThreadsTTLRequest(_message.Message):
-    __slots__ = ("batch_size", "limit")
-    BATCH_SIZE_FIELD_NUMBER: _ClassVar[int]
-    LIMIT_FIELD_NUMBER: _ClassVar[int]
-    batch_size: int
-    limit: int
-    def __init__(self, batch_size: _Optional[int] = ..., limit: _Optional[int] = ...) -> None: ...
-
 class SetThreadStatusRequest(_message.Message):
     __slots__ = ("thread_id", "checkpoint", "exception_json", "expected_status")
     THREAD_ID_FIELD_NUMBER: _ClassVar[int]
@@ -842,23 +826,35 @@ class CountRunsRequest(_message.Message):
     statuses: _containers.RepeatedScalarFieldContainer[str]
     def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., statuses: _Optional[_Iterable[str]] = ...) -> None: ...
 
-class StreamRunRequest(_message.Message):
-    __slots__ = ("thread_id", "run_id", "filters", "last_event_id", "stream_modes", "ignore_run_not_found", "cancel_on_disconnect")
+class StreamRunClientMessage(_message.Message):
+    __slots__ = ("subscribe", "join")
+    SUBSCRIBE_FIELD_NUMBER: _ClassVar[int]
+    JOIN_FIELD_NUMBER: _ClassVar[int]
+    subscribe: SubscribeRunRequest
+    join: JoinRunRequest
+    def __init__(self, subscribe: _Optional[_Union[SubscribeRunRequest, _Mapping]] = ..., join: _Optional[_Union[JoinRunRequest, _Mapping]] = ...) -> None: ...
+
+class SubscribeRunRequest(_message.Message):
+    __slots__ = ("thread_id", "run_id")
     THREAD_ID_FIELD_NUMBER: _ClassVar[int]
     RUN_ID_FIELD_NUMBER: _ClassVar[int]
+    thread_id: UUID
+    run_id: UUID
+    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., run_id: _Optional[_Union[UUID, _Mapping]] = ...) -> None: ...
+
+class JoinRunRequest(_message.Message):
+    __slots__ = ("filters", "stream_modes", "ignore_run_not_found", "cancel_on_disconnect", "last_event_id")
     FILTERS_FIELD_NUMBER: _ClassVar[int]
-    LAST_EVENT_ID_FIELD_NUMBER: _ClassVar[int]
     STREAM_MODES_FIELD_NUMBER: _ClassVar[int]
     IGNORE_RUN_NOT_FOUND_FIELD_NUMBER: _ClassVar[int]
     CANCEL_ON_DISCONNECT_FIELD_NUMBER: _ClassVar[int]
-    thread_id: UUID
-    run_id: UUID
+    LAST_EVENT_ID_FIELD_NUMBER: _ClassVar[int]
     filters: _containers.RepeatedCompositeFieldContainer[AuthFilter]
-    last_event_id: str
     stream_modes: _containers.RepeatedScalarFieldContainer[_enum_stream_mode_pb2.StreamMode]
     ignore_run_not_found: bool
     cancel_on_disconnect: bool
-    def __init__(self, thread_id: _Optional[_Union[UUID, _Mapping]] = ..., run_id: _Optional[_Union[UUID, _Mapping]] = ..., filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., last_event_id: _Optional[str] = ..., stream_modes: _Optional[_Iterable[_Union[_enum_stream_mode_pb2.StreamMode, str]]] = ..., ignore_run_not_found: bool = ..., cancel_on_disconnect: bool = ...) -> None: ...
+    last_event_id: str
+    def __init__(self, filters: _Optional[_Iterable[_Union[AuthFilter, _Mapping]]] = ..., stream_modes: _Optional[_Iterable[_Union[_enum_stream_mode_pb2.StreamMode, str]]] = ..., ignore_run_not_found: bool = ..., cancel_on_disconnect: bool = ..., last_event_id: _Optional[str] = ...) -> None: ...
 
 class EnterRunRequest(_message.Message):
     __slots__ = ("run_id", "thread_id", "resumable")

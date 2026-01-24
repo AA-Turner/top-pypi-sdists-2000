@@ -9694,19 +9694,13 @@ class BaseDeploymentConfig(
     @builtins.property
     @jsii.member(jsii_name="deploymentConfigArn")
     def deployment_config_arn(self) -> builtins.str:
-        '''The arn of the deployment config.
-
-        :attribute: true
-        '''
+        '''The ARN of the Deployment Configuration.'''
         return typing.cast(builtins.str, jsii.get(self, "deploymentConfigArn"))
 
     @builtins.property
     @jsii.member(jsii_name="deploymentConfigName")
     def deployment_config_name(self) -> builtins.str:
-        '''The name of the deployment config.
-
-        :attribute: true
-        '''
+        '''The physical, human-readable name of the Deployment Configuration.'''
         return typing.cast(builtins.str, jsii.get(self, "deploymentConfigName"))
 
     @builtins.property

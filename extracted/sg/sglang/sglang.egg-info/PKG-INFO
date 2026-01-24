@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: sglang
-Version: 0.5.7
+Version: 0.5.8
 Summary: SGLang is a fast serving framework for large language models and vision language models.
 License:                                  Apache License
                                    Version 2.0, January 2004
@@ -213,18 +213,19 @@ Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: IPython
 Requires-Dist: aiohttp
+Requires-Dist: apache-tvm-ffi<0.2,>=0.1.5
 Requires-Dist: anthropic>=0.20.0
 Requires-Dist: av; sys_platform == "linux" and (platform_machine == "aarch64" or platform_machine == "arm64" and platform_machine == "armv7l")
 Requires-Dist: blobfile==3.0.0
 Requires-Dist: build
 Requires-Dist: compressed-tensors
-Requires-Dist: cuda-python
+Requires-Dist: cuda-python==12.9
 Requires-Dist: decord2
 Requires-Dist: datasets
 Requires-Dist: einops
 Requires-Dist: fastapi
-Requires-Dist: flashinfer_python==0.5.3
-Requires-Dist: flashinfer_cubin==0.5.3
+Requires-Dist: flashinfer_python==0.6.1
+Requires-Dist: flashinfer_cubin==0.6.1
 Requires-Dist: gguf
 Requires-Dist: hf_transfer
 Requires-Dist: huggingface_hub
@@ -234,7 +235,7 @@ Requires-Dist: modelscope
 Requires-Dist: msgspec
 Requires-Dist: ninja
 Requires-Dist: numpy
-Requires-Dist: nvidia-cutlass-dsl==4.2.1
+Requires-Dist: nvidia-cutlass-dsl>=4.3.4
 Requires-Dist: nvidia-ml-py
 Requires-Dist: openai-harmony==0.0.4
 Requires-Dist: openai==2.6.1
@@ -250,20 +251,21 @@ Requires-Dist: pybase64
 Requires-Dist: pydantic
 Requires-Dist: python-multipart
 Requires-Dist: pyzmq>=25.1.2
+Requires-Dist: quack-kernels==0.2.4
 Requires-Dist: requests
 Requires-Dist: scipy
 Requires-Dist: sentencepiece
 Requires-Dist: setproctitle
-Requires-Dist: sgl-kernel==0.3.20
+Requires-Dist: sgl-kernel==0.3.21
 Requires-Dist: soundfile==0.13.1
 Requires-Dist: tiktoken
 Requires-Dist: timm==1.0.16
 Requires-Dist: torch_memory_saver==0.0.9
 Requires-Dist: torch==2.9.1
+Requires-Dist: torchao==0.9.0
 Requires-Dist: torchaudio==2.9.1
 Requires-Dist: torchcodec==0.8.0; sys_platform != "linux" or (sys_platform == "linux" and platform_machine != "aarch64" and platform_machine != "arm64" and platform_machine != "armv7l")
 Requires-Dist: torchvision
-Requires-Dist: torchao==0.9.0
 Requires-Dist: tqdm
 Requires-Dist: transformers==4.57.1
 Requires-Dist: uvicorn
@@ -286,7 +288,6 @@ Requires-Dist: opencv-python-headless==4.10.0.84; extra == "diffusion"
 Requires-Dist: remote-pdb; extra == "diffusion"
 Requires-Dist: st_attn==0.0.7; extra == "diffusion"
 Requires-Dist: vsa==0.0.4; extra == "diffusion"
-Requires-Dist: yunchang==0.6.3.post1; extra == "diffusion"
 Requires-Dist: runai_model_streamer; extra == "diffusion"
 Requires-Dist: cache-dit==1.1.8; extra == "diffusion"
 Provides-Extra: tracing
@@ -324,15 +325,17 @@ Dynamic: license-file
 
 --------------------------------------------------------------------------------
 
-| [**Blog**](https://lmsys.org/blog/)
-| [**Documentation**](https://docs.sglang.io/)
-| [**Roadmap**](https://roadmap.sglang.io/)
-| [**Join Slack**](https://slack.sglang.io/)
-| [**Weekly Dev Meeting**](https://meet.sglang.io/)
-| [**Slides**](https://github.com/sgl-project/sgl-learning-materials?tab=readme-ov-file#slides) |
+<p align="center">
+<a href="https://lmsys.org/blog/"><b>Blog</b></a> |
+<a href="https://docs.sglang.io/"><b>Documentation</b></a> |
+<a href="https://roadmap.sglang.io/"><b>Roadmap</b></a> |
+<a href="https://slack.sglang.io/"><b>Join Slack</b></a> |
+<a href="https://meet.sglang.io/"><b>Weekly Dev Meeting</b></a> |
+<a href="https://github.com/sgl-project/sgl-learning-materials?tab=readme-ov-file#slides"><b>Slides</b></a>
+</p>
 
 ## News
-- [2025/12] SGLang provides day-0 support for latest open models ([MiMo-V2-Flash](https://lmsys.org/blog/2025-12-16-mimo-v2-flash/), [Nemotron 3 Nano](https://lmsys.org/blog/2025-12-15-run-nvidia-nemotron-3-nano/), [Mistral Large 3](https://github.com/sgl-project/sglang/pull/14213), [LLaDA 2.0 Diffusion LLM](https://x.com/lmsysorg/status/1999378073125552375?s=20), [MiniMax M2](https://lmsys.org/blog/2025-11-04-miminmax-m2/)).
+- [2025/12] SGLang provides day-0 support for latest open models ([MiMo-V2-Flash](https://lmsys.org/blog/2025-12-16-mimo-v2-flash/), [Nemotron 3 Nano](https://lmsys.org/blog/2025-12-15-run-nvidia-nemotron-3-nano/), [Mistral Large 3](https://github.com/sgl-project/sglang/pull/14213), [LLaDA 2.0 Diffusion LLM](https://lmsys.org/blog/2025-12-19-diffusion-llm/), [MiniMax M2](https://lmsys.org/blog/2025-11-04-miminmax-m2/)).
 - [2025/11] 🔥 SGLang Diffusion accelerates video and image generation ([blog](https://lmsys.org/blog/2025-11-07-sglang-diffusion/)).
 - [2025/10] 🔥 SGLang now runs natively on TPU with the SGLang-Jax backend ([blog](https://lmsys.org/blog/2025-10-29-sglang-jax/)).
 - [2025/09] Deploying DeepSeek on GB200 NVL72 with PD and Large Scale EP (Part II): 3.8x Prefill, 4.8x Decode Throughput ([blog](https://lmsys.org/blog/2025-09-25-gb200-part-2/)).

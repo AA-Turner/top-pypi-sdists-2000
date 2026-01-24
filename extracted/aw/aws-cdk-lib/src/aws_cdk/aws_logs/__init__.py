@@ -476,6 +476,18 @@ logs.LogGroup(self, "LogGroupLambda",
 )
 ```
 
+## Configure Deletion Protection
+
+Indicates whether deletion protection is enabled for this log group. When enabled, deletion protection blocks all deletion operations until it is explicitly disabled.
+
+For more information, see [Protecting log groups from deletion](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/protecting-log-groups-from-deletion.html).
+
+```python
+logs.LogGroup(self, "LogGroup",
+    deletion_protection_enabled=True
+)
+```
+
 ## Field Index Policies
 
 Creates or updates a field index policy for the specified log group. You can use field index policies to create field indexes on fields found in log events in the log group. Creating field indexes lowers the costs for CloudWatch Logs Insights queries that reference those field indexes, because these queries attempt to skip the processing of log events that are known to not match the indexed field. Good fields to index are fields that you often need to query for and fields that have high cardinality of values.
@@ -13306,6 +13318,7 @@ class LogGroup(
         id: builtins.str,
         *,
         data_protection_policy: typing.Optional["DataProtectionPolicy"] = None,
+        deletion_protection_enabled: typing.Optional[builtins.bool] = None,
         encryption_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         field_index_policies: typing.Optional[typing.Sequence["FieldIndexPolicy"]] = None,
         log_group_class: typing.Optional["LogGroupClass"] = None,
@@ -13317,6 +13330,7 @@ class LogGroup(
         :param scope: -
         :param id: -
         :param data_protection_policy: Data Protection Policy for this log group. Default: - no data protection policy
+        :param deletion_protection_enabled: Indicates whether deletion protection is enabled for this log group. When enabled, deletion protection blocks all deletion operations until it is explicitly disabled. Default: false
         :param encryption_key: The KMS customer managed key to encrypt the log group with. Default: Server-side encryption managed by the CloudWatch Logs service
         :param field_index_policies: Field Index Policies for this log group. Default: - no field index policies for this log group.
         :param log_group_class: The class of the log group. Possible values are: STANDARD and INFREQUENT_ACCESS. INFREQUENT_ACCESS class provides customers a cost-effective way to consolidate logs which supports querying using Logs Insights. The logGroupClass property cannot be changed once the log group is created. Default: LogGroupClass.STANDARD
@@ -13330,6 +13344,7 @@ class LogGroup(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = LogGroupProps(
             data_protection_policy=data_protection_policy,
+            deletion_protection_enabled=deletion_protection_enabled,
             encryption_key=encryption_key,
             field_index_policies=field_index_policies,
             log_group_class=log_group_class,
@@ -13910,6 +13925,7 @@ class LogGroupGrants(
     jsii_struct_bases=[],
     name_mapping={
         "data_protection_policy": "dataProtectionPolicy",
+        "deletion_protection_enabled": "deletionProtectionEnabled",
         "encryption_key": "encryptionKey",
         "field_index_policies": "fieldIndexPolicies",
         "log_group_class": "logGroupClass",
@@ -13923,6 +13939,7 @@ class LogGroupProps:
         self,
         *,
         data_protection_policy: typing.Optional["DataProtectionPolicy"] = None,
+        deletion_protection_enabled: typing.Optional[builtins.bool] = None,
         encryption_key: typing.Optional["_IKeyRef_d4fc6ef3"] = None,
         field_index_policies: typing.Optional[typing.Sequence["FieldIndexPolicy"]] = None,
         log_group_class: typing.Optional["LogGroupClass"] = None,
@@ -13933,6 +13950,7 @@ class LogGroupProps:
         '''Properties for a LogGroup.
 
         :param data_protection_policy: Data Protection Policy for this log group. Default: - no data protection policy
+        :param deletion_protection_enabled: Indicates whether deletion protection is enabled for this log group. When enabled, deletion protection blocks all deletion operations until it is explicitly disabled. Default: false
         :param encryption_key: The KMS customer managed key to encrypt the log group with. Default: Server-side encryption managed by the CloudWatch Logs service
         :param field_index_policies: Field Index Policies for this log group. Default: - no field index policies for this log group.
         :param log_group_class: The class of the log group. Possible values are: STANDARD and INFREQUENT_ACCESS. INFREQUENT_ACCESS class provides customers a cost-effective way to consolidate logs which supports querying using Logs Insights. The logGroupClass property cannot be changed once the log group is created. Default: LogGroupClass.STANDARD
@@ -13944,40 +13962,26 @@ class LogGroupProps:
 
         Example::
 
-            import aws_cdk.aws_kinesisfirehose as firehose
+            # my_role: iam.Role
             
-            
-            log_group_destination = logs.LogGroup(self, "LogGroupLambdaAudit",
-                log_group_name="auditDestinationForCDK"
-            )
-            
-            bucket = s3.Bucket(self, "audit-bucket")
-            s3_destination = firehose.S3Bucket(bucket)
-            
-            delivery_stream = firehose.DeliveryStream(self, "Delivery Stream",
-                destination=s3_destination
-            )
-            
-            data_protection_policy = logs.DataProtectionPolicy(
-                name="data protection policy",
-                description="policy description",
-                identifiers=[logs.DataIdentifier.DRIVERSLICENSE_US,  # managed data identifier
-                    logs.DataIdentifier("EmailAddress"),  # forward compatibility for new managed data identifiers
-                    logs.CustomDataIdentifier("EmployeeId", "EmployeeId-\\d{9}")
-                ],  # custom data identifier
-                log_group_audit_destination=log_group_destination,
-                s3_bucket_audit_destination=bucket,
-                delivery_stream_name_audit_destination=delivery_stream.delivery_stream_name
-            )
-            
-            logs.LogGroup(self, "LogGroupLambda",
-                log_group_name="cdkIntegLogGroup",
-                data_protection_policy=data_protection_policy
+            cr.AwsCustomResource(self, "Customized",
+                role=my_role,  # must be assumable by the `lambda.amazonaws.com` service principal
+                timeout=Duration.minutes(10),  # defaults to 2 minutes
+                memory_size=1025,  # defaults to 512 if installLatestAwsSdk is true
+                log_group=logs.LogGroup(self, "AwsCustomResourceLogs",
+                    retention=logs.RetentionDays.ONE_DAY
+                ),
+                function_name="my-custom-name",  # defaults to a CloudFormation generated name
+                removal_policy=RemovalPolicy.RETAIN,  # defaults to `RemovalPolicy.DESTROY`
+                policy=cr.AwsCustomResourcePolicy.from_sdk_calls(
+                    resources=cr.AwsCustomResourcePolicy.ANY_RESOURCE
+                )
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__df51a93f7809d59dd37d78a60967e0071dab4876ea1cd5ecd658ac3c8eae1320)
             check_type(argname="argument data_protection_policy", value=data_protection_policy, expected_type=type_hints["data_protection_policy"])
+            check_type(argname="argument deletion_protection_enabled", value=deletion_protection_enabled, expected_type=type_hints["deletion_protection_enabled"])
             check_type(argname="argument encryption_key", value=encryption_key, expected_type=type_hints["encryption_key"])
             check_type(argname="argument field_index_policies", value=field_index_policies, expected_type=type_hints["field_index_policies"])
             check_type(argname="argument log_group_class", value=log_group_class, expected_type=type_hints["log_group_class"])
@@ -13987,6 +13991,8 @@ class LogGroupProps:
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if data_protection_policy is not None:
             self._values["data_protection_policy"] = data_protection_policy
+        if deletion_protection_enabled is not None:
+            self._values["deletion_protection_enabled"] = deletion_protection_enabled
         if encryption_key is not None:
             self._values["encryption_key"] = encryption_key
         if field_index_policies is not None:
@@ -14008,6 +14014,18 @@ class LogGroupProps:
         '''
         result = self._values.get("data_protection_policy")
         return typing.cast(typing.Optional["DataProtectionPolicy"], result)
+
+    @builtins.property
+    def deletion_protection_enabled(self) -> typing.Optional[builtins.bool]:
+        '''Indicates whether deletion protection is enabled for this log group.
+
+        When enabled,
+        deletion protection blocks all deletion operations until it is explicitly disabled.
+
+        :default: false
+        '''
+        result = self._values.get("deletion_protection_enabled")
+        return typing.cast(typing.Optional[builtins.bool], result)
 
     @builtins.property
     def encryption_key(self) -> typing.Optional["_IKeyRef_d4fc6ef3"]:
@@ -20702,6 +20720,7 @@ def _typecheckingstub__308a02ff022bfc4531ef0c547fbfb8db809293b3cda70c61106c9bc27
     id: builtins.str,
     *,
     data_protection_policy: typing.Optional[DataProtectionPolicy] = None,
+    deletion_protection_enabled: typing.Optional[builtins.bool] = None,
     encryption_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
     field_index_policies: typing.Optional[typing.Sequence[FieldIndexPolicy]] = None,
     log_group_class: typing.Optional[LogGroupClass] = None,
@@ -20845,6 +20864,7 @@ def _typecheckingstub__d7b9c220ded57ef7105f24fef958f2bad5a42c4417f83bd42464ecc96
 def _typecheckingstub__df51a93f7809d59dd37d78a60967e0071dab4876ea1cd5ecd658ac3c8eae1320(
     *,
     data_protection_policy: typing.Optional[DataProtectionPolicy] = None,
+    deletion_protection_enabled: typing.Optional[builtins.bool] = None,
     encryption_key: typing.Optional[_IKeyRef_d4fc6ef3] = None,
     field_index_policies: typing.Optional[typing.Sequence[FieldIndexPolicy]] = None,
     log_group_class: typing.Optional[LogGroupClass] = None,

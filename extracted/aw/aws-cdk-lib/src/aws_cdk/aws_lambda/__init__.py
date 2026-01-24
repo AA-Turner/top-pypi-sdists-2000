@@ -14507,24 +14507,30 @@ class CfnVersionProps:
 class Code(metaclass=jsii.JSIIAbstractClass, jsii_type="aws-cdk-lib.aws_lambda.Code"):
     '''Represents the Lambda Handler Code.
 
-    :exampleMetadata: infused
+    :exampleMetadata: fixture=default infused
 
     Example::
 
-        my_function_handler = lambda_.Function(self, "MyFunction",
-            code=lambda_.Code.from_asset("resource/myfunction"),
-            runtime=lambda_.Runtime.NODEJS_LATEST,
-            handler="index.handler"
+        # Create or reference an existing L1 CfnApplicationInferenceProfile
+        cfn_profile = aws_bedrock_cfn.CfnApplicationInferenceProfile(self, "CfnProfile",
+            inference_profile_name="my-cfn-profile",
+            model_source=aws_bedrock_cfn.CfnApplicationInferenceProfile.InferenceProfileModelSourceProperty(
+                copy_from=bedrock.BedrockFoundationModel.ANTHROPIC_CLAUDE_3_5_SONNET_V1_0.invokable_arn
+            ),
+            description="Profile created via L1 construct"
         )
         
-        event_rule = cloudtrail.Trail.on_event(self, "MyCloudWatchEvent",
-            target=targets.LambdaFunction(my_function_handler)
+        # Import the L1 construct as an L2 ApplicationInferenceProfile
+        imported_from_cfn = bedrock.ApplicationInferenceProfile.from_cfn_application_inference_profile(cfn_profile)
+        
+        # Grant permissions to use the imported profile
+        lambda_function = lambda_.Function(self, "MyFunction",
+            runtime=lambda_.Runtime.PYTHON_3_11,
+            handler="index.handler",
+            code=lambda_.Code.from_inline("def handler(event, context): return \"Hello\"")
         )
         
-        event_rule.add_event_pattern(
-            account=["123456789012"],
-            source=["aws.s3"]
-        )
+        imported_from_cfn.grant_profile_usage(lambda_function)
     '''
 
     def __init__(self) -> None:
@@ -24773,6 +24779,10 @@ class MetricType(enum.Enum):
 
     These metrics help you monitor the flow and status of events through your event source mapping.
     '''
+    ERRORCOUNT = "ERRORCOUNT"
+    '''Error Count metrics provide insights into invocation failures for your event source mapping.'''
+    KAFKAMETRICS = "KAFKAMETRICS"
+    '''Kafka-specific metrics for monitoring Apache Kafka and Amazon MSK event sources.'''
 
 
 @jsii.data_type(

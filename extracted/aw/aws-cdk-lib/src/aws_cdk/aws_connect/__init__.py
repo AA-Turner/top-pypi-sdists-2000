@@ -4358,6 +4358,17 @@ class CfnEvaluationForm(
             language_configuration=connect.CfnEvaluationForm.EvaluationFormLanguageConfigurationProperty(
                 form_language="formLanguage"
             ),
+            review_configuration=connect.CfnEvaluationForm.EvaluationReviewConfigurationProperty(
+                review_notification_recipients=[connect.CfnEvaluationForm.EvaluationReviewNotificationRecipientProperty(
+                    type="type",
+                    value=connect.CfnEvaluationForm.EvaluationReviewNotificationRecipientValueProperty(
+                        user_id="userId"
+                    )
+                )],
+        
+                # the properties below are optional
+                eligibility_days=123
+            ),
             scoring_strategy=connect.CfnEvaluationForm.ScoringStrategyProperty(
                 mode="mode",
                 status="status"
@@ -4384,6 +4395,7 @@ class CfnEvaluationForm(
         auto_evaluation_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEvaluationForm.AutoEvaluationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         language_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEvaluationForm.EvaluationFormLanguageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        review_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEvaluationForm.EvaluationReviewConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         scoring_strategy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEvaluationForm.ScoringStrategyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         target_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEvaluationForm.EvaluationFormTargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -4399,6 +4411,7 @@ class CfnEvaluationForm(
         :param auto_evaluation_configuration: The automatic evaluation configuration of an evaluation form.
         :param description: The description of the evaluation form. *Length Constraints* : Minimum length of 0. Maximum length of 1024.
         :param language_configuration: Configuration for language settings of this evaluation form.
+        :param review_configuration: 
         :param scoring_strategy: A scoring strategy of the evaluation form.
         :param tags: The tags used to organize, track, or control access for this resource. For example, { "tags": {"key1":"value1", "key2":"value2"} }.
         :param target_configuration: Configuration that specifies the target for this evaluation form.
@@ -4415,6 +4428,7 @@ class CfnEvaluationForm(
             auto_evaluation_configuration=auto_evaluation_configuration,
             description=description,
             language_configuration=language_configuration,
+            review_configuration=review_configuration,
             scoring_strategy=scoring_strategy,
             tags=tags,
             target_configuration=target_configuration,
@@ -4609,6 +4623,23 @@ class CfnEvaluationForm(
             type_hints = typing.get_type_hints(_typecheckingstub__efb516908c15c7df5482baa8a9445f59725720b268873f9eb72e8359ab37fbeb)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "languageConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="reviewConfiguration")
+    def review_configuration(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEvaluationForm.EvaluationReviewConfigurationProperty"]]:
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEvaluationForm.EvaluationReviewConfigurationProperty"]], jsii.get(self, "reviewConfiguration"))
+
+    @review_configuration.setter
+    def review_configuration(
+        self,
+        value: typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEvaluationForm.EvaluationReviewConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2a48f4c49dc468350a9f9e2d6a6992b8007a82ae0b3222b63a54221df464608d)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "reviewConfiguration", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="scoringStrategy")
@@ -7874,6 +7905,211 @@ class CfnEvaluationForm(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationReviewConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "review_notification_recipients": "reviewNotificationRecipients",
+            "eligibility_days": "eligibilityDays",
+        },
+    )
+    class EvaluationReviewConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            review_notification_recipients: typing.Union["_IResolvable_da3f097b", typing.Sequence[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEvaluationForm.EvaluationReviewNotificationRecipientProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            eligibility_days: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param review_notification_recipients: List of recipients who should be notified when a review is requested.
+            :param eligibility_days: Number of days during which a request for review can be submitted for evaluations created from this form.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationreviewconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                evaluation_review_configuration_property = connect.CfnEvaluationForm.EvaluationReviewConfigurationProperty(
+                    review_notification_recipients=[connect.CfnEvaluationForm.EvaluationReviewNotificationRecipientProperty(
+                        type="type",
+                        value=connect.CfnEvaluationForm.EvaluationReviewNotificationRecipientValueProperty(
+                            user_id="userId"
+                        )
+                    )],
+                
+                    # the properties below are optional
+                    eligibility_days=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__22f8d22a881759a91d1e6b190c5d7830fd76b7c55836d34b6b5f8d69868a6a97)
+                check_type(argname="argument review_notification_recipients", value=review_notification_recipients, expected_type=type_hints["review_notification_recipients"])
+                check_type(argname="argument eligibility_days", value=eligibility_days, expected_type=type_hints["eligibility_days"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "review_notification_recipients": review_notification_recipients,
+            }
+            if eligibility_days is not None:
+                self._values["eligibility_days"] = eligibility_days
+
+        @builtins.property
+        def review_notification_recipients(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEvaluationForm.EvaluationReviewNotificationRecipientProperty"]]]:
+            '''List of recipients who should be notified when a review is requested.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationreviewconfiguration.html#cfn-connect-evaluationform-evaluationreviewconfiguration-reviewnotificationrecipients
+            '''
+            result = self._values.get("review_notification_recipients")
+            assert result is not None, "Required property 'review_notification_recipients' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", typing.List[typing.Union["_IResolvable_da3f097b", "CfnEvaluationForm.EvaluationReviewNotificationRecipientProperty"]]], result)
+
+        @builtins.property
+        def eligibility_days(self) -> typing.Optional[jsii.Number]:
+            '''Number of days during which a request for review can be submitted for evaluations created from this form.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationreviewconfiguration.html#cfn-connect-evaluationform-evaluationreviewconfiguration-eligibilitydays
+            '''
+            result = self._values.get("eligibility_days")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EvaluationReviewConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationReviewNotificationRecipientProperty",
+        jsii_struct_bases=[],
+        name_mapping={"type": "type", "value": "value"},
+    )
+    class EvaluationReviewNotificationRecipientProperty:
+        def __init__(
+            self,
+            *,
+            type: builtins.str,
+            value: typing.Union["_IResolvable_da3f097b", typing.Union["CfnEvaluationForm.EvaluationReviewNotificationRecipientValueProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''
+            :param type: The type of notification recipient.
+            :param value: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationreviewnotificationrecipient.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                evaluation_review_notification_recipient_property = connect.CfnEvaluationForm.EvaluationReviewNotificationRecipientProperty(
+                    type="type",
+                    value=connect.CfnEvaluationForm.EvaluationReviewNotificationRecipientValueProperty(
+                        user_id="userId"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__fa83884ebad6dd461bd9c3acc782fea0de7ad2e5fd6d84484a9310ef047b4c69)
+                check_type(argname="argument type", value=type, expected_type=type_hints["type"])
+                check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "type": type,
+                "value": value,
+            }
+
+        @builtins.property
+        def type(self) -> builtins.str:
+            '''The type of notification recipient.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationreviewnotificationrecipient.html#cfn-connect-evaluationform-evaluationreviewnotificationrecipient-type
+            '''
+            result = self._values.get("type")
+            assert result is not None, "Required property 'type' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def value(
+            self,
+        ) -> typing.Union["_IResolvable_da3f097b", "CfnEvaluationForm.EvaluationReviewNotificationRecipientValueProperty"]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationreviewnotificationrecipient.html#cfn-connect-evaluationform-evaluationreviewnotificationrecipient-value
+            '''
+            result = self._values.get("value")
+            assert result is not None, "Required property 'value' is missing"
+            return typing.cast(typing.Union["_IResolvable_da3f097b", "CfnEvaluationForm.EvaluationReviewNotificationRecipientValueProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EvaluationReviewNotificationRecipientProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationReviewNotificationRecipientValueProperty",
+        jsii_struct_bases=[],
+        name_mapping={"user_id": "userId"},
+    )
+    class EvaluationReviewNotificationRecipientValueProperty:
+        def __init__(self, *, user_id: typing.Optional[builtins.str] = None) -> None:
+            '''
+            :param user_id: The user identifier for the notification recipient.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationreviewnotificationrecipientvalue.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                evaluation_review_notification_recipient_value_property = connect.CfnEvaluationForm.EvaluationReviewNotificationRecipientValueProperty(
+                    user_id="userId"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__0dfd3617262e475281f1f1361f9e7759b6b150ca0262d854d266909ac306c39b)
+                check_type(argname="argument user_id", value=user_id, expected_type=type_hints["user_id"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if user_id is not None:
+                self._values["user_id"] = user_id
+
+        @builtins.property
+        def user_id(self) -> typing.Optional[builtins.str]:
+            '''The user identifier for the notification recipient.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationreviewnotificationrecipientvalue.html#cfn-connect-evaluationform-evaluationreviewnotificationrecipientvalue-userid
+            '''
+            result = self._values.get("user_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EvaluationReviewNotificationRecipientValueProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.MultiSelectQuestionRuleCategoryAutomationProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -8201,6 +8437,7 @@ class CfnEvaluationForm(
         "auto_evaluation_configuration": "autoEvaluationConfiguration",
         "description": "description",
         "language_configuration": "languageConfiguration",
+        "review_configuration": "reviewConfiguration",
         "scoring_strategy": "scoringStrategy",
         "tags": "tags",
         "target_configuration": "targetConfiguration",
@@ -8217,6 +8454,7 @@ class CfnEvaluationFormProps:
         auto_evaluation_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEvaluationForm.AutoEvaluationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         language_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEvaluationForm.EvaluationFormLanguageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        review_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEvaluationForm.EvaluationReviewConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         scoring_strategy: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEvaluationForm.ScoringStrategyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["_CfnTag_f6864754", typing.Dict[builtins.str, typing.Any]]]] = None,
         target_configuration: typing.Optional[typing.Union["_IResolvable_da3f097b", typing.Union["CfnEvaluationForm.EvaluationFormTargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -8230,6 +8468,7 @@ class CfnEvaluationFormProps:
         :param auto_evaluation_configuration: The automatic evaluation configuration of an evaluation form.
         :param description: The description of the evaluation form. *Length Constraints* : Minimum length of 0. Maximum length of 1024.
         :param language_configuration: Configuration for language settings of this evaluation form.
+        :param review_configuration: 
         :param scoring_strategy: A scoring strategy of the evaluation form.
         :param tags: The tags used to organize, track, or control access for this resource. For example, { "tags": {"key1":"value1", "key2":"value2"} }.
         :param target_configuration: Configuration that specifies the target for this evaluation form.
@@ -8397,6 +8636,17 @@ class CfnEvaluationFormProps:
                 language_configuration=connect.CfnEvaluationForm.EvaluationFormLanguageConfigurationProperty(
                     form_language="formLanguage"
                 ),
+                review_configuration=connect.CfnEvaluationForm.EvaluationReviewConfigurationProperty(
+                    review_notification_recipients=[connect.CfnEvaluationForm.EvaluationReviewNotificationRecipientProperty(
+                        type="type",
+                        value=connect.CfnEvaluationForm.EvaluationReviewNotificationRecipientValueProperty(
+                            user_id="userId"
+                        )
+                    )],
+            
+                    # the properties below are optional
+                    eligibility_days=123
+                ),
                 scoring_strategy=connect.CfnEvaluationForm.ScoringStrategyProperty(
                     mode="mode",
                     status="status"
@@ -8419,6 +8669,7 @@ class CfnEvaluationFormProps:
             check_type(argname="argument auto_evaluation_configuration", value=auto_evaluation_configuration, expected_type=type_hints["auto_evaluation_configuration"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
             check_type(argname="argument language_configuration", value=language_configuration, expected_type=type_hints["language_configuration"])
+            check_type(argname="argument review_configuration", value=review_configuration, expected_type=type_hints["review_configuration"])
             check_type(argname="argument scoring_strategy", value=scoring_strategy, expected_type=type_hints["scoring_strategy"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
             check_type(argname="argument target_configuration", value=target_configuration, expected_type=type_hints["target_configuration"])
@@ -8434,6 +8685,8 @@ class CfnEvaluationFormProps:
             self._values["description"] = description
         if language_configuration is not None:
             self._values["language_configuration"] = language_configuration
+        if review_configuration is not None:
+            self._values["review_configuration"] = review_configuration
         if scoring_strategy is not None:
             self._values["scoring_strategy"] = scoring_strategy
         if tags is not None:
@@ -8525,6 +8778,16 @@ class CfnEvaluationFormProps:
         '''
         result = self._values.get("language_configuration")
         return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEvaluationForm.EvaluationFormLanguageConfigurationProperty"]], result)
+
+    @builtins.property
+    def review_configuration(
+        self,
+    ) -> typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEvaluationForm.EvaluationReviewConfigurationProperty"]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-evaluationform.html#cfn-connect-evaluationform-reviewconfiguration
+        '''
+        result = self._values.get("review_configuration")
+        return typing.cast(typing.Optional[typing.Union["_IResolvable_da3f097b", "CfnEvaluationForm.EvaluationReviewConfigurationProperty"]], result)
 
     @builtins.property
     def scoring_strategy(
@@ -25317,6 +25580,7 @@ def _typecheckingstub__67672e07b9b284918b4f61d0c04df64749fd2f5f1f5a07e093b1e338f
     auto_evaluation_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.AutoEvaluationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
     language_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormLanguageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    review_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationReviewConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     scoring_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.ScoringStrategyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     target_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormTargetConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -25386,6 +25650,12 @@ def _typecheckingstub__9b9daef123f8c8ba72731239424846e3251f3e39a09700e6514170d31
 
 def _typecheckingstub__efb516908c15c7df5482baa8a9445f59725720b268873f9eb72e8359ab37fbeb(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEvaluationForm.EvaluationFormLanguageConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2a48f4c49dc468350a9f9e2d6a6992b8007a82ae0b3222b63a54221df464608d(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEvaluationForm.EvaluationReviewConfigurationProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -25654,6 +25924,29 @@ def _typecheckingstub__bf7945895c50206de7b3703ba68cf028dc4eaef3ad3a6f2e2ded49618
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__22f8d22a881759a91d1e6b190c5d7830fd76b7c55836d34b6b5f8d69868a6a97(
+    *,
+    review_notification_recipients: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationReviewNotificationRecipientProperty, typing.Dict[builtins.str, typing.Any]]]]],
+    eligibility_days: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fa83884ebad6dd461bd9c3acc782fea0de7ad2e5fd6d84484a9310ef047b4c69(
+    *,
+    type: builtins.str,
+    value: typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationReviewNotificationRecipientValueProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0dfd3617262e475281f1f1361f9e7759b6b150ca0262d854d266909ac306c39b(
+    *,
+    user_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__aef61a3c8079f96ec3846cd669c1fa6b2a1bb2306302ed02acd0a8cb558006dc(
     *,
     category: builtins.str,
@@ -25696,6 +25989,7 @@ def _typecheckingstub__b678e993288629444b4e1bc33b4631f7578a458c70203ec6ae7263a8a
     auto_evaluation_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.AutoEvaluationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
     language_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormLanguageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    review_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationReviewConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     scoring_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.ScoringStrategyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     target_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormTargetConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,

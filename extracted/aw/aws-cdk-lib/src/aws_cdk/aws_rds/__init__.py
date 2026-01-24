@@ -4417,6 +4417,12 @@ class AuroraPostgresEngineVersion(
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_14_19"))
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_14_20")
+    def VER_14_20(cls) -> "AuroraPostgresEngineVersion":
+        '''Version "14.20".'''
+        return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_14_20"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="VER_14_3")
     def VER_14_3(cls) -> "AuroraPostgresEngineVersion":
         '''(deprecated) Version "14.3".
@@ -11542,7 +11548,10 @@ class CfnDBInstance(
             storage_type: typing.Optional[builtins.str] = None,
             volume_name: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''
+            '''Contains details about an additional storage volume for a DB instance.
+
+            RDS support additional storage volumes for RDS for Oracle and RDS for SQL Server.
+
             :param allocated_storage: The amount of storage allocated for the additional storage volume, in gibibytes (GiB). The minimum is 20 GiB. The maximum is 65,536 GiB (64 TiB).
             :param iops: The number of I/O operations per second (IOPS) provisioned for the additional storage volume.
             :param max_allocated_storage: The upper limit in gibibytes (GiB) to which RDS can automatically scale the storage of the additional storage volume.
@@ -33301,7 +33310,11 @@ typing.cast(typing.Any, IInstanceEngine).__jsii_proxy_class__ = lambda : _IInsta
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_rds.IOptionGroup")
-class IOptionGroup(_IResource_c80c4260, typing_extensions.Protocol):
+class IOptionGroup(
+    _IResource_c80c4260,
+    _IOptionGroupRef_093d85fd,
+    typing_extensions.Protocol,
+):
     '''An option group.'''
 
     @builtins.property
@@ -33342,6 +33355,7 @@ class IOptionGroup(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IOptionGroupProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IOptionGroupRef_093d85fd), # type: ignore[misc]
 ):
     '''An option group.'''
 
@@ -36173,6 +36187,8 @@ class NetworkType(enum.Enum):
     '''IPv4 only network type.'''
     DUAL = "DUAL"
     '''Dual-stack network type.'''
+    IPV6 = "IPV6"
+    '''IPv6 only network type.'''
 
 
 @jsii.data_type(
@@ -36519,6 +36535,12 @@ class OptionGroup(
     def option_group_name(self) -> builtins.str:
         '''The name of the option group.'''
         return typing.cast(builtins.str, jsii.get(self, "optionGroupName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="optionGroupRef")
+    def option_group_ref(self) -> "_OptionGroupReference_cac44454":
+        '''A reference to a OptionGroup resource.'''
+        return typing.cast("_OptionGroupReference_cac44454", jsii.get(self, "optionGroupRef"))
 
 
 @jsii.data_type(

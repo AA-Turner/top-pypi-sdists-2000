@@ -1496,11 +1496,11 @@ class CfnTrustAnchor(
         ) -> None:
             '''Customizable notification settings that will be applied to notification events.
 
-            IAM Roles Anywhere consumes these settings while notifying across multiple channels - CloudWatch metrics, EventBridge, and AWS Health Dashboard .
+            IAM Roles Anywhere consumes these settings while notifying across multiple channels - CloudWatch metrics, EventBridge, and Health Dashboard .
 
             :param enabled: Indicates whether the notification setting is enabled.
             :param event: The event to which this notification setting is applied.
-            :param channel: The specified channel of notification. IAM Roles Anywhere uses CloudWatch metrics, EventBridge, and AWS Health Dashboard to notify for an event. .. epigraph:: In the absence of a specific channel, IAM Roles Anywhere applies this setting to 'ALL' channels.
+            :param channel: The specified channel of notification. IAM Roles Anywhere uses CloudWatch metrics, EventBridge, and Health Dashboard to notify for an event. .. epigraph:: In the absence of a specific channel, IAM Roles Anywhere applies this setting to 'ALL' channels.
             :param threshold: The number of days before a notification event. This value is required for a notification setting that is enabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rolesanywhere-trustanchor-notificationsetting.html
@@ -1560,7 +1560,7 @@ class CfnTrustAnchor(
         def channel(self) -> typing.Optional[builtins.str]:
             '''The specified channel of notification.
 
-            IAM Roles Anywhere uses CloudWatch metrics, EventBridge, and AWS Health Dashboard to notify for an event.
+            IAM Roles Anywhere uses CloudWatch metrics, EventBridge, and Health Dashboard to notify for an event.
             .. epigraph::
 
                In the absence of a specific channel, IAM Roles Anywhere applies this setting to 'ALL' channels.

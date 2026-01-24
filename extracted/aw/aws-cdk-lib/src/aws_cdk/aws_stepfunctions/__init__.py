@@ -18447,19 +18447,13 @@ class Activity(
     @builtins.property
     @jsii.member(jsii_name="activityArn")
     def activity_arn(self) -> builtins.str:
-        '''The ARN of the activity.
-
-        :attribute: true
-        '''
+        '''The ARN of the activity.'''
         return typing.cast(builtins.str, jsii.get(self, "activityArn"))
 
     @builtins.property
     @jsii.member(jsii_name="activityName")
     def activity_name(self) -> builtins.str:
-        '''The name of the activity.
-
-        :attribute: true
-        '''
+        '''The name of the activity.'''
         return typing.cast(builtins.str, jsii.get(self, "activityName"))
 
     @builtins.property

@@ -1991,6 +1991,7 @@ class ISlackChannelConfiguration(
     _IResource_c80c4260,
     _IGrantable_71c4f5de,
     _INotificationRuleTarget_faa3b79b,
+    _ISlackChannelConfigurationRef_0aa1013d,
     typing_extensions.Protocol,
 ):
     '''Represents a Slack channel configuration.'''
@@ -2073,6 +2074,7 @@ class _ISlackChannelConfigurationProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
     jsii.proxy_for(_IGrantable_71c4f5de), # type: ignore[misc]
     jsii.proxy_for(_INotificationRuleTarget_faa3b79b), # type: ignore[misc]
+    jsii.proxy_for(_ISlackChannelConfigurationRef_0aa1013d), # type: ignore[misc]
 ):
     '''Represents a Slack channel configuration.'''
 
@@ -2457,6 +2459,14 @@ class SlackChannelConfiguration(
     def slack_channel_configuration_name(self) -> builtins.str:
         '''The name of Slack channel configuration.'''
         return typing.cast(builtins.str, jsii.get(self, "slackChannelConfigurationName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="slackChannelConfigurationRef")
+    def slack_channel_configuration_ref(
+        self,
+    ) -> "_SlackChannelConfigurationReference_73491fa9":
+        '''A reference to a SlackChannelConfiguration resource.'''
+        return typing.cast("_SlackChannelConfigurationReference_73491fa9", jsii.get(self, "slackChannelConfigurationRef"))
 
     @builtins.property
     @jsii.member(jsii_name="role")

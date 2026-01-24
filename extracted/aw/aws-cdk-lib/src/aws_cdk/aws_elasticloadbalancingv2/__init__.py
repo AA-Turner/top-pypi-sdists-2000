@@ -1894,11 +1894,8 @@ class ApplicationListenerRule(
 
     Example::
 
-        import aws_cdk.aws_lambda as lambda_
-        
         # cluster: ecs.Cluster
         # task_definition: ecs.TaskDefinition
-        # lambda_hook: lambda.Function
         # blue_target_group: elbv2.ApplicationTargetGroup
         # green_target_group: elbv2.ApplicationTargetGroup
         # prod_listener_rule: elbv2.ApplicationListenerRule
@@ -1907,17 +1904,16 @@ class ApplicationListenerRule(
         service = ecs.FargateService(self, "Service",
             cluster=cluster,
             task_definition=task_definition,
-            deployment_strategy=ecs.DeploymentStrategy.BLUE_GREEN
+            deployment_strategy=ecs.DeploymentStrategy.LINEAR,
+            linear_configuration=ecs.TrafficShiftConfig(
+                step_percent=10,
+                step_bake_time=Duration.minutes(5)
+            )
         )
         
-        service.add_lifecycle_hook(ecs.DeploymentLifecycleLambdaTarget(lambda_hook, "PreScaleHook",
-            lifecycle_stages=[ecs.DeploymentLifecycleStage.PRE_SCALE_UP]
-        ))
-        
         target = service.load_balancer_target(
-            container_name="nginx",
+            container_name="web",
             container_port=80,
-            protocol=ecs.Protocol.TCP,
             alternate_target=ecs.AlternateTarget("AlternateTarget",
                 alternate_target_group=green_target_group,
                 production_listener=ecs.ListenerRuleConfiguration.application_listener_rule(prod_listener_rule)

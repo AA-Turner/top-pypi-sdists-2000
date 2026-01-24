@@ -15424,7 +15424,11 @@ class HelmChartProps(HelmChartOptions):
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_eks.IAccessEntry")
-class IAccessEntry(_IResource_c80c4260, typing_extensions.Protocol):
+class IAccessEntry(
+    _IResource_c80c4260,
+    _IAccessEntryRef_14bb9c0a,
+    typing_extensions.Protocol,
+):
     '''Represents an access entry in an Amazon EKS cluster.
 
     An access entry defines the permissions and scope for a user or role to access an Amazon EKS cluster.
@@ -15455,6 +15459,7 @@ class IAccessEntry(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IAccessEntryProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IAccessEntryRef_14bb9c0a), # type: ignore[misc]
 ):
     '''Represents an access entry in an Amazon EKS cluster.
 
@@ -15534,7 +15539,7 @@ typing.cast(typing.Any, IAccessPolicy).__jsii_proxy_class__ = lambda : _IAccessP
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_eks.IAddon")
-class IAddon(_IResource_c80c4260, typing_extensions.Protocol):
+class IAddon(_IResource_c80c4260, _IAddonRef_fb5de88c, typing_extensions.Protocol):
     '''Represents an Amazon EKS Add-On.'''
 
     @builtins.property
@@ -15558,6 +15563,7 @@ class IAddon(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IAddonProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IAddonRef_fb5de88c), # type: ignore[misc]
 ):
     '''Represents an Amazon EKS Add-On.'''
 
@@ -15586,7 +15592,12 @@ typing.cast(typing.Any, IAddon).__jsii_proxy_class__ = lambda : _IAddonProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_eks.ICluster")
-class ICluster(_IResource_c80c4260, _IConnectable_10015a05, typing_extensions.Protocol):
+class ICluster(
+    _IResource_c80c4260,
+    _IConnectable_10015a05,
+    _IClusterRef_5527f448,
+    typing_extensions.Protocol,
+):
     '''An EKS cluster.'''
 
     @builtins.property
@@ -15959,6 +15970,7 @@ class ICluster(_IResource_c80c4260, _IConnectable_10015a05, typing_extensions.Pr
 class _IClusterProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
     jsii.proxy_for(_IConnectable_10015a05), # type: ignore[misc]
+    jsii.proxy_for(_IClusterRef_5527f448), # type: ignore[misc]
 ):
     '''An EKS cluster.'''
 
@@ -16442,7 +16454,11 @@ typing.cast(typing.Any, IKubectlProvider).__jsii_proxy_class__ = lambda : _IKube
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_eks.INodegroup")
-class INodegroup(_IResource_c80c4260, typing_extensions.Protocol):
+class INodegroup(
+    _IResource_c80c4260,
+    _INodegroupRef_cac0d8aa,
+    typing_extensions.Protocol,
+):
     '''NodeGroup interface.'''
 
     @builtins.property
@@ -16457,6 +16473,7 @@ class INodegroup(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _INodegroupProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_INodegroupRef_cac0d8aa), # type: ignore[misc]
 ):
     '''NodeGroup interface.'''
 
@@ -18279,11 +18296,14 @@ class Nodegroup(
     @builtins.property
     @jsii.member(jsii_name="nodegroupName")
     def nodegroup_name(self) -> builtins.str:
-        '''Nodegroup name.
-
-        :attribute: true
-        '''
+        '''Name of the nodegroup.'''
         return typing.cast(builtins.str, jsii.get(self, "nodegroupName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="nodegroupRef")
+    def nodegroup_ref(self) -> "_NodegroupReference_eab944f6":
+        '''A reference to a Nodegroup resource.'''
+        return typing.cast("_NodegroupReference_eab944f6", jsii.get(self, "nodegroupRef"))
 
     @builtins.property
     @jsii.member(jsii_name="role")
@@ -20356,6 +20376,12 @@ class AccessEntry(
         '''The name of the access entry.'''
         return typing.cast(builtins.str, jsii.get(self, "accessEntryName"))
 
+    @builtins.property
+    @jsii.member(jsii_name="accessEntryRef")
+    def access_entry_ref(self) -> "_AccessEntryReference_447195cd":
+        '''A reference to a AccessEntry resource.'''
+        return typing.cast("_AccessEntryReference_447195cd", jsii.get(self, "accessEntryRef"))
+
 
 @jsii.implements(IAccessPolicy)
 class AccessPolicy(
@@ -20553,14 +20579,20 @@ class Addon(
     @builtins.property
     @jsii.member(jsii_name="addonArn")
     def addon_arn(self) -> builtins.str:
-        '''Arn of the addon.'''
+        '''ARN of the Add-On.'''
         return typing.cast(builtins.str, jsii.get(self, "addonArn"))
 
     @builtins.property
     @jsii.member(jsii_name="addonName")
     def addon_name(self) -> builtins.str:
-        '''Name of the addon.'''
+        '''Name of the Add-On.'''
         return typing.cast(builtins.str, jsii.get(self, "addonName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="addonRef")
+    def addon_ref(self) -> "_AddonReference_afb1bd13":
+        '''A reference to a Addon resource.'''
+        return typing.cast("_AddonReference_afb1bd13", jsii.get(self, "addonRef"))
 
 
 @jsii.implements(ICluster)
@@ -21348,10 +21380,7 @@ class Cluster(
     @builtins.property
     @jsii.member(jsii_name="clusterArn")
     def cluster_arn(self) -> builtins.str:
-        '''The AWS generated ARN for the Cluster resource.
-
-        For example, ``arn:aws:eks:us-west-2:666666666666:cluster/prod``
-        '''
+        '''The unique ARN assigned to the service by AWS in the form of arn:aws:eks:.'''
         return typing.cast(builtins.str, jsii.get(self, "clusterArn"))
 
     @builtins.property
@@ -21380,7 +21409,7 @@ class Cluster(
     @builtins.property
     @jsii.member(jsii_name="clusterName")
     def cluster_name(self) -> builtins.str:
-        '''The Name of the created EKS Cluster.'''
+        '''The physical name of the Cluster.'''
         return typing.cast(builtins.str, jsii.get(self, "clusterName"))
 
     @builtins.property
@@ -21408,6 +21437,12 @@ class Cluster(
         :attribute: true
         '''
         return typing.cast(builtins.str, jsii.get(self, "clusterOpenIdConnectIssuerUrl"))
+
+    @builtins.property
+    @jsii.member(jsii_name="clusterRef")
+    def cluster_ref(self) -> "_ClusterReference_d6e6b9ff":
+        '''A reference to a Cluster resource.'''
+        return typing.cast("_ClusterReference_d6e6b9ff", jsii.get(self, "clusterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="clusterSecurityGroup")
