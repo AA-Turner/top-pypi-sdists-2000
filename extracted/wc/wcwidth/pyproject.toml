@@ -4,7 +4,7 @@ requires = [ "hatchling" ]
 
 [project]
 name = "wcwidth"
-version = "0.3.2"
+version = "0.3.5"
 description = "Measures the displayed width of unicode strings in a terminal"
 readme = "README.rst"
 keywords = [
@@ -44,6 +44,7 @@ classifiers = [
   "Topic :: Software Development :: Libraries",
   "Topic :: Software Development :: Localization",
   "Topic :: Terminals",
+  "Typing :: Typed",
 ]
 
 [project.urls]
