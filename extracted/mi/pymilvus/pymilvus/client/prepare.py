@@ -22,7 +22,7 @@ from pymilvus.orm.schema import (
 from pymilvus.orm.types import infer_dtype_by_scalar_data
 from pymilvus.settings import Config
 
-from . import __version__, blob, check, entity_helper, ts_utils, utils
+from . import __version__, blob, check, entity_helper, utils
 from .abstract import BaseRanker
 from .check import check_pass_param, is_legal_collection_properties
 from .constants import (
@@ -351,7 +351,7 @@ class Prepare:
 
         primary_field, auto_id_field = None, None
         for field in all_fields:
-            (field_schema, primary_field, auto_id_field) = cls.get_field_schema(
+            field_schema, primary_field, auto_id_field = cls.get_field_schema(
                 field, primary_field, auto_id_field
             )
             schema.fields.append(field_schema)
@@ -395,7 +395,7 @@ class Prepare:
         collection_name: str,
         field_schema: FieldSchema,
     ) -> milvus_types.AddCollectionFieldRequest:
-        (field_schema_proto, _, _) = cls.get_field_schema(field=field_schema.to_dict())
+        field_schema_proto, _, _ = cls.get_field_schema(field=field_schema.to_dict())
         return milvus_types.AddCollectionFieldRequest(
             collection_name=collection_name,
             schema=bytes(field_schema_proto.SerializeToString()),
@@ -755,6 +755,10 @@ class Prepare:
         }
         field_info_map = {field["name"]: field for field in input_fields_info}
 
+        # Local cache for temporary byte lists for bytes vector fields
+        # key: field_data object id, value: list of bytes
+        vector_bytes_cache: Dict[int, List[bytes]] = {}
+
         (
             struct_fields_data,
             struct_info_map,
@@ -793,7 +797,9 @@ class Prepare:
                             "default_value", None
                         ):
                             field_data.valid_data.append(v is not None)
-                        entity_helper.pack_field_value_to_field_data(v, field_data, field_info)
+                        entity_helper.pack_field_value_to_field_data(
+                            v, field_data, field_info, vector_bytes_cache
+                        )
                     elif k in struct_fields_data:
                         # Array of structs format
                         try:
@@ -817,7 +823,9 @@ class Prepare:
                     field_info, field_data = field_info_map[key], fields_data[key]
                     if field_info.get("nullable", False) or field_info.get("default_value", None):
                         field_data.valid_data.append(False)
-                        entity_helper.pack_field_value_to_field_data(None, field_data, field_info)
+                        entity_helper.pack_field_value_to_field_data(
+                            None, field_data, field_info, vector_bytes_cache
+                        )
                     else:
                         raise DataNotMatchException(
                             message=ExceptionsMessage.InsertMissedField % key
@@ -845,6 +853,16 @@ class Prepare:
                 struct_field_data.struct_arrays.fields.append(
                     struct_sub_fields_data[struct_name][field_name]
                 )
+
+        # Flush all bytes vector field temporary byte lists to optimize memory usage
+        for field_data in fields_data.values():
+            if field_data.type in (
+                DataType.INT8_VECTOR,
+                DataType.BINARY_VECTOR,
+                DataType.FLOAT16_VECTOR,
+                DataType.BFLOAT16_VECTOR,
+            ):
+                entity_helper.flush_vector_bytes(field_data, vector_bytes_cache)
 
         request.fields_data.extend(fields_data.values())
         request.fields_data.extend(struct_fields_data.values())
@@ -882,6 +900,10 @@ class Prepare:
         }
         field_info_map = {field["name"]: field for field in input_fields_info}
         field_len = {field["name"]: 0 for field in input_fields_info}
+
+        # Local cache for temporary byte lists for bytes vector fields
+        # key: field_data object id, value: list of bytes
+        vector_bytes_cache: Dict[int, List[bytes]] = {}
 
         # Use common struct data setup (only if not partial update)
         if partial_update:
@@ -930,7 +952,9 @@ class Prepare:
                             "default_value", None
                         ):
                             field_data.valid_data.append(v is not None)
-                        entity_helper.pack_field_value_to_field_data(v, field_data, field_info)
+                        entity_helper.pack_field_value_to_field_data(
+                            v, field_data, field_info, vector_bytes_cache
+                        )
                         field_len[k] += 1
                     elif k in struct_fields_data:
                         # Handle struct field (array of structs)
@@ -960,7 +984,9 @@ class Prepare:
                     if field_info.get("nullable", False) or field_info.get("default_value", None):
                         field_data.valid_data.append(False)
                         field_len[key] += 1
-                        entity_helper.pack_field_value_to_field_data(None, field_data, field_info)
+                        entity_helper.pack_field_value_to_field_data(
+                            None, field_data, field_info, vector_bytes_cache
+                        )
                     else:
                         raise DataNotMatchException(
                             message=ExceptionsMessage.InsertMissedField % key
@@ -990,6 +1016,16 @@ class Prepare:
                 )
 
         fields_data = {k: v for k, v in fields_data.items() if field_len[k] > 0}
+        # Flush all bytes vector field temporary byte lists to optimize memory usage
+        for field_data in fields_data.values():
+            if field_data.type in (
+                DataType.INT8_VECTOR,
+                DataType.BINARY_VECTOR,
+                DataType.FLOAT16_VECTOR,
+                DataType.BFLOAT16_VECTOR,
+            ):
+                entity_helper.flush_vector_bytes(field_data, vector_bytes_cache)
+
         request.fields_data.extend(fields_data.values())
 
         if struct_fields_data:
@@ -1400,9 +1436,9 @@ class Prepare:
         round_decimal: int = -1,
         ranker: Optional[Union[Function, FunctionScore]] = None,
         highlighter: Optional[Highlighter] = None,
+        use_default_consistency: bool = True,
         **kwargs,
     ) -> milvus_types.SearchRequest:
-        use_default_consistency = ts_utils.construct_guarantee_ts(collection_name, kwargs)
 
         ignore_growing = param.get("ignore_growing", False) or kwargs.get("ignore_growing", False)
         params = param.get("params", {})
@@ -1603,10 +1639,11 @@ class Prepare:
         partition_names: Optional[List[str]] = None,
         output_fields: Optional[List[str]] = None,
         round_decimal: int = -1,
+        use_default_consistency: bool = True,
         **kwargs,
     ) -> milvus_types.HybridSearchRequest:
-        use_default_consistency = ts_utils.construct_guarantee_ts(collection_name, kwargs)
         if rerank is not None and not isinstance(rerank, (Function, BaseRanker)):
+
             raise ParamError(message="The hybrid search rerank must be a Function or a Ranker.")
         rerank_param = {}
         if isinstance(rerank, BaseRanker):
@@ -1981,9 +2018,9 @@ class Prepare:
         expr: str,
         output_fields: List[str],
         partition_names: List[str],
+        use_default_consistency: bool = True,
         **kwargs,
     ):
-        use_default_consistency = ts_utils.construct_guarantee_ts(collection_name, kwargs)
         req = milvus_types.QueryRequest(
             db_name="",
             collection_name=collection_name,
@@ -2056,18 +2093,21 @@ class Prepare:
         is_clustering: bool,
         is_l0: bool,
         collection_id: Optional[int] = None,
+        target_size: Optional[int] = None,
     ):
         if is_clustering is None or not isinstance(is_clustering, bool):
             raise ParamError(message=f"is_clustering value {is_clustering} is illegal")
         if is_l0 is None or not isinstance(is_l0, bool):
             raise ParamError(message=f"is_l0 value {is_l0} is illegal")
 
-        request = milvus_types.ManualCompactionRequest()
+        request = milvus_types.ManualCompactionRequest(
+            collection_name=collection_name,
+            majorCompaction=is_clustering,
+            l0Compaction=is_l0,
+            target_size=target_size,
+        )
         if collection_id is not None:
             request.collectionID = collection_id
-        request.collection_name = collection_name
-        request.majorCompaction = is_clustering
-        request.l0Compaction = is_l0
         return request
 
     @classmethod

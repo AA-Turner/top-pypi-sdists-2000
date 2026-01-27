@@ -7343,6 +7343,7 @@ class NetworkCardInfoTypeDef(TypedDict):
     NetworkCardIndex: NotRequired[int]
     NetworkPerformance: NotRequired[str]
     MaximumNetworkInterfaces: NotRequired[int]
+    AdditionalFlexibleNetworkInterfaces: NotRequired[int]
     BaselineBandwidthInGbps: NotRequired[float]
     PeakBandwidthInGbps: NotRequired[float]
     DefaultEnaQueueCountPerInterface: NotRequired[int]

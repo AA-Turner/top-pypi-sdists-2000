@@ -13,7 +13,7 @@ use uv_client::{
 };
 use uv_configuration::{KeyringProviderType, TrustedPublishing};
 use uv_distribution_types::{IndexCapabilities, IndexLocations, IndexUrl};
-use uv_preview::{Preview, PreviewFeatures};
+use uv_preview::{Preview, PreviewFeature};
 use uv_publish::{
     CheckUrlClient, FormMetadata, PublishError, TrustedPublishResult, check_trusted_publishing,
     group_files_for_publishing, upload, upload_two_phase,
@@ -49,11 +49,11 @@ pub(crate) async fn publish(
         bail!("Unable to publish files in offline mode");
     }
 
-    if direct && !preview.is_enabled(PreviewFeatures::DIRECT_PUBLISH) {
+    if direct && !preview.is_enabled(PreviewFeature::DirectPublish) {
         warn_user_once!(
             "The `--direct` option is experimental and may change without warning. \
             Pass `--preview-features {}` to disable this warning.",
-            PreviewFeatures::DIRECT_PUBLISH
+            PreviewFeature::DirectPublish
         );
     }
 
@@ -406,6 +406,7 @@ async fn gather_credentials(
         username.as_deref(),
         password.as_deref(),
         keyring_provider,
+        token_store,
         trusted_publishing,
         &publish_url,
         oidc_client,
