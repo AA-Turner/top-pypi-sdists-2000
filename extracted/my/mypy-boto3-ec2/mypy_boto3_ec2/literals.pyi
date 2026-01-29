@@ -537,6 +537,7 @@ __all__ = (
     "ScopeType",
     "SearchLocalGatewayRoutesPaginatorName",
     "SearchTransitGatewayMulticastGroupsPaginatorName",
+    "SearchTransitGatewayRoutesPaginatorName",
     "SecurityGroupExistsWaiterName",
     "SecurityGroupReferencingSupportValueType",
     "SecurityGroupVpcAssociationAssociatedWaiterName",
@@ -3077,6 +3078,7 @@ SearchLocalGatewayRoutesPaginatorName = Literal["search_local_gateway_routes"]
 SearchTransitGatewayMulticastGroupsPaginatorName = Literal[
     "search_transit_gateway_multicast_groups"
 ]
+SearchTransitGatewayRoutesPaginatorName = Literal["search_transit_gateway_routes"]
 SecurityGroupExistsWaiterName = Literal["security_group_exists"]
 SecurityGroupReferencingSupportValueType = Literal["disable", "enable"]
 SecurityGroupVpcAssociationAssociatedWaiterName = Literal[
@@ -3923,6 +3925,7 @@ PaginatorName = Literal[
     "list_snapshots_in_recycle_bin",
     "search_local_gateway_routes",
     "search_transit_gateway_multicast_groups",
+    "search_transit_gateway_routes",
 ]
 WaiterName = Literal[
     "bundle_task_complete",
