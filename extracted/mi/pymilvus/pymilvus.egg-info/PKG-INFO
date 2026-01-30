@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: pymilvus
-Version: 2.6.7
+Version: 2.6.8
 Summary: Python Sdk for Milvus
 Author-email: PyMilvus Team <pymilvus@zilliz.com>
 Project-URL: repository, https://github.com/milvus-io/pymilvus
@@ -37,7 +37,6 @@ Requires-Dist: milvus-lite>=2.4.0; sys_platform != "win32" and extra == "milvus-
 Provides-Extra: dev
 Requires-Dist: grpcio==1.66.2; extra == "dev"
 Requires-Dist: grpcio-tools==1.66.2; extra == "dev"
-Requires-Dist: grpcio-testing==1.66.2; extra == "dev"
 Requires-Dist: pytest>=5.3.4; extra == "dev"
 Requires-Dist: pytest-cov>=5.0.0; extra == "dev"
 Requires-Dist: pytest-timeout>=1.3.4; extra == "dev"
