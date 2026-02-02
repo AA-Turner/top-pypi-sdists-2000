@@ -105,7 +105,7 @@ LifecyclePolicyPreviewStatusType = Literal["COMPLETE", "EXPIRED", "FAILED", "IN_
 LifecyclePolicyStorageClassType = Literal["ARCHIVE", "STANDARD"]
 LifecyclePolicyTargetStorageClassType = Literal["ARCHIVE"]
 ListImagesPaginatorName = Literal["list_images"]
-RCTAppliedForType = Literal["PULL_THROUGH_CACHE", "REPLICATION"]
+RCTAppliedForType = Literal["CREATE_ON_PUSH", "PULL_THROUGH_CACHE", "REPLICATION"]
 ReplicationStatusType = Literal["COMPLETE", "FAILED", "IN_PROGRESS"]
 RepositoryFilterTypeType = Literal["PREFIX_MATCH"]
 ScanFrequencyType = Literal["CONTINUOUS_SCAN", "MANUAL", "SCAN_ON_PUSH"]
@@ -415,6 +415,7 @@ ServiceName = Literal[
     "networkmonitor",
     "notifications",
     "notificationscontacts",
+    "nova-act",
     "oam",
     "observabilityadmin",
     "odb",
@@ -425,6 +426,8 @@ ServiceName = Literal[
     "osis",
     "outposts",
     "panorama",
+    "partnercentral-account",
+    "partnercentral-benefits",
     "partnercentral-channel",
     "partnercentral-selling",
     "payment-cryptography",
@@ -467,6 +470,7 @@ ServiceName = Literal[
     "route53-recovery-control-config",
     "route53-recovery-readiness",
     "route53domains",
+    "route53globalresolver",
     "route53profiles",
     "route53resolver",
     "rtbfabric",
