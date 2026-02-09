@@ -355,11 +355,11 @@ async def handle_tools_call(
         thread_id=None,
         assistant_id=tool_name,
         input=arguments,
-        raise_error=False,
         headers=request.headers,
+        raise_error=False,
     )
 
-    if "__error__" in value:
+    if isinstance(value, dict) and "__error__" in value:
         # This is a run-time error in the tool.
         return {
             "result": {
