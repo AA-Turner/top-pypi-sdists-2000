@@ -1113,24 +1113,33 @@ class ChatBedrockConverse(BaseChatModel):
         except ClientError as e:
             _handle_bedrock_error(e)
         added_model_name = False
-        for event in response["stream"]:
-            if message_chunk := _parse_stream_event(event):
-                if (
-                    hasattr(message_chunk, "usage_metadata")
-                    and message_chunk.usage_metadata
-                    and not added_model_name
-                ):
-                    message_chunk.response_metadata["model_name"] = self.model_id
-                    if metadata := response.get("ResponseMetadata"):
-                        message_chunk.response_metadata["ResponseMetadata"] = metadata
-                    added_model_name = True
-                message_chunk.response_metadata["model_provider"] = "bedrock_converse"
-                generation_chunk = ChatGenerationChunk(message=message_chunk)
-                if run_manager:
-                    run_manager.on_llm_new_token(
-                        generation_chunk.text, chunk=generation_chunk
+        stream = response["stream"]
+        try:
+            for event in stream:
+                if message_chunk := _parse_stream_event(event):
+                    if (
+                        hasattr(message_chunk, "usage_metadata")
+                        and message_chunk.usage_metadata
+                        and not added_model_name
+                    ):
+                        message_chunk.response_metadata["model_name"] = self.model_id
+                        if metadata := response.get("ResponseMetadata"):
+                            message_chunk.response_metadata["ResponseMetadata"] = (
+                                metadata
+                            )
+                        added_model_name = True
+                    message_chunk.response_metadata["model_provider"] = (
+                        "bedrock_converse"
                     )
-                yield generation_chunk
+                    generation_chunk = ChatGenerationChunk(message=message_chunk)
+                    if run_manager:
+                        run_manager.on_llm_new_token(
+                            generation_chunk.text, chunk=generation_chunk
+                        )
+                    yield generation_chunk
+        finally:
+            if hasattr(stream, "close"):
+                stream.close()
 
     def _get_llm_for_structured_output_no_tool_choice(
         self,
@@ -1208,20 +1217,17 @@ class ChatBedrockConverse(BaseChatModel):
         if system_tools:
             kwargs["disable_streaming"] = True
 
-        # If we have system tools, we need to use toolConfig format
-        # Otherwise, use the old format for backward compatibility
-        if system_tools:
-            # Format custom tools using existing logic
-            formatted_custom_tools: List[Any] = []
-            for tool in custom_tools:
-                if _is_cache_point(tool):
-                    formatted_custom_tools.append(tool)
-                else:
-                    try:
-                        formatted_custom_tools.append(convert_to_openai_tool(tool))
-                    except Exception:
-                        formatted_custom_tools.append(_format_tools([tool])[0])
+        formatted_custom_tools: List[Any] = []
+        for tool in custom_tools:
+            if _is_cache_point(tool):
+                formatted_custom_tools.append(tool)
+            else:
+                try:
+                    formatted_custom_tools.append(convert_to_openai_tool(tool))
+                except Exception:
+                    formatted_custom_tools.append(_format_tools([tool])[0])
 
+        if system_tools:
             # Merge system and custom tools
             all_tools = formatted_custom_tools + system_tools
 
@@ -1258,7 +1264,6 @@ class ChatBedrockConverse(BaseChatModel):
 
             return self.bind(toolConfig=tool_config, **kwargs)
         else:
-            # No system tools - use old format for backward compatibility
             # Format tool_choice if provided
             formatted_tool_choice = None
             if tool_choice:
@@ -1289,7 +1294,9 @@ class ChatBedrockConverse(BaseChatModel):
                 formatted_tool_choice = _format_tool_choice("any")
 
             return self.bind(
-                tools=custom_tools, tool_choice=formatted_tool_choice, **kwargs
+                tools=formatted_custom_tools,
+                tool_choice=formatted_tool_choice,
+                **kwargs,
             )
 
     def with_structured_output(

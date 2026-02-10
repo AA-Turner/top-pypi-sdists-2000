@@ -203,6 +203,9 @@ __all__ = (
     "DescribeRouteTablesPaginatorName",
     "DescribeScheduledInstanceAvailabilityPaginatorName",
     "DescribeScheduledInstancesPaginatorName",
+    "DescribeSecondaryInterfacesPaginatorName",
+    "DescribeSecondaryNetworksPaginatorName",
+    "DescribeSecondarySubnetsPaginatorName",
     "DescribeSecurityGroupRulesPaginatorName",
     "DescribeSecurityGroupVpcAssociationsPaginatorName",
     "DescribeSecurityGroupsPaginatorName",
@@ -539,6 +542,17 @@ __all__ = (
     "SearchLocalGatewayRoutesPaginatorName",
     "SearchTransitGatewayMulticastGroupsPaginatorName",
     "SearchTransitGatewayRoutesPaginatorName",
+    "SecondaryInterfaceStatusType",
+    "SecondaryInterfaceTypeType",
+    "SecondaryNetworkCidrBlockAssociationStateType",
+    "SecondaryNetworkCreateCompleteWaiterName",
+    "SecondaryNetworkDeleteCompleteWaiterName",
+    "SecondaryNetworkStateType",
+    "SecondaryNetworkTypeType",
+    "SecondarySubnetCidrBlockAssociationStateType",
+    "SecondarySubnetCreateCompleteWaiterName",
+    "SecondarySubnetDeleteCompleteWaiterName",
+    "SecondarySubnetStateType",
     "SecurityGroupExistsWaiterName",
     "SecurityGroupReferencingSupportValueType",
     "SecurityGroupVpcAssociationAssociatedWaiterName",
@@ -1022,6 +1036,9 @@ DescribeScheduledInstanceAvailabilityPaginatorName = Literal[
     "describe_scheduled_instance_availability"
 ]
 DescribeScheduledInstancesPaginatorName = Literal["describe_scheduled_instances"]
+DescribeSecondaryInterfacesPaginatorName = Literal["describe_secondary_interfaces"]
+DescribeSecondaryNetworksPaginatorName = Literal["describe_secondary_networks"]
+DescribeSecondarySubnetsPaginatorName = Literal["describe_secondary_subnets"]
 DescribeSecurityGroupRulesPaginatorName = Literal["describe_security_group_rules"]
 DescribeSecurityGroupVpcAssociationsPaginatorName = Literal[
     "describe_security_group_vpc_associations"
@@ -3010,6 +3027,9 @@ ResourceTypeType = Literal[
     "route-server-endpoint",
     "route-server-peer",
     "route-table",
+    "secondary-interface",
+    "secondary-network",
+    "secondary-subnet",
     "security-group",
     "security-group-rule",
     "service-link-virtual-interface",
@@ -3087,6 +3107,45 @@ SearchTransitGatewayMulticastGroupsPaginatorName = Literal[
     "search_transit_gateway_multicast_groups"
 ]
 SearchTransitGatewayRoutesPaginatorName = Literal["search_transit_gateway_routes"]
+SecondaryInterfaceStatusType = Literal["available", "in-use"]
+SecondaryInterfaceTypeType = Literal["secondary"]
+SecondaryNetworkCidrBlockAssociationStateType = Literal[
+    "associated",
+    "associating",
+    "association-failed",
+    "disassociated",
+    "disassociating",
+    "disassociation-failed",
+]
+SecondaryNetworkCreateCompleteWaiterName = Literal["secondary_network_create_complete"]
+SecondaryNetworkDeleteCompleteWaiterName = Literal["secondary_network_delete_complete"]
+SecondaryNetworkStateType = Literal[
+    "create-complete",
+    "create-failed",
+    "create-in-progress",
+    "delete-complete",
+    "delete-failed",
+    "delete-in-progress",
+]
+SecondaryNetworkTypeType = Literal["rdma"]
+SecondarySubnetCidrBlockAssociationStateType = Literal[
+    "associated",
+    "associating",
+    "association-failed",
+    "disassociated",
+    "disassociating",
+    "disassociation-failed",
+]
+SecondarySubnetCreateCompleteWaiterName = Literal["secondary_subnet_create_complete"]
+SecondarySubnetDeleteCompleteWaiterName = Literal["secondary_subnet_delete_complete"]
+SecondarySubnetStateType = Literal[
+    "create-complete",
+    "create-failed",
+    "create-in-progress",
+    "delete-complete",
+    "delete-failed",
+    "delete-in-progress",
+]
 SecurityGroupExistsWaiterName = Literal["security_group_exists"]
 SecurityGroupReferencingSupportValueType = Literal["disable", "enable"]
 SecurityGroupVpcAssociationAssociatedWaiterName = Literal[
@@ -3857,6 +3916,9 @@ PaginatorName = Literal[
     "describe_route_tables",
     "describe_scheduled_instance_availability",
     "describe_scheduled_instances",
+    "describe_secondary_interfaces",
+    "describe_secondary_networks",
+    "describe_secondary_subnets",
     "describe_security_group_rules",
     "describe_security_group_vpc_associations",
     "describe_security_groups",
@@ -3957,6 +4019,10 @@ WaiterName = Literal[
     "nat_gateway_deleted",
     "network_interface_available",
     "password_data_available",
+    "secondary_network_create_complete",
+    "secondary_network_delete_complete",
+    "secondary_subnet_create_complete",
+    "secondary_subnet_delete_complete",
     "security_group_exists",
     "security_group_vpc_association_associated",
     "security_group_vpc_association_disassociated",

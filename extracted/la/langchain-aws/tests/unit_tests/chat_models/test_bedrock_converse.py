@@ -2,7 +2,7 @@
 
 import base64
 import os
-from typing import Any, Dict, List, Literal, Tuple, Type, Union, cast
+from typing import Any, Dict, Iterator, List, Literal, Tuple, Type, Union, cast
 from unittest import mock
 
 import pytest
@@ -2739,6 +2739,42 @@ def test_bind_tools_toolconfig_structure_with_system_tools() -> None:
     assert tool_config["toolChoice"] == {"auto": {}}
 
 
+def test_bind_tools_formats_custom_tools_to_dicts() -> None:
+    """Test that custom tools are dict formatted with no Nova tools present."""
+    from langchain_core.tools import tool
+
+    @tool
+    def my_custom_tool(query: str) -> str:
+        """A simple test tool.
+
+        Args:
+            query: The query string.
+        """
+        return f"Result for: {query}"
+
+    chat_model = ChatBedrockConverse(
+        model="us.anthropic.claude-sonnet-4-5-20250929-v1:0", region_name="us-east-1"
+    )  # type: ignore[call-arg]
+
+    chat_model_with_tools = chat_model.bind_tools([my_custom_tool])
+
+    bound_kwargs = cast(RunnableBinding, chat_model_with_tools).kwargs
+
+    assert "tools" in bound_kwargs
+    assert "toolConfig" not in bound_kwargs
+
+    tools = bound_kwargs["tools"]
+    assert isinstance(tools, list)
+    assert len(tools) == 1
+
+    tool_def = tools[0]
+    assert isinstance(tool_def, dict), f"Expected dict, got {type(tool_def)}"
+
+    assert tool_def.get("type") == "function"
+    assert "function" in tool_def
+    assert tool_def["function"].get("name") == "my_custom_tool"
+
+
 def test_reasoning_config_validation_accepts_strings() -> None:
     """Test that reasoning config validation accepts string values."""
     # Should not raise an error with string values
@@ -3300,3 +3336,59 @@ def test_additional_model_request_fields_invoke_overrides_constructor() -> None:
     # Verify invoke value takes priority over constructor value
     assert additional_fields["reasoning_effort"] == "invoke_value"
     assert additional_fields["reasoning_effort"] != "constructor_value"
+
+
+def test_stream_closes_event_stream() -> None:
+    """Test that stream() explicitly closes the EventStream after iteration."""
+    mocked_client = mock.MagicMock()
+    mock_stream = mock.MagicMock()
+    mock_stream.__iter__ = mock.Mock(
+        return_value=iter(
+            [
+                {"messageStart": {"role": "assistant"}},
+                {
+                    "contentBlockDelta": {
+                        "delta": {"text": "Hi"},
+                        "contentBlockIndex": 0,
+                    }
+                },
+                {"messageStop": {"stopReason": "end_turn"}},
+            ]
+        )
+    )
+    mocked_client.converse_stream.return_value = {"stream": mock_stream}
+
+    llm = ChatBedrockConverse(
+        client=mocked_client,
+        model="anthropic.claude-3-sonnet-20240229-v1:0",
+        region_name="us-west-2",
+    )
+
+    list(llm.stream([HumanMessage(content="Hi")]))
+
+    mock_stream.close.assert_called_once()
+
+
+def test_stream_closes_event_stream_on_exception() -> None:
+    """Test that stream() closes the EventStream even when iteration raises."""
+    mocked_client = mock.MagicMock()
+    mock_stream = mock.MagicMock()
+
+    def raise_error() -> Iterator[Dict[str, Any]]:
+        yield {"messageStart": {"role": "assistant"}}
+        yield {"contentBlockDelta": {"delta": {"text": "Hi"}, "contentBlockIndex": 0}}
+        raise RuntimeError("Test error")
+
+    mock_stream.__iter__ = mock.Mock(return_value=raise_error())
+    mocked_client.converse_stream.return_value = {"stream": mock_stream}
+
+    llm = ChatBedrockConverse(
+        client=mocked_client,
+        model="anthropic.claude-3-sonnet-20240229-v1:0",
+        region_name="us-west-2",
+    )
+
+    with pytest.raises(RuntimeError, match="Test error"):
+        list(llm.stream([HumanMessage(content="Hi")]))
+
+    mock_stream.close.assert_called_once()
