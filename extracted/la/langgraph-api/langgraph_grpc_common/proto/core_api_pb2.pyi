@@ -7,6 +7,7 @@ This is essentially an extended version of Agent Protocol (https://github.com/la
 
 from collections import abc as _abc
 from google.protobuf import descriptor as _descriptor
+from google.protobuf import duration_pb2 as _duration_pb2
 from google.protobuf import message as _message
 from google.protobuf import timestamp_pb2 as _timestamp_pb2
 from google.protobuf.internal import containers as _containers
@@ -1478,6 +1479,7 @@ class SearchThreadsRequest(_message.Message):
     SORT_BY_FIELD_NUMBER: _builtins.int
     SORT_ORDER_FIELD_NUMBER: _builtins.int
     SELECT_FIELD_NUMBER: _builtins.int
+    IDS_FIELD_NUMBER: _builtins.int
     metadata_json: _builtins.bytes
     values_json: _builtins.bytes
     status: _enum_thread_status_pb2.ThreadStatus.ValueType
@@ -1489,6 +1491,10 @@ class SearchThreadsRequest(_message.Message):
     def filters(self) -> _containers.RepeatedCompositeFieldContainer[Global___AuthFilter]: ...
     @_builtins.property
     def select(self) -> _containers.RepeatedScalarFieldContainer[_builtins.str]: ...
+    @_builtins.property
+    def ids(self) -> _containers.RepeatedCompositeFieldContainer[Global___UUID]:
+        """Filter by specific thread IDs."""
+
     def __init__(
         self,
         *,
@@ -1501,10 +1507,11 @@ class SearchThreadsRequest(_message.Message):
         sort_by: Global___ThreadsSortBy.ValueType | None = ...,
         sort_order: Global___SortOrder.ValueType | None = ...,
         select: _abc.Iterable[_builtins.str] | None = ...,
+        ids: _abc.Iterable[Global___UUID] | None = ...,
     ) -> None: ...
     _HasFieldArgType: _TypeAlias = _typing.Literal["_limit", b"_limit", "_metadata_json", b"_metadata_json", "_offset", b"_offset", "_sort_by", b"_sort_by", "_sort_order", b"_sort_order", "_status", b"_status", "_values_json", b"_values_json", "limit", b"limit", "metadata_json", b"metadata_json", "offset", b"offset", "sort_by", b"sort_by", "sort_order", b"sort_order", "status", b"status", "values_json", b"values_json"]  # noqa: Y015
     def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
-    _ClearFieldArgType: _TypeAlias = _typing.Literal["_limit", b"_limit", "_metadata_json", b"_metadata_json", "_offset", b"_offset", "_sort_by", b"_sort_by", "_sort_order", b"_sort_order", "_status", b"_status", "_values_json", b"_values_json", "filters", b"filters", "limit", b"limit", "metadata_json", b"metadata_json", "offset", b"offset", "select", b"select", "sort_by", b"sort_by", "sort_order", b"sort_order", "status", b"status", "values_json", b"values_json"]  # noqa: Y015
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["_limit", b"_limit", "_metadata_json", b"_metadata_json", "_offset", b"_offset", "_sort_by", b"_sort_by", "_sort_order", b"_sort_order", "_status", b"_status", "_values_json", b"_values_json", "filters", b"filters", "ids", b"ids", "limit", b"limit", "metadata_json", b"metadata_json", "offset", b"offset", "select", b"select", "sort_by", b"sort_by", "sort_order", b"sort_order", "status", b"status", "values_json", b"values_json"]  # noqa: Y015
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
     _WhichOneofReturnType__limit: _TypeAlias = _typing.Literal["limit"]  # noqa: Y015
     _WhichOneofArgType__limit: _TypeAlias = _typing.Literal["_limit", b"_limit"]  # noqa: Y015
@@ -2655,3 +2662,75 @@ class ControlEvent(_message.Message):
     def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
 
 Global___ControlEvent: _TypeAlias = ControlEvent  # noqa: Y015
+
+@_typing.final
+class CacheSetRequest(_message.Message):
+    """========== Cache ============"""
+
+    DESCRIPTOR: _descriptor.Descriptor
+
+    KEY_FIELD_NUMBER: _builtins.int
+    VALUE_FIELD_NUMBER: _builtins.int
+    TTL_FIELD_NUMBER: _builtins.int
+    key: _builtins.str
+    """Non-empty cache key."""
+    value: _builtins.bytes
+    """Value to store (must be valid serialized JSON)."""
+    @_builtins.property
+    def ttl(self) -> _duration_pb2.Duration:
+        """Optional TTL (zero => implementation-defined maximum)"""
+
+    def __init__(
+        self,
+        *,
+        key: _builtins.str = ...,
+        value: _builtins.bytes = ...,
+        ttl: _duration_pb2.Duration | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["_ttl", b"_ttl", "ttl", b"ttl"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["_ttl", b"_ttl", "key", b"key", "ttl", b"ttl", "value", b"value"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType__ttl: _TypeAlias = _typing.Literal["ttl"]  # noqa: Y015
+    _WhichOneofArgType__ttl: _TypeAlias = _typing.Literal["_ttl", b"_ttl"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType__ttl) -> _WhichOneofReturnType__ttl | None: ...
+
+Global___CacheSetRequest: _TypeAlias = CacheSetRequest  # noqa: Y015
+
+@_typing.final
+class CacheGetRequest(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    KEY_FIELD_NUMBER: _builtins.int
+    key: _builtins.str
+    def __init__(
+        self,
+        *,
+        key: _builtins.str = ...,
+    ) -> None: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["key", b"key"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+
+Global___CacheGetRequest: _TypeAlias = CacheGetRequest  # noqa: Y015
+
+@_typing.final
+class CacheGetResponse(_message.Message):
+    DESCRIPTOR: _descriptor.Descriptor
+
+    VALUE_FIELD_NUMBER: _builtins.int
+    value: _builtins.bytes
+    """The cached value, or empty if not found."""
+    def __init__(
+        self,
+        *,
+        value: _builtins.bytes | None = ...,
+    ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["_value", b"_value", "value", b"value"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["_value", b"_value", "value", b"value"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType__value: _TypeAlias = _typing.Literal["value"]  # noqa: Y015
+    _WhichOneofArgType__value: _TypeAlias = _typing.Literal["_value", b"_value"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType__value) -> _WhichOneofReturnType__value | None: ...
+
+Global___CacheGetResponse: _TypeAlias = CacheGetResponse  # noqa: Y015

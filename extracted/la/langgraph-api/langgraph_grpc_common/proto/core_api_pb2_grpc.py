@@ -6,7 +6,7 @@ import warnings
 from . import core_api_pb2 as core__api__pb2
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
-GRPC_GENERATED_VERSION = '1.76.0'
+GRPC_GENERATED_VERSION = '1.78.0'
 GRPC_VERSION = grpc.__version__
 _version_not_supported = False
 
@@ -1613,6 +1613,130 @@ class Runs(object):
             '/coreApi.Runs/Sweep',
             google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             core__api__pb2.SweepRunsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+
+class CacheStub(object):
+    """A generic ephemeral key/value cache backed by Redis (or in-memory for local dev).
+    Keys are arbitrary non-empty strings (Redis keys are binary-safe).
+    Values must be valid serialized JSON.
+    """
+
+    def __init__(self, channel):
+        """Constructor.
+
+        Args:
+            channel: A grpc.Channel.
+        """
+        self.Set = channel.unary_unary(
+                '/coreApi.Cache/Set',
+                request_serializer=core__api__pb2.CacheSetRequest.SerializeToString,
+                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                _registered_method=True)
+        self.Get = channel.unary_unary(
+                '/coreApi.Cache/Get',
+                request_serializer=core__api__pb2.CacheGetRequest.SerializeToString,
+                response_deserializer=core__api__pb2.CacheGetResponse.FromString,
+                _registered_method=True)
+
+
+class CacheServicer(object):
+    """A generic ephemeral key/value cache backed by Redis (or in-memory for local dev).
+    Keys are arbitrary non-empty strings (Redis keys are binary-safe).
+    Values must be valid serialized JSON.
+    """
+
+    def Set(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Get(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+
+def add_CacheServicer_to_server(servicer, server):
+    rpc_method_handlers = {
+            'Set': grpc.unary_unary_rpc_method_handler(
+                    servicer.Set,
+                    request_deserializer=core__api__pb2.CacheSetRequest.FromString,
+                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            ),
+            'Get': grpc.unary_unary_rpc_method_handler(
+                    servicer.Get,
+                    request_deserializer=core__api__pb2.CacheGetRequest.FromString,
+                    response_serializer=core__api__pb2.CacheGetResponse.SerializeToString,
+            ),
+    }
+    generic_handler = grpc.method_handlers_generic_handler(
+            'coreApi.Cache', rpc_method_handlers)
+    server.add_generic_rpc_handlers((generic_handler,))
+    server.add_registered_method_handlers('coreApi.Cache', rpc_method_handlers)
+
+
+ # This class is part of an EXPERIMENTAL API.
+class Cache(object):
+    """A generic ephemeral key/value cache backed by Redis (or in-memory for local dev).
+    Keys are arbitrary non-empty strings (Redis keys are binary-safe).
+    Values must be valid serialized JSON.
+    """
+
+    @staticmethod
+    def Set(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/coreApi.Cache/Set',
+            core__api__pb2.CacheSetRequest.SerializeToString,
+            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def Get(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/coreApi.Cache/Get',
+            core__api__pb2.CacheGetRequest.SerializeToString,
+            core__api__pb2.CacheGetResponse.FromString,
             options,
             channel_credentials,
             insecure,

@@ -48,8 +48,10 @@ def get_encryption() -> JsonEncryptionWrapper | AesEncryptionInstance | None:
     - Neither: None
     """
     # Late import to avoid circular dependency
-    from langgraph_api.encryption.aes_json import get_aes_encryption_instance
-    from langgraph_api.encryption.custom import (
+    from langgraph_api.encryption.aes_json import (  # noqa: PLC0415
+        get_aes_encryption_instance,
+    )
+    from langgraph_api.encryption.custom import (  # noqa: PLC0415
         JsonEncryptionWrapper,
         get_custom_encryption_instance,
     )
@@ -71,7 +73,7 @@ def using_custom_encryption() -> bool:
     Returns:
         True if custom encryption is configured, False otherwise.
     """
-    from langgraph_api.encryption.custom import JsonEncryptionWrapper
+    from langgraph_api.encryption.custom import JsonEncryptionWrapper  # noqa: PLC0415
 
     return (
         isinstance(get_encryption(), JsonEncryptionWrapper)
@@ -87,8 +89,8 @@ def using_aes_encryption() -> bool:
     Returns:
         True if AES encryption is configured, False otherwise.
     """
-    from langgraph_api.encryption.aes_json import AesEncryptionInstance
-    from langgraph_api.encryption.custom import JsonEncryptionWrapper
+    from langgraph_api.encryption.aes_json import AesEncryptionInstance  # noqa: PLC0415
+    from langgraph_api.encryption.custom import JsonEncryptionWrapper  # noqa: PLC0415
 
     enc = get_encryption()
     return isinstance(enc, AesEncryptionInstance) or (

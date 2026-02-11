@@ -205,7 +205,7 @@ async def get_checkpointer(
             inner=CHECKPOINTER_STACK.inner, capabilities=_CHECKPOINTER_CAPABILITIES
         )
 
-    from langgraph_runtime.checkpoint import Checkpointer
+    from langgraph_runtime.checkpoint import Checkpointer  # noqa: PLC0415
 
     return Checkpointer(
         conn, unpack_hook=unpack_hook, use_direct_connection=use_direct_connection

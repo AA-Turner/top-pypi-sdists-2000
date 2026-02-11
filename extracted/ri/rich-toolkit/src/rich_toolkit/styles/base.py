@@ -107,10 +107,26 @@ class BaseStyle:
 
         return colors
 
+    def _count_label_lines(self, label: str, decoration_width: int = 0) -> int:
+        available_width = self.console.width - decoration_width
+        if available_width <= 0:
+            return 1
+        renderable = Text.from_markup(label) if isinstance(label, str) else label
+        lines = self.console.render_lines(
+            renderable,
+            self.console.options.update_width(available_width),
+            pad=False,
+        )
+        return len(lines)
+
     def get_cursor_offset_for_element(
         self, element: Element, parent: Optional[Element] = None
     ) -> CursorOffset:
-        return element.cursor_offset
+        offset = element.cursor_offset
+        if isinstance(element, Input) and not element.inline and element.label:
+            label_lines = self._count_label_lines(element.label)
+            return CursorOffset(top=label_lines + 1, left=offset.left)
+        return offset
 
     def render_element(
         self,
@@ -252,7 +268,8 @@ class BaseStyle:
             text = "*" * len(text)
 
         if input._cancelled:
-            text = text or (input.placeholder if isinstance(input, Input) else "")
+            if not text:
+                return ""
 
             return f"[placeholder.cancelled]{text}[/]"
 
@@ -270,6 +287,9 @@ class BaseStyle:
         if not text:
             placeholder = input.placeholder if isinstance(input, Input) else ""
 
+            # Use zero-width space when placeholder is empty to prevent
+            # the line from being stripped as a trailing blank line
+            placeholder = placeholder or "\u200b"
             return f"[placeholder]{placeholder}[/]"
 
         return f"[text]{text}[/]"

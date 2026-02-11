@@ -452,3 +452,49 @@ class RunsServicer(metaclass=_abc_1.ABCMeta):
         """Sweep abandoned runs (internal method, no auth)"""
 
 def add_RunsServicer_to_server(servicer: RunsServicer, server: _typing.Union[_grpc.Server, _aio.Server]) -> None: ...
+
+class CacheStub:
+    """A generic ephemeral key/value cache backed by Redis (or in-memory for local dev).
+    Keys are arbitrary non-empty strings (Redis keys are binary-safe).
+    Values must be valid serialized JSON.
+    """
+
+    @_typing.overload
+    def __new__(cls, channel: _grpc.Channel) -> _Self: ...
+    @_typing.overload
+    def __new__(cls, channel: _aio.Channel) -> CacheAsyncStub: ...
+    Set: _grpc.UnaryUnaryMultiCallable[_core_api_pb2.CacheSetRequest, _empty_pb2.Empty]
+    Get: _grpc.UnaryUnaryMultiCallable[_core_api_pb2.CacheGetRequest, _core_api_pb2.CacheGetResponse]
+
+@_typing.type_check_only
+class CacheAsyncStub(CacheStub):
+    """A generic ephemeral key/value cache backed by Redis (or in-memory for local dev).
+    Keys are arbitrary non-empty strings (Redis keys are binary-safe).
+    Values must be valid serialized JSON.
+    """
+
+    def __init__(self, channel: _aio.Channel) -> None: ...
+    Set: _aio.UnaryUnaryMultiCallable[_core_api_pb2.CacheSetRequest, _empty_pb2.Empty]  # type: ignore[assignment]
+    Get: _aio.UnaryUnaryMultiCallable[_core_api_pb2.CacheGetRequest, _core_api_pb2.CacheGetResponse]  # type: ignore[assignment]
+
+class CacheServicer(metaclass=_abc_1.ABCMeta):
+    """A generic ephemeral key/value cache backed by Redis (or in-memory for local dev).
+    Keys are arbitrary non-empty strings (Redis keys are binary-safe).
+    Values must be valid serialized JSON.
+    """
+
+    @_abc_1.abstractmethod
+    def Set(
+        self,
+        request: _core_api_pb2.CacheSetRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_empty_pb2.Empty, _abc.Awaitable[_empty_pb2.Empty]]: ...
+
+    @_abc_1.abstractmethod
+    def Get(
+        self,
+        request: _core_api_pb2.CacheGetRequest,
+        context: _ServicerContext,
+    ) -> _typing.Union[_core_api_pb2.CacheGetResponse, _abc.Awaitable[_core_api_pb2.CacheGetResponse]]: ...
+
+def add_CacheServicer_to_server(servicer: CacheServicer, server: _typing.Union[_grpc.Server, _aio.Server]) -> None: ...

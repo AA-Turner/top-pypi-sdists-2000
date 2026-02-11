@@ -283,10 +283,13 @@ async def worker(
                         run_attempt=attempt,
                     )
                     try:
-                        state_snapshot = await Threads.State.get(
-                            conn, run["kwargs"]["config"], subgraphs=False
-                        )
-                        checkpoint = state_snapshot_to_thread_state(state_snapshot)
+                        # We actually still need a connection for the python checkpointer
+                        # This only doubles up connections for inmem which is fine
+                        async with connect(supports_core_api=False) as conn:
+                            state_snapshot = await Threads.State.get(
+                                conn, run["kwargs"]["config"], subgraphs=False
+                            )
+                            checkpoint = state_snapshot_to_thread_state(state_snapshot)
                     except Exception:
                         await logger.aerror(
                             "Failed to fetch missing checkpoint for webhook. Continuing...",

@@ -189,7 +189,7 @@ class Serializer(JsonPlusSerializer):
         __unpack_ext_hook__: Callable[[int, bytes], Any] | None = None,
         pickle_fallback: bool | None = None,
     ):
-        from langgraph_api.config import SERDE
+        from langgraph_api.config import SERDE  # noqa: PLC0415
 
         allowed_json_modules: list[tuple[str, ...]] | Literal[True] | None = None
         if SERDE and "allowed_json_modules" in SERDE:

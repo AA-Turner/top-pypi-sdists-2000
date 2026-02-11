@@ -1,12 +1,14 @@
 import asyncio
+import json
 from random import random
-from typing import cast
+from typing import Any, cast
 
 import structlog
 
 from langgraph_api import config
 from langgraph_api.encryption.middleware import decrypt_response
 from langgraph_api.models.run import create_valid_run
+from langgraph_api.schema import Cron
 from langgraph_api.serde import json_loads
 from langgraph_api.utils import next_cron_date
 from langgraph_api.utils.config import run_in_executor
@@ -18,6 +20,26 @@ from langgraph_runtime.retry import retry_db
 logger = structlog.stdlib.get_logger(__name__)
 
 SLEEP_TIME = config.CRON_SCHEDULER_SLEEP_TIME
+
+
+def get_metadata_from_payload(
+    cron: Cron, run_payload: dict[str, Any]
+) -> dict[str, Any]:
+    cron_metadata = cron.get("metadata", {}) or {}
+    if not isinstance(cron_metadata, dict):
+        try:
+            cron_metadata = json_loads(cron_metadata)
+            if not isinstance(cron_metadata, dict):
+                logger.warning(
+                    f"Parsed cron metadata is not a dict: {type(cron_metadata)}. Will ignore."
+                )
+                cron_metadata = {}
+        except (json.JSONDecodeError, TypeError, AttributeError) as e:
+            logger.warning(f"Failed to parse cron metadata: {e}. Will ignore.")
+            cron_metadata = {}
+
+    existing_metadata = run_payload.get("metadata", {})
+    return {**cron_metadata, **existing_metadata}
 
 
 @retry_db
@@ -40,6 +62,10 @@ async def cron_scheduler():
 
                     if on_run_completed == "keep":
                         run_payload.setdefault("on_completion", "keep")  # type: ignore[union-attr]
+
+                    run_payload["metadata"] = get_metadata_from_payload(
+                        cron, run_payload
+                    )
 
                     async with set_auth_ctx_for_run(
                         run_payload, user_id=cron["user_id"]
