@@ -13,8 +13,15 @@ if TYPE_CHECKING:
     from langgraph_api.encryption.aes_json import AesEncryptionInstance
     from langgraph_api.encryption.custom import JsonEncryptionWrapper
 
-# Marker keys for encryption context storage
+# Stored alongside JSON-encrypted fields to record which encryption context was
+# used.  Presence means sibling values are already encrypted.  Stripped before
+# data reaches user code.
 ENCRYPTION_CONTEXT_KEY = "__encryption_context__"
+
+# Injected into run/cron payloads by the HTTP layer when JSON encryption is NOT
+# configured but blob encryption is still needed.  Signals to the worker "encrypt
+# blobs for this run" without implying the JSON siblings are encrypted.  Stripped
+# before data reaches user code.
 BLOB_ENCRYPTION_CONTEXT_KEY = "__blob_encryption_context__"
 
 # Reserved keys that should never appear in user-facing responses

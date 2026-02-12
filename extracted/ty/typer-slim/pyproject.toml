@@ -38,11 +38,10 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
-    "click >= 8.0.0",
-    "annotated-doc >=0.0.2",
+    "typer>=0.23.0",
 ]
-readme = "README.md"
-version = "0.21.2"
+readme = "typer-slim/README.md"
+version = "0.23.0"
 
 [project.urls]
 Homepage = "https://github.com/fastapi/typer"
@@ -51,11 +50,9 @@ Repository = "https://github.com/fastapi/typer"
 Issues = "https://github.com/fastapi/typer/issues"
 Changelog = "https://typer.tiangolo.com/release-notes/"
 
+[project.scripts]
+
 [project.optional-dependencies]
-standard = [
-    "shellingham >=1.3.0",
-    "rich >=10.11.0",
-]
 
 [dependency-groups]
 dev = [
@@ -105,30 +102,34 @@ path = "typer/__init__.py"
 
 [tool.pdm.build]
 source-includes = [
-    "tests/",
-    "docs_src/",
-    "scripts/",
+    "",
 ]
-
-[tool.tiangolo._internal-slim-build]
-sync-dependencies = [
-    "typer-slim[standard]",
-    "typer-cli",
+excludes = [
     "typer",
+    "tests",
+    "pdm_build.py",
 ]
 
 [tool.tiangolo._internal-slim-build.packages.typer-slim.project]
 name = "typer-slim"
-
-[tool.tiangolo._internal-slim-build.packages.typer]
-include-optional-dependencies = [
-    "standard",
+readme = "typer-slim/README.md"
+dependencies = [
+    "typer",
 ]
 
-[tool.tiangolo._internal-slim-build.packages.typer.project.optional-dependencies]
+[tool.tiangolo._internal-slim-build.packages.typer-slim.project.optional-dependencies]
 
-[tool.tiangolo._internal-slim-build.packages.typer.project.scripts]
-typer = "typer.cli:main"
+[tool.tiangolo._internal-slim-build.packages.typer-slim.project.scripts]
+
+[tool.tiangolo._internal-slim-build.packages.typer-slim.tool.pdm.build]
+excludes = [
+    "typer",
+    "tests",
+    "pdm_build.py",
+]
+source-includes = [
+    "",
+]
 
 [tool.tiangolo._internal-slim-build.packages.typer-cli.project]
 name = "typer-cli"
@@ -138,6 +139,8 @@ dependencies = [
 ]
 
 [tool.tiangolo._internal-slim-build.packages.typer-cli.project.optional-dependencies]
+
+[tool.tiangolo._internal-slim-build.packages.typer-cli.project.scripts]
 
 [tool.tiangolo._internal-slim-build.packages.typer-cli.tool.pdm.build]
 excludes = [

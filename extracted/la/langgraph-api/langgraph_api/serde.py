@@ -23,6 +23,13 @@ import cloudpickle
 import orjson
 import structlog
 from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+from langgraph.errors import (
+    EmptyInputError,
+    GraphBubbleUp,
+    InvalidUpdateError,
+    TaskNotFound,
+)
+from starlette.exceptions import HTTPException
 
 logger = structlog.stdlib.get_logger(__name__)
 
@@ -78,7 +85,29 @@ def default(obj):
     ):
         return obj._asdict()
     elif isinstance(obj, BaseException):
-        return {"error": type(obj).__name__, "message": str(obj)}
+        if isinstance(
+            obj,
+            (
+                # Python builtins
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                RuntimeError,
+                RecursionError,
+                TimeoutError,
+                # LangGraph DSL errors (GraphRecursionError ⊂ RecursionError,
+                # GraphInterrupt/ParentCommand ⊂ GraphBubbleUp)
+                InvalidUpdateError,
+                GraphBubbleUp,
+                EmptyInputError,
+                TaskNotFound,
+                # HTTP errors (e.g. auth failures during streaming)
+                HTTPException,
+            ),
+        ):
+            return {"error": type(obj).__name__, "message": str(obj)}
+        return {"error": type(obj).__name__, "message": "An internal error occurred"}
     elif isinstance(obj, (set, frozenset, deque)):
         return list(obj)
     elif isinstance(obj, (timezone, ZoneInfo)):

@@ -194,7 +194,7 @@ class GrpcStreamHandler:
         self,
         *,
         auth_filters: list[pb.AuthFilter],
-        stream_modes: list | None = None,
+        stream_modes: list[str] | None = None,
         ignore_run_not_found: bool = False,
         cancel_on_disconnect: bool = False,
         last_event_id: str | None = None,
@@ -286,16 +286,14 @@ def _map_if_not_exists(
 
 
 def _map_stream_modes(
-    stream_mode: str | list[str] | None,
+    stream_mode: list[str] | None,
 ) -> list[enum_stream_mode.StreamMode]:
     """Map stream mode string(s) to protobuf enum list (filtering invalid modes)."""
     if stream_mode is None:
         return []
 
-    modes = [stream_mode] if isinstance(stream_mode, str) else stream_mode
     result = []
-
-    for mode in modes:
+    for mode in stream_mode:
         proto_mode = STREAM_MODE_TO_PB.get(mode)
         if proto_mode is None:
             sanitized = str(mode)[:50] + ("..." if len(str(mode)) > 50 else "")
@@ -822,7 +820,7 @@ class Runs(Authenticated):
             thread_id: UUID,
             ignore_404: bool = False,
             cancel_on_disconnect: bool = False,
-            stream_mode=None,
+            stream_mode: list[str] | None = None,
             last_event_id: str | None = None,
             ctx: Any = None,
         ):

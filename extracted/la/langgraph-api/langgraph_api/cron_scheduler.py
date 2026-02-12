@@ -6,7 +6,9 @@ from typing import Any, cast
 import structlog
 
 from langgraph_api import config
+from langgraph_api.encryption.context import set_encryption_context
 from langgraph_api.encryption.middleware import decrypt_response
+from langgraph_api.encryption.shared import BLOB_ENCRYPTION_CONTEXT_KEY
 from langgraph_api.models.run import create_valid_run
 from langgraph_api.schema import Cron
 from langgraph_api.serde import json_loads
@@ -55,6 +57,16 @@ async def cron_scheduler():
                     if not isinstance(run_payload, dict):
                         run_payload = json_loads(run_payload)
                     run_payload = cast("dict", run_payload)
+
+                    # Extract and set encryption context from cron payload before
+                    # decryption. This ensures that runs created by crons inherit the
+                    # same encryption context that was used when the cron was created.
+                    # New crons store context at payload root; fall back to empty for
+                    # backward compatibility with old crons that don't have it.
+                    # Always set the context (even if empty) to avoid leaking context
+                    # from a previous cron iteration.
+                    enc_ctx = run_payload.get(BLOB_ENCRYPTION_CONTEXT_KEY) or {}
+                    set_encryption_context(enc_ctx)
 
                     run_payload = await decrypt_response(
                         run_payload, "cron", ["metadata", "context", "input", "config"]

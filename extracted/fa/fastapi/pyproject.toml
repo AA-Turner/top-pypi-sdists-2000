@@ -53,7 +53,7 @@ dependencies = [
     "typing-inspection>=0.4.2",
     "annotated-doc>=0.0.2",
 ]
-version = "0.128.7"
+version = "0.128.8"
 
 [project.urls]
 Homepage = "https://github.com/fastapi/fastapi"
@@ -181,6 +181,24 @@ source-includes = [
 
 [tool.tiangolo._internal-slim-build.packages.fastapi-slim.project]
 name = "fastapi-slim"
+readme = "fastapi-slim/README.md"
+dependencies = [
+    "fastapi",
+]
+
+[tool.tiangolo._internal-slim-build.packages.fastapi-slim.project.optional-dependencies]
+
+[tool.tiangolo._internal-slim-build.packages.fastapi-slim.project.scripts]
+
+[tool.tiangolo._internal-slim-build.packages.fastapi-slim.tool.pdm.build]
+excludes = [
+    "fastapi",
+    "tests",
+    "pdm_build.py",
+]
+source-includes = [
+    "",
+]
 
 [tool.mypy]
 plugins = [
