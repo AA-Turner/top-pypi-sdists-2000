@@ -53,6 +53,7 @@ GraphValue = Pregel | GraphFactory | GraphFactoryFromConfig
 
 GRAPHS: dict[str, GraphValue] = {}
 NAMESPACE_GRAPH = UUID("6ba7b821-9dad-11d1-80b4-00c04fd430c8")
+SYSTEM_ASSISTANT_IDS: set[str] = set()
 
 
 async def register_graph(
@@ -71,6 +72,7 @@ async def register_graph(
         from langgraph_runtime.ops import Assistants  # noqa: PLC0415
 
     GRAPHS[graph_id] = graph
+    SYSTEM_ASSISTANT_IDS.add(str(uuid5(NAMESPACE_GRAPH, graph_id)))
     if callable(graph):
         classify_factory(graph, graph_id)
 

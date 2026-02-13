@@ -265,6 +265,7 @@ from .literals import (
     NatGatewayApplianceModifyStateType,
     NatGatewayApplianceStateType,
     NatGatewayStateType,
+    NestedVirtualizationSpecificationType,
     NetworkInterfaceAttributeType,
     NetworkInterfaceCreationTypeType,
     NetworkInterfacePermissionStateCodeType,
@@ -354,6 +355,7 @@ from .literals import (
     SubnetCidrReservationTypeType,
     SubnetStateType,
     SummaryStatusType,
+    SupportedAdditionalProcessorFeatureType,
     TargetCapacityUnitTypeType,
     TelemetryStatusType,
     TenancyType,
@@ -4272,12 +4274,14 @@ class CpuOptionsRequestTypeDef(TypedDict):
     CoreCount: NotRequired[int]
     ThreadsPerCore: NotRequired[int]
     AmdSevSnp: NotRequired[AmdSevSnpSpecificationType]
+    NestedVirtualization: NotRequired[NestedVirtualizationSpecificationType]
 
 
 class CpuOptionsTypeDef(TypedDict):
     CoreCount: NotRequired[int]
     ThreadsPerCore: NotRequired[int]
     AmdSevSnp: NotRequired[AmdSevSnpSpecificationType]
+    NestedVirtualization: NotRequired[NestedVirtualizationSpecificationType]
 
 
 class PerformanceFactorReferenceTypeDef(TypedDict):
@@ -7327,7 +7331,7 @@ class PlacementGroupInfoTypeDef(TypedDict):
 class ProcessorInfoTypeDef(TypedDict):
     SupportedArchitectures: NotRequired[list[ArchitectureTypeType]]
     SustainedClockSpeedInGhz: NotRequired[float]
-    SupportedFeatures: NotRequired[list[Literal["amd-sev-snp"]]]
+    SupportedFeatures: NotRequired[list[SupportedAdditionalProcessorFeatureType]]
     Manufacturer: NotRequired[str]
 
 
@@ -7496,12 +7500,14 @@ class LaunchTemplateCpuOptionsRequestTypeDef(TypedDict):
     CoreCount: NotRequired[int]
     ThreadsPerCore: NotRequired[int]
     AmdSevSnp: NotRequired[AmdSevSnpSpecificationType]
+    NestedVirtualization: NotRequired[NestedVirtualizationSpecificationType]
 
 
 class LaunchTemplateCpuOptionsTypeDef(TypedDict):
     CoreCount: NotRequired[int]
     ThreadsPerCore: NotRequired[int]
     AmdSevSnp: NotRequired[AmdSevSnpSpecificationType]
+    NestedVirtualization: NotRequired[NestedVirtualizationSpecificationType]
 
 
 LaunchTemplateElasticInferenceAcceleratorResponseTypeDef = TypedDict(
@@ -7770,8 +7776,9 @@ class ModifyInstanceConnectEndpointRequestTypeDef(TypedDict):
 
 class ModifyInstanceCpuOptionsRequestTypeDef(TypedDict):
     InstanceId: str
-    CoreCount: int
-    ThreadsPerCore: int
+    CoreCount: NotRequired[int]
+    ThreadsPerCore: NotRequired[int]
+    NestedVirtualization: NotRequired[NestedVirtualizationSpecificationType]
     DryRun: NotRequired[bool]
 
 
@@ -9958,6 +9965,7 @@ class ModifyInstanceCpuOptionsResultTypeDef(TypedDict):
     InstanceId: str
     CoreCount: int
     ThreadsPerCore: int
+    NestedVirtualization: NestedVirtualizationSpecificationType
     ResponseMetadata: ResponseMetadataTypeDef
 
 

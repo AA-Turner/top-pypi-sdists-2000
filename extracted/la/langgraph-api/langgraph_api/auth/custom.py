@@ -517,10 +517,10 @@ class ProxyUser(BaseUser):
         }
 
     def __contains__(self, key: str) -> bool:
-        return key in self._user
+        return key in self.dict()
 
     def __getitem__(self, key):
-        return self._user[key]
+        return self.dict()[key]
 
     def __setitem__(self, key, value):
         self._user[key] = value
@@ -530,10 +530,22 @@ class ProxyUser(BaseUser):
         return getattr(self._user, name)
 
     def __iter__(self):
-        return iter(self._user)
+        return iter(self.dict())
 
     def __len__(self):
-        return len(self._user)
+        return len(self.dict())
+
+    def get(self, key, /, default=None):
+        return self.dict().get(key, default)
+
+    def keys(self):
+        return self.dict().keys()
+
+    def values(self):
+        return self.dict().values()
+
+    def items(self):
+        return self.dict().items()
 
     def __str__(self) -> str:
         return f"{self._user}"

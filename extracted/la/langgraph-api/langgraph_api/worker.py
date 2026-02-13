@@ -61,12 +61,18 @@ async def set_auth_ctx_for_run(
 ) -> AsyncGenerator[None, None]:
     # user_id is a fallback.
     try:
-        user = run_kwargs["config"]["configurable"]["langgraph_auth_user"]
-        permissions = run_kwargs["config"]["configurable"]["langgraph_auth_permissions"]
-        user = normalize_user(user)
+        permissions = (
+            run_kwargs["config"]["configurable"].get("langgraph_auth_permissions") or []
+        )
+        user = run_kwargs["config"]["configurable"].get("langgraph_auth_user")
+        if not user:
+            user = SimpleUser(user_id) if user_id is not None else None
+        else:
+            user = normalize_user(user)
         # Reapply normalization to the kwargs
         run_kwargs["config"]["configurable"]["langgraph_auth_user"] = user
     except Exception:
+        logger.warning("Failed to extract user from run kwargs", exc_info=True)
         user = SimpleUser(user_id) if user_id is not None else None
         permissions = None
     if user is not None:

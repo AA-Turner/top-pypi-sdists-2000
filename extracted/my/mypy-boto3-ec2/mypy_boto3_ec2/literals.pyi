@@ -470,6 +470,7 @@ __all__ = (
     "NatGatewayAvailableWaiterName",
     "NatGatewayDeletedWaiterName",
     "NatGatewayStateType",
+    "NestedVirtualizationSpecificationType",
     "NetworkInterfaceAttributeType",
     "NetworkInterfaceAvailableWaiterName",
     "NetworkInterfaceCreationTypeType",
@@ -2857,6 +2858,7 @@ NatGatewayApplianceTypeType = Literal["network-firewall-proxy"]
 NatGatewayAvailableWaiterName = Literal["nat_gateway_available"]
 NatGatewayDeletedWaiterName = Literal["nat_gateway_deleted"]
 NatGatewayStateType = Literal["available", "deleted", "deleting", "failed", "pending"]
+NestedVirtualizationSpecificationType = Literal["disabled", "enabled"]
 NetworkInterfaceAttributeType = Literal[
     "associatePublicIpAddress", "attachment", "description", "groupSet", "sourceDestCheck"
 ]
@@ -3231,7 +3233,7 @@ SubnetStateType = Literal[
     "available", "failed", "failed-insufficient-capacity", "pending", "unavailable"
 ]
 SummaryStatusType = Literal["impaired", "initializing", "insufficient-data", "not-applicable", "ok"]
-SupportedAdditionalProcessorFeatureType = Literal["amd-sev-snp"]
+SupportedAdditionalProcessorFeatureType = Literal["amd-sev-snp", "nested-virtualization"]
 SystemStatusOkWaiterName = Literal["system_status_ok"]
 TargetCapacityUnitTypeType = Literal["memory-mib", "units", "vcpu"]
 TargetStorageTierType = Literal["archive"]

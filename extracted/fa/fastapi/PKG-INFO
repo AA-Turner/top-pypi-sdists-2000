@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: fastapi
-Version: 0.128.8
+Version: 0.129.0
 Summary: FastAPI framework, high performance, easy to learn, fast to code, ready for production
 Author-Email: =?utf-8?q?Sebasti=C3=A1n_Ram=C3=ADrez?= <tiangolo@gmail.com>
 License-Expression: MIT
@@ -24,7 +24,6 @@ Classifier: Framework :: Pydantic
 Classifier: Framework :: Pydantic :: 2
 Classifier: Intended Audience :: Developers
 Classifier: Programming Language :: Python :: 3 :: Only
-Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
@@ -37,7 +36,7 @@ Project-URL: Documentation, https://fastapi.tiangolo.com/
 Project-URL: Repository, https://github.com/fastapi/fastapi
 Project-URL: Issues, https://github.com/fastapi/fastapi/issues
 Project-URL: Changelog, https://fastapi.tiangolo.com/release-notes/
-Requires-Python: >=3.9
+Requires-Python: >=3.10
 Requires-Dist: starlette<1.0.0,>=0.40.0
 Requires-Dist: pydantic>=2.7.0
 Requires-Dist: typing-extensions>=4.8.0

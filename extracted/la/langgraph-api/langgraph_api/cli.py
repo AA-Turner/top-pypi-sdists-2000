@@ -107,6 +107,7 @@ def run_server(
     ui: dict | None = None,
     webhooks: dict | None = None,
     ui_config: dict | None = None,
+    checkpointer: dict | None = None,
     studio_url: str | None = None,
     disable_persistence: bool = False,
     allow_blocking: bool = False,
@@ -209,6 +210,7 @@ def run_server(
         LANGGRAPH_UI=json.dumps(ui) if ui else None,
         LANGGRAPH_WEBHOOKS=json.dumps(webhooks) if webhooks else None,
         LANGGRAPH_UI_CONFIG=json.dumps(ui_config) if ui_config else None,
+        LANGGRAPH_CHECKPOINTER=json.dumps(checkpointer) if checkpointer else None,
         LANGGRAPH_UI_BUNDLER="true",
         LANGGRAPH_API_URL=local_url,
         LANGGRAPH_DISABLE_FILE_PERSISTENCE=str(disable_persistence).lower(),
@@ -411,6 +413,7 @@ def main():
     ui = config_data.get("ui")
     webhooks = config_data.get("webhooks")
     ui_config = config_data.get("ui_config")
+    checkpointer = config_data.get("checkpointer")
     kwargs = {}
     if args.runtime_edition == "postgres":
         kwargs["__redis_uri__"] = os.getenv("REDIS_URI")
@@ -433,6 +436,7 @@ def main():
         ui=ui,
         webhooks=webhooks,
         ui_config=ui_config,
+        checkpointer=checkpointer,
         runtime_edition=args.runtime_edition,
         **kwargs,
     )
