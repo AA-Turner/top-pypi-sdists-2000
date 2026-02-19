@@ -419,6 +419,20 @@ def test_config_set_env_ref(tox_project: ToxProjectCreator) -> None:
     outcome.assert_out_err(out, "")
 
 
+def test_config_set_env_substitution_deferred(tox_project: ToxProjectCreator) -> None:
+    project = tox_project({
+        "tox.toml": """
+        [env_run_base]
+        package = "skip"
+        set_env.COVERAGE_SRC = "{env_site_packages_dir}{/}mypackage"
+        """
+    })
+    outcome = project.run("c", "-e", "py", "-k", "set_env")
+    outcome.assert_success()
+    assert "COVERAGE_SRC=" in outcome.out
+    assert "mypackage" in outcome.out
+
+
 def test_config_env_run_base_deps_reference_with_additional_deps(tox_project: ToxProjectCreator) -> None:
     project = tox_project({
         "pyproject.toml": """
@@ -448,4 +462,27 @@ def test_config_env_pkg_base_deps_reference_with_additional_deps(tox_project: To
     outcome = project.run("c", "-e", "pkg", "-k", "deps")
     outcome.assert_success()
     out = "[testenv:pkg]\ndeps =\n  build\n  wheel\n  setuptools>=40\n"
+    outcome.assert_out_err(out, "")
+
+
+def test_config_env_base_inherit_from_arbitrary_section(tox_project: ToxProjectCreator) -> None:
+    project = tox_project({
+        "pyproject.toml": """
+        [tool.tox]
+        env_list = ["a", "b"]
+
+        [tool.tox.env.shared]
+        description = "shared config"
+        skip_install = true
+
+        [tool.tox.env.a]
+        base = ["shared"]
+
+        [tool.tox.env.b]
+        base = ["shared"]
+        """
+    })
+    outcome = project.run("c", "-e", "a,b", "-k", "description")
+    outcome.assert_success()
+    out = "[testenv:a]\ndescription = shared config\n\n[testenv:b]\ndescription = shared config\n"
     outcome.assert_out_err(out, "")

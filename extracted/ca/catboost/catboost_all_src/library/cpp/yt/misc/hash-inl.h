@@ -10,6 +10,18 @@ namespace NYT {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+inline size_t SplitMix64(size_t value)
+{
+    static_assert(sizeof(size_t) == 8, "size_t must be 64 bit.");
+
+    value += 0x9e3779b97f4a7c15ULL;
+    value = (value ^ (value >> 30)) * 0xbf58476d1ce4e5b9ULL;
+    value = (value ^ (value >> 27)) * 0x94d049bb133111ebULL;
+    return value ^ (value >> 31);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 inline void HashCombine(size_t& h, size_t k)
 {
     static_assert(sizeof(size_t) == 8, "size_t must be 64 bit.");
@@ -52,9 +64,16 @@ TRandomizedHash<TElement, TUnderlying>::TRandomizedHash()
 { }
 
 template <class TElement, class TUnderlying>
+TRandomizedHash<TElement, TUnderlying>::TRandomizedHash(size_t seed)
+    : Seed_(seed)
+{ }
+
+template <class TElement, class TUnderlying>
 size_t TRandomizedHash<TElement, TUnderlying>::operator ()(const TElement& element) const
 {
-    return Underlying_(element) + Seed_;
+    auto result = Seed_;
+    HashCombine(result, Underlying_(element));
+    return result;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

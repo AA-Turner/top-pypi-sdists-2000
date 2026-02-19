@@ -186,6 +186,27 @@ def test_recreate_package(tox_project: ToxProjectCreator, demo_pkg_inline: Path)
     result_rerun.assert_success()
 
 
+def test_recreate_env_does_not_destroy_shared_pkg(tox_project: ToxProjectCreator, demo_pkg_inline: Path) -> None:
+    toml = (demo_pkg_inline / "pyproject.toml").read_text()
+    build = (demo_pkg_inline / "build.py").read_text()
+    proj = tox_project({
+        "tox.toml": """\
+env_list = ["a", "b"]
+
+[env_run_base]
+package = "wheel"
+commands = [["python", "-c", "from demo_pkg_inline import do; do()"]]
+
+[env.b]
+recreate = true
+""",
+        "pyproject.toml": toml,
+        "build.py": build,
+    })
+    result = proj.run("r", "-e", "a,b")
+    result.assert_success()
+
+
 def test_package_deps_change(tox_project: ToxProjectCreator, demo_pkg_inline: Path) -> None:
     toml = (demo_pkg_inline / "pyproject.toml").read_text()
     build = (demo_pkg_inline / "build.py").read_text()
@@ -257,6 +278,47 @@ def test_missing_interpreter_skip_off(tox_project: ToxProjectCreator) -> None:
     result.assert_failed()
     exp = "py: failed with could not find python interpreter matching any of the specs missing-interpreter"
     assert exp in result.out
+
+
+@pytest.mark.slow
+def test_missing_interpreter_skip_set_env_substitution_ini(tox_project: ToxProjectCreator) -> None:
+    ini = """\
+[tox]
+env_list = ok, bad
+skip_missing_interpreters = true
+[testenv]
+package = skip
+set_env =
+    DATA_DIR={envsitepackagesdir}
+[testenv:bad]
+base_python = missing-interpreter
+set_env =
+    {[testenv]set_env}
+    EXTRA=yes
+"""
+    result = tox_project({"tox.ini": ini}).run("r")
+    result.assert_success()
+    assert "bad: SKIP" in result.out
+    assert "ok: OK" in result.out
+
+
+@pytest.mark.slow
+def test_missing_interpreter_skip_set_env_substitution_toml(tox_project: ToxProjectCreator) -> None:
+    toml = """\
+env_list = ["ok", "bad"]
+skip_missing_interpreters = true
+
+[env_run_base]
+package = "skip"
+
+[env.bad]
+base_python = ["missing-interpreter"]
+set_env = {DATA_DIR = "{envsitepackagesdir}", EXTRA = "yes"}
+"""
+    result = tox_project({"tox.toml": toml}).run("r")
+    result.assert_success()
+    assert "bad: SKIP" in result.out
+    assert "ok: OK" in result.out
 
 
 def test_env_tmp_dir_reset(tox_project: ToxProjectCreator) -> None:

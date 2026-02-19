@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: catboost
-Version: 1.2.8
+Version: 1.2.10
 Summary: CatBoost Python Package
 Home-page: https://catboost.ai
 Author: CatBoost Developers
@@ -20,7 +20,7 @@ Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Requires-Dist: graphviz
 Requires-Dist: matplotlib
 Requires-Dist: numpy<3.0,>=1.16.0
-Requires-Dist: pandas>=0.24
+Requires-Dist: pandas<4.0,>=0.24
 Requires-Dist: scipy
 Requires-Dist: plotly
 Requires-Dist: six
