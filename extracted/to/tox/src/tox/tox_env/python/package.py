@@ -65,6 +65,10 @@ class PythonPackageToxEnv(Python, PackageToxEnv, ABC):
     def requires(self) -> tuple[Requirement, ...] | PythonDeps:
         raise NotImplementedError
 
+    @abstractmethod
+    def load_deps_for_env(self, for_env: EnvConfigSet) -> list[Requirement]:
+        raise NotImplementedError
+
     def register_run_env(self, run_env: RunToxEnv) -> Generator[tuple[str, str], PackageToxEnv, None]:
         yield from super().register_run_env(run_env)
         if run_env.conf["package"] != "skip" and "deps" not in self.conf:
@@ -77,7 +81,7 @@ class PythonPackageToxEnv(Python, PackageToxEnv, ABC):
 
         if (
             not isinstance(run_env, Python)
-            or run_env.conf["package"] not in {"wheel", "editable"}
+            or run_env.conf["package"] not in {"wheel", "sdist-wheel", "editable"}
             or "wheel_build_env" in run_env.conf
         ):
             return
@@ -120,7 +124,7 @@ class PythonPackageToxEnv(Python, PackageToxEnv, ABC):
         self._wheel_build_envs[pkg_env] = cast("PythonPackageToxEnv", result)
 
     def child_pkg_envs(self, run_conf: EnvConfigSet) -> Iterator[PackageToxEnv]:
-        if run_conf["package"] == "wheel":
+        if run_conf["package"] in {"wheel", "sdist-wheel"}:
             try:
                 conf = run_conf["wheel_build_env"]
             except Skip:
