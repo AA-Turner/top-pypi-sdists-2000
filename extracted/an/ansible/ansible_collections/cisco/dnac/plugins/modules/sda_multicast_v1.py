@@ -1,7 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 # Copyright (c) 2021, Cisco Systems
 # GNU General Public License v3.0+ (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
+
 DOCUMENTATION = r"""
 ---
 module: sda_multicast_v1
@@ -26,17 +28,21 @@ options:
         type: str
     type: list
 requirements:
-  - dnacentersdk >= 2.4.9
-  - python >= 3.5
+  - dnacentersdk >= 2.11.0
+  - python >= 3.12
 seealso:
-  - name: Cisco DNA Center documentation for SDA UpdateMulticastV1
-    description: Complete reference of the UpdateMulticastV1 API.
+  - name: Cisco DNA Center documentation for SDA UpdateMulticast
+    description: Complete reference of the UpdateMulticast API.
     link: https://developer.cisco.com/docs/dna-center/#!update-multicast
 notes:
-  - SDK Method used are sda.Sda.update_multicast_v1,
-  - Paths used are put /dna/intent/api/v1/sda/multicast,
+  - SDK Method used are
+    sda.Sda.update_multicast,
+  - Paths used are
+    put /dna/intent/api/v1/sda/multicast,
 """
+
 EXAMPLES = r"""
+---
 - name: Update all
   cisco.dnac.sda_multicast_v1:
     dnac_host: "{{dnac_host}}"
