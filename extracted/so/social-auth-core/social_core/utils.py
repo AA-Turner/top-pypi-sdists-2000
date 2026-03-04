@@ -5,9 +5,9 @@ import functools
 import hmac
 import logging
 import re
-import sys
 import time
 import unicodedata
+from importlib import import_module
 from typing import TYPE_CHECKING, Any
 from urllib.parse import parse_qs as battery_parse_qs
 from urllib.parse import unquote, urlencode, urlparse, urlunparse
@@ -24,7 +24,9 @@ from .exceptions import (
 )
 
 if TYPE_CHECKING:
-    from social_core.backends.base import BaseAuth
+    from .backends.base import BaseAuth
+    from .storage import PartialMixin, UserProtocol
+    from .strategy import BaseStrategy
 
 SETTING_PREFIX = "SOCIAL_AUTH"
 
@@ -32,11 +34,6 @@ PARTIAL_TOKEN_SESSION_NAME = "partial_pipeline_token"
 
 
 social_logger = logging.getLogger("social")
-
-
-def import_module(name):
-    __import__(name)
-    return sys.modules[name]
 
 
 def module_member(name):
@@ -47,7 +44,7 @@ def module_member(name):
 
 def user_agent():
     """Builds a simple User-Agent string to send in requests"""
-    return "social-auth-" + social_core.__version__
+    return f"social-auth-{social_core.__version__}"
 
 
 def url_add_parameters(
@@ -61,7 +58,7 @@ def url_add_parameters(
         fragments[4] = urlencode(value)
         if _unquote_query:
             fragments[4] = unquote(fragments[4])
-        url = urlunparse(fragments)  # ty: ignore[invalid-assignment]
+        url = urlunparse(fragments)
     return url
 
 
@@ -73,7 +70,7 @@ def setting_name(*names: str) -> str:
     return to_setting_name(*((SETTING_PREFIX, *names)))
 
 
-def sanitize_redirect(hosts, redirect_to):
+def sanitize_redirect(hosts: list[str], redirect_to: str | Any) -> str | None:
     """
     Given a list of hostnames and an untrusted URL to redirect to,
     this method tests it to make sure it isn't garbage/harmful
@@ -83,7 +80,7 @@ def sanitize_redirect(hosts, redirect_to):
     # Avoid redirect on evil URLs like ///evil.com
     if (
         not redirect_to
-        or not hasattr(redirect_to, "startswith")
+        or not isinstance(redirect_to, str)
         or redirect_to.startswith("///")
     ):
         return None
@@ -92,13 +89,14 @@ def sanitize_redirect(hosts, redirect_to):
         # Don't redirect to a host that's not in the list
         netloc = urlparse(redirect_to)[1] or hosts[0]
     except (TypeError, AttributeError):
-        pass
-    else:
-        if netloc in hosts:
-            return redirect_to
+        return None
+
+    if netloc in hosts:
+        return redirect_to
+    return None
 
 
-def user_is_authenticated(user):
+def user_is_authenticated(user: UserProtocol | None) -> bool:
     if user and hasattr(user, "is_authenticated"):
         if callable(user.is_authenticated):
             authenticated = user.is_authenticated()
@@ -111,7 +109,7 @@ def user_is_authenticated(user):
     return authenticated
 
 
-def user_is_active(user):
+def user_is_active(user: UserProtocol | None) -> bool:
     if user and hasattr(user, "is_active"):
         is_active = user.is_active() if callable(user.is_active) else user.is_active
     elif user:
@@ -164,7 +162,13 @@ def drop_lists(value):
     return out
 
 
-def partial_pipeline_data(backend, user=None, partial_token=None, *args, **kwargs):
+def partial_pipeline_data(
+    backend: BaseAuth,
+    user: UserProtocol | None = None,
+    partial_token: str | None = None,
+    *args,
+    **kwargs,
+) -> PartialMixin | None:
     request_data = backend.strategy.request_data()
 
     partial_argument_name = backend.setting(
@@ -177,7 +181,7 @@ def partial_pipeline_data(backend, user=None, partial_token=None, *args, **kwarg
     )
 
     if partial_token:
-        partial = backend.strategy.partial_load(partial_token)
+        partial: PartialMixin | None = backend.strategy.partial_load(partial_token)
         partial_matches_request = False
 
         if partial and partial.backend == backend.name:
@@ -186,14 +190,15 @@ def partial_pipeline_data(backend, user=None, partial_token=None, *args, **kwarg
             # Normally when resuming a pipeline, request_data will be empty. We
             # only need to check for a uid match if new data was provided (i.e.
             # if current request specifies the ID_KEY).
-            if backend.ID_KEY and backend.ID_KEY in request_data:
+            id_key = backend.id_key()
+            if id_key and id_key in request_data:
                 id_from_partial = partial.kwargs.get("uid")
-                id_from_request = request_data.get(backend.ID_KEY)
+                id_from_request = request_data.get(id_key)
 
                 if id_from_partial != id_from_request:
                     partial_matches_request = False
 
-        if partial_matches_request:
+        if partial and partial_matches_request:
             if user:  # don't update user if it's None
                 kwargs.setdefault("user", user)
             kwargs.setdefault("request", request_data)
@@ -204,7 +209,7 @@ def partial_pipeline_data(backend, user=None, partial_token=None, *args, **kwarg
     return None
 
 
-def build_absolute_uri(host_url, path=None):
+def build_absolute_uri(host_url: str, path: str | None = None) -> str:
     """Build absolute URI with given (optional) path"""
     path = path or ""
     if path.startswith(("http://", "https://")):
@@ -214,7 +219,7 @@ def build_absolute_uri(host_url, path=None):
     return host_url + path
 
 
-def constant_time_compare(val1, val2):
+def constant_time_compare(val1: str | bytes, val2: str | bytes) -> bool:
     """Compare two values and prevent timing attacks for cryptographic use."""
     if isinstance(val1, str):
         val1 = val1.encode("utf-8")
@@ -223,12 +228,15 @@ def constant_time_compare(val1, val2):
     return hmac.compare_digest(val1, val2)
 
 
-def is_url(value):
-    return value and (value.startswith(("http://", "https://", "/")))
+def is_url(value: str | None) -> bool:
+    return value is not None and value.startswith(("http://", "https://", "/"))
 
 
-def setting_url(backend, *names):
+def setting_url(backend: BaseAuth, *names: str | None) -> str | None:
     for name in names:
+        # Name can actually None, value or setting name
+        if not name:
+            continue
         if is_url(name):
             return name
         value = backend.setting(name)
@@ -250,11 +258,11 @@ def handle_http_errors(func):
             )
 
             if err.response.status_code == 400:
-                raise AuthCanceled(args[0], response=err.response)
+                raise AuthCanceled(args[0], response=err.response) from err
             if err.response.status_code == 401:
-                raise AuthForbidden(args[0])
+                raise AuthForbidden(args[0]) from err
             if err.response.status_code == 503:
-                raise AuthUnreachableProvider(args[0])
+                raise AuthUnreachableProvider(args[0]) from err
             raise
 
     return wrapper
@@ -266,11 +274,13 @@ def wrap_access_token_error(backend: BaseAuth):
         yield
     except requests.HTTPError as error:
         if error.response.status_code == 401:
-            raise AuthTokenError(backend, "Invalid key/secret, perhaps expired")
+            raise AuthTokenError(
+                backend, "Invalid key/secret, perhaps expired"
+            ) from error
         raise
 
 
-def append_slash(url):
+def append_slash(url: str) -> str:
     """Make sure we append a slash at the end of the URL otherwise we
     have issues with urljoin Example:
     >>> urlparse.urljoin('http://www.example.com/api/v3', 'user/1/')
@@ -281,7 +291,7 @@ def append_slash(url):
     return url
 
 
-def get_strategy(strategy, storage, *args, **kwargs):
+def get_strategy(strategy: str, storage: str, *args, **kwargs) -> BaseStrategy:
     Strategy = module_member(strategy)
     Storage = module_member(storage)
     return Strategy(Storage, *args, **kwargs)
@@ -316,6 +326,7 @@ class cache:
                 try:
                     cached_value = fn(this)
                     self.cache[this.__class__] = (now, cached_value)
+                # pylint: disable-next=broad-exception-caught
                 except Exception:
                     # Use previously cached value when call fails, if available
                     if not cached_value:

@@ -10,6 +10,7 @@ from .actions import BaseActionTest
 
 class AssociateActionTest(BaseActionTest):
     expected_username = "foobar"
+    user: User
 
     def setUp(self) -> None:
         super().setUp()
@@ -18,7 +19,7 @@ class AssociateActionTest(BaseActionTest):
 
     def test_associate(self) -> None:
         self.do_login()
-        self.assertTrue(len(self.user.social), 1)
+        self.assertEqual(len(self.user.social), 1)
         self.assertEqual(self.user.social[0].provider, "github")
 
     def test_associate_with_partial_pipeline(self) -> None:

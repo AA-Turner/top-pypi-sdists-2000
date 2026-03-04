@@ -1,19 +1,26 @@
+import logging
 from typing import Tuple, List, Union
 import torch
 from ._lib import LLMatcher, LLExecutor, LLInterpreter
 
+logger = logging.getLogger(__name__)
 
 def get_bitmask_shape(batch_size: int, vocab_size: int) -> Tuple[int, int]:
     return (batch_size, (vocab_size + 31) // 32)
 
 
 def allocate_token_bitmask(batch_size: int, vocab_size: int) -> torch.Tensor:
-    return torch.full(
-        get_bitmask_shape(batch_size, vocab_size),
-        -1,
-        dtype=torch.int32,
-        pin_memory=torch.cuda.is_available(),
-    )
+    shape = get_bitmask_shape(batch_size, vocab_size)
+    try:
+        return torch.full(
+            shape,
+            -1,
+            dtype=torch.int32,
+            pin_memory=torch.cuda.is_available(),
+        )
+    except RuntimeError as e:
+        logger.warning(f"Failed to pin memory: {e}. Falling back to non-pinned memory.")
+        return torch.full(shape, -1, dtype=torch.int32, pin_memory=False)
 
 
 @torch.compile(dynamic=True)  # faster than dynamic=False and jit.script
@@ -77,3 +84,22 @@ def fill_next_token_bitmask_par_with_draft_tokens(executor: LLExecutor,
     batch, vocab = bitmask.shape
     assert bitmask.is_contiguous(), "Mask must be contiguous"
     executor.unsafe_compute_mask_ptr_with_draft_token(matchers, bitmask.data_ptr(), vocab * 4, batch)
+
+
+def consume_token_par(executor: LLExecutor,
+                      matchers: List[Tuple[LLMatcher, int]]) -> List[bool]:
+    """
+    Consume a single token for each matcher in parallel.
+
+    Args:
+        executor: The LLExecutor to use for parallel execution.
+        matchers: List of tuples containing (LLMatcher, token_id).
+
+    Returns:
+        List[bool]: Success/failure for each matcher (in order).
+
+    Note:
+        Matchers that fail (return False) are left in an error state,
+        consistent with the behavior of consume_token on a single matcher.
+    """
+    return executor.consume_token_par(matchers)

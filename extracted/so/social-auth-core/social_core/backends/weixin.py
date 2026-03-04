@@ -3,6 +3,7 @@
 Weixin OAuth2 backend
 """
 
+from typing import Any
 from urllib.parse import urlencode
 
 from requests import HTTPError
@@ -39,7 +40,7 @@ class WeixinOAuth2(BaseOAuth2):
             "profile_image_url": response.get("headimgurl", ""),
         }
 
-    def user_data(self, access_token, *args, **kwargs):
+    def user_data(self, access_token: str, *args, **kwargs) -> dict[str, Any] | None:
         data = self.get_json(
             "https://api.weixin.qq.com/sns/userinfo",
             params={
@@ -93,10 +94,10 @@ class WeixinOAuth2(BaseOAuth2):
             )
         except HTTPError as err:
             if err.response.status_code == 400:
-                raise AuthCanceled(self, response=err.response)
+                raise AuthCanceled(self, response=err.response) from err
             raise
-        except KeyError:
-            raise AuthUnknownError(self)
+        except KeyError as err:
+            raise AuthUnknownError(self) from err
         if "errcode" in response:
             raise AuthCanceled(self)
         self.process_error(response)
@@ -118,14 +119,14 @@ class WeixinOAuth2APP(WeixinOAuth2):
     ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token"
     REDIRECT_STATE = False
 
-    def auth_url(self):
+    def auth_url(self) -> str:
         if self.STATE_PARAMETER or self.REDIRECT_STATE:
             # Store state in session for further request validation. The state
             # value is passed as state parameter (as specified in OAuth2 spec),
             # but also added to redirect, that way we can still verify the
             # request if the provider doesn't implement the state parameter.
             # Reuse token if any.
-            name = self.name + "_state"
+            name = f"{self.name}_state"
             state = self.strategy.session_get(name)
             if state is None:
                 state = self.state_token()
@@ -163,10 +164,10 @@ class WeixinOAuth2APP(WeixinOAuth2):
             )
         except HTTPError as err:
             if err.response.status_code == 400:
-                raise AuthCanceled(self)
+                raise AuthCanceled(self) from err
             raise
-        except KeyError:
-            raise AuthUnknownError(self)
+        except KeyError as err:
+            raise AuthUnknownError(self) from err
 
         if "errcode" in response:
             raise AuthCanceled(self)

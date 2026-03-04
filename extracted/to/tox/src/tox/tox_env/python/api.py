@@ -67,7 +67,7 @@ PY_FACTORS_RE_EXPLICIT_VERSION = re.compile(
     r"""
     ^
     ( (?P<impl> cpython | pypy ) - )?   # optional interpreter prefix with dash
-    (?P<version> [2-9] \. [0-9]+ )      # explicit major.minor version
+    (?P<version> [23] \. [0-9]+ )        # explicit major.minor version (Python 2.x or 3.x)
     (?P<threaded> t? )                   # optional free-threaded suffix
     $
     """,
@@ -84,19 +84,23 @@ class Python(ToxEnv, ABC):
     def register_config(self) -> None:
         super().register_config()
 
-        self.conf.add_config(
+        def _ensure_list(value: list[str] | str) -> list[str]:
+            return [value] if isinstance(value, str) else value
+
+        self.conf.add_config(  # ty: ignore[no-matching-overload] # https://github.com/astral-sh/ty/issues/2428
             keys=["default_base_python"],
-            of_type=list[str],
+            of_type=list[str] | str,
             default=[sys.executable],
             desc="fallback python interpreter used when no factor or explicit base_python is defined",
+            post_process=_ensure_list,
         )
 
-        def validate_base_python(value: list[str]) -> list[str]:
-            return self._validate_base_python(self.name, value, self.core["ignore_base_python_conflict"])
+        def validate_base_python(value: list[str] | str) -> list[str]:
+            return self._validate_base_python(self.name, _ensure_list(value), self.core["ignore_base_python_conflict"])
 
         self.conf.add_config(  # ty: ignore[no-matching-overload] # https://github.com/astral-sh/ty/issues/2428
             keys=["base_python", "basepython"],
-            of_type=list[str],
+            of_type=list[str] | str,
             default=self._base_python_default,
             desc="environment identifier for python, first one found wins",
             post_process=validate_base_python,
@@ -170,21 +174,30 @@ class Python(ToxEnv, ABC):
         return env
 
     def _base_python_default(self, conf: Config, env_name: str | None) -> list[str]:  # noqa: ARG002
-        base_python = None if env_name is None else self.extract_base_python(env_name)
+        try:
+            base_python = None if env_name is None else self.extract_base_python(env_name)
+        except ValueError:
+            if self.core["ignore_base_python_conflict"]:
+                base_python = None
+            else:
+                raise
         return self.conf["default_base_python"] if base_python is None else [base_python]
 
     @classmethod
     def extract_base_python(cls, env_name: str) -> str | None:
         candidates: list[str] = []
-        match = PY_FACTORS_RE_EXPLICIT_VERSION.match(env_name)
-        if match:
+        if match := PY_FACTORS_RE_EXPLICIT_VERSION.match(env_name):
             found = match.groupdict()
             candidates.append(f"{'pypy' if found['impl'] == 'pypy' else ''}{found['version']}{found['threaded']}")
         else:
             for factor in env_name.split("-"):
-                match = PY_FACTORS_RE.match(factor)
-                if match:
+                if match := PY_FACTORS_RE.match(factor):
                     candidates.append(factor)
+                elif match := PY_FACTORS_RE_EXPLICIT_VERSION.match(factor):
+                    found = match.groupdict()
+                    candidates.append(
+                        f"{'pypy' if found['impl'] == 'pypy' else ''}{found['version']}{found['threaded']}"
+                    )
         if candidates:
             if len(candidates) > 1:
                 msg = f"conflicting factors {', '.join(candidates)} in {env_name}"
@@ -210,7 +223,12 @@ class Python(ToxEnv, ABC):
         base_pythons: list[str],
         ignore_base_python_conflict: bool,  # noqa: FBT001
     ) -> list[str]:
-        env_base_python = cls.extract_base_python(env_name)
+        try:
+            env_base_python = cls.extract_base_python(env_name)
+        except ValueError:
+            if ignore_base_python_conflict:
+                return base_pythons
+            raise
         if env_base_python is not None:
             spec_name = PythonSpec.from_string_spec(env_base_python)
             for base_python in base_pythons:

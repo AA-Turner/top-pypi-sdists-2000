@@ -17,6 +17,7 @@ def parse_object(
     # <object> ::= '{' [ <member> *(', ' <member>) ] '}' ; A sequence of 'members'
     obj: dict[str, JSONReturnType] = {}
     start_index = self.index
+    parsing_object_value = self.context.current == ContextValues.OBJECT_VALUE
 
     # Only activate schema-guided parsing if a repairer is available and schema looks object-like.
     schema_repairer: SchemaRepairer | None = None
@@ -158,13 +159,35 @@ def parse_object(
             if self.strict:
                 self.log("Duplicate key found in strict mode while parsing object, raising an error")
                 raise ValueError("Duplicate key found in strict mode while parsing object.")
-            self.log(
-                "While parsing an object we found a duplicate key, closing the object here and rolling back the index",
-            )
-            self.index = rollback_index - 1
-            # add an opening curly brace to make this work
-            self.json_str = self.json_str[: self.index + 1] + "{" + self.json_str[self.index + 1 :]
-            break
+            # Only split objects on duplicates when this object started as a direct array item.
+            # Nested object values should keep standard duplicate-key overwrite behavior.
+            if not parsing_object_value:
+                # Keep regular duplicate-key overwrite only for clearly valid duplicate members.
+                # If key parsing started from malformed prefix characters, or there's no ':' after the key,
+                # treat this as a likely missing object boundary and split.
+                lookback_idx = rollback_index - self.index - 1
+                prev_non_whitespace = self.get_char_at(lookback_idx)
+                while prev_non_whitespace and prev_non_whitespace.isspace():
+                    lookback_idx -= 1
+                    prev_non_whitespace = self.get_char_at(lookback_idx)
+                key_start_char = self.get_char_at(rollback_index - self.index)
+                next_non_whitespace = self.get_char_at(self.scroll_whitespaces())
+                is_normal_duplicate_member = (
+                    key_start_char in STRING_DELIMITERS and prev_non_whitespace == "," and next_non_whitespace == ":"
+                )
+
+                if is_normal_duplicate_member:
+                    self.log(
+                        "While parsing an object we found a duplicate key with a normal comma separator, keeping duplicate-key overwrite behavior",
+                    )
+                else:
+                    self.log(
+                        "While parsing an object we found a duplicate key, closing the object here and rolling back the index",
+                    )
+                    self.index = rollback_index - 1
+                    # add an opening curly brace to make this work
+                    self.json_str = self.json_str[: self.index + 1] + "{" + self.json_str[self.index + 1 :]
+                    break
 
         # Skip filler whitespaces
         self.skip_whitespaces()

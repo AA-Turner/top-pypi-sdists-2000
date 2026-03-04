@@ -58,7 +58,7 @@ class EvernoteOAuth(BaseOAuth1):
         except HTTPError as err:
             # Evernote returns a 401 error when AuthCanceled
             if err.response.status_code == 401:
-                raise AuthCanceled(self, response=err.response)
+                raise AuthCanceled(self, response=err.response) from err
             raise
 
     def extra_data(
@@ -76,7 +76,7 @@ class EvernoteOAuth(BaseOAuth1):
             data["expires"] = int(data["expires"]) / 1000
         return data
 
-    def user_data(self, access_token, *args, **kwargs):
+    def user_data(self, access_token: dict, *args, **kwargs) -> dict[str, Any] | None:
         """Return user data provided"""
         return access_token.copy()
 

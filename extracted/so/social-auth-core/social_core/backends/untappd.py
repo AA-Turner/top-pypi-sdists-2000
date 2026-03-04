@@ -1,3 +1,5 @@
+from typing import Any
+
 import requests
 
 from social_core.exceptions import AuthFailed
@@ -13,7 +15,7 @@ class UntappdOAuth2(BaseOAuth2):
     AUTHORIZATION_URL = "https://untappd.com/oauth/authenticate/"
     ACCESS_TOKEN_URL = "https://untappd.com/oauth/authorize/"
     BASE_API_URL = "https://api.untappd.com"
-    USER_INFO_URL = BASE_API_URL + "/v4/user/info/"
+    USER_INFO_URL = f"{BASE_API_URL}/v4/user/info/"
     ACCESS_TOKEN_METHOD = "GET"
     STATE_PARAMETER = False
     REDIRECT_STATE = False
@@ -90,9 +92,7 @@ class UntappdOAuth2(BaseOAuth2):
                 "email": user_data.get("settings", {}).get("email_address", ""),
                 "first_name": user_data.get("first_name"),
                 "last_name": user_data.get("last_name"),
-                "fullname": " ".join(
-                    [user_data.get("first_name"), user_data.get("last_name")]
-                ),
+                "fullname": f"{user_data.get('first_name')} {user_data.get('last_name')}",
             }
         )
         return user_data
@@ -102,9 +102,9 @@ class UntappdOAuth2(BaseOAuth2):
         Return a unique ID for the current user, by default from
         server response.
         """
-        return response["user"].get(self.ID_KEY)
+        return response["user"].get(self.id_key())
 
-    def user_data(self, access_token, *args, **kwargs):
+    def user_data(self, access_token: str, *args, **kwargs) -> dict[str, Any] | None:
         """Loads user data from service"""
         response = self.get_json(
             self.USER_INFO_URL, params={"access_token": access_token, "compact": "true"}

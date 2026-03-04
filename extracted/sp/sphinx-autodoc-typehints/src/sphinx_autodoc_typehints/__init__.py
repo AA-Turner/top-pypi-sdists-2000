@@ -23,7 +23,8 @@ from ._annotations import (
 )
 from ._formats import detect_format
 from ._formats._numpydoc import _convert_numpydoc_to_sphinx_fields  # noqa: F401
-from ._formats._sphinx import _has_yields_section, _is_generator_type
+from ._formats._sphinx import _has_yields_section, _is_generator_type, _strip_inline_param_type
+from ._intersphinx import build_type_mapping
 from ._parser import parse
 from ._resolver import (
     backfill_attrs_annotations,
@@ -150,14 +151,22 @@ def process_docstring(  # noqa: PLR0913, PLR0917
         return
     if inspect.isclass(obj):
         backfill_attrs_annotations(obj)
-    obj = obj.__init__ if inspect.isclass(obj) else obj
+    use_class_for_signature = False
+    if inspect.isclass(obj):
+        if obj.__init__ is object.__init__ and obj.__new__ is not object.__new__:
+            use_class_for_signature = True
+            obj = obj.__new__
+        else:
+            obj = obj.__init__
     try:
         obj = inspect.unwrap(obj)
     except ValueError:
         return
 
     try:
-        signature = sphinx_signature(obj, type_aliases=app.config["autodoc_type_aliases"])
+        signature = sphinx_signature(
+            original_obj if use_class_for_signature else obj, type_aliases=app.config["autodoc_type_aliases"]
+        )
     except (ValueError, TypeError):
         signature = None
 
@@ -190,23 +199,38 @@ def _inject_overload_signatures(
     obj: Any,
     lines: list[str],
 ) -> bool:
-    if what not in {"function", "method"}:
+    if what not in {"function", "method"} or not app.config.typehints_document_overloads:
         return False
+    if _strip_no_overloads_directive(lines):
+        return False
+    if (overloads := _resolve_overloads(obj)) is None:
+        return False
+    for line in reversed(_format_overload_lines(overloads, app)):
+        lines.insert(0, line)
+    return True
 
+
+def _strip_no_overloads_directive(lines: list[str]) -> bool:
+    for idx, line in enumerate(lines):
+        if line.strip() == ":no-overloads:":
+            del lines[idx]
+            return True
+    return False
+
+
+def _resolve_overloads(obj: Any) -> list[inspect.Signature] | None:
     module_name = getattr(obj, "__module__", None)
     if not module_name or module_name not in _OVERLOADS_CACHE:
-        return False
-
+        return None
     qualname = getattr(obj, "__qualname__", None)
     if not qualname:
-        return False
+        return None
+    return _OVERLOADS_CACHE[module_name].get(qualname) or None
 
-    overloads = _OVERLOADS_CACHE[module_name].get(qualname)
-    if not overloads:
-        return False
 
+def _format_overload_lines(overloads: list[inspect.Signature], app: Sphinx) -> list[str]:
     short_literals = app.config.python_display_short_literal_types
-    overload_lines = [":Overloads:"]
+    result = [":Overloads:"]
     for overload_sig in overloads:
         params = []
         for param_name, param in overload_sig.parameters.items():
@@ -225,13 +249,9 @@ def _inject_overload_signatures(
             formatted_return = add_type_css_class(formatted_return)
             return_annotation = f" \u2192 {formatted_return}"
 
-        sig_line = f"   * {', '.join(params)}{return_annotation}"
-        overload_lines.append(sig_line)
-
-    overload_lines.append("")
-    for line in reversed(overload_lines):
-        lines.insert(0, line)
-    return True
+        result.append(f"   * {', '.join(params)}{return_annotation}")
+    result.append("")
+    return result
 
 
 def format_default(app: Sphinx, default: Any, is_annotated: bool) -> str | None:  # noqa: FBT001
@@ -293,6 +313,13 @@ def _inject_arg_signature(  # noqa: PLR0913, PLR0917
 
     insert_index = fmt.find_param(lines, arg_name)
 
+    if (
+        insert_index is not None
+        and annotation is not None
+        and (stripped := _strip_inline_param_type(lines[insert_index], arg_name))
+    ):
+        lines[insert_index] = stripped
+
     if insert_index is not None and hasattr(fmt, "get_arg_name_from_line"):
         arg_name = fmt.get_arg_name_from_line(lines[insert_index]) or arg_name
 
@@ -302,27 +329,44 @@ def _inject_arg_signature(  # noqa: PLR0913, PLR0917
     elif annotation is not None and insert_index is None and app.config.always_document_param_types:
         insert_index = fmt.add_undocumented_param(lines, arg_name)
 
-    if insert_index is not None:
-        has_preexisting_annotation = False
+    if insert_index is None:
+        return
 
-        if annotation is None:
-            type_annotation, has_preexisting_annotation = fmt.find_preexisting_type(lines, arg_name)
-        else:
-            short_literals = app.config.python_display_short_literal_types
-            formatted_annotation = add_type_css_class(
-                format_annotation(annotation, app.config, short_literals=short_literals)
-            )
-            type_annotation = f":type {arg_name}: {formatted_annotation}"
+    has_preexisting = False
+    if annotation is None:
+        type_annotation, has_preexisting = fmt.find_preexisting_type(lines, arg_name)
+    else:
+        preexisting_line, has_preexisting = fmt.find_preexisting_type(lines, arg_name)
+        if has_preexisting:
+            insert_index = _remove_preexisting_type(lines, preexisting_line)
+        type_annotation = ":type {}: {}".format(
+            arg_name,
+            add_type_css_class(
+                format_annotation(annotation, app.config, short_literals=app.config.python_display_short_literal_types)
+            ),
+        )
 
-        if app.config.typehints_defaults:
-            formatted_default = format_default(app, default, annotation is not None or has_preexisting_annotation)
-            if formatted_default:
-                after = app.config.typehints_defaults.endswith("after")
-                type_annotation = fmt.append_default(
-                    lines, insert_index, type_annotation, formatted_default, after=after
-                )
+    if app.config.typehints_defaults and (
+        formatted_default := format_default(app, default, annotation is not None or has_preexisting)
+    ):
+        type_annotation = fmt.append_default(
+            lines,
+            insert_index,
+            type_annotation,
+            formatted_default,
+            after=app.config.typehints_defaults.endswith("after"),
+        )
 
-        lines.insert(insert_index, type_annotation)
+    lines.insert(insert_index, type_annotation)
+
+
+def _remove_preexisting_type(lines: list[str], preexisting_line: str) -> int:
+    idx = lines.index(preexisting_line)
+    end = idx + 1
+    while end < len(lines) and (not lines[end] or lines[end][0].isspace()):
+        end += 1
+    del lines[idx:end]
+    return idx
 
 
 def _inject_rtype(  # noqa: PLR0913, PLR0917
@@ -382,6 +426,8 @@ def validate_config(app: Sphinx, env: BuildEnvironment, docnames: list[str]) -> 
         msg = f"typehints_formatter needs to be callable or `None`, not {formatter}"
         raise ValueError(msg)
 
+    app.config._intersphinx_type_mapping = build_type_mapping(env)  # noqa: SLF001
+
 
 def sphinx_autodoc_typehints_type_role(
     _role: str,
@@ -410,6 +456,7 @@ def setup(app: Sphinx) -> dict[str, bool]:
     app.add_config_value("simplify_optional_unions", True, "env")  # noqa: FBT003
     app.add_config_value("always_use_bars_union", False, "env")  # noqa: FBT003
     app.add_config_value("typehints_formatter", None, "env")
+    app.add_config_value("typehints_document_overloads", True, "env")  # noqa: FBT003
     app.add_config_value("typehints_use_signature", False, "env")  # noqa: FBT003
     app.add_config_value("typehints_use_signature_return", False, "env")  # noqa: FBT003
     app.add_config_value("typehints_fixup_module_name", None, "env")

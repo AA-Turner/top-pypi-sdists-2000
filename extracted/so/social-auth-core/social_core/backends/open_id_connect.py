@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import base64
 import datetime
-import json
 from calendar import timegm
-from typing import TYPE_CHECKING, Any, Literal
+from json import loads
+from typing import TYPE_CHECKING, Any, Literal, cast
 
 import jwt
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes
 from jwt import (
     ExpiredSignatureError,
     InvalidAudienceError,
@@ -19,7 +21,6 @@ from social_core.backends.oauth import BaseOAuth2
 from social_core.exceptions import (
     AuthInvalidParameter,
     AuthMissingParameter,
-    AuthNotImplementedParameter,
     AuthTokenError,
 )
 from social_core.utils import cache
@@ -27,10 +28,10 @@ from social_core.utils import cache
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
+    from jwt.types import Options
     from requests.auth import AuthBase
 
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import hashes
+    from social_core.strategy import BaseStrategy
 
 
 class OpenIdConnectAssociation:
@@ -68,7 +69,7 @@ class OpenIdConnectAuth(BaseOAuth2):
     ID_KEY = "sub"
     USERNAME_KEY = "preferred_username"
     JWT_ALGORITHMS = ["RS256"]
-    JWT_DECODE_OPTIONS: dict[str, Any] = {}
+    JWT_DECODE_OPTIONS: Options = {}
     JWT_LEEWAY: float = 1.0  # seconds
     VALIDATE_AT_HASH: bool = True
     CUSTOM_AT_HASH_ALGO: str | None = None
@@ -89,9 +90,11 @@ class OpenIdConnectAuth(BaseOAuth2):
     LOGIN_HINT = None
     ACR_VALUES = None
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(
+        self, strategy: BaseStrategy | None = None, redirect_uri: str | None = None
+    ) -> None:
+        super().__init__(strategy, redirect_uri=redirect_uri)
         self.id_token = None
-        super().__init__(*args, **kwargs)
 
     def get_setting_config(
         self, setting_name: str, oidc_name: str, default: str
@@ -142,11 +145,11 @@ class OpenIdConnectAuth(BaseOAuth2):
         return not methods or "client_secret_basic" in methods
 
     def oidc_endpoint(self) -> str:
-        return self.setting("OIDC_ENDPOINT", self.OIDC_ENDPOINT)
+        return cast("str", self.setting("OIDC_ENDPOINT", self.OIDC_ENDPOINT))
 
     @cache(ttl=86400)
     def oidc_config(self) -> dict[Any, Any]:
-        return self.get_json(self.oidc_endpoint() + "/.well-known/openid-configuration")
+        return self.get_json(f"{self.oidc_endpoint()}/.well-known/openid-configuration")
 
     @cache(ttl=86400)
     def get_jwks_keys(self):
@@ -158,9 +161,9 @@ class OpenIdConnectAuth(BaseOAuth2):
 
     def get_remote_jwks_keys(self):
         response = self.request(self.jwks_uri())
-        return json.loads(response.text)["keys"]
+        return loads(response.text)["keys"]
 
-    def auth_params(self, state=None):  # noqa: C901
+    def auth_params(self, state=None):  # noqa: C901, PLR0912
         """Return extra arguments needed on auth process."""
         params = super().auth_params(state)
         params["nonce"] = self.get_and_store_nonce(self.authorization_url(), state)
@@ -199,19 +202,31 @@ class OpenIdConnectAuth(BaseOAuth2):
 
         ui_locales = self.setting("UI_LOCALES", default=self.UI_LOCALES)
         if ui_locales is not None:
-            raise AuthNotImplementedParameter(self, "ui_locales")
+            if not ui_locales:
+                raise AuthInvalidParameter(self, "ui_locales")
+
+            params["ui_locales"] = ui_locales
 
         id_token_hint = self.setting("ID_TOKEN_HINT", default=self.ID_TOKEN_HINT)
         if id_token_hint is not None:
-            raise AuthNotImplementedParameter(self, "id_token_hint")
+            if not id_token_hint:
+                raise AuthInvalidParameter(self, "id_token_hint")
+
+            params["id_token_hint"] = id_token_hint
 
         login_hint = self.setting("LOGIN_HINT", default=self.LOGIN_HINT)
         if login_hint is not None:
-            raise AuthNotImplementedParameter(self, "login_hint")
+            if not login_hint:
+                raise AuthInvalidParameter(self, "login_hint")
+
+            params["login_hint"] = login_hint
 
         acr_values = self.setting("ACR_VALUES", default=self.ACR_VALUES)
         if acr_values is not None:
-            raise AuthNotImplementedParameter(self, "acr_values")
+            if not acr_values:
+                raise AuthInvalidParameter(self, "acr_values")
+
+            params["acr_values"] = acr_values
 
         return params
 
@@ -229,7 +244,7 @@ class OpenIdConnectAuth(BaseOAuth2):
                 server_url=self.authorization_url(), handle=nonce
             )[0]
         except IndexError:
-            pass
+            return None
 
     def remove_nonce(self, nonce_id) -> None:
         self.strategy.storage.association.remove([nonce_id])
@@ -268,13 +283,15 @@ class OpenIdConnectAuth(BaseOAuth2):
                 # In case the key id is not found in the cached keys, just
                 # reload the JWKS keys. Ideally this should be done by
                 # invalidating the cache.
-                self.get_jwks_keys.invalidate()  # type: ignore[reportFunctionMemberAccess]
+                self.get_jwks_keys.invalidate()  # pyright: ignore[reportAttributeAccessIssue]
                 keys = self.get_jwks_keys()
 
         for key in keys:
             if kid is None or kid == key.get("kid"):
                 if "alg" not in key:
-                    key["alg"] = self.setting("JWT_ALGORITHMS", self.JWT_ALGORITHMS)[0]
+                    key["alg"] = cast(
+                        "list[str]", self.setting("JWT_ALGORITHMS", self.JWT_ALGORITHMS)
+                    )[0]
                 rsakey = jwt.PyJWK(key)
                 message, encoded_sig = id_token.rsplit(".", 1)
                 decoded_sig = base64url_decode(encoded_sig.encode("utf-8"))
@@ -306,17 +323,17 @@ class OpenIdConnectAuth(BaseOAuth2):
                 audience=client_id,
                 issuer=self.id_token_issuer(),
                 options=self.setting("JWT_DECODE_OPTIONS", self.JWT_DECODE_OPTIONS),
-                leeway=self.setting("JWT_LEEWAY", self.JWT_LEEWAY),
+                leeway=cast("int", self.setting("JWT_LEEWAY", self.JWT_LEEWAY)),
             )
-        except ExpiredSignatureError:
-            raise AuthTokenError(self, "Signature has expired")
-        except InvalidAudienceError:
+        except ExpiredSignatureError as error:
+            raise AuthTokenError(self, "Signature has expired") from error
+        except InvalidAudienceError as error:
             # compatibility with jose error message
-            raise AuthTokenError(self, "Token error: Invalid audience")
+            raise AuthTokenError(self, "Token error: Invalid audience") from error
         except InvalidTokenError as error:
-            raise AuthTokenError(self, str(error))
-        except PyJWTError:
-            raise AuthTokenError(self, "Invalid signature")
+            raise AuthTokenError(self, str(error)) from error
+        except PyJWTError as error:
+            raise AuthTokenError(self, "Invalid signature") from error
 
         # pyjwt does not validate OIDC claims
         # see https://github.com/jpadilla/pyjwt/pull/296
@@ -332,7 +349,8 @@ class OpenIdConnectAuth(BaseOAuth2):
         url: str,
         method: Literal["GET", "POST", "DELETE"] = "GET",
         headers: Mapping[str, str | bytes] | None = None,
-        data: dict | bytes | str | None = None,
+        data: dict | None = None,
+        json: dict | None = None,
         auth: tuple[str, str] | AuthBase | None = None,
         params: dict | None = None,
     ) -> dict[Any, Any]:
@@ -341,14 +359,20 @@ class OpenIdConnectAuth(BaseOAuth2):
         store it (temporarily).
         """
         response = super().request_access_token(
-            url, method, headers, data, auth, params
+            url,
+            method=method,
+            headers=headers,
+            data=data,
+            json=json,
+            auth=auth,
+            params=params,
         )
         self.id_token = self.validate_and_return_id_token(
             response["id_token"], response["access_token"]
         )
         return response
 
-    def user_data(self, access_token, *args, **kwargs):
+    def user_data(self, access_token: str, *args, **kwargs) -> dict[str, Any] | None:
         return self.get_json(
             self.userinfo_url(), headers={"Authorization": f"Bearer {access_token}"}
         )

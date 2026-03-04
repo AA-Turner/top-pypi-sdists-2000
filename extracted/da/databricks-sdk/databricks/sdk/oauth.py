@@ -247,9 +247,12 @@ class Refreshable(TokenSource):
 
     _EXECUTOR = None
     _EXECUTOR_LOCK = threading.Lock()
-    # Default duration for the stale period. This value is chosen to cover the
+    # Legacy default duration for the stale period. This value is chosen to cover the
     # maximum monthly downtime allowed by a 99.99% uptime SLA (~4.38 minutes).
     _DEFAULT_STALE_DURATION = timedelta(minutes=5)
+    # Default maximum stale duration. Chosen to cover the maximum monthly downtime
+    # allowed by a 99.99% uptime SLA (~4.38 minutes) with generous overhead guarantees
+    _MAX_STALE_DURATION = timedelta(minutes=20)
 
     @classmethod
     def _get_executor(cls):
@@ -265,17 +268,38 @@ class Refreshable(TokenSource):
         self,
         token: Optional[Token] = None,
         disable_async: bool = True,
-        stale_duration: timedelta = _DEFAULT_STALE_DURATION,
+        stale_duration: Optional[timedelta] = None,
     ):
         # Config properties
-        self._stale_duration = stale_duration
+        self._use_dynamic_stale_duration = stale_duration is None
+        self._stale_duration = stale_duration if stale_duration is not None else timedelta(seconds=0)
         self._disable_async = disable_async
         # Lock
         self._lock = threading.Lock()
         # Non Thread safe properties. They should be accessed only when protected by the lock above.
-        self._token = token or Token("")
+        self._update_token(token or Token(""))
         self._is_refreshing = False
         self._refresh_err = False
+
+    def _update_token(self, token: Token) -> None:
+        """Stores the new token and pre-computes the stale threshold.
+
+        The stale period is computed once at token acquisition time as:
+            stale_period = min(TTL x 0.5, max_stale_duration)
+
+        This ensures short-lived tokens (e.g. FastPath with 10-minute TTL) get a
+        proportionally smaller stale window, while standard OAuth tokens (≥1 hour TTL)
+        use the full cap of _DEFAULT_STALE_DURATION.
+        """
+        self._token = token
+
+        if self._use_dynamic_stale_duration and self._token.expiry:
+            ttl = self._token.expiry - datetime.now()
+
+            if ttl < timedelta(seconds=0):
+                self._stale_duration = timedelta(seconds=0)
+            else:
+                self._stale_duration = min(ttl // 2, self._MAX_STALE_DURATION)
 
     # This is the main entry point for the Token. Do not access the token
     # using any of the internal functions.
@@ -330,7 +354,7 @@ class Refreshable(TokenSource):
         if state != _TokenState.EXPIRED:
             return self._token
 
-        self._token = self.refresh()
+        self._update_token(self.refresh())
         return self._token
 
     def _trigger_async_refresh(self):
@@ -348,7 +372,7 @@ class Refreshable(TokenSource):
 
             with self._lock:
                 if new_token is not None:
-                    self._token = new_token
+                    self._update_token(new_token)
                 else:
                     self._refresh_err = True
                 self._is_refreshing = False
@@ -895,6 +919,7 @@ class TokenCache:
         redirect_url: Optional[str] = None,
         client_secret: Optional[str] = None,
         scopes: Optional[List[str]] = None,
+        profile: Optional[str] = None,
     ) -> None:
         self._host = host
         self._client_id = client_id
@@ -902,18 +927,20 @@ class TokenCache:
         self._redirect_url = redirect_url
         self._client_secret = client_secret
         self._scopes = scopes or []
+        self._profile = profile
 
     @property
     def filename(self) -> str:
-        # Include host, client_id, and scopes in the cache filename to make it unique.
-        hash = hashlib.sha256()
-        for chunk in [
-            self._host,
-            self._client_id,
-            ",".join(self._scopes),
-        ]:
-            hash.update(chunk.encode("utf-8"))
-        return os.path.expanduser(os.path.join(self.__class__.BASE_PATH, hash.hexdigest() + ".json"))
+        # Include host, client_id, scopes, and profile in the cache filename to make it unique.
+        # JSON serialization ensures values are properly escaped and separated.
+        key = {
+            "host": self._host,
+            "client_id": self._client_id,
+            "scopes": self._scopes,
+            "profile": self._profile or "",
+        }
+        h = hashlib.sha256(json.dumps(key, sort_keys=True).encode("utf-8"))
+        return os.path.expanduser(os.path.join(self.__class__.BASE_PATH, h.hexdigest() + ".json"))
 
     def load(self) -> Optional[SessionCredentials]:
         """

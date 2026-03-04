@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any, cast
 
 from openid.consumer.consumer import CANCEL, FAILURE, SUCCESS, Consumer
 from openid.consumer.discover import DiscoveryFailure
 from openid.extensions import ax, pape, sreg
+from openid.fetchers import HTTPFetchingError
 
 from social_core.exceptions import (
     AuthCanceled,
@@ -12,10 +13,14 @@ from social_core.exceptions import (
     AuthFailed,
     AuthMissingParameter,
     AuthUnknownError,
+    AuthUnreachableProvider,
 )
 from social_core.utils import url_add_parameters
 
 from .base import BaseAuth
+
+if TYPE_CHECKING:
+    from social_core.store import OpenIdStore
 
 # OpenID configuration
 OLD_AX_ATTRS = [
@@ -44,12 +49,14 @@ class OpenIdAuth(BaseAuth):
     URL: str | None = None
     USERNAME_KEY = "username"
 
+    _consumer = None
+
     def get_user_id(self, details, response):
         """Return user unique id provided by service"""
         return response.identity_url
 
-    def get_ax_attributes(self):
-        attrs = self.setting("AX_SCHEMA_ATTRS", [])
+    def get_ax_attributes(self) -> list[tuple[str, str]]:
+        attrs = cast("list[tuple[str, str]]", self.setting("AX_SCHEMA_ATTRS", []))
         if attrs and self.setting("IGNORE_DEFAULT_AX_ATTRS", True):
             return attrs
         return attrs + AX_SCHEMA_ATTRS + OLD_AX_ATTRS
@@ -109,7 +116,7 @@ class OpenIdAuth(BaseAuth):
         email = values.get("email") or ""
 
         if not fullname and first_name and last_name:
-            fullname = first_name + " " + last_name
+            fullname = f"{first_name} {last_name}"
         elif fullname:
             try:
                 first_name, last_name = fullname.rsplit(" ", 1)
@@ -194,9 +201,13 @@ class OpenIdAuth(BaseAuth):
 
     def auth_complete(self, *args, **kwargs):
         """Complete auth process"""
-        response = self.consumer().complete(
-            dict(self.data.items()), self.get_return_to()
-        )
+        try:
+            response = self.consumer().complete(
+                dict(self.data.items()), self.get_return_to()
+            )
+        except HTTPFetchingError as error:
+            raise AuthUnreachableProvider(self) from error
+
         self.process_error(response)
         if session_id := self.data.get(self.strategy.SESSION_SAVE_KEY):
             self.strategy.restore_session(session_id, kwargs)
@@ -247,10 +258,13 @@ class OpenIdAuth(BaseAuth):
             request.addExtension(pape_request)
         return request
 
+    def get_consumer_store(self) -> OpenIdStore | None:
+        return self.strategy.openid_store()
+
     def consumer(self):
         """Create an OpenID Consumer object for the given Django request."""
-        if not hasattr(self, "_consumer"):
-            self._consumer = self.create_consumer(self.strategy.openid_store())
+        if self._consumer is None:
+            self._consumer = self.create_consumer(self.get_consumer_store())
         return self._consumer
 
     def create_consumer(self, store=None):
@@ -267,7 +281,7 @@ class OpenIdAuth(BaseAuth):
         try:
             return self.consumer().begin(url_add_parameters(self.openid_url(), params))
         except DiscoveryFailure as err:
-            raise AuthException(self, f"OpenID discovery error: {err}")
+            raise AuthException(self, f"OpenID discovery error: {err}") from err
 
     def openid_url(self):
         """Return service provider URL.

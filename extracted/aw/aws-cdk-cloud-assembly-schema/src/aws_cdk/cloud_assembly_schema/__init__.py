@@ -91,6 +91,7 @@ from ._jsii import *
     jsii_struct_bases=[],
     name_mapping={
         "type": "type",
+        "additional_metadata_file": "additionalMetadataFile",
         "dependencies": "dependencies",
         "display_name": "displayName",
         "environment": "environment",
@@ -103,6 +104,7 @@ class ArtifactManifest:
         self,
         *,
         type: "ArtifactType",
+        additional_metadata_file: typing.Optional[builtins.str] = None,
         dependencies: typing.Optional[typing.Sequence[builtins.str]] = None,
         display_name: typing.Optional[builtins.str] = None,
         environment: typing.Optional[builtins.str] = None,
@@ -112,15 +114,17 @@ class ArtifactManifest:
         '''A manifest for a single artifact within the cloud assembly.
 
         :param type: The type of artifact.
+        :param additional_metadata_file: A file with additional metadata entries. The schema of this file is exactly the same as the type of the ``metadata`` field. In other words, that file contains an object mapping construct paths to arrays of metadata entries. Default: - no additional metadata
         :param dependencies: IDs of artifacts that must be deployed before this artifact. Default: - no dependencies.
         :param display_name: A string that can be shown to a user to uniquely identify this artifact inside a cloud assembly tree. Is used by the CLI to present a list of stacks to the user in a way that makes sense to them. Even though the property name "display name" doesn't imply it, this field is used to select stacks as well, so all stacks should have a unique display name. Default: - no display name
         :param environment: The environment into which this artifact is deployed. Default: - no envrionment.
-        :param metadata: Associated metadata. Default: - no metadata.
+        :param metadata: Associated metadata. Metadata can be stored directly in the assembly manifest, as well as in a separate file (see ``additionalMetadataFile``). It should prefer to be stored in the additional file, as that will reduce the size of the assembly manifest in cases of a lot of metdata (which CDK does emit by default). Default: - no metadata.
         :param properties: The set of properties for this artifact (depends on type). Default: - no properties.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8929e1c8fa42a2da90248ef476a9635f914a58bd1f9f1e211137b8ee50724a63)
             check_type(argname="argument type", value=type, expected_type=type_hints["type"])
+            check_type(argname="argument additional_metadata_file", value=additional_metadata_file, expected_type=type_hints["additional_metadata_file"])
             check_type(argname="argument dependencies", value=dependencies, expected_type=type_hints["dependencies"])
             check_type(argname="argument display_name", value=display_name, expected_type=type_hints["display_name"])
             check_type(argname="argument environment", value=environment, expected_type=type_hints["environment"])
@@ -129,6 +133,8 @@ class ArtifactManifest:
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "type": type,
         }
+        if additional_metadata_file is not None:
+            self._values["additional_metadata_file"] = additional_metadata_file
         if dependencies is not None:
             self._values["dependencies"] = dependencies
         if display_name is not None:
@@ -146,6 +152,19 @@ class ArtifactManifest:
         result = self._values.get("type")
         assert result is not None, "Required property 'type' is missing"
         return typing.cast("ArtifactType", result)
+
+    @builtins.property
+    def additional_metadata_file(self) -> typing.Optional[builtins.str]:
+        '''A file with additional metadata entries.
+
+        The schema of this file is exactly the same as the type of the ``metadata`` field.
+        In other words, that file contains an object mapping construct paths to arrays
+        of metadata entries.
+
+        :default: - no additional metadata
+        '''
+        result = self._values.get("additional_metadata_file")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def dependencies(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -184,6 +203,11 @@ class ArtifactManifest:
         self,
     ) -> typing.Optional[typing.Mapping[builtins.str, typing.List["MetadataEntry"]]]:
         '''Associated metadata.
+
+        Metadata can be stored directly in the assembly manifest, as well as in a
+        separate file (see ``additionalMetadataFile``). It should prefer to be stored
+        in the additional file, as that will reduce the size of the assembly
+        manifest in cases of a lot of metdata (which CDK does emit by default).
 
         :default: - no metadata.
         '''
@@ -641,7 +665,7 @@ class AwsCloudFormationStackProperties:
         :param requires_bootstrap_stack_version: Version of bootstrap stack required to deploy this stack. Default: - No bootstrap stack required
         :param stack_name: The name to use for the CloudFormation stack. Default: - name derived from artifact ID
         :param stack_template_asset_object_url: If the stack template has already been included in the asset manifest, its asset URL. Default: - Not uploaded yet, upload just before deploying
-        :param tags: Values for CloudFormation stack tags that should be passed when the stack is deployed. Default: - No tags
+        :param tags: Values for CloudFormation stack tags that should be passed when the stack is deployed. N.B.: Tags are also written to stack metadata, under the path of the Stack construct. Only in CDK CLI v1 are those tags found in metadata used for actual deployments; in all stable versions of CDK only the stack tags directly found in the ``tags`` property of ``AwsCloudFormationStack`` artifact (i.e., this property) are used. Default: - No tags
         :param termination_protection: Whether to enable termination protection for this stack. Default: false
         :param validate_on_synth: Whether this stack should be validated by the CLI after synthesis. Default: - false
         '''
@@ -820,6 +844,12 @@ class AwsCloudFormationStackProperties:
     @builtins.property
     def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
         '''Values for CloudFormation stack tags that should be passed when the stack is deployed.
+
+        N.B.: Tags are also written to stack metadata, under the path of the Stack
+        construct. Only in CDK CLI v1 are those tags found in metadata used for
+        actual deployments; in all stable versions of CDK only the stack tags
+        directly found in the ``tags`` property of ``AwsCloudFormationStack`` artifact
+        (i.e., this property) are used.
 
         :default: - No tags
         '''
@@ -1284,6 +1314,7 @@ class ContainerImageAssetCacheOption:
         "path": "path",
         "source_hash": "sourceHash",
         "build_args": "buildArgs",
+        "build_contexts": "buildContexts",
         "build_secrets": "buildSecrets",
         "build_ssh": "buildSsh",
         "cache_disabled": "cacheDisabled",
@@ -1308,6 +1339,7 @@ class ContainerImageAssetMetadataEntry:
         path: builtins.str,
         source_hash: builtins.str,
         build_args: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        build_contexts: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         build_secrets: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         build_ssh: typing.Optional[builtins.str] = None,
         cache_disabled: typing.Optional[builtins.bool] = None,
@@ -1329,6 +1361,7 @@ class ContainerImageAssetMetadataEntry:
         :param path: Path on disk to the asset.
         :param source_hash: The hash of the asset source.
         :param build_args: Build args to pass to the ``docker build`` command. Default: no build args are passed
+        :param build_contexts: Build contexts to pass to the ``docker build`` command. Default: no build contexts are passed
         :param build_secrets: Build secrets to pass to the ``docker build`` command. Default: no build secrets are passed
         :param build_ssh: SSH agent socket or keys to pass to the ``docker build`` command. Default: no ssh arg is passed
         :param cache_disabled: Disable the cache and pass ``--no-cache`` to the ``docker build`` command. Default: - cache is used
@@ -1360,6 +1393,7 @@ class ContainerImageAssetMetadataEntry:
             check_type(argname="argument path", value=path, expected_type=type_hints["path"])
             check_type(argname="argument source_hash", value=source_hash, expected_type=type_hints["source_hash"])
             check_type(argname="argument build_args", value=build_args, expected_type=type_hints["build_args"])
+            check_type(argname="argument build_contexts", value=build_contexts, expected_type=type_hints["build_contexts"])
             check_type(argname="argument build_secrets", value=build_secrets, expected_type=type_hints["build_secrets"])
             check_type(argname="argument build_ssh", value=build_ssh, expected_type=type_hints["build_ssh"])
             check_type(argname="argument cache_disabled", value=cache_disabled, expected_type=type_hints["cache_disabled"])
@@ -1381,6 +1415,8 @@ class ContainerImageAssetMetadataEntry:
         }
         if build_args is not None:
             self._values["build_args"] = build_args
+        if build_contexts is not None:
+            self._values["build_contexts"] = build_contexts
         if build_secrets is not None:
             self._values["build_secrets"] = build_secrets
         if build_ssh is not None:
@@ -1443,6 +1479,17 @@ class ContainerImageAssetMetadataEntry:
         :default: no build args are passed
         '''
         result = self._values.get("build_args")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    @builtins.property
+    def build_contexts(
+        self,
+    ) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''Build contexts to pass to the ``docker build`` command.
+
+        :default: no build contexts are passed
+        '''
+        result = self._values.get("build_contexts")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
@@ -3610,6 +3657,7 @@ class DockerImageDestination(AwsDestination):
         "cache_to": "cacheTo",
         "directory": "directory",
         "docker_build_args": "dockerBuildArgs",
+        "docker_build_contexts": "dockerBuildContexts",
         "docker_build_secrets": "dockerBuildSecrets",
         "docker_build_ssh": "dockerBuildSsh",
         "docker_build_target": "dockerBuildTarget",
@@ -3629,6 +3677,7 @@ class DockerImageSource:
         cache_to: typing.Optional[typing.Union["DockerCacheOption", typing.Dict[builtins.str, typing.Any]]] = None,
         directory: typing.Optional[builtins.str] = None,
         docker_build_args: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        docker_build_contexts: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         docker_build_secrets: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         docker_build_ssh: typing.Optional[builtins.str] = None,
         docker_build_target: typing.Optional[builtins.str] = None,
@@ -3645,6 +3694,7 @@ class DockerImageSource:
         :param cache_to: Cache to options to pass to the ``docker build`` command. Default: - no cache to options are passed to the build command
         :param directory: The directory containing the Docker image build instructions. This path is relative to the asset manifest location. Default: - Exactly one of ``directory`` and ``executable`` is required
         :param docker_build_args: Additional build arguments. Only allowed when ``directory`` is set. Default: - No additional build arguments
+        :param docker_build_contexts: Additional build contexts. Only allowed when ``directory`` is set. Default: - No additional build contexts
         :param docker_build_secrets: Additional build secrets. Only allowed when ``directory`` is set. Default: - No additional build secrets
         :param docker_build_ssh: SSH agent socket or keys. Requires building with docker buildkit. Default: - No ssh flag is set
         :param docker_build_target: Target build stage in a Dockerfile with multiple build stages. Only allowed when ``directory`` is set. Default: - The last stage in the Dockerfile
@@ -3663,6 +3713,7 @@ class DockerImageSource:
             check_type(argname="argument cache_to", value=cache_to, expected_type=type_hints["cache_to"])
             check_type(argname="argument directory", value=directory, expected_type=type_hints["directory"])
             check_type(argname="argument docker_build_args", value=docker_build_args, expected_type=type_hints["docker_build_args"])
+            check_type(argname="argument docker_build_contexts", value=docker_build_contexts, expected_type=type_hints["docker_build_contexts"])
             check_type(argname="argument docker_build_secrets", value=docker_build_secrets, expected_type=type_hints["docker_build_secrets"])
             check_type(argname="argument docker_build_ssh", value=docker_build_ssh, expected_type=type_hints["docker_build_ssh"])
             check_type(argname="argument docker_build_target", value=docker_build_target, expected_type=type_hints["docker_build_target"])
@@ -3682,6 +3733,8 @@ class DockerImageSource:
             self._values["directory"] = directory
         if docker_build_args is not None:
             self._values["docker_build_args"] = docker_build_args
+        if docker_build_contexts is not None:
+            self._values["docker_build_contexts"] = docker_build_contexts
         if docker_build_secrets is not None:
             self._values["docker_build_secrets"] = docker_build_secrets
         if docker_build_ssh is not None:
@@ -3752,6 +3805,19 @@ class DockerImageSource:
         :default: - No additional build arguments
         '''
         result = self._values.get("docker_build_args")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    @builtins.property
+    def docker_build_contexts(
+        self,
+    ) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''Additional build contexts.
+
+        Only allowed when ``directory`` is set.
+
+        :default: - No additional build contexts
+        '''
+        result = self._values.get("docker_build_contexts")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
@@ -5433,6 +5499,7 @@ class LoadBalancerType(enum.Enum):
         "skip_enum_check": "skipEnumCheck",
         "skip_version_check": "skipVersionCheck",
         "topo_sort": "topoSort",
+        "validate_schema": "validateSchema",
     },
 )
 class LoadManifestOptions:
@@ -5442,18 +5509,21 @@ class LoadManifestOptions:
         skip_enum_check: typing.Optional[builtins.bool] = None,
         skip_version_check: typing.Optional[builtins.bool] = None,
         topo_sort: typing.Optional[builtins.bool] = None,
+        validate_schema: typing.Optional[builtins.bool] = None,
     ) -> None:
         '''Options for the loadManifest operation.
 
         :param skip_enum_check: Skip enum checks. This means you may read enum values you don't know about yet. Make sure to always check the values of enums you encounter in the manifest. Default: false
         :param skip_version_check: Skip the version check. This means you may read a newer cloud assembly than the CX API is designed to support, and your application may not be aware of all features that in use in the Cloud Assembly. Default: false
         :param topo_sort: Topologically sort all artifacts. This parameter is only respected by the constructor of ``CloudAssembly``. The property lives here for backwards compatibility reasons. Default: true
+        :param validate_schema: Validate the file according to the declared JSON Schema. Be aware that JSON Schema validation has a significant performance cost (about 10x over not validating). Default: false, unless $TESTING_CDK is set to '1'
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__185f78e45d1b609ea45acca81931dd5b5992991a7423c244b8cc7b4d203f8361)
             check_type(argname="argument skip_enum_check", value=skip_enum_check, expected_type=type_hints["skip_enum_check"])
             check_type(argname="argument skip_version_check", value=skip_version_check, expected_type=type_hints["skip_version_check"])
             check_type(argname="argument topo_sort", value=topo_sort, expected_type=type_hints["topo_sort"])
+            check_type(argname="argument validate_schema", value=validate_schema, expected_type=type_hints["validate_schema"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if skip_enum_check is not None:
             self._values["skip_enum_check"] = skip_enum_check
@@ -5461,6 +5531,8 @@ class LoadManifestOptions:
             self._values["skip_version_check"] = skip_version_check
         if topo_sort is not None:
             self._values["topo_sort"] = topo_sort
+        if validate_schema is not None:
+            self._values["validate_schema"] = validate_schema
 
     @builtins.property
     def skip_enum_check(self) -> typing.Optional[builtins.bool]:
@@ -5499,6 +5571,18 @@ class LoadManifestOptions:
         result = self._values.get("topo_sort")
         return typing.cast(typing.Optional[builtins.bool], result)
 
+    @builtins.property
+    def validate_schema(self) -> typing.Optional[builtins.bool]:
+        '''Validate the file according to the declared JSON Schema.
+
+        Be aware that JSON Schema validation has a significant performance cost
+        (about 10x over not validating).
+
+        :default: false, unless $TESTING_CDK is set to '1'
+        '''
+        result = self._values.get("validate_schema")
+        return typing.cast(typing.Optional[builtins.bool], result)
+
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
 
@@ -5512,10 +5596,13 @@ class LoadManifestOptions:
 
 
 class Manifest(
-    metaclass=jsii.JSIIMeta,
+    metaclass=jsii.JSIIAbstractClass,
     jsii_type="@aws-cdk/cloud-assembly-schema.Manifest",
 ):
     '''Protocol utility class.'''
+
+    def __init__(self) -> None:
+        jsii.create(self.__class__, self, [])
 
     @jsii.member(jsii_name="cliVersion")
     @builtins.classmethod
@@ -5548,6 +5635,7 @@ class Manifest(
         skip_enum_check: typing.Optional[builtins.bool] = None,
         skip_version_check: typing.Optional[builtins.bool] = None,
         topo_sort: typing.Optional[builtins.bool] = None,
+        validate_schema: typing.Optional[builtins.bool] = None,
     ) -> "AssemblyManifest":
         '''Load and validates the cloud assembly manifest from file.
 
@@ -5555,6 +5643,7 @@ class Manifest(
         :param skip_enum_check: Skip enum checks. This means you may read enum values you don't know about yet. Make sure to always check the values of enums you encounter in the manifest. Default: false
         :param skip_version_check: Skip the version check. This means you may read a newer cloud assembly than the CX API is designed to support, and your application may not be aware of all features that in use in the Cloud Assembly. Default: false
         :param topo_sort: Topologically sort all artifacts. This parameter is only respected by the constructor of ``CloudAssembly``. The property lives here for backwards compatibility reasons. Default: true
+        :param validate_schema: Validate the file according to the declared JSON Schema. Be aware that JSON Schema validation has a significant performance cost (about 10x over not validating). Default: false, unless $TESTING_CDK is set to '1'
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8d8e67a18b9b5fcc00d83ef5eb21ea18cebefe37668a220bf60072d9a0d7c144)
@@ -5563,6 +5652,7 @@ class Manifest(
             skip_enum_check=skip_enum_check,
             skip_version_check=skip_version_check,
             topo_sort=topo_sort,
+            validate_schema=validate_schema,
         )
 
         return typing.cast("AssemblyManifest", jsii.sinvoke(cls, "loadAssemblyManifest", [file_path, options]))
@@ -5672,6 +5762,13 @@ class Manifest(
     def version(cls) -> builtins.str:
         '''Fetch the current schema version number.'''
         return typing.cast(builtins.str, jsii.sinvoke(cls, "version", []))
+
+
+class _ManifestProxy(Manifest):
+    pass
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the abstract class
+typing.cast(typing.Any, Manifest).__jsii_proxy_class__ = lambda : _ManifestProxy
 
 
 @jsii.data_type(
@@ -6953,6 +7050,7 @@ class AvailabilityZonesContextQuery(ContextLookupRoleOptions):
         "expected_match_count": "expectedMatchCount",
         "ignore_error_on_missing_context": "ignoreErrorOnMissingContext",
         "property_match": "propertyMatch",
+        "resource_model": "resourceModel",
     },
 )
 class CcApiContextQuery(ContextLookupRoleOptions):
@@ -6971,6 +7069,7 @@ class CcApiContextQuery(ContextLookupRoleOptions):
         expected_match_count: typing.Optional[builtins.str] = None,
         ignore_error_on_missing_context: typing.Optional[builtins.bool] = None,
         property_match: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
+        resource_model: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
     ) -> None:
         '''Query input for lookup up CloudFormation resources using CC API.
 
@@ -6991,15 +7090,18 @@ class CcApiContextQuery(ContextLookupRoleOptions):
         :param expected_match_count: Expected count of results if ``propertyMatch`` is specified. If the expected result count does not match the actual count, by default an error is produced and the result is not committed to cached context, and the user can correct the situation and try again without having to manually clear out the context key using ``cdk context --remove`` If the value of * ``ignoreErrorOnMissingContext`` is ``true``, the value of ``expectedMatchCount`` is ``at-least-one | exactly-one`` and the number of found resources is 0, ``dummyValue`` is returned and committed to context instead. Default: 'any'
         :param ignore_error_on_missing_context: Ignore an error and return the ``dummyValue`` instead if the resource was not found. - In case of an ``exactIdentifier`` lookup, return the ``dummyValue`` if the resource with that identifier was not found. - In case of a ``propertyMatch`` lookup, return the ``dummyValue`` if ``expectedMatchCount`` is ``at-least-one | exactly-one`` and the number of resources found was 0. if ``ignoreErrorOnMissingContext`` is set, ``dummyValue`` should be set and be an array. Default: false
         :param property_match: Returns any resources matching these properties, using ``ListResources``. By default, specifying propertyMatch will successfully return 0 or more results. To throw an error if the number of results is unexpected (and prevent the query results from being committed to context), specify ``expectedMatchCount``. Notes on property completeness CloudControl API's ``ListResources`` may return fewer properties than ``GetResource`` would, depending on the resource implementation. The resources that ``propertyMatch`` matches against will *only ever* be the properties returned by the ``ListResources`` call. Default: - Either exactIdentifier or propertyMatch should be specified.
+        :param resource_model: The resource model to use to select the resources, using ``ListResources``.. This is needed for sub-resources where the parent Arn is required. See https://docs.aws.amazon.com/cloudcontrolapi/latest/userguide/resource-operations-list.html#resource-operations-list-containers Default: - no resource Model is provided
 
         Example::
 
+            from aws_cdk.cloud_assembly_schema import CcApiContextQuery
             from aws_cdk.cloud_assembly_schema import CcApiContextQuery
             
             
             x = CcApiContextQuery(
                 type_name="AWS::Some::Type",
                 expected_match_count="exactly-one",
+                resource_model={"SomeArn": "arn:aws:...."},
                 properties_to_return=["SomeProp"],
                 account="11111111111",
                 region="us-east-1"
@@ -7019,6 +7121,7 @@ class CcApiContextQuery(ContextLookupRoleOptions):
             check_type(argname="argument expected_match_count", value=expected_match_count, expected_type=type_hints["expected_match_count"])
             check_type(argname="argument ignore_error_on_missing_context", value=ignore_error_on_missing_context, expected_type=type_hints["ignore_error_on_missing_context"])
             check_type(argname="argument property_match", value=property_match, expected_type=type_hints["property_match"])
+            check_type(argname="argument resource_model", value=resource_model, expected_type=type_hints["resource_model"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "account": account,
             "region": region,
@@ -7041,6 +7144,8 @@ class CcApiContextQuery(ContextLookupRoleOptions):
             self._values["ignore_error_on_missing_context"] = ignore_error_on_missing_context
         if property_match is not None:
             self._values["property_match"] = property_match
+        if resource_model is not None:
+            self._values["resource_model"] = resource_model
 
     @builtins.property
     def account(self) -> builtins.str:
@@ -7212,6 +7317,21 @@ class CcApiContextQuery(ContextLookupRoleOptions):
         :default: - Either exactIdentifier or propertyMatch should be specified.
         '''
         result = self._values.get("property_match")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)
+
+    @builtins.property
+    def resource_model(
+        self,
+    ) -> typing.Optional[typing.Mapping[builtins.str, typing.Any]]:
+        '''The resource model to use to select the resources, using ``ListResources``..
+
+        This is needed for sub-resources where the parent Arn is required.
+
+        See https://docs.aws.amazon.com/cloudcontrolapi/latest/userguide/resource-operations-list.html#resource-operations-list-containers
+
+        :default: - no resource Model is provided
+        '''
+        result = self._values.get("resource_model")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -7626,6 +7746,7 @@ publication.publish()
 def _typecheckingstub__8929e1c8fa42a2da90248ef476a9635f914a58bd1f9f1e211137b8ee50724a63(
     *,
     type: ArtifactType,
+    additional_metadata_file: typing.Optional[builtins.str] = None,
     dependencies: typing.Optional[typing.Sequence[builtins.str]] = None,
     display_name: typing.Optional[builtins.str] = None,
     environment: typing.Optional[builtins.str] = None,
@@ -7746,6 +7867,7 @@ def _typecheckingstub__a05965a1e03a347027556ee3281fdb462dd892ed3c599d69d7cd7444c
     path: builtins.str,
     source_hash: builtins.str,
     build_args: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    build_contexts: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     build_secrets: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     build_ssh: typing.Optional[builtins.str] = None,
     cache_disabled: typing.Optional[builtins.bool] = None,
@@ -7933,6 +8055,7 @@ def _typecheckingstub__b6e7c2957a6d1f05f0255045b81adc10d1731f3f4c022b7a322d02023
     cache_to: typing.Optional[typing.Union[DockerCacheOption, typing.Dict[builtins.str, typing.Any]]] = None,
     directory: typing.Optional[builtins.str] = None,
     docker_build_args: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    docker_build_contexts: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     docker_build_secrets: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     docker_build_ssh: typing.Optional[builtins.str] = None,
     docker_build_target: typing.Optional[builtins.str] = None,
@@ -8100,6 +8223,7 @@ def _typecheckingstub__185f78e45d1b609ea45acca81931dd5b5992991a7423c244b8cc7b4d2
     skip_enum_check: typing.Optional[builtins.bool] = None,
     skip_version_check: typing.Optional[builtins.bool] = None,
     topo_sort: typing.Optional[builtins.bool] = None,
+    validate_schema: typing.Optional[builtins.bool] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8116,6 +8240,7 @@ def _typecheckingstub__8d8e67a18b9b5fcc00d83ef5eb21ea18cebefe37668a220bf60072d9a
     skip_enum_check: typing.Optional[builtins.bool] = None,
     skip_version_check: typing.Optional[builtins.bool] = None,
     topo_sort: typing.Optional[builtins.bool] = None,
+    validate_schema: typing.Optional[builtins.bool] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8314,6 +8439,7 @@ def _typecheckingstub__527f00e61a39e5b3b1a863d96d9f33b15a5b10086b87f1f121e7b1201
     expected_match_count: typing.Optional[builtins.str] = None,
     ignore_error_on_missing_context: typing.Optional[builtins.bool] = None,
     property_match: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
+    resource_model: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

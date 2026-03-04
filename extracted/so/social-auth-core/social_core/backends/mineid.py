@@ -1,3 +1,5 @@
+from typing import Any, cast
+
 from .oauth import BaseOAuth2
 
 
@@ -14,7 +16,7 @@ class MineIDOAuth2(BaseOAuth2):
         """Return user details"""
         return {"email": response.get("email"), "username": response.get("email")}
 
-    def user_data(self, access_token, *args, **kwargs):
+    def user_data(self, access_token: str, *args, **kwargs) -> dict[str, Any] | None:
         return self._user_data(access_token)
 
     def _user_data(self, access_token, path=None):
@@ -29,6 +31,6 @@ class MineIDOAuth2(BaseOAuth2):
 
     def get_mineid_url_params(self) -> dict[str, str]:
         return {
-            "host": self.setting("HOST", "www.mineid.org"),
-            "scheme": self.setting("SCHEME", "https"),
+            "host": cast("str", self.setting("HOST", "www.mineid.org")),
+            "scheme": cast("str", self.setting("SCHEME", "https")),
         }

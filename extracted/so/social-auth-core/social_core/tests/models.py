@@ -26,10 +26,6 @@ class BaseModel:
         return cls.NEXT_ID - 1
 
     @classmethod
-    def get(cls, key) -> Self | None:
-        return cls.cache.get(key)
-
-    @classmethod
     def reset_cache(cls) -> None:
         cls.cache = {}
 
@@ -38,6 +34,7 @@ class User(BaseModel, UserProtocol):
     NEXT_ID = 1
     cache = {}
     _is_active = True
+    is_authenticated = True
     username: str
     email: str | None
     first_name: str | None
@@ -61,7 +58,7 @@ class User(BaseModel, UserProtocol):
         self.extra_user_fields = extra_user_fields
         self.save()
 
-    def is_active(self):
+    def is_active(self):  # pyright: ignore[reportIncompatibleVariableOverride]
         return self._is_active
 
     @classmethod
@@ -73,6 +70,10 @@ class User(BaseModel, UserProtocol):
 
     def save(self) -> None:
         User.cache[self.username] = self
+
+    @classmethod
+    def get(cls, key) -> Self | None:
+        return cls.cache.get(key)
 
 
 class TestUserSocialAuth(UserMixin, BaseModel):
@@ -151,6 +152,7 @@ class TestUserSocialAuth(UserMixin, BaseModel):
         cls,
         user: User,
         provider: str | None = None,
+        # pylint: disable-next=redefined-builtin
         id: int | None = None,  # noqa: A002
     ):
         return [
@@ -166,6 +168,10 @@ class TestUserSocialAuth(UserMixin, BaseModel):
     @classmethod
     def get_users_by_email(cls, email: str):
         return [user for user in User.cache.values() if user.email == email]
+
+    @classmethod
+    def get(cls, key) -> Self | None:
+        return cls.cache.get(key)
 
 
 class TestNonce(NonceMixin, BaseModel):
@@ -187,9 +193,7 @@ class TestNonce(NonceMixin, BaseModel):
         return nonce
 
     @classmethod
-    def get(  # type: ignore[override]
-        cls, server_url, salt
-    ):
+    def get(cls, server_url: str, salt: str):
         return TestNonce.cache[server_url]
 
     @classmethod
@@ -224,7 +228,7 @@ class TestAssociation(AssociationMixin, BaseModel):
         assoc.save()
 
     @classmethod
-    def get(  # type: ignore[override]
+    def get(
         cls: type[TestAssociation],
         server_url: str | None = None,
         handle: str | None = None,
@@ -258,12 +262,16 @@ class TestCode(CodeMixin, BaseModel):
                 return c
         return None
 
+    @classmethod
+    def get(cls, key) -> Self | None:
+        return cls.cache.get(key)
+
 
 class TestPartial(PartialMixin, BaseModel):
     __test__ = False
 
     NEXT_ID = 1
-    cache = {}
+    cache: dict[str, TestPartial] = {}
 
     def save(self) -> None:
         TestPartial.cache[self.token] = self
@@ -275,6 +283,10 @@ class TestPartial(PartialMixin, BaseModel):
     @classmethod
     def destroy(cls, token) -> None:
         cls.cache.pop(token)
+
+    @classmethod
+    def get(cls, key) -> TestPartial | None:
+        return cls.cache.get(key)
 
 
 class TestStorage(BaseStorage):

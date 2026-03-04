@@ -16,7 +16,8 @@ from .actions import BaseActionTest
 class DisconnectActionTest(BaseActionTest):
     def test_not_allowed_to_disconnect(self) -> None:
         self.do_login()
-        user = User.get(self.expected_username)
+        user = cast("User", User.get(self.expected_username))
+        self.assertIsNotNone(user)
         with self.assertRaisesRegex(
             NotAllowedToDisconnect, "This account is not allowed to be disconnected."
         ):
@@ -40,6 +41,7 @@ class DisconnectActionTest(BaseActionTest):
         self.assertEqual(len(user.social), 1)
         self.assertEqual(user.social[0], second_usa)
 
+    @responses.activate
     def test_disconnect_with_partial_pipeline(self) -> None:
         self.strategy.set_settings(
             {
@@ -71,3 +73,5 @@ class DisconnectActionTest(BaseActionTest):
 
         redirect = do_disconnect(self.backend, user)
         self.assertEqual(len(user.social), 0)
+        url = self.strategy.build_absolute_uri("/success")
+        self.assertEqual(redirect.url, url)

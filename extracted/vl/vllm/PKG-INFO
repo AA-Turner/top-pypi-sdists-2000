@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: vllm
-Version: 0.14.1
+Version: 0.16.0
 Summary: A high-throughput and memory-efficient inference and serving engine for LLMs
 Author: vLLM Team
 License-Expression: Apache-2.0
@@ -30,9 +30,9 @@ Requires-Dist: blake3
 Requires-Dist: py-cpuinfo
 Requires-Dist: transformers<5,>=4.56.0
 Requires-Dist: tokenizers>=0.21.1
-Requires-Dist: protobuf>=6.30.0
+Requires-Dist: protobuf!=6.30.*,!=6.31.*,!=6.32.*,!=6.33.0.*,!=6.33.1.*,!=6.33.2.*,!=6.33.3.*,!=6.33.4.*,>=5.29.6
 Requires-Dist: fastapi[standard]>=0.115.0
-Requires-Dist: aiohttp
+Requires-Dist: aiohttp>=3.13.3
 Requires-Dist: openai>=1.99.1
 Requires-Dist: pydantic>=2.12.0
 Requires-Dist: prometheus_client>=0.18.0
@@ -51,7 +51,7 @@ Requires-Dist: partial-json-parser
 Requires-Dist: pyzmq>=25.0.0
 Requires-Dist: msgspec
 Requires-Dist: gguf>=0.17.0
-Requires-Dist: mistral_common[image]>=1.8.8
+Requires-Dist: mistral_common[image]>=1.9.0
 Requires-Dist: opencv-python-headless>=4.13.0
 Requires-Dist: pyyaml
 Requires-Dist: six>=1.16.0; python_version > "3.11"
@@ -68,17 +68,17 @@ Requires-Dist: cbor2
 Requires-Dist: ijson
 Requires-Dist: setproctitle
 Requires-Dist: openai-harmony>=0.0.3
-Requires-Dist: anthropic==0.71.0
-Requires-Dist: model-hosting-container-standards<1.0.0,>=0.1.10
+Requires-Dist: anthropic>=0.71.0
+Requires-Dist: model-hosting-container-standards<1.0.0,>=0.1.13
 Requires-Dist: mcp
-Requires-Dist: grpcio>=1.76.0
-Requires-Dist: grpcio-reflection>=1.76.0
+Requires-Dist: grpcio
+Requires-Dist: grpcio-reflection
 Requires-Dist: numba==0.61.2
 Requires-Dist: ray[cgraph]>=2.48.0
 Requires-Dist: torch==2.9.1
 Requires-Dist: torchaudio==2.9.1
 Requires-Dist: torchvision==0.24.1
-Requires-Dist: flashinfer-python==0.5.3
+Requires-Dist: flashinfer-python==0.6.3
 Provides-Extra: bench
 Requires-Dist: pandas; extra == "bench"
 Requires-Dist: matplotlib; extra == "bench"
@@ -88,7 +88,7 @@ Requires-Dist: scipy; extra == "bench"
 Provides-Extra: tensorizer
 Requires-Dist: tensorizer==2.10.1; extra == "tensorizer"
 Provides-Extra: fastsafetensors
-Requires-Dist: fastsafetensors>=0.1.10; extra == "fastsafetensors"
+Requires-Dist: fastsafetensors>=0.2.2; extra == "fastsafetensors"
 Provides-Extra: runai
 Requires-Dist: runai-model-streamer[gcs,s3]>=0.15.3; extra == "runai"
 Provides-Extra: audio
@@ -100,6 +100,13 @@ Provides-Extra: video
 Provides-Extra: flashinfer
 Provides-Extra: petit-kernel
 Requires-Dist: petit-kernel; extra == "petit-kernel"
+Provides-Extra: helion
+Requires-Dist: helion; extra == "helion"
+Provides-Extra: otel
+Requires-Dist: opentelemetry-sdk>=1.26.0; extra == "otel"
+Requires-Dist: opentelemetry-api>=1.26.0; extra == "otel"
+Requires-Dist: opentelemetry-exporter-otlp>=1.26.0; extra == "otel"
+Requires-Dist: opentelemetry-semantic-conventions-ai>=0.4.1; extra == "otel"
 Dynamic: license-file
 Dynamic: provides-extra
 Dynamic: requires-dist

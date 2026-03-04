@@ -7,7 +7,12 @@ the minor implementation differences between the Apereo CAS OIDC server
 implementation and the standard OIDC implementation in Python Social Auth.
 """
 
+from typing import TYPE_CHECKING, Any, cast
+
 from .open_id_connect import OpenIdConnectAuth
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 
 class CASOpenIdConnectAuth(OpenIdConnectAuth):
@@ -28,7 +33,7 @@ class CASOpenIdConnectAuth(OpenIdConnectAuth):
     STATE_PARAMETER = True
 
     def oidc_endpoint(self):
-        endpoint = self.setting("OIDC_ENDPOINT", self.OIDC_ENDPOINT)
+        endpoint = super().oidc_endpoint()
         self.log_debug("endpoint: %s", endpoint)
         return endpoint
 
@@ -36,7 +41,7 @@ class CASOpenIdConnectAuth(OpenIdConnectAuth):
         self.log_debug("method: get_user_id, details: %s, %s", details, response)
         return details.get("username")
 
-    def user_data(self, access_token, *args, **kwargs):
+    def user_data(self, access_token: str, *args, **kwargs) -> dict[str, Any] | None:
         data = self.get_json(
             self.userinfo_url(), headers={"Authorization": f"Bearer {access_token}"}
         )
@@ -46,7 +51,7 @@ class CASOpenIdConnectAuth(OpenIdConnectAuth):
     def get_user_details(self, response):
         username_key = self.setting("USERNAME_KEY", self.USERNAME_KEY)
         self.log_debug("username_key: %s", username_key)
-        attributes = self.user_data(response.get("access_token"))
+        attributes = cast("dict", self.user_data(response.get("access_token")))
         return {
             "username": attributes.get(username_key),
             "email": attributes.get("email"),
@@ -56,7 +61,7 @@ class CASOpenIdConnectAuth(OpenIdConnectAuth):
         }
 
     def auth_allowed(self, response, details):
-        allow_groups = set(self.setting("ALLOW_GROUPS", set()))
+        allow_groups = set(cast("Iterable", self.setting("ALLOW_GROUPS", set())))
         groups = set(response.get("groups", set()))
         return (
             super().auth_allowed(response, details)

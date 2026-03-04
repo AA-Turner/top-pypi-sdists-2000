@@ -17,5 +17,16 @@ class Calculator:
             return data
 
 
+class Converter:
+    def __new__(cls, output):
+        instance = super().__new__(cls)
+        instance.output = output
+        return instance
+
+
 async def fetch(url):
     return url
+
+
+def transform(value):
+    return value
