@@ -28,9 +28,16 @@ from pyhanko.stamp import (
     qr_stamp_file,
     text_stamp_file,
 )
-
-from .layout_test_utils import compare_output, with_layout_comparison
-from .samples import *
+from pyhanko_testing_commons.test_data.samples import (
+    EXPECTED_OUTPUT_DIR,
+    MINIMAL_PATH,
+    PDF_DATA_DIR,
+    TEST_DIR,
+)
+from pyhanko_testing_commons.test_utils.layout_test_utils import (
+    compare_output,
+    with_layout_comparison,
+)
 
 FONT_DIR = f'{TEST_DIR}/data/fonts'
 
@@ -44,7 +51,6 @@ NOTO_SANS = f'{FONT_DIR}/NotoSans-Regular.ttf'
 # We're only using it here because it's a useful example of a string-keyed
 # CFF font.
 FREE_SERIF = f'{FONT_DIR}/FreeSerif.otf'
-EXPECTED_OUTPUT_DIR = f'{TEST_DIR}/data/pdf/layout-tests'
 
 
 def test_simple_text_stamp(tmp_path):
@@ -133,6 +139,29 @@ def _arabic_text_page(stream_xrefs):
     )
     ts.apply(0, x=10, y=60)
     return w
+
+
+@with_layout_comparison
+def test_text_stamp_color():
+    w = empty_page()
+
+    border_color = (0.29, 0.404, 0.839)
+    text_color = (0.5, 0.43, 0.1)
+
+    style = TextStampStyle(
+        stamp_text='some text',
+        text_box_style=TextBoxStyle(text_color=text_color),
+        border_color=border_color,
+    )
+    ts = TextStamp(writer=w, style=style)
+
+    x, y = (10, 800)
+    ts.apply(0, x, y)
+
+    compare_output(
+        writer=w,
+        expected_output_path=f'{EXPECTED_OUTPUT_DIR}/text-stamp-color.pdf',
+    )
 
 
 @with_layout_comparison
@@ -241,8 +270,7 @@ def test_stamp_with_unscaled_bitmap_bg():
     w = empty_page()
 
     long_text = '\n'.join(
-        'Test test test test test test test test test '
-        'on a bitmap background!'
+        'Test test test test test test test test test on a bitmap background!'
         for _ in range(60)
     )
     style = TextStampStyle(
@@ -412,6 +440,7 @@ def test_zero_width_error():
     stamp.apply(0, x=10, y=500)
 
 
+@with_layout_comparison
 def test_simple_text_stamp_on_page_with_leaky_graphics_state():
     with open(f"{PDF_DATA_DIR}/leaky-graphics-state-doc.pdf", 'rb') as fin:
         pdf_out = IncrementalPdfFileWriter(fin, strict=False)
@@ -425,6 +454,7 @@ def test_simple_text_stamp_on_page_with_leaky_graphics_state():
         )
 
 
+@with_layout_comparison
 def test_simple_text_stamp_on_page_with_leaky_graphics_state_without_coord_correction():
     with open(f"{PDF_DATA_DIR}/leaky-graphics-state-doc.pdf", 'rb') as fin:
         pdf_out = IncrementalPdfFileWriter(fin, strict=False)

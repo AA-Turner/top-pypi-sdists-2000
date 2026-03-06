@@ -11,10 +11,11 @@ from csc_dummy.csc_dummy_server import CSCWithCertomancer, DummyServiceParams
 from freezegun import freeze_time
 from pyhanko.sign.general import SigningError
 from pyhanko.sign.signers import csc_signer
-from pyhanko.sign.validation.utils import validate_raw
-
-from .csc_utils.csc_dummy_client import CSCDummyClientAuthManager
-from .samples import CERTOMANCER, TESTING_CA
+from pyhanko_certvalidator.sig_validate import DefaultSignatureValidator
+from pyhanko_testing_commons.test_data.samples import CERTOMANCER, TESTING_CA
+from pyhanko_testing_commons.test_utils.csc_utils.csc_dummy_client import (
+    CSCDummyClientAuthManager,
+)
 
 SIGNER_B64 = """
 MIIEMDCCAxigAwIBAgICEAEwDQYJKoZIhvcNAQELBQAwWTELMAkGA1UEBhMCQkUxFDASBgNVBAoM
@@ -558,14 +559,13 @@ async def test_submit_job_during_commit(aiohttp_client):
 
     signer_cert = TESTING_CA.get_cert(CertLabel('signer1'))
     for ix, sig in enumerate([sig1, *others]):
-        validate_raw(
+        DefaultSignatureValidator().validate_signature(
             sig,
             b'foobar%d' % (ix + 1),
-            signer_cert,
+            signer_cert.public_key,
             signature_algorithm=algos.SignedDigestAlgorithm(
                 {'algorithm': 'sha256_rsa'}
             ),
-            md_algorithm='sha256',
         )
     assert auth_man.authorizations_requested == 2
 
@@ -631,12 +631,11 @@ async def test_csc_with_parameters(aiohttp_client):
     signer_cert = TESTING_CA.get_cert(CertLabel('signer1'))
     mech = signer.get_signature_mechanism_for_digest('sha256')
     assert mech.signature_algo == 'rsassa_pss'
-    validate_raw(
+    DefaultSignatureValidator().validate_signature(
         result,
         b'foobar',
-        signer_cert,
+        signer_cert.public_key,
         signature_algorithm=mech,
-        md_algorithm='sha256',
     )
 
 
@@ -668,14 +667,13 @@ async def test_prefetched_sad_not_twice(aiohttp_client):
 
     result = await signer.async_sign_raw(b'foobar', digest_algorithm='sha256')
     signer_cert = TESTING_CA.get_cert(CertLabel('signer1'))
-    validate_raw(
+    DefaultSignatureValidator().validate_signature(
         result,
         b'foobar',
-        signer_cert,
+        signer_cert.public_key,
         signature_algorithm=algos.SignedDigestAlgorithm(
             {'algorithm': 'sha256_rsa'}
         ),
-        md_algorithm='sha256',
     )
 
     # but a second attempt should fail

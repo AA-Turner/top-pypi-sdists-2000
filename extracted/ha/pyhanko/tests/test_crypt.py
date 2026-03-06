@@ -38,8 +38,7 @@ from pyhanko.pdf_utils.crypt.standard import StandardAESGCMCryptFilter
 from pyhanko.pdf_utils.generic import pdf_name
 from pyhanko.pdf_utils.incremental_writer import IncrementalPdfFileWriter
 from pyhanko.pdf_utils.reader import PdfFileReader
-
-from .samples import (
+from pyhanko_testing_commons.test_data.samples import (
     CERTOMANCER,
     MINIMAL,
     MINIMAL_AES256,
@@ -944,6 +943,20 @@ def test_empty_user_pass():
     assert r.root_ref == old_root_ref
     assert len(r.root['/AcroForm']['/Fields']) == 1
     assert len(r.root['/Pages']['/Kids']) == 1
+    assert r.root['/AcroForm']['/Fields'][0]['/T'] == 'Sig1'
+
+
+def test_reauthenticate():
+    r = PdfFileReader(BytesIO(MINIMAL_ONE_FIELD))
+    w = writer.copy_into_new_writer(r)
+    w.encrypt('ownersecret', 'usersecret')
+    out = BytesIO()
+    w.write(out)
+    r = PdfFileReader(out)
+    result = r.decrypt('wrong')
+    assert result.status == AuthStatus.FAILED
+    result = r.decrypt('usersecret')
+    assert result.status == AuthStatus.USER
     assert r.root['/AcroForm']['/Fields'][0]['/T'] == 'Sig1'
 
 

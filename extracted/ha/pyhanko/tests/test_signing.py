@@ -7,16 +7,17 @@ from io import BytesIO
 import pyhanko.pdf_utils.content
 import pyhanko.sign.fields
 import pytest
+from asn1crypto import cms
 from asn1crypto.algos import SignedDigestAlgorithm
 from certomancer.integrations.illusionist import Illusionist
-from certomancer.registry import CertLabel, KeyLabel
+from certomancer.registry import ArchLabel, CertLabel, KeyLabel
 from freezegun import freeze_time
 from pyhanko import stamp
 from pyhanko.keys import load_cert_from_pemder, load_certs_from_pemder
 from pyhanko.pdf_utils import embed, generic, layout
 from pyhanko.pdf_utils.generic import pdf_name
 from pyhanko.pdf_utils.incremental_writer import IncrementalPdfFileWriter
-from pyhanko.pdf_utils.misc import PdfReadError
+from pyhanko.pdf_utils.misc import FormFillingError, PdfReadError
 from pyhanko.pdf_utils.reader import PdfFileReader
 from pyhanko.pdf_utils.writer import copy_into_new_writer
 from pyhanko.sign import fields, signers, timestamps
@@ -25,7 +26,7 @@ from pyhanko.sign.diff_analysis import (
     DiffResult,
     ModificationLevel,
 )
-from pyhanko.sign.general import SigningError, get_pyca_cryptography_hash
+from pyhanko.sign.general import SigningError
 from pyhanko.sign.signers import cms_embedder
 from pyhanko.sign.signers.pdf_byterange import BuildProps
 from pyhanko.sign.signers.pdf_cms import (
@@ -47,14 +48,29 @@ from pyhanko.sign.validation import (
     validate_pdf_timestamp,
 )
 from pyhanko.sign.validation.errors import SignatureValidationError
-from pyhanko.stamp import QRStampStyle
-
+from pyhanko.stamp import NoOpStampStyle, QRStampStyle
 from pyhanko_certvalidator import CertificateValidator, ValidationContext
+from pyhanko_certvalidator.authority import (
+    CertTrustAnchor,
+    TrustedServiceType,
+    TrustQualifiers,
+)
 from pyhanko_certvalidator.errors import PathValidationError
-from pyhanko_certvalidator.registry import SimpleCertificateStore
-
-from .samples import *
-from .signing_commons import (
+from pyhanko_certvalidator.registry import (
+    SimpleCertificateStore,
+    SimpleTrustManager,
+)
+from pyhanko_certvalidator.util import get_pyca_cryptography_hash
+from pyhanko_testing_commons.test_data.samples import (
+    CERTOMANCER,
+    CRYPTO_DATA_DIR,
+    MINIMAL,
+    MINIMAL_ONE_FIELD,
+    PDF_DATA_DIR,
+    TESTING_CA,
+    VECTOR_IMAGE_PDF,
+)
+from pyhanko_testing_commons.test_utils.signing_commons import (
     DUMMY_HTTP_TS,
     DUMMY_TS,
     FIXED_OCSP,
@@ -65,14 +81,14 @@ from .signing_commons import (
     FROM_ED25519_CA,
     REVOKED_SIGNER,
     SELF_SIGN,
-    SIMPLE_ED448_V_CONTEXT,
-    SIMPLE_ED25519_V_CONTEXT,
-    SIMPLE_V_CONTEXT,
     TRUST_ROOTS,
     TSA_CERT,
     async_val_trusted,
     dummy_ocsp_vc,
     live_testing_vc,
+    simple_ed448_v_context,
+    simple_ed25519_v_context,
+    simple_v_context,
     val_trusted,
     val_untrusted,
 )
@@ -136,7 +152,7 @@ def test_simple_sign_tamper():
     out.seek(0)
     r = PdfFileReader(out)
     emb = r.embedded_signatures[0]
-    tampered = validate_pdf_signature(emb, SIMPLE_V_CONTEXT())
+    tampered = validate_pdf_signature(emb, simple_v_context())
     assert not tampered.intact
     assert tampered.valid
     assert tampered.summary() == 'INVALID'
@@ -521,8 +537,9 @@ def test_ocsp_without_nextupdate_embed(requests_mock):
     assert rdata['responses'][0]['next_update'].native is None
 
 
+# noinspection PyDeprecation
 @freeze_time('2020-11-01')
-def test_adobe_revinfo_live(requests_mock):
+def test_adobe_revinfo_live(requests_mock, expect_deprecation):
     w = IncrementalPdfFileWriter(BytesIO(MINIMAL_ONE_FIELD))
     vc = live_testing_vc(requests_mock)
     out = signers.sign_pdf(
@@ -560,8 +577,9 @@ async def test_meta_tsa_verify():
         await cv.async_validate_usage({'time_stamping'})
 
 
+# noinspection PyDeprecation
 @freeze_time('2020-11-01')
-def test_adobe_revinfo_live_nofullchain():
+def test_adobe_revinfo_live_nofullchain(expect_deprecation):
     w = IncrementalPdfFileWriter(BytesIO(MINIMAL_ONE_FIELD))
     out = signers.sign_pdf(
         w,
@@ -600,6 +618,7 @@ def test_adobe_revinfo_live_nofullchain():
 
 
 @freeze_time('2020-11-01')
+@pytest.mark.nosmoke
 def test_simple_qr_sign():
     style = QRStampStyle(stamp_text="Hi, it's\n%(ts)s")
     signer = signers.PdfSigner(
@@ -622,6 +641,7 @@ def test_simple_qr_sign():
 
 
 @pytest.mark.parametrize('params_value', [None, {}, {'some': 'value'}])
+@pytest.mark.nosmoke
 def test_qr_sign_enforce_url_param(params_value):
     style = QRStampStyle(stamp_text="Hi, it's\n%(ts)s")
     signer = signers.PdfSigner(
@@ -749,7 +769,7 @@ def test_sig_delete_type():
     with pytest.raises(
         SignatureValidationError, match='.*must be /DocTimeStamp.*'
     ):
-        validate_pdf_timestamp(emb, validation_context=SIMPLE_V_CONTEXT())
+        validate_pdf_timestamp(emb, validation_context=simple_v_context())
 
 
 def test_timestamp_wrong_type():
@@ -765,7 +785,7 @@ def test_timestamp_wrong_type():
     with pytest.raises(
         SignatureValidationError, match='.*must be /DocTimeStamp.*'
     ):
-        validate_pdf_timestamp(emb, validation_context=SIMPLE_V_CONTEXT())
+        validate_pdf_timestamp(emb, validation_context=simple_v_context())
 
 
 @pytest.mark.parametrize(
@@ -857,6 +877,121 @@ def test_timestamp_with_different_digest():
     assert validity.timestamp_validity.trusted
 
 
+BOGUS_TSA_CERT = TESTING_CA.get_cert('interm-ocsp')
+
+
+@freeze_time('2020-11-01')
+@pytest.mark.parametrize(
+    '_descr,roots',
+    [
+        ('non-root', []),
+        (
+            'qualified root, unsupported service type',
+            [
+                CertTrustAnchor(
+                    BOGUS_TSA_CERT,
+                    TrustQualifiers(
+                        trusted_service_type=TrustedServiceType.UNSUPPORTED
+                    ),
+                )
+            ],
+        ),
+        (
+            'qualified root, mismatching service type',
+            [
+                CertTrustAnchor(
+                    BOGUS_TSA_CERT,
+                    TrustQualifiers(
+                        trusted_service_type=TrustedServiceType.CERTIFICATE_AUTHORITY
+                    ),
+                )
+            ],
+        ),
+    ],
+)
+def test_timestamp_with_nonsense_key_usage_rejection_scenarios(_descr, roots):
+    ts = timestamps.DummyTimeStamper(
+        tsa_cert=BOGUS_TSA_CERT,
+        tsa_key=TESTING_CA.key_set.get_private_key('interm-ocsp'),
+        certs_to_embed=FROM_CA.cert_registry,
+    )
+
+    manager = SimpleTrustManager.build(TRUST_ROOTS + roots)
+    vc = ValidationContext(trust_manager=manager)
+    w = IncrementalPdfFileWriter(BytesIO(MINIMAL_ONE_FIELD))
+
+    out = signers.sign_pdf(
+        w,
+        signers.PdfSignatureMetadata(md_algorithm='sha256'),
+        signer=FROM_CA,
+        timestamper=ts,
+        existing_fields_only=True,
+    )
+
+    r = PdfFileReader(out)
+    s = r.embedded_signatures[0]
+
+    validity = validate_pdf_signature(s, vc, skip_diff=True)
+    assert validity.timestamp_validity is not None
+    assert not validity.timestamp_validity.trusted
+
+
+@freeze_time('2020-11-01')
+@pytest.mark.parametrize(
+    '_descr,roots',
+    [
+        (
+            'qualified root, matching service type',
+            [
+                CertTrustAnchor(
+                    BOGUS_TSA_CERT,
+                    TrustQualifiers(
+                        trusted_service_type=TrustedServiceType.TIME_STAMPING_AUTHORITY
+                    ),
+                )
+            ],
+        ),
+        (
+            'qualified root, unspecified service type',
+            [
+                CertTrustAnchor(
+                    BOGUS_TSA_CERT,
+                    TrustQualifiers(
+                        trusted_service_type=TrustedServiceType.UNSPECIFIED
+                    ),
+                )
+            ],
+        ),
+        ('unqualified root', [BOGUS_TSA_CERT]),
+    ],
+)
+def test_timestamp_with_nonsense_key_usage_acceptance_scenarios(_descr, roots):
+    ts = timestamps.DummyTimeStamper(
+        tsa_cert=BOGUS_TSA_CERT,
+        tsa_key=TESTING_CA.key_set.get_private_key('interm-ocsp'),
+        certs_to_embed=FROM_CA.cert_registry,
+    )
+
+    manager = SimpleTrustManager.build(TRUST_ROOTS + roots)
+    vc = ValidationContext(trust_manager=manager)
+    w = IncrementalPdfFileWriter(BytesIO(MINIMAL_ONE_FIELD))
+
+    out = signers.sign_pdf(
+        w,
+        signers.PdfSignatureMetadata(md_algorithm='sha256'),
+        signer=FROM_CA,
+        timestamper=ts,
+        existing_fields_only=True,
+    )
+
+    r = PdfFileReader(out)
+    s = r.embedded_signatures[0]
+
+    validity = validate_pdf_signature(s, vc, skip_diff=True)
+    assert validity.timestamp_validity is not None
+    assert validity.timestamp_validity.trusted
+
+
 def test_sign_with_empty_kids():
     w = IncrementalPdfFileWriter(BytesIO(MINIMAL))
     fields.append_signature_field(
@@ -870,7 +1005,7 @@ def test_sign_with_empty_kids():
     w.root['/AcroForm']['/Fields'][0]['/Kids'] = generic.ArrayObject()
     meta = signers.PdfSignatureMetadata(field_name='Sig1')
 
-    with pytest.raises(SigningError, match="Failed to access.*annot.*"):
+    with pytest.raises(FormFillingError, match="Failed to access.*annot.*"):
         signers.sign_pdf(w, meta, signer=FROM_CA)
 
 
@@ -932,8 +1067,11 @@ def test_no_revinfo_to_be_added(requests_mock, in_place):
     assert len(new_dss.crls) == 1
 
 
+# noinspection PyDeprecation
 @pytest.mark.parametrize('with_vri', [True, False])
-def test_add_revinfo_timestamp_separate_no_dss(requests_mock, with_vri):
+def test_add_revinfo_timestamp_separate_no_dss(
+    requests_mock, with_vri, expect_deprecation
+):
     buf = BytesIO(MINIMAL)
     w = IncrementalPdfFileWriter(buf)
 
@@ -977,7 +1115,8 @@ def test_add_revinfo_timestamp_separate_no_dss(requests_mock, with_vri):
         assert status.modification_level == ModificationLevel.LTA_UPDATES
 
 
-def test_add_revinfo_without_timestamp(requests_mock):
+# noinspection PyDeprecation
+def test_add_revinfo_without_timestamp(requests_mock, expect_deprecation):
     w = IncrementalPdfFileWriter(BytesIO(MINIMAL))
 
     # create signature without revocation info
@@ -1218,7 +1357,7 @@ async def test_interrupted_with_delayed_signing_no_prevalidation():
         signers.PdfSignatureMetadata(
             field_name='SigNew',
             embed_validation_info=True,
-            validation_context=SIMPLE_V_CONTEXT(),
+            validation_context=simple_v_context(),
         ),
         signer=ExternalSigner(
             signing_cert=None,
@@ -1468,7 +1607,7 @@ def test_allow_hybrid_sign_validate_allow():
     r = PdfFileReader(out, strict=False)
     s = r.embedded_signatures[0]
 
-    vc = SIMPLE_V_CONTEXT()
+    vc = simple_v_context()
     val_status = validate_pdf_signature(s, vc)
     assert val_status.bottom_line
 
@@ -1500,7 +1639,7 @@ def test_ed25519_trust():
     )
     r = PdfFileReader(out)
     s = r.embedded_signatures[0]
-    val_trusted(s, vc=SIMPLE_ED25519_V_CONTEXT())
+    val_trusted(s, vc=simple_ed25519_v_context())
 
 
 @freeze_time('2020-11-01')
@@ -1531,7 +1670,7 @@ def test_ed448_trust():
     )
     r = PdfFileReader(out)
     s = r.embedded_signatures[0]
-    val_trusted(s, vc=SIMPLE_ED448_V_CONTEXT())
+    val_trusted(s, vc=simple_ed448_v_context())
 
 
 @freeze_time('2020-11-01')
@@ -1624,12 +1763,6 @@ def test_rsa_with_sha384():
         signing_cert=FROM_CA.signing_cert,
         signing_key=FROM_CA.signing_key,
         cert_registry=FROM_CA.cert_registry,
-        # need the generic mechanism because asn1crypto (==1.5.1)
-        # doesn't have the OIDs for RSA-with-SHA3 family
-        # hash functions.
-        signature_mechanism=SignedDigestAlgorithm(
-            {'algorithm': 'rsassa_pkcs1v15'}
-        ),
     )
     out = signers.sign_pdf(
         w,
@@ -1733,3 +1866,47 @@ def test_sign_reject_econtent_if_detached():
             SignatureValidationError, match='detached.*encapsulated'
         ):
             val_untrusted(emb)
+
+
+def test_do_not_enforce_key_usage_if_signer_is_root():
+    signer_with_bogus_key_usage = signers.SimpleSigner.load(
+        f"{CRYPTO_DATA_DIR}/keys-rsa/signer.key.pem",
+        f"{CRYPTO_DATA_DIR}/testing-ca/interm/decrypter1.cert.pem",
+        key_passphrase=b'secret',
+    )
+    w = IncrementalPdfFileWriter(BytesIO(MINIMAL))
+    meta = signers.PdfSignatureMetadata(field_name='Sig1')
+    out = signers.sign_pdf(w, meta, signer=signer_with_bogus_key_usage)
+
+    vc = ValidationContext(
+        trust_roots=[signer_with_bogus_key_usage.signing_cert]
+    )
+    r = PdfFileReader(out)
+    emb = r.embedded_signatures[0]
+    assert emb.field_name == 'Sig1'
+    val_trusted(emb, vc=vc)
+
+
+def test_sign_appearance_noop():
+    buf = BytesIO(MINIMAL)
+    w = IncrementalPdfFileWriter(buf)
+    spec = fields.SigFieldSpec(
+        sig_field_name='Sig1',
+        empty_field_appearance=True,
+        box=(20, 20, 80, 40),
+    )
+    fields.append_signature_field(w, sig_field_spec=spec)
+
+    w.write_in_place()
+    w = IncrementalPdfFileWriter(buf)
+
+    appearance_old = w.root['/AcroForm']['/Fields'][0]['/AP']['/N'].data
+    meta = signers.PdfSignatureMetadata(field_name='Sig1')
+
+    out = signers.PdfSigner(
+        meta, signer=SELF_SIGN, stamp_style=NoOpStampStyle()
+    ).sign_pdf(w)
+
+    r = PdfFileReader(out)
+    appearance_new = r.root['/AcroForm']['/Fields'][0]['/AP']['/N'].data
+    assert appearance_old == appearance_new

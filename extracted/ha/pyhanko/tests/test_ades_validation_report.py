@@ -17,21 +17,24 @@ from pyhanko.sign.validation.policy_decl import (
     PdfSignatureValidationSpec,
     SignatureValidationSpec,
 )
-
 from pyhanko_certvalidator.context import CertValidationPolicySpec
 from pyhanko_certvalidator.registry import (
     SimpleCertificateStore,
     SimpleTrustManager,
 )
-
-from .samples import CERTOMANCER, MINIMAL_ONE_FIELD, SAMPLE_GROUP_ATTR
-from .signing_commons import (
+from pyhanko_testing_commons.test_data.samples import (
+    CERTOMANCER,
+    MINIMAL_ONE_FIELD,
+    SAMPLE_GROUP_ATTR,
+)
+from pyhanko_testing_commons.test_utils.signing_commons import (
     DUMMY_POLICY_ID,
     DUMMY_TS,
     FROM_CA,
     FROM_ECC_CA,
     live_testing_vc,
 )
+
 from .test_ades_validation import DEFAULT_SIG_VALIDATION_SPEC
 from .test_pades import PADES
 
@@ -192,6 +195,10 @@ async def test_pades_with_attributes_report_smoke_test(requests_mock):
                         ],
                     ),
                 ),
+                name="John Doe",
+                reason="Testing",
+                contact_info="john.doe@example.com",
+                location="Somewhere",
             ),
             signer=signer,
             timestamper=DUMMY_TS,
@@ -203,3 +210,8 @@ async def test_pades_with_attributes_report_smoke_test(requests_mock):
     assert 'claimed' in report
     assert 'certified' in report
     assert 'urn:etsi:019102:validationprocess:LTA' in report
+    assert 'vr:CommitmentTypeIndication' in report
+    assert 'vr:Name' in report
+    assert 'vr:Reason' in report
+    assert 'vr:ContactInfo' in report
+    assert 'vr:SignatureProductionPlace' in report

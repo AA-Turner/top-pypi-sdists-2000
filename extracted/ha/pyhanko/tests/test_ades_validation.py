@@ -1,4 +1,5 @@
 import datetime
+from collections import defaultdict
 from io import BytesIO
 from typing import Optional
 
@@ -34,11 +35,21 @@ from pyhanko.sign.validation import SignatureCoverageLevel, ades
 from pyhanko.sign.validation.policy_decl import (
     LocalKnowledge,
     PdfSignatureValidationSpec,
+    QualificationRequirements,
     SignatureValidationSpec,
 )
-
+from pyhanko.sign.validation.qualified.q_status import (
+    QcPrivateKeyManagementType,
+    QualificationResult,
+)
+from pyhanko.sign.validation.qualified.tsp import (
+    CA_QC_URI,
+    QTST_URI,
+    QcCertType,
+    TSPTrustManager,
+)
 from pyhanko_certvalidator import policy_decl as certv_policy_decl
-from pyhanko_certvalidator.authority import CertTrustAnchor
+from pyhanko_certvalidator.authority import CertTrustAnchor, TrustedServiceType
 from pyhanko_certvalidator.context import (
     CertValidationPolicySpec,
     ValidationContext,
@@ -64,14 +75,14 @@ from pyhanko_certvalidator.registry import (
     SimpleTrustManager,
 )
 from pyhanko_certvalidator.validate import async_validate_path
-
-from .samples import (
+from pyhanko_testing_commons.test_data.samples import (
     CERTOMANCER,
     MINIMAL_ONE_FIELD,
     TESTING_CA,
+    TESTING_CA_QUALIFIED,
     UNRELATED_TSA,
 )
-from .signing_commons import (
+from pyhanko_testing_commons.test_utils.signing_commons import (
     DUMMY_HTTP_TS_VARIANT,
     DUMMY_TS,
     DUMMY_TS2,
@@ -82,16 +93,19 @@ from .signing_commons import (
     TSA_CERT,
     live_testing_vc,
 )
+
 from .test_pades import PADES
 
 
-async def _generate_pades_test_doc(requests_mock, signer=FROM_CA, **kwargs):
+async def _generate_pades_test_doc(
+    requests_mock, signer=FROM_CA, vc=None, timestamper=None, **kwargs
+):
     kwargs.setdefault('use_pades_lta', True)
     kwargs.setdefault('embed_validation_info', True)
     w = IncrementalPdfFileWriter(BytesIO(MINIMAL_ONE_FIELD))
-    vc = live_testing_vc(requests_mock)
+    vc = vc if vc else live_testing_vc(requests_mock)
 
-    timestamper = timestamps.DummyTimeStamper(
+    timestamper = timestamper or timestamps.DummyTimeStamper(
         tsa_cert=TSA_CERT,
         tsa_key=TESTING_CA.key_set.get_private_key('tsa'),
         certs_to_embed=FROM_CA.cert_registry,
@@ -154,6 +168,145 @@ async def test_pades_basic_happy_path(requests_mock):
         assert result.ades_subindic == AdESPassed.OK
 
 
+ESEAL_SIGNER = signers.SimpleSigner(
+    signing_cert=TESTING_CA_QUALIFIED.get_cert(CertLabel('eseal-qualified')),
+    signing_key=TESTING_CA_QUALIFIED.key_set.get_private_key(
+        KeyLabel('signer1')
+    ),
+    cert_registry=SimpleCertificateStore.from_certs(
+        [
+            TESTING_CA_QUALIFIED.get_cert(CertLabel('root')),
+            TESTING_CA_QUALIFIED.get_cert(CertLabel('interm-qualified')),
+        ]
+    ),
+)
+
+
+def _testing_ca_registry():
+    from pyhanko.sign.validation.qualified import eutl_parse
+    from pyhanko_testing_commons.test_data.certomancer_trust_lists import (
+        certomancer_pki_as_trusted_list,
+    )
+
+    tl_xml = certomancer_pki_as_trusted_list(
+        TESTING_CA_QUALIFIED, EntityLabel('root')
+    )
+
+    registry, _ = eutl_parse.trust_list_to_registry(
+        tl_xml, tlso_certs=[TESTING_CA_QUALIFIED.get_cert(CertLabel('root'))]
+    )
+    return registry
+
+
+@pytest.mark.asyncio
+@pytest.mark.nosmoke
+@pytest.mark.parametrize(
+    'with_requirements',
+    [True, False],
+)
+async def test_pades_basic_happy_path_with_tl(requests_mock, with_requirements):
+    signer = ESEAL_SIGNER
+
+    spec = SignatureValidationSpec(
+        cert_validation_policy=CertValidationPolicySpec(
+            trust_manager=TSPTrustManager(_testing_ca_registry()),
+            revinfo_policy=DEFAULT_REVINFO_POLICY,
+        ),
+        qualification_requirements=(
+            QualificationRequirements() if with_requirements else None
+        ),
+    )
+    with freeze_time('2020-11-20'):
+        w = IncrementalPdfFileWriter(BytesIO(MINIMAL_ONE_FIELD))
+        out = await signers.async_sign_pdf(
+            w,
+            signers.PdfSignatureMetadata(field_name='Sig1', subfilter=PADES),
+            signer=signer,
+        )
+
+    with freeze_time('2020-11-25'):
+        r = PdfFileReader(out)
+        Illusionist(TESTING_CA_QUALIFIED).register(requests_mock)
+        result = await ades.ades_basic_validation(
+            r.embedded_signatures[0].signed_data,
+            validation_spec=spec,
+            raw_digest=r.embedded_signatures[0].compute_digest(),
+        )
+        assert result.ades_subindic == AdESPassed.OK
+        qual: QualificationResult = result.api_status.qualification_result
+        assert qual.status.qualified
+        assert qual.service_definition is not None
+        assert qual.status.qc_type == QcCertType.QC_ESEAL
+
+
+@pytest.mark.asyncio
+@pytest.mark.nosmoke
+@pytest.mark.parametrize(
+    'cert_label,requirements',
+    [
+        (CertLabel('not-qualified'), QualificationRequirements()),
+        (
+            CertLabel('esig-qualified'),
+            QualificationRequirements(
+                permit_cert_types=frozenset([QcCertType.QC_ESEAL])
+            ),
+        ),
+        (
+            CertLabel('esig-qualified-no-qscd'),
+            QualificationRequirements(
+                permit_key_mgmt_types=frozenset(
+                    [QcPrivateKeyManagementType.QSCD]
+                )
+            ),
+        ),
+        (
+            CertLabel('esig-qualified'),
+            QualificationRequirements(require_service_type=QTST_URI),
+        ),
+        (
+            CertLabel('esig-qualified'),
+            QualificationRequirements(
+                require_service_type=TrustedServiceType.TIME_STAMPING_AUTHORITY
+            ),
+        ),
+    ],
+)
+async def test_pades_fail_qualification_requirements(
+    requests_mock, cert_label, requirements
+):
+    signer = signers.SimpleSigner(
+        signing_cert=TESTING_CA_QUALIFIED.get_cert(cert_label),
+        signing_key=ESEAL_SIGNER.signing_key,
+        cert_registry=SimpleCertificateStore.from_certs(
+            list(ESEAL_SIGNER.cert_registry)
+        ),
+    )
+    spec = SignatureValidationSpec(
+        cert_validation_policy=CertValidationPolicySpec(
+            trust_manager=TSPTrustManager(_testing_ca_registry()),
+            revinfo_policy=DEFAULT_REVINFO_POLICY,
+        ),
+        qualification_requirements=requirements,
+    )
+    with freeze_time('2020-11-20'):
+        w = IncrementalPdfFileWriter(BytesIO(MINIMAL_ONE_FIELD))
+        out = await signers.async_sign_pdf(
+            w,
+            signers.PdfSignatureMetadata(field_name='Sig1', subfilter=PADES),
+            signer=signer,
+        )
+
+    with freeze_time('2020-11-25'):
+        r = PdfFileReader(out)
+        Illusionist(TESTING_CA_QUALIFIED).register(requests_mock)
+        result = await ades.ades_basic_validation(
+            r.embedded_signatures[0].signed_data,
+            validation_spec=spec,
+            raw_digest=r.embedded_signatures[0].compute_digest(),
+        )
+        assert result.ades_subindic == AdESIndeterminate.SIG_CONSTRAINTS_FAILURE
+
+
 @pytest.mark.asyncio
 async def test_embedded_cades_happy_path(requests_mock):
     with freeze_time('2020-11-01'):
@@ -169,6 +322,44 @@ async def test_embedded_cades_happy_path(requests_mock):
             validation_spec=DEFAULT_SIG_VALIDATION_SPEC,
         )
         assert result.ades_subindic == AdESPassed.OK
+
+
+@pytest.mark.asyncio
+async def test_embedded_cades_basic_tampered(requests_mock):
+    with freeze_time('2020-11-01'):
+        signature = await FROM_CA.async_sign_general_data(
+            b'Hello world!', 'sha256', detached=False, use_cades=True
+        )
+        signature['content']['encap_content_info']['content'] = (
+            b'Tampered content'
+        )
+        signature = cms.ContentInfo.load(signature.dump())
+
+    with freeze_time('2020-11-25'):
+        live_testing_vc(requests_mock)
+        result = await ades.ades_basic_validation(
+            signature['content'],
+            validation_spec=DEFAULT_SIG_VALIDATION_SPEC,
+        )
+        assert result.ades_subindic == AdESFailure.HASH_FAILURE
+
+
+@pytest.mark.asyncio
+async def test_embedded_cades_sig_tampered(requests_mock):
+    with freeze_time('2020-11-01'):
+        signature = await FROM_CA.async_sign_general_data(
+            b'Hello world!', 'sha256', detached=False, use_cades=True
+        )
+        signature['content']['signer_infos'][0]['signature'] = b''
+        signature = cms.ContentInfo.load(signature.dump())
+
+    with freeze_time('2020-11-25'):
+        live_testing_vc(requests_mock)
+        result = await ades.ades_basic_validation(
+            signature['content'],
+            validation_spec=DEFAULT_SIG_VALIDATION_SPEC,
+        )
+        assert result.ades_subindic == AdESFailure.SIG_CRYPTO_FAILURE
 
 
 @pytest.mark.asyncio
@@ -193,6 +384,260 @@ async def test_embedded_cades_with_time_happy_path(requests_mock):
         assert result.best_signature_time == datetime.datetime(
             2020, 11, 1, tzinfo=datetime.timezone.utc
         )
+
+
+@pytest.mark.asyncio
+async def test_embedded_cades_with_time_tampered_timestamp(requests_mock):
+    with freeze_time('2020-11-01'):
+        signature = await FROM_CA.async_sign_general_data(
+            b'Hello world!',
+            'sha256',
+            detached=False,
+            timestamper=DUMMY_TS,
+            use_cades=True,
+        )
+        dummy = await DUMMY_TS.async_timestamp(b"\x00" * 32, 'sha256')
+
+        signature['content']['signer_infos'][0]['unsigned_attrs'][0] = (
+            cms.CMSAttribute(
+                {'type': 'signature_time_stamp_token', 'values': [dummy]}
+            )
+        )
+        signature = cms.ContentInfo.load(signature.dump())
+
+    with freeze_time('2020-11-25'):
+        live_testing_vc(requests_mock)
+        result = await ades.ades_with_time_validation(
+            signature['content'],
+            validation_spec=DEFAULT_SIG_VALIDATION_SPEC,
+        )
+        assert result.ades_subindic == AdESFailure.HASH_FAILURE
+
+
+@pytest.mark.asyncio
+async def test_embedded_cades_with_time_sig_tampered_timestamp(requests_mock):
+    with freeze_time('2020-11-01'):
+        signature = await FROM_CA.async_sign_general_data(
+            b'Hello world!',
+            'sha256',
+            detached=False,
+            timestamper=DUMMY_TS,
+            use_cades=True,
+        )
+        si = signature['content']['signer_infos'][0]
+        tst = si['unsigned_attrs'][0]['values'][0]['content']
+        tst['signer_infos'][0]['signature'] = b''
+        signature = cms.ContentInfo.load(signature.dump())
+
+    with freeze_time('2020-11-25'):
+        live_testing_vc(requests_mock)
+        result = await ades.ades_with_time_validation(
+            signature['content'],
+            validation_spec=DEFAULT_SIG_VALIDATION_SPEC,
+        )
+        assert result.ades_subindic == AdESFailure.SIG_CRYPTO_FAILURE
+
+
+@pytest.mark.asyncio
+@pytest.mark.nosmoke
+@pytest.mark.parametrize(
+    'with_requirements',
+    [True, False],
+)
+async def test_embedded_cades_with_time_happy_path_with_tl(
+    requests_mock, with_requirements
+):
+    tsa = timestamps.HTTPTimeStamper(
+        'http://pyhanko.tests/testing-ca-qualified/tsa/tsa-qualified',
+        https=False,
+    )
+    spec = SignatureValidationSpec(
+        cert_validation_policy=CertValidationPolicySpec(
+            trust_manager=TSPTrustManager(_testing_ca_registry()),
+            revinfo_policy=DEFAULT_REVINFO_POLICY,
+        ),
+        qualification_requirements=(
+            QualificationRequirements() if with_requirements else None
+        ),
+    )
+    Illusionist(TESTING_CA_QUALIFIED).register(requests_mock)
+    with freeze_time('2020-11-01'):
+        signature = await ESEAL_SIGNER.async_sign_general_data(
+            b'Hello world!',
+            'sha256',
+            detached=False,
+            timestamper=tsa,
+            use_cades=True,
+        )
+        signature = cms.ContentInfo.load(signature.dump())
+
+    with freeze_time('2020-11-25'):
+        result = await ades.ades_with_time_validation(
+            signature['content'],
+            validation_spec=spec,
+        )
+        assert result.ades_subindic == AdESPassed.OK
+        assert result.best_signature_time == datetime.datetime(
+            2020, 11, 1, tzinfo=datetime.timezone.utc
+        )
+        qual: QualificationResult = result.api_status.qualification_result
+        assert qual.status.qualified
+        assert qual.status.qc_type == QcCertType.QC_ESEAL
+        assert qual.service_definition.base_info.service_type == CA_QC_URI
+
+        ts_qual: QualificationResult = (
+            result.api_status.timestamp_validity.qualification_result
+        )
+        assert ts_qual.status.qualified
+        assert ts_qual.status.qc_type == QcCertType.QC_ESEAL
+        assert ts_qual.service_definition.base_info.service_type == QTST_URI
+
+
+@pytest.mark.asyncio
+@pytest.mark.nosmoke
+@pytest.mark.parametrize(
+    'cert_label,tsa_label,requirements,ts_requirements',
+    [
+        (
+            CertLabel('not-qualified'),
+            ServiceLabel('tsa-qualified'),
+            QualificationRequirements(),
+            QualificationRequirements(),
+        ),
+        (
+            CertLabel('esig-qualified'),
+            ServiceLabel('tsa-not-qualified'),
+            QualificationRequirements(),
+            QualificationRequirements(),
+        ),
+        (
+            CertLabel('esig-qualified'),
+            ServiceLabel('tsa-not-qualified'),
+            QualificationRequirements(),
+            None,
+        ),
+    ],
+)
+async def test_embedded_cades_with_time_fail_qualification_requirements(
+    requests_mock, cert_label, tsa_label, requirements, ts_requirements
+):
+    tsa = timestamps.HTTPTimeStamper(
+        f'http://pyhanko.tests/testing-ca-qualified/tsa/{tsa_label}',
+        https=False,
+    )
+    spec = SignatureValidationSpec(
+        cert_validation_policy=CertValidationPolicySpec(
+            trust_manager=TSPTrustManager(_testing_ca_registry()),
+            revinfo_policy=DEFAULT_REVINFO_POLICY,
+        ),
+        qualification_requirements=requirements,
+        ts_qualification_requirements=ts_requirements,
+    )
+
+    signer = signers.SimpleSigner(
+        signing_cert=TESTING_CA_QUALIFIED.get_cert(cert_label),
+        signing_key=ESEAL_SIGNER.signing_key,
+        cert_registry=SimpleCertificateStore.from_certs(
+            list(ESEAL_SIGNER.cert_registry)
+        ),
+    )
+    Illusionist(TESTING_CA_QUALIFIED).register(requests_mock)
+    with freeze_time('2020-11-01'):
+        signature = await signer.async_sign_general_data(
+            b'Hello world!',
+            'sha256',
+            detached=False,
+            timestamper=tsa,
+            use_cades=True,
+        )
+        signature = cms.ContentInfo.load(signature.dump())
+
+    with freeze_time('2020-11-25'):
+        result = await ades.ades_with_time_validation(
+            signature['content'],
+            validation_spec=spec,
+        )
+        assert result.ades_subindic == AdESIndeterminate.SIG_CONSTRAINTS_FAILURE
+
+
+@pytest.mark.nosmoke
+@pytest.mark.asyncio
+async def test_embedded_cades_with_time_non_qtst_tsa_fail(requests_mock):
+    tsa = timestamps.HTTPTimeStamper(
+        'http://pyhanko.tests/testing-ca-qualified/tsa/tsa-qualified',
+        https=False,
+    )
+    # remove the QTST registrations from the registry
+    registry = _testing_ca_registry()
+    registry._tst_cert_to_si = defaultdict(set)
+    spec = SignatureValidationSpec(
+        cert_validation_policy=CertValidationPolicySpec(
+            trust_manager=TSPTrustManager(registry),
+            revinfo_policy=DEFAULT_REVINFO_POLICY,
+        ),
+        qualification_requirements=QualificationRequirements(),
+        ts_qualification_requirements=QualificationRequirements(
+            require_service_type=QTST_URI
+        ),
+    )
+
+    Illusionist(TESTING_CA_QUALIFIED).register(requests_mock)
+    with freeze_time('2020-11-01'):
+        signature = await ESEAL_SIGNER.async_sign_general_data(
+            b'Hello world!',
+            'sha256',
+            detached=False,
+            timestamper=tsa,
+            use_cades=True,
+        )
+        signature = cms.ContentInfo.load(signature.dump())
+
+    with freeze_time('2020-11-25'):
+        result = await ades.ades_with_time_validation(
+            signature['content'],
+            validation_spec=spec,
+        )
+        assert result.ades_subindic == AdESIndeterminate.SIG_CONSTRAINTS_FAILURE
+
+
+@pytest.mark.nosmoke
+@pytest.mark.asyncio
+async def test_embedded_cades_with_time_non_qtst_tsa_pass(requests_mock):
+    tsa = timestamps.HTTPTimeStamper(
+        'http://pyhanko.tests/testing-ca-qualified/tsa/tsa-qualified',
+        https=False,
+    )
+    # remove the QTST registrations from the registry
+    registry = _testing_ca_registry()
+    registry._tst_cert_to_si = defaultdict(set)
+    spec = SignatureValidationSpec(
+        cert_validation_policy=CertValidationPolicySpec(
+            trust_manager=TSPTrustManager(registry),
+            revinfo_policy=DEFAULT_REVINFO_POLICY,
+        ),
+        qualification_requirements=QualificationRequirements(),
+        # No requirement that the TSA be directly registered as a QTST,
+        #  so trusted CAs can issue TSA certs
+        ts_qualification_requirements=QualificationRequirements(),
+    )
+
+    Illusionist(TESTING_CA_QUALIFIED).register(requests_mock)
+    with freeze_time('2020-11-01'):
+        signature = await ESEAL_SIGNER.async_sign_general_data(
+            b'Hello world!',
+            'sha256',
+            detached=False,
+            timestamper=tsa,
+            use_cades=True,
+        )
+        signature = cms.ContentInfo.load(signature.dump())
+
+    with freeze_time('2020-11-25'):
+        result = await ades.ades_with_time_validation(
+            signature['content'],
+            validation_spec=spec,
+        )
+        assert result.ades_subindic == AdESPassed.OK
 
 
 @pytest.mark.asyncio
@@ -325,6 +770,128 @@ async def test_simulate_future_lta_happy_path(requests_mock, with_lta):
     assert result.best_signature_time == datetime.datetime(
         2020, 11, 20, tzinfo=datetime.timezone.utc
     )
+
+
+@pytest.mark.nosmoke
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    'with_requirements',
+    [True, False],
+)
+@freeze_time('2020-11-20')
+async def test_simulate_future_lta_happy_path_eseal(
+    requests_mock, with_requirements
+):
+    signer = ESEAL_SIGNER
+
+    spec = PdfSignatureValidationSpec(
+        SignatureValidationSpec(
+            cert_validation_policy=CertValidationPolicySpec(
+                trust_manager=TSPTrustManager(_testing_ca_registry()),
+                revinfo_policy=DEFAULT_REVINFO_POLICY,
+            ),
+            qualification_requirements=(
+                QualificationRequirements() if with_requirements else None
+            ),
+        )
+    )
+    vc = ValidationContext(
+        trust_manager=spec.signature_validation_spec.cert_validation_policy.trust_manager,
+        allow_fetching=True,
+        other_certs=[],
+    )
+    tsa = timestamps.HTTPTimeStamper(
+        'http://pyhanko.tests/testing-ca-qualified/tsa/tsa-qualified',
+        https=False,
+    )
+    Illusionist(TESTING_CA_QUALIFIED).register(requests_mock)
+    out = await _generate_pades_test_doc(
+        requests_mock, signer=signer, vc=vc, timestamper=tsa, use_pades_lta=True
+    )
+
+    r = PdfFileReader(out)
+    result = await ades.simulate_future_ades_lta_validation(
+        r.embedded_signatures[0],
+        pdf_validation_spec=spec,
+        future_validation_time=datetime.datetime(
+            2030, 11, 20, tzinfo=datetime.timezone.utc
+        ),
+    )
+    assert result.ades_subindic == AdESPassed.OK
+    assert result.best_signature_time == datetime.datetime(
+        2020, 11, 20, tzinfo=datetime.timezone.utc
+    )
+
+
+@freeze_time('2020-11-20')
+@pytest.mark.nosmoke
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    'cert_label,tsa_label,requirements,ts_requirements',
+    [
+        (
+            CertLabel('not-qualified'),
+            ServiceLabel('tsa-qualified'),
+            QualificationRequirements(),
+            QualificationRequirements(),
+        ),
+        (
+            CertLabel('esig-qualified'),
+            ServiceLabel('tsa-not-qualified'),
+            QualificationRequirements(),
+            QualificationRequirements(),
+        ),
+        (
+            CertLabel('esig-qualified'),
+            ServiceLabel('tsa-not-qualified'),
+            QualificationRequirements(),
+            None,
+        ),
+    ],
+)
+async def test_pades_lta_fail_qualification_requirements(
+    requests_mock, cert_label, tsa_label, requirements, ts_requirements
+):
+    tsa = timestamps.HTTPTimeStamper(
+        f'http://pyhanko.tests/testing-ca-qualified/tsa/{tsa_label}',
+        https=False,
+    )
+    signer = signers.SimpleSigner(
+        signing_cert=TESTING_CA_QUALIFIED.get_cert(cert_label),
+        signing_key=ESEAL_SIGNER.signing_key,
+        cert_registry=SimpleCertificateStore.from_certs(
+            list(ESEAL_SIGNER.cert_registry)
+        ),
+    )
+    spec = PdfSignatureValidationSpec(
+        SignatureValidationSpec(
+            cert_validation_policy=CertValidationPolicySpec(
+                trust_manager=TSPTrustManager(_testing_ca_registry()),
+                revinfo_policy=DEFAULT_REVINFO_POLICY,
+            ),
+            qualification_requirements=requirements,
+            ts_qualification_requirements=ts_requirements,
+        )
+    )
+    vc = ValidationContext(
+        trust_manager=spec.signature_validation_spec.cert_validation_policy.trust_manager,
+        allow_fetching=True,
+        other_certs=[],
+    )
+    Illusionist(TESTING_CA_QUALIFIED).register(requests_mock)
+    out = await _generate_pades_test_doc(
+        requests_mock, signer=signer, vc=vc, timestamper=tsa, use_pades_lta=True
+    )
+
+    r = PdfFileReader(out)
+    result = await ades.simulate_future_ades_lta_validation(
+        r.embedded_signatures[0],
+        pdf_validation_spec=spec,
+        future_validation_time=datetime.datetime(
+            2030, 11, 20, tzinfo=datetime.timezone.utc
+        ),
+    )
+    assert result.ades_subindic == AdESIndeterminate.SIG_CONSTRAINTS_FAILURE
 
 
 @pytest.mark.asyncio

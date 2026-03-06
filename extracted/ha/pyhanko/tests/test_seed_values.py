@@ -1,9 +1,8 @@
 from io import BytesIO
 
 import pytest
-from asn1crypto import algos
+from asn1crypto import algos, x509
 from asn1crypto import pdf as asn1_pdf
-from asn1crypto import x509
 from freezegun.api import freeze_time
 from pyhanko.pdf_utils import generic
 from pyhanko.pdf_utils.generic import pdf_name
@@ -20,11 +19,9 @@ from pyhanko.sign.validation import (
     async_validate_pdf_ltv_signature,
     async_validate_pdf_signature,
 )
-
 from pyhanko_certvalidator import CertificateValidator
-
-from .samples import MINIMAL
-from .signing_commons import (
+from pyhanko_testing_commons.test_data.samples import MINIMAL
+from pyhanko_testing_commons.test_utils.signing_commons import (
     DUMMY_HTTP_TS,
     DUMMY_TS,
     FROM_CA,
@@ -35,6 +32,7 @@ from .signing_commons import (
     dummy_ocsp_vc,
     live_testing_vc,
 )
+
 from .test_pades import PADES, ts_response_callback
 
 
@@ -530,9 +528,10 @@ async def test_sv_sign_subfilter_hint():
     assert emb_sig.sig_object['/SubFilter'] == PADES.value
 
 
+# noinspection PyDeprecation
 @freeze_time('2020-11-01')
 @pytest.mark.asyncio
-async def test_sv_sign_addrevinfo_req(requests_mock):
+async def test_sv_sign_addrevinfo_req(requests_mock, expect_deprecation):
     sv = fields.SigSeedValueSpec(
         flags=fields.SigSeedValFlags.ADD_REV_INFO, add_rev_info=True
     )

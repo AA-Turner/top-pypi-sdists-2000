@@ -2,6 +2,8 @@ from io import BytesIO
 
 import pytest
 from freezegun import freeze_time
+from pyhanko.pdf_utils import writer
+from pyhanko.pdf_utils.crypt import AuthStatus
 from pyhanko.pdf_utils.incremental_writer import IncrementalPdfFileWriter
 from pyhanko.pdf_utils.reader import PdfFileReader
 from pyhanko.pdf_utils.writer import copy_into_new_writer
@@ -12,9 +14,9 @@ from pyhanko.sign.signers.pdf_signer import (
     SigDSSPlacementPreference,
 )
 from pyhanko.sign.validation import validate_pdf_signature
-
-from .samples import (
+from pyhanko_testing_commons.test_data.samples import (
     MINIMAL_AES256,
+    MINIMAL_ONE_FIELD,
     MINIMAL_ONE_FIELD_AES256,
     MINIMAL_ONE_FIELD_RC4,
     MINIMAL_PUBKEY_ONE_FIELD_AES256,
@@ -23,13 +25,16 @@ from .samples import (
     PDF_DATA_DIR,
     PUBKEY_SELFSIGNED_DECRYPTER,
 )
-from .signing_commons import (
+from pyhanko_testing_commons.test_utils.signing_commons import (
     DUMMY_HTTP_TS,
     FROM_CA,
-    SIMPLE_V_CONTEXT,
+    FROM_ED25519_CA,
     live_testing_vc,
+    simple_ed25519_v_context,
+    simple_v_context,
     val_trusted,
 )
+
 from .test_pades import PADES
 
 sign_crypt_rc4_files = (MINIMAL_RC4, MINIMAL_ONE_FIELD_RC4)
@@ -70,6 +75,54 @@ def test_sign_crypt_aes256(password):
     r.decrypt(password)
     s = r.embedded_signatures[0]
     val_trusted(s)
+
+
+@freeze_time('2020-11-01')
+def test_sign_crypt_empty_user_pass():
+    r = PdfFileReader(BytesIO(MINIMAL_ONE_FIELD))
+    w = writer.copy_into_new_writer(r)
+    w.encrypt('ownersecret', '')
+    out = BytesIO()
+    w.write(out)
+
+    w = IncrementalPdfFileWriter(out)
+    w.encrypt('')
+    out = signers.sign_pdf(
+        w,
+        signers.PdfSignatureMetadata(),
+        signer=FROM_CA,
+        existing_fields_only=True,
+    )
+
+    r = PdfFileReader(out)
+    result = r.decrypt('')
+    assert result.status == AuthStatus.USER
+    s = r.embedded_signatures[0]
+    val_trusted(s)
+
+
+@freeze_time('2020-11-01')
+def test_sign_encrypted_with_extensions():
+    r = PdfFileReader(BytesIO(MINIMAL_ONE_FIELD))
+    w = writer.copy_into_new_writer(r)
+    w.encrypt('secret')
+    out = BytesIO()
+    w.write(out)
+
+    w = IncrementalPdfFileWriter(out)
+    w.encrypt('secret')
+    out = signers.sign_pdf(
+        w,
+        signers.PdfSignatureMetadata(),
+        signer=FROM_ED25519_CA,
+        existing_fields_only=True,
+    )
+
+    r = PdfFileReader(out)
+    result = r.decrypt('secret')
+    assert result.status == AuthStatus.OWNER
+    s = r.embedded_signatures[0]
+    val_trusted(s, vc=simple_ed25519_v_context())
 
 
 @freeze_time('2020-11-01')
@@ -201,7 +254,7 @@ def test_copy_encrypted_signed_file():
     assert not r.encrypted
     s = r.embedded_signatures[0]
     s.compute_integrity_info()
-    status = validate_pdf_signature(s, SIMPLE_V_CONTEXT(), skip_diff=True)
+    status = validate_pdf_signature(s, simple_v_context(), skip_diff=True)
     assert not status.intact
 
 
@@ -212,7 +265,6 @@ def test_copy_file_with_mdp_signature_and_backref():
 
     fname = f"{PDF_DATA_DIR}/signed-encrypted-pubkey-with-catalog-ref.pdf"
     with open(fname, 'rb') as inf:
-
         r = PdfFileReader(inf)
         r.decrypt_pubkey(PUBKEY_SELFSIGNED_DECRYPTER)
 
@@ -224,5 +276,5 @@ def test_copy_file_with_mdp_signature_and_backref():
     assert not r.encrypted
     s = r.embedded_signatures[0]
     s.compute_integrity_info()
-    status = validate_pdf_signature(s, SIMPLE_V_CONTEXT(), skip_diff=True)
+    status = validate_pdf_signature(s, simple_v_context(), skip_diff=True)
     assert not status.intact

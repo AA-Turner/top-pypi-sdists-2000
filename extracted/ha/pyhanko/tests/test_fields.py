@@ -7,16 +7,14 @@ from freezegun import freeze_time
 from pyhanko.pdf_utils import generic
 from pyhanko.pdf_utils.generic import pdf_name
 from pyhanko.pdf_utils.incremental_writer import IncrementalPdfFileWriter
-from pyhanko.pdf_utils.misc import PdfError, PdfReadError, PdfWriteError
+from pyhanko.pdf_utils.misc import PdfReadError, PdfWriteError
 from pyhanko.pdf_utils.reader import PdfFileReader
 from pyhanko.pdf_utils.writer import PdfFileWriter
 from pyhanko.sign import fields, signers
 from pyhanko.sign.fields import InvisSigSettings, VisibleSigSettings
 from pyhanko.sign.general import SigningError
-
 from pyhanko_certvalidator.registry import SimpleCertificateStore
-
-from .samples import (
+from pyhanko_testing_commons.test_data.samples import (
     MINIMAL,
     MINIMAL_ONE_FIELD,
     MINIMAL_TWO_FIELDS,
@@ -25,12 +23,13 @@ from .samples import (
     TESTING_CA_ERRORS,
     simple_page,
 )
-from .signing_commons import (
+from pyhanko_testing_commons.test_utils.signing_commons import (
     FROM_CA,
     INTERM_CERT,
     ROOT_CERT,
     val_trusted,
 )
+
 from .test_signing import sign_test_files
 
 
@@ -495,23 +494,6 @@ def test_circular_form_tree_sign_deep():
                 ),
                 signer=FROM_CA,
             )
-
-
-def test_visible_field_flags():
-    buf = BytesIO(MINIMAL)
-    w = IncrementalPdfFileWriter(buf)
-    fields.append_signature_field(
-        w,
-        sig_field_spec=fields.SigFieldSpec(
-            sig_field_name='Sig1', box=(20, 20, 80, 40)
-        ),
-    )
-    w.write_in_place()
-
-    r = PdfFileReader(buf)
-    annot = r.root['/Pages']['/Kids'][0]['/Annots'][0]
-    # 'lock' and 'print'
-    assert annot['/F'] == 0b10000100
 
 
 @pytest.mark.parametrize(

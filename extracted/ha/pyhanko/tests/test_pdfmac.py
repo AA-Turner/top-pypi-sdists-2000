@@ -17,7 +17,7 @@ from io import BytesIO
 from typing import Callable, Optional, Type
 
 import pytest
-from asn1crypto import core
+from asn1crypto import cms, core
 from certomancer.integrations.illusionist import Illusionist
 from freezegun import freeze_time
 from pyhanko.pdf_utils import generic, writer
@@ -46,18 +46,19 @@ from pyhanko.sign.validation import (
     validate_pdf_ltv_signature,
 )
 from pyhanko.sign.validation.errors import DisallowedAlgorithmError
-from requests_mock import Mocker
-
 from pyhanko_certvalidator import ValidationContext
-
-from .samples import *
-from .signing_commons import (
+from pyhanko_testing_commons.test_data.samples import (
+    PUBKEY_TEST_DECRYPTER,
+    TESTING_CA_ECDSA,
+)
+from pyhanko_testing_commons.test_utils.signing_commons import (
     DUMMY_TS,
     ECC_ROOT_CERT,
     FROM_ECC_CA,
-    SIMPLE_ECC_V_CONTEXT,
+    simple_ecc_v_context,
     val_trusted,
 )
+from requests_mock import Mocker
 
 DUMMY_PASSWORD = "secret"
 
@@ -327,7 +328,7 @@ def test_sign_crypt_aes256_with_mac(encryption_type):
     r = PdfFileReader(out)
     _dummy_decrypt(r)
     s = r.embedded_signatures[0]
-    val_trusted(s, vc=SIMPLE_ECC_V_CONTEXT())
+    val_trusted(s, vc=simple_ecc_v_context())
     return out
 
 
@@ -349,9 +350,10 @@ def test_signature_nondefault_hash(encryption_type):
     return out
 
 
+# noinspection PyDeprecation
 @pdf_mac_good
 @freeze_time('2020-11-01')
-def test_pdf_mac_pades(requests_mock):
+def test_pdf_mac_pades(requests_mock, expect_deprecation):
     w = init_sample_doc(EncryptionType.STANDARD)
 
     trust_roots = [ECC_ROOT_CERT]
@@ -1135,7 +1137,7 @@ def test_mac_wrong_type(encryption_type):
         nonlocal region_start_lazy
         # we have to get a little creative here, since overriding the /MAC
         # field directly will break the serialisation logic
-        region_start_lazy = lambda: value['/ByteRange'].first_region_len
+        region_start_lazy = lambda: value['/ByteRange'].first_region_len  # noqa
 
     out = _manipulate_standalone(encryption_type, manipulator=manipulate)
 

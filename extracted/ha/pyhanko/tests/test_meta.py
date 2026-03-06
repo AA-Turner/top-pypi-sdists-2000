@@ -13,8 +13,12 @@ from pyhanko.pdf_utils.metadata import model, xmp_xml
 from pyhanko.pdf_utils.misc import StringWithLanguage
 from pyhanko.pdf_utils.reader import HistoricalResolver, PdfFileReader
 from pyhanko.pdf_utils.writer import PdfFileWriter, copy_into_new_writer
-
-from .samples import MINIMAL, PDF_DATA_DIR, VECTOR_IMAGE_PDF
+from pyhanko_testing_commons.test_data.samples import (
+    MINIMAL,
+    PDF_DATA_DIR,
+    TEST_DIR,
+    VECTOR_IMAGE_PDF,
+)
 
 try:
     import zoneinfo
@@ -468,7 +472,7 @@ def test_xmp_str():
     result = xmp_xml.parse_xmp(inp)[0]
     r = repr(result)
     assert "artificial" in r
-    assert "lang': \'en\'" in r
+    assert "lang': 'en'" in r
 
 
 # noinspection HttpUrlsUsage
@@ -962,3 +966,26 @@ def test_bogus_metadata_key_value():
 
     r = PdfFileReader(out)
     assert r._xmp_meta_view() is None
+
+
+@freeze_time('2021-01-05')
+@pytest.mark.parametrize(
+    'bad_file',
+    [
+        'cyclic.xml',
+        'dtd.xml',
+        'external_file.xml',
+        'external.xml',
+        'quadratic.xml',
+        'simple-ns.xml',
+        'simple.xml',
+        'xmlbomb.xml',
+        'xmlbomb2.xml',
+        'xmp-with-harmless-entity.xml',
+    ],
+)
+def test_xmp_with_dangerous_xml(bad_file):
+    xml_file = f"{TEST_DIR}/data/xml/bad-xml/{bad_file}"
+    with open(xml_file, 'rb') as f:
+        with pytest.raises(xmp_xml.XmpXmlProcessingError):
+            xmp_xml.parse_xmp(f)
