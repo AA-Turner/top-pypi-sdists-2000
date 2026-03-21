@@ -1,3 +1,4 @@
+import os
 import setuptools
 from pathlib import Path
 
@@ -11,20 +12,37 @@ classifiers = [
     "Topic :: Utilities",
 ]
 
-version = "0.3.4"
-pymupdf_version = "1.27.1"
-pymupdf_version_tuple = tuple(int(x) for x in pymupdf_version.split("."))
-requires = [f"pymupdf>={pymupdf_version}", "tabulate"]
-extras_require = {
-    "layout": [f"pymupdf-layout>={pymupdf_version}"],
-}
+VERSION = "1.27.2.2"
 
-text = f"# Generated file - do not edit.\nMINIMUM_PYMUPDF_VERSION = {pymupdf_version_tuple}\nVERSION = '{version}'\n"
+# We build with, and run with, a particular PyMuPDF version usually, but not
+# always, the same as our version.
+#
+pymupdf_version = VERSION
+
+# We build with, and run with, a particular pymupdf_layout version usually, but
+# not always, the same as our version.
+#
+pymupdf_layout_version = VERSION
+
+VERSION_TUPLE = tuple(int(x) for x in VERSION.split("."))
+
+PYMUPDF_SETUP_VERSION = os.environ.get('PYMUPDF_SETUP_VERSION')
+if PYMUPDF_SETUP_VERSION:
+    # Allow testing with non-matching pymupdf/layout versions.
+    requires = ["tabulate"]
+else:
+    requires = [
+            f"pymupdf=={pymupdf_version}",
+            f"pymupdf_layout=={pymupdf_layout_version}",
+            "tabulate",
+            ]
+
+text = f"# Generated file - do not edit.\n{VERSION=}\n{VERSION_TUPLE=}\n"
 Path("pymupdf4llm/versions_file.py").write_text(text)
 
 setuptools.setup(
     name="pymupdf4llm",
-    version=version,
+    version=VERSION,
     author="Artifex",
     author_email="support@artifex.com",
     description="PyMuPDF Utilities for LLM/RAG",
@@ -32,7 +50,6 @@ setuptools.setup(
     long_description=readme,
     long_description_content_type="text/markdown",
     install_requires=requires,
-    extras_require=extras_require,
     python_requires=">=3.10",
     license="Dual Licensed - GNU AFFERO GPL 3.0 or Artifex Commercial License",
     url="https://github.com/pymupdf/pymupdf4llm",

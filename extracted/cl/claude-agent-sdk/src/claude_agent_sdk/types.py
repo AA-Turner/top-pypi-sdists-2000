@@ -47,6 +47,10 @@ class AgentDefinition:
     prompt: str
     tools: list[str] | None = None
     model: Literal["sonnet", "opus", "haiku", "inherit"] | None = None
+    skills: list[str] | None = None
+    memory: Literal["user", "project", "local"] | None = None
+    # Each entry is a server name (str) or an inline {name: config} dict.
+    mcpServers: list[str | dict[str, Any]] | None = None  # noqa: N815
 
 
 # Permission Update types (matching TypeScript SDK)
@@ -792,6 +796,7 @@ class AssistantMessage:
     model: str
     parent_tool_use_id: str | None = None
     error: AssistantMessageError | None = None
+    usage: dict[str, Any] | None = None
 
 
 @dataclass
@@ -895,7 +900,61 @@ class StreamEvent:
     parent_tool_use_id: str | None = None
 
 
-Message = UserMessage | AssistantMessage | SystemMessage | ResultMessage | StreamEvent
+# Rate limit types — see https://docs.claude.com/en/docs/claude-code/rate-limits
+RateLimitStatus = Literal["allowed", "allowed_warning", "rejected"]
+RateLimitType = Literal[
+    "five_hour", "seven_day", "seven_day_opus", "seven_day_sonnet", "overage"
+]
+
+
+@dataclass
+class RateLimitInfo:
+    """Rate limit status emitted by the CLI when rate limit state changes.
+
+    Attributes:
+        status: Current rate limit status. ``allowed_warning`` means approaching
+            the limit; ``rejected`` means the limit has been hit.
+        resets_at: Unix timestamp when the rate limit window resets.
+        rate_limit_type: Which rate limit window applies.
+        utilization: Fraction of the rate limit consumed (0.0 - 1.0).
+        overage_status: Status of overage/pay-as-you-go usage if applicable.
+        overage_resets_at: Unix timestamp when overage window resets.
+        overage_disabled_reason: Why overage is unavailable if status is rejected.
+        raw: Full raw dict from the CLI, including any fields not modeled above.
+    """
+
+    status: RateLimitStatus
+    resets_at: int | None = None
+    rate_limit_type: RateLimitType | None = None
+    utilization: float | None = None
+    overage_status: RateLimitStatus | None = None
+    overage_resets_at: int | None = None
+    overage_disabled_reason: str | None = None
+    raw: dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class RateLimitEvent:
+    """Rate limit event emitted when rate limit info changes.
+
+    The CLI emits this whenever the rate limit status transitions (e.g. from
+    ``allowed`` to ``allowed_warning``). Use this to warn users before they
+    hit a hard limit, or to gracefully back off when ``status == "rejected"``.
+    """
+
+    rate_limit_info: RateLimitInfo
+    uuid: str
+    session_id: str
+
+
+Message = (
+    UserMessage
+    | AssistantMessage
+    | SystemMessage
+    | ResultMessage
+    | StreamEvent
+    | RateLimitEvent
+)
 
 
 # ---------------------------------------------------------------------------
@@ -915,21 +974,28 @@ class SDKSessionInfo:
         summary: Display title for the session — custom title, auto-generated
             summary, or first prompt.
         last_modified: Last modified time in milliseconds since epoch.
-        file_size: Session file size in bytes.
-        custom_title: User-set session title via /rename.
+        file_size: Session file size in bytes. Only populated for local
+            JSONL storage; may be ``None`` for remote storage backends.
+        custom_title: Session title — user-set custom title or AI-generated title.
         first_prompt: First meaningful user prompt in the session.
         git_branch: Git branch at the end of the session.
         cwd: Working directory for the session.
+        tag: User-set session tag.
+        created_at: Creation time in milliseconds since epoch, extracted
+            from the first entry's ISO timestamp field. More reliable
+            than stat().birthtime which is unsupported on some filesystems.
     """
 
     session_id: str
     summary: str
     last_modified: int
-    file_size: int
+    file_size: int | None = None
     custom_title: str | None = None
     first_prompt: str | None = None
     git_branch: str | None = None
     cwd: str | None = None
+    tag: str | None = None
+    created_at: int | None = None
 
 
 @dataclass

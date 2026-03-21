@@ -235,7 +235,11 @@ class TestSubprocessCLITransport:
                 assert transport.is_ready()
 
                 await transport.close()
-                mock_process.terminate.assert_called_once()
+                # After stdin EOF, the process is given time to exit
+                # gracefully. Since the mock's wait() returns immediately,
+                # terminate should NOT be called.
+                mock_process.terminate.assert_not_called()
+                mock_process.wait.assert_called()
 
         anyio.run(_test)
 
@@ -441,7 +445,7 @@ class TestSubprocessCLITransport:
                 # Check that custom env var was passed
                 assert env_passed["MY_TEST_VAR"] == test_value
 
-                # Verify SDK identifier is present
+                # Verify SDK entrypoint default is applied (overrides inherited env)
                 assert "CLAUDE_CODE_ENTRYPOINT" in env_passed
                 assert env_passed["CLAUDE_CODE_ENTRYPOINT"] == "sdk-py"
 
@@ -449,6 +453,49 @@ class TestSubprocessCLITransport:
                 if "PATH" in os.environ:
                     assert "PATH" in env_passed
                     assert env_passed["PATH"] == os.environ["PATH"]
+
+        anyio.run(_test)
+
+    def test_caller_can_override_entrypoint(self):
+        """Test that a caller-supplied CLAUDE_CODE_ENTRYPOINT survives the env merge."""
+
+        async def _test():
+            custom_env = {"CLAUDE_CODE_ENTRYPOINT": "custom-caller"}
+            options = make_options(env=custom_env)
+
+            with patch(
+                "anyio.open_process", new_callable=AsyncMock
+            ) as mock_open_process:
+                mock_version_process = MagicMock()
+                mock_version_process.stdout = MagicMock()
+                mock_version_process.stdout.receive = AsyncMock(
+                    return_value=b"2.0.0 (Claude Code)"
+                )
+                mock_version_process.terminate = MagicMock()
+                mock_version_process.wait = AsyncMock()
+
+                mock_process = MagicMock()
+                mock_process.stdout = MagicMock()
+                mock_stdin = MagicMock()
+                mock_stdin.aclose = AsyncMock()
+                mock_process.stdin = mock_stdin
+                mock_process.returncode = None
+
+                mock_open_process.side_effect = [mock_version_process, mock_process]
+
+                transport = SubprocessCLITransport(
+                    prompt="test",
+                    options=options,
+                )
+                await transport.connect()
+
+                env_passed = mock_open_process.call_args_list[1].kwargs["env"]
+
+                # Caller's entrypoint must win over the sdk-py default
+                assert env_passed["CLAUDE_CODE_ENTRYPOINT"] == "custom-caller"
+
+                # CLAUDE_AGENT_SDK_VERSION is still SDK-controlled
+                assert "CLAUDE_AGENT_SDK_VERSION" in env_passed
 
         anyio.run(_test)
 
@@ -829,6 +876,96 @@ class TestSubprocessCLITransport:
 
         anyio.run(_test, backend="trio")
 
+    def test_close_terminates_after_grace_period_timeout(self):
+        """Test that SIGTERM is sent when process doesn't exit within grace period."""
+
+        async def _test():
+            with patch("anyio.open_process") as mock_exec:
+                # Mock version check process
+                mock_version_process = MagicMock()
+                mock_version_process.stdout = MagicMock()
+                mock_version_process.stdout.receive = AsyncMock(
+                    return_value=b"2.0.0 (Claude Code)"
+                )
+                mock_version_process.terminate = MagicMock()
+                mock_version_process.wait = AsyncMock()
+
+                # Mock main process that hangs (never exits on its own)
+                mock_process = MagicMock()
+                mock_process.returncode = None
+                mock_process.terminate = MagicMock()
+                mock_process.stdout = MagicMock()
+                mock_process.stderr = MagicMock()
+
+                mock_stdin = MagicMock()
+                mock_stdin.aclose = AsyncMock()
+                mock_process.stdin = mock_stdin
+
+                # Make wait() hang until cancelled (simulates stuck process)
+                async def hanging_wait():
+                    await anyio.sleep(999)
+
+                mock_process.wait = AsyncMock(side_effect=hanging_wait)
+
+                mock_exec.side_effect = [mock_version_process, mock_process]
+
+                transport = SubprocessCLITransport(
+                    prompt="test",
+                    options=make_options(),
+                )
+
+                await transport.connect()
+
+                # Patch the grace period to be short for testing
+                with patch("anyio.fail_after", side_effect=TimeoutError):
+                    # After terminate, wait should succeed
+                    mock_process.wait = AsyncMock()
+                    await transport.close()
+
+                # Process should have been terminated after timeout
+                mock_process.terminate.assert_called_once()
+
+        anyio.run(_test)
+
+    def test_close_skips_wait_when_already_exited(self):
+        """Test that close() doesn't wait or terminate if process already exited."""
+
+        async def _test():
+            with patch("anyio.open_process") as mock_exec:
+                mock_version_process = MagicMock()
+                mock_version_process.stdout = MagicMock()
+                mock_version_process.stdout.receive = AsyncMock(
+                    return_value=b"2.0.0 (Claude Code)"
+                )
+                mock_version_process.terminate = MagicMock()
+                mock_version_process.wait = AsyncMock()
+
+                mock_process = MagicMock()
+                mock_process.returncode = 0  # Already exited
+                mock_process.terminate = MagicMock()
+                mock_process.wait = AsyncMock()
+                mock_process.stdout = MagicMock()
+                mock_process.stderr = MagicMock()
+
+                mock_stdin = MagicMock()
+                mock_stdin.aclose = AsyncMock()
+                mock_process.stdin = mock_stdin
+
+                mock_exec.side_effect = [mock_version_process, mock_process]
+
+                transport = SubprocessCLITransport(
+                    prompt="test",
+                    options=make_options(),
+                )
+
+                await transport.connect()
+                await transport.close()
+
+                # Should not try to wait or terminate an already-exited process
+                mock_process.terminate.assert_not_called()
+
+        anyio.run(_test)
+
     def test_build_command_agents_always_via_initialize(self):
         """Test that --agents is NEVER passed via CLI.
 
@@ -882,138 +1019,6 @@ class TestSubprocessCLITransport:
         assert "--input-format" in cmd
         assert "stream-json" in cmd
         assert "--print" not in cmd
-
-    def test_include_partial_messages_enables_fgts(self):
-        """Test that include_partial_messages=True sets CLAUDE_CODE_ENABLE_FINE_GRAINED_TOOL_STREAMING.
-
-        --include-partial-messages tells the CLI to forward stream_event messages,
-        but tool input parameters are still buffered by the API unless
-        eager_input_streaming is enabled via this env var.
-        """
-
-        async def _test():
-            options = make_options(include_partial_messages=True)
-
-            with patch(
-                "anyio.open_process", new_callable=AsyncMock
-            ) as mock_open_process:
-                mock_version_process = MagicMock()
-                mock_version_process.stdout = MagicMock()
-                mock_version_process.stdout.receive = AsyncMock(
-                    return_value=b"2.0.0 (Claude Code)"
-                )
-                mock_version_process.terminate = MagicMock()
-                mock_version_process.wait = AsyncMock()
-
-                mock_process = MagicMock()
-                mock_process.stdout = MagicMock()
-                mock_stdin = MagicMock()
-                mock_stdin.aclose = AsyncMock()
-                mock_process.stdin = mock_stdin
-                mock_process.returncode = None
-
-                mock_open_process.side_effect = [mock_version_process, mock_process]
-
-                transport = SubprocessCLITransport(
-                    prompt="test",
-                    options=options,
-                )
-                await transport.connect()
-
-                second_call_kwargs = mock_open_process.call_args_list[1].kwargs
-                env_passed = second_call_kwargs["env"]
-                assert (
-                    env_passed.get("CLAUDE_CODE_ENABLE_FINE_GRAINED_TOOL_STREAMING")
-                    == "1"
-                )
-
-        anyio.run(_test)
-
-    def test_include_partial_messages_false_does_not_set_fgts(self):
-        """Test that include_partial_messages=False does not force-enable FGTS."""
-
-        async def _test():
-            options = make_options(include_partial_messages=False)
-
-            with patch(
-                "anyio.open_process", new_callable=AsyncMock
-            ) as mock_open_process:
-                mock_version_process = MagicMock()
-                mock_version_process.stdout = MagicMock()
-                mock_version_process.stdout.receive = AsyncMock(
-                    return_value=b"2.0.0 (Claude Code)"
-                )
-                mock_version_process.terminate = MagicMock()
-                mock_version_process.wait = AsyncMock()
-
-                mock_process = MagicMock()
-                mock_process.stdout = MagicMock()
-                mock_stdin = MagicMock()
-                mock_stdin.aclose = AsyncMock()
-                mock_process.stdin = mock_stdin
-                mock_process.returncode = None
-
-                mock_open_process.side_effect = [mock_version_process, mock_process]
-
-                transport = SubprocessCLITransport(
-                    prompt="test",
-                    options=options,
-                )
-                await transport.connect()
-
-                second_call_kwargs = mock_open_process.call_args_list[1].kwargs
-                env_passed = second_call_kwargs["env"]
-                # Should not be set (unless the user already had it in their env)
-                assert (
-                    "CLAUDE_CODE_ENABLE_FINE_GRAINED_TOOL_STREAMING" not in env_passed
-                )
-
-        anyio.run(_test)
-
-    def test_user_can_override_fgts_env_var(self):
-        """Test that a user-supplied env var takes precedence over the SDK default."""
-
-        async def _test():
-            options = make_options(
-                include_partial_messages=True,
-                env={"CLAUDE_CODE_ENABLE_FINE_GRAINED_TOOL_STREAMING": "0"},
-            )
-
-            with patch(
-                "anyio.open_process", new_callable=AsyncMock
-            ) as mock_open_process:
-                mock_version_process = MagicMock()
-                mock_version_process.stdout = MagicMock()
-                mock_version_process.stdout.receive = AsyncMock(
-                    return_value=b"2.0.0 (Claude Code)"
-                )
-                mock_version_process.terminate = MagicMock()
-                mock_version_process.wait = AsyncMock()
-
-                mock_process = MagicMock()
-                mock_process.stdout = MagicMock()
-                mock_stdin = MagicMock()
-                mock_stdin.aclose = AsyncMock()
-                mock_process.stdin = mock_stdin
-                mock_process.returncode = None
-
-                mock_open_process.side_effect = [mock_version_process, mock_process]
-
-                transport = SubprocessCLITransport(
-                    prompt="test",
-                    options=options,
-                )
-                await transport.connect()
-
-                second_call_kwargs = mock_open_process.call_args_list[1].kwargs
-                env_passed = second_call_kwargs["env"]
-                # User's explicit "0" should win over SDK default "1"
-                assert (
-                    env_passed.get("CLAUDE_CODE_ENABLE_FINE_GRAINED_TOOL_STREAMING")
-                    == "0"
-                )
-
-        anyio.run(_test)
 
     def test_build_command_large_agents_work(self):
         """Test that large agent definitions work without size limits.

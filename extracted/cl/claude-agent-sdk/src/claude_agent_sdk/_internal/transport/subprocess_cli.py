@@ -342,26 +342,19 @@ class SubprocessCLITransport(Transport):
 
         cmd = self._build_command()
         try:
-            # Merge environment variables: system -> user -> SDK required
+            # Merge environment variables. CLAUDE_CODE_ENTRYPOINT defaults to
+            # sdk-py regardless of inherited process env; options.env can override
+            # it. CLAUDE_AGENT_SDK_VERSION is always set by the SDK.
             process_env = {
                 **os.environ,
-                **self._options.env,  # User-provided env vars
                 "CLAUDE_CODE_ENTRYPOINT": "sdk-py",
+                **self._options.env,
                 "CLAUDE_AGENT_SDK_VERSION": __version__,
             }
 
             # Enable file checkpointing if requested
             if self._options.enable_file_checkpointing:
                 process_env["CLAUDE_CODE_ENABLE_SDK_FILE_CHECKPOINTING"] = "true"
-
-            # Enable fine-grained tool streaming when partial messages are requested.
-            # --include-partial-messages emits stream_event messages, but tool input
-            # parameters are still buffered by the API unless eager_input_streaming is
-            # also enabled at the per-tool level via this env var.
-            if self._options.include_partial_messages:
-                process_env.setdefault(
-                    "CLAUDE_CODE_ENABLE_FINE_GRAINED_TOOL_STREAMING", "1"
-                )
 
             if self._cwd:
                 process_env["PWD"] = self._cwd
@@ -472,14 +465,20 @@ class SubprocessCLITransport(Transport):
                 await self._stderr_stream.aclose()
             self._stderr_stream = None
 
-        # Terminate and wait for process
+        # Wait for graceful shutdown after stdin EOF, then terminate if needed.
+        # The subprocess needs time to flush its session file after receiving
+        # EOF on stdin. Without this grace period, SIGTERM can interrupt the
+        # write and cause the last assistant message to be lost (see #625).
         if self._process.returncode is None:
-            with suppress(ProcessLookupError):
-                self._process.terminate()
-                # Wait for process to finish with timeout
-                with suppress(Exception):
-                    # Just try to wait, but don't block if it fails
+            try:
+                with anyio.fail_after(5):
                     await self._process.wait()
+            except TimeoutError:
+                # Graceful shutdown timed out — force terminate
+                with suppress(ProcessLookupError):
+                    self._process.terminate()
+                    with suppress(Exception):
+                        await self._process.wait()
 
         self._process = None
         self._stdout_stream = None
