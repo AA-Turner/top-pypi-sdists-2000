@@ -9,13 +9,13 @@ from unittest.mock import MagicMock
 
 from code2flow import code2flow, engine, model
 
-engine.logging = MagicMock()
+engine.logging = MagicMock()  # ty:ignore[invalid-assignment]
 
 
-model.TRUNK_COLOR = "#fca311"
-model.LEAF_COLOR = "#98c1d9"
+model.TRUNK_COLOR = "#fca311"  # ty:ignore[invalid-assignment]
+model.LEAF_COLOR = "#98c1d9"  # ty:ignore[invalid-assignment]
 model.EDGE_COLORS = ["#b8b8ff"] * 8
-model.NODE_COLOR = "#e5e5e5"
+model.NODE_COLOR = "#e5e5e5"  # ty:ignore[invalid-assignment]
 
 
 def _render_call_graph(module: Path) -> None:
@@ -68,7 +68,7 @@ def render_internal_api(heading_level: int = 4) -> None:
         heading_level: The initial level of Markdown headings.
     """
     root = Path(os.environ["MKDOCS_CONFIG_DIR"])
-    src = root / "src"
+    src = root / "packages" / "griffelib" / "src"
     internal_api = src / "griffe" / "_internal"
     print(_comment_block(internal_api / "__init__.py"))
     _render_api(internal_api, internal_api, heading_level)
@@ -81,7 +81,7 @@ def render_public_api(heading_level: int = 4) -> None:
         heading_level: The initial level of Markdown headings.
     """
     root = Path(os.environ["MKDOCS_CONFIG_DIR"])
-    src = root / "src"
+    src = root / "packages" / "griffelib" / "src"
     public_api = src / "griffe"
     print(f"{'#' * heading_level} `griffe`\n")
     print(_comment_block(public_api / "__init__.py"))
@@ -94,7 +94,7 @@ def render_entrypoint(heading_level: int = 4) -> None:
         heading_level: The initial level of Markdown headings.
     """
     root = Path(os.environ["MKDOCS_CONFIG_DIR"])
-    src = root / "src"
+    src = root / "packages" / "griffelib" / "src"
     public_api = src / "griffe"
     print(f"{'#' * heading_level} `griffe.__main__`\n")
     print(_comment_block(public_api / "__main__.py"))

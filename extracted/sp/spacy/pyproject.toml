@@ -5,7 +5,7 @@ requires = [
     "cymem>=2.0.2,<2.1.0",
     "preshed>=3.0.2,<3.1.0",
     "murmurhash>=0.28.0,<1.1.0",
-    "thinc>=8.3.4,<8.4.0",
+    "thinc>=8.3.12,<8.4.0",
     "numpy>=2.0.0,<3.0.0"
 ]
 build-backend = "setuptools.build_meta"
@@ -62,5 +62,13 @@ repair-wheel-command = "delocate-wheel --require-archs {delocate_archs} -w {dest
 [tool.cibuildwheel.pyodide]
 
 
-[tool.isort]
-profile = "black"
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "C", "B", "B9"]
+ignore = ["E203", "E266", "E501", "E731", "E741", "F541"]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+split-on-trailing-comma = true

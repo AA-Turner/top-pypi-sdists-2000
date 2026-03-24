@@ -1,56 +1,40 @@
 [build-system]
-requires = [
-    "pdm-backend",
-]
-build-backend = "pdm.backend"
+# pdm-backend is left here as a dependency of the version discovery script currently in use.
+# It may be removed in the future. See mkdocstrings/griffe#430
+requires = ["hatchling", "pdm-backend", "uv-dynamic-versioning>=0.7.0"]
+build-backend = "hatchling.build"
 
 [project]
 name = "griffe"
 description = "Signatures for entire Python programs. Extract the structure, the frame, the skeleton of your project, to generate API documentation or find breaking changes in your API."
-authors = [
-    { name = "Timothée Mazzucotelli", email = "dev@pawamoy.fr" },
-]
+authors = [{name = "Timothée Mazzucotelli", email = "dev@pawamoy.fr"}]
 license = "ISC"
-license-files = [
-    "LICENSE",
-]
+license-files = ["LICENSE"]
 readme = "README.md"
 requires-python = ">=3.10"
-keywords = [
-    "api",
-    "signature",
-    "breaking-changes",
-    "static-analysis",
-    "dynamic-analysis",
-]
-dynamic = []
+keywords = ["api", "signature", "breaking-changes", "static-analysis", "dynamic-analysis"]
+dynamic = ["version", "dependencies", "optional-dependencies"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
+    # YORE: EOL 3.10: Remove line.
     "Programming Language :: Python :: 3.10",
+    # YORE: EOL 3.11: Remove line.
     "Programming Language :: Python :: 3.11",
+    # YORE: EOL 3.12: Remove line.
     "Programming Language :: Python :: 3.12",
+    # YORE: EOL 3.13: Remove line.
     "Programming Language :: Python :: 3.13",
+    # YORE: EOL 3.14: Remove line.
     "Programming Language :: Python :: 3.14",
     "Topic :: Documentation",
     "Topic :: Software Development",
     "Topic :: Software Development :: Documentation",
     "Topic :: Utilities",
     "Typing :: Typed",
-]
-dependencies = [
-    "colorama>=0.4",
-]
-version = "1.15.0"
-
-[project.optional-dependencies]
-pypi = [
-    "pip>=24.0",
-    "platformdirs>=4.2",
-    "wheel>=0.42",
 ]
 
 [project.urls]
@@ -64,40 +48,49 @@ Gitter = "https://gitter.im/mkdocstrings/griffe"
 Funding = "https://github.com/sponsors/pawamoy"
 
 [project.scripts]
-griffe = "griffe:main"
+griffe = "griffecli:main"
 
-[tool.pdm.version]
-source = "call"
-getter = "scripts.get_version:get_version"
+[tool.uv-dynamic-versioning]
+pattern = '(?P<base>\d+\.\d+\.\d+)'
 
-[tool.pdm.build]
-excludes = [
-    "**/.pytest_cache",
-    "**/.mypy_cache",
-]
-source-includes = [
-    "config",
-    "docs",
-    "scripts",
-    "share",
-    "tests",
-    "duties.py",
-    "mkdocs.yml",
-    "*.md",
-    "LICENSE",
+[tool.hatch.version]
+source = "code"
+path = "scripts/get_version.py"
+expression = "get_version()"
+
+[tool.hatch.metadata.hooks.uv-dynamic-versioning]
+# Dependencies are dynamically versioned; {{version}} is substituted at build time.
+# This ensures griffe, griffelib, and griffecli versions are always 1:1.
+dependencies = ["griffelib=={{version}}", "griffecli=={{version}}"]
+
+[tool.hatch.metadata.hooks.uv-dynamic-versioning.optional-dependencies]
+# The 'pypi' extra re-exports griffelib[pypi] for backward compatibility.
+pypi = ["griffelib[pypi]=={{version}}"]
+
+[tool.hatch.build]
+# Include as much as possible in the source distribution, to help redistributors.
+ignore-vcs = true
+exclude = [".github"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/config",
+    "/docs",
+    "/scripts",
+    "/share",
+    "/tests",
+    "/duties.py",
+    "/mkdocs.yml",
+    "/*.md",
+    "/LICENSE",
 ]
 
-[tool.pdm.build.wheel-data]
-data = [
-    { path = "share/**/*", relative-to = "." },
-]
-
-[tool.uv]
-default-groups = [
-    "maintain",
-    "ci",
-    "docs",
-]
+[tool.hatch.build.targets.wheel]
+# Manual pages can be included in the wheel.
+# Depending on the installation tool, they will be accessible to users.
+# pipx supports it, uv does not yet, see https://github.com/astral-sh/uv/issues/4731.
+bypass-selection = true
+artifacts = ["share/**/*"]
 
 [dependency-groups]
 maintain = [
@@ -117,12 +110,12 @@ ci = [
     "pytest-gitconfig>=0.8.0",
     "pytest-randomly>=3.15",
     "pytest-xdist>=3.6",
-    "mypy>=1.10",
     "ruff>=0.4",
+    "ty>=0.0.14",
     "types-markdown>=3.6",
     "types-pyyaml>=6.0",
 ]
-docs = [
+ docs = [
     "code2flow>=2.5",
     "griffe-inherited-docstrings>=1.1.2",
     "markdown-callouts>=0.4",
@@ -138,5 +131,14 @@ docs = [
     "mkdocs-redirects>=1.2",
     "mkdocstrings[python]>=0.29",
     "pydeps>=1.12",
+    # YORE: EOL 3.10: Remove line.
     "tomli>=2.0; python_version < '3.11'",
 ]
+
+[tool.uv]
+default-groups = ["maintain", "ci", "docs"]
+workspace = { members = ["packages/*"] }
+
+[tool.uv.sources]
+griffelib = { workspace = true }
+griffecli = { workspace = true }

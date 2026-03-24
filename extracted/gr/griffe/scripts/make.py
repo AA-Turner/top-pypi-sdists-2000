@@ -7,10 +7,10 @@ import subprocess
 import sys
 from contextlib import contextmanager
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Callable
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Callable, Iterator
 
 
 PYTHON_VERSIONS = os.getenv("PYTHON_VERSIONS", "3.10 3.11 3.12 3.13 3.14 3.15").split()
@@ -70,7 +70,7 @@ def _run(version: str, cmd: str, *args: str, **kwargs: Any) -> None:
 
 def _command(name: str) -> Callable[[Callable[..., None]], Callable[..., None]]:
     def wrapper(func: Callable[..., None]) -> Callable[..., None]:
-        func.__cmdname__ = name  # type: ignore[attr-defined]
+        func.__cmdname__ = name  # ty:ignore[unresolved-attribute]
         _commands.append(func)
         return func
 
@@ -101,7 +101,7 @@ def help(*args: str) -> None:
     else:
         print("Available commands", flush=True)
         for cmd in _commands:
-            print(f"  {cmd.__cmdname__:21} {cmd.__doc__.splitlines()[0]}", flush=True)  # type: ignore[attr-defined,union-attr]
+            print(f"  {cmd.__cmdname__:21} {cmd.__doc__.splitlines()[0]}", flush=True)
         if Path(".venv").exists():
             print("\nAvailable tasks", flush=True)
             run("duty", "--list")
@@ -253,7 +253,7 @@ def clean() -> None:
     for path in paths_to_clean:
         _shell(f"rm -rf {path}")
 
-    cache_dirs = [".cache", ".pytest_cache", ".mypy_cache", ".ruff_cache", "__pycache__"]
+    cache_dirs = {".cache", ".pytest_cache", ".ruff_cache", "__pycache__"}
     for dirpath in Path().rglob("*/"):
         if dirpath.parts[0] not in (".venv", ".venvs") and dirpath.name in cache_dirs:
             shutil.rmtree(dirpath, ignore_errors=True)
@@ -297,28 +297,28 @@ def main(args: list[str]) -> int:
             if not args:
                 print("make: run: missing command", file=sys.stderr)
                 return 1
-            run(*args)  # ty: ignore[missing-argument]
+            run(*args)
             return 0
 
         if cmd == "multirun":
             if not args:
                 print("make: run: missing command", file=sys.stderr)
                 return 1
-            multirun(*args)  # ty: ignore[missing-argument]
+            multirun(*args)
             return 0
 
         if cmd == "allrun":
             if not args:
                 print("make: run: missing command", file=sys.stderr)
                 return 1
-            allrun(*args)  # ty: ignore[missing-argument]
+            allrun(*args)
             return 0
 
         if cmd.startswith("3."):
             if not args:
                 print("make: run: missing command", file=sys.stderr)
                 return 1
-            run3x(cmd, *args)  # ty: ignore[missing-argument]
+            run3x(cmd, *args)
             return 0
 
         opts = []

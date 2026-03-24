@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import sys
 from ast import PyCF_ONLY_AST
 
 import pytest
@@ -51,6 +52,8 @@ syntax_examples = [
     "call(something=something)",
     # Strings.
     "f'a {round(key, 2)} {z}'",
+    # YORE: EOL 3.13: Replace line with `"t'a {round(key, 2)} {z}'",`.
+    *(["t'a {round(key, 2)} {z}'"] if sys.version_info >= (3, 14) else []),
     # Slices.
     "o[x]",
     "o[x, y]",
@@ -116,7 +119,7 @@ def test_relative_to_absolute_imports(code: str, path: str, is_package: bool, ex
         is_package: Whether the module is a package (or subpackage) (parametrized).
         expected: The parametrized expected absolute path.
     """
-    node = compile(code, mode="exec", filename="<>", flags=PyCF_ONLY_AST).body[0]  # type: ignore[attr-defined]
+    node = compile(code, mode="exec", filename="<>", flags=PyCF_ONLY_AST).body[0]  # ty:ignore[unresolved-attribute]
     module = module_vtree(path, leaf_package=is_package, return_leaf=True)
     for name in node.names:
         assert relative_to_absolute(node, name, module) == expected
@@ -228,7 +231,7 @@ def test_default_value_from_nodes(default: str) -> None:
     module_defs = f"def f(x={default}):\n    return x"
     with temporary_visited_module(module_defs) as module:
         assert "f" in module.members
-        params = module.members["f"].parameters  # type: ignore[union-attr]
+        params = module.members["f"].parameters  # ty:ignore[unresolved-attribute]
         assert len(params) == 1
         assert str(params[0].default) == default
 
