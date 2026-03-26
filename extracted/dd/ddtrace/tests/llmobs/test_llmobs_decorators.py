@@ -269,6 +269,98 @@ def test_non_llm_decorators_with_error(llmobs, llmobs_events, test_spans):
         )
 
 
+def test_llm_decorator_automatic_output_annotation(llmobs, llmobs_events, test_spans):
+    """Test that the @llm decorator automatically annotates the return value as output."""
+
+    @llm(model_name="test_model", model_provider="test_provider", name="test_function")
+    def f():
+        return "test_response"
+
+    f()
+    span = test_spans.pop()[0]
+    assert llmobs_events[0] == _expected_llmobs_llm_span_event(
+        span,
+        "llm",
+        model_name="test_model",
+        model_provider="test_provider",
+        output_messages=[{"content": "test_response", "role": ""}],
+    )
+
+
+async def test_llm_decorator_automatic_output_annotation_async(llmobs, llmobs_events, test_spans):
+    """Test that the @llm decorator automatically annotates the return value as output for async functions."""
+
+    @llm(model_name="test_model", model_provider="test_provider", name="test_function")
+    async def f():
+        return "test_response"
+
+    await f()
+    span = test_spans.pop()[0]
+    assert llmobs_events[0] == _expected_llmobs_llm_span_event(
+        span,
+        "llm",
+        model_name="test_model",
+        model_provider="test_provider",
+        output_messages=[{"content": "test_response", "role": ""}],
+    )
+
+
+def test_llm_decorator_unparseable_output_logs_warning_not_raises(llmobs, llmobs_events, mock_logs, test_spans):
+    """Test that @llm decorator does not raise when return value cannot be parsed as messages."""
+
+    @llm(model_name="test_model", model_provider="test_provider", name="test_function")
+    def f():
+        return 42  # int cannot be parsed as LLM messages
+
+    f()  # should not raise LLMObsAnnotateSpanError
+    mock_logs.debug.assert_called_once_with(
+        "Failed to auto-annotate output for @%s decorated function. "
+        "Use LLMObs.annotate() to manually annotate the output.",
+        "llm",
+    )
+    test_spans.pop()
+    # span is still created, output messages are not set
+    assert llmobs_events[0].get("output", {}) == {}
+
+
+async def test_llm_decorator_unparseable_output_logs_warning_not_raises_async(
+    llmobs, llmobs_events, mock_logs, test_spans
+):
+    """Test that async @llm decorator does not raise when return value cannot be parsed as messages."""
+
+    @llm(model_name="test_model", model_provider="test_provider", name="test_function")
+    async def f():
+        return 42  # int cannot be parsed as LLM messages
+
+    await f()  # should not raise LLMObsAnnotateSpanError
+    mock_logs.debug.assert_called_once_with(
+        "Failed to auto-annotate output for @%s decorated function. "
+        "Use LLMObs.annotate() to manually annotate the output.",
+        "llm",
+    )
+    test_spans.pop()
+    assert llmobs_events[0].get("output", {}) == {}
+
+
+def test_llm_decorator_manual_annotation_not_overridden(llmobs, llmobs_events, test_spans):
+    """Test that manual LLMObs.annotate() is not overridden by automatic output annotation."""
+
+    @llm(model_name="test_model", model_provider="test_provider", name="test_function")
+    def f():
+        llmobs.annotate(output_data=[{"content": "manual_response"}])
+        return "auto_response"
+
+    f()
+    span = test_spans.pop()[0]
+    assert llmobs_events[0] == _expected_llmobs_llm_span_event(
+        span,
+        "llm",
+        model_name="test_model",
+        model_provider="test_provider",
+        output_messages=[{"content": "manual_response", "role": ""}],
+    )
+
+
 def test_llm_annotate(llmobs, llmobs_events, test_spans):
     @llm(model_name="test_model", model_provider="test_provider", name="test_function", session_id="test_session_id")
     def f():
