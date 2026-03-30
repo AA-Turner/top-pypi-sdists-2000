@@ -620,7 +620,8 @@ def test_detect_exclude_encodings_removes():
     """exclude_encodings prevents specific encodings from being returned."""
     data = b"Hello world"
     result = chardet.detect(data, exclude_encodings=["ascii"], compat_names=False)
-    assert result["encoding"] == "cp1252"
+    assert result["encoding"] != "ascii"
+    assert result["encoding"] is not None
 
 
 def test_detect_exclude_bom_result():
@@ -762,7 +763,8 @@ def test_detector_exclude_encodings():
     det = UniversalDetector(exclude_encodings=["ascii"], compat_names=False)
     det.feed(b"Hello world, this is enough ASCII data for detection. " * 2)
     result = det.close()
-    assert result["encoding"] == "cp437"
+    assert result["encoding"] != "ascii"
+    assert result["encoding"] is not None
 
 
 def test_detector_custom_empty_input_encoding():

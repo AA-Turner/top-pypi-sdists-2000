@@ -214,6 +214,7 @@ def _get_detector_version(python_executable: str, detector_type: str) -> str:
         "chardet": "chardet",
         "charset-normalizer": "charset_normalizer",
         "cchardet": "cchardet",
+        "charade": "charade",
     }[detector_type]
     script = f"import {module}; print({module}.__version__)"
     fd, tmp_path = tempfile.mkstemp(suffix=".py")
@@ -266,6 +267,7 @@ def _get_build_tag(python_executable: str, detector_type: str) -> str:
         "chardet": "chardet",
         "charset-normalizer": "charset_normalizer",
         "cchardet": "cchardet",
+        "charade": "charade",
     }[detector_type]
     # Look for .so/.pyd files under the package directory
     script = (
@@ -332,6 +334,7 @@ def _resolve_version_without_venv(
         "charset-normalizer": "charset-normalizer",
         "cchardet": "faust-cchardet",
         "chardet": "chardet",
+        "charade": "charade",
     }.get(detector_type, detector_type)
     try:
         result = subprocess.run(
@@ -366,6 +369,8 @@ def _predict_build_tag(
       -> ``"mypyc"``, ``"pure"`` on PyPy.
     """
     if pure:
+        return "pure"
+    if detector_type == "charade":
         return "pure"
     if mypyc:
         return "mypyc"
@@ -414,7 +419,7 @@ def _has_full_cache(  # noqa: PLR0913
     python_tag: str,
     build_tag: str,
     *,
-    skip_memory: bool = False,
+    skip_memory: bool = True,
     threads: int = 1,
 ) -> bool:
     """Return ``True`` if all required cache files exist."""
@@ -520,7 +525,7 @@ def _run_timing_subprocess(  # noqa: PLR0913
     data_dir : str
         Path to the test data directory.
     detector_type : str
-        One of ``"chardet"``, ``"charset-normalizer"``, or ``"cchardet"``.
+        One of ``"chardet"``, ``"charset-normalizer"``, ``"cchardet"``, or ``"charade"``.
     encoding_era : str
         For ``"chardet"`` only -- ``"all"``, ``"modern_web"``, or ``"none"``.
     pure : bool
@@ -756,7 +761,7 @@ def run_comparison(  # noqa: PLR0913
     build_tags: dict[str, str] | None = None,
     use_cache: bool = True,
     benchmark_hash: str = "",
-    no_memory: bool = False,
+    memory: bool = False,
     threads: int = 1,
     cn_dataset: bool = False,
 ) -> None:
@@ -780,8 +785,8 @@ def run_comparison(  # noqa: PLR0913
         Whether to use cached results.
     benchmark_hash : str
         Hash of benchmark source files for cache invalidation.
-    no_memory : bool
-        Skip memory benchmarks when ``True``.
+    memory : bool
+        Run memory benchmarks when ``True``.
     threads : int
         Number of detection threads to pass to ``benchmark_time.py``.
 
@@ -973,13 +978,13 @@ def run_comparison(  # noqa: PLR0913
     total = stats[detectors[0][0]]["total"]
 
     # --- Sequential memory benchmarks (with caching) ---
-    memory: dict[str, dict] = {}
-    if no_memory:
-        print("Skipping memory benchmarks (--no-memory)")
+    memory_results: dict[str, dict] = {}
+    if not memory:
+        print("Skipping memory benchmarks (pass --memory to include)")
     else:
         print("Measuring memory (isolated subprocesses)...")
     for label, detector_type, python_exe, era in detectors:
-        if no_memory:
+        if not memory:
             continue
         version = detector_versions.get(label, "unknown")
         py_tag = python_tags.get(label, "unknown")
@@ -993,11 +998,11 @@ def run_comparison(  # noqa: PLR0913
             cached = _load_cached(cache_dir, fname)
             if cached is not None:
                 print(f"  Using cached memory results for {label}")
-                memory[label] = cached
+                memory_results[label] = cached
                 continue
 
         print(f"  Measuring memory for {label} ...")
-        memory[label] = _measure_memory_subprocess(
+        memory_results[label] = _measure_memory_subprocess(
             detector_type,
             data_dir_str,
             python_executable=python_exe,
@@ -1010,7 +1015,7 @@ def run_comparison(  # noqa: PLR0913
             fname = _cache_filename(
                 detector_type, version, benchmark_hash, py_tag, b_tag, "memory"
             )
-            _save_cache(cache_dir, fname, memory[label])
+            _save_cache(cache_dir, fname, memory_results[label])
 
     # ===================================================================
     # Report
@@ -1072,7 +1077,7 @@ def run_comparison(  # noqa: PLR0913
         )
 
     # -- Startup & memory --
-    section_title = "STARTUP" if no_memory else "STARTUP & MEMORY"
+    section_title = "STARTUP & MEMORY" if memory else "STARTUP"
     print()
     print("=" * 100)
     print(f"{section_title} (isolated subprocesses)")
@@ -1082,7 +1087,7 @@ def run_comparison(  # noqa: PLR0913
         f"{'time to 1st result (ms)':>24}"
     )
     sep = f"  {'-' * max_label}  {'-' * 12}  {'-' * 16}  {'-' * 24}"
-    if not no_memory:
+    if memory:
         header += (
             f"  {'traced import':>14} {'traced peak':>14}  "
             f"{'RSS before':>12} {'RSS after':>12}"
@@ -1098,8 +1103,8 @@ def run_comparison(  # noqa: PLR0913
             f"{first_detect * 1000:>15.1f}ms  "
             f"{(import_times[label] + first_detect) * 1000:>23.1f}ms"
         )
-        if not no_memory:
-            sub = memory[label]
+        if memory:
+            sub = memory_results[label]
             row += (
                 f"  {_format_bytes(sub['traced_import']):>14} "
                 f"{_format_bytes(sub['traced_peak']):>14}  "
@@ -1108,7 +1113,7 @@ def run_comparison(  # noqa: PLR0913
             )
         print(row)
     print()
-    if not no_memory:
+    if memory:
         print("  traced = tracemalloc (CPython allocations only)")
         print(
             "  RSS    = resident set size"
@@ -1368,6 +1373,11 @@ def _run_for_python_version(  # noqa: PLR0913
             )
         )
 
+    venv_specs.extend(
+        (f"charade {version}", [f"charade=={version}"], None, "charade", python_version)
+        for version in args.charade
+    )
+
     if args.cchardet:
         venv_specs.append(
             ("cchardet", ["faust-cchardet"], None, "cchardet", python_version)
@@ -1414,7 +1424,7 @@ def _run_for_python_version(  # noqa: PLR0913
             benchmark_hash,
             python_tags[label],
             build_tags[label],
-            skip_memory=args.no_memory,
+            skip_memory=not args.memory,
             threads=args.threads,
         ):
             print(f"  {label}: full cache hit, skipping venv creation")
@@ -1497,7 +1507,26 @@ def _run_for_python_version(  # noqa: PLR0913
             old_label = spec[0]
             det_type = spec[3]
             label = label_remap.get(old_label, old_label)
-            # Cached detectors get dummy exe; run_comparison loads from cache
+            # Cached detectors get dummy exe; run_comparison loads from cache.
+            # Skip detectors whose venv failed to create and have no cache.
+            if label not in venvs:
+                cache_dir = _get_cache_dir() if use_cache else None
+                if cache_dir is None:
+                    print(f"  Skipping {label} (no venv and no cache)")
+                    continue
+                # Check if there's a cached result we can use
+                version = detector_versions.get(label, "unknown")
+                fname = _cache_filename(
+                    det_type,
+                    version,
+                    benchmark_hash,
+                    pre_python_tag,
+                    _predict_build_tag(det_type, pure=args.pure, mypyc=args.mypyc),
+                    "time",
+                )
+                if not _load_cached(cache_dir, fname):
+                    print(f"  Skipping {label} (no venv and no cache)")
+                    continue
             python_exe = str(venvs[label][1]) if label in venvs else "/dev/null"
             version = detector_versions.get(label, "unknown")
             if det_type == "chardet":
@@ -1518,7 +1547,7 @@ def _run_for_python_version(  # noqa: PLR0913
             build_tags=build_tags,
             use_cache=use_cache,
             benchmark_hash=benchmark_hash,
-            no_memory=args.no_memory,
+            memory=args.memory,
             threads=args.threads,
             cn_dataset=args.cn_dataset,
         )
@@ -1553,6 +1582,13 @@ if __name__ == "__main__":
         help="Include cchardet (faust-cchardet) in the comparison",
     )
     parser.add_argument(
+        "--charade",
+        action="append",
+        default=[],
+        metavar="VERSION",
+        help="Charade version to include (repeatable, e.g. --charade 1.0.3)",
+    )
+    parser.add_argument(
         "--cn",
         "--charset-normalizer",
         action="store_true",
@@ -1577,10 +1613,10 @@ if __name__ == "__main__":
         help="Force re-run, ignoring cached results",
     )
     parser.add_argument(
-        "--no-memory",
+        "--memory",
         action="store_true",
         default=False,
-        help="Skip memory benchmarks (much faster runs)",
+        help="Include memory benchmarks (slow, only needed for release notes)",
     )
     parser.add_argument(
         "--pure",
