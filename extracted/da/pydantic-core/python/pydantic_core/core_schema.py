@@ -7,7 +7,7 @@ from __future__ import annotations as _annotations
 
 import sys
 import warnings
-from collections.abc import Hashable, Mapping
+from collections.abc import Generator, Hashable, Mapping
 from datetime import date, datetime, time, timedelta
 from decimal import Decimal
 from re import Pattern
@@ -505,11 +505,17 @@ class ComputedField(TypedDict, total=False):
     property_name: Required[str]
     return_schema: Required[CoreSchema]
     alias: str
+    serialization_exclude_if: Callable[[Any], bool]
     metadata: dict[str, Any]
 
 
 def computed_field(
-    property_name: str, return_schema: CoreSchema, *, alias: str | None = None, metadata: dict[str, Any] | None = None
+    property_name: str,
+    return_schema: CoreSchema,
+    *,
+    alias: str | None = None,
+    serialization_exclude_if: Callable[[Any], bool] | None = None,
+    metadata: dict[str, Any] | None = None,
 ) -> ComputedField:
     """
     ComputedFields are properties of a model or dataclass that are included in serialization.
@@ -521,7 +527,12 @@ def computed_field(
         metadata: Any other information you want to include with the schema, not used by pydantic-core
     """
     return _dict_not_none(
-        type='computed-field', property_name=property_name, return_schema=return_schema, alias=alias, metadata=metadata
+        type='computed-field',
+        property_name=property_name,
+        return_schema=return_schema,
+        alias=alias,
+        serialization_exclude_if=serialization_exclude_if,
+        metadata=metadata,
     )
 
 
@@ -4261,6 +4272,7 @@ ErrorType = Literal[
     'string_too_short',
     'string_too_long',
     'string_pattern_mismatch',
+    'string_not_ascii',
     'enum',
     'dict_type',
     'mapping_type',
@@ -4336,6 +4348,15 @@ ErrorType = Literal[
 
 def _dict_not_none(**kwargs: Any) -> Any:
     return {k: v for k, v in kwargs.items() if v is not None}
+
+
+def iter_union_choices(union_schema: UnionSchema) -> Generator[CoreSchema]:
+    """Iterate over the choices of a `'union'` schema."""
+    for choice in union_schema['choices']:
+        if isinstance(choice, tuple):
+            yield choice[0]
+        else:
+            yield choice
 
 
 ###############################################################################
