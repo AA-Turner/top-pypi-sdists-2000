@@ -372,7 +372,10 @@ class Element:
         arguments = [cdp.runtime.CallArgument(
             object_id=self._remote_object.object_id
         )]
-        await self.flash_async(0.25)
+        script = 'sessionStorage.getItem("pxsid") !== null;'
+        using_px = await self.tab.evaluate(script)
+        if not using_px:
+            await self.flash_async(0.25)
         await self._tab.send(
             cdp.runtime.call_function_on(
                 "(el) => el.click()",
@@ -464,8 +467,8 @@ class Element:
                 raise Exception("Could not find position for %s " % self)
             pos = Position(quads[0])
             if abs:
-                scroll_y = (await self.tab.evaluate("window.scrollY")).value
-                scroll_x = (await self.tab.evaluate("window.scrollX")).value
+                scroll_y = (await self.tab.evaluate("window.scrollY"))
+                scroll_x = (await self.tab.evaluate("window.scrollX"))
                 abs_x = pos.left + scroll_x + (pos.width / 2)
                 abs_y = pos.top + scroll_y + (pos.height / 2)
                 pos.abs_x = abs_x
@@ -501,8 +504,11 @@ class Element:
             logger.warning("Could not calculate box model for %s", self)
             return
         logger.debug("Clicking on location: %.2f, %.2f" % center)
-        await asyncio.gather(
-            self.flash_async(0.25),
+        script = 'sessionStorage.getItem("pxsid") !== null;'
+        using_px = await self.tab.evaluate(script)
+        if not using_px:
+            asyncio.create_task(self.flash_async(0.25))
+        asyncio.create_task(
             self._tab.send(
                 cdp.input_.dispatch_mouse_event(
                     "mousePressed",
@@ -514,6 +520,8 @@ class Element:
                     click_count=1,
                 )
             ),
+        )
+        asyncio.create_task(
             self._tab.send(
                 cdp.input_.dispatch_mouse_event(
                     "mouseReleased",
@@ -558,11 +566,16 @@ class Element:
             logger.debug("Clicking on location: %.2f, %.2f" % center_pos)
         else:
             logger.debug("Clicking on location: %.2f, %.2f" % (x_pos, y_pos))
-        await asyncio.gather(
-            self.flash_async(
-                x_offset=x_offset - int(width / 2),
-                y_offset=y_offset - int(height / 2),
-            ),
+        script = 'sessionStorage.getItem("pxsid") !== null;'
+        using_px = await self.tab.evaluate(script)
+        if not using_px:
+            asyncio.create_task(
+                self.flash_async(
+                    x_offset=x_offset - (width / 2),
+                    y_offset=y_offset - (height / 2),
+                ),
+            )
+        asyncio.create_task(
             self._tab.send(
                 cdp.input_.dispatch_mouse_event(
                     "mousePressed",
@@ -573,7 +586,9 @@ class Element:
                     buttons=buttons,
                     click_count=1,
                 )
-            ),
+            )
+        )
+        asyncio.create_task(
             self._tab.send(
                 cdp.input_.dispatch_mouse_event(
                     "mouseReleased",
@@ -602,16 +617,13 @@ class Element:
             *center,
             self,
         )
-        await self._tab.send(
-            cdp.input_.dispatch_mouse_event(
-                "mouseMoved", x=center[0], y=center[1]
-            )
-        )
-        await self._tab.sleep(0.05)
-        await self._tab.send(
-            cdp.input_.dispatch_mouse_event(
-                "mouseReleased", x=center[0], y=center[1]
-            )
+        await asyncio.gather(
+            self._tab.send(
+                cdp.input_.dispatch_mouse_event(
+                    "mouseMoved", x=center[0], y=center[1]
+                )
+            ),
+            self._tab.sleep(0.05),
         )
 
     async def mouse_drag_async(
@@ -704,6 +716,31 @@ class Element:
                 button=cdp.input_.MouseButton("left"),
             )
         )
+
+    async def is_in_viewport_async(self):
+        try:
+            layout = await self.tab.send(
+                cdp.page.get_layout_metrics()
+            )
+            viewport = layout[4]
+            v_left = viewport.page_x
+            v_top = viewport.page_y
+            v_right = v_left + viewport.client_width
+            v_bottom = v_top + viewport.client_height
+            box = await self.tab.send(
+                cdp.dom.get_box_model(backend_node_id=self.backend_node_id)
+            )
+            quad = box.content
+            e_left = min(quad[0], quad[2], quad[4], quad[6])
+            e_top = min(quad[1], quad[3], quad[5], quad[7])
+            e_right = max(quad[0], quad[2], quad[4], quad[6])
+            e_bottom = max(quad[1], quad[3], quad[5], quad[7])
+            return (
+                e_left >= v_left and e_right <= v_right
+                and e_top >= v_top and e_bottom <= v_bottom
+            )
+        except Exception:
+            return False
 
     async def scroll_into_view_async(self):
         """Scrolls element into view."""

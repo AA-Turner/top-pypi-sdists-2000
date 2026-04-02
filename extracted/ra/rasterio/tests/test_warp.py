@@ -17,7 +17,7 @@ from rasterio.crs import CRS
 from rasterio.enums import Resampling
 from rasterio.errors import (
     CRSError,
-    GDALVersionError,
+    RasterioDeprecationWarning,
     TransformError,
     RPCError,
     WarpOperationError,
@@ -34,7 +34,6 @@ from rasterio.warp import (
 from rasterio import windows
 
 from . import rangehttpserver
-from .conftest import gdal_version
 
 log = logging.getLogger(__name__)
 
@@ -56,17 +55,11 @@ def flatten_coords(coordinates):
             yield from flatten_coords(elem)
 
 
-if gdal_version.at_least("3.6"):
-    # GH2662
-    reproj_expected = (
-        ({"CHECK_WITH_INVERT_PROJ": False}, 6646),
-        ({"CHECK_WITH_INVERT_PROJ": True}, 6646),
-    )
-else:
-    reproj_expected = (
-        ({"CHECK_WITH_INVERT_PROJ": False}, 6644),
-        ({"CHECK_WITH_INVERT_PROJ": True}, 6644),
-    )
+# GH2662
+reproj_expected = (
+    ({"CHECK_WITH_INVERT_PROJ": False}, 6646),
+    ({"CHECK_WITH_INVERT_PROJ": True}, 6646),
+)
 
 
 class ReprojectParams:
@@ -130,7 +123,7 @@ class RangeRequestErrorHandler(rangehttpserver.RangeRequestHandler):
             return super().send_head()
         try:
             self.range = rangehttpserver.parse_byte_range(self.headers["Range"])
-        except ValueError as e:
+        except ValueError:
             self.send_error(400, "Invalid byte range")
             return None
         first, last = self.range
@@ -591,10 +584,8 @@ def test_reproject_view():
         resampling=Resampling.nearest,
     )
 
-    expected_sum = 299199
-    if gdal_version.at_least("3.6"):
-        # GH2662
-        expected_sum = 299231
+    # GH2662
+    expected_sum = 299231
     assert (out > 0).sum() == expected_sum
 
 
@@ -1194,34 +1185,38 @@ def polygon_3373():
 
 def test_transform_geom_polygon_cutting(polygon_3373):
     geom = polygon_3373
-    result = transform_geom("EPSG:3373", "EPSG:4326", geom, antimeridian_cutting=True)
+    with pytest.warns(RasterioDeprecationWarning):
+        result = transform_geom("EPSG:3373", "EPSG:4326", geom, antimeridian_cutting=True)
     assert result["type"] == "MultiPolygon"
     assert len(result["coordinates"]) == 2
 
 
 def test_transform_geom_polygon_offset(polygon_3373):
     geom = polygon_3373
-    result = transform_geom(
-        "EPSG:3373", "EPSG:4326", geom, antimeridian_cutting=True, antimeridian_offset=0
-    )
+    with pytest.warns(RasterioDeprecationWarning):
+        result = transform_geom(
+            "EPSG:3373", "EPSG:4326", geom, antimeridian_cutting=True, antimeridian_offset=0
+        )
     assert result["type"] == "MultiPolygon"
     assert len(result["coordinates"]) == 2
 
 
 def test_transform_geom_polygon_precision(polygon_3373):
     geom = polygon_3373
-    result = transform_geom(
-        "EPSG:3373", "EPSG:4326", geom, precision=1, antimeridian_cutting=True
-    )
+    with pytest.warns(RasterioDeprecationWarning):
+        result = transform_geom(
+            "EPSG:3373", "EPSG:4326", geom, precision=1, antimeridian_cutting=True
+        )
     assert all(round(x, 1) == x for x in flatten_coords(result["coordinates"]))
 
 
 def test_transform_geom_linestring_precision(polygon_3373):
     ring = polygon_3373["coordinates"][0]
     geom = {"type": "LineString", "coordinates": ring}
-    result = transform_geom(
-        "EPSG:3373", "EPSG:4326", geom, precision=1, antimeridian_cutting=True
-    )
+    with pytest.warns(RasterioDeprecationWarning):
+        result = transform_geom(
+            "EPSG:3373", "EPSG:4326", geom, precision=1, antimeridian_cutting=True
+        )
     assert all(round(x, 1) == x for x in flatten_coords(result["coordinates"]))
 
 
@@ -1235,9 +1230,10 @@ def test_transform_geom_linestring_precision_iso(polygon_3373):
 def test_transform_geom_linearring_precision(polygon_3373):
     ring = polygon_3373["coordinates"][0]
     geom = {"type": "LinearRing", "coordinates": ring}
-    result = transform_geom(
-        "EPSG:3373", "EPSG:4326", geom, precision=1, antimeridian_cutting=True
-    )
+    with pytest.warns(RasterioDeprecationWarning):
+        result = transform_geom(
+            "EPSG:3373", "EPSG:4326", geom, precision=1, antimeridian_cutting=True
+        )
     assert all(round(x, 1) == x for x in flatten_coords(result["coordinates"]))
 
 
@@ -1399,9 +1395,6 @@ def test_reproject_array_interface(test3d, count_nonzero, path_rgb_byte_tif):
             1308064,
             marks=[
                 pytest.mark.skipif(
-                    not gdal_version.at_least("3.8"), reason="Requires GDAL 3.8.x"
-                ),
-                pytest.mark.skipif(
                     gdal_version_info >= (3, 11, 0), reason="See GDAL gh-11713"
                 ),
             ],
@@ -1410,9 +1403,6 @@ def test_reproject_array_interface(test3d, count_nonzero, path_rgb_byte_tif):
             True,
             1312959,
             marks=[
-                pytest.mark.skipif(
-                    not gdal_version.at_least("3.8"), reason="Requires GDAL 3.8.x"
-                ),
                 pytest.mark.skipif(
                     gdal_version_info < (3, 11, 0), reason="See GDAL gh-11713"
                 ),
@@ -1423,9 +1413,6 @@ def test_reproject_array_interface(test3d, count_nonzero, path_rgb_byte_tif):
             437686,
             marks=[
                 pytest.mark.skipif(
-                    not gdal_version.at_least("3.8"), reason="Requires GDAL 3.8.x"
-                ),
-                pytest.mark.skipif(
                     gdal_version_info >= (3, 11, 0), reason="See GDAL gh-11713"
                 ),
             ],
@@ -1434,9 +1421,6 @@ def test_reproject_array_interface(test3d, count_nonzero, path_rgb_byte_tif):
             False,
             438113,
             marks=[
-                pytest.mark.skipif(
-                    not gdal_version.at_least("3.8"), reason="Requires GDAL 3.8.x"
-                ),
                 pytest.mark.skipif(
                     gdal_version_info < (3, 11, 0), reason="See GDAL gh-11713"
                 ),
@@ -1469,19 +1453,13 @@ def test_reproject_masked(test3d, count_nonzero, path_rgb_byte_tif):
 @pytest.mark.parametrize(
     "test3d,count_nonzero",
     [
-        pytest.param(
+        (
             True,
             1312959,
-            marks=pytest.mark.skipif(
-                not gdal_version.at_least("3.8"), reason="Requires GDAL 3.8.x"
-            ),
         ),
-        pytest.param(
+        (
             False,
             438113,
-            marks=pytest.mark.skipif(
-                not gdal_version.at_least("3.8"), reason="Requires GDAL 3.8.x"
-            ),
         ),
     ],
 )
@@ -1504,6 +1482,19 @@ def test_reproject_masked_masked_output(test3d, count_nonzero, path_rgb_byte_tif
     assert np.count_nonzero(out[out != np.ma.masked]) == count_nonzero
 
 
+def test_reproject_to_masked_output(path_rgb_byte_tif):
+    with rasterio.open(path_rgb_byte_tif) as src:
+        inp = src.read(1)
+    out, _ = reproject(
+        inp,
+        src_transform=src.transform,
+        src_crs=src.crs,
+        dst_crs="EPSG:3857",
+        masked=True,
+    )
+    assert isinstance(out, np.ma.MaskedArray)
+
+
 @pytest.mark.parametrize(
     "test3d,count_nonzero",
     [
@@ -1511,9 +1502,6 @@ def test_reproject_masked_masked_output(test3d, count_nonzero, path_rgb_byte_tif
             True,
             1309625,
             marks=[
-                pytest.mark.skipif(
-                    not gdal_version.at_least("3.8"), reason="Requires GDAL 3.8.x"
-                ),
                 pytest.mark.skipif(
                     gdal_version_info >= (3, 11, 0), reason="See GDAL gh-11713"
                 ),
@@ -1524,9 +1512,6 @@ def test_reproject_masked_masked_output(test3d, count_nonzero, path_rgb_byte_tif
             1314520,
             marks=[
                 pytest.mark.skipif(
-                    not gdal_version.at_least("3.8"), reason="Requires GDAL 3.8.x"
-                ),
-                pytest.mark.skipif(
                     gdal_version_info < (3, 11, 0), reason="See GDAL gh-11713"
                 ),
             ],
@@ -1536,9 +1521,6 @@ def test_reproject_masked_masked_output(test3d, count_nonzero, path_rgb_byte_tif
             437686,
             marks=[
                 pytest.mark.skipif(
-                    not gdal_version.at_least("3.8"), reason="Requires GDAL 3.8.x"
-                ),
-                pytest.mark.skipif(
                     gdal_version_info >= (3, 11, 0), reason="See GDAL gh-11713"
                 ),
             ],
@@ -1547,9 +1529,6 @@ def test_reproject_masked_masked_output(test3d, count_nonzero, path_rgb_byte_tif
             False,
             438113,
             marks=[
-                pytest.mark.skipif(
-                    not gdal_version.at_least("3.8"), reason="Requires GDAL 3.8.x"
-                ),
                 pytest.mark.skipif(
                     gdal_version_info < (3, 11, 0), reason="See GDAL gh-11713"
                 ),
@@ -1907,7 +1886,7 @@ def test_transform_geom_gdal22():
     unexpected geometries, so an exception is raised.
     """
     geom = {"type": "Point", "coordinates": [0, 0]}
-    with pytest.raises(GDALVersionError):
+    with pytest.warns(RasterioDeprecationWarning):
         transform_geom("EPSG:4326", "EPSG:3857", geom, antimeridian_cutting=False)
 
 
@@ -2433,7 +2412,6 @@ def test_coordinate_pipeline(tmp_path):
             assert dst.checksum(1) == 4705
 
 
-@pytest.mark.skipif(not gdal_version.at_least("3.6"), reason="Requires GDAL 3.6")
 def test_geoloc_warp_dataset(data, tmp_path):
     """Warp a dataset using external geolocation arrays."""
     filename = str(data.join("RGB.byte.tif"))
@@ -2514,8 +2492,7 @@ def test_geoloc_warp_array(path_rgb_byte_tif):
     assert np.count_nonzero(output[0]) in [464910]
 
 
-@pytest.mark.skipif(not gdal_version.at_least("3.6"), reason="Requires GDAL 3.6")
-def test_geoloc_warp_array_subsampled(path_rgb_byte_tif, tmp_path):
+def test_geoloc_warp_array_subsampled(path_rgb_byte_tif):
     """Warp an array using subsampled external geolocation arrays."""
     with rasterio.open(path_rgb_byte_tif) as src:
         xs, ys = src.transform * np.meshgrid(

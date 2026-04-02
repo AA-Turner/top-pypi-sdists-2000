@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import pathlib
@@ -7,6 +8,9 @@ import tempfile
 import zipfile
 from contextlib import suppress
 from seleniumbase.config import settings
+from seleniumbase.drivers import chromium_drivers
+from seleniumbase.fixtures import constants
+from seleniumbase.fixtures import shared_utils
 from typing import Union, List, Optional
 
 __all__ = [
@@ -23,6 +27,12 @@ is_posix = sys.platform.startswith(("darwin", "cygwin", "linux", "linux2"))
 
 PathLike = Union[str, pathlib.Path]
 AUTO = None
+IS_MAC = shared_utils.is_mac()
+IS_LINUX = shared_utils.is_linux()
+IS_WINDOWS = shared_utils.is_windows()
+CHROMIUM_DIR = os.path.dirname(
+    os.path.realpath(chromium_drivers.__file__)
+)
 
 
 class Config:
@@ -79,21 +89,64 @@ class Config:
         if not browser_args:
             browser_args = []
         if not user_data_dir:
-            self.user_data_dir = temp_profile_dir()
+            self.user_data_dir = temp_profile_dir(proxy=proxy)
             self._user_data_dir = self.user_data_dir
             self._custom_data_dir = False
         else:
             self.user_data_dir = user_data_dir
             profile = os.path.join(self.user_data_dir, "Default")
             preferences_file = os.path.join(profile, "Preferences")
-            preferences = get_default_preferences()
+            preferences = get_default_preferences(proxy=proxy)
             if not os.path.exists(profile):
                 with suppress(Exception):
                     os.makedirs(profile)
-            with open(preferences_file, "w") as f:
-                f.write(preferences)
+            with open(preferences_file, "w", encoding="utf-8") as f:
+                json.dump(preferences, f)
+        mock_keychain = False
         if not browser_executable_path:
             browser_executable_path = find_chrome_executable()
+        elif browser_executable_path == "_chromium_":
+            from filelock import FileLock
+            binary_folder = None
+            if IS_MAC:
+                binary_folder = "chrome-mac"
+            elif IS_LINUX:
+                binary_folder = "chrome-linux"
+            elif IS_WINDOWS:
+                binary_folder = "chrome-win"
+            binary_location = os.path.join(CHROMIUM_DIR, binary_folder)
+            gui_lock = FileLock(constants.MultiBrowser.DRIVER_FIXING_LOCK)
+            with gui_lock:
+                with suppress(Exception):
+                    shared_utils.make_writable(
+                        constants.MultiBrowser.DRIVER_FIXING_LOCK
+                    )
+                if not os.path.exists(binary_location):
+                    from seleniumbase.console_scripts import sb_install
+                    sys_args = sys.argv  # Save a copy of sys args
+                    sb_install.log_d("\nWarning: Chromium binary not found...")
+                    sb_install.main(override="chromium")
+                    sys.argv = sys_args  # Put back original args
+            binary_name = binary_location.split("/")[-1].split("\\")[-1]
+            if binary_name in ["chrome-mac"]:
+                binary_name = "Chromium"
+                binary_location += "/Chromium.app"
+                binary_location += "/Contents/MacOS/Chromium"
+            elif binary_name == "chrome-linux":
+                binary_name = "chrome"
+                binary_location += "/chrome"
+            elif binary_name in ["chrome-win"]:
+                binary_name = "chrome.exe"
+                binary_location += "\\chrome.exe"
+            if os.path.exists(binary_location):
+                mock_keychain = True
+                browser_executable_path = binary_location
+            else:
+                print(
+                    f"{binary_location} not found. "
+                    f"Defaulting to regular Chrome!"
+                )
+                browser_executable_path = find_chrome_executable()
         self._browser_args = browser_args
         self.browser_executable_path = browser_executable_path
         self.headless = headless
@@ -135,25 +188,31 @@ class Config:
             "--enable-privacy-sandbox-ads-apis",
             "--safebrowsing-disable-download-protection",
             '--simulate-outdated-no-au="Tue, 31 Dec 2099 23:59:59 GMT"',
+            "--test-type",
+            "--ash-no-nudges",
             "--password-store=basic",
             "--deny-permission-prompts",
-            "--disable-application-cache",
-            "--test-type",
             "--disable-breakpad",
             "--disable-setuid-sandbox",
             "--disable-prompt-on-repost",
+            "--disable-application-cache",
             "--disable-password-generation",
+            "--disable-save-password-bubble",
+            "--disable-single-click-autofill",
             "--disable-ipc-flooding-protection",
             "--disable-background-timer-throttling",
             "--disable-search-engine-choice-screen",
             "--disable-backgrounding-occluded-windows",
             "--disable-client-side-phishing-detection",
+            "--disable-device-discovery-notifications",
             "--disable-top-sites",
             "--disable-translate",
             "--dns-prefetch-disable",
             "--disable-renderer-backgrounding",
             "--disable-dev-shm-usage",
         ]
+        if mock_keychain:
+            self._default_browser_args.append("--use-mock-keychain")
 
     @property
     def browser_args(self):
@@ -206,6 +265,7 @@ class Config:
             "OptimizationTargetPrediction,OptimizationGuideModelDownloading,"
             "SidePanelPinning,UserAgentClientHint,PrivacySandboxSettings4,"
             "OptimizationHintsFetching,InterestFeedContentSuggestions,"
+            "Bluetooth,WebBluetooth,UnifiedWebBluetooth,ComponentUpdater,"
             "DisableLoadExtensionCommandLineSwitch,"
             "WebAuthentication,PasskeyAuth"
         ]
@@ -284,25 +344,46 @@ def is_root():
         return ctypes.windll.shell32.IsUserAnAdmin() != 0
 
 
-def get_default_preferences():
-    return (
-        """{"credentials_enable_service": false,
-        "password_manager_enabled": false,
-        "password_manager_leak_detection": false}"""
-    )
+def get_default_preferences(proxy=None):
+    prefs = {
+        "profile": {
+            "password_manager_leak_detection": False,
+            "password_manager_enabled": False
+        },
+        "credentials_enable_service": False,
+        "omnibox-max-zero-suggest-matches": 0,
+        "omnibox-zero-suggest-prefetching": 0,
+        "omnibox-zero-suggest-prefetching-on-srp": 0,
+        "omnibox-zero-suggest-prefetching-on-web": 0,
+        "omnibox-zero-suggest-in-memory-caching": 0,
+        "local_discovery": {
+            "notifications_enabled": False
+        },
+        "autofill": {
+            "profile_enabled": False,
+            "credit_card_enabled": False
+        }
+    }
+    if proxy:
+        prefs["webrtc"] = {
+            "ip_handling_policy": "disable_non_proxied_udp",
+            "multiple_routes_enabled": False,
+            "nonproxied_udp_enabled": False
+        }
+    return prefs
 
 
-def temp_profile_dir():
+def temp_profile_dir(proxy=None):
     """Generate a temp dir (path)"""
     path = os.path.normpath(tempfile.mkdtemp(prefix="uc_"))
     profile = os.path.join(path, "Default")
     preferences_file = os.path.join(profile, "Preferences")
-    preferences = get_default_preferences()
+    preferences = get_default_preferences(proxy=proxy)
     if not os.path.exists(profile):
         with suppress(Exception):
             os.makedirs(profile)
-    with open(preferences_file, "w") as f:
-        f.write(preferences)
+    with open(preferences_file, "w", encoding="utf-8") as f:
+        json.dump(preferences, f)
     return path
 
 

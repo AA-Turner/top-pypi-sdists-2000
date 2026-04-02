@@ -6,28 +6,60 @@ __all__ = [
     "read_credentials",
     "write_credentials",
     "TwoLevelCache",
+    "batched_async",
+    "recursive_merge",
 ]
 
 import fcntl
 import json
+import logging
 import os
 import re
+import stat
 import threading
 from collections import defaultdict
 from collections.abc import Callable
-from concurrent.futures import Future, ThreadPoolExecutor, wait
+from concurrent.futures import Future, ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, TypeVar
+from typing import Any, AsyncIterable, TypeVar, overload
 
 from cachetools import Cache, TTLCache
 
 from diracx.core.exceptions import NotReadyError
-from diracx.core.models import TokenResponse
+from diracx.core.models.auth import TokenResponse
+
+logger = logging.getLogger(__name__)
 
 EXPIRES_GRACE_SECONDS = 15
 
 T = TypeVar("T")
+
+
+@overload
+def recursive_merge(base: T, override: None) -> T: ...
+@overload
+def recursive_merge(base: None, override: T) -> T: ...
+@overload
+def recursive_merge(base: T, override: T) -> T: ...
+def recursive_merge(base: Any, override: Any) -> Any:
+    """Recursively merge dictionaries; values in ``override`` take precedence.
+
+    - If both ``base`` and ``override`` are dicts, merge keys recursively.
+    - Otherwise, return ``override`` if it is not ``None``; fallback to ``base``.
+    """
+    if isinstance(base, dict) and isinstance(override, dict):
+        merged: dict[str, Any] = {}
+        for key, base_val in base.items():
+            if key in override:
+                merged[key] = recursive_merge(base_val, override[key])
+            else:
+                merged[key] = base_val
+        for key, override_val in override.items():
+            if key not in merged:
+                merged[key] = override_val
+        return merged
+    return override if override is not None else base
 
 
 def dotenv_files_from_environment(prefix: str) -> list[str]:
@@ -56,11 +88,13 @@ def serialize_credentials(token_response: TokenResponse) -> str:
     return json.dumps(credential_data)
 
 
-def read_credentials(location: Path) -> TokenResponse:
+def read_credentials(location: Path | None = None) -> TokenResponse:
     """Read credentials from a file."""
     from diracx.core.preferences import get_diracx_preferences
 
-    credentials_path = location or get_diracx_preferences().credentials_path
+    credentials_path = (
+        location if location is not None else get_diracx_preferences().credentials_path
+    )
     try:
         with open(credentials_path, "r") as f:
             # Lock the file to prevent other processes from writing to it at the same time
@@ -90,7 +124,14 @@ def write_credentials(token_response: TokenResponse, *, location: Path | None = 
     credentials_path = location or get_diracx_preferences().credentials_path
     credentials_path.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(credentials_path, "w") as f:
+    # Open a file and set the permissions to 0x600
+    file_descriptor = os.open(
+        path=credentials_path,
+        flags=os.O_WRONLY | os.O_CREAT | os.O_TRUNC,
+        mode=stat.S_IRUSR | stat.S_IWUSR,
+    )
+
+    with open(file_descriptor, "w") as f:
         # Lock the file to prevent other processes from writing to it at the same time
         fcntl.flock(f, fcntl.LOCK_EX)
         try:
@@ -172,15 +213,16 @@ class TwoLevelCache:
             This method is thread-safe and handles concurrent requests for the same key.
 
         """
-        if result := self.soft_cache.get(key):
-            return result
+        if key in self.soft_cache:
+            return self.soft_cache[key]
         if self.locks[key].acquire(blocking=blocking):
             try:
                 if key not in self.futures:
                     self.futures[key] = self.pool.submit(self._work, key, populate_func)
-                if result := self.hard_cache.get(key):
+                if key in self.hard_cache:
                     # The soft cache will be updated by _work so we can fill the soft
-                    # cache to avoid later requests needign to acquire the lock.
+                    # cache to avoid later requests needing to acquire the lock.
+                    result = self.hard_cache[key]
                     self.soft_cache[key] = result
                     return result
                 future = self.futures[key]
@@ -188,20 +230,24 @@ class TwoLevelCache:
                 self.locks[key].release()
             if blocking:
                 # It is critical that ``future`` is waited for outside of the lock
-                # as _work aquires the lock before filling the caches. This also
+                # as _work acquires the lock before filling the caches. This also
                 # means we can guarantee that the future has not yet been removed
                 # from the futures dict.
-                wait([future])
+                # Use result() instead of wait() to propagate any exceptions
+                future.result()
                 return self.hard_cache[key]
 
         # If the lock is not acquired we're in a non-blocking mode, try to get the
         # value from the hard cache. If it's not there, raise NotReadyError.
-        if result := self.hard_cache.get(key):
-            return result
+        if key in self.hard_cache:
+            return self.hard_cache[key]
+        logger.debug(
+            "Cache key %r not ready yet, background population in progress", key
+        )
         raise NotReadyError(f"Cache key {key} is not ready yet.")
 
     def _work(self, key: str, populate_func: Callable[[], Any]) -> None:
-        """Internal method to execute the populate_func and update caches.
+        """Execute the populate_func and update caches.
 
         This method is intended to be run in a separate thread. It calls the
         populate_func, stores the result in both caches, and cleans up the
@@ -215,11 +261,26 @@ class TwoLevelCache:
             This method is not intended to be called directly by users of the class.
 
         """
-        result = populate_func()
-        with self.locks[key]:
-            self.futures.pop(key)
-            self.hard_cache[key] = result
-            self.soft_cache[key] = result
+        success = False
+        result = None
+        try:
+            result = populate_func()
+            success = True
+        except Exception:
+            logger.error(
+                "Failed to populate cache key %r, will retry on next request",
+                key,
+                exc_info=True,
+            )
+            raise
+        finally:
+            # Always remove the future so the next request can retry on failure
+            # or submit a new refresh task on success
+            with self.locks[key]:
+                self.futures.pop(key, None)
+                if success:
+                    self.hard_cache[key] = result
+                    self.soft_cache[key] = result
 
     def clear(self):
         """Clear all caches and reset the thread pool."""
@@ -229,3 +290,44 @@ class TwoLevelCache:
         self.hard_cache.clear()
         self.futures.clear()
         self.locks.clear()
+
+
+async def batched_async(
+    iterable: AsyncIterable[T], n: int, *, strict: bool = False
+) -> AsyncIterable[tuple[T, ...]]:
+    """Yield successive n-sized chunks from an async iterable.
+
+    Args:
+        iterable (async iterable): The input async iterable to be batched.
+        n (int): The size of each batch.
+        strict (bool): If True, raises ValueError for incomplete batches.
+
+    Yields:
+        tuple: A tuple containing the next n elements from the iterable.
+
+    Raises:
+        ValueError: If strict is True and the last batch is not of size n.
+
+    Example:
+        >>> async for batch in batched(aiter("ABCDEFG"), 3):
+        ...     print(batch)
+        ('A', 'B', 'C')
+        ('D', 'E', 'F')
+        ('G',)
+        >>> async for batch in batched(aiter("ABCDEFG"), 3, strict=True):
+        ...     print(batch)
+        ValueError: batched(): incomplete batch
+
+    """
+    if n < 1:
+        raise ValueError("n must be at least one")
+    batch = []
+    async for item in iterable:
+        batch.append(item)
+        if len(batch) == n:
+            yield tuple(batch)
+            batch = []
+    if batch:
+        if strict and len(batch) != n:
+            raise ValueError("batched(): incomplete batch")
+        yield tuple(batch)

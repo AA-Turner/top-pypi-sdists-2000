@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import logging
 import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -24,15 +25,29 @@ logger = logging.getLogger(__name__)
 
 
 #: Minimum version of tmux required to run libtmux
-TMUX_MIN_VERSION = "1.8"
+TMUX_MIN_VERSION = "3.2a"
 
 #: Most recent version of tmux supported
-TMUX_MAX_VERSION = "3.4"
+TMUX_MAX_VERSION = "3.6"
 
 SessionDict = dict[str, t.Any]
 WindowDict = dict[str, t.Any]
 WindowOptionDict = dict[str, t.Any]
 PaneDict = dict[str, t.Any]
+
+
+class CmdProtocol(t.Protocol):
+    """Command protocol for tmux command."""
+
+    def __call__(self, cmd: str, *args: t.Any, **kwargs: t.Any) -> tmux_cmd:
+        """Wrap tmux_cmd."""
+        ...
+
+
+class CmdMixin:
+    """Command mixin for tmux command."""
+
+    cmd: CmdProtocol
 
 
 class EnvironmentMixin:
@@ -51,9 +66,14 @@ class EnvironmentMixin:
         Parameters
         ----------
         name : str
-            the environment variable name. such as 'PATH'.
-        option : str
-            environment value.
+            The environment variable name, e.g. 'PATH'.
+        value : str
+            Environment value.
+
+        Raises
+        ------
+        ValueError
+            If tmux returns an error.
         """
         args = ["set-environment"]
         if self._add_option:
@@ -78,7 +98,12 @@ class EnvironmentMixin:
         Parameters
         ----------
         name : str
-            the environment variable name. such as 'PATH'.
+            The environment variable name, e.g. 'PATH'.
+
+        Raises
+        ------
+        ValueError
+            If tmux returns an error.
         """
         args = ["set-environment"]
         if self._add_option:
@@ -102,7 +127,12 @@ class EnvironmentMixin:
         Parameters
         ----------
         name : str
-            the environment variable name. such as 'PATH'.
+            The environment variable name, e.g. 'PATH'.
+
+        Raises
+        ------
+        ValueError
+            If tmux returns an error.
         """
         args = ["set-environment"]
         if self._add_option:
@@ -219,16 +249,23 @@ class tmux_cmd:
         Renamed from ``tmux`` to ``tmux_cmd``.
     """
 
-    def __init__(self, *args: t.Any) -> None:
-        tmux_bin = shutil.which("tmux")
-        if not tmux_bin:
+    def __init__(self, *args: t.Any, tmux_bin: str | None = None) -> None:
+        resolved = tmux_bin or shutil.which("tmux")
+        if not resolved:
             raise exc.TmuxCommandNotFound
 
-        cmd = [tmux_bin]
+        cmd = [resolved]
         cmd += args  # add the command arguments to cmd
         cmd = [str(c) for c in cmd]
 
         self.cmd = cmd
+
+        if logger.isEnabledFor(logging.DEBUG):
+            cmd_str = shlex.join(cmd)
+            logger.debug(
+                "tmux command dispatched",
+                extra={"tmux_cmd": cmd_str},
+            )
 
         try:
             self.process = subprocess.Popen(
@@ -240,8 +277,15 @@ class tmux_cmd:
             )
             stdout, stderr = self.process.communicate()
             returncode = self.process.returncode
+        except FileNotFoundError:
+            raise exc.TmuxCommandNotFound from None
         except Exception:
-            logger.exception(f"Exception for {subprocess.list2cmdline(cmd)}")
+            logger.error(  # noqa: TRY400
+                "tmux subprocess failed",
+                extra={
+                    "tmux_cmd": shlex.join(cmd),
+                },
+            )
             raise
 
         self.returncode = returncode
@@ -259,15 +303,21 @@ class tmux_cmd:
         else:
             self.stdout = stdout_split
 
-        logger.debug(
-            "self.stdout for {cmd}: {stdout}".format(
-                cmd=" ".join(cmd),
-                stdout=self.stdout,
-            ),
-        )
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(
+                "tmux command completed",
+                extra={
+                    "tmux_cmd": shlex.join(cmd),
+                    "tmux_exit_code": self.returncode,
+                    "tmux_stdout": self.stdout[:100],
+                    "tmux_stderr": self.stderr[:100],
+                    "tmux_stdout_len": len(self.stdout),
+                    "tmux_stderr_len": len(self.stderr),
+                },
+            )
 
 
-def get_version() -> LooseVersion:
+def get_version(tmux_bin: str | None = None) -> LooseVersion:
     """Return tmux version.
 
     If tmux is built from git master, the version returned will be the latest
@@ -276,19 +326,26 @@ def get_version() -> LooseVersion:
     If using OpenBSD's base system tmux, the version will have ``-openbsd``
     appended to the latest version, e.g. ``2.4-openbsd``.
 
+    Parameters
+    ----------
+    tmux_bin : str, optional
+        Path to tmux binary. If *None*, uses the system tmux from
+        :func:`shutil.which`.
+
     Returns
     -------
     :class:`distutils.version.LooseVersion`
-        tmux version according to :func:`shtuil.which`'s tmux
+        tmux version according to *tmux_bin* if provided, otherwise the
+        system tmux from :func:`shutil.which`
     """
-    proc = tmux_cmd("-V")
+    proc = tmux_cmd("-V", tmux_bin=tmux_bin)
     if proc.stderr:
         if proc.stderr[0] == "tmux: unknown option -- V":
             if sys.platform.startswith("openbsd"):  # openbsd has no tmux -V
                 return LooseVersion(f"{TMUX_MAX_VERSION}-openbsd")
             msg = (
                 f"libtmux supports tmux {TMUX_MIN_VERSION} and greater. This system"
-                " is running tmux 1.3 or earlier."
+                " does not meet the minimum tmux version requirement."
             )
             raise exc.LibTmuxException(
                 msg,
@@ -306,93 +363,105 @@ def get_version() -> LooseVersion:
     return LooseVersion(version)
 
 
-def has_version(version: str) -> bool:
+def has_version(version: str, tmux_bin: str | None = None) -> bool:
     """Return True if tmux version installed.
 
     Parameters
     ----------
     version : str
-        version number, e.g. '1.8'
+        version number, e.g. '3.2a'
+    tmux_bin : str, optional
+        Path to tmux binary. If *None*, uses the system tmux.
 
     Returns
     -------
     bool
         True if version matches
     """
-    return get_version() == LooseVersion(version)
+    return get_version(tmux_bin=tmux_bin) == LooseVersion(version)
 
 
-def has_gt_version(min_version: str) -> bool:
+def has_gt_version(min_version: str, tmux_bin: str | None = None) -> bool:
     """Return True if tmux version greater than minimum.
 
     Parameters
     ----------
     min_version : str
-        tmux version, e.g. '1.8'
+        tmux version, e.g. '3.2a'
+    tmux_bin : str, optional
+        Path to tmux binary. If *None*, uses the system tmux.
 
     Returns
     -------
     bool
         True if version above min_version
     """
-    return get_version() > LooseVersion(min_version)
+    return get_version(tmux_bin=tmux_bin) > LooseVersion(min_version)
 
 
-def has_gte_version(min_version: str) -> bool:
+def has_gte_version(min_version: str, tmux_bin: str | None = None) -> bool:
     """Return True if tmux version greater or equal to minimum.
 
     Parameters
     ----------
     min_version : str
-        tmux version, e.g. '1.8'
+        tmux version, e.g. '3.2a'
+    tmux_bin : str, optional
+        Path to tmux binary. If *None*, uses the system tmux.
 
     Returns
     -------
     bool
         True if version above or equal to min_version
     """
-    return get_version() >= LooseVersion(min_version)
+    return get_version(tmux_bin=tmux_bin) >= LooseVersion(min_version)
 
 
-def has_lte_version(max_version: str) -> bool:
+def has_lte_version(max_version: str, tmux_bin: str | None = None) -> bool:
     """Return True if tmux version less or equal to minimum.
 
     Parameters
     ----------
     max_version : str
-        tmux version, e.g. '1.8'
+        tmux version, e.g. '3.2a'
+    tmux_bin : str, optional
+        Path to tmux binary. If *None*, uses the system tmux.
 
     Returns
     -------
     bool
          True if version below or equal to max_version
     """
-    return get_version() <= LooseVersion(max_version)
+    return get_version(tmux_bin=tmux_bin) <= LooseVersion(max_version)
 
 
-def has_lt_version(max_version: str) -> bool:
+def has_lt_version(max_version: str, tmux_bin: str | None = None) -> bool:
     """Return True if tmux version less than minimum.
 
     Parameters
     ----------
     max_version : str
-        tmux version, e.g. '1.8'
+        tmux version, e.g. '3.2a'
+    tmux_bin : str, optional
+        Path to tmux binary. If *None*, uses the system tmux.
 
     Returns
     -------
     bool
         True if version below max_version
     """
-    return get_version() < LooseVersion(max_version)
+    return get_version(tmux_bin=tmux_bin) < LooseVersion(max_version)
 
 
-def has_minimum_version(raises: bool = True) -> bool:
-    """Return True if tmux meets version requirement. Version >1.8 or above.
+def has_minimum_version(raises: bool = True, tmux_bin: str | None = None) -> bool:
+    """Return True if tmux meets version requirement. Version >= 3.2a.
 
     Parameters
     ----------
     raises : bool
         raise exception if below minimum version requirement
+    tmux_bin : str, optional
+        Path to tmux binary. If *None*, uses the system tmux.
 
     Returns
     -------
@@ -406,20 +475,23 @@ def has_minimum_version(raises: bool = True) -> bool:
 
     Notes
     -----
+    .. versionchanged:: 0.49.0
+        Minimum version bumped to 3.2a. For older tmux, use libtmux v0.48.x.
+
     .. versionchanged:: 0.7.0
         No longer returns version, returns True or False
 
     .. versionchanged:: 0.1.7
-        Versions will now remove trailing letters per `Issue 55`_.
-
-        .. _Issue 55: https://github.com/tmux-python/tmuxp/issues/55.
+        Versions will now remove trailing letters per
+        `Issue 55 <https://github.com/tmux-python/tmuxp/issues/55>`_.
     """
-    if get_version() < LooseVersion(TMUX_MIN_VERSION):
+    current_version = get_version(tmux_bin=tmux_bin)
+    if current_version < LooseVersion(TMUX_MIN_VERSION):
         if raises:
             msg = (
                 f"libtmux only supports tmux {TMUX_MIN_VERSION} and greater. This "
-                + f"system has {get_version()} installed. Upgrade your tmux to use "
-                + "libtmux."
+                f"system has {current_version} installed. Upgrade your "
+                "tmux to use libtmux, or use libtmux v0.48.x for older tmux versions."
             )
             raise exc.VersionTooLow(msg)
         return False
@@ -448,42 +520,6 @@ def session_check_name(session_name: str | None) -> None:
         raise exc.BadSessionName(reason="contains periods", session_name=session_name)
     if ":" in session_name:
         raise exc.BadSessionName(reason="contains colons", session_name=session_name)
-
-
-def handle_option_error(error: str) -> type[exc.OptionError]:
-    """Raise exception if error in option command found.
-
-    In tmux 3.0, show-option and show-window-option return invalid option instead of
-    unknown option. See https://github.com/tmux/tmux/blob/3.0/cmd-show-options.c.
-
-    In tmux >2.4, there are 3 different types of option errors:
-
-    - unknown option
-    - invalid option
-    - ambiguous option
-
-    In tmux <2.4, unknown option was the only option.
-
-    All errors raised will have the base error of :exc:`exc.OptionError`. So to
-    catch any option error, use ``except exc.OptionError``.
-
-    Parameters
-    ----------
-    error : str
-        Error response from subprocess call.
-
-    Raises
-    ------
-    :exc:`exc.OptionError`, :exc:`exc.UnknownOption`, :exc:`exc.InvalidOption`,
-    :exc:`exc.AmbiguousOption`
-    """
-    if "unknown option" in error:
-        raise exc.UnknownOption(error)
-    if "invalid option" in error:
-        raise exc.InvalidOption(error)
-    if "ambiguous option" in error:
-        raise exc.AmbiguousOption(error)
-    raise exc.OptionError(error)  # Raise generic option error
 
 
 def get_libtmux_version() -> LooseVersion:

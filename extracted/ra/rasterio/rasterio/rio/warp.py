@@ -2,10 +2,10 @@
 
 import json
 import logging
-from math import ceil, floor
-import sys
+from math import ceil
 
 import click
+import numpy as np
 
 import rasterio
 from rasterio.crs import CRS
@@ -14,19 +14,12 @@ from rasterio.errors import CRSError
 from rasterio.rio import options
 from rasterio.rio.helpers import resolve_inout
 from rasterio.rio.options import _cb_key_val
-from rasterio.transform import Affine
-from rasterio.serde import to_json
+from rasterio.transform import Affine, rowcol
 from rasterio.warp import (
     reproject, Resampling, SUPPORTED_RESAMPLING, transform_bounds,
     aligned_target, calculate_default_transform as calcdt)
 
 logger = logging.getLogger(__name__)
-
-
-@to_json.register(Affine)
-def _(obj):
-    """Convert an Affine instance to a JSON serializable form."""
-    return obj._astuple
 
 
 @click.command(short_help='Warp a raster dataset.')
@@ -316,20 +309,13 @@ def warp(
 
             else:
                 dst_crs = src.crs
-                inv_transform = ~src.transform
-                eps = sys.float_info.epsilon
-                c1, r1 = inv_transform * (left + eps, top + eps)
-                c2, r2 = inv_transform * (right + eps, top + eps)
-                c3, r3 = inv_transform * (right + eps, bottom + eps)
-                c4, r4 = inv_transform * (left + eps, bottom + eps)
-                col1 = min(c1, c2, c3, c4)
-                col2 = max(c1, c2, c3, c4)
-                row1 = min(r1, r2, r3, r4)
-                row2 = max(r1, r2, r3, r4)
-                col1 = floor(col1)
-                col2 = ceil(col2)
-                row1 = floor(row1)
-                row2 = ceil(row2)
+                rows = np.array([top, top, bottom, bottom])
+                cols = np.array([left, right, right, left])
+                rows, cols = rowcol(src.transform, rows, cols, op=float)
+                col1 = cols.min()
+                col2 = cols.max()
+                row1 = rows.min()
+                row2 = rows.max()
                 px = (right - left) / (col2 - col1)
                 py = (top - bottom) / (row2 - row1)
                 res = max(px, py)
@@ -391,7 +377,7 @@ def warp(
                         out_kwargs['crs'] = src.crs.to_string()
 
                 click.echo("Output dataset profile:")
-                click.echo(json.dumps(dict(**out_kwargs), indent=2, default=to_json))
+                click.echo(json.dumps(dict(**out_kwargs), indent=2))
             else:
                 with rasterio.open(output, "w", **out_kwargs) as dst:
                     reproject(

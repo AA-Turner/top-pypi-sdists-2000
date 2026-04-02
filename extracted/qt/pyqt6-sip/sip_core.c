@@ -160,9 +160,7 @@ static sipWrapperType sipWrapper_Type = {
             0,              /* am_await */
             0,              /* am_aiter */
             0,              /* am_anext */
-#if PY_VERSION_HEX >= 0x030a0000
             0,              /* am_send */
-#endif
         },
         {
             0,              /* nb_add */
@@ -7079,43 +7077,51 @@ static int addStringInstances(PyObject *dict, sipStringInstanceDef *si)
     {
         PyObject *w;
 
-        switch (si->si_encoding)
+        if (si->si_val == NULL)
         {
-        case 'A':
-            w = PyUnicode_DecodeASCII(si->si_val, strlen(si->si_val), NULL);
-            break;
+            w = Py_None;
+            Py_INCREF(w);
+        }
+        else
+        {
+            switch (si->si_encoding)
+            {
+            case 'A':
+                w = PyUnicode_DecodeASCII(si->si_val, strlen(si->si_val), NULL);
+                break;
 
-        case 'L':
-            w = PyUnicode_DecodeLatin1(si->si_val, strlen(si->si_val), NULL);
-            break;
+            case 'L':
+                w = PyUnicode_DecodeLatin1(si->si_val, strlen(si->si_val), NULL);
+                break;
 
-        case '8':
-            w = PyUnicode_FromString(si->si_val);
-            break;
+            case '8':
+                w = PyUnicode_FromString(si->si_val);
+                break;
 
-        case 'w':
-            /* The hack for wchar_t. */
+            case 'w':
+                /* The hack for wchar_t. */
 #if defined(HAVE_WCHAR_H)
-            w = PyUnicode_FromWideChar((const wchar_t *)si->si_val, 1);
-            break;
+                w = PyUnicode_FromWideChar((const wchar_t *)si->si_val, 1);
+                break;
 #else
-            raiseNoWChar();
-            return -1;
+                raiseNoWChar();
+                return -1;
 #endif
 
         case 'W':
-            /* The hack for wchar_t*. */
+                /* The hack for wchar_t*. */
 #if defined(HAVE_WCHAR_H)
-            w = PyUnicode_FromWideChar((const wchar_t *)si->si_val,
-                    wcslen((const wchar_t *)si->si_val));
-            break;
+                w = PyUnicode_FromWideChar((const wchar_t *)si->si_val,
+                        wcslen((const wchar_t *)si->si_val));
+                break;
 #else
-            raiseNoWChar();
-            return -1;
+                raiseNoWChar();
+                return -1;
 #endif
 
-        default:
-            w = PyBytes_FromString(si->si_val);
+            default:
+                w = PyBytes_FromString(si->si_val);
+            }
         }
 
         if (sip_dict_set_and_discard(dict, si->si_name, w) < 0)
@@ -7356,9 +7362,7 @@ static PyObject *sip_api_is_py_method_12_8(sip_gilstate_t *gil, char *pymc,
     if (sipInterpreter == NULL)
         return NULL;
 
-#ifdef WITH_THREAD
     *gil = PyGILState_Ensure();
-#endif
 
     /* Only read this when we have the GIL. */
     sipSelf = *sipSelfp;
@@ -7490,17 +7494,13 @@ static PyObject *sip_api_is_py_method_12_8(sip_gilstate_t *gil, char *pymc,
             PyErr_Print();
         }
 
-#ifdef WITH_THREAD
         PyGILState_Release(*gil);
-#endif
     }
 
     return reimp;
 
 release_gil:
-#ifdef WITH_THREAD
     PyGILState_Release(*gil);
-#endif
     return NULL;
 }
 
@@ -8432,7 +8432,6 @@ static void *findSlot(PyObject *self, sipPySlotType st)
     PyTypeObject *py_type = Py_TYPE(self);
 
     /* See if it is a wrapper. */
-    /* TODO: will this always be TRUE? */
     if (PyObject_TypeCheck((PyObject *)py_type, &sipWrapperType_Type))
     {
         const sipClassTypeDef *ctd;
@@ -8440,6 +8439,19 @@ static void *findSlot(PyObject *self, sipPySlotType st)
         ctd = (sipClassTypeDef *)((sipWrapperType *)(py_type))->wt_td;
 
         slot = findSlotInClass(ctd, st);
+    }
+    else
+    {
+        sipEnumTypeDef *etd;
+
+        /* If it is not a wrapper then it must be an enum. */
+        etd = (sipEnumTypeDef *)sip_enum_get_generated_type(
+                (PyObject *)py_type);
+
+        assert(etd != NULL);
+        assert(etd->etd_pyslots != NULL);
+
+        slot = findSlotInSlotList(etd->etd_pyslots, st);
     }
 
     return slot;
@@ -9670,9 +9682,7 @@ sipWrapperType sipSimpleWrapper_Type = {
             0,              /* am_await */
             0,              /* am_aiter */
             0,              /* am_anext */
-#if PY_VERSION_HEX >= 0x030a0000
             0,              /* am_send */
-#endif
         },
         {
             0,              /* nb_add */

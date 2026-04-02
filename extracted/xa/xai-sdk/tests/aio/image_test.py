@@ -1,0 +1,369 @@
+from unittest import mock
+
+import pytest
+import pytest_asyncio
+from opentelemetry.trace import SpanKind
+
+from xai_sdk import AsyncClient
+from xai_sdk.image import ImageFormat
+from xai_sdk.proto import batch_pb2, image_pb2
+
+from .. import server
+
+
+@pytest_asyncio.fixture(scope="session")
+async def client():
+    with server.run_test_server() as port:
+        yield AsyncClient(api_key=server.API_KEY, api_host=f"localhost:{port}")
+
+
+@pytest.fixture
+def image_asset():
+    return server.read_image()
+
+
+@pytest.mark.asyncio(loop_scope="session")
+async def test_base64(client: AsyncClient, image_asset: bytes):
+    response = await client.image.sample(prompt="foo", model="grok-2-image", image_format="base64")
+
+    with pytest.warns(DeprecationWarning, match="BaseImageResponse.prompt is deprecated"):
+        assert response.prompt == ""
+    assert image_asset == await response.image
+
+
+@pytest.mark.asyncio(loop_scope="session")
+async def test_url(client: AsyncClient, image_asset: bytes):
+    response = await client.image.sample(prompt="foo", model="grok-2-image", image_format="url")
+
+    with pytest.warns(DeprecationWarning, match="BaseImageResponse.prompt is deprecated"):
+        assert response.prompt == ""
+    assert image_asset == await response.image
+
+
+@pytest.mark.asyncio(loop_scope="session")
+async def test_batch(client: AsyncClient, image_asset: bytes):
+    responses = await client.image.sample_batch(prompt="foo", model="grok-2-image", n=2, image_format="base64")
+
+    assert len(responses) == 2
+
+    for r in responses:
+        with pytest.warns(DeprecationWarning, match="BaseImageResponse.prompt is deprecated"):
+            assert r.prompt == ""
+        assert image_asset == await r.image
+
+
+@pytest.mark.asyncio(loop_scope="session")
+async def test_sample_passes_aspect_ratio_and_resolution(client: AsyncClient):
+    server.clear_last_image_request()
+
+    await client.image.sample(
+        prompt="foo",
+        model="grok-2-image",
+        aspect_ratio="1:1",
+        resolution="1k",
+    )
+
+    request = server.get_last_image_request()
+    assert request is not None
+    assert request.HasField("aspect_ratio")
+    assert request.aspect_ratio == image_pb2.ImageAspectRatio.IMG_ASPECT_RATIO_1_1
+    assert request.HasField("resolution")
+    assert request.resolution == image_pb2.ImageResolution.IMG_RESOLUTION_1K
+
+
+@pytest.mark.asyncio(loop_scope="session")
+async def test_sample_batch_passes_aspect_ratio_and_resolution(client: AsyncClient):
+    server.clear_last_image_request()
+
+    await client.image.sample_batch(
+        prompt="foo",
+        model="grok-2-image",
+        n=2,
+        aspect_ratio="16:9",
+        resolution="1k",
+    )
+
+    request = server.get_last_image_request()
+    assert request is not None
+    assert request.HasField("aspect_ratio")
+    assert request.aspect_ratio == image_pb2.ImageAspectRatio.IMG_ASPECT_RATIO_16_9
+    assert request.HasField("resolution")
+    assert request.resolution == image_pb2.ImageResolution.IMG_RESOLUTION_1K
+
+
+@pytest.mark.asyncio(loop_scope="session")
+async def test_sample_passes_image_url(client: AsyncClient):
+    server.clear_last_image_request()
+
+    input_image_url = "https://example.com/image.jpg"
+    await client.image.sample(prompt="foo", model="grok-imagine-image", image_url=input_image_url)
+
+    request = server.get_last_image_request()
+    assert request is not None
+    assert request.HasField("image")
+    assert request.image.image_url == input_image_url
+    assert request.image.detail == image_pb2.ImageDetail.DETAIL_AUTO
+
+
+@pytest.mark.asyncio(loop_scope="session")
+async def test_sample_passes_image_urls(client: AsyncClient):
+    server.clear_last_image_request()
+
+    input_image_urls = [
+        "https://example.com/image1.jpg",
+        "data:image/jpeg;base64,/9j/4AAQSkZJRg==",
+    ]
+    await client.image.sample(prompt="foo", model="grok-imagine-image", image_urls=input_image_urls)
+
+    request = server.get_last_image_request()
+    assert request is not None
+    assert [image.image_url for image in request.images] == input_image_urls
+    assert all(image.detail == image_pb2.ImageDetail.DETAIL_AUTO for image in request.images)
+
+
+@pytest.mark.asyncio(loop_scope="session")
+async def test_sample_batch_passes_image_urls(client: AsyncClient):
+    server.clear_last_image_request()
+
+    input_image_urls = [
+        "https://example.com/image1.jpg",
+        "data:image/jpeg;base64,/9j/4AAQSkZJRg==",
+    ]
+    await client.image.sample_batch(
+        prompt="foo",
+        model="grok-imagine-image",
+        n=2,
+        image_urls=input_image_urls,
+    )
+
+    request = server.get_last_image_request()
+    assert request is not None
+    assert [image.image_url for image in request.images] == input_image_urls
+    assert all(image.detail == image_pb2.ImageDetail.DETAIL_AUTO for image in request.images)
+
+
+@pytest.mark.asyncio(loop_scope="session")
+async def test_sample_rejects_both_image_fields(client: AsyncClient):
+    input_image_url = "https://example.com/image.jpg"
+    input_image_urls = ["https://example.com/image1.jpg"]
+
+    with pytest.raises(ValueError, match="Only one of image_url or image_urls can be set"):
+        await client.image.sample(
+            prompt="foo",
+            model="grok-imagine-image",
+            image_url=input_image_url,
+            image_urls=input_image_urls,
+        )
+
+
+@pytest.mark.asyncio(loop_scope="session")
+async def test_sample_batch_rejects_both_image_fields(client: AsyncClient):
+    input_image_url = "https://example.com/image.jpg"
+    input_image_urls = ["https://example.com/image1.jpg"]
+
+    with pytest.raises(ValueError, match="Only one of image_url or image_urls can be set"):
+        await client.image.sample_batch(
+            prompt="foo",
+            model="grok-imagine-image",
+            n=2,
+            image_url=input_image_url,
+            image_urls=input_image_urls,
+        )
+
+
+@mock.patch("xai_sdk.aio.image.tracer")
+@pytest.mark.asyncio(loop_scope="session")
+@pytest.mark.parametrize("image_format", ["url", "base64"])
+async def test_sample_creates_span_with_correct_attributes(
+    mock_tracer: mock.MagicMock, client: AsyncClient, image_format: ImageFormat
+):
+    mock_span = mock.MagicMock()
+    mock_tracer.start_as_current_span.return_value.__enter__.return_value = mock_span
+
+    user = "test-user-123"
+    response = await client.image.sample(
+        prompt="A beautiful sunset", model="grok-2-image", image_format=image_format, user=user
+    )
+
+    expected_request_attributes = {
+        "gen_ai.prompt": "A beautiful sunset",
+        "gen_ai.operation.name": "generate_image",
+        "gen_ai.provider.name": "xai",
+        "gen_ai.output.type": "image",
+        "gen_ai.request.model": "grok-2-image",
+        "gen_ai.request.image.format": image_format,
+        "gen_ai.request.image.count": 1,
+        "user_id": user,
+    }
+
+    mock_tracer.start_as_current_span.assert_called_once_with(
+        name="image.sample grok-2-image",
+        kind=SpanKind.CLIENT,
+        attributes=expected_request_attributes,
+    )
+
+    expected_response_attributes = {
+        "gen_ai.response.model": "grok-2-image",
+        "gen_ai.response.image.format": image_format,
+        "gen_ai.usage.input_tokens": response.usage.prompt_tokens,
+        "gen_ai.usage.output_tokens": response.usage.completion_tokens,
+        "gen_ai.usage.total_tokens": response.usage.total_tokens,
+        "gen_ai.usage.reasoning_tokens": response.usage.reasoning_tokens,
+        "gen_ai.usage.cached_prompt_text_tokens": response.usage.cached_prompt_text_tokens,
+        "gen_ai.usage.prompt_text_tokens": response.usage.prompt_text_tokens,
+        "gen_ai.usage.prompt_image_tokens": response.usage.prompt_image_tokens,
+        "gen_ai.response.0.image.up_sampled_prompt": "",
+        "gen_ai.response.0.image.respect_moderation": response.respect_moderation,
+    }
+
+    if image_format == "url":
+        expected_response_attributes["gen_ai.response.0.image.url"] = response.url
+    else:
+        expected_response_attributes["gen_ai.response.0.image.base64"] = response.base64
+
+    mock_span.set_attributes.assert_called_once_with(expected_response_attributes)
+
+
+@mock.patch("xai_sdk.aio.image.tracer")
+@pytest.mark.asyncio(loop_scope="session")
+@pytest.mark.parametrize("image_format", ["url", "base64"])
+async def test_sample_creates_span_without_sensitive_attributes_when_disabled(
+    mock_tracer: mock.MagicMock, client: AsyncClient, image_format: ImageFormat
+):
+    """Test that sensitive attributes are not included when XAI_SDK_DISABLE_SENSITIVE_TELEMETRY_ATTRIBUTES is set."""
+    mock_span = mock.MagicMock()
+    mock_tracer.start_as_current_span.return_value.__enter__.return_value = mock_span
+
+    user = "test-user-123"
+    with mock.patch.dict("os.environ", {"XAI_SDK_DISABLE_SENSITIVE_TELEMETRY_ATTRIBUTES": "1"}):
+        await client.image.sample(
+            prompt="A beautiful sunset", model="grok-2-image", image_format=image_format, user=user
+        )
+
+    expected_request_attributes = {
+        "gen_ai.operation.name": "generate_image",
+        "gen_ai.provider.name": "xai",
+        "gen_ai.output.type": "image",
+        "gen_ai.request.model": "grok-2-image",
+    }
+
+    mock_tracer.start_as_current_span.assert_called_once_with(
+        name="image.sample grok-2-image",
+        kind=SpanKind.CLIENT,
+        attributes=expected_request_attributes,
+    )
+
+    expected_response_attributes = {
+        "gen_ai.response.model": "grok-2-image",
+    }
+
+    mock_span.set_attributes.assert_called_once_with(expected_response_attributes)
+
+
+@mock.patch("xai_sdk.aio.image.tracer")
+@pytest.mark.asyncio(loop_scope="session")
+@pytest.mark.parametrize("image_format", ["url", "base64"])
+async def test_sample_batch_creates_span_with_correct_attributes(
+    mock_tracer: mock.MagicMock, client: AsyncClient, image_format: ImageFormat
+):
+    mock_span = mock.MagicMock()
+    mock_tracer.start_as_current_span.return_value.__enter__.return_value = mock_span
+
+    user = "test-user-123"
+    responses = await client.image.sample_batch(
+        prompt="A beautiful sunset", model="grok-2-image", n=3, image_format=image_format, user=user
+    )
+
+    assert len(responses) == 3
+
+    expected_request_attributes = {
+        "gen_ai.prompt": "A beautiful sunset",
+        "gen_ai.operation.name": "generate_image",
+        "gen_ai.provider.name": "xai",
+        "gen_ai.output.type": "image",
+        "gen_ai.request.model": "grok-2-image",
+        "gen_ai.request.image.format": image_format,
+        "gen_ai.request.image.count": 3,
+        "user_id": user,
+    }
+
+    mock_tracer.start_as_current_span.assert_called_once_with(
+        name="image.sample_batch grok-2-image",
+        kind=SpanKind.CLIENT,
+        attributes=expected_request_attributes,
+    )
+
+    expected_response_attributes = {
+        "gen_ai.response.model": "grok-2-image",
+        "gen_ai.response.image.format": image_format,
+        "gen_ai.usage.input_tokens": responses[0].usage.prompt_tokens,
+        "gen_ai.usage.output_tokens": responses[0].usage.completion_tokens,
+        "gen_ai.usage.total_tokens": responses[0].usage.total_tokens,
+        "gen_ai.usage.reasoning_tokens": responses[0].usage.reasoning_tokens,
+        "gen_ai.usage.cached_prompt_text_tokens": responses[0].usage.cached_prompt_text_tokens,
+        "gen_ai.usage.prompt_text_tokens": responses[0].usage.prompt_text_tokens,
+        "gen_ai.usage.prompt_image_tokens": responses[0].usage.prompt_image_tokens,
+        "gen_ai.response.0.image.up_sampled_prompt": "",
+        "gen_ai.response.1.image.up_sampled_prompt": "",
+        "gen_ai.response.2.image.up_sampled_prompt": "",
+        "gen_ai.response.0.image.respect_moderation": responses[0].respect_moderation,
+        "gen_ai.response.1.image.respect_moderation": responses[1].respect_moderation,
+        "gen_ai.response.2.image.respect_moderation": responses[2].respect_moderation,
+    }
+
+    if image_format == "url":
+        expected_response_attributes["gen_ai.response.0.image.url"] = responses[0].url
+        expected_response_attributes["gen_ai.response.1.image.url"] = responses[1].url
+        expected_response_attributes["gen_ai.response.2.image.url"] = responses[2].url
+    else:
+        expected_response_attributes["gen_ai.response.0.image.base64"] = responses[0].base64
+        expected_response_attributes["gen_ai.response.1.image.base64"] = responses[1].base64
+        expected_response_attributes["gen_ai.response.2.image.base64"] = responses[2].base64
+
+    mock_span.set_attributes.assert_called_once_with(expected_response_attributes)
+
+
+# Tests for image.prepare() batch request method
+
+
+@pytest.mark.asyncio(loop_scope="session")
+async def test_create_returns_batch_request(client: AsyncClient):
+    """Test that create() returns a BatchRequest proto."""
+    batch_req = client.image.prepare(
+        prompt="A sunset over mountains",
+        model="grok-imagine-image",
+        batch_request_id="test_image_1",
+    )
+
+    assert isinstance(batch_req, batch_pb2.BatchRequest)
+    assert batch_req.batch_request_id == "test_image_1"
+    assert batch_req.HasField("image_request")
+    assert batch_req.image_request.prompt == "A sunset over mountains"
+    assert batch_req.image_request.model == "grok-imagine-image"
+
+
+@pytest.mark.asyncio(loop_scope="session")
+async def test_create_with_aspect_ratio_and_resolution(client: AsyncClient):
+    """Test that create() passes aspect_ratio and resolution."""
+    batch_req = client.image.prepare(
+        prompt="A beach",
+        model="grok-imagine-image",
+        batch_request_id="beach_1",
+        aspect_ratio="16:9",
+        resolution="2k",
+    )
+
+    assert batch_req.image_request.aspect_ratio == image_pb2.ImageAspectRatio.IMG_ASPECT_RATIO_16_9
+    assert batch_req.image_request.resolution == image_pb2.ImageResolution.IMG_RESOLUTION_2K
+
+
+@pytest.mark.asyncio(loop_scope="session")
+async def test_create_rejects_both_image_fields(client: AsyncClient):
+    """Test that create() rejects both image_url and image_urls."""
+    with pytest.raises(ValueError, match="Only one of image_url or image_urls can be set"):
+        client.image.prepare(
+            prompt="foo",
+            model="grok-imagine-image",
+            image_url="https://example.com/image.jpg",
+            image_urls=["https://example.com/image1.jpg"],
+        )

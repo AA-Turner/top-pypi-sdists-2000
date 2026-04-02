@@ -66,6 +66,7 @@ class CDPMethods():
             lambda *args, **kwargs: self.__gui_click(element, *args, **kwargs)
         )
         element.highlight_overlay = lambda: self.__highlight_overlay(element)
+        element.is_in_viewport = lambda: self.__is_in_viewport(element)
         element.mouse_click = lambda: self.__mouse_click(element)
         element.click_with_offset = (
             lambda *args, **kwargs: self.__mouse_click_with_offset_async(
@@ -116,10 +117,10 @@ class CDPMethods():
         if hasattr(driver, "cdp_base"):
             driver = driver.cdp_base
         load_timeout = 60.0
-        wait_timeout = 30.0
+        wait_timeout = 50.0
         if hasattr(sb_config, "_cdp_proxy") and sb_config._cdp_proxy:
             load_timeout = 90.0
-            wait_timeout = 45.0
+            wait_timeout = 75.0
         try:
             task = self.page.get(url, **kwargs)
             self.loop.run_until_complete(
@@ -127,6 +128,10 @@ class CDPMethods():
             )
         except asyncio.TimeoutError:
             print("Timeout loading %s" % url)
+        except RuntimeError:
+            self.loop.run_until_complete(
+                self.page.get(url, **kwargs)
+            )
         url_protocol = url.split(":")[0]
         safe_url = True
         if url_protocol not in ["about", "data", "chrome"]:
@@ -164,6 +169,53 @@ class CDPMethods():
     def get_event_loop(self):
         return self.loop
 
+    def get_rd_host(self):
+        """Returns the remote-debugging host (likely 127.0.0.1)"""
+        driver = self.driver
+        if hasattr(driver, "cdp_base"):
+            driver = driver.cdp_base
+        return driver.config.host
+
+    def get_rd_port(self):
+        """Returns the remote-debugging port (commonly 9222)"""
+        driver = self.driver
+        if hasattr(driver, "cdp_base"):
+            driver = driver.cdp_base
+        return driver.config.port
+
+    def get_rd_url(self):
+        """Returns the remote-debugging URL, which is used for
+        allowing the Playwright integration to launch stealthy,
+        and also applies nest-asyncio for nested event loops so
+        that SeleniumBase methods can be called from Playwright
+        without encountering event loop error messages such as:
+        Cannot run the event loop while another loop is running.
+        Also sets an environment variable to hide this warning:
+        Deprecation: "url.parse() behavior is not standardized".
+        (github.com/microsoft/playwright-python/issues/3016)"""
+        import nest_asyncio
+        nest_asyncio.apply()
+        os.environ["NODE_NO_WARNINGS"] = "1"
+        driver = self.driver
+        if hasattr(driver, "cdp_base"):
+            driver = driver.cdp_base
+        host = driver.config.host
+        port = driver.config.port
+        return f"http://{host}:{port}"
+
+    def get_endpoint_url(self):
+        """Same as get_rd_url(), which returns the remote-debugging URL."""
+        return self.get_rd_url()
+
+    def get_port(self):
+        """Same as get_rd_port(), which returns the remote-debugging port."""
+        return self.get_rd_port()
+
+    def get_websocket_url(self):
+        """Returns the websocket URL of the active tab.
+        The websocket URL starts with `ws://`."""
+        return self.get_active_tab().websocket_url
+
     def add_handler(self, event, handler):
         self.page.add_handler(event, handler)
 
@@ -186,11 +238,30 @@ class CDPMethods():
         try:
             if early_failure:
                 raise Exception("Failed!")
-            element = self.loop.run_until_complete(
-                self.page.find(
-                    selector, best_match=best_match, timeout=timeout
+            if (
+                "contains(" not in selector
+                and not page_utils.is_xpath_selector(selector)
+                and not re.findall(r"\.\s", selector)
+                and not re.findall(r"\.$", selector)
+                and not re.findall(r"#\s", selector)
+                and not re.findall(r"#$", selector)
+                and (
+                    selector in ["html", "body"]
+                    or "[" in selector
+                    or re.findall(r"\.\S", selector)
+                    or re.findall(r"#\S", selector)
+                    or " > " in selector
                 )
-            )
+            ):
+                element = self.loop.run_until_complete(
+                    self.page.select(selector, timeout=timeout)
+                )
+            else:
+                element = self.loop.run_until_complete(
+                    self.page.find(
+                        selector, best_match=best_match, timeout=timeout
+                    )
+                )
         except Exception:
             failure = True
             plural = "s"
@@ -325,11 +396,20 @@ class CDPMethods():
 
     def select_all(self, selector, timeout=None):
         if not timeout:
-            timeout = settings.SMALL_TIMEOUT
+            timeout = settings.MINI_TIMEOUT
         self.__add_light_pause()
         selector = self.__convert_to_css_if_xpath(selector)
+        if not self.is_element_present(selector):
+            self.sleep(1)
+            timeout = timeout - 1
+            if timeout < 1:
+                timeout = 1
+            try:
+                self.select(selector, timeout=timeout)
+            except Exception:
+                return []
         elements = self.loop.run_until_complete(
-            self.page.select_all(selector, timeout=timeout)
+            self.page.select_all(selector, timeout=0.1)
         )
         updated_elements = []
         for element in elements:
@@ -339,12 +419,12 @@ class CDPMethods():
 
     def find_elements(self, selector, timeout=None):
         if not timeout:
-            timeout = settings.SMALL_TIMEOUT
+            timeout = settings.MINI_TIMEOUT
         return self.select_all(selector, timeout=timeout)
 
     def find_visible_elements(self, selector, timeout=None):
         if not timeout:
-            timeout = settings.SMALL_TIMEOUT
+            timeout = settings.MINI_TIMEOUT
         visible_elements = []
         elements = self.select_all(selector, timeout=timeout)
         for element in elements:
@@ -354,7 +434,7 @@ class CDPMethods():
                     visible_elements.append(element)
         return visible_elements
 
-    def click_nth_element(self, selector, number):
+    def click_nth_element(self, selector, number, scroll=True):
         elements = self.select_all(selector)
         if len(elements) < number:
             raise Exception(
@@ -365,10 +445,11 @@ class CDPMethods():
         if number < 0:
             number = 0
         element = elements[number]
-        element.scroll_into_view()
+        if scroll:
+            element.scroll_into_view()
         element.click()
 
-    def click_nth_visible_element(self, selector, number):
+    def click_nth_visible_element(self, selector, number, scroll=True):
         """Finds all matching page elements and clicks the nth visible one.
         Example: self.click_nth_visible_element('[type="checkbox"]', 5)
                 (Clicks the 5th visible checkbox on the page.)"""
@@ -382,7 +463,8 @@ class CDPMethods():
         if number < 0:
             number = 0
         element = elements[number]
-        element.scroll_into_view()
+        if scroll:
+            element.scroll_into_view()
         element.click()
 
     def click_link(self, link_text):
@@ -406,7 +488,7 @@ class CDPMethods():
         result = (
             self.loop.run_until_complete(element.click_async())
         )
-        self.loop.run_until_complete(self.page.wait())
+        self.loop.run_until_complete(self.page.wait(0.2))
         return result
 
     def __flash(self, element, *args, **kwargs):
@@ -459,18 +541,23 @@ class CDPMethods():
         if timeframe > 3:
             timeframe = 3
         self.gui_click_x_y(x, y, timeframe=timeframe)
-        return self.loop.run_until_complete(self.page.wait())
+        return self.loop.run_until_complete(self.page.wait(0.2))
 
     def __highlight_overlay(self, element):
         return (
             self.loop.run_until_complete(element.highlight_overlay_async())
         )
 
+    def __is_in_viewport(self, element):
+        return (
+            self.loop.run_until_complete(element.is_in_viewport_async())
+        )
+
     def __mouse_click(self, element):
         result = (
             self.loop.run_until_complete(element.mouse_click_async())
         )
-        self.loop.run_until_complete(self.page.wait())
+        self.loop.run_until_complete(self.page.wait(0.2))
         return result
 
     def __mouse_click_with_offset_async(self, element, *args, **kwargs):
@@ -479,7 +566,7 @@ class CDPMethods():
                 element.mouse_click_with_offset_async(*args, **kwargs)
             )
         )
-        self.loop.run_until_complete(self.page.wait())
+        self.loop.run_until_complete(self.page.wait(0.2))
         return result
 
     def __mouse_drag(self, element, destination):
@@ -718,45 +805,63 @@ class CDPMethods():
         js_code = js_code.replace("return getBestSelector", "getBestSelector")
         return self.loop.run_until_complete(self.page.evaluate(js_code))
 
-    def click(self, selector, timeout=None):
+    def click(self, selector, timeout=None, scroll=True):
         if not timeout:
             timeout = settings.SMALL_TIMEOUT
         self.__slow_mode_pause_if_set()
         element = self.find_element(selector, timeout=timeout)
-        element.scroll_into_view()
         tag_name = element.tag_name
+        current_url = self.get_current_url()
+
         if tag_name:
             tag_name = tag_name.lower().strip()
         if (
-            tag_name in ["a", "button", "canvas", "div", "input", "li", "span"]
+            tag_name in [
+                "a", "button", "canvas", "div", "input", "li", "span", "label"
+            ]
             and "contains(" not in selector
+            and "://google" not in current_url
+            and "://www.google" not in current_url
         ):
+            if scroll:
+                element.scroll_into_view()
             try:
                 element.mouse_click()  # Simulated click (NOT PyAutoGUI)
             except Exception:
                 element.click()  # Standard CDP click
         else:
+            if scroll:
+                if "contains(" in selector:
+                    element.scroll_into_view()
+                else:
+                    try:
+                        self.js_scroll_into_view(selector)
+                    except Exception:
+                        element.scroll_into_view()
             element.click()  # Standard CDP click
         self.__slow_mode_pause_if_set()
-        self.loop.run_until_complete(self.page.wait())
+        self.loop.run_until_complete(self.page.wait(0.2))
 
     def click_active_element(self):
         self.loop.run_until_complete(
             self.page.evaluate("document.activeElement.click()")
         )
         self.__slow_mode_pause_if_set()
-        self.loop.run_until_complete(self.page.wait())
+        self.loop.run_until_complete(self.page.wait(0.2))
 
-    def click_if_visible(self, selector):
+    def click_if_visible(self, selector, timeout=0, scroll=True):
         if self.is_element_visible(selector):
             with suppress(Exception):
-                element = self.find_element(selector, timeout=0)
-                element.scroll_into_view()
-                element.click()
-                self.__slow_mode_pause_if_set()
-                self.loop.run_until_complete(self.page.wait())
+                self.click(selector, timeout=1, scroll=scroll)
+        elif timeout == 0:
+            return
+        else:
+            with suppress(Exception):
+                self.find_element(selector, timeout=timeout)
+                if self.is_element_visible(selector):
+                    self.click(selector, timeout=1)
 
-    def click_visible_elements(self, selector, limit=0):
+    def click_visible_elements(self, selector, limit=0, scroll=True):
         """Finds all matching page elements and clicks visible ones in order.
         If a click reloads or opens a new page, the clicking will stop.
         If no matching elements appear, an Exception will be raised.
@@ -779,25 +884,27 @@ class CDPMethods():
                 except Exception:
                     continue
                 if (width != 0 or height != 0):
-                    element.scroll_into_view()
+                    if scroll:
+                        element.scroll_into_view()
                     element.click()
                     click_count += 1
                     time.sleep(0.044)
                     self.__slow_mode_pause_if_set()
-                    self.loop.run_until_complete(self.page.wait())
+                    self.loop.run_until_complete(self.page.wait(0.2))
             except Exception:
                 break
 
-    def mouse_click(self, selector, timeout=None):
+    def mouse_click(self, selector, timeout=None, scroll=True):
         """(Attempt simulating a mouse click)"""
         if not timeout:
             timeout = settings.SMALL_TIMEOUT
         self.__slow_mode_pause_if_set()
         element = self.find_element(selector, timeout=timeout)
-        element.scroll_into_view()
+        if scroll:
+            element.scroll_into_view()
         element.mouse_click()
         self.__slow_mode_pause_if_set()
-        self.loop.run_until_complete(self.page.wait())
+        self.loop.run_until_complete(self.page.wait(0.2))
 
     def nested_click(self, parent_selector, selector):
         """
@@ -807,7 +914,7 @@ class CDPMethods():
         element = self.find_element(parent_selector)
         element.query_selector(selector).mouse_click()
         self.__slow_mode_pause_if_set()
-        self.loop.run_until_complete(self.page.wait())
+        self.loop.run_until_complete(self.page.wait(0.2))
 
     def get_nested_element(self, parent_selector, selector):
         """(Can be used to find an element inside an iframe)"""
@@ -961,7 +1068,11 @@ class CDPMethods():
         ):
             text = text.replace("\n", "\r")
         for key in text:
-            element.send_keys(key)
+            try:
+                element.send_keys(key)
+            except AttributeError:
+                element = self.select(selector, timeout=0.1)
+                element.send_keys(key)
             time.sleep(float(0.042 + (random.random() / 110.0)))
         if submit:
             element.send_keys("\r\n")
@@ -1144,13 +1255,15 @@ class CDPMethods():
     def switch_to_newest_window(self):
         self.switch_to_tab(-1)
 
-    def open_new_tab(self, url=None, switch_to=True):
+    def open_new_tab(self, url=None, switch_to=True, **kwargs):
         driver = self.driver
         if not isinstance(url, str):
             url = "about:blank"
         if hasattr(driver, "cdp_base"):
             try:
-                self.loop.run_until_complete(self.page.get(url, new_tab=True))
+                self.loop.run_until_complete(
+                    self.page.get(url, new_tab=True, **kwargs)
+                )
             except Exception:
                 original_targets = self.loop.run_until_complete(
                     self.page.send(mycdp.target.get_targets())
@@ -1253,7 +1366,7 @@ class CDPMethods():
     def get_window(self):
         return self.loop.run_until_complete(self.page.get_window())
 
-    def get_text(self, selector):
+    def get_text(self, selector="body"):
         return self.find_element(selector).text_all
 
     def get_title(self):
@@ -1289,6 +1402,20 @@ class CDPMethods():
                 self.page.evaluate("document.documentElement.outerHTML")
             )
         return source
+
+    def get_beautiful_soup(self, source=None):
+        """BeautifulSoup is a toolkit for dissecting an HTML document
+        and extracting what you need. It's great for screen-scraping!
+        See: https://www.crummy.com/software/BeautifulSoup/bs4/doc/ """
+        from bs4 import BeautifulSoup
+
+        if not source:
+            with suppress(Exception):
+                self.wait_for_element_visible(
+                    "body", timeout=settings.MINI_TIMEOUT
+                )
+            source = self.get_page_source()
+        return BeautifulSoup(source, "html.parser")
 
     def get_user_agent(self):
         return self.loop.run_until_complete(
@@ -1620,13 +1747,15 @@ class CDPMethods():
         css_selector = self.__convert_to_css_if_xpath(selector)
         css_selector = re.escape(css_selector)  # Add "\\" to special chars
         css_selector = js_utils.escape_quotes_if_needed(css_selector)
-        js_code = """var $elements = document.querySelectorAll('%s');
-                  var index = 0, length = $elements.length;
-                  for(; index < length; index++){
-                  $elements[index].setAttribute('%s','%s');}""" % (
-            css_selector,
-            attribute,
-            value,
+        js_code = (
+            """var $elements = document.querySelectorAll('%s');
+            var index = 0, length = $elements.length;
+            for(; index < length; index++){
+            $elements[index].setAttribute('%s','%s');}""" % (
+                css_selector,
+                attribute,
+                value,
+            )
         )
         with suppress(Exception):
             self.loop.run_until_complete(self.page.evaluate(js_code))
@@ -1868,7 +1997,7 @@ class CDPMethods():
         self.__add_light_pause()
         self.gui_click_x_y(x, y, timeframe=timeframe)
         self.__slow_mode_pause_if_set()
-        self.loop.run_until_complete(self.page.wait())
+        self.loop.run_until_complete(self.page.wait(0.2))
 
     def gui_click_with_offset(
         self, selector, x, y, timeframe=0.25, center=False
@@ -1886,9 +2015,10 @@ class CDPMethods():
             py = element_rect["y"]
             self.gui_click_x_y(px + x, py + y, timeframe=timeframe)
 
-    def click_with_offset(self, selector, x, y, center=False):
+    def click_with_offset(self, selector, x, y, center=False, scroll=True):
         element = self.find_element(selector)
-        element.scroll_into_view()
+        if scroll:
+            element.scroll_into_view()
         if "--debug" in sys.argv:
             displayed_selector = "`%s`" % selector
             if '"' not in selector:
@@ -1901,7 +2031,7 @@ class CDPMethods():
             )
         element.click_with_offset(x=x, y=y, center=center)
         self.__slow_mode_pause_if_set()
-        self.loop.run_until_complete(self.page.wait())
+        self.loop.run_until_complete(self.page.wait(0.2))
 
     def _on_a_cf_turnstile_page(self, source=None):
         if not source or len(source) < 400:
@@ -1921,9 +2051,28 @@ class CDPMethods():
             return True
         return False
 
-    def _on_a_g_recaptcha_page(self, source=None):
-        time.sleep(0.2)
-        self.loop.run_until_complete(self.page.wait(0.2))
+    def _on_an_incapsula_hcaptcha_page(self, *args, **kwargs):
+        self.loop.run_until_complete(self.page.wait(0.1))
+        if (
+            self.is_element_visible('iframe[src*="_Incapsula_Resource?"]')
+            or self.is_element_visible("iframe[data-hcaptcha-widget-id]")
+        ):
+            return True
+        return False
+
+    def _on_a_datadome_slider_page(self, *args, **kwargs):
+        self.loop.run_until_complete(self.page.wait(0.1))
+        if (
+            self.is_element_visible(
+                'body > iframe[src*="/geo.captcha-delivery.com/captcha/"]'
+            )
+        ):
+            return True
+        return False
+
+    def _on_a_g_recaptcha_page(self, *args, **kwargs):
+        time.sleep(0.4)  # reCAPTCHA may need a moment to appear
+        self.loop.run_until_complete(self.page.wait(0.1))
         source = self.get_page_source()
         if (
             (
@@ -1932,11 +2081,17 @@ class CDPMethods():
             )
             and self.is_element_visible('iframe[title="reCAPTCHA"]')
         ):
-            self.loop.run_until_complete(self.page.wait(0.1))
+            try:
+                self.loop.run_until_complete(self.page.wait(0.1))
+            except Exception:
+                time.sleep(0.1)
             return True
         elif "com/recaptcha/api.js" in source:
-            time.sleep(1.6)  # Still loading
-            self.loop.run_until_complete(self.page.wait(0.1))
+            time.sleep(1.2)  # Maybe still loading
+            try:
+                self.loop.run_until_complete(self.page.wait(0.1))
+            except Exception:
+                time.sleep(0.1)
             return True
         return False
 
@@ -1945,20 +2100,34 @@ class CDPMethods():
         if self.is_element_visible('iframe[title="reCAPTCHA"]'):
             selector = 'iframe[title="reCAPTCHA"]'
         else:
-            return
+            return False
         time.sleep(0.25)
-        self.loop.run_until_complete(self.page.wait())
+        self.loop.run_until_complete(self.page.wait(0.1))
         time.sleep(0.25)
         with suppress(Exception):
-            element_rect = self.get_gui_element_rect(selector, timeout=1)
+            element_rect = self.get_element_rect(selector, timeout=0.1)
             e_x = element_rect["x"]
             e_y = element_rect["y"]
+            window_rect = self.get_window_rect()
+            win_width = window_rect["innerWidth"]
+            win_height = window_rect["innerHeight"]
+            if (
+                e_x > 1040
+                and e_y > 640
+                and abs(win_width - e_x) < 110
+                and abs(win_height - e_y) < 110
+            ):
+                # Probably the invisible reCAPTCHA in the bottom right corner
+                return False
+            gui_element_rect = self.get_gui_element_rect(selector, timeout=1)
+            gui_e_x = gui_element_rect["x"]
+            gui_e_y = gui_element_rect["y"]
             x_offset = 26
             y_offset = 35
             if shared_utils.is_windows():
                 x_offset = 29
-            x = e_x + x_offset
-            y = e_y + y_offset
+            x = gui_e_x + x_offset
+            y = gui_e_y + y_offset
             sb_config._saved_cf_x_y = (x, y)
             time.sleep(0.08)
             if use_cdp:
@@ -1971,26 +2140,108 @@ class CDPMethods():
                     time.sleep(0.056)
             else:
                 self.gui_click_x_y(x, y)
+            return True
+        return False
+
+    def __gui_slide_datadome_captcha(self):
+        iframe = 'body > iframe[src*="/geo.captcha-delivery.com/captcha/"]'
+        if not self.is_element_visible(iframe):
+            return False
+        src = self.get_attribute(iframe, "src")
+        tab = self.get_active_tab()
+        self.open_new_tab(url=src)
+        time.sleep(0.41)
+        self.loop.run_until_complete(self.page.wait(0.1))
+        time.sleep(0.25)
+        x1, y1 = self.get_gui_element_center("div.slider")
+        x2, y2 = self.get_gui_element_center("div.sliderTarget")
+        self.close_active_tab()
+        self.switch_to_tab(tab)
+        self.gui_drag_drop_points(x1, y1, x2, y2, timeframe=0.55)
+        time.sleep(0.25)
+        self.loop.run_until_complete(self.page.wait(0.2))
+        time.sleep(0.15)
+        return True
+
+    def __cdp_click_incapsula_hcaptcha(self):
+        selector = "iframe[data-hcaptcha-widget-id]"
+        if self.is_element_visible('iframe[src*="_Incapsula_Resource?"]'):
+            outer_selector = 'iframe[src*="_Incapsula_Resource?"]'
+            element = self.get_nested_element(outer_selector, selector)
+            if not element:
+                return False
+        elif self.is_element_visible(selector):
+            element = self.select(selector, timeout=0.1)
+            if not element:
+                return False
+        else:
+            return False
+        time.sleep(0.05)
+        self.loop.run_until_complete(self.page.wait(0.1))
+        time.sleep(0.05)
+        x_offset = 30
+        y_offset = 36
+        was_clicked = False
+        gui_lock = FileLock(constants.MultiBrowser.PYAUTOGUILOCK)
+        with gui_lock:  # Prevent issues with multiple processes
+            self.bring_active_window_to_front()
+            time.sleep(0.056)
+            if "--debug" in sys.argv:
+                displayed_selector = "`%s`" % selector
+                if '"' not in selector:
+                    displayed_selector = '"%s"' % selector
+                elif "'" not in selector:
+                    displayed_selector = "'%s'" % selector
+                print(
+                    " <DEBUG> click_with_offset(%s, %s, %s)"
+                    % (displayed_selector, x_offset, y_offset)
+                )
+            with suppress(Exception):
+                element.click_with_offset(x_offset, y_offset)
+                was_clicked = True
+                time.sleep(0.075)
+        if was_clicked:
+            # Wait a moment for the click to succeed
+            time.sleep(0.75)
+            self.__slow_mode_pause_if_set()
+            self.loop.run_until_complete(self.page.wait(0.1))
+            if "--debug" in sys.argv:
+                print(" <DEBUG> hCaptcha was clicked!")
+            return True
+        if "--debug" in sys.argv:
+            print(" <DEBUG> hCaptcha was NOT clicked!")
+        return False
 
     def solve_captcha(self):
         self.__click_captcha(use_cdp=True)
 
+    def click_captcha(self):
+        """Same as solve_captcha()"""
+        self.__click_captcha(use_cdp=True)
+
     def gui_click_captcha(self):
+        """Use PyAutoGUI to click the CAPTCHA"""
         self.__click_captcha(use_cdp=False)
 
     def __click_captcha(self, use_cdp=False):
         """Uses PyAutoGUI unless use_cdp == True"""
         self.sleep(0.075)
-        self.loop.run_until_complete(self.page.wait())
+        self.loop.run_until_complete(self.page.wait(0.1))
         self.sleep(0.025)
         source = self.get_page_source()
         if self._on_a_cf_turnstile_page(source):
             pass
         elif self._on_a_g_recaptcha_page(source):
-            self.__gui_click_recaptcha(use_cdp)
-            return
+            result = self.__gui_click_recaptcha(use_cdp)
+            return result
+        elif self._on_an_incapsula_hcaptcha_page():
+            result = self.__cdp_click_incapsula_hcaptcha()
+            return result
+        elif self._on_a_datadome_slider_page():
+            result = self.__gui_slide_datadome_captcha()
+            return result
         else:
-            return
+            return False
         selector = None
         if self.is_element_present('[class="cf-turnstile"]'):
             selector = '[class="cf-turnstile"]'
@@ -2027,17 +2278,25 @@ class CDPMethods():
         ):
             selector = '[class*="turnstile"] div:not([class])'
         elif self.is_element_present(
+            "iframe[data-hcaptcha-widget-id]"
+        ):
+            selector = "iframe[data-hcaptcha-widget-id]"
+        elif self.is_element_present(
             '[data-callback="onCaptchaSuccess"]'
         ):
             selector = '[data-callback="onCaptchaSuccess"]'
         elif self.is_element_present(
-            "div:not([class]) > div:not([class])"
+            "div:not([class]):not([id]):not([aria-label]) > "
+            "div:not([class]):not([id]):not([aria-label])"
         ):
-            selector = "div:not([class]) > div:not([class])"
+            selector = (
+                "div:not([class]):not([id]):not([aria-label]) > "
+                "div:not([class]):not([id]):not([aria-label])"
+            )
         else:
-            return
+            return False
         if not selector:
-            return
+            return False
         if (
             self.is_element_present("form")
             and (
@@ -2059,7 +2318,7 @@ class CDPMethods():
             )
             with suppress(Exception):
                 self.loop.run_until_complete(self.page.evaluate(script))
-                self.loop.run_until_complete(self.page.wait())
+                self.loop.run_until_complete(self.page.wait(0.1))
         elif (
             self.is_element_present("form")
             and (
@@ -2079,7 +2338,7 @@ class CDPMethods():
             )
             with suppress(Exception):
                 self.loop.run_until_complete(self.page.evaluate(script))
-                self.loop.run_until_complete(self.page.wait())
+                self.loop.run_until_complete(self.page.wait(0.1))
         elif (
             self.is_element_present(
                 'form [id*="turnstile"] div:not([class])'
@@ -2102,7 +2361,7 @@ class CDPMethods():
             )
             with suppress(Exception):
                 self.loop.run_until_complete(self.page.evaluate(script))
-                self.loop.run_until_complete(self.page.wait())
+                self.loop.run_until_complete(self.page.wait(0.1))
         elif (
             self.is_element_present(
                 '[style*="text-align: center;"] div:not([class])'
@@ -2119,13 +2378,13 @@ class CDPMethods():
             )
             with suppress(Exception):
                 self.loop.run_until_complete(self.page.evaluate(script))
-                self.loop.run_until_complete(self.page.wait())
+                self.loop.run_until_complete(self.page.wait(0.1))
         with suppress(Exception):
             time.sleep(0.05)
             element_rect = self.get_gui_element_rect(selector, timeout=1)
             e_x = element_rect["x"]
             e_y = element_rect["y"]
-            x_offset = 32
+            x_offset = 28
             y_offset = 32
             if shared_utils.is_windows():
                 y_offset = 28
@@ -2145,6 +2404,8 @@ class CDPMethods():
                     time.sleep(0.05)
             else:
                 self.gui_click_x_y(x, y)
+            return True
+        return False
 
     def __gui_drag_drop(self, x1, y1, x2, y2, timeframe=0.25, uc_lock=False):
         self.__install_pyautogui_if_missing()
@@ -2220,7 +2481,7 @@ class CDPMethods():
                 x1, y1, x2, y2, timeframe=timeframe, uc_lock=False
             )
         self.__slow_mode_pause_if_set()
-        self.loop.run_until_complete(self.page.wait())
+        self.loop.run_until_complete(self.page.wait(0.2))
 
     def gui_drag_and_drop(self, drag_selector, drop_selector, timeframe=0.35):
         """Use PyAutoGUI to drag-and-drop from one selector to another.
@@ -2327,7 +2588,32 @@ class CDPMethods():
             self.bring_active_window_to_front()
             self.__gui_hover_x_y(x, y, timeframe=timeframe, uc_lock=False)
             self.__slow_mode_pause_if_set()
-        self.loop.run_until_complete(self.page.wait())
+        self.loop.run_until_complete(self.page.wait(0.1))
+
+    def hover_element(self, selector, timeframe=0.25):
+        element = self.select(selector)
+        gui_lock = FileLock(constants.MultiBrowser.PYAUTOGUILOCK)
+        with gui_lock:
+            self.bring_active_window_to_front()
+            self.sleep(0.02)
+            element.mouse_move()
+            self.sleep(timeframe)
+
+    def hover_and_click(self, hover_selector, click_selector):
+        if getattr(sb_config, "_cdp_mobile_mode", None):
+            self.select(click_selector).click()
+            return
+        hover_element = self.select(hover_selector)
+        gui_lock = FileLock(constants.MultiBrowser.PYAUTOGUILOCK)
+        with gui_lock:
+            self.bring_active_window_to_front()
+            self.sleep(0.02)
+            hover_element.mouse_move()
+            self.sleep(0.25)
+            try:
+                self.click(click_selector, timeout=0.5)
+            except Exception:
+                self.select(click_selector, timeout=2).click()
 
     def gui_hover_and_click(self, hover_selector, click_selector):
         if getattr(sb_config, "_cdp_mobile_mode", None):
@@ -2863,35 +3149,46 @@ class CDPMethods():
         if first in second:
             raise AssertionError("%s is in %s" % (first, second))
 
+    def js_scroll_into_view(self, selector):
+        css_selector = self.__convert_to_css_if_xpath(selector)
+        css_selector = re.escape(css_selector)  # Add "\\" to special chars
+        css_selector = js_utils.escape_quotes_if_needed(css_selector)
+        js_code = (
+            "document.querySelector('%s')?.scrollIntoView();"
+            % css_selector
+        )
+        with suppress(Exception):
+            self.loop.run_until_complete(self.page.evaluate(js_code))
+
     def scroll_into_view(self, selector):
         self.find_element(selector).scroll_into_view()
-        self.loop.run_until_complete(self.page.wait())
+        self.loop.run_until_complete(self.page.wait(0.1))
 
     def scroll_to_y(self, y):
         y = int(y)
         js_code = "window.scrollTo(0, %s);" % y
         with suppress(Exception):
             self.loop.run_until_complete(self.page.evaluate(js_code))
-            self.loop.run_until_complete(self.page.wait())
+            self.loop.run_until_complete(self.page.wait(0.1))
 
     def scroll_by_y(self, y):
         y = int(y)
         js_code = "window.scrollBy(0, %s);" % y
         with suppress(Exception):
             self.loop.run_until_complete(self.page.evaluate(js_code))
-            self.loop.run_until_complete(self.page.wait())
+            self.loop.run_until_complete(self.page.wait(0.1))
 
     def scroll_to_top(self):
         js_code = "window.scrollTo(0, 0);"
         with suppress(Exception):
             self.loop.run_until_complete(self.page.evaluate(js_code))
-            self.loop.run_until_complete(self.page.wait())
+            self.loop.run_until_complete(self.page.wait(0.1))
 
     def scroll_to_bottom(self):
         js_code = "window.scrollTo(0, 10000);"
         with suppress(Exception):
             self.loop.run_until_complete(self.page.evaluate(js_code))
-            self.loop.run_until_complete(self.page.wait())
+            self.loop.run_until_complete(self.page.wait(0.1))
 
     def scroll_up(self, amount=25):
         """Scrolls up as a percentage of the page."""
@@ -2900,7 +3197,7 @@ class CDPMethods():
         except Exception:
             amount = self.get_window_size()["height"] * amount / 100
             self.execute_script("window.scrollBy(0, -%s);" % amount)
-        self.loop.run_until_complete(self.page.wait())
+        self.loop.run_until_complete(self.page.wait(0.1))
 
     def scroll_down(self, amount=25):
         """Scrolls down as a percentage of the page."""
@@ -2909,7 +3206,7 @@ class CDPMethods():
         except Exception:
             amount = self.get_window_size()["height"] * amount / 100
             self.execute_script("window.scrollBy(0, %s);" % amount)
-        self.loop.run_until_complete(self.page.wait())
+        self.loop.run_until_complete(self.page.wait(0.1))
 
     def save_page_source(self, name, folder=None):
         from seleniumbase.core import log_helper

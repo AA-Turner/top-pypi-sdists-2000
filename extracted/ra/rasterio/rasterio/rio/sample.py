@@ -1,18 +1,8 @@
-"""Sampling raster values."""
-
 import json
 
 import click
-import numpy
 
 import rasterio
-from rasterio.serde import to_json
-
-
-@to_json.register(numpy.ndarray)
-def _(obj):
-    """Convert an ndarry to a list."""
-    return obj.tolist()
 
 
 @click.command(short_help="Sample a dataset.")
@@ -86,4 +76,4 @@ def sample(ctx, files, bidx):
             for vals in src.sample(
                 (json.loads(line) for line in points), indexes=indexes
             ):
-                click.echo(json.dumps(vals, default=to_json))
+                click.echo(json.dumps(vals.tolist()))

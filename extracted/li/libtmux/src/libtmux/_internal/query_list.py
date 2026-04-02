@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import logging
 import re
-import traceback
 import typing as t
 from collections.abc import Callable, Iterable, Mapping, Sequence
 
@@ -105,9 +104,12 @@ def keygetter(
             elif hasattr(dct, sub_field):
                 dct = getattr(dct, sub_field)
 
-    except Exception as e:
-        traceback.print_stack()
-        logger.debug(f"The above error was {e}")
+    except Exception:
+        logger.debug(
+            "key lookup failed for path: %s",
+            path,
+            exc_info=True,
+        )
         return None
 
     return dct
@@ -143,12 +145,15 @@ def parse_lookup(
     """
     try:
         if isinstance(path, str) and isinstance(lookup, str) and path.endswith(lookup):
-            field_name = path.rsplit(lookup)[0]
+            field_name = path.split(lookup, maxsplit=1)[0]
             if field_name is not None:
                 return keygetter(obj, field_name)
-    except Exception as e:
-        traceback.print_stack()
-        logger.debug(f"The above error was {e}")
+    except Exception:
+        logger.debug(
+            "lookup parsing failed for path: %s",
+            path,
+            exc_info=True,
+        )
     return None
 
 
@@ -492,7 +497,7 @@ class QueryList(list[T], t.Generic[T]):
             return False
 
         if len(self) == len(data):
-            for a, b in zip(self, data):
+            for a, b in zip(self, data, strict=False):
                 if isinstance(a, Mapping):
                     a_keys = a.keys()
                     if a.keys == b.keys():

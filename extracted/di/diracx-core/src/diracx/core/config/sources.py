@@ -1,4 +1,4 @@
-"""This module implements the logic of the configuration server side.
+"""Module to implement the logic of the configuration server side.
 
 This is where all the backend abstraction and the caching logic takes place.
 """
@@ -12,7 +12,7 @@ from abc import ABCMeta, abstractmethod
 from datetime import datetime, timezone
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Annotated
+from typing import Annotated, Generic, TypeVar
 from urllib.parse import urlparse, urlunparse
 
 import sh
@@ -21,7 +21,7 @@ from cachetools import Cache, LRUCache
 from pydantic import AnyUrl, BeforeValidator, TypeAdapter, UrlConstraints
 
 from ..exceptions import BadConfigurationVersionError
-from ..extensions import select_from_extension
+from ..extensions import DiracEntryPoint, select_from_extension
 from ..utils import TwoLevelCache
 from .schema import Config
 
@@ -44,33 +44,28 @@ def is_running_in_async_context():
 
 
 def _apply_default_scheme(value: str) -> str:
-    """Applies the default git+file:// scheme if not present."""
-    if isinstance(value, str) and "://" not in value:
+    """Apply the default git+file:// scheme if not present."""
+    if "://" not in value:
         value = f"git+file://{value}"
     return value
 
 
 class AnyUrlWithoutHost(AnyUrl):
-
     _constraints = UrlConstraints(host_required=False)
 
 
 ConfigSourceUrl = Annotated[AnyUrlWithoutHost, BeforeValidator(_apply_default_scheme)]
 
+T = TypeVar("T")
 
-class ConfigSource(metaclass=ABCMeta):
-    """Abstract class for the configuration source.
 
-    This class takes care of the expected caching and locking logic. Subclasses
-    are responsible for implementing the actual logic to find revisions and
-    reading the configuration.
+class CacheableSource(Generic[T], metaclass=ABCMeta):
+    """Abstract base class for sources that can be cached.
+
+    Handles the caching of the latest revision and its content using a two-level cache.
     """
 
-    # Keep a mapping between the scheme and the class
-    __registry: dict[str, type["ConfigSource"]] = {}
-    scheme: str
-
-    def __init__(self, *, backend_url: ConfigSourceUrl) -> None:
+    def __init__(self):
         # Revision cache is used to store the latest revision and its
         # modification date. This cache has two TTLs, one which triggers the
         # background refresh and the other which is results in a hard failure.
@@ -89,62 +84,44 @@ class ConfigSource(metaclass=ABCMeta):
 
     @abstractmethod
     def latest_revision(self) -> tuple[str, datetime]:
-        """Must return:
+        """Abstract method.
+
+        Must return:
         * a unique hash as a string, representing the last version
         * a datetime object corresponding to when the version dates.
         """
 
     @abstractmethod
-    def read_raw(self, hexsha: str, modified: datetime) -> Config:
-        """Return the Config object that corresponds to the
-        specific hash
-        The `modified` parameter is just added as a attribute to the config.
+    def read_raw(self, hexsha: str, modified: datetime) -> T:
+        """Abstract method.
+
+        Return the Source object that corresponds to the specific hash
+        The `modified` parameter is just added as a attribute to the source.
         """
 
-    def __init_subclass__(cls) -> None:
-        """Keep a record of <scheme: class>."""
-        if cls.scheme in cls.__registry:
-            raise TypeError(f"{cls.scheme=} is already define")
-        cls.__registry[cls.scheme] = cls
+    def read(self) -> T:
+        """Load the source from the backend with appropriate caching.
 
-    @classmethod
-    def create(cls):
-        return cls.create_from_url(backend_url=os.environ["DIRACX_CONFIG_BACKEND_URL"])
-
-    @classmethod
-    def create_from_url(
-        cls, *, backend_url: ConfigSourceUrl | Path | str
-    ) -> "ConfigSource":
-        """Factory method to produce a concrete instance depending on
-        the backend URL scheme.
-
-        """
-        url = TypeAdapter(ConfigSourceUrl).validate_python(str(backend_url))
-        return cls.__registry[url.scheme](backend_url=url)
-
-    def read_config(self) -> Config:
-        """Load the configuration from the backend with appropriate caching.
-
-        :raises: diracx.core.exceptions.NotReadyError if the config is being loaded still
+        :raises: diracx.core.exceptions.NotReadyError if the source is being loaded still
         :raises: git.exc.BadName if version does not exist
         """
         hexsha = self._revision_cache.get(
-            "latest_revision", self._read_config_work, blocking=True
+            "latest_revision", self._read_work, blocking=True
         )
         return self._content_cache[hexsha]
 
-    async def read_config_non_blocking(self) -> Config:
-        """Load the configuration from the backend with appropriate caching.
+    async def read_non_blocking(self) -> T:
+        """Load the source from the backend with appropriate caching.
 
-        :raises: diracx.core.exceptions.NotReadyError if the config is being loaded still
+        :raises: diracx.core.exceptions.NotReadyError if the source is being loaded still
         :raises: git.exc.BadName if version does not exist
         """
         hexsha = self._revision_cache.get(
-            "latest_revision", self._read_config_work, blocking=False
+            "latest_revision", self._read_work, blocking=False
         )
         return self._content_cache[hexsha]
 
-    def _read_config_work(self) -> str:
+    def _read_work(self) -> str:
         """Work function for the thread pool of `self._revision_cache`.
 
         This function ensures that the latest revision is loaded into the
@@ -161,6 +138,64 @@ class ConfigSource(metaclass=ABCMeta):
         self._content_cache.clear()
 
 
+class ConfigSource(CacheableSource[Config]):
+    """Abstract class for the configuration source.
+
+    This class takes care of the expected caching and locking logic. Subclasses
+    are responsible for implementing the actual logic to find revisions and
+    reading the configuration.
+    """
+
+    # Keep a mapping between the scheme and the class
+    __registry: dict[str, type["ConfigSource"]] = {}
+    scheme: str
+
+    def __init__(self, *, backend_url: ConfigSourceUrl) -> None:
+        super().__init__()
+
+    def __init_subclass__(cls) -> None:
+        """Keep a record of <scheme: class>."""
+        if cls.scheme in cls.__registry:
+            raise TypeError(f"{cls.scheme=} is already define")
+        cls.__registry[cls.scheme] = cls
+
+    @classmethod
+    def create(cls):
+        return cls.create_from_url(backend_url=os.environ["DIRACX_CONFIG_BACKEND_URL"])
+
+    @classmethod
+    def create_from_url(
+        cls, *, backend_url: ConfigSourceUrl | Path | str
+    ) -> "ConfigSource":
+        """Produce a concrete instance depending on the backend URL scheme."""
+        url = TypeAdapter(ConfigSourceUrl).validate_python(str(backend_url))
+        return cls.__registry[url.scheme](backend_url=url)
+
+    @abstractmethod
+    def read_raw(self, hexsha: str, modified: datetime) -> Config:
+        """Abstract method.
+
+        Return the Config object that corresponds to the specific hash
+        The `modified` parameter is just added as a attribute to the config.
+        """
+
+    def read_config(self) -> Config:
+        """Load the configuration from the backend with appropriate caching.
+
+        :raises: diracx.core.exceptions.NotReadyError if the config is being loaded still
+        :raises: git.exc.BadName if version does not exist
+        """
+        return super().read()
+
+    async def read_config_non_blocking(self) -> Config:
+        """Load the configuration from the backend with appropriate caching.
+
+        :raises: diracx.core.exceptions.NotReadyError if the config is being loaded still
+        :raises: git.exc.BadName if version does not exist
+        """
+        return await super().read_non_blocking()
+
+
 class BaseGitConfigSource(ConfigSource):
     """Base class for the git based config source."""
 
@@ -172,13 +207,13 @@ class BaseGitConfigSource(ConfigSource):
     def __init__(self, *, backend_url: ConfigSourceUrl) -> None:
         super().__init__(backend_url=backend_url)
         self.remote_url = self.extract_remote_url(backend_url)
-        self.git_branch = self.get_git_branch_from_url(backend_url)
+        self.git_revision = self.get_git_revision_from_url(backend_url)
 
     def latest_revision(self) -> tuple[str, datetime]:
         try:
             rev = sh.git(
                 "rev-parse",
-                self.git_branch,
+                self.git_revision,
                 _cwd=self.repo_location,
                 _tty_out=False,
                 _async=is_running_in_async_context(),
@@ -215,9 +250,9 @@ class BaseGitConfigSource(ConfigSource):
                 f"Error reading configuration: {e}"
             ) from e
 
-        config_class: Config = select_from_extension(group="diracx", name="config")[
-            0
-        ].load()
+        config_class: Config = select_from_extension(
+            group=DiracEntryPoint.CORE, name="config"
+        )[0].load()
         config = config_class.model_validate(raw_obj)
         config._hexsha = hexsha
         config._modified = modified
@@ -229,13 +264,14 @@ class BaseGitConfigSource(ConfigSource):
         remote_url = urlunparse(parsed_url._replace(query=""))
         return remote_url
 
-    def get_git_branch_from_url(self, backend_url: ConfigSourceUrl) -> str:
+    def get_git_revision_from_url(self, backend_url: ConfigSourceUrl) -> str:
         """Extract the branch from the query parameters."""
-        return dict(backend_url.query_params()).get("branch", DEFAULT_GIT_BRANCH)
+        return dict(backend_url.query_params()).get("revision", DEFAULT_GIT_BRANCH)
 
 
 class LocalGitConfigSource(BaseGitConfigSource):
-    """The configuration is stored on a local git repository
+    """The configuration is stored on a local git repository.
+
     When running on multiple servers, the filesystem must be shared.
     """
 
@@ -260,7 +296,7 @@ class LocalGitConfigSource(BaseGitConfigSource):
             raise ValueError(
                 f"{self.repo_location} is not a valid git repository"
             ) from e
-        sh.git.checkout(self.git_branch, _cwd=self.repo_location, _async=False)
+        sh.git.checkout(self.git_revision, _cwd=self.repo_location, _async=False)
 
     def __hash__(self):
         return hash(self.repo_location)
@@ -278,9 +314,8 @@ class RemoteGitConfigSource(BaseGitConfigSource):
 
         self._temp_dir = TemporaryDirectory()
         self.repo_location = Path(self._temp_dir.name)
-        sh.git.clone(
-            self.remote_url, self.repo_location, branch=self.git_branch, _async=False
-        )
+        sh.git.clone(self.remote_url, self.repo_location, _async=False)
+        sh.git.checkout(self.git_revision, _cwd=self.repo_location, _async=False)
 
     def __hash__(self):
         return hash(self.repo_location)

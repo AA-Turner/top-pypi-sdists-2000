@@ -7,6 +7,7 @@ import json
 import logging
 import sys
 import types
+import warnings
 from typing import (
     Optional,
     Generator,
@@ -132,31 +133,6 @@ class Transaction(asyncio.Future):
         return fmt
 
 
-class EventTransaction(Transaction):
-    event = None
-    value = None
-
-    def __init__(self, event_object):
-        try:
-            super().__init__(None)
-        except BaseException:
-            pass
-        self.set_result(event_object)
-        self.event = self.value = self.result()
-
-    def __repr__(self):
-        status = "finished"
-        success = False if self.exception() else True
-        event_object = self.result()
-        fmt = (
-            f"{self.__class__.__name__}\n\t"
-            f"event: {event_object.__class__.__module__}.{event_object.__class__.__name__}\n\t"  # noqa
-            f"status: {status}\n\t"
-            f"success: {success}>"
-        )
-        return fmt
-
-
 class CantTouchThis(type):
     def __setattr__(cls, attr, value):
         """:meta private:"""
@@ -184,13 +160,13 @@ class Connection(metaclass=CantTouchThis):
         self,
         websocket_url=None,
         target=None,
-        _owner=None,
+        browser=None,
         **kwargs,
     ):
         super().__init__()
         self._target = target
         self.__count__ = itertools.count(0)
-        self._owner = _owner
+        self.browser = browser
         self.websocket_url: str = websocket_url
         self.websocket = None
         self.mapper = {}
@@ -329,20 +305,31 @@ class Connection(metaclass=CantTouchThis):
         await self.update_target()
         loop = asyncio.get_running_loop()
         start_time = loop.time()
-        try:
-            if isinstance(t, (int, float)):
-                await asyncio.wait_for(self.listener.idle.wait(), timeout=t)
-                while (loop.time() - start_time) < t:
-                    await asyncio.sleep(0.1)
-            else:
-                await self.listener.idle.wait()
-        except asyncio.TimeoutError:
-            if isinstance(t, (int, float)):
-                # Explicit time is given, which is now passed, so leave now.
-                return
-        except AttributeError:
-            # No listener created yet.
-            pass
+        with warnings.catch_warnings():
+            warnings.filterwarnings(
+                action="ignore",
+                category=RuntimeWarning,
+                message=".*coroutine.*",
+            )
+            try:
+                if isinstance(t, (int, float)):
+                    try:
+                        await asyncio.wait_for(
+                            self.listener.idle.wait(), timeout=t
+                        )
+                    except RuntimeError:
+                        await self.listener.idle.wait()
+                    while (loop.time() - start_time) < t:
+                        await asyncio.sleep(0.1)
+                else:
+                    await self.listener.idle.wait()
+            except asyncio.TimeoutError:
+                if isinstance(t, (int, float)):
+                    # Explicit time that's given has passed, so leave now.
+                    return
+            except AttributeError:
+                # No listener created yet.
+                pass
 
     async def set_locale(self, locale: Optional[str] = None):
         """Sets the Language Locale code via set_user_agent_override."""
@@ -426,8 +413,8 @@ class Connection(metaclass=CantTouchThis):
         await self.aopen()
         if not self.websocket or self.websocket.state is State.CLOSED:
             return
-        if self._owner:
-            browser = self._owner
+        if self.browser:
+            browser = self.browser
             if browser.config:
                 if browser.config.expert:
                     await self._prepare_expert()
@@ -445,11 +432,17 @@ class Connection(metaclass=CantTouchThis):
             if not _is_update:
                 await self._register_handlers()
             await self.websocket.send(tx.message)
-            try:
-                return await tx
-            except ProtocolException as e:
-                e.message += f"\ncommand:{tx.method}\nparams:{tx.params}"
-                raise e
+            with warnings.catch_warnings():
+                warnings.filterwarnings(
+                    action="ignore",
+                    category=RuntimeWarning,
+                    message=".*coroutine.*",
+                )
+                try:
+                    return await tx
+                except ProtocolException as e:
+                    e.message += f"\ncommand:{tx.method}\nparams:{tx.params}"
+                    raise e
         except Exception:
             await self.aclose()
 
@@ -586,10 +579,12 @@ class Listener:
                     "Connection listener exception "
                     "while reading websocket:\n%s", e
                 )
+                self.idle.set()
                 break
             if not self.running:
                 # If we have been cancelled or otherwise stopped running,
                 # then break this loop.
+                self.idle.set()
                 break
             self.idle.clear()  # Not "idle" anymore.
             message = json.loads(msg)
@@ -610,11 +605,6 @@ class Listener:
                 # Probably an event
                 try:
                     event = cdp.util.parse_json_event(message)
-                    event_tx = EventTransaction(event)
-                    if not self.connection.mapper:
-                        self.connection.__count__ = itertools.count(0)
-                    event_tx.id = next(self.connection.__count__)
-                    self.connection.mapper[event_tx.id] = event_tx
                 except Exception as e:
                     logger.info(
                         "%s: %s during parsing of json from event : %s"
@@ -639,9 +629,11 @@ class Listener:
                                 or inspect.iscoroutine(callback)
                             ):
                                 try:
-                                    await callback(event, self.connection)
+                                    asyncio.create_task(
+                                        callback(event, self.connection)
+                                    )
                                 except TypeError:
-                                    await callback(event)
+                                    asyncio.create_task(callback(event))
                             else:
                                 try:
                                     callback(event, self.connection)

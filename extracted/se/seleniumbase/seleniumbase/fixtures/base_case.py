@@ -92,6 +92,7 @@ __all__ = ["BaseCase"]
 
 logging.getLogger("requests").setLevel(logging.ERROR)
 logging.getLogger("urllib3").setLevel(logging.ERROR)
+logging.getLogger("websocket").setLevel(logging.CRITICAL)
 urllib3.disable_warnings()
 LOGGER.setLevel(logging.WARNING)
 is_linux = shared_utils.is_linux()
@@ -221,11 +222,11 @@ class BaseCase(unittest.TestCase):
                 [sys.executable, "-m", "pytest", file, "-s", *all_args]
             )
 
-    def open(self, url):
+    def open(self, url, **kwargs):
         """Navigates the current browser window to the specified page."""
         self.__check_scope()
         if self.__is_cdp_swap_needed():
-            self.cdp.open(url)
+            self.cdp.open(url, **kwargs)
             return
         elif (
             getattr(self.driver, "_is_using_uc", None)
@@ -235,14 +236,14 @@ class BaseCase(unittest.TestCase):
             # Auth in UC Mode requires CDP Mode
             # (and now we're always forcing it)
             logging.info("open() in UC Mode now always activates CDP Mode.")
-            self.activate_cdp_mode(url)
+            self.activate_cdp_mode(url, **kwargs)
             return
         elif (
             getattr(self.driver, "_is_using_uc", None)
             and getattr(self.driver, "_is_using_cdp", None)
         ):
             self.disconnect()
-            self.cdp.open(url)
+            self.cdp.open(url, **kwargs)
             return
         self._check_browser()
         if self.__needs_minimum_wait():
@@ -410,7 +411,7 @@ class BaseCase(unittest.TestCase):
         original_by = by
         selector, by = self.__recalculate_selector(selector, by)
         if self.__is_cdp_swap_needed():
-            self.cdp.click(selector, timeout=timeout)
+            self.cdp.click(selector, timeout=timeout, scroll=scroll)
             return
         if delay and (type(delay) in [int, float]) and delay > 0:
             time.sleep(delay)
@@ -1637,14 +1638,14 @@ class BaseCase(unittest.TestCase):
     def click_link_text(self, link_text, timeout=None):
         """This method clicks link text on a page."""
         self.__check_scope()
-        if self.__is_cdp_swap_needed():
-            self.cdp.find_element(link_text, timeout=timeout).click()
-            return
-        self.__skip_if_esc()
         if not timeout:
             timeout = settings.SMALL_TIMEOUT
         if self.timeout_multiplier and timeout == settings.SMALL_TIMEOUT:
             timeout = self.__get_new_timeout(timeout)
+        if self.__is_cdp_swap_needed():
+            self.cdp.find_element(link_text, timeout=timeout).click()
+            return
+        self.__skip_if_esc()
         link_text = self.__get_type_checked_text(link_text)
         if self.__is_cdp_swap_needed():
             self.cdp.click_link(link_text)
@@ -2253,7 +2254,7 @@ class BaseCase(unittest.TestCase):
         )
 
     def click_visible_elements(
-        self, selector, by="css selector", limit=0, timeout=None
+        self, selector, by="css selector", limit=0, timeout=None, scroll=True
     ):
         """Finds all matching page elements and clicks visible ones in order.
         If a click reloads or opens a new page, the clicking will stop.
@@ -2269,7 +2270,7 @@ class BaseCase(unittest.TestCase):
             timeout = self.__get_new_timeout(timeout)
         selector, by = self.__recalculate_selector(selector, by)
         if self.__is_cdp_swap_needed():
-            self.cdp.click_visible_elements(selector, limit)
+            self.cdp.click_visible_elements(selector, limit, scroll=scroll)
             return
         self.wait_for_ready_state_complete()
         if self.__needs_minimum_wait():
@@ -2296,7 +2297,8 @@ class BaseCase(unittest.TestCase):
                 return
             try:
                 if element.is_displayed():
-                    self.__scroll_to_element(element)
+                    if scroll:
+                        self.__scroll_to_element(element)
                     if self.browser == "safari":
                         self.execute_script("arguments[0].click();", element)
                     else:
@@ -2310,7 +2312,8 @@ class BaseCase(unittest.TestCase):
                 time.sleep(0.12)
                 try:
                     if element.is_displayed():
-                        self.__scroll_to_element(element)
+                        if scroll:
+                            self.__scroll_to_element(element)
                         if self.browser == "safari":
                             self.execute_script(
                                 "arguments[0].click();", element
@@ -2347,7 +2350,7 @@ class BaseCase(unittest.TestCase):
             self.__switch_to_newest_window_if_not_blank()
 
     def click_nth_visible_element(
-        self, selector, number, by="css selector", timeout=None
+        self, selector, number, by="css selector", timeout=None, scroll=True
     ):
         """Finds all matching page elements and clicks the nth visible one.
         Example: self.click_nth_visible_element('[type="checkbox"]', 5)
@@ -2359,7 +2362,7 @@ class BaseCase(unittest.TestCase):
             timeout = self.__get_new_timeout(timeout)
         selector, by = self.__recalculate_selector(selector, by)
         if self.__is_cdp_swap_needed():
-            self.cdp.click_nth_visible_element(selector, number)
+            self.cdp.click_nth_visible_element(selector, number, scroll=scroll)
             return
         self.wait_for_ready_state_complete()
         self.wait_for_element_present(selector, by=by, timeout=timeout)
@@ -2378,7 +2381,8 @@ class BaseCase(unittest.TestCase):
             pre_action_url = self.driver.current_url
         pre_window_count = len(self.driver.window_handles)
         try:
-            self.__scroll_to_element(element)
+            if scroll:
+                self.__scroll_to_element(element)
             self.__element_click(element)
         except (Stale_Exception, ENI_Exception, ECI_Exception):
             time.sleep(0.12)
@@ -2408,25 +2412,28 @@ class BaseCase(unittest.TestCase):
         ):
             self.__switch_to_newest_window_if_not_blank()
 
-    def click_if_visible(self, selector, by="css selector", timeout=0):
+    def click_if_visible(
+        self, selector, by="css selector", timeout=0, scroll=True
+    ):
         """If the page selector exists and is visible, clicks on the element.
         This method only clicks on the first matching element found.
         Use click_visible_elements() to click all matching elements.
         If a "timeout" is provided, waits that long for the element
         to appear before giving up and returning without a click()."""
         if self.__is_cdp_swap_needed():
-            self.cdp.click_if_visible(selector)
+            self.cdp.click_if_visible(selector, timeout=timeout, scroll=scroll)
             return
         self.wait_for_ready_state_complete()
         if self.is_element_visible(selector, by=by):
-            self.click(selector, by=by)
+            self.click(selector, by=by, scroll=scroll)
         elif timeout > 0:
             with suppress(Exception):
                 self.wait_for_element_visible(
                     selector, by=by, timeout=timeout
                 )
+                self.sleep(0.2)
             if self.is_element_visible(selector, by=by):
-                self.click(selector, by=by)
+                self.click(selector, by=by, scroll=scroll)
 
     def click_active_element(self):
         if self.__is_cdp_swap_needed():
@@ -2482,6 +2489,7 @@ class BaseCase(unittest.TestCase):
         mark=None,
         timeout=None,
         center=None,
+        scroll=True,
     ):
         """Click an element at an {X,Y}-offset location.
         {0,0} is the top-left corner of the element.
@@ -2498,6 +2506,7 @@ class BaseCase(unittest.TestCase):
             mark=mark,
             timeout=timeout,
             center=center,
+            scroll=scroll,
         )
 
     def double_click_with_offset(
@@ -2509,6 +2518,7 @@ class BaseCase(unittest.TestCase):
         mark=None,
         timeout=None,
         center=None,
+        scroll=True,
     ):
         """Double click an element at an {X,Y}-offset location.
         {0,0} is the top-left corner of the element.
@@ -2525,6 +2535,7 @@ class BaseCase(unittest.TestCase):
             mark=mark,
             timeout=timeout,
             center=center,
+            scroll=scroll,
         )
 
     def is_checked(self, selector, by="css selector", timeout=None):
@@ -2717,7 +2728,7 @@ class BaseCase(unittest.TestCase):
         original_by = by
         selector, by = self.__recalculate_selector(selector, by)
         if self.__is_cdp_swap_needed():
-            self.cdp.gui_hover_element(selector)
+            self.cdp.hover_element(selector)
             return
         self.wait_for_element_visible(
             original_selector, by=original_by, timeout=timeout
@@ -2762,7 +2773,7 @@ class BaseCase(unittest.TestCase):
             click_selector, click_by
         )
         if self.__is_cdp_swap_needed():
-            self.cdp.gui_hover_and_click(hover_selector, click_selector)
+            self.cdp.hover_and_click(hover_selector, click_selector)
             return
         dropdown_element = self.wait_for_element_visible(
             original_selector, by=original_by, timeout=timeout
@@ -3446,6 +3457,46 @@ class BaseCase(unittest.TestCase):
             file_path = os.path.join(abs_path, html_file)
         self.open("file://" + file_path)
 
+    def evaluate(self, expression):
+        """Run a JavaScript expression and return the result."""
+        self.__check_scope()
+        if self.__is_cdp_swap_needed():
+            return self.cdp.evaluate(expression)
+        self._check_browser()
+        original_expression = expression
+        expression = expression.strip()
+        exp_list = expression.split("\n")
+        if exp_list and exp_list[-1].strip().startswith("return "):
+            expression = (
+                "\n".join(exp_list[0:-1]) + "\n"
+                + exp_list[-1].strip()[len("return "):]
+            ).strip()
+        evaluation = self.driver.execute_cdp_cmd(
+            "Runtime.evaluate",
+            {
+                "expression": expression
+            },
+        )
+        if "value" in evaluation["result"]:
+            return evaluation["result"]["value"]
+        elif evaluation["result"]["type"] == "undefined":
+            return None
+        elif "exceptionDetails" in evaluation:
+            raise Exception(evaluation["result"]["description"], expression)
+        elif evaluation["result"]["type"] == "object":
+            if "return " not in original_expression:
+                expression = "return " + original_expression.strip()
+            # Need to use execute_script() to return a WebDriver object.
+            # If this causes duplicate evaluation, don't use evaluate().
+            return self.execute_script(expression)
+        elif evaluation["result"]["type"] == "function":
+            return {}  # This is what sb.cdp.evaluate returns
+        elif "description" in evaluation["result"]:
+            # At this point, the description is the exception
+            raise Exception(evaluation["result"]["description"], expression)
+        else:  # Possibly an unhandled case if reached
+            return None
+
     def execute_script(self, script, *args, **kwargs):
         self.__check_scope()
         if self.__is_cdp_swap_needed():
@@ -3960,7 +4011,7 @@ class BaseCase(unittest.TestCase):
         Reverts self.set_content_to_frame()."""
         self.set_content_to_default(nested=True)
 
-    def open_new_window(self, switch_to=True):
+    def open_new_window(self, switch_to=True, **kwargs):
         """Opens a new browser tab/window and switches to it by default."""
         url = None
         if self.__looks_like_a_page_url(str(switch_to)):
@@ -3969,14 +4020,14 @@ class BaseCase(unittest.TestCase):
             url = switch_to
             switch_to = True
         if self.__is_cdp_swap_needed():
-            self.cdp.open_new_tab(url=url, switch_to=switch_to)
+            self.cdp.open_new_tab(url=url, switch_to=switch_to, **kwargs)
             return
         elif (
             getattr(self.driver, "_is_using_uc", None)
             and getattr(self.driver, "_is_using_cdp", None)
         ):
             self.disconnect()
-            self.cdp.open_new_tab(url=url, switch_to=switch_to)
+            self.cdp.open_new_tab(url=url, switch_to=switch_to, **kwargs)
             return
         self.wait_for_ready_state_complete()
         if switch_to:
@@ -5035,6 +5086,8 @@ class BaseCase(unittest.TestCase):
         self.cdp = self.driver.cdp
         if hasattr(self.cdp, "solve_captcha"):
             self.solve_captcha = self.cdp.solve_captcha
+        if hasattr(self.cdp, "click_captcha"):
+            self.click_captcha = self.cdp.click_captcha
         if hasattr(self.cdp, "find_element_by_text"):
             self.find_element_by_text = self.cdp.find_element_by_text
         if getattr(self.driver, "_is_using_auth", None):
@@ -7335,21 +7388,6 @@ class BaseCase(unittest.TestCase):
             with pip_find_lock:
                 with suppress(Exception):
                     shared_utils.make_writable(constants.PipInstall.FINDLOCK)
-                if sys.version_info < (3, 9):
-                    # Fix bug in newer cryptography for Python 3.7 and 3.8:
-                    # "pyo3_runtime.PanicException: Python API call failed"
-                    try:
-                        import cryptography
-                        if cryptography.__version__ != "39.0.2":
-                            del cryptography  # To get newer ver
-                            shared_utils.pip_install(
-                                "cryptography", version="39.0.2"
-                            )
-                            import cryptography
-                    except Exception:
-                        shared_utils.pip_install(
-                            "cryptography", version="39.0.2"
-                        )
                 try:
                     from pdfminer.high_level import extract_text
                 except Exception:
@@ -7641,7 +7679,11 @@ class BaseCase(unittest.TestCase):
                 destination_folder = constants.Files.DOWNLOADS_FOLDER
             if not os.path.exists(destination_folder):
                 os.makedirs(destination_folder)
-        page_utils._download_file_to(file_url, destination_folder)
+        agent = self.get_user_agent()
+        headers = {"user-agent": agent}
+        page_utils._download_file_to(
+            file_url, destination_folder, headers=headers
+        )
         if self.recorder_mode and self.__current_url_is_recordable():
             if self.get_session_storage_item("pause_recorder") == "no":
                 time_stamp = self.execute_script("return Date.now();")
@@ -7665,8 +7707,10 @@ class BaseCase(unittest.TestCase):
                 destination_folder = constants.Files.DOWNLOADS_FOLDER
             if not os.path.exists(destination_folder):
                 os.makedirs(destination_folder)
+        agent = self.get_user_agent()
+        headers = {"user-agent": agent}
         page_utils._download_file_to(
-            file_url, destination_folder, new_file_name
+            file_url, destination_folder, new_file_name, headers=headers
         )
 
     def save_data_as(self, data, file_name, destination_folder=None):
@@ -9271,9 +9315,9 @@ class BaseCase(unittest.TestCase):
         """Same as self.refresh_page()"""
         self.refresh_page()
 
-    def open_new_tab(self, switch_to=True):
+    def open_new_tab(self, switch_to=True, **kwargs):
         """Same as self.open_new_window()"""
-        self.open_new_window(switch_to=switch_to)
+        self.open_new_window(switch_to=switch_to, **kwargs)
 
     def switch_to_tab(self, tab, timeout=None):
         """Same as self.switch_to_window()
@@ -9298,81 +9342,42 @@ class BaseCase(unittest.TestCase):
         self, selector, text, by="css selector", timeout=None, retry=False
     ):
         """Same as self.update_text()"""
-        self.__check_scope()
-        if not timeout:
-            timeout = settings.LARGE_TIMEOUT
-        if self.timeout_multiplier and timeout == settings.LARGE_TIMEOUT:
-            timeout = self.__get_new_timeout(timeout)
-        selector, by = self.__recalculate_selector(selector, by)
         self.update_text(selector, text, by=by, timeout=timeout, retry=retry)
 
     def fill(
         self, selector, text, by="css selector", timeout=None, retry=False
     ):
         """Same as self.update_text()"""
-        self.__check_scope()
-        if not timeout:
-            timeout = settings.LARGE_TIMEOUT
-        if self.timeout_multiplier and timeout == settings.LARGE_TIMEOUT:
-            timeout = self.__get_new_timeout(timeout)
-        selector, by = self.__recalculate_selector(selector, by)
         self.update_text(selector, text, by=by, timeout=timeout, retry=retry)
 
     def write(
         self, selector, text, by="css selector", timeout=None, retry=False
     ):
         """Same as self.update_text()"""
-        self.__check_scope()
-        if not timeout:
-            timeout = settings.LARGE_TIMEOUT
-        if self.timeout_multiplier and timeout == settings.LARGE_TIMEOUT:
-            timeout = self.__get_new_timeout(timeout)
-        selector, by = self.__recalculate_selector(selector, by)
         self.update_text(selector, text, by=by, timeout=timeout, retry=retry)
 
     def click_link(self, link_text, timeout=None):
         """Same as self.click_link_text()"""
-        self.__check_scope()
-        if not timeout:
-            timeout = settings.SMALL_TIMEOUT
-        if self.timeout_multiplier and timeout == settings.SMALL_TIMEOUT:
-            timeout = self.__get_new_timeout(timeout)
         self.click_link_text(link_text, timeout=timeout)
 
     def click_partial_link(self, partial_link_text, timeout=None):
         """Same as self.click_partial_link_text()"""
-        self.__check_scope()
-        if not timeout:
-            timeout = settings.SMALL_TIMEOUT
-        if self.timeout_multiplier and timeout == settings.SMALL_TIMEOUT:
-            timeout = self.__get_new_timeout(timeout)
         self.click_partial_link_text(partial_link_text, timeout=timeout)
 
     def right_click(self, selector, by="css selector", timeout=None):
         """Same as self.context_click()"""
-        self.__check_scope()
-        if not timeout:
-            timeout = settings.SMALL_TIMEOUT
-        if self.timeout_multiplier and timeout == settings.SMALL_TIMEOUT:
-            timeout = self.__get_new_timeout(timeout)
         self.context_click(selector, by=by, timeout=timeout)
+
+    def hover_element(self, selector, by="css selector", timeout=None):
+        """Same as self.hover()"""
+        return self.hover(selector, by=by, timeout=timeout)
 
     def hover_on_element(self, selector, by="css selector", timeout=None):
         """Same as self.hover()"""
-        self.__check_scope()
-        if not timeout:
-            timeout = settings.SMALL_TIMEOUT
-        if self.timeout_multiplier and timeout == settings.SMALL_TIMEOUT:
-            timeout = self.__get_new_timeout(timeout)
         return self.hover(selector, by=by, timeout=timeout)
 
     def hover_over_element(self, selector, by="css selector", timeout=None):
         """Same as self.hover()"""
-        self.__check_scope()
-        if not timeout:
-            timeout = settings.SMALL_TIMEOUT
-        if self.timeout_multiplier and timeout == settings.SMALL_TIMEOUT:
-            timeout = self.__get_new_timeout(timeout)
         return self.hover(selector, by=by, timeout=timeout)
 
     def wait_for_element_visible(
@@ -14047,9 +14052,12 @@ class BaseCase(unittest.TestCase):
         mark=None,
         timeout=None,
         center=None,
+        scroll=True,
     ):
         if self.__is_cdp_swap_needed():
-            self.cdp.click_with_offset(selector, x, y, center=center)
+            self.cdp.click_with_offset(
+                selector, x, y, center=center, scroll=scroll
+            )
             return
         self.wait_for_ready_state_complete()
         if self.__needs_minimum_wait():
@@ -14065,9 +14073,13 @@ class BaseCase(unittest.TestCase):
         if self.demo_mode:
             self.__highlight(selector, by=by, loops=1)
         elif self.slow_mode:
-            self.__slow_scroll_to_element(element)
+            if scroll:
+                self.__slow_scroll_to_element(element)
+            else:
+                self.sleep(0.2)
         else:
-            self.__scroll_to_element(element, selector, by)
+            if scroll:
+                self.__scroll_to_element(element, selector, by)
         self.wait_for_ready_state_complete()
         if self.__needs_minimum_wait():
             time.sleep(0.03)
@@ -14736,36 +14748,10 @@ class BaseCase(unittest.TestCase):
         is_present = False
         for selector_part in selectors[1:]:
             shadow_root = None
-            if (
-                (self.is_chromium() or self.browser == "firefox")
-                and int(self.__get_major_browser_version()) >= 96
-            ):
+            if self.is_chromium() or self.browser == "firefox":
                 try:
                     shadow_root = element.shadow_root
                 except Exception:
-                    if self.is_chromium():
-                        chrome_dict = self.driver.capabilities["chrome"]
-                        chrome_dr_version = chrome_dict["chromedriverVersion"]
-                        chromedriver_version = chrome_dr_version.split(" ")[0]
-                        major_c_dr_version = chromedriver_version.split(".")[0]
-                        if int(major_c_dr_version) < 96:
-                            upgrade_to = "latest"
-                            major_browser_version = (
-                                self.__get_major_browser_version()
-                            )
-                            if int(major_browser_version) >= 96:
-                                upgrade_to = str(major_browser_version)
-                            message = (
-                                "You need to upgrade to a newer\n"
-                                "version of chromedriver to interact\n"
-                                "with Shadow root elements!\n"
-                                "(Current driver version is: %s)"
-                                "\n(Minimum driver version is: 96.*)"
-                                "\nTo upgrade, run this:"
-                                '\n"seleniumbase get chromedriver %s"'
-                                % (chromedriver_version, upgrade_to)
-                            )
-                            raise Exception(message)
                     if timeout != 0.1:  # Skip wait for special 0.1 (See above)
                         time.sleep(2)
                     try:
@@ -14774,12 +14760,7 @@ class BaseCase(unittest.TestCase):
                         raise Exception(
                             "Element {%s} has no shadow root!" % selector_chain
                         )
-            else:  # This part won't work on Chrome 96 or newer.
-                # If using Chrome 96 or newer (and on an old Python version),
-                #     you'll need to upgrade in order to access Shadow roots.
-                # Firefox users will likely hit:
-                #     https://github.com/mozilla/geckodriver/issues/1711
-                #     When Firefox adds support, switch to element.shadow_root
+            else:
                 try:
                     shadow_root = self.execute_script(
                         "return arguments[0].shadowRoot;", element

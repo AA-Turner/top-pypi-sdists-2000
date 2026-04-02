@@ -13,13 +13,13 @@ import pathlib
 import shutil
 import subprocess
 import typing as t
-import warnings
 
-from libtmux import exc, formats
+from libtmux import exc
 from libtmux._internal.query_list import QueryList
-from libtmux._internal.types import StrPath
 from libtmux.common import tmux_cmd
-from libtmux.neo import fetch_objs
+from libtmux.constants import OptionScope
+from libtmux.hooks import HooksMixin
+from libtmux.neo import fetch_objs, get_output_format, parse_output
 from libtmux.pane import Pane
 from libtmux.session import Session
 from libtmux.window import Window
@@ -29,25 +29,28 @@ from .common import (
     PaneDict,
     SessionDict,
     WindowDict,
-    has_gte_version,
     session_check_name,
 )
+from .options import OptionsMixin
 
 if t.TYPE_CHECKING:
-    import sys
     import types
+    from typing import TypeAlias
 
-    if sys.version_info >= (3, 10):
-        from typing import Self, TypeAlias
-    else:
-        from typing_extensions import Self, TypeAlias
+    from typing_extensions import Self
+
+    from libtmux._internal.types import StrPath
 
     DashLiteral: TypeAlias = t.Literal["-"]
 
 logger = logging.getLogger(__name__)
 
 
-class Server(EnvironmentMixin):
+class Server(
+    EnvironmentMixin,
+    OptionsMixin,
+    HooksMixin,
+):
     """:term:`tmux(1)` :term:`Server` [server_manual]_.
 
     - :attr:`Server.sessions` [:class:`Session`, ...]
@@ -68,6 +71,7 @@ class Server(EnvironmentMixin):
     colors : str, optional
     on_init : callable, optional
     socket_name_factory : callable, optional
+    tmux_bin : str or pathlib.Path, optional
 
     Examples
     --------
@@ -120,6 +124,13 @@ class Server(EnvironmentMixin):
     formatter_prefix = "server_"
     """Namespace used for :class:`~libtmux.common.TmuxMappingObject`"""
 
+    default_option_scope: OptionScope | None = OptionScope.Server
+    """For option management."""
+    default_hook_scope: OptionScope | None = OptionScope.Server
+    """For hook management."""
+    tmux_bin: str | None = None
+    """Custom path to tmux binary. Falls back to ``shutil.which("tmux")``."""
+
     def __init__(
         self,
         socket_name: str | None = None,
@@ -128,9 +139,11 @@ class Server(EnvironmentMixin):
         colors: int | None = None,
         on_init: t.Callable[[Server], None] | None = None,
         socket_name_factory: t.Callable[[], str] | None = None,
+        tmux_bin: str | pathlib.Path | None = None,
         **kwargs: t.Any,
     ) -> None:
         EnvironmentMixin.__init__(self, "-g")
+        self.tmux_bin = str(tmux_bin) if tmux_bin is not None else None
         self._windows: list[WindowDict] = []
         self._panes: list[PaneDict] = []
 
@@ -205,6 +218,14 @@ class Server(EnvironmentMixin):
     def raise_if_dead(self) -> None:
         """Raise if server not connected.
 
+        Raises
+        ------
+        :exc:`exc.TmuxCommandNotFound`
+            When the tmux binary cannot be found or executed.
+        :class:`subprocess.CalledProcessError`
+            When the tmux server is not running (non-zero exit from
+            ``list-sessions``).
+
         >>> tmux = Server(socket_name="no_exist")
         >>> try:
         ...     tmux.raise_if_dead()
@@ -212,8 +233,8 @@ class Server(EnvironmentMixin):
         ...     print(type(e))
         <class 'subprocess.CalledProcessError'>
         """
-        tmux_bin = shutil.which("tmux")
-        if tmux_bin is None:
+        resolved = self.tmux_bin or shutil.which("tmux")
+        if resolved is None:
             raise exc.TmuxCommandNotFound
 
         cmd_args: list[str] = ["list-sessions"]
@@ -224,7 +245,10 @@ class Server(EnvironmentMixin):
         if self.config_file:
             cmd_args.insert(0, f"-f{self.config_file}")
 
-        subprocess.check_call([tmux_bin, *cmd_args])
+        try:
+            subprocess.check_call([resolved, *cmd_args])
+        except FileNotFoundError:
+            raise exc.TmuxCommandNotFound from None
 
     #
     # Command
@@ -300,11 +324,11 @@ class Server(EnvironmentMixin):
 
         cmd_args = ["-t", str(target), *args] if target is not None else [*args]
 
-        return tmux_cmd(*svr_args, *cmd_args)
+        return tmux_cmd(*svr_args, *cmd_args, tmux_bin=self.tmux_bin)
 
     @property
     def attached_sessions(self) -> list[Session]:
-        """Return active :class:`Session`s.
+        """Return active :class:`Session` instances.
 
         Examples
         --------
@@ -313,7 +337,8 @@ class Server(EnvironmentMixin):
 
         Returns
         -------
-        list of :class:`Session`
+        list[:class:`Session`]
+            Sessions that are attached.
         """
         return self.sessions.filter(session_attached__noeq="1")
 
@@ -327,7 +352,6 @@ class Server(EnvironmentMixin):
         exact : bool
             match the session name exactly. tmux uses fnmatch by default.
             Internally prepends ``=`` to the session in ``$ tmux has-session``.
-            tmux 2.1 and up only.
 
         Raises
         ------
@@ -339,7 +363,7 @@ class Server(EnvironmentMixin):
         """
         session_check_name(target_session)
 
-        if exact and has_gte_version("2.1"):
+        if exact:
             target_session = f"={target_session}"
 
         proc = self.cmd("has-session", target=target_session)
@@ -364,7 +388,16 @@ class Server(EnvironmentMixin):
         >>> svr.is_alive()
         False
         """
-        self.cmd("kill-server")
+        proc = self.cmd("kill-server")
+        if proc.stderr:
+            stderr_text = " ".join(str(line) for line in proc.stderr)
+            if (
+                "no server running" in stderr_text
+                or "error connecting to" in stderr_text
+            ):
+                return
+            raise exc.LibTmuxException(proc.stderr)
+        logger.info("server killed", extra={"tmux_subcommand": "kill-server"})
 
     def kill_session(self, target_session: str | int) -> Server:
         """Kill tmux session.
@@ -479,10 +512,10 @@ class Server(EnvironmentMixin):
             when the command exits. NOTE: When this command exits the window
             will close.  This feature is useful for long-running processes
             where the closing of the window upon completion is desired.
-        x : [int, str], optional
+        x : int | str, optional
             Force the specified width instead of the tmux default for a
             detached session
-        y : [int, str], optional
+        y : int | str, optional
             Force the specified height instead of the tmux default for a
             detached session
 
@@ -516,76 +549,91 @@ class Server(EnvironmentMixin):
 
             if self.has_session(session_name):
                 if kill_session:
-                    self.cmd("kill-session", target=session_name)
-                    logger.info(f"session {session_name} exists. killed it.")
+                    proc = self.cmd("kill-session", target=session_name)
+                    if proc.stderr:
+                        raise exc.LibTmuxException(proc.stderr)
+                    logger.info(
+                        "existing session killed",
+                        extra={
+                            "tmux_session": session_name,
+                            "tmux_subcommand": "kill-session",
+                        },
+                    )
                 else:
                     msg = f"Session named {session_name} exists"
                     raise exc.TmuxSessionExists(
                         msg,
                     )
 
-        logger.debug(f"creating session {session_name}")
+        extra: dict[str, str] = {
+            "tmux_subcommand": "new-session",
+        }
+        if session_name is not None:
+            extra["tmux_session"] = str(session_name)
+        logger.debug("creating session", extra=extra)
 
         env = os.environ.get("TMUX")
 
         if env:
             del os.environ["TMUX"]
 
-        tmux_args: tuple[str | int, ...] = (
-            "-P",
-            "-F#{session_id}",  # output
-        )
+        try:
+            _fields, format_string = get_output_format()
 
-        if session_name is not None:
-            tmux_args += (f"-s{session_name}",)
+            tmux_args: tuple[str | int, ...] = (
+                "-P",
+                f"-F{format_string}",
+            )
 
-        if not attach:
-            tmux_args += ("-d",)
+            if session_name is not None:
+                tmux_args += (f"-s{session_name}",)
 
-        if start_directory:
-            # as of 2014-02-08 tmux 1.9-dev doesn't expand ~ in new-session -c.
-            start_directory = pathlib.Path(start_directory).expanduser()
-            tmux_args += ("-c", str(start_directory))
+            if not attach:
+                tmux_args += ("-d",)
 
-        if window_name:
-            tmux_args += ("-n", window_name)
+            if start_directory:
+                start_directory = pathlib.Path(start_directory).expanduser()
+                tmux_args += ("-c", str(start_directory))
 
-        if x is not None:
-            tmux_args += ("-x", x)
+            if window_name:
+                tmux_args += ("-n", window_name)
 
-        if y is not None:
-            tmux_args += ("-y", y)
+            if x is not None:
+                tmux_args += ("-x", x)
 
-        if environment:
-            if has_gte_version("3.2"):
+            if y is not None:
+                tmux_args += ("-y", y)
+
+            if environment:
                 for k, v in environment.items():
                     tmux_args += (f"-e{k}={v}",)
-            else:
-                logger.warning(
-                    "Environment flag ignored, tmux 3.2 or newer required.",
-                )
 
-        if window_command:
-            tmux_args += (window_command,)
+            if window_command:
+                tmux_args += (window_command,)
 
-        proc = self.cmd("new-session", *tmux_args)
+            proc = self.cmd("new-session", *tmux_args)
 
-        if proc.stderr:
-            raise exc.LibTmuxException(proc.stderr)
+            if proc.stderr:
+                raise exc.LibTmuxException(proc.stderr)
 
-        session_stdout = proc.stdout[0]
+            session_stdout = proc.stdout[0]
 
-        if env:
-            os.environ["TMUX"] = env
+        finally:
+            if env:
+                os.environ["TMUX"] = env
 
-        session_formatters = dict(
-            zip(["session_id"], session_stdout.split(formats.FORMAT_SEPARATOR)),
-        )
+        session_data = parse_output(session_stdout)
 
-        return Session.from_session_id(
-            server=self,
-            session_id=session_formatters["session_id"],
-        )
+        session = Session(server=self, **session_data)
+
+        info_extra: dict[str, str] = {
+            "tmux_subcommand": "new-session",
+        }
+        if session.session_name is not None:
+            info_extra["tmux_session"] = str(session.session_name)
+        logger.info("session created", extra=info_extra)
+
+        return session
 
     #
     # Relations
@@ -687,12 +735,11 @@ class Server(EnvironmentMixin):
            Deprecated in favor of :meth:`.kill()`.
 
         """
-        warnings.warn(
-            "Server.kill_server() is deprecated in favor of Server.kill()",
-            category=DeprecationWarning,
-            stacklevel=2,
+        raise exc.DeprecatedError(
+            deprecated="Server.kill_server()",
+            replacement="Server.kill()",
+            version="0.30.0",
         )
-        self.cmd("kill-server")
 
     def _list_panes(self) -> list[PaneDict]:
         """Return list of panes in :py:obj:`dict` form.
@@ -702,22 +749,21 @@ class Server(EnvironmentMixin):
         The :py:obj:`list` is derived from ``stdout`` in
         :class:`util.tmux_cmd` which wraps :py:class:`subprocess.Popen`.
 
-        .. deprecated:: 0.16
+        .. deprecated:: 0.17
 
            Deprecated in favor of :attr:`.panes`.
 
         """
-        warnings.warn(
-            "Server._list_panes() is deprecated",
-            category=DeprecationWarning,
-            stacklevel=2,
+        raise exc.DeprecatedError(
+            deprecated="Server._list_panes()",
+            replacement="Server.panes property",
+            version="0.17.0",
         )
-        return [p.__dict__ for p in self.panes]
 
     def _update_panes(self) -> Server:
         """Update internal pane data and return ``self`` for chainability.
 
-        .. deprecated:: 0.16
+        .. deprecated:: 0.17
 
            Deprecated in favor of :attr:`.panes` and returning ``self``.
 
@@ -725,13 +771,11 @@ class Server(EnvironmentMixin):
         -------
         :class:`Server`
         """
-        warnings.warn(
-            "Server._update_panes() is deprecated",
-            category=DeprecationWarning,
-            stacklevel=2,
+        raise exc.DeprecatedError(
+            deprecated="Server._update_panes()",
+            replacement="Server.panes property",
+            version="0.17.0",
         )
-        self._list_panes()
-        return self
 
     def get_by_id(self, session_id: str) -> Session | None:
         """Return session by id. Deprecated in favor of :meth:`.sessions.get()`.
@@ -741,45 +785,39 @@ class Server(EnvironmentMixin):
            Deprecated by :meth:`.sessions.get()`.
 
         """
-        warnings.warn(
-            "Server.get_by_id() is deprecated",
-            category=DeprecationWarning,
-            stacklevel=2,
+        raise exc.DeprecatedError(
+            deprecated="Server.get_by_id()",
+            replacement="Server.sessions.get(session_id=..., default=None)",
+            version="0.16.0",
         )
-        return self.sessions.get(session_id=session_id, default=None)
 
     def where(self, kwargs: dict[str, t.Any]) -> list[Session]:
         """Filter through sessions, return list of :class:`Session`.
 
-        .. deprecated:: 0.16
+        .. deprecated:: 0.17
 
            Deprecated by :meth:`.session.filter()`.
 
         """
-        warnings.warn(
-            "Server.find_where() is deprecated",
-            category=DeprecationWarning,
-            stacklevel=2,
+        raise exc.DeprecatedError(
+            deprecated="Server.where()",
+            replacement="Server.sessions.filter()",
+            version="0.17.0",
         )
-        try:
-            return self.sessions.filter(**kwargs)
-        except IndexError:
-            return []
 
     def find_where(self, kwargs: dict[str, t.Any]) -> Session | None:
         """Filter through sessions, return first :class:`Session`.
 
-        .. deprecated:: 0.16
+        .. deprecated:: 0.17
 
            Slated to be removed in favor of :meth:`.sessions.get()`.
 
         """
-        warnings.warn(
-            "Server.find_where() is deprecated",
-            category=DeprecationWarning,
-            stacklevel=2,
+        raise exc.DeprecatedError(
+            deprecated="Server.find_where()",
+            replacement="Server.sessions.get(default=None, **kwargs)",
+            version="0.17.0",
         )
-        return self.sessions.get(default=None, **kwargs)
 
     def _list_windows(self) -> list[WindowDict]:
         """Return list of windows in :py:obj:`dict` form.
@@ -789,68 +827,63 @@ class Server(EnvironmentMixin):
         The :py:obj:`list` is derived from ``stdout`` in
         :class:`common.tmux_cmd` which wraps :py:class:`subprocess.Popen`.
 
-        .. deprecated:: 0.16
+        .. deprecated:: 0.17
 
            Slated to be removed in favor of :attr:`.windows`.
 
         """
-        warnings.warn(
-            "Server._list_windows() is deprecated",
-            category=DeprecationWarning,
-            stacklevel=2,
+        raise exc.DeprecatedError(
+            deprecated="Server._list_windows()",
+            replacement="Server.windows property",
+            version="0.17.0",
         )
-        return [w.__dict__ for w in self.windows]
 
     def _update_windows(self) -> Server:
         """Update internal window data and return ``self`` for chainability.
 
-        .. deprecated:: 0.16
+        .. deprecated:: 0.17
 
            Deprecated in favor of :attr:`.windows` and returning ``self``.
 
         """
-        warnings.warn(
-            "Server._update_windows() is deprecated",
-            category=DeprecationWarning,
-            stacklevel=2,
+        raise exc.DeprecatedError(
+            deprecated="Server._update_windows()",
+            replacement="Server.windows property",
+            version="0.17.0",
         )
-        self._list_windows()
-        return self
 
     @property
     def _sessions(self) -> list[SessionDict]:
         """Property / alias to return :meth:`~._list_sessions`.
 
-        .. deprecated:: 0.16
+        .. deprecated:: 0.17
 
            Slated to be removed in favor of :attr:`.sessions`.
 
         """
-        warnings.warn(
-            "Server._sessions is deprecated",
-            category=DeprecationWarning,
-            stacklevel=2,
+        raise exc.DeprecatedError(
+            deprecated="Server._sessions",
+            replacement="Server.sessions property",
+            version="0.17.0",
         )
-        return self._list_sessions()
 
     def _list_sessions(self) -> list[SessionDict]:
         """Return list of session object dictionaries.
 
-        .. deprecated:: 0.16
+        .. deprecated:: 0.17
 
            Slated to be removed in favor of :attr:`.sessions`.
         """
-        warnings.warn(
-            "Server._list_sessions() is deprecated",
-            category=DeprecationWarning,
-            stacklevel=2,
+        raise exc.DeprecatedError(
+            deprecated="Server._list_sessions()",
+            replacement="Server.sessions property",
+            version="0.17.0",
         )
-        return [s.__dict__ for s in self.sessions]
 
     def list_sessions(self) -> list[Session]:
         """Return list of :class:`Session` from the ``tmux(1)`` session.
 
-        .. deprecated:: 0.16
+        .. deprecated:: 0.17
 
            Slated to be removed in favor of :attr:`.sessions`.
 
@@ -858,25 +891,23 @@ class Server(EnvironmentMixin):
         -------
         list of :class:`Session`
         """
-        warnings.warn(
-            "Server.list_sessions is deprecated",
-            category=DeprecationWarning,
-            stacklevel=2,
+        raise exc.DeprecatedError(
+            deprecated="Server.list_sessions()",
+            replacement="Server.sessions property",
+            version="0.17.0",
         )
-        return self.sessions
 
     @property
     def children(self) -> QueryList[Session]:
         """Was used by TmuxRelationalObject (but that's longer used in this class).
 
-        .. deprecated:: 0.16
+        .. deprecated:: 0.17
 
            Slated to be removed in favor of :attr:`.sessions`.
 
         """
-        warnings.warn(
-            "Server.children is deprecated",
-            category=DeprecationWarning,
-            stacklevel=2,
+        raise exc.DeprecatedError(
+            deprecated="Server.children",
+            replacement="Server.sessions property",
+            version="0.17.0",
         )
-        return self.sessions

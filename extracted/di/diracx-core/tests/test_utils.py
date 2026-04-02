@@ -1,13 +1,17 @@
 from __future__ import annotations
 
 import fcntl
+import os
+import stat
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
 
-from diracx.core.models import TokenResponse
+from diracx.core.exceptions import NotReadyError
+from diracx.core.models.auth import TokenResponse
 from diracx.core.utils import (
+    TwoLevelCache,
     dotenv_files_from_environment,
     read_credentials,
     serialize_credentials,
@@ -75,9 +79,9 @@ def test_read_credentials_reading_locked_file(monkeypatch, tmp_path):
 
     # Verify that flock was called with LOCK_SH
     assert len(flock_calls) == 1, "fcntl.flock was not called"
-    assert (
-        flock_calls[-1][1] == fcntl.LOCK_SH
-    ), f"Expected LOCK_SH, got {flock_calls[-1][1]}"
+    assert flock_calls[-1][1] == fcntl.LOCK_SH, (
+        f"Expected LOCK_SH, got {flock_calls[-1][1]}"
+    )
     assert "File is locked" in str(exc_info.value)
 
 
@@ -108,10 +112,22 @@ def test_write_credentials_writing_locked_file(monkeypatch, tmp_path):
 
     # Verify that flock was called (for LOCK_EX)
     assert len(flock_calls) == 1, "fcntl.flock was not called"
-    assert (
-        flock_calls[-1][1] == fcntl.LOCK_EX
-    ), f"Expected LOCK_EX, got {flock_calls[-1][1]}"
+    assert flock_calls[-1][1] == fcntl.LOCK_EX, (
+        f"Expected LOCK_EX, got {flock_calls[-1][1]}"
+    )
     assert "File is locked" in str(exc_info.value)
+
+
+def test_write_credentials_writing_unlocked_file(monkeypatch, tmp_path):
+    """Test that write_credentials waits to write into an unlocked file."""
+    token_location = tmp_path / "credentials.json"
+
+    # Write credentials to the file
+    write_credentials(TokenResponse(**TOKEN_RESPONSE_DICT), location=token_location)
+
+    # Verify the permissions
+    mode = os.stat(token_location).st_mode
+    assert mode == (stat.S_IFREG | stat.S_IRUSR | stat.S_IWUSR)
 
 
 def test_read_credentials_empty_file(tmp_path):
@@ -168,3 +184,118 @@ def test_read_credentials_valid_file(tmp_path):
     assert credentials.expires_in < token_response.expires_in
     assert credentials.token_type == token_response.token_type
     assert credentials.refresh_token == token_response.refresh_token
+
+
+class TestTwoLevelCache:
+    """Tests for TwoLevelCache."""
+
+    def test_successful_population(self):
+        """Test that cache is populated successfully."""
+        cache = TwoLevelCache(soft_ttl=10, hard_ttl=60)
+        call_count = 0
+
+        def populate():
+            nonlocal call_count
+            call_count += 1
+            return "test_value"
+
+        result = cache.get("key", populate)
+        assert result == "test_value"
+        assert call_count == 1
+
+        # Second call should use cached value
+        result = cache.get("key", populate)
+        assert result == "test_value"
+        assert call_count == 1
+
+    def test_failed_population_logs_and_allows_retry(self, caplog):
+        """Test that failed population logs error and allows retry on next request."""
+        cache = TwoLevelCache(soft_ttl=10, hard_ttl=60)
+        call_count = 0
+
+        def failing_populate():
+            nonlocal call_count
+            call_count += 1
+            raise ValueError("Test error")
+
+        # First call should fail and log the error
+        with pytest.raises(ValueError, match="Test error"):
+            cache.get("key", failing_populate, blocking=True)
+
+        assert call_count == 1
+        assert "Failed to populate cache key 'key'" in caplog.text
+        assert "Test error" in caplog.text
+
+        # Future should be removed, so next call should retry
+        with pytest.raises(ValueError, match="Test error"):
+            cache.get("key", failing_populate, blocking=True)
+
+        assert call_count == 2  # Should have retried
+
+    def test_failed_population_then_success(self):
+        """Test that after a failure, subsequent successful call works."""
+        cache = TwoLevelCache(soft_ttl=10, hard_ttl=60)
+        should_fail = True
+
+        def populate():
+            if should_fail:
+                raise ValueError("Test error")
+            return "success_value"
+
+        # First call fails
+        with pytest.raises(ValueError):
+            cache.get("key", populate, blocking=True)
+
+        # Second call succeeds
+        should_fail = False
+        result = cache.get("key", populate, blocking=True)
+        assert result == "success_value"
+
+    def test_none_return_value_is_cached(self):
+        """Test that None return values are properly cached."""
+        cache = TwoLevelCache(soft_ttl=10, hard_ttl=60)
+        call_count = 0
+
+        def populate_none():
+            nonlocal call_count
+            call_count += 1
+            return None
+
+        result = cache.get("key", populate_none)
+        assert result is None
+        assert call_count == 1
+
+        # Second call should use cached None value
+        result = cache.get("key", populate_none)
+        assert result is None
+        assert call_count == 1  # Should not have called populate again
+
+    def test_non_blocking_raises_not_ready(self):
+        """Test that non-blocking mode raises NotReadyError when cache is empty."""
+        import threading
+        import time
+
+        cache = TwoLevelCache(soft_ttl=10, hard_ttl=60)
+        started = threading.Event()
+
+        def slow_populate():
+            started.set()
+            time.sleep(0.5)
+            return "value"
+
+        def start_slow():
+            cache.get("key", slow_populate, blocking=True)
+
+        # Start population in background
+        thread = threading.Thread(target=start_slow)
+        thread.start()
+
+        # Wait until slow_populate has started to avoid race conditions
+        assert started.wait(timeout=1.0)
+
+        # Non-blocking call should raise NotReadyError since cache isn't populated yet
+        with pytest.raises(NotReadyError, match="not ready yet"):
+            cache.get("key", slow_populate, blocking=False)
+
+        # Ensure background thread completes
+        thread.join()

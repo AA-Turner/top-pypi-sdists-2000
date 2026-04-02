@@ -7,7 +7,6 @@ import pytest
 import rasterio
 from rasterio._err import CPLE_AppDefinedError
 from rasterio.errors import DatasetIOShapeError, RasterioIOError
-from rasterio.transform import Affine
 
 # Find out if we've got HDF support (needed below).
 try:
@@ -38,16 +37,10 @@ class ReaderContextTest(unittest.TestCase):
                 self.assertAlmostEqual(s.bounds[i], v)
             self.assertEqual(
                 s.transform,
-                Affine(
-                    300.0379266750948,
-                    0.0,
-                    101985.0,
-                    0.0,
-                    -300.041782729805,
-                    2826915.0,
-                ),
-            )
-            self.assertEqual(s.meta["crs"], s.crs)
+                (300.0379266750948, 0.0, 101985.0,
+                 0.0, -300.041782729805, 2826915.0,
+                 0, 0, 1.0))
+            self.assertEqual(s.meta['crs'], s.crs)
             self.assertEqual(
                 repr(s),
                 "<open DatasetReader name='tests/data/RGB.byte.tif' "
@@ -62,15 +55,9 @@ class ReaderContextTest(unittest.TestCase):
         self.assertEqual(s.crs.to_epsg(), 32618)
         self.assertEqual(
             s.transform,
-            Affine(
-                300.0379266750948,
-                0.0,
-                101985.0,
-                0.0,
-                -300.041782729805,
-                2826915.0,
-            ),
-        )
+            (300.0379266750948, 0.0, 101985.0,
+             0.0, -300.041782729805, 2826915.0,
+             0, 0, 1.0))
         self.assertEqual(
             repr(s),
             "<closed DatasetReader name='tests/data/RGB.byte.tif' "
@@ -342,7 +329,7 @@ def test_read_out_mask(path_rgb_byte_tif):
 @pytest.mark.parametrize(
     "out", [np.empty((20, 10), np.ubyte), np.empty((2, 20, 10), np.ubyte)]
 )
-def test_read_out_mask(path_rgb_byte_tif, out):
+def test_read_out_mask_wrong_shape(path_rgb_byte_tif, out):
     """Raise when out keyword arg has wrong shape."""
     with rasterio.open(path_rgb_byte_tif) as src:
         with pytest.raises(ValueError):

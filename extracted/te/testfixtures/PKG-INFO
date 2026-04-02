@@ -1,46 +1,47 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: testfixtures
-Version: 8.3.0
+Version: 11.0.0
 Summary: A collection of helpers and mock objects for unit tests and doc tests.
-Home-page: https://github.com/Simplistix/testfixtures
-Author: Chris Withers
-Author-email: chris@simplistix.co.uk
+Project-URL: Homepage, https://github.com/Simplistix/testfixtures
+Project-URL: Documentation, http://testfixtures.readthedocs.org/en/latest/
+Project-URL: Repository, https://github.com/Simplistix/testfixtures
+Project-URL: Changelog, https://testfixtures.readthedocs.io/en/latest/changes.html
+Author-email: Chris Withers <chris@simplistix.co.uk>
 License: MIT
+License-File: LICENSE.txt
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Intended Audience :: Developers
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Programming Language :: Python :: 3
-Requires-Python: >=3.7
-License-File: LICENSE.txt
-Provides-Extra: test
-Requires-Dist: mypy; extra == "test"
-Requires-Dist: pytest>=7.1; extra == "test"
-Requires-Dist: pytest-cov; extra == "test"
-Requires-Dist: pytest-django; extra == "test"
-Requires-Dist: django; extra == "test"
-Requires-Dist: sybil>=6; extra == "test"
-Requires-Dist: twisted; extra == "test"
-Provides-Extra: docs
-Requires-Dist: sphinx; extra == "docs"
-Requires-Dist: furo; extra == "docs"
-Requires-Dist: django; extra == "docs"
-Requires-Dist: sybil>=6; extra == "docs"
-Requires-Dist: twisted; extra == "docs"
-Provides-Extra: build
-Requires-Dist: setuptools-git; extra == "build"
-Requires-Dist: wheel; extra == "build"
-Requires-Dist: twine; extra == "build"
+Requires-Python: >=3.11
+Provides-Extra: django
+Requires-Dist: django>=4; (python_version < '3.13') and extra == 'django'
+Requires-Dist: django>=5.1.3; (python_version >= '3.13') and extra == 'django'
+Provides-Extra: mock-backport
+Requires-Dist: mock>=4.0.3; extra == 'mock-backport'
+Provides-Extra: sybil
+Requires-Dist: sybil>=6.0.3; extra == 'sybil'
+Provides-Extra: toml
+Requires-Dist: tomlkit>=0.10.0; extra == 'toml'
+Provides-Extra: twisted
+Requires-Dist: twisted>=22.1; extra == 'twisted'
+Provides-Extra: yaml
+Requires-Dist: pyyaml>=6.0.3; extra == 'yaml'
+Description-Content-Type: text/x-rst
 
 Testfixtures
 ============
 
-|CircleCI|_ |Docs|_
-
-.. |CircleCI| image:: https://circleci.com/gh/simplistix/testfixtures/tree/master.svg?style=shield
-.. _CircleCI: https://circleci.com/gh/simplistix/testfixtures/tree/master
+|Docs|_ |PyPI|_  |Git|_
 
 .. |Docs| image:: https://readthedocs.org/projects/testfixtures/badge/?version=latest
 .. _Docs: http://testfixtures.readthedocs.org/en/latest/
+
+.. |PyPI| image:: https://badge.fury.io/py/testfixtures.svg
+.. _PyPI: https://pypi.org/project/testfixtures/
+
+.. |Git| image:: https://github.com/simplistix/testfixtures/actions/workflows/ci.yml/badge.svg
+.. _Git: https://github.com/simplistix/testfixtures
 
 Testfixtures is a collection of helpers and mock objects that are useful when
 writing automated tests in Python.

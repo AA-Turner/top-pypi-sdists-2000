@@ -1,5 +1,5 @@
 """Setup steps for installing SeleniumBase dependencies and plugins.
-(Uses selenium 4.x and is compatible with Python 3.8+)"""
+(Uses selenium 4.x and is compatible with Python 3.9+)"""
 from setuptools import setup, find_packages  # noqa: F401
 import os
 import sys
@@ -121,7 +121,6 @@ setup(
         "Operating System :: POSIX :: Linux",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
@@ -145,97 +144,83 @@ setup(
         "Topic :: Software Development :: Testing :: Traffic Generation",
         "Topic :: Utilities",
     ],
-    python_requires=">=3.8",
+    python_requires=">=3.9",
     install_requires=[
-        'pip>=25.0.1;python_version<"3.9"',
-        'pip>=25.3;python_version>="3.9"',
-        'packaging>=25.0',
+        'pip>=26.0.1',
+        'packaging>=26.0',
         'setuptools~=70.2;python_version<"3.10"',  # Newer ones had issues
-        'setuptools>=80.9.0;python_version>="3.10"',
-        'wheel>=0.45.1',
-        'attrs~=25.3.0;python_version<"3.9"',
-        'attrs>=25.4.0;python_version>="3.9"',
-        "certifi>=2025.11.12",
-        "exceptiongroup>=1.3.1",
-        'websockets~=13.1;python_version<"3.9"',
-        'websockets>=15.0.1;python_version>="3.9"',
-        'filelock~=3.16.1;python_version<"3.9"',
-        'filelock~=3.19.1;python_version>="3.9" and python_version<"3.10"',
-        'filelock>=3.20.0;python_version>="3.10"',
+        'setuptools>=82.0.1;python_version>="3.10"',
+        'wheel>=0.46.3',
+        'attrs>=26.1.0',
+        'certifi>=2026.2.25',
+        'exceptiongroup>=1.3.1',
+        'websockets~=15.0.1;python_version<"3.10"',
+        'websockets>=16.0;python_version>="3.10"',
+        'filelock~=3.19.1;python_version<"3.10"',
+        'filelock>=3.25.2;python_version>="3.10"',
         'fasteners>=0.20',
-        "mycdp>=1.3.1",
-        "pynose>=1.5.5",
-        'platformdirs~=4.3.6;python_version<"3.9"',
-        'platformdirs~=4.4.0;python_version>="3.9" and python_version<"3.10"',
-        'platformdirs>=4.5.0;python_version>="3.10"',
-        'typing-extensions~=4.13.2;python_version<"3.9"',
-        'typing-extensions>=4.15.0;python_version>="3.9"',
-        "sbvirtualdisplay>=1.4.0",
-        'MarkupSafe==2.1.5;python_version<"3.9"',
-        'MarkupSafe>=3.0.3;python_version>="3.9"',
+        'mycdp>=1.3.7',
+        'pynose>=1.5.5',
+        'platformdirs~=4.4.0;python_version<"3.10"',
+        'platformdirs>=4.9.4;python_version>="3.10"',
+        'typing-extensions>=4.15.0',
+        'sbvirtualdisplay>=1.4.0',
+        'MarkupSafe>=3.0.3',
         "Jinja2>=3.1.6",
         "six>=1.17.0",
-        'parse>=1.20.2',
+        'parse>=1.21.1',
         'parse-type>=0.6.6',
         'colorama>=0.4.6',
         'pyyaml>=6.0.3',
-        'pygments>=2.19.2',
+        'pygments>=2.20.0',
         'pyreadline3>=3.5.4;platform_system=="Windows"',
-        "tabcompleter>=1.4.0",
-        "pdbp>=1.8.1",
-        "idna>=3.11",
-        'chardet==5.2.0',
-        'charset-normalizer>=3.4.4,<4',
+        'tabcompleter>=1.4.0',
+        'pdbp>=1.8.2',
+        'idna>=3.11',
+        'charset-normalizer>=3.4.6,<4',
         'urllib3>=1.26.20,<2;python_version<"3.10"',
-        'urllib3>=1.26.20,<2.6.0;python_version>="3.10"',
-        'requests==2.32.4;python_version<"3.9"',
-        'requests~=2.32.5;python_version>="3.9"',
+        'urllib3>=1.26.20,<3;python_version>="3.10"',
+        'requests~=2.32.5;python_version<"3.10"',
+        'requests~=2.33.1;python_version>="3.10"',
         'sniffio==1.3.1',
         'h11==0.16.0',
         'outcome==1.3.0.post0',
-        'trio==0.27.0;python_version<"3.9"',
-        'trio>=0.31.0,<1;python_version>="3.9" and python_version<"3.10"',
-        'trio>=0.32.0,<1;python_version>="3.10"',
+        'trio>=0.31.0,<1;python_version<"3.10"',
+        'trio>=0.33.0,<1;python_version>="3.10"',
         'trio-websocket~=0.12.2',
         'wsproto==1.2.0;python_version<"3.10"',
         'wsproto~=1.3.2;python_version>="3.10"',
-        'websocket-client~=1.8.0;python_version<"3.9"',
-        'websocket-client~=1.9.0;python_version>="3.9"',
-        'selenium==4.27.1;python_version<"3.9"',
-        'selenium==4.32.0;python_version>="3.9" and python_version<"3.10"',
-        'selenium==4.38.0;python_version>="3.10"',
-        'cssselect==1.2.0;python_version<"3.9"',
-        'cssselect==1.3.0;python_version>="3.9"',
-        "sortedcontainers==2.4.0",
+        'websocket-client~=1.9.0',
+        'selenium==4.32.0;python_version<"3.10"',
+        'selenium==4.41.0;python_version>="3.10"',
+        'cssselect==1.3.0;python_version<"3.10"',
+        'cssselect>=1.4.0,<2;python_version>="3.10"',
+        'nest-asyncio==1.6.0',
+        'sortedcontainers==2.4.0',
         'execnet==2.1.1;python_version<"3.10"',
         'execnet==2.1.2;python_version>="3.10"',
         'iniconfig==2.1.0;python_version<"3.10"',
         'iniconfig==2.3.0;python_version>="3.10"',
-        'pluggy==1.5.0;python_version<"3.9"',
-        'pluggy==1.6.0;python_version>="3.9"',
-        'pytest==8.3.5;python_version<"3.9"',
-        'pytest==8.4.2;python_version>="3.9" and python_version<"3.11"',
-        'pytest==9.0.1;python_version>="3.11"',
-        "pytest-html==4.0.2",  # Newer ones had issues
+        'pluggy==1.6.0',
+        'pytest==8.4.2;python_version<"3.11"',
+        'pytest==9.0.2;python_version>="3.11"',
+        'pytest-html==4.0.2',  # Newer ones had issues
         'pytest-metadata==3.1.1',
-        "pytest-ordering==0.6",
-        'pytest-rerunfailures==14.0;python_version<"3.9"',
-        'pytest-rerunfailures==16.0.1;python_version>="3.9" and python_version<"3.10"',  # noqa
+        'pytest-ordering==0.6',
+        'pytest-rerunfailures==16.0.1;python_version<"3.10"',
         'pytest-rerunfailures==16.1;python_version>="3.10"',
-        'pytest-xdist==3.6.1;python_version<"3.9"',
-        'pytest-xdist==3.8.0;python_version>="3.9"',
+        'pytest-xdist==3.8.0',
         'parameterized==0.9.0',
-        "behave==1.2.6",  # Newer ones had issues
-        'soupsieve==2.7;python_version<"3.9"',
-        'soupsieve~=2.8;python_version>="3.9"',
-        "beautifulsoup4~=4.14.2",
+        'behave==1.2.6',  # Newer ones had issues
+        'soupsieve~=2.8.3',
+        'beautifulsoup4~=4.14.3',
         'pyotp==2.9.0',
         'python-xlib==0.33;platform_system=="Linux"',
         'PyAutoGUI>=0.9.54;platform_system=="Linux"',
         'markdown-it-py==3.0.0;python_version<"3.10"',
         'markdown-it-py==4.0.0;python_version>="3.10"',
         'mdurl==0.1.2',
-        'rich>=14.2.0,<15',
+        'rich>=14.3.3,<15',
     ],
     extras_require={
         # pip install -e .[allure]
@@ -249,22 +234,17 @@ setup(
         # pip install -e .[coverage]
         # Usage: coverage run -m pytest; coverage html; coverage report
         "coverage": [
-            'coverage>=7.6.1;python_version<"3.9"',
-            'coverage>=7.10.7;python_version>="3.9" and python_version<"3.10"',
-            'coverage>=7.12.0;python_version>="3.10"',
-            'pytest-cov>=5.0.0;python_version<"3.9"',
-            'pytest-cov>=7.0.0;python_version>="3.9"',
+            'coverage>=7.10.7;python_version<"3.10"',
+            'coverage>=7.13.5;python_version>="3.10"',
+            'pytest-cov>=7.1.0',
         ],
         # pip install -e .[flake8]
         # Usage: flake8
         "flake8": [
-            'flake8==5.0.4;python_version<"3.9"',
-            'flake8==7.3.0;python_version>="3.9"',
+            'flake8==7.3.0',
             "mccabe==0.7.0",
-            'pyflakes==2.5.0;python_version<"3.9"',
-            'pyflakes==3.4.0;python_version>="3.9"',
-            'pycodestyle==2.9.1;python_version<"3.9"',
-            'pycodestyle==2.14.0;python_version>="3.9"',
+            'pyflakes==3.4.0',
+            'pycodestyle==2.14.0',
         ],
         # pip install -e .[ipdb]
         # (Not needed for debugging anymore. SeleniumBase now includes "pdbp".)
@@ -275,27 +255,23 @@ setup(
         # pip install -e .[mss]
         # (An optional library for tile_windows() in CDP Mode.)
         "mss": [
-            'mss==9.0.2;python_version<"3.9"',
-            'mss==10.0.0;python_version>="3.9"',
+            'mss==10.1.0',
         ],
         # pip install -e .[pdfminer]
         # (An optional library for parsing PDF files.)
         "pdfminer": [
-            'pdfminer.six==20250324;python_version<"3.9"',
-            'pdfminer.six==20251107;python_version>="3.9"',
-            'cryptography==39.0.2;python_version<"3.9"',
-            'cryptography==46.0.3;python_version>="3.9"',
-            'cffi==1.17.1;python_version<"3.9"',
-            'cffi==2.0.0;python_version>="3.9"',
-            'pycparser==2.22;python_version<"3.9"',
-            'pycparser==2.23;python_version>="3.9"',
+            'pdfminer.six==20251107;python_version<"3.10"',
+            'pdfminer.six==20260107;python_version>="3.10"',
+            'cryptography==46.0.6',
+            'cffi==2.0.0',
+            'pycparser==2.23;python_version<"3.10"',
+            'pycparser==3.0;python_version>="3.10"',
         ],
         # pip install -e .[pillow]
         # (An optional library for image-processing.)
         "pillow": [
-            'Pillow>=10.4.0;python_version<"3.9"',
-            'Pillow>=11.3.0;python_version>="3.9" and python_version<"3.10"',
-            'Pillow>=12.0.0;python_version>="3.10"',
+            'Pillow>=11.3.0;python_version<"3.10"',
+            'Pillow>=12.1.1;python_version>="3.10"',
         ],
         # pip install -e .[pip-system-certs]
         # (If you see [SSL: CERTIFICATE_VERIFY_FAILED], then get this.)
@@ -309,9 +285,14 @@ setup(
         "proxy": [
             "proxy.py==2.4.3",  # 2.4.4 did not have "Listening on ..."
         ],
+        # pip install -e .[playwright]
+        # (For the Playwright integration.)
+        "playwright": [
+            "playwright>=1.58.0",
+        ],
         # pip install -e .[psutil]
         "psutil": [
-            "psutil==7.1.2",
+            "psutil>=7.2.2",
         ],
         # pip install -e .[pyautogui]
         # (Already a required dependency on Linux now.)
@@ -352,6 +333,7 @@ setup(
         "seleniumbase.drivers.brave_drivers",
         "seleniumbase.drivers.comet_drivers",
         "seleniumbase.drivers.atlas_drivers",
+        "seleniumbase.drivers.chromium_drivers",
         "seleniumbase.extensions",
         "seleniumbase.fixtures",
         "seleniumbase.js_code",

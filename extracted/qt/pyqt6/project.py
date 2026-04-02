@@ -1,6 +1,6 @@
 # This is the PyQt6 build script.
 #
-# Copyright (c) 2025 Riverbank Computing Limited <info@riverbankcomputing.com>
+# Copyright (c) 2026 Riverbank Computing Limited <info@riverbankcomputing.com>
 # 
 # This file is part of PyQt6.
 # 
@@ -27,10 +27,6 @@ from sipbuild import (Buildable, BuildableModule, Installable, Option,
         UserException)
 
 
-# The minimum sip module ABI version needed.
-ABI_VERSION = '13.8'
-
-
 class PyQt(PyQtProject):
     """ The PyQt6 project. """
 
@@ -39,8 +35,8 @@ class PyQt(PyQtProject):
 
         # We specify the name of the sip module because PyQt-builder doesn't
         # provide it if we are creating an sdist.
-        super().__init__(abi_version=ABI_VERSION, sip_module='PyQt6.sip',
-                dunder_init=True, tag_prefix='Qt', console_scripts=[
+        super().__init__(sip_module='PyQt6.sip', dunder_init=True,
+                tag_prefix='Qt', console_scripts=[
                     'pylupdate6 = PyQt6.lupdate.pylupdate:main',
                     'pyuic6 = PyQt6.uic.pyuic:main'])
 

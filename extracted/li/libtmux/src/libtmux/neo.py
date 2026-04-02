@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import dataclasses
+import functools
 import logging
+import shlex
 import typing as t
 from collections.abc import Iterable
 
@@ -13,7 +15,7 @@ from libtmux.formats import FORMAT_SEPARATOR
 
 if t.TYPE_CHECKING:
     ListCmd = t.Literal["list-sessions", "list-windows", "list-panes"]
-    ListExtraArgs = t.Optional[Iterable[str]]
+    ListExtraArgs = Iterable[str] | None
 
     from libtmux.server import Server
 
@@ -22,16 +24,6 @@ logger = logging.getLogger(__name__)
 
 OutputRaw = dict[str, t.Any]
 OutputsRaw = list[OutputRaw]
-
-
-"""
-Quirks:
-
-QUIRK_TMUX_3_1_X_0001:
-
-- tmux 3.1 and 3.1a:
-- server crash with list-panes w/ buffer_created, client_activity, client_created
-"""
 
 
 @dataclasses.dataclass()
@@ -43,14 +35,11 @@ class Obj:
     active_window_index: str | None = None
     alternate_saved_x: str | None = None
     alternate_saved_y: str | None = None
-    # See QUIRK_TMUX_3_1_X_0001
     buffer_name: str | None = None
     buffer_sample: str | None = None
     buffer_size: str | None = None
-    # See QUIRK_TMUX_3_1_X_0001
     client_cell_height: str | None = None
     client_cell_width: str | None = None
-    # See QUIRK_TMUX_3_1_X_0001
     client_discarded: str | None = None
     client_flags: str | None = None
     client_height: str | None = None
@@ -114,6 +103,7 @@ class Obj:
     pane_start_command: str | None = None
     pane_start_path: str | None = None
     pane_tabs: str | None = None
+    pane_title: str | None = None
     pane_top: str | None = None
     pane_tty: str | None = None
     pane_width: str | None = None
@@ -174,7 +164,7 @@ class Obj:
         obj_key: str,
         obj_id: str,
         list_cmd: ListCmd = "list-panes",
-        list_extra_args: ListExtraArgs | None = None,
+        list_extra_args: ListExtraArgs = None,
     ) -> None:
         assert isinstance(obj_id, str)
         obj = fetch_obj(
@@ -190,13 +180,115 @@ class Obj:
                 setattr(self, k, v)
 
 
+@functools.cache
+def get_output_format() -> tuple[tuple[str, ...], str]:
+    """Return field names and tmux format string for all Obj fields.
+
+    Excludes the ``server`` field, which is a Python object reference
+    rather than a tmux format variable.
+
+    Returns
+    -------
+    tuple[tuple[str, ...], str]
+        A tuple of (field_names, tmux_format_string).
+
+    Examples
+    --------
+    >>> from libtmux.neo import get_output_format
+    >>> fields, fmt = get_output_format()
+    >>> 'session_id' in fields
+    True
+    >>> 'server' in fields
+    False
+    """
+    # Exclude 'server' - it's a Python object, not a tmux format variable
+    formats = tuple(f for f in Obj.__dataclass_fields__ if f != "server")
+    tmux_formats = [f"#{{{f}}}{FORMAT_SEPARATOR}" for f in formats]
+    return formats, "".join(tmux_formats)
+
+
+def parse_output(output: str) -> OutputRaw:
+    """Parse tmux output formatted with get_output_format() into a dict.
+
+    Parameters
+    ----------
+    output : str
+        Raw tmux output produced with the format string from
+        :func:`get_output_format`.
+
+    Returns
+    -------
+    OutputRaw
+        A dict mapping field names to non-empty string values.
+
+    Examples
+    --------
+    >>> from libtmux.neo import get_output_format, parse_output
+    >>> from libtmux.formats import FORMAT_SEPARATOR
+    >>> fields, fmt = get_output_format()
+    >>> values = [''] * len(fields)
+    >>> values[fields.index('session_id')] = '$1'
+    >>> result = parse_output(FORMAT_SEPARATOR.join(values) + FORMAT_SEPARATOR)
+    >>> result['session_id']
+    '$1'
+    >>> 'buffer_sample' in result
+    False
+    """
+    formats, _ = get_output_format()
+    values = output.split(FORMAT_SEPARATOR)
+
+    # Remove the trailing empty string from the split
+    if values and values[-1] == "":
+        values = values[:-1]
+
+    formatter = dict(zip(formats, values, strict=True))
+    return {k: v for k, v in formatter.items() if v}
+
+
 def fetch_objs(
     server: Server,
     list_cmd: ListCmd,
-    list_extra_args: ListExtraArgs | None = None,
+    list_extra_args: ListExtraArgs = None,
 ) -> OutputsRaw:
-    """Fetch a listing of raw data from a tmux command."""
-    formats = list(Obj.__dataclass_fields__.keys())
+    """Fetch a listing of raw data from a tmux command.
+
+    Runs a tmux list command (e.g. ``list-sessions``) with the format string
+    from :func:`get_output_format` and parses each line of output into a dict.
+
+    Parameters
+    ----------
+    server : :class:`~libtmux.server.Server`
+        The tmux server to query.
+    list_cmd : ListCmd
+        The tmux list command to run, e.g. ``"list-sessions"``,
+        ``"list-windows"``, or ``"list-panes"``.
+    list_extra_args : ListExtraArgs, optional
+        Extra arguments appended to the tmux command (e.g. ``("-a",)``
+        for all windows/panes, or ``["-t", session_id]`` to filter).
+
+    Returns
+    -------
+    OutputsRaw
+        A list of dicts, each mapping tmux format field names to their
+        non-empty string values.
+
+    Raises
+    ------
+    :exc:`~libtmux.exc.LibTmuxException`
+        If the tmux command writes to stderr.
+
+    Examples
+    --------
+    >>> from libtmux.neo import fetch_objs
+    >>> objs = fetch_objs(server=server, list_cmd="list-sessions")
+    >>> isinstance(objs, list)
+    True
+    >>> isinstance(objs[0], dict)
+    True
+    >>> 'session_id' in objs[0]
+    True
+    """
+    _fields, format_string = get_output_format()
 
     cmd_args: list[str | int] = []
 
@@ -204,7 +296,6 @@ def fetch_objs(
         cmd_args.insert(0, f"-L{server.socket_name}")
     if server.socket_path:
         cmd_args.insert(0, f"-S{server.socket_path}")
-    tmux_formats = [f"#{{{f}}}{FORMAT_SEPARATOR}" for f in formats]
 
     tmux_cmds = [
         *cmd_args,
@@ -214,22 +305,43 @@ def fetch_objs(
     if list_extra_args is not None and isinstance(list_extra_args, Iterable):
         tmux_cmds.extend(list(list_extra_args))
 
-    tmux_cmds.append("-F{}".format("".join(tmux_formats)))
+    tmux_cmds.append(f"-F{format_string}")
 
-    proc = tmux_cmd(*tmux_cmds)  # output
+    cmd_str: str | None = None
+
+    if logger.isEnabledFor(logging.DEBUG):
+        cmd_str = shlex.join([str(x) for x in tmux_cmds])
+        logger.debug(
+            "tmux list queried",
+            extra={
+                "tmux_subcommand": list_cmd,
+                "tmux_cmd": cmd_str,
+            },
+        )
+
+    proc = tmux_cmd(
+        *tmux_cmds,
+        tmux_bin=server.tmux_bin,
+    )
 
     if proc.stderr:
         raise exc.LibTmuxException(proc.stderr)
 
-    obj_output = proc.stdout
+    outputs = [parse_output(line) for line in proc.stdout]
 
-    obj_formatters = [
-        dict(zip(formats, formatter.split(FORMAT_SEPARATOR)))
-        for formatter in obj_output
-    ]
+    if logger.isEnabledFor(logging.DEBUG):
+        if cmd_str is None:
+            cmd_str = shlex.join([str(x) for x in tmux_cmds])
+        logger.debug(
+            "tmux list parsed",
+            extra={
+                "tmux_subcommand": list_cmd,
+                "tmux_cmd": cmd_str,
+                "tmux_stdout_len": len(proc.stdout),
+            },
+        )
 
-    # Filter empty values
-    return [{k: v for k, v in formatter.items() if v} for formatter in obj_formatters]
+    return outputs
 
 
 def fetch_obj(
@@ -237,7 +349,7 @@ def fetch_obj(
     obj_key: str,
     obj_id: str,
     list_cmd: ListCmd = "list-panes",
-    list_extra_args: ListExtraArgs | None = None,
+    list_extra_args: ListExtraArgs = None,
 ) -> OutputRaw:
     """Fetch raw data from tmux command."""
     obj_formatters_filtered = fetch_objs(

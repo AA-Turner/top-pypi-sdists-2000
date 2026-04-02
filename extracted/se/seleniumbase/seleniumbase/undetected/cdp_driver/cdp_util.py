@@ -31,6 +31,7 @@ DOWNLOADS_FOLDER = download_helper.get_downloads_folder()
 PROXY_DIR_LOCK = proxy_helper.PROXY_DIR_LOCK
 EXTENSIONS_DIR = os.path.dirname(os.path.realpath(extensions.__file__))
 AD_BLOCK_ZIP_PATH = os.path.join(EXTENSIONS_DIR, "ad_block.zip")
+DISABLE_CSP_ZIP_PATH = os.path.join(EXTENSIONS_DIR, "disable_csp.zip")
 T = typing.TypeVar("T")
 
 
@@ -39,24 +40,39 @@ def __activate_standard_virtual_display():
     width = settings.HEADLESS_START_WIDTH
     height = settings.HEADLESS_START_HEIGHT
     with suppress(Exception):
-        _xvfb_display = Display(
-            visible=0, size=(width, height)
-        )
+        _xvfb_display = Display(visible=0, size=(width, height))
         _xvfb_display.start()
+        time.sleep(0.03)
         sb_config._virtual_display = _xvfb_display
         sb_config.headless_active = True
 
 
 def __activate_virtual_display_as_needed(
-    headless, headed, xvfb, xvfb_metrics
+    headless, headed, xvfb, xvfb_metrics, override_display=False
 ):
     """This is only needed on Linux."""
+    reset_virtual_display = False
+    if IS_LINUX and (not headed or xvfb):
+        if (
+            not hasattr(sb_config, "_closed_connection_ids")
+            or not isinstance(sb_config._closed_connection_ids, list)
+        ):
+            sb_config._closed_connection_ids = []
+        if (
+            not hasattr(sb_config, "_xvfb_users")
+            or not isinstance(sb_config._xvfb_users, int)
+        ):
+            reset_virtual_display = True
+            sb_config._xvfb_users = 0
+        sb_config._xvfb_users += 1
     if (
         IS_LINUX
         and (not headed or xvfb)
         and (
             not hasattr(sb_config, "_virtual_display")
             or not sb_config._virtual_display
+            or reset_virtual_display
+            or override_display
         )
     ):
         from sbvirtualdisplay import Display
@@ -94,18 +110,28 @@ def __activate_virtual_display_as_needed(
                         backend="xvfb",
                         use_xauth=True,
                     )
+                    time.sleep(0.05)
                     if "--debug-display" in sys.argv:
                         print(
                             "Starting VDisplay from cdp_util: (%s, %s)"
                             % (_xvfb_width, _xvfb_height)
                         )
-                    _xvfb_display.start()
+                    try:
+                        _xvfb_display.start()
+                    except Exception:
+                        time.sleep(0.03)
+                        _xvfb_display.start()
+                    time.sleep(0.03)
                     if "DISPLAY" not in os.environ.keys():
-                        print(
-                            "\n  X11 display failed! Is Xvfb installed? "
-                            "\n  Try this: `sudo apt install -y xvfb`"
-                        )
-                        __activate_standard_virtual_display()
+                        time.sleep(0.03)
+                        _xvfb_display.start()
+                        time.sleep(0.08)
+                        if "DISPLAY" not in os.environ.keys():
+                            print(
+                                "\n  X11 display failed! Is Xvfb installed? "
+                                "\n  Try this: `sudo apt install -y xvfb`"
+                            )
+                            __activate_standard_virtual_display()
                     else:
                         sb_config._virtual_display = _xvfb_display
                         sb_config.headless_active = True
@@ -284,6 +310,7 @@ async def start(
     mobile: Optional[bool] = None,  # Use Mobile Mode with default args
     disable_csp: Optional[str] = None,  # Disable content security policy
     extension_dir: Optional[str] = None,  # Chrome extension directory
+    use_chromium: Optional[str] = None,  # Use the base Chromium browser
     **kwargs: Optional[dict],
 ) -> Browser:
     """
@@ -499,6 +526,8 @@ async def start(
                 print("  Using default Chrome browser instead!")
                 bin_loc = None
             browser_executable_path = bin_loc
+        elif use_chromium or "--use-chromium" in arg_join:
+            browser_executable_path = "_chromium_"
     if proxy is None and "--proxy" in arg_join:
         proxy_string = None
         if "--proxy=" in arg_join:
@@ -547,7 +576,13 @@ async def start(
                 platform_var = platform_var[1:-1]
     if IS_LINUX and not headless and not headed and not xvfb:
         xvfb = True  # The default setting on Linux
-    __activate_virtual_display_as_needed(headless, headed, xvfb, xvfb_metrics)
+    if port and not host:
+        host = "127.0.0.1"  # Assume localhost
+    if not host or not port:
+        # The browser hasn't been launched yet. (May need a virtual display)
+        __activate_virtual_display_as_needed(
+            headless, headed, xvfb, xvfb_metrics
+        )
     if proxy and "@" in str(proxy):
         user_with_pass = proxy.split("@")[0]
         if ":" in user_with_pass:
@@ -564,20 +599,24 @@ async def start(
                 proxy_pass,
                 proxy_scheme,
             )
-    if ad_block:
-        sb_config.ad_block_on = True
-        incognito = False
-        guest = False
-        ad_block_zip = AD_BLOCK_ZIP_PATH
-        ad_block_dir = os.path.join(DOWNLOADS_FOLDER, "ad_block")
-        __unzip_to_new_folder(ad_block_zip, ad_block_dir)
-        extension_dir = __add_chrome_ext_dir(extension_dir, ad_block_dir)
-    if disable_csp:
-        sb_config.disable_csp = True
     if "binary_location" in kwargs and not browser_executable_path:
         browser_executable_path = kwargs["binary_location"]
+    if not user_data_dir and "--user-data-dir" in arg_join:
+        udd_string = None
+        if "--user-data-dir=" in arg_join:
+            udd_string = arg_join.split("--user-data-dir=")[1].split(" ")[0]
+        elif "--user-data-dir " in arg_join:
+            udd_string = arg_join.split("--user-data-dir ")[1].split(" ")[0]
+        if udd_string:
+            if udd_string.startswith('"') and udd_string.endswith('"'):
+                udd_string = udd_string[1:-1]
+            elif udd_string.startswith("'") and udd_string.endswith("'"):
+                udd_string = udd_string[1:-1]
+            user_data_dir = udd_string
+    if user_data_dir:
+        user_data_dir = os.path.abspath(user_data_dir)
+    browser = None
     if not browser_executable_path:
-        browser = None
         if "browser" in kwargs:
             browser = kwargs["browser"]
         if not browser and "--browser" in arg_join:
@@ -588,9 +627,9 @@ async def start(
                 br_string = arg_join.split("--browser ")[1].split(" ")[0]
             if br_string:
                 if br_string.startswith('"') and br_string.endswith('"'):
-                    br_string = proxy_string[1:-1]
+                    br_string = br_string[1:-1]
                 elif br_string.startswith("'") and br_string.endswith("'"):
-                    br_string = proxy_string[1:-1]
+                    br_string = br_string[1:-1]
                 browser = br_string
         if not browser:
             if "--edge" in sys_argv:
@@ -627,6 +666,23 @@ async def start(
             sb_config._cdp_browser = "atlas"
         else:
             sb_config._cdp_browser = "chrome"
+    if ad_block:
+        sb_config.ad_block_on = True
+        incognito = False
+        guest = False
+        ad_block_zip = AD_BLOCK_ZIP_PATH
+        ad_block_dir = os.path.join(DOWNLOADS_FOLDER, "ad_block")
+        __unzip_to_new_folder(ad_block_zip, ad_block_dir)
+        extension_dir = __add_chrome_ext_dir(extension_dir, ad_block_dir)
+    if disable_csp:
+        sb_config.disable_csp = True
+        if not incognito and not guest:
+            disable_csp_zip = DISABLE_CSP_ZIP_PATH
+            disable_csp_dir = os.path.join(DOWNLOADS_FOLDER, "disable_csp")
+            __unzip_to_new_folder(disable_csp_zip, disable_csp_dir)
+            extension_dir = __add_chrome_ext_dir(
+                extension_dir, disable_csp_dir
+            )
     sb_config.incognito = incognito
     sb_config.guest_mode = guest
     if not config:
@@ -650,7 +706,12 @@ async def start(
     try:
         driver = await Browser.create(config)
     except Exception:
-        time.sleep(0.15)
+        time.sleep(0.12)
+        if not host or not port:
+            __activate_virtual_display_as_needed(
+                headless, headed, xvfb, xvfb_metrics, override_display=True
+            )
+            time.sleep(0.05)
         driver = await Browser.create(config)
     if proxy:
         sb_config._cdp_proxy = proxy
@@ -688,22 +749,12 @@ async def start(
         sb_config._cdp_platform = platform_var
     else:
         sb_config._cdp_platform = None
+    driver.page = driver.main_tab
+    driver.solve_captcha = driver.page.solve_captcha
     return driver
 
 
 async def start_async(*args, **kwargs) -> Browser:
-    if "user_data_dir" in kwargs and kwargs["user_data_dir"]:
-        headless = False
-        if "headless" in kwargs:
-            headless = kwargs["headless"]
-        decoy_args = kwargs
-        decoy_args["headless"] = True
-        driver = await start(**decoy_args)
-        kwargs["headless"] = headless
-        kwargs["user_data_dir"] = driver.config.user_data_dir
-        time.sleep(0.2)
-        driver.stop()  # Due to Chrome-130, must stop & start
-        time.sleep(0.1)
     return await start(*args, **kwargs)
 
 
@@ -717,18 +768,6 @@ def start_sync(*args, **kwargs) -> Browser:
         loop = kwargs["loop"]
     else:
         loop = asyncio.new_event_loop()
-    if "user_data_dir" in kwargs and kwargs["user_data_dir"]:
-        headless = False
-        if "headless" in kwargs:
-            headless = kwargs["headless"]
-        decoy_args = kwargs
-        decoy_args["headless"] = True
-        driver = loop.run_until_complete(start(**decoy_args))
-        kwargs["headless"] = headless
-        kwargs["user_data_dir"] = driver.config.user_data_dir
-        time.sleep(0.2)
-        driver.stop()  # Due to Chrome-130, must stop & start
-        time.sleep(0.1)
     return loop.run_until_complete(start(*args, **kwargs))
 
 
@@ -759,15 +798,14 @@ async def create_from_driver(driver) -> Browser:
 
 
 def free_port() -> int:
-    """Determines a free port using sockets."""
+    """Find and return a free port number assigned by the OS."""
     import socket
 
-    free_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    free_socket.bind(("127.0.0.1", 0))
-    free_socket.listen(5)
-    port: int = free_socket.getsockname()[1]
-    free_socket.close()
-    return port
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        # Binding to port 0 lets the OS pick a free port
+        s.bind(("127.0.0.1", 0))
+        s.listen(5)
+        return s.getsockname()[1]
 
 
 def filter_recurse_all(

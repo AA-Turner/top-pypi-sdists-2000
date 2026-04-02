@@ -2,6 +2,7 @@
 from __future__ import annotations
 import asyncio
 import atexit
+import fasteners
 import http.cookiejar
 import json
 import logging
@@ -15,7 +16,10 @@ import urllib.parse
 import urllib.request
 import warnings
 from collections import defaultdict
+from contextlib import suppress
 from seleniumbase import config as sb_config
+from seleniumbase.fixtures import constants
+from seleniumbase.fixtures import shared_utils
 from typing import List, Optional, Set, Tuple, Union
 import mycdp as cdp
 from . import cdp_util as util
@@ -34,15 +38,23 @@ def get_registered_instances():
 def deconstruct_browser():
     for _ in __registered__instances__:
         if not _.stopped:
-            _.stop()
-        for attempt in range(5):
+            _.stop(deconstruct=True)
+        max_attempts = 5
+        for attempt in range(max_attempts):
             try:
                 if _.config and not _.config.uses_custom_data_dir:
-                    shutil.rmtree(_.config.user_data_dir, ignore_errors=False)
+                    if os.path.exists(_.config.user_data_dir):
+                        shutil.rmtree(
+                            _.config.user_data_dir, ignore_errors=False
+                        )
+                    if not os.path.exists(_.config.user_data_dir):
+                        break
+                    else:
+                        time.sleep(0.12)
             except FileNotFoundError:
                 break
             except (PermissionError, OSError) as e:
-                if attempt == 4:
+                if attempt == max_attempts - 1:
                     logger.debug(
                         "Problem removing data dir %s\n"
                         "Consider checking whether it's there "
@@ -50,7 +62,7 @@ def deconstruct_browser():
                         % (_.config.user_data_dir, e)
                     )
                     break
-                time.sleep(0.15)
+                time.sleep(0.12)
                 continue
         logging.debug("Temp profile %s was removed." % _.config.user_data_dir)
 
@@ -178,7 +190,6 @@ class Browser:
         if self._process and self._process.returncode is None:
             return False
         return True
-        # return (self._process and self._process.returncode) or False
 
     async def wait(self, time: Union[float, int] = 1) -> Browser:
         """Wait for <time> seconds. Important to use,
@@ -204,7 +215,8 @@ class Browser:
             target_info = event.target_info
             current_tab = next(
                 filter(
-                    lambda item: item.target_id == target_info.target_id, self.targets  # noqa
+                    lambda item: item.target_id == target_info.target_id,
+                    self.targets,
                 )
             )
             current_target = current_tab.target
@@ -250,6 +262,29 @@ class Browser:
                 % (self.targets.index(current_tab), current_tab)
             )
             self.targets.remove(current_tab)
+
+    def get_rd_host(self):
+        return self.config.host
+
+    def get_rd_port(self):
+        return self.config.port
+
+    def get_rd_url(self):
+        """Returns the remote-debugging URL, which is used for
+        allowing the Playwright integration to launch stealthy.
+        Also sets an environment variable to hide this warning:
+        Deprecation: "url.parse() behavior is not standardized".
+        (github.com/microsoft/playwright-python/issues/3016)"""
+        os.environ["NODE_NO_WARNINGS"] = "1"
+        host = self.config.host
+        port = self.config.port
+        return f"http://{host}:{port}"
+
+    def get_endpoint_url(self):
+        return self.get_rd_url()
+
+    def get_port(self):
+        return self.get_rd_port()
 
     async def set_auth(self, username, password, tab):
         async def auth_challenge_handler(event: cdp.fetch.AuthRequired):
@@ -316,11 +351,16 @@ class Browser:
             )
             connection.browser = self
         else:
-            # First tab from browser.tabs
-            connection: tab.Tab = next(
-                filter(lambda item: item.type_ == "page", self.targets)
-            )
-            await connection.sleep(0.005)
+            try:
+                # Most recently opened tab
+                connection = self.targets[-1]
+                await connection.sleep(0.005)
+            except Exception:
+                # First tab from browser.tabs
+                connection: tab.Tab = next(
+                    filter(lambda item: item.type_ == "page", self.targets)
+                )
+                await connection.sleep(0.005)
         _cdp_timezone = None
         _cdp_user_agent = ""
         _cdp_locale = None
@@ -410,6 +450,7 @@ class Browser:
                     "*.adthrive.com*",
                     "*.pubmatic.com*",
                     "*.id5-sync.com*",
+                    "*.moatads.com*",
                     "*.dotomi.com*",
                     "*.adsrvr.org*",
                     "*.atmtd.com*",
@@ -546,19 +587,19 @@ class Browser:
                     If you are sure about the browser executable,
                     set it using `browser_executable_path='{}` parameter."""
                     ).format(
-                        "/path/to/browser/executable"
+                        "/path/to/your/browser/executable"
                         if is_posix
                         else "c:/path/to/your/browser.exe"
                     )
                 )
-        if getattr(self.config, "_extensions", None):  # noqa
+        if getattr(self.config, "_extensions", None):
             self.config.add_argument(
                 "--load-extension=%s"
                 % ",".join(str(_) for _ in self.config._extensions)
-            )  # noqa
+            )
         exe = self.config.browser_executable_path
         params = self.config()
-        logger.info(
+        logger.debug(
             "Starting\n\texecutable :%s\n\narguments:\n%s",
             exe,
             "\n\t".join(params),
@@ -566,8 +607,6 @@ class Browser:
         if not connect_existing:
             self._process: asyncio.subprocess.Process = (
                 await asyncio.create_subprocess_exec(
-                    # self.config.browser_executable_path,
-                    # *cmdparams,
                     exe,
                     *params,
                     stdin=asyncio.subprocess.PIPE,
@@ -576,19 +615,24 @@ class Browser:
                     close_fds=is_posix,
                 )
             )
+            await asyncio.sleep(0.05)
             self._process_pid = self._process.pid
+        await asyncio.sleep(0.05)
         self._http = HTTPApi((self.config.host, self.config.port))
+        await asyncio.sleep(0.05)
         get_registered_instances().add(self)
-        await asyncio.sleep(0.25)
-        for _ in range(5):
+        await asyncio.sleep(0.15)
+        max_attempts = 20
+        for attempt in range(max_attempts):
             try:
                 self.info = ContraDict(
                     await self._http.get("version"), silent=True
                 )
             except (Exception,):
-                if _ == 4:
+                if attempt == max_attempts - 1:
                     logger.debug("Could not start", exc_info=True)
-                await self.sleep(0.5)
+                else:
+                    await self.sleep(0.2)
             else:
                 break
         if not self.info:
@@ -610,11 +654,13 @@ class Browser:
                 %s
                 """ % (dashes, message, dashes)
             )
+        await asyncio.sleep(0.03)
         self.connection = Connection(
-            self.info.webSocketDebuggerUrl, _owner=self
+            self.info.webSocketDebuggerUrl, browser=self
         )
+        await asyncio.sleep(0.03)
         if self.config.autodiscover_targets:
-            logger.info("Enabling autodiscover targets")
+            logger.debug("Enabling autodiscover targets")
             self.connection.handlers[cdp.target.TargetInfoChanged] = [
                 self._handle_target_update
             ]
@@ -710,8 +756,11 @@ class Browser:
         try:
             import mss
         except Exception:
-            from seleniumbase.fixtures import shared_utils
-            shared_utils.pip_install("mss")
+            pip_find_lock = fasteners.InterProcessLock(
+                constants.PipInstall.FINDLOCK
+            )
+            with pip_find_lock:  # Prevent issues with multiple processes
+                shared_utils.pip_install("mss")
             import mss
         m = mss.mss()
         screen, screen_width, screen_height = 3 * (None,)
@@ -785,7 +834,7 @@ class Browser:
                             f"/{t.target_id}"
                         ),
                         target=t,
-                        _owner=self,
+                        browser=self,
                     )
                 )
         await asyncio.sleep(0)
@@ -820,11 +869,17 @@ class Browser:
                 else:
                     del self._i
 
-    def stop(self):
+    def stop(self, deconstruct=False):
+        if (
+            not hasattr(sb_config, "_closed_connection_ids")
+            or not isinstance(sb_config._closed_connection_ids, list)
+        ):
+            sb_config._closed_connection_ids = []
+        connection_id = None
+        with suppress(Exception):
+            connection_id = self.connection.websocket.id.hex
+        close_success = False
         try:
-            # asyncio.get_running_loop().create_task(
-            #     self.connection.send(cdp.browser.close())
-            # )
             if self.connection:
                 asyncio.get_event_loop().create_task(self.connection.aclose())
                 logger.debug(
@@ -833,23 +888,26 @@ class Browser:
         except RuntimeError:
             if self.connection:
                 try:
-                    # asyncio.run(self.connection.send(cdp.browser.close()))
                     asyncio.run(self.connection.aclose())
                     logger.debug("Closed the connection using asyncio.run()")
                 except Exception:
                     pass
         for _ in range(3):
             try:
-                self._process.terminate()
-                logger.info(
-                    "Terminated browser with pid %d successfully."
-                    % self._process.pid
-                )
-                break
+                if connection_id not in sb_config._closed_connection_ids:
+                    self._process.terminate()
+                    logger.debug(
+                        "Terminated browser with pid %d successfully."
+                        % self._process.pid
+                    )
+                    if connection_id:
+                        sb_config._closed_connection_ids.append(connection_id)
+                        close_success = True
+                    break
             except (Exception,):
                 try:
                     self._process.kill()
-                    logger.info(
+                    logger.debug(
                         "Killed browser with pid %d successfully."
                         % self._process.pid
                     )
@@ -858,14 +916,14 @@ class Browser:
                     try:
                         if hasattr(self, "browser_process_pid"):
                             os.kill(self._process_pid, 15)
-                            logger.info(
+                            logger.debug(
                                 "Killed browser with pid %d "
                                 "using signal 15 successfully."
                                 % self._process.pid
                             )
                             break
                     except (TypeError,):
-                        logger.info("typerror", exc_info=True)
+                        logger.info("TypeError", exc_info=True)
                         pass
                     except (PermissionError,):
                         logger.info(
@@ -874,12 +932,45 @@ class Browser:
                         )
                         pass
                     except (ProcessLookupError,):
-                        logger.info("Process lookup failure!")
+                        logger.info("ProcessLookupError")
                         pass
                     except (Exception,):
                         raise
             self._process = None
             self._process_pid = None
+        if (
+            hasattr(sb_config, "_xvfb_users")
+            and isinstance(sb_config._xvfb_users, int)
+            and close_success
+            and hasattr(sb_config, "_virtual_display")
+            and sb_config._virtual_display
+        ):
+            sb_config._xvfb_users -= 1
+            if sb_config._xvfb_users < 0:
+                sb_config._xvfb_users = 0
+        if (
+            shared_utils.is_linux()
+            and (
+                hasattr(sb_config, "_virtual_display")
+                and sb_config._virtual_display
+                and hasattr(sb_config._virtual_display, "stop")
+            )
+            and sb_config._xvfb_users == 0
+        ):
+            try:
+                sb_config._virtual_display.stop()
+                sb_config._virtual_display = None
+                sb_config.headless_active = False
+            except AttributeError:
+                pass
+            except Exception:
+                pass
+        if (
+            deconstruct
+            and connection_id
+            and connection_id in sb_config._closed_connection_ids
+        ):
+            sb_config._closed_connection_ids.remove(connection_id)
 
     def quit(self):
         self.stop()

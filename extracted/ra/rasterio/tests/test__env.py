@@ -34,8 +34,6 @@ def mock_fhs(tmpdir):
 @pytest.fixture
 def mock_debian(tmpdir):
     """A fake Debian multi-install system"""
-    tmpdir.ensure("share/gdal/3.6/gdalvrt.xsd")
-    tmpdir.ensure("share/gdal/3.7/gdalvrt.xsd")
     tmpdir.ensure("share/gdal/3.8/gdalvrt.xsd")
     tmpdir.ensure("share/gdal/3.9/gdalvrt.xsd")
     tmpdir.ensure("share/gdal/3.10/gdalvrt.xsd")
@@ -80,7 +78,7 @@ def test_search_debian_gdal_data(mock_debian):
     """Find GDAL data under Debian locations"""
     finder = GDALDataFinder()
     assert finder.search_debian(str(mock_debian)) == str(
-        mock_debian.join("share").join("gdal").join(f"{str(gdal_version)}")
+        mock_debian.join("share").join("gdal").join(f"{gdal_version.major}.{gdal_version.minor}")
     )
 
 
@@ -98,7 +96,7 @@ def test_search_gdal_data_debian(mock_debian):
     """Find GDAL data under Debian locations"""
     finder = GDALDataFinder()
     assert finder.search(str(mock_debian)) == str(
-        mock_debian.join("share").join("gdal").join(f"{str(gdal_version)}")
+        mock_debian.join("share").join("gdal").join(f"{gdal_version.major}.{gdal_version.minor}")
     )
 
 
