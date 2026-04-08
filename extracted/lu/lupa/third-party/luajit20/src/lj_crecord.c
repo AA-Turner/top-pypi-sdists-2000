@@ -1,6 +1,6 @@
 /*
 ** Trace recorder for C data operations.
-** Copyright (C) 2005-2025 Mike Pall. See Copyright Notice in luajit.h
+** Copyright (C) 2005-2026 Mike Pall. See Copyright Notice in luajit.h
 */
 
 #define lj_ffrecord_c
@@ -811,6 +811,8 @@ again:
 	  }
 	  J->base[0] = lj_ir_kint(J, (int32_t)fct->size);
 	  return;  /* Interpreter will throw for newindex. */
+	} else if (cd && cd->ctypeid == CTID_CTYPEID) {
+	  /* Only resolve constants and metamethods for constructors. */
 	} else if (ctype_isbitfield(fct->info)) {
 	  lj_trace_err(J, LJ_TRERR_NYICONV);
 	} else {

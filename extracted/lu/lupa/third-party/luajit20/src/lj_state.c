@@ -1,6 +1,6 @@
 /*
 ** State and stack handling.
-** Copyright (C) 2005-2025 Mike Pall. See Copyright Notice in luajit.h
+** Copyright (C) 2005-2026 Mike Pall. See Copyright Notice in luajit.h
 **
 ** Portions taken verbatim or adapted from the Lua interpreter.
 ** Copyright (C) 1994-2008 Lua.org, PUC-Rio. See Copyright Notice in lua.h
@@ -304,6 +304,10 @@ lua_State *lj_state_new(lua_State *L)
 void LJ_FASTCALL lj_state_free(global_State *g, lua_State *L)
 {
   lua_assert(L != mainthread(g));
+#if LJ_HASFFI
+  if (ctype_ctsG(g) && ctype_ctsG(g)->L == L)  /* Avoid dangling cts->L. */
+    ctype_ctsG(g)->L = mainthread(g);
+#endif
   lj_func_closeuv(L, tvref(L->stack));
   lua_assert(gcref(L->openupval) == NULL);
   lj_mem_freevec(g, tvref(L->stack), L->stacksize, TValue);

@@ -1,6 +1,6 @@
 /*
 ** Fast function call recorder.
-** Copyright (C) 2005-2025 Mike Pall. See Copyright Notice in luajit.h
+** Copyright (C) 2005-2026 Mike Pall. See Copyright Notice in luajit.h
 */
 
 #define lj_ffrecord_c
@@ -697,15 +697,15 @@ static void LJ_FASTCALL recff_string_range(jit_State *J, RecordFFData *rd)
       emitir(IRTGI(IR_EQ), trstart, tr0);
       trstart = tr0;
     } else {
-      trstart = emitir(IRTI(IR_ADD), trstart, lj_ir_kint(J, -1));
+      trstart = emitir(IRTGI(IR_ADDOV), trstart, lj_ir_kint(J, -1));
       emitir(IRTGI(IR_GE), trstart, tr0);
       start--;
     }
   }
   if (rd->data) {  /* Return string.sub result. */
-    if (end - start >= 0) {
+    if (start <= end) {
       /* Also handle empty range here, to avoid extra traces. */
-      TRef trptr, trslen = emitir(IRTI(IR_SUB), trend, trstart);
+      TRef trptr, trslen = emitir(IRTGI(IR_SUBOV), trend, trstart);
       emitir(IRTGI(IR_GE), trslen, tr0);
       trptr = emitir(IRT(IR_STRREF, IRT_P32), trstr, trstart);
       J->base[0] = emitir(IRT(IR_SNEW, IRT_STR), trptr, trslen);
@@ -714,9 +714,9 @@ static void LJ_FASTCALL recff_string_range(jit_State *J, RecordFFData *rd)
       J->base[0] = lj_ir_kstr(J, lj_str_new(J->L, strdata(str), 0));
     }
   } else {  /* Return string.byte result(s). */
-    ptrdiff_t i, len = end - start;
-    if (len > 0) {
-      TRef trslen = emitir(IRTI(IR_SUB), trend, trstart);
+    if (start < end) {
+      ptrdiff_t i, len = end - start;
+      TRef trslen = emitir(IRTGI(IR_SUBOV), trend, trstart);
       emitir(IRTGI(IR_EQ), trslen, lj_ir_kint(J, (int32_t)len));
       if (J->baseslot + len > LJ_MAX_JSLOTS)
 	lj_trace_err_info(J, LJ_TRERR_STACKOV);
