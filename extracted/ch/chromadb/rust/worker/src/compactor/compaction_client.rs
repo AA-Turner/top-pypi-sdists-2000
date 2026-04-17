@@ -1,12 +1,12 @@
 use chroma_types::chroma_proto::{
     compactor_client::CompactorClient, CollectionIds, CompactRequest,
-    GetCollectionAssignmentRequest, ListDeadJobsRequest, ListInProgressJobsRequest, RebuildRequest,
-    SegmentScope,
+    GetCollectionAssignmentRequest, ListInProgressJobsRequest, RebuildRequest, SegmentScope,
 };
 use clap::{Parser, Subcommand};
 use std::io::Write;
+use std::time::Duration;
 use thiserror::Error;
-use tonic::transport::Channel;
+use tonic::transport::{Channel, Endpoint};
 use uuid::Uuid;
 
 /// Error for compaction client
@@ -27,6 +27,10 @@ pub struct CompactionClient {
     /// Url of the target compactor
     #[arg(short, long)]
     url: String,
+
+    #[arg(long, default_value_t = 60)]
+    request_timeout_secs: u64,
+
     /// Subcommand for compaction
     #[command(subcommand)]
     command: CompactionCommand,
@@ -49,8 +53,6 @@ pub enum CompactionCommand {
         #[arg(long = "segment", value_parser = ["metadata", "vector"])]
         segment_scopes: Vec<String>,
     },
-    /// List all dead jobs (collections with failed compactions)
-    ListDeadJobs,
     /// List all in-progress compaction jobs
     ListInProgressJobs,
     /// Get collection assignment info (which node would handle a collection)
@@ -63,7 +65,12 @@ pub enum CompactionCommand {
 
 impl CompactionClient {
     async fn grpc_client(&self) -> Result<CompactorClient<Channel>, CompactionClientError> {
-        Ok(CompactorClient::connect(self.url.clone()).await?)
+        let endpoint = Endpoint::from_shared(self.url.clone())?
+            .connect_timeout(Duration::from_secs(30))
+            .timeout(Duration::from_secs(self.request_timeout_secs));
+
+        let channel = endpoint.connect().await?;
+        Ok(CompactorClient::new(channel))
     }
 
     pub async fn run(&self, w: &mut dyn Write) -> Result<(), CompactionClientError> {
@@ -105,27 +112,6 @@ impl CompactionClient {
                     .await;
                 if let Err(status) = response {
                     return Err(CompactionClientError::Compactor(status.to_string()));
-                }
-            }
-            CompactionCommand::ListDeadJobs => {
-                let mut client = self.grpc_client().await?;
-                let response = client
-                    .list_dead_jobs(ListDeadJobsRequest {})
-                    .await
-                    .map_err(|e| CompactionClientError::Compactor(e.to_string()))?;
-
-                let dead_jobs = response.into_inner();
-                if let Some(ids) = dead_jobs.ids {
-                    writeln!(w, "Dead jobs (collections with failed compactions):")?;
-                    if ids.ids.is_empty() {
-                        writeln!(w, "  None")?;
-                    } else {
-                        for id in ids.ids {
-                            writeln!(w, "  {}", id)?;
-                        }
-                    }
-                } else {
-                    writeln!(w, "No dead jobs response didn't contain an ids field")?;
                 }
             }
             CompactionCommand::ListInProgressJobs => {
