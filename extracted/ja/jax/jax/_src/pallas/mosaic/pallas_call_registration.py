@@ -34,7 +34,9 @@ from jax._src.lib.mlir import passmanager
 from jax._src.pallas import core as pallas_core
 from jax._src.pallas.mosaic import core as tpu_core
 from jax._src.pallas.mosaic import lowering
+from jax._src.pallas.mosaic import sc_core
 from jax._src.pallas.mosaic import sc_lowering
+from jax._src.pallas.mosaic import tpu_info
 from jax._src.state import types as state_types
 from jax.experimental import mosaic
 from jax.experimental.mosaic.dialects import tpu
@@ -102,13 +104,12 @@ def _get_memory_spaces_from_avals(
     avals: Sequence[jax_core.AbstractValue], kernel_type: tpu_core.CoreType
 ) -> tuple[tpu_custom_call.MemorySpace | None, ...] | None:
   memory_spaces = None
-  if any(
-      isinstance(aval, pallas_core.ShapedArrayWithMemorySpace) for aval in avals
-  ):
+  if any(isinstance(aval, jax_core.ShapedArray)
+         and not isinstance(aval.memory_space, jax_core.MemorySpace)
+         for aval in avals):
     memory_spaces = tuple(
         _get_memory_space_from_aval(aval, kernel_type=kernel_type)
-        for aval in avals
-    )
+        for aval in avals)
   return memory_spaces
 
 
@@ -126,10 +127,9 @@ def _resolve_memory_spaces(
       out_avals, kernel_type=kernel_type
   )
   input_memory_spaces = None
-  if any(
-      isinstance(aval, pallas_core.ShapedArrayWithMemorySpace)
-      for aval in in_avals
-  ):
+  if any(isinstance(aval, jax_core.ShapedArray)
+         and not isinstance(aval.memory_space, jax_core.MemorySpace)
+         for aval in in_avals):
     input_memory_spaces = _get_memory_spaces_from_avals(
         in_avals, kernel_type=kernel_type
     )
@@ -176,7 +176,7 @@ def _resolve_memory_spaces(
     input_memory_spaces = tuple(
         i
         if i
-        in {  # pylint: disable=g-long-ternary
+        in {
             tpu_custom_call.MemorySpace.HBM,
             tpu_custom_call.MemorySpace.VMEM,
             tpu_custom_call.MemorySpace.SMEM,
@@ -208,12 +208,9 @@ def _resolve_tiling(
 ) -> tpu_custom_call.Tiling | None:
   if mosaic_params.use_tc_tiling_on_sc is None:
     return None
-  if mosaic_params.kernel_type not in (
-      tpu_core.CoreType.SC_SCALAR_SUBCORE,
-      tpu_core.CoreType.SC_VECTOR_SUBCORE,
-  ):
+  if mosaic_params.kernel_type is tpu_core.CoreType.TC:
     raise ValueError(
-        "use_tc_tiling_on_sc= is only supported for SC_*_SUBCORE kernels"
+        "use_tc_tiling_on_sc= is not supported for TC kernels"
     )
 
   return (
@@ -294,7 +291,7 @@ def _lower_to_custom_call(
         raise ValueError("Metadata already contains mesh axes.")
       mesh_axes_list = list(mesh_axes)
       if all(isinstance(a, str) for a in mesh_axes):
-        mesh_axes_list = sorted(mesh_axes)  # type: ignore
+        mesh_axes_list = sorted(mesh_axes)  # pyrefly: ignore[bad-specialization]
       dict_metadata["mesh_axes"] = json.dumps(mesh_axes_list)
   out_nodes = mosaic.lower_module_to_custom_call(
       kernel_ctx,
@@ -367,7 +364,33 @@ def pallas_call_tpu_lowering_rule(
     assert isinstance(compiler_params, tpu_core.CompilerParams)
     mosaic_params = compiler_params
 
-  del mesh
+  kernel_type = mosaic_params.kernel_type
+
+  # `mesh` argument is the core mesh if provided by the user (e.g. in core_map).
+  # If it's None, we create a default mesh based on the kernel type.
+  # TODO(rdyro): Remove once we have a way of explicitly passing a mesh here.
+  if mesh is None:
+    if kernel_type == tpu_core.CoreType.TC:
+      # TODO(rdyro): In cross-compilation, TPU info might not be available.
+      # Remove this once we always have an explicit mesh.
+      try:
+        num_cores = tpu_info.get_tpu_info().num_cores
+      except ValueError:
+        num_cores = 1
+      mesh = tpu_core.create_tensorcore_mesh(
+          axis_name="tensorcore_unnamed_core", num_cores=num_cores
+      )
+    elif kernel_type == tpu_core.CoreType.SC_SCALAR_SUBCORE:
+      mesh = sc_core.ScalarSubcoreMesh(axis_name="sparsecore_unnamed_core")
+    elif kernel_type == tpu_core.CoreType.SC_VECTOR_SUBCORE:
+      mesh = sc_core.VectorSubcoreMesh(
+          core_axis_name="sparsecore_unnamed_core",
+          subcore_axis_name="sparsecore_unnamed_subcore",
+      )
+    else:
+      raise ValueError(f"Unsupported kernel type: {kernel_type}")
+  mpmd_meshes = {kernel_type: mesh}
+
   jax_mesh = None
   axis_context = ctx.module_context.axis_context
   if axis_context is not None:
@@ -378,7 +401,7 @@ def pallas_call_tpu_lowering_rule(
   mlir_ctx.load_all_available_dialects()
   tpu.register_dialect(mlir_ctx)
 
-  match (kernel_type := mosaic_params.kernel_type):
+  match kernel_type:
     case tpu_core.CoreType.TC:
       lower_jaxpr_to_module = lowering.lower_jaxpr_to_module
     case (
@@ -401,6 +424,7 @@ def pallas_call_tpu_lowering_rule(
         kernel_type=kernel_type,
         mesh=jax_mesh,
         dynamic_shape_replacement_enabled=pallas_core.dynamic_shapes_export_enabled(),
+        mpmd_meshes=mpmd_meshes,
     )
 
   if debug:
@@ -462,6 +486,7 @@ def mpmd_map_tpu_lowering_rule(
         "mpmd_map does not support dimension_semantics= in compiler_params="
     )
 
+  mpmd_meshes_map = {mesh.kernel_type: mesh for mesh in meshes}
   jax_mesh = None
   axis_context = ctx.module_context.axis_context
   if axis_context is not None:
@@ -488,18 +513,22 @@ def mpmd_map_tpu_lowering_rule(
 
       match kernel_type := mesh.kernel_type:
         case tpu_core.CoreType.TC:
-          lower_jaxpr_into_module = lowering.lower_jaxpr_into_module
+          if (mpmd_meshes_map is not None
+              and mpmd_meshes_map.keys() != {tpu_core.CoreType.TC}):
+            raise NotImplementedError(
+                "mpmd_map does not support TC kernels yet.")
+          lower_fn = lowering.lower_jaxpr_into_module
         case (
             tpu_core.CoreType.SC_SCALAR_SUBCORE
             | tpu_core.CoreType.SC_VECTOR_SUBCORE
         ):
-          lower_jaxpr_into_module = sc_lowering.lower_jaxpr_into_module
+          lower_fn = sc_lowering.lower_jaxpr_into_module
         case _:
           raise ValueError(
-              f"Unsupported kernel type: {mosaic_params.kernel_type}"
+              f"Unsupported kernel type: {kernel_type}"
           )
 
-      lower_jaxpr_into_module(
+      lower_fn(
           ctx,
           mosaic_module,
           grid_mapping,
@@ -509,6 +538,7 @@ def mpmd_map_tpu_lowering_rule(
           mesh=jax_mesh,
           name=mlir.sanitize_name(jaxpr.debug_info.func_name),
           dynamic_shape_replacement_enabled=pallas_core.dynamic_shapes_export_enabled(),
+          mpmd_meshes=mpmd_meshes_map,
       )
 
   if debug:
@@ -547,3 +577,6 @@ def mpmd_map_tpu_lowering_rule(
       name=name,
       jax_mesh=jax_mesh,
   )
+
+
+pallas_core.register_lowering_rule(tpu_core.CompilerParams, pallas_call_tpu_lowering_rule, "tpu")

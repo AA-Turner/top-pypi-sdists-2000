@@ -81,7 +81,7 @@ def zeros(shape: Any, dtype: DTypeLike | None = None, *,
     Array([[False, False, False],
            [False, False, False]], dtype=bool)
 
-  .. _explicit sharding: https://docs.jax.dev/en/latest/notebooks/explicit-sharding.html
+  .. _explicit sharding: https://docs.jax.dev/en/latest/parallel.html
   """
   if isinstance(shape, types.GeneratorType):
     raise TypeError("expected sequence object with len >= 0 or a single integer")
@@ -130,7 +130,7 @@ def ones(shape: Any, dtype: DTypeLike | None = None, *,
     Array([[ True,  True,  True],
            [ True,  True,  True]], dtype=bool)
 
-  .. _explicit sharding: https://docs.jax.dev/en/latest/notebooks/explicit-sharding.html
+  .. _explicit sharding: https://docs.jax.dev/en/latest/parallel.html
   """
   if isinstance(shape, types.GeneratorType):
     raise TypeError("expected sequence object with len >= 0 or a single integer")
@@ -149,9 +149,13 @@ def empty(shape: Any, dtype: DTypeLike | None = None, *,
           out_sharding: NamedSharding | P | None = None) -> Array:
   """Create an empty array.
 
-  JAX implementation of :func:`numpy.empty`. Because XLA cannot create an
-  un-initialized array, :func:`jax.numpy.empty` will always return an array
-  full of zeros.
+  JAX implementation of :func:`numpy.empty`.
+
+  .. note::
+
+    For historical reasons, :func:`jax.numpy.empty` is currently equivalent to
+    :func:`jax.numpy.zeros`: i.e. it returns a buffer initialized with zeros.
+    To create a buffer of uninitialized values, please use :func:`jax.lax.empty`.
 
   Args:
     shape: int or sequence of ints specifying the shape of the created array.
@@ -169,19 +173,20 @@ def empty(shape: Any, dtype: DTypeLike | None = None, *,
     Array of the specified shape and dtype, with the given device/sharding if specified.
 
   See also:
+    - :func:`jax.lax.empty`
     - :func:`jax.numpy.empty_like`
     - :func:`jax.numpy.zeros`
     - :func:`jax.numpy.ones`
     - :func:`jax.numpy.full`
 
   Examples:
-    >>> jnp.empty(4)
+    >>> jnp.empty(4)  # doctest: +SKIP
     Array([0., 0., 0., 0.], dtype=float32)
-    >>> jnp.empty((2, 3), dtype=bool)
+    >>> jnp.empty((2, 3), dtype=bool)  # doctest: +SKIP
     Array([[False, False, False],
            [False, False, False]], dtype=bool)
 
-  .. _explicit sharding: https://docs.jax.dev/en/latest/notebooks/explicit-sharding.html
+  .. _explicit sharding: https://docs.jax.dev/en/latest/parallel.html
   """
   if (m := _check_forgot_shape_tuple("empty", shape, dtype)): raise TypeError(m)
   dtype = dtypes.check_and_canonicalize_user_dtype(
@@ -375,11 +380,11 @@ def empty_like(prototype: ArrayLike | DuckTypedArray,
 
   Examples:
     >>> x = jnp.arange(4)
-    >>> jnp.empty_like(x)
+    >>> jnp.empty_like(x)  # doctest: +SKIP
     Array([0, 0, 0, 0], dtype=int32)
-    >>> jnp.empty_like(x, dtype=bool)
+    >>> jnp.empty_like(x, dtype=bool)  # doctest: +SKIP
     Array([False, False, False, False], dtype=bool)
-    >>> jnp.empty_like(x, shape=(2, 3))
+    >>> jnp.empty_like(x, shape=(2, 3))  # doctest: +SKIP
     Array([[0, 0, 0],
            [0, 0, 0]], dtype=int32)
   """
@@ -450,7 +455,7 @@ def full_like(a: ArrayLike | DuckTypedArray,
     return lax.full_like(a, fill_value, dtype, shape,
                          sharding=util.canonicalize_device_to_sharding(device))
   else:
-    shape = np.shape(a) if shape is None else shape  # type: ignore[arg-type]
+    shape = np.shape(a) if shape is None else shape  # pyrefly: ignore[no-matching-overload]
     dtype = dtypes.result_type(a) if dtype is None else dtype
     return api.device_put(
         util._broadcast_to(asarray(fill_value, dtype=dtype), shape), device)

@@ -51,7 +51,7 @@ rocm_plugin_extension = None
 try:
   from importlib.metadata import distributions
   for dist in distributions():
-    name = dist.metadata.get('Name', '')
+    name = dist.metadata.get('Name', '')  # pyrefly: ignore[missing-attribute]
     if name.startswith('jax-rocm') and name.endswith('-plugin'):
       module_name = name.replace('-', '_')
       try:
@@ -175,7 +175,7 @@ def array(object: Any, dtype: DTypeLike | None = None, copy: bool = True,
     >>> jnp.array(pybuffer)
     Array([2, 3, 5, 7], dtype=int32)
 
-  .. _explicit sharding: https://docs.jax.dev/en/latest/notebooks/explicit-sharding.html
+  .. _explicit sharding: https://docs.jax.dev/en/latest/parallel.html
   """
   if order is not None and order != "K":
     raise NotImplementedError("Only implemented for order='K'")
@@ -203,7 +203,7 @@ def array(object: Any, dtype: DTypeLike | None = None, copy: bool = True,
     if dtype is not None:
       # If there is an explicit dtype, we've already canonicalized things and
       # device_put should not canonicalize again.
-      object = literals.TypedNdArray(object, weak_type=False)
+      object = literals.TypedNdArray(object)
     # Keep the output uncommitted.
     return api.device_put(object)
 

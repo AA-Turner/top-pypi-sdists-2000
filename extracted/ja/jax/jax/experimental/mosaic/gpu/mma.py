@@ -88,7 +88,7 @@ def _mma_single_tile(
   )
   num_acc_regs, num_a_regs, num_b_regs = 4, 4, 2
 
-  acc_regs = [  # pylint: disable=g-complex-comprehension
+  acc_regs = [
       vector.extract(
           reg,
           dynamic_position=[],
@@ -138,6 +138,7 @@ def _mma_single_tile(
       constraints,
       has_side_effects=False,
   )
+  assert isinstance(out_regs_struct, ir.Value)
   out_regs = [
       llvm.extractvalue(acc.mlir_dtype, out_regs_struct, [i])
       for i in range(len(acc_regs))

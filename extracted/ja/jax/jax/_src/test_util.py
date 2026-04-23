@@ -22,7 +22,7 @@ import datetime
 import functools
 from functools import cached_property, partial
 import inspect
-import logging
+
 import math
 import os
 import platform
@@ -109,12 +109,6 @@ TEST_WITH_PERSISTENT_COMPILATION_CACHE = config.bool_flag(
     help='If enabled, the persistent compilation cache will be enabled for all '
     'test cases. This can be used to increase compilation cache coverage.')
 
-HYPOTHESIS_PROFILE = config.string_flag(
-    'hypothesis_profile',
-    os.getenv('JAX_HYPOTHESIS_PROFILE', 'deterministic'),
-    help=('Select the hypothesis profile to use for testing. Available values: '
-          'deterministic, interactive'),
-)
 
 # Global flag ensuring we only patch the subprocess env once per process.
 _bazel_subprocess_env_patched = False
@@ -315,7 +309,7 @@ def count_subjaxpr_to_hlo_conversion(fun_name):
   counts = collections.Counter()
   thread_local_state.lower_jaxpr_to_fun_counts = counts
   def get():
-    key, *others = {k for k in counts if fun_name in k}  # pytype: disable=bad-unpacking
+    key, *others = {k for k in counts if fun_name in k}
     if others: raise Exception(f"ambiguous name: {fun_name}")
     return counts[key]
   try:
@@ -553,22 +547,22 @@ class CudaArchSpecificTest:
 
   def skip_unless_sm90a(self):
     if not is_cuda_compute_capability_equal("9.0"):
-      self.skipTest("Only works on GPU with capability sm90a")  # pytype: disable=attribute-error
+      self.skipTest("Only works on GPU with capability sm90a")
 
   def skip_unless_tcgen05(self):
     if not is_device_cuda():
-      self.skipTest("Only works on GPU")  # pytype: disable=attribute-error
+      self.skipTest("Only works on GPU")
     else:
       d, *_ = xla_bridge.local_devices(backend="gpu")
       target_major, _ = map(int, d.compute_capability.split(".", 1))
       if target_major not in (10, 11):
-        self.skipTest("Only works on GPU with tcgen05 instructions")  # pytype: disable=attribute-error
+        self.skipTest("Only works on GPU with tcgen05 instructions")
 
   def skip_unless_tcgen05_int8(self):
     self.skip_unless_tcgen05()
     if not any(map(is_cuda_compute_capability_equal, ("10.0", "10.1", "11.0"))):
       # https://docs.nvidia.com/cuda/parallel-thread-execution/#tcgen05-mma-instructions-mma-ws
-      self.skipTest("tcgen05 in int8 only works on GPU with capability sm100a/sm101a/sm110a")  # pytype: disable=attribute-error
+      self.skipTest("tcgen05 in int8 only works on GPU with capability sm100a/sm101a/sm110a")
 
 def _get_device_tags():
   """returns a set of tags defined for the device under test"""
@@ -663,7 +657,7 @@ def request_cpu_devices(nr_devices: int):
 
 def skip_on_flag(flag_name, skip_value):
   """A decorator for test methods to skip the test when flags are set."""
-  def skip(test_method):        # pylint: disable=missing-docstring
+  def skip(test_method):
     @functools.wraps(test_method)
     def test_method_wrapper(self, *args, **kwargs):
       flag_value = config._read(flag_name)
@@ -1296,13 +1290,14 @@ class JaxTestCase(parameterized.TestCase):
   def rng(self):
     return self._rng
 
-  def assertDeprecationWarnsOrRaises(self, deprecation_id: str, message: str):
+  def assertDeprecationWarnsOrRaises(self, deprecation_id: str, message: str, *,
+                                     error_class: type[Exception] = ValueError):
     """Assert warning or error, depending on deprecation state.
 
     For use with functions that call :func:`jax._src.deprecations.warn`.
     """
     if deprecations.is_accelerated(deprecation_id):
-      return self.assertRaisesRegex(ValueError, message)
+      return self.assertRaisesRegex(error_class, message)
     else:
       return self.assertWarnsRegex(DeprecationWarning, message)
 
@@ -1714,11 +1709,10 @@ def parameterized_filterable(*,
       for kw in kwargs]
   else:
     for kw in kwargs:
-      testcase_name = kw.get("testcase_name")
-      if testcase_name is None:
-        testcase_name = "_".join(f"{k}={kw[k]}"  # type: ignore
-                                 for k in sorted(kw.keys()))
-      kw["testcase_name"] = sanitize_test_name(testcase_name)  # type: ignore
+      kw_testcase_name = kw.get("testcase_name")
+      if kw_testcase_name is None:
+        kw_testcase_name = "_".join(f"{k}={kw[k]}" for k in sorted(kw))
+      kw["testcase_name"] = sanitize_test_name(kw_testcase_name)
 
     kwargs_with_testcase_name = kwargs
   if one_containing is not None:
@@ -2338,77 +2332,6 @@ class numpy_with_mpmath:
     else:
       assert 0  # unreachable
 
-# Hypothesis testing support
-def hypothesis_is_thread_safe() -> bool:
-  """Returns True if the installed hypothesis version is thread-safe.
-
-  Hypothesis versions >= 6.136.9 are thread-safe.
-  """
-  try:
-    import hypothesis as hp  # pytype: disable=import-error
-    return tuple(int(x) for x in hp.__version__.split('.')) >= (6, 136, 9)
-  except (ModuleNotFoundError, ImportError):
-    return True
-
-def setup_hypothesis(max_examples=30) -> None:
-  """Sets up the hypothesis profiles.
-
-  Sets up the hypothesis testing profiles, and selects the one specified by
-  the ``JAX_HYPOTHESIS_PROFILE`` environment variable (or the
-  ``--jax_hypothesis_profile`` configuration.
-
-  Args:
-    max_examples: the maximum number of hypothesis examples to try, when using
-      the default "deterministic" profile.
-  """
-  try:
-    import hypothesis as hp  # pytype: disable=import-error
-  except (ModuleNotFoundError, ImportError):
-    return
-
-  # In our tests we often use subclasses with slightly different class variables
-  # to generate whole suites of parameterized tests, but this approach does not
-  # work well with Hypothesis databases, which use some function of the method
-  # identity to generate keys. But, if the method is defined in a superclass,
-  # all subclasses share the same key. This key collision can lead to confusing
-  # false positives in other health checks.
-  #
-  # Still, as far as I understand, for as long as we don't use the example
-  # database, it should be perfectly safe to suppress this health check. This
-  # seems simpler than rewriting our tests that trigger this behavior. See
-  # the end of https://github.com/HypothesisWorks/hypothesis/issues/3446 for
-  # more context.
-  suppressed_checks = []
-  if hasattr(hp.HealthCheck, "differing_executors"):
-    suppressed_checks.append(hp.HealthCheck.differing_executors)
-
-  hp.settings.register_profile(
-      "deterministic",
-      database=None,
-      derandomize=True,
-      deadline=None,
-      max_examples=max_examples,
-      print_blob=True,
-      suppress_health_check=suppressed_checks,
-  )
-  hp.settings.register_profile(
-      "interactive",
-      parent=hp.settings.load_profile("deterministic"),
-      max_examples=1,
-      report_multiple_bugs=False,
-      verbosity=hp.Verbosity.verbose,
-      # Don't try and shrink
-      phases=(
-          hp.Phase.explicit,
-          hp.Phase.reuse,
-          hp.Phase.generate,
-          hp.Phase.target,
-          hp.Phase.explain,
-      ),
-  )
-  profile = HYPOTHESIS_PROFILE.value
-  logging.info("Using hypothesis profile: %s", profile)
-  hp.settings.load_profile(profile)
 
 
 def runtime_environment() -> str | None:

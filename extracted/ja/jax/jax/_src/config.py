@@ -23,9 +23,7 @@ import logging
 import os
 import sys
 from typing import Any, Generic, Generator, NoReturn, Optional, Protocol, Type, TypeVar, cast
-import warnings
 
-from jax._src import deprecations
 from jax._src import logging_config
 from jax._src.lib import _jax
 from jax._src.lib import guard_lib
@@ -276,7 +274,7 @@ class State(config_ext.Config[_T]):
     raise TypeError(
         "bool() not supported for instances of type '{0}' "
         "(did you mean to use '{0}.value' instead?)".format(
-            type(self).__name__))  # pyrefly: ignore[missing-attribute]  # pyrefly#2444
+            type(self).__name__))
 
   def _set(self, value: _T) -> None:
     if self._parser:
@@ -951,14 +949,6 @@ def enum_flag(name, default, *args, **kwargs) -> Flag[str]:
 
 already_configured_with_absl = False
 
-
-trace_state = config_ext.Config('trace_state', None, include_in_jit_key=True)
-axis_env_state = config_ext.Config(
-    'axis_env_state',
-    (),
-    include_in_jit_key=True,
-    include_in_trace_context=True,
-)
 mesh_context_manager = config_ext.Config(
     'mesh_context_manager',
     (),
@@ -1229,32 +1219,15 @@ log_checkpoint_residuals = bool_state(
           'partially evaluated (e.g. for autodiff), printing what residuals '
           'are saved.'))
 
-# Since we want a deprecation warning regardless of value, we need an
-# exemption for when config.py is first loaded.
-_pmap_shmap_merge_initialized = False
-
-
-def _default_pmap_shmap_merge(new_val):
-  del new_val
-  global _pmap_shmap_merge_initialized
-  if _pmap_shmap_merge_initialized:
-    deprecations.warn(
-        'jax-pmap-shmap-merge',
-        (
-            'Setting `jax_pmap_shmap_merge` is deprecated in JAX v0.9.0 and '
-            'will be removed in JAX v0.10.0.'
-        ),
-        stacklevel=3,
-    )
-  _pmap_shmap_merge_initialized = True
-
-pmap_shmap_merge = bool_state(
-    name='jax_pmap_shmap_merge',
-    default=True,
+scan3 = bool_state(
+    name='jax_scan3',
+    default=False,
     upgrade=True,
-    help='If True, pmap and shard_map API will be merged.',
-    validator=_default_pmap_shmap_merge,
+    help='If True, embrace the future of loops.',
+    include_in_jit_key=True,
+    include_in_trace_context=True,
 )
+
 
 custom_vjp3 = bool_state(
     name='jax_custom_vjp3',
@@ -1376,14 +1349,6 @@ softmax_custom_jvp = bool_state(
           'behavior. See https://github.com/jax-ml/jax/pull/15677'),
     include_in_jit_key=True,
     include_in_trace_context=True)
-
-
-enable_custom_vjp_by_custom_transpose = bool_state(
-    name='jax_enable_custom_vjp_by_custom_transpose',
-    default=False,
-    upgrade=True,
-    help=('Enables an internal upgrade that implements `jax.custom_vjp` by '
-          'reduction to `jax.custom_jvp` and `jax.custom_transpose`.'))
 
 raise_persistent_cache_errors = bool_state(
     name='jax_raise_persistent_cache_errors',
@@ -1570,25 +1535,6 @@ remove_custom_partitioning_ptr_from_cache_key = bool_state(
           'what they are trying to achieve should set it.'),
 )
 
-def _default_dtype_bits_deprecation(val):
-  if val != '_default':
-    warnings.warn(
-        (
-          'The jax_default_dtype_bits configuration is deprecated in JAX v0.7.1'
-          ' and has no effect as of JAX v0.9.0. It will be removed in JAX v0.10.0.'
-        ),
-        category=DeprecationWarning,
-        stacklevel=4)
-
-
-default_dtype_bits = enum_state(
-    name='jax_default_dtype_bits',
-    enum_values=['_default', '32', '64'],
-    default='_default',
-    help=('[deprecated]. This has no effect starting with JAX v0.9.0, and'
-          ' will be removed in JAX v0.10.0.'),
-    extra_validator=_default_dtype_bits_deprecation)
-
 
 class ExplicitX64Mode(enum.IntEnum):
   WARN = enum.auto()
@@ -1719,8 +1665,7 @@ default_device = string_or_object_state(
         'object (e.g. ``jax.devices("cpu")[0]``) to use that Device as the '
         'default device for JAX operations and jit\'d function calls (there is '
         'no effect on multi-device computations, e.g. pmapped function calls). '
-        'Set to None to use the system default device. See '
-        ':ref:`faq-data-placement` for more information on device placement.'),
+        'Set to None to use the system default device.'),
     validator=_validate_default_device,
     include_in_jit_key=True,
     include_in_trace_context=True)
@@ -2245,6 +2190,18 @@ jax_ragged_dot_use_ragged_dot_instruction = bool_state(
         ' lowering. Otherwise, rely on the rollout logic in lowering rule for'
         ' ragged_dot_general_p.'
     ),
+)
+
+jax_ragged_dot_use_gpu_pallas_triton_lowering = bool_state(
+    name='jax_ragged_dot_use_gpu_pallas_triton_lowering',
+    default=False,
+    help=(
+        '(GPU only) If True, use Pallas Triton lowering for ragged_dot()'
+        ' lowering. Otherwise, rely on the default lowering for'
+        ' ragged_dot_general_p.'
+    ),
+    include_in_jit_key=True,
+    include_in_trace_context=True,
 )
 
 jax_pallas_verbose_errors = bool_flag(

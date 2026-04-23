@@ -205,13 +205,9 @@ class JetTracer(core.Tracer['JetTrace']):
 
   def __init__(self, trace, primal, terms):
     assert type(terms) in (ZeroSeries, list, tuple)
-    self._trace = trace
+    super().__init__(trace, core.typeof(primal))
     self.primal = primal
     self.terms = terms
-
-  @property
-  def aval(self):
-    return core.typeof(self.primal)
 
   def full_lower(self):
     if self.terms is zero_series or all(t is zero_term for t in self.terms):
@@ -235,7 +231,7 @@ class JetTrace(core.Trace):
       return val, zero_series
 
   def process_primitive(self, primitive, tracers, params, /):
-    order = self.order              # pytype: disable=attribute-error
+    order = self.order
     primals_in, series_in = unzip2(map(self.to_primal_terms_pair, tracers))
 
     if all(t is zero_series for t in series_in):

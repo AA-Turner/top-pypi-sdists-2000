@@ -14,18 +14,12 @@
 
 """Lowering rules and pass for the MLIR Mosaic GPU dialect."""
 
-# mypy has been causing more problems than it solves here. Disable it for these
-# files. We have pytype checks anyway.
-# mypy: ignore-errors
-
 from collections.abc import Callable, Iterable, Sequence
 import dataclasses
 import functools
-import inspect
-import itertools
 import math
 import operator
-from typing import Any, Protocol, cast
+from typing import Any, Literal, Protocol, assert_never, cast
 
 from jax._src.interpreters import mlir as mlir_interpreter
 from jax._src.lib import mosaic_gpu_dialect as mgpu
@@ -53,17 +47,30 @@ from . import wgmma
 @dataclasses.dataclass()
 class LoweringContext:
   launch_context: lc.LaunchContext | None
+  _single_thread_per_warp_predicate: ir.Value | None
+  _single_thread_per_warpgroup_predicate: ir.Value | None
   single_thread_per_block_predicate: ir.Value | None
-  single_thread_per_warpgroup_predicate: ir.Value | None
   single_warp_per_block_predicate: ir.Value | None
   auto_barriers: bool
   smem_requested_bytes: int
-  lowered_operations: set[ir.Operation | ir.OpView] = dataclasses.field(
-      default_factory=set
-  )
   is_collective_kernel: bool | None = dataclasses.field(
       init=False, default=None
   )
+  thread_semantics: Literal[
+      utils.ThreadSubset.WARPGROUP, utils.ThreadSubset.WARP
+  ] = utils.ThreadSubset.WARPGROUP
+
+  @property
+  def single_lane_predicate(self) -> ir.Value:
+    match self.thread_semantics:
+      case utils.ThreadSubset.WARPGROUP:
+        assert self._single_thread_per_warpgroup_predicate is not None
+        return self._single_thread_per_warpgroup_predicate
+      case utils.ThreadSubset.WARP:
+        assert self._single_thread_per_warp_predicate is not None
+        return self._single_thread_per_warp_predicate
+      case _:
+        assert_never(self.thread_semantics)
 
   def check_collective(self, op: ir.OpView) -> None:
     """Checks that the collective attribute is consistent across operations.
@@ -74,8 +81,8 @@ class LoweringContext:
     if "collective" not in op.attributes:
       return
     if self.is_collective_kernel is None:
-      self.is_collective_kernel = op.attributes["collective"]
-    elif self.is_collective_kernel != op.attributes["collective"]:
+      self.is_collective_kernel = bool(op.attributes["collective"])
+    elif self.is_collective_kernel != bool(op.attributes["collective"]):
       raise ValueError(
           "Collective attributes are inconsistent across operations in the"
           " kernel."
@@ -85,10 +92,17 @@ class LoweringContext:
     if not _should_lower(op):
       return
 
-    if (name := op.OPERATION_NAME) not in _lowerings:  # pytype: disable=attribute-error
+    # pyrefly: ignore[missing-attribute]
+    if (name := op.OPERATION_NAME) not in _lowerings:
       raise NotImplementedError(f"Missing lowering rule for {op}")
 
     lowering_rule = _lowerings[name]
+
+    if (
+        self.thread_semantics == utils.ThreadSubset.WARP
+        and name not in _supported_warp_lowerings
+    ):
+      raise NotImplementedError(f"Op {name} does not support warp semantics.")
 
     # TODO(bchetioui): make sure all layouts are set here.
     if inference_utils.should_have_layout(
@@ -100,7 +114,7 @@ class LoweringContext:
     if not isinstance(new_results, Recursed):
       for old, new in zip(op.results, new_results):
         old.replace_all_uses_with(new)
-      self.lowered_operations.add(op)
+      op.erase()
 
 
 class Recursed:
@@ -109,7 +123,7 @@ RECURSED = Recursed()
 
 MlirLoweringRuleResult = Sequence[ir.Value] | Recursed
 MlirLoweringRule = Callable[
-    [LoweringContext, ir.Operation | ir.OpView], MlirLoweringRuleResult
+    [LoweringContext, Any], MlirLoweringRuleResult
 ]
 
 
@@ -132,19 +146,16 @@ def _undo_conversion_cast(
   The function will verify that the returned values have types that match
   `expected_types`.
   """
-  conversion_cast = ir_value.owner
+  conversion_cast: Any = ir_value.owner
 
   if not isinstance(conversion_cast, builtin.UnrealizedConversionCastOp):
     raise ValueError(f"{conversion_cast} is not a conversion_cast")
 
-  converted_outputs = builtin.unrealized_conversion_cast(
+  cast_op = builtin.UnrealizedConversionCastOp(
       [operand.type for operand in conversion_cast.operands],
       conversion_cast.results,
   )
-  if isinstance(converted_outputs, ir.OpResultList):
-    converted_outputs = list(converted_outputs)
-  elif not isinstance(converted_outputs, list):
-    converted_outputs = [converted_outputs]
+  converted_outputs: Sequence[ir.Value] = cast_op.results
 
   for v, t in zip(converted_outputs, expected_types, strict=True):
     if v.type != t:
@@ -190,22 +201,25 @@ def _fragmented_array_from_ir(
     layout: ir.Attribute,
     is_signed: bool | None = None,
 ) -> fa.FragmentedArray:
-  producer_layout_attr = fragmented_array_as_ir.owner.attributes["layout"]
+  producer_layout_attr = fragmented_array_as_ir.owner.attributes["layout"]  # pyrefly: ignore[missing-attribute]
   producer_layout = layouts_lib.from_layout_attr(producer_layout_attr)
   vector_ty = ir.VectorType(fragmented_array_as_ir.type)
   reg_shape = producer_layout.registers_shape(tuple(vector_ty.shape))
-  reg_ty = producer_layout.registers_element_type(vector_ty.element_type)
+  reg_ty: ir.Type = producer_layout.registers_element_type(vector_ty.element_type)
 
   conversion_cast, converted_outputs = _undo_conversion_cast(
       fragmented_array_as_ir, [reg_ty] * math.prod(reg_shape)
   )
 
-  reverse_conversion_cast = converted_outputs[0].owner.opview
+  reverse_conversion_cast = converted_outputs[0].owner.opview  # pyrefly: ignore[missing-attribute]
   for attribute in conversion_cast.attributes:
     reverse_conversion_cast.attributes[attribute] = conversion_cast.attributes[attribute]
 
   registers = np.array(list(converted_outputs)).reshape(
-    [attr.value for attr in conversion_cast.attributes["registers_shape"]]
+    [
+        attr.value  # pyrefly: ignore[missing-attribute]
+        for attr in ir.ArrayAttr(conversion_cast.attributes["registers_shape"])
+    ]
   )
 
   if isinstance(conversion_cast.outputs[0].type.element_type, ir.IntegerType):
@@ -232,8 +246,9 @@ def wrap_transformed_memref(
   return conversion_cast.result
 
 
+# TODO(bchetioui): Change ``expected_transforms`` to be a ``Sequence``.
 def unwrap_transformed_memref(
-    ref: ir.Value, expected_transforms: ir.ArrayAttr
+    ref: ir.Value[ir.MemRefType], expected_transforms: ir.ArrayAttr
 ) -> ir.Value:
   """Uwraps a memref from an unrealized cast and verifies its transforms."""
 
@@ -250,14 +265,19 @@ def unwrap_transformed_memref(
 
   return result
 
+_supported_warp_lowerings: set[str] = set()
+
 
 def _register_lowering(
-    op: str | type[ir.OpView] | None
+    op: str | type[ir.OpView] | None,
+    support_warp_semantics: bool = False,
 ) -> Callable[[MlirLoweringRule], MlirLoweringRule]:
   def wrapper(f):
     if op is not None:
-      op_name = op if isinstance(op, str) else op.OPERATION_NAME  # pytype: disable=attribute-error
+      op_name = op if isinstance(op, str) else op.OPERATION_NAME  # pyrefly: ignore[missing-attribute]
       _lowerings[op_name] = f
+      if support_warp_semantics:
+        _supported_warp_lowerings.add(op_name)
     return f
 
   return wrapper
@@ -273,15 +293,13 @@ def _initialize_barrier_op_lowering_rule(
     op: mgpu.InitializeBarrierOp,
 ) -> Sequence[ir.Value]:
   i32 = ir.IntegerType.get_signless(32)
-  lowered_barrier_type = _lowered_barrier_type()
-
+  arrival_count = op.arrival_count.value * (
+      utils.WARPGROUP_SIZE if not op.orders_tensor_core.value else 1
+  )
   for i in range(op.num_barriers.value):
     nvvm.mbarrier_init(
-        utils.getelementptr(op.base_pointer, [i], lowered_barrier_type),
-        utils.c(
-            op.arrival_count.value * utils.WARPGROUP_SIZE,
-            i32,
-        ),
+        utils.getelementptr(op.base_pointer, [i], _lowered_barrier_type()),
+        utils.c(arrival_count, i32),
         predicate=ctx.single_thread_per_block_predicate,
     )
 
@@ -334,69 +352,12 @@ def _arith_constant_op_lowering_rule(
           fa.FragmentedArray.splat(
               arith.constant(ty.element_type, value.get_splat_value()),
               tuple(ty.shape),
-              layouts_lib.from_layout_attr(op.attributes["out_layouts"][0]),
+              layouts_lib.from_layout_attr(op.attributes["out_layouts"][0]),  # pyrefly: ignore[bad-index]
               is_signed=is_signed,
           ),
           op.result.type,
       )
   ]
-
-
-def _check_transforms_and_swizzle_are_supported(
-    ref_ty: ir.MemRefType,
-    transforms: Sequence[lc.MemRefTransform],
-    swizzle: mgpu.SwizzlingMode,
-    minimum_swizzle: mgpu.SwizzlingMode = mgpu.SwizzlingMode.kNoSwizzle,
-):
-  """Checks that the list of provided transforms and swizzle are supported.
-
-  Currently, we allow the following:
-    - any swizzle that is larger than or equal to `minimum_swizzle`;
-    - optionally, a single tile transform (with rank equal to the rank of the
-      memref being annotated);
-    - optionally, a single transpose transform.
-  """
-  if swizzle < minimum_swizzle:
-    raise NotImplementedError(
-        f"Unsupported swizzle {swizzle} smaller than {minimum_swizzle}."
-    )
-
-  partitioned_transforms = {
-      k: list(v)
-      for k, v in itertools.groupby(
-          transforms, lambda t: isinstance(t, lc.TileTransform)
-      )
-  }
-
-  tile_transforms = cast(
-      list[lc.TileTransform],
-      partitioned_transforms.get(True, []),
-  )
-  other_transforms = partitioned_transforms.get(False, [])
-
-  if len(tile_transforms) > 1:
-    raise NotImplementedError(
-        f"{tile_transforms} contains more than one tile transform."
-    )
-
-  if len(tile_transforms) == 1:
-    if len(tile_transforms[0].tiling) != len(ref_ty.shape):
-      raise NotImplementedError(
-          f"Only tile transforms with rank equal to the rank of the memref "
-          f"being annotated are supported but got {tile_transforms[0]} for "
-          f"{ref_ty}."
-      )
-
-  if len(other_transforms) > 1:
-    raise NotImplementedError(
-        f"{other_transforms} contains more than one transform."
-    )
-
-  if len(other_transforms) == 1:
-    if not isinstance(other_transforms[0], lc.TransposeTransform):
-      raise NotImplementedError(
-          f"{other_transforms[0]} is not a transpose transform."
-      )
 
 
 class _Transfer(Protocol):
@@ -414,7 +375,7 @@ def _retry_on_failure(transfer: _Transfer, optimized: bool | None) -> Any:
   # a failed call to `transfer`.
   try:
     return transfer(optimized=True)
-  except ValueError:
+  except fa.TransferPlanDerivationError:
     return transfer(optimized=False)
 
 
@@ -422,7 +383,8 @@ def _retry_on_failure(transfer: _Transfer, optimized: bool | None) -> Any:
 def _vector_load_op_lowering_rule(
     _: LoweringContext, op: mgpu.VectorLoadOp
 ) -> Sequence[ir.Value]:
-  (out_layout_attr,) = inference_utils.out_layouts(op)
+  out_layout_attr, = inference_utils.out_layouts(op)
+  out_layout = layouts_lib.from_layout_attr(out_layout_attr)
 
   element_type = ir.VectorType(op.result.type).element_type
   is_signed = _default_is_signed(element_type)
@@ -432,28 +394,24 @@ def _vector_load_op_lowering_rule(
   ) -> ir.Value:
     return fragmented_array_to_ir(fragmented_array, op.result.type)
 
-  if layouts_lib.is_strided_fragmented_layout(out_layout_attr):
-    strided_layout = layouts_lib.from_strided_fragmented_layout_attr(
-        out_layout_attr
-    )
+  if isinstance(out_layout, fa.WGStridedFragLayout):
     # TODO(bchetioui): Process transforms.
     fragmented_array = fa.FragmentedArray.load_strided(
         op.source,
         is_signed=is_signed,
-        vec_size=strided_layout.vec_size,
+        vec_size=out_layout.vec_size,
     )
     return [_fragmented_array_to_ir(fragmented_array)]
 
-  if not layouts_lib.is_tiled_layout(out_layout_attr):
+  if not isinstance(out_layout, fa.TiledLayout):
     raise ValueError(f"{op} has an unsupported layout: {out_layout_attr}")
 
   optimized = op.optimized.value if op.optimized is not None else None
-  layout = layouts_lib.from_tiled_layout_attr(out_layout_attr)
   ref_ty = ir.MemRefType(op.source.type)
   if ref_ty.memory_space is None:  # GMEM
     fragmented_array = fa.FragmentedArray.load_untiled(
         op.source,
-        layout=layout,
+        layout=out_layout,
         is_signed=is_signed,
         optimized=bool(optimized),
     )
@@ -468,7 +426,6 @@ def _vector_load_op_lowering_rule(
   )
   has_transforms = swizzle != mgpu.SwizzlingMode.kNoSwizzle or transforms
   if has_transforms:
-    _check_transforms_and_swizzle_are_supported(ref_ty, transforms, swizzle)
     transformed_ref = unwrap_transformed_memref(op.source, transforms_attr)
 
     def load_tiled(optimized: bool) -> fa.FragmentedArray:
@@ -476,7 +433,7 @@ def _vector_load_op_lowering_rule(
           transformed_ref,
           swizzle,
           is_signed=is_signed,
-          layout=layout,
+          layout=out_layout,
           optimized=optimized,
       )
 
@@ -486,7 +443,7 @@ def _vector_load_op_lowering_rule(
     def load_untiled(optimized: bool) -> fa.FragmentedArray:
       return fa.FragmentedArray.load_untiled(
           op.source,
-          layout=layout,
+          layout=out_layout,
           is_signed=is_signed,
           optimized=optimized,
       )
@@ -495,15 +452,50 @@ def _vector_load_op_lowering_rule(
 
   return [_fragmented_array_to_ir(fragmented_array)]
 
+
+# TODO(olechwierowicz): remove this check once minimum jaxlib version is 0.10.0.
+if hasattr(mgpu, "MultimemLoadReduceOp"):
+  @_register_lowering(mgpu.MultimemLoadReduceOp)
+  def _multimem_load_reduce_op_lowering_rule(
+      ctx: LoweringContext, op: mgpu.MultimemLoadReduceOp
+  ) -> Sequence[ir.Value]:
+    [out_layout_attr] = inference_utils.out_layouts(op)
+    out_layout = layouts_lib.from_layout_attr(out_layout_attr)
+
+    assert ctx.launch_context is not None
+
+    # pyrefly: ignore[missing-attribute]
+    reduction = str(mgpu.MultimemLoadReductionType(op.reduction_type.value))
+    if isinstance(op.source.type.element_type, ir.IntegerType):
+      is_signed = reduction in ("smax", "smin")
+      if reduction in ("smax", "smin", "umax", "umin"):
+        reduction = reduction[1:]
+    else:
+      is_signed = None
+
+    multimem_ref = utils.MultimemRef(op.source)
+    fa_res = fa.FragmentedArray.load_reduce_untiled(
+        multimem_ref,
+        out_layout,  # pyrefly: ignore[bad-argument-type]
+        reduction,  # pyrefly: ignore[bad-argument-type]
+        is_signed=is_signed
+    )
+
+    return [fragmented_array_to_ir(fa_res, op.result.type)]
+
+
 @_register_lowering(mgpu.VectorStoreOp)
 def _vector_store_op_lowering_rule(
     ctx: LoweringContext, op: mgpu.VectorStoreOp
 ) -> Sequence[ir.Value]:
-  # TODO(allanrenucci): remove this check once minimum jaxlib version is 0.9.2.
-  if hasattr(op, "atomic_type") and op.atomic_type is not None:
-    atomic = str(mgpu.AtomicOpType(op.atomic_type.value))
+  if op.atomic_type is not None:
+    # pyrefly: ignore[missing-attribute]
+    atomic: Any = str(mgpu.AtomicOpType(op.atomic_type.value))
   else:
     atomic = None
+
+  # TODO(olechwierowicz) Remove this check once minimum jaxlib version is 0.10.0
+  multimem = op.multimem.value if hasattr(op, "multimem") else False
 
   [to_store_layout] = inference_utils.in_layouts(op)
   fragmented_array = _fragmented_array_from_ir(op.valueToStore, to_store_layout)
@@ -516,6 +508,7 @@ def _vector_store_op_lowering_rule(
   optimized = op.optimized.value if op.optimized is not None else None
 
   if ref_type.memory_space is None:  # GMEM
+    ref = utils.MultimemRef(ref) if multimem else ref
     fragmented_array.store_untiled(
         ref, optimized=bool(optimized), atomic=atomic
     )
@@ -526,17 +519,16 @@ def _vector_store_op_lowering_rule(
     )
     has_transforms = swizzle != mgpu.SwizzlingMode.kNoSwizzle or transforms
     if has_transforms:
-      _check_transforms_and_swizzle_are_supported(ref_type, transforms, swizzle)
       unwrapped_ref = unwrap_transformed_memref(ref, transforms_attr)
 
       def store_tiled(optimized: bool):
-        fragmented_array.store_tiled(unwrapped_ref, swizzle, optimized, atomic=atomic)  # pytype: disable=wrong-arg-types
+        fragmented_array.store_tiled(unwrapped_ref, swizzle, optimized, atomic=atomic)
 
       _retry_on_failure(store_tiled, optimized)
     else:
 
       def store_untiled(optimized: bool):
-        fragmented_array.store_untiled(ref, optimized=optimized, atomic=atomic)  # pytype: disable=wrong-arg-types
+        fragmented_array.store_untiled(ref, optimized=optimized, atomic=atomic)
       _retry_on_failure(store_untiled, optimized)
   else:
     raise ValueError(f"Unsupported memory space: {ref_type.memory_space}")
@@ -624,7 +616,7 @@ def _vector_broadcast_op_lowering_rule(
       op.source,
       tuple(out_vec_ty.shape),
       layouts_lib.from_layout_attr(
-          op.attributes["out_layouts"][0]
+          op.attributes["out_layouts"][0]  # pyrefly: ignore[bad-index]
       ),
       is_signed=_default_is_signed(out_vec_ty.element_type),
   )
@@ -717,7 +709,7 @@ def _vector_reduction_op_lowering_rule(
   element_type = op.vector.type.element_type
   scratch = _slice_smem(
       ir.MemRefType.get([4], element_type, memory_space=utils.smem()),
-      arith.constant(None, op.attributes["offset"]),
+      ir.IntegerAttr(op.attributes["offset"]).value,
       ctx.smem_requested_bytes,
   )
   axes = range(op.vector.type.rank)
@@ -766,7 +758,7 @@ def _vector_multi_dim_reduction_op_lowering_rule(
     allocation_size = ir.IntegerAttr(op.attributes["scratch_size"]).value * 8 // utils.bitwidth(dtype)
     scratch = _slice_smem(
         ir.MemRefType.get([allocation_size], dtype, memory_space=utils.smem()),
-        arith.constant(None, op.attributes["offset"]),
+        ir.IntegerAttr(op.attributes["offset"]).value,
         ctx.smem_requested_bytes,
     )
   else:
@@ -784,7 +776,7 @@ def _vector_multi_dim_reduction_op_lowering_rule(
       result = result.min(acc)
     case _:
       raise NotImplementedError(f"Unsupported reduction kind: {op.kind}")
-  assert result.layout == layouts_lib.from_layout_attr(out_layout)  # pytype: disable=attribute-error
+  assert result.layout == layouts_lib.from_layout_attr(out_layout)
   return [fragmented_array_to_ir(result, op.result.type)]
 
 
@@ -838,7 +830,8 @@ def swizzle_and_transforms_from_transforms_attr(
     if mgpu.SwizzleTransformAttr.isinstance(transform):
       # TODO(dasenov): Swizzling can change if the ref is sliced in certain
       # ways. We might want to enforce some restrictions here.
-      swizzle = mgpu.SwizzleTransformAttr(transform).swizzle
+      # TODO(slebedev): Should SwizzleTransformAttr.swizzle be an enum?
+      swizzle = mgpu.SwizzlingMode(mgpu.SwizzleTransformAttr(transform).swizzle)
     elif mgpu.TileTransformAttr.isinstance(transform):
       tiling = mgpu.TileTransformAttr(transform).tiling
       tiling_transform = lc.TileTransform(tuple(tiling))
@@ -899,11 +892,18 @@ def tile_strides(
         "Can not tile strides when tiled dimensions have been transposed with "
         f"untiled dimensions. Strides: {strides}, tiling: {tiling}"
     )
-  tiled_ordered_strides = ordered_strides[-len(tiling):]
   untiled_strides, tiled_strides = strides[:-len(tiling)], strides[-len(tiling):]
 
-  to_ordered = lambda i: tiled_ordered_strides.index(tiled_strides[i])
-  from_ordered = lambda i: tiled_strides.index(tiled_ordered_strides[i])
+  # Zip the strides and tiling together, in order to sort them together. This
+  # allows handling cases where multiple tiling dimensions have the same stride,
+  # which can occur with size-1 dimensions.
+  tiled_strides_and_tiling: list[tuple[int, int]] = list(
+      zip(tiled_strides, tiling, strict=True))
+  tiled_ordered_strides_and_tiling = sorted(
+      tiled_strides_and_tiling, reverse=True)
+
+  to_ordered = lambda i: tiled_ordered_strides_and_tiling.index(tiled_strides_and_tiling[i])
+  from_ordered = lambda i: tiled_strides_and_tiling.index(tiled_ordered_strides_and_tiling[i])
 
   ordered_tiling = [tiling[from_ordered(i)] for i in range(len(tiling))]
   ordered_tiled_strides = [tiled_strides[from_ordered(i)] for i in range(len(tiling))]
@@ -945,11 +945,11 @@ def transform_type(
   # TODO(bchetioui): this should be trivial to relax if ever necessary.
   if len(transforms) > 1 or not isinstance(transforms[0], lc.TileTransform):
     raise NotImplementedError(f"Unsupported transforms: {transforms}")
-  tile_transform: lc.TileTransform = transforms[0]  # pytype: disable=attribute-error
+  tile_transform: lc.TileTransform = transforms[0]
 
   strides, offset = ref_ty.get_strides_and_offset()
   tiled_shape = tile_transform.transform_shape(ref_ty.shape)
-  tiled_strides = tile_strides(strides, tile_transform.tiling)
+  tiled_strides = tile_strides(tuple(strides), tile_transform.tiling)
 
   if offset == ir.ShapedType.get_dynamic_stride_or_offset():
     tiled_offset = offset
@@ -984,8 +984,9 @@ def _gmem_slice_and_predicate(
     dict[str, ir.Value],
 ]:
   """Returns the GMEM slice and predicate for the given async op."""
+  gmem_slice: list[ir.Value | fa.FragmentedArray | utils.DynamicSlice]
   gmem_slice = []
-  predicate = dict(predicate=ctx.single_thread_per_warpgroup_predicate)
+  predicate = dict(predicate=ctx.single_lane_predicate)
   for idx, size in zip(op.indices, op.slice_lengths, strict=True):
     if isinstance(idx.type, ir.IntegerType):
       idx_int = arith.index_cast(ir.IndexType.get(), idx)
@@ -1002,7 +1003,7 @@ def _gmem_slice_and_predicate(
   return tuple(gmem_slice), predicate
 
 
-@_register_lowering(mgpu.AsyncLoadOp)
+@_register_lowering(mgpu.AsyncLoadOp, support_warp_semantics=True)
 def _mgpu_async_load_op_lowering_rule(
     ctx: LoweringContext, load_op: mgpu.AsyncLoadOp
 ) -> Sequence[ir.Value]:
@@ -1017,7 +1018,7 @@ def _mgpu_async_load_op_lowering_rule(
   unwrapped_dst = unwrap_transformed_memref(
       load_op.destination, transforms_attr
   )
-
+  assert isinstance(unwrapped_dst.type, ir.MemRefType)
   if utils.is_memref_transposed(unwrapped_dst.type):
     strides, _ = ir.MemRefType(unwrapped_dst.type).get_strides_and_offset()
     permutation = tuple(
@@ -1038,15 +1039,25 @@ def _mgpu_async_load_op_lowering_rule(
       for axis in load_op.collective or []
   ]
 
+  match load_op.leader_tracked:
+    case mgpu.CopyReplicatedAttr():
+      leader_tracked = lc.CopyPartition.REPLICATED
+    case mgpu.CopyPartitionedAttr() as attr:
+      leader_tracked = lc.CopyPartition.PARTITIONED(attr.axis)
+    case _:
+      leader_tracked = None
+
   # TODO(dasenov): async_copy requires all GMEM strides except the last one
   # to be a multiple of 16 bytes. This restriction could be loosned with
   # strided layouts when they are contiguous in GMEM. In that case, we could do:
   # flatten -> async_copy -> unflatted here, as long as flattened size is a
   # multiple of 16.
 
-  # TODO(dasenov): Add support for the remaining op properties.
-  if ctx.auto_barriers:
+  if ctx.auto_barriers and ctx.thread_semantics == utils.ThreadSubset.WARPGROUP:
     utils.warpgroup_barrier()  # Make sure the writes have completed.
+
+  # TODO(dasenov): Add support for the remaining op properties.
+  oob_mode = lc.OOBFillMode(ir.IntegerAttr(load_op.oob_fill_mode).value)  # pyrefly: ignore[missing-attribute]
   ctx.launch_context.async_copy(
       src_ref=load_op.source,
       dst_ref=unwrapped_dst,
@@ -1056,12 +1067,14 @@ def _mgpu_async_load_op_lowering_rule(
       arrive=False,
       swizzle=swizzle,
       gmem_transform=transforms,
-      **predicate,
+      leader_tracked=leader_tracked,
+      oob_mode=oob_mode,
+      **predicate,  # pyrefly: ignore[bad-argument-type]
   )
   return []
 
 
-@_register_lowering(mgpu.AsyncPrefetchOp)
+@_register_lowering(mgpu.AsyncPrefetchOp, support_warp_semantics=True)
 def _mgpu_async_prefetch_op_lowering_rule(
     ctx: LoweringContext, load_op: mgpu.AsyncPrefetchOp
 ) -> Sequence[ir.Value]:
@@ -1077,12 +1090,12 @@ def _mgpu_async_prefetch_op_lowering_rule(
       gmem_slice=gmem_slice,
       swizzle=None,
       gmem_transform=(),
-      **predicate,
+      **predicate,  # pyrefly: ignore[bad-argument-type]
   )
   return []
 
 
-@_register_lowering(mgpu.AsyncStoreOp)
+@_register_lowering(mgpu.AsyncStoreOp, support_warp_semantics=True)
 def _mgpu_async_store_op_lowering_rule(
     ctx: LoweringContext, store_op: mgpu.AsyncStoreOp
 ) -> Sequence[ir.Value]:
@@ -1093,6 +1106,7 @@ def _mgpu_async_store_op_lowering_rule(
       transforms_attr
   )
   unwrapped_source = unwrap_transformed_memref(store_op.source, transforms_attr)
+  assert isinstance(unwrapped_source.type, ir.MemRefType)
   if utils.is_memref_transposed(unwrapped_source.type):
     strides, _ = ir.MemRefType(unwrapped_source.type).get_strides_and_offset()
     permutation = tuple(
@@ -1108,12 +1122,17 @@ def _mgpu_async_store_op_lowering_rule(
 
   gmem_slice, predicate = _gmem_slice_and_predicate(ctx, store_op)
 
+  arrive = (
+      None if store_op.commit_group is None else bool(store_op.commit_group)
+  )
+
   # TODO(dasenov): async_copy requires all GMEM strides except the last one
   # to be a multiple of 16 bytes. This restriction could be loosned with
   # strided layouts when they are contiguous in GMEM. In that case, we could do:
   # flatten -> async_copy -> unflatted here, as long as flattened size is a
   # multiple of 16.
   if store_op.reduction_op is not None:
+    # pyrefly: ignore[missing-attribute]
     reduction_op = mgpu.TMAReduction(store_op.reduction_op.value).name.lower()
   else:
     reduction_op = None
@@ -1125,34 +1144,65 @@ def _mgpu_async_store_op_lowering_rule(
       gmem_slice=gmem_slice,
       swizzle=swizzle,
       gmem_transform=transforms,
-      **predicate,
-      arrive=store_op.commit_group,
-      reduction_op=reduction_op
+      **predicate,  # pyrefly: ignore[bad-argument-type]
+      arrive=arrive,
+      reduction_op=reduction_op,  # pyrefly: ignore[bad-argument-type]
+      oob_mode=lc.OOBFillMode.UNDEFINED,
   )
   return []
 
 
-# TODO(olechwierowicz): remove this check once minimum jaxlib version is 0.9.2.
-if hasattr(mgpu, "AsyncStoreSmemToTmemOp"):
-  @_register_lowering(mgpu.AsyncStoreSmemToTmemOp)
-  def _async_copy_smem_to_tmem_lowering_rule(
-      ctx: LoweringContext, op: mgpu.AsyncStoreSmemToTmemOp
+# TODO(olechwierowicz): remove this check once minimum jaxlib version is 0.10.0.
+if hasattr(mgpu, "AsyncStoreScalesSmemToTmemOp"):
+  @_register_lowering(mgpu.AsyncStoreScalesSmemToTmemOp)
+  def _async_copy_scales_smem_to_tmem_lowering_rule(
+      ctx: LoweringContext, op: mgpu.AsyncStoreScalesSmemToTmemOp
   ) -> Sequence[ir.Value]:
-    [transforms_attr] = inference_utils.in_transforms(op)
-    swizzle, transforms = swizzle_and_transforms_from_transforms_attr(
-        transforms_attr
-    )
-    smem_ref = unwrap_transformed_memref(op.source, transforms_attr)
-    smem_ref_ty = op.source.type
-    _check_transforms_and_swizzle_are_supported(smem_ref_ty, transforms, swizzle)
-
+    ctx.check_collective(op)
     [in_layout_attr] = inference_utils.in_tmem_layouts(op)
     tmem_ref = _tmem_ref_from_ir(op.destination, in_layout_attr)
-    with utils.when(ctx.single_thread_per_warpgroup_predicate):
-      tcgen05.async_copy_smem_to_tmem(
-          smem_ref, tmem_ref, swizzle, collective=op.collective
+    smem_ref = unwrap_transformed_memref(op.source, ir.ArrayAttr.get([]))
+    with utils.when(ctx.single_lane_predicate):
+      tcgen05.async_copy_scales_smem_to_tmem(
+        smem_ref, tmem_ref, collective=bool(op.collective)
       )
     return []
+
+@_register_lowering(mgpu.AsyncStoreSparseMetadataSmemToTmemOp)
+def _async_copy_sparse_metadata_smem_to_tmem_lowering_rule(
+    ctx: LoweringContext, op: mgpu.AsyncStoreSparseMetadataSmemToTmemOp
+) -> Sequence[ir.Value]:
+  ctx.check_collective(op)
+  [in_layout_attr] = inference_utils.in_tmem_layouts(op)
+  tmem_ref = _tmem_ref_from_ir(op.destination, in_layout_attr)
+  smem_ref = unwrap_transformed_memref(op.source, ir.ArrayAttr.get([]))
+  with utils.when(ctx.single_lane_predicate):
+    tcgen05.async_copy_sparse_metadata_smem_to_tmem(
+      smem_ref, tmem_ref, collective=bool(op.collective)
+    )
+  return []
+
+
+@_register_lowering(mgpu.AsyncStoreSmemToTmemOp, support_warp_semantics=True)
+def _async_store_smem_to_tmem_lowering_rule(
+    ctx: LoweringContext, op: mgpu.AsyncStoreSmemToTmemOp
+) -> Sequence[ir.Value]:
+  ctx.check_collective(op)
+  [transforms_attr] = inference_utils.in_transforms(op)
+  swizzle, _ = swizzle_and_transforms_from_transforms_attr(
+      transforms_attr
+  )
+  smem_ref = unwrap_transformed_memref(op.source, transforms_attr)
+  smem_ref_ty = op.source.type
+  assert isinstance(smem_ref_ty, ir.MemRefType)
+
+  [in_layout_attr] = inference_utils.in_tmem_layouts(op)
+  tmem_ref = _tmem_ref_from_ir(op.destination, in_layout_attr)
+  with utils.when(ctx.single_lane_predicate):
+    tcgen05.async_copy_smem_to_tmem(
+        smem_ref, tmem_ref, swizzle, collective=bool(op.collective)
+    )
+  return []
 
 
 @_register_lowering(mgpu.TmemLayoutCastOp)
@@ -1195,7 +1245,7 @@ def _conversion_op_lowering_rule(
   if in_layout != layout:
     raise ValueError("Layout mismatch")
 
-  target_ty = op.result.type.element_type  # pytype: disable=attribute-error
+  target_ty = op.result.type.element_type
   operand = _fragmented_array_from_ir(op.operands[0], layout, source_is_signed)
   converted = operand.astype(target_ty, is_signed=target_is_signed)
   return [fragmented_array_to_ir(converted, op.result.type)]
@@ -1352,7 +1402,8 @@ def _cmpi_op_lowering_rule(
   [layout] = inference_utils.out_layouts(op)
   if any(in_layout != layout for in_layout in in_layouts):
     raise ValueError("Layout mismatch")
-  impl, is_signed = CMPI_IMPLS[op.predicate.value]  # pytype: disable=attribute-error
+  # pyrefly: ignore[missing-attribute]
+  impl, is_signed = CMPI_IMPLS[op.predicate.value]
   lhs = _fragmented_array_from_ir(op.lhs, layout, is_signed)
   rhs = _fragmented_array_from_ir(op.rhs, layout, is_signed)
   return [fragmented_array_to_ir(impl(lhs, rhs), op.result.type)]
@@ -1376,7 +1427,8 @@ def _cmpf_op_lowering_rule(
   [layout] = inference_utils.out_layouts(op)
   if any(in_layout != layout for in_layout in in_layouts):
     raise ValueError("Layout mismatch")
-  impl = CMPF_IMPLS[op.predicate.value]  # pytype: disable=attribute-error
+  # pyrefly: ignore[missing-attribute]
+  impl = CMPF_IMPLS[op.predicate.value]
   lhs = _fragmented_array_from_ir(op.lhs, layout)
   rhs = _fragmented_array_from_ir(op.rhs, layout)
   return [fragmented_array_to_ir(impl(lhs, rhs), op.result.type)]
@@ -1417,8 +1469,9 @@ def _select_op_lowering_rule(
 
 @_register_lowering(mgpu.WGMMAOp)
 def _mgpu_wgmma_op_lowering_rule(
-    _: LoweringContext, wgmma_op: mgpu.WGMMAOp
+    ctx: LoweringContext, wgmma_op: mgpu.WGMMAOp
 ) -> Sequence[ir.Value]:
+  del ctx
   in_layouts = inference_utils.in_layouts(wgmma_op)
   assert in_layouts[0] == layouts_lib.to_layout_attr(fa.WGMMA_LAYOUT)
   [out_layout] = inference_utils.out_layouts(wgmma_op)
@@ -1433,7 +1486,7 @@ def _mgpu_wgmma_op_lowering_rule(
   regs = _fragmented_array_from_ir(
       wgmma_op.accumulator, in_layouts[0], is_signed
   )
-  acc = wgmma.WGMMAAccumulator.from_registers(regs)
+  acc = wgmma.WGMMAAccumulator.from_registers(regs)  # pyrefly: ignore[missing-attribute]
 
   if isinstance(wgmma_op.a.type, ir.VectorType):
     a_transforms = None
@@ -1445,13 +1498,7 @@ def _mgpu_wgmma_op_lowering_rule(
     unwrapped_a_ref = unwrap_transformed_memref(wgmma_op.a, a_transforms)
     unwrapped_b_ref = unwrap_transformed_memref(wgmma_op.b, b_transforms)
 
-  b_swizzle, b_transforms = swizzle_and_transforms_from_transforms_attr(
-      b_transforms
-  )
-  minimum_swizzle = mgpu.SwizzlingMode.k32ByteSwizzle
-  _check_transforms_and_swizzle_are_supported(
-      ir.MemRefType(wgmma_op.b.type), b_transforms, b_swizzle, minimum_swizzle
-  )
+  b_swizzle, _ = swizzle_and_transforms_from_transforms_attr(b_transforms)
 
   if isinstance(wgmma_op.a.type, ir.VectorType):
     expected_a_layout = (
@@ -1462,12 +1509,8 @@ def _mgpu_wgmma_op_lowering_rule(
     assert in_layouts[1] == layouts_lib.to_layout_attr(expected_a_layout)
     a_operand = _fragmented_array_from_ir(wgmma_op.a, in_layouts[1], is_signed)
   else:
-    a_swizzle, a_transforms = swizzle_and_transforms_from_transforms_attr(
-        a_transforms
-    )
-    _check_transforms_and_swizzle_are_supported(
-        ir.MemRefType(wgmma_op.a.type), a_transforms, a_swizzle, minimum_swizzle
-    )
+    assert a_transforms is not None
+    a_swizzle, _ = swizzle_and_transforms_from_transforms_attr(a_transforms)
     if a_swizzle != b_swizzle:
       raise ValueError(
           f"Non-matching swizzles of operands a and b in WGMMA: {a_swizzle} !="
@@ -1476,6 +1519,7 @@ def _mgpu_wgmma_op_lowering_rule(
     assert unwrapped_a_ref is not None
     a_operand = unwrapped_a_ref
 
+  # pyrefly: ignore[missing-attribute]
   new_acc = wgmma.wgmma(acc, a_operand, unwrapped_b_ref, swizzle=b_swizzle)
   return [
       fragmented_array_to_ir(
@@ -1485,55 +1529,68 @@ def _mgpu_wgmma_op_lowering_rule(
   ]
 
 
-@_register_lowering(mgpu.ArriveOp)
+@_register_lowering(mgpu.ArriveOp, support_warp_semantics=True)
 def _mgpu_arrive_op_lowering_rule(
     ctx: LoweringContext, arrive_op: mgpu.ArriveOp
 ) -> Sequence[ir.Value]:
   barrier = utils.DialectBarrierRef.from_barrier_memref(arrive_op.barrier)
   orders_tc = arrive_op.orders_tensor_core.value
   if orders_tc:
-    # Only one thread arrives, so make sure it ups the arrival count for the
-    # whole warpgroup.
-    #
-    # TODO(b/415721295): At the moment we assume that there is a single arrival
-    # per warpgroup. If we need to support also Warp-level semantics we will
-    # need to use a warp-level predicate.
-    predicate = ctx.single_thread_per_warpgroup_predicate
-    arrival_count = utils.WARPGROUP_SIZE
-  else:
-    # Each thread arrives once.
+    # Barrier expects a single thread arrival.
+    predicate = ctx.single_lane_predicate
     arrival_count = 1
+  elif ctx.thread_semantics == utils.ThreadSubset.WARP:
+    # In warp-level lowering, we arrive on each CUDA thread in a warp, but the
+    # barrier still expects a full 128 arrivals so we arrive 4 times on each
+    # CUDA thread instead.
     predicate = None
+    arrival_count = 4
+  else:
+    # Barrier expects each thread arrives once.
+    predicate = None
+    arrival_count = 1
 
   barrier.barrier_ref.arrive(
-      arrival_count=arrival_count,
+      arrival_count,
       orders_tensor_core=orders_tc,
       predicate=predicate,
+      scope=ctx.thread_semantics,
   )
   return []
 
 
-@_register_lowering(mgpu.ArriveExpectTxOp)
+@_register_lowering(mgpu.ArriveExpectTxOp, support_warp_semantics=True)
 def _mgpu_arrive_expect_tx_op_lowering_rule(
-    _: LoweringContext, arrive_expect_tx_op: mgpu.ArriveExpectTxOp
+    ctx: LoweringContext, arrive_expect_tx_op: mgpu.ArriveExpectTxOp
 ) -> Sequence[ir.Value]:
-  num_bytes = arrive_expect_tx_op.expect_tx.value
-  if num_bytes % utils.WARPGROUP_SIZE:
-    raise NotImplementedError(
-        "Only copies of a multiple of 128 bytes are supported"
+  num_bytes: int = arrive_expect_tx_op.expect_tx.value
+  i32 = ir.IntegerType.get_signless(32)
+  num_lanes = (
+      utils.WARPGROUP_SIZE
+      if ctx.thread_semantics == utils.ThreadSubset.WARPGROUP
+      else utils.WARP_SIZE
+  )
+  if num_bytes % num_lanes == 0:
+    # Prefer uniform arrival whenever possible because it's more efficient.
+    # We arrive uniformly from each lane in the WG/Warp, so we need to divide
+    # the number of bytes by the number of lanes in the WG/Warp.
+    tx_bytes = utils.c(num_bytes // num_lanes, i32)
+  else:
+    tx_bytes = arith.select(
+        ctx.single_lane_predicate,
+        utils.c(num_bytes, i32),
+        utils.c(0, i32),
     )
-  # We arrive uniformly from each thread in the WG, so we need to divide the
-  # number of bytes by the number of threads in the WG.
-  # TODO(dasenov): Relax this. We can just select the WG leader and have it
-  # arrive with the whole transfer size, while everyone else arrives with 0.
-  # But we should continue using this scheme as it's likely to be faster.
-  num_bytes //= utils.WARPGROUP_SIZE
-  num_bytes = utils.c(num_bytes, ir.IntegerType.get_signless(32))
 
   barrier = utils.DialectBarrierRef.from_barrier_memref(
       arrive_expect_tx_op.barrier
   )
-  utils.nvvm_mbarrier_arrive_expect_tx(barrier.get_ptr(), num_bytes)
+  # In Warp-level lowering, we arrive on each CUDA thread in a warp, but the
+  # barrier still expects a full 128 arrivals so we arrive 4 times on each CUDA
+  # thread instead.
+  if ctx.thread_semantics == utils.ThreadSubset.WARP:
+    barrier.barrier_ref.arrive(arrival_count=3, can_complete=False)
+  barrier.barrier_ref.arrive_expect_tx(tx_bytes)
 
   return []
 
@@ -1554,36 +1611,35 @@ def _mgpu_slice_smem_op_lowering_rule(
     ctx: LoweringContext, op: mgpu.SliceSMEMOp
 ) -> Sequence[ir.Value]:
   ref_ty = ir.MemRefType(op.result.type)
-  if ref_ty.element_type == ir.Type.parse("!mosaic_gpu.barrier"):
+  offset = op.offset.value  # pyrefly: ignore[missing-attribute]
+  if isinstance(ref_ty.element_type, mgpu.BarrierType):
     # Barrier memrefs are not transformed and must not be wrapped.
     assert not inference_utils.has_out_transforms_set(op)
-    return [_slice_smem(ref_ty, op.offset, ctx.smem_requested_bytes)]
+    return [_slice_smem(ref_ty, offset, ctx.smem_requested_bytes)]
 
   [out_transforms] = inference_utils.out_transforms(op)
   _, transforms = swizzle_and_transforms_from_transforms_attr(out_transforms)
   transformed_ref_ty = transform_type(ref_ty, transforms)
-  transformed_ref = _slice_smem(transformed_ref_ty, op.offset, ctx.smem_requested_bytes)
+  transformed_ref = _slice_smem(transformed_ref_ty, offset, ctx.smem_requested_bytes)
   return [wrap_transformed_memref(transformed_ref, op.result.type, out_transforms)]
 
 
-def _slice_smem(result: ir.MemRefType, offset: ir.Value, smem_size: int):
-  if isinstance(offset.owner, arith.ConstantOp):
-    cst_offset = ir.IntegerAttr(offset.owner.value).value
-    size = math.prod(result.shape) * utils.bitwidth(result.element_type) // 8
-    if cst_offset + size > smem_size:
-      raise ValueError("Ran out of shared memory.")
+def _slice_smem(result: ir.MemRefType, offset: int, smem_size: int):
+  size = math.prod(result.shape) * utils.bitwidth(result.element_type) // 8
+  if offset + size > smem_size:
+    raise ValueError("Ran out of shared memory.")
 
   i8 = ir.IntegerType.get_signless(8)
   smem_base = gpu.dynamic_shared_memory(
       ir.MemRefType.get((utils.DYNAMIC,), i8, memory_space=utils.smem())
   )
-  offset = arith.index_cast(ir.IndexType.get(), offset)
+  ir_offset = arith.constant(ir.IndexType.get(), offset)
   lowered_result_type = result
-  if result.element_type == ir.Type.parse("!mosaic_gpu.barrier"):
+  if isinstance(result.element_type, mgpu.BarrierType):
     lowered_result_type = ir.MemRefType.get(
         result.shape, _lowered_barrier_type(), memory_space=utils.smem()
     )
-  view = memref.view(lowered_result_type, smem_base, offset, [])
+  view = memref.view(lowered_result_type, smem_base, ir_offset, [])
   if result == lowered_result_type:
     return view
   return builtin.unrealized_conversion_cast([result], [view])
@@ -1653,7 +1709,7 @@ def _tile_transform_offsets(
   return new_static_offsets, new_dynamic_offsets
 
 
-@_register_lowering(memref.SubViewOp)
+@_register_lowering(memref.SubViewOp, support_warp_semantics=True)
 def _memref_subview_op_lowering_rule(
     ctx: LoweringContext, op: memref.SubViewOp
 ) -> Sequence[ir.Value]:
@@ -1723,8 +1779,8 @@ def _memref_subview_op_lowering_rule(
           op.result.type,
           unwrapped_source_ref,
           op.offsets,
-          None,
-          None,
+          sizes=[],
+          strides=[],
           static_offsets=op.static_offsets,
           static_sizes=op.static_sizes,
           static_strides=op.static_strides,
@@ -1749,8 +1805,8 @@ def _memref_subview_op_lowering_rule(
           transform_type(ir.MemRefType(op.result.type), transforms),
           unwrapped_source_ref,
           new_dynamic_offsets,
-          None,
-          None,
+          sizes=[],
+          strides=[],
           static_offsets=new_static_offsets,
           static_sizes=new_sizes,
           static_strides=[1] * len(in_transformed_ty.shape),
@@ -1874,7 +1930,7 @@ def _memref_expand_shape_op_lowering_rule(
   _, transforms = swizzle_and_transforms_from_transforms_attr(out_transforms)
   out_transformed_ty = transform_type(ir.MemRefType(op.result.type), transforms)
 
-  reassociation = list(op.reassociation)
+  reassociation = cast(list[ir.ArrayAttr], list(op.reassociation))
   num_tiling_dims = len(in_transformed_ty.shape) - len(op.src.type.shape)
 
   # We don't currently allow expanding tiled dimensions. So to compute the
@@ -1889,7 +1945,7 @@ def _memref_expand_shape_op_lowering_rule(
 
   start_index = len(op.static_output_shape)
   for i in range(start_index, start_index + num_tiling_dims):
-    reassociation.append([i])
+    reassociation.append([i])  # pyrefly: ignore[bad-argument-type]
 
   new_expand_shape_op = memref.ExpandShapeOp(
       out_transformed_ty,
@@ -1961,7 +2017,7 @@ def _tmem_alloc_op_lowering_rule(
   ncols = output_shape[1] // op.packing.value
 
   with utils.when(ctx.single_warp_per_block_predicate):
-    tcgen05.tmem_alloc(op.smem_ptr, ncols, op.collective, exact=False)
+    tcgen05.tmem_alloc(op.smem_ptr, ncols, bool(op.collective), exact=False)
   gpu.barrier()
   tmem_addr = memref.load(op.smem_ptr, [])
 
@@ -1982,7 +2038,7 @@ def _tmem_relinquish_alloc_permit_op_lowering_rule(
   """Lowering rule for mgpu.TmemRelinquishAllocPermitOp."""
   ctx.check_collective(op)
   with utils.when(ctx.single_warp_per_block_predicate):
-    tcgen05.tmem_relinquish_alloc_permit(op.collective)
+    tcgen05.tmem_relinquish_alloc_permit(bool(op.collective))
   return []
 
 
@@ -1994,7 +2050,7 @@ def _tmem_dealloc_op_lowering_rule(
   i32 = ir.IntegerType.get_signless(32)
   conversion_cast, [tmem_addr] = _undo_conversion_cast(op.tmem_ref, [i32])
   collective = ir.BoolAttr(conversion_cast.attributes["collective"]).value
-  packing = ir.IntegerAttr(conversion_cast.attributes["packing"]).value
+  packing: int = ir.IntegerAttr(conversion_cast.attributes["packing"]).value
 
   output_shape = ir.MemRefType(op.tmem_ref.type).shape
   ncols = output_shape[1] // packing
@@ -2005,14 +2061,15 @@ def _tmem_dealloc_op_lowering_rule(
   return []
 
 
-def _swizzle(attrs: Sequence[ir.Attribute]) -> mgpu.SwizzlingMode:
+def _swizzle(attrs: Iterable[ir.Attribute]) -> mgpu.SwizzlingMode:
   """Returns the swizzle transform from the given attributes."""
   swizzle = None
   for attr in attrs:
     if mgpu.SwizzleTransformAttr.isinstance(attr):
       if swizzle is not None:
         raise ValueError("Multiple swizzle transforms are not supported.")
-      swizzle = mgpu.SwizzleTransformAttr(attr).swizzle
+      # TODO(slebedev): Should SwizzleTransformAttr.swizzle be an enum?
+      swizzle = mgpu.SwizzlingMode(mgpu.SwizzleTransformAttr(attr).swizzle)
   return swizzle if swizzle is not None else mgpu.SwizzlingMode.kNoSwizzle
 
 
@@ -2035,7 +2092,8 @@ def _tmem_ref_from_ir(
   i32 = ir.IntegerType.get_signless(32)
   conversion_cast, [tmem_addr] = _undo_conversion_cast(ref, [i32])
 
-  shape = tuple(mem_ref_ty.shape)
+  assert mem_ref_ty.rank == 2
+  shape = cast(tuple[int, int], tuple(mem_ref_ty.shape))
   el_ty = mem_ref_ty.element_type
   layout_attr = conversion_cast.attributes["layout"]
   if layout_attr != expected_layout:
@@ -2059,47 +2117,63 @@ def _tmem_ref_to_ir(ref: tcgen05.TMEMRef) -> ir.Value:
   return conversion_cast.result
 
 
-# TODO(bchetioui): remove this once minimum jaxlib version is 0.9.1.
-_sparse_metadata_available = "a_sparse_metadata" in inspect.signature(mgpu.tcgen05_mma).parameters
-
-
-@_register_lowering(mgpu.TcGen05MMAOp)
+@_register_lowering(mgpu.TcGen05MMAOp, support_warp_semantics=True)
 def _tcgen05_mma_op_lowering_rule(
     ctx: LoweringContext, op: mgpu.TcGen05MMAOp
 ) -> Sequence[ir.Value]:
-  if _sparse_metadata_available and op.a_sparse_metadata is not None:
-    raise NotImplementedError("Sparse metadata not yet implemented.")
-
   ctx.check_collective(op)
 
-  in_tmem_layouts = inference_utils.in_tmem_layouts(op)
-  acc_layout = in_tmem_layouts[0]
-  acc_ref = _tmem_ref_from_ir(op.accumulator, acc_layout)
+  def tmem_layout(operand):
+    result = inference_utils.in_tmem_layout_for_operand(op, operand)
+    # satisfy the type checker
+    assert result is not None
+    return result
+
+  acc_ref = _tmem_ref_from_ir(op.accumulator, tmem_layout(op.accumulator))
+
+  if op.a_sparse_metadata is not None:
+    a_sparse_metadata = _tmem_ref_from_ir(
+        op.a_sparse_metadata, tmem_layout(op.a_sparse_metadata)
+    )
+  else:
+    a_sparse_metadata = None
+  if (scaled := op.a_scale is not None) != (op.b_scale is not None):
+    raise ValueError("Expected both or neither of scales to be specified.")
+  if scaled:
+    a_scale = _tmem_ref_from_ir(op.a_scale, tmem_layout(op.a_scale))  # pyrefly: ignore[bad-argument-type]
+    b_scale = _tmem_ref_from_ir(op.b_scale, tmem_layout(op.b_scale))  # pyrefly: ignore[bad-argument-type]
+  else:
+    a_scale = None
+    b_scale = None
 
   if utils.is_smem_ref(op.a):
     a_transforms, b_transforms = inference_utils.in_transforms(op)
+    assert isinstance(a_transforms, ir.ArrayAttr)
+    assert isinstance(b_transforms, ir.ArrayAttr)
     a_swizzle = _swizzle(a_transforms)
     b_swizzle = _swizzle(b_transforms)
     a_ref = unwrap_transformed_memref(op.a, a_transforms)
     b_ref = unwrap_transformed_memref(op.b, b_transforms)
   else:
-    a_ref = _tmem_ref_from_ir(op.a, in_tmem_layouts[1])
+    a_ref = _tmem_ref_from_ir(op.a, tmem_layout(op.a))
     [b_transforms] = inference_utils.in_transforms(op)
+    assert isinstance(b_transforms, ir.ArrayAttr)
     b_swizzle = _swizzle(b_transforms)
     a_swizzle = b_swizzle
     b_ref = unwrap_transformed_memref(op.b, b_transforms)
 
-  with utils.when(ctx.single_thread_per_warpgroup_predicate):
+  with utils.when(ctx.single_lane_predicate):
     tcgen05.mma(
         acc_ref,
         a_ref,
         b_ref,
         a_swizzle=a_swizzle,
         b_swizzle=b_swizzle,
-        a_scale=op.a_scale,
-        b_scale=op.b_scale,
+        a_scale=a_scale,
+        b_scale=b_scale,
         accumulate=op.accumulate,
         collective=op.collective.value,
+        a_sparse_metadata=a_sparse_metadata,
     )
 
   return []
@@ -2114,7 +2188,8 @@ def _async_load_tmem_op_lowering_rule(
   in_layout_attr = inference_utils.in_tmem_layouts(op)[0]
   tmem_ref = _tmem_ref_from_ir(op.source, in_layout_attr)
   out_layout_attr = inference_utils.out_layouts(op)[0]
-  out_layout = layouts_lib.from_tiled_layout_attr(out_layout_attr)
+  out_layout = layouts_lib.from_layout_attr(out_layout_attr)
+  assert isinstance(out_layout, fa.TiledLayout)
   is_signed = _default_is_signed(ir.MemRefType(op.source.type).element_type)
   arr = tmem_ref.load(out_layout, is_signed)
   return [fragmented_array_to_ir(arr, op.result.type)]
@@ -2135,30 +2210,73 @@ def _async_store_tmem_op_lowering_rule(
   return []
 
 
-@_register_lowering(mgpu.CustomPrimitiveOp)
+# TODO(b/491036599): Remove this check once minimum jaxlib version is 0.10.0.
+if hasattr(mgpu, "TcGen05CommitArriveOp"):
+  @_register_lowering(mgpu.TcGen05CommitArriveOp, support_warp_semantics=True)
+  def _tcgen05_commit_arrive_op_lowering_rule(
+      ctx: LoweringContext, op: mgpu.TcGen05CommitArriveOp
+  ) -> Sequence[ir.Value]:
+    """Lowering rule for mgpu.TcGen05CommitArriveOp."""
+    ctx.check_collective(op)
+    barrier = utils.DialectBarrierRef.from_barrier_memref(op.barrier)
+    with utils.when(ctx.single_lane_predicate):
+      tcgen05.commit_arrive(
+          barrier.barrier_ref, op.collective.value, ctx.launch_context
+      )
+    return []
+
+
+@_register_lowering(mgpu.CustomPrimitiveOp, support_warp_semantics=True)
 def _mgpu_custom_primitive_op_lowering_rule(
     ctx: LoweringContext, op: mgpu.CustomPrimitiveOp
 ) -> Sequence[ir.Value]:
   """Lowering rule for mgpu.CustomPrimitiveOp."""
   del ctx
   block = op.body.blocks[0]
-  for arg, op in zip(block.arguments, op.operands, strict=True):
-    arg.replace_all_uses_with(op)
+  for arg, operand in zip(block.arguments, op.operands, strict=True):
+    arg.replace_all_uses_with(operand)
 
   return_op = None
   ip = ir.InsertionPoint.current
-  for op in block.operations:
-    if isinstance(op.opview, mgpu.ReturnOp):
+  for block_op in block.operations:
+    if isinstance(block_op.opview, mgpu.ReturnOp):
       assert return_op is None
-      return_op = op.opview
+      return_op = block_op.opview
       continue
-    op.detach_from_parent()
-    ip.insert(op)
+    block_op.detach_from_parent()
+    ip.insert(block_op)
 
   if return_op is None:
     raise ValueError("A custom return op must terminate the block.")
 
   return return_op.operands
+
+
+# TODO(allanrenucci): remove this check once minimum jaxlib version is 0.10.0.
+if hasattr(mgpu, "WarpMapOp"):
+  @_register_lowering(mgpu.WarpMapOp)
+  def _mgpu_warp_map_op_lowering_rule(
+      ctx: LoweringContext, op: mgpu.WarpMapOp
+  ) -> Sequence[ir.Value]:
+    """Lowering rule for mgpu.WarpMapOp."""
+    for a, o in zip(op.body.arguments, op.operands, strict=True):
+      a.replace_all_uses_with(o)
+    warp_ctx = dataclasses.replace(ctx, thread_semantics=utils.ThreadSubset.WARP)
+    # We allow the warps to schedule async copies without synchronizing with
+    # other warps, so we need to add a barrier here to make sure all reads and
+    # writes have completed.
+    if ctx.auto_barriers:
+      utils.warpgroup_barrier()
+    with ir.InsertionPoint.current as ip:
+      for op in op.body.operations:
+        op.detach_from_parent()
+        ip.insert(op)
+        warp_ctx.lower_op(op)
+    # We need to ensure that any effects produced by one warp (e.g. async copies)
+    # are observable by all other warps.
+    if ctx.auto_barriers:
+      utils.warpgroup_barrier()
+    return []
 
 
 # The metadata needed to recostruct a vector from its flattened representation.
@@ -2225,7 +2343,7 @@ def _move_scf_block_to_block_with_flattened_arguments(
     new_block: ir.Block,
     last_op_type: type[ir.OpView],
     args_template: Sequence[_VectorTemplate | None],
-    *new_leading_args: Sequence[ir.Value],
+    *new_leading_args: ir.Value,
 ) -> Sequence[_VectorTemplate | None]:
   """Moves the operations from `old_block` to `new_block`.
 
@@ -2268,7 +2386,7 @@ def _move_scf_block_to_block_with_flattened_arguments(
   return out_template
 
 
-@_register_lowering(scf.ForOp)
+@_register_lowering(scf.ForOp, support_warp_semantics=True)
 def _for_op_lowering_rule(
     ctx: LoweringContext, for_op: scf.ForOp
 ) -> MlirLoweringRuleResult:
@@ -2381,14 +2499,14 @@ def _infer_flat_result_types(
       continue
     vec_type = ir.VectorType(r.type)
     layout = layouts_lib.from_layout_attr(next(out_layouts_it))
+    reg_type: ir.Type = layout.registers_element_type(vec_type.element_type)
     result_types.extend(
-        [layout.registers_element_type(vec_type.element_type)]
-        * math.prod(layout.registers_shape(tuple(vec_type.shape)))
+        [reg_type] * math.prod(layout.registers_shape(tuple(vec_type.shape)))
     )
   return result_types
 
 
-@_register_lowering(scf.IfOp)
+@_register_lowering(scf.IfOp, support_warp_semantics=True)
 def _if_op_lowering_rule(
     ctx: LoweringContext, if_op: scf.IfOp
 ) -> MlirLoweringRuleResult:
@@ -2398,7 +2516,7 @@ def _if_op_lowering_rule(
   raise NotImplementedError
 
 
-@_register_lowering(scf.IndexSwitchOp)
+@_register_lowering(scf.IndexSwitchOp, support_warp_semantics=True)
 def _index_switch_op_lowering_rule(
     ctx: LoweringContext, switch_op: scf.IndexSwitchOp
 ) -> MlirLoweringRuleResult:
@@ -2423,6 +2541,29 @@ def _index_switch_op_lowering_rule(
     )
   return _unflatten_ir_values(new_switch_op.results, results_template)
 
+# TODO(b/415721295): remove this check once minimum jaxlib version is 0.10.0
+if hasattr(mgpu, "TryClusterCancelOp"):
+  @_register_lowering(mgpu.TryClusterCancelOp)
+  def _try_cluster_cancel_op_lowering_rule(
+      ctx: LoweringContext, op: mgpu.TryClusterCancelOp
+  ) -> Sequence[ir.Value]:
+    barrier = utils.DialectBarrierRef.from_barrier_memref(op.barrier)
+    predicate = ctx.single_lane_predicate
+    if op.predicate is not None:
+      predicate = arith.andi(predicate, op.predicate)
+    utils.try_cluster_cancel(op.cancellation_result, barrier.barrier_ref, predicate)
+    return []
+
+
+# TODO(b/415721295): remove this check once minimum jaxlib version is 0.10.0
+if hasattr(mgpu, "QueryClusterCancelOp"):
+  @_register_lowering(mgpu.QueryClusterCancelOp)
+  def _query_cluster_cancel_op_lowering_rule(
+      ctx: LoweringContext, op: mgpu.QueryClusterCancelOp
+  ) -> Sequence[ir.Value]:
+    del ctx
+    return utils.query_cluster_cancel(op.cancellation_result)
+
 
 @_register_lowering(func.FuncOp)
 @_register_lowering(gpu.LaunchOp)
@@ -2444,12 +2585,13 @@ def _traverse_op_lowering_rule(
 def _should_lower(op: ir.OpView) -> bool:
   """Returns 'true' if the operation should be lowered."""
   return (
-      op.OPERATION_NAME.startswith("mosaic_gpu.")  # pytype: disable=attribute-error
+      # pyrefly: ignore[missing-attribute]
+      op.OPERATION_NAME.startswith("mosaic_gpu.")
       or inference_utils.should_have_layout(op)
       or inference_utils.should_have_transforms(op)
       or inference_utils.should_have_tmem_layout(op)
       # Does it have subblocks?
-      or any(bool(b) for r in op.regions for b in r)  # pylint: disable=g-complex-comprehension
+      or any(bool(b) for r in op.regions for b in r)
   )
 
 
@@ -2471,27 +2613,25 @@ def _lowering_context(
   """Returns a `LoweringContext` for the given `LaunchContext`."""
   # TODO(bchetioui): fix tests to not have a test-only path polluting the API.
   if launch_context is None:  # this case is used in some tests
-    return LoweringContext(None, None, None, None, auto_barriers, 10**9)
+    return LoweringContext(None, None, None, None, None, auto_barriers, 10**9)
 
   gpu_launch_op = _gpu_launch_op(module)
   with ir.InsertionPoint.at_block_begin(gpu_launch_op.regions[0].blocks[0]):
-    block_predicate = utils.single_thread_predicate(
-        scope=utils.ThreadSubset.BLOCK
-    )
-    warpgroup_predicate = utils.single_thread_predicate(
-        scope=utils.ThreadSubset.WARPGROUP
-    )
     eq = arith.CmpIPredicate.eq
     i32 = ir.IntegerType.get_signless(32)
-    warp_predicate = arith.cmpi(eq, utils.warp_idx(sync=False), utils.c(0, i32))
+    single_warp_per_block_predicate = arith.cmpi(
+        eq, utils.warp_idx(sync=False), utils.c(0, i32)
+    )
     smem_size = gpu_launch_op.dynamicSharedMemorySize
+    assert smem_size is not None
     assert isinstance(smem_size.owner, arith.ConstantOp)
     smem_size = ir.IntegerAttr(smem_size.owner.value).value
     return LoweringContext(
         launch_context,
-        block_predicate,
-        warpgroup_predicate,
-        warp_predicate,
+        utils.single_thread_predicate(scope=utils.ThreadSubset.WARP),
+        utils.single_thread_predicate(scope=utils.ThreadSubset.WARPGROUP),
+        utils.single_thread_predicate(scope=utils.ThreadSubset.BLOCK),
+        single_warp_per_block_predicate,
         auto_barriers,
         smem_size,
     )
@@ -2515,6 +2655,3 @@ def lower_mgpu_dialect(
   with ir.InsertionPoint(module.body):
     for op in list(module.body):
       ctx.lower_op(op)
-
-  for lowered_op in ctx.lowered_operations:
-    lowered_op.erase()

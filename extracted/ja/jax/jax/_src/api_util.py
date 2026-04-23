@@ -27,9 +27,9 @@ from jax._src import dtypes
 from jax._src.state.types import AbstractRef
 from jax._src.tree_util import (
     PyTreeDef, tree_flatten, tree_unflatten, treedef_children,
-    generate_key_paths, broadcast_prefix, prefix_errors,
-    none_leaf_registry, broadcast_flattened_prefix_with_treedef,
-    treedef_is_leaf, tree_structure)
+    broadcast_prefix, prefix_errors, none_leaf_registry,
+    broadcast_flattened_prefix_with_treedef, treedef_is_leaf, tree_structure,
+    tracing_registry)
 from jax._src import linear_util as lu
 from jax._src.util import safe_map, HashableFunction, Unhashable, safe_zip
 from jax._src import traceback_util
@@ -288,7 +288,7 @@ def donation_vector(donate_argnums, donate_argnames, in_tree,
     donate = bool(i in donate_argnums)
     res.extend((donate,) * arg.num_leaves)
   if kwargs_tree is not None:
-    for key, val in zip(kwargs_tree.node_data()[1], kwargs_tree.children()):  # type: ignore
+    for key, val in zip(kwargs_tree.node_data()[1], kwargs_tree.children()):  # pyrefly: ignore[unsupported-operation]
       donate = key in donate_argnames
       res.extend((donate,) * val.num_leaves)
   return tuple(res)
@@ -719,17 +719,8 @@ def _non_static_arg_names(fn_signature: inspect.Signature | None,
 
   return tuple(f'{name}{lu._clean_keystr_arg_names(path)}'
                for name, x in ordered_args
-               for path, l in generate_key_paths(x) if l is not static)
-
-
-class _HashableByObjectId:
-  __slots__ = ['val']
-  def __init__(self, val):
-    self.val = val
-  def __hash__(self):
-    return id(self.val)
-  def __eq__(self, other):
-    return self.val is other.val
+               for path, l in tracing_registry.flatten_with_path(x)[0]
+               if l is not static)
 
 # TODO(mattjj): make this function faster
 def check_no_aliased_ref_args(dbg_fn: Callable[[], core.DebugInfo],

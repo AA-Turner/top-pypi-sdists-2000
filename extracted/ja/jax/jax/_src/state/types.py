@@ -29,6 +29,7 @@ from jax._src import effects
 from jax._src import pretty_printer as pp
 from jax._src import traceback_util
 from jax._src import tree_util
+from jax._src.tree_util import tracing_registry, _registry, _RegistryEntry
 from jax._src.typing import Array
 from jax._src.util import safe_map, safe_zip
 import numpy as np
@@ -328,6 +329,15 @@ def disallow_transformed_ref_avals(_):
 
 core.pytype_aval_mappings[TransformedRef] = disallow_transformed_ref_avals
 
+# We register the TransformedRefs with the tracing registry here, but not other
+# registries. This allows us to treat TransformedRefs as pytree nodes
+# internally, but as leaves in user code.
+unflatten_func = lambda meta, data: TransformedRef(*data)
+flatten_func = lambda x: ((x.ref, x.transforms), None)
+tracing_registry.register_dataclass_node(TransformedRef,
+                                         ["ref", "transforms"], [])
+_registry[TransformedRef] = _RegistryEntry(flatten_func, unflatten_func)
+
 
 def transform_type(
     ts: Sequence[Transform], ty: core.AbstractValue
@@ -366,13 +376,13 @@ class AbstractRef(core.AbstractValue):
   def lower_val(self, ref):
     if not self.is_high:
       return [ref]
-    return self.inner_aval.lower_val(ref._refs)  # type: ignore
+    return self.inner_aval.lower_val(ref._refs)  # pyrefly: ignore[missing-attribute]
 
   def raise_val(self, *vals):
     if not self.is_high:
       ref, = vals
       return ref
-    return core.Ref(self, self.inner_aval.raise_val(*vals))  # type: ignore
+    return core.Ref(self, self.inner_aval.raise_val(*vals))  # pyrefly: ignore[missing-attribute]
 
   @property
   def weak_type(self) -> bool:
@@ -383,12 +393,8 @@ class AbstractRef(core.AbstractValue):
   def update_weak_type(self, weak_type):
     return self.update(inner_aval=self.inner_aval.update_weak_type(weak_type))
 
-  def update_vma(self, vma):
-    return self.update(inner_aval=self.inner_aval.update_vma(vma))
-
-  def update_unreduced_reduced(self, unreduced, reduced):
-    return self.update(inner_aval=self.inner_aval.update_unreduced_reduced(
-        unreduced, reduced))
+  def update_manual_axis_type(self, mat):
+    return self.update(inner_aval=self.inner_aval.update_manual_axis_type(mat))
 
   def update(self, inner_aval=None, memory_space=None, kind=None):  # pyrefly: ignore[bad-override]
     inner_aval = self.inner_aval if inner_aval is None else inner_aval
@@ -408,7 +414,7 @@ class AbstractRef(core.AbstractValue):
   @property
   def shape(self):
     try:
-      return self.inner_aval.shape  # pytype: disable=attribute-error  # pyrefly: ignore[missing-attribute]
+      return self.inner_aval.shape  # pyrefly: ignore[missing-attribute]
     except AttributeError:
       raise AttributeError(
           f"{self!r} has no `shape`."
@@ -417,7 +423,7 @@ class AbstractRef(core.AbstractValue):
   @property
   def dtype(self):
     try:
-      return self.inner_aval.dtype  # pytype: disable=attribute-error  # pyrefly: ignore[missing-attribute]
+      return self.inner_aval.dtype  # pyrefly: ignore[missing-attribute]
     except AttributeError:
       raise AttributeError(
           f"{self!r} has no `dtype`."
@@ -426,20 +432,24 @@ class AbstractRef(core.AbstractValue):
   @property
   def sharding(self):
     try:
-      return self.inner_aval.sharding  # pytype: disable=attribute-error  # pyrefly: ignore[missing-attribute]
+      return self.inner_aval.sharding  # pyrefly: ignore[missing-attribute]
     except AttributeError:
       raise AttributeError(
           f"{self!r} has no `sharding`."
       ) from None
 
   @property
-  def vma(self):
+  def manual_axis_type(self):
     try:
-      return self.inner_aval.vma  # pytype: disable=attribute-error  # pyrefly: ignore[missing-attribute]
+      return self.inner_aval.manual_axis_type  # pyrefly: ignore[missing-attribute]
     except AttributeError:
       raise AttributeError(
-          f"{self!r} has no `vma`."
+          f"{self!r} has no `manual_axis_type`."
       ) from None
+
+  @property
+  def mat(self):
+    return self.manual_axis_type
 
   @core.aval_property
   def at(self):
@@ -587,7 +597,7 @@ def zeros_like_abstract_ref(aval: AbstractRef) -> core.Ref:
 # TODO(dougalm): this is nonsense but it's here because in places like
 # custom_vjp we assume that all arguments have tangent spaces. We could have
 # a distinct NotATangentType value instead.
-ad_util.aval_zeros_likers[AbstractRef] = zeros_like_abstract_ref  # type: ignore
+ad_util.aval_zeros_likers[AbstractRef] = zeros_like_abstract_ref  # pyrefly: ignore[unsupported-operation]
 
 # === pinned, chained LinearVals ===
 
@@ -596,6 +606,6 @@ class AbstractLinVal(core.AbstractValue):
   inner_aval: core.AbstractValue
   memory_space: Any = None
 
-  shape = property(lambda self: self.inner_aval.shape)  # pytype: disable=attribute-error
-  dtype = property(lambda self: self.inner_aval.dtype)  # pytype: disable=attribute-error
-  ndim = property(lambda self: self.inner_aval.ndim)  # pytype: disable=attribute-error
+  shape = property(lambda self: self.inner_aval.shape)
+  dtype = property(lambda self: self.inner_aval.dtype)
+  ndim = property(lambda self: self.inner_aval.ndim)

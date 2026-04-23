@@ -45,12 +45,17 @@ from jax._src.lib import cuda_versions
 from jax._src.lib import gpu_linalg
 from jax._src.lib import gpu_solver
 from jax._src.lib import gpu_sparse
+from jax._src.lib import jaxlib_extension_version, version as jaxlib_version
 from jax._src.lib import lapack
 from jax._src.lib.mlir import ir
 from jax._src.lib.mlir.dialects import chlo
 from jax._src.lib.mlir.dialects import hlo
 from jax._src.partition_spec import PartitionSpec as P
 from jax._src.typing import Array, ArrayLike
+
+
+def initialize_lapack():
+  lapack._lapack.initialize()
 
 
 def register_module_custom_calls(module):
@@ -163,6 +168,10 @@ def eig(
   If ``jax_use_magma`` is set to ``"auto"``, the MAGMA implementation will
   be used if the library can be found, and the input matrix is sufficiently
   large (>= 2048x2048).
+
+  Currently autodiff is not supporteed for non-symmetric eigenvectors, and
+  is only supported to first-order for non-symmetric eigenvalues. See
+  https://github.com/jax-ml/jax/issues/2748.
 
   Args:
     x: A batch of square matrices with shape ``[..., n, n]``.
@@ -473,6 +482,7 @@ class SvdAlgorithm(enum.Enum):
   QR = "QR"
   JACOBI = "Jacobi"
   POLAR = "polar"
+  DIVIDE_AND_CONQUER = "divide_and_conquer"
 
 
 @overload
@@ -681,7 +691,8 @@ def tridiagonal(
   return tridiagonal_p.bind(lax.asarray(a), lower=lower)
 
 
-def tridiagonal_solve(dl: Array, d: Array, du: Array, b: Array) -> Array:
+def tridiagonal_solve(dl: Array, d: Array, du: Array, b: Array, *,
+                      perturb_singular: bool = False) -> Array:
   r"""Computes the solution of a tridiagonal linear system.
 
   This function computes the solution of a tridiagonal linear system:
@@ -700,12 +711,24 @@ def tridiagonal_solve(dl: Array, d: Array, du: Array, b: Array) -> Array:
       The upper diagonal of A: ``du[i] := A[i, i+1]`` for i in ``[0,m)``.
       Note that ``dl[m - 1] = 0``.
     b: Right hand side matrix.
+    perturb_singular: Whether to perturb singular matrices to return a finite
+      result. ``False`` by default. If ``True``, solutions to systems involving
+      a singular matrix will be computed by perturbing near-zero pivots in
+      the partially pivoted LU decomposition. Specifically, tiny pivots are
+      perturbed by an amount of order ``eps * max_{ij} |U(i,j)|`` to avoid
+      overflow. Here ``U`` is the upper triangular part of the LU decomposition,
+      and ``eps`` is the machine precision. This is useful for solving
+      numerically singular systems when computing eigenvectors by inverse
+      iteration. Only implemented on CPU and GPU at the moment.
 
   Returns:
     Solution ``X`` of tridiagonal system.
   """
+  if perturb_singular and jaxlib_version < (0, 10):
+    raise RuntimeError("perturb_singular=True requires jaxlib >= 0.10.0.")
   dl, d, du, b = core.standard_insert_pvary(dl, d, du, b)
-  return tridiagonal_solve_p.bind(dl, d, du, b)
+  return tridiagonal_solve_p.bind(
+    dl, d, du, b, perturb_singular=perturb_singular)
 
 
 # Primitive registration helper functions
@@ -1367,7 +1390,7 @@ def _householder_product_lowering(ctx, a, taus):
     result_shapes = None
   op = mlir.custom_call(
       "ProductOfElementaryHouseholderReflectors",
-      result_types=mlir.flatten_ir_types([mlir.aval_to_ir_type(aval_out)]),
+      result_types=mlir.flatten_ir_types(mlir.aval_to_ir_types(aval_out)),
       operands=[a, taus],
       api_version=1,
       result_shapes=result_shapes)
@@ -1392,6 +1415,138 @@ householder_product_p = standard_linalg_primitive(
 mlir.register_lowering(householder_product_p, _householder_product_lowering)
 register_cpu_gpu_lowering(
     householder_product_p, _householder_product_cpu_gpu_lowering)
+
+
+# Orthogonal QR multiply
+
+def ormqr(a: ArrayLike, taus: ArrayLike, c: ArrayLike, *,
+          left: bool = True, transpose: bool = False) -> Array:
+  """Multiplies a matrix by Q from a QR factorization without materializing Q.
+
+  Computes ``Q @ C`` (``left=True``, ``transpose=False``),
+  ``Q^T @ C`` (``left=True``, ``transpose=True``),
+  ``C @ Q`` (``left=False``, ``transpose=False``), or
+  ``C @ Q^T`` (``left=False``, ``transpose=True``).
+
+  For complex types, ``transpose=True`` computes the conjugate transpose
+  (``Q^H``).
+
+  Args:
+    a: The Householder reflectors with shape ``[..., m, n]``, as returned by
+      the internal ``geqrf``/``geqp3`` primitives. Alternatively, one can use
+      :func:`jax.numpy.linalg.qr` with ``mode="raw"``, but in this case the
+      returned ``a`` must be transposed with ``.mT`` (see example below).
+    taus: The Householder scalar factors with shape ``[..., k]``, as returned
+      by ``geqrf``/``geqp3`` or the second element of the tuple from
+      :func:`jax.numpy.linalg.qr` with ``mode="raw"``.
+    c: The matrix to multiply by Q, with shape ``[..., c_rows, c_cols]``.
+    left: If ``True``, compute ``Q @ C``. If ``False``, compute ``C @ Q``.
+    transpose: If ``True``, use ``Q^T`` (or ``Q^H`` for complex types).
+
+  Returns:
+    The result of multiplying ``c`` by Q (or ``Q^T``/``Q^H``), with the
+    same shape as ``c``.
+
+  Examples:
+    Multiply a vector by Q without forming Q explicitly:
+
+    >>> import jax.numpy as jnp
+    >>> from jax.lax.linalg import ormqr
+    >>> a = jnp.array([[1., 2.], [3., 4.], [5., 6.]])
+    >>> h, taus = jnp.linalg.qr(a, mode="raw")
+    >>> c = jnp.eye(3)
+    >>> Q_times_c = ormqr(h.mT, taus, c)
+    >>> Q_direct, _ = jnp.linalg.qr(a, mode="complete")
+    >>> jnp.allclose(Q_times_c, Q_direct, atol=1e-5)
+    Array(True, dtype=bool)
+
+  See also:
+    - :func:`jax.scipy.linalg.qr_multiply`: Higher-level API for computing
+      Q @ C or C @ Q from a matrix ``a`` directly.
+  """
+  a, taus, c = core.standard_insert_pvary(a, taus, c)
+  return ormqr_p.bind(a, taus, c, left=left, transpose=transpose)
+
+
+def _ormqr_shape_rule(a_shape, taus_shape, c_shape, *, left, transpose):
+  m = a_shape[0]
+  if left and c_shape[0] != m:
+    raise ValueError(
+      "ormqr with left=True expects c to have the same number of rows as "
+      f"the Householder matrix a. Got a shape {a_shape} and c shape {c_shape}.")
+  if not left and c_shape[1] != m:
+    raise ValueError(
+      "ormqr with left=False expects c to have the same number of columns as "
+      f"the Householder matrix a has rows. Got a shape {a_shape} and c shape {c_shape}.")
+  return c_shape
+
+
+def _ormqr_lowering(a, taus, c, *, left, transpose):
+  # Apply Householder reflectors H_i = I - tau_i * v_i * v_i^H directly to c
+  # without materializing Q. Cost: O(k * m * c_cols) if left,
+  # O(k * c_rows * m) otherwise, where c has shape (..., c_rows, c_cols).
+  *batch_dims, m, n = a.shape
+  k = taus.shape[-1]
+  is_complex = dtypes.issubdtype(a.dtype, np.complexfloating)
+
+  # Householder vectors: lower triangle of a with unit diagonal.
+  eye = lax._eye(a.dtype, (m, k))
+  if batch_dims:
+    eye = lax.broadcast(eye, tuple(batch_dims))
+  V = _tril(a[..., :, :k], k=-1) + eye
+
+  effective_taus = lax.conj(taus) if (transpose and is_complex) else taus
+
+  # Q @ c and c @ Q^H apply reflectors in reverse; Q^H @ c and c @ Q forward.
+  use_reverse = (left != transpose)
+
+  n_batch = len(batch_dims)
+  batch_contract = tuple(range(n_batch))
+
+  def body(i, c):
+    idx = (k - 1 - i) if use_reverse else i
+    tau = effective_taus[..., idx]
+    v = V[..., :, idx]
+    tau_bc = lax.expand_dims(tau, (-1, -2))
+    if left:
+      # c = c - tau * v @ (v^H @ c)
+      v_h = lax.conj(v) if is_complex else v
+      vHc = lax.dot_general(v_h, c,
+          (((v_h.ndim - 1,), (c.ndim - 2,)),
+           (batch_contract, batch_contract)))
+      update = lax.expand_dims(v, (-1,)) * lax.expand_dims(vHc, (-2,))
+    else:
+      # c = c - tau * (c @ v) @ v^H
+      cv = lax.dot_general(c, v,
+          (((c.ndim - 1,), (v.ndim - 1,)),
+           (batch_contract, batch_contract)))
+      v_h = lax.conj(v) if is_complex else v
+      update = lax.expand_dims(cv, (-1,)) * lax.expand_dims(v_h, (-2,))
+    return c - tau_bc * update
+
+  return control_flow.fori_loop(0, k, body, c)
+
+
+def _ormqr_cpu_gpu_lowering(ctx, a, taus, c, *, left, transpose,
+                             target_name_prefix: str):
+  a_aval, _, _ = ctx.avals_in
+  if target_name_prefix == "cpu":
+    dtype = a_aval.dtype
+    prefix = "un" if dtypes.issubdtype(dtype, np.complexfloating) else "or"
+    target_name = lapack.prepare_lapack_call(f"{prefix}mqr_ffi", dtype)
+  else:
+    target_name = f"{target_name_prefix}solver_ormqr_ffi"
+  rule = _linalg_ffi_lowering(target_name, operand_output_aliases={2: 0})
+  return rule(ctx, a, taus, c, left=left, transpose=transpose)
+
+
+ormqr_p = standard_linalg_primitive(
+    (_float | _complex, _float | _complex, _float | _complex), (2, 1, 2),
+    _ormqr_shape_rule, "ormqr")
+mlir.register_lowering(ormqr_p, mlir.lower_fun(
+    _ormqr_lowering, multiple_results=False))
+if jaxlib_extension_version >= 422:
+  register_cpu_gpu_lowering(ormqr_p, _ormqr_cpu_gpu_lowering)
 
 
 # LU decomposition
@@ -1562,9 +1717,9 @@ def _lu_cpu_gpu_lowering(ctx, operand, *, target_name_prefix: str):
 
 def _lu_tpu_lowering_rule(ctx, operand):
   result_types = mlir.flatten_ir_types([
-      mlir.aval_to_ir_type(ctx.avals_out[0]),
-      mlir.aval_to_ir_type(ctx.avals_out[1]),
-      mlir.aval_to_ir_type(ctx.avals_out[2]),
+      mlir.aval_to_ir_types(ctx.avals_out[0]),
+      mlir.aval_to_ir_types(ctx.avals_out[1]),
+      mlir.aval_to_ir_types(ctx.avals_out[2]),
   ])
   if any(not is_constant_shape(a.shape) for a in ctx.avals_out):
     result_shapes = [
@@ -1767,7 +1922,7 @@ def _geqrf_dtype_rule(dtype):
 def _geqrf_lowering_rule(ctx, operand):
   ts_type = mlir.aval_to_ir_type(ctx.avals_out[0])
   r_type = mlir.aval_to_ir_type(ctx.avals_out[1])
-  result_types = mlir.flatten_ir_types([ts_type, r_type])
+  result_types = [ts_type, r_type]
   if any(not is_constant_shape(aval_out.shape)
          for aval_out in ctx.avals_out):
     result_shapes = [
@@ -1858,26 +2013,123 @@ def _qr_shape_rule(shape, *, pivoting, full_matrices, **_):
 def _qr_dtype_rule(dtype, *, pivoting, **_):
   return (dtype, dtype, dtypes.dtype(np.int32)) if pivoting else (dtype, dtype)
 
-def qr_jvp_rule(primals, tangents, *, pivoting, full_matrices, use_magma):
+def _thin_qr_jvp(q, r, dx):
+  """JVP for QR decompositions of [..., m, n] matrices with m >= n."""
   # See j-towns.github.io/papers/qr-derivative.pdf for a terse derivation.
-  x, = primals
-  dx, = tangents
-  q, r, *p = qr_p.bind(x, pivoting=pivoting, full_matrices=False, use_magma=use_magma)
-  *_, m, n = x.shape
-  if m < n or (full_matrices and m != n):
-    raise NotImplementedError(
-      "Unimplemented case of QR decomposition derivative")
-  if pivoting:
-    dx = dx[..., p[0]]
   dx_rinv = triangular_solve(r, dx)  # Right side solve by default
   qt_dx_rinv = _H(q) @ dx_rinv
   qt_dx_rinv_lower = _tril(qt_dx_rinv, -1)
   do = qt_dx_rinv_lower - _H(qt_dx_rinv_lower)  # This is skew-symmetric
+
   # The following correction is necessary for complex inputs
+  n = r.shape[-1]
   I = lax.expand_dims(lax._eye(do.dtype, (n, n)), range(qt_dx_rinv.ndim - 2))
   do = do + I * (qt_dx_rinv - qt_dx_rinv.real.astype(qt_dx_rinv.dtype))
+
   dq = q @ (do - qt_dx_rinv) + dx_rinv
   dr = (qt_dx_rinv - do) @ r
+  return dq, dr
+
+def qr_jvp_rule(primals, tangents, *, pivoting, full_matrices, use_magma):
+  x, = primals
+  dx, = tangents
+  q, r, *p = qr_p.bind(x, pivoting=pivoting, full_matrices=full_matrices,
+                       use_magma=use_magma)
+  *_, m, n = x.shape
+  if pivoting:
+    dx = dx[..., p[0]]
+
+  if m < n:
+    # Wide matrix case (m < n)
+    #
+    # For wide matrices, we partition the input $X$ and the upper
+    # trapezoidal matrix $R$ into square and remainder blocks:
+    #
+    # $$ X = \begin{bmatrix} X_1 & X_2 \end{bmatrix} $$
+    # $$ R = \begin{bmatrix} R_1 & R_2 \end{bmatrix} $$
+    #
+    # where $X_1, R_1 \in \mathbb{C}^{m \times m}$ and
+    # $X_2, R_2 \in \mathbb{C}^{m \times (n-m)}$.
+    #
+    # From the definition of the QR decomposition $X = QR$, we have:
+    # $$ \begin{bmatrix} X_1 & X_2 \end{bmatrix} = Q \begin{bmatrix} R_1 & R_2 \end{bmatrix}
+    #    = \begin{bmatrix} Q R_1 & Q R_2 \end{bmatrix} $$
+    #
+    # This separates into two equations:
+    # 1)  $X_1 = Q R_1$
+    # 2)  $X_2 = Q R_2$
+    #
+    # Equation (1) is exactly the QR decomposition of the square matrix $X_1$.
+    # Therefore, we can compute $dQ$ and $dR_1$ by applying the standard
+    # square QR derivative rules to $X_1$ and $dX_1$.
+    #
+    # For Equation (2), because $Q$ is unitary ($Q^H Q = I$), we can
+    # isolate $R_2$:
+    # $$ R_2 = Q^H X_2 $$
+    #
+    # Differentiating this expression via the product rule yields $dR_2$:
+    # $$ dR_2 = (dQ)^H X_2 + Q^H dX_2 $$
+    #
+    # Finally, the full derivative $dR$ is formed by concatenating the blocks:
+    # $$ dR = \begin{bmatrix} dR_1 & dR_2 \end{bmatrix} $$
+
+    # Partition X = [X1, X2] where X1 is m x m
+    # Partition R = [R1, R2] where R1 is m x m
+    x2 = x[..., :, m:]
+    dx1 = dx[..., :, :m]
+    dx2 = dx[..., :, m:]
+    r1 = r[..., :, :m]
+
+    # Use thin QR JVP for the square part X1 = Q R1
+    dq, dr1 = _thin_qr_jvp(q, r1, dx1)
+
+    # Compute dR2 = (dQ^H) X2 + Q^H dX2
+    dr2 = _H(dq) @ x2 + _H(q) @ dx2
+
+    # Concatenate to form the full m x n dR matrix
+    last_dim = len(dr1.shape) - 1
+    dr = lax.concatenate((dr1, dr2), last_dim)
+
+    if pivoting:
+      dp = ad_util.p2tz(p[0])
+      return (q, r, p[0]), (dq, dr, dp)
+    return (q, r), (dq, dr)
+
+  q_mn = q[..., :, :n] if full_matrices else q
+  r_nn = r[..., :n, :n] if full_matrices else r
+
+  dq_mn, dr_nn = _thin_qr_jvp(q_mn, r_nn, dx)
+
+  if not full_matrices or m == n:
+    dq = dq_mn
+    dr = dr_nn
+  else:
+    # See https://arxiv.org/pdf/2409.13374 for the full matrices derivation.
+    q_nn = q_mn[..., :n, :]
+    q_pn = q_mn[..., n:, :]
+    q_mp = q[..., :, n:]
+
+    dq_nn = dq_mn[..., :n, :]
+    dq_pn = dq_mn[..., n:, :]
+
+    # Eq 33: Z_pn = Q_pn @ (Q_nn - I)^{-1}
+    # To avoid explicit inversion, we compute Z_pn using a linear system solve:
+    # (Q_nn - I)^H @ Z_pn^H = Q_pn^H  =>  Z_pn^H = solve((Q_nn - I)^H, Q_pn^H)
+    I_n = lax.expand_dims(lax._eye(q_nn.dtype, (n, n)), range(q_nn.ndim - 2))
+    lu_factor, _, perm = lu(q_nn - I_n)
+    z_pn_H = lu_solve(lu_factor, perm, _H(q_pn), trans=2) # trans=2 solves A^H X = B
+    z_pn = _H(z_pn_H)
+
+    # Eq 32: dq_mp = dq_mn @ Z_pn^H - (Q_mn + Q_mp @ Z_pn) @ (dq_pn - Z_pn @ dq_nn)^H
+    dq_mp = dq_mn @ z_pn_H - (q_mn + q_mp @ z_pn) @ _H(dq_pn - z_pn @ dq_nn)
+
+    last_dim = len(dq_mn.shape) - 1
+    dq = lax.concatenate((dq_mn, dq_mp), last_dim)
+
+    zeros = lax.full((*dr_nn.shape[:-2], m - n, n), 0, dtype=dr_nn.dtype)
+    second_last_dim = len(dr_nn.shape) - 2
+    dr = lax.concatenate((dr_nn, zeros), second_last_dim)
+
   if pivoting:
     dp = ad_util.p2tz(p[0])
     return (q, r, p[0]), (dq, dr, dp)
@@ -2095,6 +2347,61 @@ def _svd_computation_attr(compute_uv, full_matrices):
     mode = "S"
   return _char_attr(mode)
 
+
+class _GpuSvdImpl(enum.Enum):
+  """Resolved GPU SVD backend after expanding :class:`SvdAlgorithm` (incl. DEFAULT).
+
+  Lowering maps a single :class:`_GpuSvdImpl` to an FFI target and layout flags,
+  so DEFAULT is not split across separate flag and ``else`` branches.
+  """
+
+  JACOBI = enum.auto()  # gesvdj
+  POLAR = enum.auto()  # gesvdp
+  QR_GESVD = enum.auto()  # explicit gesvd; transpose when m < n
+  GESVD = enum.auto()  # gesvd (CUDA large / ROCm fallback / forward-compat)
+  GESDD = enum.auto()  # divide-and-conquer (ROCm)
+
+
+def _resolve_gpu_svd_implementation(
+    ctx: mlir.LoweringRuleContext,
+    target_name_prefix: str,
+    algorithm: SvdAlgorithm | None,
+    m: core.DimSize,
+    n: core.DimSize,
+) -> _GpuSvdImpl:
+  """Map ``algorithm`` (and DEFAULT) to the concrete GPU SVD implementation."""
+  if algorithm is None:
+    algorithm = SvdAlgorithm.DEFAULT
+
+  if algorithm == SvdAlgorithm.QR:
+    return _GpuSvdImpl.QR_GESVD
+  if algorithm == SvdAlgorithm.JACOBI:
+    return _GpuSvdImpl.JACOBI
+  if algorithm == SvdAlgorithm.POLAR:
+    return _GpuSvdImpl.POLAR
+  if algorithm == SvdAlgorithm.DIVIDE_AND_CONQUER:
+    if target_name_prefix != "hip":
+      raise NotImplementedError(
+          "Divide-and-conquer SVD (SvdAlgorithm.DIVIDE_AND_CONQUER) is only "
+          "supported on AMD (ROCm) GPUs, not on NVIDIA CUDA.")
+    return _GpuSvdImpl.GESDD
+
+  if algorithm != SvdAlgorithm.DEFAULT:
+    raise NotImplementedError(
+        f"Unsupported SVD algorithm on GPU: {algorithm!r}")
+
+  if target_name_prefix in ["cu", "hip"]:
+    try:
+      if m <= 1024 and n <= 1024:
+        return _GpuSvdImpl.JACOBI
+    except core.InconclusiveDimensionOperation:
+      pass
+    return _GpuSvdImpl.GESVD
+
+  raise AssertionError(
+      f"Unexpected GPU target_name_prefix for SVD: {target_name_prefix!r}")
+
+
 def _svd_cpu_gpu_lowering(
     ctx,
     operand,
@@ -2125,6 +2432,8 @@ def _svd_cpu_gpu_lowering(
       target_name = lapack.prepare_lapack_call("gesdd_ffi", operand_aval.dtype)
     elif algorithm == SvdAlgorithm.QR:
       target_name = lapack.prepare_lapack_call("gesvd_ffi", operand_aval.dtype)
+    elif algorithm == SvdAlgorithm.DIVIDE_AND_CONQUER:
+      target_name = lapack.prepare_lapack_call("gesdd_ffi", operand_aval.dtype)
     else:
       raise NotImplementedError(
           "The SVD Jacobi and Polar algorithms are not implemented on CPU.")
@@ -2179,61 +2488,42 @@ def _svd_gpu_sub_lowering(ctx, operand, *, full_matrices, compute_uv,
   m, n = operand_aval.shape[-2:]
   k = core.min_dim(m, n)
 
-  transposed = False
-  kwargs = {}
-
-  # The Jacobi algorithm appears to outperform the default QR algorithm for
-  # small to medium sized matrices. See:
+  # DEFAULT and explicit algorithms: _resolve_gpu_svd_implementation. CUDA
+  # Jacobi for m,n <= 1024 when dimensions are concrete; otherwise GESVD. See
   # https://developer.download.nvidia.com/video/gputechconf/gtc/2019/presentation/s9226-fast-singular-value-decomposition-on-gpus-v2.pdf
-  # slide 5. With this in mind, we default to using the Jacobi algorithm for
-  # matrices smaller than 1024x1024.
-  #
-  # Note that the Jacobi algorithm is only used by default for matrices with
-  # concrete matrix dimensions. When using dynamic shapes, we always use the
-  # default QR algorithm, but users can (in principle) override this behavior
-  # by passing `use_jacobi=True`.
-  #
-  # TODO(danfm): Since this was originally implemented, hipSolver appears to
-  # have added support for the Jacobi algorithm, so we should investigate
-  # removing this condition.
-  # TODO(phawkins): Consider making polar decomposition the default.
-  use_jacobi = False
-  use_polar = False
-  if algorithm is None or algorithm == SvdAlgorithm.DEFAULT:
-    try:
-      use_jacobi = target_name_prefix in ["cu", "hip"] and \
-                   m <= 1024 and n <= 1024
-    except core.InconclusiveDimensionOperation:
-      use_jacobi = False
-  elif algorithm == SvdAlgorithm.JACOBI:
-    use_jacobi = True
-  elif algorithm == SvdAlgorithm.POLAR:
-    use_polar = True
+  # slide 5.
+  impl = _resolve_gpu_svd_implementation(
+      ctx, target_name_prefix, algorithm, m, n)
 
   column_major = True
-  if use_jacobi:
+  econ = not full_matrices
+  transposed = False
+  kwargs: dict[str, Any] = {}
+
+  if impl == _GpuSvdImpl.JACOBI:
     target_name = f"{target_name_prefix}solver_gesvdj_ffi"
-    # The gesvdjbatched kernel doesn't support "econ" mode, but it also only
-    # supports matrices up to 32x32, so it's always worth using the batched
-    # version and then slicing afterwards when the matrix is small enough.
+    # gesvdjbatched: no "econ" mode; batched path worthwhile up to 32x32.
     try:
       econ = not full_matrices and m > 32 and n > 32
     except core.InconclusiveDimensionOperation:
       econ = False
-  elif use_polar:
+  elif impl == _GpuSvdImpl.POLAR:
     target_name = f"{target_name_prefix}solver_gesvdp_ffi"
-    econ = not full_matrices
-  else:
+  elif impl == _GpuSvdImpl.GESDD:
+    target_name = f"{target_name_prefix}solver_gesdd_ffi"
+    # The gesdd FFI handler accepts the same attribute schema as gesvd:
+    # (full_matrices, compute_uv, transposed). For gesdd this is always false.
+    kwargs = {"transposed": False}
+  elif impl in (_GpuSvdImpl.QR_GESVD, _GpuSvdImpl.GESVD):
     target_name = f"{target_name_prefix}solver_gesvd_ffi"
-    econ = not full_matrices
-    # Because the base gesvd kernel only supports matrices where m >= n, we
-    # conceptually transpose the matrix if m < n.
     transposed = m < n
     kwargs = {"transposed": transposed}
     if transposed:
       column_major = False
+  else:
+    raise AssertionError(impl)
 
-  if use_jacobi or use_polar:
+  if impl in (_GpuSvdImpl.JACOBI, _GpuSvdImpl.POLAR):
     # When using the Jacobi or polar algorithms, the U and V matrices must
     # always be allocated even if compute_uv is False.
     u_aval = ShapedArray((*batch_dims, m, k if econ else m), u_aval.dtype)
@@ -2249,7 +2539,7 @@ def _svd_gpu_sub_lowering(ctx, operand, *, full_matrices, compute_uv,
                               column_major=column_major)
   _, s, u, vt, info = rule(ctx, operand, full_matrices=not econ,
                            compute_uv=compute_uv, **kwargs)
-  if (use_jacobi or use_polar) and compute_uv:
+  if impl in (_GpuSvdImpl.JACOBI, _GpuSvdImpl.POLAR) and compute_uv:
     vt = hlo.transpose(
         vt,
         mlir.dense_int_array(tuple(range(nb)) + (nb + 1, nb)))
@@ -2532,15 +2822,32 @@ def _tridiagonal_solve_shape_rule(dl_shape, d_shape, du_shape, b_shape, **_):
         "equal the dimensions of the diagonal arguments.")
   return b_shape
 
-def _tridiagonal_solve_gpu_lowering(ctx, dl, d, du, b, *, target_name_prefix):
+def _tridiagonal_solve_gpu_lowering(ctx, dl, d, du, b, *, target_name_prefix,
+                                    perturb_singular):
+  m = ctx.avals_in[1].shape[-1]
+  if perturb_singular:
+    b_aval = ctx.avals_in[-1]
+    target_name = f"{target_name_prefix}_tridiagonal_solve_perturbed"
+    rule = _linalg_ffi_lowering(target_name, avals_out=[b_aval])
+    return rule(ctx, dl, d, du, b)
+
+  # The cusolver implementation requires m >= 3.
+  if m <= 2:
+    return mlir.lower_fun(_tridiagonal_solve_jax, multiple_results=False)(
+        ctx, dl, d, du, b, perturb_singular=perturb_singular)
   target_name = f"{target_name_prefix}sparse_gtsv2_ffi"
   rule = _linalg_ffi_lowering(target_name, operand_output_aliases={3: 0})
   return rule(ctx, dl, d, du, b)
 
-def _tridiagonal_solve_cpu_lowering(ctx, dl, d, du, b, **kwargs):
-  del kwargs  # unused
+def _tridiagonal_solve_cpu_lowering(ctx, dl, d, du, b, *, perturb_singular):
   b_aval = ctx.avals_in[-1]
   batch_dims = b_aval.shape[:-2]
+
+  if perturb_singular:
+    target_name = "tridiagonal_solve_perturbed_ffi"
+    rule = _linalg_ffi_lowering(target_name, avals_out=[b_aval])
+    return rule(ctx, dl, d, du, b)
+
   target_name = lapack.prepare_lapack_call("gtsv_ffi", b_aval.dtype)
   info_aval = ShapedArray(batch_dims, np.int32)
   rule = _linalg_ffi_lowering(target_name,
@@ -2557,20 +2864,22 @@ def _tridiagonal_product(dl, d, du, b):
   y = y.at[..., :-1, :].add(du[..., :-1, None] * b[..., 1:, :])
   return y
 
-def _tridiagonal_solve_jvp_rule(primals, tangents):
+def _tridiagonal_solve_jvp_rule(primals, tangents, *, perturb_singular):
   *diags, _ = primals
   *diags_dot, b_dot = tangents
-  ans = tridiagonal_solve_p.bind(*primals)
+  ans = tridiagonal_solve_p.bind(*primals, perturb_singular=perturb_singular)
   if all(type(p) is ad_util.Zero for p in diags_dot):
     rhs = b_dot
   else:
     # pyrefly: ignore[bad-argument-count]  # pyrefly#2468
     matvec_dot = _tridiagonal_product(*map(ad.instantiate_zeros, diags_dot), ans)
     rhs = ad.add_tangents(b_dot, -matvec_dot)
-  ans_dot = tridiagonal_solve_p.bind(*diags, rhs)
+  ans_dot = tridiagonal_solve_p.bind(
+    *diags, rhs, perturb_singular=perturb_singular)
   return ans, ans_dot
 
-def _tridiagonal_solve_transpose_rule(cotangent, dl, d, du, b):
+def _tridiagonal_solve_transpose_rule(
+    cotangent, dl, d, du, b, *, perturb_singular):
   # Tridiagonal solve is nonlinear in the tridiagonal arguments and linear
   # otherwise.
   assert not (ad.is_undefined_primal(dl) or ad.is_undefined_primal(d) or
@@ -2582,10 +2891,12 @@ def _tridiagonal_solve_transpose_rule(cotangent, dl, d, du, b):
                                du.ndim-1)
     du_trans = lax.concatenate((dl[..., 1:], lax.full_like(dl[..., :1], 0)),
                                dl.ndim-1)
-    cotangent_b = tridiagonal_solve(dl_trans, d, du_trans, cotangent)
+    cotangent_b = tridiagonal_solve(dl_trans, d, du_trans, cotangent,
+                                    perturb_singular=perturb_singular)
   return [None, None, None, cotangent_b]
 
-def _tridiagonal_solve_batching_rule(batched_args, batch_dims):
+def _tridiagonal_solve_batching_rule(
+    batched_args, batch_dims, *, perturb_singular):
   dl, d, du, b = batched_args
   bdl, bd, bdu, bb = batch_dims
   if (bdl is batching.not_mapped and
@@ -2595,7 +2906,8 @@ def _tridiagonal_solve_batching_rule(batched_args, batch_dims):
     b = batching.moveaxis(b, bb, -2)
     b_flat = b.reshape(b.shape[:-3]  + (b.shape[-3], b.shape[-2] * b.shape[-1]))
     bdim_out = b.ndim - 2
-    out_flat = tridiagonal_solve(dl, d, du, b_flat)
+    out_flat = tridiagonal_solve(dl, d, du, b_flat,
+                                 perturb_singular=perturb_singular)
     return out_flat.reshape(b.shape), bdim_out
   else:
     size = next(t.shape[i] for t, i in zip(batched_args, batch_dims)
@@ -2604,7 +2916,7 @@ def _tridiagonal_solve_batching_rule(batched_args, batch_dims):
     d = batching.bdim_at_front(d, bd, size)
     du = batching.bdim_at_front(du, bdu, size)
     b = batching.bdim_at_front(b, bb, size)
-    return tridiagonal_solve(dl, d, du, b), 0
+    return tridiagonal_solve(dl, d, du, b, perturb_singular=perturb_singular), 0
 
 def _tridiagonal_solve_jax_impl(dl, d, du, b):
   def fwd(carry, args):
@@ -2626,7 +2938,9 @@ def _tridiagonal_solve_jax_impl(dl, d, du, b):
   end, ans = control_flow.scan(bwd, final, (cp, dp), unroll=32, reverse=True)
   return lax.concatenate((end[None], ans), 0)
 
-def _tridiagonal_solve_jax(dl, d, du, b, **_):
+def _tridiagonal_solve_jax(dl, d, du, b, *, perturb_singular, **_):
+  if perturb_singular:
+    raise NotImplementedError("perturb_singular=True is not supported on this platform.")
   impl = _tridiagonal_solve_jax_impl
   for _ in range(dl.ndim - 1):
     impl = api.vmap(impl)
@@ -2793,8 +3107,8 @@ def _build_sdy_sharding_rule(num_batch_dims, avals_in, avals_out):
   sdy_sharding_rule = str_to_sdy_sharding_rule(f"{lhs} -> {rhs}")
   return sdy_sharding_rule_to_mlir(
       sdy_sharding_rule,
-      [mlir.aval_to_ir_type(a) for a in avals_in],
-      [mlir.aval_to_ir_type(a) for a in avals_out])
+      mlir.flatten_ir_types(map(mlir.aval_to_ir_types, avals_in)),
+      mlir.flatten_ir_types(map(mlir.aval_to_ir_types, avals_out)))
 
 def _linalg_ffi_lowering(target_name, avals_in=None, avals_out=None,
                          operand_output_aliases=None, column_major=True,

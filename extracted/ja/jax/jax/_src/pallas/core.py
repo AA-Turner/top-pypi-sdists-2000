@@ -49,6 +49,20 @@ from jax._src.state import indexing
 from jax._src.state import types as state_types
 from jax._src.state.types import TransformedRef
 
+try:
+  import jax._src.pallas.mosaic.interpret.params as mosaic_tpu_interpret
+except ImportError:
+  mosaic_tpu_interpret = None
+
+try:
+  import jax._src.pallas.mosaic_gpu.interpret.params as mosaic_gpu_interpret
+except ImportError:
+  mosaic_gpu_interpret = None
+
+split_list = util.split_list
+map, unsafe_map = util.safe_map, map
+zip, unsafe_zip = util.safe_zip, zip
+
 
 class DynamicGridDim:
   def __repr__(self):
@@ -131,6 +145,26 @@ class CompilerParams(Protocol):
   __dataclass_fields__: ClassVar[dict[str, dataclasses.Field[Any]]]
 
 
+_backend_lowering_rules = {}
+
+
+def register_lowering_rule(params_cls, rule, platform: str):
+  _backend_lowering_rules[params_cls] = (rule, platform)
+
+
+def get_lowering_rule(params_cls, expected_platform: str):
+  rule_info = _backend_lowering_rules.get(params_cls)
+  if rule_info is None:
+    return None
+  rule, platform = rule_info
+  if platform != expected_platform:
+    raise ValueError(
+        f"Compiler params for platform {platform} cannot be used for"
+        f" {expected_platform} lowering."
+    )
+  return rule
+
+
 @enum.unique
 class RevisitMode(enum.Enum):
   """Specifies whether an output buffer supports revisiting.
@@ -172,74 +206,6 @@ class Buffered:
   use_lookahead: bool = False
   revisit: Optional[RevisitMode] = None
 
-split_list = util.split_list
-
-map, unsafe_map = util.safe_map, map
-zip, unsafe_zip = util.safe_zip, zip
-
-
-class ShapedArrayWithMemorySpace(jax_core.ShapedArray):
-  __slots__ = ["memory_space"]
-
-  def __init__(self, shape, dtype, weak_type=False, sharding=None,
-               vma=frozenset(), memory_space=None):
-    super().__init__(shape, dtype, weak_type=weak_type, sharding=sharding,
-                     vma=vma)
-    self.memory_space = memory_space
-
-  def __eq__(self, other):
-    return super().__eq__(other) and self.memory_space == other.memory_space
-
-  def __hash__(self):
-    return hash((self.shape, self.dtype, self.weak_type, self.sharding,
-                 self.vma, self.memory_space))
-
-  def str_short(self, short_dtypes=False, mesh_axis_types=False):
-    return jax_core.str_short_aval(
-        self.shape,
-        self.dtype,
-        self.sharding.mesh,
-        self.sharding.spec,
-        self.vma,
-        self.memory_space,
-        short_dtypes,
-        mesh_axis_types,
-    )
-
-  def update(  # pyrefly: ignore[bad-override]
-      self,
-      shape=None,
-      dtype=None,
-      weak_type=None,
-      sharding=None,
-      vma=None,
-      memory_space=None,
-  ):
-    if shape is None:
-      shape = self.shape
-    if dtype is None:
-      dtype = self.dtype
-    if weak_type is None:
-      weak_type = self.weak_type
-    if sharding is None:
-      sharding = self.sharding
-    if vma is None:
-      vma = self.vma
-    if memory_space is None:
-      memory_space = self.memory_space
-    return ShapedArrayWithMemorySpace(
-        shape, dtype, weak_type, sharding=sharding, vma=vma,
-        memory_space=memory_space
-    )
-
-  def unwrap(self) -> jax_core.ShapedArray:
-    """Returns a ShapedArray with the memory space removed."""
-    return jax_core.ShapedArray(
-        self.shape, self.dtype, self.weak_type, sharding=self.sharding, vma=self.vma
-    )
-
-mlir.ir_type_handlers[ShapedArrayWithMemorySpace] = mlir._array_ir_types
-
 
 @dataclasses.dataclass(frozen=True)
 class MemoryRef:
@@ -251,14 +217,11 @@ class MemoryRef:
   def get_array_aval(self) -> jax_core.ShapedArray:
     if not isinstance(self.inner_aval, jax_core.ShapedArray):
       raise ValueError(
-          f"MemoryRef type must be a ShapedArray, got {type(self.inner_aval)}"
-      )
+          f"MemoryRef type must be a ShapedArray, got {type(self.inner_aval)}")
     dtype = self.inner_aval.dtype
     if not isinstance(dtype, (jnp.dtype, dtypes.ExtendedDType)):
       dtype = jnp.dtype(dtype)
-    return ShapedArrayWithMemorySpace(
-        self.inner_aval.shape, dtype, memory_space=self.memory_space
-    )
+    return self.inner_aval.update(dtype=dtype, memory_space=self.memory_space)
 
   def get_ref_aval(self) -> TransformedRef | state.AbstractRef:
     # TODO(sharadmv): Clean this up. ShapedArrayWithMemorySpace fails when we
@@ -560,10 +523,9 @@ class BlockSpec:
         )
 
     ref_block_shape = _get_ref_block_shape(block_shape)
-    if isinstance(array_aval, ShapedArrayWithMemorySpace):
-      block_array_aval = jax_core.ShapedArray(
-          ref_block_shape, array_aval.dtype, array_aval.weak_type
-      )
+    if isinstance(array_aval, jax_core.ShapedArray):
+      block_array_aval = array_aval.update(
+          shape=ref_block_shape, memory_space=jax_core.MemorySpace.Device)
     elif isinstance(array_aval, state_types.AbstractLinVal):
       if not isinstance(array_aval.inner_aval, jax_core.ShapedArray):
         raise NotImplementedError  # TODO(mattjj,sharadmv)
@@ -965,7 +927,7 @@ class GridMapping:
   def static_grid(self) -> StaticGrid:
     if self.num_dynamic_grid_bounds:
       raise ValueError("Expected a grid with fully static bounds")
-    return self.grid  # type: ignore
+    return self.grid  # pyrefly: ignore[bad-return]
 
   @contextlib.contextmanager
   def trace_env(self):
@@ -975,13 +937,13 @@ class GridMapping:
       axis_env_ctx = jax_core.extend_axis_env_nd(
           zip(self.grid_names, self.grid)  # pyrefly: ignore[bad-argument-type]
       )
-    with tracing_grid_env(self.grid, self.vmapped_dims), axis_env_ctx:
+    with tracing_grid_env(self.grid, self.vmapped_dims), axis_env_ctx, config._check_vma(False):
       yield
 
   @property
   def slice_index_ops(self):
     """Returns a slice object to select the index operands to a kernel.
-    This works on a sequence that contains *index, *ins, *outs, *scratch.
+    This works on a sequence that contains ``*index``, ``*ins``, ``*outs``, ``*scratch``.
     """
     return slice(0, self.num_index_operands)
 
@@ -989,9 +951,9 @@ class GridMapping:
   def slice_block_ops(self):
     """Returns a slice to select the block operands to a kernel.
 
-    The block operands are: *ins, *outs, the same for which we
+    The block operands are: ``*ins``, ``*outs``, the same for which we
     have `self.block_mappings`.
-    This works on a sequence that contains *index, *ins, *outs, *scratch.
+    This works on a sequence that contains ``*index``, ``*ins``, ``*outs``, ``*scratch``.
     """
     return slice(self.num_index_operands,
                  self.num_index_operands + len(self.block_mappings))
@@ -999,7 +961,7 @@ class GridMapping:
   @property
   def slice_scratch_ops(self):
     """Returns a slice object to select the scratch operands to a kernel.
-    This works on a sequence that contains *index, *ins, *outs, *scratch.
+    This works on a sequence that contains ``*index``, ``*ins``, ``*outs``, ``*scratch``.
     """
     if self.num_scratch_operands:
       return slice(-self.num_scratch_operands, None)
@@ -1008,7 +970,7 @@ class GridMapping:
 
   @property
   def in_shapes(self) -> Iterable[jax_core.ShapeDtypeStruct]:
-    """The shapes of *index, *inputs."""
+    """The shapes of ``*index``, ``*inputs``."""
     index_shapes = (
         # pyrefly: ignore[missing-attribute]
         jax_core.ShapeDtypeStruct(ia.shape, ia.dtype)
@@ -1179,14 +1141,14 @@ class GridSpec:
     if isinstance(grid, int):
       grid = (grid,)
     elif grid and isinstance(grid[0], tuple):  # Check if we have a named grid
-      grid_names, grid = util.unzip2(grid)  # type: ignore
+      grid_names, grid = util.unzip2(grid)  # pyrefly: ignore[bad-argument-type]
 
     # TODO(b/353730556): allow NumPy scalars in grids
-    if not all(_is_valid_grid_dim(g) for g in grid):  # type: ignore
+    if not all(_is_valid_grid_dim(g) for g in grid):  # pyrefly: ignore[bad-argument-type]
       raise ValueError(
           f"Grid must be a tuple of integers or jax.Array, got {grid}"
       )
-    self.grid = grid  # type: ignore
+    self.grid = grid  # pyrefly: ignore[bad-assignment]
     self.grid_names = grid_names
 
   def _make_scalar_ref_aval(self, aval):
@@ -1202,14 +1164,15 @@ def get_grid_mapping(
     out_tree: tree_util.PyTreeDef,
     out_origins: Sequence[OriginStr],
     debug: bool = False,
+    default_memory_space: Any = None,
 ) -> tuple[tuple[jax_core.AbstractValue, ...], GridMapping]:
   if dynamic_shapes_export_enabled():
     dim_check: Any = jax_core.is_dim
   else:
     dim_check: Any = jax_core.is_constant_dim
   assert all(i is None or dim_check(i) for i in grid_spec.grid)
-  grid_mapping_grid = tuple(
-      dynamic_grid_dim if (
+  grid_mapping_grid: GridMappingGrid = tuple(
+      dynamic_grid_dim if (  # pyrefly: ignore[bad-argument-type]
           d is None or (not jax_core.is_constant_dim(d) and not dynamic_shapes_export_enabled())
       ) else d
       for d in grid_spec.grid
@@ -1254,14 +1217,24 @@ def get_grid_mapping(
     flat_scratch_avals = ()
     jaxpr_scratch_avals = ()
 
+  def _with_default_memory_space(bs: BlockSpec):
+    if bs is no_block_spec:
+      return BlockSpec(memory_space=default_memory_space)
+    elif bs.memory_space is None:
+      return bs.replace(memory_space=default_memory_space)
+    else:
+      return bs
+
   if grid_spec.in_specs is not no_block_spec:
     flat_in_specs, in_specs_tree = tree_util.tree_flatten(grid_spec.in_specs)
     if in_specs_tree != in_tree:
       raise ValueError(
           pytreedef_mismatch_err_msg("`in_specs`", in_specs_tree,
                                      "`inputs`", in_tree))
+    flat_in_specs = [_with_default_memory_space(bs) for bs in flat_in_specs]
   else:
-    flat_in_specs = [no_block_spec] * len(in_avals)
+    flat_in_specs = (
+        [BlockSpec(memory_space=default_memory_space)] * len(in_avals))
 
   in_block_mappings = map(
       partial(
@@ -1283,8 +1256,10 @@ def get_grid_mapping(
       raise ValueError(
           pytreedef_mismatch_err_msg("`out_specs`", out_specs_tree,
                                      "`out_shape`", out_tree))
+    flat_out_specs = [_with_default_memory_space(bs) for bs in flat_out_specs]
   else:
-    flat_out_specs = [no_block_spec] * len(out_avals)
+    flat_out_specs = (
+        [BlockSpec(memory_space=default_memory_space)] * len(out_avals))
 
   out_block_mappings = map(
       partial(
@@ -1300,7 +1275,7 @@ def get_grid_mapping(
       out_avals,
   )
   grid_mapping = GridMapping(
-      grid=grid_mapping_grid,  # type: ignore[arg-type]
+      grid=grid_mapping_grid,
       grid_names=grid_spec.grid_names,
       block_mappings=(*in_block_mappings, *out_block_mappings),
       index_map_avals=index_map_avals,
@@ -1380,7 +1355,8 @@ class CostEstimate:
 
 def get_memory_space_aval(aval: jax_core.AbstractValue) -> Any:
   """Queries the memory space of an array."""
-  if isinstance(aval, ShapedArrayWithMemorySpace):
+  if (isinstance(aval, jax_core.ShapedArray) and
+      not isinstance(aval.memory_space, jax_core.MemorySpace)):
     return aval.memory_space
   if isinstance(aval, state.AbstractRef):
     if aval.memory_space is not None:
@@ -1389,19 +1365,19 @@ def get_memory_space_aval(aval: jax_core.AbstractValue) -> Any:
   return None
 
 def _get_sds(aval: jax_core.AbstractValue):
-  match aval:
-    case state.AbstractRef(inner_aval=inner_aval):
-      if aval.memory_space is not None:
-        return aval.memory_space(aval.shape, aval.dtype)
-      return _get_sds(inner_aval)
-    case ShapedArrayWithMemorySpace():
+  if isinstance(aval, state.AbstractRef):
+    if aval.memory_space is not None:
       return aval.memory_space(aval.shape, aval.dtype)
-    case jax_core.ShapedArray():
+    return _get_sds(aval.inner_aval)
+  elif isinstance(aval, jax_core.ShapedArray):
+    if isinstance(aval.memory_space, jax_core.MemorySpace):
       return jax_core.ShapeDtypeStruct(
-          aval.shape, aval.dtype, vma=aval.vma, sharding=aval.sharding
-      )
-    case _:
-      raise ValueError(f"Unsupported abstract value: {aval}")
+          aval.shape, aval.dtype, manual_axis_type=aval.mat,
+          sharding=aval.sharding)
+    # memory_space is a pallas memory space which is callable
+    return aval.memory_space(aval.shape, aval.dtype)
+  else:
+    raise ValueError(f"Unsupported abstract value: {aval}")
 
 
 core_map_p = jax_core.Primitive("core_map")
@@ -1410,7 +1386,7 @@ core_map_p.multiple_results = True
 def _core_map_is_high(*avals, jaxpr, **params):
   del avals, params
   return jaxpr.is_high
-core_map_p.is_high = _core_map_is_high  # type: ignore[method-assign]
+core_map_p.is_high = _core_map_is_high
 
 def _core_map_to_lojax(*consts, jaxpr, mesh, **params):
   closed_hi_jaxpr = jax_core.ClosedJaxpr(jaxpr, consts)
@@ -1418,7 +1394,7 @@ def _core_map_to_lojax(*consts, jaxpr, mesh, **params):
       tracing_grid_env(tuple(mesh.shape.values()), mapped_dims=()),
       jax_core.extend_axis_env_nd(mesh.shape.items()),
   ):
-    closed_lo_jaxpr = pe.lower_jaxpr(closed_hi_jaxpr)
+    closed_lo_jaxpr = pe.lower_jaxpr2(closed_hi_jaxpr)
   assert not closed_lo_jaxpr.is_high
   return core_map_p.bind(
       *closed_lo_jaxpr.consts,
@@ -1473,6 +1449,7 @@ def core_map(
     with (
         tracing_grid_env(tuple(mesh.shape.values()), mapped_dims=()),
         jax_core.extend_axis_env_nd(mesh.shape.items()),
+        config._check_vma(False),
     ):
       jaxpr, _, consts = pe.trace_to_jaxpr_dynamic(flat_fun, ref_avals)
 
@@ -1520,20 +1497,12 @@ kernel_local_effects: effects.EffectTypeSet = effects.EffectTypeSet()
 
 
 def get_interpret_effects(interpret: Any) -> Set[effects.Effect]:
-  try:
-    from jax._src.pallas.mosaic.interpret import interpret_pallas_call as mosaic_tpu_interpret  # Avoid circular dependency.
-  except ImportError:
-    pass
-  else:
-    if isinstance(interpret, mosaic_tpu_interpret.InterpretParams):
-      return mosaic_tpu_interpret.get_interpret_effects()
-  try:
-    from jax._src.pallas.mosaic_gpu.interpret import interpret_pallas_call as mosaic_gpu_interpret  # Avoid circular dependency.
-  except ImportError:
-    pass
-  else:
-    if isinstance(interpret, mosaic_gpu_interpret.InterpretParams):
-      return mosaic_gpu_interpret.get_interpret_effects()
+  if (mosaic_tpu_interpret is not None
+      and isinstance(interpret, mosaic_tpu_interpret.InterpretParams)):
+    return mosaic_tpu_interpret.get_interpret_effects()
+  if (mosaic_gpu_interpret is not None
+      and isinstance(interpret, mosaic_gpu_interpret.InterpretGPUParams)):
+    return mosaic_gpu_interpret.get_interpret_effects()
   return effects.no_effects
 
 
@@ -1573,6 +1542,9 @@ def core_map_lowering_rule(ctx: mlir.LoweringRuleContext,
 mlir.register_lowering(core_map_p, core_map_lowering_rule)
 
 
+CoreType = Any  # TODO(rdyro): Unify this among backends.
+
+
 class Mesh(Protocol):
 
   @property
@@ -1583,9 +1555,23 @@ class Mesh(Protocol):
   def shape(self) -> collections.OrderedDict[object, int]:
     ...
 
+  @property
+  def kernel_type(self) -> CoreType:
+    # TODO(rdyro): Rename kernel_type property to core_type.
+    # the CoreType of the Mesh (e.g.,TensorCore, SpearCore-SCS, SpearCore-TEC)
+    ...
+
   def discharges_effect(self, effect: jax_core.Effect) -> bool:
     ...
 
+  def check_is_compatible_with(self, other_mesh):
+    """Raise if this mesh (e.g., its axes names) cannot be used with other_mesh.
+
+    For example, sparsecore scalar and vector subcore meshes are compatible only
+    if they have the same name for the core axis. By definition a mesh is also
+    compatible with itself.
+    """
+    raise ValueError(f"Mesh {self=} is not compatible with {other_mesh=}.")
 
 _core_map_mesh_rules: dict[type[Any], Callable[..., Any]] = {}
 
@@ -1604,9 +1590,7 @@ def with_memory_space_constraint_abstract_eval(x, *, memory_space):
   if not isinstance(x, jax_core.ShapedArray):
     raise NotImplementedError("with_memory_space_constraint only supports "
                               "arrays.")
-  return ShapedArrayWithMemorySpace(
-      x.shape, x.dtype, memory_space=memory_space
-  )
+  return x.update(memory_space=memory_space)
 
 def with_memory_space_constraint_lowering_rule(ctx, x, *, memory_space):
   del ctx, memory_space
@@ -1728,7 +1712,7 @@ def _core_map_discharge_rule(in_avals, out_avals, *args_flat, jaxpr, debug_info,
 
 
 def _core_map_typecheck_rule(_, *in_atoms, jaxpr, mesh, **kwargs):
-  with jax_core.extend_axis_env_nd(tuple(mesh.shape.items())):
+  with jax_core.extend_axis_env_nd(tuple(mesh.shape.items())), config._check_vma(False):
     jax_core.check_jaxpr(jaxpr)
   return _core_map_abstract_eval(*in_atoms, jaxpr=jaxpr, mesh=mesh, **kwargs)
 
@@ -1744,7 +1728,7 @@ def lower_as_mlir(
     static_argnames=(),
     platforms=None,
     **kwargs,
-) -> mlir.ir.Module:
+) -> str:
   """Lower the function to MLIR.
 
   Unlike jax.export, the exported artifact provides no stability guarantees.
@@ -1754,9 +1738,7 @@ def lower_as_mlir(
     if platforms is None:
       platforms = ["tpu"]
     exported = export(f, platforms=platforms)(*args, **kwargs)
-    stablehlo = exported.mlir_module()
-
-  return stablehlo  # type: ignore[return-value]
+    return exported.mlir_module()
 
 
 _out_shape_to_aval_mapping: dict[
@@ -1768,21 +1750,20 @@ def _convert_out_shape_to_aval(out_shape: Any) -> jax_core.AbstractValue:
   match out_shape:
     case jax_core.ShapeDtypeStruct():
       if config._check_vma.value:
-        if out_shape.vma is None:
+        if out_shape.manual_axis_type is None:
           raise ValueError(
-              "When `check_vma=True` on `jax.shard_map`, `vma` on"
-              " `jax.ShapeDtypeStruct` must not be `None`. Please specify how the"
-              " output should be varying across mesh axes using the `vma`"
-              " argument of `jax.ShapeDtypeStruct` or set `check_vma=False` on"
-              " `jax.shard_map`.")
-        # TODO(yashkatariya): Remove this once we have `aval.mt`
-        spec = (out_shape.sharding.spec
-                if isinstance(out_shape.sharding, jax_core.NamedSharding) else None)
+              "When `check_vma=True` on `jax.shard_map`, `manual_axis_type` on"
+              " `jax.ShapeDtypeStruct` must not be `None`. Please specify how"
+              " the output should be varying across mesh axes using the"
+              " `manual_axis_type` argument of `jax.ShapeDtypeStruct` or set"
+              " `check_vma=False` on `jax.shard_map`.")
         return jax_core.ShapedArray(
             shape=out_shape.shape, dtype=out_shape.dtype,
-            sharding=jax_core.get_cur_mesh_sharding(spec), vma=out_shape.vma)
-      return jax_core.ShapedArray(shape=out_shape.shape, dtype=out_shape.dtype,
-                                  sharding=jax_core.get_cur_mesh_sharding())
+            sharding=jax_core.get_cur_mesh_sharding(),
+            manual_axis_type=out_shape.manual_axis_type)
+      return jax_core.ShapedArray(
+          shape=out_shape.shape, dtype=out_shape.dtype,
+          sharding=jax_core.get_cur_mesh_sharding())
     case MemoryRef():
       return out_shape.get_array_aval()
     case hijax.HiType():

@@ -260,8 +260,7 @@ def host_local_array_to_global_array_impl(
   # If the Array is not fully addressable i.e. not host local, return it.
   if isinstance(arr, array.ArrayImpl) and not arr.is_fully_addressable:
     return arr
-  if (isinstance(arr, array.ArrayImpl) and isinstance(
-      arr.sharding, sharding_impls.PmapSharding)) or not hasattr(arr, 'shape'):
+  if (isinstance(arr, array.ArrayImpl) and not hasattr(arr, 'shape')):
     arr = np.array(arr)
   if arr.dtype == dtypes.float0:
     arr = np.zeros(arr.shape, dtype=np.dtype(bool))
@@ -289,7 +288,7 @@ def host_local_array_to_global_array_impl(
   out = pxla.batched_device_put(
       global_aval, jax.sharding.NamedSharding(global_mesh, pspec),
       arrays, list(global_mesh.local_mesh.devices.flat))
-  if is_prng_key_array:  # pyrefly: ignore[unbound-name]  # pyrefly#2382
+  if is_prng_key_array:
     return prng.PRNGKeyArray(dtype._impl, out)
   return out
 
@@ -444,7 +443,7 @@ def global_array_to_host_local_array_impl(
       resharded_array = jax.device_put(arr, global_sharding)
       arrays = resharded_array._arrays
     out = array.ArrayImpl(local_aval, local_sharding, arrays, committed=True)
-    if is_prng_key_array:  # pyrefly: ignore[unbound-name]  # pyrefly#2382
+    if is_prng_key_array:
       return prng.PRNGKeyArray(dtype._impl, out)
     return out
   else:

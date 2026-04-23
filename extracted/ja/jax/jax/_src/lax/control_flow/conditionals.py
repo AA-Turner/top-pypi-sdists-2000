@@ -42,7 +42,6 @@ from jax._src.interpreters import ad
 from jax._src.interpreters import batching
 from jax._src.interpreters import mlir
 from jax._src.interpreters import partial_eval as pe
-from jax._src.interpreters import pxla
 from jax._src.lax import lax
 from jax._src.traceback_util import api_boundary
 from jax._src.typing import ArrayLike
@@ -137,8 +136,8 @@ def _switch_internal(
     branches: Sequence[Callable],
     operands: Sequence[Any], *,
     branches_platforms: BranchesPlatforms | None):
-  if (config.disable_jit.value and core.is_concrete(index)):
-    return branches[int(index)](*operands)  # type: ignore
+  if config.disable_jit.value and core.is_concrete(index):
+    return branches[int(index)](*operands)  # pyrefly: ignore[bad-argument-type]
 
   dbgs = [api_util.debug_info("switch", branch, operands, {})
           for branch in branches]
@@ -375,14 +374,17 @@ def _check_branch_outputs(
       differences = ('\n'.join(f'  * {d};' for d in diffs[:-1])
                      + f'\n  * {diffs[-1]}.\n')
 
+    # TODO(rdyro): extend this to also cover reduced and unreduced.
     pvary_applications = [
-        f"applying `jax.lax.pcast(..., {tuple(a1.vma - a2.vma)}, to='varying')` "
-        f"to the output of {n}{component(p)}"
+        f"applying `jax.lax.pcast(..., "
+        f"{tuple(a1.mat.varying - a2.mat.varying)}, to='varying')` to the"
+        f" output of {n}{component(p)}"
         for p, aval1, aval2 in zip(paths, out_avals1, out_avals2)
         for n, a1, a2 in [(name1, aval2, aval1), (name2, aval1, aval2)]
         if not core.typematch(a1, a2) and
         isinstance(a1, core.ShapedArray) and isinstance(a2, core.ShapedArray)
-        and a1.vma != a2.vma and a2.vma - a1.vma]
+        and a1.mat.varying != a2.mat.varying
+        and a2.mat.varying - a1.mat.varying]
 
     if not pvary_applications:
       pvary_msg = ''
@@ -425,12 +427,12 @@ def _cond_abstract_eval(*avals: core.AbstractValue,
   if disallowed_effects:
     raise NotImplementedError(
         f'Effects not supported in `cond`: {disallowed_effects}')
-  b0_vma = [o.vma for o in branches[0].out_avals]
+  b0_mat = [o.mat for o in branches[0].out_avals]
   for branch in branches[1:]:
-    b_vma = [o.vma for o in branch.out_avals]
-    if b0_vma != b_vma:
+    b_mat = [o.mat for o in branch.out_avals]
+    if b0_mat != b_mat:
       raise Exception("The branches of cond produced mismatched varying manual "
-                      f"axes. Got {b0_vma} and {b_vma}. Please open an issue "
+                      f"axes. Got {b0_mat} and {b_mat}. Please open an issue "
                       "at https://github.com/jax-ml/jax/issues, and as a "
                       "temporary workaround pass the check_vma=False argument "
                       "to `jax.shard_map`")
@@ -862,12 +864,12 @@ def _transpose_jaxpr_fancy(jaxpr, in_tree, in_avals, specs, inst_out):
     ad.backward_pass3(jaxpr.jaxpr, False, jaxpr.consts, args, cts_in)
     cts_out = [maybe_inst(x.freeze(), inst) if isinstance(x, ad.ValAccum)
                else None for x, inst in zip(args, inst_out)]
-    cts_out, cell.out_tree = tree_flatten(cts_out)  # type: ignore
+    cts_out, cell.out_tree = tree_flatten(cts_out)  # pyrefly: ignore[missing-attribute]
     return cts_out
   dbg = jaxpr.jaxpr.debug_info.with_unknown_names()
   trans_jaxpr, _, consts = pe.trace_to_jaxpr_dynamic(
       lu.wrap_init(transposed, debug_info=dbg), in_avals)
-  return core.ClosedJaxpr(trans_jaxpr, consts), cell.out_tree  # type: ignore
+  return core.ClosedJaxpr(trans_jaxpr, consts), cell.out_tree  # pyrefly: ignore[missing-attribute]
 
 
 def _cond_typecheck(bind_time, *in_atoms, branches, **params):
@@ -945,7 +947,6 @@ ad.primitive_linearizations[cond_p] = _cond_linearize
 ad.fancy_transposes[cond_p] = _cond_transpose_fancy
 pe.custom_partial_eval_rules[cond_p] = _cond_partial_eval
 batching.fancy_primitive_batchers[cond_p] = _cond_batching_rule
-pxla.register_initial_style_primitive(cond_p)
 core.custom_typechecks[cond_p] = partial(_cond_typecheck, False)
 pe.partial_eval_jaxpr_custom_rules[cond_p] = _cond_partial_eval_custom
 pe.dce_rules[cond_p] = _cond_dce_rule
@@ -956,7 +957,7 @@ cond_p.is_high = _cond_is_high
 
 def _cond_to_lojax(pred, *hi_args, branches, **kwds):
   jaxpr = branches[0]
-  lo_branches = tuple(pe.lower_jaxpr(j) for j in branches)
+  lo_branches = tuple(pe.lower_jaxpr2(j) for j in branches)
   lo_args = [lo_val for aval, x in zip(branches[0].in_aval_qdds, hi_args)
              for lo_val in (aval.read_loval(x) if aval.has_qdd
                             else aval.lower_val(x))]
@@ -1021,7 +1022,7 @@ def _cond_lowering(ctx, index, *args, branches, **params):
   tokens_in = ctx.tokens_in.subset(ordered_effects)
   output_token_types = [mlir.token_type() for _ in ordered_effects]
   output_types = [
-      *output_token_types, *map(mlir.aval_to_ir_type, ctx.avals_out)]
+      *output_token_types, *map(mlir._aval_to_ir_types, ctx.avals_out)]
   flat_output_types = mlir.flatten_ir_types(output_types)
 
   # CaseOp takes a single argument 'index' and the corresponding blocks
@@ -1033,10 +1034,8 @@ def _cond_lowering(ctx, index, *args, branches, **params):
   for i, jaxpr in enumerate(branches):
     branch = case_op.regions[i].blocks.append()
     with ir.InsertionPoint(branch):
-      consts = [
-          mlir.ir_constant(x, aval=var.aval)
-          for x, var in zip(jaxpr.consts, jaxpr.jaxpr.constvars)
-      ]
+      consts = mlir.ir_consts(
+          jaxpr.consts, [v.aval for v in jaxpr.jaxpr.constvars])
       out_vals, tokens_out = mlir.jaxpr_subcomp(
           ctx.module_context, jaxpr.jaxpr, name_stack.extend(f'branch_{i}_fun'),
           tokens_in, consts, *args,
@@ -1197,8 +1196,7 @@ def _platform_index_lowering(ctx: mlir.LoweringRuleContext,
                              platforms: BranchesPlatforms):
   def lower_constant(ctx: mlir.LoweringRuleContext, *,
                      i: int) -> Sequence[ir.Value]:
-    v = mlir.ir_constant(np.int32(i))
-    return mlir.flatten_ir_values([v])
+    return [mlir.ir_constant(np.int32(i))]
 
   platform_rules: dict[str, mlir.LoweringRule] = {}
   default_rule = None

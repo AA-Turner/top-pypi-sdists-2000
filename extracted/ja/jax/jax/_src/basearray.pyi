@@ -16,7 +16,6 @@ from types import ModuleType
 from typing import Any, Protocol, runtime_checkable, Union
 import numpy as np
 
-from jax._src import literals
 from jax._src.partition_spec import PartitionSpec as P
 from jax._src.named_sharding import NamedSharding
 from jax._src.sharding import Sharding
@@ -150,6 +149,7 @@ class Array:
               stable: bool = True, descending: bool = False) -> Array: ...
   def astype(self, dtype: DTypeLike | None = None, copy: bool = False,
              device: Device | Sharding | None = None) -> Array: ...
+  def byteswap(self) -> Array: ...
   def choose(self, choices: Sequence[ArrayLike], out: None = None, mode: str = 'raise') -> Array: ...
   def clip(self, min: ArrayLike | None = None, max: ArrayLike | None = None) -> Array: ...
   def compress(self, condition: ArrayLike,
@@ -282,8 +282,6 @@ ArrayLike = Union[
   Array,  # JAX array type
   np.ndarray,  # NumPy array type
   StaticScalar,  # valid scalars
-  # Typed array and scalar types
-  literals.TypedNdArray,
 ]
 
 

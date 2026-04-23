@@ -28,7 +28,7 @@ from __future__ import annotations
 from collections.abc import Callable, Sequence
 import dataclasses
 import functools
-from typing import Any
+from typing import cast, Any
 
 from absl import logging
 import jax
@@ -38,8 +38,8 @@ from jax import numpy as jnp
 from jax import tree_util
 from jax._src import ad_util
 from jax._src import core
-from jax._src import literals
 from jax._src import effects
+from jax._src import literals
 from jax._src import util
 from jax._src.lib import _jax
 from jax._src.lib.mlir import ir
@@ -189,7 +189,7 @@ def call_tf(
       checked_res_tf_flat = [
           check_tf_result(i, r_tf, r_aval)
           for i, (r_tf, r_aval) in enumerate(
-              zip(res_tf_flat,  # pyrefly: ignore[bad-argument-type]
+              zip(res_tf_flat,
                   (output_avals
                    if output_avals is not None
                    else (None,) * len(res_tf_flat))))]
@@ -601,7 +601,8 @@ def _call_tf_lowering(
   stablehlo = _jax.mlir.hlo_to_stablehlo(func_tf_hlo)
   submodule = ir.Module.parse(stablehlo)
   symtab = ir.SymbolTable(submodule.operation)
-  callee_result_types = symtab["main"].type.results
+  main = cast(func_dialect.FuncOp, symtab["main"])
+  callee_result_types = main.type.results
   fn = mlir.merge_mlir_modules(ctx.module_context.module,
                                f"call_tf_{function_flat_tf.name}",
                                submodule,

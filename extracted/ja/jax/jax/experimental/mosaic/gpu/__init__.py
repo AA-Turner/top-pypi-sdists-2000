@@ -37,6 +37,7 @@ from .launch_context import (
     LaunchContext as LaunchContext,
     MemRefTransform as MemRefTransform,
     CopyPartition as CopyPartition,
+    OOBFillMode as OOBFillMode,
     TMAReductionOp as TMAReductionOp,
     TileTransform as TileTransform,
     TransposeTransform as TransposeTransform,
@@ -46,7 +47,7 @@ from .dialect_lowering import (
     lower_mgpu_dialect as lower_mgpu_dialect,
 )
 
-from .layout_inference import (
+from .layout_inference import (  # pytype: disable=import-error
     infer_layout as infer_layout,
 )
 

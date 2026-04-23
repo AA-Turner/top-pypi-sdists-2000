@@ -18,6 +18,7 @@ from collections.abc import (Callable, Collection, Hashable, Iterable, Iterator,
                              Sequence, MutableSet, MutableMapping)
 from contextlib import contextmanager
 from dataclasses import dataclass
+import enum
 import functools
 from functools import partial, total_ordering
 import gc
@@ -27,7 +28,7 @@ import math
 import operator
 import threading
 import types
-from typing import (Any, ClassVar, Generic, NamedTuple, TypeVar,
+from typing import (Any, ClassVar, Generic, NamedTuple, TypeVar, final,
                     overload, Union, TYPE_CHECKING)
 import warnings
 import weakref
@@ -37,6 +38,7 @@ import numpy as np
 from jax._src import dtypes
 from jax._src import config
 from jax._src import effects
+from jax._src.frozen_dict import FrozenDict
 from jax._src import mesh as mesh_lib
 from jax._src.mesh import AxisType
 from jax._src.partition_spec import PartitionSpec as P
@@ -44,21 +46,21 @@ from jax._src.errors import (
     ConcretizationTypeError, TracerArrayConversionError, TracerBoolConversionError,
     TracerIntegerConversionError, UnexpectedTracerError)
 from jax._src import linear_util as lu
-from jax._src.tree_util import tree_map
+from jax._src.tree_util import tree_map, FlatTree
 from jax._src import source_info_util
 from jax._src.util import (safe_zip, safe_map, curry, tuple_insert,
-                           tuple_delete, cache,
-                           HashableFunction, HashableWrapper, weakref_lru_cache,
-                           partition_list, StrictABCMeta, foreach,
-                           weakref_cache_key_types, set_module)
+                           tuple_delete, cache, HashableWrapper,
+                           weakref_lru_cache, partition_list, StrictABCMeta,
+                           foreach, weakref_cache_key_types, set_module,
+                           weak_value_interner, immutable)
 import jax._src.pretty_printer as pp
 from jax._src.named_sharding import NamedSharding
 from jax._src.sharding import Sharding
 from jax._src.layout import Format, AutoLayout
-from jax._src.memory import Space as MemorySpace
 from jax._src.lib import _jax
 from jax._src.lib import jax_jit
 from jax._src.lib import xla_client
+from jax._src.lib import jaxlib_extension_version
 from jax._src import traceback_util
 from jax._src.typing import Array, ArrayLike, DimSize, Shape
 from jax._src import xla_metadata_lib
@@ -157,7 +159,7 @@ class Jaxpr:
                # We want all calls to pass a DebugInfo object, but for backwards
                # compatibility we have to allow calls when the debug_info
                # is missing.
-               debug_info: DebugInfo = None,  # type: ignore[annotation-type-mismatch,assignment]
+               debug_info: DebugInfo = None,  # pyrefly: ignore[bad-function-definition]
                is_high: bool = False,
                ):
     """
@@ -196,7 +198,7 @@ class Jaxpr:
       self, source_info=source_info, print_shapes=print_shapes,
       custom_pp_eqn_rules=custom_pp_eqn_rules, name_stack=name_stack,
       print_effects=print_effects)
-    return doc.format(**kwargs)  # pyrefly: ignore[missing-attribute]
+    return doc.format(**kwargs)
 
   def _repr_pretty_(self, p, cycle):
     return p.text(self.pretty_print(use_color=True))
@@ -527,6 +529,7 @@ class DropVar(Var):
     del context, print_dtype  # unused
     return '_'
 
+@final
 class Literal:
   # See https://docs.jax.dev/en/latest/internals/constants.html
   __slots__ = ["val", "aval"]
@@ -570,11 +573,19 @@ class Literal:
 # end up as `constvars`.
 literalable_types: set[type] = set()
 
-def is_literalable(x: Any) -> bool:
+def is_literalable(x: Any, for_ad: bool = False) -> bool:
   # See https://docs.jax.dev/en/latest/internals/constants.html
+  # for_ad: we want to preserve under AD
+  if config.use_simplified_jaxpr_constants.value:
+    from jax._src.array import ArrayImpl  # pyrefly: ignore[missing-import]
+    do_lit_array = not for_ad
+    if isinstance(x, ArrayImpl):
+      return do_lit_array
+  else:
+    do_lit_array = False
   for t in type(x).__mro__:
     if t in literalable_types:
-      return (not np.shape(x) or config.use_simplified_jaxpr_constants.value)
+      return (not np.shape(x) or do_lit_array)
   return False
 
 @partial(weakref_lru_cache, trace_context_in_key=False)
@@ -614,14 +625,15 @@ class Primitive:
   multiple_results: bool = False
   # set for call primitives processed in final style.
   call_primitive: bool = False
-  # set for map primitives processed in final style.
-  map_primitive: bool = False
   # set for ref primitives
   ref_primitive: bool = False
   # set for primitives that can skip canonicalization of values
   skip_canonicalization: bool = False
   # hook for converting a hijax primitive to a lojax primitive
   to_lojax: Callable[..., Any] | None = None
+  # set for primitives that allocate references
+  ref_allocating: bool = False
+
 
   is_effectful = None
 
@@ -652,7 +664,7 @@ class Primitive:
   def bind_with_trace(self, trace, args, avals, params, /):
     if self.is_high(*avals, **params) and trace.requires_low:
       with set_current_trace(trace):
-        return self.to_lojax(*args, **params)  # type: ignore
+        return self.to_lojax(*args, **params)  # pyrefly: ignore[not-callable]
     return trace.process_primitive(self, args, params)
 
   def def_impl(self, impl):
@@ -761,6 +773,10 @@ def check_avals_context_mesh(avals, prim_name):
           f" the aval mesh {a.sharding.mesh} for shape {a.str_short()}. This"
           " error occurs at source: "
           f" {source_info_util.summarize(source_info_util.current())}")
+    if not isinstance(a.memory_space, MemorySpace):
+      raise TypeError(
+          f"Primitive {prim_name} got aval {a} with unknown memory_space type:"
+          f" {type(a.memory_space)}")
 
 # -------------------- tracing --------------------
 
@@ -792,21 +808,10 @@ class Trace:
            "primitives")
     raise NotImplementedError(msg)
 
-  def process_map(self, map_primitive, f, tracers, params, /):
-    msg = (f"{type(self)} must override process_map to handle map-like "
-           "primitives")
-    raise NotImplementedError(msg)
-
   def process_custom_jvp_call(self, primitive, fun, jvp, tracers, /, *,
                               symbolic_zeros):
     msg = (f"{type(self)} must override process_custom_jvp_call "
            "to handle custom_jvp primitives")
-    raise NotImplementedError(msg)
-
-  def process_custom_transpose(self, prim: Primitive,
-                               call: lu.WrappedFun, tracers, /, **params):
-    msg = (f"{type(self)} must override process_custom_transpose "
-           "to handle custom_transpose_call primitives")
     raise NotImplementedError(msg)
 
   def process_custom_vjp_call(self, primitive, fun, fwd, bwd, tracers, /, *,
@@ -901,19 +906,21 @@ else:
 
 class Tracer(Generic[TraceType], TracerBase, metaclass=TracerMeta):
   __array_priority__ = 1000
-  __slots__ = ['__weakref__', '_trace', '_line_info']
+  __slots__ = ['__weakref__', '_trace', '_line_info', 'aval']
   __hash__ = None
 
   _trace: TraceType
   _line_info: source_info_util.SourceInfo | None
+  aval: AbstractValue
 
   dtype = _aval_property('dtype')
   ndim = _aval_property('ndim')
   size = _aval_property('size')
   shape = _aval_property('shape')
 
-  def __init__(self, trace: TraceType):
+  def __init__(self, trace: TraceType, aval: AbstractValue):
     self._trace = trace
+    self.aval = aval
 
   def _error_repr(self):
     if self.aval is None:
@@ -1001,22 +1008,18 @@ class Tracer(Generic[TraceType], TracerBase, metaclass=TracerMeta):
       raise TypeError(f"Value of type {type(self)} does not support at().")
     return self.aval.at.fget(self)
 
-  @property
-  def aval(self) -> AbstractValue:
-    raise NotImplementedError("must override")
-
   def get_referent(self) -> Any:
     return self  # Override for object equivalence checking
 
   def __bool__(self):
-    if is_concrete(self): return bool(self.to_concrete_value())  # pytype: disable=wrong-arg-types
+    if is_concrete(self): return bool(self.to_concrete_value())
     check_bool_conversion(self)
     if not hasattr(self.aval, "_bool"):
       raise TypeError(f"Value of type {type(self)} is not convertible to boolean.")
     return self.aval._bool(self)
 
   def __int__(self):
-    if is_concrete(self): return int(self.to_concrete_value())  # pytype: disable=wrong-arg-types
+    if is_concrete(self): return int(self.to_concrete_value())
     check_scalar_conversion(self)
     if not hasattr(self.aval, "_int"):
       raise TypeError(f"Value of type {type(self)} is not convertible to integer.")
@@ -1035,21 +1038,21 @@ class Tracer(Generic[TraceType], TracerBase, metaclass=TracerMeta):
     return self.aval._complex(self)
 
   def __hex__(self):
-    if is_concrete(self): return hex(self.to_concrete_value())  # pytype: disable=wrong-arg-types
+    if is_concrete(self): return hex(self.to_concrete_value())
     check_integer_conversion(self)
     if not hasattr(self.aval, "_hex"):
       raise TypeError(f"Value of type {type(self)} is not convertible to hex.")
     return self.aval._hex(self)
 
   def __oct__(self):
-    if is_concrete(self): return oct(self.to_concrete_value())  # pytype: disable=wrong-arg-types
+    if is_concrete(self): return oct(self.to_concrete_value())
     check_integer_conversion(self)
     if not hasattr(self.aval, "_oct"):
       raise TypeError(f"Value of type {type(self)} is not convertible to oct.")
     return self.aval._oct(self)
 
   def __index__(self):
-    if is_concrete(self): return operator.index(self.to_concrete_value())  # pytype: disable=wrong-arg-types
+    if is_concrete(self): return operator.index(self.to_concrete_value())
     check_integer_conversion(self)
     if not hasattr(self.aval, "_index"):
       raise TypeError(f"Value of type {type(self)} is not convertible to integer index.")
@@ -1123,7 +1126,7 @@ class Tracer(Generic[TraceType], TracerBase, metaclass=TracerMeta):
     return base
 
   def __repr__(self):
-    return self._pretty_print(verbose=False).format()  # pyrefly: ignore[missing-attribute]
+    return self._pretty_print(verbose=False).format()
 
   def _contents(self):
     try:
@@ -1223,11 +1226,6 @@ class EvalTrace(Trace):
       return call_impl_with_key_reuse_checks(primitive, primitive.impl, f, *tracers, **params)
     else:
       return primitive.impl(f, *tracers, **params)
-  process_map = process_call
-
-  def process_custom_transpose(self, primitive, call, tracers, /, **_):
-    del primitive, _
-    return call.call_wrapped(*tracers)
 
   def process_custom_jvp_call(self, primitive, fun, jvp, tracers, /, **_):
     del primitive, jvp, _  # Unused.
@@ -1260,11 +1258,27 @@ AxisName = Hashable
 
 no_axis_name = object()
 
-@dataclass(frozen=True)
+@immutable
 class AxisEnv:
-  axis_sizes : dict[AxisName, int]
-  spmd_axis_names : set[AxisName]
+  __slots__ = ('axis_sizes', 'spmd_axis_names', 'explicit_mesh_axis_names',
+               '__weakref__')
+
+  axis_sizes : FrozenDict[AxisName, int]
+  spmd_axis_names : frozenset[AxisName]
   explicit_mesh_axis_names: frozenset[AxisName]
+
+  @staticmethod
+  @weak_value_interner
+  def _create(axis_sizes, spmd_axis_names, explicit_mesh_axis_names):
+    obj = object.__new__(AxisEnv)
+    object.__setattr__(obj, 'axis_sizes', axis_sizes)
+    object.__setattr__(obj, 'spmd_axis_names', spmd_axis_names)
+    object.__setattr__(obj, 'explicit_mesh_axis_names', explicit_mesh_axis_names)
+    return obj
+
+  def __new__(cls, axis_sizes=FrozenDict({}), spmd_axis_names=frozenset(),
+              explicit_mesh_axis_names=frozenset()):
+    return cls._create(axis_sizes, spmd_axis_names, explicit_mesh_axis_names)
 
   def axis_size(self, axis_name):
     if axis_name not in self.axis_sizes:
@@ -1279,20 +1293,20 @@ class AxisEnv:
     return tuple(k for k in self.axis_sizes)
 
   def pop_pure(self, axis_name):
-    new_sizes = self.axis_sizes.copy()
+    new_sizes = dict(self.axis_sizes)
     new_sizes.pop(axis_name)
-    return AxisEnv(new_sizes, self.spmd_axis_names,
+    return AxisEnv(FrozenDict(new_sizes), self.spmd_axis_names,
                    self.explicit_mesh_axis_names)
 
   def extend_pure(self, name_size_pairs):
-    new_sizes = self.axis_sizes.copy()
+    new_sizes = dict(self.axis_sizes)
     new_sizes.update((name, size) for name, size in name_size_pairs
                     if name is not no_axis_name)
-    return AxisEnv(new_sizes, self.spmd_axis_names,
+    return AxisEnv(FrozenDict(new_sizes), self.spmd_axis_names,
                    self.explicit_mesh_axis_names)
 
   def add_spmd_axis_names(self, axis_names):
-    new_spmd_axis_names = self.spmd_axis_names | set(axis_names)
+    new_spmd_axis_names = self.spmd_axis_names | frozenset(axis_names)
     return AxisEnv(self.axis_sizes, new_spmd_axis_names,
                    self.explicit_mesh_axis_names)
 
@@ -1304,41 +1318,56 @@ class AxisEnv:
     new_ema = self.explicit_mesh_axis_names - frozenset(axis_names)
     return AxisEnv(self.axis_sizes, self.spmd_axis_names, new_ema)
 
-  def as_hashable_key(self):
-    return tuple((name, size) for (name, size) in self.axis_sizes.items()
-                 if name is not no_axis_name)
-
 eval_trace = EvalTrace()
-top_axis_env = AxisEnv({}, set(), frozenset())
+top_axis_env = AxisEnv(FrozenDict({}), frozenset(), frozenset())
 
-class TracingContext(threading.local):
-  trace: Trace | None
-  axis_env : AxisEnv
+# Weak reference to the trace state. This is included in, e.g., the jit key.
+trace_state = config_ext.Config(
+    'trace_state', eval_trace._weakref, include_in_jit_key=True)
 
-  def __init__(self):
-    self.reset()
+# A strong reference to the trace state. This should not be included in any
+# jit or cache keys, but we need a thread-local strong reference to ensure it
+# remains alive.
+trace_state_strong_ref = config_ext.Config(
+  'trace_state_strong_ref', eval_trace, include_in_jit_key=False,
+  include_in_trace_context=False)
 
-  def reset(self):
-    self.trace = eval_trace
-    self.axis_env = top_axis_env
+axis_env_state = config_ext.Config(
+    'axis_env_state',
+    top_axis_env,
+    include_in_jit_key=True,
+    include_in_trace_context=True,
+)
+
+
+class TracingContext:
+  __slots__ = ()
+
+  @staticmethod
+  def reset():
+    trace_state.set_local(config_ext.unset)
+    trace_state_strong_ref.set_local(config_ext.unset)
+    axis_env_state.set_local(config_ext.unset)
+
+  @property
+  def trace(self):
+    return trace_state_strong_ref.value
+
+  @property
+  def axis_env(self):
+    return axis_env_state.value
 
   def is_top_level(self) -> bool:
     return (self.trace is eval_trace and
             self.axis_env is top_axis_env)
 
   def set_trace(self, trace):
-    self.trace = trace
+    trace_state_strong_ref.set_local(trace)
     ts = trace._weakref if trace is not None else None
-    config.trace_state.set_local(ts)
+    trace_state.set_local(ts)
 
   def set_axis_env(self, axis_env):
-    self.axis_env = axis_env
-    config.axis_env_state.set_local(axis_env.as_hashable_key())
-
-  def update_thread_local_jit_state(self):
-    ts = self.trace._weakref if self.trace is not None else None
-    config.trace_state.set_local(ts)
-    config.axis_env_state.set_local(self.axis_env.as_hashable_key())
+    axis_env_state.set_local(axis_env)
 
 trace_ctx = TracingContext()
 
@@ -1454,19 +1483,8 @@ remove_explicit_mesh_axis_names = RemoveExplicitMeshAxisNamesContextManager
 def get_axis_env():
   return trace_ctx.axis_env
 
-def _initialize_jax_jit_thread_local_state():
-  """Initializes the C++ thread-local context.
-
-  When the user spawns threads, the C++ `jax_jit.thread_local_state` is None.
-  The C++ accessor calls this function if it realizes the thread_local_state
-  is None (which means it's not yet initialized for this thread).
-
-  This function does not live in `config.py`, to prevent circular imports.
-  """
-  trace_ctx.update_thread_local_jit_state()
-
-jax_jit.set_thread_local_state_initialization_callback(
-    _initialize_jax_jit_thread_local_state)
+if jaxlib_extension_version < 439:
+  jax_jit.set_thread_local_state_initialization_callback(lambda: None)  # pyrefly: ignore[missing-attribute]
 
 def trace_state_clean() -> bool:
   return trace_ctx.is_top_level()
@@ -1475,7 +1493,6 @@ def reset_trace_state() -> bool:
   """Resets the global trace state and returns True if it was already clean."""
   if not trace_ctx.is_top_level():
     trace_ctx.reset()
-    trace_ctx.update_thread_local_jit_state()
     return False
   else:
     return True
@@ -1706,11 +1723,7 @@ class AbstractValue:
   def update_weak_type(self, weak_type):
     return self
 
-  def update_vma(self, vma):
-    return self
-
-  # TODO(yashkatariya): Remove after we have `update_mt`
-  def update_unreduced_reduced(self, unreduced, reduced):
+  def update_manual_axis_type(self, mat):
     return self
 
   def strip_weak_type(self) -> AbstractValue:
@@ -1750,6 +1763,12 @@ class AbstractValue:
     from jax._src.ad_util import add_jaxvals  # pytype: disable=import-error
     return add_jaxvals(x, y)
 
+  def raise_val2(self, lo_vals_ft):
+    return self.raise_val(*lo_vals_ft.unflatten())  # pyrefly: ignore[missing-attribute]
+
+  def lower_val2(self, hi_val):
+    return FlatTree.flatten(self.lower_val(hi_val))  # pyrefly: ignore[missing-attribute]
+
 InputType = tuple[AbstractValue, ...]
 OutputType = tuple[AbstractValue, ...]
 
@@ -1784,23 +1803,23 @@ def mem_space_to_kind(mem_space: MemorySpace) -> str:
 
 @cache(max_size=4096,
        trace_context_in_key=lambda: config.remove_size_one_mesh_axis_from_type.value)
-def update_aval_with_sharding(aval, sharding, vma=None):
+def update_aval_with_sharding(aval, sharding, mat=None):
   if isinstance(sharding, NamedSharding):
     s = NamedSharding(sharding.mesh.abstract_mesh,
                       sharding.spec._normalized_spec_for_aval(aval.ndim))
-    return aval.update(sharding=s, vma=aval.vma if vma is None else vma,
-                       memory_space=mem_kind_to_space(sharding.memory_kind))
-  return aval if vma is None else aval.update(vma=vma)
+    return aval.update(
+        sharding=s, manual_axis_type=(aval.mat if mat is None else mat),
+        memory_space=mem_kind_to_space(sharding.memory_kind))
+  return (aval if mat is None else aval.update(manual_axis_type=mat))
 
 
 # We have two flavors of abstractification APIs here which each used to have
 # their own separate implementation. Now they're effectively the same, with the
 # following differences:
 #
-# - typeof is like abstractify, but also accepts tracers.
+# - typeof returns avals for valid array-like objects, including tracers.
 # - shaped_abstractify is like typeof, but also accepts duck-typed arrays.
 #
-# TODO(jakevdp): can these be unified further?
 
 def shaped_abstractify(x):
   typ = type(x)
@@ -1848,9 +1867,6 @@ def typeof(x: Any) -> Any:
         ' using jax.numpy.array(), or register your object as a pytree.'
     )
   raise TypeError(f"Argument '{x}' of type '{typ}' is not a valid JAX type")
-
-# TODO(phawkins): remove this alias
-get_aval = typeof
 
 def is_concrete(x):
   return to_concrete_value(x) is not None
@@ -1924,21 +1940,27 @@ class AvalQDD:
   is_high = True
   aval: AbstractValue
   qdd: QuasiDynamicData | None # immutable
-
   has_qdd = True
+
+  is_writer = property(lambda self: self.aval.is_writer)
+
   def lo_ty(self):
     return self.aval.lo_ty_qdd(self.qdd)
 
   def read_loval(self, val):
-    return self.aval.read_loval(self.qdd, val)  # type: ignore
+    return self.aval.read_loval(self.qdd, val)  # pyrefly: ignore[missing-attribute]
+
+  def read_loval_in(self, val):
+    return self.aval.read_loval_in(self.qdd, val)  # pyrefly: ignore[missing-attribute]
+
+  def read_loval_out(self, val):
+    return self.aval.read_loval_out(self.qdd, val)  # pyrefly: ignore[missing-attribute]
 
   def new_from_loval(self, *lovals):
-    return self.aval.new_from_loval(self.qdd, *lovals)  # type: ignore
+    return self.aval.new_from_loval(self.qdd, *lovals)  # pyrefly: ignore[missing-attribute]
 
   def to_tangent_aval(self):
-    if not hasattr(self.qdd, "to_tangent_qdd"):
-      raise ValueError(f"Cannot convert to tangent aval when {self.qdd=}.")
-    return AvalQDD(self.aval.to_tangent_aval(), self.qdd.to_tangent_qdd())
+    return AvalQDD(self.aval.to_tangent_aval(), self.qdd and self.qdd.to_tangent_qdd())  # pyrefly: ignore[missing-attribute]
 
 @dataclass(frozen=True)
 class AvalMutableQDD:
@@ -1949,7 +1971,7 @@ def cur_qdd(x):
   prev_trace = trace_ctx.trace
   trace_ctx.set_trace(eval_trace)
   try:
-    return prev_trace.cur_qdd(x)  # type: ignore[missing-attribute]
+    return prev_trace.cur_qdd(x)  # pyrefly: ignore[missing-attribute]
   finally:
     trace_ctx.set_trace(prev_trace)
 
@@ -1957,6 +1979,12 @@ def cur_aval_qdd(x):
   aval = typeof(x)
   qdd = cur_qdd(x) if aval.has_qdd else None
   return AvalQDD(aval, qdd)
+
+def aval_qdd_from_current_val(aval, x):
+  if aval.has_qdd:
+    return cur_aval_qdd(x)
+  else:
+    return aval
 
 ### Extended dtypes
 #
@@ -1975,9 +2003,11 @@ def cur_aval_qdd(x):
 # to the compiler's language.
 
 @overload
-def physical_aval(aval: ShapedArray) -> ShapedArray: ...
+def physical_aval(aval: ShapedArray) -> ShapedArray:
+  ...
 @overload                       # TODO(frostig): remove this case
-def physical_aval(aval: AbstractValue) -> AbstractValue: ...
+def physical_aval(aval: AbstractValue) -> AbstractValue:
+  ...
 
 def physical_aval(aval):
   if (isinstance(aval, ShapedArray) and
@@ -1986,7 +2016,7 @@ def physical_aval(aval):
     from jax._src.sharding_impls import physical_sharding  # pytype: disable=import-error
     return ShapedArray((*aval.shape, *elt_aval.shape), elt_aval.dtype,
                        sharding=physical_sharding(aval, aval.sharding),
-                       vma=aval.vma)
+                       manual_axis_type=aval.mat)
   return aval
 
 def physical_shape(logical_shape, dtype):
@@ -1998,9 +2028,10 @@ def physical_element_aval(edtype: dtypes.ExtendedDType) -> ShapedArray:
   return ShapedArray(duck.shape, dtypes.dtype(duck.dtype))
 
 
-def _dtype_object(dtype):
-  return dtype if isinstance(dtype, dtypes.ExtendedDType) else np.dtype(dtype)
+_dtype_object_types = (np.dtype, dtypes.ExtendedDType)
 
+def _dtype_object(dtype):
+  return dtype if isinstance(dtype, _dtype_object_types) else np.dtype(dtype)
 
 def _canonicalize_dimension(dim: DimSize) -> DimSize:
   # Dimensions are most commonly integral (by far), so we check that first.
@@ -2106,15 +2137,42 @@ def canonicalize_value(primitive, val, aval):
   return val
 
 
+class MemorySpace(enum.Enum):
+  Device = enum.auto()
+  Host = enum.auto()
+  Any = enum.auto()
+
+  def __repr__(self):
+    return f"MemorySpace.{self.name}"
+
+  # For reasons passing my understanding Enum.__hash__ hashes the name string.
+  # Use an object identity hash instead.
+  __hash__ = object.__hash__
+
+
 def get_cur_mesh_sharding(spec=None):
   spec = P() if spec is None else spec
   return NamedSharding(mesh_lib.get_abstract_mesh(), spec)
 
 def getu(aval):
-  return aval.sharding.spec.unreduced
+  if aval.sharding.mesh.are_all_axes_manual:
+    return aval.mat.unreduced
+  if aval.sharding.mesh.are_all_axes_explicit:
+    return aval.sharding.spec.unreduced
+  # Revise this after partial manual unreduced is supported
+  assert not aval.mat.unreduced
+  assert not aval.sharding.spec.unreduced
+  return frozenset()
 
 def getr(aval):
-  return aval.sharding.spec.reduced
+  if aval.sharding.mesh.are_all_axes_manual:
+    return aval.mat.reduced
+  if aval.sharding.mesh.are_all_axes_explicit:
+    return aval.sharding.spec.reduced
+  # Revise this after partial manual reduced is supported
+  assert not aval.mat.reduced
+  assert not aval.sharding.spec.reduced
+  return frozenset()
 
 def _make_lengths_same(sharding, ndim):
   pspec = sharding.spec
@@ -2137,15 +2195,14 @@ def modify_spec_for_auto_manual(spec, mesh) -> P:
           p for p in s if mesh._name_to_type[p] == AxisType.Explicit))
     else:
       new_spec.append(s if mesh._name_to_type[s] == AxisType.Explicit else None)
-  # Unreduced and reduced can mention mesh axes that are Explicit and Manual.
   new_unreduced = {u for u in spec.unreduced
-                   if mesh._name_to_type[u] != AxisType.Auto}
+                   if mesh._name_to_type[u] == AxisType.Explicit}
   new_reduced = {u for u in spec.reduced
-                 if mesh._name_to_type[u] != AxisType.Auto}
+                 if mesh._name_to_type[u] == AxisType.Explicit}
   return P(*new_spec, unreduced=new_unreduced, reduced=new_reduced)
 
 def remove_size_one_mesh_axis(spec, mesh) -> P:
-  new_spec: list[Any] = []
+  new_spec = []
   for s in spec:
     if s is None:
       new_spec.append(s)
@@ -2153,7 +2210,9 @@ def remove_size_one_mesh_axis(spec, mesh) -> P:
       new_spec.append(tuple(i for i in s if mesh.shape[i] != 1))
     else:
       new_spec.append(None if mesh.shape[s] == 1 else s)
-  return P(*new_spec, unreduced=spec.unreduced, reduced=spec.reduced)
+  unreduced = frozenset(u for u in spec.unreduced if mesh.shape[u] != 1)
+  reduced = frozenset(r for r in spec.reduced if mesh.shape[r] != 1)
+  return P(*new_spec, unreduced=unreduced, reduced=reduced)
 
 def _maybe_modify_sharding(sharding, ndim):
   if len(sharding.spec) == 0 or all(s is None for s in sharding.spec):
@@ -2196,7 +2255,7 @@ def get_sharding(sharding, shape):
   """
   ndim = len(shape)
   if sharding is None:
-    return NamedSharding(mesh_lib.empty_abstract_mesh, P(*[None] * ndim))
+    return _empty_sharding(ndim)
 
   out_s = _maybe_modify_sharding(sharding, ndim)
   if len(out_s.spec) != ndim:
@@ -2213,63 +2272,162 @@ def get_sharding(sharding, shape):
 
 @cache(max_size=4096,
        trace_context_in_key=lambda: config.remove_size_one_mesh_axis_from_type.value)
-def get_vma(vma, sharding):
-  mesh = sharding.mesh
-  spec = sharding.spec
+def get_mat(mat, mesh):
   if mesh.empty:
-    assert not vma, vma
-    return vma
+    assert mat.empty, mat
+    return mat
 
   axis_env = get_axis_env()
-  for i in vma:
-    if axis_env.axis_exists(i) and i not in mesh._name_to_type:
+  in_axis_env = lambda i: axis_env.axis_exists(i) and i not in mesh._name_to_type
+  for i in it.chain(mat.varying, mat.unreduced, mat.reduced):
+    if in_axis_env(i):
       continue
     if mesh._name_to_type[i] != AxisType.Manual:
       raise ValueError(
-          "Axes mentioned in `vma` field of ShapedArray should"
-          f" be of type `Manual`. Got axis: {i} of type {mesh._name_to_type[i]}")
+          "Axes mentioned in `manual_axis_type` field of ShapedArray should be"
+          f" of type `Manual`. Got manual_axis_type={mat} with axis: {i} of"
+          f" type {mesh._name_to_type[i]}")
   if config.remove_size_one_mesh_axis_from_type.value:
-    vma = frozenset(i for i in vma if mesh.shape[i] != 1)
-
-  if vma & spec.unreduced:
-    raise ValueError(
-        f"vma and unreduced cannot have common mesh axes. Got {vma=} and"
-        f" unreduced={spec.unreduced}")
-  if vma & spec.reduced:
-    raise ValueError(
-        f"vma and reduced cannot have common mesh axes. Got {vma=} and"
-        f" reduced={spec.reduced}")
-  assert isinstance(vma, frozenset)
-  return vma
+    varying = frozenset(i for i in mat.varying
+                        if in_axis_env(i) or mesh.shape[i] != 1)
+    unreduced = frozenset(u for u in mat.unreduced if mesh.shape[u] != 1)
+    reduced = frozenset(r for r in mat.reduced if mesh.shape[r] != 1)
+    return mat.update(varying=varying, unreduced=unreduced, reduced=reduced)
+  return mat
 
 
 def get_memory_space(memory_space):
-  assert isinstance(memory_space, MemorySpace)
+  assert memory_space is not None
   return memory_space
 
 
+@immutable
+class ManualAxisType:
+  __slots__ = ('varying', 'unreduced', 'reduced', '__weakref__')
+
+  varying: frozenset
+  unreduced: frozenset
+  reduced: frozenset
+
+  @staticmethod
+  @weak_value_interner
+  def _create(varying, unreduced, reduced):
+    obj = object.__new__(ManualAxisType)
+    object.__setattr__(obj, 'varying', varying)
+    object.__setattr__(obj, 'unreduced', unreduced)
+    object.__setattr__(obj, 'reduced', reduced)
+    return obj
+
+  def __new__(cls, *, varying=frozenset(), unreduced=frozenset(),
+              reduced=frozenset()):
+    if varying & unreduced:
+      raise ValueError(
+          "varying and unreduced cannot have common mesh axes. Got"
+          f" varying={varying} and unreduced={unreduced}")
+    if varying & reduced:
+      raise ValueError(
+          "varying and reduced cannot have common mesh axes. Got"
+          f" varying={varying} and reduced={reduced}")
+    assert not (varying & unreduced & reduced)
+    return cls._create(frozenset(varying), frozenset(unreduced),
+                       frozenset(reduced))
+
+  # No __eq__ or __hash__: interned classes use object identity.
+
+  def __repr__(self):
+    return (f"ManualAxisType(varying={self.varying}, "
+            f"unreduced={self.unreduced}, reduced={self.reduced})")
+
+  def __getnewargs_ex__(self):
+    return (), {'varying': self.varying, 'unreduced': self.unreduced,
+                'reduced': self.reduced}
+
+  def update(self, **kwargs):
+    if 'varying' not in kwargs:
+      kwargs['varying'] = self.varying
+    if 'unreduced' not in kwargs:
+      kwargs['unreduced'] = self.unreduced
+    if 'reduced' not in kwargs:
+      kwargs['reduced'] = self.reduced
+    return ManualAxisType(**kwargs)
+
+  def to_ct_mat(self):
+    return self.update(unreduced=self.reduced, reduced=self.unreduced)
+
+  @property
+  def empty(self):
+    return self is empty_mat
+
+  def invarying(self, mesh) -> frozenset:
+    return frozenset(mesh.manual_axes) - (
+        self.varying | self.unreduced | self.reduced)
+
+  @property
+  def vur(self) -> frozenset:
+    return self.varying | self.unreduced | self.reduced
+
+empty_mat = ManualAxisType()
+
+@functools.cache
+def _empty_sharding(ndim):
+  return NamedSharding(mesh_lib.empty_abstract_mesh, P(*[None] * ndim))
+
+
+@immutable
 class ShapedArray(AbstractValue):
   # inherits slots from parent
-  __slots__ = ['shape', 'dtype', 'weak_type', 'sharding', 'vma', 'memory_space']
+  __slots__ = ['shape', 'dtype', 'weak_type', 'sharding', 'manual_axis_type',
+               'memory_space', '__weakref__']
   array_abstraction_level = 2
 
-  def __init__(self, shape, dtype, weak_type=False, *, sharding=None,
-               vma: frozenset[AxisName] = frozenset(),
-               memory_space: MemorySpace = MemorySpace.Device):
-    self.shape = canonicalize_shape(shape)
-    self.dtype = _dtype_object(dtype)
-    self.weak_type = weak_type
-    # The ShapedArray.sharding.memory_kind is always None; use memory_space.
-    self.sharding = get_sharding(sharding, self.shape)
-    # short for varying_manual_axes. See docs at
-    # https://docs.jax.dev/en/latest/notebooks/shard_map.html#tracking-how-values-vary-over-manual-mesh-axes-and-check-vma-true
-    self.vma = get_vma(vma, self.sharding)
+  shape: Any
+  dtype: Any
+  weak_type: Any
+  sharding: Any
+  manual_axis_type: Any
+  memory_space: Any
+
+  # TODO(yashkatariya): remove "cls" from _create and uses of type(self) below
+  # after removing ShapedArrayWithMemorySpace from Pallas.
+  @staticmethod
+  @weak_value_interner
+  def _create(shape, dtype, weak_type, sharding, manual_axis_type,
+              memory_space):
+    obj = object.__new__(ShapedArray)
+    object.__setattr__(obj, 'shape', shape)
+    object.__setattr__(obj, 'dtype', dtype)
+    object.__setattr__(obj, 'weak_type', weak_type)
+    object.__setattr__(obj, 'sharding', sharding)
+    object.__setattr__(obj, 'manual_axis_type', manual_axis_type)
+    object.__setattr__(obj, 'memory_space', memory_space)
+    return obj
+
+  def __new__(cls, shape, dtype, weak_type=False, *, sharding=None,
+              manual_axis_type: ManualAxisType = empty_mat,
+              memory_space: MemorySpace = MemorySpace.Device):
+    shape = canonicalize_shape(shape)
+    dtype = _dtype_object(dtype)
+    if sharding is None:
+      sharding = _empty_sharding(len(shape))
+      assert manual_axis_type.empty, manual_axis_type
+    else:
+      sharding = get_sharding(sharding, shape)
+      # https://docs.jax.dev/en/latest/notebooks/shard_map.html#tracking-how-values-vary-over-manual-mesh-axes-and-check-vma-true
+      manual_axis_type = get_mat(manual_axis_type, sharding.mesh)
     # See description of https://github.com/jax-ml/jax/pull/30556
-    self.memory_space = get_memory_space(memory_space)
+    memory_space = get_memory_space(memory_space)
+    return cls._create(shape, dtype, weak_type, sharding, manual_axis_type,
+                       memory_space)
+
+  # Interned types don't need __eq__ or __hash__.
 
   def lower_val(self, val): return [val]
   def raise_val(self, val): return val
   def lo_ty(self): return [self]
+
+  @property
+  def mat(self):
+    return self.manual_axis_type
 
   def update(self, shape=None, dtype=None, weak_type=None, **kwargs):
     if shape is None:
@@ -2280,8 +2438,8 @@ class ShapedArray(AbstractValue):
       weak_type = self.weak_type
     if 'sharding' not in kwargs:
       kwargs['sharding'] = self.sharding
-    if 'vma' not in kwargs:
-      kwargs['vma'] = self.vma
+    if 'manual_axis_type' not in kwargs:
+      kwargs['manual_axis_type'] = self.manual_axis_type
     if 'memory_space' not in kwargs:
       kwargs['memory_space'] = self.memory_space
     return ShapedArray(shape, dtype, weak_type, **kwargs)
@@ -2296,23 +2454,12 @@ class ShapedArray(AbstractValue):
   reshape: ClassVar[aval_method | None] = None
   _iter: ClassVar[staticmethod | None] = None
 
-  def __eq__(self, other):
-    return (type(self) is type(other)
-            and self.dtype == other.dtype and self.shape == other.shape
-            and self.weak_type == other.weak_type
-            and self.sharding == other.sharding
-            and self.vma == other.vma
-            and self.memory_space == other.memory_space)
-
-  def __hash__(self):
-    # can use hash(self.dtype) and rely on the fact that numpy reuses base dtype
-    # objects, e.g. `np.zeros(3).dtype is np.zeros(4).dtype`, or we can use
-    # the unique character code via hash(self.dtype.char)
-    return hash((self.shape, self.dtype, self.weak_type, self.sharding,
-                 self.vma, self.memory_space))
-
-  def __ne__(self, other):
-    return not self == other
+  def __getnewargs_ex__(self):
+    return (self.shape, self.dtype, self.weak_type), {
+        'sharding': self.sharding,
+        'manual_axis_type': self.manual_axis_type,
+        'memory_space': self.memory_space
+    }
 
   def __repr__(self):
     wt_str = ", weak_type=True" if self.weak_type else ""
@@ -2323,22 +2470,21 @@ class ShapedArray(AbstractValue):
     return f'{wt_str}{self.str_short()}'
 
   def to_tangent_aval(self):
-    return ShapedArray(
+    return ShapedArray._create(
         self.shape, primal_dtype_to_tangent_dtype(self.dtype),
-        self.weak_type, sharding=self.sharding, vma=self.vma,
-        memory_space=self.memory_space)
+        self.weak_type, self.sharding, self.mat, self.memory_space)
 
   def to_ct_aval(self):
     dtype = primal_dtype_to_tangent_dtype(self.dtype)
     sharding = primal_sharding_to_cotangent_sharding(self.sharding)
-    return ShapedArray(
-        self.shape, dtype, self.weak_type, sharding=sharding, vma=self.vma,
-        memory_space=self.memory_space)
+    ct_mat = self.mat.to_ct_mat()
+    return ShapedArray._create(
+        self.shape, dtype, self.weak_type, sharding, ct_mat, self.memory_space)
 
   def str_short(self, short_dtypes=False, mesh_axis_types=False):
     return str_short_aval(
         self.shape, self.dtype, self.sharding.mesh, self.sharding.spec,
-        self.vma, self.memory_space, short_dtypes, mesh_axis_types)
+        self.mat, self.memory_space, short_dtypes, mesh_axis_types)
 
   def _len(self, ignored_tracer):
     try:
@@ -2346,25 +2492,27 @@ class ShapedArray(AbstractValue):
     except IndexError as err:
       raise TypeError("len() of unsized object") from err  # same as numpy error
 
-  def update_vma(self, vma):
-    return self.update(vma=vma)
-
-  # TODO(yashkatariya): Remove after we have `update_mt`
-  def update_unreduced_reduced(self, unreduced, reduced):
-    new_s = self.sharding.update(spec=self.sharding.spec.update(
-        unreduced=unreduced, reduced=reduced))
-    return self.update(sharding=new_s)
+  def update_manual_axis_type(self, mat):
+    mat = get_mat(mat, self.sharding.mesh)
+    if mat is self.manual_axis_type:
+      return self
+    return ShapedArray._create(self.shape, self.dtype, self.weak_type,
+                               self.sharding, mat, self.memory_space)
 
   def update_weak_type(self, weak_type):
-    return self.update(weak_type=weak_type)
+    if weak_type == self.weak_type:
+      return self
+    return ShapedArray._create(self.shape, self.dtype, weak_type, self.sharding,
+                               self.manual_axis_type, self.memory_space)
 
   def nospec(self, mesh, check_vma, all_names) -> P:
     # TODO(mattjj, yashkatariya): should use newly all_names in check_vma path?
-    all_names = order_wrt_mesh(mesh, self.vma) if check_vma else all_names
-    sp = self.sharding.spec
-    # TODO(yashkatariya): Do P(all_names) directly after above self.vma is
-    # updated to `self.mt`
-    return sp.update(partitions=(all_names,)) if all_names else P()
+    sh_names = (order_wrt_mesh(mesh, self.mat.varying)
+                if check_vma else all_names)
+    u_names = self.mat.unreduced if check_vma else frozenset()
+    r_names = self.mat.reduced if check_vma else frozenset()
+    return (P(sh_names, unreduced=u_names, reduced=r_names) if sh_names else
+            P(unreduced=u_names, reduced=r_names))
 
   _bool    = concretization_function_error(bool)
   _int     = concretization_function_error(int, True)
@@ -2396,13 +2544,13 @@ def _axis_types_dict(mesh):
     d[t].append(n)
   return {t: tuple(n) for t, n in d.items()}
 
-def str_short_aval(shape, dtype, mesh, spec, vma, memory_space,
+def str_short_aval(shape, dtype, mesh, spec, mat, memory_space,
                    short_dtypes=False, mesh_axis_types=False) -> str:
   dt_str = dtypes.short_dtype_name(dtype) if short_dtypes else dtype.name
   dt_str = dt_str.replace('void', 'float0')
   shapestr = _get_shape_sharding_str(shape, spec)
   mesh_axes = f'({_axis_types_dict(mesh)})' if mesh_axis_types else ''
-  vma_ur = _vma_ur_str(vma, spec.unreduced, spec.reduced, mesh)
+  vma_ur = _vma_ur_str(mat, spec.unreduced, spec.reduced, mesh)
   ms_str = ("" if memory_space == MemorySpace.Device else
             f"<{memory_space.name.lower()}>")
   return f'{dt_str}{ms_str}[{shapestr}]{vma_ur}{mesh_axes}'
@@ -2415,12 +2563,16 @@ def _create_str(x, prefix):
 def order_wrt_mesh(mesh, x):
   return tuple(a for a in mesh.axis_names if a in x)
 
-def _vma_ur_str(vma, unreduced, reduced, mesh):
+def _vma_ur_str(mat, spec_unreduced, spec_reduced, mesh):
+  vma = mat.varying
+  # TODO(yashkatariya): Diff between explicit unreduced and manual unreduced
+  unreduced = mat.unreduced | spec_unreduced
+  reduced = mat.reduced | spec_reduced
   if not vma and not unreduced and not reduced:
     return ''
   vma_str = _create_str(order_wrt_mesh(mesh, vma), 'V') if vma else ''
-  ur_str = _create_str(unreduced, 'U') if unreduced else ''
-  red_str = _create_str(reduced, 'R') if reduced else ''
+  ur_str = _create_str(order_wrt_mesh(mesh, unreduced), 'U') if unreduced else ''
+  red_str = _create_str(order_wrt_mesh(mesh, reduced), 'R') if reduced else ''
   m_str = f"{vma_str}{ur_str}{red_str}".rstrip(', ')
   return f"{{{m_str}}}"
 
@@ -2468,7 +2620,10 @@ def reduced_vary_cast(x, axis_name):
   cur_mesh = mesh_lib.get_abstract_mesh()
   if not config._check_vma.value and all(a in cur_mesh.manual_axes for a in axes):
     return x
-  return tree_map(lambda leaf: reduced_vary_cast_p.bind(leaf, axes=axes), x)
+  new_axes = axes if cur_mesh.empty else order_wrt_mesh(cur_mesh, axes)
+  assert set(new_axes) == set(axes)
+  del axes
+  return tree_map(lambda leaf: reduced_vary_cast_p.bind(leaf, axes=new_axes), x)
 
 reduced_vary_cast_p = Primitive('reduced_vary_cast_p')
 
@@ -2478,11 +2633,11 @@ def check_unreduced_args(args, axes, name):
   axes = axes if isinstance(axes, (tuple, list)) else (axes,)
   axes = set(axes)
   for a in args:
-    if a.sharding.spec.unreduced & axes:
+    if a.mat.unreduced & axes:
       raise ValueError(
           f"{name} cannot accept args which are unreduced. Got"
           f" {a.str_short(True)} and axes={axes}")
-    if a.sharding.spec.reduced & axes:
+    if a.mat.reduced & axes:
       raise ValueError(
           f"{name} cannot accept args which are reduced. Got"
           f" {a.str_short(True)} and axes={axes}")
@@ -2492,9 +2647,9 @@ def standard_insert_pvary(*args):
     return args
   if not args:
     return args
-  in_vma = [aval.vma if isinstance(aval := typeof(a), ShapedArray)
+  in_vma = [aval.mat.varying if isinstance(aval := typeof(a), ShapedArray)
             else frozenset() for a in args]
-  in_reduced = [aval.sharding.spec.reduced
+  in_reduced = [aval.mat.reduced
                 if isinstance(aval := typeof(a), ShapedArray) else frozenset()
                 for a in args]
   out_vma = frozenset.union(*in_vma)
@@ -2519,7 +2674,7 @@ def standard_vma_rule(prim_name, *avals, **kwargs) -> frozenset[AxisName]:
   avals = tuple(a for a in avals if a is not abstract_token)
   if not avals:
     return frozenset()
-  vma, *vmas = (a.vma for a in avals)
+  vma, *vmas = (a.mat.varying for a in avals)
   if not all(vma == vma_ for vma_ in vmas):
     raise ValueError(
         f'Primitive {prim_name} requires varying manual axes '
@@ -2581,10 +2736,10 @@ class Ref(metaclass=RefMeta):
   dtype = property(lambda self: self._aval.dtype)
 
   # get operations from aval, munging the name
-  def __getitem__(self, idx): return self._aval._getitem(self, idx)  # type: ignore[missing-attribute]
-  def __setitem__(self, idx, x): return self._aval._setitem(self, idx, x)  # type: ignore[missing-attribute]
-  def __len__(self) -> int: return self._aval._len(self)  # type: ignore[missing-attribute]
-  def addupdate(self, x, idx=()): return self._aval._addupdate(self, idx, x)  # type: ignore[missing-attribute]
+  def __getitem__(self, idx): return self._aval._getitem(self, idx)  # pyrefly: ignore[missing-attribute]
+  def __setitem__(self, idx, x): return self._aval._setitem(self, idx, x)  # pyrefly: ignore[missing-attribute]
+  def __len__(self) -> int: return self._aval._len(self)  # pyrefly: ignore[missing-attribute]
+  def addupdate(self, x, idx=()): return self._aval._addupdate(self, idx, x)  # pyrefly: ignore[missing-attribute]
 
   # some attributes/methods only work for lojax refs
   sharding = property(lambda self: self._refs._buf.sharding)
@@ -2608,6 +2763,14 @@ class ArrayRefImpl:
 pytype_aval_mappings[Ref] = lambda x: x._aval
 dtypes.canonicalize_value_handlers[Ref] = lambda x: x
 
+
+class InternalMutableArrayEffect(effects.Effect):
+  pass
+array_ref_effect = internal_mutable_array_effect = InternalMutableArrayEffect()
+effects.control_flow_allowed_effects.add_type(InternalMutableArrayEffect)
+effects.remat_allowed_effects.add_type(InternalMutableArrayEffect)
+
+
 def new_ref(init_val: Any, *, memory_space: Any = None, kind: Any = None):
   """Create a mutable array reference with initial value ``init_val``.
 
@@ -2617,6 +2780,8 @@ def new_ref(init_val: Any, *, memory_space: Any = None, kind: Any = None):
     init_val: A :class:`jax.Array` representing the initial state
       of the buffer.
     memory_space: An optional memory space attribute for the Ref.
+    kind: An optional string indicating the mutation semantics under
+      rematerialization.
 
   Returns:
     A :class:`jax.ref.Ref` containing a reference to a mutable buffer.
@@ -2627,6 +2792,7 @@ def new_ref(init_val: Any, *, memory_space: Any = None, kind: Any = None):
 ref_p = Primitive('new_ref')
 ref_p.is_effectful = lambda params: True
 ref_p.ref_primitive = True
+ref_p.ref_allocating = True
 
 ref_p.is_high = lambda aval, *, memory_space, kind: aval.is_high
 def _ref_to_lojax(init_val, *, memory_space, kind):
@@ -2636,6 +2802,21 @@ def _ref_to_lojax(init_val, *, memory_space, kind):
   return Ref(AbstractRef(val_ty), hival_of_refs)
 ref_p.to_lojax = _ref_to_lojax
 
+@ref_p.def_effectful_abstract_eval
+def _ref_abstract_eval(init_aval, *, memory_space: Any, kind: Any):
+  from jax._src.state.types import AbstractRef  # pytype: disable=import-error
+  return (AbstractRef(init_aval, memory_space=memory_space, kind=kind),
+          {internal_mutable_array_effect})
+
+@ref_p.def_impl
+def _ref_impl(init_val, *, memory_space: Any, kind: Any):
+  if memory_space is not None:
+    raise NotImplementedError(
+        "array ref with memory space only works inside of a `jit`.")
+  from jax._src.state.types import AbstractRef  # pytype: disable=import-error
+  from jax._src.lax.lax import _array_copy  # pytype: disable=import-error
+  aval = AbstractRef(typeof(init_val), kind=kind)
+  return Ref(aval, ArrayRefImpl(aval, _array_copy(init_val)))
 
 # TODO(mattjj,dougalm): merge with ref_p
 def empty_ref(ty, memory_space=None):
@@ -2644,6 +2825,7 @@ def empty_ref(ty, memory_space=None):
 empty_ref_p = Primitive('empty_ref')
 empty_ref_p.ref_primitive = True
 empty_ref_p.is_effectful = lambda _: True
+empty_ref_p.ref_allocating = True
 
 
 @empty_ref_p.def_effectful_abstract_eval
@@ -2675,29 +2857,6 @@ def _free_ref_abstract_eval(ref_aval):
 @free_ref_p.def_impl
 def _free_ref_impl(ref):
   return ()
-
-
-class InternalMutableArrayEffect(effects.Effect):
-  pass
-array_ref_effect = internal_mutable_array_effect = InternalMutableArrayEffect()
-effects.control_flow_allowed_effects.add_type(InternalMutableArrayEffect)
-effects.remat_allowed_effects.add_type(InternalMutableArrayEffect)
-
-@ref_p.def_effectful_abstract_eval
-def _ref_abstract_eval(init_aval, *, memory_space: Any, kind: Any):
-  from jax._src.state.types import AbstractRef  # pytype: disable=import-error
-  return (AbstractRef(init_aval, memory_space=memory_space, kind=kind),
-          {internal_mutable_array_effect})
-
-@ref_p.def_impl
-def _ref_impl(init_val, *, memory_space: Any, kind: Any):
-  if memory_space is not None:
-    raise NotImplementedError(
-        "array ref with memory space only works inside of a `jit`.")
-  from jax._src.state.types import AbstractRef  # pytype: disable=import-error
-  from jax._src.lax.lax import _array_copy  # pytype: disable=import-error
-  aval = AbstractRef(typeof(init_val), kind=kind)
-  return Ref(aval, ArrayRefImpl(aval, _array_copy(init_val)))
 
 def freeze(ref: Ref) -> Array:
   """Invalidate a given reference and return its final value.
@@ -2772,6 +2931,12 @@ dtypes.canonicalize_value_handlers[Token] = lambda x: x
 class AbstractTodo(AbstractValue):
   def __init__(self, inner_aval):
     self.inner_aval = inner_aval
+
+  def __eq__(self, other):
+    return self.inner_aval == other.inner_aval
+
+  def __hash__(self):
+    return hash(self.inner_aval)
 
   def str_short(self, short_dtypes=False, mesh_axis_types=False) -> str:
     return f'Todo{{{self.inner_aval.str_short(True)}}}'
@@ -3008,7 +3173,7 @@ def evaluate_shape(shape: Shape, dim_vars: Sequence[str],
       return operator.index(d)
     except:
       # Is a _DimExpr
-      return d._evaluate(env)  # type: ignore
+      return d._evaluate(env)  # pyrefly: ignore[missing-attribute]
   return tuple(eval_one_dim(d) for d in shape)
 
 def dim_value_dtype():
@@ -3071,34 +3236,10 @@ closed_call_p.def_effectful_abstract_eval(
 
 # ------------------- Map -------------------
 
-class MapPrimitive(Primitive):
-  multiple_results = True
-  map_primitive = True
-  skip_canonicalization = True
-
-  def bind_with_trace(self, trace, args, avals, params, /):
-    params = dict(params)
-    fun, = params.pop('subfuns')
-    assert len(params['in_axes']) == len(args)
-    return trace.process_map(self, fun, args, params)
-
-  def process(self, trace, fun, tracers, params):
-    return trace.process_map(self, fun, tracers, params)
-
-  def get_bind_params(self, params):
-    new_params: dict[str, Any] = dict(params)
-    jaxpr: Jaxpr = new_params.pop('call_jaxpr')
-    subfun = lu.hashable_partial(
-        lu.wrap_init(eval_jaxpr, debug_info=jaxpr.debug_info), jaxpr, ())
-    new_params['subfuns'] = (subfun,)
-    axes = new_params.pop('out_axes')
-    new_params['out_axes_thunk'] = HashableFunction(lambda: axes, closure=axes)
-    return new_params
-
 def mapped_aval(size: AxisSize, axis, aval: AbstractValue) -> AbstractValue:
   from jax._src.hijax import HiType  # pytype: disable=import-error
   if isinstance(aval, HiType):
-    return aval.dec_rank(size, axis)  # type: ignore
+    return aval.dec_rank(size, axis)  # pyrefly: ignore[bad-argument-type]
   handler, _ = aval_mapping_handlers.get(type(aval), (None, None))
   if handler is not None:
     return handler(size, axis, aval)
@@ -3113,7 +3254,7 @@ def unmapped_aval(size: AxisSize, axis: int | None,
                   aval: AbstractValue, explicit_mesh_axis=None) -> AbstractValue:
   from jax._src.hijax import HiType  # pytype: disable=import-error
   if isinstance(aval, HiType):
-    return aval.inc_rank(size, axis)  # type: ignore
+    return aval.inc_rank(size, axis)  # pyrefly: ignore[bad-argument-type]
   _, handler = aval_mapping_handlers.get(type(aval), (None, None))
   if handler is not None:
     return handler(size, axis, explicit_mesh_axis, aval)
@@ -3132,8 +3273,8 @@ def _map_shaped_array(
   sharding = aval_s.update(
       spec=aval_s.spec.update(partitions=tuple_delete(aval_s.spec, axis)))
   return ShapedArray(tuple_delete(aval.shape, axis), aval.dtype,
-                     weak_type=aval.weak_type, sharding=sharding, vma=aval.vma,
-                     memory_space=aval.memory_space)
+                     weak_type=aval.weak_type, sharding=sharding,
+                     manual_axis_type=aval.mat, memory_space=aval.memory_space)
 
 def _unmap_shaped_array(
     size: int, axis: int | None, explicit_mesh_axis, aval: ShapedArray
@@ -3146,7 +3287,8 @@ def _unmap_shaped_array(
         aval_s.spec, axis, explicit_mesh_axis)))
     return ShapedArray(tuple_insert(aval.shape, axis, size), aval.dtype,
                        weak_type=aval.weak_type, sharding=sharding,
-                       vma=aval.vma, memory_space=aval.memory_space)
+                       manual_axis_type=aval.mat,
+                       memory_space=aval.memory_space)
   else:
     raise TypeError(axis)
 
@@ -3235,8 +3377,8 @@ def typematch(t1: AbstractValue, t2: AbstractValue,
     return True
   elif isinstance(t1, ShapedArray) and isinstance(t2, ShapedArray):
     if no_dtype_check:
-      return cmp_shape_shd_vma_memsp(t1, t2)
-    return t1.dtype == t2.dtype and cmp_shape_shd_vma_memsp(t1, t2)
+      return cmp_shape_shd_mat_memsp(t1, t2)
+    return t1.dtype == t2.dtype and cmp_shape_shd_mat_memsp(t1, t2)
   elif isinstance(t1, AbstractRef) and isinstance(t2, AbstractRef):
     # We want to use the regular typecheck for ShapedArray here.
     # TODO(slebedev): Remove these aliases once we migrate off pytype.
@@ -3248,23 +3390,19 @@ def typematch(t1: AbstractValue, t2: AbstractValue,
   else:
     return False
 
-def cmp_shape_shd_vma_memsp(t1, t2):
+def cmp_shape_shd_mat_memsp(t1, t2):
   # TODO(yashkatariya): Expand this to Manual and Auto mode.
   # See https://github.com/jax-ml/jax/issues/26474
   t1_mesh, t2_mesh = t1.sharding.mesh, t2.sharding.mesh
   if not t1_mesh.empty and not t2_mesh.empty:
     if t1_mesh._any_axis_explicit or t2_mesh._any_axis_explicit:
       shd_eq = t1.sharding == t2.sharding
-    elif t1_mesh._any_axis_manual or t2_mesh._any_axis_manual:
-      # TODO(yashkatariya): Once reduced/unreduced is fused into vma, remove this.
-      shd_eq = (t1.sharding.spec.unreduced == t2.sharding.spec.unreduced or
-                t1.sharding.spec.reduced == t2.sharding.spec.reduced)
     else:
       shd_eq = True
   else:
     shd_eq = True
   return (shd_eq and definitely_equal_shape(t1.shape, t2.shape) and
-          t1.vma == t2.vma and t1.memory_space == t2.memory_space)
+          t1.mat == t2.mat and t1.memory_space == t2.memory_space)
 
 def aval_mismatch_extra(a1: AbstractValue, a2: AbstractValue) -> str:
   assert not typematch(a1, a2)
@@ -3274,8 +3412,8 @@ def aval_mismatch_extra(a1: AbstractValue, a2: AbstractValue) -> str:
       mismatches.append('the dtypes do not match')
     if a1.shape != a2.shape:
       mismatches.append('the shapes do not match')
-    if a1.vma != a2.vma:
-      mismatches.append('the varying manual axes do not match')
+    if a1.mat != a2.mat:
+      mismatches.append('the manual axis types do not match')
     # TODO(yashkatariya,mattjj): add check for sharding-in-types mismatch
 
     if len(mismatches) == 0:
@@ -3343,7 +3481,7 @@ class MutableTypecheckVal:
   mutable_qdd : MutableQuasiDynamicData
 
 
-_ref_allocating_primitives = {ref_p, empty_ref_p}
+
 
 
 def _check_jaxpr(
@@ -3409,7 +3547,9 @@ def _check_jaxpr(
 
   # Check each eqn.
   sentinel = object()
-  in_idx = {v: i for i, v in enumerate(it.chain(jaxpr.constvars, jaxpr.invars))}
+  in_idx: dict[Var, int | None] = {
+      v: i for i, v in enumerate(it.chain(jaxpr.constvars, jaxpr.invars))
+  }
   mut_arrays = set()
   for eqn_idx, eqn in enumerate(jaxpr.eqns):
     prim = eqn.primitive
@@ -3426,18 +3566,15 @@ def _check_jaxpr(
         elif prim.call_primitive:
           out_type, eqn_effects = _check_call(ctx_factory, prim, in_atoms,
                                               eqn.params)
-        elif prim.map_primitive:
-          out_type, eqn_effects = _check_map(ctx_factory, prim, in_avals,
-                                            eqn.params)
         else:
           out_type, eqn_effects = check_eqn(prim, in_avals, eqn.params)
 
       # Check the computed effect type matches the eqn's annotation, and is
       # included in the jaxpr's annotation.
       if prim.ref_primitive:
-        if prim in _ref_allocating_primitives:
+        if prim.ref_allocating:
           outvar, = eqn.outvars
-          in_idx[outvar] = None  # type: ignore
+          in_idx[outvar] = None
           mut_arrays.add(outvar)
       if eqn.effects != eqn_effects:
         raise JaxprTypeError("Inferred effects do not match equation effects. "
@@ -3537,44 +3674,6 @@ def _check_call(ctx_factory, prim, in_atoms, params):
           else e for e in call_jaxpr.effects}
   return out_avals, effs
 
-def _check_map(ctx_factory, prim, in_avals, params):
-  if "call_jaxpr" not in params:
-    raise JaxprTypeError(f"Map primitive {prim} missing 'call_jaxpr' parameter")
-  call_jaxpr = params["call_jaxpr"]
-  ordered_effects_ = effects.ordered_effects.filter_in(call_jaxpr.effects)
-  if ordered_effects_:
-    raise JaxprTypeError(
-        f"Map primitive {prim} mapping ordered effects: {ordered_effects_}")
-  if "axis_size" not in params:
-    raise JaxprTypeError(f"Map primitive {prim} missing 'axis_size' parameter")
-  axis_size = params["axis_size"]
-  if "axis_name" not in params:
-    raise JaxprTypeError(f"Map primitive {prim} missing 'axis_name' parameter")
-  axis_name = params["axis_name"]
-  if "in_axes" not in params:
-    raise JaxprTypeError(f"Map primitive {prim} missing 'in_axes' parameter")
-  in_axes = params["in_axes"]
-  if "out_axes" not in params:
-    raise JaxprTypeError(f"Map primitive {prim} missing 'out_axes' parameter")
-  out_axes = params["out_axes"]
-
-  binder_avals = [unmapped_aval(axis_size, in_axis, v.aval)
-                  if in_axis is not None else v.aval
-                  for v, in_axis in zip(call_jaxpr.invars, in_axes)]
-  for binder_aval, in_aval in zip(binder_avals, in_avals):
-    if not typecompat(binder_aval, in_aval):
-      raise JaxprTypeError(f"Call primitive {prim} passes operand {in_aval} "
-                           f"to jaxpr expecting {binder_aval}")
-
-  with extend_axis_env_nd([(params['axis_name'], axis_size)]):
-    _check_jaxpr(ctx_factory, call_jaxpr)
-
-  mapped_out_avals = [v.aval for v in call_jaxpr.outvars]
-  out_avals = [unmapped_aval(axis_size, out_axis, aval)
-               if out_axis is not None else aval
-               for aval, out_axis in zip(mapped_out_avals, out_axes)]
-  return out_avals, filter_named_axis_effects(call_jaxpr.effects, {axis_name})
-
 def eqn_effects(jaxpr):
   # jaxpr input effects are indexed to include jaxpr.constvars, but the eqn
   # should have effects indexed only on its explicit arguments
@@ -3604,11 +3703,11 @@ class ShapeDtypeStruct:
     dtype: a dtype-like object
     sharding: (optional) a :class:`jax.Sharding` object
   """
-  __slots__ = ["shape", "dtype", "_sharding", "_dll", "weak_type", "vma",
-               "is_ref"]
+  __slots__ = ["shape", "dtype", "_sharding", "_dll", "weak_type",
+               "manual_axis_type", "is_ref"]
 
   def __init__(self, shape, dtype, *, sharding=None, weak_type=False,
-               vma=None, is_ref=False):
+               manual_axis_type=None, is_ref=False):
     self.shape = tuple(shape)
     if dtype is None:
       raise ValueError("ShapeDtypeStruct: dtype must be specified.")
@@ -3629,11 +3728,14 @@ class ShapeDtypeStruct:
     _check_sharding(self._sharding, self.shape)
     self._dll = sharding.layout if isinstance(sharding, Format) else None
     self.weak_type = weak_type
-    if vma is not None and not isinstance(vma, (set, frozenset)):
+    if (manual_axis_type is not None
+        and not isinstance(manual_axis_type, ManualAxisType)):
       raise TypeError(
-          "`vma` argument passed to ShapeDtypeStruct should be of type `set`"
-          f" or `frozenset`. Got type {type(vma)}")
-    self.vma = None if vma is None else frozenset(vma)
+          "`manual_axis_type` argument passed to ShapeDtypeStruct should be of"
+          " type `jax.sharding.ManualAxisType`. Got type"
+          f" {type(manual_axis_type)}")
+    self.manual_axis_type = (None if manual_axis_type is None
+                             else manual_axis_type)
     self.is_ref = is_ref
 
   size = property(lambda self: math.prod(self.shape))
@@ -3668,10 +3770,11 @@ class ShapeDtypeStruct:
     sh = f", sharding={self.sharding}" if self.sharding is not None else ""
     l = f", format={self._dll}" if self._dll is not None else ""
     wt = f", weak_type={self.weak_type}" if self.weak_type else ""
-    vma = f", vma={self.vma}" if self.vma else ""
+    mat = (f", manual_axis_type={self.manual_axis_type}"
+           if self.manual_axis_type else "")
     is_ref = f", is_ref={self.is_ref}" if self.is_ref else ""
     return (f"{type(self).__name__}(shape={self.shape}, "
-            f"dtype={self.dtype.name}{sh}{l}{wt}{vma}{is_ref})")
+            f"dtype={self.dtype.name}{sh}{l}{wt}{mat}{is_ref})")
 
   __str__ = __repr__
 
@@ -3680,15 +3783,15 @@ class ShapeDtypeStruct:
       return False
     else:
       return ((self.shape, self.dtype, self.sharding, self._dll,
-               self.weak_type, self.vma, self.is_ref) ==
+               self.weak_type, self.manual_axis_type, self.is_ref) ==
               (other.shape, other.dtype, other.sharding, other._dll,
-               other.weak_type, other.vma, other.is_ref))
+               other.weak_type, other.manual_axis_type, other.is_ref))
 
   def __hash__(self):
     # TODO(frostig): avoid the conversion from dict by addressing
     # https://github.com/jax-ml/jax/issues/8182
     return hash((self.shape, self.dtype, self.sharding, self._dll,
-                 self.weak_type, self.vma, self.is_ref))
+                 self.weak_type, self.manual_axis_type, self.is_ref))
 
   def __setattr__(self, name, value):
     if hasattr(self, name):
@@ -3718,7 +3821,7 @@ class ShapeDtypeStruct:
         dtype=kwargs.pop('dtype', self.dtype),
         sharding=sharding,
         weak_type=kwargs.pop('weak_type', self.weak_type),
-        vma=kwargs.pop('vma', self.vma),
+        manual_axis_type=kwargs.pop('manual_axis_type', self.manual_axis_type),
         is_ref=kwargs.pop('is_ref', self.is_ref))
 
 
@@ -3726,8 +3829,7 @@ def _sds_aval_mapping(x):
   aval = ShapedArray(
       x.shape, dtypes.canonicalize_dtype(x.dtype, allow_extended_dtype=True),
       weak_type=x.weak_type)
-  aval = update_aval_with_sharding(
-      aval, x.sharding, vma=(frozenset() if x.vma is None else x.vma))
+  aval = update_aval_with_sharding(aval, x.sharding, mat=x.manual_axis_type)
   if x.is_ref:
     from jax._src.state.types import AbstractRef  # pytype: disable=import-error
     return AbstractRef(aval)

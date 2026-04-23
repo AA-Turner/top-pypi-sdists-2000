@@ -12,8 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from jax._src import dtypes
+from jax._src.core import ShapedArray
 from jax._src.lib import _jax
-
 import numpy as np
 
 # TypedInt, TypedFloat, and TypedComplex are subclasses of int, float, and
@@ -21,14 +22,28 @@ import numpy as np
 # float, and complex. Repeated canonicalization, including under different
 # jax_enable_x64 modes, preserves the dtype.
 
+# Precomputed weak scalar avals
+_weak_int32_aval = ShapedArray((), np.dtype(np.int32), weak_type=True)
+_weak_int64_aval = ShapedArray((), np.dtype(np.int64), weak_type=True)
+_weak_float32_aval = ShapedArray((), np.dtype(np.float32), weak_type=True)
+_weak_float64_aval = ShapedArray((), np.dtype(np.float64), weak_type=True)
+_weak_complex64_aval = ShapedArray((), np.dtype(np.complex64), weak_type=True)
+_weak_complex128_aval = ShapedArray((), np.dtype(np.complex128), weak_type=True)
+
 
 class TypedInt(int):
-
   dtype: np.dtype
+  aval: ShapedArray
 
   def __new__(cls, value: int, dtype: np.dtype):
-    v = super(TypedInt, cls).__new__(cls, value)
+    v = super().__new__(cls, value)
     v.dtype = dtype
+    if dtype == np.dtype(np.int32):
+      v.aval = _weak_int32_aval
+    elif dtype == np.dtype(np.int64):
+      v.aval = _weak_int64_aval
+    else:
+      v.aval = ShapedArray((), dtype, weak_type=True)
     return v
 
   def __repr__(self):
@@ -39,12 +54,18 @@ class TypedInt(int):
 
 
 class TypedFloat(float):
-
   dtype: np.dtype
+  aval: ShapedArray
 
   def __new__(cls, value: float, dtype: np.dtype):
-    v = super(TypedFloat, cls).__new__(cls, value)
+    v = super().__new__(cls, value)
     v.dtype = dtype
+    if dtype == np.dtype(np.float32):
+      v.aval = _weak_float32_aval
+    elif dtype == np.dtype(np.float64):
+      v.aval = _weak_float64_aval
+    else:
+      v.aval = ShapedArray((), dtype, weak_type=True)
     return v
 
   def __repr__(self):
@@ -58,12 +79,18 @@ class TypedFloat(float):
 
 
 class TypedComplex(complex):
-
   dtype: np.dtype
+  aval: ShapedArray
 
   def __new__(cls, value: complex, dtype: np.dtype):
-    v = super(TypedComplex, cls).__new__(cls, value)
+    v = super().__new__(cls, value)
     v.dtype = dtype
+    if dtype == np.dtype(np.complex64):
+      v.aval = _weak_complex64_aval
+    elif dtype == np.dtype(np.complex128):
+      v.aval = _weak_complex128_aval
+    else:
+      v.aval = ShapedArray((), dtype, weak_type=True)
     return v
 
   def __repr__(self):
@@ -71,11 +98,6 @@ class TypedComplex(complex):
 
   def __getnewargs__(self):
     return (complex(self), self.dtype)
-
-
-_jax.set_typed_int_type(TypedInt)
-_jax.set_typed_float_type(TypedFloat)
-_jax.set_typed_complex_type(TypedComplex)
 
 
 typed_scalar_types: set[type] = {TypedInt, TypedFloat, TypedComplex}
@@ -90,35 +112,51 @@ class TypedNdArray(np.ndarray):
     mode
   * it can be weakly typed.
   """
+  __slots__ = ('_aval', '_weak_type')
 
-  weak_type: bool
-
-  def __new__(cls, val: np.ndarray, weak_type: bool):
+  def __new__(cls, val: np.ndarray, aval: ShapedArray | None = None):
     obj = np.asarray(val).view(cls)
-    obj.weak_type = weak_type
+    if aval is not None:
+      obj._aval = aval
     return obj
 
   def __array_finalize__(self, obj):
-    if obj is None:
-      return
-    self.weak_type = getattr(obj, 'weak_type', False)
+    self._aval = None
+    self._weak_type = (obj.aval.weak_type
+                       if isinstance(obj, TypedNdArray) else False)
+
+  @property
+  def aval(self) -> ShapedArray:
+    result = self._aval
+    if result is None:
+      # It is possible that multiple threads might race to reach here. However
+      # this seems safe since they will all set the same value.
+      result = ShapedArray(self.shape, self.dtype, weak_type=self._weak_type)
+      self._aval = result
+    return result
+
+  @property
+  def weak_type(self) -> bool:
+    return self.aval.weak_type
 
   @property
   def val(self) -> np.ndarray:
     return np.asarray(self)
 
   def __array_ufunc__(self, ufunc, method, *inputs, **kwargs):
-    inputs = tuple(np.asarray(x) if isinstance(x, TypedNdArray) else x
-                   for x in inputs)
+    inputs = tuple(
+        np.asarray(x) if isinstance(x, TypedNdArray) else x for x in inputs
+    )
     if 'out' in kwargs:
       kwargs['out'] = tuple(
           np.asarray(x) if isinstance(x, TypedNdArray) else x
-          for x in kwargs['out'])
+          for x in kwargs['out']
+      )
     return getattr(ufunc, method)(*inputs, **kwargs)
 
   def __repr__(self):
     prefix = 'TypedNdArray('
-    if self.weak_type:
+    if self.aval.weak_type:
       dtype_str = f'dtype={self.dtype.name}, weak_type=True)'
     else:
       dtype_str = f'dtype={self.dtype.name})'
@@ -141,9 +179,19 @@ class TypedNdArray(np.ndarray):
     return f'{prefix}{s},{sep}{dtype_str}'
 
   def __reduce__(self):
-    return (TypedNdArray, (np.asarray(self), self.weak_type))
+    return (TypedNdArray, (np.asarray(self), self.aval.weak_type))
 
   def __getnewargs__(self):
-    return (np.asarray(self), self.weak_type)
+    return (np.asarray(self), self.aval.weak_type)
+
 
 _jax.set_typed_ndarray_type(TypedNdArray)
+dtypes.register_type_whose_dtype_should_not_be_canonicalized(TypedNdArray)
+
+_jax.set_typed_int_type(TypedInt)
+_jax.set_typed_float_type(TypedFloat)
+_jax.set_typed_complex_type(TypedComplex)
+
+for _typ in typed_scalar_types:
+  dtypes.register_weak_scalar_type(_typ)
+  dtypes.register_type_whose_dtype_should_not_be_canonicalized(_typ)

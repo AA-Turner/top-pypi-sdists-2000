@@ -43,7 +43,12 @@ def _xla_metadata_call(fun, **meta):
     args_ft = FlatTree.flatten((args, kwargs))
     in_avals = args_ft.map(core.shaped_abstractify)
     jaxpr, out_avals = pe.trace_to_jaxpr(fun, in_avals, dbg)
-    outs_flat = xla_metadata_call_p.bind(*args_ft.vals, jaxpr=jaxpr, **meta)
+    if any(isinstance(c, core.Tracer) for c in jaxpr.consts):
+      jaxpr, consts = pe.separate_consts(jaxpr)
+    else:
+      consts = []
+    outs_flat = xla_metadata_call_p.bind(*consts, *args_ft.vals, jaxpr=jaxpr,
+                                         **meta)
     return tree_unflatten(out_avals.tree, outs_flat)
   return wrapped
 
@@ -66,10 +71,7 @@ def attr_get(x):
 def _xla_metadata_call_lowering(ctx, *args, jaxpr, **meta):
   const_args_and_avals = core.jaxpr_const_args(jaxpr.jaxpr)
   const_args, const_avals = unzip2(const_args_and_avals)
-  const_arg_values = [
-      mlir.ir_constant(c, const_lowering=ctx.const_lowering, aval=aval)
-      for c, aval in const_args_and_avals]
-  in_avals = (*const_avals, *ctx.avals_in)
+  in_avals = (*const_avals, *jaxpr.in_avals)
   func_op, output_types, effects = mlir.lower_called_computation(
       "xla_metadata_call", jaxpr, ctx.module_context, len(const_args), in_avals,
       ctx.avals_out, ctx.tokens_in)
@@ -77,13 +79,15 @@ def _xla_metadata_call_lowering(ctx, *args, jaxpr, **meta):
   symbol_name = func_op.name.value
   flat_output_types = mlir.flatten_ir_types(output_types)
   tokens = [ctx.tokens_in.get(eff) for eff in effects]
-  args = (*ctx.dim_var_values, *tokens, *const_arg_values, *args)
+  hoisted_const_values = mlir.flatten_ir_values(
+      mlir.ir_constants(c, const_lowering=ctx.const_lowering, aval=aval)
+      for c, aval in const_args_and_avals)
+  args = (*ctx.dim_var_values, *tokens, *hoisted_const_values, *args)
   call = func_dialect.CallOp(
       flat_output_types, ir.FlatSymbolRefAttr.get(symbol_name),
       mlir.flatten_ir_values(args))
   call.operation.attributes['mhlo.frontend_attributes'] = ir.DictAttr.get(
       {k: attr_get(v) for k, v in meta.items()})
-
   out_nodes = mlir.unflatten_ir_values_like_types(call.results, output_types)
   tokens, out_nodes = split_list(out_nodes, [len(effects)])
   tokens_out = ctx.tokens_in.update_tokens(mlir.TokenSet(zip(effects, tokens)))
@@ -146,12 +150,12 @@ def _transpose_jaxpr(jaxpr, in_avals, in_tree):
     primals_in, cts_in = tree_unflatten(in_tree, in_flat)
     out = ad.backward_pass(jaxpr.jaxpr, False, jaxpr.consts, primals_in, cts_in)
     out = [ct if not isinstance(ct, ad.Zero) else None for ct in out]
-    cts_out, cell.out_tree = tree_flatten(out)  # type: ignore
+    cts_out, cell.out_tree = tree_flatten(out)  # pyrefly: ignore[missing-attribute]
     return cts_out
   dbg = jaxpr.jaxpr.debug_info.with_unknown_names()
   trans_jaxpr, _, consts = pe.trace_to_jaxpr_dynamic(
       lu.wrap_init(transposed, debug_info=dbg), in_avals)
-  return core.ClosedJaxpr(trans_jaxpr, consts), cell.out_tree  # type: ignore
+  return core.ClosedJaxpr(trans_jaxpr, consts), cell.out_tree  # pyrefly: ignore[missing-attribute]
 
 def _xla_metadata_call_transpose(cts_in, *primals_in, jaxpr, **meta):
   in_flat, in_tree = tree_flatten((primals_in, cts_in))

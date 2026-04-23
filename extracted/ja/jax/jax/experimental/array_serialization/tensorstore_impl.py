@@ -28,6 +28,7 @@ from jax import numpy as jnp
 from jax._src import array
 from jax._src.layout import Format
 from jax._src import typing
+from jax._src.sharding_impls import make_single_device_sharding
 import numpy as np
 import tensorstore as ts
 
@@ -205,7 +206,7 @@ def verify_tensorstore_spec(spec: dict[str, Any], arr: jax.Array | None,
     if isinstance(arr, jax.Array):
       local_shape = arr.sharding.shard_shape(arr.shape)
     else:  # np.ndarray
-      local_shape = arr.shape  # pytype: disable=attribute-error
+      local_shape = arr.shape
     if spec.get("driver", "") == "zarr3":
       chunk_shape = metadata['chunk_grid']['configuration']['chunk_shape']
       if not _divides(local_shape, chunk_shape):
@@ -324,7 +325,7 @@ async def _transfer_shard_to_host(shard: array.Shard) -> np.ndarray:
       m.kind == "pinned_host" for m in shard.device.addressable_memories())
   if has_pinned_host:
     # If available, transfer to pinned host memory
-    sharding = jax.sharding.SingleDeviceSharding(shard.device,
+    sharding = make_single_device_sharding(shard.device,
         memory_kind="pinned_host")
     data = jax.device_put(data, sharding)
   else:
@@ -338,17 +339,20 @@ async def _transfer_shard_to_host(shard: array.Shard) -> np.ndarray:
 
 async def combine_kvstores(combined_kvstore: dict[str, Any],
                            kvstores: list[dict[str, Any]],
-                           context: ts.Context | dict[str, Any] = _TS_CONTEXT
+                           context: ts.Context | None = _TS_CONTEXT
                            ) -> None:
   """Merge a list of kvstores into a single kvstore. NOT multi-process safe."""
   combined_fut = ts.KvStore.open(combined_kvstore, context=context)
   kvstores_futs = [ts.KvStore.open(kvstore, context=context)
                    for kvstore in kvstores]
-  combined, kvstores = await asyncio.gather(combined_fut,
-                                            asyncio.gather(*kvstores_futs))
+  combined, opened_kvstores = await asyncio.gather(
+      combined_fut, asyncio.gather(*kvstores_futs)
+  )
   tx = ts.Transaction()
-  await asyncio.gather(*[kvstore.experimental_copy_range_to(
-      combined.with_transaction(tx)) for kvstore in kvstores])
+  await asyncio.gather(*(
+      kvstore.experimental_copy_range_to(combined.with_transaction(tx))
+      for kvstore in opened_kvstores
+  ))
   await tx.commit_async()
 
 async def async_serialize(
@@ -554,9 +558,9 @@ async def async_deserialize(
     # TODO(yashkatariya): This is a band-aid fix. Figure out a better way to
     # make this work.
     if out.dtype == jnp.int4:
-      out = jnp.asarray(out)  # type: ignore
+      out = jnp.asarray(out)
     result = jax.device_put(
-        out, Format(layout, jax.sharding.SingleDeviceSharding(device)))
+        out, Format(layout, make_single_device_sharding(device)))
     if byte_limiter is not None:
       # NB: `out` actually might not be ready for garbage collection by the
       # time we call release_bytes . Thus peak memory usage still might grow

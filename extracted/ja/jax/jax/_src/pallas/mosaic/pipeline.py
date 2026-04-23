@@ -50,30 +50,12 @@ ARBITRARY = tpu_core.ARBITRARY
 SemaphoreType = tpu_core.SemaphoreType
 SemaphoreTuple = jax.Array
 ArrayRef = Union[REF, jax.Array]
+Tiling = tpu_info.Tiling
 
 GridIndices = tuple[jax.Array, ...]
 CondVal = Union[jax.Array, bool]
 PipelineBlockSpecs = Union[Sequence[pallas_core.BlockSpec], Any]
 PipelineRefs = Union[Sequence[REF], Any]
-
-
-def _broadcast_pytree_to(from_pytree, to_pytree):
-  """Broadcast a prefix pytree to a given full tree."""
-  proxy = object()
-  treedef = tree_util.tree_structure(to_pytree)
-  broadcast_leaves = []
-  def add_leaves(i, x):
-    broadcast_leaves.extend(
-        [i] * tree_util.tree_structure(x).num_leaves)
-  try:
-    tree_util.tree_map(add_leaves, from_pytree, to_pytree,
-                       is_leaf=lambda x: x is None)
-  except ValueError:
-    raise ValueError(f"Cannot broadcast tree {from_pytree} "
-                     f"to full tree structure {treedef}.") from None
-  broadcast_leaves = [None if a is proxy else a for a in broadcast_leaves]
-  assert len(broadcast_leaves) == treedef.num_leaves
-  return tree_util.tree_unflatten(treedef, broadcast_leaves)
 
 
 def _round_up_to_nearest_multiple(
@@ -117,6 +99,7 @@ def _create_blocked_slice(
   rounded_size = pl.multiple_of(rounded_size, tiling)
   return pl.ds(block_index * block_size, rounded_size)
 
+
 def _create_bounded_slice(slice_start: jax.Array | int,
                           slice_size: jax.Array | int,
                           block_size: int,
@@ -141,6 +124,7 @@ def _create_bounded_slice(slice_start: jax.Array | int,
   )
   rounded_size = pl.multiple_of(rounded_size, tiling)
   return pl.ds(slice_start, rounded_size)
+
 
 def _make_block_slice(
     block_index: jax.Array, block_size: pl.BlockDim | int | None, size: int,
@@ -200,8 +184,19 @@ def _grid_size(grid):
   return size
 
 
-def _spec_has_trivial_windowing(spec, grid):
-  if spec is None or spec.index_map is None:
+def _spec_has_trivial_windowing(spec, grid, full_shape):
+  if spec is None:
+    return True
+  if spec.block_shape is None:
+    return True
+  for bs, fs in zip(spec.block_shape, full_shape):
+    if bs is None:
+      return False
+    if isinstance(bs, (pallas_core.BoundedSlice, pl.Squeezed, pl.Element)):
+      return False
+    if pallas_core.get_block_size(bs) != fs:
+      return False
+  if spec.index_map is None:
     return True
   nontrivial_dims = {
       i for i, d in enumerate(grid) if not isinstance(d, int) or d != 1
@@ -231,16 +226,13 @@ class BufferType(enum.Enum):
   """Buffer type for the arguments to an emitted pipeline."""
   INPUT = 1
   OUTPUT = 2
-  ACCUMULATOR = 3
-  INPUT_OUTPUT = 4
-
-  MANUAL = 5
+  INPUT_OUTPUT = 3
+  MANUAL = 4
 
   @property
   def is_input(self):
     return self in [
         BufferType.INPUT,
-        BufferType.ACCUMULATOR,
         BufferType.INPUT_OUTPUT,
     ]
 
@@ -248,7 +240,6 @@ class BufferType(enum.Enum):
   def is_output(self):
     return self in [
         BufferType.OUTPUT,
-        BufferType.ACCUMULATOR,
         BufferType.INPUT_OUTPUT,
     ]
 
@@ -299,10 +290,6 @@ class BufferedRefBase:
     return self.buffer_type.is_output
 
   @property
-  def is_accumulator(self):
-    return self.buffer_type == BufferType.ACCUMULATOR
-
-  @property
   def is_input_output(self):
     return self.buffer_type == BufferType.INPUT_OUTPUT
 
@@ -310,8 +297,21 @@ class BufferedRefBase:
   def is_manual(self):
     return self.buffer_type == BufferType.MANUAL
 
-  def init_slots(self):
-    """Initialize slot indices."""
+  @property
+  def is_trivial_windowing(self) -> bool:
+    """Whether the reference uses trivial windowing.
+
+    Returns:
+      True if the reference uses trivial windowing, False otherwise.
+      Trivial windowing means that the BlockSpec just uses the full array,
+      meaning there are no real opportunities for pipelining. Instead, we can
+      just issue sync copies in/out before/after the pipeline for an
+      input/output reference.
+    """
+    return False
+
+  def initialize_slots(self):
+    """Initializes slots to 0."""
     raise NotImplementedError()
 
   def advance_copy_in_slot(self, predicate: bool = True) -> BufferedRefBase:
@@ -330,17 +330,14 @@ class BufferedRefBase:
     """Advance the wait out slot."""
     raise NotImplementedError()
 
-  def load_slots(self, predicate: bool | jax.Array = True) -> BufferedRefBase:
-    """Load slot information into registers."""
-    raise NotImplementedError()
-
-  def save_slots(self, predicate: bool | jax.Array = True):
-    """Save slot information from registers."""
-    raise NotImplementedError()
-
   @property
   def block_shape(self) -> Sequence[pl.BlockDim | int | None] | None:
     return self.spec.block_shape
+
+  @property
+  def has_allocated_buffer(self) -> bool:
+    """Returns True if the reference has an allocated buffer outside loop."""
+    raise NotImplementedError()
 
   @property
   def compute_index(self):
@@ -397,11 +394,15 @@ class BufferedRefBase:
     if (src_shape := getattr(src_ty, "shape", None)) is None:
       raise ValueError(f"Type {src_ty} does not have a shape")
 
+    if not src_shape:
+      return ()
+
     tiling = tpu_info.infer_tiling(src_ty, getattr(self, "tiling", None))
     block_indices = self.compute_index(*grid_indices)
     return tuple(
         _make_block_slice(bi, bs, ss, t)
-        for bi, bs, ss, t in zip(  # pyrefly: ignore[no-matching-overload]  # pyrefly#2385
+        for bi, bs, ss, t in zip(
+            # pyrefly: ignore[bad-argument-type]  # pyrefly#2385
             block_indices, self.block_shape, src_shape, tiling, strict=True
         )
     )
@@ -409,7 +410,7 @@ class BufferedRefBase:
   def _to_window_slice(self, dma_slice):
     return tuple(
         pl.ds(0, s.size)
-        for s, bd in zip(dma_slice, self.block_shape)  # pyrefly: ignore[no-matching-overload]
+        for s, bd in zip(dma_slice, self.block_shape)  # pyrefly: ignore[bad-argument-type]
         if not (bd is None or isinstance(bd, pl.Squeezed))
     )
 
@@ -435,8 +436,6 @@ def _ref_to_value_aval(ref):
   )
 
 
-# TODO(justinfu): Refactor and rename slot fields to reflect cumulative values
-# instead of slot index.
 @tree_util.register_dataclass
 @dataclasses.dataclass(frozen=True)
 class BufferedRef(BufferedRefBase):
@@ -445,55 +444,42 @@ class BufferedRef(BufferedRefBase):
   Attributes:
     spec: pallas blockspec.
     buffer_type: enum indicating whether this is an input, output, or in/out
-      accumulator buffered reference.
+      buffered reference.
     window_ref: a multiple-buffer to hold the working and dirty buffers used
       to copy into and out of.  In the case of a BufferedRef targeting a VMEM
       reference, this simply points to the existing ref.
-    accum_ref: accumulating buffer used by accumulator BufferedRefs.
     copy_in_slot: current slot to copy in for the working buffer.
     copy_out_slot: current slot to copy out for the working buffer.
     wait_in_slot: current slot to wait in for the working buffer.
     wait_out_slot: current slot to wait out for the working buffer.
-    next_fetch_smem: Holds the next grid indices to fetch for lookahead. This
-      is the SMEM backing buffer used to persist state between pipeline
-      invocations.
-    next_fetch_sreg: Holds the next grid indices to fetch for lookahead. This
+    next_fetch: Holds the next grid indices to fetch for lookahead. This
       is the register state used to track the indices within the pipeline loop.
     sem_recvs: Multiple buffered semaphores for input DMAs.
     sem_sends: Multiple buffered semaphores for output DMAs.
-    block_shape: passthrough property for the BlockSpec's block_shape.
-    compute_index: passthrough property for the BlockSpec's compute_index.
-    memory_space: passthrough property for the BlockSpec's memory_space.
-    current_ref: points to the current working slice of the double-buffer.
-    is_input: whether this BufferedRef acts as a pipeline input.
-    is_output: whether this BufferedRef acts as a pipeline output.
-    is_accumulator: whether this BufferedRef is an accumulator.
-    is_input_output: whether this BufferedRef is an input/output without
-      automatic accumulation.
-    swap: Tracks whether the BufferedRef slots need to be swapped before next
-      copy.
     tiling: The tiling to assume for the buffers.
+    is_trivial_windowing: Whether the reference uses trivial windowing.
+    has_allocated_buffer: Whether the reference has an allocated buffer
+      due to being in a different memory space than the source ref.
   """
   _spec: pl.BlockSpec = dataclasses.field(metadata=dict(static=True))
   _buffer_type: BufferType = dataclasses.field(metadata=dict(static=True))
+  _buffer_count: int = dataclasses.field(metadata=dict(static=True))
+  _grid_rank: int | None = dataclasses.field(metadata=dict(static=True))
   window_ref: ArrayRef | None
-  accum_ref: ArrayRef | None
-  copy_in_slot: ArrayRef | None
-  wait_in_slot: ArrayRef | None
-  copy_out_slot: ArrayRef | None
-  wait_out_slot: ArrayRef | None
-  _copy_in_slot_reg: int | jax.Array | None
-  _wait_in_slot_reg: int | jax.Array | None
-  _copy_out_slot_reg: int | jax.Array | None
-  _wait_out_slot_reg: int | jax.Array | None
-  next_fetch_smem: Sequence[jax.Array] | None
-  next_fetch_sreg: Sequence[jax.Array] | None
+  copy_in_slot: int | jax.Array | None
+  wait_in_slot: int | jax.Array | None
+  copy_out_slot: int | jax.Array | None
+  wait_out_slot: int | jax.Array | None
+  next_fetch: Sequence[jax.Array] | None
   sem_recvs: SemaphoreTuple | None
   sem_sends: SemaphoreTuple | None
-  # TODO(ramiroleal): Improve prefetch/postyeet interface to avoid
-  # using this ref.
-  swap: ArrayRef | None
-  tiling: tpu_info.Tiling | None = dataclasses.field(metadata=dict(static=True))
+  tiling: Tiling | None = dataclasses.field(metadata=dict(static=True))
+  is_trivial_windowing: bool = dataclasses.field(
+      default=False, metadata=dict(static=True)
+  )
+  has_allocated_buffer: bool = dataclasses.field(
+      default=False, metadata=dict(static=True)
+  )
 
   def __post_init__(self):
     if self.is_buffered and self.buffer_count < 1:
@@ -517,25 +503,19 @@ class BufferedRef(BufferedRefBase):
   @property
   def is_buffered(self) -> bool:
     """Whether this buffer is multiple-buffered."""
-    slots = [self.copy_in_slot, self.wait_in_slot,
-             self.copy_out_slot, self.wait_out_slot]
-    return any(x is not None for x in slots)
+    return self._buffer_count > 0
 
   @property
   def use_lookahead(self) -> bool:
     """Whether this buffer allows lookahead for fetching blocks."""
-    return self.next_fetch_smem is not None
+    return self._grid_rank is not None
 
   @property
   def buffer_count(self) -> int:
     """Returns the number of buffers used for multiple buffering."""
     if not self.is_buffered:
       raise ValueError("buffer count is undefined")
-    return self.window_ref.shape[0]  # type: ignore[union-attr]
-
-  @staticmethod
-  def buffer_types() -> type[BufferType]:
-    return BufferType
+    return self._buffer_count
 
   @classmethod
   def create(
@@ -544,11 +524,11 @@ class BufferedRef(BufferedRefBase):
       dtype_or_type,
       buffer_type,
       buffer_count,
-      needs_swap_ref=True,
-      grid_rank=0,
+      grid_rank=None,
       use_lookahead=False,
-      source_memory_space: tpu_core.MemorySpace | Literal[ANY] = ANY,  # type: ignore[valid-type]
-      tiling: tpu_info.Tiling | None = None,
+      source_memory_space: tpu_core.MemorySpace | Literal[ANY] = ANY,  # pyrefly: ignore[not-a-type]
+      tiling: Tiling | None = None,
+      is_trivial_windowing: bool = False,
   ) -> BufferedRef:
     """Create a BufferedRef.
 
@@ -557,8 +537,7 @@ class BufferedRef(BufferedRefBase):
       dtype_or_type: dtype or aval for buffers. If an aval, the shape is
         ignored.
       buffer_type: enum indicating whether this is an input, output, or in/out
-        accumulator buffered reference.
-      needs_swap_ref: whether a swap slots tracker needs to be allocated.
+        buffered reference.
       grid_rank: rank of the pipeline grid.
       use_lookahead: whether to enable pipeline lookahead.
       source_memory_space: The memory space of the backing source Ref.
@@ -576,13 +555,12 @@ class BufferedRef(BufferedRefBase):
         else jax_core.ShapedArray((123, 456), dtype_or_type)
     )
 
-    block_shape = _get_block_shape(spec)
-    if buffer_type is BufferType.ACCUMULATOR:
-      accum_ref = VMEM.from_type(ty.update(shape=block_shape))
-    else:
-      accum_ref = None
     buffer_memory_space = (
           VMEM if spec.memory_space is None else spec.memory_space)
+    # TODO(sharadmv): Don't hard-code TC here, infer from context.
+    buffer_memory_space = tpu_core.memory_space_to_tpu_memory_space(
+        buffer_memory_space, tpu_core.CoreType.TC
+    )
     if buffer_memory_space not in (SMEM, VMEM, HBM):
       raise ValueError(
           f"Unsupported buffer memory space: {buffer_memory_space}"
@@ -591,22 +569,19 @@ class BufferedRef(BufferedRefBase):
       return cls(
           _spec=spec,
           _buffer_type=buffer_type,
+          _buffer_count=0,
+          _grid_rank=None,
           window_ref=None,  # to be bound to existing ref by the pipeline routine
-          accum_ref=accum_ref,
           copy_in_slot=None,
           wait_in_slot=None,
           copy_out_slot=None,
           wait_out_slot=None,
-          _copy_in_slot_reg=None,
-          _wait_in_slot_reg=None,
-          _copy_out_slot_reg=None,
-          _wait_out_slot_reg=None,
-          next_fetch_smem=None,
-          next_fetch_sreg=None,
+          next_fetch=None,
           sem_recvs=None,
           sem_sends=None,
-          swap=None,
           tiling=None,
+          is_trivial_windowing=is_trivial_windowing,
+          has_allocated_buffer=False,
       )
     else:
       if use_lookahead and grid_rank is None:
@@ -614,35 +589,38 @@ class BufferedRef(BufferedRefBase):
             "grid_rank must be specified when use_lookahead is True."
         )
 
-      buffer_ty = ty.update(shape=(buffer_count, *block_shape))
+      if is_trivial_windowing:
+        buffer_ty = ty
+      else:
+        block_shape = _get_block_shape(spec)
+        if len(block_shape) == 1 and tiling is not Tiling.SPARSE_CORE:
+          buffer_ty = ty.update(shape=(buffer_count * block_shape[0],))
+        else:
+          buffer_ty = ty.update(shape=(buffer_count, *block_shape))
       return cls(
           _spec=spec,
           _buffer_type=buffer_type,
+          _buffer_count=buffer_count,
+          _grid_rank=grid_rank if use_lookahead else None,
           window_ref=buffer_memory_space.from_type(buffer_ty),
-          accum_ref=accum_ref,
-          copy_in_slot=SMEM((1,), jnp.uint32) if buffer_type.is_input else None,
-          wait_in_slot=SMEM((1,), jnp.uint32) if buffer_type.is_input else None,
-          copy_out_slot=SMEM((1,), jnp.uint32) if buffer_type.is_output else None,
-          wait_out_slot=SMEM((1,), jnp.uint32) if buffer_type.is_output else None,
-          _copy_in_slot_reg=None,
-          _wait_in_slot_reg=None,
-          _copy_out_slot_reg=None,
-          _wait_out_slot_reg=None,
-          next_fetch_smem=[SMEM((1,), jnp.int32) for _ in range(
-              grid_rank)] if use_lookahead else None,
-          next_fetch_sreg=None,
+          copy_in_slot=None,
+          wait_in_slot=None,
+          copy_out_slot=None,
+          wait_out_slot=None,
+          next_fetch=None,
           sem_recvs=(
               None
-              if buffer_type is BufferType.OUTPUT
+              if buffer_type is BufferType.OUTPUT or is_trivial_windowing
               else SemaphoreType.DMA((buffer_count,))
           ),
           sem_sends=(
               None
-              if buffer_type is BufferType.INPUT
+              if buffer_type is BufferType.INPUT or is_trivial_windowing
               else SemaphoreType.DMA((buffer_count,))
           ),
-          swap=SMEM((1,), jnp.bool) if needs_swap_ref else None,
           tiling=tiling,
+          is_trivial_windowing=is_trivial_windowing,
+          has_allocated_buffer=True,
       )
 
   @classmethod
@@ -658,33 +636,20 @@ class BufferedRef(BufferedRefBase):
     )
 
   @classmethod
-  def accumulator(cls, spec, dtype_or_type, buffer_count=2, **kwargs):
-    return cls.create(
-        spec, dtype_or_type, BufferType.ACCUMULATOR, buffer_count, **kwargs
-    )
-
-  @classmethod
   def input_output(cls, spec, dtype_or_type, buffer_count=2, **kwargs):
     return cls.create(
         spec, dtype_or_type, BufferType.INPUT_OUTPUT, buffer_count, **kwargs
     )
-
-  @property
-  def block_shape(self):
-    return self.spec.block_shape
-
-  @property
-  def compute_index(self):
-    return self.spec.index_map
 
   def with_spec(self, spec: pl.BlockSpec) -> BufferedRef:
     """Returns a new BufferedRef with the given block spec."""
     return dataclasses.replace(self, _spec=spec)
 
   def with_next_fetch(
-    self, next_fetch: Sequence[jax.Array] | None = None,
+      self,
+      next_fetch: Sequence[jax.Array] | None = None,
   ):
-    return dataclasses.replace(self, next_fetch_sreg=next_fetch)
+    return dataclasses.replace(self, next_fetch=next_fetch)
 
   def with_slot_index(
       self,
@@ -696,40 +661,36 @@ class BufferedRef(BufferedRefBase):
     """Returns a new BufferedRef with the given slot index."""
     new_buf = self
     if copy_in_slot is not None:
-      new_buf = dataclasses.replace(new_buf, _copy_in_slot_reg=copy_in_slot)
+      new_buf = dataclasses.replace(new_buf, copy_in_slot=copy_in_slot)
     if copy_out_slot is not None:
-      new_buf = dataclasses.replace(new_buf, _copy_out_slot_reg=copy_out_slot)
+      new_buf = dataclasses.replace(new_buf, copy_out_slot=copy_out_slot)
     if wait_in_slot is not None:
-      new_buf = dataclasses.replace(new_buf, _wait_in_slot_reg=wait_in_slot)
+      new_buf = dataclasses.replace(new_buf, wait_in_slot=wait_in_slot)
     if wait_out_slot is not None:
-      new_buf = dataclasses.replace(new_buf, _wait_out_slot_reg=wait_out_slot)
+      new_buf = dataclasses.replace(new_buf, wait_out_slot=wait_out_slot)
     return new_buf
 
   @property
   def current_ref(self):
+    """Returns the current working slice of the double-buffer."""
     assert not (
         self.window_ref is None
         or isinstance(self.window_ref, state.AbstractRef)
     )
-    if not self.is_buffered:
+    if not self.is_buffered or self.is_trivial_windowing:
       return self.window_ref
     else:
       if self.is_output:
         slot = self.current_copy_out_slot
       else:
         slot = self.current_wait_in_slot
-      return self.window_ref.at[slot]
-
-  def _cumulative(self, smem_slot, reg_slot):
-    if reg_slot is not None:
-      return reg_slot
-    assert smem_slot is not None
-    return smem_slot[0]
+      return self._window_ref_at(slot)
 
   @property
   def cumulative_copy_in(self):
     """The cumulative number of copy_ins issued on this buffer."""
-    return self._cumulative(self.copy_in_slot, self._copy_in_slot_reg)
+    assert self.copy_in_slot is not None
+    return self.copy_in_slot
 
   @property
   def current_copy_in_slot(self):
@@ -739,7 +700,8 @@ class BufferedRef(BufferedRefBase):
   @property
   def cumulative_copy_out(self):
     """The cumulative number of copy_outs issued on this buffer."""
-    return self._cumulative(self.copy_out_slot, self._copy_out_slot_reg)
+    assert self.copy_out_slot is not None
+    return self.copy_out_slot
 
   @property
   def current_copy_out_slot(self):
@@ -749,7 +711,8 @@ class BufferedRef(BufferedRefBase):
   @property
   def cumulative_wait_in(self):
     """The cumulative number of wait_ins issued on this buffer."""
-    return self._cumulative(self.wait_in_slot, self._wait_in_slot_reg)
+    assert self.wait_in_slot is not None
+    return self.wait_in_slot
 
   @property
   def current_wait_in_slot(self):
@@ -759,7 +722,8 @@ class BufferedRef(BufferedRefBase):
   @property
   def cumulative_wait_out(self):
     """The cumulative number of wait_outs issued on this buffer."""
-    return self._cumulative(self.wait_out_slot, self._wait_out_slot_reg)
+    assert self.wait_out_slot is not None
+    return self.wait_out_slot
 
   @property
   def current_wait_out_slot(self):
@@ -771,27 +735,28 @@ class BufferedRef(BufferedRefBase):
     """Returns the next grid indices to fetch from if using lookahead."""
     if not self.use_lookahead:
       raise ValueError("Can only get fetch indices if using lookahead.")
-    if self.next_fetch_sreg is not None:
-      return self.next_fetch_sreg
-    assert self.next_fetch_smem is not None
-    return tuple(smem[0] for smem in self.next_fetch_smem)
+    assert self.next_fetch is not None
+    return self.next_fetch
 
   def bind_existing_ref(self, window_ref, indices):
     """For handling VMEM references, the pipeline aliases the existing ref."""
-    if not self.is_buffered:
+    if not self.is_buffered and not self.has_allocated_buffer:
+      if self.is_trivial_windowing:
+        return dataclasses.replace(self, window_ref=window_ref)
       return dataclasses.replace(
           self, window_ref=window_ref.at[self.compute_slice(indices)]
       )
     return self
 
   def unbind_refs(self):
-    if not self.is_buffered:
+    if not self.is_buffered and not self.has_allocated_buffer:
       return dataclasses.replace(self, window_ref=None)
     return self
 
   def compute_slice(self, grid_indices):
     """Compute DMA slice from grid indices."""
     indices = self.compute_index(*grid_indices)
+    assert self.block_shape is not None
     assert len(self.block_shape) == len(indices)
     indexer = []
     for bd, idx in zip(self.block_shape, indices, strict=True):
@@ -815,38 +780,24 @@ class BufferedRef(BufferedRefBase):
           raise ValueError(f"Unsupported block dimension type: {type(bd)}")
     return tuple(indexer)
 
-  def init_slots(self):
-    """Initialize slot indices."""
-    if not self.is_buffered: return
-    if self.is_input:
-      assert self.copy_in_slot is not None
-      assert self.wait_in_slot is not None
-      self.copy_in_slot[0] = 0
-      self.wait_in_slot[0] = 0
-      if self.use_lookahead:
-        assert self.next_fetch_smem is not None
-        for i in range(len(self.next_fetch_smem)):
-          self.next_fetch_smem[i][0] = 0
-    if self.is_output:
-      assert self.copy_out_slot is not None
-      assert self.wait_out_slot is not None
-      self.copy_out_slot[0] = 0
-      self.wait_out_slot[0] = 0
-    if self.swap is not None:
-      self.swap[0] = False
-
-  def _advance_slot(
-      self, smem_slot, reg_slot, slot_kwarg, predicate
-  ) -> "BufferedRef":
-    current_slot = (
-        smem_slot[0] if reg_slot is None else reg_slot  # type: ignore[index]
+  def initialize_slots(self) -> "BufferedRef":
+    return dataclasses.replace(
+        self,
+        copy_in_slot=jnp.uint32(0) if self.buffer_type.is_input else None,
+        wait_in_slot=jnp.uint32(0) if self.buffer_type.is_input else None,
+        copy_out_slot=jnp.uint32(0) if self.buffer_type.is_output else None,
+        wait_out_slot=jnp.uint32(0) if self.buffer_type.is_output else None,
+        next_fetch=(
+            tuple(jnp.int32(0) for _ in range(self._grid_rank))
+            if self._grid_rank is not None
+            else None
+        ),
     )
-    new_current_slot = lax.select(predicate, current_slot + 1, current_slot)
-    if reg_slot is not None:
-      return self.with_slot_index(**{slot_kwarg: new_current_slot})
-    assert isinstance(smem_slot, jax.Array)
-    smem_slot[0] = new_current_slot
-    return self
+
+  def _advance_slot(self, reg_slot, slot_kwarg, predicate) -> "BufferedRef":
+    assert reg_slot is not None
+    new_current_slot = lax.select(predicate, reg_slot + 1, reg_slot)
+    return self.with_slot_index(**{slot_kwarg: new_current_slot})
 
   def advance_copy_in_slot(
       self, predicate: bool | jax.Array = True
@@ -854,115 +805,45 @@ class BufferedRef(BufferedRefBase):
     """Switch to the next copy slot."""
     if not self.is_buffered or not self.is_input:
       return self
-    return self._advance_slot(
-        self.copy_in_slot, self._copy_in_slot_reg, "copy_in_slot", predicate
-    )
+    return self._advance_slot(self.copy_in_slot, "copy_in_slot", predicate)
 
-  def advance_wait_in_slot(self, predicate: bool | jax.Array = True) -> "BufferedRef":
+  def advance_wait_in_slot(
+      self, predicate: bool | jax.Array = True
+  ) -> "BufferedRef":
     """Switch to the next wait slot."""
     if not self.is_buffered or not self.is_input:
       return self
-    return self._advance_slot(
-        self.wait_in_slot, self._wait_in_slot_reg, "wait_in_slot", predicate
-    )
+    return self._advance_slot(self.wait_in_slot, "wait_in_slot", predicate)
 
-  def advance_copy_out_slot(self, predicate: bool | jax.Array = True) -> "BufferedRef":
+  def advance_copy_out_slot(
+      self, predicate: bool | jax.Array = True
+  ) -> "BufferedRef":
     """Switch to the next copy slot."""
     if not self.is_buffered or not self.is_output:
       return self
-    return self._advance_slot(
-        self.copy_out_slot, self._copy_out_slot_reg, "copy_out_slot", predicate
-    )
+    return self._advance_slot(self.copy_out_slot, "copy_out_slot", predicate)
 
-  def advance_wait_out_slot(self, predicate: bool | jax.Array = True) -> "BufferedRef":
+  def advance_wait_out_slot(
+      self, predicate: bool | jax.Array = True
+  ) -> "BufferedRef":
     """Switch to the next wait slot."""
     if not self.is_buffered or not self.is_output:
       return self
-    return self._advance_slot(
-        self.wait_out_slot, self._wait_out_slot_reg, "wait_out_slot", predicate
-    )
+    return self._advance_slot(self.wait_out_slot, "wait_out_slot", predicate)
 
-  def load_slots(self, predicate: bool | jax.Array = True) -> BufferedRef:
-    """Load slot information into registers."""
-    if not self.is_buffered:
-      return self
-    def _do_load():
-      copy_in = copy_out = wait_in = wait_out = None
-      if self.is_input:
-        assert self.copy_in_slot is not None
-        assert self.wait_in_slot is not None
-        copy_in = self.copy_in_slot[0]
-        wait_in = self.wait_in_slot[0]
-      if self.is_output:
-        assert self.copy_out_slot is not None
-        assert self.wait_out_slot is not None
-        copy_out = self.copy_out_slot[0]
-        wait_out = self.wait_out_slot[0]
-      if self.use_lookahead:
-        assert self.next_fetch_smem is not None
-        next_fetch = tuple(self.next_fetch_smem[i][0] for i in range(
-            len(self.next_fetch_smem)))
-      else:
-        next_fetch = None
-      return (copy_in, copy_out, wait_in, wait_out, next_fetch)
-    def _no_load():
-      copy_in = copy_out = wait_in = wait_out = None
-      # Need to make sure that we return a non-none value to make sure
-      # the pytrees for both branches match.
-      _ensure_not_none = lambda x: x if x is not None else jnp.uint32(0)
-      if self.is_input:
-        copy_in = _ensure_not_none(self._copy_in_slot_reg)
-        wait_in = _ensure_not_none(self._wait_in_slot_reg)
-      if self.is_output:
-        copy_out = _ensure_not_none(self._copy_out_slot_reg)
-        wait_out = _ensure_not_none(self._wait_out_slot_reg)
-      if self.use_lookahead:
-        if self.next_fetch_sreg is None:
-          assert self.next_fetch_smem is not None
-          next_fetch = tuple(jnp.int32(0) for _ in range(
-              len(self.next_fetch_smem)))
-        else:
-          next_fetch = self.next_fetch_sreg
-      else:
-        next_fetch = None
-      return (copy_in, copy_out, wait_in, wait_out, next_fetch)
-    (copy_in_slot, copy_out_slot, wait_in_slot, wait_out_slot,
-     next_fetch) = lax.cond(predicate, _do_load, _no_load)
-    bref = self.with_slot_index(
-        copy_in_slot=copy_in_slot,
-        copy_out_slot=copy_out_slot,
-        wait_in_slot=wait_in_slot,
-        wait_out_slot=wait_out_slot,
-    )
-    if bref.next_fetch_smem is not None:
-      bref = bref.with_next_fetch(next_fetch=next_fetch)
-    return bref
+  def _window_ref_at(self, slot, window_slice=None):
+    assert self.window_ref is not None
+    if self.window_ref.ndim > 1:
+      return self.window_ref.at[(slot, *(window_slice or ()))]
 
-  def save_slots(self, predicate: bool | jax.Array = True):
-    """Save slot information from registers."""
-    if not self.is_buffered:
-      return
-    @pl.when(predicate)
-    def _():
-      if self.is_input:
-        assert self.copy_in_slot is not None
-        assert self._copy_in_slot_reg is not None
-        self.copy_in_slot[0] = self._copy_in_slot_reg
-        assert self.wait_in_slot is not None
-        assert self._wait_in_slot_reg is not None
-        self.wait_in_slot[0] = self._wait_in_slot_reg
-        if self.use_lookahead:
-          assert self.next_fetch_smem is not None
-          assert self.next_fetch_sreg is not None
-          for i in range(len(self.next_fetch_smem)):
-            self.next_fetch_smem[i][0] = self.next_fetch_sreg[i]
-      if self.is_output:
-        assert self.copy_out_slot is not None
-        assert self._copy_out_slot_reg is not None
-        self.copy_out_slot[0] = self._copy_out_slot_reg
-        assert self.wait_out_slot is not None
-        assert self._wait_out_slot_reg is not None
-        self.wait_out_slot[0] = self._wait_out_slot_reg
+    # 1D ``window_ref`` stores all slots contiguously.
+    n = self.window_ref.shape[0] // self.buffer_count
+    if window_slice is None:
+      return self.window_ref.at[pl.ds(slot * n, n)]
+    assert len(window_slice) == 1
+    return self.window_ref.at[
+        pl.ds(slot * n + window_slice[0].start, window_slice[0].size)
+    ]
 
   def copy_in(self, src_ref, grid_indices):
     """Starts copy of HBM dma slice into the current slot."""
@@ -970,14 +851,12 @@ class BufferedRef(BufferedRefBase):
     if not self.is_buffered: return
     assert not (self.window_ref is None or isinstance(self.window_ref, state.AbstractRef))
     assert self.sem_recvs is not None
-    if self.swap is not None:
-      self.swap[0] = True
     slot = self.current_copy_in_slot
     src_slice = self.get_dma_slice(_ref_to_value_aval(src_ref), grid_indices)
     dst_slice = self._to_window_slice(src_slice)
     tpu_primitives.make_async_copy(
         src_ref.at[src_slice],
-        self.window_ref.at[(slot, *dst_slice)],
+        self._window_ref_at(slot, dst_slice),
         self.sem_recvs.at[slot],
     ).start()
 
@@ -987,13 +866,11 @@ class BufferedRef(BufferedRefBase):
     if not self.is_buffered: return
     assert not (self.window_ref is None or isinstance(self.window_ref, state.AbstractRef))
     assert self.sem_sends is not None
-    if self.swap is not None:
-      self.swap[0] = True
     slot = self.current_copy_out_slot
     dst_slice = self.get_dma_slice(_ref_to_value_aval(dst_ref), grid_indices)
     src_slice = self._to_window_slice(dst_slice)
     tpu_primitives.make_async_copy(
-        self.window_ref.at[(slot, *src_slice)],
+        self._window_ref_at(slot, src_slice),
         dst_ref.at[dst_slice],
         self.sem_sends.at[slot],
     ).start()
@@ -1009,9 +886,9 @@ class BufferedRef(BufferedRefBase):
     wait_slot = self.current_wait_in_slot
     tpu_primitives.make_async_copy(
         src_ref.at[src_slice],  # nb: doesn't matter
-        self.window_ref.at[
-            (wait_slot, *dst_slice)
-        ],  # only dst shape is important
+        self._window_ref_at(
+            wait_slot, dst_slice
+        ),  # only dst shape is important
         self.sem_recvs.at[wait_slot],
     ).wait()
 
@@ -1025,49 +902,10 @@ class BufferedRef(BufferedRefBase):
     dst_slice = self.get_dma_slice(_ref_to_value_aval(dst_ref), grid_indices)
     src_slice = self._to_window_slice(dst_slice)
     tpu_primitives.make_async_copy(
-        self.window_ref.at[(wait_slot, *src_slice)],  # nb: doesn't matter
+        self._window_ref_at(wait_slot, src_slice),  # nb: doesn't matter
         dst_ref.at[dst_slice],  # only dst shape is important
         self.sem_sends.at[wait_slot],
     ).wait()
-
-  # Accumulator methods
-  #
-  # Accumulating inline in VMEM saves half the HBM<->VMEM bandwidth cost of
-  # doing another full loop around HBM to do a reduction, at the current cost
-  # of allocating another VMEM buffer.
-  #
-  # NB: there's no actual need to have an additional accumulation buffer, if
-  # we just rewrote inner kernels to handle the initial-zero-init and output
-  # reduction, we don't need to waste VMEM.  Consider removing this magic
-  # init and reduce support.
-
-  def set_accumulator(self, init=False):
-    """Set accumulator or zero it out to initialize."""
-    assert self.is_accumulator
-    if self.accum_ref is not None:
-      accum_dtype = self.accum_ref.dtype
-      def _init():
-        assert self.accum_ref is not None  # pyrefly#40
-        self.accum_ref[...] = jnp.zeros_like(self.accum_ref[...])
-      def _set():
-        assert self.accum_ref is not None  # pyrefly#40
-        self.accum_ref[...] = self.current_ref[...].astype(accum_dtype)
-      lax.cond(init, _init, _set)
-
-  def accumulate(self):
-    """Add into the current slot."""
-    assert self.is_accumulator
-    if self.accum_ref is not None:
-      assert self.window_ref is not None
-      accum_dtype = jnp.float32
-      if self.window_ref.dtype == jnp.int32:
-        accum_dtype = jnp.int32
-      # TODO(levskaya): we could generalize init and reduction functions,
-      # could it ever be useful to support more generic monoids?
-      self.current_ref[...] = (
-          self.current_ref[...].astype(accum_dtype)
-          + self.accum_ref[...].astype(accum_dtype)
-      ).astype(self.window_ref.dtype)
 
 
 def fetch_with_lookahead(buffered_ref, src_ref,
@@ -1107,7 +945,6 @@ def fetch_with_lookahead(buffered_ref, src_ref,
     fetch_limit = lax.select(fetch_limit < fetch_once_limit,
                              fetch_limit, fetch_once_limit)
 
-
   def _loop_cond(carry):
     _, next_indices, cumulative_copy_in = carry
     # Don't fetch more blocks than we have buffers.
@@ -1127,7 +964,7 @@ def fetch_with_lookahead(buffered_ref, src_ref,
     bref = buffered_ref.with_slot_index(copy_in_slot=cumulative_copy_in)
     @pl.when(pred)
     def _start():
-      bref.copy_in(src_ref, next_indices_offset)  # pylint: disable=cell-var-from-loop
+      bref.copy_in(src_ref, next_indices_offset)
     next_copy_in = cumulative_copy_in + as_uint32(pred)
     next_next_indices = increment_indices(next_indices)
     return next_indices, next_next_indices, next_copy_in
@@ -1149,6 +986,7 @@ map_brefs = functools.partial(
     is_leaf=lambda x: isinstance(x, BufferedRefBase)
 )
 
+
 def map_inputs(f, *args):
   """Maps over all input BufferedRefs."""
   def fmap(bref, *f_args):
@@ -1156,6 +994,7 @@ def map_inputs(f, *args):
       return f(bref, *f_args)
     return bref
   return map_brefs(fmap, *args)
+
 
 def map_outputs(f, *args):
   """Maps over all output BufferedRefs."""
@@ -1230,9 +1069,6 @@ class Scheduler:
       grid: tuple[int | jax.Array, ...],
       grid_offsets: tuple[int | jax.Array, ...],
       num_stages: int,
-      first_cycle: jax.Array | bool,
-      last_cycle: jax.Array | bool,
-      init_accumulators=None,
       trace_scopes=True,
       _explicit_indices: bool = False,
   ):
@@ -1244,10 +1080,6 @@ class Scheduler:
       grid: pallas grid for BufferedRefs.
       grid_offsets: offsets for grid indices (used for megacore).
       num_stages: number of stages in the pipeline.
-      first_cycle: whether this is the first invocation of the pipeline.
-      last_cycle: whether this is the last invocation of the pipeline.
-      init_accumulators: do we zero-initialize accumulator state for this
-        invocation of the pipeline.
       trace_scopes: whether to use named_scope to trace blocks in the pipeline.
       _explicit_indices: whether the pipeline uses explicit indices.
     """
@@ -1255,9 +1087,6 @@ class Scheduler:
     self.grid = grid
     self.grid_offsets = grid_offsets
     self.num_stages = num_stages
-    self.first_cycle = first_cycle
-    self.last_cycle = last_cycle
-    self.init_accumulators = init_accumulators
     self.trace_scopes = trace_scopes
     self._explicit_indices = _explicit_indices
 
@@ -1267,10 +1096,6 @@ class Scheduler:
     # First and last inner step conditionals.
     self.first_step = step == 0
     self.last_step = step == self.num_steps - 1
-
-    # First and last total step conditionals.
-    self.first_step_ever = first_cycle & self.first_step
-    self.last_step_ever = last_cycle & self.last_step
 
     # Derived grid indices for present, previous, and next steps.
     self.indices = tuple(
@@ -1313,7 +1138,7 @@ class Scheduler:
     if self._explicit_indices:
       return contextlib.nullcontext()
     return pallas_core.grid_env(
-        list(map(pallas_core.GridAxis, self.indices, self.grid)))  # pyrefly: ignore[no-matching-overload]  # pyrefly#2385
+        list(map(pallas_core.GridAxis, self.indices, self.grid)))  # pyrefly: ignore[bad-argument-type]  # pyrefly#2385
 
   def out_of_fetch(self, buffered_ref):
     """Returns whether there are no more blocks to fetch."""
@@ -1324,21 +1149,21 @@ class Scheduler:
     return self.step >= (self.num_steps - buffered_ref.buffer_count + 1)
 
   def has_changed(self, buffered_ref):
-    if not buffered_ref.is_buffered:
+    if not buffered_ref.is_buffered or buffered_ref.is_trivial_windowing:
       return False
     indices = buffered_ref.compute_index(*self.indices)
     prev_indices = buffered_ref.compute_index(*self.prev_indices)
     return _tuples_differ(indices, prev_indices)
 
   def will_change_current(self, buffered_ref):
-    if not buffered_ref.is_buffered:
+    if not buffered_ref.is_buffered or buffered_ref.is_trivial_windowing:
       return False
     indices = buffered_ref.compute_index(*self.indices)
     next_indices = buffered_ref.compute_index(*self.next_indices)
     return _tuples_differ(indices, next_indices)
 
   def will_change_fetch(self, buffered_ref):
-    if not buffered_ref.is_buffered:
+    if not buffered_ref.is_buffered or buffered_ref.is_trivial_windowing:
       return False
     if buffered_ref.buffer_count < 2:
       return self.has_changed(buffered_ref)
@@ -1357,24 +1182,16 @@ class Scheduler:
   # SCHEDULE ----------------------------------------------------------------
 
   # Below is the sequence of conditional waits and copies used for inputs,
-  # outputs, and in-out accumulators.
+  # outputs, and in-outs.
 
-  def initialize_step(self, buffered_ref, src_ref, schedule=None, step=0):
-    if schedule is None:
-      schedule = _default_schedule
-    # TODO(justinfu): Should cache this, but it doesn't actually do computation
-    # in both default & fixed schedules right now so it doesn't increase
-    # the Jaxpr size.
-    do_copy: Any = schedule["prologue_copy_in"](self, buffered_ref, src_ref)
+  def initialize_step(self, buffered_ref, src_ref, step=0):
 
     with self._named_scope(f"ep_initialize_{step}"):
-      if step == 0:
-        @pl.when(self.first_step_ever)
-        def _init_slots():
-          buffered_ref.init_slots()
-        buffered_ref = buffered_ref.load_slots()
 
       if not buffered_ref.is_input or not buffered_ref.is_buffered:
+        return buffered_ref
+
+      if buffered_ref.is_trivial_windowing:
         return buffered_ref
 
       if (step + 1) >= buffered_ref.buffer_count:
@@ -1383,23 +1200,23 @@ class Scheduler:
       if buffered_ref.use_lookahead:
         if step == 0:
           # We always fetch the first block.
-          @pl.when(do_copy)
+          @pl.when(self.first_step)
           def _start():
             buffered_ref.copy_in(src_ref,
-              self.add_offset(buffered_ref.next_fetch_indices))  # pylint: disable=cell-var-from-loop
-          buffered_ref = buffered_ref.advance_copy_in_slot(do_copy)
+              self.add_offset(buffered_ref.next_fetch_indices))
+          buffered_ref = buffered_ref.advance_copy_in_slot(self.first_step)
         else:
           buffered_ref, _ = fetch_with_lookahead(
               buffered_ref,
               src_ref,
               self.grid,
               self.grid_offsets,
-              predicate=self.first_step_ever & do_copy,
+              predicate=self.first_step,
               max_num_fetches=1,
           )
       else:
         if step == 0:
-          predicate = do_copy
+          predicate = self.first_step
           fetch_indices = self.fetch_indices[step]
         else:
           fetch_indices = self.fetch_indices[step]
@@ -1407,43 +1224,31 @@ class Scheduler:
           block_indices = buffered_ref.compute_index(*fetch_indices)
           prev_block_indices = buffered_ref.compute_index(*prev_grid_indices)
           block_changed = _tuples_differ(block_indices, prev_block_indices)
-          predicate = do_copy & block_changed
-        @pl.when(predicate)  # pylint: disable=cell-var-from-loop
+          predicate = self.first_step & block_changed
+        @pl.when(predicate)
         def _start():
-          buffered_ref.copy_in(src_ref, fetch_indices)  # pylint: disable=cell-var-from-loop
+          buffered_ref.copy_in(src_ref, fetch_indices)
         buffered_ref = buffered_ref.advance_copy_in_slot(predicate)
     return buffered_ref
 
-  def wait_in(self, buffered_ref, src_ref, schedule=None) -> "BufferedRef":
-    if schedule is None:
-      schedule = _default_schedule
-    pred: Any = schedule["wait_in"](self, buffered_ref, src_ref)
+  def wait_in(self, buffered_ref, src_ref) -> "BufferedRef":
+    if buffered_ref.is_trivial_windowing:
+      return buffered_ref
+    pred = self.has_changed(buffered_ref) | self.first_step
 
+    @pl.when(pred)
     @self._named_scope("ep_wait_in")
     def _wait():
       if buffered_ref.is_input:
         buffered_ref.wait_in(src_ref, self.indices)
-      if buffered_ref.is_accumulator:
-        # In most cases we won't be waiting when init_accumulators is True,
-        # so this is usually just setting what we just copied.
-        buffered_ref.set_accumulator(self.init_accumulators)
-
-    @self._named_scope("ep_set_accum")
-    def _no_wait():
-      if buffered_ref.is_accumulator:
-
-        @pl.when(self.first_step | self.has_changed(buffered_ref))
-        def _set_accumulator():
-          # In most cases we will skip waiting when init_accumulators is True,
-          # so this is usually just setting the accumulator to 0.
-          buffered_ref.set_accumulator(self.init_accumulators)
-    lax.cond(pred, _wait, _no_wait)
     return buffered_ref
 
-  def copy_in(self, buffered_ref, src_ref, schedule=None) -> "BufferedRef":
-    if schedule is None:
-      schedule = _default_schedule
-    pred: Any = schedule['copy_in'](self, buffered_ref, src_ref)
+  def copy_in(self, buffered_ref, src_ref) -> "BufferedRef":
+    if buffered_ref.is_trivial_windowing:
+      return buffered_ref
+    pred = (self.will_change_fetch(buffered_ref) &
+            ~self.out_of_fetch(buffered_ref))
+
     # Single-buffered refs skip the prologue, so the first copy_in in the
     # loop must always fire to populate the buffer before wait_in.
     if buffered_ref.is_buffered and buffered_ref.buffer_count < 2:
@@ -1466,65 +1271,10 @@ class Scheduler:
           pred & buffered_ref.is_input)
     return buffered_ref
 
-  # --> Call prefetch here to grab the first inputs of next cycle.
-
-  # convenience method for prefetch callbacks.
-  def prefetch(self, buffered_ref, src_ref, schedule=None):
-    if schedule is None:
-      schedule = _default_schedule
-    pred: Any = schedule['prefetch'](self, buffered_ref, src_ref)
-
-    if not buffered_ref.is_input or not buffered_ref.is_buffered:
-      return
-
-    if buffered_ref.use_lookahead:
-      buffered_ref = buffered_ref.with_next_fetch(
-          jax.tree.map(jnp.zeros_like, buffered_ref.next_fetch_sreg))
-      @pl.when(pred)
-      def _start():
-        buffered_ref.copy_in(
-            src_ref, self.add_offset(buffered_ref.next_fetch_sreg))  # pylint: disable=cell-var-from-loop
-      buffered_ref = buffered_ref.advance_copy_in_slot(pred)
-
-      buffered_ref, final_copy_in_slot = fetch_with_lookahead(
-          buffered_ref,
-          src_ref,
-          self.grid,
-          self.grid_offsets,
-          predicate=pred,
-          update_slots=False,
-      )
-      @pl.when(pred)
-      def _():
-        bref = buffered_ref.with_slot_index(copy_in_slot=final_copy_in_slot)
-        bref.save_slots()
-    else:
-      pred = pred & self.last_step
-      grid_indices = self.indices
-      for i in range(buffered_ref.buffer_count - 1):
-        next_grid_indices = self.fetch_indices[i+1]
-        block_indices = buffered_ref.compute_index(*grid_indices)
-        next_block_indices = buffered_ref.compute_index(*next_grid_indices)
-        if i == 0:
-          # If the prefetch predicate triggers, we already know that the
-          # first block needs to be copied.
-          should_prefetch = True
-        else:
-          should_prefetch = _tuples_differ(block_indices, next_block_indices)
-
-        @pl.when(pred & should_prefetch)
-        def _():
-          buffered_ref.copy_in(src_ref, next_grid_indices)  # pylint: disable=cell-var-from-loop
-        buffered_ref = buffered_ref.advance_copy_in_slot(pred & should_prefetch)
-        grid_indices = next_grid_indices
-      buffered_ref.save_slots()
-    return
-
-  def wait_out(self, buffered_ref, dst_ref, schedule=None) -> "BufferedRef":
-    if schedule is None:
-      schedule = _default_schedule
-    pred: Any = schedule['wait_out'](self, buffered_ref, dst_ref)
-
+  def wait_out(self, buffered_ref, dst_ref) -> "BufferedRef":
+    if buffered_ref.is_trivial_windowing:
+      return buffered_ref
+    pred = self.has_changed(buffered_ref) & ~self.first_step
     @pl.when(pred)
     @self._named_scope("ep_wait_out")
     def _wait():
@@ -1538,39 +1288,23 @@ class Scheduler:
         buffered_ref.wait_out(dst_ref, self.prev_indices)
     return buffered_ref.advance_wait_out_slot(pred & buffered_ref.is_output)
 
-  # --> Call "postyeet" here, after last output copy is finished from previous
-  #     cycle
+  def copy_out(self, buffered_ref, dst_ref) -> "BufferedRef":
+    if buffered_ref.is_trivial_windowing:
+      return buffered_ref
+    pred = self.will_change_current(buffered_ref) | self.last_step
 
-  def copy_out(self, buffered_ref, dst_ref, schedule=None) -> "BufferedRef":
-    if schedule is None:
-      schedule = _default_schedule
-    pred: Any = schedule['copy_out'](self, buffered_ref, dst_ref)
-
+    @pl.when(pred)
     @self._named_scope("ep_copy_out")
-    def _copy_out_and_accumulate():
-      if buffered_ref.is_accumulator:
-        buffered_ref.accumulate()
+    def _copy_out():
       if buffered_ref.is_output:
         buffered_ref.copy_out(dst_ref, self.indices)
 
-    @self._named_scope("ep_accum")
-    def _just_accumulate():
-      if buffered_ref.is_accumulator:
-        # We accumulate on the last step because we will set the accumulator
-        # on the next first step. We can optimize this away if it becomes
-        # a problem, but it is probably not worth the complexity to support
-        # chains of different pipelines that want to reuse the accumulator with
-        # slightly different schedules.
-        @pl.when(self.last_step)
-        def _accumulate():
-          buffered_ref.accumulate()
-    lax.cond(pred, _copy_out_and_accumulate, _just_accumulate)
     return buffered_ref.advance_copy_out_slot(pred & buffered_ref.is_output)
 
-  def finalize(self, buffered_ref, dst_ref, schedule=None):
-    if schedule is None:
-      schedule = _default_schedule
-    pred: Any = schedule['epilogue_wait_out'](self, buffered_ref, dst_ref)
+  def finalize(self, buffered_ref, dst_ref):
+    if buffered_ref.is_trivial_windowing:
+      return
+    pred = self.last_step
 
     @pl.when(pred)
     @self._named_scope("ep_finalize")
@@ -1578,104 +1312,15 @@ class Scheduler:
       if buffered_ref.is_output:
         buffered_ref.wait_out(dst_ref, self.indices)
 
-    buffered_ref.save_slots()
-
-  def advance_slots(self, buffered_ref, schedule=None):
-    if schedule is None:
-      schedule = _default_schedule
-
+  def advance_slots(self, buffered_ref):
     if buffered_ref.is_input:
-      pred = schedule['advance_wait_in'](self, buffered_ref, schedule)
+      pred = self.will_change_current(buffered_ref) | self.last_step
       buffered_ref = buffered_ref.advance_wait_in_slot(pred)
     # Currently we advance copy_in and output slots after their respective
     # operation.
     return buffered_ref
 
   # END SCHEDULE --------------------------------------------------------------
-
-
-# Scheduling overrides.
-
-# When trying to fuse across pipelines that use accumulator arguments, we
-# sometimes need to mess with the default scheduling above to avoid data-races
-# or to maximize performance.  A schedule is simply a set of functions that
-# calculate predicates for whether or not the pipeline input and output
-# BufferedRefs should do copies and waits.
-
-
-# Copy of the default pipeline schedule.  The default schedule tacitly assumes
-# that the source and target HBM Refs change with each cycle.
-_default_schedule = dict(
-    prologue_copy_in=lambda s, bref, _: s.first_step_ever,
-    # We assume that the source ref changed for prefetch.
-    wait_in=lambda s, bref, _: s.has_changed(bref) | s.first_step,
-    advance_wait_in=lambda s, bref, _: (
-        s.will_change_current(bref) | s.last_step),
-    copy_in=lambda s, bref, _: s.will_change_fetch(bref) & ~s.out_of_fetch(
-        bref),
-    # We assume that the source ref changed. E.g. because of a CM DMA.
-    prefetch=lambda s, bref, _: (
-        (s.will_change_fetch(bref) | s.last_step) & ~s.last_step_ever
-    ),
-    # We assume that the target ref changed. E.g. because of a CM DMA.
-    wait_out=lambda s, bref, _: (s.has_changed(bref) | s.first_step) & ~s.first_step_ever,
-    # We assume that the target ref is changing. E.g. because of a CM DMA.
-    copy_out=lambda s, bref, _: s.will_change_current(bref) | s.last_step,
-    epilogue_wait_out=lambda s, bref, _: s.last_step_ever,
-)
-
-
-# Alternative schedule needed for accumulators reading and writing to a fixed
-# HBM reference to avoid HBM data races for trivially small grids: only
-# read/write when tiles change or at the very beginning or end of a fused
-# pipeline schedule.
-_fixed_schedule = dict(
-    prologue_copy_in=lambda s, bref, _: s.first_step_ever,
-    # We don't assume that the source ref changed for prefetch.
-    wait_in=lambda s, bref, _: s.has_changed(bref) | s.first_step_ever,
-    advance_wait_in=lambda s, bref, _: s.will_change_current(bref),
-    copy_in=lambda s, bref, _: s.will_change_fetch(bref) & ~s.out_of_fetch(
-        bref),
-    # We don't assume that the source ref changed.
-    prefetch=lambda s, bref, _: s.will_change_fetch(bref) & ~s.last_step_ever,
-    # We don't assume that the target ref changed.
-    wait_out=lambda s, bref, _: (s.has_changed(bref) & ~s.first_step_ever),
-    # We don't assume that the target ref is changing.
-    copy_out=lambda s, bref, _: s.will_change_current(bref) | s.last_step_ever,
-    epilogue_wait_out=lambda s, bref, _: s.last_step_ever,
-)
-
-
-def skip_input_copies_when_init_accumulators(schedule) -> Any:
-  """Skip input copies in schedule when init_accumulators is True."""
-  new_schedule = {**schedule}
-  for k in ["prologue_copy_in", "wait_in", "copy_in"]:
-
-    def new_pred(original_pred_fn, *a):
-      pred = original_pred_fn(*a)
-      if a[1].is_accumulator or a[1].is_input_output:
-        pred &= jnp.logical_not(a[0].init_accumulators)
-      return pred
-
-    new_schedule[k] = functools.partial(
-        new_pred,
-        schedule[k],
-    )
-  return new_schedule
-
-
-_default_schedule = skip_input_copies_when_init_accumulators(_default_schedule)
-_fixed_schedule = skip_input_copies_when_init_accumulators(_fixed_schedule)
-
-def get_pipeline_schedule(schedule) -> Any:
-  """Retrieve a named pipeline schedule or pass through fully specified one."""
-  predefined_schedules = {
-      'default': _default_schedule,
-      'fixed': _fixed_schedule
-  }
-  if isinstance(schedule, str):
-    return predefined_schedules[schedule].copy()
-  return schedule
 
 
 # Main pipeline methods
@@ -1689,13 +1334,11 @@ def _normalize_specs(specs: Any) -> tuple[pl.BlockSpec, ...]:
   return specs
 
 
-def make_pipeline_allocations(
+def _make_pipeline_allocations(
     *refs,
     in_specs=(),
     out_specs=(),
-    tiling: tpu_info.Tiling | None = None,
-    should_accumulate_out=False,
-    needs_swap_ref=True,
+    tiling: Tiling | None = None,
     grid=(),
 ):
   """Create BufferedRefs for the pipeline.
@@ -1707,9 +1350,6 @@ def make_pipeline_allocations(
   Args:
     in_specs: input pallas block specs
     out_specs: output pallas block specs
-    should_accumulate_out: booleans to indicate which outputs should be treated
-      as accumulators.
-    needs_swap_ref: whether a swap slots tracker needs to be allocated.
     grid: grid to use for the pipeline.
 
   Returns:
@@ -1722,11 +1362,8 @@ def make_pipeline_allocations(
   out_specs = _normalize_specs(out_specs)
   in_refs = refs[:num_in_specs]
   out_refs = refs[num_in_specs:]
-  # We only allocate the swap_ref when the pipeline uses prefetch or postyeet,
-  # in which case the user might be depending on the buffer_count they specify
-  # explicitly. Otherwise we can reduce it.
-  can_reduce_buffering = not needs_swap_ref
   def make_input_bref(in_spec, in_ref):
+    in_aval = _ref_to_value_aval(in_ref)
     buffer_count = 2
     use_lookahead = False
     if has_buffering := in_spec.pipeline_mode is not None:
@@ -1734,62 +1371,41 @@ def make_pipeline_allocations(
       use_lookahead = in_spec.pipeline_mode.use_lookahead
     if use_lookahead and grid is None:
       raise ValueError("Grid must be specified when using lookahead.")
-    if (
-        can_reduce_buffering
-        and not has_buffering  # pyrefly: ignore[unbound-name]
-        and _spec_has_trivial_windowing(in_spec, grid)
-    ):
+    is_trivial = _spec_has_trivial_windowing(in_spec, grid, in_aval.shape)
+    if not has_buffering and is_trivial:
       buffer_count = 1
 
-    in_aval = _ref_to_value_aval(in_ref)
     return BufferedRef.input(
         in_spec,
         in_aval,
         buffer_count,
-        needs_swap_ref=needs_swap_ref,
         grid_rank=len(grid),
         use_lookahead=use_lookahead,
         source_memory_space=in_ref.memory_space,
         tiling=tiling,
+        is_trivial_windowing=is_trivial,
     )
   in_brefs = jax.tree.map(make_input_bref, in_specs, in_refs)
-  def make_output_bref(out_spec, out_ref, accumulate):
+  def make_output_bref(out_spec, out_ref):
+    out_aval = _ref_to_value_aval(out_ref)
     buffer_count = 2
     if has_buffering := out_spec.pipeline_mode is not None:
       buffer_count = out_spec.pipeline_mode.buffer_count
       if out_spec.pipeline_mode.use_lookahead:
         raise ValueError("Output buffering does not support lookahead.")
-    # Accumulators use their own special DMA logic that seems incompatible with
-    # having only one buffer.
-    if (
-        not accumulate
-        and can_reduce_buffering
-        and not has_buffering  # pyrefly: ignore[unbound-name]
-        and _spec_has_trivial_windowing(out_spec, grid)
-    ):
+    is_trivial = _spec_has_trivial_windowing(out_spec, grid, out_aval.shape)
+    if not has_buffering and is_trivial:
       buffer_count = 1
 
-    out_aval = _ref_to_value_aval(out_ref)
-
-    if accumulate:
-      return BufferedRef.accumulator(
-          out_spec,
-          out_aval,
-          buffer_count,
-          needs_swap_ref=needs_swap_ref,
-          source_memory_space=out_ref.memory_space,
-          tiling=tiling,
-      )
     return BufferedRef.output(
         out_spec,
         out_aval,
         buffer_count,
-        needs_swap_ref=needs_swap_ref,
         source_memory_space=out_ref.memory_space,
         tiling=tiling,
+        is_trivial_windowing=is_trivial,
     )
-  out_brefs = jax.tree.map(
-      make_output_bref, out_specs, out_refs, should_accumulate_out)
+  out_brefs = jax.tree.map(make_output_bref, out_specs, out_refs)
   return (*in_brefs, *out_brefs)
 
 
@@ -1851,7 +1467,7 @@ def _partition_grid(
     offsets = jax_util.tuple_update(
         (0,) * len(grid),
         first_divisible_dimension,
-        partitioned_dim_offset,  # pyrefly: ignore[bad-argument-type]
+        partitioned_dim_offset,
     )
     return new_grid, offsets
 
@@ -1904,9 +1520,9 @@ def _partition_grid(
   offsets = jax_util.tuple_update(
       (0,) * len(grid),
       partition_dimension,
-      grid_offset,  # pyrefly: ignore[bad-argument-type]
+      grid_offset,
   )
-  return new_grid, offsets  # type: ignore[return-value]
+  return new_grid, offsets
 
 
 def sync_copy(src: REF | BufferedRef, dst: REF | BufferedRef, indices):
@@ -1925,14 +1541,16 @@ def sync_copy(src: REF | BufferedRef, dst: REF | BufferedRef, indices):
     bref = dst
     hbm_ref = src
     copy_in = True
-  hbm_slice = bref.get_dma_slice(_ref_to_value_aval(hbm_ref), indices)
-  bref_slice = bref._to_window_slice(hbm_slice)
+  window_ref = bref.current_ref
+  if not bref.is_trivial_windowing:
+    hbm_slice = bref.get_dma_slice(_ref_to_value_aval(hbm_ref), indices)
+    bref_slice = bref._to_window_slice(hbm_slice)
+    hbm_ref = hbm_ref.at[hbm_slice]
+    window_ref = window_ref.at[bref_slice]
   if copy_in:
-    tpu_helpers.sync_copy(hbm_ref.at[hbm_slice],
-                          bref.current_ref.at[bref_slice])
+    tpu_helpers.sync_copy(hbm_ref, window_ref)
   else:
-    tpu_helpers.sync_copy(bref.current_ref.at[bref_slice],
-                          hbm_ref.at[hbm_slice])
+    tpu_helpers.sync_copy(window_ref, hbm_ref)
 
 
 def emit_pipeline(
@@ -1941,8 +1559,7 @@ def emit_pipeline(
     grid: tuple[int | jax.Array, ...],
     in_specs=(),
     out_specs=(),
-    tiling: tpu_info.Tiling | None = None,
-    should_accumulate_out: bool = False,
+    tiling: Tiling | None = None,
     core_axis: tuple[int, ...] | int | None = None,
     core_axis_name: tuple[str, ...] | str | None = None,
     dimension_semantics: tuple[GridDimensionSemantics, ...] | None = None,
@@ -1956,18 +1573,12 @@ def emit_pipeline(
   pallas_call for nesting grids. This is useful when you need to have separate
   windowing strategies for communication and computation.
 
-  The new argument `should_accumulate_out` can be used to specify which outputs
-  we should accumulate into automatically within and across pipeline
-  invocations.
-
   Args:
     body: pallas kernel to set up pipeline for.
     grid: a pallas grid definition.
     in_specs: input pallas block specs
     out_specs: output pallas block specs
     tiling: optional tiling to assume for the refs.
-    should_accumulate_out: booleans to indicate which outputs should be treated
-      as accumulators.
     core_axis: optional int or tuple of int, indicates whether or not to
       partition the grid along the core axis.
     core_axis_name: optional str or tuple of str, indicates whether or not to
@@ -1994,23 +1605,16 @@ def emit_pipeline(
   num_steps = _grid_size(grid)
   in_specs = _normalize_specs(in_specs)
   out_specs = _normalize_specs(out_specs)
-  should_accumulate_out = _broadcast_pytree_to(should_accumulate_out, out_specs)
   get_buffer_count = lambda spec: (spec.pipeline_mode.buffer_count if
     (spec is not None and spec.pipeline_mode is not None) else 2)
   flattened_specs = jax.tree.leaves((in_specs, out_specs))
   max_buffer_count = max((2, *map(get_buffer_count, flattened_specs)))
 
   def pipeline(
-    *refs: Any,
-    scratches=None,
-    allocations=None,
-    first_cycle: CondVal = True,
-    last_cycle: CondVal = True,
-    init_accumulators: CondVal = False,
-    prefetch=None,
-    postyeet=None,
-    schedule=None,
-    body_prologue=None,
+      *refs: Any,
+      scratches=None,
+      allocations=None,
+      body_prologue=None,
   ):
     """
     Run the pipeline.
@@ -2020,19 +1624,6 @@ def emit_pipeline(
         pallas refs)
       scratches: scratch buffers for the inner kernel
       allocations: a list of BufferedRefs, one corresponding to each ref
-      first_cycle: boolean indicating if this is the first invocation of the
-        inner pipeline cycle.
-      last_cycle: boolean indicating if this is the last invocation of the
-        inner pipeline cycle.
-      init_accumulators: whether to zero-init accumulators during this cycle.
-      prefetch: callback called as fn(*brefs, scheduler) that is used to fetch
-        the next cycle invocations first inputs.  Called during the inputs phase
-        in the final inner step.
-      postyeet: callback called as fn(*brefs, scheduler) that is used to finish
-        any writes or transfers from the last output of the previous cycle.
-        Called during the outputs phase in the first inner step.
-      schedule: manually specified pipeline schedules for brefs, None indicates
-        default schedule.
       body_prologue: For running code within the grid environment before the
         body is run. Useful for updating manual refs.
     """
@@ -2040,47 +1631,22 @@ def emit_pipeline(
       scratches = ()
     if allocations is None:
       # run with inline scoped allocations
-
-      # Prefetch and postyeet are arbitrary functions that can copy
-      # into or out of any of the BufferedRefs. Thus, we need a ref
-      # for the scheduler to mark when the prefetch or postyeet
-      # functions perform a copy and the slots need to be
-      # swapped. Without prefetch and postyeet, the swapping logic can
-      # be performed without the need for state.
-      needs_swap_ref = prefetch is not None or postyeet is not None
       return primitives.run_scoped(
           lambda allocations: pipeline(
               *refs,
               scratches=scratches,
               allocations=allocations,
-              first_cycle=first_cycle,
-              last_cycle=last_cycle,
-              init_accumulators=init_accumulators,
-              prefetch=prefetch,
-              postyeet=postyeet,
-              schedule=schedule,
           ),
-          make_pipeline_allocations(
+          _make_pipeline_allocations(
               *refs,
               in_specs=in_specs,
               out_specs=out_specs,
-              should_accumulate_out=should_accumulate_out,
-              needs_swap_ref=needs_swap_ref,
               grid=grid,
               tiling=tiling,
           ),
       )
     if isinstance(allocations, list):
       allocations = tuple(allocations)
-    # Normalize custom schedule arguments.
-    if schedule is None:
-      schedule = map_brefs(lambda x: None, allocations)
-    if not isinstance(schedule, (list, tuple)):
-      schedule = map_brefs(lambda x: schedule, allocations)
-    if isinstance(schedule, list):
-      schedule = tuple(schedule)
-    schedule = map_brefs(
-        lambda _, x: get_pipeline_schedule(x), allocations, schedule)
 
     def make_scheduler(step, indices):
       return Scheduler(
@@ -2089,9 +1655,6 @@ def emit_pipeline(
           grid,
           grid_offsets=grid_offsets,
           num_stages=max_buffer_count,
-          first_cycle=first_cycle,
-          last_cycle=last_cycle,
-          init_accumulators=init_accumulators,
           trace_scopes=trace_scopes,
           _explicit_indices=_explicit_indices,
       )
@@ -2104,18 +1667,8 @@ def emit_pipeline(
         # prepare any local VMEM aliases
         brefs = map_brefs(scheduler.alias_local_refs, unaliased_brefs, refs)
         # loop input handling phase
-        brefs = map_brefs(scheduler.copy_in, brefs, refs, schedule)
-        brefs = map_brefs(scheduler.wait_in, brefs, refs, schedule)
-
-        # prefetch inputs for the *next* invocation of this pipeline
-        with scheduler._named_scope("ep_prefetch"):
-          if prefetch is not None:
-            do_prefetch = step == num_steps - 1
-            map_brefs(lambda x: x.save_slots(do_prefetch), brefs)
-            lax.cond(do_prefetch,
-                    lambda: prefetch(*brefs, scheduler),
-                    lambda: None)
-            brefs = map_brefs(lambda x: x.load_slots(do_prefetch), brefs)
+        brefs = map_brefs(scheduler.copy_in, brefs, refs)
+        brefs = map_brefs(scheduler.wait_in, brefs, refs)
 
         # run the kernel!
         if body_prologue is not None:
@@ -2128,19 +1681,10 @@ def emit_pipeline(
             body(*current_refs, *scratches)
 
         # loop output handling phase
-        brefs = map_brefs(scheduler.copy_out, brefs, refs, schedule)
-        brefs = map_brefs(scheduler.wait_out, brefs, refs, schedule)
-        # handle writes for the *last* invocation of this pipeline's outputs
-        with scheduler._named_scope("ep_postyeet"):
-          if postyeet is not None:
-            do_postyeet = step == 0
-            map_brefs(lambda x: x.save_slots(do_postyeet), brefs)
-            lax.cond(do_postyeet,
-                    lambda: postyeet(*brefs, scheduler),
-                    lambda: None)
-            brefs = map_brefs(lambda x: x.load_slots(do_postyeet), brefs)
+        brefs = map_brefs(scheduler.copy_out, brefs, refs)
+        brefs = map_brefs(scheduler.wait_out, brefs, refs)
 
-        brefs = map_brefs(scheduler.advance_slots, brefs, schedule)
+        brefs = map_brefs(scheduler.advance_slots, brefs)
         # Unbind window_refs for VMEM-backed buffers. Without this
         # we will be returning TransformedRefs which are not valid
         # JAX types.
@@ -2150,13 +1694,14 @@ def emit_pipeline(
     if no_pipelining:
       # Debugging mode where all copies are synchronous.
       initial_indices = (0,) * len(grid)
-      map_brefs(lambda bref: bref.init_slots(), allocations)
-      if postyeet is not None or prefetch is not None:
-        raise NotImplementedError("Prefetch/Postyeet not supported")
-      if any(bref.is_accumulator for bref in allocations):
-        raise NotImplementedError("Accumulators not supported")
-      @functools.partial(jax.lax.fori_loop, 0, num_steps,
-                         init_val=(allocations, initial_indices))
+      brefs = map_brefs(lambda bref: bref.initialize_slots(), allocations)
+
+      @functools.partial(
+          jax.lax.fori_loop,
+          0,
+          num_steps,
+          init_val=(brefs, initial_indices),
+      )
       def _loop_body(step, carry):
         brefs, indices = carry
         indices = _filter_indices(indices, grid)
@@ -2187,7 +1732,12 @@ def emit_pipeline(
         # pipeline prologue
         initial_indices = (0,) * len(grid)
         scheduler = make_scheduler(0, initial_indices)
-        brefs = allocations
+        brefs = map_brefs(lambda bref: bref.initialize_slots(), allocations)
+        def _sync_copy_in(bref, ref):
+          if bref.is_trivial_windowing and bref.window_ref is not None:
+            sync_copy(ref, bref, initial_indices)
+
+        map_inputs(_sync_copy_in, brefs, refs)
         with scheduler.grid_env():
           # We issue num_stages-1 prefetch copies per buffer.
           # We iterate over steps in the outer loop because we want to
@@ -2195,7 +1745,7 @@ def emit_pipeline(
           for step in range(scheduler.num_stages - 1):
             brefs = map_brefs(functools.partial(
                 scheduler.initialize_step, step=step),
-                brefs, refs, schedule)
+                brefs, refs)
 
         # pipeline loop
         brefs, next_indices = lax.fori_loop(
@@ -2206,7 +1756,13 @@ def emit_pipeline(
         final_indices = _prev_index(next_indices, grid)
         scheduler = make_scheduler(num_steps - 1, final_indices)
         with scheduler.grid_env():
-          map_brefs(scheduler.finalize, brefs, refs, schedule)
+          map_brefs(scheduler.finalize, brefs, refs)
+
+        def _sync_copy_out(bref, ref):
+          if bref.is_trivial_windowing and bref.window_ref is not None:
+            sync_copy(bref, ref, initial_indices)
+
+        map_outputs(_sync_copy_out, brefs, refs)
 
   return pipeline
 
@@ -2217,7 +1773,6 @@ def emit_pipeline_with_allocations(
     grid,
     in_specs=(),
     out_specs=(),
-    should_accumulate_out=False,
 ):
   """Creates pallas pipeline and top-level allocation preparation functions.
 
@@ -2226,8 +1781,6 @@ def emit_pipeline_with_allocations(
     grid: a pallas grid definition.
     in_specs: input pallas block specs
     out_specs: output pallas block specs
-    should_accumulate_out: booleans to indicate which outputs should be treated
-      as accumulators.
 
   Returns:
     (emit_pipeline, make_allocations) function pair, where
@@ -2236,16 +1789,13 @@ def emit_pipeline_with_allocations(
         pipeline that can be created at the top-level of a pallas call to be
         reused across multiple invocations of the inner pipeline.
   """
-  make_allocations = functools.partial(make_pipeline_allocations,
+  make_allocations = functools.partial(_make_pipeline_allocations,
                     in_specs=in_specs,
                     out_specs=out_specs,
-                    should_accumulate_out=should_accumulate_out,
                     grid=grid)
   pipeline = emit_pipeline(
       body,
       grid=grid,
       in_specs=in_specs,
-      out_specs=out_specs,
-      should_accumulate_out=should_accumulate_out)
-
+      out_specs=out_specs)
   return pipeline, make_allocations

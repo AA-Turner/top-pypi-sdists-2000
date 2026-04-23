@@ -24,7 +24,6 @@ from typing import Any, Literal
 
 import jax
 from jax._src import core as jax_core
-from jax._src import deprecations
 from jax._src import linear_util as lu
 from jax._src import state
 from jax._src import util
@@ -43,9 +42,15 @@ _out_shape_to_aval_mapping = pallas_core._out_shape_to_aval_mapping
 
 
 class CoreType(enum.Enum):
-  TC = 0
-  SC_SCALAR_SUBCORE = 1
-  SC_VECTOR_SUBCORE = 2
+  TC = "tc"
+  SC_SCALAR_SUBCORE = "sc_scalar_subcore"
+  SC_VECTOR_SUBCORE = "sc_vector_subcore"
+
+  def __str__(self) -> str:
+    return self.value
+
+  def __repr__(self) -> str:
+    return self.name
 
 
 class GridDimensionSemantics(enum.Enum):
@@ -182,6 +187,14 @@ class CompilerParams:
   replace = dataclasses.replace
 
 
+class MemoryRef(pallas_core.MemoryRef):
+
+  def __matmul__(self, other, /):
+    if not isinstance(other, CoreType):
+      return NotImplemented
+    return dataclasses.replace(self, memory_space=self.memory_space @ other)
+
+
 class MemorySpace(enum.Enum):
   VMEM = "vmem"
   VMEM_SHARED = "vmem_shared"
@@ -194,23 +207,51 @@ class MemorySpace(enum.Enum):
   def __str__(self) -> str:
     return self.value
 
+  def __repr__(self) -> str:
+    return self.name
+
   def from_type(self, ty):
-    return pallas_core.MemoryRef(ty, memory_space=self)
+    return MemoryRef(ty, memory_space=self)
 
   def __call__(self, shape: Sequence[int], dtype: jnp.dtype[Any]):
     # A convenience function for constructing MemoryRef types of ShapedArrays.
     return self.from_type(jax_core.ShapedArray(tuple(shape), dtype))
 
-  def __getattr__(self, name):
-    if name == "ANY":
-      # Deprecated on Dec 10, 2025.
-      deprecations.warn(
-          "pltpu-memory-space-any",
-          "pltpu.MemorySpace.ANY is deprecated. Use pl.ANY instead.",
-          stacklevel=2,
-      )
-      return pallas_core.MemorySpace.ANY
-    return super().__getattr__(name)  # type: ignore
+  def __matmul__(self, other, /):
+    if not isinstance(other, CoreType):
+      return NotImplemented
+    return CoreMemorySpace(self, other)
+
+
+@dataclasses.dataclass(frozen=True)
+class CoreMemorySpace:
+  """A memory space tied to a specific core type."""
+
+  memory_space: MemorySpace
+  core_type: CoreType
+
+  def __post_init__(self):
+    match self.memory_space, self.core_type:
+      case MemorySpace.VMEM, CoreType.TC | CoreType.SC_VECTOR_SUBCORE:
+        ...
+      case MemorySpace.SMEM | MemorySpace.SEMAPHORE, _:
+        ...
+      case MemorySpace.CMEM, CoreType.TC:
+        ...
+      case _, _:
+        raise ValueError(
+            "Unsupported core memory space:"
+            f" {self.memory_space, self.core_type}"
+        )
+
+  def __call__(self, shape: Sequence[int], dtype: jnp.dtype[Any]):
+    return MemoryRef(jax_core.ShapedArray(tuple(shape), dtype), self)
+
+  def __str__(self) -> str:
+    return f"{self.memory_space}@{self.core_type}"
+
+  def __repr__(self) -> str:
+    return f"{self.memory_space!r}@{self.core_type!r}"
 
 
 class dma_semaphore(pallas_core.semaphore_dtype):
@@ -227,19 +268,24 @@ class SemaphoreType(enum.Enum):
   DMA = "dma"
   BARRIER = "barrier"
 
-  def __call__(self, shape: tuple[int, ...]):
-    dtype: Any
+  @property
+  def dtype(self) -> Any:
     if self == SemaphoreType.DMA:
-      dtype = DMASemaphore()
+      return DMASemaphore()
     elif self == SemaphoreType.BARRIER:
-      dtype = pallas_core.BarrierSemaphore()
+      return pallas_core.BarrierSemaphore()
     else:
-      dtype = pallas_core.Semaphore()
-    return pallas_core.MemoryRef(
-        jax_core.ShapedArray(shape, dtype), MemorySpace.SEMAPHORE
-    )
+      return pallas_core.Semaphore()
 
-  def get_array_aval(self) -> pallas_core.ShapedArrayWithMemorySpace:
+  def __call__(self, shape: tuple[int, ...]):
+    return MemoryRef(jax_core.ShapedArray(shape, self.dtype), MemorySpace.SEMAPHORE)
+
+  def __matmul__(self, other, /):
+    if not isinstance(other, CoreType):
+      return NotImplemented
+    return CoreMemorySpace(MemorySpace.SEMAPHORE, other)((), self.dtype)
+
+  def get_array_aval(self) -> jax_core.ShapedArray:
     return self(()).get_array_aval()
 
   def get_ref_aval(self) -> state.AbstractRef:
@@ -279,7 +325,7 @@ class TensorCore:
 
 
 @dataclasses.dataclass(frozen=True)
-class TensorCoreMesh:
+class TensorCoreMesh(pallas_core.Mesh):
   """A mesh of TensorCores."""
 
   devices: np.ndarray
@@ -316,6 +362,11 @@ class TensorCoreMesh:
     del effect
     return False
 
+  def check_is_compatible_with(self, other_mesh):
+    if isinstance(other_mesh, TensorCoreMesh) and self != other_mesh:
+      raise ValueError("You can't use two different TensorCoreMeshes.")
+    # TODO: Add support for mpmd with SparseCore meshes.
+    return super().check_is_compatible_with(other_mesh)
 
 def create_tensorcore_mesh(
     axis_name: str,
@@ -524,3 +575,40 @@ def _convert_semaphore_type_to_aval(
 pallas_core._out_shape_to_aval_mapping[SemaphoreType] = (
     _convert_semaphore_type_to_aval
 )
+
+
+def memory_space_to_tpu_memory_space(
+    memory_space: (
+        MemorySpace | pallas_core.MemorySpace | CoreMemorySpace | None
+    ),
+    kernel_type: CoreType,
+) -> MemorySpace | pallas_core.MemorySpace | CoreMemorySpace:
+  match memory_space:
+    case None:
+      match kernel_type:
+        case CoreType.TC | CoreType.SC_VECTOR_SUBCORE:
+          return MemorySpace.VMEM
+        case CoreType.SC_SCALAR_SUBCORE:
+          return MemorySpace.SMEM
+        case _:
+          raise ValueError(f"Unsupported kernel type: {kernel_type}")
+    case pallas_core.MemorySpace.ANY:
+      return pallas_core.MemorySpace.ANY
+    case pallas_core.MemorySpace.HOST:
+      return MemorySpace.HOST
+    case (
+        pallas_core.MemorySpace.ERROR
+        | pallas_core.MemorySpace.INDEX
+        | pallas_core.MemorySpace.KEY
+    ):
+      return MemorySpace.SMEM
+    case CoreMemorySpace():
+      return (
+          memory_space.memory_space
+          if memory_space.core_type is kernel_type
+          else memory_space
+      )
+    case MemorySpace():
+      return memory_space
+    case _:
+      raise ValueError(f"Invalid memory space: {memory_space!r}")

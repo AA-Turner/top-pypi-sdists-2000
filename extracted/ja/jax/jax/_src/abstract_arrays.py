@@ -14,16 +14,13 @@
 
 from __future__ import annotations
 
-import numpy as np
 import threading
-from typing import TYPE_CHECKING
-import weakref
+import numpy as np
 
 from jax._src import config
 from jax._src import core
-from jax._src import literals
 from jax._src import dtypes
-from jax._src.lib import jaxlib_extension_version
+from jax._src import literals
 from jax._src.lib import weakref_lru_cache
 
 from jax._src import traceback_util
@@ -34,7 +31,7 @@ AbstractToken = core.AbstractToken
 abstract_token = core.abstract_token
 canonicalize_shape = core.canonicalize_shape
 
-numpy_scalar_types: set[type] = {  # pylint: disable=g-bare-generic
+numpy_scalar_types: set[type] = {
     dtypes.int4, np.int8, np.int16, np.int32, np.int64,
     dtypes.uint4, np.uint8, np.uint16, np.uint32, np.uint64,
     np.complex64, np.complex128,
@@ -51,7 +48,7 @@ if dtypes.int1 is not None:
   numpy_scalar_types.add(dtypes.int1)
   numpy_scalar_types.add(dtypes.uint1)
 
-array_types: set[type] = {literals.TypedNdArray, np.ndarray} | numpy_scalar_types  # pylint: disable=g-bare-generic
+array_types: set[type] = {literals.TypedNdArray, np.ndarray} | numpy_scalar_types
 
 
 def masked_array_error(*args, **kwargs):
@@ -68,17 +65,7 @@ def _make_shaped_array_for_numpy_array(x: np.ndarray) -> ShapedArray:
   return ShapedArray(x.shape, dtypes.canonicalize_dtype(dtype), sharding=None)
 
 core.pytype_aval_mappings[np.ndarray] = _make_shaped_array_for_numpy_array
-
-
-def _make_shaped_array_for_typed_ndarray(
-    x: literals.TypedNdArray,
-) -> ShapedArray:
-  dtype = x.dtype
-  dtypes.check_valid_dtype(dtype)
-  return ShapedArray(x.shape, dtype, sharding=None, weak_type=x.weak_type)
-
-
-core.pytype_aval_mappings[literals.TypedNdArray] = _make_shaped_array_for_typed_ndarray
+core.pytype_aval_mappings[literals.TypedNdArray] = lambda x: x.aval
 
 
 def _make_shaped_array_for_numpy_scalar(x: np.generic) -> ShapedArray:
@@ -132,54 +119,18 @@ core.pytype_aval_mappings[complex] = _complex_aval
 core.literalable_types.update(dtypes.python_scalar_types)
 
 
-def _aval_for_typed_scalar(x):
-  return ShapedArray((), x.dtype, weak_type=True, sharding=None)
-
 for t in literals.typed_scalar_types:
-  core.pytype_aval_mappings[t] = _aval_for_typed_scalar
+  core.pytype_aval_mappings[t] = lambda x: x.aval
 core.literalable_types.update(literals.typed_scalar_types)
 
 _ndarray_dtype_cache = {}
 _ndarray_dtype_cache_lock = threading.Lock()
 
-if jaxlib_extension_version < 420 and not TYPE_CHECKING:
-  # This is a temporary shim implementation of a weakly-keyed, weakly value
-  # cache that should go away after jaxlib 0.9.2 is the minimum.
-  def _canonicalize_ndarray_dtype(x):
-    x_id = id(x)
-    with _ndarray_dtype_cache_lock:
-      entry = _ndarray_dtype_cache.get(x_id)
-      if entry is not None:
-        xref, ansref = entry
-        ans = ansref()
-        if xref() is x and ans is not None:
-          return ans
 
-    dtype = dtypes.canonicalize_dtype(x.dtype)
-    ans = literals.TypedNdArray(np.asarray(x, dtype), weak_type=False)
-
-    def clear_cache(wr, key=x_id):
-      with _ndarray_dtype_cache_lock:
-        val = _ndarray_dtype_cache.get(key)
-        if val is not None and (val[0] is wr or val[1] is wr):
-          del _ndarray_dtype_cache[key]
-
-    xref = weakref.ref(x, clear_cache)
-    ansref = weakref.ref(ans, clear_cache)
-    with _ndarray_dtype_cache_lock:
-      _ndarray_dtype_cache[x_id] = (xref, ansref)
-    return ans
-
-else:
-  # We use a weakly-keyed, weakly-valued cache to memoize the result of
-  # canonicalizing ndarray dtypes. The goal is that as long as both the key
-  # and the value are alive, we will produce the same object from dtype
-  # canonicalization. This avoids duplication of large constants when forming
-  # a jaxpr.
-  @weakref_lru_cache.weak_key_weak_value_cache
-  def _canonicalize_ndarray_dtype(x):
-    dtype = dtypes.canonicalize_dtype(x.dtype)
-    return literals.TypedNdArray(np.asarray(x, dtype), weak_type=False)
+@weakref_lru_cache.weak_key_weak_value_cache
+def _canonicalize_ndarray_dtype(x):
+  dtype = dtypes.canonicalize_dtype(x.dtype)
+  return literals.TypedNdArray(np.asarray(x, dtype))
 
 dtypes.canonicalize_value_handlers[np.ndarray] = _canonicalize_ndarray_dtype
 
@@ -190,7 +141,7 @@ def _canonicalize_masked_array_dtype(x):
 
 def _canonicalize_numpy_scalar(x):
   dtype = dtypes.canonicalize_dtype(x.dtype)
-  return literals.TypedNdArray(np.asarray(x, dtype), weak_type=False)
+  return literals.TypedNdArray(np.asarray(x, dtype))
 
 dtypes.canonicalize_value_handlers.update(
     (t, _canonicalize_numpy_scalar) for t in numpy_scalar_types)
@@ -202,7 +153,7 @@ dtypes.canonicalize_value_handlers[np.ma.MaskedArray] = _canonicalize_masked_arr
 
 def _canonicalize_python_scalar(literal_type, typ):
   def canonicalize_scalar(x):
-    return literal_type(x, dtypes.scalar_type_to_dtype(typ, x))  # pytype: disable=wrong-arg-types
+    return literal_type(x, dtypes.scalar_type_to_dtype(typ, x))
   return canonicalize_scalar
 
 dtypes.canonicalize_value_handlers[bool] = lambda x: x

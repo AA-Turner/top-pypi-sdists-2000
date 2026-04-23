@@ -281,18 +281,17 @@ def spvalues_to_avals(
 
 class SparseTracer(core.Tracer['SparseTrace']):
   def __init__(self, trace: SparseTrace, *, spvalue):
+    if not hasattr(trace, 'spenv'):
+      raise RuntimeError("Internal: trace does not have spenv defined.")
+    aval = spvalues_to_avals(trace.spenv, [spvalue])[0]
+    super().__init__(trace, aval)
     self._spvalue = spvalue
-    self._trace = trace
 
   @property
   def spenv(self):
     if not hasattr(self._trace, 'spenv'):
       raise RuntimeError("Internal: trace does not have spenv defined.")
     return self._trace.spenv
-
-  @property
-  def aval(self):
-    return spvalues_to_avals(self.spenv, [self._spvalue])[0]
 
   def full_lower(self):
     return self
@@ -308,7 +307,7 @@ class SparseTrace(core.Trace):
     self.spenv = spenv
 
   def to_sparse_tracer(self, val):
-    if isinstance(val, SparseTracer) and self.tag is val._trace.tag:  # pyrefly: ignore[missing-attribute]
+    if isinstance(val, SparseTracer) and self.tag is val._trace.tag:
       return val
     else:
       with core.set_current_trace(self.parent_trace):
@@ -661,25 +660,31 @@ def _sub_sparse(spenv, *spvalues):
 
 sparse_rules_bcoo[lax.sub_p] = _sub_sparse
 
-def _mul_sparse(spenv, *spvalues):
+def _mul_sparse(spenv, *spvalues, out_dtype=None):
   X, Y = spvalues
   if X.is_sparse() and Y.is_sparse():
     if X.indices_ref == Y.indices_ref and X.unique_indices:
       if config.enable_checks.value:
         assert X.indices_sorted == Y.indices_sorted
         assert X.unique_indices == Y.unique_indices
-      out_data = lax.mul(spenv.data(X), spenv.data(Y))
+      out_data = lax.mul(spenv.data(X), spenv.data(Y), out_dtype=out_dtype)
       out_spvalue = spenv.sparse(X.shape, out_data, indices_ref=X.indices_ref,
                                  indices_sorted=X.indices_sorted,
                                  unique_indices=True)
     else:
       X_promoted, Y_promoted = spvalues_to_arrays(spenv, spvalues)
+      if out_dtype is not None:
+        X_promoted = X_promoted.astype(out_dtype)
+        Y_promoted = Y_promoted.astype(out_dtype)
       mat = bcoo_multiply_sparse(X_promoted, Y_promoted)
       out_spvalue = spenv.sparse(mat.shape, mat.data, mat.indices)
   else:
     if Y.is_sparse():
       X, Y = Y, X
     X_promoted = spvalues_to_arrays(spenv, X)
+    if out_dtype is not None:
+      X_promoted = X_promoted.astype(out_dtype)
+      Y = Y.astype(out_dtype)
     out_data = bcoo_multiply_dense(X_promoted, spenv.data(Y))
     out_spvalue = spenv.sparse(X.shape, out_data, indices_ref=X.indices_ref,
                                indices_sorted=X.indices_sorted,
@@ -824,10 +829,6 @@ def _pjit_sparse(spenv, *spvalues, jaxpr, in_shardings, out_shardings,
 sparse_rules_bcoo[pjit.jit_p] = _pjit_sparse
 
 
-def _duplicate_for_sparse_spvalues(spvalues, params):
-  for spvalue, param in safe_zip(spvalues, params):
-    yield from [param, param] if spvalue.is_sparse() else [param]
-
 def _scan_sparse(spenv, *spvalues, jaxpr, num_consts, num_carry, **params):
   const_spvalues, carry_spvalues, xs_spvalues = split_list(
     spvalues, [num_consts, num_carry])
@@ -841,15 +842,7 @@ def _scan_sparse(spenv, *spvalues, jaxpr, num_consts, num_carry, **params):
   carry, carry_tree = tree_flatten(spvalues_to_arrays(spenv, carry_spvalues))
   xs, xs_tree = tree_flatten(spvalues_to_arrays(spenv, xs_spvalues))
 
-  # params['linear'] has one entry per arg; expand it to match the sparsified args.
-  const_linear, carry_linear, xs_linear = split_list(
-    params.pop('linear'), [num_consts, num_carry])
-  sp_linear = (
-    *_duplicate_for_sparse_spvalues(const_spvalues, const_linear),
-    *_duplicate_for_sparse_spvalues(carry_spvalues, carry_linear),
-    *_duplicate_for_sparse_spvalues(xs_spvalues, xs_linear))
-
-  out = lax.scan_p.bind(*consts, *carry, *xs, jaxpr=sp_jaxpr, linear=sp_linear,
+  out = lax.scan_p.bind(*consts, *carry, *xs, jaxpr=sp_jaxpr,
                         num_consts=len(consts), num_carry=len(carry), **params)
   carry_out = tree_unflatten(carry_tree, out[:len(carry)])
   xs_out = tree_unflatten(xs_tree, out[len(carry):])

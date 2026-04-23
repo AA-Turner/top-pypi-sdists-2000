@@ -36,8 +36,8 @@ from jax._src.pallas.fuser import block_spec as block_spec_lib
 custom_fusion_p = core.Primitive('custom_fusion')
 custom_fusion_p.multiple_results = True
 
-CustomPullBlockSpecRuleFn = Callable[[tuple[pallas_core.BlockSpec, ...]],
-                                     Sequence[pallas_core.BlockSpec]]
+CustomPullBlockSpecRuleFn = Callable[[tuple[block_spec_lib.BlockIndexTransform, ...]],
+                                     Sequence[block_spec_lib.BlockIndexTransform]]
 
 CustomPushBlockSpecRuleFn = Callable[[tuple[pallas_core.BlockSpec, ...]],
                                      tuple[pallas_core.BlockSpec, ...]]
@@ -162,7 +162,7 @@ def _custom_fusion_impl(
     num_consts: int,
     pallas_num_consts: int,
     **_):
-  consts, _, args = util.split_list(args, [num_consts, pallas_num_consts])  # type: ignore[assignment]
+  consts, _, args = util.split_list(args, [num_consts, pallas_num_consts])
   return core.eval_jaxpr(jaxpr, consts, *args)
 
 mlir.register_lowering(custom_fusion_p, mlir.lower_fun(
@@ -229,13 +229,13 @@ def _custom_fusion_mosaic_lowering_rule(
 @block_spec_lib.register_pull_block_spec_rule(custom_fusion_p)
 def _custom_fusion_pull_block_spec_rule(
     ctx : block_spec_lib.PullRuleContext,
-    out_block_specs : tuple[pallas_core.BlockSpec, ...],
+    out_block_transforms : tuple[block_spec_lib.BlockIndexTransform, ...],
     *,
     pull_block_spec_rule : CustomPullBlockSpecRuleFn,
     **_,
-) -> Sequence[pallas_core.BlockSpec]:
+) -> Sequence[block_spec_lib.BlockIndexTransform]:
   del ctx
-  return pull_block_spec_rule(out_block_specs)
+  return pull_block_spec_rule(out_block_transforms)
 
 
 @block_spec_lib.register_push_block_spec_rule(custom_fusion_p)

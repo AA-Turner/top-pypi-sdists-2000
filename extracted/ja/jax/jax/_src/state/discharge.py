@@ -25,7 +25,6 @@ from jax._src import ad_util
 from jax._src import api_util
 from jax._src import config
 from jax._src import core
-from jax._src import literals
 from jax._src import linear_util as lu
 from jax._src import pjit
 from jax._src import sharding_impls
@@ -424,7 +423,7 @@ def _convert_to_gather_arrays(indexer: indexing.NDIndexer) -> tuple[Array, ...]:
       diff = len(total_shape) - idx_in_shape_after_indexing - 1
       arr = arr.reshape(arr.shape + (1,) * diff)
       arrs.append(arr)
-    elif isinstance(idxer, (np.ndarray, Array, literals.TypedNdArray)):
+    elif isinstance(idxer, (np.ndarray, Array)):
       diff = n_idxers - 1 - last_int_index_idx
       arr = idxer.reshape(idxer.shape + (1,) * diff)
       arrs.append(arr)
@@ -552,7 +551,7 @@ def transform_swap_array(x, transforms, val):
               intermediate, indexer, transpose_order
           )
         arrays = _convert_to_gather_arrays(indexer)
-        new_x = intermediate.at[arrays].set(new_x)  # pytype: disable=attribute-error
+        new_x = intermediate.at[arrays].set(new_x)
         if transpose_order is not None:
           transpose_order_inversed = np.argsort(transpose_order)
           new_x = new_x.transpose(transpose_order_inversed)
@@ -683,17 +682,14 @@ def _run_state_to_lojax(*args, jaxpr, is_initialized, **params):
   assert not jaxpr.constvars
   closed_jaxpr = core.ClosedJaxpr(jaxpr, ())
   arg_avals = map(core.typeof, args)
-  args, is_initialized = unzip2(
+  lo_args, is_initialized = unzip2(
       (lo_val, is_init) for a, x, is_init in zip(arg_avals, args, is_initialized)
       for lo_val in (a.read_loval(x) if a.has_qdd else a.lower_val(x)))
-  lo_jaxpr = pe.lower_jaxpr(closed_jaxpr)
-  all_outs = run_state_p.bind(*lo_jaxpr.consts, *args, jaxpr=lo_jaxpr.jaxpr,
-                              is_initialized=is_initialized, **params)
-  out_mut, lo_outs = split_list(all_outs, [pe.num_himuts_out(jaxpr)])
-  pe.apply_himut(jaxpr, args, out_mut)
+  lo_jaxpr = pe.lower_jaxpr2(closed_jaxpr)
+  lo_outs = run_state_p.bind(*lo_jaxpr.consts, *lo_args, jaxpr=lo_jaxpr.jaxpr,
+                             is_initialized=is_initialized, **params)
   return pe.raise_lo_outs(arg_avals, lo_outs)
 run_state_p.to_lojax = _run_state_to_lojax
-
 
 def _default_initialization(x):
   assert hasattr(x, 'shape')

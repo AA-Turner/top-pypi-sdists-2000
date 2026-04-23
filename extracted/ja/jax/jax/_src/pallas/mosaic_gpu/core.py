@@ -220,6 +220,8 @@ LANExWARP_SEMANTICS = (
     mgpu.LoweringSemantics.Lane, PrimitiveSemantics.Warp)
 WGxWG_SEMANTICS = (
     mgpu.LoweringSemantics.Warpgroup, PrimitiveSemantics.Warpgroup)
+WGxWARP_SEMANTICS = (
+    mgpu.LoweringSemantics.Warpgroup, PrimitiveSemantics.Warp)
 
 
 # TODO(justinfu): Reconcile with pl.kernel.
@@ -428,7 +430,7 @@ def infer_tmem_layout(
     packing = 32 // dtypes.itemsize_bits(dtype)
   else:
     packing = 1
-  return tcgen05._infer_tmem_layout(shape, collective=collective, packing=packing)  # type: ignore
+  return tcgen05._infer_tmem_layout(shape, collective=collective, packing=packing)
 
 
 def flatten_ref_union(ref_union: AbstractRefUnion) -> tuple[_Ref, ...]:
@@ -1132,6 +1134,7 @@ class ClusterBarrierType(dtypes.ExtendedDType):
   collective_axes: tuple[str | tuple[str, ...], ...]
   num_arrivals: int
   orders_tensor_core: bool
+  leader_tracked: bool = False
 
   def __str__(self):
     return self.name
@@ -1179,6 +1182,7 @@ class ClusterBarrier:
   num_barriers: int = 1
   num_arrivals: int = 1
   orders_tensor_core: bool = False
+  leader_tracked: bool = False
 
   def get_array_aval(self) -> jax_core.ShapedArray:
     raise ValueError("Cluster barriers are not arrays")
@@ -1187,7 +1191,8 @@ class ClusterBarrier:
     aval = jax_core.ShapedArray(
         [self.num_barriers],
         ClusterBarrierType(
-            self.collective_axes, self.num_arrivals, self.orders_tensor_core
+            self.collective_axes, self.num_arrivals,
+            self.orders_tensor_core, self.leader_tracked,
         ),
     )
     return state.AbstractRef(aval, SMEM)
@@ -1333,6 +1338,9 @@ class Mesh:
   def discharges_effect(self, effect: jax_core.Effect) -> bool:
     return effect is _wgmma_pipeline_effect or effect is _memory_effect
 
+  def check_is_compatible_with(self, other_mesh):
+    raise NotImplementedError()
+
 @dataclasses.dataclass(frozen=True, kw_only=True)
 class WarpMesh:
   """Represents a mesh over individual warps within a warpgroup.
@@ -1343,7 +1351,7 @@ class WarpMesh:
   """
 
   _NUM_WARPS_PER_WARPGROUP: ClassVar[int] = 4
-  axis_name: str
+  axis_name: jax_core.AxisName
 
   @property
   def shape(self):
@@ -1532,9 +1540,9 @@ class Layout(SomeLayout, enum.Enum):
         check_no_args()
         return mgpu.fragmented_array.WGMMA_LAYOUT_ACC_32BIT
       case Layout.WG_SPLAT:
-        return mgpu.WGSplatFragLayout(*args, **kwargs)  # pytype: disable=missing-parameter
+        return mgpu.WGSplatFragLayout(*args, **kwargs)
       case Layout.WG_STRIDED:
-        return mgpu.WGStridedFragLayout(*args, **kwargs)  # pytype: disable=missing-parameter
+        return mgpu.WGStridedFragLayout(*args, **kwargs)
       case Layout.TILED:
         return mgpu.TiledLayout(*args, **kwargs)
       case Layout.TCGEN05:
@@ -1548,9 +1556,9 @@ class Layout(SomeLayout, enum.Enum):
           return mgpu.tmem_native_layout(*args, **kwargs)
         return mgpu.TMEM_NATIVE_LAYOUT
       case Layout.TCGEN05_M64_COLLECTIVE:
-        return tcgen05.fa_m64_collective_layout(*args, **kwargs)  # pytype: disable=missing-parameter
+        return tcgen05.fa_m64_collective_layout(*args, **kwargs)
       case Layout.TCGEN05_M64_COLLECTIVE_NATIVE:
-        return tcgen05.tmem_m64_collective_layout(*args, **kwargs).as_tiled_layout()  # pytype: disable=missing-parameter
+        return tcgen05.tmem_m64_collective_layout(*args, **kwargs).as_tiled_layout()
       case Layout.SMEM_GMEM_COPY:
         normalize_args = lambda shape, dtype, swizzle: (shape, dtype, swizzle)
         shape, dtype, swizzle = normalize_args(*args, **kwargs)
@@ -1570,6 +1578,7 @@ class TMEMLayout(enum.Enum):
   SCALES_LAYOUT = enum.auto()
   SPARSE_METADATA_LAYOUT = enum.auto()
   M64_COLLECTIVE_LAYOUT = enum.auto()
+  SCALES_M64_COLLECTIVE_LAYOUT = enum.auto()
 
   def __call__(self, *args, **kwargs) -> ParameterizedLayout:
     return ParameterizedLayout(self, args, kwargs)
@@ -1581,7 +1590,9 @@ class TMEMLayout(enum.Enum):
       case TMEMLayout.SPARSE_METADATA_LAYOUT:
         return tcgen05.sparse_meta_layout(*args, **kwargs)
       case TMEMLayout.M64_COLLECTIVE_LAYOUT:
-        return tcgen05.tmem_m64_collective_layout(*args, **kwargs)  # pytype: disable=missing-parameter
+        return tcgen05.tmem_m64_collective_layout(*args, **kwargs)
+      case TMEMLayout.SCALES_M64_COLLECTIVE_LAYOUT:
+        return tcgen05.b_scales_m64_collective_layout(*args, **kwargs)
     raise ValueError(f"Invalid TMEMLayout: {self}")
 
 

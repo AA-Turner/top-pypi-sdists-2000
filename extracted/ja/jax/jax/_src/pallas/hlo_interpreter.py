@@ -363,7 +363,7 @@ def pallas_call_hlo_interpret(
   )
   dynamic_grid_args_iter = iter(dynamic_grid_args)
   grid = tuple(
-      a if a is not pallas_core.dynamic_grid_dim
+      a if not isinstance(a, pallas_core.DynamicGridDim)
       else next(dynamic_grid_args_iter)
       for a in grid_mapping.grid
   )
@@ -412,7 +412,7 @@ def pallas_call_hlo_interpret(
   num_inout_blocks = len(block_args) + len(out)
   grid_start_indices = (jnp.int32(0),) * len(grid)
   if grid:
-    num_iterations = reduce(jnp.multiply, grid)  # type: ignore[arg-type]
+    num_iterations = reduce(jnp.multiply, grid)
   else:
     # Base case is always one iteration when grid is ()
     num_iterations = 1
@@ -430,7 +430,7 @@ def pallas_call_hlo_interpret(
       local_grid_env = grid_mapping.local_grid_env(loop_idx, grid)
     else:
       local_grid_env = tuple(
-          pallas_core.GridAxis(idx, b)  # pyrefly: ignore[bad-argument-type]
+          pallas_core.GridAxis(idx, b)
           for dim, (idx, b) in enumerate(zip(loop_idx, grid))
           if dim not in grid_mapping.vmapped_dims
       )

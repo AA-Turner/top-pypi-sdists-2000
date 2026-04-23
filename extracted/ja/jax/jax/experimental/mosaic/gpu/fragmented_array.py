@@ -255,7 +255,7 @@ class TiledLayoutImpl:
     Inverse to `registers_shape`.
     """
     tiled_tiling = self.tiled_tiling_shape
-    shape = list(shape)
+    shape: list[int] = list(shape)  # pyrefly: ignore[redefinition]
     for d in self.partitioned_warp_dims:
       shape[d] = tiled_tiling[d]
     for d in self.partitioned_lane_dims:
@@ -984,7 +984,7 @@ class FragmentedArray:
         ratio = new_layout.vector_length // self.layout.vector_length
         for idx in np.ndindex(new_registers.shape):
           new_reg = utils.vector_concat([
-              self.registers[idx[0], idx[1] * ratio + i, *idx[2:]]
+              cast(ir.Value, self.registers[idx[0], idx[1] * ratio + i, *idx[2:]])
               for i in range(ratio)
           ])
           new_registers[idx] = new_reg
@@ -1599,10 +1599,21 @@ class FragmentedArray:
 
   def abs(self) -> FragmentedArray:
     if isinstance(self.mlir_dtype, ir.FloatType):
-      return self._pointwise(mlir_math.absf)
-    if isinstance(self.mlir_dtype, ir.IntegerType):
-      return self._pointwise(mlir_math.absi)
-    raise NotImplementedError
+      absf = mlir_math.absf
+      if isinstance(self.mlir_dtype, ir.F32Type):
+        absf = self._lift_fast_instr("abs.f32")
+      elif isinstance(self.mlir_dtype, ir.F16Type):
+        absf = self._lift_fast_packed_instr("abs.f16x2", "abs.f16")
+      elif isinstance(self.mlir_dtype, ir.BF16Type):
+        absf = self._lift_fast_packed_instr("abs.bf16x2", "abs.bf16")
+      return self._pointwise(absf)
+    elif isinstance(self.mlir_dtype, ir.IntegerType):
+      if self.is_signed:
+        return self._pointwise(mlir_math.absi)
+      else:
+        return self
+    else:
+      raise NotImplementedError
 
   def round(self) -> FragmentedArray:
     """Same as `lax.round(..., AWAY_FROM_ZERO)`."""
@@ -1695,6 +1706,7 @@ class FragmentedArray:
             f"{single_instr if vec_len == 1 else packed_instr} {args_ptx};",
             f"={cstr}" + f",{cstr}" * len(args)
         )
+        assert isinstance(result_int, ir.Value)
         return utils.bitcast(result_int, original_arg_ty)
       else:
         assert vec_bitwidth > 32
@@ -1740,6 +1752,7 @@ class FragmentedArray:
       raise NotImplementedError("Only arrays with tiled layouts can be sliced")
     if any(isinstance(idx, ir.Value) for idx in base_idx):
       raise ValueError("Only slicing with static indices allowed")
+    base_idx = cast(tuple[int, ...], base_idx)
     if any(is_squeezed):
       raise NotImplementedError("Integer indexing not implemented (only slicing allowed)")
     base_tile_shape = self.layout.base_tile_shape
@@ -1774,6 +1787,7 @@ class FragmentedArray:
     base_idx, slice_shape, is_squeezed = utils.parse_indices(idx, self.shape)
     if any(isinstance(idx, ir.Value) for idx in base_idx):
       raise ValueError("Only slicing with static indices allowed")
+    base_idx = cast(tuple[int, ...], base_idx)
     if any(is_squeezed):
       raise NotImplementedError("Integer indexing not implemented (only slicing allowed)")
     if value.shape != tuple(slice_shape):
@@ -1839,9 +1853,6 @@ class FragmentedArray:
       return FragmentedArray(
           _registers=self.registers, _layout=self.layout, _is_signed=is_signed
       )
-    # Otherwise, mypy is unhappy with using ``idx`` for both range and
-    # np.ndenumerate.
-    idx: Any
     any_reg = self.registers.flat[0]
     reg_type = any_reg.type
     is_vector_reg = isinstance(reg_type, ir.VectorType)
@@ -1861,6 +1872,7 @@ class FragmentedArray:
             vector.ExtractStridedSliceOp,
         )
         and utils.bitwidth(_slice_op.source.type) == 32
+        # pyrefly: ignore[missing-attribute]
         and _slice_op.strides[0].value == 1
     )
     def packed_registers(
@@ -2001,6 +2013,7 @@ class FragmentedArray:
               """,
               "=r,r,r",
           )
+          assert isinstance(int_reg, ir.Value)
           return utils.bitcast(int_reg, ir.VectorType.get((2,), bf16))
         [group_size] = ir.VectorType(reg.type).shape
         assert group_size % vector_len == 0
@@ -2012,7 +2025,7 @@ class FragmentedArray:
         # This also lets us share the right shift among more vectors.
         out_int_regs: list[ir.Value] = []
         if regs_from_32bit_slice:
-          slice_op = reg.owner
+          slice_op: Any = reg.owner
           slice_offset = slice_op.offsets[0].value
           reg_int = utils.bitcast(slice_op.source, i32)
           reg_int_shr = arith.shrui(reg_int, c(4, i32))
@@ -2076,6 +2089,7 @@ class FragmentedArray:
               """,
               "=r,=r,r",
           )
+          assert isinstance(out_struct, ir.Value)
           i8_vec = ir.VectorType.get((4,), i8)
           return utils.vector_concat([
               utils.bitcast(llvm.extractvalue(i32, out_struct, (i,)), i8_vec)
@@ -2086,7 +2100,7 @@ class FragmentedArray:
         assert group_size * 4 <= 32
         int_ty = ir.IntegerType.get_signless(group_size * 4)
         if regs_from_32bit_slice:
-          slice_op = reg.owner
+          slice_op: Any = reg.owner
           slice_offset = slice_op.offsets[0].value
           reg_int = utils.bitcast(slice_op.source, i32)
           reg_i8 = upcast_i4_to_i8(reg_int, first_valid_nibble=slice_offset)
@@ -2196,9 +2210,13 @@ class FragmentedArray:
 
     # Here we handle all conversions involving f8 types.
     # TODO(apaszke): Figure out proper satfinite control.
-    supported_f8_f16 = {f8e4m3fn: f16, f8e5m2: f16, f8e8m0fnu: bf16}
-    f8_ptx_names = {f8e4m3fn: "e4m3", f8e5m2: "e5m2", f8e8m0fnu: "ue8m0"}
-    f16_ptx_names = {f16: "f16", bf16: "bf16"}
+    supported_f8_f16: dict[ir.Type, ir.Type] = {
+        f8e4m3fn: f16, f8e5m2: f16, f8e8m0fnu: bf16
+    }
+    f8_ptx_names: dict[ir.Type, str] = {
+        f8e4m3fn: "e4m3", f8e5m2: "e5m2", f8e8m0fnu: "ue8m0"
+    }
+    f16_ptx_names: dict[ir.Type, str] = {f16: "f16", bf16: "bf16"}
     f8_types = f8_ptx_names.keys()
     f16_types = f16_ptx_names.keys()
     if f8e8m0fnu in {cur_dtype, new_dtype} and utils.get_arch().major < 10:
@@ -2228,7 +2246,7 @@ class FragmentedArray:
           return Rounding.TO_NEAREST_EVEN.ptx
         allowed_rounding = (Rounding.TO_NEAREST_EVEN,)
       check_supported_rounding(allowed_rounding)
-      return rounding.ptx  # type: ignore
+      return rounding.ptx
 
     # f8 <-> f32
     if cur_dtype == f32 and new_dtype in f8_types:
@@ -2515,18 +2533,18 @@ class FragmentedArray:
     index = ir.IndexType.get()
 
     def reduce_within_warp(out_idx):
-      out_reg = None
+      out_reg: ir.Value | None = None
       for red_idx in np.ndindex(reduced_shape):
         src_idx = tuple(o + r for o, r in zip(out_idx, red_idx))
         if out_reg is None:
-          out_reg = self.registers[src_idx]
+          out_reg = cast(ir.Value, self.registers[src_idx])
         else:
-          out_reg = op(out_reg, self.registers[src_idx])
+          out_reg = op(out_reg, cast(ir.Value, self.registers[src_idx]))
       assert out_reg is not None
       # Reduce within the vector dimension, if necessary.
       if reduced_dims[layout.vector_dim]:
         [vec_len] = ir.VectorType(out_reg.type).shape
-        scalar_out_reg = None
+        scalar_out_reg: ir.Value | None = None
         for i in range(vec_len):
           scalar = vector.extract(
               out_reg,
@@ -2536,6 +2554,7 @@ class FragmentedArray:
           scalar_out_reg = (
               scalar if scalar_out_reg is None else op(scalar_out_reg, scalar)
           )
+        assert scalar_out_reg is not None
         out_reg = vector.broadcast(
             ir.VectorType.get((1,), out_reg.type.element_type), scalar_out_reg
         )
@@ -2685,6 +2704,7 @@ class FragmentedArray:
         lane_idx: ir.Value,
         swizzle_warp_idx: Callable[[ir.Value], ir.Value]
     ):
+      assert scratch is not None
       [vec_len] = ir.VectorType(reg_ty).shape
       out_reg = None
       step_base_scratch_idx = c(step_idx * WARPGROUP_SIZE, i32)
@@ -2797,6 +2817,8 @@ class FragmentedArray:
         # TODO(bchetioui): explore pipelining computer+store and loads+reduce
         # by double buffering the scratch. This could offer more
         # instruction-level parallelism.
+        assert scratch is not None
+        assert lane_idx is not None and swizzle_warp_idx is not None
         step = len(unreduced_indices)
         store_swizzled(out_reg, step, lane_idx, scratch, swizzle_warp_idx)
         unreduced_indices.append(out_idx)
@@ -2813,8 +2835,10 @@ class FragmentedArray:
     if unreduced_indices:
       utils.warpgroup_barrier()
       for i, unreduced_index in enumerate(unreduced_indices):
+        assert lane_idx is not None and swizzle_warp_idx is not None
         out_regs[unreduced_index] = reduce_stored(
-            reg_ty, i, lane_idx, swizzle_warp_idx  # pylint: disable=undefined-variable
+            # pyrefly: ignore[unbound-name]
+            reg_ty, i, lane_idx, swizzle_warp_idx
         )
       utils.warpgroup_barrier()
     del unreduced_indices
@@ -2944,7 +2968,7 @@ class FragmentedArray:
       return FragmentedArray(
           _registers=np.tile(
               self.registers,
-              np.prod(shape) // np.prod(self.shape),
+              math.prod(shape) // math.prod(self.shape),
           ),
           _layout=layout,
           _is_signed=self.is_signed,
@@ -3035,7 +3059,7 @@ class FragmentedArray:
         new_regs = np.full_like(self.registers, llvm.mlir_undef(new_reg_type))
       return result
     for mlir_idx, reg_idx in zip(self.layout.thread_idxs(self.shape), np.ndindex(self.registers.shape), strict=True):
-      reg = self.registers[reg_idx]
+      reg = cast(ir.Value, self.registers[reg_idx])
       assert len(mlir_idx) == len(self.shape), (mlir_idx, self.shape)
       if isinstance(reg.type, ir.VectorType):
         [elems] = ir.VectorType(reg.type).shape
@@ -3098,11 +3122,16 @@ class FragmentedArray:
         if swizzle != 16:
           raise ValueError("Only TiledLayouts support swizzling")
         assert isinstance(self.layout, WGStridedFragLayout)
-        if atomic is not None and isinstance(ref, utils.MultimemRef):
-          raise NotImplementedError("Multimem refs do not support atomic stores")
+        # pyrefly: ignore[bad-argument-type]
         for get, _update, ref, idx in self.transfer_strided(ref, self.layout.vec_size):
           if isinstance(ref, utils.MultimemRef):
-            ref.store(get(self.registers), idx)
+            ptr = utils.memref_ptr(utils.memref_slice(ref.ref, tuple(idx)))
+            if atomic is not None:
+              self._store_register_atomic(
+                  ptr, get(self.registers), atomic, is_smem=False, multimem=True,
+              )
+            else:
+              utils.multimem_store(ptr, get(self.registers))
           elif atomic is not None:
             is_smem = utils.is_smem_ref(ref)
             memory_space = 3 if is_smem else None
@@ -3138,6 +3167,7 @@ class FragmentedArray:
         raise ValueError("Only TiledLayouts support swizzling")
       registers = np.empty(layout.registers_shape(shape), dtype=object)
       vec_ty = ir.VectorType.get((layout.vec_size,), ref_ty.element_type)
+      # pyrefly: ignore[bad-argument-type]
       for _get, update, ref, idx in cls.transfer_strided(ref, layout.vec_size):
         ptr = utils.memref_ptr(utils.memref_slice(ref.ref, tuple(idx)))
         update(registers, utils.multimem_load_reduce(vec_ty, ptr, reduction, is_signed))
@@ -3208,6 +3238,7 @@ class FragmentedArray:
       swizzle: int | None,
       optimized: bool = True,
       tiling_rank: int | None = None,
+      atomic: Literal["add", "max", "min", "and", "or", "xor"] | None = None,
   ):
     i32 = ir.IntegerType.get_signless(32)
     i64 = ir.IntegerType.get_signless(64)
@@ -3221,9 +3252,13 @@ class FragmentedArray:
         for d in itertools.chain(layout.warp_dims, layout.lane_dims)
     ):
       raise NotImplementedError("Replicated dimensions are not supported")
-    full_cluster_idx = [gpu.cluster_block_id(d) for d in gpu.Dimension]
+    full_cluster_idx: list[ir.Value] = [
+        gpu.cluster_block_id(d) for d in gpu.Dimension
+    ]
     full_cluster_idx[cluster_dim] = cluster_idx
-    lin_cluster_idx = arith.index_cast(i32, utils.cluster_idx(gpu.Dimension, full_cluster_idx))
+    lin_cluster_idx = arith.index_cast(
+        i32, utils.cluster_idx(tuple(gpu.Dimension), full_cluster_idx)
+    )
     cluster_barrier_ptr = utils.get_cluster_ptr(
         barrier.get_ptr(), lin_cluster_idx, generic=False
     )
@@ -3233,6 +3268,13 @@ class FragmentedArray:
     stores = self.transfer_tiled(
         cluster_ref, swizzle, layout, shape, optimized, ref_tiling_rank=tiling_rank
     )
+    if atomic is not None:
+      for get, _update, _idx, cluster_ptr in stores:
+        self._store_register_atomic(
+            cluster_ptr, get(self.registers), atomic, is_smem=False,
+            cluster_barrier_ptr=cluster_barrier_ptr,
+        )
+      return
     for get, _update, _idx, cluster_ptr in stores:
       reg = get(self.registers)
       reg_ty = ir.VectorType(reg.type)
@@ -3268,15 +3310,34 @@ class FragmentedArray:
       vreg: ir.Value,
       atomic: Literal["add", "max", "min", "and", "or", "xor"],
       is_smem: bool,
+      multimem: bool = False,
+      cluster_barrier_ptr: ir.Value | None = None,
   ):
     i32 = ir.IntegerType.get_signless(32)
-    scope = "cta" if is_smem else "gpu"
-    space = ".shared::cta" if is_smem else ""
-    ptr_constraint = "r" if is_smem else "l"
+    if cluster_barrier_ptr is not None:
+      assert not is_smem and not multimem
+      assert cluster_barrier_ptr.type == ir.Type.parse("!llvm.ptr<7>"), cluster_barrier_ptr.type
+      red = "red.async"
+      scope = "cluster.shared::cluster.mbarrier::complete_tx::bytes"
+      space = ""
+      ptr_constraint = "l"
+    elif multimem:
+      assert not is_smem
+      red = "multimem.red"
+      scope = "sys"
+      space = ".global"
+      ptr_constraint = "l"
+    else:
+      red = "red"
+      scope = "cta" if is_smem else "gpu"
+      space = ".shared::cta" if is_smem else ""
+      ptr_constraint = "r" if is_smem else "l"
     element_type = self.mlir_dtype
     element_bitwidth = utils.bitwidth(element_type)
     noftz = ""
     if isinstance(element_type, ir.F32Type):
+      if cluster_barrier_ptr is not None:
+        raise NotImplementedError("f32 not supported for async atomics")
       if atomic != "add":
         raise NotImplementedError(f"f32 only supports add atomics, got {atomic}")
       ptx_type = "f32"
@@ -3286,16 +3347,18 @@ class FragmentedArray:
       else:
         ptx_type = "s32" if self.is_signed else "u32"
     elif isinstance(element_type, (ir.F16Type, ir.BF16Type)):
+      if cluster_barrier_ptr is not None:
+        raise NotImplementedError("f16/bf16 not supported for async atomics")
       if atomic not in ("add", "min", "max"):
         raise NotImplementedError(
             f"f16/bf16 only supports add, min, max atomics, got {atomic}"
         )
-      if is_smem and atomic != "add":
+      if (is_smem or multimem) and atomic != "add":
         raise NotImplementedError(
-            f"f16/bf16 SMEM atomics only support add, got {atomic}"
+            f"f16/bf16 SMEM/multimem atomics only support add, got {atomic}"
         )
       ptx_type = f"{element_type}x2"
-      noftz = ".noftz"
+      noftz = "" if multimem else ".noftz"
     else:
       raise NotImplementedError(
           f"Unsupported element type for atomic stores: {element_type}"
@@ -3339,7 +3402,7 @@ class FragmentedArray:
                   llvm.extractelement(pair, arith.constant(i32, 0)),
                   llvm.extractelement(pair, arith.constant(i32, 1)),
               ],
-              f"red.relaxed.{scope}.{atomic}{noftz}.v2.{element_type} [$0], {{$1, $2}};",
+              f"{red}{space}.relaxed.{scope}.{atomic}{noftz}.v2.{element_type} [$0], {{$1, $2}};",
               f"{ptr_constraint},h,h",
               has_side_effects=True,
           )
@@ -3348,18 +3411,25 @@ class FragmentedArray:
           llvm.inline_asm(
               ir.Type.parse("!llvm.void"),
               [ptr, *regs_slice],
-              f"red.relaxed.{scope}.{atomic}{noftz}.v{width}.{element_type}x2 [$0], {operands};",
+              f"{red}{space}.relaxed.{scope}.{atomic}{noftz}.v{width}.{element_type}x2 [$0], {operands};",
               f"{ptr_constraint}" + ",r" * width,
               has_side_effects=True,
           )
       else:
         ptx_t = f"{element_type}x2" if element_bitwidth == 16 else ptx_type
         [reg] = regs_slice
+        operands = [ptr, reg]
+        barrier_op = ""
+        constraints = f"{ptr_constraint},r"
+        if cluster_barrier_ptr is not None:
+          operands.append(cluster_barrier_ptr)
+          barrier_op = ", [$2]"
+          constraints += ",l"
         llvm.inline_asm(
             ir.Type.parse("!llvm.void"),
-            [ptr, reg],
-            f"red{space}.relaxed.{scope}.{atomic}{noftz}.{ptx_t} [$0], $1;",
-            f"{ptr_constraint},r",
+            operands,
+            f"{red}{space}.relaxed.{scope}.{atomic}{noftz}.{ptx_t} [$0], $1{barrier_op};",
+            constraints,
             has_side_effects=True,
         )
 
@@ -3375,19 +3445,19 @@ class FragmentedArray:
       raise NotImplementedError(self.layout)
     layout, shape = self.layout, self.shape
     if atomic is not None:
-      if isinstance(ref, utils.MultimemRef):
-        raise NotImplementedError("Multimem refs do not support atomic stores")
       if any(isinstance(d, Replicated) for d in layout.warp_dims + layout.lane_dims):
         raise NotImplementedError(
             "Atomic stores not supported for layouts with replicated dims"
         )
-      is_smem = utils.is_smem_ref(ref)
+      multimem = isinstance(ref, utils.MultimemRef)
+      is_smem = not multimem and utils.is_smem_ref(ref)
       stores = self.transfer_tiled(
-          ref, swizzle, layout, shape, optimized, ref_tiling_rank=tiling_rank
+          ref.ref if multimem else ref,
+          swizzle, layout, shape, optimized, ref_tiling_rank=tiling_rank,
       )
       for get, _update, _idx, base_ptr in stores:
         self._store_register_atomic(
-            base_ptr, get(self.registers), atomic, is_smem,
+            base_ptr, get(self.registers), atomic, is_smem, multimem=multimem,
         )
       return
     # Note that the loop below will "race" for layouts that replicate data.
@@ -3618,18 +3688,6 @@ class FragmentedArray:
       tiles_strides[d] = (0,) * len(tiles_strides[d])
     tiles_shape = list(itertools.chain.from_iterable(tiles_shape))
     tiles_strides = list(itertools.chain.from_iterable(tiles_strides))
-    warp_shape = list(itertools.chain.from_iterable(
-        (d.times,) if isinstance(d, Replicated) else tiled_nested_shape[d] for d in layout.warp_dims
-    ))
-    warp_strides = list(itertools.chain.from_iterable(
-        (0,) if isinstance(d, Replicated) else tiled_nested_strides[d] for d in layout.warp_dims
-    ))
-    lane_shape = list(itertools.chain.from_iterable(
-        (d.times,) if isinstance(d, Replicated) else tiled_nested_shape[d] for d in layout.lane_dims
-    ))
-    lane_strides = list(itertools.chain.from_iterable(
-        (0,) if isinstance(d, Replicated) else tiled_nested_strides[d] for d in layout.lane_dims
-    ))
     vector_length = layout.vector_length
 
     element_bits = mgpu.bitwidth(dtype)
@@ -3667,10 +3725,7 @@ class FragmentedArray:
       if llvm_memory_space != 3 and llvm_memory_space != 7:
         raise NotImplementedError("Only optimized transfers to SMEM supported")
       plan = plan_tiled_transfer(
-          tiles_shape, tiles_strides,
-          warp_shape, warp_strides,
-          lane_shape, lane_strides,
-          vector_length, element_bits, swizzle
+        nested_ref_shape, nested_ref_strides, layout, element_bits, swizzle,
       )
     else:
       plan = TrivialTransferPlan()
@@ -3804,7 +3859,7 @@ class TransferPlan(Protocol):
 
 
 @dataclasses.dataclass(frozen=True)
-class TrivialTransferPlanImpl(TransferPlan):
+class TrivialTransferPlan(TransferPlan):
   @property
   def tile_index_transforms(self):
     return (lambda x: x,)
@@ -3819,15 +3874,22 @@ class TrivialTransferPlanImpl(TransferPlan):
 
 
 @dataclasses.dataclass(frozen=True)
-class StaggeredTransferPlanImpl(TransferPlan):
+class StaggeredTransferPlan(TransferPlan):
   stagger: int
   dim: int
   size: int
-  group_pred: ir.Value
+  group_stride: int
+
+  @functools.cached_property
+  def group_pred(self) -> ir.Value:
+    c32 = lambda x: arith.constant(ir.IntegerType.get_signless(32), x)
+    lane_idx = arith.remui(utils.thread_idx(), c32(WARP_SIZE))
+    group_idx = arith.remui(arith.divui(lane_idx, c32(self.group_stride)), c32(2))
+    return arith.cmpi(arith.CmpIPredicate.ne, group_idx, c32(0))
 
   @property
   def tile_index_transforms(self):
-    dim = self.dim  # pytype: disable=attribute-error
+    dim = self.dim
     def rotate(idx: tuple[int, ...]) -> tuple[int, ...]:
       return (
           *idx[:dim], (idx[dim] + self.stagger) % self.size, *idx[dim + 1 :],
@@ -3843,53 +3905,55 @@ class StaggeredTransferPlanImpl(TransferPlan):
     sides = [old, new] if group_idx == 0 else [new, old]
     return arith.select(self.group_pred, *sides)
 
-TrivialTransferPlan: type[TransferPlan]
-StaggeredTransferPlan: type[TransferPlan]
 
-# TODO(olechwierowicz): Remove this once the C++ impl is always included in jaxlib (min ver 0.9.1).
-if (
-    hasattr(mgpu.dialect, "TrivialTransferPlan")
-    and hasattr(mgpu.dialect, "StaggeredTransferPlan")
-    and hasattr(mgpu.dialect, "init_cc_mlir")
-    and mgpu.dialect.init_cc_mlir(ir)
-):
-  TrivialTransferPlan = mgpu.dialect.TrivialTransferPlan
-  StaggeredTransferPlan = mgpu.dialect.StaggeredTransferPlan
-else:
-  TrivialTransferPlan = TrivialTransferPlanImpl
-  StaggeredTransferPlan = StaggeredTransferPlanImpl
+class TransferPlanDerivationError(Exception):
+  """Raised when a transfer plan cannot be derived due to a known limitation."""
+  pass
 
 
 def plan_tiled_transfer(
-    tiles_shape: Sequence[int],
-    tiles_strides: Sequence[int],
-    warp_shape: Sequence[int],
-    warp_strides: Sequence[int],
-    lane_shape: Sequence[int],
-    lane_strides: Sequence[int],
-    vector_length: int,
+    nested_ref_shape: Sequence[Sequence[int]],
+    nested_ref_strides: Sequence[Sequence[int]],
+    layout: TiledLayout,
     element_bits: int,
     swizzle: int,
 ) -> TransferPlan:
   """Plans the tiled transfer in a way that avoids SMEM bank conflicts.
 
-  Note that while xyz_shape length should always match the length of
-  xyz_strides, we do not require the iteration spaces of tiles/warps/lanes to
-  have the same rank.
-
   Arguments:
-    tiles_shape: The nd-iteration space over tiles.
-    tiles_strides: The memory strides (in elements) for each tile dimension.
-    warp_shape: The nd-iteration space over warps in warpgroup.
-    warp_strides: The memory strides (in elements) for each warp dimension.
-    lane_shape: The nd-iteration space over lanes in a warp.
-    lane_strides: The memory strides (in elements) for each lane dimension.
-    vector_length: The length of a single transfer.
+    nested_ref_shape: The nested shape of the reference. For a logical ref with
+      shape (2, 8, 16) and tiling (2, 8), this would be ((2,), (4, 2), (2, 8)).
+    nested_ref_strides: The strides associated with the `nested_ref_shape`.
+    layout: The layout of the value in registers being transferred.
     element_bits: Element bitwidth.
     swizzle: The swizzle pattern length.
   """
-  i32 = ir.IntegerType.get_signless(32)
-  c = lambda x: arith.constant(i32, x)
+  tiling = layout.tiling
+  tiled_nested_shape, tiled_nested_strides = tiling.tile_nested_shape_strides(
+      nested_ref_shape, nested_ref_strides
+  )
+
+  tiles_shape = list(tiled_nested_shape)
+  tiles_strides = list(tiled_nested_strides)
+  for d in (*layout.partitioned_warp_dims, *layout.partitioned_lane_dims, layout.vector_dim):
+    tiles_shape[d] = (1,) * len(tiles_shape[d])
+    tiles_strides[d] = (0,) * len(tiles_strides[d])
+  tiles_shape = list(itertools.chain.from_iterable(tiles_shape))
+  tiles_strides = list(itertools.chain.from_iterable(tiles_strides))
+
+  warp_shape = list(itertools.chain.from_iterable(
+      (d.times,) if isinstance(d, Replicated) else tiled_nested_shape[d] for d in layout.warp_dims
+  ))
+  warp_strides = list(itertools.chain.from_iterable(
+      (0,) if isinstance(d, Replicated) else tiled_nested_strides[d] for d in layout.warp_dims
+  ))
+  lane_shape = list(itertools.chain.from_iterable(
+      (d.times,) if isinstance(d, Replicated) else tiled_nested_shape[d] for d in layout.lane_dims
+  ))
+  lane_strides = list(itertools.chain.from_iterable(
+      (0,) if isinstance(d, Replicated) else tiled_nested_strides[d] for d in layout.lane_dims
+  ))
+  vector_length = layout.vector_length
   # TODO(apaszke): Rewrite this function in terms of transfer_bytes (that we get
   # from the caller).
   swizzle_tile_elems = (16 * 8) // element_bits
@@ -3915,7 +3979,7 @@ def plan_tiled_transfer(
       swizzle_tile_elems % transfer_alignment
       and vector_length <= transfer_alignment
   ):
-    raise ValueError(
+    raise TransferPlanDerivationError(
         "Failed to prove that vector transfers don't cross swizzle tile"
         " boundaries. This check is incomplete, and does not guarantee that"
         f" this is a user error, but it might be. {transfer_alignment=}"
@@ -3927,9 +3991,13 @@ def plan_tiled_transfer(
   # that bank conflicts only don't occur if the addresses mapping to the same
   # bank are contiguous, but that's a more complicated check to perform.
   if transfer_bytes > SMEM_BANK_BYTES * 4:
-    raise NotImplementedError
+    raise TransferPlanDerivationError(
+        f"{transfer_bytes=} > {SMEM_BANK_BYTES * 4} not implemented"
+    )
   if element_bits > SMEM_BANK_BYTES * 8:
-    raise NotImplementedError
+    raise TransferPlanDerivationError(
+        f"{element_bits=} > {SMEM_BANK_BYTES * 8} not implemented"
+    )
   smem_bank_bytes = min(SMEM_BANK_BYTES, transfer_bytes)
   num_banks = SMEM_BANKS * (SMEM_BANK_BYTES // smem_bank_bytes)
   elems_per_bank = (smem_bank_bytes * 8) // element_bits
@@ -3996,13 +4064,10 @@ def plan_tiled_transfer(
         transform = lambda idx: (idx + offset * lane_group) % tiles_shape
         if not has_bank_conflicts(transform):
           # We've found a strategy that avoids bank conflicts!
-          lane_idx = arith.remui(utils.thread_idx(), c(WARP_SIZE))
-          group_idx = arith.remui(arith.divui(lane_idx, c(group_stride)), c(2))
-          group_pred = arith.cmpi(arith.CmpIPredicate.ne, group_idx, c(0))
-          return StaggeredTransferPlan(  # type: ignore[call-arg]
-              stagger, dim, tiles_shape[dim], group_pred  # pylint: disable=too-many-function-args
+          return StaggeredTransferPlan(
+              stagger, dim, tiles_shape[dim], group_stride
           )
-  raise ValueError(
+  raise TransferPlanDerivationError(
       "Failed to synthesize a transfer pattern that avoids bank conflicts"
   )
 
@@ -4029,7 +4094,7 @@ def optimization_barrier(
 
 
 @overload
-def optimization_barrier(a: mgpu.FragmentedArray) -> mgpu.FragmentedArray:
+def optimization_barrier(a: mgpu.FragmentedArray, /) -> mgpu.FragmentedArray:
   ...
 
 
@@ -4066,7 +4131,7 @@ def optimization_barrier(*arrays):
     if isinstance(dtype, ir.F32Type) or dtype == i32:
       if isinstance(reg_ty, ir.VectorType):
         [vec_len] = ir.VectorType(reg_ty).shape
-        array_regs = [  # pylint: disable=g-complex-comprehension
+        array_regs = [
             vector.extract(
                 reg,
                 dynamic_position=[],
@@ -4104,6 +4169,7 @@ def optimization_barrier(*arrays):
     reg_constraints += [reg_constraint] * len(array_regs)
   ptx = ""
   all_reg_constraints = ",".join(
+      # pyrefly: ignore[bad-argument-type]  # pyrefly#2854
       [*("=" + c for c in reg_constraints), *map(str, range(len(reg_constraints)))]
   )
 
@@ -4123,6 +4189,7 @@ def optimization_barrier(*arrays):
         struct_ty, regs, ptx, all_reg_constraints,
         asm_dialect=0, has_side_effects=True,
     )
+    assert isinstance(result_struct, ir.Value)
     regs = [
         llvm.extractvalue(dtype, result_struct, [i])
         for i, dtype in enumerate(reg_dtypes)
@@ -4149,7 +4216,7 @@ def optimization_barrier(*arrays):
         )
     )
   # pytype cannot type check the return type of an overloaded function.
-  return results[0] if len(arrays) == 1 else results  # pytype: disable=bad-return-type
+  return results[0] if len(arrays) == 1 else results
 
 
 def tiled_copy_smem_gmem_layout(
@@ -4262,7 +4329,7 @@ def copy_tiled(src: ir.Value, dst: ir.Value, swizzle: int = 16):
           f" {gmem_ty.shape} by (8, {swizzle_elems})), but got {smem_ty.shape}"
       )
     layout = tiled_copy_smem_gmem_layout(
-        *smem_ty.shape[-4:-2], swizzle, bitwidth  # type: ignore[call-arg]
+        *smem_ty.shape[-4:-2], swizzle, bitwidth  # pyrefly: ignore[bad-argument-count]
     )
     if utils.is_smem_ref(src_ty):
       regs = FragmentedArray.load_tiled(src, swizzle, is_signed=is_signed, layout=layout)

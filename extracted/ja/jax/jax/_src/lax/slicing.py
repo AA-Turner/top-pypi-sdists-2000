@@ -1554,7 +1554,7 @@ def _dynamic_slice_transpose_fancy(out_ct, operand, *start_indices, slice_sizes)
     operand_aval, = lax_utils.ensure_shaped(operand.aval)
     zeros = lax.full(operand_aval.shape, 0, operand_aval.dtype,
                      sharding=operand_aval.sharding)
-    zeros = core.pvary(zeros, tuple(operand_aval.vma))
+    zeros = core.pvary(zeros, tuple(operand_aval.mat.varying))
     operand.accum(dynamic_update_slice_p.bind(zeros, out_ct, *start_indices))
 
 def _batch_dynamic_slice_indices(indices, bdims):
@@ -2177,7 +2177,7 @@ def _gather_transpose_rule(t, operand, indices, *, dimension_numbers,
   else:
     zeros = lax.full(operand.aval.shape, 0, core.typeof(t).dtype,
                      sharding=operand.aval.sharding)
-    zeros = core.pvary(zeros, tuple(operand.aval.vma))
+    zeros = core.pvary(zeros, tuple(operand.aval.mat.varying))
     scatter_dnums = ScatterDimensionNumbers(
         update_window_dims=dimension_numbers.offset_dims,
         inserted_window_dims=dimension_numbers.collapsed_slice_dims,
@@ -2345,9 +2345,9 @@ def _gather_lower(ctx, operand, indices, *,
     # return hlo.DynamicGatherOp(
     #     operand, indices, mlir.shape_tensor(slice_sizes),
     #     dnums, indices_are_sorted=ir.BoolAttr.get(indices_are_sorted)).results
-    results = [mlir.aval_to_ir_type(aval_out)]
+    results = mlir.flatten_ir_types(mlir.aval_to_ir_types(aval_out))
     operands = [operand, indices, slice_sizes]
-    attributes = {
+    attributes: dict[str, ir.Attribute] = {
         "dimension_numbers": dnums,
         "indices_are_sorted": ir.BoolAttr.get(indices_are_sorted)
     }
@@ -2371,9 +2371,9 @@ def _scatter_dtype_rule(operand, indices, updates, **kwargs):
 
 def _get_updates_batching_dims(indices_batching_dims, update_window_dims,
                                index_vector_dim, updates_shape):
-  scatter_dim_in_updates = list(range(index_vector_dim))
+  scatter_dim_in_updates: list[int | None] = list(range(index_vector_dim))
   for i in update_window_dims:
-    scatter_dim_in_updates.insert(i, None)  # type: ignore
+    scatter_dim_in_updates.insert(i, None)
   assert len(scatter_dim_in_updates) == len(updates_shape)
   return tuple(scatter_dim_in_updates.index(i) for i in indices_batching_dims)
 
@@ -2888,6 +2888,8 @@ def _scatter_batching_rule(scatter_op, axis_data, batched_args, batch_dims, *,
         operand_batching_dims=operand_batching_dims,
         scatter_indices_batching_dims=dimension_numbers.scatter_indices_batching_dims,
     )
+    operand, indices, updates = batching.spmd_names_insert_pvary(
+        operand, indices, updates)
     return scatter_op.bind(
       operand, indices, updates, dimension_numbers=dnums,
       indices_are_sorted=indices_are_sorted, unique_indices=unique_indices,
@@ -3406,10 +3408,10 @@ def _dynamic_slice_indices(
     msg = ("Length of slice indices must match number of operand dimensions ({} "
           "vs {})")
     raise ValueError(msg.format(len(start_indices), operand.shape))
-  if not isinstance(start_indices, (tuple, list)):
-    if start_indices.ndim != 1:  # type: ignore[union-attr]
+  if not isinstance(start_indices, Sequence):
+    if start_indices.ndim != 1:
       raise ValueError("Slice indices must be a 1D sequence, got {}"
-                       .format(start_indices.shape))  # type: ignore[union-attr]
+                       .format(start_indices.shape))
     start_indices = list(start_indices)
   result: list[ArrayLike] = []
   if isinstance(allow_negative_indices, bool):
@@ -3420,7 +3422,7 @@ def _dynamic_slice_indices(
   ):
     # If i is unsigned, then it cannot be negative.
     if dtypes.issubdtype(_dtype(i), np.unsignedinteger):
-      result.append(i)  # pyrefly: ignore[bad-argument-type]  # pyrefly#2385
+      result.append(i)
       continue
     # Test whether i and d are static to avoid unnecessary staging.
     if isinstance(i, (int, np.integer)) and core.is_constant_dim(d):
@@ -3444,8 +3446,8 @@ def _dynamic_slice_indices(
       continue
     if allow_negative_index:
       d_arr = lax.convert_element_type(d, _dtype(i))
-      # pyrefly: ignore[bad-argument-type, unsupported-operation]  # pyrefly#2385
+      # pyrefly: ignore[unsupported-operation]
       result.append(lax.select(i < 0, i + d_arr, i))
     else:
-      result.append(i)  # pyrefly: ignore[bad-argument-type]  # pyrefly#2385
+      result.append(i)
   return result

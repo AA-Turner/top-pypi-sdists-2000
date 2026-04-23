@@ -16,7 +16,8 @@
 from collections.abc import Callable, Sequence
 import enum
 import functools
-from typing import overload, TypeAlias, TypeVar
+import inspect
+from typing import Any, TypeAlias, TypeVar, overload
 
 import jax
 from jax import api_util
@@ -105,7 +106,7 @@ def load_expanded(ref: Ref, *, mask: jax.Array) -> jax.Array:
   if not isinstance(ref, Ref):
     raise TypeError(f"ref must be an AbstractRef or TransformedRef, got {ref}")
   if not isinstance(ref, TransformedRef):
-    ref = ref.at[...]  # type: ignore
+    ref = ref.at[...]  # pyrefly: ignore[bad-index]
   assert isinstance(ref, TransformedRef)
   flat_transforms, tree = jax.tree.flatten(ref.transforms)
   return load_p.bind(ref.ref, *flat_transforms, mask, has_mask=True, tree=tree)
@@ -170,7 +171,7 @@ def store_compressed(ref: Ref, x: jax.Array, *, mask: jax.Array) -> None:
   if not isinstance(ref, Ref):
     raise TypeError(f"ref must be an AbstractRef or TransformedRef, got {ref}")
   if not isinstance(ref, TransformedRef):
-    ref = ref.at[...]  # type: ignore
+    ref = ref.at[...]  # pyrefly: ignore[bad-index]
   assert isinstance(ref, TransformedRef)
   flat_transforms, tree = jax.tree.flatten(ref.transforms)
   _ = swap_p.bind(
@@ -195,7 +196,7 @@ def addupdate(ref: Ref, x: jax.Array) -> None:
   if not isinstance(ref, Ref):
     raise TypeError(f"ref must be an AbstractRef or TransformedRef, got {ref}")
   if not isinstance(ref, TransformedRef):
-    ref = ref.at[...]  # type: ignore
+    ref = ref.at[...]  # pyrefly: ignore[bad-index]
   assert isinstance(ref, TransformedRef)
   flat_transforms, tree = jax.tree.flatten(ref.transforms)
   _ = swap_p.bind(
@@ -212,7 +213,7 @@ def addupdate_compressed(ref: Ref, x: jax.Array, *, mask: jax.Array) -> None:
   if not isinstance(ref, Ref):
     raise TypeError(f"ref must be an AbstractRef or TransformedRef, got {ref}")
   if not isinstance(ref, TransformedRef):
-    ref = ref.at[...]  # type: ignore
+    ref = ref.at[...]  # pyrefly: ignore[bad-index]
   assert isinstance(ref, TransformedRef)
   flat_transforms, tree = jax.tree.flatten(ref.transforms)
   _ = swap_p.bind(
@@ -1227,10 +1228,10 @@ def _fetch_and_add_abstract_eval(*args):
 def _fetch_and_add_lowering_rule(ctx: sc_lowering.LoweringRuleContext, *args):
   del ctx  # Unused.
   x_ref, value, *indices, subcore_id = args
-  core_type = ir.Attribute.parse("#tpu.core_type<sc_vector_subcore>")
-  return tpu.fetch_and_add_sync(
-      x_ref, indices, value, core_type=core_type, core_id=subcore_id
-  )
+  kwargs: dict[str, Any] = {}
+  if "core_type" in inspect.signature(tpu.fetch_and_add_sync).parameters:
+    kwargs = {"core_type": ir.Attribute.parse("#tpu.core_type<sc_vector_subcore>")}
+  return tpu.fetch_and_add_sync(x_ref, indices, value, core_id=subcore_id, **kwargs)
 
 
 def fetch_and_add(
