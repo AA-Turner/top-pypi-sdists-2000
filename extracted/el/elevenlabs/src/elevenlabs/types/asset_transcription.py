@@ -5,13 +5,14 @@ import typing
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.unchecked_base_model import UncheckedBaseModel
-from .asset_transcription_word import AssetTranscriptionWord
+from .asset_transcription_data import AssetTranscriptionData
+from .asset_transcription_status import AssetTranscriptionStatus
 
 
 class AssetTranscription(UncheckedBaseModel):
-    language_code: str
-    text: str
-    words: typing.List[AssetTranscriptionWord]
+    status: AssetTranscriptionStatus
+    data: typing.Optional[AssetTranscriptionData] = None
+    updated_at_ms: typing.Optional[int] = None
 
     if IS_PYDANTIC_V2:
         model_config: typing.ClassVar[pydantic.ConfigDict] = pydantic.ConfigDict(extra="allow", frozen=True)  # type: ignore # Pydantic v2
