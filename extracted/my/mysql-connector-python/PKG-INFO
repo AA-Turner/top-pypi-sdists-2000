@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: mysql-connector-python
-Version: 9.6.0
+Version: 9.7.0
 Summary: A self-contained Python driver for communicating with MySQL servers, using an API that is compliant with the Python Database API Specification v2.0 (PEP 249).
 Author: Oracle and/or its affiliates
 Author-email: 
