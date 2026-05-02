@@ -1,0 +1,421 @@
+# SPDX-FileCopyrightText: 2025 CoreWeave, Inc.
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-PackageName: cwsandbox-client
+
+"""Unit tests for cwsandbox._network module."""
+
+import asyncio
+from datetime import timedelta
+from unittest.mock import AsyncMock, MagicMock, patch
+
+import grpc
+import pytest
+from google.protobuf import any_pb2
+from google.protobuf.duration_pb2 import Duration
+from google.rpc import error_details_pb2, status_pb2
+
+from cwsandbox._network import (
+    create_channel,
+    paginate_async,
+    parse_grpc_target,
+    translate_grpc_error,
+)
+from cwsandbox.exceptions import (
+    CWSandboxAuthenticationError,
+    CWSandboxError,
+    DiscoveryError,
+    SandboxError,
+)
+
+
+def _status_bytes(reason: str, metadata: dict[str, str] | None = None, retry: int = 0) -> bytes:
+    status = status_pb2.Status(code=2, message="test")
+    info = error_details_pb2.ErrorInfo(
+        reason=reason, domain="cwsandbox.com", metadata=metadata or {}
+    )
+    packed = any_pb2.Any()
+    packed.Pack(info)
+    status.details.append(packed)
+    if retry:
+        retry_detail = error_details_pb2.RetryInfo(retry_delay=Duration(seconds=retry))
+        packed_retry = any_pb2.Any()
+        packed_retry.Pack(retry_detail)
+        status.details.append(packed_retry)
+    return status.SerializeToString()
+
+
+class TestParseGrpcTarget:
+    """Tests for parse_grpc_target function."""
+
+    def test_https_with_explicit_port(self) -> None:
+        """Test parsing HTTPS URL with explicit port."""
+        target, is_secure = parse_grpc_target("https://atc.example.com:8443")
+
+        assert target == "atc.example.com:8443"
+        assert is_secure is True
+
+    def test_https_default_port(self) -> None:
+        """Test parsing HTTPS URL with default port 443."""
+        target, is_secure = parse_grpc_target("https://atc.example.com")
+
+        assert target == "atc.example.com:443"
+        assert is_secure is True
+
+    def test_http_with_explicit_port(self) -> None:
+        """Test parsing HTTP URL with explicit port."""
+        target, is_secure = parse_grpc_target("http://localhost:50051")
+
+        assert target == "localhost:50051"
+        assert is_secure is False
+
+    def test_http_default_port(self) -> None:
+        """Test parsing HTTP URL with default port 80."""
+        target, is_secure = parse_grpc_target("http://localhost")
+
+        assert target == "localhost:80"
+        assert is_secure is False
+
+    def test_https_with_trailing_slash(self) -> None:
+        """Test parsing URL with trailing slash (allowed)."""
+        target, is_secure = parse_grpc_target("https://atc.example.com/")
+
+        assert target == "atc.example.com:443"
+        assert is_secure is True
+
+    def test_rejects_url_with_path(self) -> None:
+        """Test that URLs with paths are rejected."""
+        with pytest.raises(ValueError, match="gRPC does not support URL paths"):
+            parse_grpc_target("https://atc.example.com/api/v1")
+
+    def test_rejects_url_with_nested_path(self) -> None:
+        """Test that URLs with nested paths are rejected."""
+        with pytest.raises(ValueError, match="gRPC does not support URL paths"):
+            parse_grpc_target("https://atc.example.com/foo/bar/baz")
+
+    def test_rejects_invalid_scheme(self) -> None:
+        """Test that non-HTTP schemes are rejected."""
+        with pytest.raises(ValueError, match="URL must use http or https scheme"):
+            parse_grpc_target("grpc://atc.example.com")
+
+    def test_rejects_ftp_scheme(self) -> None:
+        """Test that FTP scheme is rejected."""
+        with pytest.raises(ValueError, match="URL must use http or https scheme"):
+            parse_grpc_target("ftp://files.example.com")
+
+    def test_rejects_missing_hostname(self) -> None:
+        """Test that URLs without hostname are rejected."""
+        with pytest.raises(ValueError, match="URL must have a hostname"):
+            parse_grpc_target("https://")
+
+    def test_production_url(self) -> None:
+        """Test parsing the production CWSandbox URL."""
+        target, is_secure = parse_grpc_target("https://api.cwsandbox.com")
+
+        assert target == "api.cwsandbox.com:443"
+        assert is_secure is True
+
+
+class TestCreateChannel:
+    """Tests for create_channel function."""
+
+    @patch("cwsandbox._network.grpc.aio.secure_channel")
+    @patch("cwsandbox._network.grpc.ssl_channel_credentials")
+    def test_secure_channel_with_tls(
+        self,
+        mock_ssl_creds: MagicMock,
+        mock_secure_channel: MagicMock,
+    ) -> None:
+        """Test creating a secure channel with TLS."""
+        mock_creds = MagicMock()
+        mock_ssl_creds.return_value = mock_creds
+        mock_channel = MagicMock()
+        mock_secure_channel.return_value = mock_channel
+
+        result = create_channel("atc.example.com:443", is_secure=True)
+
+        mock_ssl_creds.assert_called_once()
+        mock_secure_channel.assert_called_once_with(
+            "atc.example.com:443",
+            mock_creds,
+        )
+        assert result is mock_channel
+
+    @patch("cwsandbox._network.grpc.aio.insecure_channel")
+    def test_insecure_channel(self, mock_insecure_channel: MagicMock) -> None:
+        """Test creating an insecure channel."""
+        mock_channel = MagicMock()
+        mock_insecure_channel.return_value = mock_channel
+
+        result = create_channel("localhost:50051", is_secure=False)
+
+        mock_insecure_channel.assert_called_once_with("localhost:50051")
+        assert result is mock_channel
+
+
+def _make_rpc_error(
+    code: grpc.StatusCode,
+    details: str,
+    *,
+    trailing: list[tuple[str, bytes | str]] | None = None,
+) -> grpc.RpcError:
+    err = MagicMock()
+    err.code.return_value = code
+    err.details.return_value = details
+    err.trailing_metadata.return_value = trailing if trailing is not None else []
+    return err
+
+
+class TestTranslateGrpcError:
+    """Tests for translate_grpc_error shared helper."""
+
+    def test_unauthenticated(self) -> None:
+        err = _make_rpc_error(grpc.StatusCode.UNAUTHENTICATED, "bad token")
+        result = translate_grpc_error(err)
+        assert isinstance(result, CWSandboxAuthenticationError)
+        assert "bad token" in str(result)
+
+    def test_permission_denied(self) -> None:
+        err = _make_rpc_error(grpc.StatusCode.PERMISSION_DENIED, "forbidden")
+        result = translate_grpc_error(err)
+        assert isinstance(result, CWSandboxAuthenticationError)
+        assert "forbidden" in str(result)
+
+    def test_deadline_exceeded(self) -> None:
+        err = _make_rpc_error(grpc.StatusCode.DEADLINE_EXCEEDED, "slow")
+        result = translate_grpc_error(err, operation="List towers")
+        assert isinstance(result, CWSandboxError)
+        assert "timed out" in str(result)
+        assert "slow" in str(result)
+
+    def test_unavailable(self) -> None:
+        err = _make_rpc_error(grpc.StatusCode.UNAVAILABLE, "server down")
+        result = translate_grpc_error(err)
+        assert isinstance(result, CWSandboxError)
+        assert "unavailable" in str(result).lower()
+
+    def test_other_code(self) -> None:
+        err = _make_rpc_error(grpc.StatusCode.INTERNAL, "oops")
+        result = translate_grpc_error(err, operation="Get tower")
+        assert isinstance(result, CWSandboxError)
+        assert "oops" in str(result)
+
+    def test_returns_not_raises(self) -> None:
+        err = _make_rpc_error(grpc.StatusCode.INTERNAL, "oops")
+        result = translate_grpc_error(err)
+        assert isinstance(result, Exception)  # returned, not raised
+
+    # -- fallback_cls parameter tests --
+
+    def test_fallback_cls_sandbox_error_for_unavailable(self) -> None:
+        err = _make_rpc_error(grpc.StatusCode.UNAVAILABLE, "server down")
+        result = translate_grpc_error(err, fallback_cls=SandboxError)
+        assert isinstance(result, SandboxError)
+        assert "unavailable" in str(result).lower()
+
+    def test_fallback_cls_sandbox_error_for_deadline(self) -> None:
+        err = _make_rpc_error(grpc.StatusCode.DEADLINE_EXCEEDED, "slow")
+        result = translate_grpc_error(err, fallback_cls=SandboxError)
+        assert isinstance(result, SandboxError)
+        assert "timed out" in str(result)
+
+    def test_fallback_cls_sandbox_error_for_other(self) -> None:
+        err = _make_rpc_error(grpc.StatusCode.INTERNAL, "oops")
+        result = translate_grpc_error(err, fallback_cls=SandboxError)
+        assert isinstance(result, SandboxError)
+
+    def test_fallback_cls_discovery_error_for_unavailable(self) -> None:
+        err = _make_rpc_error(grpc.StatusCode.UNAVAILABLE, "server down")
+        result = translate_grpc_error(err, fallback_cls=DiscoveryError)
+        assert isinstance(result, DiscoveryError)
+
+    def test_fallback_cls_does_not_affect_auth_errors(self) -> None:
+        for code in (grpc.StatusCode.UNAUTHENTICATED, grpc.StatusCode.PERMISSION_DENIED):
+            err = _make_rpc_error(code, "denied")
+            result = translate_grpc_error(err, fallback_cls=SandboxError)
+            assert isinstance(result, CWSandboxAuthenticationError)
+            assert not isinstance(result, SandboxError)
+
+
+class TestTranslateGrpcErrorWithErrorInfo:
+    """ErrorInfo / RetryInfo are threaded onto exceptions returned by the shared translator."""
+
+    def test_reason_attached_to_fallback_exception(self) -> None:
+        err = _make_rpc_error(
+            grpc.StatusCode.INTERNAL,
+            "oops",
+            trailing=[("grpc-status-details-bin", _status_bytes("CWSANDBOX_RUNNER_NOT_FOUND"))],
+        )
+        result = translate_grpc_error(err, fallback_cls=SandboxError)
+        assert isinstance(result, SandboxError)
+        assert result.reason == "CWSANDBOX_RUNNER_NOT_FOUND"
+
+    def test_metadata_attached(self) -> None:
+        err = _make_rpc_error(
+            grpc.StatusCode.INTERNAL,
+            "oops",
+            trailing=[
+                (
+                    "grpc-status-details-bin",
+                    _status_bytes("CWSANDBOX_FILE_NOT_FOUND", metadata={"filepath": "/tmp/x"}),
+                )
+            ],
+        )
+        result = translate_grpc_error(err, fallback_cls=DiscoveryError)
+        assert isinstance(result, DiscoveryError)
+        assert result.reason == "CWSANDBOX_FILE_NOT_FOUND"
+        assert result.metadata == {"filepath": "/tmp/x"}
+
+    def test_retry_delay_attached(self) -> None:
+        err = _make_rpc_error(
+            grpc.StatusCode.UNAVAILABLE,
+            "server down",
+            trailing=[
+                (
+                    "grpc-status-details-bin",
+                    _status_bytes("CWSANDBOX_BACKEND_UNAVAILABLE", retry=7),
+                )
+            ],
+        )
+        result = translate_grpc_error(err, fallback_cls=DiscoveryError)
+        assert isinstance(result, DiscoveryError)
+        assert result.retry_delay == timedelta(seconds=7)
+
+    def test_reason_attached_to_auth_error(self) -> None:
+        err = _make_rpc_error(
+            grpc.StatusCode.UNAUTHENTICATED,
+            "bad token",
+            trailing=[("grpc-status-details-bin", _status_bytes("CWSANDBOX_AUTH_EXPIRED"))],
+        )
+        result = translate_grpc_error(err)
+        assert isinstance(result, CWSandboxAuthenticationError)
+        assert result.reason == "CWSANDBOX_AUTH_EXPIRED"
+
+    def test_no_error_info_keeps_defaults(self) -> None:
+        err = _make_rpc_error(grpc.StatusCode.INTERNAL, "oops")
+        result = translate_grpc_error(err, fallback_cls=SandboxError)
+        assert result.reason is None
+        assert result.metadata == {}
+        assert result.retry_delay is None
+
+
+# ---------------------------------------------------------------------------
+# Pagination tests
+# ---------------------------------------------------------------------------
+
+
+class TestPaginateAsync:
+    """Tests for paginate_async."""
+
+    def _run(self, coro: object) -> object:
+        loop = asyncio.new_event_loop()
+        try:
+            return loop.run_until_complete(coro)  # type: ignore[arg-type]
+        finally:
+            loop.close()
+
+    def test_single_page(self) -> None:
+        response = MagicMock()
+        response.items = ["a", "b"]
+        response.next_page_token = ""
+
+        rpc = AsyncMock(return_value=response)
+        request = MagicMock()
+        request.page_token = ""
+
+        result = self._run(paginate_async(rpc, request, "items", (), timeout=10.0))
+        assert result == ["a", "b"]
+        rpc.assert_awaited_once()
+
+    def test_multi_page(self) -> None:
+        page1 = MagicMock()
+        page1.items = ["a"]
+        page1.next_page_token = "tok1"
+
+        page2 = MagicMock()
+        page2.items = ["b"]
+        page2.next_page_token = "tok2"
+
+        page3 = MagicMock()
+        page3.items = ["c"]
+        page3.next_page_token = ""
+
+        rpc = AsyncMock(side_effect=[page1, page2, page3])
+        request = MagicMock()
+        request.page_token = ""
+
+        result = self._run(paginate_async(rpc, request, "items", (), timeout=30.0))
+        assert result == ["a", "b", "c"]
+        assert rpc.await_count == 3
+
+    def test_empty_response(self) -> None:
+        response = MagicMock()
+        response.items = []
+        response.next_page_token = ""
+
+        rpc = AsyncMock(return_value=response)
+        request = MagicMock()
+        request.page_token = ""
+
+        result = self._run(paginate_async(rpc, request, "items", (), timeout=10.0))
+        assert result == []
+
+    def test_repeated_token_raises(self) -> None:
+        page = MagicMock()
+        page.items = ["a"]
+        page.next_page_token = "same-token"
+
+        rpc = AsyncMock(return_value=page)
+        request = MagicMock()
+        request.page_token = ""
+
+        with pytest.raises(CWSandboxError, match="pagination loop"):
+            self._run(paginate_async(rpc, request, "items", (), timeout=10.0))
+
+    def test_max_pages_exceeded(self) -> None:
+        """Exceeding the 100-page limit raises CWSandboxError."""
+
+        call_count = 0
+
+        async def _fake_rpc(req: object, **kwargs: object) -> MagicMock:
+            nonlocal call_count
+            call_count += 1
+            resp = MagicMock()
+            resp.items = [call_count]
+            resp.next_page_token = f"tok-{call_count}"
+            return resp
+
+        request = MagicMock()
+        request.page_token = ""
+
+        with pytest.raises(CWSandboxError, match="exceeded 100 pages"):
+            self._run(paginate_async(_fake_rpc, request, "items", (), timeout=600.0))
+
+    def test_timeout_during_pagination(self) -> None:
+        """A deadline that expires mid-pagination raises CWSandboxError."""
+
+        async def _slow_rpc(req: object, **kwargs: object) -> MagicMock:
+            resp = MagicMock()
+            resp.items = ["a"]
+            resp.next_page_token = "next"
+            return resp
+
+        request = MagicMock()
+        request.page_token = ""
+
+        with pytest.raises(CWSandboxError, match="timed out"):
+            self._run(paginate_async(_slow_rpc, request, "items", (), timeout=0.0))
+
+    def test_operation_prefix_in_errors(self) -> None:
+        """The operation kwarg is reflected in error messages."""
+        page = MagicMock()
+        page.items = ["a"]
+        page.next_page_token = "same-token"
+
+        rpc = AsyncMock(return_value=page)
+        request = MagicMock()
+        request.page_token = ""
+
+        with pytest.raises(CWSandboxError, match="List sandboxes pagination loop"):
+            self._run(
+                paginate_async(rpc, request, "items", (), timeout=10.0, operation="List sandboxes")
+            )

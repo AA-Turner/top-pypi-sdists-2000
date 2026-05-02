@@ -1,0 +1,522 @@
+"""This module contains the tests for the axiom client."""
+
+import sys
+import os
+import unittest
+from unittest.mock import patch
+import gzip
+import uuid
+
+import pytest
+import ujson
+import rfc3339
+import responses
+from logging import getLogger
+from datetime import datetime, timedelta
+
+from .helpers import get_random_name
+from axiom_py import (
+    AxiomError,
+    Client,
+    AplOptions,
+    AplResultFormat,
+    ContentEncoding,
+    ContentType,
+    IngestOptions,
+    WrongQueryKindException,
+    PersonalTokenNotSupportedForEdgeError,
+)
+from axiom_py.query import (
+    QueryLegacy,
+    QueryOptions,
+    QueryKind,
+    Aggregation,
+)
+from axiom_py.tokens import (
+    CreateTokenRequest,
+    TokenOrganizationCapabilities,
+    RegenerateTokenRequest,
+)
+
+
+class TestClient(unittest.TestCase):
+    client: Client
+
+    @classmethod
+    def setUpClass(cls):
+        cls.logger = getLogger()
+        cls.client = Client(
+            token=os.getenv("AXIOM_TOKEN"),
+            org_id=os.getenv("AXIOM_ORG_ID"),
+            url=os.getenv("AXIOM_URL"),
+        )
+        cls.dataset_name = get_random_name()
+        cls.logger.info(
+            f"generated random dataset name is: {cls.dataset_name}"
+        )
+        events_time_format = "%d/%b/%Y:%H:%M:%S +0000"
+        # create events to ingest and query
+        time = datetime.utcnow() - timedelta(minutes=1)
+        time_formatted = time.strftime(events_time_format)
+        cls.logger.info(f"time_formatted: {time_formatted}")
+        cls.events = [
+            {
+                "_time": time_formatted,
+                "remote_ip": "93.180.71.3",
+                "remote_user": "-",
+                "request": "GET /downloads/product_1 HTTP/1.1",
+                "response": 304,
+                "bytes": 0,
+                "referrer": "-",
+                "agent": "Debian APT-HTTP/1.3 (0.8.16~exp12ubuntu10.21)",
+            },
+            {
+                "_time": time_formatted,
+                "remote_ip": "93.180.71.3",
+                "remote_user": "-",
+                "request": "GET /downloads/product_1 HTTP/1.1",
+                "response": 304,
+                "bytes": 0,
+                "referrer": "-",
+                "agent": "Debian APT-HTTP/1.3 (0.8.16~exp12ubuntu10.21)",
+            },
+        ]
+        # create dataset to test the client
+        cls.client.datasets.create(
+            cls.dataset_name, "create a dataset to test the python client"
+        )
+
+    @responses.activate
+    def test_retries(self):
+        axiomUrl = os.getenv("AXIOM_URL") or ""
+        url = axiomUrl + "/v1/datasets/test"
+        responses.add(responses.GET, url, status=500)
+        responses.add(responses.GET, url, status=502)
+        responses.add(
+            responses.GET,
+            url,
+            status=200,
+            json={"name": "test", "description": "", "who": "", "created": ""},
+        )
+
+        self.client.datasets.get("test")
+        assert len(responses.calls) == 3
+
+    def test_step001_ingest(self):
+        """Tests the ingest endpoint"""
+        data: bytes = ujson.dumps(self.events).encode()
+        payload = gzip.compress(data)
+        opts = IngestOptions(
+            "_time",
+            "2/Jan/2006:15:04:05 +0000",
+            # CSV_delimiter obviously not valid for JSON, but perfectly fine to
+            # test for its presence in this test.
+            ";",
+        )
+        res = self.client.ingest(
+            self.dataset_name,
+            payload=payload,
+            contentType=ContentType.JSON,
+            enc=ContentEncoding.GZIP,
+            opts=opts,
+        )
+        self.logger.debug(res)
+
+        assert (
+            res.ingested == 2
+        ), f"expected ingested count to equal 2, found {res.ingested}"
+        self.logger.info("ingested 2 events successfully.")
+
+    def test_step002_ingest_events(self):
+        """Tests the ingest_events method"""
+        time = datetime.utcnow() - timedelta(hours=1)
+        time_formatted = rfc3339.format(time)
+
+        res = self.client.ingest_events(
+            dataset=self.dataset_name,
+            events=[
+                {"foo": "bar", "_time": time_formatted},
+                {"bar": "baz", "_time": time_formatted},
+            ],
+        )
+        self.logger.debug(res)
+
+        assert (
+            res.ingested == 2
+        ), f"expected ingested count to equal 2, found {res.ingested}"
+
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
+    def test_step004_query(self):
+        """Test querying a dataset"""
+        # query the events we ingested in step2
+        startTime = datetime.utcnow() - timedelta(minutes=2)
+        endTime = datetime.utcnow()
+
+        q = QueryLegacy(startTime=startTime, endTime=endTime)
+        opts = QueryOptions(
+            streamingDuration=timedelta(seconds=60),
+            nocache=True,
+            saveAsKind=QueryKind.ANALYTICS,
+        )
+        qr = self.client.query_legacy(self.dataset_name, q, opts)
+
+        self.assertIsNotNone(qr.savedQueryID)
+        self.assertEqual(len(qr.matches), len(self.events))
+
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
+    def test_step005_apl_query(self):
+        """Test apl query"""
+        # query the events we ingested in step2
+        startTime = datetime.utcnow() - timedelta(minutes=2)
+        endTime = datetime.utcnow()
+
+        apl = "['%s']" % self.dataset_name
+        opts = AplOptions(
+            start_time=startTime,
+            end_time=endTime,
+            format=AplResultFormat.Legacy,
+        )
+        qr = self.client.query(apl, opts)
+
+        self.assertEqual(len(qr.matches), len(self.events))
+
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
+    def test_step005_apl_query_messages(self):
+        """Test an APL query with messages"""
+        startTime = datetime.utcnow() - timedelta(minutes=2)
+        endTime = datetime.utcnow()
+
+        apl = "['%s'] | where true" % self.dataset_name
+        opts = AplOptions(
+            start_time=startTime,
+            end_time=endTime,
+            format=AplResultFormat.Legacy,
+        )
+        qr = self.client.query(apl, opts)
+        # "where clause always evaluates to TRUE, which will include all data"
+        self.assertEqual(len(qr.status.messages), 1)
+        self.assertEqual(
+            qr.status.messages[0].msg,
+            "where clause always evaluates to TRUE, which will include all data",
+        )
+        self.assertEqual(
+            qr.status.messages[0].code,
+            "apl_whereclausealwaysevaluatestoTRUEwhichwillincludealldata_1",
+        )
+
+    @pytest.mark.flaky(reruns=3, reruns_delay=2)
+    def test_step005_apl_query_tabular(self):
+        """Test apl query (tabular)"""
+        # query the events we ingested in step2
+        startTime = datetime.utcnow() - timedelta(minutes=2)
+        endTime = datetime.utcnow()
+
+        apl = "['%s']" % self.dataset_name
+        opts = AplOptions(
+            start_time=startTime,
+            end_time=endTime,
+            format=AplResultFormat.Tabular,
+        )
+        qr = self.client.query(apl, opts)
+
+        events = list(qr.tables[0].events())
+        self.assertEqual(len(events), len(self.events))
+
+    def test_step005_wrong_query_kind(self):
+        """Test wrong query kind"""
+        startTime = datetime.utcnow() - timedelta(minutes=2)
+        endTime = datetime.utcnow()
+        opts = QueryOptions(
+            streamingDuration=timedelta(seconds=60),
+            nocache=True,
+            saveAsKind=QueryKind.APL,
+        )
+        q = QueryLegacy(startTime, endTime)
+
+        try:
+            self.client.query_legacy(self.dataset_name, q, opts)
+        except WrongQueryKindException:
+            self.logger.info(
+                "passing kind apl to query raised exception as expected"
+            )
+            return
+
+        self.fail("was excepting WrongQueryKindException")
+
+    def test_step005_complex_query(self):
+        """Test complex query"""
+        startTime = datetime.utcnow() - timedelta(minutes=2)
+        endTime = datetime.utcnow()
+        aggregations = [
+            Aggregation(alias="event_count", op="count", field="*")
+        ]
+        q = QueryLegacy(startTime, endTime, aggregations=aggregations)
+        res = self.client.query_legacy(self.dataset_name, q, QueryOptions())
+
+        # self.assertEqual(len(self.events), res.status.rowsExamined)
+        self.assertEqual(len(self.events), res.status.rowsMatched)
+
+        if res.buckets.totals and len(res.buckets.totals):
+            agg = res.buckets.totals[0].aggregations[0]
+            self.assertEqual("event_count", agg.op)
+
+    def test_api_tokens(self):
+        """Test creating and deleting an API token"""
+        token_name = f"PytestToken-{uuid.uuid4()}"
+        create_req = CreateTokenRequest(
+            name=token_name,
+            orgCapabilities=TokenOrganizationCapabilities(apiTokens=["read"]),
+        )
+        token = self.client.tokens.create(create_req)
+
+        self.assertEqual(token_name, token.name)
+        assert token.id
+        assert token.token
+
+        tokens = self.client.tokens.list()
+        assert tokens
+
+        token = self.client.tokens.get(token.id)
+        self.assertEqual(token_name, token.name)
+
+        self.client.tokens.regenerate(
+            token.id,
+            RegenerateTokenRequest(
+                existingTokenExpiresAt=datetime.now() + timedelta(days=1),
+                newTokenExpiresAt=datetime.now() + timedelta(days=2),
+            ),
+        )
+
+        # (An exception will be raised if the delete call is not successful.)
+        self.client.tokens.delete(token.id)
+
+    @patch("sys.exit")
+    def test_client_shutdown_atexit(self, mock_exit):
+        """Test client shutdown atexit"""
+        # Use the mock to test the firing mechanism
+        self.assertEqual(self.client.is_closed, False)
+        sys.exit()
+        mock_exit.assert_called_once()
+        # Use the hook implementation to assert the client is closed closed
+        self.client.shutdown_hook()
+        self.assertEqual(self.client.is_closed, True)
+
+    @classmethod
+    def tearDownClass(cls):
+        """A teardown that checks if the dataset still exists and deletes it,
+        otherwise we might run into zombie datasets on failures."""
+        cls.logger.info("cleaning up after TestClient...")
+        try:
+            ds = cls.client.datasets.get(cls.dataset_name)
+            if ds:
+                cls.client.datasets.delete(cls.dataset_name)
+                cls.logger.info(
+                    "dataset (%s) was not deleted as part of the test, "
+                    "deleting it now." % cls.dataset_name
+                )
+        except AxiomError as e:
+            # nothing to do here, since the dataset doesn't exist
+            cls.logger.warning(e)
+        cls.logger.info("finish cleaning up after TestClient")
+
+
+class TestEdgeConfiguration(unittest.TestCase):
+    """Tests for edge-based ingestion configuration."""
+
+    def _clear_env(self):
+        """Helper to clear edge-related env vars."""
+        os.environ.pop("AXIOM_URL", None)
+        os.environ.pop("AXIOM_EDGE_URL", None)
+
+    def test_edge_url_builds_correct_ingest_url(self):
+        """Test that edge_url config builds correct edge ingest URL."""
+        with patch.dict(os.environ, {}, clear=False):
+            self._clear_env()
+            client = Client(
+                token="xaat-test-token",
+                org_id="test-org",
+                edge_url="https://eu-central-1.aws.edge.axiom.co",
+            )
+            url = client._get_edge_ingest_url("my-dataset")
+            self.assertEqual(
+                url,
+                "https://eu-central-1.aws.edge.axiom.co/v1/ingest/my-dataset",
+            )
+            self.assertTrue(client.is_edge_configured())
+
+    def test_edge_url_builds_correct_query_url(self):
+        """Test that edge_url config builds correct edge query URL."""
+        with patch.dict(os.environ, {}, clear=False):
+            self._clear_env()
+            client = Client(
+                token="xaat-test-token",
+                org_id="test-org",
+                edge_url="https://eu-central-1.aws.edge.axiom.co",
+            )
+            url = client._get_edge_query_url()
+            self.assertEqual(
+                url,
+                "https://eu-central-1.aws.edge.axiom.co/v1/query/_apl",
+            )
+
+    def test_no_edge_returns_none(self):
+        """Test that no edge config returns None for edge URLs."""
+        with patch.dict(os.environ, {}, clear=False):
+            self._clear_env()
+            client = Client(
+                token="xaat-test-token",
+                org_id="test-org",
+            )
+            self.assertIsNone(client._get_edge_ingest_url("my-dataset"))
+            self.assertIsNone(client._get_edge_query_url())
+            self.assertFalse(client.is_edge_configured())
+
+    def test_edge_url_without_path_appends_ingest_path(self):
+        """Test that edge_url without path appends edge ingest path."""
+        with patch.dict(os.environ, {}, clear=False):
+            self._clear_env()
+            client = Client(
+                token="xaat-test-token",
+                org_id="test-org",
+                edge_url="https://eu-central-1.aws.edge.axiom.co",
+            )
+            url = client._get_edge_ingest_url("my-dataset")
+            self.assertEqual(
+                url,
+                "https://eu-central-1.aws.edge.axiom.co/v1/ingest/my-dataset",
+            )
+
+    def test_edge_url_without_path_appends_query_path(self):
+        """Test that edge_url without path appends edge query path."""
+        with patch.dict(os.environ, {}, clear=False):
+            self._clear_env()
+            client = Client(
+                token="xaat-test-token",
+                org_id="test-org",
+                edge_url="https://eu-central-1.aws.edge.axiom.co",
+            )
+            url = client._get_edge_query_url()
+            self.assertEqual(
+                url,
+                "https://eu-central-1.aws.edge.axiom.co/v1/query/_apl",
+            )
+
+    def test_edge_url_with_custom_path_used_as_is(self):
+        """Test that edge_url with custom path is used as-is."""
+        with patch.dict(os.environ, {}, clear=False):
+            self._clear_env()
+            client = Client(
+                token="xaat-test-token",
+                org_id="test-org",
+                edge_url="http://localhost:3400/ingest",
+            )
+            url = client._get_edge_ingest_url("ignored")
+            self.assertEqual(url, "http://localhost:3400/ingest")
+
+    def test_both_url_and_edge_url_edge_used_for_ingest(self):
+        """Test that when url and edge_url are set, edge_url is used."""
+        with patch.dict(os.environ, {}, clear=False):
+            self._clear_env()
+            client = Client(
+                token="xaat-test-token",
+                org_id="test-org",
+                url="https://api.eu.axiom.co",
+                edge_url="https://eu-central-1.aws.edge.axiom.co",
+            )
+            # Both are kept - url for API, edge_url for ingest/query
+            self.assertEqual(
+                client._edge_url, "https://eu-central-1.aws.edge.axiom.co"
+            )
+            self.assertEqual(client._url, "https://api.eu.axiom.co")
+            # Should use edge URL for ingest
+            url = client._get_edge_ingest_url("my-dataset")
+            self.assertEqual(
+                url,
+                "https://eu-central-1.aws.edge.axiom.co/v1/ingest/my-dataset",
+            )
+
+    def test_production_aws_edge_url(self):
+        """Test production AWS edge endpoint."""
+        with patch.dict(os.environ, {}, clear=False):
+            self._clear_env()
+            client = Client(
+                token="xaat-test-token",
+                org_id="test-org",
+                edge_url="https://us-east-1.aws.edge.axiom.co",
+            )
+            url = client._get_edge_ingest_url("logs")
+            self.assertEqual(
+                url, "https://us-east-1.aws.edge.axiom.co/v1/ingest/logs"
+            )
+
+    def test_staging_environment_edge_url(self):
+        """Test staging environment edge endpoint."""
+        with patch.dict(os.environ, {}, clear=False):
+            self._clear_env()
+            client = Client(
+                token="xaat-test-token",
+                org_id="test-org",
+                edge_url="https://us-east-1.edge.staging.axiomdomain.co",
+            )
+            url = client._get_edge_ingest_url("test-dataset")
+            self.assertEqual(
+                url,
+                "https://us-east-1.edge.staging.axiomdomain.co"
+                "/v1/ingest/test-dataset",
+            )
+
+    def test_edge_url_not_read_from_env(self):
+        """Test that edge_url is NOT auto-read from environment."""
+        with patch.dict(os.environ, {}, clear=False):
+            self._clear_env()
+            # Set env var that should be ignored
+            os.environ["AXIOM_EDGE_URL"] = "https://edge.example.com"
+
+            # Client should NOT pick up edge config from env
+            client = Client(token="xaat-test-token", org_id="test-org")
+            self.assertIsNone(client._edge_url)
+            self.assertFalse(client.is_edge_configured())
+
+            os.environ.pop("AXIOM_EDGE_URL", None)
+
+    def test_personal_token_rejected_for_edge_ingest(self):
+        """Test that personal tokens are rejected for edge ingest."""
+        with patch.dict(os.environ, {}, clear=False):
+            self._clear_env()
+            client = Client(
+                token="xapt-personal-token",
+                org_id="test-org",
+                edge_url="https://eu-central-1.aws.edge.axiom.co",
+            )
+            with self.assertRaises(PersonalTokenNotSupportedForEdgeError):
+                client.ingest(
+                    "test-dataset",
+                    b"test",
+                    ContentType.JSON,
+                    ContentEncoding.IDENTITY,
+                )
+
+    def test_api_token_allowed_for_edge_ingest(self):
+        """Test that API tokens work for edge (no exception on token check)."""
+        with patch.dict(os.environ, {}, clear=False):
+            self._clear_env()
+            client = Client(
+                token="xaat-api-token",
+                org_id="test-org",
+                edge_url="https://eu-central-1.aws.edge.axiom.co",
+            )
+            # This should not raise PersonalTokenNotSupportedForEdgeError
+            # It will fail on the actual HTTP request, but that's expected
+            self.assertTrue(client.is_edge_configured())
+
+    def test_empty_string_edge_url_treated_as_none(self):
+        """Test that empty string for edge_url is treated as None."""
+        with patch.dict(os.environ, {}, clear=False):
+            self._clear_env()
+            client = Client(
+                token="xaat-api-token",
+                org_id="test-org",
+                edge_url="",
+            )
+            self.assertIsNone(client._edge_url)
+            self.assertFalse(client.is_edge_configured())

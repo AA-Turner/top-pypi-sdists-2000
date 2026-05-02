@@ -1,0 +1,393 @@
+from __future__ import annotations
+
+import pathlib
+from dataclasses import dataclass
+from typing import Annotated, List, Optional, Sequence, Tuple
+
+import pytest
+from helptext_utils import get_helptext_with_checks
+
+import tyro
+
+
+def test_positional():
+    def main(
+        x: int,
+        y: int,
+        /,
+        # Note: it's generally a bad idea to have a mutable object (like a list) as a
+        # default value. But it should still work.
+        z: List[int] = [1, 2, 3],
+    ) -> Tuple[int, int, int]:
+        """main.
+
+        Args:
+            x: x
+            y: y
+            z: z
+
+        Returns:
+            Tuple[int, int, int]: Output.
+        """
+        return (x, y, z[0])
+
+    assert tyro.cli(main, args="1 2 --z 3".split(" ")) == (1, 2, 3)
+    with pytest.raises(SystemExit):
+        assert tyro.cli(main, args="--x 1 --y 2 --z 3".split(" ")) == (1, 2, 3)
+
+
+class A:
+    def __init__(self, a: int, hello_world: int, /, c: int):
+        self.hello_world = hello_world
+
+
+def test_nested_positional():
+    def nest1(a: int, b: int, thing: A, /, c: int) -> A:
+        return thing
+
+    assert isinstance(tyro.cli(nest1, args="0 1 2 3 4 --c 4".split(" ")), A)
+    assert tyro.cli(nest1, args="0 1 2 3 4 --c 4".split(" ")).hello_world == 3
+    with pytest.raises(SystemExit):
+        tyro.cli(nest1, args="0 1 2 3 4 4 --c 4".split(" "))
+
+
+class B:
+    def __init__(self, a: int, b: int, /, c: int):
+        pass
+
+
+def test_nested_positional_alt():
+    def nest2(a: int, b: int, /, thing: B, c: int):
+        return thing
+
+    assert isinstance(tyro.cli(nest2, args="0 1 2 3 --thing.c 4 --c 4".split(" ")), B)
+    with pytest.raises(SystemExit):
+        tyro.cli(nest2, args="0 1 2 3 4 --thing.c 4 --c 4".split(" "))
+
+
+def test_positional_with_underscores():
+    """Hyphen replacement works a bit different for positional arguments."""
+
+    def main(a_multi_word_input: int, /) -> int:
+        return a_multi_word_input
+
+    assert tyro.cli(main, args=["5"]) == 5
+
+
+def test_positional_booleans():
+    """Make sure that flag behavior is disabled for positional booleans."""
+
+    def main(
+        flag1: bool,
+        flag2: bool = True,
+        flag3: bool = False,
+        /,
+    ) -> Tuple[bool, bool, bool]:
+        return flag1, flag2, flag3
+
+    assert tyro.cli(main, args=["True"]) == (True, True, False)
+    assert tyro.cli(main, args=["True", "False"]) == (True, False, False)
+    assert tyro.cli(main, args=["False", "False", "True"]) == (False, False, True)
+
+    with pytest.raises(SystemExit):
+        tyro.cli(main, args=["hmm"])
+    with pytest.raises(SystemExit):
+        tyro.cli(main, args=["true"])
+    with pytest.raises(SystemExit):
+        tyro.cli(main, args=["True", "false"])
+
+
+def test_optional_list():
+    def main(a: Optional[List[int]], /) -> Optional[List[int]]:
+        return a
+
+    assert tyro.cli(main, args=["None"]) is None
+    assert tyro.cli(main, args=["1", "2"]) == [1, 2]
+    assert tyro.cli(main, args=[]) == []
+    with pytest.raises(SystemExit):
+        tyro.cli(main, args=["hm"])
+
+
+def test_optional_list_with_default():
+    def main(a: Optional[List[int]] = None, /) -> Optional[List[int]]:
+        return a
+
+    assert tyro.cli(main, args=["None"]) is None
+    assert tyro.cli(main, args=["5", "5"]) == [5, 5]
+    with pytest.raises(SystemExit):
+        tyro.cli(main, args=["None", "5"])
+
+
+def test_positional_tuple():
+    def main(x: Tuple[int, int], y: Tuple[str, str], /):
+        return x, y
+
+    assert tyro.cli(main, args="1 2 3 4".split(" ")) == ((1, 2), ("3", "4"))
+
+
+def make_list_of_strings_with_minimum_length(args: List[str]) -> List[str]:
+    if len(args) == 0:
+        raise ValueError("Expected at least one string")
+    return args
+
+
+ListOfStringsWithMinimumLength = Annotated[
+    List[str],
+    tyro.constructors.PrimitiveConstructorSpec(
+        nargs="*",
+        metavar="STR [STR ...]",
+        is_instance=lambda x: (
+            isinstance(x, list) and all(isinstance(i, str) for i in x)
+        ),
+        instance_from_str=make_list_of_strings_with_minimum_length,
+        str_from_instance=lambda args: args,
+    ),
+]
+
+
+def test_min_length_custom_constructor_positional() -> None:
+    def main(
+        field1: ListOfStringsWithMinimumLength, /, field2: int = 3
+    ) -> ListOfStringsWithMinimumLength:
+        del field2
+        return field1
+
+    with pytest.raises(SystemExit):
+        tyro.cli(main, args=[])
+    assert tyro.cli(main, args=["a", "b"]) == ["a", "b"]
+
+
+TupleCustomConstructor = Annotated[
+    Tuple[str, ...],
+    tyro.constructors.PrimitiveConstructorSpec(
+        nargs="*",
+        metavar="A TUPLE METAVAR",
+        is_instance=lambda x: (
+            isinstance(x, tuple) and all(isinstance(i, str) for i in x)
+        ),
+        instance_from_str=tuple,
+        str_from_instance=list,
+    ),
+]
+
+
+def test_tuple_custom_constructors_positional() -> None:
+    def main(field1: TupleCustomConstructor, /, field2: int = 3) -> Tuple[str, ...]:
+        del field2
+        return field1
+
+    assert tyro.cli(main, args=["a", "b"]) == ("a", "b")
+    assert tyro.cli(main, args=["a"]) == ("a",)
+    assert tyro.cli(main, args=[]) == ()
+    assert "A TUPLE METAVAR" in get_helptext_with_checks(main)
+
+
+TupleCustomConstructor2 = Annotated[
+    Tuple[str, ...],
+    tyro.constructors.PrimitiveConstructorSpec(
+        nargs="*",
+        metavar="A TUPLE METAVAR",
+        is_instance=lambda x: (
+            isinstance(x, tuple) and all(isinstance(i, str) for i in x)
+        ),
+        instance_from_str=tuple,
+        str_from_instance=list,
+    ),
+]
+
+
+def test_tuple_custom_constructors_positional_default_none() -> None:
+    def main(
+        field1: TupleCustomConstructor2 | None = None, /, field2: int = 3
+    ) -> Tuple[str, ...] | None:
+        del field2
+        return field1
+
+    assert tyro.cli(main, args=["a", "b"]) == ("a", "b")
+    assert tyro.cli(main, args=["a"]) == ("a",)
+    assert tyro.cli(main, args=[]) is None
+    assert "A TUPLE METAVAR" in get_helptext_with_checks(main)
+
+
+def test_tuple_custom_constructors_positional_default_five() -> None:
+    def main(
+        field1: TupleCustomConstructor2 | int = 5, /, field2: int = 3
+    ) -> Tuple[str, ...] | int:
+        del field2
+        return field1
+
+    assert tyro.cli(main, args=["a", "b"]) == ("a", "b")
+    assert tyro.cli(main, args=["a"]) == ("a",)
+    assert tyro.cli(main, args=[]) == 5
+    assert "A TUPLE METAVAR" in get_helptext_with_checks(main)
+
+
+@dataclass
+class DoubleDashOptions:
+    """Test dataclass for double-dash parsing."""
+
+    command: Annotated[
+        tyro.conf.Positional[Sequence[str]], tyro.conf.arg(metavar="COMMAND")
+    ]
+    flag: str = "<unset>"
+
+
+@dataclass
+class DoubleDashFixedPositional:
+    """Test dataclass with a fixed (non-sequence) positional argument."""
+
+    command: Annotated[tyro.conf.Positional[str], tyro.conf.arg(metavar="COMMAND")]
+    flag: str = "<unset>"
+
+
+def test_double_dash_end_of_options() -> None:
+    """Test that '--' works as end-of-options marker.
+
+    After '--', all arguments should be treated as positional, even if they
+    look like flags (e.g., --flag).
+
+    Regression test for: https://github.com/brentyi/tyro/issues/411
+    """
+    # Basic case: '--' before flag-like positional args.
+    result = tyro.cli(DoubleDashOptions, args="test -- --flag flag-test".split())
+    assert result.command == ["test", "--flag", "flag-test"]
+    assert result.flag == "<unset>"
+
+    # '--' at the beginning: everything is positional.
+    result = tyro.cli(DoubleDashOptions, args="-- --flag test".split())
+    assert result.command == ["--flag", "test"]
+    assert result.flag == "<unset>"
+
+    # '--' at the end (no args after).
+    result = tyro.cli(DoubleDashOptions, args="test --".split())
+    assert result.command == ["test"]
+    assert result.flag == "<unset>"
+
+    # '--' with actual flag before it.
+    result = tyro.cli(
+        DoubleDashOptions, args="--flag actual-flag test -- --not-a-flag".split()
+    )
+    assert result.command == ["test", "--not-a-flag"]
+    assert result.flag == "actual-flag"
+
+    # '--' after fixed positional with extra args should error (unknown args).
+    with pytest.raises(SystemExit):
+        tyro.cli(DoubleDashFixedPositional, args="test -- --extra-arg".split())
+
+
+def test_positional_list_not_required():
+    """Positional list[str] with no default should not be marked as required,
+    since nargs='*' means zero or more arguments are accepted."""
+
+    def main(files: List[str], /) -> List[str]:
+        return files
+
+    # Should accept zero arguments.
+    assert tyro.cli(main, args=[]) == []
+    # Should accept one or more arguments.
+    assert tyro.cli(main, args=["a", "b"]) == ["a", "b"]
+    # Help text should not say "(required)".
+    helptext = get_helptext_with_checks(main)
+    assert "(required)" not in helptext
+
+
+def test_positional_list_with_preceding_positional():
+    """When a required positional precedes a list positional, the list should
+    not be marked as required."""
+
+    def main(file: str, files: List[str], /) -> Tuple[str, List[str]]:
+        return file, files
+
+    # First arg is required, remaining are optional.
+    assert tyro.cli(main, args=["a"]) == ("a", [])
+    assert tyro.cli(main, args=["a", "b", "c"]) == ("a", ["b", "c"])
+    # Help text should show only `file` as required, not `files`.
+    helptext = get_helptext_with_checks(main)
+    assert helptext.count("(required)") == 1
+
+
+@dataclass
+class PositionalAndOptionalVarLen:
+    """Test dataclass with a positional and a variable-length optional arg."""
+
+    pos: tyro.conf.Positional[str]
+    var_len: Annotated[tuple[str, ...], tyro.conf.arg(aliases=["-x"])] = ()
+
+
+def test_positional_with_varlen_kwarg() -> None:
+    """Test that variable-length kwargs don't consume values needed by positional args.
+
+    Regression test for: https://github.com/brentyi/tyro/issues/440
+    """
+    # Simple positional only.
+    result = tyro.cli(PositionalAndOptionalVarLen, args=["OK"])
+    assert result.pos == "OK"
+    assert result.var_len == ()
+
+    # Variable-length flag with '--' separating the positional arg.
+    result = tyro.cli(
+        PositionalAndOptionalVarLen,
+        args=["-x", "NOT", "OK", "--", "IN_v1.0"],
+    )
+    assert result.pos == "IN_v1.0"
+    assert result.var_len == ("NOT", "OK")
+
+    # Variable-length flag via '=' syntax, positional as separate arg.
+    result = tyro.cli(
+        PositionalAndOptionalVarLen,
+        args=["--var-len=NEITHER", "LIKE_THIS"],
+    )
+    assert result.pos == "LIKE_THIS"
+    assert result.var_len == ("NEITHER",)
+
+    # Variable-length flag via '=' syntax, '--' before positional.
+    result = tyro.cli(
+        PositionalAndOptionalVarLen,
+        args=["--var-len=NOR", "--", "LIKE_THIS"],
+    )
+    assert result.pos == "LIKE_THIS"
+    assert result.var_len == ("NOR",)
+
+
+def test_positional_with_varlen_kwarg_positional_nargs_none() -> None:
+    """Cover nargs=None branch in _min_positional_consumption."""
+
+    def f(
+        pos: str,
+        /,
+        var_len: Annotated[tuple[str, ...], tyro.conf.arg(aliases=["-x"])] = (),
+    ) -> tuple[str, tuple[str, ...]]:
+        return pos, var_len
+
+    assert tyro.cli(f, args=["--var-len=a", "b"]) == ("b", ("a",))
+
+
+def test_positional_with_varlen_kwarg_positional_nargs_plus() -> None:
+    """Cover nargs='+' branch in _min_positional_consumption."""
+
+    @dataclass
+    class Config:
+        pos: tyro.conf.Positional[tuple[str, ...]]
+        var_len: Annotated[tuple[str, ...], tyro.conf.arg(aliases=["-x"])] = ()
+
+    result = tyro.cli(Config, args=["-x", "a", "--", "b", "c"])
+    assert result.pos == ("b", "c")
+    assert result.var_len == ("a",)
+
+
+def test_positional_varlen_rejects_unknown_flags() -> None:
+    """Regression test for #457: unknown flags should not be consumed as positional values.
+
+    With tyro >= 1.0.9, --invalid was incorrectly accepted as a positional
+    path value instead of raising an unrecognized-options error.
+    """
+
+    @dataclass
+    class Arguments:
+        logfile_paths: tyro.conf.Positional[tuple[pathlib.Path, ...]]
+        cfg_file: Annotated[pathlib.Path, tyro.conf.arg(aliases=["-c"])] = pathlib.Path(
+            "config.yaml"
+        )
+
+    with pytest.raises(SystemExit):
+        tyro.cli(Arguments, args=["--invalid"])
