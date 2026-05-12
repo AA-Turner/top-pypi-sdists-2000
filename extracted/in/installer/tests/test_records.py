@@ -1,3 +1,6 @@
+from io import BytesIO
+from pathlib import Path
+
 import pytest
 
 from installer.records import Hash, InvalidRecordEntry, RecordEntry, parse_record_file
@@ -23,7 +26,7 @@ def record_simple_iter(record_simple_list):
 def record_simple_file(tmpdir, record_simple_list):
     p = tmpdir.join("RECORD")
     p.write("\n".join(record_simple_list))
-    with open(str(p)) as f:
+    with Path(p).open() as f:
         yield f
 
 
@@ -53,21 +56,29 @@ SAMPLE_RECORDS = [
     ),
     (
         "purelib",
-        ("test4.py", "sha256=Y0sCextp4SQtQNU-MSs7SsdxD1W-gfKJtUlEbvZ3i-4", 7),
-        b"test1\n",
-        False,
-    ),
-    (
-        "purelib",
         (
-            "test5.py",
+            "test4.py",
             "sha256=Y0sCextp4SQtQNU-MSs7SsdxD1W-gfKJtUlEbvZ3i-4",
             None,
         ),
         b"test1\n",
         True,
     ),
-    ("purelib", ("test6.py", None, None), b"test1\n", True),
+    ("purelib", ("test5.py", None, None), b"test1\n", True),
+    ("purelib", ("test6.py", None, 6), b"test1\n", True),
+    (
+        "purelib",
+        ("test7.py", "sha256=Y0sCextp4SQtQNU-MSs7SsdxD1W-gfKJtUlEbvZ3i-4", 7),
+        b"test1\n",
+        False,
+    ),
+    (
+        "purelib",
+        ("test7.py", "sha256=Y0sCextp4SQtQNU-MSs7SsdxD1W-gfKJtUlEbvZ3i-4", None),
+        b"not-test1\n",
+        False,
+    ),
+    ("purelib", ("test8.py", None, 10), b"test1\n", False),
 ]
 
 
@@ -129,6 +140,14 @@ class TestRecordEntry:
     def test_validation(self, scheme, elements, data, passes_validation):
         record = RecordEntry.from_elements(*elements)
         assert record.validate(data) == passes_validation
+
+    @pytest.mark.parametrize(
+        ("scheme", "elements", "data", "passes_validation"), SAMPLE_RECORDS
+    )
+    def test_validate_stream(self, scheme, elements, data, passes_validation):
+        record = RecordEntry.from_elements(*elements)
+
+        assert record.validate_stream(BytesIO(data)) == passes_validation
 
     @pytest.mark.parametrize(
         ("scheme", "elements", "data", "passes_validation"), SAMPLE_RECORDS
