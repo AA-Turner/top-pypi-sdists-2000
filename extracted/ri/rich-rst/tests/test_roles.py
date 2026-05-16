@@ -21,6 +21,17 @@ Formatting contract (in-sentence context)
 * ``:sup:`` / ``:superscript:`` → digit/letter translated to superscript Unicode
 """
 from rich.text import Text
+import pytest
+from rich.console import Console
+from rich.console import Console
+from rich.panel import Panel
+from rich.rule import Rule
+from rich.table import Table
+import rich_rst
+import rich_rst._vendor.docutils.core
+from rich_rst._vendor import docutils
+from rich_rst import RestructuredText, RSTVisitor
+from rich_rst import RSTVisitor, RestructuredText
 
 
 def _get_text(make_visitor, rst):
@@ -123,21 +134,25 @@ def test_role_math_in_sentence_content_visible(render_text):
 # ── :pep-reference: / :PEP: ──────────────────────────────────────────────────
 
 def test_role_pep_number_in_output(render_text):
-    assert "8" in render_text(":PEP:`8`")
+    out = render_text(":PEP:`8`")
+    assert "PEP 8" in out, f":PEP: must render as 'PEP 8', got {out!r}"
 
 
 def test_role_pep_reference_long_form_number(render_text):
-    assert "287" in render_text(":pep-reference:`287`")
+    out = render_text(":pep-reference:`287`")
+    assert "PEP 287" in out, f":pep-reference: must render as 'PEP 287', got {out!r}"
 
 
 # ── :rfc-reference: / :RFC: ──────────────────────────────────────────────────
 
 def test_role_rfc_number_in_output(render_text):
-    assert "2822" in render_text(":RFC:`2822`")
+    out = render_text(":RFC:`2822`")
+    assert "RFC 2822" in out, f":RFC: must render as 'RFC 2822', got {out!r}"
 
 
 def test_role_rfc_reference_long_form_number(render_text):
-    assert "1945" in render_text(":rfc-reference:`1945`")
+    out = render_text(":rfc-reference:`1945`")
+    assert "RFC 1945" in out, f":rfc-reference: must render as 'RFC 1945', got {out!r}"
 
 
 # ── :sub: / :subscript: ──────────────────────────────────────────────────────
@@ -207,3 +222,33 @@ def test_role_t_alias_is_italic(make_visitor):
     italic_base = t.style.italic is True
     italic_span = bool(_italic_spans(t))
     assert italic_base or italic_span, ":t: alias must produce italic formatting"
+
+def test_abbreviation_with_explanation(render_text):
+    """Test abbreviation with explanation."""
+    rst = """\
+The |abbr| (abbreviation) is common.
+
+.. |abbr| abbreviation:: An abbreviation
+"""
+    out = render_text(rst)
+    assert "abbreviation" in out, "Abbreviation substitution text must be visible"
+
+def test_acronym_with_explanation(render_text):
+    """Test acronym with explanation."""
+    rst = """\
+The |acr| (acronym) is used here.
+
+.. |acr| acronym:: An Acronym Code
+"""
+    out = render_text(rst)
+    assert "acronym" in out, "Acronym substitution text must be visible"
+
+def test_abbreviation_inline_full_markup(render_text):
+    """Test abbreviation with full inline markup."""
+    rst = """\
+Use |HTML| in markup.
+
+.. |HTML| abbreviation:: HyperText Markup Language
+"""
+    out = render_text(rst)
+    assert "HTML" in out, "Abbreviation label must be visible in the output"

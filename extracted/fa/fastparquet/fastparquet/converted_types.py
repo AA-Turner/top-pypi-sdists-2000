@@ -167,9 +167,13 @@ def convert(data, se, timestamp96=True, dtype=None):
     if ctype is None:
         return data
     if ctype == parquet_thrift.ConvertedType.UTF8:
+        import pandas as pd
+        if isinstance(data.dtype, pd.StringDtype):
+            # pandas 3+: data is already an arrow-backed string array (decoded),
+            # no further conversion needed.
+            return data
         if data.dtype != "O" or (len(data) == 1 and not isinstance(data[0], str)):
-            # fixed string
-            import pandas as pd
+            # fixed-length byte string (e.g. FIXED_LEN_BYTE_ARRAY): decode to str
             return pd.Series(data).str.decode("utf8").values
         # already converted in speedups.unpack_byte_array
         return data
@@ -178,22 +182,33 @@ def convert(data, se, timestamp96=True, dtype=None):
         if data.dtype.kind in ['i', 'f']:
             return data * scale_factor
         else:  # byte-string
-            # NB: general but slow method
-            # could optimize when data.dtype.itemsize <= 8
-            # TODO: easy cythonize (but rare)
-            # TODO: extension point for pandas-decimal (no conversion needed)
-            return np.array([
-                int.from_bytes(
-                    data.data[i:i + 1], byteorder='big', signed=True
-                ) * scale_factor
-                for i in range(len(data))
-            ])
+            # Handle both FIXED_LEN_BYTE_ARRAY and BYTE_ARRAY
+            if se.type == parquet_thrift.Type.FIXED_LEN_BYTE_ARRAY:
+                # Fixed-length: use buffer slicing approach
+                # This handles the case where numpy may truncate during iteration
+                # (see commit 53ceac2dbb141b76f603318a5cc0f78e64769d62)
+                its = data.dtype.itemsize 
+                by = data.tobytes()
+                return np.array([
+                    int.from_bytes(
+                        by[i * its:(i + 1) * its],
+                        byteorder='big', signed=True
+                    ) * scale_factor
+                    for i in range(len(data))
+                ])
+            else:
+                # Variable-length (BYTE_ARRAY): iterate over elements directly
+                # Each element is a bytes object in the object array
+                return np.array([
+                    int.from_bytes(d, byteorder='big', signed=True) * scale_factor
+                    for d in data
+                ])
     elif ctype == parquet_thrift.ConvertedType.DATE:
         data = data * DAYS_TO_NANOS
         return data.view('datetime64[ns]')
     elif ctype == parquet_thrift.ConvertedType.TIME_MILLIS:
         # this was not covered by new pandas time units
-        data = data.astype('int64', copy=False)
+        data = data.astype('int64')
         time_shift(data, 1000000)
         return data.view('timedelta64[ns]')
     elif ctype == parquet_thrift.ConvertedType.TIMESTAMP_MILLIS:
