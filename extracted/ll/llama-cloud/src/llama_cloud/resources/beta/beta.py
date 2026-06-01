@@ -2,6 +2,14 @@
 
 from __future__ import annotations
 
+from .chat import (
+    ChatResource,
+    AsyncChatResource,
+    ChatResourceWithRawResponse,
+    AsyncChatResourceWithRawResponse,
+    ChatResourceWithStreamingResponse,
+    AsyncChatResourceWithStreamingResponse,
+)
 from .split import (
     SplitResource,
     AsyncSplitResource,
@@ -18,7 +26,23 @@ from .sheets import (
     SheetsResourceWithStreamingResponse,
     AsyncSheetsResourceWithStreamingResponse,
 )
+from .indexes import (
+    IndexesResource,
+    AsyncIndexesResource,
+    IndexesResourceWithRawResponse,
+    AsyncIndexesResourceWithRawResponse,
+    IndexesResourceWithStreamingResponse,
+    AsyncIndexesResourceWithStreamingResponse,
+)
 from ..._compat import cached_property
+from .retrieval import (
+    RetrievalResource,
+    AsyncRetrievalResource,
+    RetrievalResourceWithRawResponse,
+    AsyncRetrievalResourceWithRawResponse,
+    RetrievalResourceWithStreamingResponse,
+    AsyncRetrievalResourceWithStreamingResponse,
+)
 from .agent_data import (
     AgentDataResource,
     AsyncAgentDataResource,
@@ -50,6 +74,18 @@ __all__ = ["BetaResource", "AsyncBetaResource"]
 
 class BetaResource(SyncAPIResource):
     @cached_property
+    def indexes(self) -> IndexesResource:
+        return IndexesResource(self._client)
+
+    @cached_property
+    def retrieval(self) -> RetrievalResource:
+        return RetrievalResource(self._client)
+
+    @cached_property
+    def chat(self) -> ChatResource:
+        return ChatResource(self._client)
+
+    @cached_property
     def agent_data(self) -> AgentDataResource:
         return AgentDataResource(self._client)
 
@@ -75,7 +111,7 @@ class BetaResource(SyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/run-llama/llama-cloud-py#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/run-llama/llama-parse-py#accessing-raw-response-data-eg-headers
         """
         return BetaResourceWithRawResponse(self)
 
@@ -84,12 +120,24 @@ class BetaResource(SyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/run-llama/llama-cloud-py#with_streaming_response
+        For more information, see https://www.github.com/run-llama/llama-parse-py#with_streaming_response
         """
         return BetaResourceWithStreamingResponse(self)
 
 
 class AsyncBetaResource(AsyncAPIResource):
+    @cached_property
+    def indexes(self) -> AsyncIndexesResource:
+        return AsyncIndexesResource(self._client)
+
+    @cached_property
+    def retrieval(self) -> AsyncRetrievalResource:
+        return AsyncRetrievalResource(self._client)
+
+    @cached_property
+    def chat(self) -> AsyncChatResource:
+        return AsyncChatResource(self._client)
+
     @cached_property
     def agent_data(self) -> AsyncAgentDataResource:
         return AsyncAgentDataResource(self._client)
@@ -116,7 +164,7 @@ class AsyncBetaResource(AsyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/run-llama/llama-cloud-py#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/run-llama/llama-parse-py#accessing-raw-response-data-eg-headers
         """
         return AsyncBetaResourceWithRawResponse(self)
 
@@ -125,7 +173,7 @@ class AsyncBetaResource(AsyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/run-llama/llama-cloud-py#with_streaming_response
+        For more information, see https://www.github.com/run-llama/llama-parse-py#with_streaming_response
         """
         return AsyncBetaResourceWithStreamingResponse(self)
 
@@ -133,6 +181,18 @@ class AsyncBetaResource(AsyncAPIResource):
 class BetaResourceWithRawResponse:
     def __init__(self, beta: BetaResource) -> None:
         self._beta = beta
+
+    @cached_property
+    def indexes(self) -> IndexesResourceWithRawResponse:
+        return IndexesResourceWithRawResponse(self._beta.indexes)
+
+    @cached_property
+    def retrieval(self) -> RetrievalResourceWithRawResponse:
+        return RetrievalResourceWithRawResponse(self._beta.retrieval)
+
+    @cached_property
+    def chat(self) -> ChatResourceWithRawResponse:
+        return ChatResourceWithRawResponse(self._beta.chat)
 
     @cached_property
     def agent_data(self) -> AgentDataResourceWithRawResponse:
@@ -160,6 +220,18 @@ class AsyncBetaResourceWithRawResponse:
         self._beta = beta
 
     @cached_property
+    def indexes(self) -> AsyncIndexesResourceWithRawResponse:
+        return AsyncIndexesResourceWithRawResponse(self._beta.indexes)
+
+    @cached_property
+    def retrieval(self) -> AsyncRetrievalResourceWithRawResponse:
+        return AsyncRetrievalResourceWithRawResponse(self._beta.retrieval)
+
+    @cached_property
+    def chat(self) -> AsyncChatResourceWithRawResponse:
+        return AsyncChatResourceWithRawResponse(self._beta.chat)
+
+    @cached_property
     def agent_data(self) -> AsyncAgentDataResourceWithRawResponse:
         return AsyncAgentDataResourceWithRawResponse(self._beta.agent_data)
 
@@ -185,6 +257,18 @@ class BetaResourceWithStreamingResponse:
         self._beta = beta
 
     @cached_property
+    def indexes(self) -> IndexesResourceWithStreamingResponse:
+        return IndexesResourceWithStreamingResponse(self._beta.indexes)
+
+    @cached_property
+    def retrieval(self) -> RetrievalResourceWithStreamingResponse:
+        return RetrievalResourceWithStreamingResponse(self._beta.retrieval)
+
+    @cached_property
+    def chat(self) -> ChatResourceWithStreamingResponse:
+        return ChatResourceWithStreamingResponse(self._beta.chat)
+
+    @cached_property
     def agent_data(self) -> AgentDataResourceWithStreamingResponse:
         return AgentDataResourceWithStreamingResponse(self._beta.agent_data)
 
@@ -208,6 +292,18 @@ class BetaResourceWithStreamingResponse:
 class AsyncBetaResourceWithStreamingResponse:
     def __init__(self, beta: AsyncBetaResource) -> None:
         self._beta = beta
+
+    @cached_property
+    def indexes(self) -> AsyncIndexesResourceWithStreamingResponse:
+        return AsyncIndexesResourceWithStreamingResponse(self._beta.indexes)
+
+    @cached_property
+    def retrieval(self) -> AsyncRetrievalResourceWithStreamingResponse:
+        return AsyncRetrievalResourceWithStreamingResponse(self._beta.retrieval)
+
+    @cached_property
+    def chat(self) -> AsyncChatResourceWithStreamingResponse:
+        return AsyncChatResourceWithStreamingResponse(self._beta.chat)
 
     @cached_property
     def agent_data(self) -> AsyncAgentDataResourceWithStreamingResponse:

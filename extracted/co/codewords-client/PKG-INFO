@@ -1,0 +1,51 @@
+Metadata-Version: 2.4
+Name: codewords-client
+Version: 0.4.8
+Summary: Python client for CodeWords with auto-configured FastAPI integration.
+Author-email: Osman Ramadan <osman@agemo.ai>
+License-Expression: MIT
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: httpx>=0.25.0
+Requires-Dist: fastapi>=0.100.0
+Requires-Dist: structlog>=23.0.0
+Requires-Dist: pydantic>=2.0.0
+Requires-Dist: uvicorn[standard]>=0.20.0
+Requires-Dist: redis>=5.0.0
+Provides-Extra: openai
+Requires-Dist: openai>=1.0.0; extra == "openai"
+Provides-Extra: anthropic
+Requires-Dist: anthropic>=0.25.0; extra == "anthropic"
+Provides-Extra: firecrawl
+Requires-Dist: firecrawl>=1.0.0; extra == "firecrawl"
+Provides-Extra: perplexityai
+Requires-Dist: perplexityai>=1.0.0; extra == "perplexityai"
+Provides-Extra: composio
+Requires-Dist: composio>=0.10.0; extra == "composio"
+Provides-Extra: replicate
+Requires-Dist: replicate>=1.0.0; extra == "replicate"
+Provides-Extra: linkup
+Requires-Dist: linkup-sdk>=0.2.0; extra == "linkup"
+Provides-Extra: agent
+Requires-Dist: openai-agents>=0.13.4; extra == "agent"
+Requires-Dist: litellm; extra == "agent"
+Provides-Extra: all
+Requires-Dist: openai>=1.0.0; extra == "all"
+Requires-Dist: anthropic>=0.25.0; extra == "all"
+Requires-Dist: firecrawl>=1.0.0; extra == "all"
+Requires-Dist: perplexityai>=1.0.0; extra == "all"
+Requires-Dist: composio>=0.10.0; extra == "all"
+Requires-Dist: replicate>=1.0.0; extra == "all"
+Requires-Dist: linkup-sdk>=0.2.0; extra == "all"
+Requires-Dist: openai-agents>=0.13.4; extra == "all"
+Requires-Dist: litellm; extra == "all"
+
+# Codewords Client
+
+This is a client for the Codewords API.
+
+## Installation
+
+```bash
+pip install codewords-client
+```

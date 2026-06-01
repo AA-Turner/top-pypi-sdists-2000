@@ -1,9 +1,10 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Dict, Union, Optional
+from typing import Dict, List, Union, Optional
 from datetime import datetime
 
 from ...._models import BaseModel
+from ...presigned_url import PresignedURL
 
 __all__ = ["FileAddResponse"]
 
@@ -29,16 +30,16 @@ class FileAddResponse(BaseModel):
     created_at: Optional[datetime] = None
     """Creation datetime"""
 
-    data_source_id: Optional[str] = None
-    """Optional data source credential associated with the file."""
-
     deleted_at: Optional[datetime] = None
     """Soft delete marker when the file is removed upstream or by user action."""
+
+    download_url: Optional[PresignedURL] = None
+    """Schema for a presigned URL."""
 
     file_id: Optional[str] = None
     """File ID for the storage location."""
 
-    metadata: Optional[Dict[str, Union[str, float, bool, None]]] = None
+    metadata: Optional[Dict[str, Union[str, float, bool, List[str], None]]] = None
     """Merged metadata from all sources. Higher-priority sources override lower."""
 
     updated_at: Optional[datetime] = None

@@ -19,7 +19,11 @@ from ._types import (
     RequestOptions,
     not_given,
 )
-from ._utils import is_given, get_async_library
+from ._utils import (
+    is_given,
+    is_mapping_t,
+    get_async_library,
+)
 from ._compat import cached_property
 from ._version import __version__
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
@@ -34,6 +38,7 @@ if TYPE_CHECKING:
     from .resources import (
         beta,
         files,
+        batches,
         extract,
         parsing,
         classify,
@@ -46,6 +51,7 @@ if TYPE_CHECKING:
         configurations,
     )
     from .resources.files import FilesResource, AsyncFilesResource
+    from .resources.batches import BatchesResource, AsyncBatchesResource
     from .resources.extract import ExtractResource, AsyncExtractResource
     from .resources.parsing import ParsingResource, AsyncParsingResource
     from .resources.classify import ClassifyResource, AsyncClassifyResource
@@ -114,6 +120,15 @@ class LlamaCloud(SyncAPIClient):
         if base_url is None:
             base_url = f"https://api.cloud.llamaindex.ai"
 
+        custom_headers_env = os.environ.get("LLAMA_CLOUD_CUSTOM_HEADERS")
+        if custom_headers_env is not None:
+            parsed: dict[str, str] = {}
+            for line in custom_headers_env.split("\n"):
+                colon = line.find(":")
+                if colon >= 0:
+                    parsed[line[:colon].strip()] = line[colon + 1 :].strip()
+            default_headers = {**parsed, **(default_headers if is_mapping_t(default_headers) else {})}
+
         super().__init__(
             version=__version__,
             base_url=base_url,
@@ -148,6 +163,12 @@ class LlamaCloud(SyncAPIClient):
         from .resources.classifier import ClassifierResource
 
         return ClassifierResource(self)
+
+    @cached_property
+    def batches(self) -> BatchesResource:
+        from .resources.batches import BatchesResource
+
+        return BatchesResource(self)
 
     @cached_property
     def classify(self) -> ClassifyResource:
@@ -354,6 +375,15 @@ class AsyncLlamaCloud(AsyncAPIClient):
         if base_url is None:
             base_url = f"https://api.cloud.llamaindex.ai"
 
+        custom_headers_env = os.environ.get("LLAMA_CLOUD_CUSTOM_HEADERS")
+        if custom_headers_env is not None:
+            parsed: dict[str, str] = {}
+            for line in custom_headers_env.split("\n"):
+                colon = line.find(":")
+                if colon >= 0:
+                    parsed[line[:colon].strip()] = line[colon + 1 :].strip()
+            default_headers = {**parsed, **(default_headers if is_mapping_t(default_headers) else {})}
+
         super().__init__(
             version=__version__,
             base_url=base_url,
@@ -388,6 +418,12 @@ class AsyncLlamaCloud(AsyncAPIClient):
         from .resources.classifier import AsyncClassifierResource
 
         return AsyncClassifierResource(self)
+
+    @cached_property
+    def batches(self) -> AsyncBatchesResource:
+        from .resources.batches import AsyncBatchesResource
+
+        return AsyncBatchesResource(self)
 
     @cached_property
     def classify(self) -> AsyncClassifyResource:
@@ -581,6 +617,12 @@ class LlamaCloudWithRawResponse:
         return ClassifierResourceWithRawResponse(self._client.classifier)
 
     @cached_property
+    def batches(self) -> batches.BatchesResourceWithRawResponse:
+        from .resources.batches import BatchesResourceWithRawResponse
+
+        return BatchesResourceWithRawResponse(self._client.batches)
+
+    @cached_property
     def classify(self) -> classify.ClassifyResourceWithRawResponse:
         from .resources.classify import ClassifyResourceWithRawResponse
 
@@ -658,6 +700,12 @@ class AsyncLlamaCloudWithRawResponse:
         from .resources.classifier import AsyncClassifierResourceWithRawResponse
 
         return AsyncClassifierResourceWithRawResponse(self._client.classifier)
+
+    @cached_property
+    def batches(self) -> batches.AsyncBatchesResourceWithRawResponse:
+        from .resources.batches import AsyncBatchesResourceWithRawResponse
+
+        return AsyncBatchesResourceWithRawResponse(self._client.batches)
 
     @cached_property
     def classify(self) -> classify.AsyncClassifyResourceWithRawResponse:
@@ -739,6 +787,12 @@ class LlamaCloudWithStreamedResponse:
         return ClassifierResourceWithStreamingResponse(self._client.classifier)
 
     @cached_property
+    def batches(self) -> batches.BatchesResourceWithStreamingResponse:
+        from .resources.batches import BatchesResourceWithStreamingResponse
+
+        return BatchesResourceWithStreamingResponse(self._client.batches)
+
+    @cached_property
     def classify(self) -> classify.ClassifyResourceWithStreamingResponse:
         from .resources.classify import ClassifyResourceWithStreamingResponse
 
@@ -816,6 +870,12 @@ class AsyncLlamaCloudWithStreamedResponse:
         from .resources.classifier import AsyncClassifierResourceWithStreamingResponse
 
         return AsyncClassifierResourceWithStreamingResponse(self._client.classifier)
+
+    @cached_property
+    def batches(self) -> batches.AsyncBatchesResourceWithStreamingResponse:
+        from .resources.batches import AsyncBatchesResourceWithStreamingResponse
+
+        return AsyncBatchesResourceWithStreamingResponse(self._client.batches)
 
     @cached_property
     def classify(self) -> classify.AsyncClassifyResourceWithStreamingResponse:

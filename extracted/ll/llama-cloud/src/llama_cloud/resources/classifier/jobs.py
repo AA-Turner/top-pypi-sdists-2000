@@ -41,7 +41,7 @@ class JobsResource(SyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/run-llama/llama-cloud-py#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/run-llama/llama-parse-py#accessing-raw-response-data-eg-headers
         """
         return JobsResourceWithRawResponse(self)
 
@@ -50,7 +50,7 @@ class JobsResource(SyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/run-llama/llama-cloud-py#with_streaming_response
+        For more information, see https://www.github.com/run-llama/llama-parse-py#with_streaming_response
         """
         return JobsResourceWithStreamingResponse(self)
 
@@ -74,8 +74,7 @@ class JobsResource(SyncAPIResource):
     ) -> ClassifyJob:
         """Create a classify job.
 
-        Experimental: This endpoint is not yet ready for
-        production use and is subject to change at any time.
+        Experimental: not production-ready and subject to change.
 
         Args:
           file_ids: The IDs of the files to classify
@@ -141,8 +140,7 @@ class JobsResource(SyncAPIResource):
     ) -> SyncPaginatedCursor[ClassifyJob]:
         """List classify jobs.
 
-        Experimental: This endpoint is not yet ready for production
-        use and is subject to change at any time.
+        Experimental: not production-ready and subject to change.
 
         Args:
           extra_headers: Send extra headers
@@ -190,8 +188,7 @@ class JobsResource(SyncAPIResource):
     ) -> ClassifyJob:
         """Get a classify job.
 
-        Experimental: This endpoint is not yet ready for production
-        use and is subject to change at any time.
+        Experimental: not production-ready and subject to change.
 
         Args:
           extra_headers: Send extra headers
@@ -238,8 +235,8 @@ class JobsResource(SyncAPIResource):
     ) -> JobGetResultsResponse:
         """Get the results of a classify job.
 
-        Experimental: This endpoint is not yet ready
-        for production use and is subject to change at any time.
+        Experimental: not production-ready and
+        subject to change.
 
         Args:
           extra_headers: Send extra headers
@@ -278,7 +275,7 @@ class AsyncJobsResource(AsyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/run-llama/llama-cloud-py#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/run-llama/llama-parse-py#accessing-raw-response-data-eg-headers
         """
         return AsyncJobsResourceWithRawResponse(self)
 
@@ -287,7 +284,7 @@ class AsyncJobsResource(AsyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/run-llama/llama-cloud-py#with_streaming_response
+        For more information, see https://www.github.com/run-llama/llama-parse-py#with_streaming_response
         """
         return AsyncJobsResourceWithStreamingResponse(self)
 
@@ -311,8 +308,7 @@ class AsyncJobsResource(AsyncAPIResource):
     ) -> ClassifyJob:
         """Create a classify job.
 
-        Experimental: This endpoint is not yet ready for
-        production use and is subject to change at any time.
+        Experimental: not production-ready and subject to change.
 
         Args:
           file_ids: The IDs of the files to classify
@@ -378,8 +374,7 @@ class AsyncJobsResource(AsyncAPIResource):
     ) -> AsyncPaginator[ClassifyJob, AsyncPaginatedCursor[ClassifyJob]]:
         """List classify jobs.
 
-        Experimental: This endpoint is not yet ready for production
-        use and is subject to change at any time.
+        Experimental: not production-ready and subject to change.
 
         Args:
           extra_headers: Send extra headers
@@ -427,8 +422,7 @@ class AsyncJobsResource(AsyncAPIResource):
     ) -> ClassifyJob:
         """Get a classify job.
 
-        Experimental: This endpoint is not yet ready for production
-        use and is subject to change at any time.
+        Experimental: not production-ready and subject to change.
 
         Args:
           extra_headers: Send extra headers
@@ -475,8 +469,8 @@ class AsyncJobsResource(AsyncAPIResource):
     ) -> JobGetResultsResponse:
         """Get the results of a classify job.
 
-        Experimental: This endpoint is not yet ready
-        for production use and is subject to change at any time.
+        Experimental: not production-ready and
+        subject to change.
 
         Args:
           extra_headers: Send extra headers

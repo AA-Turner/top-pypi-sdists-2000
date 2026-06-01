@@ -111,14 +111,14 @@ async def test_anthropic_extended_response_schema():
 
 @skip_if_no_google
 async def test_google_extended_tool_schema():
-    model = get_model("google/gemini-3.1-flash-lite-preview")
+    model = get_model("google/gemini-3.1-flash-lite")
     result = await model.generate(input=INPUT_TOOL, tools=[CONSTRAINED_TOOL])
     assert result.completion is not None
 
 
 @skip_if_no_google
 async def test_google_extended_response_schema():
-    model = get_model("google/gemini-3.1-flash-lite-preview")
+    model = get_model("google/gemini-3.1-flash-lite")
     result = await model.generate(input=INPUT_SCHEMA, config=_response_config())
     assert result.completion is not None
 
@@ -179,14 +179,14 @@ async def test_grok_extended_response_schema():
 
 @skip_if_no_together
 async def test_together_extended_tool_schema():
-    model = get_model("together/MiniMaxAI/MiniMax-M2.5")
+    model = get_model("together/MiniMaxAI/MiniMax-M2.7")
     result = await model.generate(input=INPUT_TOOL, tools=[CONSTRAINED_TOOL])
     assert result.completion is not None
 
 
 @skip_if_no_together
 async def test_together_extended_response_schema():
-    model = get_model("together/MiniMaxAI/MiniMax-M2.5")
+    model = get_model("together/MiniMaxAI/MiniMax-M2.7")
     result = await model.generate(input=INPUT_SCHEMA, config=_response_config())
     assert result.completion is not None
 

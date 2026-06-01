@@ -58,14 +58,14 @@ from inspect_ai.model._reasoning import parse_content_with_reasoning
 from inspect_ai.tool import ToolCall, ToolChoice, ToolFunction, ToolInfo
 from inspect_ai.util._json import json_schema_dump
 
-from ..._util.httpx import httpx_should_retry
+from ..._util.httpx import httpx_classify_retry
 from .._call_tools import parse_tool_call
 from .._chat_message import (
     ChatMessage,
     ChatMessageAssistant,
 )
 from .._generate_config import GenerateConfig
-from .._model import ModelAPI
+from .._model import ModelAPI, RetryDecision
 from .._model_call import ModelCall, as_error_response
 from .._model_output import (
     ChatCompletionChoice,
@@ -271,17 +271,26 @@ class MistralAPI(ModelAPI):
         return f"mistral/{self.service_model_name()}"
 
     @override
-    def should_retry(self, ex: Exception) -> bool:
+    def should_retry(self, ex: Exception) -> bool | RetryDecision:
         if isinstance(ex, SDKError):
-            return is_retryable_http_status(ex.status_code)
-        elif httpx_should_retry(ex):
-            return True
-        else:
-            return False
+            if not is_retryable_http_status(ex.status_code):
+                return RetryDecision.no()
+            if ex.status_code == 429:
+                return RetryDecision.rate_limit()
+            return RetryDecision.transient()
+        decision = httpx_classify_retry(ex)
+        return decision if decision is not None else RetryDecision.no()
 
     @override
     def connection_key(self) -> str:
-        return str(self.api_key)
+        """Scope adaptive concurrency per (key, model).
+
+        A pool shared across models lets the faster model's signals push the
+        adaptive limit past the slower model's actual ceiling (cram-down).
+        Per-model scoping avoids that, at the cost of slight over-fragmentation
+        when models actually share an upstream rate-limit budget.
+        """
+        return f"{self.api_key}:{self.model_name}"
 
     @override
     def is_auth_failure(self, ex: Exception) -> bool:
@@ -566,9 +575,12 @@ def completion_content_chunks(content: ContentChunk) -> list[Content]:
         if isinstance(content.image_url, str):
             return [ContentImage(image=content.image_url)]
         else:
+            detail: Literal["auto", "low", "high"]
             match content.image_url.detail:
-                case "low" | "high":
-                    detail: Literal["auto", "low", "high"] = content.image_url.detail
+                case "low":
+                    detail = "low"
+                case "high":
+                    detail = "high"
                 case _:
                     detail = "auto"
             return [ContentImage(image=content.image_url.url, detail=detail)]
@@ -602,7 +614,9 @@ def choice_stop_reason(choice: MistralChatCompletionChoice) -> StopReason:
             return "stop"
         case "length":
             return "max_tokens"
-        case "model_length" | "tool_calls":
-            return choice.finish_reason
+        case "model_length":
+            return "model_length"
+        case "tool_calls":
+            return "tool_calls"
         case _:
             return "unknown"

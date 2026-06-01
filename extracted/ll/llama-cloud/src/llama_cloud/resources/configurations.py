@@ -38,7 +38,7 @@ class ConfigurationsResource(SyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/run-llama/llama-cloud-py#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/run-llama/llama-parse-py#accessing-raw-response-data-eg-headers
         """
         return ConfigurationsResourceWithRawResponse(self)
 
@@ -47,7 +47,7 @@ class ConfigurationsResource(SyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/run-llama/llama-cloud-py#with_streaming_response
+        For more information, see https://www.github.com/run-llama/llama-parse-py#with_streaming_response
         """
         return ConfigurationsResourceWithStreamingResponse(self)
 
@@ -66,10 +66,8 @@ class ConfigurationsResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ConfigurationResponse:
         """
-        Create or update a product configuration.
-
-        If a configuration with the same name already exists for this product type and
-        project, it will be updated (upsert semantics).
+        Upsert a product configuration; updates if one with the same name + product
+        type + project exists, otherwise creates.
 
         Args:
           name: Human-readable name for this configuration.
@@ -332,7 +330,7 @@ class AsyncConfigurationsResource(AsyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/run-llama/llama-cloud-py#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/run-llama/llama-parse-py#accessing-raw-response-data-eg-headers
         """
         return AsyncConfigurationsResourceWithRawResponse(self)
 
@@ -341,7 +339,7 @@ class AsyncConfigurationsResource(AsyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/run-llama/llama-cloud-py#with_streaming_response
+        For more information, see https://www.github.com/run-llama/llama-parse-py#with_streaming_response
         """
         return AsyncConfigurationsResourceWithStreamingResponse(self)
 
@@ -360,10 +358,8 @@ class AsyncConfigurationsResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> ConfigurationResponse:
         """
-        Create or update a product configuration.
-
-        If a configuration with the same name already exists for this product type and
-        project, it will be updated (upsert semantics).
+        Upsert a product configuration; updates if one with the same name + product
+        type + project exists, otherwise creates.
 
         Args:
           name: Human-readable name for this configuration.

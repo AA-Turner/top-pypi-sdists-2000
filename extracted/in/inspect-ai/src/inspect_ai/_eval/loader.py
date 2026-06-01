@@ -1,5 +1,6 @@
 import ast
 import contextlib
+import copy
 import inspect
 import os
 from dataclasses import replace
@@ -18,12 +19,14 @@ from inspect_ai._util.module import load_module
 from inspect_ai._util.path import chdir_python, cwd_relative_path
 from inspect_ai._util.registry import (
     RegistryInfo,
+    create_registry_object,
     is_registry_object,
     registry_create,
     registry_info,
     registry_lookup,
     registry_params,
 )
+from inspect_ai.agent._agent import Agent
 from inspect_ai.agent._as_solver import as_solver
 from inspect_ai.model import Model
 from inspect_ai.scorer._metric import Metric, MetricSpec, metric_create
@@ -32,6 +35,10 @@ from inspect_ai.solver._bridge import bridge
 from inspect_ai.solver._constants import SOLVER_ALL_PARAMS_ATTR
 from inspect_ai.solver._solver import Solver, SolverSpec
 from inspect_ai.util import SandboxEnvironmentSpec, SandboxEnvironmentType
+from inspect_ai.util._checkpoint._layout import (
+    eval_checkpoints_dir_from_config,
+)
+from inspect_ai.util._checkpoint.config import CheckpointConfig
 from inspect_ai.util._sandbox.compose import (
     is_docker_compatible_config,
     is_docker_compatible_sandbox_type,
@@ -70,6 +77,7 @@ def resolve_tasks(
     model_roles: dict[str, Model] | None,
     sandbox: SandboxEnvironmentType | None,
     sample_shuffle: bool | int | None,
+    eval_checkpoint: CheckpointConfig | None = None,
 ) -> list[ResolvedTask]:
     def as_resolved_tasks(tasks: list[Task]) -> list[ResolvedTask]:
         # shuffle data in tasks if requested
@@ -89,10 +97,16 @@ def resolve_tasks(
                 model=task.model or model,
                 model_roles=_merge_model_roles(task.model_roles, model_roles),
                 sandbox=resolve_task_sandbox(task, sandbox),
+                checkpoint=task.checkpoint,
                 sequence=sequence,
             )
             for sequence, task in enumerate(tasks)
         ]
+
+    # an empty list is equivalent to None (load tasks from cwd) — but it
+    # must short-circuit before any tasks[0] access below
+    if isinstance(tasks, list) and len(tasks) == 0:
+        return as_resolved_tasks(load_tasks(None, task_args))
 
     # reflect resolved tasks right back
     if isinstance(tasks, ResolvedTask):
@@ -100,29 +114,27 @@ def resolve_tasks(
     if isinstance(tasks, PreviousTask):
         tasks = [tasks]
     if isinstance(tasks, list) and isinstance(tasks[0], (ResolvedTask, PreviousTask)):
-        tasks = cast(
-            list[PreviousTask] | list[ResolvedTask] | list[ResolvedTask | PreviousTask],
-            tasks,
-        )
         return resolve_previous_tasks(
-            tasks, sample_shuffle=sample_shuffle, model=model, model_roles=model_roles
+            [t for t in tasks if isinstance(t, (ResolvedTask, PreviousTask))],
+            sample_shuffle=sample_shuffle,
+            model=model,
+            model_roles=model_roles,
+            eval_checkpoint=eval_checkpoint,
         )
-
-    # take empty lists out of play
-    if isinstance(tasks, list) and len(tasks) == 0:
-        return as_resolved_tasks(load_tasks(None, task_args))
 
     # simple cases of passing us Task objects
     if isinstance(tasks, Task):
         return as_resolved_tasks([tasks])
     elif isinstance(tasks, list) and isinstance(tasks[0], Task):
-        return as_resolved_tasks(cast(list[Task], tasks))
+        return as_resolved_tasks([t for t in tasks if isinstance(t, Task)])
 
     # convert TaskInfo to str
     if isinstance(tasks, TaskInfo):
         tasks = [tasks]
     if isinstance(tasks, list) and isinstance(tasks[0], TaskInfo):
-        tasks = [f"{task.file}@{task.name}" for task in cast(list[TaskInfo], tasks)]
+        tasks = [
+            f"{task.file}@{task.name}" for task in tasks if isinstance(task, TaskInfo)
+        ]
 
     # handle functions that return tasks (we get their registry name)
     if isinstance(tasks, list) and callable(tasks[0]):
@@ -143,6 +155,7 @@ def resolve_previous_tasks(
     sample_shuffle: bool | int | None,
     model: Model,
     model_roles: dict[str, Model] | None,
+    eval_checkpoint: CheckpointConfig | None = None,
 ) -> list[ResolvedTask]:
     result = []
     for sequence, task in enumerate(tasks):
@@ -173,6 +186,7 @@ def resolve_previous_tasks(
                     model_roles,
                     previous_task,
                     sequence,
+                    eval_checkpoint,
                 )
             )
     return result
@@ -185,7 +199,18 @@ def resolve_previous_task(
     model_roles: dict[str, Model] | None,
     previous_task: PreviousTask,
     sequence: int,
+    eval_checkpoint: CheckpointConfig | None = None,
 ) -> ResolvedTask:
+    # carry token usage forward from the prior log so cumulative totals stay
+    # accurate across retries. Deep-copy so the prior log is never mutated.
+    prior_stats = previous_task.log.stats
+    initial_model_usage = (
+        copy.deepcopy(prior_stats.model_usage) if prior_stats.model_usage else None
+    )
+    initial_role_usage = (
+        copy.deepcopy(prior_stats.role_usage) if prior_stats.role_usage else None
+    )
+
     return ResolvedTask(
         task=loaded_task,
         task_args=loaded_task_args,
@@ -197,11 +222,23 @@ def resolve_previous_task(
         sandbox=resolve_task_file_sandbox(
             previous_task.log.eval.task_file, previous_task.log.eval.sandbox
         ),
+        checkpoint=loaded_task.checkpoint,
         sequence=sequence,
         id=previous_task.id,
         sample_source=eval_log_sample_source(
-            previous_task.log, previous_task.log_info, loaded_task.dataset
+            previous_task.log,
+            previous_task.log_info,
+            loaded_task.dataset,
+            eval_checkpoints_dir_from_config(
+                previous_task.log_info.name
+                if previous_task.log_info is not None
+                else previous_task.log.location,
+                loaded_task.checkpoint,
+                eval_checkpoint,
+            ),
         ),
+        initial_model_usage=initial_model_usage,
+        initial_role_usage=initial_role_usage,
     )
 
 
@@ -465,7 +502,13 @@ def solver_from_spec(spec: SolverSpec) -> Solver:
             elif registry_lookup("solver", solver_name) is not None:
                 return registry_create("solver", solver_name, **spec.args_passed)
             elif registry_lookup("agent", solver_name) is not None:
-                agent = registry_create("agent", solver_name, **spec.args_passed)
+                # create via create_registry_object (args as a dict) so an agent
+                # factory with its own `name` parameter doesn't collide with
+                # registry_create's positional `name` argument.
+                agent = cast(
+                    Agent,
+                    create_registry_object("agent", solver_name, spec.args_passed),
+                )
                 return as_solver(agent)
             else:
                 raise ValueError(
@@ -528,7 +571,10 @@ def solver_from_spec(spec: SolverSpec) -> Solver:
 
             # create decorator based agents using the registry
             elif any(agent[0] == solver_name for agent in agent_decorators):
-                agent = registry_create("agent", solver_name, **spec.args_passed)
+                agent = cast(
+                    Agent,
+                    create_registry_object("agent", solver_name, spec.args_passed),
+                )
                 return as_solver(agent)
 
             # create bridge based solvers by calling the function and wrapping it in bridge()

@@ -3,11 +3,23 @@
 from __future__ import annotations
 
 from typing import Dict, Union, Mapping, Optional, cast
+from datetime import datetime
 
 import httpx
 
 from ...._files import deepcopy_with_paths
-from ...._types import Body, Omit, Query, Headers, NoneType, NotGiven, FileTypes, omit, not_given
+from ...._types import (
+    Body,
+    Omit,
+    Query,
+    Headers,
+    NoneType,
+    NotGiven,
+    FileTypes,
+    SequenceNotStr,
+    omit,
+    not_given,
+)
 from ...._utils import extract_files, path_template, maybe_transform, async_maybe_transform
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
@@ -43,7 +55,7 @@ class FilesResource(SyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/run-llama/llama-cloud-py#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/run-llama/llama-parse-py#accessing-raw-response-data-eg-headers
         """
         return FilesResourceWithRawResponse(self)
 
@@ -52,7 +64,7 @@ class FilesResource(SyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/run-llama/llama-cloud-py#with_streaming_response
+        For more information, see https://www.github.com/run-llama/llama-parse-py#with_streaming_response
         """
         return FilesResourceWithStreamingResponse(self)
 
@@ -60,12 +72,12 @@ class FilesResource(SyncAPIResource):
         self,
         directory_file_id: str,
         *,
-        path_directory_id: str,
+        directory_id: str,
         organization_id: Optional[str] | Omit = omit,
         project_id: Optional[str] | Omit = omit,
-        body_directory_id: Optional[str] | Omit = omit,
         display_name: Optional[str] | Omit = omit,
-        metadata: Optional[Dict[str, Union[str, float, bool, None]]] | Omit = omit,
+        metadata: Optional[Dict[str, Union[str, float, bool, SequenceNotStr[str], None]]] | Omit = omit,
+        target_directory_id: Optional[str] | Omit = omit,
         unique_id: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -75,20 +87,16 @@ class FilesResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FileUpdateResponse:
         """
-        Update file metadata within the specified directory.
-
-        Supports moving files to a different directory by setting directory_id.
-
-        Note: This endpoint uses directory_file_id (the internal ID). If you're trying
-        to update a file by its unique_id, use the list endpoint with a filter to find
-        the directory_file_id first.
+        Update directory-file metadata by `directory_file_id`; set `directory_id` to
+        move the file to a different directory. To resolve from `unique_id`, list with a
+        filter first.
 
         Args:
-          body_directory_id: Move file to a different directory.
-
           display_name: Updated display name.
 
           metadata: User-defined metadata key-value pairs. Replaces the user metadata layer.
+
+          target_directory_id: Move file to a different directory.
 
           unique_id: Updated unique identifier.
 
@@ -100,21 +108,21 @@ class FilesResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not path_directory_id:
-            raise ValueError(f"Expected a non-empty value for `path_directory_id` but received {path_directory_id!r}")
+        if not directory_id:
+            raise ValueError(f"Expected a non-empty value for `directory_id` but received {directory_id!r}")
         if not directory_file_id:
             raise ValueError(f"Expected a non-empty value for `directory_file_id` but received {directory_file_id!r}")
         return self._patch(
             path_template(
-                "/api/v1/beta/directories/{path_directory_id}/files/{directory_file_id}",
-                path_directory_id=path_directory_id,
+                "/api/v1/beta/directories/{directory_id}/files/{directory_file_id}",
+                directory_id=directory_id,
                 directory_file_id=directory_file_id,
             ),
             body=maybe_transform(
                 {
-                    "body_directory_id": body_directory_id,
                     "display_name": display_name,
                     "metadata": metadata,
+                    "target_directory_id": target_directory_id,
                     "unique_id": unique_id,
                 },
                 file_update_params.FileUpdateParams,
@@ -141,6 +149,7 @@ class FilesResource(SyncAPIResource):
         *,
         display_name: Optional[str] | Omit = omit,
         display_name_contains: Optional[str] | Omit = omit,
+        expand: Optional[SequenceNotStr[str]] | Omit = omit,
         file_id: Optional[str] | Omit = omit,
         include_deleted: bool | Omit = omit,
         organization_id: Optional[str] | Omit = omit,
@@ -148,6 +157,8 @@ class FilesResource(SyncAPIResource):
         page_token: Optional[str] | Omit = omit,
         project_id: Optional[str] | Omit = omit,
         unique_id: Optional[str] | Omit = omit,
+        updated_at_on_or_after: Union[str, datetime, None] | Omit = omit,
+        updated_at_on_or_before: Union[str, datetime, None] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -160,6 +171,12 @@ class FilesResource(SyncAPIResource):
         pagination.
 
         Args:
+          expand: Fields to expand on each directory file.
+
+          updated_at_on_or_after: Include items updated at or after this timestamp (inclusive)
+
+          updated_at_on_or_before: Include items updated at or before this timestamp (inclusive)
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -182,6 +199,7 @@ class FilesResource(SyncAPIResource):
                     {
                         "display_name": display_name,
                         "display_name_contains": display_name_contains,
+                        "expand": expand,
                         "file_id": file_id,
                         "include_deleted": include_deleted,
                         "organization_id": organization_id,
@@ -189,6 +207,8 @@ class FilesResource(SyncAPIResource):
                         "page_token": page_token,
                         "project_id": project_id,
                         "unique_id": unique_id,
+                        "updated_at_on_or_after": updated_at_on_or_after,
+                        "updated_at_on_or_before": updated_at_on_or_before,
                     },
                     file_list_params.FileListParams,
                 ),
@@ -211,11 +231,8 @@ class FilesResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
         """
-        Delete a file from the specified directory.
-
-        Note: This endpoint uses directory_file_id (the internal ID). If you're trying
-        to delete a file by its unique_id, use the list endpoint with a filter to find
-        the directory_file_id first.
+        Delete a directory file by `directory_file_id`; to resolve from `unique_id`,
+        list with a filter first.
 
         Args:
           extra_headers: Send extra headers
@@ -261,7 +278,7 @@ class FilesResource(SyncAPIResource):
         organization_id: Optional[str] | Omit = omit,
         project_id: Optional[str] | Omit = omit,
         display_name: Optional[str] | Omit = omit,
-        metadata: Optional[Dict[str, Union[str, float, bool, None]]] | Omit = omit,
+        metadata: Optional[Dict[str, Union[str, float, bool, SequenceNotStr[str], None]]] | Omit = omit,
         unique_id: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -271,10 +288,8 @@ class FilesResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FileAddResponse:
         """
-        Create a new file within the specified directory.
-
-        The directory must exist and belong to the project passed in. The file_id must
-        be provided and exist in the project.
+        Create a new file within the specified directory; the directory must exist in
+        the project and `file_id` must reference an existing file.
 
         Args:
           file_id: File ID for the storage location (required).
@@ -328,6 +343,7 @@ class FilesResource(SyncAPIResource):
         directory_file_id: str,
         *,
         directory_id: str,
+        expand: Optional[SequenceNotStr[str]] | Omit = omit,
         organization_id: Optional[str] | Omit = omit,
         project_id: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -337,13 +353,13 @@ class FilesResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FileGetResponse:
-        """Get a file by its directory_file_id within the specified directory.
-
-        If you're
-        trying to get a file by its unique_id, use the list endpoint with a filter
-        instead.
+        """
+        Get a directory file by `directory_file_id`; to look up by `unique_id`, use the
+        list endpoint with a filter.
 
         Args:
+          expand: Fields to expand.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -369,6 +385,7 @@ class FilesResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "expand": expand,
                         "organization_id": organization_id,
                         "project_id": project_id,
                     },
@@ -387,6 +404,7 @@ class FilesResource(SyncAPIResource):
         project_id: Optional[str] | Omit = omit,
         display_name: Optional[str] | Omit = omit,
         external_file_id: Optional[str] | Omit = omit,
+        metadata: Optional[str] | Omit = omit,
         unique_id: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -396,13 +414,12 @@ class FilesResource(SyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FileUploadResponse:
         """
-        Upload a file directly to a directory.
-
-        Uploads a file and creates a directory file entry in a single operation. If
-        unique_id or display_name are not provided, they will be derived from the file
-        metadata.
+        Upload a file and create its directory entry in one call; `unique_id` /
+        `display_name` default to values derived from file metadata.
 
         Args:
+          metadata: User metadata as a JSON object string.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -418,6 +435,7 @@ class FilesResource(SyncAPIResource):
                 "upload_file": upload_file,
                 "display_name": display_name,
                 "external_file_id": external_file_id,
+                "metadata": metadata,
                 "unique_id": unique_id,
             },
             [["upload_file"]],
@@ -455,7 +473,7 @@ class AsyncFilesResource(AsyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/run-llama/llama-cloud-py#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/run-llama/llama-parse-py#accessing-raw-response-data-eg-headers
         """
         return AsyncFilesResourceWithRawResponse(self)
 
@@ -464,7 +482,7 @@ class AsyncFilesResource(AsyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/run-llama/llama-cloud-py#with_streaming_response
+        For more information, see https://www.github.com/run-llama/llama-parse-py#with_streaming_response
         """
         return AsyncFilesResourceWithStreamingResponse(self)
 
@@ -472,12 +490,12 @@ class AsyncFilesResource(AsyncAPIResource):
         self,
         directory_file_id: str,
         *,
-        path_directory_id: str,
+        directory_id: str,
         organization_id: Optional[str] | Omit = omit,
         project_id: Optional[str] | Omit = omit,
-        body_directory_id: Optional[str] | Omit = omit,
         display_name: Optional[str] | Omit = omit,
-        metadata: Optional[Dict[str, Union[str, float, bool, None]]] | Omit = omit,
+        metadata: Optional[Dict[str, Union[str, float, bool, SequenceNotStr[str], None]]] | Omit = omit,
+        target_directory_id: Optional[str] | Omit = omit,
         unique_id: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -487,20 +505,16 @@ class AsyncFilesResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FileUpdateResponse:
         """
-        Update file metadata within the specified directory.
-
-        Supports moving files to a different directory by setting directory_id.
-
-        Note: This endpoint uses directory_file_id (the internal ID). If you're trying
-        to update a file by its unique_id, use the list endpoint with a filter to find
-        the directory_file_id first.
+        Update directory-file metadata by `directory_file_id`; set `directory_id` to
+        move the file to a different directory. To resolve from `unique_id`, list with a
+        filter first.
 
         Args:
-          body_directory_id: Move file to a different directory.
-
           display_name: Updated display name.
 
           metadata: User-defined metadata key-value pairs. Replaces the user metadata layer.
+
+          target_directory_id: Move file to a different directory.
 
           unique_id: Updated unique identifier.
 
@@ -512,21 +526,21 @@ class AsyncFilesResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        if not path_directory_id:
-            raise ValueError(f"Expected a non-empty value for `path_directory_id` but received {path_directory_id!r}")
+        if not directory_id:
+            raise ValueError(f"Expected a non-empty value for `directory_id` but received {directory_id!r}")
         if not directory_file_id:
             raise ValueError(f"Expected a non-empty value for `directory_file_id` but received {directory_file_id!r}")
         return await self._patch(
             path_template(
-                "/api/v1/beta/directories/{path_directory_id}/files/{directory_file_id}",
-                path_directory_id=path_directory_id,
+                "/api/v1/beta/directories/{directory_id}/files/{directory_file_id}",
+                directory_id=directory_id,
                 directory_file_id=directory_file_id,
             ),
             body=await async_maybe_transform(
                 {
-                    "body_directory_id": body_directory_id,
                     "display_name": display_name,
                     "metadata": metadata,
+                    "target_directory_id": target_directory_id,
                     "unique_id": unique_id,
                 },
                 file_update_params.FileUpdateParams,
@@ -553,6 +567,7 @@ class AsyncFilesResource(AsyncAPIResource):
         *,
         display_name: Optional[str] | Omit = omit,
         display_name_contains: Optional[str] | Omit = omit,
+        expand: Optional[SequenceNotStr[str]] | Omit = omit,
         file_id: Optional[str] | Omit = omit,
         include_deleted: bool | Omit = omit,
         organization_id: Optional[str] | Omit = omit,
@@ -560,6 +575,8 @@ class AsyncFilesResource(AsyncAPIResource):
         page_token: Optional[str] | Omit = omit,
         project_id: Optional[str] | Omit = omit,
         unique_id: Optional[str] | Omit = omit,
+        updated_at_on_or_after: Union[str, datetime, None] | Omit = omit,
+        updated_at_on_or_before: Union[str, datetime, None] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -572,6 +589,12 @@ class AsyncFilesResource(AsyncAPIResource):
         pagination.
 
         Args:
+          expand: Fields to expand on each directory file.
+
+          updated_at_on_or_after: Include items updated at or after this timestamp (inclusive)
+
+          updated_at_on_or_before: Include items updated at or before this timestamp (inclusive)
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -594,6 +617,7 @@ class AsyncFilesResource(AsyncAPIResource):
                     {
                         "display_name": display_name,
                         "display_name_contains": display_name_contains,
+                        "expand": expand,
                         "file_id": file_id,
                         "include_deleted": include_deleted,
                         "organization_id": organization_id,
@@ -601,6 +625,8 @@ class AsyncFilesResource(AsyncAPIResource):
                         "page_token": page_token,
                         "project_id": project_id,
                         "unique_id": unique_id,
+                        "updated_at_on_or_after": updated_at_on_or_after,
+                        "updated_at_on_or_before": updated_at_on_or_before,
                     },
                     file_list_params.FileListParams,
                 ),
@@ -623,11 +649,8 @@ class AsyncFilesResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> None:
         """
-        Delete a file from the specified directory.
-
-        Note: This endpoint uses directory_file_id (the internal ID). If you're trying
-        to delete a file by its unique_id, use the list endpoint with a filter to find
-        the directory_file_id first.
+        Delete a directory file by `directory_file_id`; to resolve from `unique_id`,
+        list with a filter first.
 
         Args:
           extra_headers: Send extra headers
@@ -673,7 +696,7 @@ class AsyncFilesResource(AsyncAPIResource):
         organization_id: Optional[str] | Omit = omit,
         project_id: Optional[str] | Omit = omit,
         display_name: Optional[str] | Omit = omit,
-        metadata: Optional[Dict[str, Union[str, float, bool, None]]] | Omit = omit,
+        metadata: Optional[Dict[str, Union[str, float, bool, SequenceNotStr[str], None]]] | Omit = omit,
         unique_id: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -683,10 +706,8 @@ class AsyncFilesResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FileAddResponse:
         """
-        Create a new file within the specified directory.
-
-        The directory must exist and belong to the project passed in. The file_id must
-        be provided and exist in the project.
+        Create a new file within the specified directory; the directory must exist in
+        the project and `file_id` must reference an existing file.
 
         Args:
           file_id: File ID for the storage location (required).
@@ -740,6 +761,7 @@ class AsyncFilesResource(AsyncAPIResource):
         directory_file_id: str,
         *,
         directory_id: str,
+        expand: Optional[SequenceNotStr[str]] | Omit = omit,
         organization_id: Optional[str] | Omit = omit,
         project_id: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -749,13 +771,13 @@ class AsyncFilesResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FileGetResponse:
-        """Get a file by its directory_file_id within the specified directory.
-
-        If you're
-        trying to get a file by its unique_id, use the list endpoint with a filter
-        instead.
+        """
+        Get a directory file by `directory_file_id`; to look up by `unique_id`, use the
+        list endpoint with a filter.
 
         Args:
+          expand: Fields to expand.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -781,6 +803,7 @@ class AsyncFilesResource(AsyncAPIResource):
                 timeout=timeout,
                 query=await async_maybe_transform(
                     {
+                        "expand": expand,
                         "organization_id": organization_id,
                         "project_id": project_id,
                     },
@@ -799,6 +822,7 @@ class AsyncFilesResource(AsyncAPIResource):
         project_id: Optional[str] | Omit = omit,
         display_name: Optional[str] | Omit = omit,
         external_file_id: Optional[str] | Omit = omit,
+        metadata: Optional[str] | Omit = omit,
         unique_id: Optional[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -808,13 +832,12 @@ class AsyncFilesResource(AsyncAPIResource):
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FileUploadResponse:
         """
-        Upload a file directly to a directory.
-
-        Uploads a file and creates a directory file entry in a single operation. If
-        unique_id or display_name are not provided, they will be derived from the file
-        metadata.
+        Upload a file and create its directory entry in one call; `unique_id` /
+        `display_name` default to values derived from file metadata.
 
         Args:
+          metadata: User metadata as a JSON object string.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -830,6 +853,7 @@ class AsyncFilesResource(AsyncAPIResource):
                 "upload_file": upload_file,
                 "display_name": display_name,
                 "external_file_id": external_file_id,
+                "metadata": metadata,
                 "unique_id": unique_id,
             },
             [["upload_file"]],

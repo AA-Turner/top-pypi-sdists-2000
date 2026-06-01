@@ -1,14 +1,13 @@
 import fnmatch
 import inspect
 import logging
+import math
 import re
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import Any, Tuple, TypeGuard, cast, get_args, get_origin, get_type_hints
-
-import numpy as np
 
 from inspect_ai._util.logger import warn_once
 from inspect_ai._util.registry import (
@@ -85,22 +84,27 @@ def eval_results(
     samples: int,
     scores: list[dict[str, SampleScore]],
     reducers: ScoreReducer | list[ScoreReducer] | None,
-    scorers: list[Scorer] | None,
+    scorers: list[Scorer] | list[ScorerInfo] | None,
     metrics: list[Metric | dict[str, list[Metric]]] | dict[str, list[Metric]] | None,
     scorer_names: list[str] | None = None,
     early_stopping: EarlyStoppingSummary | None = None,
+    metadata: dict[str, Any] | None = None,
 ) -> Tuple[EvalResults, list[EvalSampleReductions] | None]:
     # initialise results
     results = EvalResults(
         total_samples=samples,
         completed_samples=len(scores),
         early_stopping=early_stopping,
+        metadata=metadata,
     )
     reductions = None
 
     # extract scorers info from scorers then create scorers info for any
     # scores not already accounted for by a scorer name
-    scorers_info = [ScorerInfo.from_scorer(scorer) for scorer in (scorers or [])]
+    scorers_info = [
+        s if isinstance(s, ScorerInfo) else ScorerInfo.from_scorer(s)
+        for s in (scorers or [])
+    ]
 
     # use resolved scorer names to detect scores that are present in task state
     # that don't have a corresponding scorer
@@ -295,7 +299,7 @@ def scorer_for_metrics(
     ## unscored_samples to note the number of samples that were not scored
     sample_scores_with_values = []
     for sample_score in sample_scores:
-        if not isinstance(sample_score.score.value, float) or not np.isnan(
+        if not isinstance(sample_score.score.value, float) or not math.isnan(
             sample_score.score.value
         ):
             sample_scores_with_values.append(sample_score)
@@ -405,7 +409,7 @@ def scorers_from_metric_dict(
             value = sample_score.score.value
             # NaN-at-root is the unscored sentinel: count toward unscored_samples
             # and skip without requiring the value to be a dict.
-            if isinstance(value, float) and np.isnan(value):
+            if isinstance(value, float) and math.isnan(value):
                 unscored_samples += 1
                 continue
             if isinstance(value, dict):
@@ -413,7 +417,7 @@ def scorers_from_metric_dict(
                     # Convert the score into a simple scalar value to apply metrics
                     metric_score = deepcopy(sample_score)
                     metric_score.score.value = cast(float, value[metric_key])
-                    if isinstance(metric_score.score.value, float) and np.isnan(
+                    if isinstance(metric_score.score.value, float) and math.isnan(
                         metric_score.score.value
                     ):
                         unscored_samples += 1

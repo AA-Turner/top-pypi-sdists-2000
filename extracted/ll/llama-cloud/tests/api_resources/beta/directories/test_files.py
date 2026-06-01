@@ -9,6 +9,7 @@ import pytest
 
 from llama_cloud import LlamaCloud, AsyncLlamaCloud
 from tests.utils import assert_matches_type
+from llama_cloud._utils import parse_datetime
 from llama_cloud.pagination import SyncPaginatedCursor, AsyncPaginatedCursor
 from llama_cloud.types.beta.directories import (
     FileAddResponse,
@@ -29,7 +30,7 @@ class TestFiles:
     def test_method_update(self, client: LlamaCloud) -> None:
         file = client.beta.directories.files.update(
             directory_file_id="directory_file_id",
-            path_directory_id="directory_id",
+            directory_id="directory_id",
         )
         assert_matches_type(FileUpdateResponse, file, path=["response"])
 
@@ -38,12 +39,12 @@ class TestFiles:
     def test_method_update_with_all_params(self, client: LlamaCloud) -> None:
         file = client.beta.directories.files.update(
             directory_file_id="directory_file_id",
-            path_directory_id="directory_id",
+            directory_id="directory_id",
             organization_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             project_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-            body_directory_id="directory_id",
             display_name="display_name",
             metadata={"foo": "string"},
+            target_directory_id="target_directory_id",
             unique_id="x",
         )
         assert_matches_type(FileUpdateResponse, file, path=["response"])
@@ -53,7 +54,7 @@ class TestFiles:
     def test_raw_response_update(self, client: LlamaCloud) -> None:
         response = client.beta.directories.files.with_raw_response.update(
             directory_file_id="directory_file_id",
-            path_directory_id="directory_id",
+            directory_id="directory_id",
         )
 
         assert response.is_closed is True
@@ -66,7 +67,7 @@ class TestFiles:
     def test_streaming_response_update(self, client: LlamaCloud) -> None:
         with client.beta.directories.files.with_streaming_response.update(
             directory_file_id="directory_file_id",
-            path_directory_id="directory_id",
+            directory_id="directory_id",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -79,16 +80,16 @@ class TestFiles:
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_update(self, client: LlamaCloud) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_directory_id` but received ''"):
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `directory_id` but received ''"):
             client.beta.directories.files.with_raw_response.update(
                 directory_file_id="directory_file_id",
-                path_directory_id="",
+                directory_id="",
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `directory_file_id` but received ''"):
             client.beta.directories.files.with_raw_response.update(
                 directory_file_id="",
-                path_directory_id="directory_id",
+                directory_id="directory_id",
             )
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
@@ -106,6 +107,7 @@ class TestFiles:
             directory_id="directory_id",
             display_name="display_name",
             display_name_contains="display_name_contains",
+            expand=["string", "string"],
             file_id="file_id",
             include_deleted=True,
             organization_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
@@ -113,6 +115,8 @@ class TestFiles:
             page_token="page_token",
             project_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             unique_id="unique_id",
+            updated_at_on_or_after=parse_datetime("2019-12-27T18:11:19.117Z"),
+            updated_at_on_or_before=parse_datetime("2019-12-27T18:11:19.117Z"),
         )
         assert_matches_type(SyncPaginatedCursor[FileListResponse], file, path=["response"])
 
@@ -288,6 +292,7 @@ class TestFiles:
         file = client.beta.directories.files.get(
             directory_file_id="directory_file_id",
             directory_id="directory_id",
+            expand=["string", "string"],
             organization_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             project_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         )
@@ -355,6 +360,7 @@ class TestFiles:
             project_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             display_name="display_name",
             external_file_id="external_file_id",
+            metadata='{"source": "web", "priority": 1}',
             unique_id="unique_id",
         )
         assert_matches_type(FileUploadResponse, file, path=["response"])
@@ -407,7 +413,7 @@ class TestAsyncFiles:
     async def test_method_update(self, async_client: AsyncLlamaCloud) -> None:
         file = await async_client.beta.directories.files.update(
             directory_file_id="directory_file_id",
-            path_directory_id="directory_id",
+            directory_id="directory_id",
         )
         assert_matches_type(FileUpdateResponse, file, path=["response"])
 
@@ -416,12 +422,12 @@ class TestAsyncFiles:
     async def test_method_update_with_all_params(self, async_client: AsyncLlamaCloud) -> None:
         file = await async_client.beta.directories.files.update(
             directory_file_id="directory_file_id",
-            path_directory_id="directory_id",
+            directory_id="directory_id",
             organization_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             project_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-            body_directory_id="directory_id",
             display_name="display_name",
             metadata={"foo": "string"},
+            target_directory_id="target_directory_id",
             unique_id="x",
         )
         assert_matches_type(FileUpdateResponse, file, path=["response"])
@@ -431,7 +437,7 @@ class TestAsyncFiles:
     async def test_raw_response_update(self, async_client: AsyncLlamaCloud) -> None:
         response = await async_client.beta.directories.files.with_raw_response.update(
             directory_file_id="directory_file_id",
-            path_directory_id="directory_id",
+            directory_id="directory_id",
         )
 
         assert response.is_closed is True
@@ -444,7 +450,7 @@ class TestAsyncFiles:
     async def test_streaming_response_update(self, async_client: AsyncLlamaCloud) -> None:
         async with async_client.beta.directories.files.with_streaming_response.update(
             directory_file_id="directory_file_id",
-            path_directory_id="directory_id",
+            directory_id="directory_id",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -457,16 +463,16 @@ class TestAsyncFiles:
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_update(self, async_client: AsyncLlamaCloud) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_directory_id` but received ''"):
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `directory_id` but received ''"):
             await async_client.beta.directories.files.with_raw_response.update(
                 directory_file_id="directory_file_id",
-                path_directory_id="",
+                directory_id="",
             )
 
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `directory_file_id` but received ''"):
             await async_client.beta.directories.files.with_raw_response.update(
                 directory_file_id="",
-                path_directory_id="directory_id",
+                directory_id="directory_id",
             )
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
@@ -484,6 +490,7 @@ class TestAsyncFiles:
             directory_id="directory_id",
             display_name="display_name",
             display_name_contains="display_name_contains",
+            expand=["string", "string"],
             file_id="file_id",
             include_deleted=True,
             organization_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
@@ -491,6 +498,8 @@ class TestAsyncFiles:
             page_token="page_token",
             project_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             unique_id="unique_id",
+            updated_at_on_or_after=parse_datetime("2019-12-27T18:11:19.117Z"),
+            updated_at_on_or_before=parse_datetime("2019-12-27T18:11:19.117Z"),
         )
         assert_matches_type(AsyncPaginatedCursor[FileListResponse], file, path=["response"])
 
@@ -666,6 +675,7 @@ class TestAsyncFiles:
         file = await async_client.beta.directories.files.get(
             directory_file_id="directory_file_id",
             directory_id="directory_id",
+            expand=["string", "string"],
             organization_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             project_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         )
@@ -733,6 +743,7 @@ class TestAsyncFiles:
             project_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             display_name="display_name",
             external_file_id="external_file_id",
+            metadata='{"source": "web", "priority": 1}',
             unique_id="unique_id",
         )
         assert_matches_type(FileUploadResponse, file, path=["response"])

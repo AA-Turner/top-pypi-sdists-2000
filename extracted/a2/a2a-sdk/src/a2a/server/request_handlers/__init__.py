@@ -3,22 +3,28 @@
 import logging
 
 from a2a.server.request_handlers.default_request_handler import (
-    DefaultRequestHandler,
+    LegacyRequestHandler,
 )
-from a2a.server.request_handlers.jsonrpc_handler import JSONRPCHandler
-from a2a.server.request_handlers.request_handler import RequestHandler
+from a2a.server.request_handlers.default_request_handler_v2 import (
+    DefaultRequestHandlerV2,
+)
+from a2a.server.request_handlers.request_handler import (
+    RequestHandler,
+    validate_request_params,
+)
 from a2a.server.request_handlers.response_helpers import (
     build_error_response,
     prepare_response_object,
 )
-from a2a.server.request_handlers.rest_handler import RESTHandler
 
 
 logger = logging.getLogger(__name__)
 
 try:
     from a2a.server.request_handlers.grpc_handler import (
-        GrpcHandler,  # type: ignore
+        DefaultGrpcServerCallContextBuilder,
+        GrpcHandler,
+        GrpcServerCallContextBuilder,
     )
 except ImportError as e:
     _original_error = e
@@ -27,7 +33,7 @@ except ImportError as e:
         _original_error,
     )
 
-    class GrpcHandler:  # type: ignore
+    class GrpcHandler:
         """Placeholder for GrpcHandler when dependencies are not installed."""
 
         def __init__(self, *args, **kwargs):
@@ -37,12 +43,17 @@ except ImportError as e:
             ) from _original_error
 
 
+DefaultRequestHandler = DefaultRequestHandlerV2
+
 __all__ = [
+    'DefaultGrpcServerCallContextBuilder',
     'DefaultRequestHandler',
+    'DefaultRequestHandlerV2',
     'GrpcHandler',
-    'JSONRPCHandler',
-    'RESTHandler',
+    'GrpcServerCallContextBuilder',
+    'LegacyRequestHandler',
     'RequestHandler',
     'build_error_response',
     'prepare_response_object',
+    'validate_request_params',
 ]

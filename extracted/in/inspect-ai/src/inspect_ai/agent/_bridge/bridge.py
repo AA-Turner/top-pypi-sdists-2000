@@ -6,7 +6,6 @@ from dataclasses import dataclass, field
 from functools import wraps
 from typing import Any, AsyncGenerator, Awaitable, Callable, Type, cast
 
-from jsonschema import Draft7Validator
 from pydantic import BaseModel, Field, ValidationError
 from pydantic_core import to_json
 
@@ -15,7 +14,7 @@ from inspect_ai.agent._agent import Agent, AgentState, agent
 from inspect_ai.agent._bridge.types import AgentBridge
 from inspect_ai.log._samples import sample_active
 from inspect_ai.model._compaction.types import CompactionStrategy
-from inspect_ai.model._model import GenerateFilter, get_model
+from inspect_ai.model._model import GenerateFilter, ModelEventSink, get_model
 from inspect_ai.model._model_output import ModelOutput
 from inspect_ai.model._openai_convert import (
     messages_from_openai,
@@ -91,6 +90,7 @@ async def agent_bridge(
     compaction: CompactionStrategy | None = None,
     web_search: WebSearchProviders | None = None,
     code_execution: CodeExecutionProviders | None = None,
+    model_event_sink: ModelEventSink | None = None,
 ) -> AsyncGenerator[AgentBridge, None]:
     """Agent bridge.
 
@@ -122,6 +122,10 @@ async def agent_bridge(
           Anthropic, Google, and Grok). If the provider does not support
           native code execution then the bash() tool will be provided
           (note that this requires a sandbox by declared for the task).
+       model_event_sink: Optional sink that takes ownership of `ModelEvent`
+          emission for calls routed through the bridge. When set, the bridge
+          installs it around `model.generate()` so the sink decides when and
+          under which span each event is emitted to the transcript.
     """
     # ensure one time init
     init_bridge_request_patch()
@@ -134,7 +138,13 @@ async def agent_bridge(
     state = state or AgentState(messages=[])
 
     # create the bridge
-    bridge = AgentBridge(state, filter, retry_refusals, compaction)
+    bridge = AgentBridge(
+        state,
+        filter,
+        retry_refusals,
+        compaction,
+        model_event_sink=model_event_sink,
+    )
 
     # set the patch config for this context and child coroutines
     token = _patch_config.set(
@@ -433,6 +443,8 @@ def bridge(
     class BridgeResult(BaseModel):
         output: str
         messages: list[ChatCompletionMessageParam] | None = Field(default=None)
+
+    from jsonschema import Draft7Validator
 
     result_schema = BridgeResult.model_json_schema()
     result_validator = Draft7Validator(result_schema)

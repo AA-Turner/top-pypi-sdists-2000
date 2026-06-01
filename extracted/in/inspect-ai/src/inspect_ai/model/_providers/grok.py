@@ -49,7 +49,7 @@ from inspect_ai.model._chat_message import (
     ChatMessageTool,
     ChatMessageUser,
 )
-from inspect_ai.model._model import ModelAPI, log_model_retry
+from inspect_ai.model._model import ModelAPI, RetryDecision, log_model_retry
 from inspect_ai.model._model_call import ModelCall
 from inspect_ai.model._model_output import ModelOutput
 from inspect_ai.model._providers.util.util import model_base_url
@@ -153,6 +153,21 @@ class GrokAPI(ModelAPI):
 
     def is_grok_4(self) -> bool:
         return "grok-4" in self.model_name
+
+    def is_grok_4_original(self) -> bool:
+        """The original grok-4 release (deprecated 2026-05-15).
+
+        Distinct from grok-4-fast / grok-4-1 / grok-4.20 / grok-4.3, which all
+        contain "grok-4" in their name but accept `reasoning_effort`. The
+        original grok-4 has reasoning but does NOT accept the parameter — the
+        xAI API returns an error when it's set.
+        https://docs.x.ai/developers/model-capabilities/text/reasoning
+        """
+        return (
+            self.model_name == "grok-4"
+            or self.model_name == "grok-4-latest"
+            or self.model_name.startswith("grok-4-0709")
+        )
 
     def is_at_least_grok_4(self) -> bool:
         return not self.is_grok_2() and not self.is_grok_3()
@@ -302,16 +317,32 @@ class GrokAPI(ModelAPI):
             and ex.code() == grpc.StatusCode.UNAUTHENTICATED
         )
 
-    def should_retry(self, ex: BaseException) -> bool:
+    @override
+    def connection_key(self) -> str:
+        """Scope adaptive concurrency per (key, model).
+
+        A pool shared across models lets the faster model's signals push the
+        adaptive limit past the slower model's actual ceiling (cram-down).
+        Per-model scoping avoids that, at the cost of slight over-fragmentation
+        when models actually share an upstream rate-limit budget.
+        """
+        return f"{self.api_key}:{self.model_name}"
+
+    def should_retry(self, ex: BaseException) -> bool | RetryDecision:
         if isinstance(ex, grpc.RpcError):
-            return ex.code() in {
+            code = ex.code()
+            # RESOURCE_EXHAUSTED is the gRPC equivalent of HTTP 429 — the only
+            # one that indicates rate-limiting. UNKNOWN / UNAVAILABLE /
+            # DEADLINE_EXCEEDED are infrastructure transients.
+            if code == grpc.StatusCode.RESOURCE_EXHAUSTED:
+                return RetryDecision.rate_limit()
+            if code in {
                 grpc.StatusCode.UNKNOWN,
                 grpc.StatusCode.UNAVAILABLE,
                 grpc.StatusCode.DEADLINE_EXCEEDED,
-                grpc.StatusCode.RESOURCE_EXHAUSTED,
-            }
-        else:
-            return False
+            }:
+                return RetryDecision.transient()
+        return RetryDecision.no()
 
     @override
     def retry_wait(self) -> WaitBaseT | None:
@@ -413,16 +444,19 @@ class GrokAPI(ModelAPI):
             # we'll call chat.parse() above w/ the schema
             gconfig["response_format"] = "json_object"
 
-        # note that grok-3-mini is the only model which supports a reasoning effort parameter
-        if config.reasoning_effort is not None and self.is_grok_3_mini():
+        # grok-3-mini and grok-4 variants (4-fast, 4.1, 4.20, 4.3) accept
+        # reasoning_effort. The *original* grok-4 reasons but rejects the
+        # parameter and must be excluded.
+        if config.reasoning_effort is not None and (
+            self.is_grok_3_mini()
+            or (self.is_grok_4() and not self.is_grok_4_original())
+        ):
             match config.reasoning_effort:
-                case "none":
-                    raise ValueError(
-                        "Grok models do not support 'none' for reasoning effort."
-                    )
                 case "minimal" | "low":
                     gconfig["reasoning_effort"] = "low"
-                case "medium" | "high" | "xhigh" | "max":
+                case "medium":
+                    gconfig["reasoning_effort"] = "medium"
+                case "high" | "xhigh" | "max":
                     gconfig["reasoning_effort"] = "high"
 
         # return encrypted reasoning blocks
@@ -615,7 +649,8 @@ async def _grok_message(message: ChatMessage) -> chat_pb2.Message:
             return await _grok_assistant_message(message)
         case ChatMessageTool():
             return tool_result(
-                f"Error: {message.error.message}" if message.error else message.text
+                f"Error: {message.error.message}" if message.error else message.text,
+                tool_call_id=message.tool_call_id,
             )
 
 

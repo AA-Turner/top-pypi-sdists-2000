@@ -32,6 +32,7 @@ from ._file import (
     write_log_dir_manifest,
 )
 from ._log import (
+    ConnectionLimitChange,
     EvalConfig,
     EvalDataset,
     EvalLog,
@@ -53,13 +54,13 @@ from ._log import (
     EventsData,
 )
 from ._metric import recompute_metrics
-from ._pool import resolve_sample_events_data
 from ._recover import (
     RecoverableEvalLog,
     RecoveryNotAvailable,
     recover_eval_log,
     recoverable_eval_logs,
 )
+from ._resolve import resolve_sample_events_data
 from ._retry import retryable_eval_logs
 from ._score import edit_score
 from ._transcript import (
@@ -123,6 +124,7 @@ __all__ = [
     "recoverable_eval_logs",
     "RecoverableEvalLog",
     "RecoveryNotAvailable",
+    "ConnectionLimitChange",
 ]
 
 

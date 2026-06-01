@@ -30,14 +30,14 @@ from inspect_ai.tool import ToolChoice, ToolInfo
 
 from .._chat_message import ChatMessage
 from .._generate_config import GenerateConfig
-from .._model import ModelAPI, log_model_retry
+from .._model import ModelAPI, RetryDecision, log_model_retry
 from .._model_call import ModelCall
 from .._model_output import ModelOutput, ModelUsage
 from .._openai import (
     OpenAIAsyncHttpxClient,
     is_gpt_5_model,
     is_o_series_model,
-    openai_should_retry,
+    openai_classify_retry,
 )
 from .._openai_responses import (
     chat_messages_from_compact_response,
@@ -59,6 +59,7 @@ from .util import (
 logger = getLogger(__name__)
 
 OPENAI_API_KEY = "OPENAI_API_KEY"
+OPENAI_SAFETY_IDENTIFIER = "OPENAI_SAFETY_IDENTIFIER"
 AZURE_OPENAI_API_KEY = "AZURE_OPENAI_API_KEY"
 AZUREAI_OPENAI_API_KEY = "AZUREAI_OPENAI_API_KEY"
 
@@ -106,10 +107,15 @@ class OpenAIAPI(ModelAPI):
             "prompt_cache_retention", NOT_GIVEN
         )
 
-        # extract safety_identifier model arg if provided
+        # extract safety_identifier model arg if provided, falling back to
+        # the OPENAI_SAFETY_IDENTIFIER environment variable
         self.safety_identifier: str | NotGiven = model_args.pop(
             "safety_identifier", NOT_GIVEN
         )
+        if self.safety_identifier is NOT_GIVEN:
+            env_safety_identifier = os.environ.get(OPENAI_SAFETY_IDENTIFIER, None)
+            if env_safety_identifier:
+                self.safety_identifier = env_safety_identifier
 
         # OpenAI recommends preserving `phase` on replayed Responses API
         # assistant messages:
@@ -470,17 +476,15 @@ class OpenAIAPI(ModelAPI):
         return f"openai/{self.service_model_name()}"
 
     @override
-    def should_retry(self, ex: BaseException) -> bool:
+    def should_retry(self, ex: BaseException) -> bool | RetryDecision:
         if isinstance(ex, RateLimitError):
-            # Do not retry on these rate limit errors
-            # The quota exceeded one is related to monthly account quotas.
+            # quota-exceeded is a permanent monthly-quota error, not a transient
+            # rate limit — do not retry.
             if "You exceeded your current quota" in ex.message:
                 warn_once(logger, f"OpenAI quota exceeded, not retrying: {ex.message}")
-                return False
-            else:
-                return True
-        else:
-            return openai_should_retry(ex)
+                return RetryDecision.no()
+        decision = openai_classify_retry(ex)
+        return decision if decision is not None else RetryDecision.no()
 
     @override
     def is_auth_failure(self, ex: Exception) -> bool:
@@ -490,8 +494,22 @@ class OpenAIAPI(ModelAPI):
 
     @override
     def connection_key(self) -> str:
-        """Scope for enforcing max_connections (could also use endpoint)."""
-        return str(self.api_key)
+        """Scope adaptive concurrency per (key, model).
+
+        A pool shared across models lets the faster model's signals push the
+        adaptive limit past the slower model's actual ceiling (cram-down).
+        Per-model scoping avoids that, at the cost of slight over-fragmentation
+        when models actually share an upstream rate-limit budget.
+        """
+        return f"{self.api_key}:{self.model_name}"
+
+    @override
+    def apply_redacted_reasoning_tokens_to_input(self) -> bool:
+        # Responses API with store=false + include=encrypted_content re-injects
+        # encrypted reasoning blocks on every turn but excludes them from
+        # usage.input_tokens. Compaction's threshold check needs the count
+        # added back. Chat Completions is unaffected.
+        return self.responses_api
 
     async def reasoning_summaries(self) -> bool:
         # validate that reasoning summaries are supported for this account

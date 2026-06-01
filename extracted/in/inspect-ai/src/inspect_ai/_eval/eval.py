@@ -1,4 +1,4 @@
-import copy
+import contextlib
 import logging
 import os
 import sys
@@ -10,6 +10,7 @@ import anyio
 from anyio.abc import TaskGroup
 
 from inspect_ai._util.notgiven import NOT_GIVEN, NotGiven
+from inspect_ai.agent._acp.server import acp_server as _acp_server
 from inspect_ai.agent._agent import Agent, is_agent
 from inspect_ai.agent._as_solver import as_solver
 from inspect_ai.model._model_config import model_roles_config_to_model_roles
@@ -27,15 +28,18 @@ from typing_extensions import Unpack
 from inspect_ai._cli.util import parse_cli_args
 from inspect_ai._display.core.active import active_display as active_task_display
 from inspect_ai._display.core.active import display as task_display
+from inspect_ai._eval.task.scan import Scanners, scan_context
 from inspect_ai._util.asyncfiles import with_async_fs
 from inspect_ai._util.config import resolve_args
 from inspect_ai._util.constants import (
+    DEFAULT_EPOCHS,
     DEFAULT_LOG_FORMAT,
     DEFAULT_LOG_SHARED,
     JSON_LOG_FORMAT,
 )
 from inspect_ai._util.error import PrerequisiteError
 from inspect_ai._util.file import absolute_file_path, filesystem
+from inspect_ai._util.log_context import set_run_shape
 from inspect_ai._util.logger import warn_once
 from inspect_ai._util.platform import platform_init
 from inspect_ai._util.registry import registry_lookup, registry_package_name
@@ -59,20 +63,21 @@ from inspect_ai.model._model import (
     get_model,
     init_active_model,
     init_model_roles,
-    init_model_usage,
-    init_role_usage,
     resolve_models,
 )
 from inspect_ai.scorer._reducer import reducer_log_names
 from inspect_ai.solver._chain import chain
 from inspect_ai.solver._solver import Solver, SolverSpec
 from inspect_ai.util import SandboxEnvironmentType
+from inspect_ai.util._checkpoint import CheckpointConfig
+from inspect_ai.util._concurrency import AdaptiveConcurrency
 from inspect_ai.util._display import (
     DisplayType,
     display_type,
     display_type_initialized,
     init_display_type,
 )
+from inspect_ai.util._notify import build_apprise, init_apprise
 
 from .context import init_eval_context
 from .loader import resolve_tasks
@@ -93,12 +98,16 @@ def eval(
     task_args: dict[str, Any] | str = dict(),
     sandbox: SandboxEnvironmentType | None = None,
     sandbox_cleanup: bool | None = None,
+    checkpoint: CheckpointConfig | None = None,
+    acp_server: bool | int | str | None = None,
     solver: Solver | SolverSpec | Agent | list[Solver] | None = None,
+    scanner: "Scanners | None" = None,
     tags: list[str] | None = None,
     metadata: dict[str, Any] | None = None,
     trace: bool | None = None,
     display: DisplayType | None = None,
     approval: str | list[ApprovalPolicy] | ApprovalPolicyConfig | None = None,
+    notification: bool | str | None = None,
     log_level: str | None = None,
     log_level_transcript: str | None = None,
     log_dir: str | None = None,
@@ -110,6 +119,7 @@ def eval(
     fail_on_error: bool | float | None = None,
     continue_on_fail: bool | None = None,
     retry_on_error: int | None = None,
+    score_on_error: bool | None = None,
     debug_errors: bool | None = None,
     message_limit: int | None = None,
     token_limit: int | None = None,
@@ -134,6 +144,7 @@ def eval(
     score: bool = True,
     score_display: bool | None = None,
     eval_set_id: str | None = None,
+    scan_id: str | None = None,
     task_retry_attempts: int | None = None,
     **kwargs: Unpack[GenerateConfigArgs],
 ) -> list[EvalLog]:
@@ -156,8 +167,16 @@ def eval(
             (or optionally a str or tuple with a shorthand spec)
         sandbox_cleanup: Cleanup sandbox environments after task completes
             (defaults to True)
+        checkpoint: Checkpoint configuration for this eval. Overrides
+            any task- or sample-level `checkpoint` when set.
+        acp_server: Expose this eval over an Agent Client Protocol server.
+            `True` enables a default AF_UNIX socket at `<inspect_data_dir>/acp/<run_id>.sock`;
+            an integer binds a TCP loopback port; a string is taken as a custom
+            UNIX socket path; `None` (default) does not start an ACP server.
         solver: Alternative solver for task(s).
             Optional (uses task solver by default).
+        scanner: Scanner(s) to apply to each sample's transcript after the
+            sample completes.
         tags: Tags to associate with this evaluation run.
         metadata: Metadata to associate with this evaluation run.
         trace: Trace message interactions with evaluated model to terminal.
@@ -165,6 +184,14 @@ def eval(
         approval: Tool use approval policies.
             Either a path to an approval policy config file, an ApprovalPolicyConfig, or a list of approval policies.
             Defaults to no approval policy.
+        notification: Enable out-of-band notifications when a human-in-the-loop
+            interaction (`ask_user`, human approval) is posted. Pass `True` to
+            send via the URL(s) in the `INSPECT_EVAL_NOTIFICATION` environment
+            variable (single URL, comma-separated list, or path to an Apprise
+            config file). Alternatively pass a path to an Apprise YAML/text
+            config file. URLs are not accepted directly so secrets never end up
+            in source code, shell history, process listings, or eval logs.
+            Requires the `apprise` package.
         log_level: Level for logging to the console: "debug", "http", "sandbox",
             "info", "warning", "error", "critical", or "notset" (defaults to "warning")
         log_level_transcript: Level for logging to the log file (defaults to "info")
@@ -186,6 +213,9 @@ def eval(
             `False` to fail eval immediately when the `fail_on_error` condition is met (default).
         retry_on_error: Number of times to retry samples if they encounter errors
             (by default, no retries occur).
+        score_on_error: Score samples that error rather than failing the eval mid-run.
+            Errors still count toward the `fail_on_error` threshold for marking the eval
+            log as 'error'. Only takes effect after retries (if any) are exhausted.
         debug_errors: Raise task errors (rather than logging them)
             so they can be debugged (defaults to False).
         message_limit: Limit on total messages used for each sample.
@@ -228,6 +258,7 @@ def eval(
         score: Score output (defaults to True)
         score_display: Show scoring metrics in realtime (defaults to True)
         eval_set_id: Unique id for eval set (this is passed from `eval_set()` and should not be specified directly).
+        scan_id: Override the scan-dir identifier (defaults to `eval_set_id` or `run_id`). Set by `eval_retry` to reuse the original eval's scan dir.
         task_retry_attempts: Number of times to retry tasks (defaults to 0)
         **kwargs: Model generation options.
 
@@ -253,10 +284,13 @@ def eval(
                 task_args=task_args,
                 sandbox=sandbox,
                 sandbox_cleanup=sandbox_cleanup,
+                checkpoint=checkpoint,
                 solver=solver,
+                scanner=scanner,
                 tags=tags,
                 metadata=metadata,
                 approval=approval,
+                notification=notification,
                 log_level=log_level,
                 log_level_transcript=log_level_transcript,
                 log_dir=log_dir,
@@ -268,6 +302,7 @@ def eval(
                 fail_on_error=fail_on_error,
                 continue_on_fail=continue_on_fail,
                 retry_on_error=retry_on_error,
+                score_on_error=score_on_error,
                 debug_errors=debug_errors,
                 message_limit=message_limit,
                 token_limit=token_limit,
@@ -291,7 +326,9 @@ def eval(
                 run_samples=run_samples,
                 score=score,
                 score_display=score_display,
+                acp_server=acp_server,
                 eval_set_id=eval_set_id,
+                scan_id=scan_id,
                 task_retry_attempts=task_retry_attempts,
                 **kwargs,
             )
@@ -302,7 +339,20 @@ def eval(
             else:
                 raise
 
-    return task_display().run_task_app(with_async_fs(run_task_app))
+    result = task_display().run_task_app(with_async_fs(run_task_app))
+
+    # print scan status after the task display has exited so the
+    # message lands AFTER the panel + `Log:` line. Only when eval owns
+    # the scan lifecycle (standalone call, not nested in eval_set).
+    if scanner is not None and eval_set_id is None:
+        from inspect_ai._eval.task.scan import print_scan_status
+
+        resolved_log_dir = absolute_file_path(
+            log_dir if log_dir else os.environ.get("INSPECT_LOG_DIR", "./logs")
+        )
+        print_scan_status(resolved_log_dir, scanner)
+
+    return result
 
 
 # single call to eval_async at a time
@@ -318,10 +368,14 @@ async def eval_async(
     task_args: dict[str, Any] | str = dict(),
     sandbox: SandboxEnvironmentType | None = None,
     sandbox_cleanup: bool | None = None,
+    checkpoint: CheckpointConfig | None = None,
+    acp_server: bool | int | str | None = None,
     solver: Solver | SolverSpec | Agent | list[Solver] | None = None,
+    scanner: "Scanners | None" = None,
     tags: list[str] | None = None,
     metadata: dict[str, Any] | None = None,
     approval: str | list[ApprovalPolicy] | ApprovalPolicyConfig | None = None,
+    notification: bool | str | None = None,
     log_level: str | None = None,
     log_level_transcript: str | None = None,
     log_dir: str | None = None,
@@ -333,6 +387,7 @@ async def eval_async(
     fail_on_error: bool | float | None = None,
     continue_on_fail: bool | None = None,
     retry_on_error: int | None = None,
+    score_on_error: bool | None = None,
     debug_errors: bool | None = None,
     message_limit: int | None = None,
     token_limit: int | None = None,
@@ -357,6 +412,7 @@ async def eval_async(
     score: bool = True,
     score_display: bool | None = None,
     eval_set_id: str | None = None,
+    scan_id: str | None = None,
     task_retry_attempts: int | None = None,
     **kwargs: Unpack[GenerateConfigArgs],
 ) -> list[EvalLog]:
@@ -374,12 +430,26 @@ async def eval_async(
         task_args: Task creation arguments (as a dictionary or as a path to a JSON or YAML config file)
         sandbox: Sandbox environment type (or optionally a str or tuple with a shorthand spec)
         sandbox_cleanup: Cleanup sandbox environments after task completes (defaults to True)
+        checkpoint: Checkpoint configuration for this eval. Overrides any task- or sample-level `checkpoint` when set.
+        acp_server: Expose this eval over an Agent Client Protocol server.
+            `True` enables a default AF_UNIX socket at `<inspect_data_dir>/acp/<run_id>.sock`;
+            an integer binds a TCP loopback port; a string is taken as a custom
+            UNIX socket path; `None` (default) does not start an ACP server.
         solver: Alternative solver for task(s).  Optional (uses task solver by default).
+        scanner: Scanner(s) to apply to each sample's transcript after the sample completes.
         tags: Tags to associate with this evaluation run.
         metadata: Metadata to associate with this evaluation run.
         approval: Tool use approval policies.
             Either a path to an approval policy config file, an ApprovalPolicyConfig, or a list of approval policies.
             Defaults to no approval policy.
+        notification: Enable out-of-band notifications when a human-in-the-loop
+            interaction (`ask_user`, human approval) is posted. Pass `True` to
+            send via the URL(s) in the `INSPECT_EVAL_NOTIFICATION` environment
+            variable (single URL, comma-separated list, or path to an Apprise
+            config file). Alternatively pass a path to an Apprise YAML/text
+            config file. URLs are not accepted directly so secrets never end up
+            in source code, shell history, process listings, or eval logs.
+            Requires the `apprise` package.
         log_level: Level for logging to the console: "debug", "http", "sandbox",
             "info", "warning", "error", "critical", or "notset" (defaults to "warning")
         log_level_transcript: Level for logging to the log file (defaults to "info")
@@ -397,6 +467,9 @@ async def eval_async(
             `False` to fail eval immediately when the `fail_on_error` condition is met (default).
         retry_on_error: Number of times to retry samples if they encounter errors
             (by default, no retries occur).
+        score_on_error: Score samples that error rather than failing the eval mid-run.
+            Errors still count toward the `fail_on_error` threshold for marking the eval
+            log as 'error'. Only takes effect after retries (if any) are exhausted.
         debug_errors: Raise task errors (rather than logging them) so they can be debugged (defaults to False).
         message_limit: Limit on total messages used for each sample.
         token_limit: Limit on total tokens used for each sample.
@@ -430,6 +503,7 @@ async def eval_async(
         score: Score output (defaults to True)
         score_display: Show scoring metrics in realtime (defaults to True)
         eval_set_id: Unique id for eval set (this is passed from `eval_set()` and should not be specified directly).
+        scan_id: Override the scan-dir identifier (defaults to `eval_set_id` or `run_id`). Set by `eval_retry` to reuse the original eval's scan dir.
         task_retry_attempts: Number of times to retry tasks (defaults to 0)
         **kwargs: Model generation options.
 
@@ -451,10 +525,13 @@ async def eval_async(
                 task_args=task_args,
                 sandbox=sandbox,
                 sandbox_cleanup=sandbox_cleanup,
+                checkpoint=checkpoint,
                 solver=solver,
+                scanner=scanner,
                 tags=tags,
                 metadata=metadata,
                 approval=approval,
+                notification=notification,
                 log_level=log_level,
                 log_level_transcript=log_level_transcript,
                 log_dir=log_dir,
@@ -466,6 +543,7 @@ async def eval_async(
                 fail_on_error=fail_on_error,
                 continue_on_fail=continue_on_fail,
                 retry_on_error=retry_on_error,
+                score_on_error=score_on_error,
                 debug_errors=debug_errors,
                 message_limit=message_limit,
                 token_limit=token_limit,
@@ -489,7 +567,9 @@ async def eval_async(
                 run_samples=run_samples,
                 score=score,
                 score_display=score_display,
+                acp_server=acp_server,
                 eval_set_id=eval_set_id,
+                scan_id=scan_id,
                 task_retry_attempts=task_retry_attempts,
                 **kwargs,
             )
@@ -521,10 +601,14 @@ async def _eval_async_inner(
     task_args: dict[str, Any] | str = dict(),
     sandbox: SandboxEnvironmentType | None = None,
     sandbox_cleanup: bool | None = None,
+    checkpoint: CheckpointConfig | None = None,
+    acp_server: bool | int | str | None = None,
     solver: Solver | SolverSpec | Agent | list[Solver] | None = None,
+    scanner: "Scanners | None" = None,
     tags: list[str] | None = None,
     metadata: dict[str, Any] | None = None,
     approval: str | list[ApprovalPolicy] | ApprovalPolicyConfig | None = None,
+    notification: bool | str | None = None,
     log_level: str | None = None,
     log_level_transcript: str | None = None,
     log_dir: str | None = None,
@@ -536,6 +620,7 @@ async def _eval_async_inner(
     fail_on_error: bool | float | None = None,
     continue_on_fail: bool | None = None,
     retry_on_error: int | None = None,
+    score_on_error: bool | None = None,
     debug_errors: bool | None = None,
     message_limit: int | None = None,
     token_limit: int | None = None,
@@ -560,6 +645,7 @@ async def _eval_async_inner(
     score: bool = True,
     score_display: bool | None = None,
     eval_set_id: str | None = None,
+    scan_id: str | None = None,
     task_retry_attempts: int | None = None,
     **kwargs: Unpack[GenerateConfigArgs],
 ) -> list[EvalLog]:
@@ -619,6 +705,8 @@ async def _eval_async_inner(
             approval,
             sandbox,
             sample_shuffle,
+            checkpoint,
+            notification,
         )
 
         # warn and return empty string if we resolved no tasks
@@ -708,9 +796,11 @@ async def _eval_async_inner(
             if epochs_reducer is not None
             else None,
             approval=config_from_approval_policies(approval) if approval else None,
+            notification=notification,
             fail_on_error=fail_on_error,
             continue_on_fail=continue_on_fail,
             retry_on_error=retry_on_error,
+            score_on_error=score_on_error,
             message_limit=message_limit,
             token_limit=token_limit,
             cost_limit=cost_limit,
@@ -729,6 +819,7 @@ async def _eval_async_inner(
             log_buffer=log_buffer,
             log_shared=log_shared,
             score_display=score_display,
+            acp_server=acp_server,
         )
 
         # run tasks - 2 codepaths, one for the traditional task at a time
@@ -737,64 +828,106 @@ async def _eval_async_inner(
         task_definitions = len(resolved_tasks) // len(model)
         parallel = 1 if (task_definitions == 1 or max_tasks is None) else max_tasks
 
+        # set run shape for log record enhancement
+        if eval_config.epochs is not None:
+            run_max_epochs = eval_config.epochs
+        else:
+            run_max_epochs = max(
+                (t.task.epochs or DEFAULT_EPOCHS for t in resolved_tasks),
+                default=DEFAULT_EPOCHS,
+            )
+        set_run_shape(
+            (t.task.name for t in resolved_tasks),
+            run_max_epochs,
+        )
         await emit_run_start(eval_set_id, run_id, resolved_tasks)
 
-        # single task definition (could be multi-model) or max_tasks capped to 1
-        if parallel == 1:
-            results: list[EvalLog] = []
-            for sequence in sorted(set(t.sequence for t in resolved_tasks)):
-                task_batch = list(
-                    filter(lambda t: t.sequence == sequence, resolved_tasks)
-                )
-                results.extend(
-                    await eval_run(
+        # scan_id is whichever the caller passed explicitly (e.g. eval_retry
+        # forwards the prior log's scan_id so the scan dir is reused), else
+        # the eval_set_id (when nested inside `eval_set`), else this run's
+        # uuid for a standalone eval. eval_set already wraps the run loop
+        # in scan_context, so skip the wrap here when eval_set_id is set
+        # to avoid double init/finalize.
+        scan_id = scan_id or eval_set_id or run_id
+        if scanner is not None and eval_set_id is None:
+            scan_cm: contextlib.AbstractContextManager[None] = scan_context(
+                scanner, scan_id=scan_id, log_dir=log_dir
+            )
+        else:
+            scan_cm = contextlib.nullcontext()
+
+        # Stand up the optional ACP server for this eval's run_id. When
+        # `acp_server` (the EvalConfig field / CLI flag value) is falsy
+        # the context manager yields None and binds nothing. The server
+        # lives for the duration of the eval_run loop so any agent that
+        # opens an `acp_session()` can be reached by external clients
+        # via the discovery file in `<inspect_data_dir>/acp/`. Nested
+        # rather than parenthesized because ``scan_cm`` is a sync
+        # context manager and Python disallows mixing in the comma form.
+        async with _acp_server(eval_id=run_id, transport=acp_server):
+            with scan_cm:
+                # single task definition (could be multi-model) or max_tasks capped to 1
+                if parallel == 1:
+                    results: list[EvalLog] = []
+                    for sequence in sorted(set(t.sequence for t in resolved_tasks)):
+                        task_batch = list(
+                            filter(lambda t: t.sequence == sequence, resolved_tasks)
+                        )
+                        results.extend(
+                            await eval_run(
+                                eval_set_id=eval_set_id,
+                                run_id=run_id,
+                                tasks=task_batch,
+                                parallel=parallel,
+                                eval_config=eval_config,
+                                eval_sandbox=sandbox,
+                                eval_checkpoint=checkpoint,
+                                recorder=recorder,
+                                header_only=log_header_only,
+                                epochs_reducer=epochs_reducer,
+                                solver=solver,
+                                scanner=scanner,
+                                scan_id=scan_id,
+                                tags=tags,
+                                metadata=metadata,
+                                run_samples=run_samples,
+                                score=score,
+                                debug_errors=debug_errors is True,
+                                task_retry_attempts=task_retry_attempts,
+                                **kwargs,
+                            )
+                        )
+                        # exit the loop if there was a cancellation
+                        if any([result.status == "cancelled" for result in results]):
+                            break
+
+                    # return list of eval logs
+                    logs = EvalLogs(results)
+
+                # multiple task definitions AND tasks not capped at 1
+                else:
+                    results = await eval_run(
                         eval_set_id=eval_set_id,
                         run_id=run_id,
-                        tasks=task_batch,
+                        tasks=resolved_tasks,
                         parallel=parallel,
                         eval_config=eval_config,
                         eval_sandbox=sandbox,
+                        eval_checkpoint=checkpoint,
                         recorder=recorder,
                         header_only=log_header_only,
                         epochs_reducer=epochs_reducer,
                         solver=solver,
+                        scanner=scanner,
+                        scan_id=scan_id,
                         tags=tags,
                         metadata=metadata,
                         run_samples=run_samples,
                         score=score,
-                        debug_errors=debug_errors is True,
                         task_retry_attempts=task_retry_attempts,
                         **kwargs,
                     )
-                )
-                # exit the loop if there was a cancellation
-                if any([result.status == "cancelled" for result in results]):
-                    break
-
-            # return list of eval logs
-            logs = EvalLogs(results)
-
-        # multiple task definitions AND tasks not capped at 1
-        else:
-            results = await eval_run(
-                eval_set_id=eval_set_id,
-                run_id=run_id,
-                tasks=resolved_tasks,
-                parallel=parallel,
-                eval_config=eval_config,
-                eval_sandbox=sandbox,
-                recorder=recorder,
-                header_only=log_header_only,
-                epochs_reducer=epochs_reducer,
-                solver=solver,
-                tags=tags,
-                metadata=metadata,
-                run_samples=run_samples,
-                score=score,
-                task_retry_attempts=task_retry_attempts,
-                **kwargs,
-            )
-            logs = EvalLogs(results)
+                    logs = EvalLogs(results)
 
         # cleanup sample buffers if required
         cleanup_sample_buffers(log_dir)
@@ -830,6 +963,7 @@ def eval_retry(
     fail_on_error: bool | float | None = None,
     continue_on_fail: bool | None = None,
     retry_on_error: int | None = None,
+    score_on_error: bool | None = None,
     debug_errors: bool | None = None,
     log_samples: bool | None = None,
     log_realtime: bool | None = None,
@@ -840,10 +974,14 @@ def eval_retry(
     log_shared: bool | int | None = None,
     score: bool = True,
     score_display: bool | None = None,
+    acp_server: bool | int | str | None = None,
+    scanner: "Scanners | None" = None,
     max_retries: int | None = None,
     timeout: int | None = None,
     attempt_timeout: int | None = None,
     max_connections: int | None = None,
+    adaptive_connections: bool | int | AdaptiveConcurrency | None = None,
+    checkpoint: CheckpointConfig | None = None,
 ) -> list[EvalLog]:
     """Retry a previously failed evaluation task.
 
@@ -876,6 +1014,9 @@ def eval_retry(
             `False` to fail eval immediately when the `fail_on_error` condition is met (default).
         retry_on_error: Number of times to retry samples if they encounter errors
             (by default, no retries occur).
+        score_on_error: Score samples that error rather than failing the eval mid-run.
+            Errors still count toward the `fail_on_error` threshold for marking the eval
+            log as 'error'. Only takes effect after retries (if any) are exhausted.
         debug_errors: Raise task errors (rather than logging them)
             so they can be debugged (defaults to False).
         log_samples: Log detailed samples and scores (defaults to True)
@@ -892,6 +1033,16 @@ def eval_retry(
             to sync every 10 seconds, otherwise an integer to sync every `n` seconds.
         score: Score output (defaults to True)
         score_display: Show scoring metrics in realtime (defaults to True)
+        acp_server: Override the original eval's ACP server transport on retry.
+            `True` enables a default AF_UNIX socket; an integer binds a TCP
+            loopback port; a string is taken as a custom UNIX socket path;
+            `None` (default) replays whatever transport (or no transport) was
+            persisted in the original log's `EvalConfig.acp_server`.
+        scanner: Scanner(s) to apply to each sample's transcript after the sample
+            completes. When provided, the existing scan dir from the original
+            eval (keyed by its `eval_set_id` or `run_id`) is reused — same resume
+            contract as `eval_set`: matching scanner config attaches, divergent
+            config raises `PrerequisiteError`.
         max_retries:
             Maximum number of times to retry request.
         timeout:
@@ -900,6 +1051,19 @@ def eval_retry(
             Timeout (in seconds) for any given attempt (if exceeded, will abandon attempt and retry according to max_retries).
         max_connections:
             Maximum number of concurrent connections to Model API (default is per Model API)
+        adaptive_connections:
+            Adaptive concurrency for Model API connections. Defaults to enabled
+            (resolves to `AdaptiveConcurrency()` defaults: min=4, start=20, max=100).
+            Pass `False` to opt out (uses static concurrency), an integer `N` as
+            shorthand for `AdaptiveConcurrency(max=N)`, or an `AdaptiveConcurrency`
+            to fully customize bounds and tuning (cooldown_seconds, decrease_factor,
+            scale_up_percent). An explicit `max_connections` or `batch=True`
+            takes precedence and uses static concurrency.
+        checkpoint:
+            Checkpoint configuration for this retry. Must match the config
+            used on the original eval for resume detection to find the
+            checkpoint files (the original `--checkpoint` is not recorded in the
+            log file).
 
     Returns:
         List of EvalLog (one for each task)
@@ -925,6 +1089,7 @@ def eval_retry(
             fail_on_error=fail_on_error,
             continue_on_fail=continue_on_fail,
             retry_on_error=retry_on_error,
+            score_on_error=score_on_error,
             debug_errors=debug_errors,
             log_samples=log_samples,
             log_realtime=log_realtime,
@@ -935,13 +1100,30 @@ def eval_retry(
             log_shared=log_shared,
             score=score,
             score_display=score_display,
+            acp_server=acp_server,
+            scanner=scanner,
             max_retries=max_retries,
             timeout=timeout,
             attempt_timeout=attempt_timeout,
             max_connections=max_connections,
+            adaptive_connections=adaptive_connections,
+            checkpoint=checkpoint,
         )
 
-    return task_display().run_task_app(with_async_fs(run_task_app))
+    result = task_display().run_task_app(with_async_fs(run_task_app))
+
+    # print scan status after the task display has exited so the
+    # message lands AFTER the panel + `Log:` line. Matches `eval` /
+    # `eval_set`'s trailing summary.
+    if scanner is not None:
+        from inspect_ai._eval.task.scan import print_scan_status
+
+        resolved_log_dir = absolute_file_path(
+            log_dir if log_dir else os.environ.get("INSPECT_LOG_DIR", "./logs")
+        )
+        print_scan_status(resolved_log_dir, scanner)
+
+    return result
 
 
 async def eval_retry_async(
@@ -958,6 +1140,7 @@ async def eval_retry_async(
     fail_on_error: bool | float | None = None,
     continue_on_fail: bool | None = None,
     retry_on_error: int | None = None,
+    score_on_error: bool | None = None,
     debug_errors: bool | None = None,
     log_samples: bool | None = None,
     log_realtime: bool | None = None,
@@ -968,10 +1151,14 @@ async def eval_retry_async(
     log_shared: bool | int | None = None,
     score: bool = True,
     score_display: bool | None = None,
+    acp_server: bool | int | str | None = None,
+    scanner: "Scanners | None" = None,
     max_retries: int | None = None,
     timeout: int | None = None,
     attempt_timeout: int | None = None,
     max_connections: int | None = None,
+    adaptive_connections: bool | int | AdaptiveConcurrency | None = None,
+    checkpoint: CheckpointConfig | None = None,
 ) -> list[EvalLog]:
     """Retry a previously failed evaluation task.
 
@@ -997,6 +1184,9 @@ async def eval_retry_async(
             `False` to fail eval immediately when the `fail_on_error` condition is met (default).
         retry_on_error: Number of times to retry samples if they encounter errors
            (by default, no retries occur).
+        score_on_error: Score samples that error rather than failing the eval mid-run.
+            Errors still count toward the `fail_on_error` threshold for marking the eval
+            log as 'error'. Only takes effect after retries (if any) are exhausted.
         debug_errors: Raise task errors (rather than logging them)
            so they can be debugged (defaults to False).
         log_samples: Log detailed samples and scores (defaults to True)
@@ -1012,10 +1202,22 @@ async def eval_retry_async(
             additional syncing of realtime log data for Inspect View.
         score: Score output (defaults to True)
         score_display: Show scoring metrics in realtime (defaults to True)
+        acp_server: Override the original eval's ACP server transport on retry.
+            `True` enables a default AF_UNIX socket; an integer binds a TCP
+            loopback port; a string is taken as a custom UNIX socket path;
+            `None` (default) replays whatever transport (or no transport) was
+            persisted in the original log's `EvalConfig.acp_server`.
+        scanner: Scanner(s) to apply to each sample's transcript after the sample
+            completes. When provided, the existing scan dir from the original
+            eval (keyed by its `eval_set_id` or `run_id`) is reused — same resume
+            contract as `eval_set`: matching scanner config attaches, divergent
+            config raises `PrerequisiteError`.
         max_retries: Maximum number of times to retry request.
         timeout: Request timeout (in seconds)
         attempt_timeout: Timeout (in seconds) for any given attempt (if exceeded, will abandon attempt and retry according to max_retries).
         max_connections: Maximum number of concurrent connections to Model API (default is per Model API)
+        adaptive_connections: Adaptive concurrency for Model API connections. Defaults to enabled (resolves to `AdaptiveConcurrency()` defaults: min=4, start=20, max=100). Pass `False` to opt out, an integer `N` as shorthand for `AdaptiveConcurrency(max=N)`, or an `AdaptiveConcurrency` to fully customize bounds and tuning (cooldown_seconds, decrease_factor, scale_up_percent). An explicit `max_connections` or `batch=True` takes precedence and uses static concurrency.
+        checkpoint: Checkpoint configuration for this retry. Must match the config used on the original eval for resume detection to find the checkpoint files (the original `--checkpoint` is not recorded in the log file).
 
     Returns:
         List of EvalLog (one for each task)
@@ -1135,6 +1337,7 @@ async def eval_retry_async(
             else None
         )
         approval = eval_log.eval.config.approval
+        notification: bool | str | None = eval_log.eval.config.notification
         message_limit = eval_log.eval.config.message_limit
         token_limit = eval_log.eval.config.token_limit
         time_limit = eval_log.eval.config.time_limit
@@ -1162,6 +1365,11 @@ async def eval_retry_async(
             retry_on_error
             if retry_on_error is not None
             else eval_log.eval.config.retry_on_error
+        )
+        score_on_error = (
+            score_on_error
+            if score_on_error is not None
+            else eval_log.eval.config.score_on_error
         )
         log_samples = (
             log_samples if log_samples is not None else eval_log.eval.config.log_samples
@@ -1200,29 +1408,35 @@ async def eval_retry_async(
             if score_display is not None
             else eval_log.eval.config.score_display
         )
+        # ACP server: explicit retry-time value wins; otherwise replay
+        # whatever transport the original eval used.
+        acp_server = (
+            acp_server if acp_server is not None else eval_log.eval.config.acp_server
+        )
 
         config = eval_log.plan.config
         config.max_retries = max_retries or config.max_retries
         config.timeout = timeout or config.timeout
         config.attempt_timeout = attempt_timeout or config.attempt_timeout
         config.max_connections = max_connections or config.max_connections
+        if adaptive_connections is not None:
+            config.adaptive_connections = adaptive_connections
 
-        # extract previous model usage to continue token counting (make a deep copy to avoid modifying the original log)
-        initial_model_usage = (
-            copy.deepcopy(eval_log.stats.model_usage)
-            if eval_log.stats.model_usage
+        # model_usage / role_usage are rolled forward per-task inside task_run
+        # via PreviousTask.log.stats -> ResolvedTask.initial_*_usage; nothing
+        # to seed here.
+
+        # When the user passes scanners on retry, reuse the prior log's
+        # scan_id so the existing scan dir is attached to (rather than a
+        # fresh one being created from the new run_id). scan_init's
+        # _verify_scanner_config_unchanged then enforces the same resume
+        # contract eval_set uses — matching config attaches, divergent
+        # config raises before any samples run.
+        retry_scan_id = (
+            (eval_log.eval.eval_set_id or eval_log.eval.run_id)
+            if scanner is not None
             else None
         )
-        if initial_model_usage:
-            init_model_usage(initial_model_usage)
-
-        initial_role_usage = (
-            copy.deepcopy(eval_log.stats.role_usage)
-            if eval_log.stats.role_usage
-            else None
-        )
-        if initial_role_usage:
-            init_role_usage(initial_role_usage)
 
         # run the eval
         log = (
@@ -1242,9 +1456,12 @@ async def eval_retry_async(
                 sandbox=eval_log.eval.sandbox,
                 sandbox_cleanup=sandbox_cleanup,
                 solver=solver,
+                scanner=scanner,
+                scan_id=retry_scan_id,
                 tags=tags,
                 metadata=metadata,
                 approval=approval,
+                notification=notification,
                 log_level=log_level,
                 log_level_transcript=log_level_transcript,
                 log_dir=log_dir,
@@ -1256,6 +1473,7 @@ async def eval_retry_async(
                 fail_on_error=fail_on_error,
                 continue_on_fail=continue_on_fail,
                 retry_on_error=retry_on_error,
+                score_on_error=score_on_error,
                 debug_errors=debug_errors,
                 message_limit=message_limit,
                 token_limit=token_limit,
@@ -1274,6 +1492,8 @@ async def eval_retry_async(
                 log_shared=log_shared,
                 score=score,
                 score_display=score_display,
+                checkpoint=checkpoint,
+                acp_server=acp_server,
                 **dict(config),
             )
         )[0]
@@ -1335,6 +1555,8 @@ def eval_resolve_tasks(
     approval: str | list[ApprovalPolicy] | ApprovalPolicyConfig | None,
     sandbox: SandboxEnvironmentType | None,
     sample_shuffle: bool | int | None,
+    eval_checkpoint: CheckpointConfig | None = None,
+    notification: bool | str | None = None,
 ) -> tuple[list[ResolvedTask], list[ApprovalPolicy] | None]:
     # resolve model roles and initialize them in the eval context -- this
     # will enable tasks that reference model roles in their initialization
@@ -1351,13 +1573,22 @@ def eval_resolve_tasks(
             init_active_model(m, config)
             resolved_tasks.extend(
                 resolve_tasks(
-                    tasks, task_args, m, resolved_model_roles, sandbox, sample_shuffle
+                    tasks,
+                    task_args,
+                    m,
+                    resolved_model_roles,
+                    sandbox,
+                    sample_shuffle,
+                    eval_checkpoint,
                 )
             )
 
     if isinstance(approval, str | ApprovalPolicyConfig):
         approval = approval_policies_from_config(approval)
     init_tool_approval(approval)
+
+    # install Apprise notification target for the eval scope
+    init_apprise(build_apprise(notification))
 
     # return tasks and approval
     return resolved_tasks, approval

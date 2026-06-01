@@ -1,8 +1,10 @@
 import os
 import tempfile
+from contextlib import AbstractContextManager
+from dataclasses import dataclass
 from logging import getLogger
 from pathlib import Path
-from typing import Iterator, Literal
+from typing import TYPE_CHECKING, Iterator, Literal
 from zipfile import ZipFile
 
 from pydantic import BaseModel, Field
@@ -10,13 +12,17 @@ from typing_extensions import override
 
 from inspect_ai._display.core.display import TaskDisplayMetric
 from inspect_ai._util.constants import DEFAULT_LOG_SHARED, EVAL_LOG_FORMAT
-from inspect_ai._util.file import FileSystem, basename, dirname, file, filesystem
+from inspect_ai._util.file import FileSystem, basename, dirname, filesystem, open_file
 from inspect_ai._util.json import to_json_safe, to_json_str_safe
 from inspect_ai._util.zipfile import zipfile_compress_kwargs
 from inspect_ai.log._file import read_eval_log
 
 from ..._log import EvalSampleSummary
 from .types import SampleBuffer, SampleData, Samples
+
+if TYPE_CHECKING:
+    from .history import SampleHistory
+
 
 logger = getLogger(__name__)
 
@@ -46,6 +52,84 @@ class Manifest(BaseModel):
     segments: list[Segment] = Field(default_factory=list)
 
 
+def _find_sample(
+    manifest: Manifest, id: str | int, epoch: int
+) -> SampleManifest | None:
+    # `Sample.id` is `int | str` and the type as written round-trips through
+    # the manifest, so the manifest may carry either form. URL handlers always
+    # pass `id` as `str`; compare in string form so both directions match.
+    id_str = str(id)
+    return next(
+        (
+            s
+            for s in manifest.samples
+            if str(s.summary.id) == id_str and s.summary.epoch == epoch
+        ),
+        None,
+    )
+
+
+def segments_for_sample_cursor(
+    manifest: Manifest,
+    sample: SampleManifest,
+    *,
+    after_event_id: int | None,
+    after_attachment_id: int | None,
+    after_message_pool_id: int | None,
+    after_call_pool_id: int | None,
+) -> list[Segment]:
+    """Return segments for `sample` that can contain data newer than the cursors.
+
+    OR-logic across cursor types: a segment qualifies if any of its
+    last_*_id values exceeds the corresponding cursor. Over-inclusive
+    by design; individual items must be post-filtered by the caller.
+
+    Cursors are floored at 0 because SQL AUTOINCREMENT ids start at 1,
+    so a cursor of `None`, `-1`, or `0` are equivalent: "no items of
+    this type seen". A segment whose `last_*_id` is `0` (the writer's
+    "no items of this type in this segment" sentinel; pool dimensions
+    default to `0` per the Segment schema) then evaluates `0 > 0 = False`
+    and drops out. Without the floor the initial client cursor of `-1`
+    keeps every empty-pool segment qualifying forever, and the
+    streaming viewer loops within `max-segments`.
+    """
+    after_event = max(0, after_event_id or 0)
+    after_attachment = max(0, after_attachment_id or 0)
+    after_message_pool = max(0, after_message_pool_id or 0)
+    after_call_pool = max(0, after_call_pool_id or 0)
+
+    by_id = sorted(
+        (s for s in manifest.segments if s.id in sample.segments),
+        key=lambda s: s.id,
+    )
+    return [
+        s
+        for s in by_id
+        if s.last_event_id > after_event
+        or s.last_attachment_id > after_attachment
+        or s.last_message_pool_id > after_message_pool
+        or s.last_call_pool_id > after_call_pool
+    ]
+
+
+@dataclass(frozen=True)
+class SegmentLocation:
+    """Location of a segment zip and the member to read from it."""
+
+    id: int
+    path: str
+    member_name: str
+
+
+@dataclass(frozen=True)
+class PendingSampleSegments:
+    """Segments + manifest metadata needed to fulfill a pending-sample query."""
+
+    segments: list[SegmentLocation]
+    has_more: bool
+    complete: bool
+
+
 MANIFEST = "manifest.json"
 
 
@@ -68,7 +152,7 @@ class SampleBufferFilestore(SampleBuffer):
             self._fs.touch(f"{self._dir}.keep")
 
     def write_manifest(self, manifest: Manifest) -> None:
-        with file(self._manifest_file(), "wb") as f:
+        with open_file(self._manifest_file(), "wb") as f:
             f.write(to_json_safe(manifest))
 
     def write_segment(self, id: int, files: list[SegmentFile]) -> None:
@@ -87,7 +171,7 @@ class SampleBufferFilestore(SampleBuffer):
         # write then move for atomicity
         try:
             with open(name, "rb") as zf:
-                with file(f"{self._dir}{segment_name(id)}", "wb") as f:
+                with open_file(f"{self._dir}{segment_name(id)}", "wb") as f:
                     f.write(zf.read())
                     f.flush()
         finally:
@@ -95,7 +179,7 @@ class SampleBufferFilestore(SampleBuffer):
 
     def read_manifest(self) -> Manifest | None:
         try:
-            with file(self._manifest_file(), "r") as f:
+            with open_file(self._manifest_file(), "r") as f:
                 contents = f.read()
                 return Manifest.model_validate_json(contents)
         except FileNotFoundError:
@@ -105,7 +189,7 @@ class SampleBufferFilestore(SampleBuffer):
         self, id: int, sample_id: str | int, epoch_id: int
     ) -> SampleData:
         segment_file = f"{self._dir}{segment_name(id)}"
-        with file(segment_file, "rb") as f:
+        with open_file(segment_file, "rb") as f:
             with ZipFile(f, mode="r") as zip:
                 with zip.open(segment_file_name(sample_id, epoch_id), "r") as sf:
                     return SampleData.model_validate_json(sf.read())
@@ -130,14 +214,7 @@ class SampleBufferFilestore(SampleBuffer):
             Tuples of (segment_id, SampleData) for each successfully read
             segment, in segment-id order.
         """
-        sample = next(
-            (
-                s
-                for s in manifest.samples
-                if s.summary.id == id and s.summary.epoch == epoch
-            ),
-            None,
-        )
+        sample = _find_sample(manifest, id, epoch)
         if sample is None:
             return
 
@@ -211,19 +288,20 @@ class SampleBufferFilestore(SampleBuffer):
             return None
 
         # find this sample in the manifest
-        sample = next(
-            (
-                sample
-                for sample in manifest.samples
-                if sample.summary.id == id and sample.summary.epoch == epoch
-            ),
-            None,
-        )
+        sample = _find_sample(manifest, id, epoch)
         if sample is None:
             return None
 
-        # determine which segments we need to return in order to
-        # satisfy the cursor parameters
+        segments = segments_for_sample_cursor(
+            manifest,
+            sample,
+            after_event_id=after_event_id,
+            after_attachment_id=after_attachment_id,
+            after_message_pool_id=after_message_pool_id,
+            after_call_pool_id=after_call_pool_id,
+        )
+
+        # defaults for the per-item post-filter below
         after_event_id = after_event_id if after_event_id is not None else -1
         after_attachment_id = (
             after_attachment_id if after_attachment_id is not None else -1
@@ -234,17 +312,6 @@ class SampleBufferFilestore(SampleBuffer):
         after_call_pool_id = (
             after_call_pool_id if after_call_pool_id is not None else -1
         )
-        segments = [
-            segment for segment in manifest.segments if segment.id in sample.segments
-        ]
-        segments = [
-            segment
-            for segment in segments
-            if segment.last_event_id > after_event_id
-            or segment.last_attachment_id > after_attachment_id
-            or segment.last_message_pool_id > after_message_pool_id
-            or segment.last_call_pool_id > after_call_pool_id
-        ]
 
         # collect data from the segments
         try:
@@ -277,6 +344,98 @@ class SampleBufferFilestore(SampleBuffer):
         ]
 
         return sample_data
+
+    @override
+    def sample_event_count(self, id: str | int, epoch: int) -> int:
+        raise NotImplementedError("Sample history is only available for buffer DBs")
+
+    @override
+    def open_sample_history_tail(
+        self,
+        id: str | int,
+        epoch: int,
+        n: int,
+    ) -> AbstractContextManager["SampleHistory"]:
+        raise NotImplementedError("Sample history is only available for buffer DBs")
+
+    @override
+    def open_sample_history_from(
+        self,
+        id: str | int,
+        epoch: int,
+        start: int,
+    ) -> AbstractContextManager["SampleHistory"]:
+        raise NotImplementedError("Sample history is only available for buffer DBs")
+
+    @override
+    def open_sample_history(
+        self,
+        id: str | int,
+        epoch: int,
+    ) -> AbstractContextManager["SampleHistory"]:
+        raise NotImplementedError("Sample history is only available for buffer DBs")
+
+    def get_pending_segments(
+        self,
+        id: str | int,
+        epoch: int,
+        *,
+        after_event_id: int | None = None,
+        after_attachment_id: int | None = None,
+        after_message_pool_id: int | None = None,
+        after_call_pool_id: int | None = None,
+        max_segments: int | None = None,
+        tail: bool = False,
+    ) -> PendingSampleSegments | None:
+        """Return segment locations + metadata for a pending-sample query.
+
+        Returns None when the manifest is missing or the requested sample is
+        not in the manifest. With `max_segments >= 0`, the result is truncated
+        and `has_more` is set; otherwise all eligible segments are returned
+        and `has_more` is False.
+
+        With `tail=True`, the truncation takes the last `max_segments` segments
+        instead of the first; `has_more` is always False so a "show recent then
+        follow" caller can drop in mid-stream without cursor management.
+        """
+        manifest = self.read_manifest()
+        if manifest is None:
+            return None
+
+        sample = _find_sample(manifest, id, epoch)
+        if sample is None:
+            return None
+
+        all_segments = segments_for_sample_cursor(
+            manifest,
+            sample,
+            after_event_id=after_event_id,
+            after_attachment_id=after_attachment_id,
+            after_message_pool_id=after_message_pool_id,
+            after_call_pool_id=after_call_pool_id,
+        )
+        if max_segments is not None and max_segments >= 0:
+            segments = (
+                all_segments[-max_segments:] if tail else all_segments[:max_segments]
+            )
+        else:
+            segments = all_segments
+        has_more = False if tail else len(segments) < len(all_segments)
+
+        member_name = segment_file_name(sample.summary.id, sample.summary.epoch)
+        locations = [
+            SegmentLocation(
+                id=seg.id,
+                path=f"{self._dir}{segment_name(seg.id)}",
+                member_name=member_name,
+            )
+            for seg in segments
+        ]
+        return PendingSampleSegments(
+            segments=locations,
+            has_more=has_more,
+            complete=sample.summary.completed or False,
+        )
 
     def _manifest_file(self) -> str:
         return f"{self._dir}{MANIFEST}"

@@ -1,5 +1,5 @@
 import types
-from typing import Any
+from typing import Any, cast
 from unittest.mock import AsyncMock, create_autospec
 
 import pytest
@@ -112,6 +112,91 @@ def test_anthropic_extra_headers_not_mutated_across_calls() -> None:
         }
 
 
+_FULL_THINKING_BETA = "dev-full-thinking-2025-05-14"
+
+
+def test_anthropic_full_thinking_removes_display_adaptive() -> None:
+    """The dev-full-thinking beta only takes effect when 'display' is absent.
+
+    See the Anthropic thinking.display param: it defaults to 'omitted' on 4.7
+    and 'summarized' elsewhere, but the dev-full-thinking beta is ignored unless
+    the param is omitted entirely. So when that beta is present we must drop it.
+    """
+    api = AnthropicAPI(
+        model_name="claude-opus-4-7", api_key="test-key", betas=[_FULL_THINKING_BETA]
+    )
+    config = GenerateConfig(max_tokens=64, reasoning_effort="high")
+    params, _extra_body, _headers, betas = api.completion_config(config)
+    assert _FULL_THINKING_BETA in betas
+    assert params["thinking"]["type"] == "adaptive"
+    assert "display" not in params["thinking"]
+
+
+def test_anthropic_full_thinking_removes_display_budget() -> None:
+    """Same removal applies on the pre-4.6 extended-thinking (budget) path."""
+    api = AnthropicAPI(
+        model_name="claude-sonnet-4-6", api_key="test-key", betas=[_FULL_THINKING_BETA]
+    )
+    config = GenerateConfig(max_tokens=64, reasoning_tokens=2048)
+    params, _extra_body, _headers, _betas = api.completion_config(config)
+    assert params["thinking"]["type"] == "enabled"
+    assert "display" not in params["thinking"]
+
+
+def test_anthropic_thinking_keeps_display_without_full_thinking_beta() -> None:
+    """Without the beta, 'display' stays 'summarized' on both thinking paths."""
+    adaptive = AnthropicAPI(model_name="claude-opus-4-7", api_key="test-key")
+    params, _e, _h, _b = adaptive.completion_config(
+        GenerateConfig(max_tokens=64, reasoning_effort="high")
+    )
+    assert params["thinking"]["display"] == "summarized"
+
+    budget = AnthropicAPI(model_name="claude-sonnet-4-6", api_key="test-key")
+    params, _e, _h, _b = budget.completion_config(
+        GenerateConfig(max_tokens=64, reasoning_tokens=2048)
+    )
+    assert params["thinking"]["display"] == "summarized"
+
+
+@pytest.mark.parametrize(
+    "header_key", ["anthropic_beta", "anthropic-beta", "Anthropic-Beta"]
+)
+def test_anthropic_full_thinking_beta_via_extra_header(header_key: str) -> None:
+    """The beta is honored via extra_headers in both header spellings.
+
+    The underscore form is Inspect's convention; the hyphen form is the literal
+    Anthropic header name. Both must be parsed into betas so the beta is both
+    detected (for display removal) and forwarded, rather than silently dropped.
+    """
+    api = AnthropicAPI(model_name="claude-opus-4-7", api_key="test-key")
+    config = GenerateConfig(
+        max_tokens=64,
+        reasoning_effort="high",
+        extra_headers={header_key: _FULL_THINKING_BETA},
+    )
+    params, _extra_body, headers, betas = api.completion_config(config)
+    assert _FULL_THINKING_BETA in betas
+    assert header_key not in headers
+    assert "display" not in params["thinking"]
+
+
+def test_anthropic_full_thinking_beta_via_client_default_header() -> None:
+    """The beta is honored when set as a client default header.
+
+    Client default betas (e.g. oauth-2025-04-20) are only merged into the
+    per-request betas list after completion_config returns, so detection must
+    consult them directly rather than relying on the returned betas.
+    """
+    api = AnthropicAPI(model_name="claude-opus-4-7", api_key="test-key")
+    # original casing is preserved by the SDK; detection must be case-insensitive
+    cast(dict[str, str], api.client._custom_headers)["Anthropic-Beta"] = (
+        _FULL_THINKING_BETA
+    )
+    config = GenerateConfig(max_tokens=64, reasoning_effort="high")
+    params, _extra_body, _headers, _betas = api.completion_config(config)
+    assert "display" not in params["thinking"]
+
+
 @skip_if_no_anthropic
 def test_anthropic_should_retry():
     import httpx
@@ -186,6 +271,92 @@ def test_anthropic_should_retry():
         },
     )
     assert not model.api.should_retry(ex)
+
+
+def test_anthropic_handle_bad_request_content_filter_apistatuserror() -> None:
+    """Mid-stream content-filter errors arrive as a plain APIStatusError.
+
+    The Anthropic SDK raises errors that occur after streaming has begun via
+    `_make_status_error`; because the HTTP response was already 200, the SDK
+    can't infer the 400 subclass, so the exception is the base APIStatusError
+    rather than BadRequestError. handle_bad_request() must still convert
+    "content filtering" messages into a content_filter refusal.
+    """
+    import httpx
+    from anthropic import APIStatusError
+
+    from inspect_ai.model._model_output import ModelOutput
+
+    api = AnthropicAPI(model_name="claude-opus-4-6", api_key="test-key")
+    ex = APIStatusError(
+        "Output blocked by content filtering policy",
+        response=httpx.Response(
+            status_code=200,
+            request=httpx.Request("POST", "https://api.anthropic.com/v1/messages"),
+        ),
+        body={
+            "type": "error",
+            "error": {
+                "type": "invalid_request_error",
+                "message": "Output blocked by content filtering policy",
+            },
+        },
+    )
+
+    result = api.handle_bad_request(ex)
+    assert isinstance(result, ModelOutput)
+    assert result.stop_reason == "content_filter"
+
+
+@pytest.mark.anyio
+async def test_anthropic_generate_handles_midstream_content_filter() -> None:
+    """generate() must convert a mid-stream APIStatusError into a content_filter refusal.
+
+    Regression: the outer `except APIStatusError` block previously only handled
+    status_code == 413 and re-raised everything else, so content-filter errors
+    that surfaced mid-stream killed the eval instead of becoming a refusal.
+    """
+    import httpx
+    from anthropic import APIStatusError
+
+    from inspect_ai.model._model_output import ModelOutput
+
+    api = AnthropicAPI(model_name="claude-opus-4-6", api_key="test-key")
+
+    async def fake_perform(
+        request: dict[str, Any],
+        streaming: bool,
+        tools: list[Any],
+        config: GenerateConfig,
+        pending_tool_uses: Any = None,
+        pending_mcp_tool_uses: Any = None,
+    ) -> tuple[dict[str, Any], ModelOutput]:
+        raise APIStatusError(
+            "Output blocked by content filtering policy",
+            response=httpx.Response(
+                status_code=200,
+                request=httpx.Request("POST", "https://api.anthropic.com/v1/messages"),
+            ),
+            body={
+                "type": "error",
+                "error": {
+                    "type": "invalid_request_error",
+                    "message": "Output blocked by content filtering policy",
+                },
+            },
+        )
+
+    api._perform_request_and_continuations = fake_perform  # type: ignore[method-assign]
+
+    output, _model_call = await api.generate(
+        input=[ChatMessageUser(content="hello")],
+        tools=[],
+        tool_choice="auto",
+        config=GenerateConfig(max_tokens=64),
+    )
+
+    assert isinstance(output, ModelOutput)
+    assert output.stop_reason == "content_filter"
 
 
 @skip_if_no_anthropic
@@ -453,6 +624,66 @@ async def test_anthropic_cache_marks_penultimate_block() -> None:
     )
     assert cache_prompt is False
     assert marked(msgs[0]["content"]) == []
+
+
+@pytest.mark.anyio
+@pytest.mark.parametrize(
+    "model_name,expects_top_level_cache_control",
+    [
+        ("claude-sonnet-4-6", True),
+        ("bedrock/us.anthropic.claude-sonnet-4-6", False),
+        ("vertex/claude-sonnet-4-6@20250929", False),
+    ],
+)
+async def test_anthropic_top_level_cache_control_skipped_on_bedrock_vertex(
+    model_name: str, expects_top_level_cache_control: bool
+) -> None:
+    """Skip top-level cache_control on Bedrock/Vertex.
+
+    Per Anthropic's docs, top-level cache_control is only supported on the direct
+    Claude API and Azure AI Foundry; "support for Amazon Bedrock and Google Vertex
+    AI is coming later." Regression: the field was added in PR #3656 without
+    gating those services, breaking Anthropic-on-Bedrock with
+    `cache_control: Extra inputs are not permitted`.
+    ref: https://docs.claude.com/en/docs/build-with-claude/prompt-caching#automatic-caching
+    """
+    import os
+
+    os.environ.setdefault("AWS_REGION", "us-east-1")
+    os.environ.setdefault("AWS_ACCESS_KEY_ID", "fake")
+    os.environ.setdefault("AWS_SECRET_ACCESS_KEY", "fake")
+    os.environ.setdefault("ANTHROPIC_VERTEX_PROJECT_ID", "fake")
+    os.environ.setdefault("ANTHROPIC_VERTEX_REGION", "us-east5")
+
+    api = AnthropicAPI(model_name=model_name, api_key="test-key")
+
+    captured: dict[str, Any] = {}
+
+    from inspect_ai.model._model_output import ModelOutput
+
+    async def fake_perform(
+        request: dict[str, Any],
+        streaming: bool,
+        tools: list[Any],
+        config: GenerateConfig,
+        pending_tool_uses: Any = None,
+        pending_mcp_tool_uses: Any = None,
+    ) -> tuple[dict[str, Any], ModelOutput]:
+        captured.update(request)
+        return {}, ModelOutput.from_content(
+            model=api.service_model_name(), content="ok"
+        )
+
+    api._perform_request_and_continuations = fake_perform  # type: ignore[method-assign]
+
+    await api.generate(
+        input=[ChatMessageUser(content="hello")],
+        tools=[],
+        tool_choice="auto",
+        config=GenerateConfig(cache_prompt=True),
+    )
+
+    assert ("cache_control" in captured) is expects_top_level_cache_control
 
 
 @pytest.mark.anyio

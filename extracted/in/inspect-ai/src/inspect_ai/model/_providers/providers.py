@@ -99,6 +99,15 @@ def vllm() -> type[ModelAPI]:
     return VLLMAPI
 
 
+@modelapi(name="vllm-completions")
+def vllm_completions() -> type[ModelAPI]:
+    validate_openai_client("vLLM Completions API")
+
+    from .vllm_completions import VLLMCompletionsAPI
+
+    return VLLMCompletionsAPI
+
+
 @modelapi(name="cf")
 def cf() -> type[ModelAPI]:
     from .cloudflare import CloudFlareAPI
@@ -337,7 +346,7 @@ def validate_openai_client(feature: str) -> None:
 
 def validate_anthropic_client(feature: str) -> None:
     PACKAGE = "anthropic"
-    MIN_VERSION = "0.96.0"
+    MIN_VERSION = "0.105.0"
 
     # verify we have the package
     try:

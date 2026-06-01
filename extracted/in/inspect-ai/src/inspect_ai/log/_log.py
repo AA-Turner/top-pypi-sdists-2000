@@ -64,6 +64,7 @@ class EvalConfigDefaults(TypedDict):
     epochs_reducer: list[str]
     fail_on_error: bool
     continue_on_fail: bool
+    score_on_error: bool
     sandbox_cleanup: bool
     log_samples: bool
     log_realtime: bool
@@ -77,6 +78,7 @@ def eval_config_defaults() -> EvalConfigDefaults:
         "epochs_reducer": ["mean"],
         "fail_on_error": True,
         "continue_on_fail": False,
+        "score_on_error": False,
         "sandbox_cleanup": True,
         "log_samples": True,
         "log_realtime": True,
@@ -108,6 +110,13 @@ class EvalConfig(BaseModel):
     approval: ApprovalPolicyConfig | None = Field(default=None)
     """Approval policy for tool use."""
 
+    notification: bool | str | None = Field(default=None)
+    """Notification routing for human-in-the-loop interactions.
+
+    `True` means notifications are enabled via the `INSPECT_EVAL_NOTIFICATION`
+    environment variable; a string is a path to an Apprise YAML/text config
+    file. URLs are never stored here to keep secrets out of eval logs."""
+
     fail_on_error: bool | float | None = Field(default=None)
     """Fail eval when sample errors occur.
 
@@ -126,6 +135,14 @@ class EvalConfig(BaseModel):
 
     retry_on_error: int | None = Field(default=None)
     """Number of times to retry samples if they encounter errors."""
+
+    score_on_error: bool | None = Field(default=None)
+    """Score samples that error rather than failing the eval mid-run.
+
+    Errors are still counted toward the `fail_on_error` threshold for marking
+    the eval log as 'error'. Only takes effect after retries (if any) are
+    exhausted.
+    """
 
     message_limit: int | None = Field(default=None)
     """Maximum messages to allow per sample."""
@@ -185,6 +202,17 @@ class EvalConfig(BaseModel):
 
     score_display: bool | None = Field(default=None)
     """Display scoring metrics realtime."""
+
+    acp_server: bool | int | str | None = Field(default=None)
+    """Expose this eval over an Agent Client Protocol server.
+
+    `True` enables a default AF_UNIX socket at
+    `<inspect_data_dir>/acp/<eval_id>.sock`; an integer binds a TCP
+    loopback port (127.0.0.1:<int>); a string of the form `host:port`
+    (e.g. `0.0.0.0:4444`) binds TCP on a specific interface; any other
+    string is taken as a custom AF_UNIX socket path; `None` (default)
+    does not start an ACP server.
+    """
 
     @property
     def max_messages(self) -> int | None:
@@ -479,6 +507,7 @@ class EvalSample(BaseModel):
             metadata=self.metadata,
             scores=self.scores,
             model_usage=self.model_usage,
+            role_usage=self.role_usage,
             started_at=self.started_at,
             completed_at=self.completed_at,
             total_time=self.total_time,
@@ -985,6 +1014,25 @@ def eval_error(
     )
 
 
+class ConnectionLimitChange(BaseModel):
+    """Record of an adaptive-connections controller scale change."""
+
+    timestamp: float
+    """Unix timestamp (seconds since epoch) of the change."""
+
+    model: str
+    """Display name of the model whose connection limit changed (e.g. `openai/gpt-4o`)."""
+
+    old_limit: int
+    """Concurrency limit before the change."""
+
+    new_limit: int
+    """Concurrency limit after the change."""
+
+    reason: Literal["slow_start", "steady_state_up", "rate_limit"]
+    """Why the change occurred."""
+
+
 class EvalStats(BaseModel):
     """Timing and usage statistics."""
 
@@ -999,6 +1047,9 @@ class EvalStats(BaseModel):
 
     role_usage: dict[str, ModelUsage] = Field(default_factory=dict)
     """Model token usage by role for evaluation."""
+
+    connection_limit_history: list[ConnectionLimitChange] = Field(default_factory=list)
+    """History of adaptive-connections controller scale changes (empty unless `adaptive_connections` was enabled)."""
 
     # allow field model_usage
     model_config = ConfigDict(protected_namespaces=())

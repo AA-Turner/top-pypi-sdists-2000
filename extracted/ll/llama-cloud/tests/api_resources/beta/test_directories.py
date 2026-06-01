@@ -9,6 +9,7 @@ import pytest
 
 from llama_cloud import LlamaCloud, AsyncLlamaCloud
 from tests.utils import assert_matches_type
+from llama_cloud._utils import parse_datetime
 from llama_cloud.pagination import SyncPaginatedCursor, AsyncPaginatedCursor
 from llama_cloud.types.beta import (
     DirectoryGetResponse,
@@ -38,8 +39,10 @@ class TestDirectories:
             name="x",
             organization_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             project_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-            data_source_id="data_source_id",
             description="description",
+            expires_at=parse_datetime("2026-05-10T00:00:00Z"),
+            system_metadata={"foo": "bar"},
+            type="user",
         )
         assert_matches_type(DirectoryCreateResponse, directory, path=["response"])
 
@@ -133,13 +136,13 @@ class TestDirectories:
     @parametrize
     def test_method_list_with_all_params(self, client: LlamaCloud) -> None:
         directory = client.beta.directories.list(
-            data_source_id="data_source_id",
             include_deleted=True,
             name="name",
             organization_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             page_size=0,
             page_token="page_token",
             project_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            type="user",
         )
         assert_matches_type(SyncPaginatedCursor[DirectoryListResponse], directory, path=["response"])
 
@@ -290,8 +293,10 @@ class TestAsyncDirectories:
             name="x",
             organization_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             project_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-            data_source_id="data_source_id",
             description="description",
+            expires_at=parse_datetime("2026-05-10T00:00:00Z"),
+            system_metadata={"foo": "bar"},
+            type="user",
         )
         assert_matches_type(DirectoryCreateResponse, directory, path=["response"])
 
@@ -385,13 +390,13 @@ class TestAsyncDirectories:
     @parametrize
     async def test_method_list_with_all_params(self, async_client: AsyncLlamaCloud) -> None:
         directory = await async_client.beta.directories.list(
-            data_source_id="data_source_id",
             include_deleted=True,
             name="name",
             organization_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             page_size=0,
             page_token="page_token",
             project_id="182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+            type="user",
         )
         assert_matches_type(AsyncPaginatedCursor[DirectoryListResponse], directory, path=["response"])
 

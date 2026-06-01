@@ -11,6 +11,7 @@ from inspect_ai._util.file import cleanup_s3_sessions
 from inspect_ai._util.task import task_display_name
 from inspect_ai._util.trace import trace_action
 from inspect_ai.util._anyio import inner_exception
+from inspect_ai.util._checkpoint import CheckpointConfig
 
 if sys.version_info < (3, 11):
     from exceptiongroup import ExceptionGroup
@@ -25,6 +26,7 @@ from inspect_ai._display.core.active import (
     init_task_screen,
 )
 from inspect_ai._display.core.display import CancelType, TaskCancel, TaskSpec
+from inspect_ai._eval.task.scan import Scanners
 from inspect_ai._util.error import PrerequisiteError, exception_message
 from inspect_ai._util.path import chdir
 from inspect_ai.dataset._dataset import Dataset
@@ -38,6 +40,9 @@ from inspect_ai.scorer._reducer import ScoreReducer, reducer_log_names
 from inspect_ai.scorer._reducer.registry import validate_reducer
 from inspect_ai.scorer._scorer import as_scorer_spec
 from inspect_ai.solver._solver import Solver, SolverSpec
+from inspect_ai.util._checkpoint._layout import (
+    eval_checkpoints_dir_from_config,
+)
 from inspect_ai.util._sandbox.environment import (
     SandboxEnvironmentConfigType,
     SandboxEnvironmentSpec,
@@ -54,7 +59,13 @@ from .loader import (
 )
 from .task.log import TaskLogger
 from .task.resolved import ResolvedTask
-from .task.run import TaskRunOptions, eval_log_sample_source, task_run
+from .task.run import (
+    TaskRunOptions,
+    eval_log_sample_source,
+    plan_agent_name,
+    resolve_plan,
+    task_run,
+)
 from .task.sandbox import TaskSandboxEnvironment, resolve_sandbox_for_task_and_sample
 from .task.util import slice_dataset, task_run_dir
 
@@ -68,10 +79,13 @@ async def eval_run(
     parallel: int,
     eval_config: EvalConfig,
     eval_sandbox: SandboxEnvironmentType | None,
+    eval_checkpoint: CheckpointConfig | None,
     recorder: Recorder,
     header_only: bool,
     epochs_reducer: list[ScoreReducer] | None = None,
     solver: Solver | SolverSpec | None = None,
+    scanner: "Scanners | None" = None,
+    scan_id: str | None = None,
     tags: list[str] | None = None,
     metadata: dict[str, Any] | None = None,
     debug_errors: bool = False,
@@ -211,6 +225,12 @@ async def eval_run(
                 else:
                     task.continue_on_fail = task_eval_config.continue_on_fail
 
+                # score_on_error
+                if task_eval_config.score_on_error is None:
+                    task_eval_config.score_on_error = task.score_on_error
+                else:
+                    task.score_on_error = task_eval_config.score_on_error
+
                 # merge eval-level and task-level tags
                 merged_tags = list(set(tags or []) | set(task.tags or [])) or None
 
@@ -253,16 +273,22 @@ async def eval_run(
                         model=resolved_task.model,
                         model_roles=resolved_task.model_roles,
                         sandbox=resolved_task.sandbox,
+                        checkpoint=resolved_task.checkpoint,
+                        eval_checkpoint=eval_checkpoint,
                         logger=logger,
                         eval_wd=eval_wd,
                         config=task_eval_config,
                         solver=eval_solver,
+                        scanner=scanner,
+                        scan_id=scan_id,
                         tags=merged_tags,
                         run_samples=run_samples,
                         score=score,
                         debug_errors=debug_errors,
                         sample_source=resolved_task.sample_source,
                         kwargs=kwargs,
+                        initial_model_usage=resolved_task.initial_model_usage,
+                        initial_role_usage=resolved_task.initial_role_usage,
                     )
                 )
 
@@ -679,7 +705,14 @@ async def run_task_retry_attempts(
                         suffix=None,
                     )
                     sample_source = eval_log_sample_source(
-                        result, failed_log_info, task_options.task.dataset
+                        result,
+                        failed_log_info,
+                        task_options.task.dataset,
+                        eval_checkpoints_dir_from_config(
+                            task_options.logger.location,
+                            task_options.checkpoint,
+                            task_options.eval_checkpoint,
+                        ),
                     )
 
                     # reinit logger for a fresh eval entry
@@ -836,6 +869,10 @@ async def startup_sandbox_environments(
                 (task_cleanup, sandboxenv.sandbox.config, sandboxenv.run_dir)
             )
 
+        # provide some space above task display
+        if sandboxenvs:
+            print("")
+
     # return shutdown method
     async def shutdown() -> None:
         with anyio.CancelScope(shield=True):
@@ -854,7 +891,11 @@ async def startup_sandbox_environments(
 
 def task_specs(tasks: list[TaskRunOptions]) -> list[TaskSpec]:
     return [
-        TaskSpec(task_display_name(task.task.name), ModelName(task.model))
+        TaskSpec(
+            task_display_name(task.task.name),
+            ModelName(task.model),
+            plan_agent_name(resolve_plan(task.task, task.solver)),
+        )
         for task in tasks
     ]
 
@@ -871,10 +912,25 @@ def ensure_unique_ids(dataset: Dataset) -> None:
     Raises:
         PrerequisiteError: If duplicate IDs are found in the dataset.
     """
-    seen_ids = set()
+    seen_ids: set[int | str | None] = set()
+    seen_str_ids: dict[str, int | str] = {}
     for sample in dataset:
         if sample.id in seen_ids:
             raise PrerequisiteError(
                 f"The dataset contains duplicate sample ids (duplicate id: {sample.id}). Please ensure each sample has a unique id."
             )
+        # sample ids are also keyed by their str() form downstream (.eval log
+        # member names, score reduction grouping, buffer database), so e.g.
+        # int 1 and str "1" cannot coexist even though they're distinct values
+        if sample.id is not None:
+            str_id = str(sample.id)
+            if str_id in seen_str_ids:
+                other = seen_str_ids[str_id]
+                raise PrerequisiteError(
+                    f"The dataset contains sample ids {other!r} ({type(other).__name__}) "
+                    f"and {sample.id!r} ({type(sample.id).__name__}) which share the same "
+                    f"string representation '{str_id}'. Sample ids must be unique when "
+                    f"converted to strings."
+                )
+            seen_str_ids[str_id] = sample.id
         seen_ids.add(sample.id)

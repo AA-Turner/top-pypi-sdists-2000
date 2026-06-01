@@ -1,3 +1,5 @@
+from inspect_ai._util.download import download, gdrive_download
+from inspect_ai._util.images import MediaResolverFunc, media_resolver
 from inspect_ai._util.logger import warn_once
 from inspect_ai._util.registry import (
     RegistryInfo,
@@ -15,14 +17,26 @@ from inspect_ai.util._limit import (
     cost_limit,
     message_limit,
     sample_limits,
+    suspend_token_limit,
     time_limit,
     token_limit,
     working_limit,
 )
 
 from ._background import background
+from ._checkpoint import (
+    CheckpointConfig,
+    CheckpointSampleConfig,
+    CheckpointTrigger,
+    Manual,
+    Retention,
+    TimeInterval,
+    TokenInterval,
+    TurnInterval,
+    checkpointer,
+)
 from ._collect import collect
-from ._concurrency import concurrency
+from ._concurrency import AdaptiveConcurrency, concurrency
 from ._console import input_screen
 from ._display import DisplayType, display_counter, display_type
 from ._early_stopping import (
@@ -30,7 +44,9 @@ from ._early_stopping import (
     EarlyStopping,
     EarlyStoppingSummary,
 )
+from ._input import InputOutcome, InputRequest, InputResult, request_input
 from ._json import JSONSchema, JSONType, json_schema
+from ._notify import notify
 from ._panel import InputPanel, input_panel
 from ._resource import resource
 from ._sandbox import (
@@ -62,7 +78,7 @@ from ._sandbox import (
     sandbox_with,
     sandboxenv,
 )
-from ._span import current_span_id, span
+from ._span import SpanIdProvider, current_span_id, span, span_id_provider
 from ._store import Store, store, store_from_events, store_from_events_as
 from ._store_model import StoreModel, store_as
 from ._subprocess import (
@@ -73,6 +89,8 @@ from ._subtask import Subtask, subtask
 from ._throttle import throttle
 
 __all__ = [
+    "media_resolver",
+    "MediaResolverFunc",
     "apply_limits",
     "sample_limits",
     "SampleLimits",
@@ -81,11 +99,17 @@ __all__ = [
     "ComposeHealthcheck",
     "ComposeService",
     "ExecResult",
+    "AdaptiveConcurrency",
     "concurrency",
+    "download",
+    "gdrive_download",
     "DisplayType",
     "display_counter",
     "display_type",
+    "InputOutcome",
     "InputPanel",
+    "InputRequest",
+    "InputResult",
     "input_panel",
     "input_screen",
     "is_compose_yaml",
@@ -95,6 +119,7 @@ __all__ = [
     "json_schema",
     "Limit",
     "message_limit",
+    "notify",
     "OutputLimitExceededError",
     "parse_compose_yaml",
     "resource",
@@ -121,12 +146,15 @@ __all__ = [
     "store_as",
     "span",
     "current_span_id",
+    "span_id_provider",
+    "SpanIdProvider",
     "collect",
     "Subtask",
     "subtask",
     "throttle",
     "background",
     "cost_limit",
+    "suspend_token_limit",
     "token_limit",
     "time_limit",
     "working_limit",
@@ -137,6 +165,7 @@ __all__ = [
     "RegistryType",
     "registry_create",
     "registry_info",
+    "request_input",
     "EarlyStopping",
     "EarlyStop",
     "EarlyStoppingSummary",
@@ -147,4 +176,13 @@ __all__ = [
     "ExecRemoteStreamingOptions",
     "ExecStderr",
     "ExecStdout",
+    "CheckpointConfig",
+    "CheckpointSampleConfig",
+    "CheckpointTrigger",
+    "checkpointer",
+    "Manual",
+    "Retention",
+    "TimeInterval",
+    "TokenInterval",
+    "TurnInterval",
 ]
