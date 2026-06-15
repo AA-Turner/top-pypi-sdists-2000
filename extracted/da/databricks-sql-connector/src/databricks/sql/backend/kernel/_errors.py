@@ -38,6 +38,8 @@ flow is visible at the call site, the helper is a pure function
 
 from __future__ import annotations
 
+import logging
+
 from databricks.sql.exc import (
     DatabaseError,
     Error,
@@ -50,12 +52,39 @@ try:
     import databricks_sql_kernel as _kernel  # type: ignore[import-not-found]
 except ImportError as exc:  # pragma: no cover - same hint as client.py
     raise ImportError(
-        "use_kernel=True requires the databricks-sql-kernel extension, which "
-        "is not yet published on PyPI. Build and install it locally from the "
-        "databricks-sql-kernel repo:\n"
-        "  cd databricks-sql-kernel/pyo3 && maturin develop --release\n"
-        "(into the same venv as databricks-sql-connector)."
+        "use_kernel=True requires the optional databricks-sql-kernel "
+        "extension, which is not installed. Install it with:\n"
+        '  pip install "databricks-sql-connector[kernel]"\n'
+        "The kernel wheel requires Python >= 3.10; on older interpreters "
+        "use_kernel is unavailable. For local kernel development you can "
+        "instead build it from the databricks-sql-kernel repo:\n"
+        "  cd databricks-sql-kernel/pyo3 && maturin develop --release"
     ) from exc
+
+# Route the kernel's Rust-side logs into Python's ``logging`` as soon as
+# the extension loads. The kernel emits under the ``databricks.sql.kernel``
+# logger (a child of the connector's ``databricks.sql`` namespace), so a
+# customer who configures ``databricks.sql`` logging gets kernel logs for
+# free with no extra setup.
+#
+# This is a best-effort, non-essential feature: it must never take down
+# ``use_kernel=True`` for a process. ``getattr`` guards against an older
+# kernel wheel that predates the function. The ``try`` guards against the
+# call itself throwing — note ``except BaseException`` is deliberate: a
+# panic raised across the PyO3 boundary surfaces as
+# ``pyo3_runtime.PanicException``, which derives from ``BaseException``
+# (not ``Exception``), so a narrower clause would let it escape module
+# import and fail every kernel-backed connection. The kernel side is
+# idempotent and returns rather than panics on a double install, but we
+# do not rely on that here — the guard holds regardless of the Rust impl.
+_kernel_init_logging = getattr(_kernel, "init_logging", None)
+if _kernel_init_logging is not None:
+    try:
+        _kernel_init_logging()
+    except BaseException as exc:  # noqa: BLE001 - see comment above re: PanicException
+        logging.getLogger(__name__).debug(
+            "kernel log bridge init failed; continuing without it: %r", exc
+        )
 
 
 # Map a kernel `code` slug to the PEP 249 exception class that best
@@ -97,7 +126,23 @@ def reraise_kernel_error(exc: "_kernel.KernelError") -> "Error":
     """
     code = getattr(exc, "code", "Unknown")
     cls = _CODE_TO_EXCEPTION.get(code, DatabaseError)
-    new = cls(getattr(exc, "message", str(exc)))
+
+    # For ServerOperationError, reproduce the Thrift backend's
+    # ``context`` dict so callers that read
+    # ``err.context["diagnostic-info"]`` (the Spark stack trace) /
+    # ``err.context["operation-id"]`` get the same shape on the kernel
+    # path. ``diagnostic_info`` is forwarded from the kernel error (it
+    # now crosses the PyO3 boundary; older wheels return ``None`` via
+    # ``getattr``, so this degrades gracefully). Matches
+    # thrift_backend.py's ServerOperationError construction.
+    context = None
+    if cls is ServerOperationError:
+        context = {
+            "operation-id": getattr(exc, "query_id", None),
+            "diagnostic-info": getattr(exc, "diagnostic_info", None),
+        }
+    new = cls(getattr(exc, "message", str(exc)), context)
+
     for attr in (
         "code",
         "sql_state",
@@ -106,6 +151,12 @@ def reraise_kernel_error(exc: "_kernel.KernelError") -> "Error":
         "http_status",
         "retryable",
         "query_id",
+        # Extended server status now forwarded across the PyO3 boundary
+        # (kernel #121). ``getattr(..., None)`` keeps this forward-safe
+        # against an older wheel that doesn't set these attrs.
+        "display_message",
+        "diagnostic_info",
+        "error_details_json",
     ):
         setattr(new, attr, getattr(exc, attr, None))
     return new
