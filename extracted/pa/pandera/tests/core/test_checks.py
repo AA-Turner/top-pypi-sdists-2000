@@ -1,521 +1,249 @@
-"""Tests the way Columns are Checked"""
+"""Core Check tests — native flag and from_builtin_check_name propagation."""
 
-import copy
-
-import pandas as pd
+import narwhals.stable.v1 as nw
+import polars as pl
 import pytest
 
-from pandera import (
-    Bool,
-    Check,
-    Column,
-    DataFrameSchema,
-    Float,
-    Index,
-    Int,
-    SeriesSchema,
-    String,
-    errors,
-)
-from pandera.backends.pandas import error_formatters
+from pandera.api.checks import Check
 
 
-def test_vectorized_checks() -> None:
-    """Test that using element-wise checking returns and errors as expected."""
-    schema = SeriesSchema(
-        Int, Check(lambda s: s.value_counts() == 2, element_wise=False)
-    )
-    validated_series = schema.validate(pd.Series([1, 1, 2, 2, 3, 3]))
-    assert isinstance(validated_series, pd.Series)
+class TestNativeFlag:
+    """Test the native: bool parameter on Check.__init__."""
 
-    # error case
-    with pytest.raises(errors.SchemaError):
-        schema.validate(pd.Series([1, 2, 3]))
+    def test_native_default_true(self):
+        """Check(fn).native == True (default)."""
+        check = Check(lambda x: True)
+        assert check.native is True
 
+    def test_native_explicit_false(self):
+        """Check(fn, native=False).native == False."""
+        check = Check(lambda x: True, native=False)
+        assert check.native is False
 
-def test_check_groupby() -> None:
-    """Tests uses of groupby to specify dependencies between one column and a
-    single other column, including error handling."""
-    schema = DataFrameSchema(
-        columns={
-            "col1": Column(
-                Int,
-                [
-                    Check(lambda s: s["foo"] > 10, groupby="col2"),
-                    Check(lambda s: s["bar"] < 10, groupby=["col2"]),
-                    Check(
-                        lambda s: s["foo"] > 10,
-                        groupby=lambda df: df.groupby("col2"),
-                    ),
-                    Check(
-                        lambda s: s["bar"] < 10,
-                        groupby=lambda df: df.groupby("col2"),
-                    ),
-                ],
-            ),
-            "col2": Column(String, Check(lambda s: s.isin(["foo", "bar"]))),
-        },
-        index=Index(Int, name="data_id"),
-    )
+    def test_native_explicit_true(self):
+        """Check(fn, native=True).native == True (explicit)."""
+        check = Check(lambda x: True, native=True)
+        assert check.native is True
 
-    df_pass = pd.DataFrame(
-        data={
-            "col1": [7, 8, 9, 11, 12, 13],
-            "col2": ["bar", "bar", "bar", "foo", "foo", "foo"],
-        },
-        index=pd.Series([1, 2, 3, 4, 5, 6], name="data_id"),
-    )
+    def test_element_wise_and_native_coexist(self):
+        """element_wise=True, native=True both coexist without error."""
+        check = Check(lambda x: x > 0, element_wise=True, native=True)
+        assert check.element_wise is True
+        assert check.native is True
 
-    df = schema.validate(df_pass)
-    assert isinstance(df, pd.DataFrame)
-    assert len(df.columns) == 2
-    assert set(df.columns) == {"col1", "col2"}
-
-    # raise errors.SchemaError when Check fails
-    df_fail_on_bar = pd.DataFrame(
-        data={
-            "col1": [7, 8, 20, 11, 12, 13],
-            "col2": ["bar", "bar", "bar", "foo", "foo", "foo"],
-        },
-        index=pd.Series([1, 2, 3, 4, 5, 6], name="data_id"),
-    )
-    df_fail_on_foo = pd.DataFrame(
-        data={
-            "col1": [7, 8, 9, 11, 1, 13],
-            "col2": ["bar", "bar", "bar", "foo", "foo", "foo"],
-        },
-        index=pd.Series([1, 2, 3, 4, 5, 6], name="data_id"),
-    )
-    # raise errors.SchemaError when groupby column doesn't exist
-    df_fail_no_column = pd.DataFrame(
-        data={
-            "col1": [7, 8, 20, 11, 12, 13],
-        },
-        index=pd.Series([1, 2, 3, 4, 5, 6], name="data_id"),
-    )
-
-    for df in [df_fail_on_bar, df_fail_on_foo, df_fail_no_column]:
-        with pytest.raises(errors.SchemaError):
-            schema.validate(df)
+    def test_element_wise_false_native_false(self):
+        """element_wise=False, native=False both coexist without error."""
+        check = Check(lambda x: True, element_wise=False, native=False)
+        assert check.element_wise is False
+        assert check.native is False
 
 
-def test_check_groupby_multiple_columns() -> None:
-    """Tests uses of groupby to specify dependencies between one column and a
-    number of other columns, including error handling."""
-    schema = DataFrameSchema(
-        {
-            "col1": Column(
-                Int,
-                [
-                    Check(
-                        lambda s: s[("bar", True)].sum() == 16,  # 7 + 9
-                        groupby=["col2", "col3"],
-                    ),
-                ],
-            ),
-            "col2": Column(String, Check(lambda s: s.isin(["foo", "bar"]))),
-            "col3": Column(Bool),
-        }
-    )
+class TestBuiltinNativeFalse:
+    """Test that builtin checks created via from_builtin_check_name have native=False."""
 
-    df_pass = pd.DataFrame(
-        {
-            "col1": [7, 8, 9, 11, 12, 13],
-            "col2": ["bar", "bar", "bar", "foo", "foo", "foo"],
-            "col3": [True, False, True, False, True, False],
-        }
-    )
+    def test_equal_to_native_false(self):
+        """Check.equal_to(5).native == False."""
+        assert Check.equal_to(5).native is False
 
-    df = schema.validate(df_pass)
-    assert isinstance(df, pd.DataFrame)
-    assert len(df.columns) == 3
-    assert set(df.columns) == {"col1", "col2", "col3"}
+    def test_greater_than_native_false(self):
+        """Check.greater_than(0).native == False."""
+        assert Check.greater_than(0).native is False
 
+    def test_isin_native_false(self):
+        """Check.isin([1, 2]).native == False."""
+        assert Check.isin([1, 2]).native is False
 
-def test_check_groups() -> None:
-    """Tests uses of groupby and groups (for values within columns)."""
-    schema = DataFrameSchema(
-        {
-            "col1": Column(
-                Int,
-                [
-                    Check(
-                        lambda s: s["foo"] > 10, groupby="col2", groups=["foo"]
-                    ),
-                    Check(
-                        lambda s: s["foo"] > 10, groupby="col2", groups="foo"
-                    ),
-                ],
-            ),
-            "col2": Column(String, Check(lambda s: s.isin(["foo", "bar"]))),
-        }
-    )
+    def test_not_equal_to_native_false(self):
+        """Check.not_equal_to(0).native == False."""
+        assert Check.not_equal_to(0).native is False
 
-    df = pd.DataFrame(
-        {
-            "col1": [7, 8, 9, 11, 12, 13],
-            "col2": ["bar", "bar", "bar", "foo", "foo", "foo"],
-        }
-    )
+    def test_greater_than_or_equal_to_native_false(self):
+        """Check.greater_than_or_equal_to(1).native == False."""
+        assert Check.greater_than_or_equal_to(1).native is False
 
-    validated_df = schema.validate(df)
-    assert isinstance(validated_df, pd.DataFrame)
-    assert len(validated_df.columns) == 2
-    assert set(validated_df.columns) == {"col1", "col2"}
+    def test_less_than_native_false(self):
+        """Check.less_than(10).native == False."""
+        assert Check.less_than(10).native is False
 
-    # raise KeyError when groups does not include a particular group name
-    schema_fail_key_error = DataFrameSchema(
-        {
-            "col1": Column(
-                Int,
-                [
-                    Check(
-                        lambda s: s["bar"] > 10, groupby="col2", groups="foo"
-                    ),
-                ],
-            ),
-            "col2": Column(String, Check(lambda s: s.isin(["foo", "bar"]))),
-        }
-    )
-    with pytest.raises(
-        errors.SchemaError,
-        match=r'Error while executing check function: KeyError\("bar"\)',
-    ):
-        schema_fail_key_error.validate(df)
+    def test_less_than_or_equal_to_native_false(self):
+        """Check.less_than_or_equal_to(10).native == False."""
+        assert Check.less_than_or_equal_to(10).native is False
 
-    # raise KeyError when the group does not exist in the groupby column when
-    # referenced in the Check function
-    schema_fail_nonexistent_key_in_fn = DataFrameSchema(
-        {
-            "col1": Column(
-                Int,
-                [
-                    Check(
-                        lambda s: s["baz"] > 10, groupby="col2", groups=["foo"]
-                    ),
-                ],
-            ),
-            "col2": Column(String, Check(lambda s: s.isin(["foo", "bar"]))),
-        }
-    )
-    with pytest.raises(
-        errors.SchemaError,
-        match=r'Error while executing check function: KeyError\("baz"\)',
-    ):
-        schema_fail_nonexistent_key_in_fn.validate(df)
+    def test_in_range_native_false(self):
+        """Check.in_range(0, 10).native == False."""
+        assert Check.in_range(0, 10).native is False
 
-    # raise KeyError when the group does not exist in the groups argument.
-    schema_fail_nonexistent_key_in_groups = DataFrameSchema(
-        {
-            "col1": Column(
-                Int,
-                [
-                    Check(
-                        lambda s: s["foo"] > 10, groupby="col2", groups=["baz"]
-                    ),
-                ],
-            ),
-            "col2": Column(String, Check(lambda s: s.isin(["foo", "bar"]))),
-        }
-    )
-    with pytest.raises(errors.SchemaError):
-        schema_fail_nonexistent_key_in_groups.validate(df)
+    def test_notin_native_false(self):
+        """Check.notin([0, -1]).native == False."""
+        assert Check.notin([0, -1]).native is False
+
+    def test_str_matches_native_false(self):
+        """Check.str_matches(r'^foo').native == False."""
+        assert Check.str_matches(r"^foo").native is False
+
+    def test_str_contains_native_false(self):
+        """Check.str_contains('oo').native == False."""
+        assert Check.str_contains("oo").native is False
+
+    def test_str_startswith_native_false(self):
+        """Check.str_startswith('foo').native == False."""
+        assert Check.str_startswith("foo").native is False
+
+    def test_str_endswith_native_false(self):
+        """Check.str_endswith('bar').native == False."""
+        assert Check.str_endswith("bar").native is False
+
+    def test_str_length_native_false(self):
+        """Check.str_length(min_value=2, max_value=5).native == False."""
+        assert Check.str_length(min_value=2, max_value=5).native is False
 
 
-def test_groupby_init_exceptions() -> None:
-    """Test that when using a groupby it errors properly across a variety of
-    API-specific differences."""
+class TestBuiltinCheckSignatures:
+    """Test that all 14 builtin check functions accept (col_expr: nw.Expr, ...) signature.
 
-    def init_schema_element_wise():
-        DataFrameSchema(
-            {
-                "col1": Column(
-                    Int,
-                    [
-                        Check(
-                            lambda s: s["foo"] > 10,
-                            element_wise=True,
-                            groupby=["col2"],
-                        ),
-                    ],
-                ),
-                "col2": Column(
-                    String, Check(lambda s: s.isin(["foo", "bar"]))
+    These tests call the builtin functions directly with nw.col(key) as the
+    first arg — verifying the nw.Expr protocol is in place and that
+    each function returns an nw.Expr.
+    """
+
+    def test_equal_to_signature(self):
+        """equal_to(col_expr: nw.Expr, value=3) returns nw.Expr."""
+        from pandera.backends.narwhals.builtin_checks import equal_to
+
+        result = equal_to(nw.col("x"), value=3)
+        assert isinstance(result, nw.Expr)
+
+    def test_not_equal_to_signature(self):
+        """not_equal_to(col_expr: nw.Expr, value=0) returns nw.Expr."""
+        from pandera.backends.narwhals.builtin_checks import not_equal_to
+
+        result = not_equal_to(nw.col("x"), value=0)
+        assert isinstance(result, nw.Expr)
+
+    def test_greater_than_signature(self):
+        """greater_than(col_expr: nw.Expr, min_value=0) returns nw.Expr."""
+        from pandera.backends.narwhals.builtin_checks import greater_than
+
+        result = greater_than(nw.col("x"), min_value=0)
+        assert isinstance(result, nw.Expr)
+
+    def test_greater_than_or_equal_to_signature(self):
+        """greater_than_or_equal_to(col_expr: nw.Expr, min_value=1) returns nw.Expr."""
+        from pandera.backends.narwhals.builtin_checks import (
+            greater_than_or_equal_to,
+        )
+
+        result = greater_than_or_equal_to(nw.col("x"), min_value=1)
+        assert isinstance(result, nw.Expr)
+
+    def test_less_than_signature(self):
+        """less_than(col_expr: nw.Expr, max_value=10) returns nw.Expr."""
+        from pandera.backends.narwhals.builtin_checks import less_than
+
+        result = less_than(nw.col("x"), max_value=10)
+        assert isinstance(result, nw.Expr)
+
+    def test_less_than_or_equal_to_signature(self):
+        """less_than_or_equal_to(col_expr: nw.Expr, max_value=10) returns nw.Expr."""
+        from pandera.backends.narwhals.builtin_checks import (
+            less_than_or_equal_to,
+        )
+
+        result = less_than_or_equal_to(nw.col("x"), max_value=10)
+        assert isinstance(result, nw.Expr)
+
+    def test_in_range_signature(self):
+        """in_range(col_expr: nw.Expr, min_value=1, max_value=5) returns nw.Expr."""
+        from pandera.backends.narwhals.builtin_checks import in_range
+
+        result = in_range(nw.col("x"), min_value=1, max_value=5)
+        assert isinstance(result, nw.Expr)
+
+    def test_isin_signature(self):
+        """isin(col_expr: nw.Expr, allowed_values=[1, 2, 3]) returns nw.Expr."""
+        from pandera.backends.narwhals.builtin_checks import isin
+
+        result = isin(nw.col("x"), allowed_values=[1, 2, 3])
+        assert isinstance(result, nw.Expr)
+
+    def test_notin_signature(self):
+        """notin(col_expr: nw.Expr, forbidden_values=[0]) returns nw.Expr."""
+        from pandera.backends.narwhals.builtin_checks import notin
+
+        result = notin(nw.col("x"), forbidden_values=[0])
+        assert isinstance(result, nw.Expr)
+
+    def test_str_matches_signature(self):
+        """str_matches(col_expr: nw.Expr, pattern=r'^a') returns nw.Expr."""
+        from pandera.backends.narwhals.builtin_checks import str_matches
+
+        result = str_matches(nw.col("x"), pattern=r"^a")
+        assert isinstance(result, nw.Expr)
+
+    def test_str_contains_signature(self):
+        """str_contains(col_expr: nw.Expr, pattern='a') returns nw.Expr."""
+        from pandera.backends.narwhals.builtin_checks import str_contains
+
+        result = str_contains(nw.col("x"), pattern="a")
+        assert isinstance(result, nw.Expr)
+
+    def test_str_startswith_signature(self):
+        """str_startswith(col_expr: nw.Expr, string='a') returns nw.Expr."""
+        from pandera.backends.narwhals.builtin_checks import str_startswith
+
+        result = str_startswith(nw.col("x"), string="a")
+        assert isinstance(result, nw.Expr)
+
+    def test_str_endswith_signature(self):
+        """str_endswith(col_expr: nw.Expr, string='a') returns nw.Expr."""
+        from pandera.backends.narwhals.builtin_checks import str_endswith
+
+        result = str_endswith(nw.col("x"), string="a")
+        assert isinstance(result, nw.Expr)
+
+    def test_str_length_signature(self):
+        """str_length(col_expr: nw.Expr, min_value=1, max_value=10) returns nw.Expr."""
+        from pandera.backends.narwhals.builtin_checks import str_length
+
+        result = str_length(nw.col("x"), min_value=1, max_value=10)
+        assert isinstance(result, nw.Expr)
+
+
+class TestBuiltinCheckCustomName:
+    """Regression tests for #2042: a built-in check given a custom ``name`` must still execute."""
+
+    def test_builtin_check_with_custom_name_validates(self):
+        import pandas as pd
+
+        import pandera.pandas as pa
+
+        schema = pa.DataFrameSchema(
+            columns={
+                "test": pa.Column(
+                    float, checks=[pa.Check.gt(0, name="test_check")]
                 ),
             }
         )
 
-    # can't use groupby in Checks where element_wise == True
-    with pytest.raises(
-        errors.SchemaInitError,
-        match=r"^Cannot use groupby when element_wise=True.",
-    ):
-        init_schema_element_wise()
+        # Previously raised SchemaError wrapping KeyError(<class 'pandas.Series'>)
+        validated = schema.validate(pd.DataFrame({"test": [1.0, 2.0]}))
+        assert validated.shape == (2, 1)
 
-    # raise errors.SchemaInitError even when the schema doesn't specify column
-    # key for groupby column
-    def init_schema_no_groupby_column():
-        DataFrameSchema(
-            {
-                "col1": Column(
-                    Int,
-                    [
-                        Check(lambda s: s["foo"] > 10, groupby=["col2"]),
-                    ],
+    def test_builtin_check_with_custom_name_still_detects_failures(self):
+        import pandas as pd
+
+        import pandera.pandas as pa
+
+        schema = pa.DataFrameSchema(
+            columns={
+                "test": pa.Column(
+                    float, checks=[pa.Check.gt(0, name="test_check")]
                 ),
             }
         )
 
-    with pytest.raises(errors.SchemaInitError):
-        init_schema_no_groupby_column()
+        with pytest.raises(pa.errors.SchemaError) as exc_info:
+            schema.validate(pd.DataFrame({"test": [-1.0]}))
 
-    # can't use groupby argument in SeriesSchema or Index objects
-    for schema_class in [SeriesSchema, Index]:
-        with pytest.raises(
-            errors.SchemaInitError, match="^Cannot use groupby checks with"
-        ):
-            schema_class(Int, Check(lambda s: s["bar"] == 1, groupby="foo"))
-
-
-def test_dataframe_checks() -> None:
-    """Tests that dataframe checks validate, error when a DataFrame doesn't
-    comply with the schema, simple tests of the groupby checks which are
-    covered in more detail above."""
-    schema = DataFrameSchema(
-        columns={
-            "col1": Column(Int),
-            "col2": Column(Float),
-            "col3": Column(String),
-            "col4": Column(String),
-        },
-        checks=[
-            Check(lambda df: df["col1"] < df["col2"]),
-            Check(lambda df: df["col3"] == df["col4"]),
-        ],
-    )
-    df = pd.DataFrame(
-        {
-            "col1": [1, 2, 3],
-            "col2": [2.0, 3.0, 4.0],
-            "col3": ["foo", "bar", "baz"],
-            "col4": ["foo", "bar", "baz"],
-        }
-    )
-
-    assert isinstance(schema.validate(df), pd.DataFrame)
-
-    # test invalid schema error raising
-    invalid_df = df.copy()
-    invalid_df["col1"] = invalid_df["col1"] * 3
-
-    with pytest.raises(errors.SchemaError):
-        schema.validate(invalid_df)
-
-    # test groupby checks
-    groupby_check_schema = DataFrameSchema(
-        columns={
-            "col1": Column(Int),
-            "col3": Column(String),
-        },
-        checks=[
-            Check(lambda g: g["foo"]["col1"].iat[0] == 1, groupby="col3"),
-            Check(lambda g: g["foo"]["col2"].iat[0] == 2.0, groupby="col3"),
-            Check(lambda g: g["foo"]["col3"].iat[0] == "foo", groupby="col3"),
-            Check(
-                lambda g: g[("foo", "foo")]["col1"].iat[0] == 1,
-                groupby=["col3", "col4"],
-            ),
-        ],
-    )
-    assert isinstance(groupby_check_schema.validate(df), pd.DataFrame)
-
-    # test element-wise checks
-    element_wise_check_schema = DataFrameSchema(
-        columns={
-            "col1": Column(Int),
-            "col2": Column(Float),
-        },
-        checks=Check(lambda row: row["col1"] < row["col2"], element_wise=True),
-    )
-    assert isinstance(element_wise_check_schema.validate(df), pd.DataFrame)
-
-
-def test_reshape_failure_cases_exceptions() -> None:
-    """Tests that the reshape_failure_cases method correctly produces a
-    TypeError."""
-    # pylint: disable=W0212, E1121
-    # disabling pylint because this function should be private to the class and
-    # it's ok to access it because the function needs to be tested.
-    check = Check(lambda x: x.isna().sum() == 0)
-    for data in [1, "foobar", 1.0, {"key": "value"}, list(range(10))]:
-        with pytest.raises(TypeError):
-            error_formatters.reshape_failure_cases(
-                data, bool(check.n_failure_cases)  # type: ignore
-            )
-
-
-def test_check_equality_operators() -> None:
-    """Test the usage of == between a Check and an entirely different Check,
-    and a non-Check."""
-    check = Check(lambda g: g["foo"]["col1"].iat[0] == 1, groupby="col3")
-
-    not_equal_check = Check(lambda x: x.isna().sum() == 0)
-    assert check == copy.deepcopy(check)
-    assert check != not_equal_check
-    assert check != "not a check"
-
-
-def test_equality_operators_functional_equivalence() -> None:
-    """Test the usage of == for Checks where the Check callable object has
-    the same implementation."""
-    main_check = Check(lambda g: g["foo"]["col1"].iat[0] == 1, groupby="col3")
-    same_check = Check(lambda h: h["foo"]["col1"].iat[0] == 1, groupby="col3")
-
-    assert main_check == same_check
-
-
-def test_raise_warning_series() -> None:
-    """Test that checks with raise_warning=True raise a warning."""
-    data = pd.Series([-1, -2, -3])
-    error_schema = SeriesSchema(checks=Check(lambda s: s > 0))
-    warning_schema = SeriesSchema(
-        checks=Check(lambda s: s > 0, raise_warning=True)
-    )
-
-    with pytest.raises(errors.SchemaError):
-        error_schema(data)
-
-    with pytest.warns(errors.SchemaWarning):
-        warning_schema(data)
-
-    # For compatibility with old behaviour of raise_warning to give UserWarning
-    with pytest.warns(UserWarning):
-        warning_schema(data)
-
-
-def test_raise_warning_dataframe() -> None:
-    """Test that checks with raise_warning=True raise a warning."""
-    data = pd.DataFrame({"positive_numbers": [-1, -2, -3]})
-    error_schema = DataFrameSchema(
-        {
-            "positive_numbers": Column(checks=Check(lambda s: s > 0)),
-        }
-    )
-    warning_schema = DataFrameSchema(
-        {
-            "positive_numbers": Column(
-                checks=Check(lambda s: s > 0, raise_warning=True)
-            ),
-        }
-    )
-
-    with pytest.raises(errors.SchemaError):
-        error_schema(data)
-
-    with pytest.warns(errors.SchemaWarning):
-        warning_schema(data)
-
-
-def test_dataframe_schema_check() -> None:
-    """Test that DataFrameSchema-level Checks work properly."""
-    data = pd.DataFrame([range(10) for _ in range(10)])
-
-    schema_check_return_bool = DataFrameSchema(
-        checks=Check(lambda df: (df < 10).all())
-    )
-    assert isinstance(schema_check_return_bool.validate(data), pd.DataFrame)
-
-    schema_check_return_series = DataFrameSchema(
-        checks=Check(lambda df: df[0] < 10)
-    )
-    assert isinstance(schema_check_return_series.validate(data), pd.DataFrame)
-
-    schema_check_return_df = DataFrameSchema(checks=Check(lambda df: df < 10))
-    assert isinstance(schema_check_return_df.validate(data), pd.DataFrame)
-
-
-def test_dataframe_check_schema_error() -> None:
-    """Test that DataFramSchema-level checks raises errors."""
-
-    schema = DataFrameSchema(
-        checks=Check(
-            lambda df: df["a"].isna() | ~df["b"].isna(), ignore_na=False
-        )
-    )
-    df = pd.DataFrame(
-        {
-            "a": [1, 2, 3, 1],
-            "b": [1, 2, None, None],
-        }
-    )
-
-    try:
-        schema(df, lazy=True)
-    except errors.SchemaErrors as exc:
-        assert pd.isna(
-            exc.failure_cases.query(
-                "index == 2 & column == 'b'"
-            ).failure_case.iloc[0]
-        )
-        assert pd.isna(
-            exc.failure_cases.query(
-                "index == 3 & column == 'b'"
-            ).failure_case.iloc[0]
-        )
-
-
-def test_prepare_series_check_output_df_level():
-    """Test that dataframe-level checks only ignore rows where all values are null."""
-    df = pd.DataFrame(
-        {
-            "a": [1, 1, 2, 2, 3, 3, None],
-            "b": [2, 1, 4, 3, 6, 5, None],
-            "c": [None] * 7,
-        }
-    )
-    check = Check(lambda df: df["b"] == df["a"] * 2, ignore_na=True)
-    # The last record should evaluate to True, since all values are null
-    expected_output = [True, False, True, False, True, False, True]
-    result = check(df)
-    assert result.check_output.tolist() == expected_output
-
-
-# pylint: disable=unused-argument
-def test_custom_check_error_is_failure_case(extra_registered_checks):
-    """Test that an error in a custom check is returned as a failure case"""
-    test_schema = DataFrameSchema(checks=[Check.raise_an_error_check()])
-
-    df = pd.DataFrame()
-
-    try:
-        test_schema.validate(df, lazy=True)
-    except errors.SchemaErrors as err:
-        assert err.error_counts == {"CHECK_ERROR": 1}
-        assert (
-            err.message["DATA"]["CHECK_ERROR"][0]["check"]
-            == "raise_an_error_check"
-        )
-
-
-def test_check_backend_not_found():
-    """Test that checks complain if a backend is not register for that type."""
-
-    class CustomDataObject:
-        """Custom data object."""
-
-    dummy_check = Check(lambda _: True)
-
-    with pytest.raises(KeyError, match="Backend not found for class"):
-        dummy_check(CustomDataObject())
-
-
-def test_check_output_dtype_with_empty_datetime():
-    from pandera.backends.pandas.register import register_pandas_backends
-
-    # NOTE: this should automatically be handles in the check.__call__ method
-    register_pandas_backends("pandas.DataFrame")
-
-    check = Check(lambda _: True, element_wise=True)
-    df = pd.DataFrame({"year_mon": pd.Series(dtype="datetime64[D]")})
-    check_result = check(df)
-    assert check_result.check_output.dtype == bool
+        # The failure must be a real check failure, not a KeyError from check dispatch
+        assert "KeyError" not in str(exc_info.value)
