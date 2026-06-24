@@ -4,6 +4,11 @@ import typing
 
 MusicStreamRequestOutputFormat = typing.Union[
     typing.Literal[
+        "auto",
+        "mp3_48000_128",
+        "mp3_48000_192",
+        "mp3_48000_240",
+        "mp3_48000_320",
         "mp3_22050_32",
         "mp3_24000_48",
         "mp3_44100_32",
