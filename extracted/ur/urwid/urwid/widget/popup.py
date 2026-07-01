@@ -43,11 +43,11 @@ if typing.TYPE_CHECKING:
         overlay_height: int
 
 
-WrappedWidget = typing.TypeVar("WrappedWidget")
+WrappedWidget = typing.TypeVar("WrappedWidget", bound="Widget")
 
 
 class PopUpLauncher(delegate_to_widget_mixin("_original_widget"), WidgetDecoration[WrappedWidget]):
-    def __init__(self, original_widget: [WrappedWidget]) -> None:
+    def __init__(self, original_widget: WrappedWidget) -> None:
         super().__init__(original_widget)
         self._pop_up_widget = None
 
@@ -142,7 +142,7 @@ class PopUpTarget(WidgetDecoration[WrappedWidget]):
         self._update_overlay(size, True)
         return self._current_widget.keypress(size, key)
 
-    def move_cursor_to_coords(self, size: tuple[int, int], x: int, y: int):
+    def move_cursor_to_coords(self, size: tuple[int, int], x: int, y: int) -> bool:
         self._update_overlay(size, True)
         return self._current_widget.move_cursor_to_coords(size, x, y)
 
@@ -163,7 +163,7 @@ class PopUpTarget(WidgetDecoration[WrappedWidget]):
         return self._current_widget.pack(size)
 
 
-def _test():
+def _test() -> None:
     import doctest
 
     doctest.testmod()

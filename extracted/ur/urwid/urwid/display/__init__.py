@@ -36,7 +36,7 @@ from .common import (
 if typing.TYPE_CHECKING:
     import types
 
-__all__ = (
+__all__: tuple[str, ...] = (
     "BLACK",
     "BROWN",
     "DARK_BLUE",
@@ -97,6 +97,6 @@ def lazy_import(name: str, package: str | None = None) -> types.ModuleType:
     return module
 
 
-html_fragment = lazy_import(".html_fragment", __package__)
-lcd = lazy_import(".lcd", __package__)
-web = lazy_import(".web", __package__)
+html_fragment = lazy_import(".html_fragment", "urwid.display")
+lcd = lazy_import(".lcd", "urwid.display")
+web = lazy_import(".web", "urwid.display")

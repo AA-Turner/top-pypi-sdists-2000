@@ -41,19 +41,45 @@ from . import escape
 from .common import UNPRINTABLE_TRANS_TABLE, UPDATE_PALETTE_ENTRY, AttrSpec, BaseScreen, RealTerminal
 
 if typing.TYPE_CHECKING:
-    from collections.abc import Callable, Iterable
+    from collections.abc import Callable, Iterable, Sequence
     from types import FrameType
 
     from typing_extensions import Literal
 
     from urwid import Canvas, EventLoop
 
+    _MouseInput = tuple[str, int, int, int]
+    _CursorPosition = tuple[typing.Literal["cursor position"], int, int]
+    _DecodedInput = list[typing.Union[str, _MouseInput, _CursorPosition]]
+
 IS_WINDOWS = sys.platform == "win32"
 IS_WSL = (sys.platform == "linux") and ("wsl" in platform.platform().lower())
 
 
+@typing.runtime_checkable
+class SupportsFileno(typing.Protocol):
+    """Object that can be used to obtain an OS-level file descriptor."""
+
+    def fileno(self) -> int: ...
+
+
+class TextWriter(typing.Protocol):
+    """Text output stream used by the raw display."""
+
+    def write(self, data: str, /) -> object: ...
+
+    def flush(self) -> object: ...
+
+
 class Screen(BaseScreen, RealTerminal):
-    def __init__(self, input: typing.IO, output: typing.IO) -> None:  # noqa: A002  # pylint: disable=redefined-builtin
+    _term_input_file: SupportsFileno
+    _term_output_file: TextWriter
+
+    def __init__(
+        self,
+        input: SupportsFileno,  # noqa: A002  # pylint: disable=redefined-builtin
+        output: TextWriter,
+    ) -> None:
         """Initialize a screen that directly prints escape codes to an output
         terminal.
         """
@@ -68,21 +94,21 @@ class Screen(BaseScreen, RealTerminal):
         self.has_underline = True  # FIXME: detect this
         self.prev_input_resize = 0
         self.set_input_timeouts()
-        self.screen_buf = None
-        self._screen_buf_canvas = None
+        self.screen_buf: list[list[tuple[AttrSpec | str | None, Literal["0", "U"] | None, bytes]]] | None = None
+        self._screen_buf_canvas: Canvas | None = None
         self._resized = False
-        self.maxrow = None
+        self.maxrow: int | None = None
         self._mouse_tracking_enabled = False
         self.last_bstate = 0
         self._setup_G1_done = False
-        self._rows_used = None
+        self._rows_used: int | None = None
         self._cy = 0
         self.term = os.environ.get("TERM", "")
         self.fg_bright_is_bold = not self.term.startswith("xterm")
         self.bg_bright_is_blink = self.term == "linux"
         self.back_color_erase = not self.term.startswith("screen")
         self.register_palette_entry(None, "default", "default")
-        self._next_timeout = None
+        self._next_timeout: float | None = None
         self.signal_handler_setter = signal.signal
 
         # Our connections to the world
@@ -115,8 +141,8 @@ class Screen(BaseScreen, RealTerminal):
         self.screen_buf = None
 
     @property
-    def _term_input_io(self) -> typing.IO | None:
-        if hasattr(self._term_input_file, "fileno"):
+    def _term_input_io(self) -> SupportsFileno | None:
+        if isinstance(self._term_input_file, SupportsFileno):
             return self._term_input_file
         return None
 
@@ -125,12 +151,12 @@ class Screen(BaseScreen, RealTerminal):
 
         A stream without a fileno can't participate in whatever.
         """
-        if hasattr(self._term_input_file, "fileno"):
+        if isinstance(self._term_input_file, SupportsFileno):
             return self._term_input_file.fileno()
 
         return None
 
-    def _on_update_palette_entry(self, name: str | None, *attrspecs: AttrSpec):
+    def _on_update_palette_entry(self, name: str | None, *attrspecs: AttrSpec) -> None:
         # copy the attribute to a dictionary containing the escape seqences
         a: AttrSpec = attrspecs[{16: 0, 1: 1, 88: 2, 256: 3, 2**24: 4}[self.colors]]
         self._pal_attrspec[name] = a
@@ -161,7 +187,7 @@ class Screen(BaseScreen, RealTerminal):
             if self._next_timeout is None:
                 self._next_timeout = max_wait
             else:
-                self._next_timeout = min(self._next_timeout, self.max_wait)
+                self._next_timeout = min(self._next_timeout, max_wait)
         self.complete_wait = complete_wait
         self.resize_wait = resize_wait
 
@@ -186,7 +212,12 @@ class Screen(BaseScreen, RealTerminal):
             self.write(escape.MOUSE_TRACKING_OFF)
 
     @abc.abstractmethod
-    def _start(self, alternate_buffer: bool = True) -> None:
+    def _start(  # pylint: disable=keyword-arg-before-vararg
+        self,
+        alternate_buffer: bool = True,
+        *args: typing.Any,
+        **kwargs: typing.Any,
+    ) -> None:
         """
         Initialize the screen and input mode.
 
@@ -228,12 +259,12 @@ class Screen(BaseScreen, RealTerminal):
         self._term_output_file.flush()
 
     @typing.overload
-    def get_input(self, raw_keys: Literal[False]) -> list[str]: ...
+    def get_input(self, raw_keys: Literal[False]) -> _DecodedInput: ...
 
     @typing.overload
-    def get_input(self, raw_keys: Literal[True]) -> tuple[list[str], list[int]]: ...
+    def get_input(self, raw_keys: Literal[True]) -> tuple[_DecodedInput, list[int]]: ...
 
-    def get_input(self, raw_keys: bool = False) -> list[str] | tuple[list[str], list[int]]:
+    def get_input(self, raw_keys: bool = False) -> _DecodedInput | tuple[_DecodedInput, list[int]]:
         """Return pending input as a list.
 
         raw_keys -- return raw keycodes as well as translated versions
@@ -309,7 +340,7 @@ class Screen(BaseScreen, RealTerminal):
             return keys, raw
         return keys
 
-    def get_input_descriptors(self) -> list[socket.socket | typing.IO | int]:
+    def get_input_descriptors(self) -> list[SupportsFileno | int]:
         """
         Return a list of integer file descriptors that should be
         polled in external event loops to check for user input.
@@ -322,13 +353,13 @@ class Screen(BaseScreen, RealTerminal):
         if not self._started:
             return []
 
-        fd_list: list[socket.socket | typing.IO | int] = [self._resize_pipe_rd]
+        fd_list: list[SupportsFileno | int] = [self._resize_pipe_rd]
 
         if (input_io := self._term_input_io) is not None:
             fd_list.append(input_io)
         return fd_list
 
-    _current_event_loop_handles = ()
+    _current_event_loop_handles: Sequence[typing.Any] = ()
 
     @abc.abstractmethod
     def unhook_event_loop(self, event_loop: EventLoop) -> None:
@@ -340,7 +371,7 @@ class Screen(BaseScreen, RealTerminal):
     def hook_event_loop(
         self,
         event_loop: EventLoop,
-        callback: Callable[[list[str], list[int]], typing.Any],
+        callback: Callable[[_DecodedInput, list[int]], typing.Any],
     ) -> None:
         """
         Register the given callback with the event loop, to be called with new
@@ -350,23 +381,25 @@ class Screen(BaseScreen, RealTerminal):
         Subclasses may wish to use parse_input to wrap the callback.
         """
 
-    _input_timeout = None
+    _input_timeout: typing.Any = None
 
     def _make_legacy_input_wrapper(
         self,
         event_loop: EventLoop,
-        callback: Callable[[list[str], list[int]], typing.Any],
+        callback: Callable[[_DecodedInput, list[int]], typing.Any],
     ) -> Callable[[], None]:
         """
         Support old Screen classes that still have a get_input_nonblocking and expect it to work.
         """
 
         @functools.wraps(callback)
-        def wrapper():
+        def wrapper() -> None:
             if self._input_timeout:
                 event_loop.remove_alarm(self._input_timeout)
                 self._input_timeout = None
-            timeout, keys, raw = self.get_input_nonblocking()  # pylint: disable=no-member  # should we deprecate?
+
+            # should we deprecate?
+            timeout, keys, raw = self.get_input_nonblocking()  # type: ignore[attr-defined]  # pylint: disable=no-member
             if timeout is not None:
                 self._input_timeout = event_loop.alarm(timeout, wrapper)
 
@@ -404,26 +437,17 @@ class Screen(BaseScreen, RealTerminal):
     @typing.overload
     def parse_input(
         self,
-        event_loop: None,
+        event_loop: EventLoop | None,
         callback: None,
         codes: list[int],
         wait_for_more: bool = ...,
-    ) -> tuple[list[str], list[int]]: ...
+    ) -> tuple[_DecodedInput, list[int]]: ...
 
     @typing.overload
     def parse_input(
         self,
-        event_loop: EventLoop,
-        callback: None,
-        codes: list[int],
-        wait_for_more: bool = ...,
-    ) -> tuple[list[str], list[int]]: ...
-
-    @typing.overload
-    def parse_input(
-        self,
-        event_loop: EventLoop,
-        callback: Callable[[list[str], list[int]], typing.Any],
+        event_loop: EventLoop | None,
+        callback: Callable[[_DecodedInput, list[int]], typing.Any],
         codes: list[int],
         wait_for_more: bool = ...,
     ) -> None: ...
@@ -431,21 +455,19 @@ class Screen(BaseScreen, RealTerminal):
     def parse_input(
         self,
         event_loop: EventLoop | None,
-        callback: Callable[[list[str], list[int]], typing.Any] | None,
+        callback: Callable[[_DecodedInput, list[int]], typing.Any] | None,
         codes: list[int],
         wait_for_more: bool = True,
-    ) -> tuple[list[str], list[int]] | None:
+    ) -> tuple[_DecodedInput, list[int]] | None:
         """
-        Read any available input from get_available_raw_input, parses it into
-        keys, and calls the given callback.
+        Read any available input from get_available_raw_input, parses it into keys, and calls the given callback.
 
         The current implementation tries to avoid any assumptions about what
         the screen or event loop look like; it only deals with parsing keycodes
         and setting a timeout when an incomplete one is detected.
 
         `codes` should be a sequence of keycodes, i.e. bytes.  A bytearray is
-        appropriate, but beware of using bytes, which only iterates as integers
-        on Python 3.
+        appropriate, but beware of using bytes, which only iterates as integers on Python 3.
         """
 
         logger = self.logger.getChild("parse_input")
@@ -460,7 +482,8 @@ class Screen(BaseScreen, RealTerminal):
         decoded_codes = []
         try:
             while codes:
-                run, codes = escape.process_keyqueue(codes, wait_for_more)
+                run, remaining_codes = escape.process_keyqueue(codes, wait_for_more)
+                codes = list(remaining_codes)
                 decoded_codes.extend(run)
         except escape.MoreInputRequired:
             # Set a timer to wait for the rest of the input; if it goes off
@@ -469,7 +492,7 @@ class Screen(BaseScreen, RealTerminal):
             raw_codes = original_codes[:k]
             self._partial_codes = codes
 
-            def _parse_incomplete_input():
+            def _parse_incomplete_input() -> None:
                 self._input_timeout = None
                 self._partial_codes = []
                 self.parse_input(event_loop, callback, codes, wait_for_more=False)
@@ -545,25 +568,73 @@ class Screen(BaseScreen, RealTerminal):
                 return "\b" + escape.CURSOR_HOME_COL + escape.move_cursor_up(cy - y) + escape.move_cursor_right(x)
             return "\b" + escape.CURSOR_HOME_COL + escape.move_cursor_down(y - cy) + escape.move_cursor_right(x)
 
-        def is_blank_row(row: list[tuple[object, Literal["0", "U"] | None], bytes]) -> bool:
+        def is_blank_row(row: list[tuple[AttrSpec | str | None, Literal["0", "U"] | None, bytes]]) -> bool:
             if len(row) > 1:
                 return False
             return not row[0][2].strip()
 
-        def attr_to_escape(a: AttrSpec | str | None) -> str:
-            if a in self._pal_escape:
-                return self._pal_escape[a]
-            if isinstance(a, AttrSpec):
-                return self._attrspec_to_escape(a)
-            if a is None:
-                return self._attrspec_to_escape(AttrSpec("default", "default"))
-            # undefined attributes use default/default
-            self.logger.debug(f"Undefined attribute: {a!r}")
-            return self._attrspec_to_escape(AttrSpec("default", "default"))
-
-        def using_standout_or_underline(a: AttrSpec | str) -> bool:
-            a = self._pal_attrspec.get(a, a)
+        def using_standout_or_underline(a: AttrSpec | str | None) -> bool:
+            a = self._pal_attrspec.get(a, a)  # type: ignore[arg-type]
             return isinstance(a, AttrSpec) and (a.standout or a.underline)
+
+        def partial_display() -> bool:
+            """Returns True if the screen is in partial display mode ie. only some rows belong to the display"""
+            return self._rows_used is not None
+
+        def handle_row(
+            attr: AttrSpec | str | None,
+            charset: Literal["0", "U"] | None,
+            run: bytes,
+            last: bool,
+        ) -> None:
+            nonlocal last_charset_flag  # type: ignore[misc]
+            nonlocal last_attributes  # type: ignore[misc]
+            nonlocal first  # type: ignore[misc]
+
+            if not isinstance(run, bytes):  # canvases render with bytes
+                raise TypeError(run)
+
+            if charset != "U":
+                run = run.translate(UNPRINTABLE_TRANS_TABLE)
+
+            if last_attributes != attr:
+                output.append(self._attr_to_escape(attr))
+                last_attributes = attr
+
+            if last:
+                output.append("\x08" * back)
+
+            if encoding != "utf-8" and (first or last_charset_flag != charset):
+                if charset not in {None, "0", "U"}:
+                    raise ValueError(charset)
+                if last_charset_flag == "U":
+                    output.append(escape.IBMPC_OFF)
+
+                if charset is None:
+                    icss = escape.SI
+                elif charset == "U":
+                    icss = escape.IBMPC_ON
+                else:
+                    icss = escape.SO
+
+                output.append(icss)
+
+                last_charset_flag = charset
+
+            line_text = run.decode(encoding, "replace")
+
+            if not last:
+                output.append(line_text)
+            else:
+                if not IS_WINDOWS:
+                    output.extend((escape.INSERT_ON, line_text, escape.INSERT_OFF))
+                else:
+                    output.extend((f"{escape.ESC}[{str_util.calc_width(line_text, 0, len(line_text))}@", line_text))
+
+                if encoding != "utf-8" and charset == "U":
+                    output.append(escape.IBMPC_OFF)
+
+            first = False
 
         encoding = util.get_encoding()
 
@@ -590,22 +661,19 @@ class Screen(BaseScreen, RealTerminal):
 
         logger.debug(f"Drawing screen with size {size!r}")
 
-        last_attributes = None  # Default = empty
+        last_attributes: AttrSpec | str | None = None  # Default = empty
 
-        output: list[str] = [escape.HIDE_CURSOR, attr_to_escape(last_attributes)]
-
-        def partial_display() -> bool:
-            # returns True if the screen is in partial display mode ie. only some rows belong to the display
-            return self._rows_used is not None
+        output: list[str] = [escape.HIDE_CURSOR, self._attr_to_escape(last_attributes)]
 
         if not partial_display():
             output.append(escape.CURSOR_HOME)
 
+        osb: list[list[tuple[AttrSpec | str | None, Literal["0", "U"] | None, bytes]]]
         if self.screen_buf:
             osb = self.screen_buf
         else:
             osb = []
-        sb: list[list[tuple[object, Literal["0", "U"] | None, bytes]]] = []
+        sb: list[list[tuple[AttrSpec | str | None, Literal["0", "U"] | None, bytes]]] = []
         cy = self._cy
         y = -1
 
@@ -614,7 +682,7 @@ class Screen(BaseScreen, RealTerminal):
         cy = 0
 
         first = True
-        last_charset_flag = None
+        last_charset_flag: Literal["0", "U"] | None = None
 
         for row in canvas.content():
             y += 1
@@ -628,7 +696,7 @@ class Screen(BaseScreen, RealTerminal):
 
             # leave blank lines off display when we are using
             # the default screen buffer (allows partial screen)
-            if partial_display() and y > self._rows_used:
+            if partial_display() and y > typing.cast("int", self._rows_used):
                 if is_blank_row(row):
                     continue
                 self._rows_used = y
@@ -641,6 +709,8 @@ class Screen(BaseScreen, RealTerminal):
             cy = y
 
             whitespace_at_end = False
+            back = 0
+
             if row:
                 a, cs, run = row[-1]
                 if run[-1:] == b" " and self.back_color_erase and not using_standout_or_underline(a):
@@ -648,63 +718,15 @@ class Screen(BaseScreen, RealTerminal):
                     row = [*row[:-1], (a, cs, run.rstrip(b" "))]  # noqa: PLW2901
                 elif y == maxrow - 1 and maxcol > 1:
                     row, back, ins = self._last_row(row)  # noqa: PLW2901
+            else:
+                continue
 
             for a, cs, run in row:
-                if not isinstance(run, bytes):  # canvases render with bytes
-                    raise TypeError(run)
-
-                if cs != "U":
-                    run = run.translate(UNPRINTABLE_TRANS_TABLE)  # noqa: PLW2901
-
-                if last_attributes != a:
-                    output.append(attr_to_escape(a))
-                    last_attributes = a
-
-                if encoding != "utf-8" and (first or last_charset_flag != cs):
-                    if cs not in {None, "0", "U"}:
-                        raise ValueError(cs)
-                    if last_charset_flag == "U":
-                        output.append(escape.IBMPC_OFF)
-
-                    if cs is None:
-                        output.append(escape.SI)
-                    elif cs == "U":
-                        output.append(escape.IBMPC_ON)
-                    else:
-                        output.append(escape.SO)
-                    last_charset_flag = cs
-
-                output.append(run.decode(encoding, "replace"))
-                first = False
+                handle_row(a, cs, run, last=False)
 
             if ins:
-                (inserta, insertcs, inserttext) = ins
-                ias = attr_to_escape(inserta)
-                if insertcs not in {None, "0", "U"}:
-                    raise ValueError(insertcs)
-
-                if isinstance(inserttext, bytes):
-                    inserttext = inserttext.decode(encoding)
-
-                output.extend(("\x08" * back, ias))  # pylint: disable=used-before-assignment  # defined in `if row`
-
-                if encoding != "utf-8":
-                    if cs is None:
-                        icss = escape.SI
-                    elif cs == "U":
-                        icss = escape.IBMPC_ON
-                    else:
-                        icss = escape.SO
-
-                    output.append(icss)
-
-                if not IS_WINDOWS:
-                    output += [escape.INSERT_ON, inserttext, escape.INSERT_OFF]
-                else:
-                    output += [f"{escape.ESC}[{str_util.calc_width(inserttext, 0, len(inserttext))}@", inserttext]
-
-                if encoding != "utf-8" and cs == "U":
-                    output.append(escape.IBMPC_OFF)
+                (a, cs, run) = ins
+                handle_row(a, cs, run, last=True)
 
             if whitespace_at_end:
                 output.append(escape.ERASE_IN_LINE_RIGHT)
@@ -733,15 +755,15 @@ class Screen(BaseScreen, RealTerminal):
 
     def _last_row(
         self,
-        row: list[tuple[object, Literal["0", "U"] | None, bytes]],
+        row: list[tuple[AttrSpec | str | None, Literal["0", "U"] | None, bytes]],
     ) -> tuple[
-        list[tuple[object, Literal["0", "U"] | None, bytes]],
+        list[tuple[AttrSpec | str | None, Literal["0", "U"] | None, bytes]],
         int,
-        tuple[object, Literal["0", "U"] | None, bytes],
+        tuple[AttrSpec | str | None, Literal["0", "U"] | None, bytes],
     ]:
-        """On the last row we need to slide the bottom right character
-        into place. Calculate the new line, attr and an insert sequence
-        to do that.
+        """On the last row we need to slide the bottom right character into place.
+
+        Calculate the new line, attr and an insert sequence to do that.
 
         eg. last row:
         XXXXXXXXXXXXXXXXXXXXYZ
@@ -749,7 +771,7 @@ class Screen(BaseScreen, RealTerminal):
         Y will be drawn after Z, shifting Z into position.
         """
 
-        new_row = row[:-1]
+        new_row: list[tuple[AttrSpec | str | None, Literal["0", "U"] | None, bytes]] = row[:-1]
         z_attr, z_cs, last_text = row[-1]
         last_cols = str_util.calc_width(last_text, 0, len(last_text))
         last_offs, z_col = str_util.calc_text_pos(last_text, 0, len(last_text), last_cols - 1)
@@ -782,6 +804,18 @@ class Screen(BaseScreen, RealTerminal):
         call to draw_screen().
         """
         self.screen_buf = None
+
+    def _attr_to_escape(self, a: AttrSpec | str | None) -> str:
+        """Convert attribute instance a to an escape sequence for the terminal."""
+        if found := self._pal_escape.get(a):  # type: ignore[arg-type]
+            return found
+        if isinstance(a, AttrSpec):
+            return self._attrspec_to_escape(a)
+        if a is None:
+            return self._attrspec_to_escape(AttrSpec("default", "default"))
+        # undefined attributes use default/default
+        self.logger.debug(f"Undefined attribute: {a!r}")
+        return self._attrspec_to_escape(AttrSpec("default", "default"))
 
     def _attrspec_to_escape(self, a: AttrSpec) -> str:
         """
@@ -887,17 +921,17 @@ class Screen(BaseScreen, RealTerminal):
         else:
             colors = self.colors
 
-        def rgb_values(n) -> tuple[int | None, int | None, int | None]:
+        def rgb_values(n: int) -> tuple[int | None, int | None, int | None]:
             if colors == 16:
                 aspec = AttrSpec(f"h{n:d}", "", 256)
             else:
-                aspec = AttrSpec(f"h{n:d}", "", colors)
+                aspec = AttrSpec(f"h{n:d}", "", typing.cast("Literal[1, 16, 88, 256, 16777216]", colors))
             return aspec.get_rgb_values()[:3]
 
         entries = [(n, *rgb_values(n)) for n in range(min(colors, 256))]
         self.modify_terminal_palette(entries)
 
-    def modify_terminal_palette(self, entries: list[tuple[int, int | None, int | None, int | None]]):
+    def modify_terminal_palette(self, entries: list[tuple[int, int | None, int | None, int | None]]) -> None:
         """
         entries - list of (index, red, green, blue) tuples.
 
@@ -918,5 +952,5 @@ class Screen(BaseScreen, RealTerminal):
 
     # shortcut for creating an AttrSpec with this screen object's
     # number of colors
-    def AttrSpec(self, fg, bg) -> AttrSpec:
+    def AttrSpec(self, fg: str, bg: str) -> AttrSpec:
         return AttrSpec(fg, bg, self.colors)

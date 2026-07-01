@@ -1,0 +1,36 @@
+Metadata-Version: 2.4
+Name: pyroscope-io
+Version: 1.0.12
+Summary: Pyroscope Python integration
+Author-email: Tolya Korniltsev <anatoly.korniltsev@grafana.com>
+Maintainer-email: Tolyan Korniltsev <anatoly.korniltsev@grafana.com>
+License-Expression: Apache-2.0
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: MacOS
+Classifier: Operating System :: POSIX
+Classifier: Operating System :: Unix
+Classifier: Programming Language :: Python
+Classifier: Topic :: Software Development
+Classifier: Topic :: Software Development :: Debuggers
+Classifier: Topic :: Utilities
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: cffi<3.0.0,>=2.0.0
+Dynamic: license-file
+
+# pyroscope-python
+
+Pyroscope continuous profiling agent for Python applications.
+
+Uses [py-spy](https://github.com/benfred/py-spy) for stack sampling and the [pyroscope](https://crates.io/crates/pyroscope) Rust crate to send profiles to a Pyroscope server.
+
+## Installation
+
+```bash
+pip install pyroscope-io
+```
+
+## License
+
+Apache-2.0

@@ -18,7 +18,6 @@ from deepeval.metrics.dag.utils import (
     is_valid_dag_from_roots,
     extract_required_params,
 )
-from deepeval.metrics.api import metric_data_manager
 
 
 class DAGMetric(BaseMetric):
@@ -62,13 +61,20 @@ class DAGMetric(BaseMetric):
         _in_component: bool = False,
         _log_metric_to_confident: bool = True,
     ) -> float:
+        multimodal = test_case.multimodal
         check_llm_test_case_params(
             test_case,
             extract_required_params(self.dag.root_nodes, self.dag.multiturn),
+            None,
+            None,
             self,
+            self.model,
+            multimodal,
         )
 
         self.evaluation_cost = 0 if self.using_native_model else None
+        self.input_tokens = 0 if self.using_native_model else None
+        self.output_tokens = 0 if self.using_native_model else None
         with metric_progress_indicator(
             self, _show_indicator=_show_indicator, _in_component=_in_component
         ):
@@ -92,10 +98,6 @@ class DAGMetric(BaseMetric):
                         f"Score: {self.score}\nReason: {self.reason}",
                     ],
                 )
-                if _log_metric_to_confident:
-                    metric_data_manager.post_metric_if_enabled(
-                        self, test_case=test_case
-                    )
             return self.score
 
     async def a_measure(
@@ -105,13 +107,20 @@ class DAGMetric(BaseMetric):
         _in_component: bool = False,
         _log_metric_to_confident: bool = True,
     ) -> float:
+        multimodal = test_case.multimodal
         check_llm_test_case_params(
             test_case,
             extract_required_params(self.dag.root_nodes, self.dag.multiturn),
+            None,
+            None,
             self,
+            self.model,
+            multimodal,
         )
 
         self.evaluation_cost = 0 if self.using_native_model else None
+        self.input_tokens = 0 if self.using_native_model else None
+        self.output_tokens = 0 if self.using_native_model else None
         with metric_progress_indicator(
             self,
             async_mode=True,
@@ -127,10 +136,6 @@ class DAGMetric(BaseMetric):
                     f"Score: {self.score}\nReason: {self.reason}",
                 ],
             )
-            if _log_metric_to_confident:
-                metric_data_manager.post_metric_if_enabled(
-                    self, test_case=test_case
-                )
             return self.score
 
     def is_successful(self) -> bool:

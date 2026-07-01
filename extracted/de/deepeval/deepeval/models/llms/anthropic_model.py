@@ -1,55 +1,126 @@
-import warnings
+from typing import Optional, Tuple, Union, Dict, List
+from pydantic import BaseModel, SecretStr
 
-from typing import Optional, Tuple, Union, Dict
-from anthropic import Anthropic, AsyncAnthropic
-from pydantic import BaseModel
-
+from deepeval.errors import DeepEvalError
 from deepeval.models import DeepEvalBaseLLM
 from deepeval.models.llms.utils import trim_and_load_json
 from deepeval.models.retry_policy import (
     create_retry_decorator,
     sdk_retries_for,
 )
-from deepeval.models.utils import parse_model_name
+from deepeval.models.utils import (
+    require_costs,
+    require_secret_api_key,
+    normalize_kwargs_and_extract_aliases,
+    EvaluationCost,
+)
+from deepeval.test_case import MLLMImage
+from deepeval.utils import check_if_multimodal, convert_to_multi_modal_array
 from deepeval.config.settings import get_settings
 from deepeval.constants import ProviderSlug as PS
-
+from deepeval.utils import require_dependency, require_param
+from deepeval.models.llms.constants import ANTHROPIC_MODELS_DATA
 
 # consistent retry rules
 retry_anthropic = create_retry_decorator(PS.ANTHROPIC)
 
-model_pricing = {
-    "claude-opus-4-20250514": {"input": 15.00 / 1e6, "output": 75.00 / 1e6},
-    "claude-sonnet-4-20250514": {"input": 3.00 / 1e6, "output": 15.00 / 1e6},
-    "claude-3-7-sonnet-latest": {"input": 3.00 / 1e6, "output": 15.00 / 1e6},
-    "claude-3-5-haiku-latest": {"input": 0.80 / 1e6, "output": 4.00 / 1e6},
-    "claude-3-5-sonnet-latest": {"input": 3.00 / 1e6, "output": 15.00 / 1e6},
-    "claude-3-opus-latest": {"input": 15.00 / 1e6, "output": 75.00 / 1e6},
-    "claude-3-sonnet-20240229": {"input": 3.00 / 1e6, "output": 15.00 / 1e6},
-    "claude-3-haiku-20240307": {"input": 0.25 / 1e6, "output": 1.25 / 1e6},
-    "claude-instant-1.2": {"input": 0.80 / 1e6, "output": 2.40 / 1e6},
+_ALIAS_MAP = {
+    "api_key": ["_anthropic_api_key"],
 }
+
+default_model = "claude-sonnet-4-6-20250514"
 
 
 class AnthropicModel(DeepEvalBaseLLM):
     def __init__(
         self,
-        model: str = "claude-3-7-sonnet-latest",
-        temperature: float = 0,
-        _anthropic_api_key: Optional[str] = None,
+        model: Optional[str] = None,
+        api_key: Optional[str] = None,
+        temperature: Optional[float] = None,
+        cost_per_input_token: Optional[float] = None,
+        cost_per_output_token: Optional[float] = None,
         generation_kwargs: Optional[Dict] = None,
         **kwargs,
     ):
-        model_name = parse_model_name(model)
-        self._anthropic_api_key = _anthropic_api_key
+        settings = get_settings()
+        normalized_kwargs, alias_values = normalize_kwargs_and_extract_aliases(
+            "AnthropicModel",
+            kwargs,
+            _ALIAS_MAP,
+        )
 
-        if temperature < 0:
-            raise ValueError("Temperature must be >= 0.")
+        # re-map depricated keywords to re-named positional args
+        if api_key is None and "api_key" in alias_values:
+            api_key = alias_values["api_key"]
+
+        if api_key is not None:
+            # keep it secret, keep it safe from serializings, logging and alike
+            self.api_key: Optional[SecretStr] = SecretStr(api_key)
+        else:
+            self.api_key = settings.ANTHROPIC_API_KEY
+
+        model = model or settings.ANTHROPIC_MODEL_NAME or default_model
+
+        if temperature is not None:
+            temperature = float(temperature)
+        elif settings.TEMPERATURE is not None:
+            temperature = settings.TEMPERATURE
+        # else: leave as None so `temperature` is only sent to the client when
+        # explicitly configured — some models (e.g. reasoning models) reject it.
+
+        cost_per_input_token = (
+            cost_per_input_token
+            if cost_per_input_token is not None
+            else settings.ANTHROPIC_COST_PER_INPUT_TOKEN
+        )
+        cost_per_output_token = (
+            cost_per_output_token
+            if cost_per_output_token is not None
+            else settings.ANTHROPIC_COST_PER_OUTPUT_TOKEN
+        )
+
+        # Validation
+        model = require_param(
+            model,
+            provider_label="AnthropicModel",
+            env_var_name="ANTHROPIC_MODEL_NAME",
+            param_hint="model",
+        )
+
+        if temperature is not None and temperature < 0:
+            raise DeepEvalError("Temperature must be >= 0.")
         self.temperature = temperature
 
-        self.kwargs = kwargs
-        self.generation_kwargs = generation_kwargs or {}
-        super().__init__(model_name)
+        self.model_data = ANTHROPIC_MODELS_DATA.get(model)
+
+        cost_per_input_token, cost_per_output_token = require_costs(
+            self.model_data,
+            model,
+            "ANTHROPIC_COST_PER_INPUT_TOKEN",
+            "ANTHROPIC_COST_PER_OUTPUT_TOKEN",
+            cost_per_input_token,
+            cost_per_output_token,
+        )
+        self.model_data.input_price = cost_per_input_token
+        self.model_data.output_price = cost_per_output_token
+
+        # Keep sanitized kwargs for client call to strip legacy keys
+        self.kwargs = normalized_kwargs
+        self.kwargs.pop(
+            "temperature", None
+        )  # to avoid duplicate with self.temperature
+        max_tokens = self.kwargs.pop("max_tokens", None)
+
+        self.generation_kwargs = dict(generation_kwargs or {})
+        self.generation_kwargs.pop(
+            "temperature", None
+        )  # to avoid duplicate with self.temperature
+        default_max_tokens = 1024 if max_tokens is None else max_tokens
+        self._max_tokens = int(
+            self.generation_kwargs.pop("max_tokens", default_max_tokens)
+        )
+
+        super().__init__(model)
 
     ###############################################
     # Generate functions
@@ -58,20 +129,34 @@ class AnthropicModel(DeepEvalBaseLLM):
     @retry_anthropic
     def generate(
         self, prompt: str, schema: Optional[BaseModel] = None
-    ) -> Tuple[Union[str, Dict], float]:
+    ) -> Tuple[Union[str, BaseModel], float]:
+        if check_if_multimodal(prompt):
+            prompt = convert_to_multi_modal_array(input=prompt)
+            content = self.generate_content(prompt)
+        else:
+            content = [{"type": "text", "text": prompt}]
+
+        # Get max_tokens from kwargs, default to 1024 if not provided
+        max_tokens = self._max_tokens
         chat_model = self.load_model()
-        message = chat_model.messages.create(
-            max_tokens=1024,
+        create_kwargs = dict(
+            max_tokens=max_tokens,
             messages=[
                 {
                     "role": "user",
-                    "content": prompt,
+                    "content": content,
                 }
             ],
-            model=self.model_name,
-            temperature=self.temperature,
+            model=self.name,
             **self.generation_kwargs,
         )
+        # Only send `temperature` when explicitly configured and the model
+        # supports it — some models reject/deprecate `temperature`.
+        if self.temperature is not None and not (
+            self.model_data and self.model_data.supports_temperature is False
+        ):
+            create_kwargs["temperature"] = self.temperature
+        message = chat_model.messages.create(**create_kwargs)
         cost = self.calculate_cost(
             message.usage.input_tokens, message.usage.output_tokens
         )
@@ -84,20 +169,34 @@ class AnthropicModel(DeepEvalBaseLLM):
     @retry_anthropic
     async def a_generate(
         self, prompt: str, schema: Optional[BaseModel] = None
-    ) -> Tuple[str, float]:
+    ) -> Tuple[Union[str, BaseModel], float]:
+        if check_if_multimodal(prompt):
+            prompt = convert_to_multi_modal_array(input=prompt)
+            content = self.generate_content(prompt)
+        else:
+            content = [{"type": "text", "text": prompt}]
+
+        # Get max_tokens from kwargs, default to 1024 if not provided
+        max_tokens = self._max_tokens
         chat_model = self.load_model(async_mode=True)
-        message = await chat_model.messages.create(
-            max_tokens=1024,
+        create_kwargs = dict(
+            max_tokens=max_tokens,
             messages=[
                 {
                     "role": "user",
-                    "content": prompt,
+                    "content": content,
                 }
             ],
-            model=self.model_name,
-            temperature=self.temperature,
+            model=self.name,
             **self.generation_kwargs,
         )
+        # Only send `temperature` when explicitly configured and the model
+        # supports it — some models reject/deprecate `temperature`.
+        if self.temperature is not None and not (
+            self.model_data and self.model_data.supports_temperature is False
+        ):
+            create_kwargs["temperature"] = self.temperature
+        message = await chat_model.messages.create(**create_kwargs)
         cost = self.calculate_cost(
             message.usage.input_tokens, message.usage.output_tokens
         )
@@ -108,43 +207,79 @@ class AnthropicModel(DeepEvalBaseLLM):
 
             return schema.model_validate(json_output), cost
 
+    def generate_content(self, multimodal_input: List[Union[str, MLLMImage]]):
+        content = []
+        for element in multimodal_input:
+            if isinstance(element, str):
+                content.append({"type": "text", "text": element})
+            elif isinstance(element, MLLMImage):
+                if element.url and not element.local:
+                    content.append(
+                        {
+                            "type": "image",
+                            "source": {"type": "url", "url": element.url},
+                        }
+                    )
+                else:
+                    element.ensure_images_loaded()
+                    mime_type = element.mimeType or "image/jpeg"
+                    content.append(
+                        {
+                            "type": "image",
+                            "source": {
+                                "type": "base64",
+                                "media_type": mime_type,
+                                "data": element.dataBase64,
+                            },
+                        }
+                    )
+        return content
+
     ###############################################
     # Utilities
     ###############################################
 
     def calculate_cost(self, input_tokens: int, output_tokens: int) -> float:
-        pricing = model_pricing.get(self.model_name)
-
-        if pricing is None:
-            # Calculate average cost from all known models
-            avg_input_cost = sum(
-                p["input"] for p in model_pricing.values()
-            ) / len(model_pricing)
-            avg_output_cost = sum(
-                p["output"] for p in model_pricing.values()
-            ) / len(model_pricing)
-            pricing = {"input": avg_input_cost, "output": avg_output_cost}
-
-            warnings.warn(
-                f"[Warning] Pricing not defined for model '{self.model_name}'. "
-                "Using average input/output token costs from existing model_pricing."
+        if self.model_data.input_price and self.model_data.output_price:
+            input_cost = input_tokens * self.model_data.input_price
+            output_cost = output_tokens * self.model_data.output_price
+            return EvaluationCost(
+                input_cost + output_cost, input_tokens, output_tokens
             )
 
-        input_cost = input_tokens * pricing["input"]
-        output_cost = output_tokens * pricing["output"]
-        return input_cost + output_cost
+    #########################
+    # Capabilities          #
+    #########################
+
+    def supports_log_probs(self) -> Union[bool, None]:
+        return self.model_data.supports_log_probs
+
+    def supports_temperature(self) -> Union[bool, None]:
+        return self.model_data.supports_temperature
+
+    def supports_multimodal(self) -> Union[bool, None]:
+        return self.model_data.supports_multimodal
+
+    def supports_structured_outputs(self) -> Union[bool, None]:
+        return self.model_data.supports_structured_outputs
+
+    def supports_json_mode(self) -> Union[bool, None]:
+        return self.model_data.supports_json
 
     ###############################################
     # Model
     ###############################################
 
     def load_model(self, async_mode: bool = False):
-        if not async_mode:
-            return self._build_client(Anthropic)
-        return self._build_client(AsyncAnthropic)
+        module = require_dependency(
+            "anthropic",
+            provider_label="AnthropicModel",
+            install_hint="Install it with `pip install anthropic`.",
+        )
 
-    def get_model_name(self):
-        return f"{self.model_name}"
+        if not async_mode:
+            return self._build_client(module.Anthropic)
+        return self._build_client(module.AsyncAnthropic)
 
     def _client_kwargs(self) -> Dict:
         kwargs = dict(self.kwargs or {})
@@ -155,9 +290,14 @@ class AnthropicModel(DeepEvalBaseLLM):
         return kwargs
 
     def _build_client(self, cls):
-        settings = get_settings()
+        api_key = require_secret_api_key(
+            self.api_key,
+            provider_label="Anthropic",
+            env_var_name="ANTHROPIC_API_KEY",
+            param_hint="`api_key` to AnthropicModel(...)",
+        )
         kw = dict(
-            api_key=settings.ANTHROPIC_API_KEY or self._anthropic_api_key,
+            api_key=api_key,
             **self._client_kwargs(),
         )
         try:
@@ -168,3 +308,6 @@ class AnthropicModel(DeepEvalBaseLLM):
                 kw.pop("max_retries", None)
                 return cls(**kw)
             raise
+
+    def get_model_name(self):
+        return f"{self.name} (Anthropic)"

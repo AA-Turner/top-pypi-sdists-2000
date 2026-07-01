@@ -7,6 +7,7 @@ import logging
 import warnings
 from collections.abc import Awaitable, Callable, Generator, Sequence
 from typing import Any as TypingAny
+from typing import cast
 
 from pydispatch.dispatcher import (
     Anonymous,
@@ -50,7 +51,7 @@ def send_catch_log(
         result: TypingAny
         try:
             response = robustApply(
-                receiver, signal=signal, sender=sender, *arguments, **named
+                receiver, *arguments, signal=signal, sender=sender, **named
             )
             if isinstance(response, Deferred):
                 logger.error(
@@ -118,9 +119,9 @@ def _send_catch_log_deferred(
             robustApply,
             True,
             receiver,
+            *arguments,
             signal=signal,
             sender=sender,
-            *arguments,
             **named,
         )
         d.addErrback(logerror, receiver)
@@ -185,12 +186,14 @@ async def _send_catch_log_asyncio(
     handlers: list[Awaitable[TypingAny]] = []
     for receiver in liveReceivers(getAllReceivers(sender, signal)):
 
-        async def handler(receiver: Callable) -> TypingAny:
+        async def handler(
+            receiver: Callable[..., Any],
+        ) -> tuple[Callable[..., Any], TypingAny]:
             result: TypingAny
             try:
                 result = await ensure_awaitable(
                     robustApply(
-                        receiver, signal=signal, sender=sender, *arguments, **named
+                        receiver, *arguments, signal=signal, sender=sender, **named
                     ),
                     _warn=global_object_name(receiver),
                 )
@@ -208,7 +211,10 @@ async def _send_catch_log_asyncio(
 
         handlers.append(handler(receiver))
 
-    return await asyncio.gather(*handlers, return_exceptions=True)
+    return cast(
+        "list[tuple[TypingAny, TypingAny]]",
+        await asyncio.gather(*handlers, return_exceptions=True),
+    )
 
 
 def disconnect_all(signal: TypingAny = Any, sender: TypingAny = Any) -> None:

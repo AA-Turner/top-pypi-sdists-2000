@@ -1,20 +1,37 @@
+from __future__ import annotations
+
+from importlib import import_module
+from typing import TYPE_CHECKING, Any
+
 from django.conf import settings
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, get_user
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Model
-from django.http import HttpResponse
-from django.shortcuts import redirect, resolve_url
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect, render, resolve_url
 from django.template import TemplateDoesNotExist, engines, loader
 from django.utils.crypto import get_random_string
+from django.utils.datastructures import MultiValueDict
 from django.utils.encoding import force_str
 from django.utils.functional import Promise
 from django.utils.translation import get_language
 from social_core.strategy import BaseStrategy, BaseTemplateStrategy
+from social_core.utils import PARTIAL_TOKEN_PENDING_CONFIRMATION_SESSION_NAME
+
+if TYPE_CHECKING:
+    from django.contrib.sessions.backends.base import SessionBase
+    from social_core.backends.base import BaseAuth
+    from social_core.storage import PartialMixin
+
+
+PARTIAL_PIPELINE_CONFIRMATION_NONCE_PARAMETER = "partial_pipeline_confirm_nonce"
 
 
 def render_template_string(request, html, context=None):
-    """Take a template in the form of a string and render it for the
-    given context"""
+    """
+    Take a template in the form of a string and render it for the
+    given context
+    """
     template = engines["django"].from_string(html)
     return template.render(context=context, request=request)
 
@@ -28,13 +45,32 @@ class DjangoTemplateStrategy(BaseTemplateStrategy):
         return render_template_string(self.strategy.request, html, context)
 
 
+def create_session(session_key: str | None = None) -> SessionBase:
+    engine = import_module(settings.SESSION_ENGINE)
+    return engine.SessionStore(session_key)
+
+
 class DjangoStrategy(BaseStrategy):
     DEFAULT_TEMPLATE_STRATEGY = DjangoTemplateStrategy
+    _session: SessionBase
 
-    def __init__(self, storage, request=None, tpl=None):
-        self.request = request
-        self.session = request.session if request else {}
+    def __init__(self, storage, request: None | HttpRequest = None, tpl=None):
+        self.request: HttpRequest = request
+        if request:
+            self.session = request.session
         super().__init__(storage, tpl)
+
+    @property
+    def session(self) -> SessionBase:
+        try:
+            return self._session
+        except AttributeError:
+            self._session = create_session()
+            return self._session
+
+    @session.setter
+    def session(self, value: SessionBase) -> None:
+        self._session = value
 
     def get_setting(self, name):
         value = getattr(settings, name)
@@ -60,13 +96,14 @@ class DjangoStrategy(BaseStrategy):
     def request_host(self):
         if self.request:
             return self.request.get_host()
+        return None
 
     def request_is_secure(self):
         """Is the request using HTTPS?"""
         return self.request.is_secure()
 
     def request_path(self):
-        """path of the current request"""
+        """Path of the current request"""
         return self.request.path
 
     def request_port(self):
@@ -87,9 +124,59 @@ class DjangoStrategy(BaseStrategy):
     def html(self, content):
         return HttpResponse(content, content_type="text/html;charset=UTF-8")
 
+    def partial_pipeline_external_resume_confirmation(
+        self,
+        backend: BaseAuth,
+        partial: PartialMixin,
+        request_data: dict[str, Any],
+    ) -> HttpResponse | None:
+        if not self.request:
+            return None
+
+        nonce = self.random_string(32)
+        self.session_set(PARTIAL_TOKEN_PENDING_CONFIRMATION_SESSION_NAME, nonce)
+        confirmation_parameter = backend.setting(
+            "PARTIAL_PIPELINE_EXTERNAL_RESUME_CONFIRMATION_PARAMETER",
+            "partial_pipeline_confirm",
+        )
+        return render(
+            self.request,
+            "social_django/partial_pipeline_external_resume.html",
+            {
+                "action_url": self.request.path,
+                "backend": backend,
+                "backend_name": backend.name,
+                "confirmation_parameter": confirmation_parameter,
+                "confirmation_value": "1",
+                "confirmation_nonce_parameter": (PARTIAL_PIPELINE_CONFIRMATION_NONCE_PARAMETER),
+                "confirmation_nonce": nonce,
+                "partial": partial,
+            },
+        )
+
+    def partial_pipeline_external_resume_confirmed(
+        self,
+        backend: BaseAuth,
+        request_data: dict[str, Any],
+    ) -> bool:
+        if not self.request or self.request.method != "POST":
+            return False
+
+        confirmation_parameter = backend.setting(
+            "PARTIAL_PIPELINE_EXTERNAL_RESUME_CONFIRMATION_PARAMETER",
+            "partial_pipeline_confirm",
+        )
+        if not confirmation_parameter or confirmation_parameter not in request_data:
+            return False
+
+        expected_nonce = self.session_get(PARTIAL_TOKEN_PENDING_CONFIRMATION_SESSION_NAME)
+        submitted_nonce = request_data.get(PARTIAL_PIPELINE_CONFIRMATION_NONCE_PARAMETER)
+        return bool(expected_nonce) and submitted_nonce == expected_nonce
+
     def render_html(self, tpl=None, html=None, context=None):
         if not tpl and not html:
-            raise ValueError("Missing template or html parameters")
+            msg = "Missing template or html parameters"
+            raise ValueError(msg)
         context = context or {}
         try:
             template = loader.get_template(tpl)
@@ -125,16 +212,19 @@ class DjangoStrategy(BaseStrategy):
     def build_absolute_uri(self, path=None):
         if self.request:
             return self.request.build_absolute_uri(path)
-        else:
-            return path
+        return path
 
     def random_string(self, length=12, chars=BaseStrategy.ALLOWED_CHARS):
         return get_random_string(length, chars)
 
     def to_session_value(self, val):
-        """Converts values that are instance of Model to a dictionary
-        with enough information to retrieve the instance back later."""
-        if isinstance(val, Model):
+        """
+        Converts values that are instance of Model to a dictionary
+        with enough information to retrieve the instance back later.
+        """
+        if isinstance(val, MultiValueDict):
+            val = val.dict()
+        elif isinstance(val, Model):
             val = {"pk": val.pk, "ctype": ContentType.objects.get_for_model(val).pk}
         return val
 
@@ -142,10 +232,24 @@ class DjangoStrategy(BaseStrategy):
         """Converts back the instance saved by self._ctype function."""
         if isinstance(val, dict) and "pk" in val and "ctype" in val:
             ctype = ContentType.objects.get_for_id(val["ctype"])
-            ModelClass = ctype.model_class()
-            val = ModelClass._default_manager.get(pk=val["pk"])
+            ModelClass = ctype.model_class()  # noqa: N806
+            val = ModelClass._default_manager.get(pk=val["pk"])  # noqa: SLF001
+
         return val
 
     def get_language(self):
         """Return current language"""
         return get_language()
+
+    def get_session_id(self) -> str | None:
+        return self.session.session_key
+
+    def restore_session(self, session_id: str, kwargs: dict[str, Any]) -> None:
+        # Load session
+        self.request.session = self.session = create_session(session_id)
+        # Update request user
+        self.request.user = get_user(self.request)
+        if "user" in kwargs and self.request.user.is_authenticated:
+            kwargs["user"] = self.request.user
+        # Rotate session key to avoid reuse
+        self.session.cycle_key()

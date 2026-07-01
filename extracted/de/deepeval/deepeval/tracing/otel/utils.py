@@ -1,6 +1,7 @@
 import json
+from threading import Lock
 
-from typing import List, Optional, Tuple, Any
+from typing import Dict, List, Optional, Tuple, Any
 from opentelemetry.sdk.trace.export import ReadableSpan
 
 from deepeval.test_case.api import create_api_test_case
@@ -10,8 +11,31 @@ from deepeval.tracing.types import Trace, LLMTestCase, ToolCall
 from deepeval.tracing import trace_manager, BaseSpan
 from deepeval.tracing.utils import make_json_serializable
 
-
 GEN_AI_OPERATION_NAMES = ["chat", "generate_content", "text_completion"]
+
+# Pending-metrics overlay: in-process side-channel for ``List[BaseMetric]``,
+# which can't fit in OTel attrs (primitives only). Writer is
+# ``SpanInterceptor.on_end`` (gated on eval mode); reader is
+# ``ConfidentSpanExporter`` after rebuilding the span from attrs. Keyed by
+# deepeval span uuid (16-char hex of OTel span_id). Pop semantics + eval gate
+# = no unbounded growth. Distinct from ``metric_collection: str``, which is a
+# server-side online-eval reference and rides along as a normal OTel attr.
+_pending_metrics_lock = Lock()
+_pending_metrics_overlay: Dict[str, List[Any]] = {}
+
+
+def stash_pending_metrics(uuid: str, metrics: Optional[List[Any]]) -> None:
+    """Stash span-level metrics for the exporter to pick up. No-op when empty."""
+    if not metrics:
+        return
+    with _pending_metrics_lock:
+        _pending_metrics_overlay[uuid] = list(metrics)
+
+
+def pop_pending_metrics(uuid: str) -> Optional[List[Any]]:
+    """One-shot retrieve metrics for ``uuid``; returns None if absent."""
+    with _pending_metrics_lock:
+        return _pending_metrics_overlay.pop(uuid, None)
 
 
 def to_hex_string(id_value: int | bytes, length: int = 32) -> str:
@@ -417,32 +441,47 @@ def post_test_run(traces: List[Trace], test_run_id: Optional[str]):
     # return test_run_manager.post_test_run(test_run) TODO: add after test run with metric collection is implemented
 
 
-def normalize_pydantic_ai_messages(span: ReadableSpan) -> Optional[list]:
+def normalize_pydantic_ai_messages(span: ReadableSpan) -> list:
+    """Normalize PydanticAI message attributes across instrumentation versions."""
+
+    def _normalize_messages(raw_messages: Any) -> list:
+        if isinstance(raw_messages, str):
+            try:
+                raw_messages = json.loads(raw_messages)
+            except Exception:
+                return []
+        elif isinstance(raw_messages, tuple):
+            raw_messages = list(raw_messages)
+
+        if not isinstance(raw_messages, list):
+            return []
+
+        normalized = []
+        for message in raw_messages:
+            if isinstance(message, str):
+                try:
+                    message = json.loads(message)
+                except Exception:
+                    pass
+            normalized.append(message)
+        return normalized
+
     try:
-        raw = span.attributes.get("pydantic_ai.all_messages")
-        if not raw:
-            return None
+        all_messages = _normalize_messages(
+            span.attributes.get("pydantic_ai.all_messages")
+        )
+        if all_messages:
+            return all_messages
 
-        messages = raw
-        if isinstance(messages, str):
-            messages = json.loads(messages)
-        elif isinstance(messages, tuple):
-            messages = list(messages)
-
-        if isinstance(messages, list):
-            normalized = []
-            for m in messages:
-                if isinstance(m, str):
-                    try:
-                        m = json.loads(m)
-                    except Exception:
-                        pass
-                normalized.append(m)
-            return normalized
+        input_messages = _normalize_messages(
+            span.attributes.get("gen_ai.input.messages")
+        )
+        output_messages = _normalize_messages(
+            span.attributes.get("gen_ai.output.messages")
+        )
+        return input_messages + output_messages
     except Exception:
-        pass
-
-    return []
+        return []
 
 
 def _extract_non_thinking_part_of_last_message(message: dict) -> dict:
@@ -458,6 +497,17 @@ def _extract_non_thinking_part_of_last_message(message: dict) -> dict:
     return None
 
 
+def _is_user_text_message(m: dict) -> bool:
+    """Check if a user message contains actual text content (not tool responses)."""
+    parts = m.get("parts")
+    if parts and isinstance(parts, list):
+        return any(
+            isinstance(p, dict) and p.get("type") == "text" for p in parts
+        )
+    content = m.get("content")
+    return isinstance(content, str)
+
+
 def check_pydantic_ai_agent_input_output(
     span: ReadableSpan,
 ) -> Tuple[Optional[Any], Optional[Any]]:
@@ -467,22 +517,20 @@ def check_pydantic_ai_agent_input_output(
     # Get normalized messages once
     normalized = normalize_pydantic_ai_messages(span)
 
-    # Input (pydantic_ai.all_messages) - slice up to and including the first 'user' message
+    # Input (pydantic_ai.all_messages) - find the last user message with text content
     if normalized:
         try:
-            first_user_idx = None
+            last_user_text_idx = None
             for i, m in enumerate(normalized):
-                role = None
                 if isinstance(m, dict):
                     role = m.get("role") or m.get("author")
-                if role == "user":
-                    first_user_idx = i
-                    break
+                    if role == "user" and _is_user_text_message(m):
+                        last_user_text_idx = i
 
             input_val = (
                 normalized
-                if first_user_idx is None
-                else normalized[: first_user_idx + 1]
+                if last_user_text_idx is None
+                else [normalized[last_user_text_idx]]
             )
         except Exception:
             pass
@@ -507,6 +555,62 @@ def check_pydantic_ai_agent_input_output(
 
     input_val = _flatten_input(input_val)
     return system_instructions + input_val, output_val
+
+
+def check_pydantic_ai_tools_called(
+    span: ReadableSpan,
+) -> Optional[List[ToolCall]]:
+    """Extract tool calls (and their resuls) from pydantic-ai message history
+
+    Tool call live inside `pydantic_ai.all_messages` as parts of type
+    `̀tool_call` ({id, name, arguments}) paired with `tool_call_response`
+    parts ({id, name, result}). We rebuild structured `ToolCall` objects,
+    matching responses to call by `id`.
+    """
+    try:
+        normalized = normalize_pydantic_ai_messages(span)
+        if not normalized:
+            return None
+
+        calls_by_id: dict = {}
+        ordered: List[ToolCall] = []
+
+        for message in normalized:
+            if not isinstance(message, dict):
+                continue
+            for part in message.get("parts", []) or []:
+                if not isinstance(part, dict):
+                    continue
+                part_type = part.get("type")
+
+                if part_type == "tool_call":
+                    raw_args = part.get("arguments")
+                    input_parameters = {}
+                    if isinstance(raw_args, str):
+                        try:
+                            input_parameters = json.loads(raw_args)
+                        except Exception:
+                            input_parameters = {}
+                    elif isinstance(raw_args, dict):
+                        input_parameters = raw_args
+
+                    tool_call = ToolCall(
+                        name=part.get("name", ""),
+                        input_parameters=input_parameters,
+                    )
+                    ordered.append(tool_call)
+                    call_id = part.get("id")
+                    if call_id is not None:
+                        calls_by_id[call_id] = tool_call
+
+                elif part_type == "tool_call_response":
+                    call_id = part.get("id")
+                    if call_id in calls_by_id:
+                        calls_by_id[call_id].output = part.get("result")
+
+        return ordered or None
+    except Exception:
+        return None
 
 
 def check_tool_output(span: ReadableSpan):

@@ -35,6 +35,7 @@ import termios
 import time
 import traceback
 import typing
+import warnings
 from collections import deque
 from contextlib import suppress
 from dataclasses import dataclass
@@ -48,7 +49,7 @@ from urwid.widget import Sizing, Widget
 from .display.common import _BASIC_COLORS, _color_desc_256, _color_desc_true
 
 if typing.TYPE_CHECKING:
-    from collections.abc import Callable, Iterable, Mapping, Sequence
+    from collections.abc import Callable, Hashable, Iterable, Iterator, Mapping, Sequence
 
     from typing_extensions import Literal
 
@@ -214,7 +215,7 @@ class TermCharset:
 
         # prepare defaults
         self.active = 0
-        self.current: str | None = None
+        self.current: Literal["0", "U"] | None = None
 
         self.activate(0)
 
@@ -230,7 +231,7 @@ class TermCharset:
         Activate the given charset slot.
         """
         self.active = g
-        self.current = self.MAPPING.get(self._g[g], None)
+        self.current = self.MAPPING.get(self._g[g], None)  # type: ignore[assignment]
 
     def set_sgr_ibmpc(self) -> None:
         """
@@ -268,7 +269,9 @@ class TermCanvas(Canvas):
         self.modes: TermModes = widget.term_modes
         self.has_focus = False
 
-        self.scrollback_buffer: deque[list[tuple[AttrSpec | None, str | None, bytes]]] = deque(maxlen=10000)
+        self.scrollback_buffer: deque[list[tuple[AttrSpec | None, Literal["0", "U"] | None, bytes]]] = deque(
+            maxlen=10000
+        )
         self.scrolling_up = 0
 
         self.utf8_eat_bytes: int | None = None
@@ -295,7 +298,7 @@ class TermCanvas(Canvas):
         self.scrollregion_end = self.height - 1
 
         self.tabstops: list[int] = []
-        self.term: list[list[tuple[AttrSpec | None, str | None, bytes]]] = []
+        self.term: list[list[tuple[AttrSpec | None, Literal["0", "U"] | None, bytes]]] = []
 
         self.reset()
 
@@ -411,10 +414,10 @@ class TermCanvas(Canvas):
         div, mod = divmod(x, 8)
         return (self.tabstops[div] & (1 << mod)) > 0
 
-    def empty_line(self, char: bytes = b" ") -> list[tuple[AttrSpec | None, str | None, bytes]]:
+    def empty_line(self, char: bytes = b" ") -> list[tuple[AttrSpec | None, Literal["0", "U"] | None, bytes]]:
         return [self.empty_char(char)] * self.width
 
-    def empty_char(self, char: bytes = b" ") -> tuple[AttrSpec | None, str | None, bytes]:
+    def empty_char(self, char: bytes = b" ") -> tuple[AttrSpec | None, Literal["0", "U"] | None, bytes]:
         return (self.attrspec, self.charset.current, char)
 
     def addstr(self, data: Iterable[int]) -> None:
@@ -531,7 +534,7 @@ class TermCanvas(Canvas):
                     escbuf[i] = default_value
 
             with suppress(ValueError):
-                cmd(self, escbuf, qmark)
+                cmd(self, typing.cast("list[int]", escbuf), qmark)
                 # ignore commands that don't match the
                 # unpacked tuples in CSI_COMMANDS.
 
@@ -873,7 +876,7 @@ class TermCanvas(Canvas):
             self.push_char(char, x, y)
 
     def save_cursor(self, with_attrs: bool = False) -> None:
-        self.saved_cursor = tuple(self.term_cursor)
+        self.saved_cursor = self.term_cursor
         if with_attrs:
             self.saved_attrs = (copy.copy(self.attrspec), copy.copy(self.charset))
 
@@ -1061,10 +1064,10 @@ class TermCanvas(Canvas):
     def sgi_to_attrspec(
         self,
         attrs: Sequence[int],
-        fg: int,
-        bg: int,
+        fg: int | None,
+        bg: int | None,
         attributes: set[str],
-        prev_colors: int,
+        prev_colors: Literal[1, 16, 88, 256, 16777216],
     ) -> AttrSpec | None:
         """
         Parse SGI sequence and return an AttrSpec representing the sequence
@@ -1104,7 +1107,7 @@ class TermCanvas(Canvas):
                 elif idx + 4 < len(attrs) and attrs[idx + 1] == 2:
                     # 24 bit color specification
                     color = (attrs[idx + 2] << 16) + (attrs[idx + 3] << 8) + attrs[idx + 4]
-                    colors = 2**24
+                    colors = 16777216  # 2 ** 24
                     if attr == 38:
                         fg = color
                     else:
@@ -1150,18 +1153,18 @@ class TermCanvas(Canvas):
         if "bold" in attributes and colors == 16 and fg is not None and fg < 8:
             fg += 8
 
-        def _defaulter(color: int | None, colors: int) -> str:
-            if color is None:
+        def _defaulter(req_color: int | None) -> str:
+            if req_color is None:
                 return "default"
             # Note: we can't detect 88 color mode
-            if color > 255 or colors == 2**24:
-                return _color_desc_true(color)
-            if color > 15 or colors == 256:
-                return _color_desc_256(color)
-            return _BASIC_COLORS[color]
+            if req_color > 255 or colors == 2**24:
+                return _color_desc_true(req_color)
+            if req_color > 15 or colors == 256:
+                return _color_desc_256(req_color)
+            return _BASIC_COLORS[req_color]
 
-        decoded_fg = _defaulter(fg, colors)
-        decoded_bg = _defaulter(bg, colors)
+        decoded_fg = _defaulter(fg)
+        decoded_bg = _defaulter(bg)
 
         if attributes:
             decoded_fg = ",".join((decoded_fg, *list(attributes)))
@@ -1241,7 +1244,7 @@ class TermCanvas(Canvas):
 
     def set_mode(
         self,
-        mode: Literal[1, 3, 4, 5, 6, 7, 20, 25, 2004],
+        mode: int,
         flag: bool,
         qmark: bool,
         reset: bool,
@@ -1280,7 +1283,12 @@ class TermCanvas(Canvas):
             elif mode == 20:
                 self.modes.lfnl = flag
 
-    def csi_set_modes(self, modes: Iterable[int], qmark: bool, reset: bool = False) -> None:
+    def csi_set_modes(
+        self,
+        modes: Iterable[int],
+        qmark: bool,
+        reset: bool = False,
+    ) -> None:
         """
         Set (DECSET/ECMA-48) or reset modes (DECRST/ECMA-48) if reset is True.
         """
@@ -1306,7 +1314,7 @@ class TermCanvas(Canvas):
 
             self.set_term_cursor(0, 0)
 
-    def csi_clear_tabstop(self, mode: Literal[0, 3] = 0):
+    def csi_clear_tabstop(self, mode: int = 0) -> None:
         """
         Clear tabstop at current position or if 'mode' is 3, delete all
         tabstops.
@@ -1324,7 +1332,7 @@ class TermCanvas(Canvas):
         if not qmark:
             self.widget.respond(f"{ESC}[?6c")
 
-    def csi_status_report(self, mode: Literal[5, 6]) -> None:
+    def csi_status_report(self, mode: int) -> None:
         """
         Report various information about the terminal status.
         Information is queried by 'mode', where possible values are:
@@ -1338,7 +1346,7 @@ class TermCanvas(Canvas):
             x, y = self.term_cursor
             self.widget.respond(ESC + f"[{y + 1:d};{x + 1:d}R")
 
-    def csi_erase_line(self, mode: Literal[0, 1, 2]) -> None:
+    def csi_erase_line(self, mode: int) -> None:
         """
         Erase current line, modes are:
             0 -> erase from cursor to end of line.
@@ -1354,7 +1362,7 @@ class TermCanvas(Canvas):
         elif mode == 2:
             self.blank_line(y)
 
-    def csi_erase_display(self, mode: Literal[0, 1, 2]) -> None:
+    def csi_erase_display(self, mode: int) -> None:
         """
         Erase display, modes are:
             0 -> erase from cursor to end of display.
@@ -1368,7 +1376,7 @@ class TermCanvas(Canvas):
         elif mode == 2:
             self.clear(cursor=self.term_cursor)
 
-    def csi_set_keyboard_leds(self, mode: Literal[0, 1, 2, 3] = 0) -> None:
+    def csi_set_keyboard_leds(self, mode: int = 0) -> None:
         """
         Set keyboard LEDs, modes are:
             0 -> clear all LEDs
@@ -1387,7 +1395,7 @@ class TermCanvas(Canvas):
         }
 
         if mode in states:
-            self.widget.leds(states[mode])
+            self.widget.leds(states[mode])  # type: ignore[arg-type]
 
     def clear(self, cursor: tuple[int, int] | None = None) -> None:
         """
@@ -1407,21 +1415,33 @@ class TermCanvas(Canvas):
     def rows(self) -> int:
         return self.height
 
-    def content(
+    def content(  # type: ignore[override]
         self,
         trim_left: int = 0,
         trim_top: int = 0,
-        cols: int | None = None,
-        rows: int | None = None,
-        attr=None,
-    ) -> Iterable[list[tuple[object, Literal["0", "U"] | None, bytes]]]:
+        cols: int = 0,
+        rows: int = 0,
+        attr: Mapping[Hashable, AttrSpec | str | None] | None = None,
+    ) -> Iterator[list[tuple[AttrSpec | None, Literal["0", "U"] | None, bytes]]]:
+        """Canvas content.
+
+        All parameters are ignored.
+        """
         if self.scrolling_up == 0:
             yield from self.term
         else:
             viewport_range = slice(-(self.height + self.scrolling_up), -self.scrolling_up)
             yield from (*self.scrollback_buffer, *self.term)[viewport_range]
 
-    def content_delta(self, other: Canvas):
+    def content_delta(  # type: ignore[override]
+        self,
+        other: Canvas,
+    ) -> list[int] | Iterator[list[tuple[AttrSpec | None, Literal["0", "U"] | None, bytes]]]:
+        warnings.warn(
+            "content_delta is not used by code base and will be removed in the future releases",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         if other is self:
             return [self.cols()] * self.rows()
         return self.content()
@@ -1435,7 +1455,10 @@ class Terminal(Widget):
 
     def __init__(
         self,
-        command: Sequence[str | bytes] | Callable[[], typing.Any] | None,
+        command: tuple[str | bytes | os.PathLike[str] | os.PathLike[bytes], ...]
+        | list[str | bytes | os.PathLike[str] | os.PathLike[bytes]]
+        | Callable[[], typing.Any]
+        | None,
         env: Mapping[str, str] | Iterable[tuple[str, str]] | None = None,
         main_loop: event_loop.EventLoop | None = None,
         escape_sequence: str | None = None,
@@ -1557,12 +1580,12 @@ class Terminal(Widget):
         self.remove_watch()
         self.change_focus(False)
 
-        if self.pid > 0:
+        if typing.cast("int", self.pid) > 0:
             self.set_termsize(0, 0)
             for sig in (signal.SIGHUP, signal.SIGCONT, signal.SIGINT, signal.SIGTERM, signal.SIGKILL):
                 try:
-                    os.kill(self.pid, sig)
-                    pid, _status = os.waitpid(self.pid, os.WNOHANG)
+                    os.kill(typing.cast("int", self.pid), sig)
+                    pid, _status = os.waitpid(typing.cast("int", self.pid), os.WNOHANG)
                 except OSError:
                     break
 
@@ -1570,9 +1593,9 @@ class Terminal(Widget):
                     break
                 time.sleep(0.1)
             with suppress(OSError):
-                os.waitpid(self.pid, 0)
+                os.waitpid(typing.cast("int", self.pid), 0)
 
-            os.close(self.master)
+            os.close(typing.cast("int", self.master))
 
     def beep(self) -> None:
         self._emit("beep")
@@ -1588,12 +1611,12 @@ class Terminal(Widget):
 
     def flush_responses(self) -> None:
         for string in self.response_buffer:
-            os.write(self.master, string.encode("ascii"))
+            os.write(typing.cast("int", self.master), string.encode("ascii"))
         self.response_buffer = []
 
     def set_termsize(self, width: int, height: int) -> None:
         winsize = struct.pack("HHHH", height, width, 0, 0)
-        fcntl.ioctl(self.master, termios.TIOCSWINSZ, winsize)
+        fcntl.ioctl(typing.cast("int", self.master), termios.TIOCSWINSZ, winsize)
 
     def touch_term(self, width: int, height: int) -> None:
         process_opened = False
@@ -1620,10 +1643,10 @@ class Terminal(Widget):
 
         self._emit("resize", (width, height))
 
-    def set_title(self, title) -> None:
+    def set_title(self, title: str) -> None:
         self._emit("title", title)
 
-    def change_focus(self, has_focus) -> None:
+    def change_focus(self, has_focus: bool) -> None:
         """
         Ignore SIGINT if this widget has focus.
         """
@@ -1638,11 +1661,11 @@ class Terminal(Widget):
 
         if has_focus:
             self.old_tios = RealTerminal().tty_signal_keys()
-            RealTerminal().tty_signal_keys(*(["undefined"] * 5))
-        elif hasattr(self, "old_tios"):
-            RealTerminal().tty_signal_keys(*self.old_tios)
+            RealTerminal().tty_signal_keys(*(["undefined"] * 5))  # type: ignore[arg-type]
+        elif old_tios := getattr(self, "old_tios", ()):
+            RealTerminal().tty_signal_keys(*old_tios)  # pylint: disable=not-an-iterable
 
-    def render(self, size: tuple[int, int], focus: bool = False) -> TermCanvas:
+    def render(self, size: tuple[int, int], focus: bool = False) -> TermCanvas:  # type: ignore[override]
         if not self.terminated:
             self.change_focus(focus)
 
@@ -1652,12 +1675,12 @@ class Terminal(Widget):
             if self.main_loop is None:
                 self.feed()
 
-        return self.term
+        return self.term  # type: ignore[return-value]
 
     def add_watch(self) -> None:
         if self.main_loop is None:
             return
-        self.main_loop.watch_file(self.master, self.feed)
+        self.main_loop.watch_file(typing.cast("int", self.master), self.feed)
 
     def remove_watch(self) -> None:
         if self.main_loop is None:
@@ -1666,7 +1689,7 @@ class Terminal(Widget):
 
     def wait_and_feed(self, timeout: float = 1.0) -> None:
         with selectors.DefaultSelector() as selector:
-            selector.register(self.master, selectors.EVENT_READ)
+            selector.register(typing.cast("int", self.master), selectors.EVENT_READ)
 
             selector.select(timeout)
 
@@ -1676,7 +1699,7 @@ class Terminal(Widget):
         data = EOF
 
         try:
-            data = os.read(self.master, 4096)
+            data = os.read(typing.cast("int", self.master), 4096)
         except OSError as e:
             if e.errno == errno.EIO:  # EIO, child terminated
                 data = EOF
@@ -1690,11 +1713,11 @@ class Terminal(Widget):
             self._emit("closed")
             return
 
-        self.term.addstr(data)
+        self.term.addstr(data)  # type: ignore[union-attr]
 
         self.flush_responses()
 
-    def keypress(self, size: tuple[int, int], key: str) -> str | None:
+    def keypress(self, size: tuple[int, int], key: str) -> str | None:  # type: ignore[override]
         if self.terminated:
             return key
 
@@ -1723,13 +1746,13 @@ class Terminal(Widget):
                 return None
         else:
             if key == "page up":
-                self.term.scroll_buffer()
+                self.term.scroll_buffer()  # type: ignore[union-attr]
                 self.last_key = key
                 self._invalidate()
                 return None
 
             if key == "page down":
-                self.term.scroll_buffer(up=False)
+                self.term.scroll_buffer(up=False)  # type: ignore[union-attr]
                 self.last_key = key
                 self._invalidate()
                 return None
@@ -1757,7 +1780,7 @@ class Terminal(Widget):
 
         self.last_key = key
 
-        self.term.scroll_buffer(reset=True)
+        self.term.scroll_buffer(reset=True)  # type: ignore[union-attr]
 
         if key.startswith("ctrl "):
             if key[-1].islower():
@@ -1774,6 +1797,6 @@ class Terminal(Widget):
         if self.term_modes.lfnl and key == "\r":
             key += "\n"
 
-        os.write(self.master, key.encode(self.encoding, "ignore"))
+        os.write(typing.cast("int", self.master), key.encode(self.encoding, "ignore"))
 
         return None

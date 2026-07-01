@@ -45,6 +45,10 @@ if typing.TYPE_CHECKING:
 
     from urwid.event_loop import EventLoop
 
+    _MouseInput = tuple[str, int, int, int]
+    _CursorPosition = tuple[typing.Literal["cursor position"], int, int]
+    _DecodedInput = list[typing.Union[str, _MouseInput, _CursorPosition]]
+
 
 class Screen(_raw_display_base.Screen):
     _term_input_file: socket.socket
@@ -52,7 +56,7 @@ class Screen(_raw_display_base.Screen):
     def __init__(
         self,
         input: socket.socket | None = None,  # noqa: A002  # pylint: disable=redefined-builtin
-        output: typing.TextIO = sys.stdout,
+        output: _raw_display_base.TextWriter = sys.stdout,
     ) -> None:
         """Initialize a screen that directly prints escape codes to an output
         terminal.
@@ -65,12 +69,20 @@ class Screen(_raw_display_base.Screen):
     _dwOriginalOutMode = None
     _dwOriginalInMode = None
 
-    def _start(self, alternate_buffer: bool = True) -> None:
+    def _start(  # pylint: disable=keyword-arg-before-vararg
+        self,
+        alternate_buffer: bool = True,
+        *args: typing.Any,
+        **kwargs: typing.Any,
+    ) -> None:
         """
         Initialize the screen and input mode.
 
         alternate_buffer -- use alternate screen buffer
         """
+        if args or kwargs:
+            raise TypeError(f"start() got unexpected arguments: {args=!r}, {kwargs=!r}")
+
         if alternate_buffer:
             self.write(escape.SWITCH_TO_ALTERNATE_BUFFER)
             self._rows_used = None
@@ -106,7 +118,7 @@ class Screen(_raw_display_base.Screen):
         # restore mouse tracking to previous state
         self._mouse_tracking(self._mouse_tracking_enabled)
 
-        return super()._start()
+        super()._start()  # type: ignore[safe-super]
 
     def _stop(self) -> None:
         """
@@ -127,7 +139,7 @@ class Screen(_raw_display_base.Screen):
         if not (ok := _win32.SetConsoleMode(handle_in, self._dwOriginalInMode)):
             raise RuntimeError(f"ConsoleMode set failed for input. Err: {ok!r}")
 
-        super()._stop()
+        super()._stop()  # type: ignore[safe-super]
 
     def unhook_event_loop(self, event_loop: EventLoop) -> None:
         """
@@ -151,7 +163,7 @@ class Screen(_raw_display_base.Screen):
     def hook_event_loop(
         self,
         event_loop: EventLoop,
-        callback: Callable[[list[str], list[int]], typing.Any],
+        callback: Callable[[_DecodedInput, list[int]], typing.Any],
     ) -> None:
         """
         Register the given callback with the event loop, to be called with new
@@ -197,7 +209,7 @@ class Screen(_raw_display_base.Screen):
         """Return the terminal dimensions (num columns, num rows)."""
         y, x = super().get_cols_rows()
         with contextlib.suppress(OSError):  # Term size could not be determined
-            if hasattr(self._term_output_file, "fileno"):
+            if isinstance(self._term_output_file, _raw_display_base.SupportsFileno):
                 if self._term_output_file != sys.stdout:
                     raise RuntimeError("Unexpected terminal output file")
                 handle = _win32.GetStdHandle(_win32.STD_OUTPUT_HANDLE)
@@ -257,7 +269,7 @@ class ReadInputThread(threading.Thread):
                     pass  # TODO: handle mouse events
 
 
-def _test():
+def _test() -> None:
     import doctest
 
     doctest.testmod()

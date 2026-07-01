@@ -503,7 +503,7 @@ class Runtime:
 
     @property
     def version(self) -> Version:
-        """Return current Version object for Ansible.
+        """Current Version object for Ansible.
 
         If version is not mentioned, it returns current version as detected.
         When version argument is mentioned, it return converts the version string
@@ -882,8 +882,12 @@ class Runtime:
             raise RuntimeError(msg) from exc
 
         alterations_list: list[tuple[list[str], str, bool]] = [
-            (library_paths, "plugins/modules", True),
-            (roles_path, "roles", True),
+            (
+                library_paths,
+                str((self.project_dir / "plugins" / "modules").absolute()),
+                True,
+            ),
+            (roles_path, str((self.project_dir / "roles").absolute()), True),
         ]
 
         alterations_list.extend(
@@ -1074,8 +1078,12 @@ def search_galaxy_paths(search_dir: Path) -> list[Path]:
             continue
         if file_path.is_dir() and namespace_re.match(file_path.name):
             file_path /= "galaxy.yml"
-            if file_path.exists():
-                galaxy_paths.append(file_path)
+            try:
+                if file_path.exists():
+                    galaxy_paths.append(file_path)
+            except PermissionError:  # pragma: no cover
+                # we silently ignore permissions errors, can happen with use of /tmp
+                pass
     return galaxy_paths
 
 

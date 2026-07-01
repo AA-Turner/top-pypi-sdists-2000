@@ -3,13 +3,14 @@ from typing import Optional, List, Union
 from deepeval.utils import get_or_create_event_loop
 from deepeval.metrics.utils import (
     construct_verbose_logs,
-    trimAndLoadJson,
     check_llm_test_case_params,
     initialize_model,
+    a_generate_with_schema_and_extract,
+    generate_with_schema_and_extract,
 )
 from deepeval.test_case import (
     LLMTestCase,
-    LLMTestCaseParams,
+    SingleTurnParams,
     MCPServer,
     MCPToolCall,
     MCPResourceCall,
@@ -18,16 +19,14 @@ from deepeval.test_case import (
 from deepeval.metrics import BaseMetric
 from deepeval.models import DeepEvalBaseLLM
 from deepeval.metrics.indicator import metric_progress_indicator
-from .template import MCPUseMetricTemplate
 from .schema import MCPPrimitivesScore, MCPArgsScore
-from deepeval.metrics.api import metric_data_manager
 
 
 class MCPUseMetric(BaseMetric):
-    _required_params: List[LLMTestCaseParams] = [
-        LLMTestCaseParams.INPUT,
-        LLMTestCaseParams.ACTUAL_OUTPUT,
-        LLMTestCaseParams.MCP_SERVERS,
+    _required_params: List[SingleTurnParams] = [
+        SingleTurnParams.INPUT,
+        SingleTurnParams.ACTUAL_OUTPUT,
+        SingleTurnParams.MCP_SERVERS,
     ]
 
     def __init__(
@@ -54,9 +53,20 @@ class MCPUseMetric(BaseMetric):
         _in_component: bool = False,
         _log_metric_to_confident: bool = True,
     ) -> float:
-        check_llm_test_case_params(test_case, self._required_params, self)
+        multimodal = test_case.multimodal
+        check_llm_test_case_params(
+            test_case,
+            self._required_params,
+            None,
+            None,
+            self,
+            self.model,
+            multimodal,
+        )
 
         self.evaluation_cost = 0 if self.using_native_model else None
+        self.input_tokens = 0 if self.using_native_model else None
+        self.output_tokens = 0 if self.using_native_model else None
         with metric_progress_indicator(
             self, _show_indicator=_show_indicator, _in_component=_in_component
         ):
@@ -107,10 +117,6 @@ class MCPUseMetric(BaseMetric):
                     self,
                     steps=steps,
                 )
-                if _log_metric_to_confident:
-                    metric_data_manager.post_metric_if_enabled(
-                        self, test_case=test_case
-                    )
 
                 return self.score
 
@@ -121,11 +127,25 @@ class MCPUseMetric(BaseMetric):
         _in_component: bool = False,
         _log_metric_to_confident: bool = True,
     ) -> float:
-        check_llm_test_case_params(test_case, self._required_params, self)
+        multimodal = test_case.multimodal
+        check_llm_test_case_params(
+            test_case,
+            self._required_params,
+            None,
+            None,
+            self,
+            self.model,
+            multimodal,
+        )
 
         self.evaluation_cost = 0 if self.using_native_model else None
+        self.input_tokens = 0 if self.using_native_model else None
+        self.output_tokens = 0 if self.using_native_model else None
         with metric_progress_indicator(
-            self, _show_indicator=_show_indicator, _in_component=_in_component
+            self,
+            async_mode=True,
+            _show_indicator=_show_indicator,
+            _in_component=_in_component,
         ):
             available_primitives, primitives_used = (
                 self._get_mcp_interaction_text(
@@ -162,10 +182,6 @@ class MCPUseMetric(BaseMetric):
                 self,
                 steps=steps,
             )
-            if _log_metric_to_confident:
-                metric_data_manager.post_metric_if_enabled(
-                    self, test_case=test_case
-                )
             return self.score
 
     def _get_primitives_used_score(
@@ -174,23 +190,21 @@ class MCPUseMetric(BaseMetric):
         available_primitives: str,
         primitives_used: str,
     ) -> MCPPrimitivesScore:
-        prompt = MCPUseMetricTemplate.get_primitive_correctness_prompt(
-            test_case, available_primitives, primitives_used
+        prompt = self._get_prompt(
+            "get_primitive_correctness_prompt",
+            template_class="MCPUseMetric",
+            test_case=test_case,
+            available_primitives=available_primitives,
+            primitives_used=primitives_used,
+            multimodal=test_case.multimodal,
         )
-        if self.using_native_model:
-            res, cost = self.model.generate(prompt, schema=MCPPrimitivesScore)
-            self.evaluation_cost += cost
-            return res
-        else:
-            try:
-                res: MCPPrimitivesScore = self.model.generate(
-                    prompt, schema=MCPPrimitivesScore
-                )
-                return res
-            except TypeError:
-                res = self.model.generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return MCPPrimitivesScore(**data)
+        return generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=MCPPrimitivesScore,
+            extract_schema=lambda s: s,
+            extract_json=lambda data: MCPPrimitivesScore(**data),
+        )
 
     async def _a_get_primitives_used_score(
         self,
@@ -198,25 +212,21 @@ class MCPUseMetric(BaseMetric):
         available_primitives: str,
         primitives_used: str,
     ) -> MCPPrimitivesScore:
-        prompt = MCPUseMetricTemplate.get_primitive_correctness_prompt(
-            test_case, available_primitives, primitives_used
+        prompt = self._get_prompt(
+            "get_primitive_correctness_prompt",
+            template_class="MCPUseMetric",
+            test_case=test_case,
+            available_primitives=available_primitives,
+            primitives_used=primitives_used,
+            multimodal=test_case.multimodal,
         )
-        if self.using_native_model:
-            res, cost = await self.model.a_generate(
-                prompt, schema=MCPPrimitivesScore
-            )
-            self.evaluation_cost += cost
-            return res
-        else:
-            try:
-                res: MCPPrimitivesScore = await self.model.a_generate(
-                    prompt, schema=MCPPrimitivesScore
-                )
-                return res
-            except TypeError:
-                res = await self.model.a_generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return MCPPrimitivesScore(**data)
+        return await a_generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=MCPPrimitivesScore,
+            extract_schema=lambda s: s,
+            extract_json=lambda data: MCPPrimitivesScore(**data),
+        )
 
     def _get_argument_correctness_score(
         self,
@@ -224,23 +234,21 @@ class MCPUseMetric(BaseMetric):
         available_primitives: str,
         primitives_used: str,
     ) -> MCPArgsScore:
-        prompt = MCPUseMetricTemplate.get_mcp_argument_correctness_prompt(
-            test_case, available_primitives, primitives_used
+        prompt = self._get_prompt(
+            "get_mcp_argument_correctness_prompt",
+            template_class="MCPUseMetric",
+            test_case=test_case,
+            available_primitives=available_primitives,
+            primitives_used=primitives_used,
+            multimodal=test_case.multimodal,
         )
-        if self.using_native_model:
-            res, cost = self.model.generate(prompt, schema=MCPArgsScore)
-            self.evaluation_cost += cost
-            return res
-        else:
-            try:
-                res: MCPArgsScore = self.model.generate(
-                    prompt, schema=MCPArgsScore
-                )
-                return res
-            except TypeError:
-                res = self.model.generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return MCPArgsScore(**data)
+        return generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=MCPArgsScore,
+            extract_schema=lambda s: s,
+            extract_json=lambda data: MCPArgsScore(**data),
+        )
 
     async def _a_get_argument_correctness_score(
         self,
@@ -248,23 +256,21 @@ class MCPUseMetric(BaseMetric):
         available_primitives: str,
         primitives_used: str,
     ) -> MCPArgsScore:
-        prompt = MCPUseMetricTemplate.get_mcp_argument_correctness_prompt(
-            test_case, available_primitives, primitives_used
+        prompt = self._get_prompt(
+            "get_mcp_argument_correctness_prompt",
+            template_class="MCPUseMetric",
+            test_case=test_case,
+            available_primitives=available_primitives,
+            primitives_used=primitives_used,
+            multimodal=test_case.multimodal,
         )
-        if self.using_native_model:
-            res, cost = await self.model.a_generate(prompt, schema=MCPArgsScore)
-            self.evaluation_cost += cost
-            return res
-        else:
-            try:
-                res: MCPArgsScore = await self.model.a_generate(
-                    prompt, schema=MCPArgsScore
-                )
-                return res
-            except TypeError:
-                res = await self.model.a_generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return MCPArgsScore(**data)
+        return await a_generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=MCPArgsScore,
+            extract_schema=lambda s: s,
+            extract_json=lambda data: MCPArgsScore(**data),
+        )
 
     def _calculate_score(
         self,
@@ -280,7 +286,9 @@ class MCPUseMetric(BaseMetric):
         self,
         primitives_used_score: MCPPrimitivesScore,
         argument_correctness_score: MCPArgsScore,
-    ) -> str:
+    ) -> Optional[str]:
+        if not self.include_reason:
+            return None
         return (
             f"[\n"
             f"\t{primitives_used_score.reason}\n"
@@ -390,7 +398,7 @@ class MCPUseMetric(BaseMetric):
         else:
             try:
                 self.success = self.score >= self.threshold
-            except:
+            except TypeError:
                 self.success = False
         return self.success
 

@@ -19,6 +19,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
@@ -29,6 +30,7 @@ dependencies = [
     "deprecated",
     "eval-type-backport;python_version<'3.10'",
     "platformdirs",
+    "filetype>=1.2.0",
 ]
 
 [project.optional-dependencies]
@@ -65,7 +67,7 @@ cov = ["test-cov", "cov-report"]
 docs = "mkdocs {args:build}"
 
 [[tool.hatch.envs.all.matrix]]
-python = ["3.9", "3.10", "3.11", "3.12", "3.13"]
+python = ["3.10", "3.11", "3.12", "3.13", "3.14"]
 
 [tool.hatch.envs.lint]
 detached = false                                                              # Normally the linting env can be detached, but mypy doesn't install all the stubs we need
@@ -77,6 +79,7 @@ lint = "pylint {args:src/banks}"
 typing = "mypy --install-types --non-interactive {args:src/banks}"
 all = ["check", "typing", "lint"]
 fmt = "ruff format {args}"
+fix = "ruff check --fix {args}"
 
 [tool.hatch.build.targets.wheel]
 only-include = ["src/banks", "src/templates"]
@@ -179,8 +182,9 @@ exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
 
 
 [[tool.mypy.overrides]]
-module = ["litellm.*", "simplemma.*", "deprecated.*"]
+module = ["litellm.*", "simplemma.*", "deprecated.*", "griffe.*"]
 ignore_missing_imports = true
+
 
 [tool.pylint]
 disable = [
@@ -199,7 +203,7 @@ max-args = 10
 asyncio_default_fixture_loop_scope = "function"
 markers = ["e2e"]
 filterwarnings = [
-    # Dilence litellm warning coming from their Pydantic config.
+    # Silence litellm warning coming from their Pydantic config.
     # This assumes our use of Pydantic is correct :)
     "ignore:Support for class-based `config` is deprecated",
 ]

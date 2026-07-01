@@ -5,16 +5,15 @@ from deepeval.metrics.utils import (
     check_llm_test_case_params,
     construct_verbose_logs,
 )
-from deepeval.metrics.api import metric_data_manager
 from deepeval.metrics import BaseMetric
-from deepeval.test_case import LLMTestCase, LLMTestCaseParams
+from deepeval.test_case import LLMTestCase, SingleTurnParams
 
 
 class ExactMatchMetric(BaseMetric):
-    _required_params: List[LLMTestCaseParams] = [
-        LLMTestCaseParams.INPUT,
-        LLMTestCaseParams.ACTUAL_OUTPUT,
-        LLMTestCaseParams.EXPECTED_OUTPUT,
+    _required_params: List[SingleTurnParams] = [
+        SingleTurnParams.INPUT,
+        SingleTurnParams.ACTUAL_OUTPUT,
+        SingleTurnParams.EXPECTED_OUTPUT,
     ]
 
     def __init__(
@@ -32,7 +31,15 @@ class ExactMatchMetric(BaseMetric):
         _in_component: bool = False,
         _log_metric_to_confident: bool = True,
     ) -> float:
-        check_llm_test_case_params(test_case, self._required_params, self)
+        check_llm_test_case_params(
+            test_case,
+            self._required_params,
+            None,
+            None,
+            self,
+            None,
+            test_case.multimodal,
+        )
 
         with metric_progress_indicator(
             self, _show_indicator=_show_indicator, _in_component=_in_component
@@ -58,11 +65,6 @@ class ExactMatchMetric(BaseMetric):
                         f"Score: {self.score:.2f}",
                         f"Reason: {self.reason}",
                     ],
-                )
-
-            if _log_metric_to_confident:
-                metric_data_manager.post_metric_if_enabled(
-                    self, test_case=test_case
                 )
 
             return self.score

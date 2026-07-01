@@ -1,0 +1,327 @@
+from __future__ import annotations
+
+import asyncio
+import time
+from typing import TYPE_CHECKING, Any
+
+from ..._core import _UNSET
+from ..._core.http import AsyncHttpClient, SyncHttpClient
+from ...generated.v3.models import (
+    BrowserDownloadListResponse,
+    MessageListResponse,
+    SessionListResponse,
+    SessionResponse,
+)
+
+if TYPE_CHECKING:
+    from uuid import UUID
+
+
+class Sessions:
+    def __init__(
+        self,
+        http: SyncHttpClient,
+        *,
+        use_own_key: bool | None = None,
+    ) -> None:
+        self._http = http
+        self._use_own_key = use_own_key
+
+    def create(
+        self,
+        task: str | None = None,
+        *,
+        model: str | None = None,
+        session_id: str | UUID | None = None,
+        keep_alive: bool | None = None,
+        max_cost_usd: float | None = None,
+        profile_id: str | None = None,
+        proxy_country_code: str | None = _UNSET,  # type: ignore[assignment]
+        output_schema: dict[str, Any] | None = None,
+        workspace_id: str | None = None,
+        enable_scheduled_tasks: bool | None = None,
+        sensitive_data: dict[str, str] | None = None,
+        enable_recording: bool | None = None,
+        cache_script: bool | None = None,
+        code_mode: bool | None = None,
+        use_own_key: bool | None = None,
+        **extra: Any,
+    ) -> SessionResponse:
+        """Create a session and optionally dispatch a task."""
+        body: dict[str, Any] = {}
+        if task is not None:
+            body["task"] = task
+        if model is not None:
+            body["model"] = model
+        if session_id is not None:
+            body["sessionId"] = str(session_id)
+        if keep_alive is not None:
+            body["keepAlive"] = keep_alive
+        if max_cost_usd is not None:
+            body["maxCostUsd"] = max_cost_usd
+        if profile_id is not None:
+            body["profileId"] = profile_id
+        if proxy_country_code is not _UNSET:
+            body["proxyCountryCode"] = proxy_country_code.lower() if isinstance(proxy_country_code, str) else proxy_country_code
+        if output_schema is not None:
+            body["outputSchema"] = output_schema
+        if workspace_id is not None:
+            body["workspaceId"] = workspace_id
+        if enable_scheduled_tasks is not None:
+            body["enableScheduledTasks"] = enable_scheduled_tasks
+        if sensitive_data is not None:
+            body["sensitiveData"] = sensitive_data
+        if enable_recording is not None:
+            body["enableRecording"] = enable_recording
+        if cache_script is not None:
+            body["cacheScript"] = cache_script
+        if code_mode is not None:
+            body["codeMode"] = code_mode
+        effective_use_own_key = (
+            self._use_own_key if use_own_key is None else use_own_key
+        )
+        if effective_use_own_key is not None:
+            body["useOwnKey"] = effective_use_own_key
+        body.update(extra)
+        return SessionResponse.model_validate(
+            self._http.request("POST", "/sessions", json=body)
+        )
+
+    def list(
+        self,
+        *,
+        page: int | None = None,
+        page_size: int | None = None,
+    ) -> SessionListResponse:
+        """List sessions for the authenticated project."""
+        return SessionListResponse.model_validate(
+            self._http.request(
+                "GET",
+                "/sessions",
+                params={
+                    "page": page,
+                    "page_size": page_size,
+                },
+            )
+        )
+
+    def get(self, session_id: str | UUID) -> SessionResponse:
+        """Get session details."""
+        return SessionResponse.model_validate(
+            self._http.request("GET", f"/sessions/{session_id}")
+        )
+
+    def stop(self, session_id: str | UUID, *, strategy: str | None = None, **extra: Any) -> SessionResponse:
+        """Stop a session or the running task."""
+        body: dict[str, Any] | None = None
+        if strategy is not None or extra:
+            body = {}
+            if strategy is not None:
+                body["strategy"] = strategy
+            body.update(extra)
+        return SessionResponse.model_validate(
+            self._http.request("POST", f"/sessions/{session_id}/stop", json=body)
+        )
+
+    def delete(self, session_id: str | UUID) -> None:
+        """Soft-delete a session."""
+        self._http.request("DELETE", f"/sessions/{session_id}")
+
+    def messages(
+        self,
+        session_id: str | UUID,
+        *,
+        after: str | None = None,
+        before: str | None = None,
+        limit: int | None = None,
+    ) -> MessageListResponse:
+        """List messages for a session with cursor-based pagination."""
+        return MessageListResponse.model_validate(
+            self._http.request(
+                "GET",
+                f"/sessions/{session_id}/messages",
+                params={
+                    "after": after,
+                    "before": before,
+                    "limit": limit,
+                },
+            )
+        )
+
+    def wait_for_recording(
+        self,
+        session_id: str | UUID,
+        *,
+        timeout: float = 15,
+        interval: float = 2,
+    ) -> list[str]:
+        """Poll until recording URLs are available. Returns a list of presigned MP4 URLs.
+
+        Returns an empty list if no recording was produced (e.g. the agent
+        answered without opening a browser, or recording was not enabled).
+        """
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            session = self.get(session_id)
+            if session.recording_urls:
+                return list(session.recording_urls)
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                break
+            time.sleep(min(interval, remaining))
+        return []
+
+
+class AsyncSessions:
+    def __init__(
+        self,
+        http: AsyncHttpClient,
+        *,
+        use_own_key: bool | None = None,
+    ) -> None:
+        self._http = http
+        self._use_own_key = use_own_key
+
+    async def create(
+        self,
+        task: str | None = None,
+        *,
+        model: str | None = None,
+        session_id: str | UUID | None = None,
+        keep_alive: bool | None = None,
+        max_cost_usd: float | None = None,
+        profile_id: str | None = None,
+        proxy_country_code: str | None = _UNSET,  # type: ignore[assignment]
+        output_schema: dict[str, Any] | None = None,
+        workspace_id: str | None = None,
+        enable_scheduled_tasks: bool | None = None,
+        sensitive_data: dict[str, str] | None = None,
+        enable_recording: bool | None = None,
+        cache_script: bool | None = None,
+        code_mode: bool | None = None,
+        use_own_key: bool | None = None,
+        **extra: Any,
+    ) -> SessionResponse:
+        """Create a session and optionally dispatch a task."""
+        body: dict[str, Any] = {}
+        if task is not None:
+            body["task"] = task
+        if model is not None:
+            body["model"] = model
+        if session_id is not None:
+            body["sessionId"] = str(session_id)
+        if keep_alive is not None:
+            body["keepAlive"] = keep_alive
+        if max_cost_usd is not None:
+            body["maxCostUsd"] = max_cost_usd
+        if profile_id is not None:
+            body["profileId"] = profile_id
+        if proxy_country_code is not _UNSET:
+            body["proxyCountryCode"] = proxy_country_code.lower() if isinstance(proxy_country_code, str) else proxy_country_code
+        if output_schema is not None:
+            body["outputSchema"] = output_schema
+        if workspace_id is not None:
+            body["workspaceId"] = workspace_id
+        if enable_scheduled_tasks is not None:
+            body["enableScheduledTasks"] = enable_scheduled_tasks
+        if sensitive_data is not None:
+            body["sensitiveData"] = sensitive_data
+        if enable_recording is not None:
+            body["enableRecording"] = enable_recording
+        if cache_script is not None:
+            body["cacheScript"] = cache_script
+        if code_mode is not None:
+            body["codeMode"] = code_mode
+        effective_use_own_key = (
+            self._use_own_key if use_own_key is None else use_own_key
+        )
+        if effective_use_own_key is not None:
+            body["useOwnKey"] = effective_use_own_key
+        body.update(extra)
+        return SessionResponse.model_validate(
+            await self._http.request("POST", "/sessions", json=body)
+        )
+
+    async def list(
+        self,
+        *,
+        page: int | None = None,
+        page_size: int | None = None,
+    ) -> SessionListResponse:
+        """List sessions for the authenticated project."""
+        return SessionListResponse.model_validate(
+            await self._http.request(
+                "GET",
+                "/sessions",
+                params={
+                    "page": page,
+                    "page_size": page_size,
+                },
+            )
+        )
+
+    async def get(self, session_id: str | UUID) -> SessionResponse:
+        """Get session details."""
+        return SessionResponse.model_validate(
+            await self._http.request("GET", f"/sessions/{session_id}")
+        )
+
+    async def stop(self, session_id: str | UUID, *, strategy: str | None = None, **extra: Any) -> SessionResponse:
+        """Stop a session or the running task."""
+        body: dict[str, Any] | None = None
+        if strategy is not None or extra:
+            body = {}
+            if strategy is not None:
+                body["strategy"] = strategy
+            body.update(extra)
+        return SessionResponse.model_validate(
+            await self._http.request("POST", f"/sessions/{session_id}/stop", json=body)
+        )
+
+    async def delete(self, session_id: str | UUID) -> None:
+        """Soft-delete a session."""
+        await self._http.request("DELETE", f"/sessions/{session_id}")
+
+    async def messages(
+        self,
+        session_id: str | UUID,
+        *,
+        after: str | None = None,
+        before: str | None = None,
+        limit: int | None = None,
+    ) -> MessageListResponse:
+        """List messages for a session with cursor-based pagination."""
+        return MessageListResponse.model_validate(
+            await self._http.request(
+                "GET",
+                f"/sessions/{session_id}/messages",
+                params={
+                    "after": after,
+                    "before": before,
+                    "limit": limit,
+                },
+            )
+        )
+
+    async def wait_for_recording(
+        self,
+        session_id: str | UUID,
+        *,
+        timeout: float = 15,
+        interval: float = 2,
+    ) -> list[str]:
+        """Poll until recording URLs are available. Returns a list of presigned MP4 URLs.
+
+        Returns an empty list if no recording was produced (e.g. the agent
+        answered without opening a browser, or recording was not enabled).
+        """
+        deadline = time.monotonic() + timeout
+        while time.monotonic() < deadline:
+            session = await self.get(session_id)
+            if session.recording_urls:
+                return list(session.recording_urls)
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                break
+            await asyncio.sleep(min(interval, remaining))
+        return []

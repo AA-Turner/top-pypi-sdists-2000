@@ -1,29 +1,32 @@
-from typing import List, Optional, Type, Union
+from typing import List, Optional, Union
 
 from deepeval.metrics import BaseMetric
 from deepeval.test_case import (
     LLMTestCase,
-    LLMTestCaseParams,
-    ConversationalTestCase,
+    SingleTurnParams,
 )
 from deepeval.metrics.indicator import metric_progress_indicator
 from deepeval.models import DeepEvalBaseLLM
 from deepeval.utils import get_or_create_event_loop, prettify_list
 from deepeval.metrics.utils import (
     construct_verbose_logs,
-    trimAndLoadJson,
     check_llm_test_case_params,
     initialize_model,
+    a_generate_with_schema_and_extract,
+    generate_with_schema_and_extract,
 )
-from deepeval.metrics.pii_leakage.template import PIILeakageTemplate
-from deepeval.metrics.pii_leakage.schema import *
-from deepeval.metrics.api import metric_data_manager
+from deepeval.metrics.pii_leakage.schema import (
+    PIILeakageVerdict,
+    Verdicts,
+    ExtractedPII,
+    PIILeakageScoreReason,
+)
 
 
 class PIILeakageMetric(BaseMetric):
-    _required_params: List[LLMTestCaseParams] = [
-        LLMTestCaseParams.INPUT,
-        LLMTestCaseParams.ACTUAL_OUTPUT,
+    _required_params: List[SingleTurnParams] = [
+        SingleTurnParams.INPUT,
+        SingleTurnParams.ACTUAL_OUTPUT,
     ]
 
     def __init__(
@@ -34,7 +37,6 @@ class PIILeakageMetric(BaseMetric):
         async_mode: bool = True,
         strict_mode: bool = False,
         verbose_mode: bool = False,
-        evaluation_template: Type[PIILeakageTemplate] = PIILeakageTemplate,
     ):
         self.threshold = 1 if strict_mode else threshold
         self.model, self.using_native_model = initialize_model(model)
@@ -43,7 +45,6 @@ class PIILeakageMetric(BaseMetric):
         self.async_mode = async_mode
         self.strict_mode = strict_mode
         self.verbose_mode = verbose_mode
-        self.evaluation_template = evaluation_template
 
     def measure(
         self,
@@ -53,9 +54,19 @@ class PIILeakageMetric(BaseMetric):
         _log_metric_to_confident: bool = True,
     ) -> float:
 
-        check_llm_test_case_params(test_case, self._required_params, self)
+        check_llm_test_case_params(
+            test_case,
+            self._required_params,
+            None,
+            None,
+            self,
+            self.model,
+            test_case.multimodal,
+        )
 
         self.evaluation_cost = 0 if self.using_native_model else None
+        self.input_tokens = 0 if self.using_native_model else None
+        self.output_tokens = 0 if self.using_native_model else None
         with metric_progress_indicator(
             self, _show_indicator=_show_indicator, _in_component=_in_component
         ):
@@ -71,7 +82,7 @@ class PIILeakageMetric(BaseMetric):
                 )
             else:
                 self.extracted_pii: List[str] = self._extract_pii(
-                    test_case.actual_output
+                    test_case.actual_output, multimodal=test_case.multimodal
                 )
                 self.verdicts: List[PIILeakageVerdict] = (
                     self._generate_verdicts()
@@ -87,10 +98,6 @@ class PIILeakageMetric(BaseMetric):
                         f"Score: {self.score}\nReason: {self.reason}",
                     ],
                 )
-                if _log_metric_to_confident:
-                    metric_data_manager.post_metric_if_enabled(
-                        self, test_case=test_case
-                    )
 
             return self.score
 
@@ -102,9 +109,19 @@ class PIILeakageMetric(BaseMetric):
         _log_metric_to_confident: bool = True,
     ) -> float:
 
-        check_llm_test_case_params(test_case, self._required_params, self)
+        check_llm_test_case_params(
+            test_case,
+            self._required_params,
+            None,
+            None,
+            self,
+            self.model,
+            test_case.multimodal,
+        )
 
         self.evaluation_cost = 0 if self.using_native_model else None
+        self.input_tokens = 0 if self.using_native_model else None
+        self.output_tokens = 0 if self.using_native_model else None
         with metric_progress_indicator(
             self,
             async_mode=True,
@@ -112,7 +129,7 @@ class PIILeakageMetric(BaseMetric):
             _in_component=_in_component,
         ):
             self.extracted_pii: List[str] = await self._a_extract_pii(
-                test_case.actual_output
+                test_case.actual_output, multimodal=test_case.multimodal
             )
             self.verdicts: List[PIILeakageVerdict] = (
                 await self._a_generate_verdicts()
@@ -128,13 +145,9 @@ class PIILeakageMetric(BaseMetric):
                     f"Score: {self.score}\nReason: {self.reason}",
                 ],
             )
-            if _log_metric_to_confident:
-                metric_data_manager.post_metric_if_enabled(
-                    self, test_case=test_case
-                )
             return self.score
 
-    async def _a_generate_reason(self) -> str:
+    async def _a_generate_reason(self) -> Optional[str]:
         if self.include_reason is False:
             return None
 
@@ -143,29 +156,21 @@ class PIILeakageMetric(BaseMetric):
             if verdict.verdict.strip().lower() == "yes":
                 privacy_violations.append(verdict.reason)
 
-        prompt: dict = self.evaluation_template.generate_reason(
+        prompt: dict = self._get_prompt(
+            "generate_reason",
             privacy_violations=privacy_violations,
             score=format(self.score, ".2f"),
         )
 
-        if self.using_native_model:
-            res, cost = await self.model.a_generate(
-                prompt, schema=PIILeakageScoreReason
-            )
-            self.evaluation_cost += cost
-            return res.reason
-        else:
-            try:
-                res: PIILeakageScoreReason = await self.model.a_generate(
-                    prompt, schema=PIILeakageScoreReason
-                )
-                return res.reason
-            except TypeError:
-                res = await self.model.a_generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return data["reason"]
+        return await a_generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=PIILeakageScoreReason,
+            extract_schema=lambda s: s.reason,
+            extract_json=lambda data: data["reason"],
+        )
 
-    def _generate_reason(self) -> str:
+    def _generate_reason(self) -> Optional[str]:
         if self.include_reason is False:
             return None
 
@@ -174,115 +179,87 @@ class PIILeakageMetric(BaseMetric):
             if verdict.verdict.strip().lower() == "yes":
                 privacy_violations.append(verdict.reason)
 
-        prompt: dict = self.evaluation_template.generate_reason(
+        prompt: dict = self._get_prompt(
+            "generate_reason",
             privacy_violations=privacy_violations,
             score=format(self.score, ".2f"),
         )
 
-        if self.using_native_model:
-            res, cost = self.model.generate(
-                prompt, schema=PIILeakageScoreReason
-            )
-            self.evaluation_cost += cost
-            return res.reason
-        else:
-            try:
-                res: PIILeakageScoreReason = self.model.generate(
-                    prompt, schema=PIILeakageScoreReason
-                )
-                return res.reason
-            except TypeError:
-                res = self.model.generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return data["reason"]
+        return generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=PIILeakageScoreReason,
+            extract_schema=lambda s: s.reason,
+            extract_json=lambda data: data["reason"],
+        )
 
     async def _a_generate_verdicts(self) -> List[PIILeakageVerdict]:
         if len(self.extracted_pii) == 0:
             return []
 
-        verdicts: List[PIILeakageVerdict] = []
-        prompt = self.evaluation_template.generate_verdicts(
-            extracted_pii=self.extracted_pii
+        prompt = self._get_prompt(
+            "generate_verdicts",
+            extracted_pii=self.extracted_pii,
         )
-        if self.using_native_model:
-            res, cost = await self.model.a_generate(prompt, schema=Verdicts)
-            self.evaluation_cost += cost
-            verdicts = [item for item in res.verdicts]
-            return verdicts
-        else:
-            try:
-                res: Verdicts = await self.model.a_generate(
-                    prompt, schema=Verdicts
-                )
-                verdicts = [item for item in res.verdicts]
-                return verdicts
-            except TypeError:
-                res = await self.model.a_generate(prompt)
-                data = trimAndLoadJson(res, self)
-                verdicts = [
-                    PIILeakageVerdict(**item) for item in data["verdicts"]
-                ]
-                return verdicts
+        return await a_generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=Verdicts,
+            extract_schema=lambda s: list(s.verdicts),
+            extract_json=lambda data: [
+                PIILeakageVerdict(**item) for item in data["verdicts"]
+            ],
+        )
 
     def _generate_verdicts(self) -> List[PIILeakageVerdict]:
         if len(self.extracted_pii) == 0:
             return []
 
-        verdicts: List[PIILeakageVerdict] = []
-        prompt = self.evaluation_template.generate_verdicts(
-            extracted_pii=self.extracted_pii
+        prompt = self._get_prompt(
+            "generate_verdicts",
+            extracted_pii=self.extracted_pii,
         )
-        if self.using_native_model:
-            res, cost = self.model.generate(prompt, schema=Verdicts)
-            self.evaluation_cost += cost
-            verdicts = [item for item in res.verdicts]
-            return verdicts
-        else:
-            try:
-                res: Verdicts = self.model.generate(prompt, schema=Verdicts)
-                verdicts = [item for item in res.verdicts]
-                return verdicts
-            except TypeError:
-                res = self.model.generate(prompt)
-                data = trimAndLoadJson(res, self)
-                verdicts = [
-                    PIILeakageVerdict(**item) for item in data["verdicts"]
-                ]
-                return verdicts
+        return generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=Verdicts,
+            extract_schema=lambda s: list(s.verdicts),
+            extract_json=lambda data: [
+                PIILeakageVerdict(**item) for item in data["verdicts"]
+            ],
+        )
 
-    async def _a_extract_pii(self, actual_output: str) -> List[str]:
-        prompt = self.evaluation_template.extract_pii(actual_output)
-        if self.using_native_model:
-            res, cost = await self.model.a_generate(prompt, schema=ExtractedPII)
-            self.evaluation_cost += cost
-            return res.extracted_pii
-        else:
-            try:
-                res: ExtractedPII = await self.model.a_generate(
-                    prompt, schema=ExtractedPII
-                )
-                return res.extracted_pii
-            except TypeError:
-                res = await self.model.a_generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return data["extracted_pii"]
+    async def _a_extract_pii(
+        self, actual_output: str, *, multimodal: bool
+    ) -> List[str]:
+        prompt = self._get_prompt(
+            "extract_pii",
+            actual_output=actual_output,
+            multimodal=multimodal,
+        )
+        return await a_generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=ExtractedPII,
+            extract_schema=lambda s: s.extracted_pii,
+            extract_json=lambda data: data["extracted_pii"],
+        )
 
-    def _extract_pii(self, actual_output: str) -> List[str]:
-        prompt = self.evaluation_template.extract_pii(actual_output)
-        if self.using_native_model:
-            res, cost = self.model.generate(prompt, schema=ExtractedPII)
-            self.evaluation_cost += cost
-            return res.extracted_pii
-        else:
-            try:
-                res: ExtractedPII = self.model.generate(
-                    prompt, schema=ExtractedPII
-                )
-                return res.extracted_pii
-            except TypeError:
-                res = self.model.generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return data["extracted_pii"]
+    def _extract_pii(
+        self, actual_output: str, *, multimodal: bool
+    ) -> List[str]:
+        prompt = self._get_prompt(
+            "extract_pii",
+            actual_output=actual_output,
+            multimodal=multimodal,
+        )
+        return generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=ExtractedPII,
+            extract_schema=lambda s: s.extracted_pii,
+            extract_json=lambda data: data["extracted_pii"],
+        )
 
     def _calculate_score(self) -> float:
         number_of_verdicts = len(self.verdicts)
@@ -303,7 +280,7 @@ class PIILeakageMetric(BaseMetric):
         else:
             try:
                 self.success = self.score >= self.threshold
-            except:
+            except TypeError:
                 self.success = False
         return self.success
 

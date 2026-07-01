@@ -1,11 +1,10 @@
 from enum import Enum
 import os
 import json
+from pathlib import Path
 from pydantic import BaseModel, Field
 from typing import Any, Optional, List, Dict, Union, Tuple
-import shutil
 import sys
-import datetime
 from rich.table import Table
 from rich.console import Console
 from rich import print
@@ -21,10 +20,11 @@ from deepeval.test_run.api import (
 )
 from deepeval.tracing.utils import make_json_serializable
 from deepeval.tracing.api import SpanApiType, span_api_type_literals
-from deepeval.test_case import LLMTestCase, ConversationalTestCase, MLLMTestCase
+from deepeval.test_case import LLMTestCase, ConversationalTestCase
 from deepeval.utils import (
     delete_file_if_exists,
     get_is_running_deepeval,
+    get_test_run_official,
     is_read_only_env,
     open_browser,
     shorten,
@@ -41,7 +41,6 @@ from deepeval.prompt import (
 )
 from rich.panel import Panel
 from rich.columns import Columns
-
 
 portalocker = None
 if not is_read_only_env():
@@ -60,6 +59,8 @@ else:
 
 TEMP_FILE_PATH = f"{HIDDEN_DIR}/.temp_test_run_data.json"
 LATEST_TEST_RUN_FILE_PATH = f"{HIDDEN_DIR}/.latest_test_run.json"
+# Full TestRun payload (same as timestamped exports); overwritten each run.
+LATEST_FULL_TEST_RUN_FILE_PATH = f"{HIDDEN_DIR}/.latest_run_full.json"
 LATEST_TEST_RUN_DATA_KEY = "testRunData"
 LATEST_TEST_RUN_LINK_KEY = "testRunLink"
 console = Console()
@@ -98,6 +99,7 @@ class TraceMetricScores(BaseModel):
 
 class PromptData(BaseModel):
     alias: Optional[str] = None
+    hash: Optional[str] = None
     version: Optional[str] = None
     text_template: Optional[str] = None
     messages_template: Optional[List[PromptMessage]] = None
@@ -165,6 +167,7 @@ class TestRun(BaseModel):
     evaluation_cost: Union[float, None] = Field(None, alias="evaluationCost")
     dataset_alias: Optional[str] = Field(None, alias="datasetAlias")
     dataset_id: Optional[str] = Field(None, alias="datasetId")
+    official: bool = False
 
     def add_test_case(
         self, api_test_case: Union[LLMApiTestCase, ConversationalApiTestCase]
@@ -182,7 +185,7 @@ class TestRun(BaseModel):
 
     def set_dataset_properties(
         self,
-        test_case: Union[LLMTestCase, ConversationalTestCase, MLLMTestCase],
+        test_case: Union[LLMTestCase, ConversationalTestCase],
     ):
         if self.dataset_alias is None:
             self.dataset_alias = test_case._dataset_alias
@@ -190,26 +193,49 @@ class TestRun(BaseModel):
         if self.dataset_id is None:
             self.dataset_id = test_case._dataset_id
 
-    def sort_test_cases(self):
-        self.test_cases.sort(
-            key=lambda x: (x.order if x.order is not None else float("inf"))
-        )
-        # Optionally update order only if not already set
+    @staticmethod
+    def _assign_unique_orders(test_cases):
+        """Assign unique sequential orders to a sorted list of test cases.
+
+        Preserves the original gap-filling behaviour (only touch test cases
+        whose order is ``None``) **unless** duplicates are detected.  When
+        multiple ``evaluate()`` calls accumulate into the same test run each
+        call starts its order counter from 0, producing duplicates such as
+        ``[0, 0, 1, 1, ...]``.  Confident AI treats ``order`` as a unique
+        position identifier, so duplicates cause earlier test cases to be
+        displayed as *Skipped*.  In that case we fall back to a full
+        sequential re-number to guarantee uniqueness.
+        """
+        # --- original logic: fill Nones, keep existing values ---
         highest_order = 0
-        for test_case in self.test_cases:
+        for test_case in test_cases:
             if test_case.order is None:
                 test_case.order = highest_order
             highest_order = test_case.order + 1
 
+        # --- check for duplicates introduced by accumulation ---
+        seen = set()
+        has_duplicates = False
+        for test_case in test_cases:
+            if test_case.order in seen:
+                has_duplicates = True
+                break
+            seen.add(test_case.order)
+
+        if has_duplicates:
+            for i, test_case in enumerate(test_cases):
+                test_case.order = i
+
+    def sort_test_cases(self):
+        self.test_cases.sort(
+            key=lambda x: (x.order if x.order is not None else float("inf"))
+        )
+        self._assign_unique_orders(self.test_cases)
+
         self.conversational_test_cases.sort(
             key=lambda x: (x.order if x.order is not None else float("inf"))
         )
-        # Optionally update order only if not already set
-        highest_order = 0
-        for test_case in self.conversational_test_cases:
-            if test_case.order is None:
-                test_case.order = highest_order
-            highest_order = test_case.order + 1
+        self._assign_unique_orders(self.conversational_test_cases)
 
     def construct_metrics_scores(self) -> int:
         # Use a dict to aggregate scores, passes, and fails for each metric.
@@ -406,9 +432,10 @@ class TestRun(BaseModel):
         try:
             body = self.model_dump(by_alias=True, exclude_none=True)
         except AttributeError:
-            # Pydantic version below 2.0
             body = self.dict(by_alias=True, exclude_none=True)
         json.dump(body, f, cls=TestRunEncoder)
+        f.flush()
+        os.fsync(f.fileno())
         return self
 
     @classmethod
@@ -437,12 +464,38 @@ class TestRunManager:
         self.temp_file_path = TEMP_FILE_PATH
         self.save_to_disk = False
         self.disable_request = False
+        self.results_folder: Optional[str] = None
+        self.results_subfolder: Optional[str] = None
+        # Timestamped export if one was written, else rolling snapshot.
+        # Consumed by the post-run inspect prompt.
+        self.last_saved_path: Optional[Path] = None
 
     def reset(self):
         self.test_run = None
         self.temp_file_path = TEMP_FILE_PATH
         self.save_to_disk = False
         self.disable_request = False
+        self.results_folder = None
+        self.results_subfolder = None
+        self.last_saved_path = None
+
+    def configure_local_store(
+        self,
+        results_folder: Optional[str] = None,
+        results_subfolder: Optional[str] = None,
+    ):
+        """Configure where `save_test_run_locally` writes the full TestRun JSON.
+
+        Values set here take precedence over the `DEEPEVAL_RESULTS_FOLDER`
+        env var. Intended to be called from `evaluate()` / `evals_iterator()`
+        right before `wrap_up_test_run()`.
+        """
+        self.results_folder = results_folder
+        self.results_subfolder = results_subfolder
+        # The manager is a long-lived singleton, so a previous run's path
+        # could linger and mislead the inspect prompt into offering a stale
+        # file. Clear it whenever a new run configures its local store.
+        self.last_saved_path = None
 
     def set_test_run(self, test_run: TestRun):
         self.test_run = test_run
@@ -515,6 +568,8 @@ class TestRunManager:
                             )
                         wrapper_data = {save_under_key: test_run_data}
                         json.dump(wrapper_data, file, cls=TestRunEncoder)
+                        file.flush()
+                        os.fsync(file.fileno())
                     else:
                         self.test_run.save(file)
             except portalocker.exceptions.LockException:
@@ -527,13 +582,15 @@ class TestRunManager:
                     LATEST_TEST_RUN_FILE_PATH, mode="w"
                 ) as file:
                     json.dump({LATEST_TEST_RUN_LINK_KEY: link}, file)
+                    file.flush()
+                    os.fsync(file.fileno())
             except portalocker.exceptions.LockException:
                 pass
 
     def update_test_run(
         self,
         api_test_case: Union[LLMApiTestCase, ConversationalApiTestCase],
-        test_case: Union[LLMTestCase, ConversationalTestCase, MLLMTestCase],
+        test_case: Union[LLMTestCase, ConversationalTestCase],
     ):
         if (
             api_test_case.metrics_data is not None
@@ -938,24 +995,48 @@ class TestRunManager:
         return link, res.id
 
     def save_test_run_locally(self):
-        local_folder = os.getenv("DEEPEVAL_RESULTS_FOLDER")
-        if local_folder:
-            new_test_filename = datetime.datetime.now().strftime(
-                "%Y%m%d_%H%M%S"
+        """Persist the current TestRun to disk.
+
+        Always writes a rolling snapshot to `.deepeval/.latest_run_full.json`.
+        Additionally writes a timestamped `test_run_<YYYYMMDD_HHMMSS>.json` to
+        `results_folder` (or `DEEPEVAL_RESULTS_FOLDER`) when set.
+        """
+        if self.test_run is None:
+            return
+
+        from deepeval.evaluate.local_store import (
+            resolve_target_dir,
+            write_rolling_test_run,
+            write_test_run,
+        )
+
+        rolling_path = write_rolling_test_run(self.test_run)
+        if rolling_path is not None:
+            self.last_saved_path = rolling_path
+
+        target_dir = resolve_target_dir(
+            results_folder=self.results_folder,
+            results_subfolder=self.results_subfolder,
+        )
+        if target_dir is None:
+            return
+
+        if target_dir.exists() and target_dir.is_file():
+            print(
+                f"❌ Error: results_folder={target_dir} already exists and is a file.\n"
+                "Detailed results won't be saved. Please specify a folder or an available path."
             )
-            os.rename(self.temp_file_path, new_test_filename)
-            if not os.path.exists(local_folder):
-                os.mkdir(local_folder)
-                shutil.copy(new_test_filename, local_folder)
-                print(f"Results saved in {local_folder} as {new_test_filename}")
-            elif os.path.isfile(local_folder):
-                print(
-                    f"""❌ Error: DEEPEVAL_RESULTS_FOLDER={local_folder} already exists and is a file.\nDetailed results won't be saved. Please specify a folder or an available path."""
-                )
-            else:
-                shutil.copy(new_test_filename, local_folder)
-                print(f"Results saved in {local_folder} as {new_test_filename}")
-            os.remove(new_test_filename)
+            return
+
+        try:
+            path = write_test_run(target_dir, self.test_run)
+            self.last_saved_path = path
+            print(f"Test run saved at {path}")
+        except Exception as e:
+            print(
+                f"Warning: failed to save test run to {target_dir}: {e}",
+                file=sys.stderr,
+            )
 
     def wrap_up_test_run(
         self,
@@ -976,14 +1057,24 @@ class TestRunManager:
             delete_file_if_exists(self.temp_file_path)
             return
 
+        # Mark the run as the official if requested via the `--official` CLI flag or `evaluate(official=True)`.
+        # Set here, in the main process right before upload, so it rides along in the test run
+        # creation payload (and survives any xdist worker disk round-trips).
+        if get_test_run_official():
+            test_run.official = True
+
+        # Don't block the post when all metrics errored — the spans still
+        # carry the underlying error info (populated by ``Observer.__exit__``)
+        # which the dashboard can render. Just warn so it's not mistaken
+        # for a successful run.
         valid_scores = test_run.construct_metrics_scores()
         if valid_scores == 0:
-            print("All metrics errored for all test cases, please try again.")
-            delete_file_if_exists(self.temp_file_path)
-            delete_file_if_exists(
-                global_test_run_cache_manager.temp_cache_file_name
+            console.print(
+                "\n[bold yellow]⚠ WARNING:[/bold yellow] All metrics errored "
+                "across every test case — no metric scores were recorded. "
+                "Posting the run anyway so you can inspect the trace + span "
+                "errors on the Confident AI dashboard.\n"
             )
-            return
         test_run.run_duration = runDuration
         test_run.calculate_test_passes_and_fails()
         test_run.sort_test_cases()
@@ -1016,15 +1107,21 @@ class TestRunManager:
 
         self.save_test_run_locally()
         delete_file_if_exists(self.temp_file_path)
-        if is_confident() and self.disable_request is False:
+        confident_enabled = is_confident()
+        if confident_enabled and self.disable_request is False:
             return self.post_test_run(test_run)
         else:
             self.save_test_run(
                 LATEST_TEST_RUN_FILE_PATH,
                 save_under_key=LATEST_TEST_RUN_DATA_KEY,
             )
+            token_cost = (
+                f"{test_run.evaluation_cost} USD"
+                if test_run.evaluation_cost
+                else "None"
+            )
             console.print(
-                f"\n\n[rgb(5,245,141)]✓[/rgb(5,245,141)] Evaluation completed 🎉! (time taken: {round(runDuration, 2)}s | token cost: {test_run.evaluation_cost} USD)\n"
+                f"\n\n[rgb(5,245,141)]✓[/rgb(5,245,141)] Evaluation completed 🎉! (time taken: {round(runDuration, 2)}s | token cost: {token_cost})\n"
                 f"» Test Results ({test_run.test_passed + test_run.test_failed} total tests):\n",
                 f"  » Pass Rate: {round((test_run.test_passed / (test_run.test_passed + test_run.test_failed)) * 100, 2)}% | Passed: [bold green]{test_run.test_passed}[/bold green] | Failed: [bold red]{test_run.test_failed}[/bold red]\n\n",
                 "=" * 80,
@@ -1102,8 +1199,8 @@ class TestRunManager:
                 lines.append("")
                 lines.extend(settings_lines)
             title = f"{format_string(prompt.alias)}"
-            if prompt.version:
-                title += f" (v{prompt.version})"
+            if prompt.hash:
+                title += f" ({prompt.hash})"
             body = "\n".join(lines)
             panel = Panel(
                 body,

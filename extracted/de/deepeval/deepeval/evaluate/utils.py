@@ -1,6 +1,4 @@
-import ast
-import inspect
-from typing import Optional, List, Callable, Union
+from typing import Optional, List, Union
 import os
 import time
 
@@ -11,12 +9,10 @@ from deepeval.metrics import (
     ArenaGEval,
     BaseMetric,
     BaseConversationalMetric,
-    BaseMultimodalMetric,
 )
 from deepeval.test_case import (
     LLMTestCase,
     ConversationalTestCase,
-    MLLMTestCase,
 )
 from deepeval.test_run import (
     LLMApiTestCase,
@@ -68,6 +64,8 @@ def create_metric_data(metric: BaseMetric) -> MetricData:
             evaluationModel=metric.evaluation_model,
             error=metric.error,
             evaluationCost=metric.evaluation_cost,
+            inputTokenCount=metric.input_tokens,
+            outputTokenCount=metric.output_tokens,
             verboseLogs=metric.verbose_logs,
         )
     else:
@@ -81,6 +79,8 @@ def create_metric_data(metric: BaseMetric) -> MetricData:
             evaluationModel=metric.evaluation_model,
             error=None,
             evaluationCost=metric.evaluation_cost,
+            inputTokenCount=metric.input_tokens,
+            outputTokenCount=metric.output_tokens,
             verboseLogs=metric.verbose_logs,
         )
 
@@ -97,6 +97,8 @@ def create_arena_metric_data(metric: ArenaGEval, contestant: str) -> MetricData:
             evaluationModel=metric.evaluation_model,
             error=metric.error,
             evaluationCost=metric.evaluation_cost,
+            inputTokenCount=metric.input_tokens,
+            outputTokenCount=metric.output_tokens,
             verboseLogs=metric.verbose_logs,
         )
     else:
@@ -110,6 +112,8 @@ def create_arena_metric_data(metric: ArenaGEval, contestant: str) -> MetricData:
             evaluationModel=metric.evaluation_model,
             error=None,
             evaluationCost=metric.evaluation_cost,
+            inputTokenCount=metric.input_tokens,
+            outputTokenCount=metric.output_tokens,
             verboseLogs=metric.verbose_logs,
         )
 
@@ -118,6 +122,7 @@ def create_test_result(
     api_test_case: Union[LLMApiTestCase, ConversationalApiTestCase],
 ) -> TestResult:
     name = api_test_case.name
+    index = api_test_case.order
 
     if isinstance(api_test_case, ConversationalApiTestCase):
         return TestResult(
@@ -125,24 +130,23 @@ def create_test_result(
             success=api_test_case.success,
             metrics_data=api_test_case.metrics_data,
             conversational=True,
-            additional_metadata=api_test_case.additional_metadata,
+            index=index,
+            metadata=api_test_case.metadata,
             turns=api_test_case.turns,
         )
     else:
-        multimodal = (
-            api_test_case.multimodal_input is not None
-            and api_test_case.multimodal_input_actual_output is not None
-        )
+        multimodal = api_test_case.images_mapping
         if multimodal:
             return TestResult(
                 name=name,
                 success=api_test_case.success,
                 metrics_data=api_test_case.metrics_data,
-                input=api_test_case.multimodal_input,
-                actual_output=api_test_case.multimodal_input_actual_output,
+                input=api_test_case.input,
+                actual_output=api_test_case.actual_output,
                 conversational=False,
+                index=index,
                 multimodal=True,
-                additional_metadata=api_test_case.additional_metadata,
+                metadata=api_test_case.metadata,
             )
         else:
             return TestResult(
@@ -155,12 +159,50 @@ def create_test_result(
                 context=api_test_case.context,
                 retrieval_context=api_test_case.retrieval_context,
                 conversational=False,
+                index=index,
                 multimodal=False,
-                additional_metadata=api_test_case.additional_metadata,
+                metadata=api_test_case.metadata,
             )
 
 
 def create_api_trace(trace: Trace, golden: Golden) -> TraceApi:
+    # Fall back to the golden's input when the trace didn't capture a
+    # meaningful one of its own. This concern lives here at the
+    # evaluation/rendering boundary, NOT in the tracer: `@observe`
+    # faithfully records whatever kwargs were passed (including `{}` for
+    # positional-only calls), and we shouldn't rewrite general tracing
+    # behavior to paper over an evaluation-specific rendering/dedupe
+    # problem. The truthiness check cleanly covers the "absent" cases
+    # (`None`, `{}`, `""`) that would otherwise show as garbage in the
+    # trace-level Metrics Summary and break `filter_duplicate_results`.
+    #
+    # Span lists start empty and are populated by the eval-iterator's
+    # DFS walker (``_a_execute_span_test_case`` / its sync twin), which
+    # categorizes each visited span by isinstance and appends to the
+    # matching ``trace_api.*_spans`` list. We DON'T pre-populate from
+    # ``trace.root_spans`` here because the walker is also responsible
+    # for attaching per-span metric data, error flags, and trace dicts —
+    # doing it twice (here + walker) would either double-emit or require
+    # the walker to dedupe.
+    #
+    # Trace-level fields (``name``, ``tags``, ``thread_id``, ``user_id``,
+    # ``metadata``, ``environment``) are forwarded from the trace so that
+    # OTel-based integrations whose users configured them via instrumentation
+    # settings or ``update_current_trace(...)`` see them on the dashboard.
+    # The non-eval REST path (``trace_manager.create_trace_api``) already
+    # forwards these; mirror its shape here so the eval-iterator path
+    # doesn't silently drop them.
+    #
+    # ``metadata`` sources from ``trace.metadata`` (user-configured
+    # at instrument time or via ``update_current_trace(...)``). It does
+    # NOT source from ``golden.additional_metadata`` here — that field
+    # already populates ``LLMTestCase.metadata`` at every callsite that
+    # builds a test case from a golden, which is the correct home for
+    # per-row evaluation context. Conflating the two layers (test-case
+    # metadata vs trace metadata) silently overwrote whatever the user
+    # configured on the trace, which is the opposite of what we want:
+    # the user owns trace metadata, the golden owns test-case metadata,
+    # both flow to their respective surfaces.
     return TraceApi(
         uuid=trace.uuid,
         baseSpans=[],
@@ -178,14 +220,26 @@ def create_api_trace(trace: Trace, golden: Golden) -> TraceApi:
             if trace.end_time
             else None
         ),
-        input=trace.input,
+        input=trace.input or golden.input,
         output=trace.output,
         expected_output=trace.expected_output,
         context=trace.context,
-        retrieval_context=trace.retrieval_context,
+        retrieval_context=(
+            [
+                rc.context if hasattr(rc, "context") else rc
+                for rc in trace.retrieval_context
+            ]
+            if trace.retrieval_context
+            else None
+        ),
         tools_called=trace.tools_called,
         expected_tools=trace.expected_tools,
-        metadata=golden.additional_metadata,
+        metadata=trace.metadata,
+        name=trace.name,
+        tags=trace.tags,
+        threadId=trace.thread_id,
+        userId=trace.user_id,
+        environment=trace.environment,
         status=(
             TraceSpanApiStatus.SUCCESS
             if trace.status == TraceSpanStatus.SUCCESS
@@ -196,33 +250,27 @@ def create_api_trace(trace: Trace, golden: Golden) -> TraceApi:
 
 def validate_assert_test_inputs(
     golden: Optional[Golden] = None,
-    observed_callback: Optional[Callable] = None,
     test_case: Optional[LLMTestCase] = None,
     metrics: Optional[List] = None,
 ):
-    if golden and observed_callback:
-        if not getattr(observed_callback, "_is_deepeval_observed", False):
+    # Trace-scoped shape: `assert_test(golden[, metrics])` inside a plugin-wrapped test.
+    if golden and not test_case:
+        if metrics is not None and not all(
+            isinstance(m, BaseMetric) for m in metrics
+        ):
             raise ValueError(
-                "The provided 'observed_callback' must be decorated with '@observe' from deepeval.tracing."
+                "All 'metrics' must be instances of 'BaseMetric' when using "
+                "`assert_test(golden=..., metrics=...)`."
             )
-        if test_case or metrics:
-            raise ValueError(
-                "You cannot provide both ('golden' + 'observed_callback') and ('test_case' + 'metrics'). Choose one mode."
-            )
-    elif (golden and not observed_callback) or (
-        observed_callback and not golden
-    ):
-        raise ValueError(
-            "Both 'golden' and 'observed_callback' must be provided together."
-        )
+        return
 
-    if (test_case and not metrics) or (metrics and not test_case):
+    if test_case and not metrics:
         raise ValueError(
             "Both 'test_case' and 'metrics' must be provided together."
         )
 
     if test_case and metrics:
-        if isinstance(test_case, LLMTestCase) and not all(
+        if (isinstance(test_case, LLMTestCase)) and not all(
             isinstance(metric, BaseMetric) for metric in metrics
         ):
             raise ValueError(
@@ -234,32 +282,22 @@ def validate_assert_test_inputs(
             raise ValueError(
                 "All 'metrics' for an 'ConversationalTestCase' must be instances of 'BaseConversationalMetric' only."
             )
-        if isinstance(test_case, MLLMTestCase) and not all(
-            isinstance(metric, BaseMultimodalMetric) for metric in metrics
-        ):
-            raise ValueError(
-                "All 'metrics' for an 'MLLMTestCase' must be instances of 'BaseMultimodalMetric' only."
-            )
+        return
 
-    if not ((golden and observed_callback) or (test_case and metrics)):
-        raise ValueError(
-            "You must provide either ('golden' + 'observed_callback') or ('test_case' + 'metrics')."
-        )
+    raise ValueError(
+        "You must provide either ('golden' [+ 'metrics']) from inside a "
+        "`deepeval test run` test, or ('test_case' + 'metrics')."
+    )
 
 
 def validate_evaluate_inputs(
-    goldens: Optional[List] = None,
-    observed_callback: Optional[Callable] = None,
     test_cases: Optional[
-        Union[
-            List[LLMTestCase], List[ConversationalTestCase], List[MLLMTestCase]
-        ]
+        Union[List[LLMTestCase], List[ConversationalTestCase]]
     ] = None,
     metrics: Optional[
         Union[
             List[BaseMetric],
             List[BaseConversationalMetric],
-            List[BaseMultimodalMetric],
         ]
     ] = None,
     metric_collection: Optional[str] = None,
@@ -273,26 +311,10 @@ def validate_evaluate_inputs(
             "You cannot provide both 'metric_collection' and 'metrics'."
         )
 
-    if goldens and observed_callback:
-        if not getattr(observed_callback, "_is_deepeval_observed", False):
-            raise ValueError(
-                "The provided 'observed_callback' must be decorated with '@observe' from deepeval.tracing."
-            )
-        if test_cases or metrics:
-            raise ValueError(
-                "You cannot provide both ('goldens' with 'observed_callback') and ('test_cases' with 'metrics'). Please choose one mode."
-            )
-    elif (goldens and not observed_callback) or (
-        observed_callback and not goldens
-    ):
-        raise ValueError(
-            "If using 'goldens', you must also provide a 'observed_callback'."
-        )
-
     if test_cases and metrics:
         for test_case in test_cases:
             for metric in metrics:
-                if isinstance(test_case, LLMTestCase) and not isinstance(
+                if (isinstance(test_case, LLMTestCase)) and not isinstance(
                     metric, BaseMetric
                 ):
                     raise ValueError(
@@ -304,12 +326,6 @@ def validate_evaluate_inputs(
                     print(type(metric))
                     raise ValueError(
                         f"Metric {metric.__name__} is not a valid metric for ConversationalTestCase."
-                    )
-                if isinstance(test_case, MLLMTestCase) and not isinstance(
-                    metric, BaseMultimodalMetric
-                ):
-                    raise ValueError(
-                        f"Metric {metric.__name__} is not a valid metric for MLLMTestCase."
                     )
 
 
@@ -523,21 +539,10 @@ def count_metrics_in_span_subtree(span: BaseSpan) -> int:
 
 def extract_trace_test_results(trace_api: TraceApi) -> List[TestResult]:
     test_results: List[TestResult] = []
-    # extract trace result
-    if trace_api.metrics_data:
-        test_results.append(
-            TestResult(
-                name=trace_api.name,
-                success=True,
-                metrics_data=trace_api.metrics_data,
-                conversational=False,
-                input=trace_api.input,
-                actual_output=trace_api.output,
-                expected_output=trace_api.expected_output,
-                context=trace_api.context,
-                retrieval_context=trace_api.retrieval_context,
-            )
-        )
+    # Do not emit trace-level ``trace_api.metrics_data`` as its own ``TestResult``.
+    # The golden ``api_test_case`` path already records those rows via
+    # ``update_metric_data``; emitting them again here was the root cause of an
+    # extra dashboard panel (wrong ``name`` / ``success`` vs the main case).
     # extract base span results
     for span in trace_api.base_spans:
         test_results.extend(extract_span_test_results(span))
@@ -574,21 +579,3 @@ def extract_span_test_results(span_api: BaseApiSpan) -> List[TestResult]:
             )
         )
     return test_results
-
-
-def count_observe_decorators_in_module(func: Callable) -> int:
-    mod = inspect.getmodule(func)
-    if mod is None or not hasattr(mod, "__file__"):
-        raise RuntimeError("Cannot locate @observe function.")
-    module_source = inspect.getsource(mod)
-    tree = ast.parse(module_source)
-    count = 0
-    for node in ast.walk(tree):
-        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-            for deco in node.decorator_list:
-                if (
-                    isinstance(deco, ast.Call)
-                    and getattr(deco.func, "id", "") == "observe"
-                ):
-                    count += 1
-    return count

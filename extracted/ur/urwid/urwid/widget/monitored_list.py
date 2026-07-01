@@ -282,7 +282,10 @@ class MonitoredFocusList(MonitoredList[_T], typing.Generic[_T]):
     ) -> int | None:
         return None
 
-    def set_validate_contents_modified(self, callback: Callable[[tuple[int, int, int], Collection[_T]], int | None]):
+    def set_validate_contents_modified(
+        self,
+        callback: Callable[[tuple[int, int, int], Collection[_T]], int | None],
+    ) -> None:
         """
         Assign a callback function to handle validating changes to the list.
         This may raise an exception if the change should not be performed.
@@ -423,7 +426,7 @@ class MonitoredFocusList(MonitoredList[_T], typing.Generic[_T]):
         super().__setitem__(i, y)
         self.focus = focus
 
-    def __imul__(self, n: int):
+    def __imul__(self, n: int) -> Self:
         """
         >>> def modified(indices, new_items):
         ...     print(f"range{indices!r} <- {list(new_items)!r}")

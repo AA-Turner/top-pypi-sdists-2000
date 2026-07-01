@@ -1,27 +1,26 @@
 from typing import Optional, Union, List
 
 from deepeval.metrics import BaseConversationalMetric
-from deepeval.metrics.api import metric_data_manager
 from deepeval.metrics.role_adherence.schema import (
     OutOfCharacterResponseVerdicts,
+    RoleAdherenceScoreReason,
 )
-from deepeval.metrics.role_adherence.template import RoleAdherenceTemplate
 from deepeval.metrics.utils import (
     check_conversational_test_case_params,
     construct_verbose_logs,
     convert_turn_to_dict,
-    trimAndLoadJson,
     initialize_model,
+    a_generate_with_schema_and_extract,
+    generate_with_schema_and_extract,
 )
 from deepeval.models import DeepEvalBaseLLM
 from deepeval.metrics.indicator import metric_progress_indicator
-from deepeval.test_case import Turn, ConversationalTestCase, TurnParams
+from deepeval.test_case import Turn, ConversationalTestCase, MultiTurnParams
 from deepeval.utils import get_or_create_event_loop, prettify_list
-from deepeval.metrics.role_adherence.schema import *
 
 
 class RoleAdherenceMetric(BaseConversationalMetric):
-    _required_test_case_params = [TurnParams.CONTENT, TurnParams.ROLE]
+    _required_test_case_params = [MultiTurnParams.CONTENT, MultiTurnParams.ROLE]
 
     def __init__(
         self,
@@ -51,10 +50,14 @@ class RoleAdherenceMetric(BaseConversationalMetric):
             test_case,
             self._required_test_case_params,
             self,
-            require_chatbot_role=True,
+            True,
+            self.model,
+            test_case.multimodal,
         )
 
         self.evaluation_cost = 0 if self.using_native_model else None
+        self.input_tokens = 0 if self.using_native_model else None
+        self.output_tokens = 0 if self.using_native_model else None
         with metric_progress_indicator(
             self, _show_indicator=_show_indicator, _in_component=_in_component
         ):
@@ -85,10 +88,6 @@ class RoleAdherenceMetric(BaseConversationalMetric):
                         f"Score: {self.score}\nReason: {self.reason}",
                     ],
                 )
-                if _log_metric_to_confident:
-                    metric_data_manager.post_metric_if_enabled(
-                        self, test_case=test_case
-                    )
             return self.score
 
     async def a_measure(
@@ -102,10 +101,14 @@ class RoleAdherenceMetric(BaseConversationalMetric):
             test_case,
             self._required_test_case_params,
             self,
-            require_chatbot_role=True,
+            True,
+            self.model,
+            test_case.multimodal,
         )
 
         self.evaluation_cost = 0 if self.using_native_model else None
+        self.input_tokens = 0 if self.using_native_model else None
+        self.output_tokens = 0 if self.using_native_model else None
         with metric_progress_indicator(
             self,
             async_mode=True,
@@ -132,17 +135,14 @@ class RoleAdherenceMetric(BaseConversationalMetric):
                     f"Score: {self.score}\nReason: {self.reason}",
                 ],
             )
-            if _log_metric_to_confident:
-                metric_data_manager.post_metric_if_enabled(
-                    self, test_case=test_case
-                )
             return self.score
 
-    async def _a_generate_reason(self, role: str) -> str:
+    async def _a_generate_reason(self, role: str) -> Optional[str]:
         if self.include_reason is False:
             return None
 
-        prompt = RoleAdherenceTemplate.generate_reason(
+        prompt = self._get_prompt(
+            "generate_reason",
             score=self.score,
             role=role,
             out_of_character_responses=[
@@ -150,25 +150,19 @@ class RoleAdherenceMetric(BaseConversationalMetric):
                 for verdict in self.out_of_character_verdicts.verdicts
             ],
         )
-        if self.using_native_model:
-            res, cost = await self.model.a_generate(
-                prompt, schema=RoleAdherenceScoreReason
-            )
-            self.evaluation_cost += cost
-            return res.reason
-        else:
-            try:
-                res: RoleAdherenceScoreReason = await self.model.a_generate(
-                    prompt, schema=RoleAdherenceScoreReason
-                )
-                return res.reason
-            except TypeError:
-                res = await self.model.a_generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return data["reason"]
+        return await a_generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=RoleAdherenceScoreReason,
+            extract_schema=lambda s: s.reason,
+            extract_json=lambda data: data["reason"],
+        )
 
-    def _generate_reason(self, role: str) -> str:
-        prompt = RoleAdherenceTemplate.generate_reason(
+    def _generate_reason(self, role: str) -> Optional[str]:
+        if self.include_reason is False:
+            return None
+        prompt = self._get_prompt(
+            "generate_reason",
             score=self.score,
             role=role,
             out_of_character_responses=[
@@ -176,86 +170,63 @@ class RoleAdherenceMetric(BaseConversationalMetric):
                 for verdict in self.out_of_character_verdicts.verdicts
             ],
         )
-        if self.using_native_model:
-            res, cost = self.model.generate(
-                prompt, schema=RoleAdherenceScoreReason
-            )
-            self.evaluation_cost += cost
-            return res.reason
-        else:
-            try:
-                res: RoleAdherenceScoreReason = self.model.generate(
-                    prompt, schema=RoleAdherenceScoreReason
-                )
-                return res.reason
-            except TypeError:
-                res = self.model.generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return data["reason"]
+        return generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=RoleAdherenceScoreReason,
+            extract_schema=lambda s: s.reason,
+            extract_json=lambda data: data["reason"],
+        )
 
     async def _a_extract_out_of_character_verdicts(
         self, turns: List[Turn], role: str
     ) -> OutOfCharacterResponseVerdicts:
-        prompt = (
-            RoleAdherenceTemplate.extract_out_of_character_response_verdicts(
-                turns=[convert_turn_to_dict(turn) for turn in turns],
-                role=role,
+        prompt = self._get_prompt(
+            "extract_out_of_character_response_verdicts",
+            turns=[convert_turn_to_dict(turn) for turn in turns],
+            role=role,
+        )
+        res: OutOfCharacterResponseVerdicts = (
+            await a_generate_with_schema_and_extract(
+                metric=self,
+                prompt=prompt,
+                schema_cls=OutOfCharacterResponseVerdicts,
+                extract_schema=lambda s: s,
+                extract_json=lambda data: OutOfCharacterResponseVerdicts(
+                    **data
+                ),
             )
         )
-        if self.using_native_model:
-            res, cost = await self.model.a_generate(
-                prompt, schema=OutOfCharacterResponseVerdicts
-            )
-            self.evaluation_cost += cost
-        else:
-            try:
-                res: OutOfCharacterResponseVerdicts = (
-                    await self.model.a_generate(
-                        prompt, schema=OutOfCharacterResponseVerdicts
-                    )
-                )
-            except TypeError:
-                res = await self.model.a_generate(prompt)
-                data = trimAndLoadJson(res, self)
-                res = OutOfCharacterResponseVerdicts(**data)
 
         for verdict in res.verdicts:
             try:
                 index = verdict.index
                 verdict.ai_message = f"{turns[index].content} (turn #{index+1})"
-            except:
+            except Exception:
                 pass
         return res
 
     def _extract_out_of_character_verdicts(
         self, turns: List[Turn], role: str
     ) -> OutOfCharacterResponseVerdicts:
-        prompt = (
-            RoleAdherenceTemplate.extract_out_of_character_response_verdicts(
-                turns=[convert_turn_to_dict(turn) for turn in turns],
-                role=role,
-            )
+        prompt = self._get_prompt(
+            "extract_out_of_character_response_verdicts",
+            turns=[convert_turn_to_dict(turn) for turn in turns],
+            role=role,
         )
-        if self.using_native_model:
-            res, cost = self.model.generate(
-                prompt, schema=OutOfCharacterResponseVerdicts
-            )
-            self.evaluation_cost += cost
-        else:
-            try:
-                res: OutOfCharacterResponseVerdicts = self.model.generate(
-                    prompt, schema=OutOfCharacterResponseVerdicts
-                )
-            except TypeError:
-                res = self.model.generate(prompt)
-                data = trimAndLoadJson(res, self)
-                res = OutOfCharacterResponseVerdicts(**data)
+        res: OutOfCharacterResponseVerdicts = generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=OutOfCharacterResponseVerdicts,
+            extract_schema=lambda s: s,
+            extract_json=lambda data: OutOfCharacterResponseVerdicts(**data),
+        )
 
         for verdict in res.verdicts:
             try:
                 index = verdict.index
                 verdict.ai_message = f"{turns[index].content} (turn #{index+1})"
-            except:
+            except Exception:
                 pass
         return res
 
@@ -278,8 +249,8 @@ class RoleAdherenceMetric(BaseConversationalMetric):
             self.success = False
         else:
             try:
-                self.score >= self.threshold
-            except:
+                self.success = self.score >= self.threshold
+            except TypeError:
                 self.success = False
         return self.success
 

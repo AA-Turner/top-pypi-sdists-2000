@@ -1,30 +1,65 @@
-from typing import Optional, List, Type, Union
+from typing import Any, Dict, Optional, List, Union
 
-from deepeval.utils import get_or_create_event_loop, prettify_list
+from deepeval.utils import (
+    get_or_create_event_loop,
+    prettify_list,
+)
 from deepeval.metrics.utils import (
     construct_verbose_logs,
-    trimAndLoadJson,
     check_llm_test_case_params,
     initialize_model,
+    a_generate_with_schema_and_extract,
+    generate_with_schema_and_extract,
 )
 from deepeval.test_case import (
     LLMTestCase,
-    LLMTestCaseParams,
+    SingleTurnParams,
 )
 from deepeval.metrics import BaseMetric
 from deepeval.models import DeepEvalBaseLLM
-from deepeval.metrics.contextual_recall.template import ContextualRecallTemplate
+from deepeval.metrics.retrieval_context_display import id_retrieval_context
 from deepeval.metrics.indicator import metric_progress_indicator
-from deepeval.metrics.contextual_recall.schema import *
-from deepeval.metrics.api import metric_data_manager
+from deepeval.metrics.contextual_recall.schema import (
+    ContextualRecallVerdict,
+    Verdicts,
+    ContextualRecallScoreReason,
+    VerdictWithExpectedOutput,
+)
+
+
+def _contextual_recall_verdict_kwargs(
+    retrieval_context: List[Any],
+    multimodal: bool,
+) -> Dict[str, object]:
+    content_type = "sentence and image" if multimodal else "sentence"
+    content_type_plural = "sentences and images" if multimodal else "sentences"
+    content_or = "sentence or image" if multimodal else "sentence"
+    context_to_display = (
+        id_retrieval_context(retrieval_context)
+        if multimodal
+        else retrieval_context
+    )
+    node_instruction = ""
+    if multimodal:
+        node_instruction = (
+            " A node is either a string or image, but not both (so do not group "
+            "images and texts in the same nodes)."
+        )
+    return {
+        "content_type": content_type,
+        "content_type_plural": content_type_plural,
+        "content_or": content_or,
+        "context_to_display": context_to_display,
+        "node_instruction": node_instruction,
+    }
 
 
 class ContextualRecallMetric(BaseMetric):
 
-    _required_params: List[LLMTestCaseParams] = [
-        LLMTestCaseParams.INPUT,
-        LLMTestCaseParams.RETRIEVAL_CONTEXT,
-        LLMTestCaseParams.EXPECTED_OUTPUT,
+    _required_params: List[SingleTurnParams] = [
+        SingleTurnParams.INPUT,
+        SingleTurnParams.RETRIEVAL_CONTEXT,
+        SingleTurnParams.EXPECTED_OUTPUT,
     ]
 
     def __init__(
@@ -35,9 +70,6 @@ class ContextualRecallMetric(BaseMetric):
         async_mode: bool = True,
         strict_mode: bool = False,
         verbose_mode: bool = False,
-        evaluation_template: Type[
-            ContextualRecallTemplate
-        ] = ContextualRecallTemplate,
     ):
         self.threshold = 1 if strict_mode else threshold
         self.model, self.using_native_model = initialize_model(model)
@@ -46,7 +78,6 @@ class ContextualRecallMetric(BaseMetric):
         self.async_mode = async_mode
         self.strict_mode = strict_mode
         self.verbose_mode = verbose_mode
-        self.evaluation_template = evaluation_template
 
     def measure(
         self,
@@ -55,9 +86,21 @@ class ContextualRecallMetric(BaseMetric):
         _in_component: bool = False,
         _log_metric_to_confident: bool = True,
     ) -> float:
-        check_llm_test_case_params(test_case, self._required_params, self)
+        multimodal = test_case.multimodal
+
+        check_llm_test_case_params(
+            test_case,
+            self._required_params,
+            None,
+            None,
+            self,
+            self.model,
+            test_case.multimodal,
+        )
 
         self.evaluation_cost = 0 if self.using_native_model else None
+        self.input_tokens = 0 if self.using_native_model else None
+        self.output_tokens = 0 if self.using_native_model else None
         with metric_progress_indicator(
             self, _show_indicator=_show_indicator, _in_component=_in_component
         ):
@@ -72,13 +115,16 @@ class ContextualRecallMetric(BaseMetric):
                     )
                 )
             else:
-                self.verdicts: List[ContextualRecallVerdict] = (
+                expected_output = test_case.expected_output
+                retrieval_context = test_case.retrieval_context
+
+                self.verdicts: List[VerdictWithExpectedOutput] = (
                     self._generate_verdicts(
-                        test_case.expected_output, test_case.retrieval_context
+                        expected_output, retrieval_context, multimodal
                     )
                 )
                 self.score = self._calculate_score()
-                self.reason = self._generate_reason(test_case.expected_output)
+                self.reason = self._generate_reason(expected_output, multimodal)
                 self.success = self.score >= self.threshold
                 self.verbose_logs = construct_verbose_logs(
                     self,
@@ -87,10 +133,6 @@ class ContextualRecallMetric(BaseMetric):
                         f"Score: {self.score}\nReason: {self.reason}",
                     ],
                 )
-                if _log_metric_to_confident:
-                    metric_data_manager.post_metric_if_enabled(
-                        self, test_case=test_case
-                    )
             return self.score
 
     async def a_measure(
@@ -101,23 +143,38 @@ class ContextualRecallMetric(BaseMetric):
         _log_metric_to_confident: bool = True,
     ) -> float:
 
-        check_llm_test_case_params(test_case, self._required_params, self)
+        multimodal = test_case.multimodal
+
+        check_llm_test_case_params(
+            test_case,
+            self._required_params,
+            None,
+            None,
+            self,
+            self.model,
+            test_case.multimodal,
+        )
 
         self.evaluation_cost = 0 if self.using_native_model else None
+        self.input_tokens = 0 if self.using_native_model else None
+        self.output_tokens = 0 if self.using_native_model else None
         with metric_progress_indicator(
             self,
             async_mode=True,
             _show_indicator=_show_indicator,
             _in_component=_in_component,
         ):
-            self.verdicts: List[ContextualRecallVerdict] = (
+            expected_output = test_case.expected_output
+            retrieval_context = test_case.retrieval_context
+
+            self.verdicts: List[VerdictWithExpectedOutput] = (
                 await self._a_generate_verdicts(
-                    test_case.expected_output, test_case.retrieval_context
+                    expected_output, retrieval_context, multimodal
                 )
             )
             self.score = self._calculate_score()
             self.reason = await self._a_generate_reason(
-                test_case.expected_output
+                expected_output, multimodal
             )
             self.success = self.score >= self.threshold
             self.verbose_logs = construct_verbose_logs(
@@ -127,13 +184,9 @@ class ContextualRecallMetric(BaseMetric):
                     f"Score: {self.score}\nReason: {self.reason}",
                 ],
             )
-            if _log_metric_to_confident:
-                metric_data_manager.post_metric_if_enabled(
-                    self, test_case=test_case
-                )
             return self.score
 
-    async def _a_generate_reason(self, expected_output: str):
+    async def _a_generate_reason(self, expected_output: str, multimodal: bool):
         if self.include_reason is False:
             return None
 
@@ -145,31 +198,25 @@ class ContextualRecallMetric(BaseMetric):
             else:
                 unsupportive_reasons.append(verdict.reason)
 
-        prompt = self.evaluation_template.generate_reason(
+        prompt = self._get_prompt(
+            "generate_reason",
             expected_output=expected_output,
             supportive_reasons=supportive_reasons,
             unsupportive_reasons=unsupportive_reasons,
             score=format(self.score, ".2f"),
+            multimodal=multimodal,
+            content_type="sentence or image" if multimodal else "sentence",
         )
 
-        if self.using_native_model:
-            res, cost = await self.model.a_generate(
-                prompt, schema=ContextualRecallScoreReason
-            )
-            self.evaluation_cost += cost
-            return res.reason
-        else:
-            try:
-                res: ContextualRecallScoreReason = await self.model.a_generate(
-                    prompt, schema=ContextualRecallScoreReason
-                )
-                return res.reason
-            except TypeError:
-                res = await self.model.a_generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return data["reason"]
+        return await a_generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=ContextualRecallScoreReason,
+            extract_schema=lambda score_reason: score_reason.reason,
+            extract_json=lambda data: data["reason"],
+        )
 
-    def _generate_reason(self, expected_output: str):
+    def _generate_reason(self, expected_output: str, multimodal: bool):
         if self.include_reason is False:
             return None
 
@@ -181,29 +228,23 @@ class ContextualRecallMetric(BaseMetric):
             else:
                 unsupportive_reasons.append(verdict.reason)
 
-        prompt = self.evaluation_template.generate_reason(
+        prompt = self._get_prompt(
+            "generate_reason",
             expected_output=expected_output,
             supportive_reasons=supportive_reasons,
             unsupportive_reasons=unsupportive_reasons,
             score=format(self.score, ".2f"),
+            multimodal=multimodal,
+            content_type="sentence or image" if multimodal else "sentence",
         )
 
-        if self.using_native_model:
-            res, cost = self.model.generate(
-                prompt, schema=ContextualRecallScoreReason
-            )
-            self.evaluation_cost += cost
-            return res.reason
-        else:
-            try:
-                res: ContextualRecallScoreReason = self.model.generate(
-                    prompt, schema=ContextualRecallScoreReason
-                )
-                return res.reason
-            except TypeError:
-                res = self.model.generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return data["reason"]
+        return generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=ContextualRecallScoreReason,
+            extract_schema=lambda score_reason: score_reason.reason,
+            extract_json=lambda data: data["reason"],
+        )
 
     def _calculate_score(self):
         number_of_verdicts = len(self.verdicts)
@@ -219,54 +260,66 @@ class ContextualRecallMetric(BaseMetric):
         return 0 if self.strict_mode and score < self.threshold else score
 
     async def _a_generate_verdicts(
-        self, expected_output: str, retrieval_context: List[str]
-    ) -> List[ContextualRecallVerdict]:
-        prompt = self.evaluation_template.generate_verdicts(
-            expected_output=expected_output, retrieval_context=retrieval_context
+        self,
+        expected_output: str,
+        retrieval_context: List[str],
+        multimodal: bool,
+    ) -> List[VerdictWithExpectedOutput]:
+        prompt = self._get_prompt(
+            "generate_verdicts",
+            expected_output=expected_output,
+            multimodal=multimodal,
+            **_contextual_recall_verdict_kwargs(retrieval_context, multimodal),
         )
-        if self.using_native_model:
-            res, cost = await self.model.a_generate(prompt, schema=Verdicts)
-            self.evaluation_cost += cost
-            verdicts = [item for item in res.verdicts]
-            return verdicts
-        else:
-            try:
-                res: Verdicts = await self.model.a_generate(
-                    prompt, schema=Verdicts
-                )
-                verdicts: Verdicts = [item for item in res.verdicts]
-                return verdicts
-            except TypeError:
-                res = await self.model.a_generate(prompt)
-                data = trimAndLoadJson(res, self)
-                verdicts = [
-                    ContextualRecallVerdict(**item) for item in data["verdicts"]
-                ]
-                return verdicts
+        verdicts = await a_generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=Verdicts,
+            extract_schema=lambda r: list(r.verdicts),
+            extract_json=lambda data: [
+                ContextualRecallVerdict(**item) for item in data["verdicts"]
+            ],
+        )
+        final_verdicts = []
+        for verdict in verdicts:
+            new_verdict = VerdictWithExpectedOutput(
+                verdict=verdict.verdict,
+                reason=verdict.reason,
+                expected_output=expected_output,
+            )
+            final_verdicts.append(new_verdict)
+        return final_verdicts
 
     def _generate_verdicts(
-        self, expected_output: str, retrieval_context: List[str]
-    ) -> List[ContextualRecallVerdict]:
-        prompt = self.evaluation_template.generate_verdicts(
-            expected_output=expected_output, retrieval_context=retrieval_context
+        self,
+        expected_output: str,
+        retrieval_context: List[str],
+        multimodal: bool,
+    ) -> List[VerdictWithExpectedOutput]:
+        prompt = self._get_prompt(
+            "generate_verdicts",
+            expected_output=expected_output,
+            multimodal=multimodal,
+            **_contextual_recall_verdict_kwargs(retrieval_context, multimodal),
         )
-        if self.using_native_model:
-            res, cost = self.model.generate(prompt, schema=Verdicts)
-            self.evaluation_cost += cost
-            verdicts = [item for item in res.verdicts]
-            return verdicts
-        else:
-            try:
-                res: Verdicts = self.model.generate(prompt, schema=Verdicts)
-                verdicts: Verdicts = [item for item in res.verdicts]
-                return verdicts
-            except TypeError:
-                res = self.model.generate(prompt)
-                data = trimAndLoadJson(res, self)
-                verdicts = [
-                    ContextualRecallVerdict(**item) for item in data["verdicts"]
-                ]
-                return verdicts
+        verdicts = generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=Verdicts,
+            extract_schema=lambda r: list(r.verdicts),
+            extract_json=lambda data: [
+                ContextualRecallVerdict(**item) for item in data["verdicts"]
+            ],
+        )
+        final_verdicts = []
+        for verdict in verdicts:
+            new_verdict = VerdictWithExpectedOutput(
+                verdict=verdict.verdict,
+                reason=verdict.reason,
+                expected_output=expected_output,
+            )
+            final_verdicts.append(new_verdict)
+        return final_verdicts
 
     def is_successful(self) -> bool:
         if self.error is not None:
@@ -274,7 +327,7 @@ class ContextualRecallMetric(BaseMetric):
         else:
             try:
                 self.success = self.score >= self.threshold
-            except:
+            except TypeError:
                 self.success = False
         return self.success
 

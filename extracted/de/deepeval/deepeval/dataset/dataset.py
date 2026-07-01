@@ -24,14 +24,21 @@ from deepeval.dataset.utils import (
     format_turns,
     check_tracer,
     parse_turns,
+    serialize_retrieval_context,
+    join_retrieval_context,
+    reconstruct_retrieval_context,
     trimAndLoadJson,
 )
 from deepeval.dataset.api import (
     APIDataset,
     DatasetHttpResponse,
     APIQueueDataset,
+    DatasetVersion,
+    DatasetVersionsHttpResponse,
+    CreateDatasetVersionHttpResponse,
 )
 from deepeval.dataset.golden import Golden, ConversationalGolden
+from deepeval.evaluate.console_report import EvaluationConsoleReport
 from deepeval.metrics.base_metric import BaseMetric
 from deepeval.telemetry import capture_evaluation_run, capture_pull_dataset
 from deepeval.test_case import (
@@ -70,6 +77,7 @@ class EvaluationDataset:
     _multi_turn: bool = field(default=False)
     _alias: Union[str, None] = field(default=None)
     _id: Union[str, None] = field(default=None)
+    _version: Union[str, None] = field(default=None)
 
     _goldens: List[Golden] = field(default_factory=[], repr=None)
     _conversational_goldens: List[ConversationalGolden] = field(
@@ -84,9 +92,12 @@ class EvaluationDataset:
     def __init__(
         self,
         goldens: Union[List[Golden], List[ConversationalGolden]] = [],
+        confident_api_key: Optional[str] = None,
     ):
         self._alias = None
         self._id = None
+        self._version = None
+        self.confident_api_key = confident_api_key
         if len(goldens) > 0:
             self._multi_turn = (
                 True if isinstance(goldens[0], ConversationalGolden) else False
@@ -108,7 +119,7 @@ class EvaluationDataset:
         return (
             f"{self.__class__.__name__}(test_cases={self.test_cases}, "
             f"goldens={self.goldens}, "
-            f"_alias={self._alias}, _id={self._id}, _multi_turn={self._multi_turn})"
+            f"_alias={self._alias}, _id={self._id}, _version={self._version}, _multi_turn={self._multi_turn})"
         )
 
     @property
@@ -189,17 +200,35 @@ class EvaluationDataset:
         test_case._dataset_alias = self._alias
         test_case._dataset_id = self._id
         if isinstance(test_case, LLMTestCase):
+            if self._conversational_goldens or self._conversational_test_cases:
+                raise TypeError(
+                    "You cannot add 'LLMTestCase' to a multi-turn dataset."
+                )
             test_case._dataset_rank = len(self._llm_test_cases)
             self._llm_test_cases.append(test_case)
         elif isinstance(test_case, ConversationalTestCase):
+            if self._goldens or self._llm_test_cases:
+                raise TypeError(
+                    "You cannot add 'ConversationalTestCase' to a single-turn dataset."
+                )
+            self._multi_turn = True
             test_case._dataset_rank = len(self._conversational_test_cases)
             self._conversational_test_cases.append(test_case)
 
     def add_golden(self, golden: Union[Golden, ConversationalGolden]):
-        if self._multi_turn:
-            self._add_conversational_golden(golden)
-        else:
+        if isinstance(golden, Golden):
+            if self._conversational_goldens or self._conversational_test_cases:
+                raise TypeError(
+                    "You cannot add 'Golden' to a multi-turn dataset."
+                )
             self._add_golden(golden)
+        else:
+            if self._goldens or self._llm_test_cases:
+                raise TypeError(
+                    "You cannot add 'ConversationalGolden' to a single-turn dataset."
+                )
+            self._multi_turn = True
+            self._add_conversational_golden(golden)
 
     def _add_golden(self, golden: Union[Golden, ConversationalGolden]):
         if isinstance(golden, Golden):
@@ -224,16 +253,16 @@ class EvaluationDataset:
         file_path: str,
         input_col_name: str,
         actual_output_col_name: str,
-        expected_output_col_name: Optional[str] = None,
-        context_col_name: Optional[str] = None,
+        expected_output_col_name: Optional[str] = "expected_output",
+        context_col_name: Optional[str] = "context",
         context_col_delimiter: str = ";",
-        retrieval_context_col_name: Optional[str] = None,
+        retrieval_context_col_name: Optional[str] = "retrieval_context",
         retrieval_context_col_delimiter: str = ";",
-        tools_called_col_name: Optional[str] = None,
+        tools_called_col_name: Optional[str] = "tools_called",
         tools_called_col_delimiter: str = ";",
-        expected_tools_col_name: Optional[str] = None,
+        expected_tools_col_name: Optional[str] = "expected_tools",
         expected_tools_col_delimiter: str = ";",
-        additional_metadata_col_name: Optional[str] = None,
+        additional_metadata_col_name: Optional[str] = "additional_metadata",
     ):
         """
         Load test cases from a CSV file.
@@ -291,7 +320,9 @@ class EvaluationDataset:
         ]
         retrieval_contexts = [
             (
-                retrieval_context.split(retrieval_context_col_delimiter)
+                reconstruct_retrieval_context(
+                    retrieval_context.split(retrieval_context_col_delimiter)
+                )
                 if retrieval_context
                 else []
             )
@@ -330,7 +361,7 @@ class EvaluationDataset:
                     raise ValueError(f"Error processing expected_tools: {e}")
             else:
                 expected_tools.append([])
-        additional_metadatas = [
+        metadatas = [
             ast.literal_eval(metadata) if metadata else None
             for metadata in get_column_data(
                 df, additional_metadata_col_name, default=""
@@ -345,7 +376,7 @@ class EvaluationDataset:
             retrieval_context,
             tools_called,
             expected_tools,
-            additional_metadata,
+            metadata,
         ) in zip(
             inputs,
             actual_outputs,
@@ -354,7 +385,7 @@ class EvaluationDataset:
             retrieval_contexts,
             tools_called,
             expected_tools,
-            additional_metadatas,
+            metadatas,
         ):
             self.add_test_case(
                 LLMTestCase(
@@ -365,7 +396,7 @@ class EvaluationDataset:
                     retrieval_context=retrieval_context,
                     tools_called=tools_called,
                     expected_tools=expected_tools,
-                    additional_metadata=additional_metadata,
+                    metadata=metadata,
                 )
             )
 
@@ -379,6 +410,7 @@ class EvaluationDataset:
         retrieval_context_key_name: Optional[str] = None,
         tools_called_key_name: Optional[str] = None,
         expected_tools_key_name: Optional[str] = None,
+        addtional_metadata_key_name: Optional[str] = None,
         encoding_type: str = "utf-8",
     ):
         """
@@ -426,11 +458,14 @@ class EvaluationDataset:
             actual_output = json_obj[actual_output_key_name]
             expected_output = json_obj.get(expected_output_key_name)
             context = json_obj.get(context_key_name)
-            retrieval_context = json_obj.get(retrieval_context_key_name)
+            retrieval_context = reconstruct_retrieval_context(
+                json_obj.get(retrieval_context_key_name)
+            )
             tools_called_data = json_obj.get(tools_called_key_name, [])
             tools_called = [ToolCall(**tool) for tool in tools_called_data]
             expected_tools_data = json_obj.get(expected_tools_key_name, [])
             expected_tools = [ToolCall(**tool) for tool in expected_tools_data]
+            # additional_metadata = json_obj.get(addtional_metadata_key_name)
 
             self.add_test_case(
                 LLMTestCase(
@@ -441,6 +476,7 @@ class EvaluationDataset:
                     retrieval_context=retrieval_context,
                     tools_called=tools_called,
                     expected_tools=expected_tools,
+                    # additional_metadata=additional_metadata,
                 )
             )
 
@@ -460,8 +496,8 @@ class EvaluationDataset:
         expected_tools_col_delimiter: str = ";",
         comments_key_name: str = "comments",
         name_key_name: str = "name",
-        source_file_col_name: Optional[str] = None,
-        additional_metadata_col_name: Optional[str] = None,
+        source_file_col_name: Optional[str] = "source_file",
+        additional_metadata_col_name: Optional[str] = "additional_metadata",
         scenario_col_name: Optional[str] = "scenario",
         turns_col_name: Optional[str] = "turns",
         expected_outcome_col_name: Optional[str] = "expected_outcome",
@@ -500,7 +536,9 @@ class EvaluationDataset:
         ]
         retrieval_contexts = [
             (
-                retrieval_context.split(retrieval_context_col_delimiter)
+                reconstruct_retrieval_context(
+                    retrieval_context.split(retrieval_context_col_delimiter)
+                )
                 if retrieval_context
                 else []
             )
@@ -508,30 +546,51 @@ class EvaluationDataset:
                 df, retrieval_context_col_name, default=""
             )
         ]
-        tools_called = [
-            (
-                tool_called.split(tools_called_col_delimiter)
-                if tool_called
-                else []
-            )
-            for tool_called in get_column_data(
-                df, tools_called_col_name, default=""
-            )
-        ]
-        expected_tools = [
-            (
-                expected_tool.split(expected_tools_col_delimiter)
-                if expected_tool
-                else []
-            )
-            for expected_tool in get_column_data(
-                df, expected_tools_col_name, default=""
-            )
-        ]
+
+        tools_called = []
+        for tools_called_str in get_column_data(
+            df, tools_called_col_name, default=""
+        ):
+            if tools_called_str:
+                try:
+                    # Try loading JSON-serialized ToolCall objects
+                    parsed_tools = [
+                        ToolCall(**tool)
+                        for tool in trimAndLoadJson(tools_called_str)
+                    ]
+                    tools_called.append(parsed_tools)
+                except ValueError or json.JSONDecodeError:
+                    # Fallback to simple split on delimiter
+                    tools_called.append(
+                        tools_called_str.split(tools_called_col_delimiter)
+                    )
+            else:
+                tools_called.append([])
+
+        expected_tools = []
+        for expected_tools_str in get_column_data(
+            df, expected_tools_col_name, default=""
+        ):
+            if expected_tools_str:
+                try:
+                    # Try loading JSON-serialized ToolCall objects
+                    parsed_tools = [
+                        ToolCall(**tool)
+                        for tool in trimAndLoadJson(expected_tools_str)
+                    ]
+                    expected_tools.append(parsed_tools)
+                except ValueError or json.JSONDecodeError:
+                    # Fallback to simple split on delimiter
+                    expected_tools.append(
+                        expected_tools_str.split(expected_tools_col_delimiter)
+                    )
+            else:
+                expected_tools.append([])
+
         comments = get_column_data(df, comments_key_name)
         name = get_column_data(df, name_key_name)
         source_files = get_column_data(df, source_file_col_name)
-        additional_metadatas = [
+        metadatas = [
             ast.literal_eval(metadata) if metadata else None
             for metadata in get_column_data(
                 df, additional_metadata_col_name, default=""
@@ -553,7 +612,7 @@ class EvaluationDataset:
             comments,
             name,
             source_file,
-            additional_metadata,
+            metadata,
             scenario,
             turns,
             expected_outcome,
@@ -569,16 +628,15 @@ class EvaluationDataset:
             comments,
             name,
             source_files,
-            additional_metadatas,
+            metadatas,
             scenarios,
             turns_raw,
             expected_outcomes,
             user_descriptions,
         ):
             if scenario:
-                self._multi_turn = True
                 parsed_turns = parse_turns(turns) if turns else []
-                self.goldens.append(
+                self.add_golden(
                     ConversationalGolden(
                         scenario=scenario,
                         turns=parsed_turns,
@@ -587,11 +645,11 @@ class EvaluationDataset:
                         context=context,
                         comments=comments,
                         name=name,
+                        additional_metadata=metadata,
                     )
                 )
             else:
-                self._multi_turn = False
-                self.goldens.append(
+                self.add_golden(
                     Golden(
                         input=input,
                         actual_output=actual_output,
@@ -600,7 +658,7 @@ class EvaluationDataset:
                         retrieval_context=retrieval_context,
                         tools_called=tools_called,
                         expected_tools=expected_tools,
-                        additional_metadata=additional_metadata,
+                        additional_metadata=metadata,
                         source_file=source_file,
                         comments=comments,
                         name=name,
@@ -645,9 +703,9 @@ class EvaluationDataset:
                 comments = json_obj.get(comments_key_name)
                 name = json_obj.get(name_key_name)
                 parsed_turns = parse_turns(turns) if turns else []
+                metadata = json_obj.get(additional_metadata_key_name)
 
-                self._multi_turn = True
-                self.goldens.append(
+                self.add_golden(
                     ConversationalGolden(
                         scenario=scenario,
                         turns=parsed_turns,
@@ -656,6 +714,7 @@ class EvaluationDataset:
                         context=context,
                         comments=comments,
                         name=name,
+                        additional_metadata=metadata,
                     )
                 )
             else:
@@ -663,16 +722,17 @@ class EvaluationDataset:
                 actual_output = json_obj.get(actual_output_key_name)
                 expected_output = json_obj.get(expected_output_key_name)
                 context = json_obj.get(context_key_name)
-                retrieval_context = json_obj.get(retrieval_context_key_name)
+                retrieval_context = reconstruct_retrieval_context(
+                    json_obj.get(retrieval_context_key_name)
+                )
                 tools_called = json_obj.get(tools_called_key_name)
                 expected_tools = json_obj.get(expected_tools_key_name)
                 comments = json_obj.get(comments_key_name)
                 name = json_obj.get(name_key_name)
                 source_file = json_obj.get(source_file_key_name)
-                additional_metadata = json_obj.get(additional_metadata_key_name)
+                metadata = json_obj.get(additional_metadata_key_name)
 
-                self._multi_turn = False
-                self.goldens.append(
+                self.add_golden(
                     Golden(
                         input=input,
                         actual_output=actual_output,
@@ -681,7 +741,139 @@ class EvaluationDataset:
                         retrieval_context=retrieval_context,
                         tools_called=tools_called,
                         expected_tools=expected_tools,
-                        additional_metadata=additional_metadata,
+                        additional_metadata=metadata,
+                        comments=comments,
+                        name=name,
+                        source_file=source_file,
+                    )
+                )
+
+    def add_goldens_from_jsonl_file(
+        self,
+        file_path: str,
+        input_key_name: str = "input",
+        actual_output_key_name: Optional[str] = "actual_output",
+        expected_output_key_name: Optional[str] = "expected_output",
+        context_key_name: Optional[str] = "context",
+        context_col_delimiter: str = "|",
+        retrieval_context_key_name: Optional[str] = "retrieval_context",
+        retrieval_context_col_delimiter: str = "|",
+        tools_called_key_name: Optional[str] = "tools_called",
+        expected_tools_key_name: Optional[str] = "expected_tools",
+        comments_key_name: str = "comments",
+        name_key_name: str = "name",
+        source_file_key_name: Optional[str] = "source_file",
+        additional_metadata_key_name: Optional[str] = "additional_metadata",
+        custom_column_key_values_key_name: Optional[
+            str
+        ] = "custom_column_key_values",
+        scenario_key_name: Optional[str] = "scenario",
+        turns_key_name: Optional[str] = "turns",
+        expected_outcome_key_name: Optional[str] = "expected_outcome",
+        user_description_key_name: Optional[str] = "user_description",
+        encoding_type: str = "utf-8",
+    ):
+        def parse_context(value, delimiter: str):
+            if value is None:
+                return None
+            if isinstance(value, list):
+                return value
+            if isinstance(value, str):
+                return value.split(delimiter) if value else []
+            raise TypeError(
+                "Expected context fields in JSONL goldens to be a list, string, or null."
+            )
+
+        def parse_tools(value):
+            if not value:
+                return None
+            if isinstance(value, str):
+                value = trimAndLoadJson(value)
+            return [ToolCall(**tool) for tool in value]
+
+        try:
+            with open(file_path, "r", encoding=encoding_type) as file:
+                json_lines = [
+                    (line_number, line.strip())
+                    for line_number, line in enumerate(file, start=1)
+                    if line.strip()
+                ]
+        except FileNotFoundError:
+            raise FileNotFoundError(f"The file {file_path} was not found.")
+
+        for line_number, line in json_lines:
+            try:
+                json_obj = json.loads(line)
+            except json.JSONDecodeError:
+                raise ValueError(
+                    f"The file {file_path} contains invalid JSON on line {line_number}."
+                )
+
+            if scenario_key_name in json_obj and json_obj[scenario_key_name]:
+                scenario = json_obj.get(scenario_key_name)
+                turns = json_obj.get(turns_key_name, [])
+                expected_outcome = json_obj.get(expected_outcome_key_name)
+                user_description = json_obj.get(user_description_key_name)
+                context = parse_context(
+                    json_obj.get(context_key_name), context_col_delimiter
+                )
+                comments = json_obj.get(comments_key_name)
+                name = json_obj.get(name_key_name)
+                parsed_turns = parse_turns(turns) if turns else []
+                metadata = json_obj.get(additional_metadata_key_name)
+                custom_column_key_values = json_obj.get(
+                    custom_column_key_values_key_name
+                )
+
+                self.add_golden(
+                    ConversationalGolden(
+                        scenario=scenario,
+                        turns=parsed_turns,
+                        expected_outcome=expected_outcome,
+                        user_description=user_description,
+                        context=context,
+                        comments=comments,
+                        name=name,
+                        additional_metadata=metadata,
+                        custom_column_key_values=custom_column_key_values,
+                    )
+                )
+            else:
+                input = json_obj.get(input_key_name)
+                actual_output = json_obj.get(actual_output_key_name)
+                expected_output = json_obj.get(expected_output_key_name)
+                context = parse_context(
+                    json_obj.get(context_key_name), context_col_delimiter
+                )
+                retrieval_context = reconstruct_retrieval_context(
+                    parse_context(
+                        json_obj.get(retrieval_context_key_name),
+                        retrieval_context_col_delimiter,
+                    )
+                )
+                tools_called = parse_tools(json_obj.get(tools_called_key_name))
+                expected_tools = parse_tools(
+                    json_obj.get(expected_tools_key_name)
+                )
+                comments = json_obj.get(comments_key_name)
+                name = json_obj.get(name_key_name)
+                source_file = json_obj.get(source_file_key_name)
+                metadata = json_obj.get(additional_metadata_key_name)
+                custom_column_key_values = json_obj.get(
+                    custom_column_key_values_key_name
+                )
+
+                self.add_golden(
+                    Golden(
+                        input=input,
+                        actual_output=actual_output,
+                        expected_output=expected_output,
+                        context=context,
+                        retrieval_context=retrieval_context,
+                        tools_called=tools_called,
+                        expected_tools=expected_tools,
+                        additional_metadata=metadata,
+                        custom_column_key_values=custom_column_key_values,
                         comments=comments,
                         name=name,
                         source_file=source_file,
@@ -692,17 +884,19 @@ class EvaluationDataset:
         self,
         alias: str,
         finalized: bool = True,
+        version: Optional[str] = None,
     ):
         if len(self.goldens) == 0:
             raise ValueError(
                 "Unable to push empty dataset to Confident AI, there must be at least one golden in dataset."
             )
 
-        api = Api()
+        api = Api(api_key=self.confident_api_key)
         api_dataset = APIDataset(
             goldens=self.goldens if not self._multi_turn else None,
             conversationalGoldens=(self.goldens if self._multi_turn else None),
             finalized=finalized,
+            version=version,
         )
         try:
             body = api_dataset.model_dump(by_alias=True, exclude_none=True)
@@ -730,8 +924,9 @@ class EvaluationDataset:
         finalized: bool = True,
         auto_convert_goldens_to_test_cases: bool = False,
         public: bool = False,
+        version: Optional[str] = None,
     ):
-        api = Api()
+        api = Api(api_key=self.confident_api_key)
         with capture_pull_dataset():
             with Progress(
                 SpinnerColumn(style="rgb(106,0,255)"),
@@ -744,18 +939,22 @@ class EvaluationDataset:
                     total=100,
                 )
                 start_time = time.perf_counter()
+                params = {
+                    "finalized": str(finalized).lower(),
+                    "public": str(public).lower(),
+                }
+                if version is not None:
+                    params["version"] = version
                 data, _ = api.send_request(
                     method=HttpMethods.GET,
                     endpoint=Endpoints.DATASET_ALIAS_ENDPOINT,
                     url_params={"alias": alias},
-                    params={
-                        "finalized": str(finalized).lower(),
-                        "public": str(public).lower(),
-                    },
+                    params=params,
                 )
 
                 response = DatasetHttpResponse(
                     id=data["id"],
+                    version=data.get("version"),
                     goldens=convert_keys_to_snake_case(
                         data.get("goldens", None)
                     ),
@@ -766,6 +965,7 @@ class EvaluationDataset:
 
                 self._alias = alias
                 self._id = response.id
+                self._version = response.version
                 self._multi_turn = response.goldens is None
                 self.goldens = []
                 self.test_cases = []
@@ -805,6 +1005,37 @@ class EvaluationDataset:
                     completed=100,
                 )
 
+    def create_version(
+        self, alias: str, _verbose: Optional[bool] = True
+    ) -> str:
+        api = Api(api_key=self.confident_api_key)
+        data, _ = api.send_request(
+            method=HttpMethods.POST,
+            endpoint=Endpoints.DATASET_ALIAS_VERSIONS_ENDPOINT,
+            url_params={"alias": alias},
+            body={},
+        )
+        response = CreateDatasetVersionHttpResponse(**data)
+        self._alias = alias
+        self._id = response.id
+        self._version = response.version
+        if _verbose:
+            console = Console()
+            console.print(
+                f"✅ New Dataset version successfully created: {response.version}"
+            )
+        return response.version
+
+    def get_versions(self, alias: str) -> List[DatasetVersion]:
+        api = Api(api_key=self.confident_api_key)
+        data, _ = api.send_request(
+            method=HttpMethods.GET,
+            endpoint=Endpoints.DATASET_ALIAS_VERSIONS_ENDPOINT,
+            url_params={"alias": alias},
+        )
+        response = DatasetVersionsHttpResponse(**data)
+        return response.versions
+
     def queue(
         self,
         alias: str,
@@ -815,7 +1046,7 @@ class EvaluationDataset:
             raise ValueError(
                 f"Can't queue empty list of goldens to dataset with alias: {alias} on Confident AI."
             )
-        api = Api()
+        api = Api(api_key=self.confident_api_key)
 
         multi_turn = isinstance(goldens[0], ConversationalGolden)
 
@@ -847,7 +1078,7 @@ class EvaluationDataset:
         self,
         alias: str,
     ):
-        api = Api()
+        api = Api(api_key=self.confident_api_key)
         api.send_request(
             method=HttpMethods.DELETE,
             endpoint=Endpoints.DATASET_ALIAS_ENDPOINT,
@@ -1048,7 +1279,9 @@ class EvaluationDataset:
                                 "input": golden.input,
                                 "actual_output": golden.actual_output,
                                 "expected_output": golden.expected_output,
-                                "retrieval_context": golden.retrieval_context,
+                                "retrieval_context": serialize_retrieval_context(
+                                    golden.retrieval_context
+                                ),
                                 "context": golden.context,
                                 "name": golden.name,
                                 "comments": golden.comments,
@@ -1140,10 +1373,8 @@ class EvaluationDataset:
                         ]
                     )
                     for golden in goldens:
-                        retrieval_context = (
-                            "|".join(golden.retrieval_context)
-                            if golden.retrieval_context is not None
-                            else None
+                        retrieval_context = join_retrieval_context(
+                            golden.retrieval_context
                         )
                         context = (
                             "|".join(golden.context)
@@ -1223,10 +1454,8 @@ class EvaluationDataset:
                             "custom_column_key_values": golden.custom_column_key_values,
                         }
                     else:
-                        retrieval_context = (
-                            "|".join(golden.retrieval_context)
-                            if golden.retrieval_context is not None
-                            else None
+                        retrieval_context = join_retrieval_context(
+                            golden.retrieval_context
                         )
                         context = (
                             "|".join(golden.context)
@@ -1309,7 +1538,6 @@ class EvaluationDataset:
 
         if not self.goldens or len(self.goldens) == 0:
             raise ValueError("Unable to evaluate dataset with no goldens.")
-        trace_manager.integration_traces_to_evaluate.clear()
         goldens = self.goldens
         with capture_evaluation_run("traceable evaluate()"):
             global_test_run_manager.reset()
@@ -1367,19 +1595,33 @@ class EvaluationDataset:
             end_time = time.perf_counter()
             run_duration = end_time - start_time
             if display_config.print_results:
-                for test_result in test_results:
-                    print_test_result(
-                        test_result, display_config.display_option
-                    )
-                aggregate_metric_pass_rates(test_results)
-            if display_config.file_output_dir is not None:
-                for test_result in test_results:
-                    write_test_result_to_file(
-                        test_result,
-                        display_config.display_option,
-                        display_config.file_output_dir,
-                    )
+                console_report = EvaluationConsoleReport(test_results)
+                console_report.render_to_terminal(
+                    truncate_passing_cases=display_config.truncate_passing_cases
+                )
 
+                # Handle full, un-truncated file exports
+                if display_config.file_output_dir is not None:
+                    if display_config.file_type == "html":
+                        console_report.export_to_html(
+                            output_dir=display_config.file_output_dir,
+                            evaluation_name=identifier,
+                            theme_mode="dark",
+                        )
+                    elif display_config.file_type == "md":
+                        console_report.export_to_markdown(
+                            output_dir=display_config.file_output_dir,
+                            evaluation_name=identifier,
+                        )
+                    else:
+                        raise ValueError(
+                            f"Invalid file type: {display_config.file_type}"
+                        )
+
+            global_test_run_manager.configure_local_store(
+                results_folder=display_config.results_folder,
+                results_subfolder=display_config.results_subfolder,
+            )
             # save test run
             global_test_run_manager.save_test_run(TEMP_FILE_PATH)
 
@@ -1396,6 +1638,16 @@ class EvaluationDataset:
                     confident_link, test_run_id = res
                 else:
                     confident_link = test_run_id = None
+
+                # Offer the inspect TUI after all other run output has
+                # flushed — mirrors the placement in
+                # ``deepeval/evaluate/evaluate.py``.
+                from deepeval.evaluate.inspect_prompt import (
+                    maybe_offer_inspect_tui,
+                )
+
+                maybe_offer_inspect_tui(global_test_run_manager, display_config)
+
                 return EvaluationResult(
                     test_results=test_results,
                     confident_link=confident_link,

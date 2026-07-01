@@ -1,7 +1,7 @@
 [project]
 name = "pywinpty"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dynamic = ["version", "description"]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
@@ -23,7 +23,16 @@ authors = [
 maintainers = [
   {name = "Edgar Margffoy", email = "andfoy@gmail.com"}
 ]
+urls.Changelog = "https://github.com/andfoy/pywinpty/blob/main/CHANGELOG.md"
+urls.Repository = "https://github.com/andfoy/pywinpty"
 
 [build-system]
 requires = ["maturin>=1.1,<2.0"]
 build-backend = "maturin"
+
+[tool.maturin]
+# The python package lives under `winpty/`, while the rust cdylib is named
+# `_winpty` (renamed from `winpty` to avoid a collision with the bundled
+# `winpty.dll` C library that maturin would otherwise de-dupe).
+python-source = "."
+module-name = "winpty._winpty"

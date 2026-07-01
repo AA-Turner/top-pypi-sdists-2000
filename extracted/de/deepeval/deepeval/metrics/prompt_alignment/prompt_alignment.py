@@ -2,32 +2,33 @@ import asyncio
 
 from typing import Optional, List, Union
 
-from deepeval.utils import get_or_create_event_loop, prettify_list
+from deepeval.utils import (
+    get_or_create_event_loop,
+    prettify_list,
+    get_per_task_timeout,
+)
 from deepeval.metrics.utils import (
     construct_verbose_logs,
-    trimAndLoadJson,
     check_llm_test_case_params,
     initialize_model,
+    a_generate_with_schema_and_extract,
+    generate_with_schema_and_extract,
 )
 from deepeval.test_case import (
     LLMTestCase,
-    LLMTestCaseParams,
+    SingleTurnParams,
 )
 from deepeval.metrics import BaseMetric
 from deepeval.models import DeepEvalBaseLLM
-from deepeval.metrics.prompt_alignment.template import PromptAlignmentTemplate
 from deepeval.metrics.indicator import metric_progress_indicator
 from deepeval.metrics.prompt_alignment import schema as paschema
-from deepeval.config.settings import get_settings
-
-from deepeval.metrics.api import metric_data_manager
 
 
 class PromptAlignmentMetric(BaseMetric):
 
-    _required_params: List[LLMTestCaseParams] = [
-        LLMTestCaseParams.INPUT,
-        LLMTestCaseParams.ACTUAL_OUTPUT,
+    _required_params: List[SingleTurnParams] = [
+        SingleTurnParams.INPUT,
+        SingleTurnParams.ACTUAL_OUTPUT,
     ]
 
     def __init__(
@@ -60,9 +61,19 @@ class PromptAlignmentMetric(BaseMetric):
         _log_metric_to_confident: bool = True,
     ) -> float:
 
-        check_llm_test_case_params(test_case, self._required_params, self)
+        check_llm_test_case_params(
+            test_case,
+            self._required_params,
+            None,
+            None,
+            self,
+            self.model,
+            test_case.multimodal,
+        )
 
         self.evaluation_cost = 0 if self.using_native_model else None
+        self.input_tokens = 0 if self.using_native_model else None
+        self.output_tokens = 0 if self.using_native_model else None
         with metric_progress_indicator(
             self, _show_indicator=_show_indicator, _in_component=_in_component
         ):
@@ -72,16 +83,19 @@ class PromptAlignmentMetric(BaseMetric):
                     test_case,
                     _show_indicator=False,
                     _in_component=_in_component,
+                    _log_metric_to_confident=_log_metric_to_confident,
                 )
                 loop.run_until_complete(
                     asyncio.wait_for(
                         coro,
-                        timeout=get_settings().DEEPEVAL_PER_TASK_TIMEOUT_SECONDS,
+                        timeout=get_per_task_timeout(),
                     )
                 )
             else:
-                self.verdicts: paschema.Verdicts = self._generate_verdicts(
-                    test_case.input, test_case.actual_output
+                self.verdicts: List[paschema.PromptAlignmentVerdict] = (
+                    self._generate_verdicts(
+                        test_case.input, test_case.actual_output
+                    )
                 )
                 self.score = self._calculate_score()
                 self.reason = self._generate_reason(
@@ -96,10 +110,6 @@ class PromptAlignmentMetric(BaseMetric):
                         f"Score: {self.score}\nReason: {self.reason}",
                     ],
                 )
-                if _log_metric_to_confident:
-                    metric_data_manager.post_metric_if_enabled(
-                        self, test_case=test_case
-                    )
 
             return self.score
 
@@ -111,17 +121,29 @@ class PromptAlignmentMetric(BaseMetric):
         _log_metric_to_confident: bool = True,
     ) -> float:
 
-        check_llm_test_case_params(test_case, self._required_params, self)
+        check_llm_test_case_params(
+            test_case,
+            self._required_params,
+            None,
+            None,
+            self,
+            self.model,
+            test_case.multimodal,
+        )
 
         self.evaluation_cost = 0 if self.using_native_model else None
+        self.input_tokens = 0 if self.using_native_model else None
+        self.output_tokens = 0 if self.using_native_model else None
         with metric_progress_indicator(
             self,
             async_mode=True,
             _show_indicator=_show_indicator,
             _in_component=_in_component,
         ):
-            self.verdicts: paschema.Verdicts = await self._a_generate_verdicts(
-                test_case.input, test_case.actual_output
+            self.verdicts: List[paschema.PromptAlignmentVerdict] = (
+                await self._a_generate_verdicts(
+                    test_case.input, test_case.actual_output
+                )
             )
             self.score = self._calculate_score()
             self.reason = await self._a_generate_reason(
@@ -136,13 +158,11 @@ class PromptAlignmentMetric(BaseMetric):
                     f"Score: {self.score}\nReason: {self.reason}",
                 ],
             )
-            if _log_metric_to_confident:
-                metric_data_manager.post_metric_if_enabled(
-                    self, test_case=test_case
-                )
             return self.score
 
-    async def _a_generate_reason(self, input: str, actual_output: str) -> str:
+    async def _a_generate_reason(
+        self, input: str, actual_output: str
+    ) -> Optional[str]:
         if self.include_reason is False:
             return None
 
@@ -151,33 +171,23 @@ class PromptAlignmentMetric(BaseMetric):
             if verdict.verdict.strip().lower() == "no":
                 unalignment_reasons.append(verdict.reason)
 
-        prompt = PromptAlignmentTemplate.generate_reason(
+        prompt = self._get_prompt(
+            "generate_reason",
             unalignment_reasons=unalignment_reasons,
             input=input,
             actual_output=actual_output,
             score=format(self.score, ".2f"),
         )
-        if self.using_native_model:
-            res, cost = await self.model.a_generate(
-                prompt, schema=paschema.PromptAlignmentScoreReason
-            )
-            self.evaluation_cost += cost
-            return res.reason
-        else:
-            try:
-                res: paschema.PromptAlignmentScoreReason = (
-                    await self.model.a_generate(
-                        prompt=prompt,
-                        schema=paschema.PromptAlignmentScoreReason,
-                    )
-                )
-                return res.reason
-            except TypeError:
-                res = await self.model.a_generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return data["reason"]
 
-    def _generate_reason(self, input: str, actual_output: str) -> str:
+        return await a_generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=paschema.PromptAlignmentScoreReason,
+            extract_schema=lambda s: s.reason,
+            extract_json=lambda data: data["reason"],
+        )
+
+    def _generate_reason(self, input: str, actual_output: str) -> Optional[str]:
         if self.include_reason is False:
             return None
 
@@ -186,84 +196,63 @@ class PromptAlignmentMetric(BaseMetric):
             if verdict.verdict.strip().lower() == "no":
                 unalignment_reasons.append(verdict.reason)
 
-        prompt = PromptAlignmentTemplate.generate_reason(
+        prompt = self._get_prompt(
+            "generate_reason",
             unalignment_reasons=unalignment_reasons,
             input=input,
             actual_output=actual_output,
             score=format(self.score, ".2f"),
         )
-        if self.using_native_model:
-            res, cost = self.model.generate(
-                prompt, schema=paschema.PromptAlignmentScoreReason
-            )
-            self.evaluation_cost += cost
-            return res.reason
-        else:
-            try:
-                res: paschema.PromptAlignmentScoreReason = self.model.generate(
-                    prompt=prompt, schema=paschema.PromptAlignmentScoreReason
-                )
-                return res.reason
-            except TypeError:
-                res = self.model.generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return data["reason"]
+
+        return generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=paschema.PromptAlignmentScoreReason,
+            extract_schema=lambda s: s.reason,
+            extract_json=lambda data: data["reason"],
+        )
 
     async def _a_generate_verdicts(
         self, input: str, actual_output: str
-    ) -> paschema.Verdicts:
-        prompt = PromptAlignmentTemplate.generate_verdicts(
+    ) -> List[paschema.PromptAlignmentVerdict]:
+        prompt = self._get_prompt(
+            "generate_verdicts",
             prompt_instructions=self.prompt_instructions,
             input=input,
             actual_output=actual_output,
         )
-        if self.using_native_model:
-            res, cost = await self.model.a_generate(
-                prompt, schema=paschema.Verdicts
-            )
-            self.evaluation_cost += cost
-            return [item for item in res.verdicts]
-        else:
-            try:
-                res: paschema.Verdicts = await self.model.a_generate(
-                    prompt, schema=paschema.Verdicts
-                )
-                return [item for item in res.verdicts]
-            except TypeError:
-                res = await self.model.a_generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return [
-                    paschema.PromptAlignmentVerdict(**item)
-                    for item in data["verdicts"]
-                ]
+        return await a_generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=paschema.Verdicts,
+            extract_schema=lambda s: list(s.verdicts),
+            extract_json=lambda data: [
+                paschema.PromptAlignmentVerdict(**item)
+                for item in data["verdicts"]
+            ],
+        )
 
     def _generate_verdicts(
         self, input: str, actual_output: str
-    ) -> paschema.Verdicts:
-        prompt = PromptAlignmentTemplate.generate_verdicts(
+    ) -> List[paschema.PromptAlignmentVerdict]:
+        prompt = self._get_prompt(
+            "generate_verdicts",
             prompt_instructions=self.prompt_instructions,
             input=input,
             actual_output=actual_output,
         )
-        if self.using_native_model:
-            res, cost = self.model.generate(prompt, schema=paschema.Verdicts)
-            self.evaluation_cost += cost
-            return [item for item in res.verdicts]
-        else:
-            try:
-                res: paschema.Verdicts = self.model.generate(
-                    prompt, schema=paschema.Verdicts
-                )
-                return [item for item in res.verdicts]
-            except TypeError:
-                res = self.model.generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return [
-                    paschema.PromptAlignmentVerdict(**item)
-                    for item in data["verdicts"]
-                ]
+        return generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=paschema.Verdicts,
+            extract_schema=lambda s: list(s.verdicts),
+            extract_json=lambda data: [
+                paschema.PromptAlignmentVerdict(**item)
+                for item in data["verdicts"]
+            ],
+        )
 
-    def _calculate_score(self):
+    def _calculate_score(self) -> float:
         number_of_verdicts = len(self.verdicts)
         if number_of_verdicts == 0:
             return 1

@@ -37,37 +37,46 @@ from twisted.internet.error import AlreadyCalled, AlreadyCancelled
 from .abstract_loop import EventLoop, ExitMainLoop
 
 if typing.TYPE_CHECKING:
+    import asyncio
     from collections.abc import Callable
     from concurrent.futures import Executor, Future
 
     from twisted.internet.base import DelayedCall, ReactorBase
+    from twisted.internet.interfaces import IReactorFDSet, IReadDescriptor
     from typing_extensions import ParamSpec
 
     _Spec = ParamSpec("_Spec")
-    _T = typing.TypeVar("_T")
 
 __all__ = ("TwistedEventLoop",)
 
 
-class _TwistedInputDescriptor(FileDescriptor):
-    def __init__(self, reactor: ReactorBase, fd: int, cb: Callable[[], typing.Any]) -> None:
+_T = typing.TypeVar("_T")
+
+
+class _TwistedInputDescriptor(FileDescriptor, typing.Generic[_T]):
+    def __init__(
+        self,
+        reactor: ReactorBase,
+        fd: int,
+        cb: Callable[[], _T],
+    ) -> None:
         self._fileno = fd
         self.cb = cb
-        super().__init__(reactor)  # ReactorBase implement full API as required in interfaces
+        super().__init__(typing.cast("IReactorFDSet", reactor))
 
     def fileno(self) -> int:
         return self._fileno
 
-    def doRead(self):
+    def doRead(self) -> _T:
         return self.cb()
 
-    def getHost(self):
+    def getHost(self) -> typing.NoReturn:
         raise NotImplementedError("No network operation expected")
 
-    def getPeer(self):
+    def getPeer(self) -> typing.NoReturn:
         raise NotImplementedError("No network operation expected")
 
-    def writeSomeData(self, data: bytes) -> None:
+    def writeSomeData(self, data: bytes) -> int | BaseException:
         raise NotImplementedError("Reduced functionality: read-only")
 
 
@@ -105,7 +114,7 @@ class TwistedEventLoop(EventLoop):
 
             reactor = twisted.internet.reactor
         self.reactor: ReactorBase = reactor
-        self._watch_files: dict[int, _TwistedInputDescriptor] = {}
+        self._watch_files: dict[int, _TwistedInputDescriptor[typing.Any]] = {}
         self._idle_handle: int = 0
         self._twisted_idle_enabled = False
         self._idle_callbacks: dict[int, Callable[[], typing.Any]] = {}
@@ -116,10 +125,10 @@ class TwistedEventLoop(EventLoop):
     def run_in_executor(
         self,
         executor: Executor,
-        func: Callable[..., _T],
-        *args: object,
-        **kwargs: object,
-    ) -> Future[_T]:
+        func: Callable[_Spec, _T],
+        *args: _Spec.args,
+        **kwargs: _Spec.kwargs,
+    ) -> Future[_T] | asyncio.Future[_T]:
         raise NotImplementedError(
             "Twisted implement it's own ThreadPool executor. Please use native API for call:\n"
             "'threads.deferToThread(Callable[..., Any], *args, **kwargs)'\n"
@@ -154,7 +163,7 @@ class TwistedEventLoop(EventLoop):
 
         return True
 
-    def watch_file(self, fd: int, callback: Callable[[], typing.Any]) -> int:
+    def watch_file(self, fd: int, callback: Callable[[], _T]) -> int:
         """
         Call callback() when fd has some data to read.  No parameters
         are passed to callback.
@@ -166,7 +175,7 @@ class TwistedEventLoop(EventLoop):
         """
         ind = _TwistedInputDescriptor(self.reactor, fd, self.handle_exit(callback))
         self._watch_files[fd] = ind
-        self.reactor.addReader(ind)
+        self.reactor.addReader(typing.cast("IReadDescriptor", ind))
         return fd
 
     def remove_watch_file(self, handle: int) -> bool:
@@ -176,7 +185,7 @@ class TwistedEventLoop(EventLoop):
         Returns True if the input file exists, False otherwise
         """
         if handle in self._watch_files:
-            self.reactor.removeReader(self._watch_files[handle])
+            self.reactor.removeReader(typing.cast("IReadDescriptor", self._watch_files[handle]))
             del self._watch_files[handle]
             return True
         return False

@@ -1,28 +1,32 @@
-from typing import List, Optional, Type, Union
+from typing import List, Optional, Union
 
 from deepeval.metrics import BaseMetric
-from deepeval.metrics.api import metric_data_manager
 from deepeval.test_case import (
     LLMTestCase,
-    LLMTestCaseParams,
+    SingleTurnParams,
 )
 from deepeval.metrics.indicator import metric_progress_indicator
 from deepeval.models import DeepEvalBaseLLM
 from deepeval.utils import get_or_create_event_loop, prettify_list
 from deepeval.metrics.utils import (
     construct_verbose_logs,
-    trimAndLoadJson,
     check_llm_test_case_params,
     initialize_model,
+    a_generate_with_schema_and_extract,
+    generate_with_schema_and_extract,
 )
-from deepeval.metrics.bias.template import BiasTemplate
-from deepeval.metrics.bias.schema import *
+from deepeval.metrics.bias.schema import (
+    Opinions,
+    BiasVerdict,
+    Verdicts,
+    BiasScoreReason,
+)
 
 
 class BiasMetric(BaseMetric):
-    _required_params: List[LLMTestCaseParams] = [
-        LLMTestCaseParams.INPUT,
-        LLMTestCaseParams.ACTUAL_OUTPUT,
+    _required_params: List[SingleTurnParams] = [
+        SingleTurnParams.INPUT,
+        SingleTurnParams.ACTUAL_OUTPUT,
     ]
 
     def __init__(
@@ -33,7 +37,6 @@ class BiasMetric(BaseMetric):
         async_mode: bool = True,
         strict_mode: bool = False,
         verbose_mode: bool = False,
-        evaluation_template: Type[BiasTemplate] = BiasTemplate,
     ):
         self.threshold = 0 if strict_mode else threshold
         self.model, self.using_native_model = initialize_model(model)
@@ -42,7 +45,6 @@ class BiasMetric(BaseMetric):
         self.async_mode = async_mode
         self.strict_mode = strict_mode
         self.verbose_mode = verbose_mode
-        self.evaluation_template = evaluation_template
 
     def measure(
         self,
@@ -51,9 +53,20 @@ class BiasMetric(BaseMetric):
         _in_component: bool = False,
         _log_metric_to_confident: bool = True,
     ) -> float:
-        check_llm_test_case_params(test_case, self._required_params, self)
+
+        check_llm_test_case_params(
+            test_case,
+            self._required_params,
+            None,
+            None,
+            self,
+            self.model,
+            test_case.multimodal,
+        )
 
         self.evaluation_cost = 0 if self.using_native_model else None
+        self.input_tokens = 0 if self.using_native_model else None
+        self.output_tokens = 0 if self.using_native_model else None
         with metric_progress_indicator(
             self, _show_indicator=_show_indicator, _in_component=_in_component
         ):
@@ -69,9 +82,11 @@ class BiasMetric(BaseMetric):
                 )
             else:
                 self.opinions: List[str] = self._generate_opinions(
-                    test_case.actual_output
+                    test_case.actual_output, test_case.multimodal
                 )
-                self.verdicts: List[BiasVerdict] = self._generate_verdicts()
+                self.verdicts: List[BiasVerdict] = self._generate_verdicts(
+                    test_case.multimodal
+                )
                 self.score = self._calculate_score()
                 self.reason = self._generate_reason()
                 self.success = self.score <= self.threshold
@@ -83,10 +98,6 @@ class BiasMetric(BaseMetric):
                         f"Score: {self.score}\nReason: {self.reason}",
                     ],
                 )
-                if _log_metric_to_confident:
-                    metric_data_manager.post_metric_if_enabled(
-                        self, test_case=test_case
-                    )
             return self.score
 
     async def a_measure(
@@ -96,9 +107,20 @@ class BiasMetric(BaseMetric):
         _in_component: bool = False,
         _log_metric_to_confident: bool = True,
     ) -> float:
-        check_llm_test_case_params(test_case, self._required_params, self)
+
+        check_llm_test_case_params(
+            test_case,
+            self._required_params,
+            None,
+            None,
+            self,
+            self.model,
+            test_case.multimodal,
+        )
 
         self.evaluation_cost = 0 if self.using_native_model else None
+        self.input_tokens = 0 if self.using_native_model else None
+        self.output_tokens = 0 if self.using_native_model else None
         with metric_progress_indicator(
             self,
             async_mode=True,
@@ -106,9 +128,11 @@ class BiasMetric(BaseMetric):
             _in_component=_in_component,
         ):
             self.opinions: List[str] = await self._a_generate_opinions(
-                test_case.actual_output
+                test_case.actual_output, test_case.multimodal
             )
-            self.verdicts: List[BiasVerdict] = await self._a_generate_verdicts()
+            self.verdicts: List[BiasVerdict] = await self._a_generate_verdicts(
+                test_case.multimodal
+            )
             self.score = self._calculate_score()
             self.reason = await self._a_generate_reason()
             self.success = self.score <= self.threshold
@@ -121,13 +145,11 @@ class BiasMetric(BaseMetric):
                 ],
             )
 
-            if _log_metric_to_confident:
-                metric_data_manager.post_metric_if_enabled(
-                    self, test_case=test_case
-                )
             return self.score
 
-    async def _a_generate_reason(self) -> str:
+    async def _a_generate_reason(
+        self,
+    ) -> str:
         if self.include_reason is False:
             return None
 
@@ -136,27 +158,19 @@ class BiasMetric(BaseMetric):
             if verdict.verdict.strip().lower() == "yes":
                 biases.append(verdict.reason)
 
-        prompt: dict = self.evaluation_template.generate_reason(
+        prompt: dict = self._get_prompt(
+            "generate_reason",
             biases=biases,
             score=format(self.score, ".2f"),
         )
 
-        if self.using_native_model:
-            res, cost = await self.model.a_generate(
-                prompt, schema=BiasScoreReason
-            )
-            self.evaluation_cost += cost
-            return res.reason
-        else:
-            try:
-                res: BiasScoreReason = await self.model.a_generate(
-                    prompt, schema=BiasScoreReason
-                )
-                return res.reason
-            except TypeError:
-                res = await self.model.a_generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return data["reason"]
+        return await a_generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=BiasScoreReason,
+            extract_schema=lambda score_reason: score_reason.reason,
+            extract_json=lambda data: data["reason"],
+        )
 
     def _generate_reason(self) -> str:
         if self.include_reason is False:
@@ -167,111 +181,93 @@ class BiasMetric(BaseMetric):
             if verdict.verdict.strip().lower() == "yes":
                 biases.append(verdict.reason)
 
-        prompt: dict = self.evaluation_template.generate_reason(
+        prompt: dict = self._get_prompt(
+            "generate_reason",
             biases=biases,
             score=format(self.score, ".2f"),
         )
 
-        if self.using_native_model:
-            res, cost = self.model.generate(prompt, schema=BiasScoreReason)
-            self.evaluation_cost += cost
-            return res.reason
-        else:
-            try:
-                res: BiasScoreReason = self.model.generate(
-                    prompt, schema=BiasScoreReason
-                )
-                return res.reason
-            except TypeError:
-                res = self.model.generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return data["reason"]
+        return generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=BiasScoreReason,
+            extract_schema=lambda score_reason: score_reason.reason,
+            extract_json=lambda data: data["reason"],
+        )
 
-    async def _a_generate_verdicts(self) -> List[BiasVerdict]:
+    async def _a_generate_verdicts(self, multimodal: bool) -> List[BiasVerdict]:
         if len(self.opinions) == 0:
             return []
 
-        verdicts: List[BiasVerdict] = []
-        prompt = self.evaluation_template.generate_verdicts(
-            opinions=self.opinions
+        prompt = self._get_prompt(
+            "generate_verdicts",
+            multimodal=multimodal,
+            opinions=self.opinions,
         )
-        if self.using_native_model:
-            res, cost = await self.model.a_generate(prompt, schema=Verdicts)
-            self.evaluation_cost += cost
-            verdicts = [item for item in res.verdicts]
-            return verdicts
-        else:
-            try:
-                res: Verdicts = await self.model.a_generate(
-                    prompt, schema=Verdicts
-                )
-                verdicts = [item for item in res.verdicts]
-                return verdicts
-            except TypeError:
-                res = await self.model.a_generate(prompt)
-                data = trimAndLoadJson(res, self)
-                verdicts = [BiasVerdict(**item) for item in data["verdicts"]]
-                return verdicts
 
-    def _generate_verdicts(self) -> List[BiasVerdict]:
+        return await a_generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=Verdicts,
+            extract_schema=lambda r: list(r.verdicts),
+            extract_json=lambda data: [
+                BiasVerdict(**item) for item in data["verdicts"]
+            ],
+        )
+
+    def _generate_verdicts(self, multimodal: bool) -> List[BiasVerdict]:
         if len(self.opinions) == 0:
             return []
 
-        verdicts: List[BiasVerdict] = []
-        prompt = self.evaluation_template.generate_verdicts(
-            opinions=self.opinions
+        prompt = self._get_prompt(
+            "generate_verdicts",
+            multimodal=multimodal,
+            opinions=self.opinions,
         )
-        if self.using_native_model:
-            res, cost = self.model.generate(prompt, schema=Verdicts)
-            self.evaluation_cost += cost
-            verdicts = [item for item in res.verdicts]
-            return verdicts
-        else:
-            try:
-                res: Verdicts = self.model.generate(prompt, schema=Verdicts)
-                verdicts = [item for item in res.verdicts]
-                return verdicts
-            except TypeError:
-                res = self.model.generate(prompt)
-                data = trimAndLoadJson(res, self)
-                verdicts = [BiasVerdict(**item) for item in data["verdicts"]]
-                return verdicts
 
-    async def _a_generate_opinions(self, actual_output: str) -> List[str]:
-        prompt = self.evaluation_template.generate_opinions(
-            actual_output=actual_output
+        return generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=Verdicts,
+            extract_schema=lambda r: list(r.verdicts),
+            extract_json=lambda data: [
+                BiasVerdict(**item) for item in data["verdicts"]
+            ],
         )
-        if self.using_native_model:
-            res, cost = await self.model.a_generate(prompt, schema=Opinions)
-            self.evaluation_cost += cost
-            return res.opinions
-        else:
-            try:
-                res: Opinions = await self.model.a_generate(
-                    prompt, schema=Opinions
-                )
-                return res.opinions
-            except TypeError:
-                res = await self.model.a_generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return data["opinions"]
 
-    def _generate_opinions(self, actual_output: str) -> List[str]:
-        prompt = self.evaluation_template.generate_opinions(
-            actual_output=actual_output
+    async def _a_generate_opinions(
+        self, actual_output: str, multimodal: bool
+    ) -> List[str]:
+        prompt = self._get_prompt(
+            "generate_opinions",
+            multimodal=multimodal,
+            actual_output=actual_output,
         )
-        if self.using_native_model:
-            res, cost = self.model.generate(prompt, schema=Opinions)
-            self.evaluation_cost += cost
-            return res.opinions
-        else:
-            try:
-                res: Opinions = self.model.generate(prompt, schema=Opinions)
-                return res.opinions
-            except TypeError:
-                res = self.model.generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return data["opinions"]
+
+        return await a_generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=Opinions,
+            extract_schema=lambda r: r.opinions,
+            extract_json=lambda data: data["opinions"],
+        )
+
+    def _generate_opinions(
+        self, actual_output: str, multimodal: bool
+    ) -> List[str]:
+        prompt = self._get_prompt(
+            "generate_opinions",
+            multimodal=multimodal,
+            actual_output=actual_output,
+        )
+
+        return generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=Opinions,
+            extract_schema=lambda r: r.opinions,
+            extract_json=lambda data: data["opinions"],
+        )
 
     def _calculate_score(self) -> float:
         number_of_verdicts = len(self.verdicts)
@@ -292,7 +288,7 @@ class BiasMetric(BaseMetric):
         else:
             try:
                 self.success = self.score <= self.threshold
-            except:
+            except TypeError:
                 self.success = False
         return self.success
 

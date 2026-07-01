@@ -1,5 +1,160 @@
-from typing import Any, List, Dict, Optional
+import uuid
+import re
+from typing import Any, List, Dict, Optional, Union, Literal, Callable
+from time import perf_counter
+from deepeval.test_case.llm_test_case import MLLMImage, _MLLM_IMAGE_REGISTRY
 from langchain_core.outputs import ChatGeneration
+from rich.progress import Progress
+
+from deepeval.metrics import BaseMetric
+from deepeval.tracing.context import current_span_context, current_trace_context
+from deepeval.tracing.tracing import trace_manager
+from deepeval.tracing.types import (
+    AgentSpan,
+    BaseSpan,
+    LlmSpan,
+    RetrieverSpan,
+    SpanType,
+    ToolSpan,
+    TraceSpanStatus,
+)
+
+
+def _persist_mllm_image(img: MLLMImage) -> MLLMImage:
+    _MLLM_IMAGE_REGISTRY[img._id] = img
+    return img
+
+
+def _mllm_image_from_url_or_data_uri(url: str) -> MLLMImage:
+    url = url.strip()
+    if url.startswith("data:"):
+        try:
+            header, base64_data = url.split(",", 1)
+            mime_type = header.split(";")[0].replace("data:", "")
+            return _persist_mllm_image(
+                MLLMImage(
+                    dataBase64=base64_data.replace("\n", "").replace("\r", ""),
+                    mimeType=mime_type,
+                )
+            )
+        except Exception:
+            pass
+    return _persist_mllm_image(MLLMImage(url=url))
+
+
+def _media_url_from_langchain_block(block: dict) -> Optional[str]:
+    """URL or data URI from an image / image_url style block."""
+    url = block.get("url")
+    if url:
+        return str(url)
+    image_url = block.get("image_url")
+    if isinstance(image_url, dict):
+        u = image_url.get("url")
+        return str(u) if u else None
+    if isinstance(image_url, str):
+        return image_url
+    return None
+
+
+def _mllm_placeholder_from_media_fields(block: dict) -> str:
+    """
+    Build an MLLMImage string placeholder ([DEEPEVAL:IMAGE:…] or [DEEPEVAL:PDF:…]).
+    Expects url / data URI, or base64 + mimeType (images and application/pdf only).
+    """
+    base64_data = block.get("base64") or block.get("data")
+    mime_type = block.get("mime_type") or block.get("mimeType")
+    if base64_data and mime_type:
+        return str(
+            _persist_mllm_image(
+                MLLMImage(dataBase64=str(base64_data), mimeType=str(mime_type))
+            )
+        )
+    url = _media_url_from_langchain_block(block)
+    if url:
+        return str(_mllm_image_from_url_or_data_uri(url))
+    return str(block)
+
+
+def _langchain_content_block_to_str(block: dict) -> str:
+    """
+    Turn one LangChain multimodal content dict into a string segment.
+
+    Only image and PDF are turned into Deepeval placeholders; everything else is
+    stringified so nothing is silently dropped.
+    """
+    block_type = (block.get("type") or "").lower()
+
+    if block_type == "text" or "text" in block:
+        return str(block.get("text", ""))
+
+    if block_type in ("image", "image_url"):
+        return _mllm_placeholder_from_media_fields(block)
+
+    if block_type == "file":
+        mime = str(
+            block.get("mime_type") or block.get("mimeType") or ""
+        ).lower()
+        if mime == "application/pdf" or mime.startswith("image/"):
+            return _mllm_placeholder_from_media_fields(block)
+        return str(block)
+
+    return str(block)
+
+
+def convert_chat_messages_to_input(
+    messages: list[list[Any]], **kwargs
+) -> List[Dict[str, str]]:
+    """
+    Convert LangChain chat messages to our internal format.
+
+    Args:
+        messages: list[list[BaseMessage]] - outer list is batches, inner is messages.
+        **kwargs: May contain invocation_params with tools definitions.
+
+    Returns:
+        List of dicts with 'role' and 'content' keys, matching the schema used
+        by parse_prompts_to_messages for consistency.
+    """
+    # Valid roles matching parse_prompts_to_messages
+    ROLE_MAPPING = {
+        "human": "human",
+        "user": "human",
+        "ai": "ai",
+        "assistant": "ai",
+        "system": "system",
+        "tool": "tool",
+        "function": "function",
+    }
+
+    result: List[Dict[str, str]] = []
+    for batch in messages:
+        for msg in batch:
+            raw_role = getattr(msg, "type", "unknown")
+            content = getattr(msg, "content", "")
+            role = ROLE_MAPPING.get(raw_role.lower(), raw_role)
+
+            if isinstance(content, list):
+                content_parts = []
+                for part in content:
+                    if isinstance(part, dict):
+                        content_parts.append(
+                            _langchain_content_block_to_str(part)
+                        )
+                    else:
+                        content_parts.append(str(part))
+                content_str = " ".join(content_parts).strip()
+            else:
+                content_str = str(content) if content else ""
+
+            result.append({"role": role, "content": content_str})
+
+    # Append tool definitions if present which matches parse_prompts_to_messages behavior
+    tools = kwargs.get("invocation_params", {}).get("tools", None)
+    if tools and isinstance(tools, list):
+        for tool in tools:
+            result.append({"role": "Tool Input", "content": str(tool)})
+
+    return result
 
 
 def parse_prompts_to_messages(
@@ -73,13 +228,23 @@ def prepare_dict(**kwargs: Any) -> dict[str, Any]:
 
 
 def safe_extract_token_usage(
-    response_metadata: dict[str, Any],
+    message: Any,
 ) -> tuple[int, int]:
     prompt_tokens, completion_tokens = 0, 0
-    token_usage = response_metadata.get("token_usage")
-    if token_usage and isinstance(token_usage, dict):
-        prompt_tokens = token_usage.get("prompt_tokens", 0)
-        completion_tokens = token_usage.get("completion_tokens", 0)
+
+    # New usage_metadata extraction
+    usage_metadata = getattr(message, "usage_metadata", None)
+    if usage_metadata:
+        prompt_tokens = usage_metadata.get("input_tokens", 0)
+        completion_tokens = usage_metadata.get("output_tokens", 0)
+
+    # Legacy response_metadata extraction
+    if prompt_tokens == 0 and completion_tokens == 0:
+        response_metadata = getattr(message, "response_metadata", {})
+        token_usage = response_metadata.get("token_usage")
+        if token_usage and isinstance(token_usage, dict):
+            prompt_tokens = token_usage.get("prompt_tokens", 0)
+            completion_tokens = token_usage.get("completion_tokens", 0)
 
     return prompt_tokens, completion_tokens
 
@@ -112,25 +277,22 @@ def safe_extract_model_name(
     return None
 
 
-from typing import Any, List, Dict, Optional, Union, Literal, Callable
-from langchain_core.outputs import ChatGeneration
-from time import perf_counter
-import uuid
-from rich.progress import Progress
-from deepeval.tracing.tracing import Observer
+def safe_extract_provider(
+    metadata: Optional[dict[str, Any]], **kwargs: Any
+) -> Optional[str]:
+    invocation_params = kwargs.get("invocation_params")
+    if isinstance(invocation_params, dict):
+        provider = invocation_params.get("model_provider")
+        if provider:
+            return str(provider)
 
-from deepeval.metrics import BaseMetric
-from deepeval.tracing.context import current_span_context, current_trace_context
-from deepeval.tracing.tracing import trace_manager
-from deepeval.tracing.types import (
-    AgentSpan,
-    BaseSpan,
-    LlmSpan,
-    RetrieverSpan,
-    SpanType,
-    ToolSpan,
-    TraceSpanStatus,
-)
+    if metadata and isinstance(metadata, dict):
+        for key in ("ls_provider", "model_provider"):
+            provider = metadata.get(key)
+            if provider:
+                return str(provider)
+
+    return None
 
 
 def enter_current_context(
@@ -145,6 +307,7 @@ def enter_current_context(
     progress: Optional[Progress] = None,
     pbar_callback_id: Optional[int] = None,
     uuid_str: Optional[str] = None,
+    fallback_trace_uuid: Optional[str] = None,
 ) -> BaseSpan:
     start_time = perf_counter()
     observe_kwargs = observe_kwargs or {}
@@ -159,12 +322,27 @@ def enter_current_context(
     parent_uuid: Optional[str] = None
 
     if parent_span:
-        parent_uuid = parent_span.uuid
-        trace_uuid = parent_span.trace_uuid
-    else:
+        # Validate that the parent span's trace is still active
+        if parent_span.trace_uuid in trace_manager.active_traces:
+            parent_uuid = parent_span.uuid
+            trace_uuid = parent_span.trace_uuid
+        else:
+            # Parent span references a dead trace - treat as if no parent
+            parent_span = None
+
+    if not parent_span:
         current_trace = current_trace_context.get()
-        if current_trace:
+        # IMPORTANT: Verify trace is still active, not just in context
+        # (a previous failed async operation might leave a dead trace in context)
+        if current_trace and current_trace.uuid in trace_manager.active_traces:
             trace_uuid = current_trace.uuid
+        elif (
+            fallback_trace_uuid
+            and fallback_trace_uuid in trace_manager.active_traces
+        ):
+            # In async contexts, ContextVar may not propagate. Use the fallback trace_uuid
+            # provided by the CallbackHandler to avoid creating duplicate traces.
+            trace_uuid = fallback_trace_uuid
         else:
             trace = trace_manager.start_new_trace(
                 metric_collection=metric_collection
@@ -223,8 +401,8 @@ def enter_current_context(
 
     if (
         parent_span
-        and getattr(parent_span, "progress", None) is not None
-        and getattr(parent_span, "pbar_callback_id", None) is not None
+        and parent_span.progress is not None
+        and parent_span.pbar_callback_id is not None
     ):
         progress = parent_span.progress
         pbar_callback_id = parent_span.pbar_callback_id
@@ -258,11 +436,13 @@ def exit_current_context(
 
     current_span = current_span_context.get()
 
+    # In async contexts (LangChain/LangGraph), context variables don't propagate
+    # reliably across task boundaries. Fall back to direct span lookup.
     if not current_span or current_span.uuid != uuid_str:
-        print(
-            f"Error: Current span in context does not match the span being exited. Expected UUID: {uuid_str}, Got: {current_span.uuid if current_span else 'None'}"
-        )
-        return
+        current_span = trace_manager.get_span_by_uuid(uuid_str)
+        if not current_span:
+            # Span already removed or never existed
+            return
 
     current_span.end_time = end_time
     if exc_type is not None:
@@ -295,7 +475,12 @@ def exit_current_context(
         else:
             current_span_context.set(None)
     else:
+        # Try context first, then fall back to direct trace lookup for async contexts
         current_trace = current_trace_context.get()
+        if not current_trace and current_span.trace_uuid:
+            current_trace = trace_manager.get_trace_by_uuid(
+                current_span.trace_uuid
+            )
         if current_span.status == TraceSpanStatus.ERRORED and current_trace:
             current_trace.status = TraceSpanStatus.ERRORED
         if current_trace and current_trace.uuid == current_span.trace_uuid:

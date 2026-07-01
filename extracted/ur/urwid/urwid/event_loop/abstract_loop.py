@@ -39,7 +39,14 @@ if typing.TYPE_CHECKING:
     _T = typing.TypeVar("_T")
     _Spec = ParamSpec("_Spec")
 
-__all__ = ("EventLoop", "ExitMainLoop")
+__all__ = ("EventLoop", "ExitMainLoop", "SupportsFileno")
+
+
+@typing.runtime_checkable
+class SupportsFileno(typing.Protocol):
+    """Object that can provide an OS-level file descriptor."""
+
+    def fileno(self) -> int: ...
 
 
 class ExitMainLoop(Exception):
@@ -97,7 +104,7 @@ class EventLoop(abc.ABC):
         """
 
     @abc.abstractmethod
-    def enter_idle(self, callback):
+    def enter_idle(self, callback: typing.Any) -> typing.Any:
         """
         Add a callback for entering idle.
 
@@ -107,7 +114,7 @@ class EventLoop(abc.ABC):
         """
 
     @abc.abstractmethod
-    def remove_alarm(self, handle) -> bool:
+    def remove_alarm(self, handle: typing.Any) -> bool:
         """
         Remove an alarm.
 
@@ -117,7 +124,7 @@ class EventLoop(abc.ABC):
         """
 
     @abc.abstractmethod
-    def remove_enter_idle(self, handle) -> bool:
+    def remove_enter_idle(self, handle: typing.Any) -> bool:
         """
         Remove an idle callback.
 
@@ -127,7 +134,7 @@ class EventLoop(abc.ABC):
         """
 
     @abc.abstractmethod
-    def remove_watch_file(self, handle) -> bool:
+    def remove_watch_file(self, handle: typing.Any) -> bool:
         """
         Remove an input file.
 
@@ -146,7 +153,7 @@ class EventLoop(abc.ABC):
         """
 
     @abc.abstractmethod
-    def watch_file(self, fd: int, callback: Callable[[], typing.Any]):
+    def watch_file(self, fd: int, callback: Callable[[], typing.Any]) -> typing.Any:
         """
         Call callback() when fd has some data to read.  No parameters
         are passed to callback.

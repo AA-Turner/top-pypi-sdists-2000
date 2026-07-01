@@ -1,0 +1,46 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "browser-use-sdk"
+version = "3.8.4"
+description = "Python SDK for the Browser Use cloud API"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.9"
+dependencies = ["httpx>=0.24", "pydantic>=2.0"]
+
+[project.urls]
+Homepage = "https://github.com/browser-use/sdk"
+Repository = "https://github.com/browser-use/sdk"
+Issues = "https://github.com/browser-use/sdk/issues"
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "pyright>=1.1"]
+examples = ["python-dotenv>=1.0"]
+# Pay for API access with USDC instead of an API key. Requires Python 3.10+.
+# Install with: pip install "browser-use-sdk[x402]"
+x402 = [
+    "x402[evm]>=2.9.0; python_version >= '3.10'",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/browser_use_sdk"]
+
+[tool.pytest.ini_options]
+markers = [
+    "prod: production smoke tests (hit real API)",
+    "live: live integration tests (hit localhost)",
+]
+
+[tool.pyright]
+pythonVersion = "3.9"
+typeCheckingMode = "basic"
+include = ["src", "tests", "examples"]
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.408",
+    "pytest>=8.4.2",
+]

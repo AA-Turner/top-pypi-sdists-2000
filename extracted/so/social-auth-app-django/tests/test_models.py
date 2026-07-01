@@ -4,7 +4,8 @@ from unittest import mock
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from django.db import IntegrityError
-from django.test import TestCase
+from django.test import TestCase, override_settings
+from social_core.exceptions import AuthAlreadyAssociated
 
 from social_django.models import (
     AbstractUserSocialAuth,
@@ -20,22 +21,22 @@ from social_django.models import (
 class TestSocialAuthUser(TestCase):
     def test_user_relationship_none(self):
         """Accessing User.social_user outside of the pipeline doesn't work"""
-        User = get_user_model()
-        user = User._default_manager.create_user(username="randomtester")
+        User = get_user_model()  # noqa: N806
+        user = User._default_manager.create_user(username="randomtester")  # noqa: SLF001
         with self.assertRaises(AttributeError):
-            user.social_user
+            user.social_user  # noqa: B018
 
     def test_user_existing_relationship(self):
         """Accessing User.social_user outside of the pipeline doesn't work"""
-        User = get_user_model()
-        user = User._default_manager.create_user(username="randomtester")
+        User = get_user_model()  # noqa: N806
+        user = User._default_manager.create_user(username="randomtester")  # noqa: SLF001
         UserSocialAuth.objects.create(user=user, provider="my-provider", uid="1234")
         with self.assertRaises(AttributeError):
-            user.social_user
+            user.social_user  # noqa: B018
 
     def test_get_social_auth(self):
-        User = get_user_model()
-        user = User._default_manager.create_user(username="randomtester")
+        User = get_user_model()  # noqa: N806
+        user = User._default_manager.create_user(username="randomtester")  # noqa: SLF001
         user_social = UserSocialAuth.objects.create(user=user, provider="my-provider", uid="1234")
         other = UserSocialAuth.get_social_auth("my-provider", "1234")
         self.assertEqual(other, user_social)
@@ -65,13 +66,13 @@ class TestSocialAuthUser(TestCase):
 class TestUserSocialAuth(TestCase):
     def setUp(self):
         self.user_model = get_user_model()
-        self.user = self.user_model._default_manager.create_user(username="randomtester", email="user@example.com")
+        self.user = self.user_model._default_manager.create_user(username="randomtester", email="user@example.com")  # noqa: SLF001
         self.usa = UserSocialAuth.objects.create(user=self.user, provider="my-provider", uid="1234")
 
     def test_changed(self):
         self.user.email = eml = "test@example.com"
         UserSocialAuth.changed(user=self.user)
-        db_eml = self.user_model._default_manager.get(username=self.user.username).email
+        db_eml = self.user_model._default_manager.get(username=self.user.username).email  # noqa: SLF001
         self.assertEqual(db_eml, eml)
 
     def test_set_extra_data(self):
@@ -101,22 +102,21 @@ class TestUserSocialAuth(TestCase):
         self.assertEqual(UserSocialAuth.get_username(self.user), self.user.username)
 
     def test_create_user(self):
-        # Catch integrity error and find existing user
-        UserSocialAuth.create_user(username=self.user.username)
+        UserSocialAuth.create_user(username="testuser")
 
     def test_create_user_reraise(self):
-        with self.assertRaises(IntegrityError):
+        with self.assertRaises(AuthAlreadyAssociated):
             UserSocialAuth.create_user(username=self.user.username, email=None)
 
     @mock.patch("social_django.models.UserSocialAuth.username_field", return_value="email")
-    @mock.patch("django.contrib.auth.models.UserManager.create_user", side_effect=IntegrityError)
+    @mock.patch("django.contrib.auth.models.UserManager.create_user", return_value="<User>")
     def test_create_user_custom_username(self, *args):
         UserSocialAuth.create_user(username=self.user.email)
 
-    @mock.patch("social_django.storage.transaction", spec=[])
-    def test_create_user_without_transaction_atomic(self, *args):
-        UserSocialAuth.create_user(username="test")
-        self.assertTrue(self.user_model._default_manager.filter(username="test").exists())
+    @mock.patch("django.contrib.auth.models.UserManager.create_user", side_effect=IntegrityError)
+    def test_create_user_existing(self, *args):
+        with self.assertRaises(AuthAlreadyAssociated):
+            UserSocialAuth.create_user(username=self.user.email)
 
     def test_get_user(self):
         self.assertEqual(UserSocialAuth.get_user(pk=self.user.pk), self.user)
@@ -125,6 +125,13 @@ class TestUserSocialAuth(TestCase):
     def test_get_users_by_email(self):
         qs = UserSocialAuth.get_users_by_email(email=self.user.email)
         self.assertEqual(qs.count(), 1)
+        self.user.is_active = False
+        self.user.save()
+        qs = UserSocialAuth.get_users_by_email(email=self.user.email)
+        self.assertEqual(qs.count(), 0)
+        with override_settings(SOCIAL_AUTH_ACTIVE_USERS_FILTER={}):
+            qs = UserSocialAuth.get_users_by_email(email=self.user.email)
+            self.assertEqual(qs.count(), 1)
 
     def test_get_social_auth(self):
         usa = self.usa
@@ -174,11 +181,6 @@ class TestUserSocialAuth(TestCase):
         self.assertEqual(usa.uid, "1")
         self.assertEqual(str(usa), str(self.user))
 
-    @mock.patch("social_django.storage.transaction", spec=[])
-    def test_create_social_auth_without_transaction_atomic(self, *args):
-        with self.assertRaises(IntegrityError):
-            UserSocialAuth.create_social_auth(user=self.user, provider=self.usa.provider, uid=self.usa.uid)
-
     def test_username_max_length(self):
         self.assertEqual(UserSocialAuth.username_max_length(), 150)
 
@@ -216,11 +218,12 @@ class TestCode(TestCase):
 
 class TestPartial(TestCase):
     def test_load_destroy(self):
-        p = Partial.objects.create(token="x", backend="y", data={})
-        self.assertEqual(Partial.load(token="x"), p)
-        self.assertIsNone(Partial.load(token="y"))
+        token_value = "x"  # noqa: S105
+        p = Partial.objects.create(token=token_value, backend="y", data={})
+        self.assertEqual(Partial.load(token=token_value), p)
+        self.assertIsNone(Partial.load(token="y"))  # noqa: S106
 
-        Partial.destroy(token="x")
+        Partial.destroy(token=token_value)
         self.assertEqual(Partial.objects.count(), 0)
 
 

@@ -43,20 +43,24 @@ from . import _raw_display_base, escape
 from .common import INPUT_DESCRIPTORS_CHANGED
 
 if typing.TYPE_CHECKING:
-    import socket
     from collections.abc import Callable
     from types import FrameType
 
     from urwid.event_loop import EventLoop
 
+    SignalHandler = typing.Union[Callable[[int, typing.Union[FrameType, None]], typing.Any], int, None]
+    _MouseInput = tuple[str, int, int, int]
+    _CursorPosition = tuple[typing.Literal["cursor position"], int, int]
+    _DecodedInput = list[typing.Union[str, _MouseInput, _CursorPosition]]
+
 
 class Screen(_raw_display_base.Screen):
     def __init__(
         self,
-        input: typing.TextIO = sys.stdin,  # noqa: A002  # pylint: disable=redefined-builtin
-        output: typing.TextIO = sys.stdout,
-        bracketed_paste_mode=False,
-        focus_reporting=False,
+        input: _raw_display_base.SupportsFileno = sys.stdin,  # noqa: A002  # pylint: disable=redefined-builtin
+        output: _raw_display_base.TextWriter = sys.stdout,
+        bracketed_paste_mode: bool = False,
+        focus_reporting: bool = False,
     ) -> None:
         """Initialize a screen that directly prints escape codes to an output
         terminal.
@@ -69,15 +73,15 @@ class Screen(_raw_display_base.Screen):
             and `focus out` keystrokes when the application gains and loses focus.
         """
         super().__init__(input, output)
-        self.gpm_mev: Popen | None = None
+        self.gpm_mev: Popen[str] | None = None
         self.gpm_event_pending: bool = False
         self.bracketed_paste_mode = bracketed_paste_mode
         self.focus_reporting = focus_reporting
 
         # These store the previous signal handlers after setting ours
-        self._prev_sigcont_handler = None
-        self._prev_sigtstp_handler = None
-        self._prev_sigwinch_handler = None
+        self._prev_sigcont_handler: SignalHandler = None
+        self._prev_sigtstp_handler: SignalHandler = None
+        self._prev_sigwinch_handler: SignalHandler = None
 
     def __repr__(self) -> str:
         return (
@@ -161,6 +165,8 @@ class Screen(_raw_display_base.Screen):
             close_fds=True,
             encoding="ascii",
         )
+        if m.stdout is None:
+            raise RuntimeError("gpm mouse tracking stdout was not created")
         fcntl.fcntl(m.stdout.fileno(), fcntl.F_SETFL, os.O_NONBLOCK)
         self.gpm_mev = m
 
@@ -171,12 +177,20 @@ class Screen(_raw_display_base.Screen):
         os.waitpid(self.gpm_mev.pid, 0)
         self.gpm_mev = None
 
-    def _start(self, alternate_buffer: bool = True) -> None:
+    def _start(  # pylint: disable=keyword-arg-before-vararg
+        self,
+        alternate_buffer: bool = True,
+        *args: typing.Any,
+        **kwargs: typing.Any,
+    ) -> None:
         """
         Initialize the screen and input mode.
 
         alternate_buffer -- use an alternate screen buffer
         """
+        if args or kwargs:
+            raise TypeError(f"start() got unexpected arguments: {args=!r}, {kwargs=!r}")
+
         if alternate_buffer:
             self.write(escape.SWITCH_TO_ALTERNATE_BUFFER)
             self._rows_used = None
@@ -205,7 +219,7 @@ class Screen(_raw_display_base.Screen):
         # restore mouse tracking to previous state
         self._mouse_tracking(self._mouse_tracking_enabled)
 
-        return super()._start()
+        super()._start(*args, **kwargs)  # type: ignore[safe-super]
 
     def _stop(self) -> None:
         """
@@ -232,9 +246,9 @@ class Screen(_raw_display_base.Screen):
         if self._old_signal_keys:
             self.tty_signal_keys(*self._old_signal_keys, fd)
 
-        super()._stop()
+        super()._stop()  # type: ignore[safe-super]
 
-    def get_input_descriptors(self) -> list[socket.socket | typing.IO | int]:
+    def get_input_descriptors(self) -> list[_raw_display_base.SupportsFileno | int]:
         """
         Return a list of integer file descriptors that should be
         polled in external event loops to check for user input.
@@ -266,7 +280,7 @@ class Screen(_raw_display_base.Screen):
     def hook_event_loop(
         self,
         event_loop: EventLoop,
-        callback: Callable[[list[str], list[int]], typing.Any],
+        callback: Callable[[_DecodedInput, list[int]], typing.Any],
     ) -> None:
         """
         Register the given callback with the event loop, to be called with new
@@ -280,7 +294,7 @@ class Screen(_raw_display_base.Screen):
         else:
 
             @functools.wraps(callback)
-            def wrapper() -> tuple[list[str], typing.Any] | None:
+            def wrapper() -> tuple[_DecodedInput, list[int]] | None:
                 self.logger.debug('Calling callback for "watch file"')
                 return self.parse_input(event_loop, callback, self.get_available_raw_input())
 
@@ -292,9 +306,11 @@ class Screen(_raw_display_base.Screen):
         return super()._get_input_codes() + self._get_gpm_codes()
 
     def _get_gpm_codes(self) -> list[int]:
-        codes = []
+        codes: list[int] = []
         try:
             while self.gpm_mev is not None and self.gpm_event_pending:
+                if self.gpm_mev.stdout is None:
+                    return codes
                 codes.extend(self._encode_gpm_event())
         except OSError as e:
             if e.args[0] != 11:
@@ -303,7 +319,8 @@ class Screen(_raw_display_base.Screen):
 
     def _read_raw_input(self, timeout: int) -> bytearray:
         ready = self._wait_for_input_ready(timeout)
-        if self.gpm_mev is not None and self.gpm_mev.stdout.fileno() in ready:
+        gpm_stdout = self.gpm_mev.stdout if self.gpm_mev is not None else None
+        if gpm_stdout is not None and gpm_stdout.fileno() in ready:
             self.gpm_event_pending = True
         fd = self._input_fileno()
         chars = bytearray()
@@ -325,24 +342,28 @@ class Screen(_raw_display_base.Screen):
 
     def _encode_gpm_event(self) -> list[int]:
         self.gpm_event_pending = False
+        if self.gpm_mev is None or self.gpm_mev.stdout is None:
+            return []
+
         s = self.gpm_mev.stdout.readline()
-        result = s.split(", ")
-        if len(result) != 6:
+        event_result = s.split(",")
+        if len(event_result) != 6:
             # unexpected output, stop tracking
             self._stop_gpm_tracking()
             signals.emit_signal(self, INPUT_DESCRIPTORS_CHANGED)
             return []
-        ev, x, y, _ign, b, m = s.split(",")
-        ev = int(ev.split("x")[-1], 16)
-        x = int(x.split(" ")[-1])
-        y = int(y.lstrip().split(" ")[0])
-        b = int(b.split(" ")[-1])
-        m = int(m.split("x")[-1].rstrip(), 16)
+
+        ev_, x_, y_, _ign, b_, m_ = s.split(",")
+        ev = int(ev_.rsplit("x", 1)[-1], 16)
+        x = int(x_.rsplit(" ", 1)[-1])
+        y = int(y_.lstrip().split(" ", 1)[0])
+        b = int(b_.rsplit(" ", 1)[-1])
+        m = int(m_.rsplit("x", 1)[-1].rstrip(), 16)
 
         # convert to xterm-like escape sequence
 
         last_state = next_state = self.last_bstate
-        result = []
+        result: list[int] = []
 
         mod = 0
         if m & 1:
@@ -405,7 +426,7 @@ class Screen(_raw_display_base.Screen):
         """Return the terminal dimensions (num columns, num rows)."""
         y, x = super().get_cols_rows()
         with contextlib.suppress(OSError):  # Term size could not be determined
-            if hasattr(self._term_output_file, "fileno"):
+            if isinstance(self._term_output_file, _raw_display_base.SupportsFileno):
                 buf = fcntl.ioctl(self._term_output_file.fileno(), termios.TIOCGWINSZ, b" " * 8)
                 y, x, _, _ = struct.unpack("hhhh", buf)
 
@@ -417,7 +438,7 @@ class Screen(_raw_display_base.Screen):
         return x, y
 
 
-def _test():
+def _test() -> None:
     import doctest
 
     doctest.testmod()

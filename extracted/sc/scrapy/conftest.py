@@ -8,8 +8,10 @@ import pytest
 from twisted.web.http import H2_ENABLED
 
 from scrapy.utils.reactor import set_asyncio_event_loop_policy
+from scrapy.utils.reactorless import install_reactor_import_hook
 from tests.keys import generate_keys
 from tests.mockserver.http import MockServer
+from tests.mockserver.mitm_proxy import MitmProxy
 
 if TYPE_CHECKING:
     from collections.abc import Generator
@@ -22,13 +24,6 @@ def _py_files(folder):
 collect_ignore = [
     # may need extra deps
     "docs/_ext",
-    # not a test, but looks like a test
-    "scrapy/utils/testproc.py",
-    "scrapy/utils/testsite.py",
-    "tests/ftpserver.py",
-    "tests/mockserver.py",
-    "tests/pipelines.py",
-    "tests/spiders.py",
     # contains scripts to be run by tests/test_crawler.py::AsyncCrawlerProcessSubprocess
     *_py_files("tests/AsyncCrawlerProcess"),
     # contains scripts to be run by tests/test_crawler.py::AsyncCrawlerRunnerSubprocess
@@ -55,11 +50,53 @@ if not H2_ENABLED:
         )
     )
 
+try:
+    import httpx  # noqa: F401
+except ImportError:
+    collect_ignore.append("scrapy/core/downloader/handlers/_httpx.py")
+
+
+def pytest_addoption(parser, pluginmanager):
+    if pluginmanager.hasplugin("twisted"):
+        return
+    # add the full choice set so that pytest doesn't complain about invalid choices in some cases
+    parser.addoption(
+        "--reactor",
+        default="none",
+        choices=["asyncio", "default", "none"],
+    )
+
 
 @pytest.fixture(scope="session")
 def mockserver() -> Generator[MockServer]:
     with MockServer() as mockserver:
         yield mockserver
+
+
+@pytest.fixture  # function scope because it modifies os.environ
+def mitm_proxy_server(monkeypatch: pytest.MonkeyPatch) -> Generator[MitmProxy]:
+    proxy = MitmProxy()
+    url = proxy.start()
+    monkeypatch.setenv("http_proxy", url)
+    monkeypatch.setenv("https_proxy", url)
+
+    try:
+        yield proxy
+    finally:
+        proxy.stop()
+
+
+@pytest.fixture  # function scope because it modifies os.environ
+def mitm_proxy_server_https(monkeypatch: pytest.MonkeyPatch) -> Generator[MitmProxy]:
+    proxy = MitmProxy()
+    url = proxy.start().replace("http://", "https://")
+    monkeypatch.setenv("http_proxy", url)
+    monkeypatch.setenv("https_proxy", url)
+
+    try:
+        yield proxy
+    finally:
+        proxy.stop()
 
 
 @pytest.fixture(scope="session")
@@ -72,17 +109,26 @@ def pytest_configure(config):
         # Needed on Windows to switch from proactor to selector for Twisted reactor compatibility.
         # If we decide to run tests with both, we will need to add a new option and check it here.
         set_asyncio_event_loop_policy()
+    elif config.getoption("--reactor") == "none":
+        install_reactor_import_hook()
 
 
 def pytest_runtest_setup(item):
     # Skip tests based on reactor markers
     reactor = item.config.getoption("--reactor")
 
-    if item.get_closest_marker("only_asyncio") and reactor != "asyncio":
-        pytest.skip("This test is only run with --reactor=asyncio")
+    if item.get_closest_marker("requires_reactor") and reactor == "none":
+        pytest.skip('This test is only run when the --reactor value is not "none"')
 
-    if item.get_closest_marker("only_not_asyncio") and reactor == "asyncio":
-        pytest.skip("This test is only run without --reactor=asyncio")
+    if item.get_closest_marker("only_asyncio") and reactor not in {"asyncio", "none"}:
+        pytest.skip(
+            'This test is only run when the --reactor value is "asyncio" (default) or "none"'
+        )
+
+    if item.get_closest_marker("only_not_asyncio") and reactor in {"asyncio", "none"}:
+        pytest.skip(
+            'This test is only run when the --reactor value is not "asyncio" (default) or "none"'
+        )
 
     # Skip tests requiring optional dependencies
     optional_deps = [

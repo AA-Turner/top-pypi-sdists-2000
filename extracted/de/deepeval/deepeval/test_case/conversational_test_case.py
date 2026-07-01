@@ -1,3 +1,5 @@
+import re
+import warnings
 from pydantic import (
     BaseModel,
     Field,
@@ -5,11 +7,11 @@ from pydantic import (
     model_validator,
     AliasChoices,
 )
-from typing import List, Optional, Dict, Literal
+from typing import List, Optional, Dict, Literal, Union
 from copy import deepcopy
 from enum import Enum
 
-from deepeval.test_case import ToolCall
+from deepeval.test_case import ToolCall, MLLMImage, RetrievedContextData
 from deepeval.test_case.mcp import (
     MCPServer,
     MCPPromptCall,
@@ -17,18 +19,36 @@ from deepeval.test_case.mcp import (
     MCPToolCall,
     validate_mcp_servers,
 )
+from deepeval.test_case.llm_test_case import _MLLM_IMAGE_REGISTRY
 
 
-class TurnParams(Enum):
+class MultiTurnParams(Enum):
     ROLE = "role"
     CONTENT = "content"
+    METADATA = "metadata"
+    TAGS = "tags"
     SCENARIO = "scenario"
     EXPECTED_OUTCOME = "expected_outcome"
+    CONTEXT = "context"
+    USER_DESCRIPTION = "user_description"
     RETRIEVAL_CONTEXT = "retrieval_context"
+    CHATBOT_ROLE = "chatbot_role"
     TOOLS_CALLED = "tools_called"
     MCP_TOOLS = "mcp_tools_called"
     MCP_RESOURCES = "mcp_resources_called"
     MCP_PROMPTS = "mcp_prompts_called"
+
+
+def __getattr__(name: str):
+    if name == "TurnParams":
+        warnings.warn(
+            "'TurnParams' is deprecated and will be removed in a future "
+            "release. Use 'MultiTurnParams' instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return MultiTurnParams
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
 class Turn(BaseModel):
@@ -37,7 +57,7 @@ class Turn(BaseModel):
     user_id: Optional[str] = Field(
         default=None, validation_alias=AliasChoices("userId", "user_id")
     )
-    retrieval_context: Optional[List[str]] = Field(
+    retrieval_context: Optional[List[Union[str, RetrievedContextData]]] = Field(
         default=None,
         validation_alias=AliasChoices("retrievalContext", "retrieval_context"),
     )
@@ -48,14 +68,39 @@ class Turn(BaseModel):
     mcp_tools_called: Optional[List[MCPToolCall]] = Field(default=None)
     mcp_resources_called: Optional[List[MCPResourceCall]] = Field(default=None)
     mcp_prompts_called: Optional[List[MCPPromptCall]] = Field(default=None)
-    additional_metadata: Optional[Dict] = Field(
+    metadata: Optional[Dict] = Field(
         default=None,
-        serialization_alias="additionalMetadata",
         validation_alias=AliasChoices(
-            "additionalMetadata", "additional_metadata"
+            "metadata", "additionalMetadata", "additional_metadata"
         ),
     )
-    _mcp_interaction: bool = PrivateAttr(default=False)
+
+    @property
+    def additional_metadata(self) -> Optional[Dict]:
+        warnings.warn(
+            "'additional_metadata' is deprecated. Use 'metadata' instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.metadata
+
+    @additional_metadata.setter
+    def additional_metadata(self, value: Optional[Dict]):
+        warnings.warn(
+            "'additional_metadata' is deprecated. Use 'metadata' instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        self.metadata = value
+
+    @property
+    def _mcp_interaction(self) -> bool:
+        """Whether this turn involves any MCP interactions."""
+        return (
+            self.mcp_tools_called is not None
+            or self.mcp_resources_called is not None
+            or self.mcp_prompts_called is not None
+        )
 
     def __repr__(self):
         attrs = [f"role={self.role!r}", f"content={self.content!r}"]
@@ -71,8 +116,8 @@ class Turn(BaseModel):
             attrs.append(f"mcp_resources_called={self.mcp_resources_called!r}")
         if self.mcp_prompts_called is not None:
             attrs.append(f"mcp_prompts_called={self.mcp_prompts_called!r}")
-        if self.additional_metadata is not None:
-            attrs.append(f"additional_metadata={self.additional_metadata!r}")
+        if self.metadata is not None:
+            attrs.append(f"metadata={self.metadata!r}")
         return f"Turn({', '.join(attrs)})"
 
     @model_validator(mode="before")
@@ -92,7 +137,6 @@ class Turn(BaseModel):
                 GetPromptResult,
             )
 
-            data["_mcp_interaction"] = True
             if mcp_tools_called is not None:
                 if not isinstance(mcp_tools_called, list) or not all(
                     isinstance(tool_called, MCPToolCall)
@@ -146,20 +190,79 @@ class ConversationalTestCase(BaseModel):
         serialization_alias="chatbotRole",
         validation_alias=AliasChoices("chatbotRole", "chatbot_role"),
     )
-    additional_metadata: Optional[Dict] = Field(
+    metadata: Optional[Dict] = Field(
         default=None,
-        serialization_alias="additionalMetadata",
         validation_alias=AliasChoices(
-            "additionalMetadata", "additional_metadata"
+            "metadata", "additionalMetadata", "additional_metadata"
         ),
     )
     comments: Optional[str] = Field(default=None)
     tags: Optional[List[str]] = Field(default=None)
     mcp_servers: Optional[List[MCPServer]] = Field(default=None)
+    multimodal: bool = False
 
     _dataset_rank: Optional[int] = PrivateAttr(default=None)
     _dataset_alias: Optional[str] = PrivateAttr(default=None)
     _dataset_id: Optional[str] = PrivateAttr(default=None)
+
+    @property
+    def additional_metadata(self) -> Optional[Dict]:
+        warnings.warn(
+            "'additional_metadata' is deprecated. Use 'metadata' instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.metadata
+
+    @additional_metadata.setter
+    def additional_metadata(self, value: Optional[Dict]):
+        warnings.warn(
+            "'additional_metadata' is deprecated. Use 'metadata' instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        self.metadata = value
+
+    @model_validator(mode="after")
+    def set_is_multimodal(self):
+        import re
+
+        if self.multimodal is True:
+            return self
+
+        pattern = r"\[DEEPEVAL:(?:IMAGE|PDF):(.*?)\]"
+        if self.scenario:
+            if re.search(pattern, self.scenario) is not None:
+                self.multimodal = True
+                return self
+        if self.expected_outcome:
+            if re.search(pattern, self.expected_outcome) is not None:
+                self.multimodal = True
+                return self
+        if self.user_description:
+            if re.search(pattern, self.user_description) is not None:
+                self.multimodal = True
+                return self
+        if self.turns:
+            for turn in self.turns:
+                if re.search(pattern, turn.content) is not None:
+                    self.multimodal = True
+                    return self
+                if turn.retrieval_context is not None:
+                    self.multimodal = self.multimodal or any(
+                        re.search(
+                            pattern,
+                            (
+                                c.context
+                                if isinstance(c, RetrievedContextData)
+                                else c
+                            ),
+                        )
+                        for c in turn.retrieval_context
+                        if isinstance(c, (RetrievedContextData, str))
+                    )
+
+        return self
 
     @model_validator(mode="before")
     def validate_input(cls, data):
@@ -173,9 +276,12 @@ class ConversationalTestCase(BaseModel):
         # Ensure `context` is None or a list of strings
         if context is not None:
             if not isinstance(context, list) or not all(
-                isinstance(item, str) for item in context
+                isinstance(item, (str, RetrievedContextData))
+                for item in context
             ):
-                raise TypeError("'context' must be None or a list of strings")
+                raise TypeError(
+                    "'context' must be None or a list of strings or RetrievedContextData"
+                )
 
         if mcp_servers is not None:
             validate_mcp_servers(mcp_servers)
@@ -197,3 +303,34 @@ class ConversationalTestCase(BaseModel):
         data["turns"] = copied_turns
 
         return data
+
+    def _get_images_mapping(self) -> Dict[str, MLLMImage]:
+        pattern = r"\[DEEPEVAL:(?:IMAGE|PDF):(.*?)\]"
+        image_ids = set()
+
+        def extract_ids_from_string(s: Optional[str]) -> None:
+            """Helper to extract image IDs from a string."""
+            if s is not None and isinstance(s, str):
+                matches = re.findall(pattern, s)
+                image_ids.update(matches)
+
+        def extract_ids_from_list(lst: Optional[List[str]]) -> None:
+            """Helper to extract image IDs from a list of strings."""
+            if lst is not None:
+                for item in lst:
+                    extract_ids_from_string(item)
+
+        extract_ids_from_string(self.scenario)
+        extract_ids_from_string(self.expected_outcome)
+        extract_ids_from_list(self.context)
+        extract_ids_from_string(self.user_description)
+        for turn in self.turns:
+            extract_ids_from_string(turn.content)
+            extract_ids_from_list(turn.retrieval_context)
+
+        images_mapping = {}
+        for img_id in image_ids:
+            if img_id in _MLLM_IMAGE_REGISTRY:
+                images_mapping[img_id] = _MLLM_IMAGE_REGISTRY[img_id]
+
+        return images_mapping if len(images_mapping) > 0 else None

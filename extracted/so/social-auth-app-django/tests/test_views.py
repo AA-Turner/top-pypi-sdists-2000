@@ -9,7 +9,7 @@ from social_django.models import UserSocialAuth
 from social_django.views import get_session_timeout
 
 
-@override_settings(SOCIAL_AUTH_FACEBOOK_KEY="1", SOCIAL_AUTH_FACEBOOK_SECRET="2")
+@override_settings(SOCIAL_AUTH_FACEBOOK_KEY="1", SOCIAL_AUTH_FACEBOOK_SECRET="2")  # noqa: S106
 class TestViews(TestCase):
     def setUp(self):
         session = self.client.session
@@ -17,17 +17,16 @@ class TestViews(TestCase):
         session.save()
 
     def test_begin_view(self):
-        response = self.client.get(reverse("social:begin", kwargs={"backend": "facebook"}))
+        response = self.client.post(reverse("social:begin", kwargs={"backend": "facebook"}))
         self.assertEqual(response.status_code, 302)
 
         url = reverse("social:begin", kwargs={"backend": "blabla"})
-        response = self.client.get(url)
+        response = self.client.post(url)
         self.assertEqual(response.status_code, 404)
 
-    def test_require_post_works(self):
-        with override_settings(SOCIAL_AUTH_REQUIRE_POST=True):
-            response = self.client.get(reverse("social:begin", kwargs={"backend": "facebook"}))
-            self.assertEqual(response.status_code, 405)
+    def test_begin_view_requires_post(self):
+        response = self.client.get(reverse("social:begin", kwargs={"backend": "facebook"}))
+        self.assertEqual(response.status_code, 405)
 
     @mock.patch("social_core.backends.base.BaseAuth.request")
     def test_complete(self, mock_request):
@@ -43,11 +42,14 @@ class TestViews(TestCase):
             self.assertEqual(response.url, "/accounts/profile/")
 
     @mock.patch("social_core.backends.base.BaseAuth.request")
-    def test_disconnect(self, mock_request):
+    def test_disconnect(self, _mock_request):
         user_model = get_user_model()
-        user = user_model._default_manager.create_user(username="test", password="pwd")
-        UserSocialAuth.objects.create(user=user, provider="facebook")
-        self.client.login(username="test", password="pwd")
+        user = user_model._default_manager.create_user(  # noqa: SLF001
+            username="test",
+            password="pwd",  # noqa: S106
+        )
+        UserSocialAuth.objects.create(user=user, provider="facebook", uid="some-mock-facebook-uid")
+        self.client.login(username="test", password="pwd")  # noqa: S106
 
         url = reverse("social:disconnect", kwargs={"backend": "facebook"})
         response = self.client.post(url)
@@ -78,7 +80,7 @@ class TestGetSessionTimeout(TestCase):
 
     def set_user_expiration(self, seconds):
         self.social_user.expiration_datetime.return_value = mock.MagicMock(
-            total_seconds=mock.MagicMock(return_value=seconds)
+            total_seconds=mock.MagicMock(return_value=seconds),
         )
 
     def test_expiration_disabled_no_max(self):
@@ -88,7 +90,9 @@ class TestGetSessionTimeout(TestCase):
 
     def test_expiration_disabled_with_max(self):
         expiration_length = get_session_timeout(
-            self.social_user, enable_session_expiration=False, max_session_length=60
+            self.social_user,
+            enable_session_expiration=False,
+            max_session_length=60,
         )
         self.assertEqual(expiration_length, 60)
 

@@ -1,9 +1,8 @@
 # SPDX-FileCopyrightText: 2023-present Massimiliano Pippi <mpippi@gmail.com>
 #
 # SPDX-License-Identifier: MIT
-import importlib
 import json
-from typing import cast
+from typing import TYPE_CHECKING, Any, Callable, ClassVar, cast
 
 from jinja2 import TemplateSyntaxError, nodes
 from jinja2.ext import Extension
@@ -12,6 +11,8 @@ from pydantic import ValidationError
 from banks.errors import InvalidPromptError, LLMError
 from banks.types import ChatMessage, Tool
 
+if TYPE_CHECKING:
+    from litellm.types.utils import ChatCompletionMessageToolCall
 SUPPORTED_KWARGS = ("model",)
 LITELLM_INSTALL_MSG = "litellm is not installed. Please install it with `pip install litellm`."
 
@@ -38,6 +39,14 @@ class CompletionExtension(Extension):
 
     # a set of names that trigger the extension.
     tags = {"completion"}  # noqa
+
+    # Maps tool function name → callable; populated by the `tool` filter at render time.
+    # Resolution never goes through importlib — only callables registered here are invocable.
+    _callable_registry: ClassVar[dict[str, Callable[..., Any]]] = {}
+
+    @classmethod
+    def register_callable(cls, name: str, func: Callable[..., Any]) -> None:
+        cls._callable_registry[name] = func
 
     def parse(self, parser):
         # We get the line number of the first token for error reporting
@@ -74,14 +83,27 @@ class CompletionExtension(Extension):
             return nodes.CallBlock(self.call_method("_do_completion_async", args), [], [], body).set_lineno(lineno)
         return nodes.CallBlock(self.call_method("_do_completion", args), [], [], body).set_lineno(lineno)
 
-    def _get_tool_callable(self, tools, tool_call):
-        for tool in tools:
-            if tool.function.name == tool_call.function.name:
-                module_name, func_name = tool.import_path.rsplit(".", maxsplit=1)
-                module = importlib.import_module(module_name)
-                return getattr(module, func_name)
-        msg = f"Function {tool_call.function.name} not found in available tools"
-        raise ValueError(msg)
+    def _get_tool_callable(self, tools: list[Tool], tool_call: "ChatCompletionMessageToolCall") -> Callable[..., Any]:
+        """Get the callable function for a tool call.
+
+        Args:
+            tools: List of available tools
+            tool_call: The tool call from the LLM response
+
+        Returns:
+            The callable function
+
+        Raises:
+            ValueError: If the function is not found in available tools or not registered
+        """
+        name = tool_call.function.name
+        if not any(t.function.name == name for t in tools):
+            msg = f"Function {name} not found in available tools"
+            raise ValueError(msg)
+        if name not in self._callable_registry:
+            msg = f"Function {name!r} is not registered"
+            raise ValueError(msg)
+        return self._callable_registry[name]
 
     def _do_completion(self, model_name, caller):
         """
@@ -95,7 +117,7 @@ class CompletionExtension(Extension):
 
         messages, tools = self._body_to_messages(caller())
         message_dicts = [m.model_dump() for m in messages]
-        tool_dicts = [t.model_dump() for t in tools] or None
+        tool_dicts = [t.model_dump(exclude={"import_path"}) for t in tools] or None
 
         response = cast(ModelResponse, completion(model=model_name, messages=message_dicts, tools=tool_dicts))
         choices = cast(list[Choices], response.choices)
@@ -135,7 +157,7 @@ class CompletionExtension(Extension):
 
         messages, tools = self._body_to_messages(caller())
         message_dicts = [m.model_dump() for m in messages]
-        tool_dicts = [t.model_dump() for t in tools] or None
+        tool_dicts = [t.model_dump(exclude={"import_path"}) for t in tools] or None
 
         response = cast(ModelResponse, await acompletion(model=model_name, messages=message_dicts, tools=tool_dicts))
         choices = cast(list[Choices], response.choices)

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 # Standard library imports
-import codecs
 import os
 import shlex
 import signal
@@ -12,7 +11,7 @@ import time
 from shutil import which
 
 # Local imports
-from .winpty import PTY
+from ._winpty import PTY
 
 
 class PtyProcess(object):
@@ -351,7 +350,7 @@ def _read_in_thread(address, pty: PTY, blocking: bool):
 
     while 1:
         try:
-            data = pty.read(blocking=blocking) or b'0011Ignore'
+            data = pty.read(blocking=blocking) or '0011Ignore'
             try:
                 client.send(bytes(data, 'utf-8'))
             except socket.error:
@@ -363,8 +362,7 @@ def _read_in_thread(address, pty: PTY, blocking: bool):
                     client.send(b'')
                 except socket.error:
                     pass
-                finally:
-                    break
+                break
 
             call += 1
         except Exception as e:

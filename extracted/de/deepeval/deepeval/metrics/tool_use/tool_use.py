@@ -3,35 +3,34 @@ import asyncio
 from deepeval.utils import get_or_create_event_loop, prettify_list
 from deepeval.metrics.utils import (
     construct_verbose_logs,
-    trimAndLoadJson,
     get_unit_interactions,
-    print_tools_called,
     check_conversational_test_case_params,
     initialize_model,
+    a_generate_with_schema_and_extract,
+    generate_with_schema_and_extract,
 )
 from deepeval.test_case import (
     ConversationalTestCase,
-    TurnParams,
+    MultiTurnParams,
     ToolCall,
     Turn,
 )
 from deepeval.metrics import BaseConversationalMetric
 from deepeval.models import DeepEvalBaseLLM
 from deepeval.metrics.indicator import metric_progress_indicator
-from deepeval.metrics.tool_use.template import ToolUseTemplate
 from deepeval.metrics.tool_use.schema import (
     ToolSelectionScore,
     UserInputAndTools,
     ArgumentCorrectnessScore,
+    Reason,
 )
-from deepeval.metrics.api import metric_data_manager
 
 
 class ToolUseMetric(BaseConversationalMetric):
 
     _required_test_case_params = [
-        TurnParams.ROLE,
-        TurnParams.CONTENT,
+        MultiTurnParams.ROLE,
+        MultiTurnParams.CONTENT,
     ]
 
     def __init__(
@@ -61,10 +60,17 @@ class ToolUseMetric(BaseConversationalMetric):
         _log_metric_to_confident: bool = True,
     ):
         check_conversational_test_case_params(
-            test_case, self._required_test_case_params, self
+            test_case,
+            self._required_test_case_params,
+            self,
+            False,
+            self.model,
+            test_case.multimodal,
         )
 
         self.evaluation_cost = 0 if self.using_native_model else None
+        self.input_tokens = 0 if self.using_native_model else None
+        self.output_tokens = 0 if self.using_native_model else None
         with metric_progress_indicator(
             self, _show_indicator=_show_indicator, _in_component=_in_component
         ):
@@ -84,11 +90,15 @@ class ToolUseMetric(BaseConversationalMetric):
                     unit_interactions
                 )
                 tool_selection_scores = [
-                    self._get_tool_selection_score(user_and_tools)
+                    self._get_tool_selection_score(
+                        user_and_tools, multimodal=test_case.multimodal
+                    )
                     for user_and_tools in user_input_and_tools
                 ]
                 argument_correctness_scores = [
-                    self._get_argument_correctness_score(user_and_tools)
+                    self._get_argument_correctness_score(
+                        user_and_tools, multimodal=test_case.multimodal
+                    )
                     for user_and_tools in user_input_and_tools
                     if user_and_tools.tools_used
                 ]
@@ -97,12 +107,13 @@ class ToolUseMetric(BaseConversationalMetric):
                 )
                 tool_selection_reason = (
                     self._generate_reason_for_tool_selection(
-                        tool_selection_scores
+                        tool_selection_scores, multimodal=test_case.multimodal
                     )
                 )
                 argument_correctness_reason = (
                     self._generate_reason_for_argument_correctness(
-                        argument_correctness_scores
+                        argument_correctness_scores,
+                        multimodal=test_case.multimodal,
                     )
                 )
                 self.reason = str(
@@ -121,11 +132,6 @@ class ToolUseMetric(BaseConversationalMetric):
                     ],
                 )
 
-                if _log_metric_to_confident:
-                    metric_data_manager.post_metric_if_enabled(
-                        self, test_case=test_case
-                    )
-
                 return self.score
 
     async def a_measure(
@@ -136,10 +142,17 @@ class ToolUseMetric(BaseConversationalMetric):
         _log_metric_to_confident: bool = True,
     ):
         check_conversational_test_case_params(
-            test_case, self._required_test_case_params, self
+            test_case,
+            self._required_test_case_params,
+            self,
+            False,
+            self.model,
+            test_case.multimodal,
         )
 
         self.evaluation_cost = 0 if self.using_native_model else None
+        self.input_tokens = 0 if self.using_native_model else None
+        self.output_tokens = 0 if self.using_native_model else None
         with metric_progress_indicator(
             self,
             async_mode=True,
@@ -152,13 +165,17 @@ class ToolUseMetric(BaseConversationalMetric):
             )
             tool_selection_scores = await asyncio.gather(
                 *[
-                    self._a_get_tool_selection_score(user_and_tools)
+                    self._a_get_tool_selection_score(
+                        user_and_tools, multimodal=test_case.multimodal
+                    )
                     for user_and_tools in user_input_and_tools
                 ]
             )
             argument_correctness_scores = await asyncio.gather(
                 *[
-                    self._a_get_argument_correctness_score(user_and_tools)
+                    self._a_get_argument_correctness_score(
+                        user_and_tools, multimodal=test_case.multimodal
+                    )
                     for user_and_tools in user_input_and_tools
                     if user_and_tools.tools_used
                 ]
@@ -168,12 +185,13 @@ class ToolUseMetric(BaseConversationalMetric):
             )
             tool_selection_reason = (
                 await self._a_generate_reason_for_tool_selection(
-                    tool_selection_scores
+                    tool_selection_scores, multimodal=test_case.multimodal
                 )
             )
             argument_correctness_reason = (
                 await self._a_generate_reason_for_argument_correctness(
-                    argument_correctness_scores
+                    argument_correctness_scores,
+                    multimodal=test_case.multimodal,
                 )
             )
             self.reason = str(
@@ -190,117 +208,92 @@ class ToolUseMetric(BaseConversationalMetric):
                 ],
             )
 
-            if _log_metric_to_confident:
-                metric_data_manager.post_metric_if_enabled(
-                    self, test_case=test_case
-                )
-
             return self.score
 
     def _get_argument_correctness_score(
-        self, user_and_tools: UserInputAndTools
+        self, user_and_tools: UserInputAndTools, *, multimodal: bool
     ):
-        prompt = ToolUseTemplate.get_argument_correctness_score(
-            user_and_tools.user_messages,
-            user_and_tools.assistant_messages,
-            user_and_tools.tools_called,
-            user_and_tools.available_tools,
+        prompt = self._get_prompt(
+            "get_argument_correctness_score",
+            user_input=user_and_tools.user_messages,
+            assistant_messages=user_and_tools.assistant_messages,
+            tools_called=user_and_tools.tools_called,
+            available_tools=user_and_tools.available_tools,
+            multimodal=multimodal,
         )
-        if self.using_native_model:
-            res, cost = self.model.generate(
-                prompt, schema=ArgumentCorrectnessScore
-            )
-            self.evaluation_cost += cost
-            return res
-        else:
-            try:
-                res: ArgumentCorrectnessScore = self.model.generate(
-                    prompt, schema=ArgumentCorrectnessScore
-                )
-                return res
-            except TypeError:
-                res = self.model.generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return ArgumentCorrectnessScore(**data)
+        return generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=ArgumentCorrectnessScore,
+            extract_schema=lambda s: s,
+            extract_json=lambda data: ArgumentCorrectnessScore(**data),
+        )
 
     async def _a_get_argument_correctness_score(
         self,
         user_and_tools: UserInputAndTools,
+        *,
+        multimodal: bool,
     ):
-        prompt = ToolUseTemplate.get_argument_correctness_score(
-            user_and_tools.user_messages,
-            user_and_tools.assistant_messages,
-            user_and_tools.tools_called,
-            user_and_tools.available_tools,
+        prompt = self._get_prompt(
+            "get_argument_correctness_score",
+            user_input=user_and_tools.user_messages,
+            assistant_messages=user_and_tools.assistant_messages,
+            tools_called=user_and_tools.tools_called,
+            available_tools=user_and_tools.available_tools,
+            multimodal=multimodal,
         )
-        if self.using_native_model:
-            res, cost = await self.model.a_generate(
-                prompt, schema=ArgumentCorrectnessScore
-            )
-            self.evaluation_cost += cost
-            return res
-        else:
-            try:
-                res: ArgumentCorrectnessScore = await self.model.a_generate(
-                    prompt, schema=ArgumentCorrectnessScore
-                )
-                return res
-            except TypeError:
-                res = await self.model.a_generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return ArgumentCorrectnessScore(**data)
+        return await a_generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=ArgumentCorrectnessScore,
+            extract_schema=lambda s: s,
+            extract_json=lambda data: ArgumentCorrectnessScore(**data),
+        )
 
     def _get_tool_selection_score(
         self,
         user_and_tools: UserInputAndTools,
+        *,
+        multimodal: bool,
     ):
-        prompt = ToolUseTemplate.get_tool_selection_score(
-            user_and_tools.user_messages,
-            user_and_tools.assistant_messages,
-            user_and_tools.tools_called,
-            user_and_tools.available_tools,
+        prompt = self._get_prompt(
+            "get_tool_selection_score",
+            user_input=user_and_tools.user_messages,
+            assistant_messages=user_and_tools.assistant_messages,
+            tools_called=user_and_tools.tools_called,
+            available_tools=user_and_tools.available_tools,
+            multimodal=multimodal,
         )
-        if self.using_native_model:
-            res, cost = self.model.generate(prompt, schema=ToolSelectionScore)
-            self.evaluation_cost += cost
-            return res
-        else:
-            try:
-                res: ToolSelectionScore = self.model.generate(
-                    prompt, schema=ToolSelectionScore
-                )
-                return res
-            except TypeError:
-                res = self.model.generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return ToolSelectionScore(**data)
+        return generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=ToolSelectionScore,
+            extract_schema=lambda s: s,
+            extract_json=lambda data: ToolSelectionScore(**data),
+        )
 
     async def _a_get_tool_selection_score(
         self,
         user_and_tools: UserInputAndTools,
+        *,
+        multimodal: bool,
     ):
-        prompt = ToolUseTemplate.get_tool_selection_score(
-            user_and_tools.user_messages,
-            user_and_tools.assistant_messages,
-            user_and_tools.tools_called,
-            user_and_tools.available_tools,
+        prompt = self._get_prompt(
+            "get_tool_selection_score",
+            user_input=user_and_tools.user_messages,
+            assistant_messages=user_and_tools.assistant_messages,
+            tools_called=user_and_tools.tools_called,
+            available_tools=user_and_tools.available_tools,
+            multimodal=multimodal,
         )
-        if self.using_native_model:
-            res, cost = await self.model.a_generate(
-                prompt, schema=ToolSelectionScore
-            )
-            self.evaluation_cost += cost
-            return res
-        else:
-            try:
-                res: ToolSelectionScore = await self.model.a_generate(
-                    prompt, schema=ToolSelectionScore
-                )
-                return res
-            except TypeError:
-                res = await self.model.a_generate(prompt)
-                data = trimAndLoadJson(res, self)
-                return ToolSelectionScore(**data)
+        return await a_generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=ToolSelectionScore,
+            extract_schema=lambda s: s,
+            extract_json=lambda data: ToolSelectionScore(**data),
+        )
 
     def _get_user_input_and_turns(
         self,
@@ -371,80 +364,104 @@ class ToolUseMetric(BaseConversationalMetric):
     def _generate_reason_for_tool_selection(
         self,
         tool_use_scores: List[ToolSelectionScore],
+        *,
+        multimodal: bool,
     ):
         scores_and_reasons = ""
         for tool_use in tool_use_scores:
             scores_and_reasons += (
                 f"\nScore: {tool_use.score} \nReason: {tool_use.reason} \n"
             )
-        prompt = ToolUseTemplate.get_tool_selection_final_reason(
-            scores_and_reasons, self.score, self.threshold
+        prompt = self._get_prompt(
+            "get_tool_selection_final_reason",
+            all_scores_and_reasons=scores_and_reasons,
+            final_score=self.score,
+            threshold=self.threshold,
+            multimodal=multimodal,
         )
-        if self.using_native_model:
-            res, cost = self.model.generate(prompt)
-            self.evaluation_cost += cost
-            return res
-        else:
-            res = self.model.generate(prompt)
-            return res
+
+        return generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=Reason,
+            extract_schema=lambda s: s.reason,
+            extract_json=lambda data: data["reason"],
+        )
 
     def _generate_reason_for_argument_correctness(
         self,
         argument_correctness_scores: List[ArgumentCorrectnessScore],
+        *,
+        multimodal: bool,
     ):
         scores_and_reasons = ""
         for tool_use in argument_correctness_scores:
             scores_and_reasons += (
                 f"\nScore: {tool_use.score} \nReason: {tool_use.reason} \n"
             )
-        prompt = ToolUseTemplate.get_tool_selection_final_reason(
-            scores_and_reasons, self.score, self.threshold
+        prompt = self._get_prompt(
+            "get_tool_selection_final_reason",
+            all_scores_and_reasons=scores_and_reasons,
+            final_score=self.score,
+            threshold=self.threshold,
+            multimodal=multimodal,
         )
-        if self.using_native_model:
-            res, cost = self.model.generate(prompt)
-            self.evaluation_cost += cost
-            return res
-        else:
-            res = self.model.generate(prompt)
-            return res
+        return generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=Reason,
+            extract_schema=lambda s: s.reason,
+            extract_json=lambda data: data["reason"],
+        )
 
     async def _a_generate_reason_for_tool_selection(
-        self, tool_use_scores: List[ToolSelectionScore]
+        self, tool_use_scores: List[ToolSelectionScore], *, multimodal: bool
     ):
         scores_and_reasons = ""
         for tool_use in tool_use_scores:
             scores_and_reasons += (
                 f"\nScore: {tool_use.score} \nReason: {tool_use.reason} \n"
             )
-        prompt = ToolUseTemplate.get_tool_selection_final_reason(
-            scores_and_reasons, self.score, self.threshold
+        prompt = self._get_prompt(
+            "get_tool_selection_final_reason",
+            all_scores_and_reasons=scores_and_reasons,
+            final_score=self.score,
+            threshold=self.threshold,
+            multimodal=multimodal,
         )
-        if self.using_native_model:
-            res, cost = await self.model.a_generate(prompt)
-            self.evaluation_cost += cost
-            return res
-        else:
-            res = await self.model.a_generate(prompt)
-            return res
+        return await a_generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=Reason,
+            extract_schema=lambda s: s.reason,
+            extract_json=lambda data: data["reason"],
+        )
 
     async def _a_generate_reason_for_argument_correctness(
-        self, argument_correctness_scores: List[ArgumentCorrectnessScore]
+        self,
+        argument_correctness_scores: List[ArgumentCorrectnessScore],
+        *,
+        multimodal: bool,
     ):
         scores_and_reasons = ""
         for tool_use in argument_correctness_scores:
             scores_and_reasons += (
                 f"\nScore: {tool_use.score} \nReason: {tool_use.reason} \n"
             )
-        prompt = ToolUseTemplate.get_tool_selection_final_reason(
-            scores_and_reasons, self.score, self.threshold
+        prompt = self._get_prompt(
+            "get_tool_selection_final_reason",
+            all_scores_and_reasons=scores_and_reasons,
+            final_score=self.score,
+            threshold=self.threshold,
+            multimodal=multimodal,
         )
-        if self.using_native_model:
-            res, cost = await self.model.a_generate(prompt)
-            self.evaluation_cost += cost
-            return res
-        else:
-            res = await self.model.a_generate(prompt)
-            return res
+        return await a_generate_with_schema_and_extract(
+            metric=self,
+            prompt=prompt,
+            schema_cls=Reason,
+            extract_schema=lambda s: s.reason,
+            extract_json=lambda data: data["reason"],
+        )
 
     def is_successful(self) -> bool:
         try:

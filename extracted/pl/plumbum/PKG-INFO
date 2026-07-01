@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: plumbum
-Version: 1.10.0
+Version: 2.0.1
 Summary: Plumbum: shell combinators library
 Project-URL: Homepage, https://github.com/tomerfiliba/plumbum
 Project-URL: Documentation, https://plumbum.readthedocs.io/
@@ -10,7 +10,7 @@ Project-URL: Cheatsheet, https://plumbum.readthedocs.io/en/latest/quickref.html
 Author-email: Tomer Filiba <tomerfiliba@gmail.com>
 License-Expression: MIT
 License-File: LICENSE
-Keywords: cli,color,execution,local,path,pipe,popen,process,remote,shell,ssh
+Keywords: async,asyncio,cli,color,execution,local,path,pipe,popen,process,remote,shell,ssh
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Operating System :: Microsoft :: Windows
 Classifier: Operating System :: POSIX
@@ -22,10 +22,12 @@ Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
 Classifier: Programming Language :: Python :: 3.14
+Classifier: Programming Language :: Python :: 3.15
 Classifier: Topic :: Software Development :: Build Tools
 Classifier: Topic :: System :: Systems Administration
+Classifier: Typing :: Typed
 Requires-Python: >=3.9
-Requires-Dist: pywin32; platform_system == 'Windows' and platform_python_implementation != 'PyPy'
+Requires-Dist: typing-extensions; python_version < '3.13'
 Provides-Extra: ssh
 Requires-Dist: paramiko; extra == 'ssh'
 Description-Content-Type: text/x-rst
@@ -89,7 +91,7 @@ Basics
     >>> local.cmd.ls
     LocalCommand(/bin/ls)
     >>> local.cmd.ls()
-    'build.py\nCHANGELOG.rst\nconda.recipe\nCONTRIBUTING.rst\ndocs\nexamples\nexperiments\nLICENSE\nMANIFEST.in\nPipfile\nplumbum\nplumbum.egg-info\npytest.ini\nREADME.rst\nsetup.cfg\nsetup.py\ntests\ntranslations.py\n'
+    'build.py\nCHANGELOG.rst\nCONTRIBUTING.rst\ndocs\nexamples\nexperiments\nLICENSE\nMANIFEST.in\nPipfile\nplumbum\nplumbum.egg-info\npytest.ini\nREADME.rst\nsetup.cfg\nsetup.py\ntests\ntranslations.py\n'
     >>> notepad = local["c:\\windows\\notepad.exe"]
     >>> notepad()                                   # Notepad window pops up
     ''                                              # Notepad window is closed by user, command returns
