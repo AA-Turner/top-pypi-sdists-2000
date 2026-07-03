@@ -919,28 +919,6 @@ TEST(Core_UMat, getUMat)
         EXPECT_EQ(0., err);
     }
 }
-#include "test_precomp.hpp"
-
-TEST(Core_UMat, construct_from_vector)
-{
-    std::vector<int> src = {1, 2, 3, 4};
-    UMat um(src); // copyData parameter is deprecated and ignored
-
-    src[0] = 100; // modify source to ensure data was copied
-
-    Mat result;
-    um.copyTo(result);
-
-    ASSERT_EQ(4, result.rows);
-    ASSERT_EQ(1, result.cols);
-    ASSERT_EQ(CV_32S, result.type());
-    EXPECT_EQ(1, result.at<int>(0));
-    EXPECT_EQ(2, result.at<int>(1));
-    EXPECT_EQ(3, result.at<int>(2));
-    EXPECT_EQ(4, result.at<int>(3));
-}
-
-
 
 TEST(UMat, Sync)
 {
@@ -1199,6 +1177,14 @@ TEST(UMat, async_cleanup_without_call_chain_warning)
     }
 }
 
+TEST(UMat, copyToConvertTo_Empty)
+{
+    cv::UMat A(0, 0, CV_16SC2), B, C;
+    A.copyTo(B);
+    ASSERT_EQ(A.type(), B.type());
+    A.convertTo(C, CV_32SC2);
+    ASSERT_EQ(C.type(), CV_32SC2);
+}
 
 ///////////// oclCleanupCallback threadsafe check (#5062) /////////////////////
 
@@ -1474,6 +1460,16 @@ TEST(UMat, exceptions_refcounts_issue_20594)
     umat1.u->handle = original_handle;
 }
 
-#include "test_precomp.hpp"
+TEST(UMat, copy_scalar)
+{
+    Mat m(0, nullptr, CV_32F), m2;
+    m.at<float>(0) = 5;
+    UMat um;
+    m.copyTo(um);
+    um.copyTo(m2);
+    EXPECT_EQ(0, m2.dims);
+    EXPECT_EQ(1, m2.cols);
+    EXPECT_EQ(5.f, m2.at<float>(0));
+}
 
 } } // namespace opencv_test::ocl

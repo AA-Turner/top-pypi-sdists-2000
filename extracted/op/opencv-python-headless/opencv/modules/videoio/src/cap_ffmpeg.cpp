@@ -74,6 +74,11 @@ public:
     {
         open(filename, params);
     }
+    CvCapture_FFMPEG_proxy(int index, const cv::VideoCaptureParameters& params)
+        : ffmpegCapture(NULL)
+    {
+        open(index, params);
+    }
     CvCapture_FFMPEG_proxy(const Ptr<IStreamReader>& stream, const cv::VideoCaptureParameters& params)
         : ffmpegCapture(NULL)
     {
@@ -83,7 +88,7 @@ public:
 
     virtual double getProperty_(int propId) const CV_OVERRIDE
     {
-        return ffmpegCapture ? icvGetCaptureProperty_FFMPEG_p(ffmpegCapture, propId) : 0;
+        return ffmpegCapture ? icvGetCaptureProperty_FFMPEG_p(ffmpegCapture, propId) : static_cast<double>(CAP_PROP_UNKNOWN);
     }
     virtual bool setProperty_(int propId, double value) CV_OVERRIDE
     {
@@ -127,6 +132,13 @@ public:
         ffmpegCapture = cvCreateFileCaptureWithParams_FFMPEG(filename.c_str(), params);
         return ffmpegCapture != 0;
     }
+    bool open(int index, const cv::VideoCaptureParameters& params)
+    {
+        close();
+
+        ffmpegCapture = cvCreateFileCaptureWithParams_FFMPEG(index, params);
+        return ffmpegCapture != 0;
+    }
     bool open(const Ptr<IStreamReader>& stream, const cv::VideoCaptureParameters& params)
     {
         close();
@@ -161,6 +173,14 @@ cv::Ptr<cv::IVideoCapture> cvCreateFileCapture_FFMPEG_proxy(const std::string &f
     return cv::Ptr<cv::IVideoCapture>();
 }
 
+cv::Ptr<cv::IVideoCapture> cvCreateCameraCapture_FFMPEG_proxy(int index, const cv::VideoCaptureParameters& params)
+{
+    cv::Ptr<CvCapture_FFMPEG_proxy> capture = cv::makePtr<CvCapture_FFMPEG_proxy>(index, params);
+    if (capture && capture->isOpened())
+        return capture;
+    return cv::Ptr<cv::IVideoCapture>();
+}
+
 cv::Ptr<cv::IVideoCapture> cvCreateStreamCapture_FFMPEG_proxy(const Ptr<IStreamReader>& stream, const cv::VideoCaptureParameters& params)
 {
     cv::Ptr<CvCapture_FFMPEG_proxy> capture = std::make_shared<CvCapture_FFMPEG_proxy>(stream, params);
@@ -181,21 +201,25 @@ public:
 
     int getCaptureDomain() const CV_OVERRIDE { return cv::CAP_FFMPEG; }
 
-    virtual void write(cv::InputArray image ) CV_OVERRIDE
+    virtual bool write(cv::InputArray image ) CV_OVERRIDE
     {
         if(!ffmpegWriter)
-            return;
+            return false;
         CV_Assert(image.depth() == CV_8U || image.depth() == CV_16U);
 
         // if UMat, try GPU to GPU copy using OpenCL extensions
         if (image.isUMat()) {
             if (ffmpegWriter->writeHWFrame(image)) {
-                return;
+                return true;
             }
         }
 
         if (!icvWriteFrame_FFMPEG_p(ffmpegWriter, (const uchar*)image.getMat().ptr(), (int)image.step(), image.cols(), image.rows(), image.channels(), 0))
+        {
             CV_LOG_WARNING(NULL, "FFmpeg: Failed to write frame");
+            return false;
+        }
+        return true;
     }
     virtual bool open( const cv::String& filename, int fourcc, double fps, cv::Size frameSize, const VideoWriterParameters& params )
     {
@@ -214,7 +238,7 @@ public:
 
     virtual double getProperty(int propId) const CV_OVERRIDE {
         if(!ffmpegWriter)
-            return 0;
+            return VIDEOWRITER_PROP_UNKNOWN;
         return ffmpegWriter->getProperty(propId);
     }
 
@@ -272,13 +296,15 @@ CvResult CV_API_CALL cv_capture_open(const char* filename, int camera_index, CV_
     if (!handle)
         return CV_ERROR_FAIL;
     *handle = NULL;
-    if (!filename)
+    if (!filename && camera_index < 0)
         return CV_ERROR_FAIL;
-    CV_UNUSED(camera_index);
     CvCapture_FFMPEG_proxy *cap = 0;
     try
     {
-        cap = new CvCapture_FFMPEG_proxy(String(filename), cv::VideoCaptureParameters());
+        if (filename)
+            cap = new CvCapture_FFMPEG_proxy(String(filename), cv::VideoCaptureParameters());
+        else
+            cap = new CvCapture_FFMPEG_proxy(camera_index, cv::VideoCaptureParameters());
         if (cap->isOpened())
         {
             *handle = (CvPluginCapture)cap;
@@ -308,14 +334,16 @@ CvResult CV_API_CALL cv_capture_open_with_params(
     if (!handle)
         return CV_ERROR_FAIL;
     *handle = NULL;
-    if (!filename)
+    if (!filename && camera_index < 0)
         return CV_ERROR_FAIL;
-    CV_UNUSED(camera_index);
     CvCapture_FFMPEG_proxy *cap = 0;
     try
     {
         cv::VideoCaptureParameters parameters(params, n_params);
-        cap = new CvCapture_FFMPEG_proxy(String(filename), parameters);
+        if (filename)
+            cap = new CvCapture_FFMPEG_proxy(String(filename), parameters);
+        else
+            cap = new CvCapture_FFMPEG_proxy(camera_index, parameters);
         if (cap->isOpened())
         {
             *handle = (CvPluginCapture)cap;
@@ -415,7 +443,15 @@ CvResult CV_API_CALL cv_capture_set_prop(CvPluginCapture handle, int prop, doubl
     try
     {
         CvCapture_FFMPEG_proxy* instance = (CvCapture_FFMPEG_proxy*)handle;
-        return instance->setProperty(prop, val) ? CV_ERROR_OK : CV_ERROR_FAIL;
+        if (instance->setProperty(prop, val))
+        {
+            return CV_ERROR_OK;
+        }
+        else
+        {
+            CV_LOG_INFO(NULL, "FFmpeg: Unsupported property or value: prop=" << prop << " val=" << val);
+            return CV_ERROR_FAIL;
+        }
     }
     catch (const std::exception& e)
     {
@@ -567,8 +603,14 @@ CvResult CV_API_CALL cv_writer_get_prop(CvPluginWriter handle, int prop, CV_OUT 
         *val = instance->getProperty(prop);
         return CV_ERROR_OK;
     }
+    catch (const std::exception& e)
+    {
+        CV_LOG_WARNING(NULL, "FFmpeg: Exception is raised: " << e.what());
+        return CV_ERROR_FAIL;
+    }
     catch (...)
     {
+        CV_LOG_WARNING(NULL, "FFmpeg: Unknown C++ exception is raised");
         return CV_ERROR_FAIL;
     }
 }
@@ -581,13 +623,26 @@ CvResult CV_API_CALL cv_writer_set_prop(CvPluginWriter handle, int prop, double 
     try
     {
         CvVideoWriter_FFMPEG_proxy* instance = (CvVideoWriter_FFMPEG_proxy*)handle;
-        return (instance->setProperty(prop, val) ? CV_ERROR_OK : CV_ERROR_FAIL);
+        if (instance->setProperty(prop, val))
+        {
+            return CV_ERROR_OK;
+        }
+        else
+        {
+            CV_LOG_INFO(NULL, "FFmpeg: Unsupported property or value: prop=" << prop << " val=" << val);
+            return CV_ERROR_FAIL;
+        }
+    }
+    catch (const std::exception& e)
+    {
+        CV_LOG_WARNING(NULL, "FFmpeg: Exception is raised: " << e.what());
+        return CV_ERROR_FAIL;
     }
     catch (...)
     {
+        CV_LOG_WARNING(NULL, "FFmpeg: Unknown C++ exception is raised");
         return CV_ERROR_FAIL;
     }
-    return CV_ERROR_FAIL;
 }
 
 static

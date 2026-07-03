@@ -46,6 +46,8 @@
 #include <atomic>
 #include <limits>
 #include <iostream>
+#include <algorithm>
+#include <cmath>
 #include "mathfuncs.hpp"
 
 namespace cv
@@ -79,7 +81,7 @@ static bool ocl_math_op(InputArray _src1, InputArray _src2, OutputArray _dst, in
         return false;
 
     UMat src1 = _src1.getUMat(), src2 = _src2.getUMat();
-    _dst.create(src1.size(), type);
+    _dst.createSameSize(src1, type);
     UMat dst = _dst.getUMat();
 
     ocl::KernelArg src1arg = ocl::KernelArg::ReadOnlyNoSize(src1),
@@ -101,7 +103,7 @@ static bool ocl_math_op(InputArray _src1, InputArray _src2, OutputArray _dst, in
    Fast cube root by Ken Turkowski
    (http://www.worldserver.com/turk/computergraphics/papers.html)
 \* ************************************************************************** */
-float  cubeRoot( float value )
+CV_DISABLE_UBSAN float cubeRoot( float value )
 {
     CV_INSTRUMENT_REGION();
 
@@ -155,7 +157,7 @@ void magnitude( InputArray src1, InputArray src2, OutputArray dst )
                ocl_math_op(src1, src2, dst, OCL_OP_MAG))
 
     Mat X = src1.getMat(), Y = src2.getMat();
-    dst.create(X.dims, X.size, X.type());
+    dst.create(X.size, X.type());
     Mat Mag = dst.getMat();
 
     const Mat* arrays[] = {&X, &Y, &Mag, 0};
@@ -191,7 +193,7 @@ void phase( InputArray src1, InputArray src2, OutputArray dst, bool angleInDegre
                ocl_math_op(src1, src2, dst, angleInDegrees ? OCL_OP_PHASE_DEGREES : OCL_OP_PHASE_RADIANS))
 
     Mat X = src1.getMat(), Y = src2.getMat();
-    dst.create( X.dims, X.size, type );
+    dst.create( X.size, type );
     Mat Angle = dst.getMat();
 
     const Mat* arrays[] = {&X, &Y, &Angle, 0};
@@ -288,8 +290,8 @@ void cartToPolar( InputArray src1, InputArray src2,
     Mat X = src1.getMat(), Y = src2.getMat();
     int type = X.type(), depth = X.depth(), cn = X.channels();
     CV_Assert( X.size == Y.size && type == Y.type() && (depth == CV_32F || depth == CV_64F));
-    dst1.create( X.dims, X.size, type );
-    dst2.create( X.dims, X.size, type );
+    dst1.create( X.size, type );
+    dst2.create( X.size, type );
     Mat Mag = dst1.getMat(), Angle = dst2.getMat();
 
     const Mat* arrays[] = {&X, &Y, &Mag, &Angle, 0};
@@ -393,8 +395,8 @@ void polarToCart( InputArray src1, InputArray src2,
 
     Mat Mag = src1.getMat(), Angle = src2.getMat();
     CV_Assert( Mag.empty() || Angle.size == Mag.size);
-    dst1.create( Angle.dims, Angle.size, type );
-    dst2.create( Angle.dims, Angle.size, type );
+    dst1.create( Angle.size, type );
+    dst2.create( Angle.size, type );
     Mat X = dst1.getMat(), Y = dst2.getMat();
 
     const Mat* arrays[] = {&Mag, &Angle, &X, &Y, 0};
@@ -445,7 +447,7 @@ void exp( InputArray _src, OutputArray _dst )
                ocl_math_op(_src, noArray(), _dst, OCL_OP_EXP))
 
     Mat src = _src.getMat();
-    _dst.create( src.dims, src.size, type );
+    _dst.create( src.size, type );
     Mat dst = _dst.getMat();
 
     const Mat* arrays[] = {&src, &dst, 0};
@@ -478,7 +480,7 @@ void log( InputArray _src, OutputArray _dst )
                 ocl_math_op(_src, noArray(), _dst, OCL_OP_LOG))
 
     Mat src = _src.getMat();
-    _dst.create( src.dims, src.size, type );
+    _dst.create( src.size, type );
     Mat dst = _dst.getMat();
 
     const Mat* arrays[] = {&src, &dst, 0};
@@ -977,7 +979,7 @@ static bool ocl_pow(InputArray _src, double power, OutputArray _dst,
         return false;
 
     UMat src = _src.getUMat();
-    _dst.create(src.size(), type);
+    _dst.createSameSize(src, type);
     UMat dst = _dst.getUMat();
 
     ocl::KernelArg srcarg = ocl::KernelArg::ReadOnlyNoSize(src),
@@ -1032,7 +1034,7 @@ void pow( InputArray _src, double power, OutputArray _dst )
     CV_OCL_RUN(useOpenCL, ocl_pow(_src, power, _dst, is_ipower, ipower))
 
     Mat src = _src.getMat();
-    _dst.create( src.dims, src.size, type );
+    _dst.create( src.size, type );
     Mat dst = _dst.getMat();
 
     const Mat* arrays[] = {&src, &dst, 0};
@@ -1356,170 +1358,7 @@ bool checkRange(InputArray _src, bool quiet, Point* pt, double minVal, double ma
     return true;
 }
 
-#ifdef HAVE_OPENCL
-
-static bool ocl_patchNaNs( InputOutputArray _a, float value )
-{
-    int rowsPerWI = ocl::Device::getDefault().isIntel() ? 4 : 1;
-    ocl::Kernel k("KF", ocl::core::arithm_oclsrc,
-                     format("-D UNARY_OP -D OP_PATCH_NANS -D dstT=float -D DEPTH_dst=%d -D rowsPerWI=%d",
-                            CV_32F, rowsPerWI));
-    if (k.empty())
-        return false;
-
-    UMat a = _a.getUMat();
-    int cn = a.channels();
-
-    k.args(ocl::KernelArg::ReadOnlyNoSize(a),
-           ocl::KernelArg::WriteOnly(a, cn), (float)value);
-
-    size_t globalsize[2] = { (size_t)a.cols * cn, ((size_t)a.rows + rowsPerWI - 1) / rowsPerWI };
-    return k.run(2, globalsize, NULL, false);
-}
-
-#endif
-
-void patchNaNs( InputOutputArray _a, double _val )
-{
-    CV_INSTRUMENT_REGION();
-
-    CV_Assert( _a.depth() == CV_32F );
-
-    CV_OCL_RUN(_a.isUMat() && _a.dims() <= 2,
-               ocl_patchNaNs(_a, (float)_val))
-
-    Mat a = _a.getMat();
-    const Mat* arrays[] = {&a, 0};
-    int* ptrs[1] = {};
-    NAryMatIterator it(arrays, (uchar**)ptrs);
-    int len = (int)(it.size*a.channels());
-    Cv32suf val;
-    val.f = (float)_val;
-
-    for( size_t i = 0; i < it.nplanes; i++, ++it )
-    {
-        int* tptr = ptrs[0];
-        int j = 0;
-
-#if (CV_SIMD || CV_SIMD_SCALABLE)
-        v_int32 v_pos_mask = vx_setall_s32(0x7fffffff), v_exp_mask = vx_setall_s32(0x7f800000);
-        v_int32 v_val = vx_setall_s32(val.i);
-
-        int cWidth = VTraits<v_int32>::vlanes();
-        for (; j < len - cWidth * 2 + 1; j += cWidth * 2)
-        {
-            v_int32 v_src0 = vx_load(tptr + j);
-            v_int32 v_src1 = vx_load(tptr + j + cWidth);
-
-            v_int32 v_cmp_mask0 = v_lt(v_exp_mask, v_and(v_src0, v_pos_mask));
-            v_int32 v_cmp_mask1 = v_lt(v_exp_mask, v_and(v_src1, v_pos_mask));
-
-            if (v_check_any(v_or(v_cmp_mask0, v_cmp_mask1)))
-            {
-                v_int32 v_dst0 = v_select(v_cmp_mask0, v_val, v_src0);
-                v_int32 v_dst1 = v_select(v_cmp_mask1, v_val, v_src1);
-
-                v_store(tptr + j, v_dst0);
-                v_store(tptr + j + cWidth, v_dst1);
-            }
-        }
-#endif
-
-        for( ; j < len; j++ )
-            if( (tptr[j] & 0x7fffffff) > 0x7f800000 )
-                tptr[j] = val.i;
-    }
-}
-
-}
-
-
-#ifndef OPENCV_EXCLUDE_C_API
-
-CV_IMPL float cvCbrt(float value) { return cv::cubeRoot(value); }
-CV_IMPL float cvFastArctan(float y, float x) { return cv::fastAtan2(y, x); }
-
-CV_IMPL void
-cvCartToPolar( const CvArr* xarr, const CvArr* yarr,
-               CvArr* magarr, CvArr* anglearr,
-               int angle_in_degrees )
-{
-    cv::Mat X = cv::cvarrToMat(xarr), Y = cv::cvarrToMat(yarr), Mag, Angle;
-    if( magarr )
-    {
-        Mag = cv::cvarrToMat(magarr);
-        CV_Assert( Mag.size() == X.size() && Mag.type() == X.type() );
-    }
-    if( anglearr )
-    {
-        Angle = cv::cvarrToMat(anglearr);
-        CV_Assert( Angle.size() == X.size() && Angle.type() == X.type() );
-    }
-    if( magarr )
-    {
-        if( anglearr )
-            cv::cartToPolar( X, Y, Mag, Angle, angle_in_degrees != 0 );
-        else
-            cv::magnitude( X, Y, Mag );
-    }
-    else
-        cv::phase( X, Y, Angle, angle_in_degrees != 0 );
-}
-
-CV_IMPL void
-cvPolarToCart( const CvArr* magarr, const CvArr* anglearr,
-               CvArr* xarr, CvArr* yarr, int angle_in_degrees )
-{
-    cv::Mat X, Y, Angle = cv::cvarrToMat(anglearr), Mag;
-    if( magarr )
-    {
-        Mag = cv::cvarrToMat(magarr);
-        CV_Assert( Mag.size() == Angle.size() && Mag.type() == Angle.type() );
-    }
-    if( xarr )
-    {
-        X = cv::cvarrToMat(xarr);
-        CV_Assert( X.size() == Angle.size() && X.type() == Angle.type() );
-    }
-    if( yarr )
-    {
-        Y = cv::cvarrToMat(yarr);
-        CV_Assert( Y.size() == Angle.size() && Y.type() == Angle.type() );
-    }
-
-    cv::polarToCart( Mag, Angle, X, Y, angle_in_degrees != 0 );
-}
-
-CV_IMPL void cvExp( const CvArr* srcarr, CvArr* dstarr )
-{
-    cv::Mat src = cv::cvarrToMat(srcarr), dst = cv::cvarrToMat(dstarr);
-    CV_Assert( src.type() == dst.type() && src.size == dst.size );
-    cv::exp( src, dst );
-}
-
-CV_IMPL void cvLog( const CvArr* srcarr, CvArr* dstarr )
-{
-    cv::Mat src = cv::cvarrToMat(srcarr), dst = cv::cvarrToMat(dstarr);
-    CV_Assert( src.type() == dst.type() && src.size == dst.size );
-    cv::log( src, dst );
-}
-
-CV_IMPL void cvPow( const CvArr* srcarr, CvArr* dstarr, double power )
-{
-    cv::Mat src = cv::cvarrToMat(srcarr), dst = cv::cvarrToMat(dstarr);
-    CV_Assert( src.type() == dst.type() && src.size == dst.size );
-    cv::pow( src, power, dst );
-}
-
-CV_IMPL int cvCheckArr( const CvArr* arr, int flags,
-                        double minVal, double maxVal )
-{
-    if( (flags & CV_CHECK_RANGE) == 0 )
-        minVal = -DBL_MAX, maxVal = DBL_MAX;
-    return cv::checkRange(cv::cvarrToMat(arr), (flags & CV_CHECK_QUIET) != 0, 0, minVal, maxVal );
-}
-
-#endif  // OPENCV_EXCLUDE_C_API
+} // namespace cv
 
 /*
   Finds real roots of cubic, quadratic or linear equation.
@@ -1586,12 +1425,21 @@ int cv::solveCubic( InputArray _coeffs, OutputArray _roots )
         a3 = coeffs.at<double>(i+3);
     }
 
-    if( a0 == 0 )
+    // Fix for Issue #27748: Normalize coefficients to avoid overflow/underflow
+    // and correctly detect negligible cubic terms.
+    double max_coeff = std::max({std::abs(a0), std::abs(a1), std::abs(a2), std::abs(a3)});
+
+    // If max_coeff is effectively zero, the equation is 0=0
+    if (max_coeff < std::numeric_limits<double>::epsilon())
+        return -1;
+
+    // Check if the cubic term is negligible relative to the largest coefficient
+    if( std::abs(a0) < std::numeric_limits<double>::epsilon() * max_coeff )
     {
-        if( a1 == 0 )
+        if( std::abs(a1) < std::numeric_limits<double>::epsilon() * max_coeff )
         {
-            if( a2 == 0 ) // constant
-                n = a3 == 0 ? -1 : 0;
+            if( std::abs(a2) < std::numeric_limits<double>::epsilon() * max_coeff )
+                n = std::abs(a3) < std::numeric_limits<double>::epsilon() * max_coeff ? -1 : 0;
             else
             {
                 // linear equation
@@ -1608,7 +1456,7 @@ int cv::solveCubic( InputArray _coeffs, OutputArray _roots )
                 d = std::sqrt(d);
                 double q1 = (-a2 + d) * 0.5;
                 double q2 = (a2 + d) * -0.5;
-                if( fabs(q1) > fabs(q2) )
+                if( std::abs(q1) > std::abs(q2) )
                 {
                     x0 = q1 / a1;
                     x1 = a3 / q1;
@@ -1625,6 +1473,13 @@ int cv::solveCubic( InputArray _coeffs, OutputArray _roots )
     else
     {
         // cubic equation
+        // Normalize coefficients in-place to prevent overflow/instability
+        double scale = 1.0 / max_coeff;
+        a0 *= scale;
+        a1 *= scale;
+        a2 *= scale;
+        a3 *= scale;
+
         a0 = 1./a0;
         a1 *= a0;
         a2 *= a0;
@@ -1633,6 +1488,7 @@ int cv::solveCubic( InputArray _coeffs, OutputArray _roots )
         double Q = (a1 * a1 - 3 * a2) * (1./9);
         double R = (a1 * (2 * a1 * a1 - 9 * a2) + 27 * a3) * (1./54);
         double Qcubed = Q * Q * Q;
+
         /*
           Here we expand expression `Qcubed - R * R` for `d` variable
           to reduce common terms `a1^6 / 729` and `-a1^4 * a2 / 81`
@@ -1656,16 +1512,8 @@ int cv::solveCubic( InputArray _coeffs, OutputArray _roots )
         }
         else if( d == 0 )
         {
-            if(R >= 0)
-            {
-                x0 = -2*pow(R, 1./3) - a1/3;
-                x1 = pow(R, 1./3) - a1/3;
-            }
-            else
-            {
-                x0 = 2*pow(-R, 1./3) - a1/3;
-                x1 = -pow(-R, 1./3) - a1/3;
-            }
+            x0 = -2*std::cbrt(R) - a1/3;
+            x1 = std::cbrt(R) - a1/3;
             x2 = 0;
             n = x0 == x1 ? 1 : 2;
             x1 = x0 == x1 ? 0 : x1;
@@ -1674,7 +1522,7 @@ int cv::solveCubic( InputArray _coeffs, OutputArray _roots )
         {
             double e;
             d = sqrt(-d);
-            e = pow(d + fabs(R), 1./3);
+            e = std::cbrt(d + fabs(R));
             if( R > 0 )
                 e = -e;
             x0 = (e + Q / e) - a1 * (1./3);
@@ -1737,7 +1585,40 @@ double cv::solvePoly( InputArray _coeffs0, OutputArray _roots0, int maxIters )
             break;
     }
 
-    C p(1, 0), r(1, 1);
+    // Related issue: https://github.com/opencv/opencv/issues/23644,
+    // This the initialization scheme of "Initial approximations in Durand-Kerner's root finding method" by Guggenheimer.
+    // https://link.springer.com/article/10.1007/BF01935059
+    // We put the initial points equidistantly on a circle on the complex plane. This code computes the circle radius as in the paper.
+    Mat absCoeffs(n + 1, 1, CV_64F);
+    for( i = 0; i <= n; i++ )
+        absCoeffs.at<double>(i) = abs(coeffs[i]);
+
+    int nonZeroCoeffs = 0;
+    Mat u(n, 1, CV_64F, Scalar(0)), v(n, 1, CV_64F, Scalar(0));
+    for( i = 0; i <= n; i++ )
+    {
+        double coeff = absCoeffs.at<double>(i);
+        if( coeff > DBL_EPSILON )
+        {
+            if( i != n )
+                u.at<double>(i) = 2.0 * pow(coeff / absCoeffs.at<double>(n), 1.0 / (n - i));
+            if( i != 0 )
+                v.at<double>(i - 1) = 0.5 * pow(absCoeffs.at<double>(0) / coeff, 1.0 / i);
+            nonZeroCoeffs++;
+        }
+    }
+    double scale = 1;
+    if( nonZeroCoeffs > 2 )
+    {
+        Point maxU, minV;
+        minMaxLoc(u, nullptr, nullptr, nullptr, &maxU);
+        minMaxLoc(v, nullptr, nullptr, &minV);
+        u.at<double>(maxU) = 0;
+        v.at<double>(minV) = 0;
+        scale = (sum(u).val[0] + sum(v).val[0]) / (2 * nonZeroCoeffs - 2);
+    }
+
+    C p(scale, 0), r(cos(CV_2PI / n), sin(CV_2PI / n));
 
     for( i = 0; i < n; i++ )
     {
@@ -1789,15 +1670,14 @@ double cv::solvePoly( InputArray _coeffs0, OutputArray _roots0, int maxIters )
                 if( num_same_root % 2 != 0){
                     Mat cube_coefs(4, 1, CV_64FC1);
                     Mat cube_roots(3, 1, CV_64FC2);
-                    cube_coefs.at<double>(3) = -(pow(old_num_re, 3));
-                    cube_coefs.at<double>(2) = -(15*pow(old_num_re, 2) + 27*pow(old_num_im, 2));
+                    cube_coefs.at<double>(3) = -(std::pow(old_num_re, 3));
+                    cube_coefs.at<double>(2) = -(15*std::pow(old_num_re, 2) + 27*std::pow(old_num_im, 2));
                     cube_coefs.at<double>(1) = -48*old_num_re;
                     cube_coefs.at<double>(0) = 64;
                     solveCubic(cube_coefs, cube_roots);
 
-                    if(cube_roots.at<double>(0) >= 0) num.re = pow(cube_roots.at<double>(0), 1./3);
-                    else num.re = -pow(-cube_roots.at<double>(0), 1./3);
-                    num.im = sqrt(pow(num.re, 2) / 3 - old_num_re / (3*num.re));
+                    num.re = std::cbrt(cube_roots.at<double>(0));
+                    num.im = sqrt(std::pow(num.re, 2) / 3 - old_num_re / (3*num.re));
                 }
             }
             roots[i] = p - num;
@@ -1821,31 +1701,6 @@ double cv::solvePoly( InputArray _coeffs0, OutputArray _roots0, int maxIters )
     Mat(roots0.size(), CV_64FC2, roots).convertTo(roots0, roots0.type());
     return maxDiff;
 }
-
-
-#ifndef OPENCV_EXCLUDE_C_API
-
-CV_IMPL int
-cvSolveCubic( const CvMat* coeffs, CvMat* roots )
-{
-    cv::Mat _coeffs = cv::cvarrToMat(coeffs), _roots = cv::cvarrToMat(roots), _roots0 = _roots;
-    int nroots = cv::solveCubic(_coeffs, _roots);
-    CV_Assert( _roots.data == _roots0.data ); // check that the array of roots was not reallocated
-    return nroots;
-}
-
-
-void cvSolvePoly(const CvMat* a, CvMat *r, int maxiter, int)
-{
-    cv::Mat _a = cv::cvarrToMat(a);
-    cv::Mat _r = cv::cvarrToMat(r);
-    cv::Mat _r0 = _r;
-    cv::solvePoly(_a, _r, maxiter);
-    CV_Assert( _r.data == _r0.data ); // check that the array of roots was not reallocated
-}
-
-#endif  // OPENCV_EXCLUDE_C_API
-
 
 // Common constants for dispatched code
 namespace cv { namespace details {

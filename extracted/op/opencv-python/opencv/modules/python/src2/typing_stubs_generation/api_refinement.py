@@ -2,13 +2,13 @@ __all__ = [
     "apply_manual_api_refinement"
 ]
 
-from typing import cast, Sequence, Callable, Iterable
+from typing import cast, Sequence, Callable, Iterable, Optional
 
 from .nodes import (NamespaceNode, FunctionNode, OptionalTypeNode, TypeNode,
                     ClassProperty, PrimitiveTypeNode, ASTNodeTypeNode,
                     AggregatedTypeNode, CallableTypeNode, AnyTypeNode,
                     TupleTypeNode, UnionTypeNode, ProtocolClassNode,
-                    DictTypeNode, ClassTypeNode)
+                    DictTypeNode, ClassTypeNode, AliasRefTypeNode)
 from .ast_utils import (find_function_node, SymbolName,
                         for_each_function_overload)
 from .types_conversion import create_type_node
@@ -27,6 +27,8 @@ def apply_manual_api_refinement(root: NamespaceNode) -> None:
         refine_symbol(root, symbol_name)
     version_constant = root.add_constant("__version__", "<unused>")
     version_constant._value_type = "str"
+
+    convert_returned_scalar_to_tuple(root)
 
     """
     def redirectError(
@@ -69,8 +71,8 @@ def make_optional_none_return(root_node: NamespaceNode,
 def export_matrix_type_constants(root: NamespaceNode) -> None:
     MAX_PREDEFINED_CHANNELS = 4
 
-    depth_names = ("CV_8U", "CV_8S", "CV_16U", "CV_16S", "CV_32S",
-                   "CV_32F", "CV_64F", "CV_16F")
+    depth_names = ("CV_8U", "CV_8S", "CV_16U", "CV_16S", "CV_32U", "CV_32S",
+                   "CV_64U", "CV_64S", "CV_32F", "CV_64F", "CV_16F", "CV_16BF" "CV_Bool")
     for depth_value, depth_name in enumerate(depth_names):
         # Export depth constants
         root.add_constant(depth_name, str(depth_value))
@@ -93,21 +95,61 @@ def export_matrix_type_constants(root: NamespaceNode) -> None:
     )
 
 
-def make_optional_arg(arg_name: str) -> Callable[[NamespaceNode, SymbolName], None]:
+def make_optional_arg(*arg_names: str) -> Callable[[NamespaceNode, SymbolName], None]:
     def _make_optional_arg(root_node: NamespaceNode,
                            function_symbol_name: SymbolName) -> None:
         function = find_function_node(root_node, function_symbol_name)
-        for overload in function.overloads:
-            arg_idx = _find_argument_index(overload.arguments, arg_name)
-            # Avoid multiplying optional qualification
-            if isinstance(overload.arguments[arg_idx].type_node, OptionalTypeNode):
-                continue
+        for arg_name in arg_names:
+            found_overload_with_arg = False
 
-            overload.arguments[arg_idx].type_node = OptionalTypeNode(
-                cast(TypeNode, overload.arguments[arg_idx].type_node)
-            )
+            for overload in function.overloads:
+                arg_idx = _find_argument_index(overload.arguments, arg_name)
+
+                # skip overloads without this argument
+                if arg_idx is None:
+                    continue
+
+                # Avoid multiplying optional qualification
+                if isinstance(overload.arguments[arg_idx].type_node, OptionalTypeNode):
+                    continue
+
+                overload.arguments[arg_idx].type_node = OptionalTypeNode(
+                    cast(TypeNode, overload.arguments[arg_idx].type_node)
+                )
+
+                found_overload_with_arg = True
+
+            if not found_overload_with_arg:
+                raise RuntimeError(
+                    f"Failed to find argument with name: '{arg_name}'"
+                    f" in '{function_symbol_name.name}' overloads"
+                )
 
     return _make_optional_arg
+
+
+def convert_returned_scalar_to_tuple(root: NamespaceNode) -> None:
+    """Force `tuple[float, float, float, float]` usage instead of Scalar alias
+    for return types due to `pyopencv_from` specialization for Scalar type.
+    """
+
+    float_4_tuple_node = TupleTypeNode(
+        "ScalarOutput",
+        items=(PrimitiveTypeNode.float_(),) * 4
+    )
+
+    def fix_scalar_return_type(fn: FunctionNode.Overload):
+        if fn.return_type is None:
+            return
+        if fn.return_type.type_node.typename == "Scalar":
+            fn.return_type.type_node = float_4_tuple_node
+
+    for overload in for_each_function_overload(root):
+        fix_scalar_return_type(overload)
+
+    for ns in root.namespaces.values():
+        for overload in for_each_function_overload(ns):
+            fix_scalar_return_type(overload)
 
 
 def refine_cuda_module(root: NamespaceNode) -> None:
@@ -327,21 +369,99 @@ def _trim_class_name_from_argument_types(
 
 
 def _find_argument_index(arguments: Sequence[FunctionNode.Arg],
-                         name: str) -> int:
+                         name: str) -> Optional[int]:
     for i, arg in enumerate(arguments):
         if arg.name == name:
             return i
-    raise RuntimeError(
-        f"Failed to find argument with name: '{name}' in {arguments}"
-    )
+    return None
+
+
+def make_matlike_or_scalar_arg(*arg_names: str) -> Callable[[NamespaceNode, SymbolName], None]:
+    """Make arguments accept both MatLike and Scalar types.
+
+    This is used for functions like inRange where the C++ InputArray parameter
+    can accept both Mat objects and Scalar values (tuples, floats, etc.).
+
+    Example: cv2.inRange(img, (0, 0, 0), (255, 255, 255)) should be valid.
+    """
+    def _make_matlike_or_scalar_arg(root_node: NamespaceNode,
+                                     function_symbol_name: SymbolName) -> None:
+        from .predefined_types import PREDEFINED_TYPES
+
+        function = find_function_node(root_node, function_symbol_name)
+        for arg_name in arg_names:
+            found_overload_with_arg = False
+
+            for overload in function.overloads:
+                arg_idx = _find_argument_index(overload.arguments, arg_name)
+
+                # skip overloads without this argument
+                if arg_idx is None:
+                    continue
+
+                current_type = overload.arguments[arg_idx].type_node
+
+                # Check if it's already a union or if it already includes Scalar
+                if isinstance(current_type, UnionTypeNode):
+                    # Check if Scalar is already in the union
+                    has_scalar = any(
+                        isinstance(item, AliasRefTypeNode) and item.typename == "Scalar"
+                        for item in current_type.items
+                    )
+                    if has_scalar:
+                        continue
+                    # Add Scalar to existing union
+                    scalar_ref = AliasRefTypeNode("Scalar")
+                    current_type.items = current_type.items + (scalar_ref,)
+                else:
+                    # Create a union of current type and Scalar
+                    scalar_ref = AliasRefTypeNode("Scalar")
+                    overload.arguments[arg_idx].type_node = UnionTypeNode(
+                        f"{arg_name}_type",
+                        (cast(TypeNode, current_type), scalar_ref)
+                    )
+
+                found_overload_with_arg = True
+
+            if not found_overload_with_arg:
+                raise RuntimeError(
+                    f"Failed to find argument with name: '{arg_name}'"
+                    f" in '{function_symbol_name.name}' overloads"
+                )
+
+    return _make_matlike_or_scalar_arg
 
 
 NODES_TO_REFINE = {
     SymbolName(("cv", ), (), "resize"): make_optional_arg("dsize"),
     SymbolName(("cv", ), (), "calcHist"): make_optional_arg("mask"),
     SymbolName(("cv", ), (), "floodFill"): make_optional_arg("mask"),
+    SymbolName(("cv", ), ("Feature2D", ), "detectAndCompute"): make_optional_arg("mask"),
+    SymbolName(("cv", ), (), "findEssentialMat"): make_optional_arg(
+        "distCoeffs1", "distCoeffs2", "dist_coeff1", "dist_coeff2"
+    ),
+    SymbolName(("cv", ), (), "drawFrameAxes"): make_optional_arg("distCoeffs"),
+    SymbolName(("cv", ), (), "getOptimalNewCameraMatrix"): make_optional_arg("distCoeffs"),
+    SymbolName(("cv", ), (), "initInverseRectificationMap"): make_optional_arg("distCoeffs", "R"),
+    SymbolName(("cv", ), (), "initUndistortRectifyMap"): make_optional_arg("distCoeffs", "R"),
+    SymbolName(("cv", ), (), "projectPoints"): make_optional_arg("distCoeffs"),
+    SymbolName(("cv", ), (), "solveP3P"): make_optional_arg("distCoeffs"),
+    SymbolName(("cv", ), (), "solvePnP"): make_optional_arg("distCoeffs"),
+    SymbolName(("cv", ), (), "solvePnPGeneric"): make_optional_arg("distCoeffs"),
+    SymbolName(("cv", ), (), "solvePnPRansac"): make_optional_arg("distCoeffs"),
+    SymbolName(("cv", ), (), "solvePnPRefineLM"): make_optional_arg("distCoeffs"),
+    SymbolName(("cv", ), (), "solvePnPRefineVVS"): make_optional_arg("distCoeffs"),
+    SymbolName(("cv", ), (), "undistort"): make_optional_arg("distCoeffs"),
+    SymbolName(("cv", ), (), "undistortPoints"): make_optional_arg("distCoeffs"),
+    SymbolName(("cv", ), (), "calibrateCamera"): make_optional_arg("cameraMatrix", "distCoeffs"),
+    SymbolName(("cv", "fisheye"), (), "initUndistortRectifyMap"): make_optional_arg("D"),
     SymbolName(("cv", ), (), "imread"): make_optional_none_return,
     SymbolName(("cv", ), (), "imdecode"): make_optional_none_return,
+    SymbolName(("cv", ), (), "HoughCircles"): make_optional_none_return,
+    SymbolName(("cv", ), (), "HoughLines"): make_optional_none_return,
+    SymbolName(("cv", ), (), "HoughLinesP"): make_optional_none_return,
+    # Fix for issue #28534: inRange should accept Scalar for lowerb and upperb
+    SymbolName(("cv", ), (), "inRange"): make_matlike_or_scalar_arg("lowerb", "upperb"),
 }
 
 ERROR_CLASS_PROPERTIES = (

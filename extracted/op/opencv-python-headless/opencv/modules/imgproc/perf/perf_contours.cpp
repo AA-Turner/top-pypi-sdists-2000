@@ -84,24 +84,76 @@ PERF_TEST_P(TestFindContoursFF, findContours,
     SANITY_CHECK_NOTHING();
 }
 
-typedef TestBaseWithParam< tuple<MatDepth, int> > TestBoundingRect;
+// ============================================================
+// findTRUContours performance tests
+// ============================================================
 
-PERF_TEST_P(TestBoundingRect, BoundingRect,
+typedef TestBaseWithParam< tuple<Size, int, int> > TestFindTRUContours;
+
+PERF_TEST_P(TestFindTRUContours, findTRUContours,
     Combine(
-        testing::Values(CV_32S, CV_32F), // points type
-        Values(400, 511, 1000, 10000, 100000) // points count
+        Values(sz1080p, sz2160p),   // image size
+        Values(128, 512, 2048),     // circle count
+        Values(1, 0)                // nthreads: 1=single-thread baseline, 0=all available
     )
 )
-
 {
-    int ptType = get<0>(GetParam());
-    int n = get<1>(GetParam());
+    Size img_size  = get<0>(GetParam());
+    int num_circles = get<1>(GetParam());
+    int nthreads   = get<2>(GetParam());
 
-    Mat pts(n, 2, ptType);
-    declare.in(pts, WARMUP_RNG);
+    RNG rng(12345);
+    Mat img = Mat::zeros(img_size, CV_8UC1);
+    for (int i = 0; i < num_circles; ++i)
+    {
+        Point center(rng.uniform(50, img_size.width  - 50),
+                     rng.uniform(50, img_size.height - 50));
+        int radius = rng.uniform(10, 200);
+        circle(img, center, radius, Scalar::all(255), FILLED);
+    }
 
-    cv::Rect rect;
-    TEST_CYCLE() rect = boundingRect(pts);
+    Mat binary;
+    adaptiveThreshold(img, binary, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 11, 0);
+
+    vector<vector<Point>> contours;
+    int prev_nthreads=cv::getNumThreads();
+    cv::setNumThreads(nthreads);
+    TEST_CYCLE() findContours(binary, contours, RETR_LIST, CHAIN_APPROX_NONE);
+    cv::setNumThreads(prev_nthreads);
+
+    SANITY_CHECK_NOTHING();
+}
+
+// Baseline: same image, findContours(RETR_LIST, CHAIN_APPROX_NONE) for direct comparison
+typedef TestBaseWithParam< tuple<Size, int> > TestFindContoursBaseline;
+
+PERF_TEST_P(TestFindContoursBaseline, findContours_baseline_for_TRUCO,
+    Combine(
+        Values(sz1080p, sz2160p),
+        Values(128, 512, 2048)
+    )
+)
+{
+    Size img_size   = get<0>(GetParam());
+    int num_circles = get<1>(GetParam());
+
+    RNG rng(12345);
+    Mat img = Mat::zeros(img_size, CV_8UC1);
+    for (int i = 0; i < num_circles; ++i)
+    {
+        Point center(rng.uniform(50, img_size.width  - 50),
+                     rng.uniform(50, img_size.height - 50));
+        int radius = rng.uniform(10, 200);
+        circle(img, center, radius, Scalar::all(255), FILLED);
+    }
+
+    Mat binary;
+    adaptiveThreshold(img, binary, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 11, 0);
+
+    vector<vector<Point>> contours;
+    vector<Vec4i> hierarchy;
+
+    TEST_CYCLE() findContours(binary, contours, hierarchy, RETR_LIST, CHAIN_APPROX_NONE);
 
     SANITY_CHECK_NOTHING();
 }

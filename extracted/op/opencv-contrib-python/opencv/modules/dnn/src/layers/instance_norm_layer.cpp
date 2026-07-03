@@ -5,6 +5,7 @@
 #include "../precomp.hpp"
 #include <opencv2/dnn/shape_utils.hpp>
 #include "./cpu_kernels/fast_norm.hpp"
+#include <opencv2/core/hal/intrin.hpp>
 
 // CANN backend
 #include "../op_cann.hpp"
@@ -55,8 +56,10 @@ public:
         const auto &scale = inputs[1];
         const auto &bias = inputs[2];
         CV_CheckGE(input.size(), static_cast<size_t>(3), "DNN/InstanceNorm: input dimension >= 3 is required");
+        if (input.layout == DATA_LAYOUT_BLOCK)
+            CV_CheckEQ(input.dims, 5, "DNN/InstanceNorm: only 5D block layout is supported");
 
-        int C = input[1];
+        int C = input.layout == DATA_LAYOUT_BLOCK ? input.C : input[1];
         int scale_dim = std::accumulate(scale.begin(), scale.end(), 1, std::multiplies<int>());
         CV_CheckEQ(scale_dim, C, "DNN/InstanceNorm: scale must be a 1d tensor and match the channel of input");
         int bias_dim = std::accumulate(bias.begin(), bias.end(), 1, std::multiplies<int>());
@@ -64,6 +67,16 @@ public:
 
         outputs.assign(1, inputs[0]);
         return false;
+    }
+
+    int getLayouts(const std::vector<DataLayout>& actualInputs,
+                   std::vector<DataLayout>& desiredInputs,
+                   const int requiredOutputs,
+                   std::vector<DataLayout>& outputs) const CV_OVERRIDE {
+        CV_Assert(!actualInputs.empty());
+        desiredInputs = actualInputs;
+        outputs.assign(requiredOutputs, actualInputs[0]);
+        return 0;
     }
 
     void forward(InputArrayOfArrays inputs_arr, OutputArrayOfArrays outputs_arr, OutputArrayOfArrays internals_arr) CV_OVERRIDE {
@@ -221,7 +234,7 @@ public:
 #ifdef HAVE_DNN_NGRAPH
     virtual Ptr<BackendNode> initNgraph(const std::vector<Ptr<BackendWrapper> >& inputs,
                                         const std::vector<Ptr<BackendNode> >& nodes) CV_OVERRIDE {
-        // onnx to openvino convertion: https://github.com/openvinotoolkit/openvino/blob/2023.1.0/src/frontends/onnx/frontend/src/op/instance_norm.cpp
+        // onnx to openvino conversion: https://github.com/openvinotoolkit/openvino/blob/2023.1.0/src/frontends/onnx/frontend/src/op/instance_norm.cpp
 
         auto ieInpNode = nodes[0].dynamicCast<InfEngineNgraphNode>()->node;
         const auto &input_shape = ieInpNode.get_shape();

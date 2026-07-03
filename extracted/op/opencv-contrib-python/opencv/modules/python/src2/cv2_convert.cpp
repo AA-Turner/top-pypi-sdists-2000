@@ -129,15 +129,7 @@ bool pyopencv_to(PyObject* o, Mat& m, const ArgInfo& info)
 
     bool needcopy = false, needcast = false;
     int typenum = PyArray_TYPE(oarr), new_typenum = typenum;
-    int type = typenum == NPY_UBYTE ? CV_8U :
-               typenum == NPY_BYTE ? CV_8S :
-               typenum == NPY_USHORT ? CV_16U :
-               typenum == NPY_SHORT ? CV_16S :
-               typenum == NPY_INT ? CV_32S :
-               typenum == NPY_INT32 ? CV_32S :
-               typenum == NPY_HALF ? CV_16F :
-               typenum == NPY_FLOAT ? CV_32F :
-               typenum == NPY_DOUBLE ? CV_64F : -1;
+    int type = numpyTypeToCvDepth(typenum);
 
     if( type < 0 )
     {
@@ -206,9 +198,9 @@ bool pyopencv_to(PyObject* o, Mat& m, const ArgInfo& info)
     if (ismultichannel)
     {
         int channels = ndims >= 1 ? (int)_sizes[ndims - 1] : 1;
-        if (channels > CV_CN_MAX)
+        if (channels < 1 || channels > CV_CN_MAX)
         {
-            failmsg("%s unable to wrap channels, too high (%d > CV_CN_MAX=%d)", info.name, (int)channels, (int)CV_CN_MAX);
+            failmsg("%s unable to wrap channels, invalid count (%d, must be in [1, %d])", info.name, (int)channels, (int)CV_CN_MAX);
             return false;
         }
         ndims--;
@@ -267,10 +259,12 @@ bool pyopencv_to(PyObject* o, Mat& m, const ArgInfo& info)
         const int sz2 = 4;       // Scalar has 4 elements.
         m = Mat::zeros(sz2, 1, CV_64F);
 
+        // Fill the Mat with array elements
+        bool filled = true;
         const char *base_ptr = PyArray_BYTES(oarr);
-        for(int i = 0; i < sz; i++ )
+        for(int i = 0; i < sz && filled; i++ )
         {
-            PyObject* oi = PyArray_GETITEM(oarr, base_ptr + step[0] * i);
+            PyObject* oi = PyArray_GETITEM(oarr, base_ptr + step[0] * i); // new object
             if( PyInt_Check(oi) )
                 m.at<double>(i) = (double)PyInt_AsLong(oi);
             else if( PyFloat_Check(oi) )
@@ -279,18 +273,26 @@ bool pyopencv_to(PyObject* o, Mat& m, const ArgInfo& info)
             {
                 failmsg("%s has some non-numerical elements", info.name);
                 m.release();
-                return false;
+                filled = false;
             }
+
+            Py_DECREF(oi);
         }
-        return true;
+
+        if(needcopy)
+            Py_DECREF(o);
+
+        return filled;
     }
 
-    // handle degenerate case
-    // FIXIT: Don't force 1D for Scalars
-    if( ndims == 0) {
-        size[ndims] = 1;
-        step[ndims] = elemsize;
-        ndims++;
+    // 0D (scalar) tensor: allocate a proper scalar Mat and copy the value.
+    if (ndims == 0)
+    {
+        m.fit(0, nullptr, type);
+        memcpy(m.data, PyArray_DATA(oarr), CV_ELEM_SIZE(type));
+        if (needcopy)
+            Py_DECREF(o);
+        return true;
     }
 
 #if 1
@@ -315,6 +317,15 @@ PyObject* pyopencv_from(const cv::Mat& m)
 {
     if( !m.data )
         Py_RETURN_NONE;
+    // 0D (scalar) Mat: return a true 0D numpy array.
+    if( m.dims == 0 )
+    {
+        int typenum = cvDepthToNumpyType(CV_MAT_DEPTH(m.type()));
+        PyObject* o = PyArray_SimpleNew(0, nullptr, typenum);
+        if( o )
+            memcpy(PyArray_DATA((PyArrayObject*)o), m.data, CV_ELEM_SIZE(m.type()));
+        return o;
+    }
     cv::Mat temp, *p = (cv::Mat*)&m;
     if(!p->u || p->allocator != &GetNumpyAllocator())
     {
@@ -703,28 +714,29 @@ bool pyopencv_to(PyObject* obj, String &value, const ArgInfo& info)
     std::string str;
 
 #if ((PY_VERSION_HEX >= 0x03060000) && !defined(Py_LIMITED_API)) || (Py_LIMITED_API >= 0x03060000)
+    PyObject* path_obj = NULL;
     if (info.pathlike)
     {
-        obj = PyOS_FSPath(obj);
+        path_obj = PyOS_FSPath(obj);
         if (PyErr_Occurred())
         {
             failmsg("Expected '%s' to be a str or path-like object", info.name);
             return false;
         }
+        obj = path_obj;
     }
 #endif
+
+    bool result = false;
     if (getUnicodeString(obj, str))
     {
         value = str;
-        return true;
+        result = true;
     }
     else
     {
-        // If error hasn't been already set by Python conversion functions
         if (!PyErr_Occurred())
         {
-            // Direct access to underlying slots of PyObjectType is not allowed
-            // when limited API is enabled
 #ifdef Py_LIMITED_API
             failmsg("Can't convert object to 'str' for '%s'", info.name);
 #else
@@ -733,7 +745,12 @@ bool pyopencv_to(PyObject* obj, String &value, const ArgInfo& info)
 #endif
         }
     }
-    return false;
+
+#if ((PY_VERSION_HEX >= 0x03060000) && !defined(Py_LIMITED_API)) || (Py_LIMITED_API >= 0x03060000)
+    Py_XDECREF(path_obj);
+#endif
+
+    return result;
 }
 
 template<>

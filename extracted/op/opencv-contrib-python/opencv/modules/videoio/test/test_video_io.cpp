@@ -64,6 +64,9 @@ public:
             std::cout << "SKIP test: backend " << apiPref << " can't open the video: " << video_file << std::endl;
             return;
         }
+
+        EXPECT_EQ(CAP_PROP_UNKNOWN, cap.get(CV__CAP_PROP_LATEST));
+
         int n_frames = -1;
         EXPECT_NO_THROW(n_frames = (int)cap.get(CAP_PROP_FRAME_COUNT));
         if (n_frames > 0)
@@ -222,6 +225,9 @@ public:
             throw SkipTestException(cv::String("Backend ") +  cv::videoio_registry::getBackendName(apiPref) +
                     cv::String(" does not support CAP_PROP_POS_MSEC option"));
 
+        if (cvtest::skipUnstableTests && apiPref == CAP_MSMF && (ext == "h264" || ext == "h265" || ext == "mpg"))
+            throw SkipTestException("Unstable MSMF test");
+
         VideoCapture cap;
         EXPECT_NO_THROW(cap.open(video_file, apiPref));
         if (!cap.isOpened())
@@ -335,7 +341,10 @@ public:
 
         // Workaround for some gstreamer pipelines
         if (apiPref == CAP_GSTREAMER)
+        {
             expected_frame_count.start -= 1;
+            expected_frame_count.end += 1;
+        }
 
         ASSERT_LE(expected_frame_count.start, actual);
         ASSERT_GE(expected_frame_count.end, actual);
@@ -525,6 +534,9 @@ TEST_P(Videoio_Writer, write_nothing)
     VideoWriter writer;
     EXPECT_NO_THROW(writer.open(video_file, apiPref, fourcc, fps, frame_size, true));
     ASSERT_TRUE(writer.isOpened());
+
+    EXPECT_EQ(cv::VIDEOWRITER_PROP_UNKNOWN, writer.get(CV__CAP_PROP_LATEST));
+
 #if 0  // no frames
     cv::Mat m(frame_size, CV_8UC3, Scalar::all(127));
     writer << m;
@@ -608,12 +620,6 @@ static vector<Ext_Fourcc_API> generate_Ext_Fourcc_API_nocrash()
 #ifdef HAVE_MSMF_DISABLED  // MSMF opens writer stream
     {"wmv", "aaaa", CAP_MSMF},
     {"mov", "aaaa", CAP_MSMF},
-#endif
-
-#ifdef HAVE_QUICKTIME
-    {"mov", "aaaa", CAP_QT},
-    {"avi", "aaaa", CAP_QT},
-    {"mkv", "aaaa", CAP_QT},
 #endif
 
 #ifdef HAVE_AVFOUNDATION
@@ -710,7 +716,11 @@ TEST_P(videocapture_acceleration, read)
 {
     auto param = GetParam();
     std::string filename = get<0>(param).filename;
+#if 0  // FIXIT OpenCV 5.0 putText result
     double psnr_threshold = get<0>(param).psnr_threshold;
+#else
+    double psnr_threshold = 10;
+#endif
     VideoCaptureAPIs backend = get<1>(param);
     VideoAccelerationType va_type = get<2>(param);
     bool use_umat = get<3>(param);
@@ -787,7 +797,7 @@ TEST_P(videocapture_acceleration, read)
             {
                 if (filename == "sample_322x242_15frames.yuv420p.libvpx-vp9.mp4")
                     throw SkipTestException("Unable to read the first frame with VP9 codec (media stack misconfiguration / bug)");
-                // FFMPEG: [av1 @ 0000027ac07d1340] Your platform doesn't suppport hardware accelerated AV1 decoding.
+                // FFMPEG: [av1 @ 0000027ac07d1340] Your platform doesn't support hardware accelerated AV1 decoding.
                 if (filename == "sample_322x242_15frames.yuv420p.libaom-av1.mp4")
                     throw SkipTestException("Unable to read the first frame with AV1 codec (missing support)");
             }
@@ -809,7 +819,7 @@ TEST_P(videocapture_acceleration, read)
             {
                 if (filename == "sample_322x242_15frames.yuv420p.libvpx-vp9.mp4")
                     throw SkipTestException("Unable to read the first frame with VP9 codec (media stack misconfiguration / bug)");
-                // FFMPEG: [av1 @ 0000027ac07d1340] Your platform doesn't suppport hardware accelerated AV1 decoding.
+                // FFMPEG: [av1 @ 0000027ac07d1340] Your platform doesn't support hardware accelerated AV1 decoding.
                 if (filename == "sample_322x242_15frames.yuv420p.libaom-av1.mp4")
                     throw SkipTestException("Unable to read the first frame with AV1 codec (missing support)");
             }
@@ -851,7 +861,7 @@ static const VideoCaptureAccelerationInput hw_filename[] = {
         { "sample_322x242_15frames.yuv420p.mpeg2video.mp4", 24.0 },  // GSTREAMER on Ubuntu 18.04
         { "sample_322x242_15frames.yuv420p.libx264.mp4", 20.0 },  // 20 - D3D11 (i7-11800H), 23 - D3D11 on GHA/Windows, GSTREAMER on Ubuntu 18.04
         { "sample_322x242_15frames.yuv420p.libx265.mp4", 20.0 },  // 20 - D3D11 (i7-11800H), 23 - D3D11 on GHA/Windows
-        { "sample_322x242_15frames.yuv420p.libvpx-vp9.mp4", 30.0 },
+        { "sample_322x242_15frames.yuv420p.libvpx-vp9.mp4", 29.0 }, // 29 - MSMF i5-1135G7
         { "sample_322x242_15frames.yuv420p.libaom-av1.mp4", 30.0 }
 };
 
@@ -871,6 +881,7 @@ static const VideoAccelerationType hw_types[] = {
         VIDEO_ACCELERATION_D3D11,
 #else
         VIDEO_ACCELERATION_VAAPI,
+        VIDEO_ACCELERATION_DRM,
 #endif
 };
 
@@ -916,7 +927,7 @@ TEST_P(videowriter_acceleration, write)
         throw SkipTestException(cv::String("Backend is not available/disabled: ") + backend_name);
 #ifdef __linux__
     if (cvtest::skipUnstableTests && backend == CAP_GSTREAMER &&
-        (extension == "mkv") && (codecid == "MPEG"))
+        (extension == "mkv") && (codecid == "MPEG" || codecid == "H264"))
     {
         throw SkipTestException("Unstable GSTREAMER test");
     }
@@ -1236,5 +1247,61 @@ inline static std::string stream_capture_ffmpeg_name_printer(const testing::Test
 }
 
 INSTANTIATE_TEST_CASE_P(videoio, stream_capture_ffmpeg, testing::Values("h264", "h265", "mjpg.avi"), stream_capture_ffmpeg_name_printer);
+
+// Seek by frame index must be accurate on non-integer frame rates.
+typedef testing::TestWithParam<VideoCaptureAPIs> PreciseSeekingTest;
+
+TEST_P(PreciseSeekingTest, seek_nonInteger_fps_frame_accurate)
+{
+    VideoCaptureAPIs apiPref = GetParam();
+    if (!videoio_registry::hasBackend(apiPref))
+        throw SkipTestException(cv::String("Backend is not available/disabled: ") + cv::videoio_registry::getBackendName(apiPref));
+
+    const std::string file = findDataFile("video/sample_23976fps.mp4");
+
+    VideoCapture cap;
+    ASSERT_TRUE(cap.open(file, apiPref))
+        << "AVFoundation could not open " << file;
+
+    const double fps_num = 24000.0;
+    const double fps_den = 1001.0;
+    const double frame_period_ms = fps_den * 1000.0 / fps_num;  // ~41.7083
+    const double tol_ms = frame_period_ms * 0.5;
+
+    const int targets[] = { 0, 1, 24, 50, 99 };
+    for (int N : targets)
+    {
+        ASSERT_TRUE(cap.set(CAP_PROP_POS_FRAMES, N))
+            << "seek to frame " << N << " failed";
+        Mat img;
+        ASSERT_TRUE(cap.read(img))
+            << "read after seek to frame " << N << " failed";
+        const double got_ms    = cap.get(CAP_PROP_POS_MSEC);
+        const double expect_ms = N * frame_period_ms;
+        EXPECT_NEAR(got_ms, expect_ms, tol_ms)
+            << "non-integer fps seek drifted at frame N=" << N;
+    }
+}
+
+VideoCaptureAPIs seekable_backeinds[] = {CAP_FFMPEG, CAP_MSMF, CAP_AVFOUNDATION};
+
+INSTANTIATE_TEST_CASE_P(videoio, PreciseSeekingTest, testing::ValuesIn(seekable_backeinds), safe_capture_name_printer);
+
+// Regression test for heap-buffer-overflow in mjpeg_buffer::put_bits (GitHub issue #29112).
+// When len == bits_free the old guard used strict '>' and skipped the resize, causing
+// an out-of-bounds write after '++m_pos' advanced past data.size().
+TEST(Videoio_MJPEG, put_bits_no_heap_overflow)
+{
+    const std::string filename = cv::tempfile(".avi");
+    cv::Mat frame(1, 1, CV_8UC1, cv::Scalar::all(255));
+    int fourcc = cv::VideoWriter::fourcc('M', 'J', 'P', 'G');
+    {
+        cv::VideoWriter writer;
+        ASSERT_NO_THROW(writer.open(filename, CAP_OPENCV_MJPEG, fourcc, 25.0, cv::Size(1, 1), false));
+        ASSERT_TRUE(writer.isOpened());
+        EXPECT_NO_THROW(writer.write(frame));
+    }
+    remove(filename.c_str());
+}
 
 } // namespace

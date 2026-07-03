@@ -419,8 +419,16 @@ public:
             CV_PARSE_ERROR_CPP( "Key must start with \'\"\'" );
 
         char * beg = ptr + 1;
-
+        std::string key_name;
         do {
+            if (*ptr == '\\') { // skip the next character if current is back slash
+                ++ptr;
+                CV_PERSISTENCE_CHECK_END_OF_BUFFER_BUG_CPP();
+                key_name += *ptr;
+            } else if (*ptr != '"') {
+                // normal byte: append current, do NOT skip ahead first
+                key_name += *ptr;
+            }
             ++ptr;
             CV_PERSISTENCE_CHECK_END_OF_BUFFER_BUG_CPP();
         } while( cv_isprint(*ptr) && *ptr != '"' );
@@ -430,7 +438,7 @@ public:
 
         if( ptr == beg )
             CV_PARSE_ERROR_CPP( "Key is empty" );
-        value_placeholder = fs->addNode(collection, std::string(beg, (size_t)(ptr - beg)), FileNode::NONE);
+        value_placeholder = fs->addNode(collection, key_name, FileNode::NONE);
 
         ptr++;
         ptr = skipSpaces( ptr );
@@ -519,7 +527,33 @@ public:
                             case 't' : { buf[i++] = '\t'; break; }
                             case 'b' : { buf[i++] = '\b'; break; }
                             case 'f' : { buf[i++] = '\f'; break; }
-                            case 'u' : { CV_PARSE_ERROR_CPP( "'\\uXXXX' currently not supported" ); break; }
+                            case 'u' : {
+                                if (i + 4 >= CV_FS_MAX_LEN)
+                                    CV_PARSE_ERROR_CPP("string is too long");
+                                ptr++;
+                                uint32_t codepoint = 0;
+                                for (int k = 0; k < 4; k++, ptr++) {
+                                    char hex = *ptr;
+                                    uint32_t digit = 0;
+                                    if      (hex >= '0' && hex <= '9') digit = (uint32_t)(hex - '0');
+                                    else if (hex >= 'a' && hex <= 'f') digit = (uint32_t)(hex - 'a') + 10u;
+                                    else if (hex >= 'A' && hex <= 'F') digit = (uint32_t)(hex - 'A') + 10u;
+                                    else CV_PARSE_ERROR_CPP("invalid \\uXXXX escape sequence");
+                                    codepoint = (codepoint << 4) | digit;
+                                }
+                                if (codepoint < 0x80) {
+                                    buf[i++] = (char)codepoint;
+                                } else if (codepoint < 0x800) {
+                                    buf[i++] = (char)(0xC0 | (codepoint >> 6));
+                                    buf[i++] = (char)(0x80 | (codepoint & 0x3F));
+                                } else {
+                                    buf[i++] = (char)(0xE0 | (codepoint >> 12));
+                                    buf[i++] = (char)(0x80 | ((codepoint >> 6) & 0x3F));
+                                    buf[i++] = (char)(0x80 | (codepoint & 0x3F));
+                                }
+                                beg = ptr;
+                                continue;
+                            }
                             default  : { CV_PARSE_ERROR_CPP( "Invalid escape character" ); }
                             break;
                             }
@@ -623,9 +657,7 @@ public:
             }
 
             if( len == 4 && memcmp( beg, "null", 4 ) == 0 )
-            {
-                CV_PARSE_ERROR_CPP( "Value 'null' is not supported by this parser" );
-            }
+                ;
             else if( (len == 4 && memcmp( beg, "true", 4 ) == 0) ||
                      (len == 5 && memcmp( beg, "false", 5 ) == 0) )
             {

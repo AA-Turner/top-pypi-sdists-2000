@@ -77,11 +77,6 @@ public:
     {
         init();
     }
-    CvCapture_Images(const String& _filename)
-    {
-        init();
-        open(_filename);
-    }
 
     virtual ~CvCapture_Images() CV_OVERRIDE
     {
@@ -94,7 +89,7 @@ public:
     virtual bool isOpened() const CV_OVERRIDE;
     virtual int getCaptureDomain() /*const*/ CV_OVERRIDE { return cv::CAP_IMAGES; }
 
-    bool open(const String&);
+    bool open(const String&, int image_seq_start = -1);
     void close();
 protected:
     std::string filename_pattern; // actually a printf-pattern
@@ -146,7 +141,7 @@ double CvCapture_Images::getProperty(int id) const
     {
     case cv::CAP_PROP_POS_MSEC:
         CV_WARN("collections of images don't have framerates");
-        return 0;
+        return CAP_PROP_UNKNOWN;
     case cv::CAP_PROP_POS_FRAMES:
         return currentframe;
     case cv::CAP_PROP_FRAME_COUNT:
@@ -159,12 +154,12 @@ double CvCapture_Images::getProperty(int id) const
         return frame.rows;
     case cv::CAP_PROP_FPS:
         CV_WARN("collections of images don't have framerates");
-        return 1;
+        return CAP_PROP_UNKNOWN;
     case cv::CAP_PROP_FOURCC:
         CV_WARN("collections of images don't have 4-character codes");
-        return 0;
+        return CAP_PROP_UNKNOWN;
     }
-    return 0;
+    return CAP_PROP_UNKNOWN;
 }
 
 bool CvCapture_Images::setProperty(int id, double value)
@@ -285,13 +280,16 @@ std::string icvExtractPattern(const std::string& filename, unsigned *offset)
 }
 
 
-bool CvCapture_Images::open(const std::string& _filename)
+bool CvCapture_Images::open(const std::string& _filename, int image_seq_start)
 {
     unsigned offset = 0;
     close();
 
     CV_Assert(!_filename.empty());
     filename_pattern = icvExtractPattern(_filename, &offset);
+    const bool explicit_start = (image_seq_start >= 0);
+    if (explicit_start)
+        offset = static_cast<unsigned>(image_seq_start);
     if (filename_pattern.empty())
     {
         filename_pattern = _filename;
@@ -317,7 +315,7 @@ bool CvCapture_Images::open(const std::string& _filename)
             cv::String filename = cv::format(filename_pattern.c_str(), (int)(offset + length));
             if (!utils::fs::exists(filename))
             {
-                if (length == 0 && offset == 0) // allow starting with 0 or 1
+                if (length == 0 && offset == 0 && !explicit_start) // allow starting with 0 or 1
                 {
                     offset++;
                     continue;
@@ -355,9 +353,22 @@ bool CvCapture_Images::isOpened() const
     return !filename_pattern.empty();
 }
 
-Ptr<IVideoCapture> create_Images_capture(const std::string &filename)
+Ptr<IVideoCapture> create_Images_capture(const std::string& filename, const VideoCaptureParameters& params)
 {
-    return makePtr<CvCapture_Images>(filename);
+    int image_seq_start = -1;
+    if (params.has(CAP_PROP_IMAGE_SEQ_START))
+    {
+        image_seq_start = params.get<int>(CAP_PROP_IMAGE_SEQ_START);
+    }
+    if (params.warnUnusedParameters())
+    {
+        CV_LOG_ERROR(NULL, "VIDEOIO/IMAGES: unsupported parameters in .open(), see logger INFO channel for details. Bailout");
+        return Ptr<IVideoCapture>();
+    }
+    Ptr<CvCapture_Images> cap = makePtr<CvCapture_Images>();
+    if (!cap->open(filename, image_seq_start))
+        return Ptr<IVideoCapture>();
+    return cap;
 }
 
 //
@@ -372,10 +383,10 @@ public:
     void close();
 
     ~CvVideoWriter_Images() CV_OVERRIDE { close(); }
-    double getProperty(int) const CV_OVERRIDE { return 0; }
+    double getProperty(int) const CV_OVERRIDE { return VIDEOWRITER_PROP_UNKNOWN; }
     bool setProperty( int, double ) CV_OVERRIDE; // FIXIT doesn't work: IVideoWriter interface only!
     bool isOpened() const CV_OVERRIDE { return !filename_pattern.empty(); }
-    void write( InputArray ) CV_OVERRIDE;
+    bool write( InputArray ) CV_OVERRIDE;
     int getCaptureDomain() const CV_OVERRIDE { return cv::CAP_IMAGES; }
 protected:
     std::string filename_pattern;
@@ -383,19 +394,16 @@ protected:
     std::vector<int> params;
 };
 
-void CvVideoWriter_Images::write(InputArray image)
+bool CvVideoWriter_Images::write(InputArray image)
 {
     CV_Assert(!filename_pattern.empty());
     cv::String filename = cv::format(filename_pattern.c_str(), (int)currentframe);
     CV_Assert(!filename.empty());
 
-    std::vector<int> image_params = params;
-    image_params.push_back(0); // append parameters 'stop' mark
-    image_params.push_back(0);
-
     cv::Mat img = image.getMat();
-    cv::imwrite(filename, img, image_params);
+    const bool ok = cv::imwrite(filename, img);
     currentframe++;
+    return ok;
 }
 
 void CvVideoWriter_Images::close()

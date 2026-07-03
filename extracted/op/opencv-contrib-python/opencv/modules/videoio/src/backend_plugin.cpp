@@ -540,10 +540,10 @@ public:
     }
     double getProperty(int prop) const CV_OVERRIDE
     {
-        double val = -1;
+        double val = CAP_PROP_UNKNOWN;
         if (plugin_api_->v0.Capture_getProperty)
             if (CV_ERROR_OK != plugin_api_->v0.Capture_getProperty(capture_, prop, &val))
-                val = -1;
+                val = CAP_PROP_UNKNOWN;
         return val;
     }
     bool setProperty(int prop, double val) CV_OVERRIDE
@@ -566,6 +566,12 @@ public:
         cv::_OutputArray* dst = static_cast<cv::_OutputArray*>(userdata);
         if (!dst)
             return CV_ERROR_FAIL;
+        int depth = CV_MAT_DEPTH(type);
+        // [TODO] Remove this condition after rebuilding plugins or add a new
+        // version of plugins. Convert type from the old one to the new one (5 bits)
+        if (depth > 7) {
+            type = CV_MAKETYPE((type & 7), (type >> 3) + 1);
+        }
         cv::Mat(cv::Size(width, height), type, (void*)data, step).copyTo(*dst);
         return CV_ERROR_OK;
     }
@@ -658,10 +664,10 @@ public:
     }
     double getProperty(int prop) const CV_OVERRIDE
     {
-        double val = -1;
+        double val = CAP_PROP_UNKNOWN;
         if (plugin_api_->v0.Writer_getProperty)
             if (CV_ERROR_OK != plugin_api_->v0.Writer_getProperty(writer_, prop, &val))
-                val = -1;
+                val = CAP_PROP_UNKNOWN;
         return val;
     }
     bool setProperty(int prop, double val) CV_OVERRIDE
@@ -675,7 +681,7 @@ public:
     {
         return writer_ != NULL;  // TODO always true
     }
-    void write(cv::InputArray arr) CV_OVERRIDE
+    bool write(cv::InputArray arr) CV_OVERRIDE
     {
         cv::Mat img = arr.getMat();
         CV_DbgAssert(writer_);
@@ -683,8 +689,9 @@ public:
         if (CV_ERROR_OK != plugin_api_->v0.Writer_write(writer_, img.data, (int)img.step[0], img.cols, img.rows, img.channels()))
         {
             CV_LOG_DEBUG(NULL, "Video I/O: Can't write frame by plugin '" << plugin_api_->api_header.api_description << "'");
+            return false;
         }
-        // TODO return bool result?
+        return true;
     }
     int getCaptureDomain() const CV_OVERRIDE
     {

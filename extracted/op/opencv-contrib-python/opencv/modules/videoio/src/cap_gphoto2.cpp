@@ -153,7 +153,7 @@ public:
 
 protected:
     // Known widget names
-    static const char * PROP_EXPOSURE_COMPENSACTION;
+    static const char * PROP_EXPOSURE_COMPENSATION;
     static const char * PROP_SELF_TIMER_DELAY;
     static const char * PROP_MANUALFOCUS;
     static const char * PROP_AUTOFOCUS;
@@ -294,7 +294,7 @@ const char * DigitalCameraCapture::lineDelimiter = "\n";
  * Those are actually substrings of widget name.
  * ie. for VIEWFINDER, Nikon uses "viewfinder", while Canon can use "eosviewfinder".
  */
-const char * DigitalCameraCapture::PROP_EXPOSURE_COMPENSACTION =
+const char * DigitalCameraCapture::PROP_EXPOSURE_COMPENSATION =
         "exposurecompensation";
 const char * DigitalCameraCapture::PROP_SELF_TIMER_DELAY = "selftimerdelay";
 const char * DigitalCameraCapture::PROP_MANUALFOCUS = "manualfocusdrive";
@@ -555,7 +555,7 @@ CameraWidget * DigitalCameraCapture::getGenericProperty(int propertyId,
             return NULL;
         }
         case CAP_PROP_EXPOSURE:
-            return findWidgetByName(PROP_EXPOSURE_COMPENSACTION);
+            return findWidgetByName(PROP_EXPOSURE_COMPENSATION);
         case CAP_PROP_TRIGGER_DELAY:
             return findWidgetByName(PROP_SELF_TIMER_DELAY);
         case CAP_PROP_ZOOM:
@@ -576,6 +576,7 @@ CameraWidget * DigitalCameraCapture::getGenericProperty(int propertyId,
         case CAP_PROP_VIEWFINDER:
             return findWidgetByName(PROP_VIEWFINDER);
     }
+    output = CAP_PROP_UNKNOWN;
     return NULL;
 }
 
@@ -586,7 +587,7 @@ CameraWidget * DigitalCameraCapture::getGenericProperty(int propertyId,
 double DigitalCameraCapture::getProperty(int propertyId) const
 {
     CameraWidget * widget = NULL;
-    double output = 0;
+    double output = CAP_PROP_UNKNOWN;
     if (propertyId < 0)
     {
         widget = getWidget(-propertyId);
@@ -600,10 +601,10 @@ double DigitalCameraCapture::getProperty(int propertyId) const
                 return preview;
             case CAP_PROP_GPHOTO2_WIDGET_ENUMERATE:
                 if (rootWidget == NULL)
-                    return 0;
+                    return CAP_PROP_UNKNOWN;
                 return (intptr_t) widgetInfo.c_str();
             case CAP_PROP_GPHOTO2_RELOAD_CONFIG:
-                return 0; // Trigger, only by set
+                return CAP_PROP_UNKNOWN; // Trigger, only by set
             case CAP_PROP_GPHOTO2_RELOAD_ON_CHANGE:
                 return reloadOnChange;
             case CAP_PROP_GPHOTO2_COLLECT_MSGS:
@@ -642,7 +643,7 @@ double DigitalCameraCapture::getProperty(int propertyId) const
                         return i;
                     }
                 }
-                return -1;
+                return CAP_PROP_UNKNOWN;
             }
             case GP_WIDGET_TOGGLE:
             {
@@ -669,7 +670,7 @@ double DigitalCameraCapture::getProperty(int propertyId) const
         char buf[128] = "";
         snprintf(buf, sizeof(buf), "cannot get property: %d", propertyId);
         message(WARNING, (const char *) buf, e);
-        return 0;
+        return CAP_PROP_UNKNOWN;
     }
 }
 
@@ -692,7 +693,7 @@ CameraWidget * DigitalCameraCapture::setGenericProperty(int propertyId,
             output = false;
             return NULL;
         case CAP_PROP_EXPOSURE:
-            return findWidgetByName(PROP_EXPOSURE_COMPENSACTION);
+            return findWidgetByName(PROP_EXPOSURE_COMPENSATION);
         case CAP_PROP_TRIGGER_DELAY:
             return findWidgetByName(PROP_SELF_TIMER_DELAY);
         case CAP_PROP_ZOOM:

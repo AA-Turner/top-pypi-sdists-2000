@@ -76,6 +76,79 @@ void getConvPoolPaddings(const std::vector<int>& inp, const std::vector<size_t>&
 
 // Used in quantized model. It will return the (Max_element - Min_element)/127.
 double getWeightScale(const Mat& weightsMat);
+
+// Several ONNX operations take list of integer's or float's,
+// e.g. to specify list of axes (Squeeze, Unsqueeze, Transpose, Reduce*, ...),
+// coordinates, repetitions etc. (Slice, Tile, ...), scale factors (Resize, ...).
+// Here are helper functions to extract this data
+void tensorToIntVec(const Mat& tensor, std::vector<int>& vec);
+void tensorToFloatVec(const Mat& tensor, std::vector<float>& vec);
+void tensorToScalar(const Mat& tensor, int type, void* value);
+template<typename _Tp> _Tp tensorToScalar(const Mat& tensor)
+{
+    _Tp value = _Tp(0);
+    tensorToScalar(tensor, DataType<_Tp>::type, &value);
+    return value;
+}
+
+// tensor to mat shape
+MatShape tensorToShape(const Mat& shapeTensor);
+
+enum OnnxDataType
+{
+    ONNX_UNDEFINED  = 0,
+    ONNX_FLOAT      = 1,   // float
+    ONNX_UINT8      = 2,   // uint8_t
+    ONNX_INT8       = 3,   // int8_t
+    ONNX_UINT16     = 4,   // uint16_t
+    ONNX_INT16      = 5,   // int16_t
+    ONNX_INT32      = 6,   // int32_t
+    ONNX_INT64      = 7,   // int64_t
+    ONNX_STRING     = 8,   // string
+    ONNX_BOOL       = 9,   // bool
+    ONNX_FLOAT16    = 10,
+    ONNX_DOUBLE     = 11,
+    ONNX_UINT32     = 12,
+    ONNX_UINT64     = 13,
+    ONNX_BFLOAT16   = 14
+};
+
+inline int onnxDataTypeToCV(OnnxDataType dt)
+{
+    switch (dt)
+    {
+    case ONNX_UINT8:      return CV_8U;
+    case ONNX_INT8:       return CV_8S;
+    case ONNX_UINT16:     return CV_16U;
+    case ONNX_INT16:      return CV_16S;
+    case ONNX_UINT32:     return CV_32U;
+    case ONNX_INT32:      return CV_32S;
+    case ONNX_UINT64:     return CV_64U;
+    case ONNX_INT64:      return CV_64S;
+    case ONNX_FLOAT:      return CV_32F;
+    case ONNX_DOUBLE:     return CV_64F;
+    case ONNX_FLOAT16:    return CV_16F;
+    case ONNX_BFLOAT16:   return CV_16BF;
+    case ONNX_BOOL:       return CV_Bool;
+    default:
+        // Fallback to default ONNX FLOAT if value is unknown.
+        return CV_32F;
+    }
+}
+
+// inputs and outputs are both vector<Mat>'s or both are vector<UMat>'s.
+// the function does the following:
+//
+// 1. resizes output vector to 1-element vector
+// 2. outputs[0].fit(shape, inputs[0].type())
+// 3. temp = inputs[0].reshape(shape);
+// 4. temp.copyTo(outputs[0]) // detect in-place case and do nothing in this case
+//
+// the function helps to implement DL operations
+// 'Reshape', 'Flatten', 'Squeeze', 'Unsqueeze', 'Identity'.
+void reshapeAndCopyFirst(InputArrayOfArrays inputs,
+                         OutputArrayOfArrays outputs,
+                         const MatShape& shape);
 }
 }
 

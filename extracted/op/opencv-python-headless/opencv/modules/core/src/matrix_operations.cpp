@@ -29,22 +29,8 @@ void cv::swap( Mat& a, Mat& b )
     std::swap(a.allocator, b.allocator);
     std::swap(a.u, b.u);
 
-    std::swap(a.size.p, b.size.p);
-    std::swap(a.step.p, b.step.p);
-    std::swap(a.step.buf[0], b.step.buf[0]);
-    std::swap(a.step.buf[1], b.step.buf[1]);
-
-    if( a.step.p == b.step.buf )
-    {
-        a.step.p = a.step.buf;
-        a.size.p = &a.rows;
-    }
-
-    if( b.step.p == a.step.buf )
-    {
-        b.step.p = b.step.buf;
-        b.size.p = &b.rows;
-    }
+    std::swap(a.size, b.size);
+    std::swap(a.step, b.step);
 }
 
 
@@ -341,6 +327,20 @@ cv::Mat cv::Mat::cross(InputArray _m) const
 namespace cv
 {
 
+typedef void (*ReduceSumFunc)(const Mat& src, Mat& dst);
+ReduceSumFunc getReduceCSumFunc(int sdepth, int ddepth);
+ReduceSumFunc getReduceRSumFunc(int sdepth, int ddepth);
+
+template <typename T, typename WT, typename Op>
+struct ReduceR_SIMD
+{
+    int operator()(const T*, int start, int, WT*, const Op&) const
+    {
+        return start;
+    }
+};
+
+
 template<typename T, typename ST, typename WT, class Op, class OpInit>
 class ReduceR_Invoker : public ParallelLoopBody
 {
@@ -364,7 +364,8 @@ public:
     for( ; --height; )
     {
         src += srcstep;
-        i = range.start;
+        ReduceR_SIMD<T, WT, Op> simd_op;
+        i = simd_op(src, range.start, range.end, buf, op);
         #if CV_ENABLE_UNROLLED
         for(; i <= range.end - 4; i += 4 )
         {
@@ -788,6 +789,15 @@ void cv::reduce(InputArray _src, OutputArray _dst, int dim, int op, int dtype)
         srcUMat = _src.getUMat();
 
     Mat src = _src.getMat();
+    if (src.dims <= 1) {
+        if (src.dims == 0) {
+            src.convertTo(_dst, dtype);
+            return;
+        }
+        CV_Assert(dim == 0);
+        dim = 1;
+    }
+
     _dst.create(dim == 0 ? 1 : src.rows, dim == 0 ? src.cols : 1, dtype);
     Mat dst = _dst.getMat(), temp = dst;
 
@@ -806,7 +816,10 @@ void cv::reduce(InputArray _src, OutputArray _dst, int dim, int op, int dtype)
     {
         if( op == REDUCE_SUM )
         {
-            if(sdepth == CV_8U && ddepth == CV_32S)
+            ReduceSumFunc simd_func = getReduceRSumFunc(sdepth, ddepth);
+            if(simd_func)
+                func = (ReduceFunc)simd_func;
+            else if(sdepth == CV_8U && ddepth == CV_32S)
                 func = reduceSumR8u32s;
             else if(sdepth == CV_8U && ddepth == CV_32F)
                 func = reduceSumR8u32f;
@@ -881,7 +894,10 @@ void cv::reduce(InputArray _src, OutputArray _dst, int dim, int op, int dtype)
     {
         if(op == REDUCE_SUM)
         {
-            if(sdepth == CV_8U && ddepth == CV_32S)
+            ReduceSumFunc simd_func = getReduceCSumFunc(sdepth, ddepth);
+            if(simd_func)
+                func = (ReduceFunc)simd_func;
+            else if(sdepth == CV_8U && ddepth == CV_32S)
                 func = reduceSumC8u32s;
             else if(sdepth == CV_8U && ddepth == CV_32F)
                 func = reduceSumC8u32f;
@@ -1255,7 +1271,7 @@ void cv::sort( InputArray _src, OutputArray _dst, int flags )
 
     Mat src = _src.getMat();
     CV_Assert( src.dims <= 2 && src.channels() == 1 );
-    _dst.create( src.size(), src.type() );
+    _dst.createSameSize( src, src.type() );
     Mat dst = _dst.getMat();
     CV_IPP_RUN_FAST(ipp_sort(src, dst, flags));
 
@@ -1279,7 +1295,7 @@ void cv::sortIdx( InputArray _src, OutputArray _dst, int flags )
     Mat dst = _dst.getMat();
     if( dst.data == src.data )
         _dst.release();
-    _dst.create( src.size(), CV_32S );
+    _dst.createSameSize( src, CV_32S );
     dst = _dst.getMat();
 
     CV_IPP_RUN_FAST(ipp_sortIdx(src, dst, flags));

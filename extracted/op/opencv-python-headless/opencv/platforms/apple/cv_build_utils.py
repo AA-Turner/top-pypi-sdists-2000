@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
-Common utilities. These should be compatible with Python 2 and 3.
+Common utilities. These should be compatible with Python3.
 """
 
 from __future__ import print_function
@@ -63,3 +63,17 @@ def get_cmake_version():
         return (int(m.group(1)), int(m.group(2)), int(m.group(3)))
     else:
         raise Exception("Failed to parse CMake version")
+
+def get_current_branch(opencv_dir):
+    ret = check_output(["git", "branch", "--show-current"], cwd = opencv_dir).decode('utf-8').strip()
+    if ret != "":
+        return ret
+    else:
+        raise Exception("Failed to get current branch")
+
+def find_directory(base_dir, search_dir):
+    dirs = check_output(["find", base_dir, "-type", "d", "-name", search_dir]).decode('utf-8').splitlines()
+    if dirs and len(dirs) > 0:
+        return dirs[0]
+    else:
+        raise Exception("Failed to find directory: " + search_dir)

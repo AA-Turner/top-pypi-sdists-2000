@@ -190,7 +190,7 @@ public:
     ContourDataStorage(ContourDataStorage&&) noexcept = default;
     ~ContourDataStorage() = default;
     ContourDataStorage& operator=(const ContourDataStorage&) = delete;
-    ContourDataStorage& operator=(ContourDataStorage&&) noexcept = default;
+    ContourDataStorage& operator=(ContourDataStorage&&) = default;
 public:
     typename storage_t::RangeIterator getRangeIterator(void) const {return storage->getRangeIterator(first, last);}
 public:
@@ -243,7 +243,7 @@ public:
     Contour(const Contour&) = delete;
     Contour(Contour&& other) noexcept = default;
     Contour& operator=(const Contour&) = delete;
-    Contour& operator=(Contour&& other) noexcept = default;
+    Contour& operator=(Contour&& other) = default;
     ~Contour() = default;
     void updateBoundingRect() {}
     bool isEmpty() const
@@ -302,6 +302,8 @@ void contourTreeToResults(CTree& tree,
 
 void approximateChainTC89(const ContourCodesStorage& chain, const Point& origin, const int method,
                           ContourPointsStorage& output);
+
+void findTRUContours(InputArray _src, OutputArrayOfArrays _contours, int minSize=0, bool binarize=false, int method=CHAIN_APPROX_NONE);
 
 }  // namespace cv
 

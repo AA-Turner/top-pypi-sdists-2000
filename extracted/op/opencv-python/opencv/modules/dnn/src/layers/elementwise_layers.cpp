@@ -43,7 +43,6 @@
 #include "../precomp.hpp"
 #include "layers_common.hpp"
 #include "../op_cuda.hpp"
-#include "../op_halide.hpp"
 #include "../op_inf_engine.hpp"
 #include "../ie_ngraph.hpp"
 #include "../op_vkcom.hpp"
@@ -93,6 +92,26 @@ using std::erf;
 using std::sin;
 using std::sinh;
 using std::tan;
+
+int ActivationLayer::getLayouts(const std::vector<DataLayout>& actualInputs,
+                                std::vector<DataLayout>& desiredInputs,
+                                const int requiredOutputs,
+                                std::vector<DataLayout>& outputs) const
+{
+    size_t ninputs = actualInputs.size();
+    CV_Assert(ninputs >= 1u);
+    desiredInputs = actualInputs;
+    outputs.assign(requiredOutputs, actualInputs[0]);
+    return 0;
+}
+
+struct PowerFunctor;
+
+template<typename Func>
+struct ElementWiseIntDispatch
+{
+    static inline bool apply(const Func&, const Mat&, Mat&) { return false; }
+};
 
 template<typename Func>
 class ElementWiseLayer : public Func::Layer
@@ -153,38 +172,6 @@ public:
     virtual void finalize(InputArrayOfArrays, OutputArrayOfArrays) CV_OVERRIDE
     {
         func.finalize();
-    }
-
-    virtual Ptr<BackendNode> tryAttach(const Ptr<BackendNode>& node) CV_OVERRIDE
-    {
-        switch (node->backendId)
-        {
-            case DNN_BACKEND_HALIDE:
-            {
-#ifdef HAVE_HALIDE
-                auto base = node.dynamicCast<HalideBackendNode>();
-                Halide::Func& input = base->funcs.back();
-                Halide::Var x("x"), y("y"), c("c"), n("n");
-                Halide::Func top = (this->name.empty() ? Halide::Func() : Halide::Func(this->name));
-                func.attachHalide(input(x, y, c, n), top);
-                return Ptr<BackendNode>(new HalideBackendNode(base, top));
-#endif  // HAVE_HALIDE
-                break;
-            }
-        }
-        return Ptr<BackendNode>();
-    }
-
-    virtual Ptr<BackendNode> initHalide(const std::vector<Ptr<BackendWrapper> > &inputs) CV_OVERRIDE
-    {
-#ifdef HAVE_HALIDE
-        Halide::Buffer<float> input = halideBuffer(inputs[0]);
-        Halide::Var x("x"), y("y"), c("c"), n("n");
-        Halide::Func top = (this->name.empty() ? Halide::Func() : Halide::Func(this->name));
-        func.attachHalide(input(x, y, c, n), top);
-        return Ptr<BackendNode>(new HalideBackendNode(top));
-#endif  // HAVE_HALIDE
-        return Ptr<BackendNode>();
     }
 
 #ifdef HAVE_CANN
@@ -257,18 +244,67 @@ public:
         {
             const Mat &src = inputs[i];
             Mat &dst = outputs[i];
-            CV_Assert_N(src.size == dst.size, src.type() == dst.type(),
-                      src.isContinuous(), dst.isContinuous(), src.type() == CV_32F);
 
-            const int nstripes = getNumThreads();
-            PBody body(func, src, dst, nstripes);
-            parallel_for_(Range(0, nstripes), body, nstripes);
+            if (src.total() == 0)
+                continue;
+
+            CV_Assert_N(src.size == dst.size, src.isContinuous(), dst.isContinuous());
+
+            if (ElementWiseIntDispatch<Func>::apply(func, src, dst))
+                continue;
+
+            if (src.type() == CV_32F && dst.type() == CV_32F)
+            {
+                // Try fast activation function path first
+                std::vector<float> activParams_;
+                ActivationFunc activFunc = func.getActivationFunc(CV_32F, activParams_);
+                if (activFunc) {
+                    const float* params = activParams_.empty() ? nullptr : activParams_.data();
+                    size_t total = src.total();
+                    const float* srcptr = src.ptr<float>();
+                    float* dstptr = dst.ptr<float>();
+
+                    const size_t BLOCK_SIZE = 1 << 16;
+                    parallel_for_(Range(0, (int)((total + BLOCK_SIZE - 1) / BLOCK_SIZE)),
+                        [&](const Range& r) {
+                            for (int b = r.start; b < r.end; b++) {
+                                size_t start = b * BLOCK_SIZE;
+                                size_t len = std::min(BLOCK_SIZE, total - start);
+                                activFunc(srcptr + start, dstptr + start, len, params);
+                            }
+                        });
+                    continue;
+                }
+
+                const int nstripes = getNumThreads();
+                PBody body(func, src, dst, nstripes);
+                parallel_for_(Range(0, nstripes), body, nstripes);
+                continue;
+            }
+
+            if (src.type() == CV_64F && dst.type() == CV_64F)
+            {
+                Mat src_f, dst_f(dst.size, CV_32F);
+                src.convertTo(src_f, CV_32F);
+                const int nstripes = getNumThreads();
+                PBody body(func, src_f, dst_f, nstripes);
+                parallel_for_(Range(0, nstripes), body, nstripes);
+                dst_f.convertTo(dst, CV_64F);
+                continue;
+            }
+
+            CV_Error(Error::StsUnsupportedFormat, "ElementWiseLayer: unsupported input/output type; expected CV_32F or CV_64F.");
         }
     }
 
     void forwardSlice(const float* src, float* dst, int len, size_t planeSize, int cn0, int cn1) const CV_OVERRIDE
     {
         func.apply(src, dst, -1, len, planeSize, cn0, cn1);
+    }
+
+    ActivationFunc getActivationFunc(int depth, std::vector<float>& activParams) const CV_OVERRIDE
+    {
+        return func.getActivationFunc(depth, activParams);
     }
 
 #ifdef HAVE_CUDA
@@ -282,12 +318,6 @@ public:
         return func.initCUDA(Layer::preferableTarget, context->stream);
     }
 #endif
-
-    virtual bool tryQuantize(const std::vector<std::vector<float> > &scales,
-                             const std::vector<std::vector<int> > &zeropoints, LayerParams& params) CV_OVERRIDE
-    {
-        return func.tryQuantize(scales, zeropoints, params);
-    }
 
     virtual int64 getFLOPS(const std::vector<MatShape> &inputs,
                            const std::vector<MatShape> &outputs) const CV_OVERRIDE
@@ -323,7 +353,8 @@ struct BaseFunctor
 
     void getScaleShift(Mat&, Mat&) const {}
 
-    bool tryQuantize(const std::vector<std::vector<float>>&, const std::vector<std::vector<int>>&, LayerParams&) { return false; }
+    ActivationFunc getActivationFunc(int /*depth*/, std::vector<float>& /*activParams*/) const
+    { return nullptr; }
 };
 
 struct ReLUFunctor : public BaseFunctor
@@ -332,6 +363,13 @@ struct ReLUFunctor : public BaseFunctor
     float slope;
 
     explicit ReLUFunctor(float slope_=1.f) : slope(slope_) {}
+
+    ActivationFunc getActivationFunc(int depth, std::vector<float>& activParams) const
+    {
+        if (depth != CV_32F) return nullptr;
+        activParams = {slope};
+        return cv::dnn::getActivationFunc(ACTIV_RELU);
+    }
 
     bool supportBackend(int backendId, int)
     {
@@ -351,7 +389,6 @@ struct ReLUFunctor : public BaseFunctor
 #endif
         return backendId == DNN_BACKEND_OPENCV ||
                backendId == DNN_BACKEND_CUDA ||
-               backendId == DNN_BACKEND_HALIDE ||
                backendId == DNN_BACKEND_CANN;
     }
 
@@ -438,21 +475,6 @@ struct ReLUFunctor : public BaseFunctor
     }
 #endif
 
-#ifdef HAVE_HALIDE
-    void attachHalide(const Halide::Expr& input, Halide::Func& top)
-    {
-        Halide::Var x("x"), y("y"), c("c"), n("n");
-        if (slope)
-        {
-            top(x, y, c, n) = select(input >= 0.0f, input, slope * input);
-        }
-        else
-        {
-            top(x, y, c, n) = max(input, 0.0f);
-        }
-    }
-#endif  // HAVE_HALIDE
-
 #ifdef HAVE_CANN
     Ptr<BackendNode> initCannOp(const std::string& name,
                                 const std::vector<Ptr<BackendWrapper> > &inputs,
@@ -507,32 +529,6 @@ struct ReLUFunctor : public BaseFunctor
     }
 #endif
 
-    bool tryQuantize(const std::vector<std::vector<float> > &scales,
-                     const std::vector<std::vector<int> > &zeropoints, LayerParams& params)
-    {
-        if (slope != 0.f)
-        {
-            float inpScale = scales[0][0], outScale = scales[1][0];
-            int inpZp = zeropoints[0][0], outZp = zeropoints[1][0];
-
-            Mat lookUpTable(1, 256, CV_8S);
-            int8_t* table = lookUpTable.ptr<int8_t>();
-            for (int i = -128; i < 128; i++)
-            {
-                float x = inpScale*(i - inpZp);
-                float y = x >= 0.f ? x : slope*x;
-                int quantized = outZp + (int)std::round(y/outScale);
-                table[i+128] = saturate_cast<int8_t>(quantized);
-            }
-            params.blobs.clear();
-            params.blobs.push_back(lookUpTable);
-        }
-        params.set("input_scale", scales[0][0]);
-        params.set("input_zeropoint", zeropoints[0][0]);
-        params.set("slope", slope);
-        return true;
-    }
-
     int64 getFLOPSPerElement() const { return 1; }
 };
 
@@ -547,6 +543,13 @@ struct ReLU6Functor : public BaseFunctor
         CV_Assert(minValue <= maxValue);
     }
 
+    ActivationFunc getActivationFunc(int depth, std::vector<float>& activParams) const
+    {
+        if (depth != CV_32F) return nullptr;
+        activParams = {minValue, maxValue};
+        return cv::dnn::getActivationFunc(ACTIV_CLIP);
+    }
+
     bool supportBackend(int backendId, int)
     {
 #ifdef HAVE_INF_ENGINE
@@ -555,7 +558,6 @@ struct ReLU6Functor : public BaseFunctor
 #endif
         return backendId == DNN_BACKEND_OPENCV ||
                backendId == DNN_BACKEND_CUDA ||
-               backendId == DNN_BACKEND_HALIDE ||
                backendId == DNN_BACKEND_WEBNN ||
                backendId == DNN_BACKEND_CANN;
     }
@@ -632,14 +634,6 @@ struct ReLU6Functor : public BaseFunctor
     }
 #endif
 
-#ifdef HAVE_HALIDE
-    void attachHalide(const Halide::Expr& input, Halide::Func& top)
-    {
-        Halide::Var x("x"), y("y"), c("c"), n("n");
-        top(x, y, c, n) = clamp(input, minValue, maxValue);
-    }
-#endif  // HAVE_HALIDE
-
 #ifdef HAVE_CANN
     Ptr<BackendNode> initCannOp(const std::string& name,
                                 const std::vector<Ptr<BackendWrapper> > &inputs,
@@ -692,14 +686,6 @@ struct ReLU6Functor : public BaseFunctor
     }
 #endif
 
-    bool tryQuantize(const std::vector<std::vector<float> > &scales,
-                     const std::vector<std::vector<int> > &zeropoints, LayerParams& params)
-    {
-        params.set("input_scale", scales[0][0]);
-        params.set("input_zeropoint", zeropoints[0][0]);
-        return true;
-    }
-
     int64 getFLOPSPerElement() const { return 2; }
 };
 
@@ -750,41 +736,12 @@ struct BaseDefaultFunctor : public BaseFunctor
 
     inline void setKernelParams(ocl::Kernel& kernel) const {}
 
-    bool tryQuantize(const std::vector<std::vector<float> > &scales,
-                     const std::vector<std::vector<int> > &zeropoints, LayerParams& params)
-    {
-        float inpScale = scales[0][0], outScale = scales[1][0];
-        int inpZp = zeropoints[0][0], outZp = zeropoints[1][0];
-
-        Mat lookUpTable(1, 256, CV_8S);
-        int8_t* table = lookUpTable.ptr<int8_t>();
-        for (int i = -128; i < 128; i++)
-        {
-            float x = inpScale * static_cast<float>(i - inpZp);
-            float y = static_cast<T const*>(this)->calculate(x);
-            int quantized = outZp + static_cast<int>(std::round(y/outScale));
-            table[i+128] = saturate_cast<int8_t>(quantized);
-        }
-        params.blobs.clear();
-        params.blobs.push_back(lookUpTable);
-        params.set("input_scale", scales[0][0]);
-        params.set("input_zeropoint", zeropoints[0][0]);
-        return true;
-    }
-
 #ifdef HAVE_CUDA
     Ptr<BackendNode> initCUDA(int target, csl::Stream stream)
     {
         CV_Error(Error::StsNotImplemented, "");
     }
 #endif
-
-#ifdef HAVE_HALIDE
-    void attachHalide(const Halide::Expr& input, Halide::Func& top)
-    {
-        CV_Error(Error::StsNotImplemented, "");
-    }
-#endif  // HAVE_HALIDE
 
 #ifdef HAVE_CANN
     Ptr<BackendNode> initCannOp(const std::string& name,
@@ -843,6 +800,13 @@ struct GeluFunctor : public BaseFunctor {
 #else
         vlanes = 1;
 #endif
+    }
+
+    ActivationFunc getActivationFunc(int depth, std::vector<float>& activParams) const
+    {
+        if (depth != CV_32F) return nullptr;
+        activParams.clear();
+        return cv::dnn::getActivationFunc(ACTIV_GELU);
     }
 
     bool supportBackend(int backendId, int)
@@ -978,6 +942,13 @@ struct GeluApproximationFunctor : public BaseDefaultFunctor<GeluApproximationFun
 
     explicit GeluApproximationFunctor() {}
 
+    ActivationFunc getActivationFunc(int depth, std::vector<float>& activParams) const
+    {
+        if (depth != CV_32F) return nullptr;
+        activParams.clear();
+        return cv::dnn::getActivationFunc(ACTIV_GELU_APPROX);
+    }
+
     bool supportBackend(int backendId, int)
     {
         return backendId == DNN_BACKEND_OPENCV;
@@ -999,6 +970,13 @@ struct TanHFunctor : public BaseDefaultFunctor<TanHFunctor>
 {
     typedef TanHLayer Layer;
 
+    ActivationFunc getActivationFunc(int depth, std::vector<float>& activParams) const
+    {
+        if (depth != CV_32F) return nullptr;
+        activParams.clear();
+        return cv::dnn::getActivationFunc(ACTIV_TANH);
+    }
+
     bool supportBackend(int backendId, int)
     {
 #ifdef HAVE_INF_ENGINE
@@ -1007,7 +985,6 @@ struct TanHFunctor : public BaseDefaultFunctor<TanHFunctor>
 #endif
         return backendId == DNN_BACKEND_OPENCV ||
                backendId == DNN_BACKEND_CUDA ||
-               backendId == DNN_BACKEND_HALIDE ||
                backendId == DNN_BACKEND_CANN;
     }
 
@@ -1022,14 +999,6 @@ struct TanHFunctor : public BaseDefaultFunctor<TanHFunctor>
         return make_cuda_node<cuda4dnn::TanHOp>(target, stream);
     }
 #endif
-
-#ifdef HAVE_HALIDE
-    void attachHalide(const Halide::Expr& input, Halide::Func& top)
-    {
-        Halide::Var x("x"), y("y"), c("c"), n("n");
-        top(x, y, c, n) = tanh(input);
-    }
-#endif  // HAVE_HALIDE
 
 #ifdef HAVE_CANN
     Ptr<BackendNode> initCannOp(const std::string& name,
@@ -1079,11 +1048,17 @@ struct SwishFunctor : public BaseDefaultFunctor<SwishFunctor>
 #endif
     }
 
+    ActivationFunc getActivationFunc(int depth, std::vector<float>& activParams) const
+    {
+        if (depth != CV_32F) return nullptr;
+        activParams.clear();
+        return cv::dnn::getActivationFunc(ACTIV_SWISH);
+    }
+
     bool supportBackend(int backendId, int)
     {
         return backendId == DNN_BACKEND_OPENCV ||
                backendId == DNN_BACKEND_CUDA ||
-               backendId == DNN_BACKEND_HALIDE ||
                backendId == DNN_BACKEND_INFERENCE_ENGINE_NGRAPH ||
                backendId == DNN_BACKEND_CANN;
     }
@@ -1125,14 +1100,6 @@ struct SwishFunctor : public BaseDefaultFunctor<SwishFunctor>
         return make_cuda_node<cuda4dnn::SwishOp>(target, stream);
     }
 #endif
-
-#ifdef HAVE_HALIDE
-    void attachHalide(const Halide::Expr& input, Halide::Func& top)
-    {
-        Halide::Var x("x"), y("y"), c("c"), n("n");
-        top(x, y, c, n) = input / (1.0f + exp(-input));
-    }
-#endif  // HAVE_HALIDE
 
 #ifdef HAVE_CANN
     Ptr<BackendNode> initCannOp(const std::string& name,
@@ -1193,11 +1160,17 @@ struct MishFunctor : public BaseDefaultFunctor<MishFunctor>
 #endif
     }
 
+    ActivationFunc getActivationFunc(int depth, std::vector<float>& activParams) const
+    {
+        if (depth != CV_32F) return nullptr;
+        activParams.clear();
+        return cv::dnn::getActivationFunc(ACTIV_MISH);
+    }
+
     bool supportBackend(int backendId, int)
     {
         return backendId == DNN_BACKEND_OPENCV ||
                backendId == DNN_BACKEND_CUDA ||
-               backendId == DNN_BACKEND_HALIDE ||
                backendId == DNN_BACKEND_INFERENCE_ENGINE_NGRAPH ||
                backendId == DNN_BACKEND_CANN;
     }
@@ -1241,14 +1214,6 @@ struct MishFunctor : public BaseDefaultFunctor<MishFunctor>
     }
 #endif
 
-#ifdef HAVE_HALIDE
-    void attachHalide(const Halide::Expr& input, Halide::Func& top)
-    {
-        Halide::Var x("x"), y("y"), c("c"), n("n");
-        top(x, y, c, n) = input * tanh(log(1.0f + exp(input)));
-    }
-#endif  // HAVE_HALIDE
-
 #ifdef HAVE_CANN
     Ptr<BackendNode> initCannOp(const std::string& name,
                                 const std::vector<Ptr<BackendWrapper> > &inputs,
@@ -1287,6 +1252,13 @@ struct SigmoidFunctor : public BaseDefaultFunctor<SigmoidFunctor>
 {
     typedef SigmoidLayer Layer;
 
+    ActivationFunc getActivationFunc(int depth, std::vector<float>& activParams) const
+    {
+        if (depth != CV_32F) return nullptr;
+        activParams.clear();
+        return cv::dnn::getActivationFunc(ACTIV_SIGMOID);
+    }
+
     bool supportBackend(int backendId, int)
     {
 #ifdef HAVE_INF_ENGINE
@@ -1295,7 +1267,6 @@ struct SigmoidFunctor : public BaseDefaultFunctor<SigmoidFunctor>
 #endif
         return backendId == DNN_BACKEND_OPENCV ||
                backendId == DNN_BACKEND_CUDA ||
-               backendId == DNN_BACKEND_HALIDE ||
                backendId == DNN_BACKEND_CANN;
     }
 
@@ -1317,14 +1288,6 @@ struct SigmoidFunctor : public BaseDefaultFunctor<SigmoidFunctor>
         return make_cuda_node<cuda4dnn::SigmoidOp>(target, stream);
     }
 #endif
-
-#ifdef HAVE_HALIDE
-    void attachHalide(const Halide::Expr& input, Halide::Func& top)
-    {
-        Halide::Var x("x"), y("y"), c("c"), n("n");
-        top(x, y, c, n) = 1.0f / (1.0f + exp(-input));
-    }
-#endif  // HAVE_HALIDE
 
 #ifdef HAVE_CANN
     Ptr<BackendNode> initCannOp(const std::string& name,
@@ -1375,6 +1338,13 @@ struct ELUFunctor : public BaseDefaultFunctor<ELUFunctor>
 #endif
     }
 
+    ActivationFunc getActivationFunc(int depth, std::vector<float>& activParams) const
+    {
+        if (depth != CV_32F) return nullptr;
+        activParams = {alpha};
+        return cv::dnn::getActivationFunc(ACTIV_ELU);
+    }
+
     bool supportBackend(int backendId, int)
     {
 #ifdef HAVE_INF_ENGINE
@@ -1383,7 +1353,6 @@ struct ELUFunctor : public BaseDefaultFunctor<ELUFunctor>
 #endif
         return backendId == DNN_BACKEND_OPENCV ||
                backendId == DNN_BACKEND_CUDA ||
-               backendId == DNN_BACKEND_HALIDE ||
                backendId == DNN_BACKEND_CANN;
     }
 
@@ -1425,14 +1394,6 @@ struct ELUFunctor : public BaseDefaultFunctor<ELUFunctor>
         return make_cuda_node<cuda4dnn::ELUOp>(target, stream, alpha);
     }
 #endif
-
-#ifdef HAVE_HALIDE
-    void attachHalide(const Halide::Expr& input, Halide::Func& top)
-    {
-        Halide::Var x("x"), y("y"), c("c"), n("n");
-        top(x, y, c, n) = select(input >= 0.0f, input, alpha * (exp(input) - 1));
-    }
-#endif  // HAVE_HALIDE
 
 #ifdef HAVE_CANN
     Ptr<BackendNode> initCannOp(const std::string& name,
@@ -1482,7 +1443,6 @@ struct AbsValFunctor : public BaseDefaultFunctor<AbsValFunctor>
 #endif
         return backendId == DNN_BACKEND_OPENCV ||
                backendId == DNN_BACKEND_CUDA ||
-               backendId == DNN_BACKEND_HALIDE ||
                backendId == DNN_BACKEND_CANN;
     }
 
@@ -1497,14 +1457,6 @@ struct AbsValFunctor : public BaseDefaultFunctor<AbsValFunctor>
         return make_cuda_node<cuda4dnn::AbsValOp>(target, stream);
     }
 #endif
-
-#ifdef HAVE_HALIDE
-    void attachHalide(const Halide::Expr& input, Halide::Func& top)
-    {
-        Halide::Var x("x"), y("y"), c("c"), n("n");
-        top(x, y, c, n) = abs(input);
-    }
-#endif  // HAVE_HALIDE
 
 #ifdef HAVE_CANN
     Ptr<BackendNode> initCannOp(const std::string& name,
@@ -1548,7 +1500,6 @@ struct BNLLFunctor : public BaseDefaultFunctor<BNLLFunctor>
     {
         return backendId == DNN_BACKEND_OPENCV ||
                backendId == DNN_BACKEND_CUDA ||
-               backendId == DNN_BACKEND_HALIDE ||
                backendId == DNN_BACKEND_CANN;
     }
 
@@ -1586,15 +1537,6 @@ struct BNLLFunctor : public BaseDefaultFunctor<BNLLFunctor>
     }
 #endif // HAVE_CANN
 
-#ifdef HAVE_HALIDE
-    void attachHalide(const Halide::Expr& input, Halide::Func& top)
-    {
-        Halide::Var x("x"), y("y"), c("c"), n("n");
-        // https://github.com/BVLC/caffe/blame/1.0/src/caffe/layers/bnll_layer.cpp#L17
-        top(x, y, c, n) = max(input, 0) + log(1.0f + exp(-abs(input)));
-    }
-#endif  // HAVE_HALIDE
-
     int64 getFLOPSPerElement() const { return 5; }
 };
 
@@ -1607,7 +1549,7 @@ struct CeilFunctor : public BaseDefaultFunctor<CeilFunctor>
 
     bool supportBackend(int backendId, int)
     {
-        return backendId == DNN_BACKEND_OPENCV || backendId == DNN_BACKEND_CUDA || backendId == DNN_BACKEND_HALIDE;
+        return backendId == DNN_BACKEND_OPENCV || backendId == DNN_BACKEND_CUDA;
     }
 
     inline float calculate(float x) const
@@ -1643,14 +1585,6 @@ struct CeilFunctor : public BaseDefaultFunctor<CeilFunctor>
     }
 #endif // HAVE_CANN
 
-#ifdef HAVE_HALIDE
-    void attachHalide(const Halide::Expr& input, Halide::Func& top)
-    {
-        Halide::Var x("x"), y("y"), c("c"), n("n");
-        top(x, y, c, n) = ceil(input);
-    }
-#endif  // HAVE_HALIDE
-
     int64 getFLOPSPerElement() const { return 1; }
 };
 
@@ -1665,7 +1599,6 @@ struct FloorFunctor : public BaseDefaultFunctor<FloorFunctor>
     {
         return backendId == DNN_BACKEND_OPENCV ||
                backendId == DNN_BACKEND_CUDA   ||
-               backendId == DNN_BACKEND_HALIDE ||
                backendId == DNN_BACKEND_CANN;
     }
 
@@ -1702,14 +1635,6 @@ struct FloorFunctor : public BaseDefaultFunctor<FloorFunctor>
     }
 #endif // HAVE_CANN
 
-#ifdef HAVE_HALIDE
-    void attachHalide(const Halide::Expr& input, Halide::Func& top)
-    {
-        Halide::Var x("x"), y("y"), c("c"), n("n");
-        top(x, y, c, n) = floor(input);
-    }
-#endif  // HAVE_HALIDE
-
     int64 getFLOPSPerElement() const { return 1; }
 };
 
@@ -1722,7 +1647,7 @@ struct LogFunctor : public BaseDefaultFunctor<LogFunctor>
 
     bool supportBackend(int backendId, int)
     {
-        return backendId == DNN_BACKEND_OPENCV || backendId == DNN_BACKEND_CUDA || backendId == DNN_BACKEND_HALIDE;
+        return backendId == DNN_BACKEND_OPENCV || backendId == DNN_BACKEND_CUDA;
     }
 
     inline float calculate(float x) const
@@ -1737,14 +1662,6 @@ struct LogFunctor : public BaseDefaultFunctor<LogFunctor>
     }
 #endif
 
-#ifdef HAVE_HALIDE
-    void attachHalide(const Halide::Expr& input, Halide::Func& top)
-    {
-        Halide::Var x("x"), y("y"), c("c"), n("n");
-        top(x, y, c, n) = log(input);
-    }
-#endif  // HAVE_HALIDE
-
     int64 getFLOPSPerElement() const { return 1; }
 };
 
@@ -1757,7 +1674,7 @@ struct RoundFunctor : public BaseDefaultFunctor<RoundFunctor>
 
     bool supportBackend(int backendId, int)
     {
-        return backendId == DNN_BACKEND_OPENCV || backendId == DNN_BACKEND_CUDA || backendId == DNN_BACKEND_HALIDE;
+        return backendId == DNN_BACKEND_OPENCV || backendId == DNN_BACKEND_CUDA;
     }
 
     inline float calculate(float x) const
@@ -1777,14 +1694,6 @@ struct RoundFunctor : public BaseDefaultFunctor<RoundFunctor>
     }
 #endif
 
-#ifdef HAVE_HALIDE
-    void attachHalide(const Halide::Expr& input, Halide::Func& top)
-    {
-        Halide::Var x("x"), y("y"), c("c"), n("n");
-        top(x, y, c, n) = round(input);
-    }
-#endif  // HAVE_HALIDE
-
     int64 getFLOPSPerElement() const { return 2; }
 };
 
@@ -1799,8 +1708,7 @@ struct SqrtFunctor : public BaseDefaultFunctor<SqrtFunctor>
     {
         return backendId == DNN_BACKEND_OPENCV ||
                backendId == DNN_BACKEND_CUDA   ||
-               backendId == DNN_BACKEND_CANN   ||
-               backendId == DNN_BACKEND_HALIDE;
+               backendId == DNN_BACKEND_CANN;
     }
 
     inline float calculate(float x) const
@@ -1815,14 +1723,6 @@ struct SqrtFunctor : public BaseDefaultFunctor<SqrtFunctor>
     }
 #endif
 
-#ifdef HAVE_HALIDE
-    void attachHalide(const Halide::Expr& input, Halide::Func& top)
-    {
-        Halide::Var x("x"), y("y"), c("c"), n("n");
-        top(x, y, c, n) = sqrt(input);
-    }
-#endif  // HAVE_HALIDE
-
 #ifdef HAVE_DNN_NGRAPH
     std::shared_ptr<ov::Node> initNgraphAPI(const ov::Output<ov::Node>& node)
     {
@@ -1830,67 +1730,11 @@ struct SqrtFunctor : public BaseDefaultFunctor<SqrtFunctor>
     }
 #endif  // HAVE_DNN_NGRAPH
 
-#ifdef HAVE_CANN
-    Ptr<BackendNode> initCannOp(const std::string& name,
-                                const std::vector<Ptr<BackendWrapper> > &inputs,
-                                const std::vector<Ptr<BackendNode> >& nodes)
-    {
-        auto input_wrapper = inputs[0].dynamicCast<CannBackendWrapper>();
-
-        auto op = std::make_shared<ge::op::Sqrt>(name);
-
-        auto input_node = nodes[0].dynamicCast<CannBackendNode>()->getOp();
-        op->set_input_x_by_name(*input_node, input_wrapper->name.c_str());
-        auto input_desc = input_wrapper->getTensorDesc();
-        op->update_input_desc_x(*input_desc);
-
-        auto output_desc = std::make_shared<ge::TensorDesc>(ge::Shape(), ge::FORMAT_NCHW, ge::DT_FLOAT);
-        op->update_output_desc_y(*output_desc);
-
-        return Ptr<BackendNode>(new CannBackendNode(op));
-    }
-#endif // HAVE_CANN
-
     int64 getFLOPSPerElement() const { return 1; }
 };
 
 template<>
 const char* const BaseDefaultFunctor<SqrtFunctor>::ocl_kernel_name = "SqrtForward";
-
-struct NotFunctor : public BaseDefaultFunctor<NotFunctor>
-{
-    typedef NotLayer Layer;
-
-    bool supportBackend(int backendId, int)
-    {
-        return backendId == DNN_BACKEND_OPENCV || backendId == DNN_BACKEND_CUDA || backendId == DNN_BACKEND_HALIDE;
-    }
-
-    inline float calculate(float x) const
-    {
-        return floor(1.f - x);
-    }
-
-#ifdef HAVE_CUDA
-    Ptr<BackendNode> initCUDA(int target, csl::Stream stream)
-    {
-        return make_cuda_node<cuda4dnn::NotOp>(target, stream);
-    }
-#endif
-
-#ifdef HAVE_HALIDE
-    void attachHalide(const Halide::Expr& input, Halide::Func& top)
-    {
-        Halide::Var x("x"), y("y"), c("c"), n("n");
-        top(x, y, c, n) = floor(1.0f - input);
-    }
-#endif  // HAVE_HALIDE
-
-    int64 getFLOPSPerElement() const { return 2; }
-};
-
-template<>
-const char* const BaseDefaultFunctor<NotFunctor>::ocl_kernel_name = "NotForward";
 
 struct AcosFunctor : public BaseDefaultFunctor<AcosFunctor>
 {
@@ -2146,6 +1990,13 @@ struct HardSwishFunctor : public BaseDefaultFunctor<HardSwishFunctor>
 #else
         vlanes = 1;
 #endif
+    }
+
+    ActivationFunc getActivationFunc(int depth, std::vector<float>& activParams) const
+    {
+        if (depth != CV_32F) return nullptr;
+        activParams.clear();
+        return cv::dnn::getActivationFunc(ACTIV_HARDSWISH);
     }
 
     bool supportBackend(int backendId, int)
@@ -2429,6 +2280,13 @@ struct HardSigmoidFunctor : public BaseDefaultFunctor<HardSigmoidFunctor>
 
     explicit HardSigmoidFunctor(float alpha_ = 0.2f, float beta_ = 0.5f) : alpha(alpha_), beta(beta_) {}
 
+    ActivationFunc getActivationFunc(int depth, std::vector<float>& activParams) const
+    {
+        if (depth != CV_32F) return nullptr;
+        activParams = {alpha, beta};
+        return cv::dnn::getActivationFunc(ACTIV_HARDSIGMOID);
+    }
+
     bool supportBackend(int backendId, int)
     {
         return backendId == DNN_BACKEND_OPENCV || backendId == DNN_BACKEND_CUDA;
@@ -2585,8 +2443,7 @@ struct PowerFunctor : public BaseFunctor
 #endif
         {
             return backendId == DNN_BACKEND_OPENCV ||
-                   backendId == DNN_BACKEND_CUDA ||
-                   backendId == DNN_BACKEND_HALIDE;
+                   backendId == DNN_BACKEND_CUDA;
         }
     }
 
@@ -2619,7 +2476,7 @@ struct PowerFunctor : public BaseFunctor
                 for( int i = 0; i < len; i++ )
                 {
                     float x = srcptr[i];
-                    dstptr[i] = pow(a*x + b, p);
+                    dstptr[i] = std::pow(a*x + b, p);
                 }
             }
         }
@@ -2662,23 +2519,6 @@ struct PowerFunctor : public BaseFunctor
         return make_cuda_node<cuda4dnn::PowerOp>(target, stream, power, scale, shift);
     }
 #endif
-
-#ifdef HAVE_HALIDE
-    void attachHalide(const Halide::Expr& input, Halide::Func& top)
-    {
-        Halide::Var x("x"), y("y"), c("c"), n("n");
-        Halide::Expr topExpr = (scale == 1.0f ? input : input * scale);
-        if (shift)
-        {
-            topExpr += shift;
-        }
-        if (power != 1.0f)
-        {
-            topExpr = pow(topExpr, power);
-        }
-        top(x, y, c, n) = topExpr;
-    }
-#endif  // HAVE_HALIDE
 
 #ifdef HAVE_CANN
     Ptr<BackendNode> initCannOp(const std::string& name,
@@ -2747,6 +2587,49 @@ struct PowerFunctor : public BaseFunctor
     int64 getFLOPSPerElement() const { return power == 1 ? 2 : 10; }
 };
 
+// This is required for ONNX Neg on integer tensors produced by Shape/Size subgraphs.
+template<>
+struct ElementWiseIntDispatch<PowerFunctor>
+{
+    static inline bool apply(const PowerFunctor& func, const Mat& src, Mat& dst)
+    {
+        if (src.type() != dst.type())
+            return false;
+        const int depth = src.depth();
+        if (depth != CV_32S && depth != CV_64S)
+            return false;
+
+        if (func.power != 1.f)
+            return false;
+        if (func.shift != 0.f)
+            return false;
+
+        // scale must be an integer value (Neg uses scale=-1)
+        const double scale_d = (double)func.scale;
+        if (std::floor(scale_d) != scale_d)
+            return false;
+        const int64_t scale = (int64_t)scale_d;
+
+        const size_t n = src.total();
+        if (depth == CV_32S)
+        {
+            const int32_t* sp = src.ptr<int32_t>();
+            int32_t* dp = dst.ptr<int32_t>();
+            for (size_t i = 0; i < n; ++i)
+                dp[i] = (int32_t)((int64_t)sp[i] * scale);
+            return true;
+        }
+        else // CV_64S
+        {
+            const int64_t* sp = src.ptr<int64_t>();
+            int64_t* dp = dst.ptr<int64_t>();
+            for (size_t i = 0; i < n; ++i)
+                dp[i] = sp[i] * scale;
+            return true;
+        }
+    }
+};
+
 struct ExpFunctor : public BaseDefaultFunctor<ExpFunctor>
 {
     typedef ExpLayer Layer;
@@ -2770,7 +2653,7 @@ struct ExpFunctor : public BaseDefaultFunctor<ExpFunctor>
     bool supportBackend(int backendId, int targetId)
     {
         return backendId == DNN_BACKEND_OPENCV || backendId == DNN_BACKEND_CUDA ||
-               backendId == DNN_BACKEND_HALIDE || backendId == DNN_BACKEND_INFERENCE_ENGINE_NGRAPH;
+               backendId == DNN_BACKEND_INFERENCE_ENGINE_NGRAPH;
     }
 
     inline float calculate(float x) const
@@ -2790,14 +2673,6 @@ struct ExpFunctor : public BaseDefaultFunctor<ExpFunctor>
         return make_cuda_node<cuda4dnn::ExpOp>(target, stream, normScale, normShift);
     }
 #endif
-
-#ifdef HAVE_HALIDE
-    void attachHalide(const Halide::Expr& input, Halide::Func& top)
-    {
-        Halide::Var x("x"), y("y"), c("c"), n("n");
-        top(x, y, c, n) = exp(normScale * input + normShift);
-    }
-#endif  // HAVE_HALIDE
 
 #ifdef HAVE_DNN_NGRAPH
     std::shared_ptr<ov::Node> initNgraphAPI(const ov::Output<ov::Node>& node)
@@ -2839,7 +2714,6 @@ struct ChannelsPReLUFunctor : public BaseFunctor
 #endif
         return backendId == DNN_BACKEND_OPENCV ||
                backendId == DNN_BACKEND_CUDA ||
-               backendId == DNN_BACKEND_HALIDE ||
                backendId == DNN_BACKEND_CANN;
     }
 
@@ -2921,15 +2795,6 @@ struct ChannelsPReLUFunctor : public BaseFunctor
         return make_cuda_node<cuda4dnn::ChannelwiseReLUOp>(target, stream, scale);
     }
 #endif
-
-#ifdef HAVE_HALIDE
-    void attachHalide(const Halide::Expr& input, Halide::Func& top)
-    {
-        Halide::Var x("x"), y("y"), c("c"), n("n");
-        auto weights = wrapToHalideBuffer(scale, {(int)scale.total()});
-        top(x, y, c, n) = select(input >= 0.0f, input, weights(c) * input);
-    }
-#endif  // HAVE_HALIDE
 
 #ifdef HAVE_CANN
     Ptr<BackendNode> initCannOp(const std::string& name,
@@ -3275,14 +3140,6 @@ Ptr<SqrtLayer> SqrtLayer::create(const LayerParams& params)
     return l;
 }
 
-Ptr<NotLayer> NotLayer::create(const LayerParams& params)
-{
-    Ptr<NotLayer> l(new ElementWiseLayer<NotFunctor>());
-    l->setParamsFrom(params);
-
-    return l;
-}
-
 Ptr<AcosLayer> AcosLayer::create(const LayerParams& params)
 {
     Ptr<AcosLayer> l(new ElementWiseLayer<AcosFunctor>());
@@ -3475,6 +3332,117 @@ Ptr<ExpLayer> ExpLayer::create(const LayerParams& params)
     return l;
 }
 
+// Block-layout (NxC1xHxWxC0) aware override of per-channel PReLU.
+class ChannelsPReLUImpl CV_FINAL : public ElementWiseLayer<ChannelsPReLUFunctor>
+{
+public:
+    using ElementWiseLayer<ChannelsPReLUFunctor>::ElementWiseLayer;
+
+    void forward(InputArrayOfArrays inputs_arr,
+                 OutputArrayOfArrays outputs_arr,
+                 OutputArrayOfArrays internals_arr) CV_OVERRIDE
+    {
+        CV_TRACE_FUNCTION();
+
+        std::vector<Mat> inputs, outputs;
+        inputs_arr.getMatVector(inputs);
+        outputs_arr.getMatVector(outputs);
+        if (!inputs.empty() && inputs[0].shape().layout == DATA_LAYOUT_BLOCK)
+        {
+            CV_Assert(inputs.size() == outputs.size());
+            for (size_t i = 0; i < inputs.size(); ++i)
+                forwardBlock(inputs[i], outputs[i]);
+            return;
+        }
+        ElementWiseLayer<ChannelsPReLUFunctor>::forward(inputs_arr, outputs_arr, internals_arr);
+    }
+
+private:
+    void forwardBlock(const Mat& src, Mat& dst) const
+    {
+        CV_Assert(src.type() == CV_32F && dst.type() == CV_32F);
+        CV_Assert(src.dims == 5 && dst.dims == 5);
+        CV_Assert(src.isContinuous() && dst.isContinuous());
+
+        const int N  = src.size[0];
+        const int C1 = src.size[1];
+        const int H  = src.size[2];
+        const int W  = src.size[3];
+        const int C0 = src.size[4];
+        const int Ci = (int)src.shape().C;
+
+        const float* scaleptr = func.scale.ptr<float>();
+
+        const size_t inStep0 = src.step.p[0] / sizeof(float);
+        const size_t inStep1 = src.step.p[1] / sizeof(float);
+        const size_t inStep2 = src.step.p[2] / sizeof(float);
+        const size_t inStep3 = src.step.p[3] / sizeof(float);
+
+        const size_t outStep0 = dst.step.p[0] / sizeof(float);
+        const size_t outStep1 = dst.step.p[1] / sizeof(float);
+        const size_t outStep2 = dst.step.p[2] / sizeof(float);
+        const size_t outStep3 = dst.step.p[3] / sizeof(float);
+
+#if CV_SIMD
+        const int VEC_SZ = VTraits<v_float32>::vlanes();
+#endif
+
+        parallel_for_(Range(0, N * C1), [&](const Range& r) {
+            const float* inptr0 = src.ptr<float>();
+            float* outptr0 = dst.ptr<float>();
+            AutoBuffer<float> slopeBuf(C0);
+            float* slopes = slopeBuf.data();
+
+            for (int i = r.start; i < r.end; ++i) {
+                const int n  = i / C1;
+                const int c1 = i - n * C1;
+                const int cbase = c1 * C0;
+                const int validC0 = std::min(C0, std::max(0, Ci - cbase));
+
+                for (int c = 0; c < validC0; ++c)
+                    slopes[c] = scaleptr[cbase + c];
+                for (int c = validC0; c < C0; ++c)
+                    slopes[c] = 0.f;
+
+                const float* inbase  = inptr0  + n * inStep0 + c1 * inStep1;
+                float*       outbase = outptr0 + n * outStep0 + c1 * outStep1;
+
+#if CV_SIMD
+                if (C0 == VEC_SZ) {
+                    v_float32 vslope = vx_load(slopes);
+                    v_float32 vzero  = vx_setzero_f32();
+                    for (int h = 0; h < H; ++h) {
+                        const float* inrow  = inbase  + h * inStep2;
+                        float*       outrow = outbase + h * outStep2;
+                        for (int w = 0; w < W; ++w) {
+                            v_float32 v = vx_load(inrow + w * inStep3);
+                            v_float32 scaled = v_mul(v, vslope);
+                            v_float32 out = v_select(v_ge(v, vzero), v, scaled);
+                            vx_store(outrow + w * outStep3, out);
+                        }
+                    }
+                    continue;
+                }
+#endif
+                for (int h = 0; h < H; ++h) {
+                    const float* inrow  = inbase  + h * inStep2;
+                    float*       outrow = outbase + h * outStep2;
+                    for (int w = 0; w < W; ++w) {
+                        const float* in_pos  = inrow  + w * inStep3;
+                        float*       out_pos = outrow + w * outStep3;
+                        for (int c0 = 0; c0 < validC0; ++c0) {
+                            float v = in_pos[c0];
+                            out_pos[c0] = v >= 0.f ? v : slopes[c0] * v;
+                        }
+                        for (int c0 = validC0; c0 < C0; ++c0)
+                            out_pos[c0] = 0.f;
+                    }
+                }
+            }
+        });
+    }
+};
+
 Ptr<Layer> ChannelsPReLULayer::create(const LayerParams& params)
 {
     CV_Assert(params.blobs.size() == 1);
@@ -3496,7 +3464,7 @@ Ptr<Layer> ChannelsPReLULayer::create(const LayerParams& params)
     }
     else
     {
-        l = new ElementWiseLayer<ChannelsPReLUFunctor>(ChannelsPReLUFunctor(scale));
+        l = new ChannelsPReLUImpl(ChannelsPReLUFunctor(scale));
     }
     l->setParamsFrom(params);
 

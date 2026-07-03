@@ -63,14 +63,14 @@
 
 namespace cv {
 
-BaseRowFilter::BaseRowFilter() { ksize = anchor = -1; }
+BaseRowFilter::BaseRowFilter() : ksize(-1), anchor(-1) {}
 BaseRowFilter::~BaseRowFilter() {}
 
-BaseColumnFilter::BaseColumnFilter() { ksize = anchor = -1; }
+BaseColumnFilter::BaseColumnFilter() : ksize(-1), anchor(-1) {}
 BaseColumnFilter::~BaseColumnFilter() {}
 void BaseColumnFilter::reset() {}
 
-BaseFilter::BaseFilter() { ksize = Size(-1,-1); anchor = Point(-1,-1); }
+BaseFilter::BaseFilter() : ksize(-1, -1), anchor(-1, -1) {}
 BaseFilter::~BaseFilter() {}
 void BaseFilter::reset() {}
 
@@ -205,6 +205,14 @@ int FilterEngine::proceed(const uchar* src, int srcstep, int count,
 
     CV_CPU_DISPATCH(FilterEngine__proceed, (*this, src, srcstep, count, dst, dststep),
         CV_CPU_DISPATCH_MODES_ALL);
+}
+
+bool FilterEngine::isStateless() const
+{
+    bool s2d = !filter2D    || filter2D->isStateless();
+    bool sr  = !rowFilter   || rowFilter->isStateless();
+    bool sc  = !columnFilter || columnFilter->isStateless();
+    return s2d && sr && sc;
 }
 
 void FilterEngine::apply(const Mat& src, Mat& dst, const Size& wsz, const Point& ofs)
@@ -455,16 +463,18 @@ template<typename ST, class CastOp, class VecOp> struct Filter2D : public BaseFi
         vecOp = _vecOp;
         CV_Assert( _kernel.type() == DataType<KT>::type );
         preprocess2DKernel( _kernel, coords, coeffs );
-        ptrs.resize( coords.size() );
     }
+
+    bool isStateless() const CV_OVERRIDE { return true; }
 
     void operator()(const uchar** src, uchar* dst, int dststep, int count, int width, int cn) CV_OVERRIDE
     {
         KT _delta = delta;
         const Point* pt = &coords[0];
         const KT* kf = (const KT*)&coeffs[0];
-        const ST** kp = (const ST**)&ptrs[0];
         int i, k, nz = (int)coords.size();
+        AutoBuffer<const ST*> _kp(nz);
+        const ST** kp = _kp.data();
         CastOp castOp = castOp0;
 
         width *= cn;
@@ -507,7 +517,6 @@ template<typename ST, class CastOp, class VecOp> struct Filter2D : public BaseFi
 
     std::vector<Point> coords;
     std::vector<uchar> coeffs;
-    std::vector<uchar*> ptrs;
     KT delta;
     CastOp castOp0;
     VecOp vecOp;
@@ -1171,16 +1180,50 @@ static bool replacementFilter2D(int stype, int dtype, int kernel_type,
                                 int anchor_x, int anchor_y,
                                 double delta, int borderType, bool isSubmatrix)
 {
+    // Prioritize stateless implementation
+    int res = cv_hal_filter_stateless(src_data, src_step, stype,
+                                      dst_data, dst_step, dtype, width, height,
+                                      full_width, full_height, offset_x, offset_y,
+                                      kernel_data, kernel_step, kernel_type,
+                                      kernel_width, kernel_height, anchor_x, anchor_y,
+                                      delta, borderType, isSubmatrix, src_data == dst_data);
+    if (res == CV_HAL_ERROR_OK)
+    {
+        return true;
+    } else if (res != CV_HAL_ERROR_NOT_IMPLEMENTED)
+    {
+        CV_Error_(cv::Error::StsInternal,
+                  ("HAL implementation filter_stateless ==> " CVAUX_STR(cv_hal_filter_stateless) " returned %d (0x%08x)", res, res));
+    }
+
     cvhalFilter2D* ctx;
-    int res = cv_hal_filterInit(&ctx, kernel_data, kernel_step, kernel_type, kernel_width, kernel_height, width, height,
+    res = cv_hal_filterInit(&ctx, kernel_data, kernel_step, kernel_type, kernel_width, kernel_height, width, height,
                                 stype, dtype, borderType, delta, anchor_x, anchor_y, isSubmatrix, src_data == dst_data);
-    if (res != CV_HAL_ERROR_OK)
+    if (res == CV_HAL_ERROR_NOT_IMPLEMENTED)
+    {
         return false;
+    } else if (res != CV_HAL_ERROR_OK)
+    {
+        CV_Error_(cv::Error::StsInternal,
+                  ("HAL implementation filterInit ==> " CVAUX_STR(cv_hal_filterInit) " returned %d (0x%08x)", res, res));
+    }
+
     res = cv_hal_filter(ctx, src_data, src_step, dst_data, dst_step, width, height, full_width, full_height, offset_x, offset_y);
     bool success = (res == CV_HAL_ERROR_OK);
+    if (res != CV_HAL_ERROR_OK && res != CV_HAL_ERROR_NOT_IMPLEMENTED )
+    {
+        CV_Error_(cv::Error::StsInternal,
+                  ("HAL implementation filter ==> " CVAUX_STR(cv_hal_filter) " returned %d (0x%08x)", res, res));
+    }
+
     res = cv_hal_filterFree(ctx);
-    if (res != CV_HAL_ERROR_OK)
-        return false;
+    success &= (res == CV_HAL_ERROR_OK);
+    if (res != CV_HAL_ERROR_OK && res != CV_HAL_ERROR_NOT_IMPLEMENTED )
+    {
+        CV_Error_(cv::Error::StsInternal,
+                  ("HAL implementation filterFree ==> " CVAUX_STR(cv_hal_filterFree) " returned %d (0x%08x)", res, res));
+    }
+
     return success;
 }
 
@@ -1367,18 +1410,51 @@ static bool replacementSepFilter(int stype, int dtype, int ktype,
                                  uchar * kernely_data, int kernely_len,
                                  int anchor_x, int anchor_y, double delta, int borderType)
 {
+    // Prioritize stateless implementation
+    int res = cv_hal_sepFilter_stateless(src_data, src_step, stype,
+                                         dst_data, dst_step, dtype,
+                                         width, height, full_width, full_height, offset_x, offset_y,
+                                         kernelx_data, kernelx_len, kernely_data, kernely_len, ktype,
+                                         anchor_x, anchor_y, delta, borderType);
+    if (res == CV_HAL_ERROR_OK)
+    {
+        return true;
+    } else if (res != CV_HAL_ERROR_NOT_IMPLEMENTED)
+    {
+        CV_Error_(cv::Error::StsInternal,
+                  ("HAL implementation sepFilter_stateless ==> " CVAUX_STR(cv_hal_sepFilter_stateless) " returned %d (0x%08x)", res, res));
+    }
+
     cvhalFilter2D *ctx;
-    int res = cv_hal_sepFilterInit(&ctx, stype, dtype, ktype,
+    res = cv_hal_sepFilterInit(&ctx, stype, dtype, ktype,
                                    kernelx_data, kernelx_len,
                                    kernely_data, kernely_len,
                                    anchor_x, anchor_y, delta, borderType);
-    if (res != CV_HAL_ERROR_OK)
+    if (res == CV_HAL_ERROR_NOT_IMPLEMENTED)
+    {
         return false;
+    } else if (res != CV_HAL_ERROR_OK)
+    {
+        CV_Error_(cv::Error::StsInternal,
+                  ("HAL implementation sepFilterInit ==> " CVAUX_STR(cv_hal_sepFilterInit) " returned %d (0x%08x)", res, res));
+    }
+
     res = cv_hal_sepFilter(ctx, src_data, src_step, dst_data, dst_step, width, height, full_width, full_height, offset_x, offset_y);
     bool success = (res == CV_HAL_ERROR_OK);
+    if (res != CV_HAL_ERROR_OK && res != CV_HAL_ERROR_NOT_IMPLEMENTED )
+    {
+        CV_Error_(cv::Error::StsInternal,
+                  ("HAL implementation sepFilter ==> " CVAUX_STR(cv_hal_sepFilter) " returned %d (0x%08x)", res, res));
+    }
+
     res = cv_hal_sepFilterFree(ctx);
-    if (res != CV_HAL_ERROR_OK)
-        return false;
+    success &= (res == CV_HAL_ERROR_OK);
+    if (res != CV_HAL_ERROR_OK && res != CV_HAL_ERROR_NOT_IMPLEMENTED )
+    {
+        CV_Error_(cv::Error::StsInternal,
+                  ("HAL implementation sepFilterFree ==> " CVAUX_STR(cv_hal_sepFilterFree) " returned %d (0x%08x)", res, res));
+    }
+
     return success;
 }
 
@@ -1552,6 +1628,22 @@ void filter2D(InputArray _src, OutputArray _dst, int ddepth,
                   delta, borderType, src.isSubmatrix());
 }
 
+void filter2D( InputArray src, OutputArray dst, InputArray kernel,
+               const Filter2DParams& params)
+{
+    Mat K = kernel.getMat(), tempK;
+    if (params.scale != 1) {
+        int kdepth = K.depth();
+        K.convertTo(tempK,
+            kdepth == CV_32F || kdepth == CV_64F ? kdepth : CV_32F,
+            params.scale, 0);
+        K = tempK;
+    }
+    CV_Assert(params.borderValue == Scalar());
+    filter2D(src, dst, params.ddepth, K, Point(params.anchorX, params.anchorY),
+             params.shift, params.borderType);
+}
+
 void sepFilter2D(InputArray _src, OutputArray _dst, int ddepth,
                  InputArray _kernelX, InputArray _kernelY, Point anchor,
                  double delta, int borderType)
@@ -1594,16 +1686,3 @@ void sepFilter2D(InputArray _src, OutputArray _dst, int ddepth,
 }
 
 } // namespace
-
-CV_IMPL void
-cvFilter2D( const CvArr* srcarr, CvArr* dstarr, const CvMat* _kernel, CvPoint anchor )
-{
-    cv::Mat src = cv::cvarrToMat(srcarr), dst = cv::cvarrToMat(dstarr);
-    cv::Mat kernel = cv::cvarrToMat(_kernel);
-
-    CV_Assert( src.size() == dst.size() && src.channels() == dst.channels() );
-
-    cv::filter2D( src, dst, dst.depth(), kernel, anchor, 0, cv::BORDER_REPLICATE );
-}
-
-/* End of file. */

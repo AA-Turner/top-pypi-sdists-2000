@@ -22,11 +22,9 @@ def main():
     build_java = "ON" if get_build_env_var_by_name("java") else "OFF"
     build_rolling = get_build_env_var_by_name("rolling")
 
-    # NOTE: since 2.3.0 numpy upgraded from manylinux2014 to manylinux_2_28
-    # see https://numpy.org/doc/stable/release/2.3.0-notes.html#numpy-2-3-0-release-notes
     install_requires = [
         'numpy<2.0; python_version<"3.9"',
-        'numpy(>=2, <2.3.0); python_version>="3.9"',
+        'numpy>=2; python_version>="3.9"',
     ]
 
     python_version = cmaker.CMaker.get_python_version()
@@ -75,16 +73,16 @@ def main():
     # https://stackoverflow.com/questions/1405913/python-32bit-or-64bit-mode
     is64 = sys.maxsize > 2 ** 32
 
-    package_name = "opencv-python"
+    package_name = "opencv_python"
 
     if build_contrib and not build_headless:
-        package_name = "opencv-contrib-python"
+        package_name = "opencv_contrib_python"
 
     if build_contrib and build_headless:
-        package_name = "opencv-contrib-python-headless"
+        package_name = "opencv_contrib_python_headless"
 
     if build_headless and not build_contrib:
-        package_name = "opencv-python-headless"
+        package_name = "opencv_python_headless"
 
     if build_rolling:
         package_name += "-rolling"
@@ -99,14 +97,13 @@ def main():
         "cv2": ["*%s" % sysconfig.get_config_vars().get("SO"), "version.py"]
         + (["*.dll"] if os.name == "nt" else [])
         + ["LICENSE.txt", "LICENSE-3RD-PARTY.txt"],
-        "cv2.data": ["*.xml"],
     }
 
     # Files from CMake output to copy to package.
     # Path regexes with forward slashes relative to CMake install dir.
     rearrange_cmake_output_data = {
         "cv2": (
-            [r"bin/opencv_videoio_ffmpeg\d{4}%s\.dll" % ("_64" if is64 else "")]
+            [r"bin/opencv_videoio_ffmpeg\d{3}%s\.dll" % ("_64" if is64 else "")]
             if os.name == "nt"
             else []
         )
@@ -132,12 +129,6 @@ def main():
         +
         [ r"python/cv2/py.typed" ] if sys.version_info >= (3, 6) else []
         ,
-        "cv2.data": [  # OPENCV_OTHER_INSTALL_PATH
-            ("etc" if os.name == "nt" else "share/opencv4") + r"/haarcascades/.*\.xml"
-        ],
-        "cv2.gapi": [
-            "python/cv2" + r"/gapi/.*\.py"
-        ],
         "cv2.mat_wrapper": [
             "python/cv2" + r"/mat_wrapper/.*\.py"
         ],
@@ -156,8 +147,11 @@ def main():
     # Raw paths relative to sourcetree root.
     files_outside_package_dir = {"cv2": ["LICENSE.txt", "LICENSE-3RD-PARTY.txt"]}
 
+    # HACK: Disabled generic assembler for now.
+    # Windows 2025 CI environment does not provide suitable assembler or build is broken in OpenCV MLAS.
     ci_cmake_generator = (
-        ["-G", "Visual Studio 17 2022"]
+        ["-G", "Visual Studio 17 2022",
+         "-DCMAKE_ASM_COMPILER="]
         if os.name == "nt"
         else ["-G", "Unix Makefiles"]
     )
@@ -214,10 +208,14 @@ def main():
         cmake_args.append("-DWITH_WIN32UI=OFF")
         cmake_args.append("-DWITH_QT=OFF")
         cmake_args.append("-DWITH_GTK=OFF")
-        if is_CI_build:
-            cmake_args.append(
-                "-DWITH_MSMF=OFF"
-            )  # see: https://github.com/skvark/opencv-python/issues/263
+        # see: https://github.com/skvark/opencv-python/issues/263
+        # see: https://github.com/opencv/opencv-python/issues/771
+        cmake_args.append("-DWITH_MSMF=OFF")
+        cmake_args.append("-DWITH_OBSENSOR=OFF") # Orbbec cameras backend uses MSMF API
+        # see: https://github.com/opencv/opencv/issues/28438
+        # libavdevice is enabled by default, but brings libxcb dependency
+        if sys.platform.startswith("linux"):
+            cmake_args.append("-DOPENCV_FFMPEG_ENABLE_LIBAVDEVICE=OFF")
 
     if sys.platform.startswith("linux") and not is64 and "bdist_wheel" in sys.argv:
         subprocess.check_call("patch -p0 < patches/patchOpenEXR", shell=True)
@@ -300,6 +298,7 @@ def main():
             "Programming Language :: Python :: 3.11",
             "Programming Language :: Python :: 3.12",
             "Programming Language :: Python :: 3.13",
+            "Programming Language :: Python :: 3.14",
             "Programming Language :: C++",
             "Programming Language :: Python :: Implementation :: CPython",
             "Topic :: Scientific/Engineering",

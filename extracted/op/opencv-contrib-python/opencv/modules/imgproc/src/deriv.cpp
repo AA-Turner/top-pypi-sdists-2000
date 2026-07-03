@@ -715,15 +715,30 @@ void cv::Laplacian( InputArray _src, OutputArray _dst, int ddepth, int ksize,
         ddepth = sdepth;
     _dst.create( _src.size(), CV_MAKETYPE(ddepth, cn) );
 
+    int ktype = std::max(CV_32F, std::max(ddepth, sdepth));
+    Mat kernel;
+
     if( ksize == 1 || ksize == 3 )
     {
-        float K[2][9] =
+        static const double K[2][9] =
         {
             { 0, 1, 0, 1, -4, 1, 0, 1, 0 },
             { 2, 0, 2, 0, -8, 0, 2, 0, 2 }
         };
 
-        Mat kernel(3, 3, CV_32F, K[ksize == 3]);
+        kernel.create(3, 3, ktype);
+        if (ktype == CV_32F)
+        {
+            float* kptr = kernel.ptr<float>();
+            for (int i = 0; i < 9; ++i)
+                kptr[i] = static_cast<float>(K[ksize == 3][i]);
+        }
+        else
+        {
+            double* kptr = kernel.ptr<double>();
+            for (int i = 0; i < 9; ++i)
+                kptr[i] = K[ksize == 3][i];
+        }
         if( scale != 1 )
             kernel *= scale;
 
@@ -735,20 +750,26 @@ void cv::Laplacian( InputArray _src, OutputArray _dst, int ddepth, int ksize,
 
     if( ksize == 1 || ksize == 3 )
     {
-        float K[2][9] =
-        {
-            { 0, 1, 0, 1, -4, 1, 0, 1, 0 },
-            { 2, 0, 2, 0, -8, 0, 2, 0, 2 }
-        };
-        Mat kernel(3, 3, CV_32F, K[ksize == 3]);
-        if( scale != 1 )
-            kernel *= scale;
+        Mat src = _src.getMat();
+        Mat dst = _dst.getMat();
+
+        Point ofs;
+        Size wsz(src.cols, src.rows);
+        if(!(borderType & BORDER_ISOLATED))
+            src.locateROI(wsz, ofs);
+
+        CALL_HAL(laplacian, cv_hal_laplacian,
+                src.ptr(), src.step,
+                dst.ptr(), dst.step,
+                src.cols, src.rows,
+                sdepth, ddepth, cn,
+                ksize, borderType & ~BORDER_ISOLATED,
+                (uint8_t)0);
 
         filter2D( _src, _dst, ddepth, kernel, Point(-1, -1), delta, borderType );
     }
     else
     {
-        int ktype = std::max(CV_32F, std::max(ddepth, sdepth));
         int wdepth = sdepth == CV_8U && ksize <= 5 ? CV_16S : sdepth <= CV_32F ? CV_32F : CV_64F;
         int wtype = CV_MAKETYPE(wdepth, cn);
         Mat kd, ks;
@@ -776,47 +797,23 @@ void cv::Laplacian( InputArray _src, OutputArray _dst, int ddepth, int ksize,
         const uchar* sptr = src.ptr() + src.step[0] * y;
 
         int dy0 = std::min(std::max((int)(STRIPE_SIZE/(CV_ELEM_SIZE(stype)*src.cols)), 1), src.rows);
-        Mat d2x( dy0 + kd.rows - 1, src.cols, wtype );
-        Mat d2y( dy0 + kd.rows - 1, src.cols, wtype );
+        Mat d2xbuf( dy0 + kd.rows - 1, src.cols, wtype );
+        Mat d2ybuf( dy0 + kd.rows - 1, src.cols, wtype );
 
         for( ; dsty < src.rows; sptr += dy0*src.step, dsty += dy )
         {
-            fx->proceed( sptr, (int)src.step, dy0, d2x.ptr(), (int)d2x.step );
-            dy = fy->proceed( sptr, (int)src.step, dy0, d2y.ptr(), (int)d2y.step );
+            fx->proceed( sptr, (int)src.step, dy0, d2xbuf.ptr(), (int)d2xbuf.step );
+            dy = fy->proceed( sptr, (int)src.step, dy0, d2ybuf.ptr(), (int)d2ybuf.step );
             if( dy > 0 )
             {
                 Mat dstripe = dst.rowRange(dsty, dsty + dy);
-                d2x.rows = d2y.rows = dy; // modify the headers, which should work
+                Mat d2x = d2xbuf.rowRange(0, dy);
+                Mat d2y = d2ybuf.rowRange(0, dy);
                 d2x += d2y;
                 d2x.convertTo( dstripe, ddepth, scale, delta );
             }
         }
     }
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////
-
-CV_IMPL void
-cvSobel( const void* srcarr, void* dstarr, int dx, int dy, int aperture_size )
-{
-    cv::Mat src = cv::cvarrToMat(srcarr), dst = cv::cvarrToMat(dstarr);
-
-    CV_Assert( src.size() == dst.size() && src.channels() == dst.channels() );
-
-    cv::Sobel( src, dst, dst.depth(), dx, dy, aperture_size, 1, 0, cv::BORDER_REPLICATE );
-    if( CV_IS_IMAGE(srcarr) && ((IplImage*)srcarr)->origin && dy % 2 != 0 )
-        dst *= -1;
-}
-
-
-CV_IMPL void
-cvLaplace( const void* srcarr, void* dstarr, int aperture_size )
-{
-    cv::Mat src = cv::cvarrToMat(srcarr), dst = cv::cvarrToMat(dstarr);
-
-    CV_Assert( src.size() == dst.size() && src.channels() == dst.channels() );
-
-    cv::Laplacian( src, dst, dst.depth(), aperture_size, 1, 0, cv::BORDER_REPLICATE );
 }
 
 /* End of file. */

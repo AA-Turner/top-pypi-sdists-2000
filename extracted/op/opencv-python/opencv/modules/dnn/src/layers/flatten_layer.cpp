@@ -65,10 +65,14 @@ namespace dnn
 class FlattenLayerImpl CV_FINAL : public FlattenLayer
 {
 public:
+    bool _onnxMode;
+
     FlattenLayerImpl(const LayerParams &params)
     {
         _startAxis = params.get<int>("axis", 1);
         _endAxis = params.get<int>("end_axis", -1);
+        _onnxMode = params.get<bool>("onnx", false);
+
         setParamsFrom(params);
     }
 
@@ -83,6 +87,10 @@ public:
                backendId == DNN_BACKEND_CANN;
     }
 
+    bool isDataShuffling() const CV_OVERRIDE { return true; }
+
+    virtual bool alwaysSupportInplace() const CV_OVERRIDE { return true; }
+
     bool getMemoryShapes(const std::vector<MatShape> &inputs,
                          const int requiredOutputs,
                          std::vector<MatShape> &outputs,
@@ -94,29 +102,68 @@ public:
             CV_Assert(inputs[i] == inputs[0]);
         }
 
-        int numAxes = inputs[0].size();
+        MatShape outputShapeVec;
+
+        int numAxes = (int)inputs[0].size();
+        /*
+           Ticket: https://github.com/opencv/opencv/issues/26197
+           [TODO] this is not quite correct,
+           in ONNX Flatten valid range is [0, numAxes],
+           not [0, numAxes-1] which normalize_axis() produces.
+           But if we fix it, flatten_const.onnx from opencv_extra
+           is not processed correctly.
+           libprotobuf-c reads it correctly,
+           but the current version of libprotobuf does not
+        */
         int startAxis = normalize_axis(_startAxis, numAxes);
         int endAxis = normalize_axis(_endAxis, numAxes);
 
-        CV_Assert(startAxis >= 0);
-        CV_Assert(endAxis >= startAxis && endAxis < (int)numAxes);
+        CV_Assert(startAxis >= 0 && startAxis <= numAxes);
 
-        size_t flattenedDimensionSize = total(inputs[0], startAxis, endAxis + 1);
+        if (_onnxMode) {
+            int onnxAxis = _startAxis;
+            if (onnxAxis < 0) onnxAxis += numAxes;
+            onnxAxis = std::max(0, std::min(onnxAxis, numAxes));
+            size_t outer = 1, inner = 1;
+            int i = 0;
+            for (; i < onnxAxis; i++)
+                outer *= inputs[0][i];
+            for (; i < numAxes; i++)
+                inner *= inputs[0][i];
 
-        MatShape outputShapeVec;
-        for (int i = 0; i < startAxis; i++)
-        {
-            outputShapeVec.push_back(inputs[0][i]);
+            CV_Assert_N(inner <= (size_t)INT_MAX, outer < (size_t)INT_MAX);
+            outputShapeVec.push_back((int)outer);
+            outputShapeVec.push_back((int)inner);
         }
-        outputShapeVec.push_back(flattenedDimensionSize);
-        for (size_t i = endAxis + 1; i < numAxes; i++)
-        {
-            outputShapeVec.push_back(inputs[0][i]);
+        else {
+            CV_Assert(endAxis >= startAxis && endAxis <= numAxes);
+
+            size_t flattenedDimensionSize = total(inputs[0], startAxis, endAxis + 1);
+
+            for (int i = 0; i < startAxis; i++)
+            {
+                outputShapeVec.push_back(inputs[0][i]);
+            }
+            outputShapeVec.push_back(flattenedDimensionSize);
+            for (size_t i = endAxis + 1; i < numAxes; i++)
+            {
+                outputShapeVec.push_back(inputs[0][i]);
+            }
         }
 
         outputs.resize(inputs.size(), outputShapeVec);
 
         return true;
+    }
+
+    void getTypes(const std::vector<MatType>& inputs,
+        const int requiredOutputs,
+        const int requiredInternals,
+        std::vector<MatType>& outputs,
+        std::vector<MatType>& internals) const CV_OVERRIDE
+    {
+        CV_Assert(inputs.size());
+        outputs.assign(requiredOutputs, inputs[0]);
     }
 
     void finalize(InputArrayOfArrays inputs_arr, OutputArrayOfArrays) CV_OVERRIDE
@@ -125,8 +172,10 @@ public:
         inputs_arr.getMatVector(inputs);
 
         int numAxes = inputs[0].dims;
-        _startAxis = normalize_axis(_startAxis, numAxes);
-        _endAxis = normalize_axis(_endAxis, numAxes);
+        if (!_onnxMode) {
+            _startAxis = normalize_axis(_startAxis, numAxes);
+            _endAxis = normalize_axis(_endAxis, numAxes);
+        }
     }
 
 #ifdef HAVE_OPENCL
@@ -146,7 +195,7 @@ public:
         {
             MatShape outShape = shape(outputs[i]);
             UMat& output = outputs_arr.getUMatRef(i);
-            output = inputs[i]->reshape(1, (int)outShape.size(), &outShape[0]);
+            inputs[i]->reshape(1, (int)outShape.size(), &outShape[0]).copyTo(output);
         }
 
         return true;
@@ -162,18 +211,11 @@ public:
                    outputs_arr.isUMatVector(),
                    forward_ocl(inputs_arr, outputs_arr, internals_arr))
 
-        std::vector<Mat> inputs, outputs;
-        inputs_arr.getMatVector(inputs);
-        outputs_arr.getMatVector(outputs);
-
-        for (size_t i = 0; i < inputs.size(); i++)
-        {
-            MatShape outShape = shape(outputs[i]);
-            if (inputs[i].data != outputs[i].data)
-            {
-                inputs[i].reshape(1, (int)outShape.size(), &outShape[0]).copyTo(outputs[i]);
-            }
-        }
+        std::vector<Mat> outs;
+        outputs_arr.getMatVector(outs);
+        CV_Assert(!outs.empty());
+        const MatShape outShape = outs[0].shape();
+        reshapeAndCopyFirst(inputs_arr, outputs_arr, outShape);
     }
 
 #ifdef HAVE_CANN
@@ -213,11 +255,14 @@ public:
         std::vector<size_t> dims = ieInpNode.get_shape();
 
         int numAxes = dims.size();
-        int startAxis = normalize_axis(_startAxis, numAxes);
-        int endAxis = normalize_axis(_endAxis, numAxes);
+        int startAxis = _startAxis;
+        if (startAxis < 0) startAxis += numAxes;
+        startAxis = std::max(0, std::min(startAxis, numAxes));
+        int endAxis = _endAxis;
+        if (endAxis < 0) endAxis += numAxes;
+        endAxis = std::max(0, std::min(endAxis, numAxes - 1));
 
         CV_Assert(startAxis >= 0);
-        CV_Assert(endAxis >= startAxis && endAxis < numAxes);
         int64_t flattenedDimensionSize = std::accumulate(dims.begin() + startAxis,
                                          dims.begin() + endAxis + 1, 1, std::multiplies<size_t>());
 
@@ -241,15 +286,12 @@ public:
     ) override
     {
         auto context = reinterpret_cast<csl::CSLContext*>(context_);
-        return make_cuda_node<cuda4dnn::ReshapeOp>(preferableTarget, std::move(context->stream));
+        if (inputs[0]->getHostMatDepth() == CV_Bool)
+            return make_cuda_node_bool<cuda4dnn::ReshapeOp>(std::move(context->stream));
+        else
+            return make_cuda_node_with_type<cuda4dnn::ReshapeOp>(preferableTarget, inputs[0]->getHostMatDepth(), std::move(context->stream));
     }
 #endif
-
-    virtual bool tryQuantize(const std::vector<std::vector<float> > &scales,
-                             const std::vector<std::vector<int> > &zeropoints, LayerParams& params) CV_OVERRIDE
-    {
-        return true;
-    }
 
     int _startAxis;
     int _endAxis;

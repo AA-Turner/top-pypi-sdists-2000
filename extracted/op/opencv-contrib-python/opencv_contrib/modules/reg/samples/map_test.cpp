@@ -42,8 +42,7 @@
 
 #ifdef COMPARE_FEATURES
 #include <opencv2/xfeatures2d.hpp>
-#include <opencv2/calib3d.hpp>
-#include <opencv2/calib3d/calib3d_c.h>
+#include <opencv2/geometry.hpp>
 using namespace cv::xfeatures2d;
 #endif
 

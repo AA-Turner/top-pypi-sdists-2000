@@ -30,16 +30,13 @@ public:
         isGlobalPooling = std::vector<bool>(3, false);
         output_zp = params.get<int>("zeropoints", 0);
         input_zp = params.get<int>("input_zeropoint", output_zp);
-        multiplier = params.get<float>("multiplier", 1.f);
-
         output_sc = params.get<float>("scales", 1.f);
-        input_sc =  multiplier * output_sc;
+        input_sc = params.get<float>("input_scale", params.get<float>("multiplier", 1.f) * output_sc);
 
         hasDynamicShapes = params.get<bool>("has_dynamic_shapes", false);
         shapesInitialized = !hasDynamicShapes;
 
-        if (params.has("pool") || params.has("kernel_size") ||
-            params.has("kernel_w") || params.has("kernel_h"))
+        if (params.has("pool"))
         {
             String pool = toLowerCase(params.get<String>("pool", "max"));
             if (pool == "max")
@@ -50,12 +47,21 @@ public:
                 type = SUM;
             else
                 CV_Error(Error::StsBadArg, "Unknown pooling type \"" + pool + "\"");
+        }
+        else
+        {
+            type = MAX;
+        }
 
+        const bool hasKernelOrGlobalSpec =
+            params.has("kernel_size") || params.has("kernel_w") || params.has("kernel_h") || params.has("kernel_d") ||
+            params.has("global_pooling") || params.has("global_pooling_d") ||
+            params.has("global_pooling_h") || params.has("global_pooling_w");
+        if (hasKernelOrGlobalSpec)
+        {
             getPoolingKernelParams(params, kernel_size, isGlobalPooling, pads_begin, pads_end, strides, padMode);
             globalPooling = isGlobalPooling[0] || isGlobalPooling[1] || isGlobalPooling[2];
         }
-        else
-            CV_Error(Error::StsBadArg, "Cannot determine pooling type");
         setParamsFrom(params);
         ceilMode = params.get<bool>("ceil_mode", true);
         spatialScale = params.get<float>("spatial_scale", 1);
@@ -296,9 +302,16 @@ public:
                         ov::Shape(pads_begin), ov::Shape(pads_end), ov::Shape(kernel_size),
                         rounding_type, pad_type);
         } else if (type == AVE) {
+#if defined(INF_ENGINE_RELEASE) && INF_ENGINE_VER_MAJOR_GE(2025030000)
+            std::vector<size_t> dilations(kernel_size.size(), 1);
+            pool = std::make_shared<ov::op::v16::AvgPool>(input, ov::Strides(strides), ov::Strides(dilations),
+                        ov::Shape(pads_begin), ov::Shape(pads_end), ov::Shape(kernel_size),
+                        !avePoolPaddedArea, rounding_type, pad_type);
+#else
             pool = std::make_shared<ov::op::v1::AvgPool>(input, ov::Strides(strides),
                         ov::Shape(pads_begin), ov::Shape(pads_end), ov::Shape(kernel_size),
                         !avePoolPaddedArea, rounding_type, pad_type);
+#endif
         } else if (type == SUM) {
             ov::Shape inpShape = input.get_shape();
             CV_Assert(inpShape.size() == 2 + kernel_size.size());
@@ -357,7 +370,7 @@ public:
         int nstripes, inpZp, outZp;
         std::vector<int> ofsbuf;
         int poolingType;
-        float multiplier;
+        float inputScaleRatio;
         float spatialScale;
 
         std::vector<size_t> pads_begin, pads_end;
@@ -366,13 +379,13 @@ public:
 
         PoolingInvoker() : src(0), rois(0), dst(0), pad_l(0), pad_t(0), pad_r(0), pad_b(0),
                            avePoolPaddedArea(false), nstripes(0), inpZp(0), outZp(0),
-                           poolingType(MAX), multiplier(1), spatialScale(0){}
+                           poolingType(MAX), inputScaleRatio(1.f), spatialScale(0){}
 
         static void run(const Mat& src, const Mat& rois, Mat& dst,
                         std::vector<size_t> kernel_size, std::vector<size_t> strides,
                         std::vector<size_t> pads_begin, std::vector<size_t> pads_end,
                         bool avePoolPaddedArea, int poolingType, float spatialScale,
-                        float multiplier, int inpZp, int outZp, int nstripes)
+                        float inputScaleRatio, int inpZp, int outZp, int nstripes)
         {
             CV_Assert_N(
                       src.isContinuous(), dst.isContinuous(),
@@ -405,7 +418,7 @@ public:
             p.outZp = outZp;
             p.poolingType = poolingType;
             p.spatialScale = spatialScale;
-            p.multiplier = multiplier;
+            p.inputScaleRatio = inputScaleRatio;
 
             int height = isPool1D ? 1 : src.size[src.dims - 2];
             int width = src.size[src.dims - 1];
@@ -610,7 +623,7 @@ public:
 
                         int bias = (avePoolPaddedArea ? (padded_kernel_area - real_kernel_area) * inpZp : 0)
                                  - (inpZp * kernel_area);
-                        float inv_kernel_area = poolingType == AVE ? multiplier / kernel_area : multiplier;
+                        float inv_kernel_area = poolingType == AVE ? inputScaleRatio / kernel_area : inputScaleRatio;
 #if CV_SIMD128
                         if( isPool2D && xstart > 0 && x0 + 15 < x1 && (x0 + 15) * stride_w - pad_l + kernel_w < inp_width )
                         {
@@ -680,16 +693,18 @@ public:
     {
         const int nstripes = getNumThreads();
         Mat rois;
+        const float inputScaleRatio = input_sc / std::max(output_sc, 1e-12f);
         PoolingInvoker::run(src, rois, dst, kernel_size, strides, pads_begin, pads_end, avePoolPaddedArea, type,
-                            spatialScale, multiplier, input_zp, output_zp, nstripes);
+                            spatialScale, inputScaleRatio, input_zp, output_zp, nstripes);
     }
 
     void avePooling(Mat &src, Mat &dst)
     {
         const int nstripes = getNumThreads();
         Mat rois;
+        const float inputScaleRatio = input_sc / std::max(output_sc, 1e-12f);
         PoolingInvoker::run(src, rois, dst, kernel_size, strides, pads_begin, pads_end, avePoolPaddedArea, type,
-                            spatialScale, multiplier, input_zp, output_zp, nstripes);
+                            spatialScale, inputScaleRatio, input_zp, output_zp, nstripes);
     }
 
     bool getMemoryShapes(const std::vector<MatShape> &inputs,
@@ -706,7 +721,7 @@ public:
         std::vector<size_t> local_kernel;
         if (globalPooling) {
             for (int i = 0; i < inpShape.size(); i++) {
-                int idx = isGlobalPooling.size() - inpShape.size() + i;
+                size_t idx = isGlobalPooling.size() - inpShape.size() + i;
                 local_kernel.push_back(isGlobalPooling[idx] ? inpShape[i] : kernel_size[idx]);
             }
         } else {
@@ -741,7 +756,7 @@ public:
                                  std::vector<size_t>(local_kernel.size(), 1), outShape);
         }
 
-        outputs.assign(1, outShape);
+        outputs.assign(1, MatShape(outShape));
         return false;
     }
 
@@ -787,7 +802,6 @@ private:
     };
     bool hasDynamicShapes;
     bool shapesInitialized;
-    float multiplier;
 };
 
 Ptr<PoolingLayerInt8> PoolingLayerInt8::create(const LayerParams& params)

@@ -5,7 +5,8 @@
 #include "frameProcessor.hpp"
 #include "rotationConverters.hpp"
 
-#include <opencv2/calib3d.hpp>
+#include <opencv2/3d.hpp>
+#include <opencv2/calib.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 
@@ -308,7 +309,10 @@ cv::Mat CalibProcessor::processFrame(const cv::Mat &frame)
 {
     cv::Mat frameCopy;
     cv::Mat frameCopyToSave;
-    frame.copyTo(frameCopy);
+    if (frame.channels() == 1)
+        cv::cvtColor(frame, frameCopy, cv::COLOR_GRAY2BGR);
+    else
+        frame.copyTo(frameCopy);
     bool isTemplateFound = false;
     mCurrentImagePoints.clear();
 

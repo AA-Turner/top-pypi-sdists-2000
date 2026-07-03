@@ -11,8 +11,10 @@
 #include "opencv2/core.hpp"
 #include <opencv2/core/utility.hpp>
 #include "opencv2/imgproc.hpp"
-#include "opencv2/calib3d.hpp"
+#include "opencv2/geometry.hpp"
+#include "opencv2/calib.hpp"
 #include "opencv2/imgcodecs.hpp"
+#include "opencv2/objdetect.hpp"
 #include "opencv2/videoio.hpp"
 #include "opencv2/highgui.hpp"
 
@@ -120,7 +122,7 @@ static Point3f image2plane(Point2f imgpt, const Mat& R, const Mat& tvec,
 {
     Mat R1 = R.clone();
     R1.col(2) = R1.col(2)*Z + tvec;
-    Mat_<double> v = (cameraMatrix*R1).inv()*(Mat_<double>(3,1) << imgpt.x, imgpt.y, 1);
+    Mat_<double> v = (cameraMatrix*R1).inv()*(Mat_<double>({3,1}, {imgpt.x, imgpt.y, 1}));
     double iw = fabs(v(2,0)) > DBL_EPSILON ? 1./v(2,0) : 0;
     return Point3f((float)(v(0,0)*iw), (float)(v(1,0)*iw), (float)Z);
 }

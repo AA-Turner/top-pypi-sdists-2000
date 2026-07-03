@@ -55,7 +55,10 @@ static MergeFunc getMergeFunc(int depth)
         (MergeFunc)GET_OPTIMIZED(cv::hal::merge8u), (MergeFunc)GET_OPTIMIZED(cv::hal::merge8u),
         (MergeFunc)GET_OPTIMIZED(cv::hal::merge16u), (MergeFunc)GET_OPTIMIZED(cv::hal::merge16u),
         (MergeFunc)GET_OPTIMIZED(cv::hal::merge32s), (MergeFunc)GET_OPTIMIZED(cv::hal::merge32s),
-        (MergeFunc)GET_OPTIMIZED(cv::hal::merge64s), (MergeFunc)GET_OPTIMIZED(cv::hal::merge16u)
+        (MergeFunc)GET_OPTIMIZED(cv::hal::merge64s), (MergeFunc)GET_OPTIMIZED(cv::hal::merge16u),
+        (MergeFunc)GET_OPTIMIZED(cv::hal::merge16u), (MergeFunc)GET_OPTIMIZED(cv::hal::merge8u),
+        (MergeFunc)GET_OPTIMIZED(cv::hal::merge64s), (MergeFunc)GET_OPTIMIZED(cv::hal::merge64s),
+        (MergeFunc)GET_OPTIMIZED(cv::hal::merge32s), 0, 0, 0,
     };
 
     return mergeTab[depth];
@@ -133,7 +136,7 @@ void merge(const Mat* mv, size_t n, OutputArray _dst)
     }
 
     CV_Assert( 0 < cn && cn <= CV_CN_MAX );
-    _dst.create(mv[0].dims, mv[0].size, CV_MAKETYPE(depth, cn));
+    _dst.create(mv[0].size, CV_MAKETYPE(depth, cn));
     Mat dst = _dst.getMat();
 
     if( n == 1 )

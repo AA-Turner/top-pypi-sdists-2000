@@ -3,6 +3,14 @@
 // of this distribution and at http://opencv.org/license.html.
 
 #include "../precomp.hpp"
+
+#include "cpu_kernels/nary_eltwise_kernels.simd.hpp"
+#include "layers/cpu_kernels/nary_eltwise_kernels.simd_declarations.hpp"
+#define CV_CPU_OPTIMIZATION_NAMESPACE_BEGIN namespace cpu_baseline {
+#define CV_CPU_OPTIMIZATION_NAMESPACE_END }
+#undef CV_CPU_DISPATCH_MODES_ALL
+
+#include "../net_impl.hpp"
 #include "layers_common.hpp"
 #include "../op_cuda.hpp"
 #include "../op_cann.hpp"
@@ -10,6 +18,7 @@
 #include "../op_vkcom.hpp"
 
 #include <opencv2/dnn/shape_utils.hpp>
+#include "opencv2/core/hal/intrin.hpp"
 
 #include <algorithm>
 #include <iterator>
@@ -33,6 +42,14 @@ static int _mod(int x, int y) {
     }
     return res;
 }
+
+// Wrapper that turns the CV_CPU_DISPATCH return-chain into a normal call.
+static inline int simd_binop_f32_dispatch(const float* a, const float* b,
+                                          float* out, int n, int op) {
+    CV_CPU_DISPATCH(simd_binop_f32_, (a, b, out, n, op),
+                    NEON, AVX2, AVX, BASELINE);
+}
+
 }
 
 class NaryEltwiseHelper CV_FINAL
@@ -99,24 +116,6 @@ public:
         }
     }
 
-    void reInit(size_t newElemSize) {
-        std::vector<size_t> newElemSizes(elemsize.size(), newElemSize);
-        reInit(newElemSizes);
-    }
-
-    void reInit(std::vector<size_t> newElemSizes) {
-        for (size_t array_index = 0; array_index < orig_steps.size(); array_index++) {
-            auto &step = orig_steps[array_index];
-            int esz = elemsize[array_index];
-            int new_esz = newElemSizes[array_index];
-            for (size_t step_index = 0; step_index < step.size(); step_index++) {
-                step[step_index] = static_cast<size_t>(step[step_index] / esz * new_esz);
-            }
-            elemsize[array_index] = newElemSizes[array_index];
-        }
-        prepare_for_broadcast_op();
-    }
-
     bool prepare_for_broadcast_op()
     {
         int i, j, k;
@@ -134,8 +133,6 @@ public:
                 assert(st_i % elemsize[k] == 0);
                 this->shapes[k][i] = sz_i;
                 this->steps[k][i] = st_i;
-                if (this->shapes[k][i] == 0)
-                    return false;
             }
         }
 
@@ -143,7 +140,7 @@ public:
         // since we'd need proper values of steps to check continuity.
         // this loop is probably the most tricky part
         // in the whole implementation of broadcasting.
-        j = this->max_ndims-1;
+        j = this->max_ndims > 0 ? this->max_ndims-1 : 0;
         for (i = j - 1; i >= 0; i--) {
             bool all_contiguous = true, all_scalars = true, all_consistent = true;
             for(k = 0; k < this->narrays; k++) {
@@ -173,13 +170,14 @@ public:
             for (k = 0; k < this->narrays; k++)
                 this->steps[k][i] = this->shapes[k][i] == 1 ? 0 : this->steps[k][i];
         }
+        if (this->max_ndims == 0)
+            i = 0;
         for (; i >= 0; i--) {
             for (k = 0; k < this->narrays; k++) {
                 this->steps[k][i] = 0;
                 this->shapes[k][i] = 1;
             }
         }
-
         return true;
     }
 };
@@ -188,36 +186,12 @@ class NaryEltwiseLayerImpl CV_FINAL : public NaryEltwiseLayer
 {
     NaryEltwiseHelper helper;
 public:
-    enum class OPERATION
-    {
-        AND = 0,
-        EQUAL,
-        GREATER,
-        GREATER_EQUAL,
-        LESS,
-        LESS_EQUAL,
-        OR,
-        POW,
-        XOR,
-        BITSHIFT,
-        MAX,
-        MEAN,
-        MIN,
-        MOD,  // Integer Mod. Reminder's sign = Divisor's sign.
-        FMOD, // Floating-point Mod. Reminder's sign = Dividend's sign.
-        PROD,
-        SUB,
-        SUM,
-        ADD,
-        DIV,
-        WHERE,
-    } op;
+    std::string operation;
 
     NaryEltwiseLayerImpl(const LayerParams& params)
     {
         setParamsFrom(params);
-
-        String operation = toLowerCase(params.get<String>("operation", "sum"));
+        operation = toLowerCase(params.get<String>("operation", "sum"));
 
         if (operation == "equal")
             op = OPERATION::EQUAL;
@@ -261,8 +235,21 @@ public:
             op = OPERATION::XOR;
         else if (operation == "where")
             op = OPERATION::WHERE;
+        else if (operation == "bitwise_and")
+            op = OPERATION::BITWISE_AND;
+        else if (operation == "bitwise_or")
+            op = OPERATION::BITWISE_OR;
+        else if (operation == "bitwise_xor")
+            op = OPERATION::BITWISE_XOR;
         else
             CV_Error(cv::Error::StsBadArg, "Unknown operation type \"" + operation + "\"");
+    }
+
+    virtual std::ostream& dumpAttrs(std::ostream& strm, int indent) const CV_OVERRIDE
+    {
+        prindent(strm, indent);
+        strm << "operation: \"" << operation << "\",\n";
+        return strm;
     }
 
     virtual bool supportBackend(int backendId) CV_OVERRIDE
@@ -276,8 +263,15 @@ public:
         if (backendId == DNN_BACKEND_INFERENCE_ENGINE_NGRAPH)
             return (op == OPERATION::ADD ||
                     op == OPERATION::PROD ||
+                    op == OPERATION::EQUAL ||
+                    op == OPERATION::GREATER ||
                     op == OPERATION::GREATER_EQUAL ||
+                    op == OPERATION::LESS ||
                     op == OPERATION::LESS_EQUAL ||
+                    op == OPERATION::AND ||
+                    op == OPERATION::OR ||
+                    op == OPERATION::XOR ||
+                    op == OPERATION::WHERE ||
                     op == OPERATION::MOD ||
                     op == OPERATION::FMOD
             );
@@ -296,27 +290,44 @@ public:
         return backendId == DNN_BACKEND_OPENCV;
     }
 
-    static MatShape findCommonShape(std::vector<MatShape> shapes)
+    // [TODO] move it to MatShape
+    static MatShape findCommonShape(const std::vector<MatShape>& shapes)
     {
-        CV_Assert(!shapes.empty());
-        const size_t dim = std::max_element(shapes.begin(), shapes.end(),
-                                            [](const MatShape& a, const MatShape& b)
-                                            { return a.size() < b.size(); })->size();
+        size_t i, ninputs = shapes.size();
+        CV_Assert(ninputs > 0u);
 
-        for (auto& shape : shapes)
-        {
-            shape.insert(shape.begin(), dim - shape.size(), 1);
+        int C0 = shapes[0].C, dims0 = shapes[0].dims, maxdims = dims0;
+        bool constC = true;
+        bool allBlock = true;
+        bool constDims = true;
+        for (i = 0; i < ninputs; i++) {
+            const MatShape& inpShape = shapes[i];
+            int dims = inpShape.dims;
+            allBlock = allBlock && inpShape.layout == DATA_LAYOUT_BLOCK;
+            constC = constC && inpShape.C == C0;
+            constDims = constDims && dims == dims0;
+            maxdims = std::max(maxdims, dims);
         }
 
-        MatShape outShape(dim, 1);
-        for (size_t i = 0; i < dim; ++i)
+        MatShape outShape(maxdims, 1);
+        if (allBlock && constC && constDims) {
+            outShape.layout = DATA_LAYOUT_BLOCK;
+            outShape.C = C0;
+        }
+
+        for (i = 0; i < ninputs; i++)
         {
-            for (const auto& shape : shapes)
-            {
-                if (shape[i] != outShape[i])
-                {
-                    CV_Assert(shape[i] == 1 || outShape[i] == 1);
-                    outShape[i] = std::max(outShape[i], shape[i]);
+            const MatShape& inpShape = shapes[i];
+            int dims = inpShape.dims, delta = maxdims - dims;
+            for (int j = 0; j < maxdims; j++) {
+                int inpsz = j < delta ? 1 : inpShape[j - delta];
+                int outsz = outShape[j];
+                if (inpsz == outsz || inpsz == 1 || outsz == 1) {
+                    outShape[j] = inpsz != 1 ? inpsz : outsz;
+                } else {
+                    // Clamp to minimum to tolerate off-by-1 spatial mismatches from Caffe→ONNX export.
+                    CV_LOG_WARNING(NULL, "NaryEltwiseLayer: Shape mismatch detected at dimension " << j << " (" << inpsz << " vs " << outsz << "). Clamping to " << std::min(inpsz, outsz) << ".");
+                    outShape[j] = std::min(inpsz, outsz);
                 }
             }
         }
@@ -324,19 +335,10 @@ public:
         return outShape;
     }
 
-
     virtual void finalize(InputArrayOfArrays inputs_arr, OutputArrayOfArrays outputs_arr) CV_OVERRIDE {
         std::vector<Mat> inputs, outputs;
         inputs_arr.getMatVector(inputs);
         outputs_arr.getMatVector(outputs);
-
-        if (op != OPERATION::POW) {
-            for (size_t i = 0; i < inputs.size(); i++) {
-                if (inputs[i].depth() != outputs[0].depth()) {
-                    CV_Error(Error::BadDepth, cv::format("NaryEltwiseLayer: Data type mismatch, input %zu of type %d, output of type %d", i, inputs[i].depth(), outputs[0].depth()));
-                }
-            }
-        }
 
         helper.init(inputs, outputs);
         CV_CheckTrue(helper.prepare_for_broadcast_op(), "NaryEltwiseLayer: Preparation for broadcasting failed");
@@ -356,26 +358,206 @@ public:
         return false;
     }
 
-    template <typename T, typename Functor>
-    void binary_forward_impl(const Functor& op, int ndims, const std::vector<int>& shape,
-                             const char* data1, const std::vector<size_t>& step1,
-                             const char* data2, const std::vector<size_t>& step2,
-                             char* data, const std::vector<size_t>& step, size_t block_size) {
-        assert(ndims >= 2);
-        size_t dp1 = step1.back() / sizeof(T);
-        size_t dp2 = step2.back() / sizeof(T);
-        size_t dp = step.back() / sizeof(T);
-        int plane_size = shape.back();
-        int nplanes = std::accumulate(shape.begin(), shape.end() - 1, 1, std::multiplies<int>());
+    void getTypes(const std::vector<MatType>& inputs,
+        const int requiredOutputs,
+        const int requiredInternals,
+        std::vector<MatType>& outputs,
+        std::vector<MatType>& internals) const CV_OVERRIDE
+    {
+        if (op == OPERATION::WHERE)
+        {
+            CV_CheckTypeEQ(inputs[0], CV_Bool, "");
+            CV_CheckTypeEQ(inputs[1], inputs[2], "");
+            outputs.assign(1, inputs[1]);
+            return;
+        }
+
+        if (op == OPERATION::AND || op == OPERATION::OR || op == OPERATION::XOR)
+        {
+            CV_CheckTypeEQ(inputs[0], CV_Bool, "");
+            CV_CheckTypeEQ(inputs[1], CV_Bool, "");
+            outputs.assign(1, CV_Bool);
+            return;
+        }
+
+        if (op == OPERATION::BITWISE_AND || op == OPERATION::BITWISE_OR || op == OPERATION::BITWISE_XOR)
+        {
+            CV_Assert(inputs.size());
+            for (auto input : inputs)
+            {
+                CV_CheckTypeEQ(inputs[0], input, "All inputs should have equal types");
+                CV_CheckType(input, input == CV_8S || input == CV_8U || input == CV_16S || input == CV_16U || input == CV_32S || input == CV_32U || input == CV_64S || input == CV_64U, "");
+            }
+            outputs.assign(requiredOutputs, inputs[0]);
+            return;
+        }
+
+        if (op == OPERATION::POW) {
+            CV_Assert(inputs.size() == 2);
+            auto isIntegerType = [](int t) {
+                return t == CV_8S || t == CV_8U || t == CV_16S || t == CV_16U || t == CV_32S || t == CV_32U || t == CV_64S || t == CV_64U;
+            };
+            auto isFloatType = [](int t) {
+                return t == CV_32F || t == CV_64F || t == CV_16F || t == CV_16BF;
+            };
+
+            int out_type;
+            const bool baseIsInt   = isIntegerType(inputs[0]);
+            const bool expIsInt    = isIntegerType(inputs[1]);
+            const bool baseIsFloat = isFloatType(inputs[0]);
+            const bool expIsFloat  = isFloatType(inputs[1]);
+
+            if ((baseIsInt && expIsInt) || (baseIsFloat && expIsFloat))
+            {
+                out_type = (inputs[0] == inputs[1]) ? inputs[0] : CV_32F;
+            }
+            else if (baseIsFloat && !expIsFloat)
+            {
+                out_type = inputs[0];
+            }
+            else if (!baseIsFloat && expIsFloat)
+            {
+                out_type = CV_32F;
+            }
+            else
+            {
+                out_type = CV_32F;
+            }
+            outputs.assign(1, out_type);
+            return;
+        }
+
+        CV_Assert(inputs.size());
+        for (auto input : inputs)
+        {
+            CV_CheckTypeEQ(inputs[0], input, "All inputs should have equal types");
+            if (preferableTarget == DNN_TARGET_OPENCL_FP16)
+                CV_CheckType(input, input == CV_16F || input == CV_32F || input == CV_64F || input == CV_8S || input == CV_8U || input == CV_16S || input == CV_16U || input == CV_32S || input == CV_32U || input == CV_64S || input == CV_64U, "");
+            else
+                CV_CheckType(input, input == CV_32F || input == CV_64F || input == CV_8S || input == CV_8U || input == CV_16S || input == CV_16U || input == CV_32S || input == CV_32U || input == CV_64S || input == CV_64U, "");
+        }
+
+        if (op == OPERATION::EQUAL || op == OPERATION::GREATER || op == OPERATION::GREATER_EQUAL || op == OPERATION::LESS || op == OPERATION::LESS_EQUAL)
+            outputs.assign(1, CV_Bool);
+        else
+            outputs.assign(requiredOutputs, inputs[0]);
+    }
+
+    int getLayouts(const std::vector<DataLayout>& actualInputs,
+                   std::vector<DataLayout>& desiredInputs,
+                   const int requiredOutputs,
+                   std::vector<DataLayout>& outputs) const CV_OVERRIDE
+    {
+        auto* netimpl_ = getNetImpl(this);
+        DataLayout defaultLayout = netimpl_->originalLayout;
+        size_t ninputs = actualInputs.size(), nblockInputs = 0;
+        CV_Assert(ninputs >= 1u);
+        for (size_t i = 0; i < ninputs; i++) {
+            DataLayout layout = actualInputs[i];
+            nblockInputs += layout == DATA_LAYOUT_BLOCK;
+        }
+
+        desiredInputs = actualInputs;
+        if (nblockInputs == ninputs) {
+            outputs.assign(requiredOutputs, DATA_LAYOUT_BLOCK);
+        } else {
+            if (nblockInputs < ninputs) {
+                for (size_t i = 0; i < ninputs; i++) {
+                    DataLayout layout = actualInputs[i];
+                    desiredInputs[i] = layout == DATA_LAYOUT_BLOCK ? defaultLayout : layout;
+                }
+            }
+            outputs.assign(requiredOutputs, DATA_LAYOUT_UNKNOWN);
+        }
+        return outputs[0] == DATA_LAYOUT_BLOCK ? netimpl_->defaultC0 : 0;
+    }
+
+    template <typename T, typename RESULT_T, typename Functor>
+    void binary_forward_impl(const Functor& op, int ndims, const std::vector<int>& shape_in,
+                             const char* data1, const std::vector<size_t>& step1_in,
+                             const char* data2, const std::vector<size_t>& step2_in,
+                             char* data, const std::vector<size_t>& step_in, size_t block_size) {
+        // Collapse consecutive dims that are contiguous in all three tensors.
+        std::vector<int> shape(shape_in.begin(), shape_in.begin() + ndims);
+        std::vector<size_t> step1(step1_in.begin(), step1_in.begin() + ndims);
+        std::vector<size_t> step2(step2_in.begin(), step2_in.begin() + ndims);
+        std::vector<size_t> step (step_in .begin(), step_in .begin() + ndims);
+        for (int k = (int)shape.size() - 2; k >= 0; k--) {
+            size_t e1 = (size_t)shape[k + 1] * step1[k + 1];
+            size_t e2 = (size_t)shape[k + 1] * step2[k + 1];
+            size_t e  = (size_t)shape[k + 1] * step [k + 1];
+            if (step1[k] == e1 && step2[k] == e2 && step[k] == e) {
+                shape[k] *= shape[k + 1];
+                step1[k] = step1[k + 1];
+                step2[k] = step2[k + 1];
+                step [k] = step [k + 1];
+                shape.erase(shape.begin() + k + 1);
+                step1.erase(step1.begin() + k + 1);
+                step2.erase(step2.begin() + k + 1);
+                step .erase(step .begin() + k + 1);
+            }
+        }
+        ndims = (int)shape.size();
+
+        size_t dp1 = 0, dp2 = 0, dp = 0;
+        int plane_size = 1;
+        size_t nplanes = 1;
+
+        if (ndims >= 1) {
+            dp1 = step1.back() / sizeof(T);
+            dp2 = step2.back() / sizeof(T);
+            dp = step.back() / sizeof(RESULT_T);
+            plane_size = shape.back();
+
+            if (ndims >= 2) {
+                nplanes = std::accumulate(shape.begin(), shape.end() - 1, 1, std::multiplies<size_t>());
+            }
+        }
+
+        const bool is_add = (this->op == OPERATION::SUM || this->op == OPERATION::ADD);
+        const bool is_sub = (this->op == OPERATION::SUB);
+        const bool is_mul = (this->op == OPERATION::PROD);
+        const bool is_div = (this->op == OPERATION::DIV);
+        const bool simd_f32 = std::is_same<T, float>::value && std::is_same<RESULT_T, float>::value &&
+                              (is_add || is_sub || is_mul || is_div);
+        const int simd_bin_op = is_add ? cpu_baseline::SIMD_BIN_ADD :
+                                is_sub ? cpu_baseline::SIMD_BIN_SUB :
+                                is_mul ? cpu_baseline::SIMD_BIN_MUL :
+                                is_div ? cpu_baseline::SIMD_BIN_DIV : -1;
+
+        // Fast path: fully-flat contiguous float binop -> one big parallel SIMD loop.
+        if (simd_f32 && ndims == 1 && dp1 == 1 && dp2 == 1 && dp == 1) {
+            int64_t total = (int64_t)nplanes * plane_size;
+            const float* p1 = (const float*)data1;
+            const float* p2 = (const float*)data2;
+            float* po = (float*)data;
+            const int64_t chunk = 4096;
+            int64_t nchunks = (total + chunk - 1) / chunk;
+            parallel_for_(Range(0, (int)nchunks), [&](const Range& r) {
+                for (int c = r.start; c < r.end; c++) {
+                    int64_t start = c * chunk;
+                    int64_t end = std::min(start + chunk, total);
+                    int n = (int)(end - start);
+                    simd_binop_f32_dispatch(p1 + start, p2 + start, po + start, n, simd_bin_op);
+                }
+            });
+            return;
+        }
 
         if (nplanes == 1) { // parallelize within the plane
             const T* ptr1 = (const T*)data1;
             const T* ptr2 = (const T*)data2;
-            T* ptr = (T*)data;
+            RESULT_T* ptr = (RESULT_T*)data;
             auto worker = [&](const Range &r) {
                 if (dp1 == 1 && dp2 == 1 && dp == 1) {
-                    for(int i = r.start; i < r.end; i++) {
-                        ptr[i] = op(ptr1[i], ptr2[i]);
+                    if (simd_f32) {
+                        const float* p1 = (const float*)(const void*)&ptr1[r.start];
+                        const float* p2 = (const float*)(const void*)&ptr2[r.start];
+                        float* po = (float*)(void*)&ptr[r.start];
+                        simd_binop_f32_dispatch(p1, p2, po, r.end - r.start, simd_bin_op);
+                    } else {
+                        for (int i = r.start; i < r.end; i++)
+                            ptr[i] = op(ptr1[i], ptr2[i]);
                     }
                 } else if (dp1 == 1 && dp2 == 0 && dp == 1){
                     T x2 = *ptr2;
@@ -414,10 +596,16 @@ public:
 
                     const T* ptr1 = (const T*)ptr1_;
                     const T* ptr2 = (const T*)ptr2_;
-                    T* ptr = (T*)ptr_;
+                    RESULT_T* ptr = (RESULT_T*)ptr_;
                     if (dp1 == 1 && dp2 == 1 && dp == 1) {
-                        for(int i = 0; i < plane_size; i++) {
-                            ptr[i] = op(ptr1[i], ptr2[i]);
+                        if (simd_f32) {
+                            simd_binop_f32_dispatch((const float*)(const void*)ptr1,
+                                                    (const float*)(const void*)ptr2,
+                                                    (float*)(void*)ptr,
+                                                    plane_size, simd_bin_op);
+                        } else {
+                            for (int i = 0; i < plane_size; i++)
+                                ptr[i] = op(ptr1[i], ptr2[i]);
                         }
                     } else if (dp1 == 1 && dp2 == 0 && dp == 1){
                         T x2 = *ptr2;
@@ -436,7 +624,14 @@ public:
                     }
                 }
             };
-            double nstripes = nplanes * (1.0 / double(block_size));
+            // Use total work (planes * plane_size) so large broadcasts parallelize
+            // even when nplanes alone is below the old nstripes threshold. Target
+            // ~16KB of output work per stripe so even tiny plane_size ops (e.g.
+            // 2-element broadcast rows) spread across threads instead of running
+            // serially.
+            double nstripes = (double)nplanes * plane_size * sizeof(T) / 16384.0;
+            if (nstripes < 1.0) nstripes = 1.0;
+            (void)block_size;
             parallel_for_(Range(0, nplanes), worker, nstripes);
         }
     }
@@ -444,13 +639,19 @@ public:
     /*
         Elementwise binary operator (like +, -, x, /, etc.) which takes two operands
     */
-    template <typename T, typename Functor>
+    template <typename T, typename RESULT_T,  typename Functor>
     void binary_forward(const Functor& f, const std::vector<Mat>& inputs, std::vector<Mat>& outputs, size_t block_size = 6e6) {
         const Mat& a = inputs[0];
         const Mat& b = inputs[1];
         Mat& out = outputs[0];
+
+        if (op == OPERATION::POW && std::is_same<T, RESULT_T>::value && b.total() == 1) {
+            cv::pow(a, (double)(*(const T*)b.data), out);
+            return;
+        }
+
         CV_Assert(helper.shapes.size() == 3 && helper.steps.size() == 3);
-        binary_forward_impl<T, Functor>(f, helper.max_ndims, helper.shapes[0], a.ptr<char>(), helper.steps[1],
+        binary_forward_impl<T, RESULT_T, Functor>(f, helper.max_ndims, helper.shapes[0], a.ptr<char>(), helper.steps[1],
                                         b.ptr<char>(), helper.steps[2], out.ptr<char>(), helper.steps[0], block_size);
     }
 
@@ -466,22 +667,22 @@ public:
         int nplanes = std::accumulate(shape.begin(), shape.end() - 1, 1, std::multiplies<int>());
 
         if (nplanes == 1) { // parallelize within the plane
-            AutoBuffer<char> buf_ptrs(steps.size());
-            auto ptrs = (char**)buf_ptrs.data();
+            AutoBuffer<char*> buf_ptrs(steps.size());
+            char** ptrs = buf_ptrs.data();
             ptrs[0] = out;
             for (int i = 0; i < ninputs; i++) {
                 ptrs[i+1] = (char*)inp[i];
             }
-            const T* ptr1 = (const T*)(ptrs[1]);
-            const T* ptr2 = (const T*)(ptrs[2]);
-            T* ptr = (T*)(ptrs[0]);
             auto worker = [&](const Range &r) {
+                const T* ptr1 = (const T*)(ptrs[1]);
+                const T* ptr2 = (const T*)(ptrs[2]);
+                T* ptr = (T*)(ptrs[0]);
                 if (dp == 1 && dp1 == 1 && dp2 == 1) {
                     for (int i = r.start; i < r.end; i++) {
                         ptr[i] = op(ptr1[i], ptr2[i]);
                     }
                     for (int j = 2; j < ninputs; j++) {
-                        int dpj = steps[j + 1].back();
+                        size_t dpj = steps[j + 1].back() / sizeof(T);
                         const T* ptrj = (const T*)(ptrs[j + 1]);
                         if (dpj == 1) {
                             for (int i = r.start; i < r.end; i++) {
@@ -500,7 +701,7 @@ public:
                     }
                     ptr = tmp;
                     for (int j = 2; j < ninputs; j++) {
-                        int dpj = steps[j + 1].back();
+                        size_t dpj = steps[j + 1].back() / sizeof(T);
                         const T* ptr_j = (const T*)(ptrs[j + 1]);
                         for (int i = r.start; i < r.end; i++, ptr += dp, ptr_j += dpj) {
                             *ptr = saturate_cast<T>(op(*ptr, *ptr_j) * scale);
@@ -512,8 +713,8 @@ public:
             parallel_for_(Range(0, plane_size), worker, nstripes);
         } else { // parallelize across the plane
             auto worker = [&](const Range &r) {
-                AutoBuffer<char> buf_ptrs(steps.size());
-                auto ptrs = (char**)buf_ptrs.data();
+                AutoBuffer<char*> buf_ptrs(steps.size());
+                char** ptrs = buf_ptrs.data();
                 for (int plane_idx = r.start; plane_idx < r.end; plane_idx++) {
                     ptrs[0] = out;
                     for (int i = 0; i < ninputs; i++) ptrs[i+1] = (char*)inp[i];
@@ -535,7 +736,7 @@ public:
                             ptr[i] = saturate_cast<T>(op(ptr1[i], ptr2[i]) * scale);
                         }
                         for (int j = 2; j < ninputs; j++) {
-                            int dpj = steps[j + 1].back();
+                            size_t dpj = steps[j + 1].back() / sizeof(T);
                             const T* ptrj = (const T*)(ptrs[j + 1]);
                             if (dpj == 1) {
                                 for (int i = 0; i < plane_size; i++) {
@@ -554,7 +755,7 @@ public:
                         }
                         ptr = tmp;
                         for (int j = 2; j < ninputs; j++) {
-                            int dpj = steps[j + 1].back();
+                            size_t dpj = steps[j + 1].back() / sizeof(T);
                             const T* ptrj = (const T*)(ptrs[j + 1]);
                             for (int i = 0; i < plane_size; i++, ptr += dp, ptrj += dpj) {
                                 *ptr = op(*ptr, saturate_cast<T>(*ptrj * scale));
@@ -563,7 +764,9 @@ public:
                     }
                 }
             };
-            double nstripes = nplanes * (1.0 / double(block_size));
+            double nstripes = (double)nplanes * plane_size * sizeof(T) / 16384.0;
+            if (nstripes < 1.0) nstripes = 1.0;
+            (void)block_size;
             parallel_for_(Range(0, nplanes), worker, nstripes);
         }
     }
@@ -589,7 +792,7 @@ public:
     /*
         Elementwise ternary operator (like where) which takes three operands
     */
-    template <typename T, typename Functor>
+    template <typename T_INP1, typename T_INP2, typename T_INP3, typename T_OUT, typename Functor>
     void ternary_forward(const Functor& f, const std::vector<Mat>& inputs, std::vector<Mat>& outputs, size_t block_size = 6e6) {
         const Mat& a = inputs[0];
         const Mat& b = inputs[1];
@@ -598,14 +801,14 @@ public:
 
         CV_Assert(helper.shapes.size() == 4 && helper.steps.size() == 4);
 
-        ternary_forward_impl<T, Functor>(f, helper.max_ndims, helper.shapes[0],
-                                         a.ptr<char>(), helper.steps[1],
-                                         b.ptr<char>(), helper.steps[2],
-                                         c.ptr<char>(), helper.steps[3],
-                                         out.ptr<char>(), helper.steps[0], block_size);
+        ternary_forward_impl<T_INP1, T_INP2, T_INP3, T_OUT, Functor>(f, helper.max_ndims, helper.shapes[0],
+                                                                     a.ptr<char>(), helper.steps[1],
+                                                                     b.ptr<char>(), helper.steps[2],
+                                                                     c.ptr<char>(), helper.steps[3],
+                                                                     out.ptr<char>(), helper.steps[0], block_size);
     }
 
-    template <typename T, typename Functor>
+    template <typename T_INP1, typename T_INP2, typename T_INP3, typename T_OUT, typename Functor>
     void ternary_forward_impl(
             const Functor& op, int ndims, const std::vector<int>& shape,
             const char* data1, const std::vector<size_t>& step1,
@@ -613,35 +816,35 @@ public:
             const char* data3, const std::vector<size_t>& step3,
             char* data, const std::vector<size_t>& step, size_t block_size) {
         CV_Assert(ndims >= 2);
-        size_t dp1 = step1.back() / sizeof(T);
-        size_t dp2 = step2.back() / sizeof(T);
-        size_t dp3 = step3.back() / sizeof(T);
-        size_t dp = step.back() / sizeof(T);
+        size_t dp1 = step1.back() / sizeof(T_INP1);
+        size_t dp2 = step2.back() / sizeof(T_INP2);
+        size_t dp3 = step3.back() / sizeof(T_INP3);
+        size_t dp = step.back() / sizeof(T_OUT);
         int plane_size = shape.back();
         int nplanes = std::accumulate(shape.begin(), shape.end() - 1, 1, std::multiplies<int>());
 
         if (nplanes == 1) { // parallelize within the plane
-            const T *ptr1 = (const T*)data1;
-            const T *ptr2 = (const T*)data2;
-            const T *ptr3 = (const T*)data3;
-            T* ptr = (T*)data;
+            const auto *ptr1 = (const T_INP1*)data1;
+            const auto *ptr2 = (const T_INP2*)data2;
+            const auto *ptr3 = (const T_INP3*)data3;
+            auto* ptr = (T_OUT*)data;
             auto worker = [&](const Range &r) {
                 if (dp1 == 1 && dp2 == 1 && dp3 == 1 && dp == 1) {
                     for (int i = r.start; i < r.end; i++) {
                         ptr[i] = op(ptr1[i], ptr2[i], ptr3[i]);
                     }
                 } else if (dp1 == 0 && dp2 == 1 && dp3 == 1 && dp == 1){
-                    T x1 = *ptr1;
+                    auto x1 = *ptr1;
                     for (int i = r.start; i < r.end; i++) {
                         ptr[i] = op(x1, ptr2[i], ptr3[i]);
                     }
                 } else if (dp1 == 1 && dp2 == 0 && dp3 == 1 && dp == 1){
-                    T x2 = *ptr2;
+                    auto x2 = *ptr2;
                     for (int i = r.start; i < r.end; i++) {
                         ptr[i] = op(ptr1[i], x2, ptr3[i]);
                     }
                 } else if (dp1 == 1 && dp2 == 1 && dp3 == 1 && dp == 1) {
-                    T x3 = *ptr3;
+                    auto x3 = *ptr3;
                     for (int i = r.start; i < r.end; i++) {
                         ptr[i] = op(ptr1[i], ptr2[i], x3);
                     }
@@ -672,26 +875,26 @@ public:
                         idx = next_idx;
                     }
 
-                    const T *ptr1 = (const T*)ptr1_;
-                    const T *ptr2 = (const T*)ptr2_;
-                    const T *ptr3 = (const T*)ptr3_;
-                    T* ptr = (T*)ptr_;
+                    const auto *ptr1 = (const T_INP1*)ptr1_;
+                    const auto *ptr2 = (const T_INP2*)ptr2_;
+                    const auto *ptr3 = (const T_INP3*)ptr3_;
+                    auto* ptr = (T_OUT*)ptr_;
                     if (dp1 == 1 && dp2 == 1 && dp3 == 1 && dp == 1) {
                         for (int i = 0; i < plane_size; i++) {
                             ptr[i] = op(ptr1[i], ptr2[i], ptr3[i]);
                         }
                     } else if (dp1 == 0 && dp2 == 1 && dp3 == 1 && dp == 1){
-                        T x1 = *ptr1;
+                        auto x1 = *ptr1;
                         for (int i = 0; i < plane_size; i++) {
                             ptr[i] = op(x1, ptr2[i], ptr3[i]);
                         }
                     } else if (dp1 == 1 && dp2 == 0 && dp3 == 1 && dp == 1){
-                        T x2 = *ptr2;
+                        auto x2 = *ptr2;
                         for (int i = 0; i < plane_size; i++) {
                             ptr[i] = op(ptr1[i], x2, ptr3[i]);
                         }
                     } else if (dp1 == 1 && dp2 == 1 && dp3 == 1 && dp == 1) {
-                        T x3 = *ptr3;
+                        auto x3 = *ptr3;
                         for (int i = 0; i < plane_size; i++) {
                             ptr[i] = op(ptr1[i], ptr2[i], x3);
                         }
@@ -702,7 +905,9 @@ public:
                     }
                 }
             };
-            double nstripes = nplanes * (1.0 / double(block_size));
+            double nstripes = (double)nplanes * plane_size * (sizeof(T_INP1) + sizeof(T_OUT)) / 16384.0;
+            if (nstripes < 1.0) nstripes = 1.0;
+            (void)block_size;
             parallel_for_(Range(0, nplanes), worker, nstripes);
         }
     }
@@ -714,7 +919,6 @@ public:
 
         if (inputs_arr.depth() == CV_16F)
         {
-            helper.reInit(sizeof(float));
             forward_fallback(inputs_arr, outputs_arr, internals_arr);
             return;
         }
@@ -728,115 +932,281 @@ public:
             return;
         }
 
-        typeDispatch(outputs[0].type(), inputs.size(), inputs, outputs);
+        std::vector<Mat> used_inputs = inputs;
+
+        const Mat& out0 = outputs[0];
+        bool needsCrop = false;
+        for (const auto& inp : used_inputs) {
+            int delta = out0.dims - inp.dims;
+            for (int d = 0; d < inp.dims; d++) {
+                int od = d + delta;
+                if (od >= 0 && inp.size[d] > 1 && out0.size[od] > 1 &&
+                    inp.size[d] != out0.size[od]) {
+                    needsCrop = true; break;
+                }
+            }
+            if (needsCrop) break;
+        }
+        if (needsCrop) {
+            std::vector<Range> ranges;
+            for (size_t k = 0; k < used_inputs.size(); k++) {
+                Mat& inp = used_inputs[k];
+                int delta = out0.dims - inp.dims;
+                bool modified = false;
+                ranges.assign(inp.dims, Range::all());
+                for (int d = 0; d < inp.dims; d++) {
+                    int od = d + delta;
+                    if (od >= 0 && inp.size[d] > out0.size[od] &&
+                        inp.size[d] > 1 && out0.size[od] > 1) {
+                        ranges[d] = Range(0, out0.size[od]);
+                        modified = true;
+                    }
+                }
+                if (modified)
+                    inp = inp(ranges).clone();
+            }
+            helper.init(used_inputs, outputs);
+            CV_CheckTrue(helper.prepare_for_broadcast_op(), "NaryEltwiseLayer: Preparation for broadcasting failed");
+        }
+
+        if (op == OPERATION::POW) {
+            CV_Assert(used_inputs.size() == 2);
+            const int out_type = outputs[0].type();
+            if (used_inputs[0].type() != out_type || used_inputs[1].type() != out_type) {
+                Mat a_conv, b_conv;
+                used_inputs[0].convertTo(a_conv, out_type);
+                used_inputs[1].convertTo(b_conv, out_type);
+                used_inputs = {a_conv, b_conv};
+                helper.init(used_inputs, outputs);
+                CV_CheckTrue(helper.prepare_for_broadcast_op(), "NaryEltwiseLayer: Preparation for broadcasting failed");
+            }
+        }
+
+        int type_for_dispatch = (op == OPERATION::WHERE || op == OPERATION::POW) ? outputs.front().type() : used_inputs.front().type();
+        typeDispatch(type_for_dispatch, used_inputs.size(), used_inputs, outputs);
     }
 
     template<typename T, typename... Args>
-    inline void opDispatch(size_t ninputs, Args&&... args)
+    inline typename std::enable_if<std::is_integral<T>::value && !std::is_same<T, bool>::value, void>::type opDispatch(size_t ninputs, Args&&... args)
     {
-        if (ninputs == 2) { // Operators that take two operands
+        if (ninputs == 2) {
             switch (op) {
-                case OPERATION::AND: {
-                    auto op_and = [](const uint8_t &a, const uint8_t &b) { return a & b; };
-                    binary_forward<T>(op_and, std::forward<Args>(args)...);
-                    break;
-                }
                 case OPERATION::EQUAL: {
                     auto equal = [](const T &a, const T &b) { return a == b; };
-                    binary_forward<T>(equal, std::forward<Args>(args)...);
+                    binary_forward<T, bool>(equal, std::forward<Args>(args)...);
                     break;
                 }
                 case OPERATION::GREATER: {
                     auto greater = [](const T &a, const T &b) { return a > b; };
-                    binary_forward<T>(greater, std::forward<Args>(args)...);
+                    binary_forward<T, bool>(greater, std::forward<Args>(args)...);
                     break;
                 }
                 case OPERATION::GREATER_EQUAL: {
                     auto greater_equal = [](const T &a, const T &b) { return a >= b; };
-                    binary_forward<T>(greater_equal, std::forward<Args>(args)...);
+                    binary_forward<T, bool>(greater_equal, std::forward<Args>(args)...);
                     break;
                 }
                 case OPERATION::LESS: {
                     auto less = [](const T &a, const T &b) { return a < b; };
-                    binary_forward<T>(less, std::forward<Args>(args)...);
+                    binary_forward<T, bool>(less, std::forward<Args>(args)...);
                     break;
                 }
                 case OPERATION::LESS_EQUAL: {
                     auto less_equal = [](const T &a, const T &b) { return a <= b; };
-                    binary_forward<T>(less_equal, std::forward<Args>(args)...);
-                    break;
-                }
-                case OPERATION::OR: {
-                    auto op_or = [](const uint8_t &a, const uint8_t &b) { return a | b; };
-                    binary_forward<T>(op_or, std::forward<Args>(args)...);
+                    binary_forward<T, bool>(less_equal, std::forward<Args>(args)...);
                     break;
                 }
                 case OPERATION::POW: {
-                    auto pow = [] (const T& a, const T& b) { return std::pow(a, b); };
-                    binary_forward<T>(pow, std::forward<Args>(args)..., 1e5);
-                    break;
-                }
-                case OPERATION::XOR: {
-                    auto op_xor = [](const uint8_t &a, const uint8_t &b) { return a ^ b; };
-                    binary_forward<T>(op_xor, std::forward<Args>(args)...);
+                    auto pow = [] (const T& a, const T& b) { return saturate_cast<T>(std::pow((double)a, (double)b)); };
+                    binary_forward<T, T>(pow, std::forward<Args>(args)..., 1e5);
                     break;
                 }
                 case OPERATION::BITSHIFT: {
                     auto bitshift = [] (const uint8_t &a, const uint8_t &b) { return a << b; };
-                    binary_forward<T>(bitshift, std::forward<Args>(args)...);
+                    binary_forward<T, T>(bitshift, std::forward<Args>(args)...);
                     break;
                 }
                 case OPERATION::MAX: {
                     auto max = [](const T &a, const T &b) { return std::max(a, b); };
-                    binary_forward<T>(max, std::forward<Args>(args)...);
+                    binary_forward<T, T>(max, std::forward<Args>(args)...);
                     break;
                 }
                 case OPERATION::MEAN: {
                     auto mean = [](const T &a, const T &b) { return (a + b) / T{2}; };
-                    binary_forward<T>(mean, std::forward<Args>(args)...);
+                    binary_forward<T, T>(mean, std::forward<Args>(args)...);
                     break;
                 }
                 case OPERATION::MIN: {
                     auto min = [](const T &a, const T &b) { return std::min(a, b); };
-                    binary_forward<T>(min, std::forward<Args>(args)...);
+                    binary_forward<T, T>(min, std::forward<Args>(args)...);
                     break;
                 }
                 case OPERATION::MOD: {
                     auto mod = [] (const T &a, const T &b) { return static_cast<T>(_mod(int(a), int(b))); };
-                    binary_forward<T>(mod, std::forward<Args>(args)...);
+                    binary_forward<T, T>(mod, std::forward<Args>(args)...);
                     break;
                 }
                 case OPERATION::FMOD: {
                     auto fmod = [](const T &a, const T &b) { return std::fmod(a, b); };
-                    binary_forward<T>(fmod, std::forward<Args>(args)...);
+                    binary_forward<T, T>(fmod, std::forward<Args>(args)...);
                     break;
                 }
                 case OPERATION::PROD: {
                     auto prod = [](const T &a, const T &b) { return a * b; };
-                    binary_forward<T>(prod, std::forward<Args>(args)...);
+                    binary_forward<T, T>(prod, std::forward<Args>(args)...);
                     break;
                 }
                 case OPERATION::SUB: {
                     auto sub = [](const T &a, const T &b) { return a - b; };
-                    binary_forward<T>(sub, std::forward<Args>(args)...);
+                    binary_forward<T, T>(sub, std::forward<Args>(args)...);
                     break;
                 }
                 case OPERATION::ADD:
                 case OPERATION::SUM: {
                     auto sum = [](const T &a, const T &b) { return a + b; };
-                    binary_forward<T>(sum, std::forward<Args>(args)...);
+                    binary_forward<T, T>(sum, std::forward<Args>(args)...);
                     break;
                 }
                 case OPERATION::DIV: {
                     auto div = [](const T &a, const T &b) { return a / b; };
-                    binary_forward<T>(div, std::forward<Args>(args)...);
+                    binary_forward<T, T>(div, std::forward<Args>(args)...);
+                    break;
+                }
+                case OPERATION::BITWISE_AND: {
+                    auto band = [](const T &a, const T &b) { return (T)(a & b); };
+                    binary_forward<T, T>(band, std::forward<Args>(args)...);
+                    break;
+                }
+                case OPERATION::BITWISE_OR: {
+                    auto bor = [](const T &a, const T &b) { return (T)(a | b); };
+                    binary_forward<T, T>(bor, std::forward<Args>(args)...);
+                    break;
+                }
+                case OPERATION::BITWISE_XOR: {
+                    auto bxor = [](const T &a, const T &b) { return (T)(a ^ b); };
+                    binary_forward<T, T>(bxor, std::forward<Args>(args)...);
+                    break;
+                }
+                default: CV_Error(Error::StsBadArg, "Unsupported operation");
+            }
+        } else if (ninputs == 3 && op == OPERATION::WHERE) {
+            auto where = [](const T &a, const T &b, const T &c) { return a ? b : c; };
+            ternary_forward<bool, T, T, T>(where, std::forward<Args>(args)...);
+        } else {
+            switch (op)
+            {
+                case OPERATION::MAX: {
+                    auto max = [](const T &a, const T &b) { return std::max(a, b); };
+                    nary_forward<T>(max, T{1}, std::forward<Args>(args)...);
+                    break;
+                }
+                case OPERATION::MEAN: {
+                    auto sum = [](const T &a, const T &b) { return a + b; };
+                    nary_forward<T>(sum, T{1} / ninputs, std::forward<Args>(args)...);
+                    break;
+                }
+                case OPERATION::MIN: {
+                    auto min = [](const T &a, const T &b) { return std::min(a, b); };
+                    nary_forward<T>(min, T{1}, std::forward<Args>(args)...);
+                    break;
+                }
+                case OPERATION::SUM: {
+                    auto sum = [](const T &a, const T &b) { return a + b; };
+                    nary_forward<T>(sum, T{1}, std::forward<Args>(args)...);
+                    break;
+                }
+                default:
+                    CV_Error(Error::StsBadArg, "Unsupported operation.");
+            }
+        };
+    }
+
+    template<typename T, typename... Args>
+    inline typename std::enable_if<!std::is_integral<T>::value || std::is_same<T, bool>::value, void>::type opDispatch(size_t ninputs, Args&&... args)
+    {
+        if (ninputs == 2) { // Operators that take two operands
+            switch (op) {
+                case OPERATION::EQUAL: {
+                    auto equal = [](const T &a, const T &b) { return a == b; };
+                    binary_forward<T, bool>(equal, std::forward<Args>(args)...);
+                    break;
+                }
+                case OPERATION::GREATER: {
+                    auto greater = [](const T &a, const T &b) { return a > b; };
+                    binary_forward<T, bool>(greater, std::forward<Args>(args)...);
+                    break;
+                }
+                case OPERATION::GREATER_EQUAL: {
+                    auto greater_equal = [](const T &a, const T &b) { return a >= b; };
+                    binary_forward<T, bool>(greater_equal, std::forward<Args>(args)...);
+                    break;
+                }
+                case OPERATION::LESS: {
+                    auto less = [](const T &a, const T &b) { return a < b; };
+                    binary_forward<T, bool>(less, std::forward<Args>(args)...);
+                    break;
+                }
+                case OPERATION::LESS_EQUAL: {
+                    auto less_equal = [](const T &a, const T &b) { return a <= b; };
+                    binary_forward<T, bool>(less_equal, std::forward<Args>(args)...);
+                    break;
+                }
+                case OPERATION::POW: {
+                    auto pow = [] (const T& a, const T& b) { return saturate_cast<T>(std::pow((double)a, (double)b)); };
+                    binary_forward<T, T>(pow, std::forward<Args>(args)..., 1e5);
+                    break;
+                }
+                case OPERATION::MAX: {
+                    auto max = [](const T &a, const T &b) { return std::max(a, b); };
+                    binary_forward<T, T>(max, std::forward<Args>(args)...);
+                    break;
+                }
+                case OPERATION::MEAN: {
+                    auto mean = [](const T &a, const T &b) { return (a + b) / T{2}; };
+                    binary_forward<T, T>(mean, std::forward<Args>(args)...);
+                    break;
+                }
+                case OPERATION::MIN: {
+                    auto min = [](const T &a, const T &b) { return std::min(a, b); };
+                    binary_forward<T, T>(min, std::forward<Args>(args)...);
+                    break;
+                }
+                case OPERATION::MOD: {
+                    auto mod = [] (const T &a, const T &b) { return static_cast<T>(_mod(int(a), int(b))); };
+                    binary_forward<T, T>(mod, std::forward<Args>(args)...);
+                    break;
+                }
+                case OPERATION::FMOD: {
+                    auto fmod = [](const T &a, const T &b) { return std::fmod(a, b); };
+                    binary_forward<T, T>(fmod, std::forward<Args>(args)...);
+                    break;
+                }
+                case OPERATION::PROD: {
+                    auto prod = [](const T &a, const T &b) { return a * b; };
+                    binary_forward<T, T>(prod, std::forward<Args>(args)...);
+                    break;
+                }
+                case OPERATION::SUB: {
+                    auto sub = [](const T &a, const T &b) { return a - b; };
+                    binary_forward<T, T>(sub, std::forward<Args>(args)...);
+                    break;
+                }
+                case OPERATION::ADD:
+                case OPERATION::SUM: {
+                    auto sum = [](const T &a, const T &b) { return a + b; };
+                    binary_forward<T, T>(sum, std::forward<Args>(args)...);
+                    break;
+                }
+                case OPERATION::DIV: {
+                    auto div = [](const T &a, const T &b) { return a / b; };
+                    binary_forward<T, T>(div, std::forward<Args>(args)...);
                     break;
                 }
                 default: CV_Error(Error::StsBadArg, "Unsupported operation");
             }
         } else if (ninputs == 3 && op == OPERATION::WHERE) { // Operators that take three operands
             auto where = [](const T &a, const T &b, const T &c) { return a ? b : c; };
-            ternary_forward<T>(where, std::forward<Args>(args)...);
+            ternary_forward<bool, T, T, T>(where, std::forward<Args>(args)...);
         } else { // Operators that can take multiple (>= 3) operands
             switch (op)
             {
@@ -868,24 +1238,78 @@ public:
     }
 
     template<typename... Args>
+    inline void boolOpDispatch(size_t ninputs, Args&&... args)
+    {
+        switch (op)
+        {
+            case OPERATION::AND:
+            {
+                auto op_and = [](const bool &a, const bool &b) { return a && b; };
+                binary_forward<bool, bool>(op_and, std::forward<Args>(args)...);
+                break;
+            }
+            case OPERATION::OR:
+            {
+                auto op_or = [](const bool &a, const bool &b) { return a || b; };
+                binary_forward<bool, bool>(op_or, std::forward<Args>(args)...);
+                break;
+            }
+            case OPERATION::XOR:
+            {
+                auto op_xor = [](const bool &a, const bool &b) { return a != b; };
+                binary_forward<bool, bool>(op_xor, std::forward<Args>(args)...);
+                break;
+            }
+            default:
+                CV_Error(Error::StsBadArg, "Unsupported operation.");
+        };
+    }
+
+    template<typename... Args>
     inline void typeDispatch(const int type, Args&&... args)
     {
         switch (type)
         {
+            case CV_Bool:
+                boolOpDispatch(std::forward<Args>(args)...);
+                break;
             case CV_8U:
-                // TODO: integrate with type inference
-                helper.reInit(sizeof(uint8_t));
                 opDispatch<uint8_t>(std::forward<Args>(args)...);
                 break;
+            case CV_8S:
+                opDispatch<int8_t>(std::forward<Args>(args)...);
+                break;
             case CV_32S:
-                // TODO: integrate with type inference
-                helper.reInit(sizeof(int32_t));
                 opDispatch<int32_t>(std::forward<Args>(args)...);
+                break;
+            case CV_64S:
+                opDispatch<int64_t>(std::forward<Args>(args)...);
                 break;
             case CV_32F:
                 CV_Assert(op != OPERATION::BITSHIFT && op != OPERATION::AND &&
-                          op != OPERATION::OR && op != OPERATION::XOR);
+                          op != OPERATION::OR && op != OPERATION::XOR &&
+                          op != OPERATION::BITWISE_AND && op != OPERATION::BITWISE_OR &&
+                          op != OPERATION::BITWISE_XOR);
                 opDispatch<float>(std::forward<Args>(args)...);
+                break;
+            case CV_64F:
+                CV_Assert(op != OPERATION::BITSHIFT && op != OPERATION::AND &&
+                          op != OPERATION::OR && op != OPERATION::XOR &&
+                          op != OPERATION::BITWISE_AND && op != OPERATION::BITWISE_OR &&
+                          op != OPERATION::BITWISE_XOR);
+                opDispatch<double>(std::forward<Args>(args)...);
+                break;
+            case CV_16S:
+                opDispatch<int16_t>(std::forward<Args>(args)...);
+                break;
+            case CV_16U:
+                opDispatch<uint16_t>(std::forward<Args>(args)...);
+                break;
+            case CV_32U:
+                opDispatch<uint32_t>(std::forward<Args>(args)...);
+                break;
+            case CV_64U:
+                opDispatch<uint64_t>(std::forward<Args>(args)...);
                 break;
             default:
                 CV_Error(cv::Error::BadDepth, "Unsupported type.");
@@ -936,7 +1360,7 @@ public:
             default: return Ptr<BackendNode>(); // return empty cuda_node if the EltwiseOpType is unsupported type.
         };
 
-        return make_cuda_node<cuda4dnn::EltwiseOp>(preferableTarget, std::move(context->stream), op_, std::vector<float>());
+        return make_cuda_node_with_type<cuda4dnn::EltwiseOp>(preferableTarget, inputs[0]->getHostMatDepth(), std::move(context->stream), op_, std::vector<float>());
     }
 #endif
 
@@ -988,12 +1412,6 @@ public:
     }
 #endif // HAVE_CANN
 
-    virtual bool tryQuantize(const std::vector<std::vector<float> > &scales,
-                             const std::vector<std::vector<int> > &zeropoints, LayerParams& params) CV_OVERRIDE
-    {
-        return false;
-    }
-
     virtual int64 getFLOPS(const std::vector<MatShape> &inputs,
                            const std::vector<MatShape> &outputs) const CV_OVERRIDE
     {
@@ -1013,11 +1431,17 @@ public:
         }
 
         // TODO: Support multiple (>=3) inputs
-        CV_Assert(inputs.size() == 2);
+
+        if (op == OPERATION::WHERE)
+            CV_CheckEQ(inputs.size(), 3u, "");
+        else
+            CV_CheckEQ(inputs.size(), 2u, "");
         auto& inp0 = nodes[0].dynamicCast<InfEngineNgraphNode>()->node;
         auto& inp1 = nodes[1].dynamicCast<InfEngineNgraphNode>()->node;
 
-        if (inp0.get_element_type() != inp1.get_element_type()) {
+        if (op != OPERATION::WHERE && inp0.get_element_type() != inp1.get_element_type()) {
+            CV_Assert(inp0.get_element_type() == ov::element::f16 || inp0.get_element_type() == ov::element::f32);
+            CV_Assert(inp1.get_element_type() == ov::element::f16 || inp1.get_element_type() == ov::element::f32);
             auto dtype = preferableTarget == DNN_TARGET_OPENCL_FP16 || preferableTarget == DNN_TARGET_MYRIAD ?
                         ov::element::f16 : ov::element::f32;
             if (inp0.get_element_type() != dtype)
@@ -1031,12 +1455,29 @@ public:
             node = std::make_shared<ov::op::v1::Add>(inp0, inp1);
         else if (op == OPERATION::PROD)
             node = std::make_shared<ov::op::v1::Multiply>(inp0, inp1);
+        else if (op == OPERATION::EQUAL)
+            node = std::make_shared<ov::op::v1::Equal>(inp0, inp1);
+        else if (op == OPERATION::GREATER)
+            node = std::make_shared<ov::op::v1::Greater>(inp0, inp1);
         else if (op == OPERATION::GREATER_EQUAL)
             node = std::make_shared<ov::op::v1::GreaterEqual>(inp0, inp1);
+        else if (op == OPERATION::LESS)
+            node = std::make_shared<ov::op::v1::Less>(inp0, inp1);
         else if (op == OPERATION::LESS_EQUAL)
             node = std::make_shared<ov::op::v1::LessEqual>(inp0, inp1);
+        else if (op == OPERATION::AND)
+            node = std::make_shared<ov::op::v1::LogicalAnd>(inp0, inp1);
+        else if (op == OPERATION::OR)
+            node = std::make_shared<ov::op::v1::LogicalOr>(inp0, inp1);
+        else if (op == OPERATION::XOR)
+            node = std::make_shared<ov::op::v1::LogicalXor>(inp0, inp1);
+        else if (op == OPERATION::WHERE)
+        {
+            auto& inp2 = nodes[2].dynamicCast<InfEngineNgraphNode>()->node;
+            node = std::make_shared<ov::op::v1::Select>(inp0, inp1, inp2);
+        }
         // Ideally we should do this but int32 internal blobs are converted to float32 data type in inference.
-        // TODO: Remove data type convertion when we have type inference.
+        // TODO: Remove data type conversion when we have type inference.
         else if (op == OPERATION::MOD) {
             auto inp0_i64 = std::make_shared<ov::op::v0::Convert>(inp0, ov::element::i64);
             auto inp1_i64 = std::make_shared<ov::op::v0::Convert>(inp1, ov::element::i64);

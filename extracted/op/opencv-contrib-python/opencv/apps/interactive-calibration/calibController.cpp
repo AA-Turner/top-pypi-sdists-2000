@@ -8,9 +8,12 @@
 #include <cmath>
 #include <ctime>
 
-#include <opencv2/calib3d.hpp>
+#include <opencv2/3d.hpp>
+#include <opencv2/calib.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/imgcodecs.hpp>
+
+using namespace cv;
 
 double calib::calibController::estimateCoverageQuality()
 {
@@ -306,10 +309,10 @@ bool calib::calibDataController::saveCurrentCameraParameters() const
                 parametersWriter << "calibrationDate" << buf;
                 parametersWriter << "framesCount" << std::max((int)mCalibData->objectPoints.size(), (int)mCalibData->allCharucoCorners.size());
                 parametersWriter << "cameraResolution" << mCalibData->imageSize;
-                parametersWriter << "cameraMatrix" << mCalibData->cameraMatrix;
-                parametersWriter << "cameraMatrix_std_dev" << mCalibData->stdDeviations.rowRange(cv::Range(0, 4));
-                parametersWriter << "dist_coeffs" << mCalibData->distCoeffs;
-                parametersWriter << "dist_coeffs_std_dev" << mCalibData->stdDeviations.rowRange(cv::Range(4, 9));
+                parametersWriter << "camera_matrix" << mCalibData->cameraMatrix;
+                parametersWriter << "camera_matrix_std_dev" << mCalibData->stdDeviations.rowRange(cv::Range(0, 4));
+                parametersWriter << "distortion_coefficients" << mCalibData->distCoeffs;
+                parametersWriter << "distortion_coefficients_std_dev" << mCalibData->stdDeviations.rowRange(cv::Range(4, 9));
                 parametersWriter << "avg_reprojection_error" << mCalibData->totalAvgErr;
 
                 parametersWriter.release();

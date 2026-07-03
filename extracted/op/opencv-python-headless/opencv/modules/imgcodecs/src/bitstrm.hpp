@@ -14,7 +14,7 @@ namespace cv
 class RBS_ ## name ## _Exception : public cv::Exception \
 { \
 public: \
-    RBS_ ## name ## _Exception(int code_, const String& err_, const String& func_, const String& file_, int line_) : \
+    RBS_ ## name ## _Exception(cv::Error::Code code_, const String& err_, const String& func_, const String& file_, int line_) : \
         cv::Exception(code_, err_, func_, file_, line_) \
     {} \
 };
@@ -45,9 +45,9 @@ public:
     virtual bool  open( const Mat& buf );
     virtual void  close();
     bool          isOpened();
-    void          setPos( int pos );
-    int           getPos();
-    void          skip( int bytes );
+    void          setPos( int64_t pos );
+    int64_t       getPos();
+    void          skip( int64_t bytes );
 
 protected:
 
@@ -57,7 +57,7 @@ protected:
     uchar*  m_current;
     FILE*   m_file;
     int     m_block_size;
-    int     m_block_pos;
+    int64_t m_block_pos;
     bool    m_is_opened;
 
     virtual void  readBlock();

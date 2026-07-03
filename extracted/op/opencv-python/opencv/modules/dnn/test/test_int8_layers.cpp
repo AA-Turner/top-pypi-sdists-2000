@@ -2,6 +2,10 @@
 // It is subject to the license terms in the LICENSE file found in the top-level directory
 // of this distribution and at http://opencv.org/license.html.
 
+// The tests are disabled, because on-fly quantization was removed in https://github.com/opencv/opencv/pull/24980
+// To be restored, when test models are quantized outsize of OpenCV
+#if 0
+
 #include "test_precomp.hpp"
 #include "npy_blob.hpp"
 #include <opencv2/dnn/shape_utils.hpp>
@@ -42,16 +46,7 @@ public:
         String inpPath, outPath;
         Net net, qnet;
 
-        if (importer == "Caffe")
-        {
-            String prototxt = _tf("layers/" + basename + ".prototxt");
-            String caffemodel = _tf("layers/" + basename + ".caffemodel");
-            net = readNetFromCaffe(prototxt, useCaffeModel ? caffemodel : String());
-
-            inpPath = _tf("layers/" + (useCommonInputBlob ? "blob" : basename + ".input"));
-            outPath =  _tf("layers/" + basename);
-        }
-        else if (importer == "TensorFlow")
+        if (importer == "TensorFlow")
         {
             String netPath = _tf("tensorflow/" + basename + "_net.pb");
             String netConfig = hasText ? _tf("tensorflow/" + basename + "_net.pbtxt") : "";
@@ -97,7 +92,11 @@ public:
         for (int i = 0; i < numOuts; i++)
         {
             outs_int8[i].convertTo(outs_dequantized[i], CV_32F, outputScale[i], -(outputScale[i] * outputZp[i]));
-            normAssert(refs[i], outs_dequantized[i], basename.c_str(), l1, lInf);
+            Mat out_i = outs_dequantized[i], ref_i = refs[i];
+            if (out_i.dims == 2 && ref_i.dims == 1) {
+                ref_i = ref_i.reshape(1, 1);
+            }
+            normAssert(ref_i, out_i, basename.c_str(), l1, lInf);
         }
     }
 };
@@ -204,7 +203,10 @@ TEST_P(Test_Int8_layers, AvePooling)
     if (backend != DNN_BACKEND_INFERENCE_ENGINE_NGRAPH)
         testLayer("layer_pooling_ave", "Caffe", 0.0021, 0.0075);
     testLayer("ave_pool_same", "TensorFlow", 0.00153, 0.0041);
-    testLayer("average_pooling_1d", "ONNX", 0.002, 0.0048);
+#if defined(INF_ENGINE_RELEASE) && INF_ENGINE_VER_MAJOR_LT(2025030000)
+    if (backend != DNN_BACKEND_INFERENCE_ENGINE_NGRAPH)
+#endif
+        testLayer("average_pooling_1d", "ONNX", 0.002, 0.0048);
     if (backend != DNN_BACKEND_INFERENCE_ENGINE_NGRAPH)
         testLayer("average_pooling", "ONNX", 0.0014, 0.0032);
     testLayer("average_pooling_dynamic_axes", "ONNX", 0.0014, 0.006);
@@ -640,9 +642,9 @@ public:
         normAssert(ref, out, "", l1, lInf);
     }
 
-    void testDarknetModel(const std::string& cfg, const std::string& weights,
-                          const cv::Mat& ref, double scoreDiff, double iouDiff,
-                          float confThreshold = 0.24, float nmsThreshold = 0.4, bool perChannel = true)
+    void testYOLOModel(const std::string& model,
+                      const cv::Mat& ref, double scoreDiff, double iouDiff,
+                      float confThreshold = 0.24, float nmsThreshold = 0.4, bool perChannel = true)
     {
         CV_Assert(ref.cols == 7);
         std::vector<std::vector<int> > refClassIds;
@@ -681,7 +683,7 @@ public:
 
         Mat inp = blobFromImages(samples, 1.0/255, Size(416, 416), Scalar(), true, false);
 
-        Net baseNet = readNetFromDarknet(findDataFile("dnn/" + cfg), findDataFile("dnn/" + weights, false));
+        Net baseNet = readNet(findDataFile("dnn/" + model, false));
         Net qnet = baseNet.quantize(inp, CV_32F, CV_32F, perChannel);
         qnet.setPreferableBackend(backend);
         qnet.setPreferableTarget(target);
@@ -757,121 +759,6 @@ public:
     }
 };
 
-TEST_P(Test_Int8_nets, AlexNet)
-{
-#if defined(OPENCV_32BIT_CONFIGURATION) && defined(HAVE_OPENCL)
-    applyTestTag(CV_TEST_TAG_MEMORY_2GB);
-#else
-    applyTestTag(target == DNN_TARGET_CPU ? CV_TEST_TAG_MEMORY_512MB : CV_TEST_TAG_MEMORY_1GB);
-#endif
-    if (target == DNN_TARGET_OPENCL_FP16 && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL_FP16);
-    if (target == DNN_TARGET_OPENCL && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL);
-
-
-    Net net = readNetFromCaffe(findDataFile("dnn/bvlc_alexnet.prototxt"),
-                               findDataFile("dnn/bvlc_alexnet.caffemodel", false));
-
-    Mat inp = imread(_tf("grace_hopper_227.png"));
-    Mat blob = blobFromImage(inp, 1.0, Size(227, 227), Scalar(), false);
-    Mat ref = blobFromNPY(_tf("caffe_alexnet_prob.npy"));
-
-    float l1 = 1e-4, lInf = 0.003;
-    testClassificationNet(net, blob, ref, l1, lInf);
-}
-
-TEST_P(Test_Int8_nets, GoogLeNet)
-{
-    if (target == DNN_TARGET_OPENCL_FP16 && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL_FP16);
-    if (target == DNN_TARGET_OPENCL && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL);
-
-    Net net = readNetFromCaffe(findDataFile("dnn/bvlc_googlenet.prototxt"),
-                               findDataFile("dnn/bvlc_googlenet.caffemodel", false));
-
-    std::vector<Mat> inpMats;
-    inpMats.push_back( imread(_tf("googlenet_0.png")) );
-    inpMats.push_back( imread(_tf("googlenet_1.png")) );
-    Mat blob = blobFromImages(inpMats, 1.0, Size(224, 224), Scalar(), false);
-    Mat ref = blobFromNPY(_tf("googlenet_prob.npy"));
-
-    float l1 = 2e-4, lInf = 0.07;
-    testClassificationNet(net, blob, ref, l1, lInf);
-}
-
-TEST_P(Test_Int8_nets, ResNet50)
-{
-    applyTestTag(
-        target == DNN_TARGET_CPU ? CV_TEST_TAG_MEMORY_512MB : CV_TEST_TAG_MEMORY_1GB,
-        CV_TEST_TAG_DEBUG_VERYLONG
-    );
-
-    if (target == DNN_TARGET_OPENCL_FP16 && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL_FP16);
-    if (target == DNN_TARGET_OPENCL && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL);
-
-    Net net = readNetFromCaffe(findDataFile("dnn/ResNet-50-deploy.prototxt"),
-                               findDataFile("dnn/ResNet-50-model.caffemodel", false));
-
-    Mat inp = imread(_tf("googlenet_0.png"));
-    Mat blob = blobFromImage(inp, 1.0, Size(224, 224), Scalar(), false);
-    Mat ref = blobFromNPY(_tf("resnet50_prob.npy"));
-
-    float l1 = 3e-4, lInf = 0.05;
-    testClassificationNet(net, blob, ref, l1, lInf);
-
-    {
-        SCOPED_TRACE("Per-tensor quantize");
-        testClassificationNet(net, blob, ref, l1, lInf, false);
-    }
-}
-
-TEST_P(Test_Int8_nets, DenseNet121)
-{
-    applyTestTag(CV_TEST_TAG_MEMORY_512MB);
-
-    if (target == DNN_TARGET_OPENCL_FP16 && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL_FP16);
-    if (target == DNN_TARGET_OPENCL && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL);
-    if (backend == DNN_BACKEND_INFERENCE_ENGINE_NGRAPH)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_IE_NGRAPH);
-
-    Net net = readNetFromCaffe(findDataFile("dnn/DenseNet_121.prototxt", false),
-                               findDataFile("dnn/DenseNet_121.caffemodel", false));
-
-    Mat inp = imread(_tf("dog416.png"));
-    Mat blob = blobFromImage(inp, 1.0 / 255.0, Size(224, 224), Scalar(), true, true);
-    Mat ref = blobFromNPY(_tf("densenet_121_output.npy"));
-
-    float l1 = 0.76, lInf = 3.31; // seems wrong
-    testClassificationNet(net, blob, ref, l1, lInf);
-}
-
-TEST_P(Test_Int8_nets, SqueezeNet_v1_1)
-{
-    if(target == DNN_TARGET_OPENCL_FP16)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL_FP16);
-
-    if (target == DNN_TARGET_OPENCL_FP16 && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL_FP16);
-    if (target == DNN_TARGET_OPENCL && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL);
-
-    Net net = readNetFromCaffe(findDataFile("dnn/squeezenet_v1.1.prototxt"),
-                               findDataFile("dnn/squeezenet_v1.1.caffemodel", false));
-
-    Mat inp = imread(_tf("googlenet_0.png"));
-    Mat blob = blobFromImage(inp, 1.0, Size(227, 227), Scalar(), false, true);
-    Mat ref = blobFromNPY(_tf("squeezenet_v1.1_prob.npy"));
-
-    float l1 = 3e-4, lInf = 0.056;
-    testClassificationNet(net, blob, ref, l1, lInf);
-}
-
 TEST_P(Test_Int8_nets, CaffeNet)
 {
 #if defined(OPENCV_32BIT_CONFIGURATION) && (defined(HAVE_OPENCL) || defined(_WIN32))
@@ -936,24 +823,6 @@ TEST_P(Test_Int8_nets, Shufflenet)
     testONNXNet("shufflenet", default_l1, default_lInf);
 }
 
-TEST_P(Test_Int8_nets, MobileNet_SSD)
-{
-    if (target == DNN_TARGET_OPENCL_FP16 && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL_FP16);
-    if (target == DNN_TARGET_OPENCL && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL);
-
-    Net net = readNetFromCaffe(findDataFile("dnn/MobileNetSSD_deploy_19e3ec3.prototxt", false),
-                               findDataFile("dnn/MobileNetSSD_deploy_19e3ec3.caffemodel", false));
-
-    Mat inp = imread(_tf("street.png"));
-    Mat blob = blobFromImage(inp, 1.0 / 127.5, Size(300, 300), Scalar(127.5, 127.5, 127.5), false);
-    Mat ref = blobFromNPY(_tf("mobilenet_ssd_caffe_out.npy"));
-
-    float confThreshold = FLT_MIN, scoreDiff = 0.084, iouDiff = 0.43;
-    testDetectionNet(net, blob, ref, confThreshold, scoreDiff, iouDiff);
-}
-
 TEST_P(Test_Int8_nets, MobileNet_v1_SSD)
 {
     if (target == DNN_TARGET_OPENCL_FP16 && !ocl::Device::getDefault().isIntel())
@@ -968,7 +837,7 @@ TEST_P(Test_Int8_nets, MobileNet_v1_SSD)
     Mat blob = blobFromImage(inp, 1.0, Size(300, 300), Scalar(), true, false);
     Mat ref = blobFromNPY(_tf("tensorflow/ssd_mobilenet_v1_coco_2017_11_17.detection_out.npy"));
 
-    float confThreshold = 0.5, scoreDiff = 0.034, iouDiff = 0.13;
+    float confThreshold = 0.5, scoreDiff = 0.034, iouDiff = 0.14;
     testDetectionNet(net, blob, ref, confThreshold, scoreDiff, iouDiff);
 }
 
@@ -986,7 +855,7 @@ TEST_P(Test_Int8_nets, MobileNet_v1_SSD_PPN)
     Mat blob = blobFromImage(inp, 1.0, Size(300, 300), Scalar(), true, false);
     Mat ref = blobFromNPY(_tf("tensorflow/ssd_mobilenet_v1_ppn_coco.detection_out.npy"));
 
-    float confThreshold = 0.51, scoreDiff = 0.05, iouDiff = 0.06;
+    float confThreshold = 0.51, scoreDiff = 0.05, iouDiff = 0.07;
     testDetectionNet(net, blob, ref, confThreshold, scoreDiff, iouDiff);
 }
 
@@ -1011,31 +880,6 @@ TEST_P(Test_Int8_nets, Inception_v2_SSD)
                                     0, 10, 0.93973452, 0.66561931, 0.37841269, 0.68074018, 0.42907384);
 
     float confThreshold = 0.5, scoreDiff = 0.0114, iouDiff = 0.22;
-    testDetectionNet(net, blob, ref, confThreshold, scoreDiff, iouDiff);
-}
-
-TEST_P(Test_Int8_nets, opencv_face_detector)
-{
-    if (target == DNN_TARGET_OPENCL_FP16 && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL_FP16);
-    if (target == DNN_TARGET_OPENCL && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL);
-    if (backend == DNN_BACKEND_INFERENCE_ENGINE_NGRAPH)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_IE_NGRAPH);
-
-    Net net = readNetFromCaffe(findDataFile("dnn/opencv_face_detector.prototxt"),
-                               findDataFile("dnn/opencv_face_detector.caffemodel", false));
-
-    Mat inp = imread(findDataFile("gpu/lbpcascade/er.png"));
-    Mat blob = blobFromImage(inp, 1.0, Size(), Scalar(104.0, 177.0, 123.0), false, false);
-    Mat ref = (Mat_<float>(6, 7) << 0, 1, 0.99520785, 0.80997437, 0.16379407, 0.87996572, 0.26685631,
-                                    0, 1, 0.9934696, 0.2831718, 0.50738752, 0.345781, 0.5985168,
-                                    0, 1, 0.99096733, 0.13629119, 0.24892329, 0.19756334, 0.3310290,
-                                    0, 1, 0.98977017, 0.23901358, 0.09084064, 0.29902688, 0.1769477,
-                                    0, 1, 0.97203469, 0.67965847, 0.06876482, 0.73999709, 0.1513494,
-                                    0, 1, 0.95097077, 0.51901293, 0.45863652, 0.5777427, 0.5347801);
-
-    float confThreshold = 0.5, scoreDiff = 0.002, iouDiff = 0.4;
     testDetectionNet(net, blob, ref, confThreshold, scoreDiff, iouDiff);
 }
 
@@ -1132,171 +976,6 @@ TEST_P(Test_Int8_nets, FasterRCNN_inceptionv2)
     testDetectionNet(net, blob, ref, confThreshold, scoreDiff, iouDiff);
 }
 
-TEST_P(Test_Int8_nets, FasterRCNN_vgg16)
-{
-    applyTestTag(
-#if defined(OPENCV_32BIT_CONFIGURATION) && defined(HAVE_OPENCL)
-        CV_TEST_TAG_MEMORY_2GB,
-#else
-        CV_TEST_TAG_MEMORY_2GB,
-#endif
-        CV_TEST_TAG_LONG,
-        CV_TEST_TAG_DEBUG_VERYLONG
-    );
-
-    if (target == DNN_TARGET_OPENCL_FP16 && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL_FP16);
-    if (target == DNN_TARGET_OPENCL && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL);
-    if (backend == DNN_BACKEND_INFERENCE_ENGINE_NGRAPH)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_IE_NGRAPH);
-
-    Net net = readNetFromCaffe(findDataFile("dnn/faster_rcnn_vgg16.prototxt"),
-                               findDataFile("dnn/VGG16_faster_rcnn_final.caffemodel", false));
-
-    Mat ref = (Mat_<float>(3, 7) << 0, 2, 0.949398, 99.2454, 210.141, 601.205, 462.849,
-                                    0, 7, 0.997022, 481.841, 92.3218, 722.685, 175.953,
-                                    0, 12, 0.993028, 133.221, 189.377, 350.994, 563.166);
-
-    float confThreshold = 0.8, scoreDiff = 0.048, iouDiff = 0.35;
-    testFaster(net, ref, confThreshold, scoreDiff, iouDiff);
-}
-
-TEST_P(Test_Int8_nets, FasterRCNN_zf)
-{
-    applyTestTag(
-#if defined(OPENCV_32BIT_CONFIGURATION) && defined(HAVE_OPENCL)
-        CV_TEST_TAG_MEMORY_2GB,
-#else
-        (target == DNN_TARGET_CPU ? CV_TEST_TAG_MEMORY_512MB : CV_TEST_TAG_MEMORY_1GB),
-#endif
-        CV_TEST_TAG_DEBUG_VERYLONG
-    );
-
-    if (target == DNN_TARGET_OPENCL_FP16 && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL_FP16);
-    if (target == DNN_TARGET_OPENCL && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL);
-    if (backend == DNN_BACKEND_INFERENCE_ENGINE_NGRAPH)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_IE_NGRAPH);
-
-    Net net = readNetFromCaffe(findDataFile("dnn/faster_rcnn_zf.prototxt"),
-                               findDataFile("dnn/ZF_faster_rcnn_final.caffemodel", false));
-
-    Mat ref = (Mat_<float>(3, 7) << 0, 2, 0.90121, 120.407, 115.83, 570.586, 528.395,
-                                    0, 7, 0.988779, 469.849, 75.1756, 718.64, 186.762,
-                                    0, 12, 0.967198, 138.588, 206.843, 329.766, 553.176);
-
-    float confThreshold = 0.8, scoreDiff = 0.021, iouDiff = 0.1;
-    testFaster(net, ref, confThreshold, scoreDiff, iouDiff);
-}
-
-TEST_P(Test_Int8_nets, RFCN)
-{
-    applyTestTag(
-        (target == DNN_TARGET_CPU ? CV_TEST_TAG_MEMORY_512MB : CV_TEST_TAG_MEMORY_2GB),
-        CV_TEST_TAG_LONG,
-        CV_TEST_TAG_DEBUG_VERYLONG
-    );
-
-    if (target == DNN_TARGET_OPENCL_FP16 && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL_FP16);
-    if (target == DNN_TARGET_OPENCL && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL);
-
-    Net net = readNetFromCaffe(findDataFile("dnn/rfcn_pascal_voc_resnet50.prototxt"),
-                               findDataFile("dnn/resnet50_rfcn_final.caffemodel", false));
-
-    Mat ref = (Mat_<float>(2, 7) << 0, 7, 0.991359, 491.822, 81.1668, 702.573, 178.234,
-                                    0, 12, 0.94786, 132.093, 223.903, 338.077, 566.16);
-
-    float confThreshold = 0.8, scoreDiff = 0.15, iouDiff = 0.11;
-    if (backend == DNN_BACKEND_INFERENCE_ENGINE_NGRAPH) {
-        iouDiff = 0.12;
-    }
-    testFaster(net, ref, confThreshold, scoreDiff, iouDiff);
-}
-
-TEST_P(Test_Int8_nets, YoloVoc)
-{
-    applyTestTag(
-#if defined(OPENCV_32BIT_CONFIGURATION) && defined(HAVE_OPENCL)
-        CV_TEST_TAG_MEMORY_2GB,
-#else
-        CV_TEST_TAG_MEMORY_1GB,
-#endif
-        CV_TEST_TAG_LONG,
-        CV_TEST_TAG_DEBUG_VERYLONG
-    );
-
-    if (target == DNN_TARGET_OPENCL_FP16 && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL_FP16);
-    if (target == DNN_TARGET_OPENCL && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL);
-
-    Mat ref = (Mat_<float>(6, 7) << 0, 6,  0.750469f, 0.577374f, 0.127391f, 0.902949f, 0.300809f,
-                                    0, 1,  0.780879f, 0.270762f, 0.264102f, 0.732475f, 0.745412f,
-                                    0, 11, 0.901615f, 0.1386f,   0.338509f, 0.421337f, 0.938789f,
-                                    1, 14, 0.623813f, 0.183179f, 0.381921f, 0.247726f, 0.625847f,
-                                    1, 6,  0.667770f, 0.446555f, 0.453578f, 0.499986f, 0.519167f,
-                                    1, 6,  0.844947f, 0.637058f, 0.460398f, 0.828508f, 0.66427f);
-
-    std::string config_file = "yolo-voc.cfg";
-    std::string weights_file = "yolo-voc.weights";
-
-    double scoreDiff = 0.12, iouDiff = 0.3;
-    {
-    SCOPED_TRACE("batch size 1");
-    testDarknetModel(config_file, weights_file, ref.rowRange(0, 3), scoreDiff, iouDiff);
-    }
-
-    {
-    SCOPED_TRACE("batch size 2");
-    testDarknetModel(config_file, weights_file, ref, scoreDiff, iouDiff);
-    }
-}
-
-TEST_P(Test_Int8_nets, TinyYoloVoc)
-{
-    applyTestTag(
-        CV_TEST_TAG_MEMORY_512MB,
-        CV_TEST_TAG_DEBUG_VERYLONG
-    );
-
-    if (target == DNN_TARGET_OPENCL_FP16 && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL_FP16);
-    if (target == DNN_TARGET_OPENCL && !ocl::Device::getDefault().isIntel())
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL);
-
-    Mat ref = (Mat_<float>(4, 7) << 0, 6,  0.761967f, 0.579042f, 0.159161f, 0.894482f, 0.31994f,
-                                    0, 11, 0.780595f, 0.129696f, 0.386467f, 0.445275f, 0.920994f,
-                                    1, 6,  0.651450f, 0.460526f, 0.458019f, 0.522527f, 0.5341f,
-                                    1, 6,  0.928758f, 0.651024f, 0.463539f, 0.823784f, 0.654998f);
-
-    std::string config_file = "tiny-yolo-voc.cfg";
-    std::string weights_file = "tiny-yolo-voc.weights";
-
-    double scoreDiff = 0.043, iouDiff = 0.12;
-    {
-    SCOPED_TRACE("batch size 1");
-    testDarknetModel(config_file, weights_file, ref.rowRange(0, 2), scoreDiff, iouDiff);
-        {
-            SCOPED_TRACE("Per-tensor quantize");
-            testDarknetModel(config_file, weights_file, ref.rowRange(0, 2), 0.1, 0.2, 0.24, 0.6, false);
-        }
-    }
-
-    {
-    SCOPED_TRACE("batch size 2");
-    testDarknetModel(config_file, weights_file, ref, scoreDiff, iouDiff);
-
-        {
-            SCOPED_TRACE("Per-tensor quantize");
-            testDarknetModel(config_file, weights_file, ref, 0.1, 0.2, 0.24, 0.6, false);
-        }
-    }
-}
-
 TEST_P(Test_Int8_nets, YOLOv3)
 {
     applyTestTag(
@@ -1326,18 +1005,17 @@ TEST_P(Test_Int8_nets, YOLOv3)
     };
     Mat ref(N0 + N1, 7, CV_32FC1, (void*)ref_);
 
-    std::string config_file = "yolov3.cfg";
-    std::string weights_file = "yolov3.weights";
+    std::string model_file = "yolov3.onnx";
 
-    double scoreDiff = 0.08, iouDiff = 0.21, confThreshold = 0.25;
+    double scoreDiff = 0.08, iouDiff = 0.21, confThreshold = 0.28;
     {
         SCOPED_TRACE("batch size 1");
-        testDarknetModel(config_file, weights_file, ref.rowRange(0, N0), scoreDiff, iouDiff, confThreshold);
+        testYOLOModel(model_file, ref.rowRange(0, N0), scoreDiff, iouDiff, confThreshold);
     }
 
     {
         SCOPED_TRACE("batch size 2");
-        testDarknetModel(config_file, weights_file, ref, scoreDiff, iouDiff, confThreshold);
+        testYOLOModel(model_file, ref, scoreDiff, iouDiff, confThreshold);
     }
 }
 
@@ -1355,7 +1033,7 @@ TEST_P(Test_Int8_nets, YOLOv4)
         applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL);
 
     const int N0 = 3;
-    const int N1 = 7;
+    const int N1 = 5;
     static const float ref_[/* (N0 + N1) * 7 */] = {
 0, 16, 0.992194f, 0.172375f, 0.402458f, 0.403918f, 0.932801f,
 0, 1, 0.988326f, 0.166708f, 0.228236f, 0.737208f, 0.735803f,
@@ -1366,23 +1044,20 @@ TEST_P(Test_Int8_nets, YOLOv4)
 1, 2, 0.98233f, 0.452007f, 0.462217f, 0.495612f, 0.521687f,
 1, 9, 0.919195f, 0.374642f, 0.316524f, 0.398126f, 0.393714f,
 1, 9, 0.856303f, 0.666842f, 0.372215f, 0.685539f, 0.44141f,
-1, 9, 0.313516f, 0.656791f, 0.374734f, 0.671959f, 0.438371f,
-1, 9, 0.256625f, 0.940232f, 0.326931f, 0.967586f, 0.374002f,
     };
     Mat ref(N0 + N1, 7, CV_32FC1, (void*)ref_);
 
-    std::string config_file = "yolov4.cfg";
-    std::string weights_file = "yolov4.weights";
+    std::string model_file = "yolov4.onnx";
     double scoreDiff = 0.15, iouDiff = 0.2;
     {
         SCOPED_TRACE("batch size 1");
-        testDarknetModel(config_file, weights_file, ref.rowRange(0, N0), scoreDiff, iouDiff);
+        testYOLOModel(model_file, ref.rowRange(0, N0), scoreDiff, iouDiff, 0.5);
     }
 
     {
         SCOPED_TRACE("batch size 2");
 
-        testDarknetModel(config_file, weights_file, ref, scoreDiff, iouDiff);
+        testYOLOModel(model_file, ref, scoreDiff, iouDiff, 0.5);
     }
 }
 
@@ -1413,18 +1088,17 @@ TEST_P(Test_Int8_nets, YOLOv4_tiny)
     };
     Mat ref(N0 + N1, 7, CV_32FC1, (void*)ref_);
 
-    std::string config_file = "yolov4-tiny-2020-12.cfg";
-    std::string weights_file = "yolov4-tiny-2020-12.weights";
+    std::string model_file = "yolov4-tiny.onnx";
     double scoreDiff = 0.12;
     double iouDiff = target == DNN_TARGET_OPENCL_FP16 ? 0.2 : 0.118;
 
     {
         SCOPED_TRACE("batch size 1");
-        testDarknetModel(config_file, weights_file, ref.rowRange(0, N0), scoreDiff, iouDiff, confThreshold);
+        testYOLOModel(model_file, ref.rowRange(0, N0), scoreDiff, iouDiff, confThreshold);
 
         {
             SCOPED_TRACE("Per-tensor quantize");
-            testDarknetModel(config_file, weights_file, ref.rowRange(0, N0), scoreDiff, 0.224, 0.7, 0.4, false);
+            testYOLOModel(model_file, ref.rowRange(0, N0), scoreDiff, 0.224, 0.7, 0.4, false);
         }
     }
 
@@ -1432,7 +1106,7 @@ TEST_P(Test_Int8_nets, YOLOv4_tiny)
     /* bad accuracy on second image
     {
         SCOPED_TRACE("batch size 2");
-        testDarknetModel(config_file, weights_file, ref, scoreDiff, iouDiff, confThreshold);
+        testYOLOModel(model_file, ref, scoreDiff, iouDiff, confThreshold);
     }
     */
 }
@@ -1440,3 +1114,5 @@ TEST_P(Test_Int8_nets, YOLOv4_tiny)
 INSTANTIATE_TEST_CASE_P(/**/, Test_Int8_nets, dnnBackendsAndTargetsInt8());
 
 }} // namespace
+
+#endif // #if 0

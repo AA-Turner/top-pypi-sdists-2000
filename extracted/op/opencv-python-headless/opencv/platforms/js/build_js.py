@@ -105,7 +105,6 @@ class Builder:
                "-DWITH_OPENEXR=OFF",
                "-DWITH_OPENJPEG=OFF",
                "-DWITH_OPENGL=OFF",
-               "-DWITH_OPENVX=OFF",
                "-DWITH_OPENNI=OFF",
                "-DWITH_OPENNI2=OFF",
                "-DWITH_PNG=OFF",
@@ -119,12 +118,11 @@ class Builder:
                "-DWITH_GPHOTO2=OFF",
                "-DWITH_LAPACK=OFF",
                "-DWITH_ITT=OFF",
-               "-DWITH_QUIRC=OFF",
                "-DBUILD_ZLIB=ON",
                "-DBUILD_opencv_apps=OFF",
-               "-DBUILD_opencv_calib3d=ON",
+               "-DBUILD_opencv_3d=ON",
                "-DBUILD_opencv_dnn=ON",
-               "-DBUILD_opencv_features2d=ON",
+               "-DBUILD_opencv_features=ON",
                "-DBUILD_opencv_flann=ON",  # No bindings provided. This module is used as a dependency for other modules.
                "-DBUILD_opencv_gapi=OFF",
                "-DBUILD_opencv_ml=OFF",
@@ -138,7 +136,6 @@ class Builder:
                "-DBUILD_opencv_stitching=OFF",
                "-DBUILD_opencv_java=OFF",
                "-DBUILD_opencv_js=ON",
-               "-DBUILD_opencv_python2=OFF",
                "-DBUILD_opencv_python3=OFF",
                "-DBUILD_EXAMPLES=ON",
                "-DBUILD_PACKAGE=OFF",
@@ -175,6 +172,10 @@ class Builder:
         if flags:
             cmd += ["-DCMAKE_C_FLAGS='%s'" % flags,
                     "-DCMAKE_CXX_FLAGS='%s'" % flags]
+
+        if self.options.extra_modules:
+            cmd.append("-DOPENCV_EXTRA_MODULES_PATH='%s'" % self.options.extra_modules)
+
         return cmd
 
     def get_build_flags(self):
@@ -260,6 +261,8 @@ if __name__ == "__main__":
     # Write a path to modify file like argument of this flag
     parser.add_argument('--config', help="Specify configuration file with own list of exported into JS functions")
     parser.add_argument('--webnn', action="store_true", help="Enable WebNN Backend")
+    parser.add_argument("--extra_modules", required=False, help="Path extra modules location (OPENCV_EXTRA_MODULES_PATH)")
+
 
     transformed_args = ["--cmake_option={}".format(arg) if arg[:2] == "-D" else arg for arg in sys.argv[1:]]
     args = parser.parse_args(transformed_args)

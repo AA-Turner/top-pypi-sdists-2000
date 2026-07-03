@@ -96,7 +96,11 @@ void cv::cornerSubPix( InputArray _image, InputOutputArray _corners,
     for( int pt_i = 0; pt_i < count; pt_i++ )
     {
         Point2f cT = corners[pt_i], cI = cT;
-        CV_Assert( Rect(0, 0, src.cols, src.rows).contains(cT) );
+        if (!Rect(0, 0, src.cols, src.rows).contains(cT))
+        {
+            CV_Error(Error::StsOutOfRange,
+                    "cornerSubPix: initial corner is outside the image.");
+        }
         int iter = 0;
         double err = 0;
 
@@ -155,19 +159,6 @@ void cv::cornerSubPix( InputArray _image, InputOutputArray _corners,
 
         corners[pt_i] = cI;
     }
-}
-
-
-CV_IMPL void
-cvFindCornerSubPix( const void* srcarr, CvPoint2D32f* _corners,
-                   int count, CvSize win, CvSize zeroZone,
-                   CvTermCriteria criteria )
-{
-    if(!_corners || count <= 0)
-        return;
-
-    cv::Mat src = cv::cvarrToMat(srcarr), corners(count, 1, CV_32FC2, _corners);
-    cv::cornerSubPix(src, corners, win, zeroZone, criteria);
 }
 
 /* End of file. */

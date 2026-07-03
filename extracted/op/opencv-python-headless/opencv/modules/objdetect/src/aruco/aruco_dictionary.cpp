@@ -73,13 +73,10 @@ void Dictionary::writeDictionary(FileStorage& fs, const String &name)
 }
 
 
-bool Dictionary::identify(const Mat &onlyBits, int &idx, int &rotation, double maxCorrectionRate) const {
-    CV_Assert(onlyBits.rows == markerSize && onlyBits.cols == markerSize);
+bool Dictionary::identify(const Mat &onlyCellPixelRatio, CV_OUT int &idx, CV_OUT int &rotation, double maxCorrectionRate, float validBitIdThreshold) const {
+    CV_Assert(onlyCellPixelRatio.rows == markerSize && onlyCellPixelRatio.cols == markerSize);
 
     int maxCorrectionRecalculed = int(double(maxCorrectionBits) * maxCorrectionRate);
-
-    // get as a byte list
-    Mat candidateBytes = getByteListFromBits(onlyBits);
 
     idx = -1; // by default, not found
 
@@ -87,11 +84,21 @@ bool Dictionary::identify(const Mat &onlyBits, int &idx, int &rotation, double m
     for(int m = 0; m < bytesList.rows; m++) {
         int currentMinDistance = markerSize * markerSize + 1;
         int currentRotation = -1;
-        for(unsigned int r = 0; r < 4; r++) {
-            int currentHamming = cv::hal::normHamming(
-                    bytesList.ptr(m)+r*candidateBytes.cols,
-                    candidateBytes.ptr(),
-                    candidateBytes.cols);
+        for(int r = 0; r < 4; r++) {
+
+            Mat bitsRot = getBitsFromByteList(bytesList.rowRange(m, m + 1), markerSize, r);
+            bitsRot.convertTo(bitsRot, CV_32F);
+
+            // Loop over all bits dictBitsList [m, markerSize * markerSize, 4]; onlyCellPixelRatio [markerSize, markerSize]
+            int currentHamming = 0;
+            for(int i = 0; i < markerSize; i++) {
+                for(int j = 0; j < markerSize; j++) {
+                    // If detected bit is too far from the ground truth, consider it false.
+                    if(fabs(onlyCellPixelRatio.at<float>(i, j) - static_cast<float>(bitsRot.at<float>(i, j))) > validBitIdThreshold){
+                        currentHamming++;
+                    }
+                }
+            }
 
             if(currentHamming < currentMinDistance) {
                 currentMinDistance = currentHamming;
@@ -108,6 +115,16 @@ bool Dictionary::identify(const Mat &onlyBits, int &idx, int &rotation, double m
     }
 
     return idx != -1;
+}
+
+
+bool Dictionary::identify(const Mat &onlyBits, CV_OUT int &idx, CV_OUT int &rotation, double maxCorrectionRate) const {
+    CV_Assert(onlyBits.rows == markerSize && onlyBits.cols == markerSize);
+
+    Mat candidateBitRatio;
+    onlyBits.convertTo(candidateBitRatio, CV_32F);
+    const float validBitIdThreshold = DEFAULT_VALID_BIT_ID_THRESHOLD;
+    return identify(candidateBitRatio, idx, rotation, maxCorrectionRate, validBitIdThreshold);
 }
 
 
@@ -147,7 +164,8 @@ void Dictionary::generateImageMarker(int id, int sidePixels, OutputArray _img, i
     Mat innerRegion = tinyMarker.rowRange(borderBits, tinyMarker.rows - borderBits)
                           .colRange(borderBits, tinyMarker.cols - borderBits);
     // put inner bits
-    Mat bits = 255 * getBitsFromByteList(bytesList.rowRange(id, id + 1), markerSize);
+    Mat bits = getMarkerBits(id);
+    bits.convertTo(bits, CV_8U, 255.0);
     CV_Assert(innerRegion.total() == bits.total());
     bits.copyTo(innerRegion);
 
@@ -194,34 +212,53 @@ Mat Dictionary::getByteListFromBits(const Mat &bits) {
 }
 
 
-Mat Dictionary::getBitsFromByteList(const Mat &byteList, int markerSize) {
+Mat Dictionary::getMarkerBits(int markerId, int rotationId) const {
+
+    const int nbRotations = 4;
+    CV_Assert(markerId < bytesList.rows);
+    CV_Assert(rotationId < nbRotations);
+
+    Mat bits(markerSize, markerSize, CV_32F, Scalar::all(0));
+    Mat bitsUints = getBitsFromByteList(bytesList.rowRange(markerId, markerId + 1), markerSize, rotationId);
+    bitsUints.convertTo(bits, CV_32F);
+
+    CV_Assert(bits.rows == markerSize && bits.cols == markerSize);
+    return bits;
+}
+
+
+Mat Dictionary::getBitsFromByteList(const Mat &byteList, int markerSize, int rotationId) {
     CV_Assert(byteList.total() > 0 &&
               byteList.total() >= (unsigned int)markerSize * markerSize / 8 &&
               byteList.total() <= (unsigned int)markerSize * markerSize / 8 + 1);
-    Mat bits(markerSize, markerSize, CV_8UC1, Scalar::all(0));
 
-    unsigned char base2List[] = { 128, 64, 32, 16, 8, 4, 2, 1 };
-    int currentByteIdx = 0;
-    // we only need the bytes in normal rotation
-    unsigned char currentByte = byteList.ptr()[0];
-    int currentBit = 0;
-    for(int row = 0; row < bits.rows; row++) {
-        for(int col = 0; col < bits.cols; col++) {
-            if(currentByte >= base2List[currentBit]) {
-                bits.at<unsigned char>(row, col) = 1;
-                currentByte -= base2List[currentBit];
-            }
-            currentBit++;
-            if(currentBit == 8) {
-                currentByteIdx++;
-                currentByte = byteList.ptr()[currentByteIdx];
-                // if not enough bits for one more byte, we are in the end
-                // update bit position accordingly
-                if(8 * (currentByteIdx + 1) > (int)bits.total())
-                    currentBit = 8 * (currentByteIdx + 1) - (int)bits.total();
-                else
-                    currentBit = 0; // ok, bits enough for next byte
-            }
+    CV_Assert(byteList.channels() >= 4);
+    CV_Assert(rotationId >= 0 && rotationId < 4);
+
+    Mat bits = Mat::zeros(markerSize, markerSize, CV_8UC1);
+    unsigned char *bitsPtr = bits.ptr();
+
+    // Use a base offset for the selected rotation
+    int nbytes = (bits.cols * bits.rows + 8 - 1) / 8; // integer ceil
+    int base = rotationId * nbytes;
+    const unsigned char *currentBytePtr = byteList.ptr() + base;
+    const unsigned char *currentBytePtrEnd = currentBytePtr + bits.total() / 8;
+
+    for(;currentBytePtr < currentBytePtrEnd; ++currentBytePtr) {
+        unsigned char currentByte = *currentBytePtr;
+        for(int mask = 1 << 7; mask != 0; mask >>= 1) {
+            if (currentByte & mask) *bitsPtr = 1;
+            ++bitsPtr;
+        }
+    }
+    // if not enough bits for one more byte, we are in the end
+    // update bit position accordingly
+    if (bits.total() % 8 != 0) {
+        unsigned char currentByte = *currentBytePtrEnd;
+        int mask = 1 << ((bits.total() % 8) - 1);
+        for(; mask != 0; mask >>= 1) {
+            if (currentByte & mask) *bitsPtr = 1;
+            ++bitsPtr;
         }
     }
     return bits;
@@ -229,36 +266,42 @@ Mat Dictionary::getBitsFromByteList(const Mat &byteList, int markerSize) {
 
 
 Dictionary getPredefinedDictionary(PredefinedDictionaryType name) {
+    // The maximum number of bits that can be corrected is theoretically (d-1)/2,
+    // where d is the minimum Hamming distance between any two codes in the dictionary.
+    // However, we use a more conservative limit (d/2)-1 to reduce the probability
+    // of false positives during detection. This formula is equivalent to the
+    // theoretical limit for even distances and stricter for odd distances.
+
     // DictionaryData constructors calls
     //    moved out of globals so construted on first use, which allows lazy-loading of opencv dll
-    static const Dictionary DICT_ARUCO_DATA = Dictionary(Mat(1024, (5 * 5 + 7) / 8, CV_8UC4, (uchar*)DICT_ARUCO_BYTES), 5, 0);
+    static const Dictionary DICT_ARUCO_DATA = Dictionary(Mat(1024, (5 * 5 + 7) / 8, CV_8UC4, (uchar*)DICT_ARUCO_BYTES), 5, (3-1)/2);
 
-    static const Dictionary DICT_4X4_50_DATA = Dictionary(Mat(50, (4 * 4 + 7) / 8, CV_8UC4, (uchar*)DICT_4X4_1000_BYTES), 4, 1);
-    static const Dictionary DICT_4X4_100_DATA = Dictionary(Mat(100, (4 * 4 + 7) / 8, CV_8UC4, (uchar*)DICT_4X4_1000_BYTES), 4, 1);
-    static const Dictionary DICT_4X4_250_DATA = Dictionary(Mat(250, (4 * 4 + 7) / 8, CV_8UC4, (uchar*)DICT_4X4_1000_BYTES), 4, 1);
-    static const Dictionary DICT_4X4_1000_DATA = Dictionary(Mat(1000, (4 * 4 + 7) / 8, CV_8UC4, (uchar*)DICT_4X4_1000_BYTES), 4, 0);
+    static const Dictionary DICT_4X4_50_DATA = Dictionary(Mat(50, (4 * 4 + 7) / 8, CV_8UC4, (uchar*)DICT_4X4_1000_BYTES), 4, (4-1)/2);
+    static const Dictionary DICT_4X4_100_DATA = Dictionary(Mat(100, (4 * 4 + 7) / 8, CV_8UC4, (uchar*)DICT_4X4_1000_BYTES), 4, (3-1)/2);
+    static const Dictionary DICT_4X4_250_DATA = Dictionary(Mat(250, (4 * 4 + 7) / 8, CV_8UC4, (uchar*)DICT_4X4_1000_BYTES), 4, (3-1)/2);
+    static const Dictionary DICT_4X4_1000_DATA = Dictionary(Mat(1000, (4 * 4 + 7) / 8, CV_8UC4, (uchar*)DICT_4X4_1000_BYTES), 4, (2-1)/2);
 
-    static const Dictionary DICT_5X5_50_DATA = Dictionary(Mat(50, (5 * 5 + 7) / 8, CV_8UC4, (uchar*)DICT_5X5_1000_BYTES), 5, 3);
-    static const Dictionary DICT_5X5_100_DATA = Dictionary(Mat(100, (5 * 5 + 7) / 8, CV_8UC4, (uchar*)DICT_5X5_1000_BYTES), 5, 3);
-    static const Dictionary DICT_5X5_250_DATA = Dictionary(Mat(250, (5 * 5 + 7) / 8, CV_8UC4, (uchar*)DICT_5X5_1000_BYTES), 5, 2);
-    static const Dictionary DICT_5X5_1000_DATA = Dictionary(Mat(1000, (5 * 5 + 7) / 8, CV_8UC4, (uchar*)DICT_5X5_1000_BYTES), 5, 2);
+    static const Dictionary DICT_5X5_50_DATA = Dictionary(Mat(50, (5 * 5 + 7) / 8, CV_8UC4, (uchar*)DICT_5X5_1000_BYTES), 5, (8-1)/2);
+    static const Dictionary DICT_5X5_100_DATA = Dictionary(Mat(100, (5 * 5 + 7) / 8, CV_8UC4, (uchar*)DICT_5X5_1000_BYTES), 5, (7-1)/2);
+    static const Dictionary DICT_5X5_250_DATA = Dictionary(Mat(250, (5 * 5 + 7) / 8, CV_8UC4, (uchar*)DICT_5X5_1000_BYTES), 5, (6-1)/2);
+    static const Dictionary DICT_5X5_1000_DATA = Dictionary(Mat(1000, (5 * 5 + 7) / 8, CV_8UC4, (uchar*)DICT_5X5_1000_BYTES), 5, (5-1)/2);
 
-    static const Dictionary DICT_6X6_50_DATA = Dictionary(Mat(50, (6 * 6 + 7) / 8, CV_8UC4, (uchar*)DICT_6X6_1000_BYTES), 6, 6);
-    static const Dictionary DICT_6X6_100_DATA = Dictionary(Mat(100, (6 * 6 + 7) / 8, CV_8UC4, (uchar*)DICT_6X6_1000_BYTES), 6, 5);
-    static const Dictionary DICT_6X6_250_DATA = Dictionary(Mat(250, (6 * 6 + 7) / 8, CV_8UC4, (uchar*)DICT_6X6_1000_BYTES), 6, 5);
-    static const Dictionary DICT_6X6_1000_DATA = Dictionary(Mat(1000, (6 * 6 + 7) / 8, CV_8UC4, (uchar*)DICT_6X6_1000_BYTES), 6, 4);
+    static const Dictionary DICT_6X6_50_DATA = Dictionary(Mat(50, (6 * 6 + 7) / 8, CV_8UC4, (uchar*)DICT_6X6_1000_BYTES), 6, (13-1)/2);
+    static const Dictionary DICT_6X6_100_DATA = Dictionary(Mat(100, (6 * 6 + 7) / 8, CV_8UC4, (uchar*)DICT_6X6_1000_BYTES), 6, (12-1)/2);
+    static const Dictionary DICT_6X6_250_DATA = Dictionary(Mat(250, (6 * 6 + 7) / 8, CV_8UC4, (uchar*)DICT_6X6_1000_BYTES), 6, (11-1)/2);
+    static const Dictionary DICT_6X6_1000_DATA = Dictionary(Mat(1000, (6 * 6 + 7) / 8, CV_8UC4, (uchar*)DICT_6X6_1000_BYTES), 6, (9-1)/2);
 
-    static const Dictionary DICT_7X7_50_DATA = Dictionary(Mat(50, (7 * 7 + 7) / 8, CV_8UC4, (uchar*)DICT_7X7_1000_BYTES), 7, 9);
-    static const Dictionary DICT_7X7_100_DATA = Dictionary(Mat(100, (7 * 7 + 7) / 8, CV_8UC4, (uchar*)DICT_7X7_1000_BYTES), 7, 8);
-    static const Dictionary DICT_7X7_250_DATA = Dictionary(Mat(250, (7 * 7 + 7) / 8, CV_8UC4, (uchar*)DICT_7X7_1000_BYTES), 7, 8);
-    static const Dictionary DICT_7X7_1000_DATA = Dictionary(Mat(1000, (7 * 7 + 7) / 8, CV_8UC4, (uchar*)DICT_7X7_1000_BYTES), 7, 6);
+    static const Dictionary DICT_7X7_50_DATA = Dictionary(Mat(50, (7 * 7 + 7) / 8, CV_8UC4, (uchar*)DICT_7X7_1000_BYTES), 7, (19-1)/2);
+    static const Dictionary DICT_7X7_100_DATA = Dictionary(Mat(100, (7 * 7 + 7) / 8, CV_8UC4, (uchar*)DICT_7X7_1000_BYTES), 7, (18-1)/2);
+    static const Dictionary DICT_7X7_250_DATA = Dictionary(Mat(250, (7 * 7 + 7) / 8, CV_8UC4, (uchar*)DICT_7X7_1000_BYTES), 7, (17-1)/2);
+    static const Dictionary DICT_7X7_1000_DATA = Dictionary(Mat(1000, (7 * 7 + 7) / 8, CV_8UC4, (uchar*)DICT_7X7_1000_BYTES), 7, (14-1)/2);
 
-    static const Dictionary DICT_APRILTAG_16h5_DATA = Dictionary(Mat(30, (4 * 4 + 7) / 8, CV_8UC4, (uchar*)DICT_APRILTAG_16h5_BYTES), 4, 0);
-    static const Dictionary DICT_APRILTAG_25h9_DATA = Dictionary(Mat(35, (5 * 5 + 7) / 8, CV_8UC4, (uchar*)DICT_APRILTAG_25h9_BYTES), 5, 0);
-    static const Dictionary DICT_APRILTAG_36h10_DATA = Dictionary(Mat(2320, (6 * 6 + 7) / 8, CV_8UC4, (uchar*)DICT_APRILTAG_36h10_BYTES), 6, 0);
-    static const Dictionary DICT_APRILTAG_36h11_DATA = Dictionary(Mat(587, (6 * 6 + 7) / 8, CV_8UC4, (uchar*)DICT_APRILTAG_36h11_BYTES), 6, 0);
+    static const Dictionary DICT_APRILTAG_16h5_DATA = Dictionary(Mat(30, (4 * 4 + 7) / 8, CV_8UC4, (uchar*)DICT_APRILTAG_16h5_BYTES), 4, (5-1)/2);
+    static const Dictionary DICT_APRILTAG_25h9_DATA = Dictionary(Mat(35, (5 * 5 + 7) / 8, CV_8UC4, (uchar*)DICT_APRILTAG_25h9_BYTES), 5, (9-1)/2);
+    static const Dictionary DICT_APRILTAG_36h10_DATA = Dictionary(Mat(2320, (6 * 6 + 7) / 8, CV_8UC4, (uchar*)DICT_APRILTAG_36h10_BYTES), 6, (10-1)/2);
+    static const Dictionary DICT_APRILTAG_36h11_DATA = Dictionary(Mat(587, (6 * 6 + 7) / 8, CV_8UC4, (uchar*)DICT_APRILTAG_36h11_BYTES), 6, (11-1)/2);
 
-    static const Dictionary DICT_ARUCO_MIP_36h12_DATA = Dictionary(Mat(250, (6 * 6 + 7) / 8, CV_8UC4, (uchar*)DICT_ARUCO_MIP_36h12_BYTES), 6, 12);
+    static const Dictionary DICT_ARUCO_MIP_36h12_DATA = Dictionary(Mat(250, (6 * 6 + 7) / 8, CV_8UC4, (uchar*)DICT_ARUCO_MIP_36h12_BYTES), 6, (12-1)/2);
 
     switch(name) {
 

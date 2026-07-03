@@ -6,6 +6,7 @@
 
 #include <opencv2/dnn/shape_utils.hpp>
 #include "cpu_kernels/fast_gemm.hpp"
+#include "cpu_kernels/mlas_gemm.hpp"
 
 // OpenVINO backend
 #include "../op_inf_engine.hpp"
@@ -118,6 +119,29 @@ class MatMulLayerImpl CV_FINAL : public MatMulLayer {
         return false;
     }
 
+    virtual int64 getFLOPS(const std::vector<MatShape> &inputs,
+                           const std::vector<MatShape> &outputs) const CV_OVERRIDE
+    {
+        CV_Assert(!inputs.empty());
+        const auto shape_A = inputs[0], shape_B = blobs.empty() ? inputs[1] : shape(blobs[0]);
+        int mA = shape_A[shape_A.size() - 2], nA = shape_A.back();
+        int mB = shape_B[shape_B.size() - 2], nB = shape_B.back();
+        int M = trans_a ? nA : mA;
+        int N = trans_b ? mB : nB;
+        int K = trans_a ? mA : nA;
+
+        int64 batch = 1;
+        for (size_t i = 0; i + 2 < outputs[0].size(); i++)
+            batch *= outputs[0][i];
+
+        // 2*M*N*K multiply-adds per batch element, +M*N for bias if present
+        int64 flops = batch * (CV_BIG_INT(2) * M * N * K);
+        int num_inputs = (int)inputs.size() + (int)blobs.size();
+        if (num_inputs == 3)
+            flops += batch * M * N;
+        return flops;
+    }
+
     virtual void finalize(InputArrayOfArrays inputs_arr, OutputArrayOfArrays outputs_arr) CV_OVERRIDE {
         opt.init();
 
@@ -130,9 +154,26 @@ class MatMulLayerImpl CV_FINAL : public MatMulLayer {
                    C_shape = shape(outputs[0]);
         helper.compute(trans_a, trans_b, A_shape, B_shape, C_shape);
 
-        if (!blobs.empty()) {
-            fastGemmPackB(blobs[0], packed_input_B, trans_b, opt);
-            helper.updatePackedBOffsets(packed_input_B.size());
+        // Pack only 2D weight matrices; skip higher-dim tensors (e.g. Q@K^T in attention).
+        const Mat* B_mat = !blobs.empty() ? &blobs[0] :
+                           (inputs.size() >= 2 && inputs[1].dims == 2 ? &inputs[1] : nullptr);
+        if (B_mat && B_mat->data != last_packed_input_B_data) {
+            packed_input_B.clear();
+            packed_input_B.shrink_to_fit();
+            thin_packed_B.clear();
+
+            if (helper.batch == 1 && B_mat->type() == CV_32F &&
+                fastGemmThinEligible(helper.M, helper.N, helper.K)) {
+                thin_packed_B.resize(fastGemmThinPackBSize(helper.N, helper.K));
+                fastGemmThinPackB(helper.N, helper.K,
+                                  B_mat->ptr<const float>(),
+                                  (size_t)helper.ldb0, (size_t)helper.ldb1,
+                                  thin_packed_B.data());
+            } else {
+                fastGemmPackB(*B_mat, packed_input_B, trans_b, opt);
+                helper.updatePackedBOffsets(packed_input_B.size());
+            }
+            last_packed_input_B_data = B_mat->data;
         }
 
         // broadcast bias if needed
@@ -233,13 +274,38 @@ class MatMulLayerImpl CV_FINAL : public MatMulLayer {
         if (blobs.empty()) {
             const auto &B = inputs[1];
             const auto *b = B.ptr<const float>();
-            fastGemmBatch(helper.batch, helper.A_offsets.data(), helper.B_offsets.data(), helper.C_offsets.data(),
-                          helper.M, helper.N, helper.K, alpha, a, helper.lda0, helper.lda1,
-                          b, helper.ldb0, helper.ldb1, beta, y, helper.ldc, opt);
-        } else {
+            bool done = false;
+            if (mlasAvailable() && helper.M > 0 && helper.N > 0 && helper.K > 0) {
+                const auto A_shape = shape(A);
+                const auto B_shape = shape(B);
+                const int lda_mem = A_shape.back();
+                const int ldb_mem = B_shape.back();
+                done = mlasSgemmBatch(helper.batch,
+                                      helper.A_offsets.data(), helper.B_offsets.data(), helper.C_offsets.data(),
+                                      trans_a, trans_b, helper.M, helper.N, helper.K,
+                                      alpha, a, lda_mem, b, ldb_mem, beta, y, helper.ldc);
+            }
+            if (!done) {
+                fastGemmBatch(helper.batch, helper.A_offsets.data(), helper.B_offsets.data(), helper.C_offsets.data(),
+                              helper.M, helper.N, helper.K, alpha, a, helper.lda0, helper.lda1,
+                              b, helper.ldb0, helper.ldb1, beta, y, helper.ldc, opt);
+            }
+        } else if (!thin_packed_B.empty()) {
+            fastGemmThin(helper.M, helper.N, helper.K, alpha,
+                         a, helper.lda0, helper.lda1,
+                         thin_packed_B.data(), beta,
+                         y, helper.ldc, opt.multi_thread);
+        } else if (!packed_input_B.empty()) {
             fastGemmBatch(helper.batch, helper.A_offsets.data(), helper.packed_B_offsets.data(), helper.C_offsets.data(),
                           helper.M, helper.N, helper.K, alpha, a, helper.lda0, helper.lda1,
                           packed_input_B.data(), beta, y, helper.ldc, opt);
+        } else {
+            // truly dynamic B (changes every call — no packing cache available)
+            const auto &B = inputs[1];
+            const auto *b = B.ptr<const float>();
+            fastGemmBatch(helper.batch, helper.A_offsets.data(), helper.B_offsets.data(), helper.C_offsets.data(),
+                          helper.M, helper.N, helper.K, alpha, a, helper.lda0, helper.lda1,
+                          b, helper.ldb0, helper.ldb1, beta, y, helper.ldc, opt);
         }
     }
 
@@ -423,7 +489,7 @@ class MatMulLayerImpl CV_FINAL : public MatMulLayer {
         op->set_input_x1_by_name(*input_A_node, input_A_wrapper->name.c_str());
         op->update_input_desc_x1(*input_A_desc);
         // set inputs : x2
-        if (blobs.empty()) { // varaible input B
+        if (blobs.empty()) { // variable input B
             auto input_B_wrapper = inputs[1].dynamicCast<CannBackendWrapper>();
             auto input_B_desc = input_B_wrapper->getTensorDesc();
             auto input_B_node = nodes[1].dynamicCast<CannBackendNode>()->getOp();
@@ -464,15 +530,13 @@ class MatMulLayerImpl CV_FINAL : public MatMulLayer {
 #endif // HAVE_CANN
 
  private:
-    bool trans_a;
-    bool trans_b;
-    float alpha;
-    float beta;
-
     int real_ndims_C;
 
     std::vector<float> packed_input_B;
+    std::vector<float> thin_packed_B;
     Mat broadcast_bias;
+
+    const uchar* last_packed_input_B_data = nullptr;
 
     FastGemmOpt opt;
     MatMulHelper helper;

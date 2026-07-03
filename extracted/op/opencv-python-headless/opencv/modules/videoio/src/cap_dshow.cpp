@@ -1431,7 +1431,7 @@ int videoInput::getWidth(int id) const
         return VDList[id] ->width;
     }
 
-    return 0;
+    return CAP_PROP_UNKNOWN;
 
 }
 
@@ -1448,7 +1448,7 @@ int videoInput::getHeight(int id) const
         return VDList[id] ->height;
     }
 
-    return 0;
+    return CAP_PROP_UNKNOWN;
 
 }
 
@@ -1463,7 +1463,7 @@ int videoInput::getFourcc(int id) const
         return getFourccFromMediaSubtype(VDList[id]->videoType);
     }
 
-    return 0;
+    return CAP_PROP_UNKNOWN;
 
 }
 
@@ -1477,14 +1477,14 @@ double videoInput::getFPS(int id) const
         }
     }
 
-    return 0;
+    return CAP_PROP_UNKNOWN;
 
 }
 
 int videoInput::getChannel(int deviceID) const
 {
     if (!isDeviceSetup(deviceID))
-        return 0;
+        return CAP_PROP_UNKNOWN;
     return VDList[deviceID]->storeConn;
 }
 
@@ -1500,7 +1500,7 @@ int videoInput::getSize(int id) const
         return VDList[id] ->videoSize;
     }
 
-    return 0;
+    return CAP_PROP_UNKNOWN;
 
 }
 
@@ -2394,7 +2394,7 @@ int videoInput::getVideoPropertyFromCV(int cv_property){
         case CAP_PROP_MONOCHROME:
             return VideoProcAmp_ColorEnable;
 
-        case CAP_PROP_WHITE_BALANCE_BLUE_U:
+        case cv::VideoCaptureProperties::CAP_PROP_WB_TEMPERATURE:
             return VideoProcAmp_WhiteBalance;
 
         case cv::VideoCaptureProperties::CAP_PROP_AUTO_WB:
@@ -2406,7 +2406,7 @@ int videoInput::getVideoPropertyFromCV(int cv_property){
         case CAP_PROP_GAIN:
             return VideoProcAmp_Gain;
     }
-    return -1;
+    return CAP_PROP_UNKNOWN;
 }
 
 int videoInput::getCameraPropertyFromCV(int cv_property){
@@ -2437,7 +2437,7 @@ int videoInput::getCameraPropertyFromCV(int cv_property){
         default:
             break;
     }
-    return -1;
+    return CAP_PROP_UNKNOWN;
 }
 
 bool videoInput::isDeviceDisconnected(int deviceNumber)
@@ -2756,7 +2756,13 @@ int videoInput::start(int deviceID, videoDevice *VD){
     }
 
     VIDEOINFOHEADER *pVih =  reinterpret_cast<VIDEOINFOHEADER*>(VD->pAmMediaType->pbFormat);
-    CV_Assert(pVih);
+    // Some legacy or virtual cameras (e.g., Microsoft Ball filter) return S_OK
+    // but leave pbFormat as NULL. We check for NULL here to avoid a crash.
+    // https://github.com/opencv/opencv/issues/28904
+    if (pVih == NULL) {
+        DebugPrintOut("ERROR: pbFormat field is not set!\n");
+        return false;
+    }
     int currentWidth    =  HEADER(pVih)->biWidth;
     int currentHeight    =  HEADER(pVih)->biHeight;
 
@@ -3353,7 +3359,7 @@ int videoInput::property_window_count(int idx)
     if (isDeviceSetup(idx))
         return (int)InterlockedCompareExchange(&VDList[idx]->property_window_count, 0L, 0L);
 
-    return 0;
+    return CAP_PROP_UNKNOWN;
 }
 
 namespace cv
@@ -3422,7 +3428,7 @@ double VideoCapture_DShow::getProperty(int propIdx) const
     case CAP_PROP_SHARPNESS:
     case CAP_PROP_GAMMA:
     case CAP_PROP_MONOCHROME:
-    case CAP_PROP_WHITE_BALANCE_BLUE_U:
+    case cv::VideoCaptureProperties::CAP_PROP_WB_TEMPERATURE:
     case CAP_PROP_BACKLIGHT:
     case CAP_PROP_GAIN:
         if (g_VI.getVideoSettingFilter(m_index, g_VI.getVideoPropertyFromCV(propIdx), min_value, max_value, stepping_delta, current_value, flags, defaultValue))
@@ -3451,7 +3457,7 @@ double VideoCapture_DShow::getProperty(int propIdx) const
         break;
     }
     // unknown parameter or value not available
-    return -1;
+    return CAP_PROP_UNKNOWN;
 }
 bool VideoCapture_DShow::setProperty(int propIdx, double propVal)
 {
@@ -3589,7 +3595,7 @@ bool VideoCapture_DShow::setProperty(int propIdx, double propVal)
             else
                 flags = VideoProcAmp_Flags_Manual;
             break;
-        case CAP_PROP_WHITE_BALANCE_BLUE_U:
+        case cv::VideoCaptureProperties::CAP_PROP_WB_TEMPERATURE:
             flags = VideoProcAmp_Flags_Manual;
             break;
     }
@@ -3604,7 +3610,7 @@ bool VideoCapture_DShow::setProperty(int propIdx, double propVal)
     case CAP_PROP_SHARPNESS:
     case CAP_PROP_GAMMA:
     case CAP_PROP_MONOCHROME:
-    case CAP_PROP_WHITE_BALANCE_BLUE_U:
+    case cv::VideoCaptureProperties::CAP_PROP_WB_TEMPERATURE:
     case cv::VideoCaptureProperties::CAP_PROP_AUTO_WB:
     case CAP_PROP_BACKLIGHT:
     case CAP_PROP_GAIN:

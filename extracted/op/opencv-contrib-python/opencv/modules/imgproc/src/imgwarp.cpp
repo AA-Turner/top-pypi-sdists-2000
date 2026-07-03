@@ -55,71 +55,161 @@
 #include "opencv2/core/softfloat.hpp"
 #include "imgwarp.hpp"
 
-using namespace cv;
+#include "warp_common.hpp"
+#include "warp_kernels.simd.hpp"
+#include "warp_kernels.simd_declarations.hpp"
 
 namespace cv
 {
 
-#if defined (HAVE_IPP) && (!IPP_DISABLE_WARPAFFINE || !IPP_DISABLE_WARPPERSPECTIVE || !IPP_DISABLE_REMAP)
-typedef IppStatus (CV_STDCALL* ippiSetFunc)(const void*, void *, int, IppiSize);
+///////////////////////////// new-style kernel-base image warping without tables ////////////////////////
 
-template <int channels, typename Type>
-bool IPPSetSimple(cv::Scalar value, void *dataPointer, int step, IppiSize &size, ippiSetFunc func)
+ImgWarpFunc getImgWarpFunc(int type, int interpolation)
 {
-    CV_INSTRUMENT_REGION_IPP();
-
-    Type values[channels];
-    for( int i = 0; i < channels; i++ )
-        values[i] = saturate_cast<Type>(value[i]);
-    return func(values, dataPointer, step, size) >= 0;
+    if (interpolation == INTER_CUBIC) {
+        CV_CPU_DISPATCH(getBicubicWarpFunc_, (type), CV_CPU_DISPATCH_MODES_ALL);
+    }
+    return (ImgWarpFunc)nullptr;
 }
 
-static bool IPPSet(const cv::Scalar &value, void *dataPointer, int step, IppiSize &size, int channels, int depth)
+static bool genericWarp(const Mat& src, const Mat& M_, const Mat& mapx, const Mat& mapy, Mat& dst,
+                        int interpolation, int borderType_, const Scalar& borderValue, bool relativeMap_)
 {
-    CV_INSTRUMENT_REGION_IPP();
+    constexpr int MAX_CHANNELS = 4;
+    int srctype = src.type();
 
-    if( channels == 1 )
-    {
-        switch( depth )
-        {
-        case CV_8U:
-            return CV_INSTRUMENT_FUN_IPP(ippiSet_8u_C1R, saturate_cast<Ipp8u>(value[0]), (Ipp8u *)dataPointer, step, size) >= 0;
-        case CV_16U:
-            return CV_INSTRUMENT_FUN_IPP(ippiSet_16u_C1R, saturate_cast<Ipp16u>(value[0]), (Ipp16u *)dataPointer, step, size) >= 0;
-        case CV_32F:
-            return CV_INSTRUMENT_FUN_IPP(ippiSet_32f_C1R, saturate_cast<Ipp32f>(value[0]), (Ipp32f *)dataPointer, step, size) >= 0;
+    ImgWarpFunc func = getImgWarpFunc(srctype, interpolation);
+    if (!func) {
+        return false; // not implemented;
+    }
+
+    CV_Assert(src.type() == dst.type());
+    CV_Assert(src.channels() <= MAX_CHANNELS);
+    Matx33f Mdata(1.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 1.f);
+
+    if (!M_.empty()) {
+        if (!mapx.empty() || !mapy.empty()) {
+            CV_Error(Error::StsBadArg, "Either M or both mapx and mapy must be empty");
+        }
+        CV_Assert(M_.size() == Size(3, 2) || M_.size() == Size(3, 3));
+        CV_Assert(M_.type() == CV_32F || M_.type() == CV_64F);
+        Mat Mcopy(M_.size(), CV_32F, Mdata.val);
+        M_.convertTo(Mcopy, CV_32F);
+    } else {
+        if (mapx.empty()) {
+            CV_Error(Error::StsBadArg, "When M is empty, mapx and/or mapy must be non-empty");
+        }
+        CV_Assert(mapx.size() == dst.size());
+        if (mapy.empty()) {
+            CV_Assert(mapx.type() == CV_32FC2);
+        } else {
+            if (mapx.type() == mapy.type()) {
+                CV_Assert(mapx.type() == CV_32FC1);
+            } else {
+                CV_Assert(mapx.type() == CV_16SC2 && (mapy.type() == CV_16UC1 || mapy.type() == CV_16SC1));
+            }
+            CV_Assert(mapx.size() == mapy.size());
         }
     }
-    else
-    {
-        if( channels == 3 )
-        {
-            switch( depth )
-            {
-            case CV_8U:
-                return IPPSetSimple<3, Ipp8u>(value, dataPointer, step, size, (ippiSetFunc)ippiSet_8u_C3R);
-            case CV_16U:
-                return IPPSetSimple<3, Ipp16u>(value, dataPointer, step, size, (ippiSetFunc)ippiSet_16u_C3R);
-            case CV_32F:
-                return IPPSetSimple<3, Ipp32f>(value, dataPointer, step, size, (ippiSetFunc)ippiSet_32f_C3R);
+
+    int64_t borderValBuf_[MAX_CHANNELS];
+    scalarToRawData(borderValue, borderValBuf_, src.type());
+
+    parallel_for_(Range(0, dst.rows), [&](const Range& range) {
+        constexpr float FIXPT_SCALE = 1.f/32;
+        constexpr int BLOCK_SIZE = 128;
+        const uint8_t* srcdata = src.data;
+        const float* fparams = nullptr;
+        size_t srcstep = src.step;
+        Size srcsize = src.size();
+        int dstcols = dst.cols;
+        int borderType = borderType_;
+        size_t bpp = src.elemSize();
+
+        bool warping = !M_.empty();
+        bool warpAffine = warping && M_.rows == 2;
+        bool warpPerspective = warping && M_.rows == 3;
+
+        bool relativeMap = relativeMap_ && !warping;
+        float relscale = relativeMap ? 1.f : 0.f;
+        bool interleavedmap = !warping && (mapx.type() == CV_32FC2);
+        bool planarmap = !warping && (mapx.type() == mapy.type());
+        bool fixedmap = !warping && (mapx.type() == CV_16SC2);
+
+        CV_Assert(warping || interleavedmap || planarmap || fixedmap);
+
+        Matx33f M = Mdata;
+        const uint8_t* borderValBuf = (const uint8_t*)borderValBuf_;
+        float M_xx = M(0, 0), M_yx = M(1, 0), M_zx = M(2, 0);
+        float xbuf[BLOCK_SIZE], ybuf[BLOCK_SIZE];
+        const float* xbufptr = xbuf;
+        const float* ybufptr = ybuf;
+
+        for (int y = range.start; y < range.end; y++) {
+            uint8_t* dstptr = dst.ptr(y);
+            float M_x = float(y)*M(0, 1) + M(0, 2);
+            float M_y = float(y)*M(1, 1) + M(1, 2);
+            float M_z = float(y)*M(2, 1) + M(2, 2);
+            const Vec2s* xysptr = fixedmap ? mapx.ptr<Vec2s>(y) : nullptr;
+            const ushort* idxptr = fixedmap ? mapy.ptr<ushort>(y) : nullptr;
+            const Vec2f* xyfptr = interleavedmap ? mapx.ptr<Vec2f>(y) : nullptr;
+            const float* xfptr = planarmap ? mapx.ptr<float>(y) : nullptr;
+            const float* yfptr = planarmap ? mapy.ptr<float>(y) : nullptr;
+            float y0 = relativeMap ? float(y) : 0.f;
+
+            for (int x = 0; x < dstcols; x += BLOCK_SIZE) {
+                int blocksize = std::min(BLOCK_SIZE, dstcols - x);
+                if (warpAffine) {
+                    for (int dx = 0; dx < blocksize; dx++) {
+                        float xf = float(x + dx);
+                        xbuf[dx] = M_x + M_xx*xf;
+                        ybuf[dx] = M_y + M_yx*xf;
+                    }
+                } else if (warpPerspective) {
+                    for (int dx = 0; dx < blocksize; dx++) {
+                        double xf = double(x + dx);
+                        double invz = 1./(M_z + M_zx*xf);
+                        xbuf[dx] = float((M_x + M_xx*xf)*invz);
+                        ybuf[dx] = float((M_y + M_yx*xf)*invz);
+                    }
+                } else if (fixedmap) {
+                    for (int dx = 0; dx < blocksize; dx++) {
+                        Vec2s xy = xysptr[x + dx];
+                        ushort idx = idxptr[x + dx];
+                        float xf = float(xy[0]) + (idx & 31)*FIXPT_SCALE + (x + dx)*relscale;
+                        float yf = float(xy[1]) + ((idx >> 5) & 31)*FIXPT_SCALE + y0;
+                        xbuf[dx] = xf;
+                        ybuf[dx] = yf;
+                    }
+                } else if (interleavedmap) {
+                    for (int dx = 0; dx < blocksize; dx++) {
+                        Vec2f xy = xyfptr[x + dx];
+                        float xf = xy[0] + (x + dx)*relscale;
+                        float yf = xy[1] + y0;
+                        xbuf[dx] = xf;
+                        ybuf[dx] = yf;
+                    }
+                } else if (relativeMap) {
+                    for (int dx = 0; dx < blocksize; dx++) {
+                        float xf = xfptr[x + dx] + (x + dx)*relscale;
+                        float yf = yfptr[x + dx] + y0;
+                        xbuf[dx] = xf;
+                        ybuf[dx] = yf;
+                    }
+                } else {
+                    // planar absolute map — just use it as-is without copying
+                    xbufptr = xfptr + x;
+                    ybufptr = yfptr + x;
+                }
+
+                func(xbufptr, ybufptr, blocksize, srcdata, srcstep, srcsize,
+                     dstptr + x*bpp, fparams, borderType, borderValBuf);
             }
         }
-        else if( channels == 4 )
-        {
-            switch( depth )
-            {
-            case CV_8U:
-                return IPPSetSimple<4, Ipp8u>(value, dataPointer, step, size, (ippiSetFunc)ippiSet_8u_C4R);
-            case CV_16U:
-                return IPPSetSimple<4, Ipp16u>(value, dataPointer, step, size, (ippiSetFunc)ippiSet_16u_C4R);
-            case CV_32F:
-                return IPPSetSimple<4, Ipp32f>(value, dataPointer, step, size, (ippiSetFunc)ippiSet_32f_C4R);
-            }
-        }
-    }
-    return false;
+    });
+
+    return true;
 }
-#endif
 
 /************** interpolation formulas and tables ***************/
 
@@ -136,9 +226,6 @@ static short BilinearTab_iC4_buf[INTER_TAB_SIZE2+2][2][8];
 static short (*BilinearTab_iC4)[2][8] = (short (*)[2][8])alignPtr(BilinearTab_iC4_buf, 16);
 #endif
 
-static float BicubicTab_f[INTER_TAB_SIZE2][4][4];
-static short BicubicTab_i[INTER_TAB_SIZE2][4][4];
-
 static float Lanczos4Tab_f[INTER_TAB_SIZE2][8][8];
 static short Lanczos4Tab_i[INTER_TAB_SIZE2][8][8];
 
@@ -146,16 +233,6 @@ static inline void interpolateLinear( float x, float* coeffs )
 {
     coeffs[0] = 1.f - x;
     coeffs[1] = x;
-}
-
-static inline void interpolateCubic( float x, float* coeffs )
-{
-    const float A = -0.75f;
-
-    coeffs[0] = ((A*(x + 1) - 5*A)*(x + 1) + 8*A)*(x + 1) - 4*A;
-    coeffs[1] = ((A + 2)*x - (A + 3))*x*x + 1;
-    coeffs[2] = ((A + 2)*(1 - x) - (A + 3))*(1 - x)*(1 - x) + 1;
-    coeffs[3] = 1.f - coeffs[0] - coeffs[1] - coeffs[2];
 }
 
 static inline void interpolateLanczos4( float x, float* coeffs )
@@ -196,8 +273,7 @@ static void initInterTab1D(int method, float* tab, int tabsz)
     }
     else if( method == INTER_CUBIC )
     {
-        for( int i = 0; i < tabsz; i++, tab += 4 )
-            interpolateCubic( i*scale, tab );
+        ; // pass
     }
     else if( method == INTER_LANCZOS4 )
     {
@@ -212,13 +288,15 @@ static void initInterTab1D(int method, float* tab, int tabsz)
 static const void* initInterTab2D( int method, bool fixpt )
 {
     static bool inittab[INTER_MAX+1] = {false};
+
+    if( method == INTER_CUBIC )
+        return nullptr;
+
     float* tab = 0;
     short* itab = 0;
     int ksize = 0;
     if( method == INTER_LINEAR )
         tab = BilinearTab_f[0][0], itab = BilinearTab_i[0][0], ksize=2;
-    else if( method == INTER_CUBIC )
-        tab = BicubicTab_f[0][0], itab = BicubicTab_i[0][0], ksize=4;
     else if( method == INTER_LANCZOS4 )
         tab = Lanczos4Tab_f[0][0], itab = Lanczos4Tab_i[0][0], ksize=8;
     else
@@ -290,8 +368,6 @@ static bool initAllInterTab2D()
 {
     return  initInterTab2D( INTER_LINEAR, false ) &&
             initInterTab2D( INTER_LINEAR, true ) &&
-            initInterTab2D( INTER_CUBIC, false ) &&
-            initInterTab2D( INTER_CUBIC, true ) &&
             initInterTab2D( INTER_LANCZOS4, false ) &&
             initInterTab2D( INTER_LANCZOS4, true );
 }
@@ -904,111 +980,6 @@ static void remapBilinear( const Mat& _src, Mat& _dst, const Mat& _xy,
 
 
 template<class CastOp, typename AT, int ONE, bool isRelative>
-static void remapBicubic( const Mat& _src, Mat& _dst, const Mat& _xy,
-                          const Mat& _fxy, const void* _wtab,
-                          int borderType, const Scalar& _borderValue, const Point& _offset )
-{
-    typedef typename CastOp::rtype T;
-    typedef typename CastOp::type1 WT;
-    Size ssize = _src.size(), dsize = _dst.size();
-    const int cn = _src.channels();
-    const AT* wtab = (const AT*)_wtab;
-    const T* S0 = _src.ptr<T>();
-    size_t sstep = _src.step/sizeof(S0[0]);
-    T cval[CV_CN_MAX];
-    CastOp castOp;
-
-    for(int k = 0; k < cn; k++ )
-        cval[k] = saturate_cast<T>(_borderValue[k & 3]);
-
-    int borderType1 = borderType != BORDER_TRANSPARENT ? borderType : BORDER_REFLECT_101;
-
-    unsigned width1 = std::max(ssize.width-3, 0), height1 = std::max(ssize.height-3, 0);
-
-    if( _dst.isContinuous() && _xy.isContinuous() && _fxy.isContinuous() && !isRelative )
-    {
-        dsize.width *= dsize.height;
-        dsize.height = 1;
-    }
-
-    for(int dy = 0; dy < dsize.height; dy++ )
-    {
-        T* D = _dst.ptr<T>(dy);
-        const short* XY = _xy.ptr<short>(dy);
-        const ushort* FXY = _fxy.ptr<ushort>(dy);
-        const int off_y = isRelative ? (_offset.y+dy) : 0;
-        for(int dx = 0; dx < dsize.width; dx++, D += cn )
-        {
-            const int off_x = isRelative ? (_offset.x+dx) : 0;
-            int sx = XY[dx*2]-1+off_x, sy = XY[dx*2+1]-1+off_y;
-            const AT* w = wtab + FXY[dx]*16;
-            if( (unsigned)sx < width1 && (unsigned)sy < height1 )
-            {
-                const T* S = S0 + sy*sstep + sx*cn;
-                for(int k = 0; k < cn; k++ )
-                {
-                    WT sum = S[0]*w[0] + S[cn]*w[1] + S[cn*2]*w[2] + S[cn*3]*w[3];
-                    S += sstep;
-                    sum += S[0]*w[4] + S[cn]*w[5] + S[cn*2]*w[6] + S[cn*3]*w[7];
-                    S += sstep;
-                    sum += S[0]*w[8] + S[cn]*w[9] + S[cn*2]*w[10] + S[cn*3]*w[11];
-                    S += sstep;
-                    sum += S[0]*w[12] + S[cn]*w[13] + S[cn*2]*w[14] + S[cn*3]*w[15];
-                    S -= sstep * 3 - 1;
-                    D[k] = castOp(sum);
-                }
-            }
-            else
-            {
-                int x[4], y[4];
-                if( borderType == BORDER_TRANSPARENT &&
-                    ((unsigned)(sx+1) >= (unsigned)ssize.width ||
-                    (unsigned)(sy+1) >= (unsigned)ssize.height) )
-                    continue;
-
-                if( borderType1 == BORDER_CONSTANT &&
-                    (sx >= ssize.width || sx+4 <= 0 ||
-                    sy >= ssize.height || sy+4 <= 0))
-                {
-                    for(int k = 0; k < cn; k++ )
-                        D[k] = cval[k];
-                    continue;
-                }
-
-                for(int i = 0; i < 4; i++ )
-                {
-                    x[i] = borderInterpolate(sx + i, ssize.width, borderType1)*cn;
-                    y[i] = borderInterpolate(sy + i, ssize.height, borderType1);
-                }
-
-                for(int k = 0; k < cn; k++, S0++, w -= 16 )
-                {
-                    WT cv = cval[k], sum = cv*ONE;
-                    for(int i = 0; i < 4; i++, w += 4 )
-                    {
-                        int yi = y[i];
-                        if( yi < 0 )
-                            continue;
-                        const T* S = S0 + yi*sstep;
-                        if( x[0] >= 0 )
-                            sum += (S[x[0]] - cv)*w[0];
-                        if( x[1] >= 0 )
-                            sum += (S[x[1]] - cv)*w[1];
-                        if( x[2] >= 0 )
-                            sum += (S[x[2]] - cv)*w[2];
-                        if( x[3] >= 0 )
-                            sum += (S[x[3]] - cv)*w[3];
-                    }
-                    D[k] = castOp(sum);
-                }
-                S0 -= cn;
-            }
-        }
-    }
-}
-
-
-template<class CastOp, typename AT, int ONE, bool isRelative>
 static void remapLanczos4( const Mat& _src, Mat& _dst, const Mat& _xy,
                            const Mat& _fxy, const void* _wtab,
                            int borderType, const Scalar& _borderValue, const Point& _offset )
@@ -1344,12 +1315,15 @@ private:
 static bool ocl_remap(InputArray _src, OutputArray _dst, InputArray _map1, InputArray _map2,
                       int interpolation, int borderType, const Scalar& borderValue)
 {
-    const bool hasRelativeFlag = ((interpolation & WARP_RELATIVE_MAP) != 0);
-    interpolation &= ~WARP_RELATIVE_MAP;
+    const bool hasRelativeFlag = ((interpolation & cv::WARP_RELATIVE_MAP) != 0);
+    interpolation &= ~cv::WARP_RELATIVE_MAP;
 
     const ocl::Device & dev = ocl::Device::getDefault();
     int cn = _src.channels(), type = _src.type(), depth = _src.depth(),
             rowsPerWI = dev.isIntel() ? 4 : 1;
+
+    if(!dev.hasFP64() && depth == CV_64F)
+        return false;
 
     if (borderType == BORDER_TRANSPARENT || !(interpolation == INTER_LINEAR || interpolation == INTER_NEAREST)
             || _map1.type() == CV_16SC1 || _map2.type() == CV_16SC1)
@@ -1426,279 +1400,19 @@ static bool ocl_remap(InputArray _src, OutputArray _dst, InputArray _map1, Input
     return k.run(2, globalThreads, NULL, false);
 }
 
-#if 0
-/**
-@deprecated with old version of cv::linearPolar
-*/
-static bool ocl_linearPolar(InputArray _src, OutputArray _dst,
-    Point2f center, double maxRadius, int flags)
-{
-    UMat src_with_border; // don't scope this variable (it holds image data)
-
-    UMat mapx, mapy, r, cp_sp;
-    UMat src = _src.getUMat();
-    _dst.create(src.size(), src.type());
-    Size dsize = src.size();
-    r.create(Size(1, dsize.width), CV_32F);
-    cp_sp.create(Size(1, dsize.height), CV_32FC2);
-
-    mapx.create(dsize, CV_32F);
-    mapy.create(dsize, CV_32F);
-    size_t w = dsize.width;
-    size_t h = dsize.height;
-    String buildOptions;
-    unsigned mem_size = 32;
-    if (flags & cv::WARP_INVERSE_MAP)
-    {
-        buildOptions = "-D InverseMap";
-    }
-    else
-    {
-        buildOptions = format("-D ForwardMap  -D MEM_SIZE=%d", mem_size);
-    }
-    String retval;
-    ocl::Program p(ocl::imgproc::linearPolar_oclsrc, buildOptions, retval);
-    ocl::Kernel k("linearPolar", p);
-    ocl::KernelArg ocl_mapx = ocl::KernelArg::PtrReadWrite(mapx), ocl_mapy = ocl::KernelArg::PtrReadWrite(mapy);
-    ocl::KernelArg  ocl_cp_sp = ocl::KernelArg::PtrReadWrite(cp_sp);
-    ocl::KernelArg ocl_r = ocl::KernelArg::PtrReadWrite(r);
-
-    if (!(flags & cv::WARP_INVERSE_MAP))
-    {
-
-
-
-        ocl::Kernel computeAngleRadius_Kernel("computeAngleRadius", p);
-        float PI2_height = (float) CV_2PI / dsize.height;
-        float maxRadius_width = (float) maxRadius / dsize.width;
-        computeAngleRadius_Kernel.args(ocl_cp_sp, ocl_r, maxRadius_width, PI2_height, (unsigned)dsize.width, (unsigned)dsize.height);
-        size_t max_dim = max(h, w);
-        computeAngleRadius_Kernel.run(1, &max_dim, NULL, false);
-        k.args(ocl_mapx, ocl_mapy, ocl_cp_sp, ocl_r, center.x, center.y, (unsigned)dsize.width, (unsigned)dsize.height);
-    }
-    else
-    {
-        const int ANGLE_BORDER = 1;
-
-        cv::copyMakeBorder(src, src_with_border, ANGLE_BORDER, ANGLE_BORDER, 0, 0, BORDER_WRAP);
-        src = src_with_border;
-        Size ssize = src_with_border.size();
-        ssize.height -= 2 * ANGLE_BORDER;
-        float ascale =  ssize.height / ((float)CV_2PI);
-        float pscale =  ssize.width / ((float) maxRadius);
-
-        k.args(ocl_mapx, ocl_mapy, ascale, pscale, center.x, center.y, ANGLE_BORDER, (unsigned)dsize.width, (unsigned)dsize.height);
-
-
-    }
-    size_t globalThreads[2] = { (size_t)dsize.width , (size_t)dsize.height };
-    size_t localThreads[2] = { mem_size , mem_size };
-    k.run(2, globalThreads, localThreads, false);
-    remap(src, _dst, mapx, mapy, flags & cv::INTER_MAX, (flags & cv::WARP_FILL_OUTLIERS) ? cv::BORDER_CONSTANT : cv::BORDER_TRANSPARENT);
-    return true;
-}
-static bool ocl_logPolar(InputArray _src, OutputArray _dst,
-    Point2f center, double M, int flags)
-{
-    if (M <= 0)
-        CV_Error(cv::Error::StsOutOfRange, "M should be >0");
-    UMat src_with_border; // don't scope this variable (it holds image data)
-
-    UMat mapx, mapy, r, cp_sp;
-    UMat src = _src.getUMat();
-    _dst.create(src.size(), src.type());
-    Size dsize = src.size();
-    r.create(Size(1, dsize.width), CV_32F);
-    cp_sp.create(Size(1, dsize.height), CV_32FC2);
-
-    mapx.create(dsize, CV_32F);
-    mapy.create(dsize, CV_32F);
-    size_t w = dsize.width;
-    size_t h = dsize.height;
-    String buildOptions;
-    unsigned mem_size = 32;
-    if (flags & cv::WARP_INVERSE_MAP)
-    {
-        buildOptions = "-D InverseMap";
-    }
-    else
-    {
-        buildOptions = format("-D ForwardMap  -D MEM_SIZE=%d", mem_size);
-    }
-    String retval;
-    ocl::Program p(ocl::imgproc::logPolar_oclsrc, buildOptions, retval);
-    //ocl::Program p(ocl::imgproc::my_linearPolar_oclsrc, buildOptions, retval);
-    //printf("%s\n", retval);
-    ocl::Kernel k("logPolar", p);
-    ocl::KernelArg ocl_mapx = ocl::KernelArg::PtrReadWrite(mapx), ocl_mapy = ocl::KernelArg::PtrReadWrite(mapy);
-    ocl::KernelArg  ocl_cp_sp = ocl::KernelArg::PtrReadWrite(cp_sp);
-    ocl::KernelArg ocl_r = ocl::KernelArg::PtrReadWrite(r);
-
-    if (!(flags & cv::WARP_INVERSE_MAP))
-    {
-
-
-
-        ocl::Kernel computeAngleRadius_Kernel("computeAngleRadius", p);
-        float PI2_height = (float) CV_2PI / dsize.height;
-
-        computeAngleRadius_Kernel.args(ocl_cp_sp, ocl_r, (float)M, PI2_height, (unsigned)dsize.width, (unsigned)dsize.height);
-        size_t max_dim = max(h, w);
-        computeAngleRadius_Kernel.run(1, &max_dim, NULL, false);
-        k.args(ocl_mapx, ocl_mapy, ocl_cp_sp, ocl_r, center.x, center.y, (unsigned)dsize.width, (unsigned)dsize.height);
-    }
-    else
-    {
-        const int ANGLE_BORDER = 1;
-
-        cv::copyMakeBorder(src, src_with_border, ANGLE_BORDER, ANGLE_BORDER, 0, 0, BORDER_WRAP);
-        src = src_with_border;
-        Size ssize = src_with_border.size();
-        ssize.height -= 2 * ANGLE_BORDER;
-        float ascale =  ssize.height / ((float)CV_2PI);
-
-
-        k.args(ocl_mapx, ocl_mapy, ascale, (float)M, center.x, center.y, ANGLE_BORDER, (unsigned)dsize.width, (unsigned)dsize.height);
-
-
-    }
-    size_t globalThreads[2] = { (size_t)dsize.width , (size_t)dsize.height };
-    size_t localThreads[2] = { mem_size , mem_size };
-    k.run(2, globalThreads, localThreads, false);
-    remap(src, _dst, mapx, mapy, flags & cv::INTER_MAX, (flags & cv::WARP_FILL_OUTLIERS) ? cv::BORDER_CONSTANT : cv::BORDER_TRANSPARENT);
-    return true;
-}
-#endif
-
-#endif
-
-#if defined HAVE_IPP && !IPP_DISABLE_REMAP
-
-typedef IppStatus (CV_STDCALL * ippiRemap)(const void * pSrc, IppiSize srcSize, int srcStep, IppiRect srcRoi,
-                                           const Ipp32f* pxMap, int xMapStep, const Ipp32f* pyMap, int yMapStep,
-                                           void * pDst, int dstStep, IppiSize dstRoiSize, int interpolation);
-
-class IPPRemapInvoker :
-        public ParallelLoopBody
-{
-public:
-    IPPRemapInvoker(Mat & _src, Mat & _dst, Mat & _xmap, Mat & _ymap, ippiRemap _ippFunc,
-                    int _ippInterpolation, int _borderType, const Scalar & _borderValue, bool * _ok) :
-        ParallelLoopBody(), src(_src), dst(_dst), map1(_xmap), map2(_ymap), ippFunc(_ippFunc),
-        ippInterpolation(_ippInterpolation), borderType(_borderType), borderValue(_borderValue), ok(_ok)
-    {
-        *ok = true;
-    }
-
-    virtual void operator() (const Range & range) const
-    {
-        IppiRect srcRoiRect = { 0, 0, src.cols, src.rows };
-        Mat dstRoi = dst.rowRange(range);
-        IppiSize dstRoiSize = ippiSize(dstRoi.size());
-        int type = dst.type(), depth = CV_MAT_DEPTH(type), cn = CV_MAT_CN(type);
-
-        if (borderType == BORDER_CONSTANT &&
-                !IPPSet(borderValue, dstRoi.ptr(), (int)dstRoi.step, dstRoiSize, cn, depth))
-        {
-            *ok = false;
-            return;
-        }
-
-        if (CV_INSTRUMENT_FUN_IPP(ippFunc, src.ptr(), ippiSize(src.size()), (int)src.step, srcRoiRect,
-                    map1.ptr<Ipp32f>(), (int)map1.step, map2.ptr<Ipp32f>(), (int)map2.step,
-                    dstRoi.ptr(), (int)dstRoi.step, dstRoiSize, ippInterpolation) < 0)
-            *ok = false;
-        else
-        {
-            CV_IMPL_ADD(CV_IMPL_IPP|CV_IMPL_MT);
-        }
-    }
-
-private:
-    Mat & src, & dst, & map1, & map2;
-    ippiRemap ippFunc;
-    int ippInterpolation, borderType;
-    Scalar borderValue;
-    bool * ok;
-};
-
 #endif
 
 }
 
 void cv::remap( InputArray _src, OutputArray _dst,
                 InputArray _map1, InputArray _map2,
-                int interpolation, int borderType, const Scalar& borderValue )
+                int interpolation, int borderType, const Scalar& borderValue,
+                AlgorithmHint hint )
 {
     CV_INSTRUMENT_REGION();
 
-    const bool hasRelativeFlag = ((interpolation & WARP_RELATIVE_MAP) != 0);
-
-    static RemapNNFunc nn_tab[2][8] =
-    {
-        {
-            remapNearest<uchar, false>, remapNearest<schar, false>, remapNearest<ushort, false>, remapNearest<short, false>,
-            remapNearest<int, false>, remapNearest<float, false>, remapNearest<double, false>, 0
-        },
-        {
-            remapNearest<uchar, true>, remapNearest<schar, true>, remapNearest<ushort, true>, remapNearest<short, true>,
-            remapNearest<int, true>, remapNearest<float, true>, remapNearest<double, true>, 0
-        }
-    };
-
-    static RemapFunc linear_tab[2][8] =
-    {
-        {
-            remapBilinear<FixedPtCast<int, uchar, INTER_REMAP_COEF_BITS>, RemapVec_8u<false>, short, false>, 0,
-            remapBilinear<Cast<float, ushort>, RemapNoVec<false>, float, false>,
-            remapBilinear<Cast<float, short>, RemapNoVec<false>, float, false>, 0,
-            remapBilinear<Cast<float, float>, RemapNoVec<false>, float, false>,
-            remapBilinear<Cast<double, double>, RemapNoVec<false>, float, false>, 0
-        },
-        {
-            remapBilinear<FixedPtCast<int, uchar, INTER_REMAP_COEF_BITS>, RemapVec_8u<true>, short, true>, 0,
-            remapBilinear<Cast<float, ushort>, RemapNoVec<true>, float, true>,
-            remapBilinear<Cast<float, short>, RemapNoVec<true>, float, true>, 0,
-            remapBilinear<Cast<float, float>, RemapNoVec<true>, float, true>,
-            remapBilinear<Cast<double, double>, RemapNoVec<true>, float, true>, 0
-        }
-    };
-
-    static RemapFunc cubic_tab[2][8] =
-    {
-        {
-            remapBicubic<FixedPtCast<int, uchar, INTER_REMAP_COEF_BITS>, short, INTER_REMAP_COEF_SCALE, false>, 0,
-            remapBicubic<Cast<float, ushort>, float, 1, false>,
-            remapBicubic<Cast<float, short>, float, 1, false>, 0,
-            remapBicubic<Cast<float, float>, float, 1, false>,
-            remapBicubic<Cast<double, double>, float, 1, false>, 0
-        },
-        {
-            remapBicubic<FixedPtCast<int, uchar, INTER_REMAP_COEF_BITS>, short, INTER_REMAP_COEF_SCALE, true>, 0,
-            remapBicubic<Cast<float, ushort>, float, 1, true>,
-            remapBicubic<Cast<float, short>, float, 1, true>, 0,
-            remapBicubic<Cast<float, float>, float, 1, true>,
-            remapBicubic<Cast<double, double>, float, 1, true>, 0
-        }
-};
-
-    static RemapFunc lanczos4_tab[2][8] =
-    {
-        {
-            remapLanczos4<FixedPtCast<int, uchar, INTER_REMAP_COEF_BITS>, short, INTER_REMAP_COEF_SCALE, false>, 0,
-            remapLanczos4<Cast<float, ushort>, float, 1, false>,
-            remapLanczos4<Cast<float, short>, float, 1, false>, 0,
-            remapLanczos4<Cast<float, float>, float, 1, false>,
-            remapLanczos4<Cast<double, double>, float, 1, false>, 0
-        },
-        {
-            remapLanczos4<FixedPtCast<int, uchar, INTER_REMAP_COEF_BITS>, short, INTER_REMAP_COEF_SCALE, true>, 0,
-            remapLanczos4<Cast<float, ushort>, float, 1, true>,
-            remapLanczos4<Cast<float, short>, float, 1, true>, 0,
-            remapLanczos4<Cast<float, float>, float, 1, true>,
-            remapLanczos4<Cast<double, double>, float, 1, true>, 0
-        }
-};
+    if (hint == cv::ALGO_HINT_DEFAULT)
+        hint = cv::getDefaultAlgorithmHint();
 
     CV_Assert( !_map1.empty() );
     CV_Assert( _map2.empty() || (_map2.size() == _map1.size()));
@@ -1731,58 +1445,185 @@ void cv::remap( InputArray _src, OutputArray _dst,
                  map1.ptr<short>(), map1.step, map2.ptr<ushort>(), map2.step, interpolation, borderType, borderValue.val);
     }
 
-    interpolation &= ~WARP_RELATIVE_MAP;
+    const bool hasRelativeFlag = ((interpolation & cv::WARP_RELATIVE_MAP) != 0);
+
+    interpolation &= ~cv::WARP_RELATIVE_MAP;
     if( interpolation == INTER_AREA )
         interpolation = INTER_LINEAR;
 
+    if (genericWarp(src, Mat(), map1, map2, dst, interpolation, borderType, borderValue, hasRelativeFlag)) {
+        return;
+    }
+
     int type = src.type(), depth = CV_MAT_DEPTH(type);
 
-#if defined HAVE_IPP && !IPP_DISABLE_REMAP
-    CV_IPP_CHECK()
-    {
-        if ((interpolation == INTER_LINEAR || interpolation == INTER_CUBIC || interpolation == INTER_NEAREST) &&
-                map1.type() == CV_32FC1 && map2.type() == CV_32FC1 &&
-                (borderType == BORDER_CONSTANT || borderType == BORDER_TRANSPARENT))
-        {
-            int ippInterpolation =
-                interpolation == INTER_NEAREST ? IPPI_INTER_NN :
-                interpolation == INTER_LINEAR ? IPPI_INTER_LINEAR : IPPI_INTER_CUBIC;
+    if (interpolation == INTER_NEAREST && map1.depth() == CV_32F) {
+        const auto *src_data = src.ptr<const uchar>();
+        auto *dst_data = dst.ptr<uchar>();
+        size_t src_step = src.step, dst_step = dst.step,
+                map1_step = map1.step, map2_step = map2.step;
+        int src_rows = src.rows, src_cols = src.cols;
+        int dst_rows = dst.rows, dst_cols = dst.cols;
+        const float *map1_data = map1.ptr<const float>();
+        const float *map2_data = map2.ptr<const float>();
+        switch (src.type()) {
+            case CV_8UC1: {
+                CV_CPU_DISPATCH(remapNearestInvoker_8UC1, (src_data, src_step, src_rows, src_cols, dst_data, dst_step, dst_rows, dst_cols, borderType, borderValue.val, map1_data, map1_step, map2_data, map2_step, hasRelativeFlag), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_8UC3: {
+                CV_CPU_DISPATCH(remapNearestInvoker_8UC3, (src_data, src_step, src_rows, src_cols, dst_data, dst_step, dst_rows, dst_cols, borderType, borderValue.val, map1_data, map1_step, map2_data, map2_step, hasRelativeFlag), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_8UC4: {
+                CV_CPU_DISPATCH(remapNearestInvoker_8UC4, (src_data, src_step, src_rows, src_cols, dst_data, dst_step, dst_rows, dst_cols, borderType, borderValue.val, map1_data, map1_step, map2_data, map2_step, hasRelativeFlag), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_16UC1: {
+                CV_CPU_DISPATCH(remapNearestInvoker_16UC1, ((const uint16_t*)src_data, src_step, src_rows, src_cols, (uint16_t*)dst_data, dst_step, dst_rows, dst_cols, borderType, borderValue.val, map1_data, map1_step, map2_data, map2_step, hasRelativeFlag), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_16UC3: {
+                CV_CPU_DISPATCH(remapNearestInvoker_16UC3, ((const uint16_t*)src_data, src_step, src_rows, src_cols, (uint16_t*)dst_data, dst_step, dst_rows, dst_cols, borderType, borderValue.val, map1_data, map1_step, map2_data, map2_step, hasRelativeFlag), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_16UC4: {
+                CV_CPU_DISPATCH(remapNearestInvoker_16UC4, ((const uint16_t*)src_data, src_step, src_rows, src_cols, (uint16_t*)dst_data, dst_step, dst_rows, dst_cols, borderType, borderValue.val, map1_data, map1_step, map2_data, map2_step, hasRelativeFlag), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_32FC1: {
+                CV_CPU_DISPATCH(remapNearestInvoker_32FC1, ((const float*)src_data, src_step, src_rows, src_cols, (float*)dst_data, dst_step, dst_rows, dst_cols, borderType, borderValue.val, map1_data, map1_step, map2_data, map2_step, hasRelativeFlag), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_32FC3: {
+                CV_CPU_DISPATCH(remapNearestInvoker_32FC3, ((const float*)src_data, src_step, src_rows, src_cols, (float*)dst_data, dst_step, dst_rows, dst_cols, borderType, borderValue.val, map1_data, map1_step, map2_data, map2_step, hasRelativeFlag), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_32FC4: {
+                CV_CPU_DISPATCH(remapNearestInvoker_32FC4, ((const float*)src_data, src_step, src_rows, src_cols, (float*)dst_data, dst_step, dst_rows, dst_cols, borderType, borderValue.val, map1_data, map1_step, map2_data, map2_step, hasRelativeFlag), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            // no default
+        }
+    }
 
-            ippiRemap ippFunc =
-                type == CV_8UC1 ? (ippiRemap)ippiRemap_8u_C1R :
-                type == CV_8UC3 ? (ippiRemap)ippiRemap_8u_C3R :
-                type == CV_8UC4 ? (ippiRemap)ippiRemap_8u_C4R :
-                type == CV_16UC1 ? (ippiRemap)ippiRemap_16u_C1R :
-                type == CV_16UC3 ? (ippiRemap)ippiRemap_16u_C3R :
-                type == CV_16UC4 ? (ippiRemap)ippiRemap_16u_C4R :
-                type == CV_32FC1 ? (ippiRemap)ippiRemap_32f_C1R :
-                type == CV_32FC3 ? (ippiRemap)ippiRemap_32f_C3R :
-                type == CV_32FC4 ? (ippiRemap)ippiRemap_32f_C4R : 0;
-
-            if (ippFunc)
-            {
-                bool ok;
-                IPPRemapInvoker invoker(src, dst, map1, map2, ippFunc, ippInterpolation,
-                                        borderType, borderValue, &ok);
-                Range range(0, dst.rows);
-                parallel_for_(range, invoker, dst.total() / (double)(1 << 16));
-
-                if (ok)
-                {
-                    CV_IMPL_ADD(CV_IMPL_IPP|CV_IMPL_MT);
-                    return;
+    if (interpolation == INTER_LINEAR) {
+        if (map1.depth() == CV_32F) {
+            const auto *src_data = src.ptr<const uint8_t>();
+            auto *dst_data = dst.ptr<uint8_t>();
+            size_t src_step = src.step, dst_step = dst.step,
+                   map1_step = map1.step, map2_step = map2.step;
+            int src_rows = src.rows, src_cols = src.cols;
+            int dst_rows = dst.rows, dst_cols = dst.cols;
+            const float *map1_data = map1.ptr<const float>();
+            const float *map2_data = map2.ptr<const float>();
+            switch (src.type()) {
+                case CV_8UC1: {
+                    if (hint == cv::ALGO_HINT_APPROX) {
+                        CV_CPU_DISPATCH(remapLinearApproxInvoker_8UC1, (src_data, src_step, src_rows, src_cols, dst_data, dst_step, dst_rows, dst_cols, borderType, borderValue.val, map1_data, map1_step, map2_data, map2_step, hasRelativeFlag), CV_CPU_DISPATCH_MODES_ALL);
+                    } else {
+                        CV_CPU_DISPATCH(remapLinearInvoker_8UC1, (src_data, src_step, src_rows, src_cols, dst_data, dst_step, dst_rows, dst_cols, borderType, borderValue.val, map1_data, map1_step, map2_data, map2_step, hasRelativeFlag), CV_CPU_DISPATCH_MODES_ALL);
+                    }
+                    break;
                 }
-                setIppErrorStatus();
+                case CV_8UC3: {
+                    if (hint == cv::ALGO_HINT_APPROX) {
+                        CV_CPU_DISPATCH(remapLinearApproxInvoker_8UC3, (src_data, src_step, src_rows, src_cols, dst_data, dst_step, dst_rows, dst_cols, borderType, borderValue.val, map1_data, map1_step, map2_data, map2_step, hasRelativeFlag), CV_CPU_DISPATCH_MODES_ALL);
+                    } else {
+                        CV_CPU_DISPATCH(remapLinearInvoker_8UC3, (src_data, src_step, src_rows, src_cols, dst_data, dst_step, dst_rows, dst_cols, borderType, borderValue.val, map1_data, map1_step, map2_data, map2_step, hasRelativeFlag), CV_CPU_DISPATCH_MODES_ALL);
+                    }
+                    break;
+                }
+                case CV_8UC4: {
+                    if (hint == cv::ALGO_HINT_APPROX) {
+                        CV_CPU_DISPATCH(remapLinearApproxInvoker_8UC4, (src_data, src_step, src_rows, src_cols, dst_data, dst_step, dst_rows, dst_cols, borderType, borderValue.val, map1_data, map1_step, map2_data, map2_step, hasRelativeFlag), CV_CPU_DISPATCH_MODES_ALL);
+                    } else {
+                        CV_CPU_DISPATCH(remapLinearInvoker_8UC4, (src_data, src_step, src_rows, src_cols, dst_data, dst_step, dst_rows, dst_cols, borderType, borderValue.val, map1_data, map1_step, map2_data, map2_step, hasRelativeFlag), CV_CPU_DISPATCH_MODES_ALL);
+                    }
+                    break;
+                }
+                case CV_16UC1: {
+                    CV_CPU_DISPATCH(remapLinearInvoker_16UC1, ((const uint16_t*)src_data, src_step, src_rows, src_cols, (uint16_t*)dst_data, dst_step, dst_rows, dst_cols, borderType, borderValue.val, map1_data, map1_step, map2_data, map2_step, hasRelativeFlag), CV_CPU_DISPATCH_MODES_ALL);
+                    break;
+                }
+                case CV_16UC3: {
+                    CV_CPU_DISPATCH(remapLinearInvoker_16UC3, ((const uint16_t*)src_data, src_step, src_rows, src_cols, (uint16_t*)dst_data, dst_step, dst_rows, dst_cols, borderType, borderValue.val, map1_data, map1_step, map2_data, map2_step, hasRelativeFlag), CV_CPU_DISPATCH_MODES_ALL);
+                    break;
+                }
+                case CV_16UC4: {
+                    CV_CPU_DISPATCH(remapLinearInvoker_16UC4, ((const uint16_t*)src_data, src_step, src_rows, src_cols, (uint16_t*)dst_data, dst_step, dst_rows, dst_cols, borderType, borderValue.val, map1_data, map1_step, map2_data, map2_step, hasRelativeFlag), CV_CPU_DISPATCH_MODES_ALL);
+                    break;
+                }
+                case CV_32FC1: {
+                    CV_CPU_DISPATCH(remapLinearInvoker_32FC1, ((const float*)src_data, src_step, src_rows, src_cols, (float*)dst_data, dst_step, dst_rows, dst_cols, borderType, borderValue.val, map1_data, map1_step, map2_data, map2_step, hasRelativeFlag), CV_CPU_DISPATCH_MODES_ALL);
+                    break;
+                }
+                case CV_32FC3: {
+                    CV_CPU_DISPATCH(remapLinearInvoker_32FC3, ((const float*)src_data, src_step, src_rows, src_cols, (float*)dst_data, dst_step, dst_rows, dst_cols, borderType, borderValue.val, map1_data, map1_step, map2_data, map2_step, hasRelativeFlag), CV_CPU_DISPATCH_MODES_ALL);
+                    break;
+                }
+                case CV_32FC4: {
+                    CV_CPU_DISPATCH(remapLinearInvoker_32FC4, ((const float*)src_data, src_step, src_rows, src_cols, (float*)dst_data, dst_step, dst_rows, dst_cols, borderType, borderValue.val, map1_data, map1_step, map2_data, map2_step, hasRelativeFlag), CV_CPU_DISPATCH_MODES_ALL);
+                    break;
+                }
+                // no default
             }
         }
     }
-#endif
 
     RemapNNFunc nnfunc = 0;
     RemapFunc ifunc = 0;
     const void* ctab = 0;
     bool fixpt = depth == CV_8U;
     bool planar_input = false;
+
+    static RemapNNFunc nn_tab[2][CV_DEPTH_MAX] =
+    {
+        {
+            remapNearest<uchar, false>, remapNearest<schar, false>, remapNearest<ushort, false>, remapNearest<short, false>,
+            remapNearest<int, false>, remapNearest<float, false>, remapNearest<double, false>, 0
+        },
+        {
+            remapNearest<uchar, true>, remapNearest<schar, true>, remapNearest<ushort, true>, remapNearest<short, true>,
+            remapNearest<int, true>, remapNearest<float, true>, remapNearest<double, true>, 0
+        }
+    };
+
+    static RemapFunc linear_tab[2][CV_DEPTH_MAX] =
+    {
+        {
+            remapBilinear<FixedPtCast<int, uchar, INTER_REMAP_COEF_BITS>, RemapVec_8u<false>, short, false>, 0,
+            remapBilinear<Cast<float, ushort>, RemapNoVec<false>, float, false>,
+            remapBilinear<Cast<float, short>, RemapNoVec<false>, float, false>, 0,
+            remapBilinear<Cast<float, float>, RemapNoVec<false>, float, false>,
+            remapBilinear<Cast<double, double>, RemapNoVec<false>, float, false>, 0
+        },
+        {
+            remapBilinear<FixedPtCast<int, uchar, INTER_REMAP_COEF_BITS>, RemapVec_8u<true>, short, true>, 0,
+            remapBilinear<Cast<float, ushort>, RemapNoVec<true>, float, true>,
+            remapBilinear<Cast<float, short>, RemapNoVec<true>, float, true>, 0,
+            remapBilinear<Cast<float, float>, RemapNoVec<true>, float, true>,
+            remapBilinear<Cast<double, double>, RemapNoVec<true>, float, true>, 0
+        }
+    };
+
+    static RemapFunc lanczos4_tab[2][8] =
+    {
+        {
+            remapLanczos4<FixedPtCast<int, uchar, INTER_REMAP_COEF_BITS>, short, INTER_REMAP_COEF_SCALE, false>, 0,
+            remapLanczos4<Cast<float, ushort>, float, 1, false>,
+            remapLanczos4<Cast<float, short>, float, 1, false>, 0,
+            remapLanczos4<Cast<float, float>, float, 1, false>,
+            remapLanczos4<Cast<double, double>, float, 1, false>, 0
+        },
+        {
+            remapLanczos4<FixedPtCast<int, uchar, INTER_REMAP_COEF_BITS>, short, INTER_REMAP_COEF_SCALE, true>, 0,
+            remapLanczos4<Cast<float, ushort>, float, 1, true>,
+            remapLanczos4<Cast<float, short>, float, 1, true>, 0,
+            remapLanczos4<Cast<float, float>, float, 1, true>,
+            remapLanczos4<Cast<double, double>, float, 1, true>, 0
+        }
+    };
 
     const int relativeOptionIndex = (hasRelativeFlag ? 1 : 0);
     if( interpolation == INTER_NEAREST )
@@ -1794,10 +1635,6 @@ void cv::remap( InputArray _src, OutputArray _dst,
     {
         if( interpolation == INTER_LINEAR )
             ifunc = linear_tab[relativeOptionIndex][depth];
-        else if( interpolation == INTER_CUBIC ){
-            ifunc = cubic_tab[relativeOptionIndex][depth];
-            CV_Assert( _src.channels() <= 4 );
-        }
         else if( interpolation == INTER_LANCZOS4 ){
             ifunc = lanczos4_tab[relativeOptionIndex][depth];
             CV_Assert( _src.channels() <= 4 );
@@ -2207,62 +2044,6 @@ private:
     const double *M;
 };
 
-
-#if defined (HAVE_IPP) && IPP_VERSION_X100 >= 810 && !IPP_DISABLE_WARPAFFINE
-typedef IppStatus (CV_STDCALL* ippiWarpAffineBackFunc)(const void*, IppiSize, int, IppiRect, void *, int, IppiRect, double [2][3], int);
-
-class IPPWarpAffineInvoker :
-    public ParallelLoopBody
-{
-public:
-    IPPWarpAffineInvoker(Mat &_src, Mat &_dst, double (&_coeffs)[2][3], int &_interpolation, int _borderType,
-                         const Scalar &_borderValue, ippiWarpAffineBackFunc _func, bool *_ok) :
-        ParallelLoopBody(), src(_src), dst(_dst), mode(_interpolation), coeffs(_coeffs),
-        borderType(_borderType), borderValue(_borderValue), func(_func), ok(_ok)
-    {
-        *ok = true;
-    }
-
-    virtual void operator() (const Range& range) const CV_OVERRIDE
-    {
-        IppiSize srcsize = { src.cols, src.rows };
-        IppiRect srcroi = { 0, 0, src.cols, src.rows };
-        IppiRect dstroi = { 0, range.start, dst.cols, range.end - range.start };
-        int cnn = src.channels();
-        if( borderType == BORDER_CONSTANT )
-        {
-            IppiSize setSize = { dst.cols, range.end - range.start };
-            void *dataPointer = dst.ptr(range.start);
-            if( !IPPSet( borderValue, dataPointer, (int)dst.step[0], setSize, cnn, src.depth() ) )
-            {
-                *ok = false;
-                return;
-            }
-        }
-
-        // Aug 2013: problem in IPP 7.1, 8.0 : sometimes function return ippStsCoeffErr
-        IppStatus status = CV_INSTRUMENT_FUN_IPP(func,( src.ptr(), srcsize, (int)src.step[0], srcroi, dst.ptr(),
-                                (int)dst.step[0], dstroi, coeffs, mode ));
-        if( status < 0)
-            *ok = false;
-        else
-        {
-            CV_IMPL_ADD(CV_IMPL_IPP|CV_IMPL_MT);
-        }
-    }
-private:
-    Mat &src;
-    Mat &dst;
-    int mode;
-    double (&coeffs)[2][3];
-    int borderType;
-    Scalar borderValue;
-    ippiWarpAffineBackFunc func;
-    bool *ok;
-    const IPPWarpAffineInvoker& operator= (const IPPWarpAffineInvoker&);
-};
-#endif
-
 #ifdef HAVE_OPENCL
 
 enum { OCL_OP_PERSPECTIVE = 1, OCL_OP_AFFINE = 0 };
@@ -2281,6 +2062,7 @@ static bool ocl_warpTransform_cols4(InputArray _src, OutputArray _dst, InputArra
 
     if ( !dev.isIntel() || !(type == CV_8UC1) ||
          !(dtype == CV_8UC1) || !(_dst.cols() % 4 == 0) ||
+         (op_type == OCL_OP_PERSPECTIVE && interpolation != INTER_NEAREST) ||
          !(borderType == cv::BORDER_CONSTANT &&
           (interpolation == cv::INTER_NEAREST || interpolation == cv::INTER_LINEAR || interpolation == cv::INTER_CUBIC)))
         return false;
@@ -2290,7 +2072,7 @@ static bool ocl_warpTransform_cols4(InputArray _src, OutputArray _dst, InputArra
     ocl::ProgramSource program = ocl::imgproc::warp_transform_oclsrc;
     String kernelName = format("warp%s_%s_8u", warp_op[op_type], interpolationMap[interpolation]);
 
-    bool is32f = (interpolation == INTER_CUBIC || interpolation == INTER_LINEAR) && op_type == OCL_OP_AFFINE;
+    bool is32f = interpolation == INTER_CUBIC || interpolation == INTER_LINEAR;
     int wdepth = interpolation == INTER_NEAREST ? depth : std::max(is32f ? CV_32F : CV_32S, depth);
     int sctype = CV_MAKETYPE(wdepth, cn);
 
@@ -2373,7 +2155,7 @@ static bool ocl_warpTransform(InputArray _src, OutputArray _dst, InputArray _M0,
     const char * const kernelName = op_type == OCL_OP_AFFINE ? "warpAffine" : "warpPerspective";
 
     int scalarcn = cn == 3 ? 4 : cn;
-    bool is32f = !dev.isAMD() && (interpolation == INTER_CUBIC || interpolation == INTER_LINEAR) && op_type == OCL_OP_AFFINE;
+    bool is32f = interpolation == INTER_CUBIC || interpolation == INTER_LINEAR;
     int wdepth = interpolation == INTER_NEAREST ? depth : std::max(is32f ? CV_32F : CV_32S, depth);
     int sctype = CV_MAKETYPE(wdepth, scalarcn);
 
@@ -2388,8 +2170,7 @@ static bool ocl_warpTransform(InputArray _src, OutputArray _dst, InputArray _M0,
                       ocl::typeToStr(CV_MAT_DEPTH(type)),
                       ocl::typeToStr(sctype), cn, rowsPerWI);
     }
-    else
-    {
+    else {
         char cvt[2][50];
         opts = format("-D INTER_%s -D T=%s -D T1=%s -D ST=%s -D WT=%s -D SRC_DEPTH=%d"
                       " -D CONVERT_TO_WT=%s -D CONVERT_TO_T=%s%s -D CT=%s -D CN=%d -D ROWS_PER_WI=%d",
@@ -2452,143 +2233,113 @@ static bool ocl_warpTransform(InputArray _src, OutputArray _dst, InputArray _M0,
 
 #endif
 
-#ifdef HAVE_IPP
-#define IPP_WARPAFFINE_PARALLEL 1
-
-#ifdef HAVE_IPP_IW
-
-class ipp_warpAffineParallel: public ParallelLoopBody
-{
-public:
-    ipp_warpAffineParallel(::ipp::IwiImage &src, ::ipp::IwiImage &dst, IppiInterpolationType _inter, double (&_coeffs)[2][3], ::ipp::IwiBorderType _borderType, IwTransDirection _iwTransDirection, bool *_ok):m_src(src), m_dst(dst)
-    {
-        pOk = _ok;
-
-        inter          = _inter;
-        borderType     = _borderType;
-        iwTransDirection = _iwTransDirection;
-
-        for( int i = 0; i < 2; i++ )
-            for( int j = 0; j < 3; j++ )
-                coeffs[i][j] = _coeffs[i][j];
-
-        *pOk = true;
-    }
-    ~ipp_warpAffineParallel() {}
-
-    virtual void operator() (const Range& range) const CV_OVERRIDE
-    {
-        CV_INSTRUMENT_REGION_IPP();
-
-        if(*pOk == false)
-            return;
-
-        try
-        {
-            ::ipp::IwiTile tile = ::ipp::IwiRoi(0, range.start, m_dst.m_size.width, range.end - range.start);
-            CV_INSTRUMENT_FUN_IPP(::ipp::iwiWarpAffine, m_src, m_dst, coeffs, iwTransDirection, inter, ::ipp::IwiWarpAffineParams(), borderType, tile);
-        }
-        catch(const ::ipp::IwException &)
-        {
-            *pOk = false;
-            return;
-        }
-    }
-private:
-    ::ipp::IwiImage &m_src;
-    ::ipp::IwiImage &m_dst;
-
-    IppiInterpolationType inter;
-    double coeffs[2][3];
-    ::ipp::IwiBorderType borderType;
-    IwTransDirection iwTransDirection;
-
-    bool  *pOk;
-    const ipp_warpAffineParallel& operator= (const ipp_warpAffineParallel&);
-};
-
-#endif
-
-static bool ipp_warpAffine( InputArray _src, OutputArray _dst, int interpolation, int borderType, const Scalar & borderValue, InputArray _M, int flags )
-{
-#ifdef HAVE_IPP_IW
-    CV_INSTRUMENT_REGION_IPP();
-
-    if (!cv::ipp::useIPP_NotExact())
-        return false;
-
-    IppiInterpolationType ippInter    = ippiGetInterpolation(interpolation);
-    if((int)ippInter < 0)
-        return false;
-
-    // Acquire data and begin processing
-    try
-    {
-        Mat src = _src.getMat();
-        Mat dst = _dst.getMat();
-        ::ipp::IwiImage        iwSrc = ippiGetImage(src);
-        ::ipp::IwiImage        iwDst = ippiGetImage(dst);
-        ::ipp::IwiBorderType   ippBorder(ippiGetBorderType(borderType), ippiGetValue(borderValue));
-        IwTransDirection       iwTransDirection;
-        if(!ippBorder)
-            return false;
-
-        if( !(flags & WARP_INVERSE_MAP) )
-            iwTransDirection = iwTransForward;
-        else
-            iwTransDirection = iwTransInverse;
-
-        Mat M = _M.getMat();
-        double coeffs[2][3];
-        for( int i = 0; i < 2; i++ )
-            for( int j = 0; j < 3; j++ )
-                coeffs[i][j] = M.at<double>(i, j);
-
-        const int threads = ippiSuggestThreadsNum(iwDst, 2);
-
-        if(IPP_WARPAFFINE_PARALLEL && threads > 1)
-        {
-            bool  ok      = true;
-            Range range(0, (int)iwDst.m_size.height);
-            ipp_warpAffineParallel invoker(iwSrc, iwDst, ippInter, coeffs, ippBorder, iwTransDirection, &ok);
-            if(!ok)
-                return false;
-
-            parallel_for_(range, invoker, threads*4);
-
-            if(!ok)
-                return false;
-        } else {
-            CV_INSTRUMENT_FUN_IPP(::ipp::iwiWarpAffine, iwSrc, iwDst, coeffs, iwTransDirection, ippInter, ::ipp::IwiWarpAffineParams(), ippBorder);
-        }
-
-    }
-    catch (const ::ipp::IwException &)
-    {
-        return false;
-    }
-
-    return true;
-#else
-    CV_UNUSED(_src); CV_UNUSED(_dst); CV_UNUSED(interpolation);
-    CV_UNUSED(borderType); CV_UNUSED(borderValue); CV_UNUSED(_M); CV_UNUSED(flags);
-    return false;
-#endif
-}
-
-#endif
-
 namespace hal {
 
-void warpAffine(int src_type,
-                const uchar * src_data, size_t src_step, int src_width, int src_height,
-                uchar * dst_data, size_t dst_step, int dst_width, int dst_height,
-                const double M[6], int interpolation, int borderType, const double borderValue[4])
+static void warpAffine(int src_type,
+                       const uchar * src_data, size_t src_step, int src_width, int src_height,
+                       uchar * dst_data, size_t dst_step, int dst_width, int dst_height,
+                       const double M[6], int interpolation, int borderType, const double borderValue[4], AlgorithmHint hint)
 {
     CALL_HAL(warpAffine, cv_hal_warpAffine, src_type, src_data, src_step, src_width, src_height, dst_data, dst_step, dst_width, dst_height, M, interpolation, borderType, borderValue);
 
     Mat src(Size(src_width, src_height), src_type, const_cast<uchar*>(src_data), src_step);
     Mat dst(Size(dst_width, dst_height), src_type, dst_data, dst_step);
+
+    if (interpolation == INTER_NEAREST) {
+        switch (src_type) {
+            case CV_8UC1: {
+                CV_CPU_DISPATCH(warpAffineNearestInvoker_8UC1, (src_data, src_step, src_height, src_width, dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_8UC3: {
+                CV_CPU_DISPATCH(warpAffineNearestInvoker_8UC3, (src_data, src_step, src_height, src_width, dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_8UC4: {
+                CV_CPU_DISPATCH(warpAffineNearestInvoker_8UC4, (src_data, src_step, src_height, src_width, dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_16UC1: {
+                CV_CPU_DISPATCH(warpAffineNearestInvoker_16UC1, ((const uint16_t*)src_data, src_step, src_height, src_width, (uint16_t*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_16UC3: {
+                CV_CPU_DISPATCH(warpAffineNearestInvoker_16UC3, ((const uint16_t*)src_data, src_step, src_height, src_width, (uint16_t*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_16UC4: {
+                CV_CPU_DISPATCH(warpAffineNearestInvoker_16UC4, ((const uint16_t*)src_data, src_step, src_height, src_width, (uint16_t*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_32FC1: {
+                CV_CPU_DISPATCH(warpAffineNearestInvoker_32FC1, ((const float*)src_data, src_step, src_height, src_width, (float*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_32FC3: {
+                CV_CPU_DISPATCH(warpAffineNearestInvoker_32FC3, ((const float*)src_data, src_step, src_height, src_width, (float*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_32FC4: {
+                CV_CPU_DISPATCH(warpAffineNearestInvoker_32FC4, ((const float*)src_data, src_step, src_height, src_width, (float*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            // no default
+        }
+    }
+
+    if (interpolation == INTER_LINEAR) {
+        switch (src_type) {
+            case CV_8UC1: {
+                if (hint == cv::ALGO_HINT_APPROX) {
+                    CV_CPU_DISPATCH(warpAffineLinearApproxInvoker_8UC1, (src_data, src_step, src_height, src_width, dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                } else {
+                    CV_CPU_DISPATCH(warpAffineLinearInvoker_8UC1, (src_data, src_step, src_height, src_width, dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                }
+                break;
+            }
+            case CV_8UC3: {
+                if (hint == cv::ALGO_HINT_APPROX) {
+                    CV_CPU_DISPATCH(warpAffineLinearApproxInvoker_8UC3, (src_data, src_step, src_height, src_width, dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                } else {
+                    CV_CPU_DISPATCH(warpAffineLinearInvoker_8UC3, (src_data, src_step, src_height, src_width, dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                }
+                break;
+            }
+            case CV_8UC4: {
+                if (hint == cv::ALGO_HINT_APPROX) {
+                    CV_CPU_DISPATCH(warpAffineLinearApproxInvoker_8UC4, (src_data, src_step, src_height, src_width, dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                } else {
+                    CV_CPU_DISPATCH(warpAffineLinearInvoker_8UC4, (src_data, src_step, src_height, src_width, dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                }
+                break;
+            }
+            case CV_16UC1: {
+                CV_CPU_DISPATCH(warpAffineLinearInvoker_16UC1, ((const uint16_t*)src_data, src_step, src_height, src_width, (uint16_t*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_16UC3: {
+                CV_CPU_DISPATCH(warpAffineLinearInvoker_16UC3, ((const uint16_t*)src_data, src_step, src_height, src_width, (uint16_t*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_16UC4: {
+                CV_CPU_DISPATCH(warpAffineLinearInvoker_16UC4, ((const uint16_t*)src_data, src_step, src_height, src_width, (uint16_t*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_32FC1: {
+                CV_CPU_DISPATCH(warpAffineLinearInvoker_32FC1, ((const float*)src_data, src_step, src_height, src_width, (float*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_32FC3: {
+                CV_CPU_DISPATCH(warpAffineLinearInvoker_32FC3, ((const float*)src_data, src_step, src_height, src_width, (float*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_32FC4: {
+                CV_CPU_DISPATCH(warpAffineLinearInvoker_32FC4, ((const float*)src_data, src_step, src_height, src_width, (float*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            // no default
+        }
+    }
 
     int x;
     AutoBuffer<int> _abdelta(dst.cols*2);
@@ -2609,6 +2360,7 @@ void warpAffine(int src_type,
     parallel_for_(range, invoker, dst.total()/(double)(1<<16));
 }
 
+CV_DISABLE_UBSAN
 void warpAffineBlocklineNN(int *adelta, int *bdelta, short* xy, int X0, int Y0, int bw)
 {
     CALL_HAL(warpAffineBlocklineNN, cv_hal_warpAffineBlocklineNN, adelta, bdelta, xy, X0, Y0, bw);
@@ -2639,6 +2391,7 @@ void warpAffineBlocklineNN(int *adelta, int *bdelta, short* xy, int X0, int Y0, 
     }
 }
 
+CV_DISABLE_UBSAN
 void warpAffineBlockline(int *adelta, int *bdelta, short* xy, short* alpha, int X0, int Y0, int bw)
 {
     CALL_HAL(warpAffineBlockline, cv_hal_warpAffineBlockline, adelta, bdelta, xy, alpha, X0, Y0, bw);
@@ -2697,9 +2450,13 @@ void warpAffineBlockline(int *adelta, int *bdelta, short* xy, short* alpha, int 
 
 void cv::warpAffine( InputArray _src, OutputArray _dst,
                      InputArray _M0, Size dsize,
-                     int flags, int borderType, const Scalar& borderValue )
+                     int flags, int borderType, const Scalar& borderValue,
+                     AlgorithmHint hint )
 {
     CV_INSTRUMENT_REGION();
+
+    if (hint == cv::ALGO_HINT_DEFAULT)
+        hint = cv::getDefaultAlgorithmHint();
 
     int interpolation = flags & INTER_MAX;
     CV_Assert( _src.channels() <= 4 || (interpolation != INTER_LANCZOS4 &&
@@ -2729,8 +2486,6 @@ void cv::warpAffine( InputArray _src, OutputArray _dst,
     CV_Assert( (M0.type() == CV_32F || M0.type() == CV_64F) && M0.rows == 2 && M0.cols == 3 );
     M0.convertTo(matM, matM.type());
 
-    CV_IPP_RUN_FAST(ipp_warpAffine(src, dst, interpolation, borderType, borderValue, matM, flags));
-
     if( !(flags & WARP_INVERSE_MAP) )
     {
         double D = M[0]*M[4] - M[1]*M[3];
@@ -2743,72 +2498,12 @@ void cv::warpAffine( InputArray _src, OutputArray _dst,
         M[2] = b1; M[5] = b2;
     }
 
-#if defined (HAVE_IPP) && IPP_VERSION_X100 >= 810 && !IPP_DISABLE_WARPAFFINE
-    CV_IPP_CHECK()
-    {
-        int type = src.type(), depth = CV_MAT_DEPTH(type), cn = CV_MAT_CN(type);
-        if( ( depth == CV_8U || depth == CV_16U || depth == CV_32F ) &&
-           ( cn == 1 || cn == 3 || cn == 4 ) &&
-           ( interpolation == INTER_NEAREST || interpolation == INTER_LINEAR || interpolation == INTER_CUBIC) &&
-           ( borderType == cv::BORDER_TRANSPARENT || borderType == cv::BORDER_CONSTANT) )
-        {
-            ippiWarpAffineBackFunc ippFunc = 0;
-            if ((flags & WARP_INVERSE_MAP) != 0)
-            {
-                ippFunc =
-                type == CV_8UC1 ? (ippiWarpAffineBackFunc)ippiWarpAffineBack_8u_C1R :
-                type == CV_8UC3 ? (ippiWarpAffineBackFunc)ippiWarpAffineBack_8u_C3R :
-                type == CV_8UC4 ? (ippiWarpAffineBackFunc)ippiWarpAffineBack_8u_C4R :
-                type == CV_16UC1 ? (ippiWarpAffineBackFunc)ippiWarpAffineBack_16u_C1R :
-                type == CV_16UC3 ? (ippiWarpAffineBackFunc)ippiWarpAffineBack_16u_C3R :
-                type == CV_16UC4 ? (ippiWarpAffineBackFunc)ippiWarpAffineBack_16u_C4R :
-                type == CV_32FC1 ? (ippiWarpAffineBackFunc)ippiWarpAffineBack_32f_C1R :
-                type == CV_32FC3 ? (ippiWarpAffineBackFunc)ippiWarpAffineBack_32f_C3R :
-                type == CV_32FC4 ? (ippiWarpAffineBackFunc)ippiWarpAffineBack_32f_C4R :
-                0;
-            }
-            else
-            {
-                ippFunc =
-                type == CV_8UC1 ? (ippiWarpAffineBackFunc)ippiWarpAffine_8u_C1R :
-                type == CV_8UC3 ? (ippiWarpAffineBackFunc)ippiWarpAffine_8u_C3R :
-                type == CV_8UC4 ? (ippiWarpAffineBackFunc)ippiWarpAffine_8u_C4R :
-                type == CV_16UC1 ? (ippiWarpAffineBackFunc)ippiWarpAffine_16u_C1R :
-                type == CV_16UC3 ? (ippiWarpAffineBackFunc)ippiWarpAffine_16u_C3R :
-                type == CV_16UC4 ? (ippiWarpAffineBackFunc)ippiWarpAffine_16u_C4R :
-                type == CV_32FC1 ? (ippiWarpAffineBackFunc)ippiWarpAffine_32f_C1R :
-                type == CV_32FC3 ? (ippiWarpAffineBackFunc)ippiWarpAffine_32f_C3R :
-                type == CV_32FC4 ? (ippiWarpAffineBackFunc)ippiWarpAffine_32f_C4R :
-                0;
-            }
-            int mode =
-            interpolation == INTER_LINEAR ? IPPI_INTER_LINEAR :
-            interpolation == INTER_NEAREST ? IPPI_INTER_NN :
-            interpolation == INTER_CUBIC ? IPPI_INTER_CUBIC :
-            0;
-            CV_Assert(mode && ippFunc);
-
-            double coeffs[2][3];
-            for( int i = 0; i < 2; i++ )
-                for( int j = 0; j < 3; j++ )
-                    coeffs[i][j] = matM.at<double>(i, j);
-
-            bool ok;
-            Range range(0, dst.rows);
-            IPPWarpAffineInvoker invoker(src, dst, coeffs, mode, borderType, borderValue, ippFunc, &ok);
-            parallel_for_(range, invoker, dst.total()/(double)(1<<16));
-            if( ok )
-            {
-                CV_IMPL_ADD(CV_IMPL_IPP|CV_IMPL_MT);
-                return;
-            }
-            setIppErrorStatus();
-        }
+    if (genericWarp(src, matM, Mat(), Mat(), dst, interpolation, borderType, borderValue, false)) {
+        return;
     }
-#endif
 
     hal::warpAffine(src.type(), src.data, src.step, src.cols, src.rows, dst.data, dst.step, dst.cols, dst.rows,
-                    M, interpolation, borderType, borderValue.val);
+                    M, interpolation, borderType, borderValue.val, hint);
 }
 
 
@@ -3075,13 +2770,7 @@ public:
                            int _borderType, const Scalar &_borderValue) :
         ParallelLoopBody(), src(_src), dst(_dst), M(_M), interpolation(_interpolation),
         borderType(_borderType), borderValue(_borderValue)
-    {
-#if defined(_MSC_VER) && _MSC_VER == 1800 /* MSVS 2013 */ && CV_AVX
-        // details: https://github.com/opencv/opencv/issues/11026
-        borderValue.val[2] = _borderValue.val[2];
-        borderValue.val[3] = _borderValue.val[3];
-#endif
-    }
+    {}
 
     virtual void operator() (const Range& range) const CV_OVERRIDE
     {
@@ -3135,69 +2824,113 @@ private:
     Scalar borderValue;
 };
 
-#if defined (HAVE_IPP) && IPP_VERSION_X100 >= 810 && !IPP_DISABLE_WARPPERSPECTIVE
-typedef IppStatus (CV_STDCALL* ippiWarpPerspectiveFunc)(const void*, IppiSize, int, IppiRect, void *, int, IppiRect, double [3][3], int);
-
-class IPPWarpPerspectiveInvoker :
-    public ParallelLoopBody
-{
-public:
-    IPPWarpPerspectiveInvoker(Mat &_src, Mat &_dst, double (&_coeffs)[3][3], int &_interpolation,
-                              int &_borderType, const Scalar &_borderValue, ippiWarpPerspectiveFunc _func, bool *_ok) :
-        ParallelLoopBody(), src(_src), dst(_dst), mode(_interpolation), coeffs(_coeffs),
-        borderType(_borderType), borderValue(_borderValue), func(_func), ok(_ok)
-    {
-        *ok = true;
-    }
-
-    virtual void operator() (const Range& range) const CV_OVERRIDE
-    {
-        IppiSize srcsize = {src.cols, src.rows};
-        IppiRect srcroi = {0, 0, src.cols, src.rows};
-        IppiRect dstroi = {0, range.start, dst.cols, range.end - range.start};
-        int cnn = src.channels();
-
-        if( borderType == BORDER_CONSTANT )
-        {
-            IppiSize setSize = {dst.cols, range.end - range.start};
-            void *dataPointer = dst.ptr(range.start);
-            if( !IPPSet( borderValue, dataPointer, (int)dst.step[0], setSize, cnn, src.depth() ) )
-            {
-                *ok = false;
-                return;
-            }
-        }
-
-        IppStatus status = CV_INSTRUMENT_FUN_IPP(func,(src.ptr();, srcsize, (int)src.step[0], srcroi, dst.ptr(), (int)dst.step[0], dstroi, coeffs, mode));
-        if (status != ippStsNoErr)
-            *ok = false;
-        else
-        {
-            CV_IMPL_ADD(CV_IMPL_IPP|CV_IMPL_MT);
-        }
-    }
-private:
-    Mat &src;
-    Mat &dst;
-    int mode;
-    double (&coeffs)[3][3];
-    int borderType;
-    const Scalar borderValue;
-    ippiWarpPerspectiveFunc func;
-    bool *ok;
-
-    const IPPWarpPerspectiveInvoker& operator= (const IPPWarpPerspectiveInvoker&);
-};
-#endif
-
 namespace hal {
 
-void warpPerspective(int src_type,
+static void warpPerspective(int src_type,
                     const uchar * src_data, size_t src_step, int src_width, int src_height,
                     uchar * dst_data, size_t dst_step, int dst_width, int dst_height,
-                    const double M[9], int interpolation, int borderType, const double borderValue[4])
+                    const double M[9], int interpolation, int borderType, const double borderValue[4], AlgorithmHint hint)
 {
     CALL_HAL(warpPerspective, cv_hal_warpPerspective, src_type, src_data, src_step, src_width, src_height, dst_data, dst_step, dst_width, dst_height, M, interpolation, borderType, borderValue);
+
+    if (interpolation == INTER_NEAREST) {
+        switch (src_type) {
+            case CV_8UC1: {
+                CV_CPU_DISPATCH(warpPerspectiveNearestInvoker_8UC1, (src_data, src_step, src_height, src_width, dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_8UC3: {
+                CV_CPU_DISPATCH(warpPerspectiveNearestInvoker_8UC3, (src_data, src_step, src_height, src_width, dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_8UC4: {
+                CV_CPU_DISPATCH(warpPerspectiveNearestInvoker_8UC4, (src_data, src_step, src_height, src_width, dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_16UC1: {
+                CV_CPU_DISPATCH(warpPerspectiveNearestInvoker_16UC1, ((const uint16_t*)src_data, src_step, src_height, src_width, (uint16_t*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_16UC3: {
+                CV_CPU_DISPATCH(warpPerspectiveNearestInvoker_16UC3, ((const uint16_t*)src_data, src_step, src_height, src_width, (uint16_t*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_16UC4: {
+                CV_CPU_DISPATCH(warpPerspectiveNearestInvoker_16UC4, ((const uint16_t*)src_data, src_step, src_height, src_width, (uint16_t*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_32FC1: {
+                CV_CPU_DISPATCH(warpPerspectiveNearestInvoker_32FC1, ((const float*)src_data, src_step, src_height, src_width, (float*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_32FC3: {
+                CV_CPU_DISPATCH(warpPerspectiveNearestInvoker_32FC3, ((const float*)src_data, src_step, src_height, src_width, (float*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_32FC4: {
+                CV_CPU_DISPATCH(warpPerspectiveNearestInvoker_32FC4, ((const float*)src_data, src_step, src_height, src_width, (float*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+        }
+    }
+
+    if (interpolation == INTER_LINEAR) {
+        switch (src_type) {
+            case CV_8UC1: {
+                if (hint == cv::ALGO_HINT_APPROX) {
+                    CV_CPU_DISPATCH(warpPerspectiveLinearApproxInvoker_8UC1, (src_data, src_step, src_height, src_width, dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                    break;
+                } else {
+                    CV_CPU_DISPATCH(warpPerspectiveLinearInvoker_8UC1, (src_data, src_step, src_height, src_width, dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                    break;
+                }
+            }
+            case CV_8UC3: {
+                if (hint == cv::ALGO_HINT_APPROX) {
+                    CV_CPU_DISPATCH(warpPerspectiveLinearApproxInvoker_8UC3, (src_data, src_step, src_height, src_width, dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                    break;
+                } else {
+                    CV_CPU_DISPATCH(warpPerspectiveLinearInvoker_8UC3, (src_data, src_step, src_height, src_width, dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                    break;
+                }
+            }
+            case CV_8UC4: {
+                if (hint == cv::ALGO_HINT_APPROX) {
+                    CV_CPU_DISPATCH(warpPerspectiveLinearApproxInvoker_8UC4, (src_data, src_step, src_height, src_width, dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                    break;
+                } else {
+                    CV_CPU_DISPATCH(warpPerspectiveLinearInvoker_8UC4, (src_data, src_step, src_height, src_width, dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                    break;
+                }
+            }
+            case CV_16UC1: {
+                CV_CPU_DISPATCH(warpPerspectiveLinearInvoker_16UC1, ((const uint16_t*)src_data, src_step, src_height, src_width, (uint16_t*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_16UC3: {
+                CV_CPU_DISPATCH(warpPerspectiveLinearInvoker_16UC3, ((const uint16_t*)src_data, src_step, src_height, src_width, (uint16_t*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_16UC4: {
+                CV_CPU_DISPATCH(warpPerspectiveLinearInvoker_16UC4, ((const uint16_t*)src_data, src_step, src_height, src_width, (uint16_t*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_32FC1: {
+                CV_CPU_DISPATCH(warpPerspectiveLinearInvoker_32FC1, ((const float*)src_data, src_step, src_height, src_width, (float*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_32FC3: {
+                CV_CPU_DISPATCH(warpPerspectiveLinearInvoker_32FC3, ((const float*)src_data, src_step, src_height, src_width, (float*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            case CV_32FC4: {
+                CV_CPU_DISPATCH(warpPerspectiveLinearInvoker_32FC4, ((const float*)src_data, src_step, src_height, src_width, (float*)dst_data, dst_step, dst_height, dst_width, M, borderType, borderValue), CV_CPU_DISPATCH_MODES_ALL);
+                break;
+            }
+            // no default
+        }
+    }
+
     Mat src(Size(src_width, src_height), src_type, const_cast<uchar*>(src_data), src_step);
     Mat dst(Size(dst_width, dst_height), src_type, dst_data, dst_step);
 
@@ -3278,11 +3011,17 @@ void warpPerspectiveBlockline(const double *M, short* xy, short* alpha, double X
 } // cv::
 
 void cv::warpPerspective( InputArray _src, OutputArray _dst, InputArray _M0,
-                          Size dsize, int flags, int borderType, const Scalar& borderValue )
+                          Size dsize, int flags, int borderType, const Scalar& borderValue,
+                          AlgorithmHint hint )
 {
     CV_INSTRUMENT_REGION();
 
+    if (hint == cv::ALGO_HINT_DEFAULT)
+        hint = cv::getDefaultAlgorithmHint();
+
     CV_Assert( _src.total() > 0 );
+
+    int interpolation = flags & INTER_MAX;
 
     CV_OCL_RUN(_src.dims() <= 2 && _dst.isUMat() &&
                _src.cols() <= SHRT_MAX && _src.rows() <= SHRT_MAX,
@@ -3302,369 +3041,22 @@ void cv::warpPerspective( InputArray _src, OutputArray _dst, InputArray _M0,
 
     double M[9];
     Mat matM(3, 3, CV_64F, M);
-    int interpolation = flags & INTER_MAX;
+
     if( interpolation == INTER_AREA )
         interpolation = INTER_LINEAR;
 
     CV_Assert( (M0.type() == CV_32F || M0.type() == CV_64F) && M0.rows == 3 && M0.cols == 3 );
     M0.convertTo(matM, matM.type());
 
-#if defined (HAVE_IPP) && IPP_VERSION_X100 >= 810 && !IPP_DISABLE_WARPPERSPECTIVE
-    CV_IPP_CHECK()
-    {
-        int type = src.type(), depth = CV_MAT_DEPTH(type), cn = CV_MAT_CN(type);
-        if( (depth == CV_8U || depth == CV_16U || depth == CV_32F) &&
-           (cn == 1 || cn == 3 || cn == 4) &&
-           ( borderType == cv::BORDER_TRANSPARENT || borderType == cv::BORDER_CONSTANT ) &&
-           (interpolation == INTER_NEAREST || interpolation == INTER_LINEAR || interpolation == INTER_CUBIC))
-        {
-            ippiWarpPerspectiveFunc ippFunc = 0;
-            if ((flags & WARP_INVERSE_MAP) != 0)
-            {
-                ippFunc = type == CV_8UC1 ? (ippiWarpPerspectiveFunc)ippiWarpPerspectiveBack_8u_C1R :
-                type == CV_8UC3 ? (ippiWarpPerspectiveFunc)ippiWarpPerspectiveBack_8u_C3R :
-                type == CV_8UC4 ? (ippiWarpPerspectiveFunc)ippiWarpPerspectiveBack_8u_C4R :
-                type == CV_16UC1 ? (ippiWarpPerspectiveFunc)ippiWarpPerspectiveBack_16u_C1R :
-                type == CV_16UC3 ? (ippiWarpPerspectiveFunc)ippiWarpPerspectiveBack_16u_C3R :
-                type == CV_16UC4 ? (ippiWarpPerspectiveFunc)ippiWarpPerspectiveBack_16u_C4R :
-                type == CV_32FC1 ? (ippiWarpPerspectiveFunc)ippiWarpPerspectiveBack_32f_C1R :
-                type == CV_32FC3 ? (ippiWarpPerspectiveFunc)ippiWarpPerspectiveBack_32f_C3R :
-                type == CV_32FC4 ? (ippiWarpPerspectiveFunc)ippiWarpPerspectiveBack_32f_C4R : 0;
-            }
-            else
-            {
-                ippFunc = type == CV_8UC1 ? (ippiWarpPerspectiveFunc)ippiWarpPerspective_8u_C1R :
-                type == CV_8UC3 ? (ippiWarpPerspectiveFunc)ippiWarpPerspective_8u_C3R :
-                type == CV_8UC4 ? (ippiWarpPerspectiveFunc)ippiWarpPerspective_8u_C4R :
-                type == CV_16UC1 ? (ippiWarpPerspectiveFunc)ippiWarpPerspective_16u_C1R :
-                type == CV_16UC3 ? (ippiWarpPerspectiveFunc)ippiWarpPerspective_16u_C3R :
-                type == CV_16UC4 ? (ippiWarpPerspectiveFunc)ippiWarpPerspective_16u_C4R :
-                type == CV_32FC1 ? (ippiWarpPerspectiveFunc)ippiWarpPerspective_32f_C1R :
-                type == CV_32FC3 ? (ippiWarpPerspectiveFunc)ippiWarpPerspective_32f_C3R :
-                type == CV_32FC4 ? (ippiWarpPerspectiveFunc)ippiWarpPerspective_32f_C4R : 0;
-            }
-            int mode =
-            interpolation == INTER_NEAREST ? IPPI_INTER_NN :
-            interpolation == INTER_LINEAR ? IPPI_INTER_LINEAR :
-            interpolation == INTER_CUBIC ? IPPI_INTER_CUBIC : 0;
-            CV_Assert(mode && ippFunc);
-
-            double coeffs[3][3];
-            for( int i = 0; i < 3; i++ )
-                for( int j = 0; j < 3; j++ )
-                    coeffs[i][j] = matM.at<double>(i, j);
-
-            bool ok;
-            Range range(0, dst.rows);
-            IPPWarpPerspectiveInvoker invoker(src, dst, coeffs, mode, borderType, borderValue, ippFunc, &ok);
-            parallel_for_(range, invoker, dst.total()/(double)(1<<16));
-            if( ok )
-            {
-                CV_IMPL_ADD(CV_IMPL_IPP|CV_IMPL_MT);
-                return;
-            }
-            setIppErrorStatus();
-        }
-    }
-#endif
-
     if( !(flags & WARP_INVERSE_MAP) )
         invert(matM, matM);
 
+    if (genericWarp(src, matM, Mat(), Mat(), dst, interpolation, borderType, borderValue, false)) {
+        return;
+    }
+
     hal::warpPerspective(src.type(), src.data, src.step, src.cols, src.rows, dst.data, dst.step, dst.cols, dst.rows,
-                        matM.ptr<double>(), interpolation, borderType, borderValue.val);
-}
-
-
-cv::Matx23d cv::getRotationMatrix2D_(Point2f center, double angle, double scale)
-{
-    CV_INSTRUMENT_REGION();
-
-    angle *= CV_PI/180;
-    double alpha = std::cos(angle)*scale;
-    double beta = std::sin(angle)*scale;
-
-    Matx23d M(
-        alpha, beta, (1-alpha)*center.x - beta*center.y,
-        -beta, alpha, beta*center.x + (1-alpha)*center.y
-    );
-    return M;
-}
-
-/* Calculates coefficients of perspective transformation
- * which maps (xi,yi) to (ui,vi), (i=1,2,3,4):
- *
- *      c00*xi + c01*yi + c02
- * ui = ---------------------
- *      c20*xi + c21*yi + c22
- *
- *      c10*xi + c11*yi + c12
- * vi = ---------------------
- *      c20*xi + c21*yi + c22
- *
- * Coefficients are calculated by solving one of 2 linear systems:
- * / x0 y0  1  0  0  0 -x0*u0 -y0*u0 \ /c00\ /u0\
- * | x1 y1  1  0  0  0 -x1*u1 -y1*u1 | |c01| |u1|
- * | x2 y2  1  0  0  0 -x2*u2 -y2*u2 | |c02| |u2|
- * | x3 y3  1  0  0  0 -x3*u3 -y3*u3 |.|c10|=|u3|,
- * |  0  0  0 x0 y0  1 -x0*v0 -y0*v0 | |c11| |v0|
- * |  0  0  0 x1 y1  1 -x1*v1 -y1*v1 | |c12| |v1|
- * |  0  0  0 x2 y2  1 -x2*v2 -y2*v2 | |c20| |v2|
- * \  0  0  0 x3 y3  1 -x3*v3 -y3*v3 / \c21/ \v3/
- *
- * where:
- *   cij - matrix coefficients, c22 = 1
- *
- * or
- *
- * / x0 y0  1  0  0  0 -x0*u0 -y0*u0 -u0 \ /c00\ /0\
- * | x1 y1  1  0  0  0 -x1*u1 -y1*u1 -u1 | |c01| |0|
- * | x2 y2  1  0  0  0 -x2*u2 -y2*u2 -u2 | |c02| |0|
- * | x3 y3  1  0  0  0 -x3*u3 -y3*u3 -u3 |.|c10|=|0|,
- * |  0  0  0 x0 y0  1 -x0*v0 -y0*v0 -v0 | |c11| |0|
- * |  0  0  0 x1 y1  1 -x1*v1 -y1*v1 -v1 | |c12| |0|
- * |  0  0  0 x2 y2  1 -x2*v2 -y2*v2 -v2 | |c20| |0|
- * \  0  0  0 x3 y3  1 -x3*v3 -y3*v3 -v3 / |c21| \0/
- *                                         \c22/
- *
- * where:
- *   cij - matrix coefficients, c00^2 + c01^2 + c02^2 + c10^2 + c11^2 + c12^2 + c20^2 + c21^2 + c22^2 = 1
- */
-cv::Mat cv::getPerspectiveTransform(const Point2f src[], const Point2f dst[], int solveMethod)
-{
-    CV_INSTRUMENT_REGION();
-
-    // try c22 = 1
-    Mat M(3, 3, CV_64F), X8(8, 1, CV_64F, M.ptr());
-    double a[8][8], b[8];
-    Mat A(8, 8, CV_64F, a), B(8, 1, CV_64F, b);
-
-    for( int i = 0; i < 4; ++i )
-    {
-        a[i][0] = a[i+4][3] = src[i].x;
-        a[i][1] = a[i+4][4] = src[i].y;
-        a[i][2] = a[i+4][5] = 1;
-        a[i][3] = a[i][4] = a[i][5] =
-        a[i+4][0] = a[i+4][1] = a[i+4][2] = 0;
-        a[i][6] = -src[i].x*dst[i].x;
-        a[i][7] = -src[i].y*dst[i].x;
-        a[i+4][6] = -src[i].x*dst[i].y;
-        a[i+4][7] = -src[i].y*dst[i].y;
-        b[i] = dst[i].x;
-        b[i+4] = dst[i].y;
-    }
-
-    if (solve(A, B, X8, solveMethod) && norm(A * X8, B) < 1e-8)
-    {
-        M.ptr<double>()[8] = 1.;
-
-        return M;
-    }
-
-    // c00^2 + c01^2 + c02^2 + c10^2 + c11^2 + c12^2 + c20^2 + c21^2 + c22^2 = 1
-    hconcat(A, -B, A);
-
-    Mat AtA;
-    mulTransposed(A, AtA, true);
-
-    Mat D, U;
-    SVDecomp(AtA, D, U, noArray());
-
-    Mat X9(9, 1, CV_64F, M.ptr());
-    U.col(8).copyTo(X9);
-
-    return M;
-}
-
-/* Calculates coefficients of affine transformation
- * which maps (xi,yi) to (ui,vi), (i=1,2,3):
- *
- * ui = c00*xi + c01*yi + c02
- *
- * vi = c10*xi + c11*yi + c12
- *
- * Coefficients are calculated by solving linear system:
- * / x0 y0  1  0  0  0 \ /c00\ /u0\
- * | x1 y1  1  0  0  0 | |c01| |u1|
- * | x2 y2  1  0  0  0 | |c02| |u2|
- * |  0  0  0 x0 y0  1 | |c10| |v0|
- * |  0  0  0 x1 y1  1 | |c11| |v1|
- * \  0  0  0 x2 y2  1 / |c12| |v2|
- *
- * where:
- *   cij - matrix coefficients
- */
-
-cv::Mat cv::getAffineTransform( const Point2f src[], const Point2f dst[] )
-{
-    Mat M(2, 3, CV_64F), X(6, 1, CV_64F, M.ptr());
-    double a[6*6], b[6];
-    Mat A(6, 6, CV_64F, a), B(6, 1, CV_64F, b);
-
-    for( int i = 0; i < 3; i++ )
-    {
-        int j = i*12;
-        int k = i*12+6;
-        a[j] = a[k+3] = src[i].x;
-        a[j+1] = a[k+4] = src[i].y;
-        a[j+2] = a[k+5] = 1;
-        a[j+3] = a[j+4] = a[j+5] = 0;
-        a[k] = a[k+1] = a[k+2] = 0;
-        b[i*2] = dst[i].x;
-        b[i*2+1] = dst[i].y;
-    }
-
-    solve( A, B, X );
-    return M;
-}
-
-void cv::invertAffineTransform(InputArray _matM, OutputArray __iM)
-{
-    Mat matM = _matM.getMat();
-    CV_Assert(matM.rows == 2 && matM.cols == 3);
-    __iM.create(2, 3, matM.type());
-    Mat _iM = __iM.getMat();
-
-    if( matM.type() == CV_32F )
-    {
-        const softfloat* M = matM.ptr<softfloat>();
-        softfloat* iM = _iM.ptr<softfloat>();
-        int step = (int)(matM.step/sizeof(M[0])), istep = (int)(_iM.step/sizeof(iM[0]));
-
-        softdouble D = M[0]*M[step+1] - M[1]*M[step];
-        D = D != 0. ? softdouble(1.)/D : softdouble(0.);
-        softdouble A11 = M[step+1]*D, A22 = M[0]*D, A12 = -M[1]*D, A21 = -M[step]*D;
-        softdouble b1 = -A11*M[2] - A12*M[step+2];
-        softdouble b2 = -A21*M[2] - A22*M[step+2];
-
-        iM[0] = A11; iM[1] = A12; iM[2] = b1;
-        iM[istep] = A21; iM[istep+1] = A22; iM[istep+2] = b2;
-    }
-    else if( matM.type() == CV_64F )
-    {
-        const softdouble* M = matM.ptr<softdouble>();
-        softdouble* iM = _iM.ptr<softdouble>();
-        int step = (int)(matM.step/sizeof(M[0])), istep = (int)(_iM.step/sizeof(iM[0]));
-
-        softdouble D = M[0]*M[step+1] - M[1]*M[step];
-        D = D != 0. ? softdouble(1.)/D : softdouble(0.);
-        softdouble A11 = M[step+1]*D, A22 = M[0]*D, A12 = -M[1]*D, A21 = -M[step]*D;
-        softdouble b1 = -A11*M[2] - A12*M[step+2];
-        softdouble b2 = -A21*M[2] - A22*M[step+2];
-
-        iM[0] = A11; iM[1] = A12; iM[2] = b1;
-        iM[istep] = A21; iM[istep+1] = A22; iM[istep+2] = b2;
-    }
-    else
-        CV_Error( cv::Error::StsUnsupportedFormat, "" );
-}
-
-cv::Mat cv::getPerspectiveTransform(InputArray _src, InputArray _dst, int solveMethod)
-{
-    Mat src = _src.getMat(), dst = _dst.getMat();
-    CV_Assert(src.checkVector(2, CV_32F) == 4 && dst.checkVector(2, CV_32F) == 4);
-    return getPerspectiveTransform((const Point2f*)src.data, (const Point2f*)dst.data, solveMethod);
-}
-
-cv::Mat cv::getAffineTransform(InputArray _src, InputArray _dst)
-{
-    Mat src = _src.getMat(), dst = _dst.getMat();
-    CV_Assert(src.checkVector(2, CV_32F) == 3 && dst.checkVector(2, CV_32F) == 3);
-    return getAffineTransform((const Point2f*)src.data, (const Point2f*)dst.data);
-}
-
-CV_IMPL void
-cvWarpAffine( const CvArr* srcarr, CvArr* dstarr, const CvMat* marr,
-              int flags, CvScalar fillval )
-{
-    cv::Mat src = cv::cvarrToMat(srcarr), dst = cv::cvarrToMat(dstarr);
-    cv::Mat matrix = cv::cvarrToMat(marr);
-    CV_Assert( src.type() == dst.type() );
-    cv::warpAffine( src, dst, matrix, dst.size(), flags,
-        (flags & cv::WARP_FILL_OUTLIERS) ? cv::BORDER_CONSTANT : cv::BORDER_TRANSPARENT,
-        fillval );
-}
-
-CV_IMPL void
-cvWarpPerspective( const CvArr* srcarr, CvArr* dstarr, const CvMat* marr,
-                   int flags, CvScalar fillval )
-{
-    cv::Mat src = cv::cvarrToMat(srcarr), dst = cv::cvarrToMat(dstarr);
-    cv::Mat matrix = cv::cvarrToMat(marr);
-    CV_Assert( src.type() == dst.type() );
-    cv::warpPerspective( src, dst, matrix, dst.size(), flags,
-        (flags & cv::WARP_FILL_OUTLIERS) ? cv::BORDER_CONSTANT : cv::BORDER_TRANSPARENT,
-        fillval );
-}
-
-CV_IMPL void
-cvRemap( const CvArr* srcarr, CvArr* dstarr,
-         const CvArr* _mapx, const CvArr* _mapy,
-         int flags, CvScalar fillval )
-{
-    cv::Mat src = cv::cvarrToMat(srcarr), dst = cv::cvarrToMat(dstarr), dst0 = dst;
-    cv::Mat mapx = cv::cvarrToMat(_mapx), mapy = cv::cvarrToMat(_mapy);
-    CV_Assert( src.type() == dst.type() && dst.size() == mapx.size() );
-    cv::remap( src, dst, mapx, mapy, flags & cv::INTER_MAX,
-        (flags & cv::WARP_FILL_OUTLIERS) ? cv::BORDER_CONSTANT : cv::BORDER_TRANSPARENT,
-        fillval );
-    CV_Assert( dst0.data == dst.data );
-}
-
-
-CV_IMPL CvMat*
-cv2DRotationMatrix( CvPoint2D32f center, double angle,
-                    double scale, CvMat* matrix )
-{
-    cv::Mat M0 = cv::cvarrToMat(matrix), M = cv::getRotationMatrix2D(center, angle, scale);
-    CV_Assert( M.size() == M0.size() );
-    M.convertTo(M0, M0.type());
-    return matrix;
-}
-
-
-CV_IMPL CvMat*
-cvGetPerspectiveTransform( const CvPoint2D32f* src,
-                          const CvPoint2D32f* dst,
-                          CvMat* matrix )
-{
-    cv::Mat M0 = cv::cvarrToMat(matrix),
-        M = cv::getPerspectiveTransform((const cv::Point2f*)src, (const cv::Point2f*)dst);
-    CV_Assert( M.size() == M0.size() );
-    M.convertTo(M0, M0.type());
-    return matrix;
-}
-
-
-CV_IMPL CvMat*
-cvGetAffineTransform( const CvPoint2D32f* src,
-                          const CvPoint2D32f* dst,
-                          CvMat* matrix )
-{
-    cv::Mat M0 = cv::cvarrToMat(matrix),
-        M = cv::getAffineTransform((const cv::Point2f*)src, (const cv::Point2f*)dst);
-    CV_Assert( M.size() == M0.size() );
-    M.convertTo(M0, M0.type());
-    return matrix;
-}
-
-
-CV_IMPL void
-cvConvertMaps( const CvArr* arr1, const CvArr* arr2, CvArr* dstarr1, CvArr* dstarr2 )
-{
-    cv::Mat map1 = cv::cvarrToMat(arr1), map2;
-    cv::Mat dstmap1 = cv::cvarrToMat(dstarr1), dstmap2;
-
-    if( arr2 )
-        map2 = cv::cvarrToMat(arr2);
-    if( dstarr2 )
-    {
-        dstmap2 = cv::cvarrToMat(dstarr2);
-        if( dstmap2.type() == CV_16SC1 )
-            dstmap2 = cv::Mat(dstmap2.size(), CV_16UC1, dstmap2.ptr(), dstmap2.step);
-    }
-
-    cv::convertMaps( map1, map2, dstmap1, dstmap2, dstmap1.type(), false );
+                        matM.ptr<double>(), interpolation, borderType, borderValue.val, hint);
 }
 
 /****************************************************************************************
@@ -3790,46 +3182,6 @@ void cv::warpPolar(InputArray _src, OutputArray _dst, Size dsize,
         remap(src, _dst, mapx, mapy, flags & cv::INTER_MAX,
               (flags & cv::WARP_FILL_OUTLIERS) ? cv::BORDER_CONSTANT : cv::BORDER_TRANSPARENT);
     }
-}
-
-void cv::linearPolar( InputArray _src, OutputArray _dst,
-                      Point2f center, double maxRadius, int flags )
-{
-    warpPolar(_src, _dst, _src.size(), center, maxRadius, flags & ~WARP_POLAR_LOG);
-}
-
-void cv::logPolar( InputArray _src, OutputArray _dst,
-                   Point2f center, double maxRadius, int flags )
-{
-    Size ssize = _src.size();
-    double M = maxRadius > 0 ? std::exp(ssize.width / maxRadius) : 1;
-    warpPolar(_src, _dst, ssize, center, M, flags | WARP_POLAR_LOG);
-}
-
-CV_IMPL
-void cvLinearPolar( const CvArr* srcarr, CvArr* dstarr,
-                    CvPoint2D32f center, double maxRadius, int flags )
-{
-    Mat src = cvarrToMat(srcarr);
-    Mat dst = cvarrToMat(dstarr);
-
-    CV_Assert(src.size == dst.size);
-    CV_Assert(src.type() == dst.type());
-
-    cv::linearPolar(src, dst, center, maxRadius, flags);
-}
-
-CV_IMPL
-void cvLogPolar( const CvArr* srcarr, CvArr* dstarr,
-                 CvPoint2D32f center, double M, int flags )
-{
-    Mat src = cvarrToMat(srcarr);
-    Mat dst = cvarrToMat(dstarr);
-
-    CV_Assert(src.size == dst.size);
-    CV_Assert(src.type() == dst.type());
-
-    cv::logPolar(src, dst, center, M, flags);
 }
 
 /* End of file. */

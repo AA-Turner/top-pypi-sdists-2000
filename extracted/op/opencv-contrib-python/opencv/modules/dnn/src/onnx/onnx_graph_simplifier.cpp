@@ -10,6 +10,8 @@
 #ifdef HAVE_PROTOBUF
 #include "../graph_simplifier.hpp"
 #include "onnx_graph_simplifier.hpp"
+#include <opencv2/core/utils/filesystem.hpp>
+#include "opencv2/core/utils/filesystem.private.hpp"
 
 #include <opencv2/core/utils/logger.hpp>
 #include <queue>
@@ -19,6 +21,71 @@ namespace cv { namespace dnn {
 CV__DNN_INLINE_NS_BEGIN
 
 extern bool DNN_DIAGNOSTICS_RUN;
+
+static bool isValidPerm(const std::vector<int>& perm, int rank)
+{
+    if (rank <= 0 || perm.size() != static_cast<size_t>(rank))
+        return false;
+
+    std::vector<bool> used(rank, false);
+    for (size_t i = 0; i < perm.size(); ++i)
+    {
+        if (perm[i] < 0 || perm[i] >= rank || used[perm[i]])
+            return false;
+        used[perm[i]] = true;
+    }
+    return true;
+}
+
+static bool getPermAttr(opencv_onnx::NodeProto* node, std::vector<int>& perm, bool& hasPerm)
+{
+    CV_Assert(node);
+
+    hasPerm = false;
+    for (int i = 0; i < node->attribute_size(); ++i)
+    {
+        opencv_onnx::AttributeProto attr = node->attribute(i);
+        // ONNX Transpose uses "perm"; OpenCV internal Permute layer uses "order" after import.
+        if (attr.name() != "perm")
+            continue;
+
+        hasPerm = true;
+        perm.clear();
+        for (int j = 0; j < attr.ints_size(); ++j)
+        {
+            int64_t axis = attr.ints(j);
+            if (axis < std::numeric_limits<int>::min() || axis > std::numeric_limits<int>::max())
+                return false;
+            perm.push_back(static_cast<int>(axis));
+        }
+        return true;
+    }
+
+    perm.clear();
+    return true;
+}
+
+static void getDefaultPerm(int rank, std::vector<int>& perm)
+{
+    perm.resize(rank);
+    // ONNX Transpose without "perm" reverses all dimensions.
+    for (int i = 0; i < rank; ++i)
+        perm[i] = rank - 1 - i;
+}
+
+static bool isIdentityPerm(const std::vector<int>& p2, const std::vector<int>& p1)
+{
+    if (p1.size() != p2.size())
+        return false;
+
+    for (size_t i = 0; i < p2.size(); ++i)
+    {
+        // For ONNX Transpose, p1 followed by p2 composes as p1[p2[i]].
+        if (p2[i] < 0 || p2[i] >= static_cast<int>(p1.size()) || p1[p2[i]] != static_cast<int>(i))
+            return false;
+    }
+    return true;
+}
 
 // This wrapper can behave differently for fake input nodes and real graph nodes.
 class ONNXNodeWrapper : public ImportNodeWrapper
@@ -63,8 +130,9 @@ public:
 class ONNXGraphWrapper : public ImportGraphWrapper
 {
 public:
-    ONNXGraphWrapper(opencv_onnx::GraphProto& _net) : net(_net)
+    ONNXGraphWrapper(opencv_onnx::GraphProto& _net, const std::string& _basePath = "") : net(_net)
     {
+        basePath = _basePath;
         // Add a fake initializer with empty name.
         // Some ONNX models skip their inputs. For example,
         // Resize which has 4 inputs but 2 of them have empty names.
@@ -127,7 +195,7 @@ public:
     Mat getMatFromInitializer(int idx)
     {
         const opencv_onnx::TensorProto& tensor_proto = net.initializer(idx);
-        return getMatFromTensor(tensor_proto);
+        return getMatFromTensor(tensor_proto, false, basePath);
     }
 
     std::string getNameOfInitializer(int idx) const
@@ -160,6 +228,34 @@ public:
             return net.node(nodeId - numInputs - numInitializers).output(outId);
     }
 
+    bool hasSingleConsumer(const std::string& name) const
+    {
+        int count = 0;
+        for (int i = 0; i < net.node_size(); ++i)
+        {
+            const opencv_onnx::NodeProto& node = net.node(i);
+            for (int j = 0; j < node.input_size(); ++j)
+            {
+                if (node.input(j) == name)
+                {
+                    if (++count > 1)
+                        return false;
+                }
+            }
+        }
+        return count == 1;
+    }
+
+    bool isGraphOutput(const std::string& name) const
+    {
+        for (int i = 0; i < net.output_size(); ++i)
+        {
+            if (net.output(i).name() == name)
+                return true;
+        }
+        return false;
+    }
+
     virtual void removeNode(int idx) CV_OVERRIDE
     {
         if (idx >= numInputs + numInitializers)
@@ -174,6 +270,9 @@ public:
 private:
     int numInputs, numInitializers;
     opencv_onnx::GraphProto& net;
+
+public:
+    std::string basePath;
 };
 
 static Mat extractConstant(const Ptr<ImportGraphWrapper>& net, int node_id, int input_id)
@@ -191,7 +290,7 @@ static Mat extractConstant(const Ptr<ImportGraphWrapper>& net, int node_id, int 
         Ptr<ImportNodeWrapper> constant_ptr = net->getNode(constant_id);
         opencv_onnx::NodeProto* constant_node = constant_ptr.dynamicCast<ONNXNodeWrapper>()->node;
         opencv_onnx::TensorProto constant_proto = constant_node->attribute(0).t();
-        return getMatFromTensor(constant_proto);
+        return getMatFromTensor(constant_proto, false, onnx_net->basePath);
     }
 }
 
@@ -467,8 +566,8 @@ class AttentionSubGraph : public Subgraph {
             // get attrs - qkv_hidden_sizes
             qkv_hidden_sizes.clear();
             auto fill_qkv_hidden_sizes = [&] (const int slice_node_id) {
-                int slice_start = extractConstant(net, matchedNodesIds[slice_node_id], 1).at<int>(0);
-                int slice_end = extractConstant(net, matchedNodesIds[slice_node_id], 2).at<int>(0);
+                int slice_start = extractConstant(net, matchedNodesIds[slice_node_id], 1).at<int64_t>(0);
+                int slice_end = extractConstant(net, matchedNodesIds[slice_node_id], 2).at<int64_t>(0);
                 if (slice_end == std::numeric_limits<int>::max()) {
                     qkv_hidden_sizes.push_back(0); // workaround for Slice with end=INT_MAX
                 } else {
@@ -482,7 +581,7 @@ class AttentionSubGraph : public Subgraph {
             CV_CheckEQ(qkv_hidden_sizes.size(), static_cast<size_t>(3), "ONNXSimplifier/Attention: invalid qkv hidden sizes");
             CV_CheckEQ(int(qkv_hidden_sizes[0]), int(qkv_hidden_sizes[1]), "ONNXSimplifier/Attention: invalid qkv hidden sizes, q_hidden_size == v_hidden_size is required");
             // get attrs - num_heads, scale
-            num_heads = extractConstant(net, matchedNodesIds[reshape_q], 1).at<int>(1);
+            num_heads = extractConstant(net, matchedNodesIds[reshape_q], 1).at<int64_t>(1);
             scale = extractConstant(net, matchedNodesIds[div_q], 1).at<float>(0);
             output_ndims = extractConstant(net, matchedNodesIds[last_reshape], 1).size[0];
 
@@ -499,6 +598,7 @@ class AttentionSubGraph : public Subgraph {
                           std::vector<Ptr<ImportNodeWrapper> >&) CV_OVERRIDE {
         // add attrs
         opencv_onnx::NodeProto* node = fusedNode.dynamicCast<ONNXNodeWrapper>()->node;
+        node->set_domain("com.microsoft");
         opencv_onnx::AttributeProto* attr_num_heads = node->add_attribute();
         attr_num_heads->set_name("num_heads");
         attr_num_heads->set_i(num_heads);
@@ -577,8 +677,8 @@ class AttentionSingleHeadSubGraph : public Subgraph {
             // get attrs - qkv_hidden_sizes
             qkv_hidden_sizes.clear();
             auto fill_qkv_hidden_sizes = [&] (const int slice_node_id) {
-                int slice_start = extractConstant(net, matchedNodesIds[slice_node_id], 1).at<int>(0);
-                int slice_end = extractConstant(net, matchedNodesIds[slice_node_id], 2).at<int>(0);
+                int slice_start = extractConstant(net, matchedNodesIds[slice_node_id], 1).at<int64_t>(0);
+                int slice_end = extractConstant(net, matchedNodesIds[slice_node_id], 2).at<int64_t>(0);
                 if (slice_end == std::numeric_limits<int>::max()) {
                     qkv_hidden_sizes.push_back(0); // workaround for Slice with end=INT_MAX
                 } else {
@@ -609,6 +709,7 @@ class AttentionSingleHeadSubGraph : public Subgraph {
                           std::vector<Ptr<ImportNodeWrapper> >&) CV_OVERRIDE {
         // add attrs
         opencv_onnx::NodeProto* node = fusedNode.dynamicCast<ONNXNodeWrapper>()->node;
+        node->set_domain("com.microsoft");
         opencv_onnx::AttributeProto* attr_num_heads = node->add_attribute();
         attr_num_heads->set_name("num_heads");
         attr_num_heads->set_i(num_heads);
@@ -837,12 +938,28 @@ public:
             std::vector<int64_t> axes = extractAxis(net, matchedNodesIds[mean]);
             // check whether it is -1 or last_axis or [axis, ..., last_axis]
             int64_t input_ndims = static_cast<int64_t>(net.dynamicCast<ONNXGraphWrapper>()->getTensorShapeSize(matchedNodesIds[mean], 0));
-            if (input_ndims == -1) {
-                return false; // input shape unknown
+
+            // When axes are all negative (e.g. [-1] or [-2, -1]), we can validate
+            // the pattern without knowing input_ndims.
+            bool all_axes_negative = !axes.empty();
+            for (size_t i = 0; i < axes.size(); i++) {
+                if (axes[i] >= 0) { all_axes_negative = false; break; }
             }
-            // assume that axes are sorted in ascending order, e.g. [0, 1, 2, 3] or [-3, -2, -1]
-            if (axes.back() != -1 && axes.back() != (input_ndims - 1)) {
-                return false;
+
+            if (input_ndims == -1 && !all_axes_negative) {
+                return false; // input shape unknown and axes are positive
+            }
+
+            if (input_ndims != -1) {
+                // assume that axes are sorted in ascending order, e.g. [0, 1, 2, 3] or [-3, -2, -1]
+                if (axes.back() != -1 && axes.back() != (input_ndims - 1)) {
+                    return false;
+                }
+            } else {
+                // axes are all negative; check that the last axis is -1
+                if (axes.back() != -1) {
+                    return false;
+                }
             }
             for (size_t i = 0; i < axes.size() - 1; i++) {
                 if (axes[i] - axes[i + 1] != -1) {
@@ -853,9 +970,18 @@ public:
             std::vector<int64_t> axes1 = extractAxis(net, matchedNodesIds[mean1]);
             if (axes.size() != axes1.size())
                 return false;
-            for (size_t i = 0; i < axes.size(); i++) {
-                if (((axes[i] + input_ndims) % input_ndims) != ((axes1[i] + input_ndims) % input_ndims)) {
-                    return false;
+            if (input_ndims != -1) {
+                for (size_t i = 0; i < axes.size(); i++) {
+                    if (((axes[i] + input_ndims) % input_ndims) != ((axes1[i] + input_ndims) % input_ndims)) {
+                        return false;
+                    }
+                }
+            } else {
+                // both axes sets are negative; just compare directly
+                for (size_t i = 0; i < axes.size(); i++) {
+                    if (axes[i] != axes1[i]) {
+                        return false;
+                    }
                 }
             }
             axis = axes[0];
@@ -1027,6 +1153,43 @@ public:
 
 private:
     int hardSigmoidId;
+};
+
+// Swish/SiLU: x * Sigmoid(x)
+class SwishSubgraph : public Subgraph
+{
+public:
+    SwishSubgraph()
+    {
+        int input = addNodeToMatch("");
+        sigmoidId = addNodeToMatch("Sigmoid", input);
+        mulId = addNodeToMatch("Mul", input, sigmoidId);
+        setFusedNode("Swish", input);
+    }
+
+    virtual bool match(const Ptr<ImportGraphWrapper>& net, int nodeId,
+                       std::vector<int>& matchedNodesIds) CV_OVERRIDE
+    {
+        if (Subgraph::match(net, nodeId, matchedNodesIds))
+        {
+            // Verify both Mul inputs trace to the same tensor as Sigmoid's input.
+            Ptr<ImportNodeWrapper> mulNode = net->getNode(matchedNodesIds[mulId]);
+            Ptr<ImportNodeWrapper> sigmoidNode = net->getNode(matchedNodesIds[sigmoidId]);
+            std::string sigmoidInput = sigmoidNode->getInputName(0);
+            std::string sigmoidOutput = net->getOutputName(matchedNodesIds[sigmoidId], 0);
+
+            for (int i = 0; i < mulNode->getNumInputs(); i++)
+            {
+                std::string mulInput = mulNode->getInputName(i);
+                if (mulInput != sigmoidOutput)
+                    return mulInput == sigmoidInput;
+            }
+        }
+        return false;
+    }
+
+private:
+    int sigmoidId, mulId;
 };
 
 class CeluSubgraph : public Subgraph
@@ -1278,14 +1441,33 @@ public:
                             }
                         }
                     }
+                    // extract axis from original Gather node
+                    axis = 0;
+                    opencv_onnx::NodeProto* origGatherNode =
+                        inpNode.dynamicCast<ONNXNodeWrapper>()->node;
+                    for (int i = 0; i < origGatherNode->attribute_size(); i++) {
+                        opencv_onnx::AttributeProto attr = origGatherNode->attribute(i);
+                        if (attr.name() == "axis")
+                            axis = attr.i();
+                    }
                 }
             }
         }
         return retVal;
     }
 
+    virtual void finalize(const Ptr<ImportGraphWrapper>& net,
+                          const Ptr<ImportNodeWrapper>& fusedNode,
+                          std::vector<Ptr<ImportNodeWrapper> >& /*inputs*/) CV_OVERRIDE
+    {
+        opencv_onnx::NodeProto* node = fusedNode.dynamicCast<ONNXNodeWrapper>()->node;
+        opencv_onnx::AttributeProto* new_attr = node->add_attribute();
+        new_attr->set_name("axis");
+        new_attr->set_i(axis);
+    }
+
 private:
-    int cast, gather;
+    int cast, gather, axis;
 };
 
 /*  Constant folding shape for Expand.
@@ -1329,9 +1511,12 @@ public:
             }
             Mat mat_value = getMatFromTensor(attr.t());
             switch (mat_value.type()) {
-                case CV_32S: {
+                case CV_32S:
                     val = static_cast<int64_t>(mat_value.at<int>());
-                } break;
+                    break;
+                case CV_64S:
+                    val = mat_value.at<int64_t>();
+                    break;
                 default: return 0;
             }
             return 1;
@@ -1662,7 +1847,73 @@ public:
     }
 };
 
-void simplifySubgraphs(opencv_onnx::GraphProto& net)
+class ConsecutiveTransposePairsSubgraph : public Subgraph
+{
+public:
+    ConsecutiveTransposePairsSubgraph()
+    {
+        input = addNodeToMatch("");
+        transpose1 = addNodeToMatch("Transpose", input);
+        transpose2 = addNodeToMatch("Transpose", transpose1);
+        setFusedNode("Identity", input);
+    }
+
+    virtual bool match(const Ptr<ImportGraphWrapper>& net, int nodeId,
+                       std::vector<int>& matchedNodesIds) CV_OVERRIDE
+    {
+        if (!Subgraph::match(net, nodeId, matchedNodesIds))
+            return false;
+
+        Ptr<ONNXGraphWrapper> onnxNet = net.dynamicCast<ONNXGraphWrapper>();
+        if (!onnxNet)
+            return false;
+
+        Ptr<ONNXNodeWrapper> nodeWrapper1 = net->getNode(matchedNodesIds[transpose1]).dynamicCast<ONNXNodeWrapper>();
+        Ptr<ONNXNodeWrapper> nodeWrapper2 = net->getNode(matchedNodesIds[transpose2]).dynamicCast<ONNXNodeWrapper>();
+        if (!nodeWrapper1 || !nodeWrapper1->node || !nodeWrapper2 || !nodeWrapper2->node)
+            return false;
+
+        if (nodeWrapper1->node->output_size() != 1 || nodeWrapper2->node->output_size() != 1)
+            return false;
+        const std::string& intermediate = nodeWrapper1->node->output(0);
+        if (!onnxNet->hasSingleConsumer(intermediate) || onnxNet->isGraphOutput(intermediate))
+            return false;
+
+        std::vector<int> perm1, perm2;
+        bool hasPerm1, hasPerm2;
+        if (!getPermAttr(nodeWrapper1->node, perm1, hasPerm1) ||
+            !getPermAttr(nodeWrapper2->node, perm2, hasPerm2))
+            return false;
+
+        int inputRank = -1;
+        if (hasPerm1 && hasPerm2)
+        {
+            if (perm1.size() != perm2.size())
+                return false;
+            inputRank = static_cast<int>(perm1.size());
+        }
+        else
+        {
+            inputRank = onnxNet->getTensorShapeSize(matchedNodesIds[transpose1], 0);
+            if (inputRank <= 0)
+                return false;
+            if (!hasPerm1)
+                getDefaultPerm(inputRank, perm1);
+            if (!hasPerm2)
+                getDefaultPerm(inputRank, perm2);
+        }
+
+        if (!isValidPerm(perm1, inputRank) || !isValidPerm(perm2, inputRank))
+            return false;
+
+        return isIdentityPerm(perm2, perm1);
+    }
+
+protected:
+    int input, transpose1, transpose2;
+};
+
+void simplifySubgraphs(opencv_onnx::GraphProto& net, const std::string& basePath)
 {
     std::vector<Ptr<Subgraph> > subgraphs;
     subgraphs.push_back(makePtr<BiasedMatmulSubgraph>());
@@ -1680,6 +1931,7 @@ void simplifySubgraphs(opencv_onnx::GraphProto& net)
     subgraphs.push_back(makePtr<SoftMaxSubgraph>());
     subgraphs.push_back(makePtr<SoftMaxSubgraph2>());
     subgraphs.push_back(makePtr<LogSoftMaxSubgraph>());
+    subgraphs.push_back(makePtr<SwishSubgraph>());
     subgraphs.push_back(makePtr<HardSwishSubgraph>());
     subgraphs.push_back(makePtr<CeluSubgraph>());
     subgraphs.push_back(makePtr<NormalizeSubgraph1>());
@@ -1697,18 +1949,90 @@ void simplifySubgraphs(opencv_onnx::GraphProto& net)
         subgraphs.push_back(makePtr<AttentionSubGraph>());
         subgraphs.push_back(makePtr<AttentionSingleHeadSubGraph>());
     }
+    // Cleanup pass: remove identity-equivalent consecutive Transpose nodes after larger fusions.
+    subgraphs.push_back(makePtr<ConsecutiveTransposePairsSubgraph>());
 
-    simplifySubgraphs(Ptr<ImportGraphWrapper>(new ONNXGraphWrapper(net)), subgraphs);
+    simplifySubgraphs(Ptr<ImportGraphWrapper>(new ONNXGraphWrapper(net, basePath)), subgraphs);
 }
 
-Mat getMatFromTensor(const opencv_onnx::TensorProto& tensor_proto)
+
+static std::string getExternalDataValue(const opencv_onnx::TensorProto& tensor_proto, const std::string& key)
+{
+    for (const auto& entry : tensor_proto.external_data())
+    {
+        if (entry.key() == key)
+            return entry.value();
+    }
+    return std::string();
+}
+
+static char* getTensorRAWData(const opencv_onnx::TensorProto& tensor_proto,
+                              std::vector<int64_t>& tensor_data, const std::string& base_path = "")
+{
+    if (tensor_proto.has_data_location() && tensor_proto.data_location() == opencv_onnx::TensorProto::EXTERNAL) {
+    #if OPENCV_HAVE_FILESYSTEM_SUPPORT
+        CV_Assert(tensor_proto.has_data_location() && tensor_proto.data_location() == opencv_onnx::TensorProto::EXTERNAL);
+        std::string location_path = getExternalDataValue(tensor_proto, "location");
+        CV_CheckTrue(!location_path.empty(), "External tensor data location is not specified");
+
+        std::string full_path = base_path.empty() ? location_path : utils::fs::join(base_path, location_path);
+
+        std::ifstream file(full_path, std::ios::binary | std::ios::ate);
+        CV_CheckTrue(file.is_open(), "Failed to open external tensor data file");
+
+        size_t file_size = (size_t)file.tellg();
+        size_t offset = 0;
+        std::string offset_str = getExternalDataValue(tensor_proto, "offset");
+        if (!offset_str.empty())
+            offset = (size_t)std::stoull(offset_str);
+
+        size_t length = file_size - offset;
+        std::string length_str = getExternalDataValue(tensor_proto, "length");
+        if (!length_str.empty())
+            length = (size_t)std::stoull(length_str);
+
+        CV_Check(offset, offset <= file_size, "External data offset exceeds file size");
+        CV_Check(length, length <= file_size - offset, "External data length exceeds available bytes");
+
+        file.seekg(offset, std::ios::beg);
+        tensor_data.resize(divUp(length, sizeof(int64_t)));
+        file.read((char*)tensor_data.data(), length);
+        return (char*)tensor_data.data();
+    #else
+        CV_Error(Error::StsNotImplemented, "External tensor data is not supported without filesystem support");
+    #endif
+    }
+    else if (!tensor_proto.raw_data().empty()) {
+        char* ptr = (char*)tensor_proto.raw_data().c_str();
+        if (!isAligned<sizeof(int64_t)>(ptr))
+        {
+            size_t size = tensor_proto.raw_data().size();
+            tensor_data.resize(divUp(size, sizeof(int64_t)));
+            memcpy(tensor_data.data(), ptr, size);
+            ptr = (char*)tensor_data.data();
+        }
+        return ptr;
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
+Mat getMatFromTensor(const opencv_onnx::TensorProto& tensor_proto, bool uint8ToInt8, const std::string base_path)
 {
     if (tensor_proto.raw_data().empty() && tensor_proto.float_data().empty() &&
         tensor_proto.double_data().empty() && tensor_proto.int64_data().empty() &&
-        tensor_proto.int32_data().empty())
+        tensor_proto.int32_data().empty() &&
+        (!tensor_proto.has_data_location() || tensor_proto.data_location() != opencv_onnx::TensorProto::EXTERNAL)
+    )
         return Mat();
 
-    opencv_onnx::TensorProto_DataType datatype = tensor_proto.data_type();
+    // read binary data, should be just empty in case it is set in <DTYPE>_data field
+    std::vector<int64_t> external_tensor_data;
+    char* rawdata = getTensorRAWData(tensor_proto, external_tensor_data, base_path);
+
+    int datatype = tensor_proto.data_type();
     Mat blob;
     std::vector<int> sizes;
     for (int i = 0; i < tensor_proto.dims_size(); i++) {
@@ -1716,15 +2040,13 @@ Mat getMatFromTensor(const opencv_onnx::TensorProto& tensor_proto)
     }
     if (sizes.empty())
         sizes.assign(1, 1);
-    if (datatype == opencv_onnx::TensorProto_DataType_FLOAT) {
 
+    if (datatype == opencv_onnx::TensorProto_DataType_FLOAT) {
         if (!tensor_proto.float_data().empty()) {
-            const ::google::protobuf::RepeatedField<float> field = tensor_proto.float_data();
-            Mat(sizes, CV_32FC1, (void*)field.data()).copyTo(blob);
+            Mat(sizes, CV_32FC1, (void*)tensor_proto.float_data().data()).copyTo(blob);
         }
         else {
-            char* val = const_cast<char*>(tensor_proto.raw_data().c_str());
-            Mat(sizes, CV_32FC1, val).copyTo(blob);
+            Mat(sizes, CV_32FC1, rawdata).copyTo(blob);
         }
     }
     else if (datatype == opencv_onnx::TensorProto_DataType_FLOAT16)
@@ -1736,126 +2058,155 @@ Mat getMatFromTensor(const opencv_onnx::TensorProto& tensor_proto)
         // Link: https://github.com/onnx/onnx/issues/4460#issuecomment-1224373746
         if (!tensor_proto.int32_data().empty())
         {
-            int offset = 0;
-#ifdef WORDS_BIGENDIAN
-            offset = 1;
-#endif
-            const ::google::protobuf::RepeatedField<int32_t> field = tensor_proto.int32_data();
-
-            AutoBuffer<hfloat, 16> aligned_val;
             size_t sz = tensor_proto.int32_data().size();
-            aligned_val.allocate(sz);
-            hfloat* bufPtr = aligned_val.data();
-
-            hfloat *fp16Ptr = (hfloat *)field.data();
-            for (int i = 0; i < sz; i++)
+            std::vector<int16_t> halfvec(sz);
+            const int32_t* intdata = (const int32_t*)tensor_proto.int32_data().data();
+            for (size_t i = 0; i < sz; i++)
             {
-                bufPtr[i] = fp16Ptr[i*2 + offset];
+                union
+                {
+                    int16_t h;
+                    int32_t i;
+                } u;
+                u.i = intdata[i];
+                halfvec[i] = u.h;
             }
-            Mat(sizes, CV_16FC1, bufPtr).convertTo(blob, CV_32FC1);
+            Mat(sizes, CV_16FC1, halfvec.data()).convertTo(blob, CV_32FC1);
         }
         else
         {
-            char* val = const_cast<char*>(tensor_proto.raw_data().c_str());
-#if CV_STRONG_ALIGNMENT
-            // Aligned pointer is required.
-            AutoBuffer<hfloat, 16> aligned_val;
-            if (!isAligned<sizeof(hfloat)>(val))
+            Mat(sizes, CV_16FC1, rawdata).convertTo(blob, CV_32FC1);
+        }
+    }
+    else if (datatype == opencv_onnx::TensorProto_DataType_BFLOAT16)
+    {
+        if (!tensor_proto.raw_data().empty())
+        {
+            blob.create((int)sizes.size(), sizes.data(), CV_16BFC1);
+            size_t bytes = (size_t)blob.total() * blob.elemSize();
+            memcpy(blob.data, rawdata, bytes);
+        }
+        else if (!tensor_proto.int32_data().empty())
+        {
+            const auto& v = tensor_proto.int32_data();
+            blob.create((int)sizes.size(), sizes.data(), CV_16BFC1);
+            uint16_t* dst = reinterpret_cast<uint16_t*>(blob.data);
+            for (size_t i = 0; i < v.size(); ++i)
             {
-                size_t sz = tensor_proto.raw_data().size();
-                aligned_val.allocate(divUp(sz, sizeof(hfloat)));
-                memcpy(aligned_val.data(), val, sz);
-                val = (char*)aligned_val.data();
+                dst[i] = static_cast<uint16_t>(v[i] & 0xFFFF);
             }
-#endif
-            Mat(sizes, CV_16FC1, val).convertTo(blob, CV_32FC1);
+        }
+        else
+        {
+            CV_Error(Error::StsNotImplemented, "BFLOAT16 tensor has no raw_data");
         }
     }
     else if (datatype == opencv_onnx::TensorProto_DataType_DOUBLE)
     {
-        const ::google::protobuf::RepeatedField<double> field = tensor_proto.double_data();
-        char* val = nullptr;
-        if (!field.empty())
-            val = (char *)field.data();
+        if (!tensor_proto.double_data().empty())
+            Mat(sizes, CV_64FC1, (void*)tensor_proto.double_data().data()).convertTo(blob, CV_32FC1);
         else
-            val = const_cast<char*>(tensor_proto.raw_data().c_str()); // sometime, the double will be stored at raw_data.
-
-#if CV_STRONG_ALIGNMENT
-        // Aligned pointer is required.
-        AutoBuffer<double, 16> aligned_val;
-        if (!isAligned<sizeof(double)>(val))
-        {
-            size_t sz = tensor_proto.raw_data().size();
-            aligned_val.allocate(divUp(sz, sizeof(double)));
-            memcpy(aligned_val.data(), val, sz);
-            val = (char*)aligned_val.data();
-        }
-#endif
-        Mat(sizes, CV_64FC1, val).convertTo(blob, CV_32FC1);
+            Mat(sizes, CV_64FC1, rawdata).copyTo(blob);
     }
     else if (datatype == opencv_onnx::TensorProto_DataType_INT32)
     {
         if (!tensor_proto.int32_data().empty())
-        {
-            const ::google::protobuf::RepeatedField<int32_t> field = tensor_proto.int32_data();
-            Mat(sizes, CV_32SC1, (void*)field.data()).copyTo(blob);
-        }
+            Mat(sizes, CV_32SC1, (void*)tensor_proto.int32_data().data()).copyTo(blob);
         else
-        {
-            char* val = const_cast<char*>(tensor_proto.raw_data().c_str());
-            Mat(sizes, CV_32SC1, val).copyTo(blob);
-        }
+            Mat(sizes, CV_32SC1, rawdata).copyTo(blob);
     }
     else if (datatype == opencv_onnx::TensorProto_DataType_INT64)
     {
-        blob.create(sizes, CV_32SC1);
-        int32_t* dst = reinterpret_cast<int32_t*>(blob.data);
-
-        if (!tensor_proto.int64_data().empty()) {
-            ::google::protobuf::RepeatedField< ::google::protobuf::int64> src = tensor_proto.int64_data();
-            convertInt64ToInt32(src, dst, blob.total());
-        }
+        if (!tensor_proto.int64_data().empty())
+            Mat(sizes, CV_64SC1, (void*)tensor_proto.int64_data().data()).copyTo(blob);
         else
-        {
-            const char* val = tensor_proto.raw_data().c_str();
-#if CV_STRONG_ALIGNMENT
-            // Aligned pointer is required: https://github.com/opencv/opencv/issues/16373
-            // this doesn't work: typedef int64_t CV_DECL_ALIGNED(1) unaligned_int64_t;
-            AutoBuffer<int64_t, 16> aligned_val;
-            if (!isAligned<sizeof(int64_t)>(val))
-            {
-                size_t sz = tensor_proto.raw_data().size();
-                aligned_val.allocate(divUp(sz, sizeof(int64_t)));
-                memcpy(aligned_val.data(), val, sz);
-                val = (const char*)aligned_val.data();
-            }
-#endif
-            const int64_t* src = reinterpret_cast<const int64_t*>(val);
-            convertInt64ToInt32(src, dst, blob.total());
-        }
+            Mat(sizes, CV_64SC1, rawdata).copyTo(blob);
     }
-    else if (datatype == opencv_onnx::TensorProto_DataType_INT8 ||
-             datatype == opencv_onnx::TensorProto_DataType_UINT8)
+    else if (datatype == opencv_onnx::TensorProto_DataType_INT8)
+    {
+        if (!tensor_proto.int32_data().empty())
+            Mat(sizes, CV_32SC1, (void*)tensor_proto.int32_data().data()).convertTo(blob, CV_8S);
+        else
+            Mat(sizes, CV_8S, rawdata).copyTo(blob);
+    }
+    else if (datatype == opencv_onnx::TensorProto_DataType_UINT8)
     {
         // TODO : Add support for uint8 weights and acitvations. For now, converting uint8 tensors to int8.
-        int offset = datatype == opencv_onnx::TensorProto_DataType_INT8 ? 0 : -128;
-        int depth = datatype == opencv_onnx::TensorProto_DataType_INT8 ? CV_8S : CV_8U;
 
         if (!tensor_proto.int32_data().empty())
         {
-            const ::google::protobuf::RepeatedField<int32_t> field = tensor_proto.int32_data();
-            Mat(sizes, CV_32SC1, (void*)field.data()).convertTo(blob, CV_8S, 1.0, offset);
+            int32_t* intdata = (int32_t*)tensor_proto.int32_data().data();
+            if (uint8ToInt8)
+                Mat(sizes, CV_32SC1, intdata).convertTo(blob, CV_8S, 1, -128); // handle as ONNX quantized weight
+            else
+                Mat(sizes, CV_32SC1, intdata).convertTo(blob, CV_8U);
         }
         else
         {
-            char* val = const_cast<char*>(tensor_proto.raw_data().c_str());
-            Mat(sizes, depth, val).convertTo(blob, CV_8S, 1.0, offset);
+            if (uint8ToInt8)
+                Mat(sizes, CV_8U, rawdata).convertTo(blob, CV_8S, 1, -128);  // handle as ONNX quantized weight
+            else
+                Mat(sizes, CV_8U, rawdata).copyTo(blob);
         }
+    }
+    else if (datatype == opencv_onnx::TensorProto_DataType_UINT16)
+    {
+        if (!tensor_proto.int32_data().empty())
+            Mat(sizes, CV_32SC1, (void*)tensor_proto.int32_data().data()).convertTo(blob, CV_16UC1);
+        else
+            Mat(sizes, CV_16UC1, rawdata).copyTo(blob);
+    }
+    else if (datatype == opencv_onnx::TensorProto_DataType_UINT32)
+    {
+        if (!tensor_proto.int32_data().empty())
+            Mat(sizes, CV_32SC1, (void*)tensor_proto.int32_data().data()).convertTo(blob, CV_32UC1);
+        else
+            Mat(sizes, CV_32UC1, rawdata).copyTo(blob);
+    }
+    else if (datatype == opencv_onnx::TensorProto_DataType_UINT64)
+    {
+        if (!tensor_proto.int64_data().empty())
+            Mat(sizes, CV_64SC1, (void*)tensor_proto.int64_data().data()).convertTo(blob, CV_64UC1);
+        else
+            Mat(sizes, CV_64UC1, rawdata).copyTo(blob);
+    }
+    else if (datatype == opencv_onnx::TensorProto_DataType_BOOL)
+    {
+        Mat(sizes, CV_Bool, rawdata).copyTo(blob);
+    }
+    else if (datatype == opencv_onnx::TensorProto_DataType_INT16)
+    {
+        if (!tensor_proto.int32_data().empty())
+            Mat(sizes, CV_32SC1, (void*)tensor_proto.int32_data().data()).convertTo(blob, CV_16SC1);
+        else
+            Mat(sizes, CV_16SC1, rawdata).copyTo(blob);
+    }
+    else if (datatype == opencv_onnx::TensorProto_DataType_UINT16)
+    {
+        if (!tensor_proto.int32_data().empty())
+            Mat(sizes, CV_32SC1, (void*)tensor_proto.int32_data().data()).convertTo(blob, CV_16UC1);
+        else
+            Mat(sizes, CV_16UC1, rawdata).copyTo(blob);
+    }
+    else if (datatype == opencv_onnx::TensorProto_DataType_UINT32)
+    {
+        if (!tensor_proto.int32_data().empty())
+            Mat(sizes, CV_32SC1, (void*)tensor_proto.int32_data().data()).convertTo(blob, CV_32UC1);
+        else
+            Mat(sizes, CV_32UC1, rawdata).copyTo(blob);
+    }
+    else if (datatype == opencv_onnx::TensorProto_DataType_UINT64)
+    {
+        if (!tensor_proto.int64_data().empty())
+            Mat(sizes, CV_64SC1, (void*)tensor_proto.int64_data().data()).convertTo(blob, CV_64UC1);
+        else
+            Mat(sizes, CV_64UC1, rawdata).copyTo(blob);
     }
     else
     {
-        std::string errorMsg = "Unsupported data type: " +
-                            opencv_onnx::TensorProto_DataType_Name(datatype);
+        // @TODO: refactor the error handling
+        std::string errorMsg = "Unsupported data type: "; /* +
+                            opencv_onnx::TensorProto_DataType_Name(datatype);*/
 
         if (!DNN_DIAGNOSTICS_RUN)
         {
@@ -1864,8 +2215,9 @@ Mat getMatFromTensor(const opencv_onnx::TensorProto& tensor_proto)
         CV_LOG_ERROR(NULL, errorMsg);
         return blob;
     }
-    if (tensor_proto.dims_size() == 0)
-        blob.dims = 1;  // To force 1-dimensional cv::Mat for scalars.
+    if (tensor_proto.dims_size() == 0) {
+        blob.size.dims = blob.dims = 1;  // To force 1-dimensional cv::Mat for scalars.
+    }
     return blob;
 }
 

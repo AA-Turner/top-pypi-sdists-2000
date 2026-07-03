@@ -42,6 +42,7 @@
 //M*/
 
 #include "precomp.hpp"
+//#include "opencv2/core/core_c.h"
 #include <atomic>
 #include <exception>
 #include <iostream>
@@ -178,6 +179,7 @@ const uint64_t AT_HWCAP = NT_GNU_HWCAP;
   #define _WIN32_WINNT 0x0400  // http://msdn.microsoft.com/en-us/library/ms686857(VS.85).aspx
 #endif
 #include <windows.h>
+#include <combaseapi.h>
 #if (_WIN32_WINNT >= 0x0602)
   #include <synchapi.h>
 #endif
@@ -319,9 +321,9 @@ DECLARE_CV_CPUID_X86
 namespace cv
 {
 
-Exception::Exception() { code = 0; line = 0; }
+Exception::Exception() { code = Error::StsOk; line = 0; }
 
-Exception::Exception(int _code, const String& _err, const String& _func, const String& _file, int _line)
+Exception::Exception(Error::Code _code, const String& _err, const String& _func, const String& _file, int _line)
 : code(_code), err(_err), func(_func), file(_file), line(_line)
 {
     formatMessage();
@@ -356,14 +358,64 @@ void Exception::formatMessage()
     if (func.size() > 0)
     {
         if (multiline)
-            msg = format("OpenCV(%s) %s:%d: error: (%d:%s) in function '%s'\n%s", CV_VERSION, file.c_str(), line, code, cvErrorStr(code), func.c_str(), err.c_str());
+            msg = format("OpenCV(%s) %s:%d: error: (%d:%s) in function '%s'\n%s", CV_VERSION, file.c_str(), line, code, codeMessage(), func.c_str(), err.c_str());
         else
-            msg = format("OpenCV(%s) %s:%d: error: (%d:%s) %s in function '%s'\n", CV_VERSION, file.c_str(), line, code, cvErrorStr(code), err.c_str(), func.c_str());
+            msg = format("OpenCV(%s) %s:%d: error: (%d:%s) %s in function '%s'\n", CV_VERSION, file.c_str(), line, code, codeMessage(), err.c_str(), func.c_str());
     }
     else
     {
-        msg = format("OpenCV(%s) %s:%d: error: (%d:%s) %s%s", CV_VERSION, file.c_str(), line, code, cvErrorStr(code), err.c_str(), multiline ? "" : "\n");
+        msg = format("OpenCV(%s) %s:%d: error: (%d:%s) %s%s", CV_VERSION, file.c_str(), line, code, codeMessage(), err.c_str(), multiline ? "" : "\n");
     }
+}
+
+const char * Exception::codeMessage() const
+{
+    switch (code)
+    {
+    case cv::Error::StsOk :                  return "No Error";
+    case cv::Error::StsBackTrace :           return "Backtrace";
+    case cv::Error::StsError :               return "Unspecified error";
+    case cv::Error::StsInternal :            return "Internal error";
+    case cv::Error::StsNoMem :               return "Insufficient memory";
+    case cv::Error::StsBadArg :              return "Bad argument";
+    case cv::Error::StsNoConv :              return "Iterations do not converge";
+    case cv::Error::StsAutoTrace :           return "Autotrace call";
+    case cv::Error::StsBadSize :             return "Incorrect size of input array";
+    case cv::Error::StsNullPtr :             return "Null pointer";
+    case cv::Error::StsDivByZero :           return "Division by zero occurred";
+    case cv::Error::BadStep :                return "Image step is wrong";
+    case cv::Error::StsInplaceNotSupported : return "Inplace operation is not supported";
+    case cv::Error::StsObjectNotFound :      return "Requested object was not found";
+    case cv::Error::BadDepth :               return "Input image depth is not supported by function";
+    case cv::Error::StsUnmatchedFormats :    return "Formats of input arguments do not match";
+    case cv::Error::StsUnmatchedSizes :      return "Sizes of input arguments do not match";
+    case cv::Error::StsOutOfRange :          return "One of the arguments\' values is out of range";
+    case cv::Error::StsUnsupportedFormat :   return "Unsupported format or combination of formats";
+    case cv::Error::BadCOI :                 return "Input COI is not supported";
+    case cv::Error::BadNumChannels :         return "Bad number of channels";
+    case cv::Error::StsBadFlag :             return "Bad flag (parameter or structure field)";
+    case cv::Error::StsBadPoint :            return "Bad parameter of type CvPoint";
+    case cv::Error::StsBadMask :             return "Bad type of mask argument";
+    case cv::Error::StsParseError :          return "Parsing error";
+    case cv::Error::StsNotImplemented :      return "The function/feature is not implemented";
+    case cv::Error::StsBadMemBlock :         return "Memory block has been corrupted";
+    case cv::Error::StsAssert :              return "Assertion failed";
+    case cv::Error::GpuNotSupported :        return "No CUDA support";
+    case cv::Error::GpuApiCallError :        return "Gpu API call";
+    case cv::Error::OpenGlNotSupported :     return "No OpenGL support";
+    case cv::Error::OpenGlApiCallError :     return "OpenGL API call";
+    case cv::Error::OpenCLApiCallError :     return "OpenCL API call error";
+    case cv::Error::OpenCLDoubleNotSupported:return "OpenCL device does not support double";
+    case cv::Error::OpenCLInitError :        return "OpenCL initialization error";
+    case cv::Error::OpenCLNoAMDBlasFft :     return "Missing OpenCL AMD BLAS FFT";
+    default:
+    {
+        static char buf[256] {0};
+        snprintf(buf, sizeof(buf), "Unknown %s code %d", code >= 0 ? "status":"error", code);
+        return buf;
+    }
+    };
+
 }
 
 static const char* g_hwFeatureNames[CV_HARDWARE_MAX_FEATURE] = { NULL };
@@ -422,11 +474,13 @@ struct HWFeatures
         g_hwFeatureNames[CPU_AVX_512VPOPCNTDQ] = "AVX512VPOPCNTDQ";
         g_hwFeatureNames[CPU_AVX_5124VNNIW] = "AVX5124VNNIW";
         g_hwFeatureNames[CPU_AVX_5124FMAPS] = "AVX5124FMAPS";
+        g_hwFeatureNames[CPU_AVX_VNNI] = "AVX_VNNI";
 
         g_hwFeatureNames[CPU_NEON] = "NEON";
         g_hwFeatureNames[CPU_NEON_DOTPROD] = "NEON_DOTPROD";
         g_hwFeatureNames[CPU_NEON_FP16] = "NEON_FP16";
         g_hwFeatureNames[CPU_NEON_BF16] = "NEON_BF16";
+        g_hwFeatureNames[CPU_SVE] = "SVE";
 
         g_hwFeatureNames[CPU_VSX] = "VSX";
         g_hwFeatureNames[CPU_VSX3] = "VSX3";
@@ -443,6 +497,7 @@ struct HWFeatures
         g_hwFeatureNames[CPU_AVX512_ICL] = "AVX512-ICL";
 
         g_hwFeatureNames[CPU_RVV] = "RVV";
+        g_hwFeatureNames[CPU_RVV_ZVFH] = "RVV_ZVFH";
 
         g_hwFeatureNames[CPU_LSX]  = "LSX";
         g_hwFeatureNames[CPU_LASX] = "LASX";
@@ -501,6 +556,11 @@ struct HWFeatures
             have[CV_CPU_AVX_5124VNNIW]    = (cpuid_data_ex[3] & (1<<2))  != 0;
             have[CV_CPU_AVX_5124FMAPS]    = (cpuid_data_ex[3] & (1<<3))  != 0;
 
+            // CPUID leaf 7, subleaf 1 for AVX-VNNI
+            int cpuid_data_ex1[4] = { 0, 0, 0, 0 };
+            CV_CPUID_X86(cpuid_data_ex1, 7, 1);
+            have[CV_CPU_AVX_VNNI]         = (cpuid_data_ex1[0] & (1<<4))  != 0;
+
             bool have_AVX_OS_support = true;
             bool have_AVX512_OS_support = true;
             if (!(cpuid_data[2] & (1<<27)))
@@ -525,6 +585,7 @@ struct HWFeatures
                 have[CV_CPU_FP16] = false;
                 have[CV_CPU_AVX2] = false;
                 have[CV_CPU_FMA3] = false;
+                have[CV_CPU_AVX_VNNI] = false;
             }
             if (!have_AVX_OS_support || !have_AVX512_OS_support)
             {
@@ -589,6 +650,7 @@ struct HWFeatures
                 {
                     have[CV_CPU_NEON_DOTPROD] = (auxv.a_un.a_val & (1 << 20)) != 0; // HWCAP_ASIMDDP
                     have[CV_CPU_NEON_FP16] = (auxv.a_un.a_val & (1 << 10)) != 0; // HWCAP_ASIMDHP
+                    have[CV_CPU_SVE] = (auxv.a_un.a_val & (1 << 22)) != 0; // HWCAP_SVE
                 }
 #if defined(AT_HWCAP2)
                 else if (auxv.a_type == AT_HWCAP2)
@@ -719,6 +781,12 @@ struct HWFeatures
 
     #if defined __riscv && defined __riscv_vector
         have[CV_CPU_RVV] = true;
+        #if (defined __riscv_zvfh && __riscv_zvfh) || (defined __riscv_zvfhmin && __riscv_zvfhmin)
+            have[CV_CPU_FP16] = true;
+        #endif
+        #if defined __riscv_zvfh && __riscv_zvfh
+            have[CV_CPU_RVV_ZVFH] = true;
+        #endif
     #endif
 
     #if defined __loongarch64 && defined __linux__
@@ -1106,20 +1174,31 @@ String tempfile( const char* suffix )
         fname = String(aname);
     }
 #else
+    // Use GUID-based naming to avoid race condition with GetTempFileNameA
+    // See issue #19648
     char temp_dir2[MAX_PATH] = { 0 };
-    char temp_file[MAX_PATH] = { 0 };
 
     if (temp_dir.empty())
     {
         ::GetTempPathA(sizeof(temp_dir2), temp_dir2);
         temp_dir = std::string(temp_dir2);
     }
-    if(0 == ::GetTempFileNameA(temp_dir.c_str(), "ocv", 0, temp_file))
+
+    GUID g;
+    HRESULT hr = CoCreateGuid(&g);
+    if (FAILED(hr))
         return String();
+    char guidStr[40];
+    const char* mask = "%08x_%04x_%04x_%02x%02x_%02x%02x%02x%02x%02x%02x";
+    snprintf(guidStr, sizeof(guidStr), mask,
+            g.Data1, g.Data2, g.Data3, (unsigned int)g.Data4[0], (unsigned int)g.Data4[1],
+            (unsigned int)g.Data4[2], (unsigned int)g.Data4[3], (unsigned int)g.Data4[4],
+            (unsigned int)g.Data4[5], (unsigned int)g.Data4[6], (unsigned int)g.Data4[7]);
 
-    DeleteFileA(temp_file);
-
-    fname = temp_file;
+    fname = temp_dir;
+    if (!fname.empty() && fname[fname.size()-1] != '\\' && fname[fname.size()-1] != '/')
+        fname += "\\";
+    fname = fname + "ocv" + guidStr;
 #endif
 # else
 #  ifdef __ANDROID__
@@ -1204,7 +1283,7 @@ int cv_vsnprintf(char* buf, int len, const char* fmt, va_list args)
 
 static void dumpException(const Exception& exc)
 {
-    const char* errorStr = cvErrorStr(exc.code);
+    const char* errorStr = exc.codeMessage();
     char buf[1 << 12];
 
     cv_snprintf(buf, sizeof(buf),
@@ -1268,8 +1347,7 @@ void error( const Exception& exc )
 
     if(breakOnError)
     {
-        static volatile int* p = 0;
-        *p = 0;
+        std::terminate();
     }
 
     throw exc;
@@ -1282,7 +1360,7 @@ void error( const Exception& exc )
 #endif
 }
 
-void error(int _code, const String& _err, const char* _func, const char* _file, int _line)
+void error(Error::Code _code, const String& _err, const char* _func, const char* _file, int _line)
 {
     error(cv::Exception(_code, _err, _func, _file, _line));
 #ifdef __GNUC__
@@ -1315,168 +1393,12 @@ redirectError( ErrorCallback errCallback, void* userdata, void** prevUserdata)
     return prevCallback;
 }
 
-void terminate(int _code, const String& _err, const char* _func, const char* _file, int _line) CV_NOEXCEPT
+void terminate(Error::Code _code, const String& _err, const char* _func, const char* _file, int _line) CV_NOEXCEPT
 {
     dumpException(cv::Exception(_code, _err, _func, _file, _line));
     std::terminate();
 }
 
-}
-
-CV_IMPL int cvCheckHardwareSupport(int feature)
-{
-    CV_DbgAssert( 0 <= feature && feature <= CV_HARDWARE_MAX_FEATURE );
-    return cv::currentFeatures->have[feature];
-}
-
-CV_IMPL int cvUseOptimized( int flag )
-{
-    int prevMode = cv::useOptimizedFlag;
-    cv::setUseOptimized( flag != 0 );
-    return prevMode;
-}
-
-CV_IMPL int64  cvGetTickCount(void)
-{
-    return cv::getTickCount();
-}
-
-CV_IMPL double cvGetTickFrequency(void)
-{
-    return cv::getTickFrequency()*1e-6;
-}
-
-CV_IMPL CvErrorCallback
-cvRedirectError( CvErrorCallback errCallback, void* userdata, void** prevUserdata)
-{
-    return cv::redirectError(errCallback, userdata, prevUserdata);
-}
-
-CV_IMPL int cvNulDevReport( int, const char*, const char*,
-                            const char*, int, void* )
-{
-    return 0;
-}
-
-CV_IMPL int cvStdErrReport( int, const char*, const char*,
-                            const char*, int, void* )
-{
-    return 0;
-}
-
-CV_IMPL int cvGuiBoxReport( int, const char*, const char*,
-                            const char*, int, void* )
-{
-    return 0;
-}
-
-CV_IMPL int cvGetErrInfo( const char**, const char**, const char**, int* )
-{
-    return 0;
-}
-
-
-CV_IMPL const char* cvErrorStr( int status )
-{
-    static char buf[256];
-
-    switch (status)
-    {
-    case cv::Error::StsOk :                  return "No Error";
-    case cv::Error::StsBackTrace :           return "Backtrace";
-    case cv::Error::StsError :               return "Unspecified error";
-    case cv::Error::StsInternal :            return "Internal error";
-    case cv::Error::StsNoMem :               return "Insufficient memory";
-    case cv::Error::StsBadArg :              return "Bad argument";
-    case cv::Error::StsNoConv :              return "Iterations do not converge";
-    case cv::Error::StsAutoTrace :           return "Autotrace call";
-    case cv::Error::StsBadSize :             return "Incorrect size of input array";
-    case cv::Error::StsNullPtr :             return "Null pointer";
-    case cv::Error::StsDivByZero :           return "Division by zero occurred";
-    case cv::Error::BadStep :                return "Image step is wrong";
-    case cv::Error::StsInplaceNotSupported : return "Inplace operation is not supported";
-    case cv::Error::StsObjectNotFound :      return "Requested object was not found";
-    case cv::Error::BadDepth :               return "Input image depth is not supported by function";
-    case cv::Error::StsUnmatchedFormats :    return "Formats of input arguments do not match";
-    case cv::Error::StsUnmatchedSizes :      return "Sizes of input arguments do not match";
-    case cv::Error::StsOutOfRange :          return "One of the arguments\' values is out of range";
-    case cv::Error::StsUnsupportedFormat :   return "Unsupported format or combination of formats";
-    case cv::Error::BadCOI :                 return "Input COI is not supported";
-    case cv::Error::BadNumChannels :         return "Bad number of channels";
-    case cv::Error::StsBadFlag :             return "Bad flag (parameter or structure field)";
-    case cv::Error::StsBadPoint :            return "Bad parameter of type CvPoint";
-    case cv::Error::StsBadMask :             return "Bad type of mask argument";
-    case cv::Error::StsParseError :          return "Parsing error";
-    case cv::Error::StsNotImplemented :      return "The function/feature is not implemented";
-    case cv::Error::StsBadMemBlock :         return "Memory block has been corrupted";
-    case cv::Error::StsAssert :              return "Assertion failed";
-    case cv::Error::GpuNotSupported :        return "No CUDA support";
-    case cv::Error::GpuApiCallError :        return "Gpu API call";
-    case cv::Error::OpenGlNotSupported :     return "No OpenGL support";
-    case cv::Error::OpenGlApiCallError :     return "OpenGL API call";
-    };
-
-    snprintf(buf, sizeof(buf), "Unknown %s code %d", status >= 0 ? "status":"error", status);
-    return buf;
-}
-
-CV_IMPL int cvGetErrMode(void)
-{
-    return 0;
-}
-
-CV_IMPL int cvSetErrMode(int)
-{
-    return 0;
-}
-
-CV_IMPL int cvGetErrStatus(void)
-{
-    return 0;
-}
-
-CV_IMPL void cvSetErrStatus(int)
-{
-}
-
-
-CV_IMPL void cvError( int code, const char* func_name,
-                      const char* err_msg,
-                      const char* file_name, int line )
-{
-    cv::error(cv::Exception(code, err_msg, func_name, file_name, line));
-}
-
-/* function, which converts int to int */
-CV_IMPL int
-cvErrorFromIppStatus( int status )
-{
-    switch (status)
-    {
-    case CV_BADSIZE_ERR:               return cv::Error::StsBadSize;
-    case CV_BADMEMBLOCK_ERR:           return cv::Error::StsBadMemBlock;
-    case CV_NULLPTR_ERR:               return cv::Error::StsNullPtr;
-    case CV_DIV_BY_ZERO_ERR:           return cv::Error::StsDivByZero;
-    case CV_BADSTEP_ERR:               return cv::Error::BadStep;
-    case CV_OUTOFMEM_ERR:              return cv::Error::StsNoMem;
-    case CV_BADARG_ERR:                return cv::Error::StsBadArg;
-    case CV_NOTDEFINED_ERR:            return cv::Error::StsError;
-    case CV_INPLACE_NOT_SUPPORTED_ERR: return cv::Error::StsInplaceNotSupported;
-    case CV_NOTFOUND_ERR:              return cv::Error::StsObjectNotFound;
-    case CV_BADCONVERGENCE_ERR:        return cv::Error::StsNoConv;
-    case CV_BADDEPTH_ERR:              return cv::Error::BadDepth;
-    case CV_UNMATCHED_FORMATS_ERR:     return cv::Error::StsUnmatchedFormats;
-    case CV_UNSUPPORTED_COI_ERR:       return cv::Error::BadCOI;
-    case CV_UNSUPPORTED_CHANNELS_ERR:  return cv::Error::BadNumChannels;
-    case CV_BADFLAG_ERR:               return cv::Error::StsBadFlag;
-    case CV_BADRANGE_ERR:              return cv::Error::StsBadArg;
-    case CV_BADCOEF_ERR:               return cv::Error::StsBadArg;
-    case CV_BADFACTOR_ERR:             return cv::Error::StsBadArg;
-    case CV_BADPOINT_ERR:              return cv::Error::StsBadPoint;
-
-    default:
-      return cv::Error::StsError;
-    }
 }
 
 namespace cv {

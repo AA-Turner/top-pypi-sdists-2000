@@ -212,14 +212,34 @@ static bool halMorph(int op, int src_type, int dst_type,
               int kernel_width, int kernel_height, int anchor_x, int anchor_y,
               int borderType, const double borderValue[4], int iterations, bool isSubmatrix)
 {
+    // Prioritize stateless implementation
+    int res = cv_hal_morph_stateless(op, src_data, src_step, src_type, dst_data, dst_step, dst_type, width, height,
+                                     roi_width, roi_height, roi_x, roi_y, roi_width2, roi_height2, roi_x2, roi_y2,
+                                     kernel_data, kernel_step, kernel_type, kernel_width, kernel_height, anchor_x, anchor_y,
+                                     borderType, borderValue, iterations, isSubmatrix, src_data == dst_data);
+    if (res == CV_HAL_ERROR_OK)
+    {
+        return true;
+    } else if (res != CV_HAL_ERROR_NOT_IMPLEMENTED)
+    {
+        CV_Error_(cv::Error::StsInternal,
+                  ("HAL implementation morph_stateless ==> " CVAUX_STR(cv_hal_morph_stateless) " returned %d (0x%08x)", res, res));
+    }
+
     cvhalFilter2D * ctx;
-    int res = cv_hal_morphInit(&ctx, op, src_type, dst_type, width, height,
+    res = cv_hal_morphInit(&ctx, op, src_type, dst_type, width, height,
                                kernel_type, kernel_data, kernel_step, kernel_width, kernel_height,
                                anchor_x, anchor_y,
                                borderType, borderValue,
                                iterations, isSubmatrix, src_data == dst_data);
-    if (res != CV_HAL_ERROR_OK)
+    if (res == CV_HAL_ERROR_NOT_IMPLEMENTED)
+    {
         return false;
+    } else if (res != CV_HAL_ERROR_OK)
+    {
+        CV_Error_(cv::Error::StsInternal,
+                  ("HAL implementation morphInit ==> " CVAUX_STR(cv_hal_morphInit) " returned %d (0x%08x)", res, res));
+    }
 
     res = cv_hal_morph(ctx, src_data, src_step, dst_data, dst_step, width, height,
                        roi_width, roi_height,
@@ -227,10 +247,19 @@ static bool halMorph(int op, int src_type, int dst_type,
                        roi_width2, roi_height2,
                        roi_x2, roi_y2);
     bool success = (res == CV_HAL_ERROR_OK);
+    if (res != CV_HAL_ERROR_OK && res != CV_HAL_ERROR_NOT_IMPLEMENTED )
+    {
+        CV_Error_(cv::Error::StsInternal,
+                  ("HAL implementation morph ==> " CVAUX_STR(cv_hal_morph) " returned %d (0x%08x)", res, res));
+    }
 
     res = cv_hal_morphFree(ctx);
-    if (res != CV_HAL_ERROR_OK)
-        return false;
+    success &= (res == CV_HAL_ERROR_OK);
+    if (res != CV_HAL_ERROR_OK && res != CV_HAL_ERROR_NOT_IMPLEMENTED )
+    {
+        CV_Error_(cv::Error::StsInternal,
+                  ("HAL implementation morphFree ==> " CVAUX_STR(cv_hal_morphFree) " returned %d (0x%08x)", res, res));
+    }
 
     return success;
 }
@@ -1269,112 +1298,3 @@ void morphologyEx( InputArray _src, OutputArray _dst, int op,
 }
 
 } // namespace cv
-
-CV_IMPL IplConvKernel *
-cvCreateStructuringElementEx( int cols, int rows,
-                              int anchorX, int anchorY,
-                              int shape, int *values )
-{
-    cv::Size ksize = cv::Size(cols, rows);
-    cv::Point anchor = cv::Point(anchorX, anchorY);
-    CV_Assert( cols > 0 && rows > 0 && anchor.inside(cv::Rect(0,0,cols,rows)) &&
-               (shape != CV_SHAPE_CUSTOM || values != 0));
-
-    int i, size = rows * cols;
-    int element_size = sizeof(IplConvKernel) + size*sizeof(int);
-    IplConvKernel *element = (IplConvKernel*)cvAlloc(element_size + 32);
-
-    element->nCols = cols;
-    element->nRows = rows;
-    element->anchorX = anchorX;
-    element->anchorY = anchorY;
-    element->nShiftR = shape < CV_SHAPE_ELLIPSE ? shape : CV_SHAPE_CUSTOM;
-    element->values = (int*)(element + 1);
-
-    if( shape == CV_SHAPE_CUSTOM )
-    {
-        for( i = 0; i < size; i++ )
-            element->values[i] = values[i];
-    }
-    else
-    {
-        cv::Mat elem = cv::getStructuringElement(shape, ksize, anchor);
-        for( i = 0; i < size; i++ )
-            element->values[i] = elem.ptr()[i];
-    }
-
-    return element;
-}
-
-
-CV_IMPL void
-cvReleaseStructuringElement( IplConvKernel ** element )
-{
-    if( !element )
-        CV_Error( cv::Error::StsNullPtr, "" );
-    cvFree( element );
-}
-
-
-static void convertConvKernel( const IplConvKernel* src, cv::Mat& dst, cv::Point& anchor )
-{
-    if(!src)
-    {
-        anchor = cv::Point(1,1);
-        dst.release();
-        return;
-    }
-    anchor = cv::Point(src->anchorX, src->anchorY);
-    dst.create(src->nRows, src->nCols, CV_8U);
-
-    int i, size = src->nRows*src->nCols;
-    for( i = 0; i < size; i++ )
-        dst.ptr()[i] = (uchar)(src->values[i] != 0);
-}
-
-
-CV_IMPL void
-cvErode( const CvArr* srcarr, CvArr* dstarr, IplConvKernel* element, int iterations )
-{
-    cv::Mat src = cv::cvarrToMat(srcarr), dst = cv::cvarrToMat(dstarr), kernel;
-    CV_Assert( src.size() == dst.size() && src.type() == dst.type() );
-    cv::Point anchor;
-    convertConvKernel( element, kernel, anchor );
-    cv::erode( src, dst, kernel, anchor, iterations, cv::BORDER_REPLICATE );
-}
-
-
-CV_IMPL void
-cvDilate( const CvArr* srcarr, CvArr* dstarr, IplConvKernel* element, int iterations )
-{
-    cv::Mat src = cv::cvarrToMat(srcarr), dst = cv::cvarrToMat(dstarr), kernel;
-    CV_Assert( src.size() == dst.size() && src.type() == dst.type() );
-    cv::Point anchor;
-    convertConvKernel( element, kernel, anchor );
-    cv::dilate( src, dst, kernel, anchor, iterations, cv::BORDER_REPLICATE );
-}
-
-
-CV_IMPL void
-cvMorphologyEx( const void* srcarr, void* dstarr, void*,
-                IplConvKernel* element, int op, int iterations )
-{
-    cv::Mat src = cv::cvarrToMat(srcarr), dst = cv::cvarrToMat(dstarr), kernel;
-    CV_Assert( src.size() == dst.size() && src.type() == dst.type() );
-    cv::Point anchor;
-    IplConvKernel* temp_element = NULL;
-    if (!element)
-    {
-        temp_element = cvCreateStructuringElementEx(3, 3, 1, 1, CV_SHAPE_RECT);
-    } else {
-        temp_element = element;
-    }
-    convertConvKernel( temp_element, kernel, anchor );
-    if (!element)
-    {
-        cvReleaseStructuringElement(&temp_element);
-    }
-    cv::morphologyEx( src, dst, op, kernel, anchor, iterations, cv::BORDER_REPLICATE );
-}
-
-/* End of file. */

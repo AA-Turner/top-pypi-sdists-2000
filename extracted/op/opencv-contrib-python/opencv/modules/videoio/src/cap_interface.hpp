@@ -6,32 +6,8 @@
 #define CAP_INTERFACE_HPP
 
 #include "opencv2/core.hpp"
-#include "opencv2/core/core_c.h"
 #include "opencv2/videoio.hpp"
-#include "opencv2/videoio/videoio_c.h"
 #include "opencv2/videoio/utils.private.hpp"
-
-//===================================================
-
-// Legacy structs
-
-struct CvCapture
-{
-    virtual ~CvCapture() {}
-    virtual double getProperty(int) const { return 0; }
-    virtual bool setProperty(int, double) { return 0; }
-    virtual bool grabFrame() { return true; }
-    virtual IplImage* retrieveFrame(int) { return 0; }
-    virtual int getCaptureDomain() { return cv::CAP_ANY; } // Return the type of the capture object: CAP_DSHOW, etc...
-};
-
-struct CvVideoWriter
-{
-    virtual ~CvVideoWriter() {}
-    virtual bool writeFrame(const IplImage*) { return false; }
-    virtual int getCaptureDomain() const { return cv::CAP_ANY; } // Return the type of the capture object: CAP_FFMPEG, etc...
-    virtual double getProperty(int) const { return 0; }
-};
 
 //===================================================
 
@@ -214,7 +190,7 @@ class IVideoCapture
 {
 public:
     virtual ~IVideoCapture() {}
-    virtual double getProperty(int) const { return 0; }
+    virtual double getProperty(int) const { return CAP_PROP_UNKNOWN; }
     virtual bool setProperty(int, double) { return false; }
     virtual bool grabFrame() = 0;
     virtual bool retrieveFrame(int, OutputArray) = 0;
@@ -226,10 +202,10 @@ class IVideoWriter
 {
 public:
     virtual ~IVideoWriter() {}
-    virtual double getProperty(int) const { return 0; }
+    virtual double getProperty(int) const { return CAP_PROP_UNKNOWN; }
     virtual bool setProperty(int, double) { return false; }
     virtual bool isOpened() const = 0;
-    virtual void write(InputArray) = 0;
+    virtual bool write(InputArray) = 0;
     virtual int getCaptureDomain() const { return cv::CAP_ANY; } // Return the type of the capture object: CAP_FFMPEG, etc...
 };
 
@@ -327,6 +303,7 @@ protected:
 //==================================================================================================
 
 Ptr<IVideoCapture> cvCreateFileCapture_FFMPEG_proxy(const std::string &filename, const VideoCaptureParameters& params);
+Ptr<IVideoCapture> cvCreateCameraCapture_FFMPEG_proxy(int index, const VideoCaptureParameters& params);
 Ptr<IVideoCapture> cvCreateStreamCapture_FFMPEG_proxy(const Ptr<IStreamReader>& stream, const VideoCaptureParameters& params);
 Ptr<IVideoWriter> cvCreateVideoWriter_FFMPEG_proxy(const std::string& filename, int fourcc,
                                                    double fps, const Size& frameSize,
@@ -366,7 +343,7 @@ Ptr<IVideoCapture> create_V4L_capture_file(const std::string &filename);
 Ptr<IVideoCapture> create_OpenNI2_capture_cam( int index );
 Ptr<IVideoCapture> create_OpenNI2_capture_file( const std::string &filename );
 
-Ptr<IVideoCapture> create_Images_capture(const std::string &filename);
+Ptr<IVideoCapture> create_Images_capture(const std::string& filename, const VideoCaptureParameters& params);
 Ptr<IVideoWriter> create_Images_writer(const std::string& filename, int fourcc,
                                        double fps, const Size& frameSize,
                                        const VideoWriterParameters& params);
@@ -400,7 +377,7 @@ Ptr<IVideoWriter> createAndroidVideoWriter(const std::string& filename, int four
                                            double fps, const Size& frameSize,
                                            const VideoWriterParameters& params);
 
-Ptr<IVideoCapture> create_obsensor_capture(int index);
+Ptr<IVideoCapture> create_obsensor_capture(int index, const cv::VideoCaptureParameters& params);
 
 bool VideoCapture_V4L_waitAny(
         const std::vector<VideoCapture>& streams,
@@ -417,6 +394,7 @@ std::ostream& operator<<(std::ostream& out, const VideoAccelerationType& va_type
     case VIDEO_ACCELERATION_D3D11: out << "D3D11"; return out;
     case VIDEO_ACCELERATION_VAAPI: out << "VAAPI"; return out;
     case VIDEO_ACCELERATION_MFX: out << "MFX"; return out;
+    case VIDEO_ACCELERATION_DRM: out << "DRM"; return out;
     }
     out << cv::format("UNKNOWN(0x%ux)", static_cast<unsigned int>(va_type));
     return out;

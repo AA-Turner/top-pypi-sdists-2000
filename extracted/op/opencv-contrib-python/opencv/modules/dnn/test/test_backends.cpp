@@ -15,7 +15,6 @@ class DNNTestNetwork : public DNNTestLayer
 public:
     void processNet(const std::string& weights, const std::string& proto,
                     Size inpSize, const std::string& outputLayer = "",
-                    const std::string& halideScheduler = "",
                     double l1 = 0.0, double lInf = 0.0)
     {
         // Create a common input blob.
@@ -23,12 +22,11 @@ public:
         Mat inp(4, blobSize, CV_32FC1);
         randu(inp, 0.0f, 1.0f);
 
-        processNet(weights, proto, inp, outputLayer, halideScheduler, l1, lInf);
+        processNet(weights, proto, inp, outputLayer, l1, lInf);
     }
 
     void processNet(std::string weights, std::string proto,
                     Mat inp, const std::string& outputLayer = "",
-                    std::string halideScheduler = "",
                     double l1 = 0.0, double lInf = 0.0, double detectionConfThresh = 0.2, bool useWinograd = true)
     {
         checkBackend();
@@ -43,7 +41,13 @@ public:
         Net netDefault = readNet(weights, proto);
         netDefault.setPreferableBackend(DNN_BACKEND_OPENCV);
         netDefault.setInput(inp);
-        Mat outDefault = netDefault.forward(outputLayer).clone();
+
+        // BUG: https://github.com/opencv/opencv/issues/26349
+        Mat outDefault;
+        if(netDefault.getMainGraph())
+            outDefault = netDefault.forward().clone();
+        else
+            outDefault = netDefault.forward(outputLayer).clone();
 
         net = readNet(weights, proto);
         net.setInput(inp);
@@ -53,12 +57,12 @@ public:
         if (target == DNN_TARGET_CPU_FP16)
             net.enableWinograd(false);
 
-        if (backend == DNN_BACKEND_HALIDE && !halideScheduler.empty())
-        {
-            halideScheduler = findDataFile(halideScheduler);
-            net.setHalideScheduler(halideScheduler);
-        }
-        Mat out = net.forward(outputLayer).clone();
+        // BUG: https://github.com/opencv/opencv/issues/26349
+        Mat out;
+        if(net.getMainGraph())
+            out = net.forward().clone();
+        else
+            out = net.forward(outputLayer).clone();
 
         check(outDefault, out, outputLayer, l1, lInf, detectionConfThresh, "First run");
 
@@ -72,8 +76,17 @@ public:
         }
         netDefault.setInput(inp);
         net.setInput(inp);
-        outDefault = netDefault.forward(outputLayer).clone();
-        out = net.forward(outputLayer).clone();
+
+        if(netDefault.getMainGraph())
+            outDefault = netDefault.forward().clone();
+        else
+            outDefault = netDefault.forward(outputLayer).clone();
+
+        if(net.getMainGraph())
+            out = net.forward().clone();
+        else
+            out = net.forward(outputLayer).clone();
+
         check(outDefault, out, outputLayer, l1, lInf, detectionConfThresh, "Second run");
     }
 
@@ -111,10 +124,11 @@ TEST_P(DNNTestNetwork, DISABLED_YOLOv8n) {
 TEST_P(DNNTestNetwork, AlexNet)
 {
     applyTestTag(CV_TEST_TAG_MEMORY_1GB);
-    processNet("dnn/bvlc_alexnet.caffemodel", "dnn/bvlc_alexnet.prototxt",
-               Size(227, 227), "prob",
-               target == DNN_TARGET_OPENCL ? "dnn/halide_scheduler_opencl_alexnet.yml" :
-                                             "dnn/halide_scheduler_alexnet.yml");
+    // Skip memory-heavy OpenCL targets on 32-bit (x86) platforms to avoid OutOfMemoryError
+    if (sizeof(void*) == 4 &&
+        (target == DNN_TARGET_OPENCL || target == DNN_TARGET_OPENCL_FP16))
+        throw SkipTestException("Skip memory-heavy OpenCL target on 32-bit (x86) platform");
+    processNet("dnn/onnx/models/alexnet.onnx", "", Size(227, 227));
     expectNoFallbacksFromIE(net);
     expectNoFallbacksFromCUDA(net);
 }
@@ -126,20 +140,20 @@ TEST_P(DNNTestNetwork, ResNet_50)
         CV_TEST_TAG_DEBUG_VERYLONG
     );
 
-    processNet("dnn/ResNet-50-model.caffemodel", "dnn/ResNet-50-deploy.prototxt",
-               Size(224, 224), "prob",
-               target == DNN_TARGET_OPENCL ? "dnn/halide_scheduler_opencl_resnet_50.yml" :
-                                             "dnn/halide_scheduler_resnet_50.yml");
+    double l1 = default_l1, lInf = default_lInf;
+    if (target == DNN_TARGET_CUDA_FP16 || target == DNN_TARGET_OPENCL_FP16 || target == DNN_TARGET_CPU_FP16)
+    {
+        l1 = 0.015;
+        lInf = 0.05;
+    }
+    processNet("dnn/onnx/models/resnet50v1.onnx", "", Size(224, 224), "", l1, lInf);
     expectNoFallbacksFromIE(net);
     expectNoFallbacksFromCUDA(net);
 }
 
 TEST_P(DNNTestNetwork, SqueezeNet_v1_1)
 {
-    processNet("dnn/squeezenet_v1.1.caffemodel", "dnn/squeezenet_v1.1.prototxt",
-               Size(227, 227), "prob",
-               target == DNN_TARGET_OPENCL ? "dnn/halide_scheduler_opencl_squeezenet_v1_1.yml" :
-                                             "dnn/halide_scheduler_squeezenet_v1_1.yml");
+    processNet("dnn/onnx/models/squeezenet.onnx", "", Size(227, 227));
     expectNoFallbacksFromIE(net);
     expectNoFallbacksFromCUDA(net);
 }
@@ -148,8 +162,7 @@ TEST_P(DNNTestNetwork, GoogLeNet)
 {
     applyTestTag(target == DNN_TARGET_CPU ? "" : CV_TEST_TAG_MEMORY_512MB);
 
-    processNet("dnn/bvlc_googlenet.caffemodel", "dnn/bvlc_googlenet.prototxt",
-               Size(224, 224), "prob");
+    processNet("dnn/onnx/models/googlenet.onnx", "", Size(224, 224));
     expectNoFallbacksFromIE(net);
     expectNoFallbacksFromCUDA(net);
 }
@@ -164,100 +177,14 @@ TEST_P(DNNTestNetwork, Inception_5h)
         l1 = 1.72e-5;
         lInf = 8e-4;
     }
-    processNet("dnn/tensorflow_inception_graph.pb", "", Size(224, 224), "softmax2",
-               target == DNN_TARGET_OPENCL ? "dnn/halide_scheduler_opencl_inception_5h.yml" :
-                                             "dnn/halide_scheduler_inception_5h.yml",
-               l1, lInf);
+    processNet("dnn/tensorflow_inception_graph.pb", "", Size(224, 224), "softmax2", l1, lInf);
     expectNoFallbacksFromIE(net);
     expectNoFallbacksFromCUDA(net);
-}
-
-TEST_P(DNNTestNetwork, ENet)
-{
-    applyTestTag(target == DNN_TARGET_CPU ? "" : CV_TEST_TAG_MEMORY_512MB);
-
-#if defined(INF_ENGINE_RELEASE) && INF_ENGINE_VER_MAJOR_LT(2023000000)
-    if (backend == DNN_BACKEND_INFERENCE_ENGINE_NN_BUILDER_2019)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_IE_NN_BUILDER);
-    if (backend == DNN_BACKEND_INFERENCE_ENGINE_NGRAPH)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_IE_NGRAPH);
-#endif
-    if (backend == DNN_BACKEND_OPENCV && target == DNN_TARGET_OPENCL_FP16)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_OPENCL_FP16);
-    if (backend == DNN_BACKEND_CUDA && target == DNN_TARGET_CUDA_FP16)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_CUDA_FP16);
-    if (backend == DNN_BACKEND_OPENCV && target == DNN_TARGET_CPU_FP16)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_CPU_FP16);
-    processNet("dnn/Enet-model-best.net", "", Size(512, 512), "l367_Deconvolution",
-               target == DNN_TARGET_OPENCL ? "dnn/halide_scheduler_opencl_enet.yml" :
-                                             "dnn/halide_scheduler_enet.yml",
-               2e-5, 0.15);
-    expectNoFallbacksFromCUDA(net);
-}
-
-TEST_P(DNNTestNetwork, MobileNet_SSD_Caffe)
-{
-    applyTestTag(CV_TEST_TAG_MEMORY_512MB);
-    if (backend == DNN_BACKEND_HALIDE)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_HALIDE);
-    Mat sample = imread(findDataFile("dnn/street.png"));
-    Mat inp = blobFromImage(sample, 1.0f / 127.5, Size(300, 300), Scalar(127.5, 127.5, 127.5), false);
-    float scoreDiff = (target == DNN_TARGET_OPENCL_FP16 || target == DNN_TARGET_MYRIAD || target == DNN_TARGET_CPU_FP16) ? 1.5e-2 : 0.0;
-    float iouDiff = (target == DNN_TARGET_MYRIAD) ? 0.063  : 0.0;
-    float detectionConfThresh = (target == DNN_TARGET_MYRIAD) ? 0.262  : FLT_MIN;
-         processNet("dnn/MobileNetSSD_deploy_19e3ec3.caffemodel", "dnn/MobileNetSSD_deploy_19e3ec3.prototxt",
-                    inp, "detection_out", "", scoreDiff, iouDiff, detectionConfThresh);
-    expectNoFallbacksFromIE(net);
-}
-
-TEST_P(DNNTestNetwork, MobileNet_SSD_Caffe_Different_Width_Height)
-{
-    if (backend == DNN_BACKEND_HALIDE)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_HALIDE);
-#if defined(INF_ENGINE_RELEASE) && INF_ENGINE_VER_MAJOR_EQ(2022010000)
-    // May hang on some configurations
-    if (backend == DNN_BACKEND_INFERENCE_ENGINE_NGRAPH && (target == DNN_TARGET_OPENCL || target == DNN_TARGET_OPENCL_FP16))
-        applyTestTag(target == DNN_TARGET_OPENCL ? CV_TEST_TAG_DNN_SKIP_IE_OPENCL : CV_TEST_TAG_DNN_SKIP_IE_OPENCL_FP16,
-            CV_TEST_TAG_DNN_SKIP_IE_NGRAPH, CV_TEST_TAG_DNN_SKIP_IE_VERSION
-        );
-#elif defined(INF_ENGINE_RELEASE) && INF_ENGINE_VER_MAJOR_EQ(2021040000)
-    // IE exception: Ngraph operation Transpose with name conv15_2_mbox_conf_perm has dynamic output shape on 0 port, but CPU plug-in supports only static shape
-    if (backend == DNN_BACKEND_INFERENCE_ENGINE_NGRAPH && (target == DNN_TARGET_OPENCL || target == DNN_TARGET_OPENCL_FP16))
-        applyTestTag(target == DNN_TARGET_OPENCL ? CV_TEST_TAG_DNN_SKIP_IE_OPENCL : CV_TEST_TAG_DNN_SKIP_IE_OPENCL_FP16,
-            CV_TEST_TAG_DNN_SKIP_IE_NGRAPH, CV_TEST_TAG_DNN_SKIP_IE_VERSION
-        );
-    if ((backend == DNN_BACKEND_INFERENCE_ENGINE_NN_BUILDER_2019 || backend == DNN_BACKEND_INFERENCE_ENGINE_NGRAPH) &&
-        target == DNN_TARGET_MYRIAD && getInferenceEngineVPUType() == CV_DNN_INFERENCE_ENGINE_VPU_TYPE_MYRIAD_X)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_IE_MYRIAD_X, CV_TEST_TAG_DNN_SKIP_IE_NGRAPH, CV_TEST_TAG_DNN_SKIP_IE_VERSION);
-#elif defined(INF_ENGINE_RELEASE)
-    if ((backend == DNN_BACKEND_INFERENCE_ENGINE_NN_BUILDER_2019 || backend == DNN_BACKEND_INFERENCE_ENGINE_NGRAPH) &&
-        target == DNN_TARGET_MYRIAD && getInferenceEngineVPUType() == CV_DNN_INFERENCE_ENGINE_VPU_TYPE_MYRIAD_X)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_IE_MYRIAD_X, CV_TEST_TAG_DNN_SKIP_IE_NGRAPH, CV_TEST_TAG_DNN_SKIP_IE_VERSION);
-#endif
-
-    Mat sample = imread(findDataFile("dnn/street.png"));
-    Mat inp = blobFromImage(sample, 1.0f / 127.5, Size(300, 560), Scalar(127.5, 127.5, 127.5), false);
-    float scoreDiff = 0.0, iouDiff = 0.0;
-    if (target == DNN_TARGET_OPENCL_FP16 || target == DNN_TARGET_MYRIAD || target == DNN_TARGET_CPU_FP16)
-    {
-        scoreDiff = 0.029;
-        iouDiff = 0.09;
-    }
-    else if (target == DNN_TARGET_CUDA_FP16)
-    {
-        scoreDiff = 0.03;
-        iouDiff = 0.08;
-    }
-    processNet("dnn/MobileNetSSD_deploy_19e3ec3.caffemodel", "dnn/MobileNetSSD_deploy_19e3ec3.prototxt",
-                inp, "detection_out", "", scoreDiff, iouDiff);
-    expectNoFallbacksFromIE(net);
 }
 
 TEST_P(DNNTestNetwork, MobileNet_SSD_v1_TensorFlow)
 {
     applyTestTag((target == DNN_TARGET_CPU || target == DNN_TARGET_CPU_FP16) ? "" : CV_TEST_TAG_MEMORY_512MB);
-    if (backend == DNN_BACKEND_HALIDE)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_HALIDE);
 
     Mat sample = imread(findDataFile("dnn/street.png"));
     Mat inp = blobFromImage(sample, 1.0f, Size(300, 300), Scalar(), false);
@@ -274,14 +201,12 @@ TEST_P(DNNTestNetwork, MobileNet_SSD_v1_TensorFlow)
         iouDiff = 0.08;
     }
     processNet("dnn/ssd_mobilenet_v1_coco_2017_11_17.pb", "dnn/ssd_mobilenet_v1_coco_2017_11_17.pbtxt",
-               inp, "detection_out", "", scoreDiff, iouDiff, detectionConfThresh);
+               inp, "detection_out", scoreDiff, iouDiff, detectionConfThresh);
     expectNoFallbacksFromIE(net);
 }
 
 TEST_P(DNNTestNetwork, MobileNet_SSD_v1_TensorFlow_Different_Width_Height)
 {
-    if (backend == DNN_BACKEND_HALIDE)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_HALIDE);
 #if defined(INF_ENGINE_RELEASE) && INF_ENGINE_VER_MAJOR_LT(2021040000)
     if ((backend == DNN_BACKEND_INFERENCE_ENGINE_NN_BUILDER_2019 || backend == DNN_BACKEND_INFERENCE_ENGINE_NGRAPH) &&
         target == DNN_TARGET_MYRIAD && getInferenceEngineVPUType() == CV_DNN_INFERENCE_ENGINE_VPU_TYPE_MYRIAD_X)
@@ -306,15 +231,13 @@ TEST_P(DNNTestNetwork, MobileNet_SSD_v1_TensorFlow_Different_Width_Height)
         iouDiff = 0.06;
     }
     processNet("dnn/ssd_mobilenet_v1_coco_2017_11_17.pb", "dnn/ssd_mobilenet_v1_coco_2017_11_17.pbtxt",
-               inp, "detection_out", "", scoreDiff, iouDiff);
+               inp, "detection_out", scoreDiff, iouDiff);
     expectNoFallbacksFromIE(net);
 }
 
 TEST_P(DNNTestNetwork, MobileNet_SSD_v2_TensorFlow)
 {
     applyTestTag(target == DNN_TARGET_CPU ? CV_TEST_TAG_MEMORY_512MB : CV_TEST_TAG_MEMORY_1GB);
-    if (backend == DNN_BACKEND_HALIDE)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_HALIDE);
 
     Mat sample = imread(findDataFile("dnn/street.png"));
     Mat inp = blobFromImage(sample, 1.0f, Size(300, 300), Scalar(), false);
@@ -330,7 +253,7 @@ TEST_P(DNNTestNetwork, MobileNet_SSD_v2_TensorFlow)
         iouDiff = 0.07;
     }
     processNet("dnn/ssd_mobilenet_v2_coco_2018_03_29.pb", "dnn/ssd_mobilenet_v2_coco_2018_03_29.pbtxt",
-               inp, "detection_out", "", scoreDiff, iouDiff, 0.25);
+               inp, "detection_out", scoreDiff, iouDiff, 0.25);
     expectNoFallbacksFromIE(net);
 }
 
@@ -341,8 +264,18 @@ TEST_P(DNNTestNetwork, SSD_VGG16)
         CV_TEST_TAG_LONG,
         CV_TEST_TAG_DEBUG_VERYLONG
     );
-    if (backend == DNN_BACKEND_HALIDE && target == DNN_TARGET_CPU)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_HALIDE);  // TODO HALIDE_CPU
+
+    // This converted SSD model relies on layers the OpenVINO backend can't run.
+    if (backend == DNN_BACKEND_INFERENCE_ENGINE_NGRAPH)
+        applyTestTag(CV_TEST_TAG_DNN_SKIP_IE_NGRAPH);
+
+    auto engine_forced = static_cast<cv::dnn::EngineType>(
+        cv::utils::getConfigurationParameterSizeT("OPENCV_FORCE_DNN_ENGINE", cv::dnn::ENGINE_AUTO));
+    if (engine_forced == cv::dnn::ENGINE_CLASSIC)
+    {
+        applyTestTag(CV_TEST_TAG_DNN_SKIP_PARSER);
+        return;
+    }
 
     Mat sample = imread(findDataFile("dnn/street.png"));
     Mat inp = blobFromImage(sample, 1.0f, Size(300, 300), Scalar(), false);
@@ -363,8 +296,8 @@ TEST_P(DNNTestNetwork, SSD_VGG16)
         iouDiff = 0.13;
     }
 
-    processNet("dnn/VGG_ILSVRC2016_SSD_300x300_iter_440000.caffemodel",
-               "dnn/ssd_vgg16.prototxt", inp, "detection_out", "", scoreDiff,
+    processNet("dnn/onnx/models/ssd_vgg16.onnx", "",
+               inp, "detection_out", scoreDiff,
                iouDiff, 0.2, false);
     expectNoFallbacksFromIE(net);
 }
@@ -373,8 +306,6 @@ TEST_P(DNNTestNetwork, OpenPose_pose_coco)
 {
     applyTestTag(CV_TEST_TAG_LONG, (target == DNN_TARGET_CPU ? CV_TEST_TAG_MEMORY_1GB : CV_TEST_TAG_MEMORY_2GB),
                  CV_TEST_TAG_DEBUG_LONG);
-    if (backend == DNN_BACKEND_HALIDE)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_HALIDE);
 #if defined(INF_ENGINE_RELEASE) && INF_ENGINE_VER_MAJOR_LE(2018050000)
     if (backend == DNN_BACKEND_INFERENCE_ENGINE_NN_BUILDER_2019 && target == DNN_TARGET_MYRIAD
             && getInferenceEngineVPUType() == CV_DNN_INFERENCE_ENGINE_VPU_TYPE_MYRIAD_X)
@@ -383,8 +314,8 @@ TEST_P(DNNTestNetwork, OpenPose_pose_coco)
 
     const float l1 = (target == DNN_TARGET_MYRIAD) ? 0.009 : 0.0;
     const float lInf = (target == DNN_TARGET_MYRIAD) ? 0.09 : 0.0;
-    processNet("dnn/openpose_pose_coco.caffemodel", "dnn/openpose_pose_coco.prototxt",
-               Size(46, 46), "", "", l1, lInf);
+    processNet("dnn/onnx/models/openpose_pose_coco.onnx", "",
+               Size(46, 46), "", l1, lInf);
     expectNoFallbacksFromIE(net);
     expectNoFallbacksFromCUDA(net);
 }
@@ -393,8 +324,6 @@ TEST_P(DNNTestNetwork, OpenPose_pose_mpi)
 {
     applyTestTag(CV_TEST_TAG_LONG, (target == DNN_TARGET_CPU ? CV_TEST_TAG_MEMORY_1GB : CV_TEST_TAG_MEMORY_2GB),
                  CV_TEST_TAG_DEBUG_VERYLONG);
-    if (backend == DNN_BACKEND_HALIDE)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_HALIDE);
 #if defined(INF_ENGINE_RELEASE) && INF_ENGINE_VER_MAJOR_LE(2018050000)
     if (backend == DNN_BACKEND_INFERENCE_ENGINE_NN_BUILDER_2019 && target == DNN_TARGET_MYRIAD
             && getInferenceEngineVPUType() == CV_DNN_INFERENCE_ENGINE_VPU_TYPE_MYRIAD_X)
@@ -404,8 +333,8 @@ TEST_P(DNNTestNetwork, OpenPose_pose_mpi)
     // output range: [-0.001, 0.97]
     const float l1 = (target == DNN_TARGET_MYRIAD) ? 0.02 : 0.0;
     const float lInf = (target == DNN_TARGET_MYRIAD || target == DNN_TARGET_OPENCL_FP16 || target == DNN_TARGET_CPU_FP16) ? 0.2 : 0.0;
-    processNet("dnn/openpose_pose_mpi.caffemodel", "dnn/openpose_pose_mpi.prototxt",
-               Size(46, 46), "", "", l1, lInf);
+    processNet("dnn/onnx/models/openpose_pose_mpi.onnx", "",
+               Size(46, 46), "", l1, lInf);
     expectNoFallbacksFromIE(net);
     expectNoFallbacksFromCUDA(net);
 }
@@ -413,47 +342,28 @@ TEST_P(DNNTestNetwork, OpenPose_pose_mpi)
 TEST_P(DNNTestNetwork, OpenPose_pose_mpi_faster_4_stages)
 {
     applyTestTag(CV_TEST_TAG_LONG, CV_TEST_TAG_MEMORY_1GB);
-    if (backend == DNN_BACKEND_HALIDE)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_HALIDE);
 #if defined(INF_ENGINE_RELEASE) && INF_ENGINE_VER_MAJOR_LE(2018050000)
     if (backend == DNN_BACKEND_INFERENCE_ENGINE_NN_BUILDER_2019 && target == DNN_TARGET_MYRIAD
             && getInferenceEngineVPUType() == CV_DNN_INFERENCE_ENGINE_VPU_TYPE_MYRIAD_X)
         applyTestTag(CV_TEST_TAG_DNN_SKIP_IE_MYRIAD_X, CV_TEST_TAG_DNN_SKIP_IE_VERSION);
 #endif
 
-    // The same .caffemodel but modified .prototxt
     // See https://github.com/CMU-Perceptual-Computing-Lab/openpose/blob/master/src/openpose/pose/poseParameters.cpp
-    processNet("dnn/openpose_pose_mpi.caffemodel", "dnn/openpose_pose_mpi_faster_4_stages.prototxt",
+    processNet("dnn/onnx/models/openpose_pose_mpi_faster_4_stages.onnx", "",
                Size(46, 46));
     expectNoFallbacksFromIE(net);
     expectNoFallbacksFromCUDA(net);
 }
 
-TEST_P(DNNTestNetwork, OpenFace)
+TEST_P(DNNTestNetwork, YuNet)
 {
-#if defined(INF_ENGINE_RELEASE)
-#if INF_ENGINE_VER_MAJOR_EQ(2018050000)
-    if (backend == DNN_BACKEND_INFERENCE_ENGINE_NN_BUILDER_2019 && target == DNN_TARGET_MYRIAD)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_IE_MYRIAD, CV_TEST_TAG_DNN_SKIP_IE_VERSION);
-#endif
-#endif
-    if (backend == DNN_BACKEND_HALIDE)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_HALIDE);
-    const float l1 = (target == DNN_TARGET_MYRIAD) ? 0.0024 : 0.0;
-    const float lInf = (target == DNN_TARGET_MYRIAD) ? 0.0071 : 0.0;
-    processNet("dnn/openface_nn4.small2.v1.t7", "", Size(96, 96), "", "", l1, lInf);
-
-    expectNoFallbacksFromCUDA(net);
-}
-
-TEST_P(DNNTestNetwork, opencv_face_detector)
-{
-    if (backend == DNN_BACKEND_HALIDE)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_HALIDE);
-    Mat img = imread(findDataFile("gpu/lbpcascade/er.png"));
-    Mat inp = blobFromImage(img, 1.0, Size(), Scalar(104.0, 177.0, 123.0), false, false);
-    processNet("dnn/opencv_face_detector.caffemodel", "dnn/opencv_face_detector.prototxt",
-               inp, "detection_out");
+    double l1 = 0.0, lInf = 0.0;
+    if (target == DNN_TARGET_CUDA_FP16 || target == DNN_TARGET_OPENCL_FP16 || target == DNN_TARGET_CPU_FP16)
+    {
+        l1 = 0.01;
+        lInf = 0.05;
+    }
+    processNet("dnn/onnx/models/yunet-202605.onnx", "", Size(320, 320), "", l1, lInf);
     expectNoFallbacksFromIE(net);
 }
 
@@ -472,8 +382,6 @@ TEST_P(DNNTestNetwork, Inception_v2_SSD_TensorFlow)
     if (backend == DNN_BACKEND_INFERENCE_ENGINE_NN_BUILDER_2019 && target == DNN_TARGET_MYRIAD)
         applyTestTag(CV_TEST_TAG_DNN_SKIP_IE_MYRIAD, CV_TEST_TAG_DNN_SKIP_IE_NN_BUILDER, CV_TEST_TAG_DNN_SKIP_IE_VERSION);
 #endif
-    if (backend == DNN_BACKEND_HALIDE)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_HALIDE);
     Mat sample = imread(findDataFile("dnn/street.png"));
     Mat inp = blobFromImage(sample, 1.0f, Size(300, 300), Scalar(), false);
     float scoreDiff = 0.0, iouDiff = 0.0;
@@ -488,15 +396,13 @@ TEST_P(DNNTestNetwork, Inception_v2_SSD_TensorFlow)
         iouDiff = 0.08;
     }
     processNet("dnn/ssd_inception_v2_coco_2017_11_17.pb", "dnn/ssd_inception_v2_coco_2017_11_17.pbtxt",
-               inp, "detection_out", "", scoreDiff, iouDiff);
+               inp, "detection_out", scoreDiff, iouDiff);
     expectNoFallbacksFromIE(net);
 }
 
 TEST_P(DNNTestNetwork, DenseNet_121)
 {
     applyTestTag(CV_TEST_TAG_MEMORY_512MB);
-    if (backend == DNN_BACKEND_HALIDE)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_HALIDE);
     // Reference output values are in range [-3.807, 4.605]
     float l1 = 0.0, lInf = 0.0;
     if (target == DNN_TARGET_OPENCL_FP16 || target == DNN_TARGET_CPU_FP16)
@@ -513,10 +419,10 @@ TEST_P(DNNTestNetwork, DenseNet_121)
     }
     else if (target == DNN_TARGET_CUDA_FP16)
     {
-        l1 = 0.008;
-        lInf = 0.06;
+        l1 = 2e-2;
+        lInf = 9e-2;
     }
-    processNet("dnn/DenseNet_121.caffemodel", "dnn/DenseNet_121.prototxt", Size(224, 224), "", "", l1, lInf);
+    processNet("dnn/onnx/models/densenet121.onnx", "", Size(224, 224), "", l1, lInf);
     if (target != DNN_TARGET_MYRIAD || getInferenceEngineVPUType() != CV_DNN_INFERENCE_ENGINE_VPU_TYPE_MYRIAD_X)
         expectNoFallbacksFromIE(net);
     expectNoFallbacksFromCUDA(net);
@@ -526,8 +432,6 @@ TEST_P(DNNTestNetwork, FastNeuralStyle_eccv16)
 {
     applyTestTag(CV_TEST_TAG_MEMORY_512MB, CV_TEST_TAG_DEBUG_VERYLONG);
 
-    if (backend == DNN_BACKEND_HALIDE)
-        applyTestTag(CV_TEST_TAG_DNN_SKIP_HALIDE);
     if (backend == DNN_BACKEND_INFERENCE_ENGINE_NN_BUILDER_2019 && target == DNN_TARGET_MYRIAD)
         applyTestTag(CV_TEST_TAG_DNN_SKIP_IE_MYRIAD, CV_TEST_TAG_DNN_SKIP_IE_NN_BUILDER);
     if (backend == DNN_BACKEND_INFERENCE_ENGINE_NGRAPH && target == DNN_TARGET_MYRIAD)
@@ -541,28 +445,42 @@ TEST_P(DNNTestNetwork, FastNeuralStyle_eccv16)
 #endif
 
     Mat img = imread(findDataFile("dnn/googlenet_1.png"));
-    Mat inp = blobFromImage(img, 1.0, Size(320, 240), Scalar(103.939, 116.779, 123.68), false, false);
-    // Output image has values in range [-143.526, 148.539].
-    float l1 = 2e-4, lInf = 2.4e-3;
-    if (target == DNN_TARGET_OPENCL_FP16 || target == DNN_TARGET_MYRIAD)
+    Mat inp = blobFromImage(img, 1.0, Size(224, 224), Scalar(0.0, 0.0, 0.0), true, false);
+    // Output image has values in range [0.0, 255.0].
+    float l1 = 6e-4, lInf = 1e-2;
+    if (target == DNN_TARGET_MYRIAD)
     {
         l1 = 0.4;
         lInf = 7.46;
     }
+    else if (target == DNN_TARGET_CUDA)
+    {
+        l1 = 8e-4;
+        lInf = 2e-2;
+    }
     else if (target == DNN_TARGET_CUDA_FP16)
     {
-        l1 = 0.3;
-        lInf = 7.6;
+        l1 = 0.9;
+        lInf = 16;
     }
     else if (target == DNN_TARGET_CPU_FP16)
     {
         l1 = 0.4;
-        lInf = 22.;
+        lInf = 26.;
     }
     else if (target == DNN_TARGET_VULKAN)
     {
         l1 = 0.4;
         lInf = 7.46;
+    }
+    else if (backend == DNN_BACKEND_OPENCV && target == DNN_TARGET_OPENCL)
+    {
+        l1 = 5.5e-4;
+    }
+    else if (backend == DNN_BACKEND_OPENCV && target == DNN_TARGET_OPENCL_FP16)
+    {
+        l1 = 0.86;
+        lInf = 16;
     }
 
 #if defined(INF_ENGINE_RELEASE) && INF_ENGINE_VER_MAJOR_EQ(2022010000)
@@ -578,14 +496,19 @@ TEST_P(DNNTestNetwork, FastNeuralStyle_eccv16)
 #endif
 
 
-    processNet("dnn/fast_neural_style_eccv16_starry_night.t7", "", inp, "", "", l1, lInf);
+    processNet("dnn/mosaic-9.onnx", "", inp, "", l1, lInf);
 #if defined(HAVE_INF_ENGINE) && INF_ENGINE_VER_MAJOR_GE(2019010000)
     expectNoFallbacksFromIE(net);
 #endif
+
     expectNoFallbacksFromCUDA(net);
 }
 
-INSTANTIATE_TEST_CASE_P(/*nothing*/, DNNTestNetwork, dnnBackendsAndTargets(true, true, false, true, true));
+INSTANTIATE_TEST_CASE_P(/*nothing*/, DNNTestNetwork, dnnBackendsAndTargets(/* withInferenceEngine = */ true,
+                                                                           /* obsolete_withHalide = */ false,
+                                                                           /* withCpuOCV = */          false,
+                                                                           /* withVkCom = */           true,
+                                                                           /* withCUDA = */            true));
 
 /*
     Backend tests of layers

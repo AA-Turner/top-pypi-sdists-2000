@@ -43,6 +43,7 @@
 #include "precomp.hpp"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/ml.hpp"
+#include "opencv2/geometry.hpp"
 #include <limits>
 #include <fstream>
 #include <queue>
@@ -1891,6 +1892,7 @@ public:
                      N(_Num),
                      members(_members),
                      postprocessfn(NULL),
+                     distfn(NULL),
                      V(NULL)
     {
         switch (method) {

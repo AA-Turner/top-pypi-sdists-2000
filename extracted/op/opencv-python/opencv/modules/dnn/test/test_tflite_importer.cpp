@@ -31,7 +31,7 @@ public:
 void testInputShapes(const Net& net, const std::vector<Mat>& inps) {
     std::vector<MatShape> inLayerShapes;
     std::vector<MatShape> outLayerShapes;
-    net.getLayerShapes(MatShape(), 0, inLayerShapes, outLayerShapes);
+    net.getLayerShapes(MatShape(), CV_32F, 0, inLayerShapes, outLayerShapes);
     ASSERT_EQ(inLayerShapes.size(), inps.size());
 
     for (int i = 0; i < inps.size(); ++i) {
@@ -94,7 +94,7 @@ TEST_P(Test_TFLite, face_landmark)
 {
     if (backend == DNN_BACKEND_CUDA && target == DNN_TARGET_CUDA_FP16)
         applyTestTag(CV_TEST_TAG_DNN_SKIP_CUDA_FP16);
-    double l1 = 2.2e-5, lInf = 2e-4;
+    double l1 = 0.066, lInf = 0.21;
     if (target == DNN_TARGET_CPU_FP16 || target == DNN_TARGET_CUDA_FP16 || target == DNN_TARGET_OPENCL_FP16 || target == DNN_TARGET_MYRIAD ||
         (backend == DNN_BACKEND_INFERENCE_ENGINE_NGRAPH && target == DNN_TARGET_OPENCL))
     {
@@ -120,7 +120,7 @@ TEST_P(Test_TFLite, face_detection_short_range)
 // https://google.github.io/mediapipe/solutions/selfie_segmentation
 TEST_P(Test_TFLite, selfie_segmentation)
 {
-    double l1 = 0, lInf = 0;
+    double l1 = 0.002, lInf = 0.24;
     if (target == DNN_TARGET_CPU_FP16 || target == DNN_TARGET_CUDA_FP16 || target == DNN_TARGET_OPENCL_FP16 || target == DNN_TARGET_MYRIAD ||
         (backend == DNN_BACKEND_INFERENCE_ENGINE_NGRAPH && target == DNN_TARGET_OPENCL))
     {
@@ -156,6 +156,9 @@ TEST_P(Test_TFLite, max_unpooling)
     net.setPreferableBackend(backend);
     net.setPreferableTarget(target);
 
+    if (net.getMainGraph())
+        throw SkipTestException("The new dnn engine doesn't support forward to specified layers"); // https://github.com/opencv/opencv/issues/26349
+
     Mat input = imread(findDataFile("cv/shared/lena.png"));
     cvtColor(input, input, COLOR_BGR2RGBA);
     input = input.mul(Scalar(1, 1, 1, 0));
@@ -186,7 +189,7 @@ TEST_P(Test_TFLite, max_unpooling)
     for (int c = 0; c < 32; ++c) {
         float *poolInpData = poolInp.ptr<float>(0, c);
         float *poolOutData = poolOut.ptr<float>(0, c);
-        float *poolIdsData = poolIds.ptr<float>(0, c);
+        int64_t *poolIdsData = poolIds.ptr<int64_t>(0, c);
         float *unpoolInpData = unpoolInp.ptr<float>(0, c);
         float *unpoolOutData = unpoolOut.ptr<float>(0, c);
         for (int y = 0; y < 64; ++y) {
@@ -202,7 +205,7 @@ TEST_P(Test_TFLite, max_unpooling)
                 }
                 EXPECT_EQ(poolInpData[maxIdx], poolOutData[y * 64 + x]) << errMsg;
                 if (backend != DNN_BACKEND_INFERENCE_ENGINE_NGRAPH) {
-                    EXPECT_EQ(poolIdsData[y * 64 + x], (float)maxIdx) << errMsg;
+                    EXPECT_EQ(poolIdsData[y * 64 + x], (int64_t)maxIdx) << errMsg;
                 }
                 EXPECT_EQ(unpoolOutData[maxIdx], unpoolInpData[y * 64 + x]) << errMsg;
             }
@@ -211,6 +214,9 @@ TEST_P(Test_TFLite, max_unpooling)
 }
 
 TEST_P(Test_TFLite, EfficientDet_int8) {
+    if (backend == DNN_BACKEND_INFERENCE_ENGINE_NGRAPH)
+        applyTestTag(CV_TEST_TAG_DNN_SKIP_IE_NGRAPH); // TODO: fix this test for OpenVINO
+
     if (target != DNN_TARGET_CPU || (backend != DNN_BACKEND_OPENCV &&
         backend != DNN_BACKEND_TIMVX && backend != DNN_BACKEND_INFERENCE_ENGINE_NGRAPH)) {
         throw SkipTestException("Only OpenCV, TimVX and OpenVINO targets support INT8 on CPU");
@@ -281,6 +287,62 @@ TEST_P(Test_TFLite, face_blendshapes)
 {
     Mat inp = blobFromNPY(findDataFile("dnn/tflite/face_blendshapes_inp.npy"));
     testModel("face_blendshapes", inp);
+}
+
+TEST_P(Test_TFLite, maximum)
+{
+    Net net = readNetFromTFLite(findDataFile("dnn/tflite/maximum.tflite"));
+
+    net.setPreferableBackend(backend);
+    net.setPreferableTarget(target);
+
+    Mat input_x = blobFromNPY(findDataFile("dnn/tflite/maximum_input_x.npy"));
+    Mat input_y = blobFromNPY(findDataFile("dnn/tflite/maximum_input_y.npy"));
+
+    net.setInput(input_x, "x");
+    net.setInput(input_y, "y");
+
+    Mat out = net.forward();
+    Mat ref = blobFromNPY(findDataFile("dnn/tflite/maximum_output.npy"));
+
+    double l1 = 1e-5;
+    double lInf = 1e-4;
+
+    if (target == DNN_TARGET_CUDA_FP16 || target == DNN_TARGET_OPENCL_FP16)
+    {
+        l1 = 1e-3;
+        lInf = 1e-3;
+    }
+
+    normAssert(ref, out, "", l1, lInf);
+}
+
+TEST_P(Test_TFLite, minimum)
+{
+    Net net = readNetFromTFLite(findDataFile("dnn/tflite/minimum.tflite"));
+
+    net.setPreferableBackend(backend);
+    net.setPreferableTarget(target);
+
+    Mat input_x = blobFromNPY(findDataFile("dnn/tflite/minimum_input_x.npy"));
+    Mat input_y = blobFromNPY(findDataFile("dnn/tflite/minimum_input_y.npy"));
+
+    net.setInput(input_x, "x");
+    net.setInput(input_y, "y");
+
+    Mat out = net.forward();
+    Mat ref = blobFromNPY(findDataFile("dnn/tflite/minimum_output.npy"));
+
+    double l1 = 1e-5;
+    double lInf = 1e-4;
+
+    if (target == DNN_TARGET_CUDA_FP16 || target == DNN_TARGET_OPENCL_FP16)
+    {
+        l1 = 1e-3;
+        lInf = 1e-3;
+    }
+
+    normAssert(ref, out, "", l1, lInf);
 }
 
 INSTANTIATE_TEST_CASE_P(/**/, Test_TFLite, dnnBackendsAndTargets());

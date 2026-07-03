@@ -112,6 +112,12 @@ static const struct VideoBackendInfo builtin_backends[] =
     DECLARE_STATIC_BACKEND(CAP_V4L, "V4L_BSD", MODE_CAPTURE_ALL, create_V4L_capture_file, create_V4L_capture_cam, 0)
 #endif
 
+    // FFmpeg webcamera by underlying backend (DShow, V4L2, AVFoundation)
+#ifdef HAVE_FFMPEG
+    DECLARE_STATIC_BACKEND(CAP_FFMPEG, "FFMPEG", MODE_CAPTURE_BY_INDEX, 0, cvCreateCameraCapture_FFMPEG_proxy, 0)
+#elif defined(ENABLE_PLUGINS) || defined(HAVE_FFMPEG_WRAPPER)
+    DECLARE_DYNAMIC_BACKEND(CAP_FFMPEG, "FFMPEG", MODE_CAPTURE_BY_INDEX)
+#endif
 
     // RGB-D universal
 #ifdef HAVE_OPENNI2
@@ -190,17 +196,11 @@ static const struct VideoBackendInfo builtin_backends[] =
     // dropped backends: MIL, TYZX
 };
 
+#if 0 // deprecated_backends is empty in 5.x for now
 static const struct VideoDeprecatedBackendInfo deprecated_backends[] =
 {
-#ifdef _WIN32
-    {CAP_VFW, "Video for Windows"},
-#endif
-    {CAP_QT, "QuickTime"},
-    {CAP_UNICAP, "Unicap"},
-    {CAP_OPENNI, "OpenNI"},
-    {CAP_OPENNI_ASUS, "OpenNI"},
-    {CAP_GIGANETIX, "GigEVisionSDK"}
 };
+#endif
 
 bool sortByPriority(const VideoBackendInfo &lhs, const VideoBackendInfo &rhs)
 {
@@ -387,12 +387,15 @@ std::vector<VideoBackendInfo> getAvailableBackends_Writer()
 }
 
 bool checkDeprecatedBackend(int api) {
+    CV_UNUSED(api);
+#if 0 // deprecated_backends is empty in 5.x for now
     const int M = sizeof(deprecated_backends) / sizeof(deprecated_backends[0]);
     for (size_t i = 0; i < M; i++)
     {
         if (deprecated_backends[i].id == api)
             return true;
     }
+#endif
     return false;
 }
 
@@ -407,14 +410,14 @@ cv::String getBackendName(VideoCaptureAPIs api)
         if (backend.id == api)
             return backend.name;
     }
-
+#if 0 // deprecated_backends is empty in 5.x for now
     const int M = sizeof(deprecated_backends) / sizeof(deprecated_backends[0]);
     for (size_t i = 0; i < M; i++)
     {
         if (deprecated_backends[i].id == api)
             return deprecated_backends[i].name;
     }
-
+#endif
     return cv::format("UnknownVideoAPI(%d)", (int)api);
 }
 

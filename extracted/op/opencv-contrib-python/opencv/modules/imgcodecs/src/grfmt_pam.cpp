@@ -55,6 +55,7 @@
 
 #include "utils.hpp"
 #include "grfmt_pam.hpp"
+#include "opencv2/core/utils/logger.hpp"
 
 namespace cv {
 
@@ -480,6 +481,23 @@ bool PAMDecoder::readHeader()
             }
         } while (fieldtype != PAM_HEADER_ENDHDR);
 
+        if (selected_fmt != IMWRITE_PAM_FORMAT_NULL && flds_depth) {
+            if (selected_fmt == IMWRITE_PAM_FORMAT_BLACKANDWHITE && m_channels != 1) {
+                CV_Error(Error::StsError, "fmt is IMWRITE_PAM_FORMAT_BLACKANDWHITE but number of channels is not 1");
+            }
+            if (selected_fmt == IMWRITE_PAM_FORMAT_GRAYSCALE && m_channels != 1) {
+                CV_Error(Error::StsError, "fmt is IMWRITE_PAM_FORMAT_GRAYSCALE but number of channels is not 1");
+            }
+            if (selected_fmt == IMWRITE_PAM_FORMAT_GRAYSCALE_ALPHA && m_channels != 2) {
+                CV_Error(Error::StsError, "fmt is IMWRITE_PAM_FORMAT_GRAYSCALE_ALPHA but number of channels is not 2");
+            }
+            if (selected_fmt == IMWRITE_PAM_FORMAT_RGB && m_channels != 3) {
+                CV_Error(Error::StsError, "fmt is IMWRITE_PAM_FORMAT_RGB but number of channels is not 3");
+            }
+            if (selected_fmt == IMWRITE_PAM_FORMAT_RGB_ALPHA && m_channels != 4) {
+                CV_Error(Error::StsError, "fmt is IMWRITE_PAM_FORMAT_RGB_ALPHA but number of channels is not 4");
+            }
+        }
         if (flds_endhdr && flds_height && flds_width && flds_depth && flds_maxval)
         {
             if (selected_fmt == IMWRITE_PAM_FORMAT_NULL)
@@ -657,6 +675,7 @@ PAMEncoder::PAMEncoder()
 {
     m_description = "Portable arbitrary format (*.pam)";
     m_buf_supported = true;
+    m_supported_encode_key = {IMWRITE_PAM_TUPLETYPE};
 }
 
 
@@ -689,12 +708,25 @@ bool PAMEncoder::write( const Mat& img, const std::vector<int>& params )
     int x, y, tmp, bufsize = 256;
 
     /* parse save file type */
-    for( size_t i = 0; i < params.size(); i += 2 )
+    for( size_t i = 0; i < params.size(); i += 2 ) {
+        const int value = params[i+1];
         if( params[i] == IMWRITE_PAM_TUPLETYPE ) {
-            if ( params[i+1] > IMWRITE_PAM_FORMAT_NULL &&
-                 params[i+1] < (int) PAM_FORMATS_NO)
-                fmt = &formats[params[i+1]];
+            switch(value) {
+                case IMWRITE_PAM_FORMAT_NULL:
+                case IMWRITE_PAM_FORMAT_BLACKANDWHITE:
+                case IMWRITE_PAM_FORMAT_GRAYSCALE:
+                case IMWRITE_PAM_FORMAT_GRAYSCALE_ALPHA:
+                case IMWRITE_PAM_FORMAT_RGB:
+                case IMWRITE_PAM_FORMAT_RGB_ALPHA:
+                    fmt = &formats[value];
+                    break;
+                default:
+                    CV_LOG_WARNING(nullptr, cv::format("The value(%d) for IMWRITE_PAM_TUPLETYPE must be one of ImwritePAMFlags. It is ignored", value));
+                    fmt = nullptr;
+                    break;
+            }
         }
+    }
 
     if( m_buf )
     {

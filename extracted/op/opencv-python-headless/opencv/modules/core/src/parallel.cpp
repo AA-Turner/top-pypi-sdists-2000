@@ -465,10 +465,6 @@ namespace {
 static inline int _initMaxThreads()
 {
     int maxThreads = omp_get_max_threads();
-    if (!utils::getConfigurationParameterBool("OPENCV_FOR_OPENMP_DYNAMIC_DISABLE", false))
-    {
-        omp_set_dynamic(1);
-    }
     return maxThreads;
 }
 static int numThreadsMax = _initMaxThreads();
@@ -1054,18 +1050,3 @@ const char* currentParallelFramework()
 }
 
 }  // namespace cv::
-
-CV_IMPL void cvSetNumThreads(int nt)
-{
-    cv::setNumThreads(nt);
-}
-
-CV_IMPL int cvGetNumThreads()
-{
-    return cv::getNumThreads();
-}
-
-CV_IMPL int cvGetThreadNum()
-{
-    return cv::getThreadNum();
-}

@@ -4,6 +4,7 @@
  */
 
 #include <opencv2/core.hpp>
+#include <opencv2/geometry.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 #include <iostream>
@@ -41,10 +42,11 @@ int main(int argc, char *argv[])
 
     //! [sharp]
     // Create a kernel that we will use to sharpen our image
-    Mat kernel = (Mat_<float>(3,3) <<
-                  1,  1, 1,
-                  1, -8, 1,
-                  1,  1, 1); // an approximation of second derivative, a quite strong kernel
+    Mat kernel = Mat_<float>({3,3}, {
+        1,  1, 1,
+        1, -8, 1,
+        1,  1, 1
+    }); // an approximation of second derivative, a quite strong kernel
 
     // do the laplacian filtering as it is
     // well, we need to convert everything in something more deeper then CV_8U

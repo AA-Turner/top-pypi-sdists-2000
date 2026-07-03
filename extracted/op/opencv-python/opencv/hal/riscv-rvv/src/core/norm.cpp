@@ -313,7 +313,7 @@ struct NormL2_RVV<short, double> {
             auto v_mul = __riscv_vwmul(v, v, vl);
             s = __riscv_vfadd_tu(s, s, __riscv_vfwcvt_f(v_mul, vl), vl);
         }
-        return __riscv_vfmv_f(__riscv_vfredosum(s, __riscv_vfmv_s_f_f64m1(0, __riscv_vsetvlmax_e32m1()), vlmax));
+        return __riscv_vfmv_f(__riscv_vfredosum(s, __riscv_vfmv_s_f_f64m1(0, __riscv_vsetvlmax_e64m1()), vlmax));
     }
 };
 
@@ -695,7 +695,7 @@ struct MaskedNormL2_RVV<short, double> {
                 s = __riscv_vfadd_tumu(b, s, s, __riscv_vfwcvt_f(b, v_mul, vl), vl);
             }
         }
-        return __riscv_vfmv_f(__riscv_vfredosum(s, __riscv_vfmv_s_f_f64m1(0, __riscv_vsetvlmax_e32m1()), vlmax));
+        return __riscv_vfmv_f(__riscv_vfredosum(s, __riscv_vfmv_s_f_f64m1(0, __riscv_vsetvlmax_e64m1()), vlmax));
     }
 };
 
@@ -977,25 +977,27 @@ int norm(const uchar* src, size_t src_step, const uchar* mask, size_t mask_step,
         return CV_HAL_ERROR_NOT_IMPLEMENTED;
     }
 
-    // [FIXME] append 0's when merging to 5.x
     static NormFunc norm_tab[3][CV_DEPTH_MAX] = {
         {
             (NormFunc)(normInf_8u), (NormFunc)(normInf_8s),
             (NormFunc)(normInf_16u), (NormFunc)(normInf_16s),
             (NormFunc)(normInf_32s), (NormFunc)(normInf_32f),
             (NormFunc)(normInf_64f), 0,
+            0, 0, 0, 0, 0, 0,
         },
         {
             (NormFunc)(normL1_8u), (NormFunc)(normL1_8s),
             (NormFunc)(normL1_16u), (NormFunc)(normL1_16s),
             (NormFunc)(normL1_32s), (NormFunc)(normL1_32f),
             (NormFunc)(normL1_64f), 0,
+            0, 0, 0, 0, 0, 0,
         },
         {
             (NormFunc)(normL2_8u), (NormFunc)(normL2_8s),
             (NormFunc)(normL2_16u), (NormFunc)(normL2_16s),
             (NormFunc)(normL2_32s), (NormFunc)(normL2_32f),
             (NormFunc)(normL2_64f), 0,
+            0, 0, 0, 0, 0, 0,
         },
     };
 

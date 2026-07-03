@@ -44,7 +44,8 @@
 #define OPENCV_STITCHING_EXPOSURE_COMPENSATE_HPP
 
 #if defined(NO)
-#  warning Detected Apple 'NO' macro definition, it can cause build conflicts. Please, include this header before any Apple headers.
+#undef NO
+//#warning Detected Apple 'NO' macro definition, it can cause build conflicts. Please, include this header before any Apple headers.
 #endif
 
 #include "opencv2/core.hpp"
@@ -187,7 +188,7 @@ public:
 
 protected:
     template<class Compensator>
-    void feed(const std::vector<Point> &corners, const std::vector<UMat> &images,
+    void feedWithStrategy(const std::vector<Point> &corners, const std::vector<UMat> &images,
               const std::vector<std::pair<UMat,uchar> > &masks);
 
 private:

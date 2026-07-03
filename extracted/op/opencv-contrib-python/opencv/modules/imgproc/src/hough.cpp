@@ -228,7 +228,7 @@ HoughLinesStandard( InputArray src, OutputArray lines, int type,
         int idx = _sort_buf[i];
         int n = cvFloor(idx*scale) - 1;
         int r = idx - (n+1)*(numrho+2) - 1;
-        line.rho = (r - (numrho - 1)*0.5f) * rho;
+        line.rho = (r - (numrho - 1)/2) * rho;
         line.angle = static_cast<float>(min_theta) + n * theta;
         if (type == CV_32FC2)
         {
@@ -349,7 +349,7 @@ HoughLinesSDiv( InputArray image, OutputArray lines, int type,
                 xc = (float) col + 0.5f;
 
                 /* Update the accumulator */
-                t = (float) fabs( cvFastArctan( yc, xc ) * d2r );
+                t = (float) fabs( fastAtan2( yc, xc ) * d2r );
                 r = (float) std::sqrt( (double)xc * xc + (double)yc * yc );
                 r0 = r * irho;
                 ti0 = cvFloor( (t + CV_PI*0.5) * itheta );
@@ -417,7 +417,7 @@ HoughLinesSDiv( InputArray image, OutputArray lines, int type,
                     xc = (float) x[index] + 0.5f;
 
                     // Update the accumulator
-                    t = (float) fabs( cvFastArctan( yc, xc ) * d2r );
+                    t = (float) fabs( fastAtan2( yc, xc ) * d2r );
                     r = (float) std::sqrt( (double)xc * xc + (double)yc * yc ) * isrho;
                     ti0 = cvFloor( (t + CV_PI * 0.5) * istheta );
                     ti2 = (ti * stn - ti0) * 5;
@@ -1024,7 +1024,7 @@ void HoughLinesPointSet( InputArray _point, OutputArray _lines, int lines_max, i
         int r = idx - (n+1)*(numrho+2) - 1;
         line.rho = static_cast<float>(min_rho) + r * (float)rho_step;
         line.angle = static_cast<float>(min_theta) + n * (float)theta_step;
-        lines.push_back(Vec3d((double)accum[idx], (double)line.rho, (double)line.angle));
+        lines.emplace_back((double)accum[idx], (double)line.rho, (double)line.angle);
     }
 
     Mat(lines).copyTo(_lines);
@@ -1125,7 +1125,7 @@ public:
             {
                 if (ptr[x])
                 {
-                    list.push_back(Point(x, y));
+                    list.emplace_back(x, y);
                 }
             }
         }
@@ -1489,7 +1489,7 @@ protected:
             // Check if the circle has enough support
             if(maxCount > accThreshold)
             {
-                circlesLocal.push_back(EstimatedCircle(Vec3f(curCenter.x, curCenter.y, rBest), maxCount));
+                circlesLocal.emplace_back(Vec3f(curCenter.x, curCenter.y, rBest), maxCount);
             }
         }
 
@@ -1847,7 +1847,7 @@ static void HoughCirclesAlt( const Mat& img, std::vector<EstimatedCircle>& circl
                 continue;
 
             mdata[y*mstep + x] = (uchar)1;
-            stack.push_back(Point(x, y));
+            stack.emplace_back(x, y);
             bool backtrace_mode = false;
 
             do
@@ -1858,7 +1858,7 @@ static void HoughCirclesAlt( const Mat& img, std::vector<EstimatedCircle>& circl
                 int vy = dyData[p.y*dxystep + p.x];
 
                 float mag = std::sqrt((float)vx*vx+(float)vy*vy);
-                nz.push_back(Vec4f((float)p.x, (float)p.y, (float)vx, (float)vy));
+                nz.emplace_back((float)p.x, (float)p.y, (float)vx, (float)vy);
                 CV_Assert(mdata[p.y*mstep + p.x] == 1);
 
                 int sx = cvRound(vx * RAY_FP_SCALE / mag);
@@ -1903,7 +1903,7 @@ static void HoughCirclesAlt( const Mat& img, std::vector<EstimatedCircle>& circl
                     if( mdata[y_*mstep + x_] || !edgeData[y_*estep + x_])
                         continue;
                     mdata[y_*mstep + x_] = (uchar)1;
-                    stack.push_back(Point(x_, y_));
+                    stack.emplace_back(x_, y_);
                     neighbors++;
                 }
 
@@ -1919,7 +1919,7 @@ static void HoughCirclesAlt( const Mat& img, std::vector<EstimatedCircle>& circl
             // insert a special "stop marker" in the end of each
             // connected component to make sure we
             // finalize and analyze the arc segment
-            nz.push_back(Vec4f(0.f, 0.f, 0.f, 0.f));
+            nz.emplace_back(0.f, 0.f, 0.f, 0.f);
         }
     }
 
@@ -1951,7 +1951,7 @@ static void HoughCirclesAlt( const Mat& img, std::vector<EstimatedCircle>& circl
             {
                 float cx = (float)((left + x - 1)*dp*0.5f);
                 float cy = (float)(y*dp);
-                centers.push_back(Point2f(cx, cy));
+                centers.emplace_back(cx, cy);
                 left = -1;
             }
         }
@@ -2223,7 +2223,7 @@ static void HoughCirclesAlt( const Mat& img, std::vector<EstimatedCircle>& circl
                 //       (accepted ? '+' : '-'), cx, cy, rk, cjk.weight, count, max_runlen, cjk.mask);
 
                 if( accepted )
-                    local_circles.push_back(EstimatedCircle(Vec3f(cx, cy, (float)rk), cjk.weight));
+                    local_circles.emplace_back(Vec3f(cx, cy, (float)rk), cjk.weight);
             }
         }
     }
@@ -2362,161 +2362,3 @@ void HoughCircles( InputArray _image, OutputArray _circles,
     HoughCircles(_image, _circles, method, dp, minDist, param1, param2, minRadius, maxRadius, -1, 3);
 }
 } // \namespace cv
-
-
-/* Wrapper function for standard hough transform */
-CV_IMPL CvSeq*
-cvHoughLines2( CvArr* src_image, void* lineStorage, int method,
-               double rho, double theta, int threshold,
-               double param1, double param2,
-               double min_theta, double max_theta )
-{
-    cv::Mat image = cv::cvarrToMat(src_image);
-    std::vector<cv::Vec2f> l2;
-    std::vector<cv::Vec4i> l4;
-
-    CvMat* mat = 0;
-    CvSeq* lines = 0;
-    CvSeq lines_header;
-    CvSeqBlock lines_block;
-    int lineType, elemSize;
-    int linesMax = INT_MAX;
-    int iparam1, iparam2;
-
-    if( !lineStorage )
-        CV_Error(cv::Error::StsNullPtr, "NULL destination" );
-
-    if( rho <= 0 || theta <= 0 || threshold <= 0 )
-        CV_Error( cv::Error::StsOutOfRange, "rho, theta and threshold must be positive" );
-
-    if( method != CV_HOUGH_PROBABILISTIC )
-    {
-        lineType = CV_32FC2;
-        elemSize = sizeof(float)*2;
-    }
-    else
-    {
-        lineType = CV_32SC4;
-        elemSize = sizeof(int)*4;
-    }
-
-    bool isStorage = isStorageOrMat(lineStorage);
-
-    if( isStorage )
-    {
-        lines = cvCreateSeq( lineType, sizeof(CvSeq), elemSize, (CvMemStorage*)lineStorage );
-    }
-    else
-    {
-        mat = (CvMat*)lineStorage;
-
-        if( !CV_IS_MAT_CONT( mat->type ) || (mat->rows != 1 && mat->cols != 1) )
-            CV_Error( cv::Error::StsBadArg,
-            "The destination matrix should be continuous and have a single row or a single column" );
-
-        if( CV_MAT_TYPE( mat->type ) != lineType )
-            CV_Error( cv::Error::StsBadArg,
-            "The destination matrix data type is inappropriate, see the manual" );
-
-        lines = cvMakeSeqHeaderForArray( lineType, sizeof(CvSeq), elemSize, mat->data.ptr,
-                                         mat->rows + mat->cols - 1, &lines_header, &lines_block );
-        linesMax = lines->total;
-        cvClearSeq( lines );
-    }
-
-    iparam1 = cvRound(param1);
-    iparam2 = cvRound(param2);
-
-    switch( method )
-    {
-    case CV_HOUGH_STANDARD:
-        HoughLinesStandard( image, l2, CV_32FC2, (float)rho,
-                (float)theta, threshold, linesMax, min_theta, max_theta );
-        break;
-    case CV_HOUGH_MULTI_SCALE:
-        HoughLinesSDiv( image, l2, CV_32FC2, (float)rho, (float)theta,
-                threshold, iparam1, iparam2, linesMax, min_theta, max_theta );
-        break;
-    case CV_HOUGH_PROBABILISTIC:
-        HoughLinesProbabilistic( image, (float)rho, (float)theta,
-                threshold, iparam1, iparam2, l4, linesMax );
-        break;
-    default:
-        CV_Error( cv::Error::StsBadArg, "Unrecognized method id" );
-    }
-
-    int nlines = (int)(l2.size() + l4.size());
-
-    if( !isStorage )
-    {
-        if( mat->cols > mat->rows )
-            mat->cols = nlines;
-        else
-            mat->rows = nlines;
-    }
-
-    if( nlines )
-    {
-        cv::Mat lx = method == CV_HOUGH_STANDARD || method == CV_HOUGH_MULTI_SCALE ?
-            cv::Mat(nlines, 1, CV_32FC2, &l2[0]) : cv::Mat(nlines, 1, CV_32SC4, &l4[0]);
-
-        if (isStorage)
-        {
-            cvSeqPushMulti(lines, lx.ptr(), nlines);
-        }
-        else
-        {
-            cv::Mat dst(nlines, 1, lx.type(), mat->data.ptr);
-            lx.copyTo(dst);
-        }
-    }
-
-    if( isStorage )
-        return lines;
-    return 0;
-}
-
-
-CV_IMPL CvSeq*
-cvHoughCircles( CvArr* src_image, void* circle_storage,
-                int method, double dp, double min_dist,
-                double param1, double param2,
-                int min_radius, int max_radius )
-{
-    CvSeq* circles = NULL;
-    int circles_max = INT_MAX;
-    cv::Mat src = cv::cvarrToMat(src_image), circles_mat;
-
-    if( !circle_storage )
-        CV_Error( cv::Error::StsNullPtr, "NULL destination" );
-
-    bool isStorage = isStorageOrMat(circle_storage);
-
-    if(isStorage)
-    {
-        circles = cvCreateSeq( CV_32FC3, sizeof(CvSeq),
-            sizeof(float)*3, (CvMemStorage*)circle_storage );
-    }
-    else
-    {
-        CvSeq circles_header;
-        CvSeqBlock circles_block;
-        CvMat *mat = (CvMat*)circle_storage;
-
-        if( !CV_IS_MAT_CONT( mat->type ) || (mat->rows != 1 && mat->cols != 1) ||
-            CV_MAT_TYPE(mat->type) != CV_32FC3 )
-            CV_Error( cv::Error::StsBadArg,
-                      "The destination matrix should be continuous and have a single row or a single column" );
-
-        circles = cvMakeSeqHeaderForArray( CV_32FC3, sizeof(CvSeq), sizeof(float)*3,
-                mat->data.ptr, mat->rows + mat->cols - 1, &circles_header, &circles_block );
-        circles_max = circles->total;
-        cvClearSeq( circles );
-    }
-
-    cv::HoughCircles(src, circles_mat, method, dp, min_dist, param1, param2, min_radius, max_radius, circles_max, 3);
-    cvSeqPushMulti(circles, circles_mat.data, (int)circles_mat.total());
-    return circles;
-}
-
-/* End of file. */

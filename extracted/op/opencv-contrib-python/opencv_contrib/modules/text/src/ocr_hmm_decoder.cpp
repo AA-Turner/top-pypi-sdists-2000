@@ -42,6 +42,7 @@
 
 #include "precomp.hpp"
 #include "opencv2/imgproc.hpp"
+#include "opencv2/geometry.hpp"
 #include "opencv2/ml.hpp"
 
 #include <iostream>
@@ -208,7 +209,7 @@ public:
             vector<int> spaces_start;
             vector<int> spaces_end;
             int space_count=0;
-            int last_one_idx;
+            int last_one_idx=0;
 
             int s_init = 0, s_end=vector_w.cols;
             for (int s=0; s<vector_w.cols; s++)
@@ -456,7 +457,7 @@ public:
             vector<int> spaces_start;
             vector<int> spaces_end;
             int space_count=0;
-            int last_one_idx;
+            int last_one_idx=0;
 
             int s_init = 0, s_end=vector_w.cols;
             for (int s=0; s<vector_w.cols; s++)

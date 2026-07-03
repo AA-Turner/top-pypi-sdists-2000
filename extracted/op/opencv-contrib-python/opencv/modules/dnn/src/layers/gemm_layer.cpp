@@ -17,9 +17,39 @@ using namespace cv::dnn::cuda4dnn;
 
 #include <opencv2/dnn/shape_utils.hpp>
 #include "cpu_kernels/fast_gemm.hpp"
+#include "cpu_kernels/mlas_gemm.hpp"
 
 namespace cv { namespace dnn {
 
+enum class LayerGemmOpMode {
+    blobB,
+    blobBC,
+    blobC,
+    noblob
+};
+
+bool constB(LayerGemmOpMode mode){
+    switch (mode) {
+        case LayerGemmOpMode::blobB:
+        case LayerGemmOpMode::blobBC:
+            return true;
+        default:
+            return false;
+    }
+}
+
+bool constC(LayerGemmOpMode mode){
+    switch (mode) {
+        case LayerGemmOpMode::blobC:
+        case LayerGemmOpMode::blobBC:
+            return true;
+        default:
+            return false;
+    }
+}
+
+
+// Y = alpha * A’ * B’ + beta * C
 class GemmLayerImpl CV_FINAL : public GemmLayer {
 public:
     GemmLayerImpl(const LayerParams& params) {
@@ -29,10 +59,12 @@ public:
         trans_b = params.get<bool>("transB", false);
         alpha = params.get<float>("alpha", 1.0f);
         beta = params.get<float>("beta", 1.0f);
+        flatten_a = params.get<bool>("flatten_a", true);
 
-        const_B = params.get<bool>("constB", false); // true means blobs[0] is B
-        const_C = params.get<bool>("constC", false); // true means blobs.back() is C
-        have_bias = params.get<bool>("have_bias", false); // NOTE: have_bias being true does not mean bias is constant
+        // The params are not part of ONNX, but set by old ONNX parser
+        const_B = params.get<bool>("constB", false);
+        const_C = params.get<bool>("constC", false);
+        have_bias =  params.get<bool>("have_bias", false);
 
         real_ndims_C = params.get<int>("real_ndims_C", -1);
     }
@@ -45,17 +77,52 @@ public:
                (backendId == DNN_BACKEND_VKCOM && haveVulkan() && !have_bias && !trans_a);
     }
 
+
+
+    LayerGemmOpMode getOpMode(size_t n_inputs, size_t n_blobs) const {
+        if (n_blobs == 0) return LayerGemmOpMode::noblob;
+        if (n_inputs == 3) return LayerGemmOpMode::noblob ; // if all inputs are given, then no blobs are used
+        if (n_inputs == 2) {
+            if (have_bias) {
+                // check where the input comes from
+                if(const_B)
+                    return LayerGemmOpMode::blobB;
+                if(const_C)
+                    return LayerGemmOpMode::blobC;
+                return LayerGemmOpMode::blobC;
+            } else {
+                if (n_blobs == 1)
+                    // 2 inputs, no bias => input[1] is B
+                    return LayerGemmOpMode::noblob;
+                if (n_blobs == 2)
+                    return LayerGemmOpMode::blobC;
+            }
+        }
+        if (n_inputs == 1) {
+            // only A is given per input
+            if (n_blobs == 2)
+                return LayerGemmOpMode::blobBC;
+            else
+                return LayerGemmOpMode::blobB;
+        }
+        CV_Error(Error::StsError, "DNN/Gemm: could not derive OP mode");
+    }
+
+
     virtual bool getMemoryShapes(const std::vector<MatShape> &inputs,
                                  const int requiredOutputs,
                                  std::vector<MatShape> &outputs,
                                  std::vector<MatShape> &internals) const CV_OVERRIDE {
         int num_inputs = static_cast<int>(inputs.size() + blobs.size());
+
         CV_CheckGE(num_inputs, 2, "DNN/Gemm: Gemm takes at least two inputs");
         CV_CheckLE(num_inputs, 3, "DNN/Gemm: Gemm takes at most three inputs");
 
+        LayerGemmOpMode mode = getOpMode(inputs.size(), blobs.size());
+
         // Check whether A and B are two dimensional
         const auto shape_A = inputs[0];
-        const auto shape_B = const_B ? shape(blobs[0]) : inputs[1];
+        const auto shape_B =  constB(mode) ? shape(blobs[0]) : inputs[1];
         CV_CheckGE(shape_A.size(), static_cast<size_t>(2), "DNN/Gemm: Tensor A must be n-dimensional (n >= 2)");
         CV_CheckEQ(shape_B.size(), static_cast<size_t>(2), "DNN/Gemm: Tensor B must be two dimensional");
 
@@ -67,18 +134,22 @@ public:
         int N = trans_b ? mb : nb;
         int K_a = trans_a ? ma : na;
         int K_b = trans_b ? nb : mb;
+
+
         CV_CheckEQ(K_a, K_b, "DNN/Gemm: Invalid dimension of dim K");
 
         // Check whether C can be unidirectional broadcast to (M, N). Handle carefully with 1D Mat.
         if (have_bias) {
-            const auto shape_C = const_C ? shape(blobs.back()) : inputs.back();
+            const auto shape_C = constC(mode) ? shape(blobs.back()) : inputs.back();
 
             auto ndims_C = shape_C.size();
             CV_CheckLE(ndims_C, static_cast<size_t>(2), "DNN/Gemm: C can only be 0d (scalar) / 1d / 2d tensor");
 
-            if (real_ndims_C == 1) { // (1,) or (N,)
+            int real_ndims_C_ = real_ndims_C >= 0 ? real_ndims_C : ndims_C;
+
+            if (real_ndims_C_ == 1) { // (1,) or (N,)
                 CV_Check(shape_C[0], shape_C[0] == 1 || shape_C[0] == N, "DNN/Gemm: invalid dimension of C");
-            } else if (real_ndims_C == 2) { // (1, 1) or (1, N) or (M, 1) or (M, N)
+            } else if (real_ndims_C_ == 2) { // (1, 1) or (1, N) or (M, 1) or (M, N)
                 // printf("shape_C=[%d, %d]\n", shape_C[0], shape_C[1]);
                 CV_Check(shape_C[0], (shape_C[0] == 1 && shape_C[1] == 1) ||
                                      (shape_C[0] == 1 && shape_C[1] == N) ||
@@ -95,31 +166,63 @@ public:
             }
         }
 
-        int batches = std::accumulate(shape_A.begin(), shape_A.end() - 2, 1, std::multiplies<int>());
-        MatShape shape_y{M * batches, N};
-        outputs.assign(1, shape_y);
+        if (flatten_a) {
+            int batches = std::accumulate(shape_A.begin(), shape_A.end() - 2, 1, std::multiplies<int>());
+            MatShape shape_y{M * batches, N};
+            outputs.assign(1, shape_y);
+        } else {
+            // Preserve A's leading dims; only the trailing axis changes from K to N.
+            // (trans_a is rejected upstream for this mode, so M corresponds to
+            //  shape_A[-2] and we just rewrite the last axis.)
+            CV_CheckFalse(trans_a, "DNN/Gemm: flatten_a=false requires trans_a=false");
+            MatShape shape_y = shape_A;
+            shape_y[shape_y.size() - 1] = N;
+            outputs.assign(1, shape_y);
+        }
         return false;
+    }
+
+    virtual int64 getFLOPS(const std::vector<MatShape> &inputs,
+                           const std::vector<MatShape> &outputs) const CV_OVERRIDE
+    {
+        CV_Assert(!inputs.empty());
+        LayerGemmOpMode mode_ = getOpMode(inputs.size(), blobs.size());
+        const auto shape_A = inputs[0];
+        const auto shape_B = constB(mode_) ? shape(blobs[0]) : inputs[1];
+        int M = trans_a ? shape_A.back() : shape_A[shape_A.size() - 2];
+        int K = trans_a ? shape_A[shape_A.size() - 2] : shape_A.back();
+        int N = trans_b ? shape_B[shape_B.size() - 2] : shape_B.back();
+
+        int64 batches = std::accumulate(shape_A.begin(), shape_A.end() - 2,
+                                        CV_BIG_INT(1), std::multiplies<int64>());
+
+        // 2*M*N*K multiply-adds, +M*N for bias
+        int64 flops = batches * (CV_BIG_INT(2) * M * N * K);
+        if (have_bias)
+            flops += batches * M * N;
+        return flops;
     }
 
     // TODO: replace with cv::broadcast() once 1d mat is supported
     // FIXME: fix if conditions if 1d mat is supported properly
     void broadcastCWtihBeta(int M, int N, const Mat &C) {
+        broadcast_C.clear();
+        broadcast_C.resize(M * N, 0.f);
         if (beta != 0 && !C.empty()) {
-            broadcast_C.clear();
-            broadcast_C.resize(M * N, 0.f);
+            int real_ndims_C_ = real_ndims_C >= 0 ? real_ndims_C : C.dims;
 
             const float *ptr_c = C.ptr<const float>();
             const auto shape_C = shape(C);
-            if ((real_ndims_C == 0) || (real_ndims_C == 1 && shape_C[0] == 1) ||
-                (real_ndims_C == 2 && shape_C[0] == 1 && shape_C[1] == 1)) {
+            if ((real_ndims_C_ == 0) || (real_ndims_C_ == 1 && shape_C[0] == 1) ||
+                (real_ndims_C_ == 2 && shape_C[0] == 1 && shape_C[1] == 1)) {
                 // (), (1,), (1, 1)
                 float c = *ptr_c;
                 int total = M * N;
                 for (int i = 0; i < total; ++i) {
                     broadcast_C[i] = beta * c;
                 }
-            } else if ((real_ndims_C == 1 && shape_C[0] == N) ||
-                       (real_ndims_C == 2 && shape_C[0] == 1 && shape_C[1] == N)) {
+            } else if ((real_ndims_C_ == 1 && shape_C[0] == N) ||
+                       (real_ndims_C_ == 2 && shape_C[0] == 1 && shape_C[1] == N)) {
                 // (N,), (1, N)
                 for (int i = 0; i < M; ++i) {
                     int step = i * N;
@@ -127,7 +230,7 @@ public:
                         broadcast_C[step + j] = beta * ptr_c[j];
                     }
                 }
-            } else if (real_ndims_C == 2 && shape_C[0] == M && shape_C[1] == 1) {
+            } else if (real_ndims_C_ == 2 && shape_C[0] == M && shape_C[1] == 1) {
                 // (M, 1)
                 for (int i = 0; i < M; ++i) {
                     int step = i * N;
@@ -143,16 +246,81 @@ public:
         }
     }
 
+
+
     virtual void finalize(InputArrayOfArrays inputs_arr, OutputArrayOfArrays outputs_arr) CV_OVERRIDE {
         opt.init();
+        std::vector<Mat> inputs;
+        inputs_arr.getMatVector(inputs);
+        LayerGemmOpMode mode = getOpMode(inputs.size(), blobs.size());
 
         // pack B if it is const
-        if (const_B) {
-            fastGemmPackB(blobs[0], packed_B, trans_b, opt);
+        if (constB(mode) && blobs[0].data != last_packed_blob_data) {
+            packed_B.clear();
+            packed_B.shrink_to_fit();
+            thin_packed_B.clear();
+            thin_packed_B.shrink_to_fit();
+
+            bool mlas_packed = false;
+#ifdef HAVE_MLAS
+            packed_B_mlas.release();
+            packed_B_mlas_M = packed_B_mlas_N = packed_B_mlas_K = 0;
+            if (mlasAvailable()) {
+                std::vector<Mat> outputs;
+                outputs_arr.getMatVector(outputs);
+                const auto shape_A = shape(inputs[0]);
+                const auto shape_Y = shape(outputs[0]);
+                const int na = shape_A[shape_A.size() - 1];
+                const int ma = shape_A[shape_A.size() - 2];
+                const int N  = shape_Y[shape_Y.size() - 1];
+                const int M  = shape_Y[shape_Y.size() - 2];
+                const int K  = trans_a ? ma : na;
+                const Mat& Bmat = blobs[0];
+                const int ldb = Bmat.size[Bmat.dims - 1];
+                const size_t packed_bytes = mlasSgemmPackBSize(trans_a, trans_b, N, K);
+                if (packed_bytes > 0 && packed_bytes <= static_cast<size_t>(INT_MAX)) {
+                    packed_B_mlas.create(1, static_cast<int>(packed_bytes), CV_8U);
+                    if (mlasSgemmPackB(trans_a, trans_b, N, K,
+                                       Bmat.ptr<const float>(), ldb,
+                                       packed_B_mlas.data)) {
+                        packed_B_mlas_M = M;
+                        packed_B_mlas_N = N;
+                        packed_B_mlas_K = K;
+                        mlas_packed = true;
+                    } else {
+                        packed_B_mlas.release();
+                    }
+                }
+            }
+#endif
+            if (!mlas_packed) {
+                fastGemmPackB(blobs[0], packed_B, trans_b, opt);
+
+                if (!trans_a && blobs[0].type() == CV_32F) {
+                    std::vector<Mat> outputs;
+                    outputs_arr.getMatVector(outputs);
+                    if (!outputs.empty()) {
+                        const auto &Y = outputs[0];
+                        const auto shape_Y = shape(Y);
+                        const int N = shape_Y.back();
+                        const int K = trans_b ? blobs[0].size[1] : blobs[0].size[0];
+                        const int rows_thin = flatten_a ? shape_Y[shape_Y.size() - 2]
+                                                        : (int)(Y.total() / (size_t)N);
+                        if (fastGemmThinEligible(rows_thin, N, K)) {
+                            thin_packed_B.resize(fastGemmThinPackBSize(N, K));
+                            const size_t ldb_K = trans_b ? 1 : N;
+                            const size_t ldb_N = trans_b ? K : 1;
+                            fastGemmThinPackB(N, K, blobs[0].ptr<const float>(),
+                                              ldb_K, ldb_N, thin_packed_B.data());
+                        }
+                    }
+                }
+            }
+
+            last_packed_blob_data = blobs[0].data;
         }
 
-        // also pre-broadcast bias
-        if (const_C) {
+        if (constC(mode) && flatten_a) {
             const auto &C = blobs.back();
 
             std::vector<Mat> outputs;
@@ -182,6 +350,8 @@ public:
         inputs_arr.getMatVector(inputs);
         outputs_arr.getMatVector(outputs);
 
+        LayerGemmOpMode mode = getOpMode(inputs.size(), blobs.size());
+
         const auto &A = inputs[0];
         auto &Y = outputs[0];
 
@@ -192,24 +362,112 @@ public:
         int M = shape_Y[dims_Y - 2], N = shape_Y[dims_Y - 1];
         int K = trans_a ? ma : na;
 
+        // In flatten_a=false mode the output keeps A's leading dims, so the
+        // GEMM row count spans those dims as well: rows = total(Y)/N.
+        const int rows = flatten_a ? M : (int)(Y.total() / (size_t)N);
+
         // broadcast C and copy C to output
-        if (have_bias) {
-            if (!const_C) {
-                broadcastCWtihBeta(M, N, inputs.back());
-            }
-            int step = M * N;
-            CV_CheckEQ(broadcast_C.size(), static_cast<size_t>(step), "DNN/Gemm: C is not broadcast properly");
+        if (constC(mode) || inputs.size() >= 3) {
             float *ptr_y = Y.ptr<float>();
-            std::memcpy(ptr_y, broadcast_C.data(), step * sizeof(float));
+            if (flatten_a) {
+                if (!constC(mode) || broadcast_C.empty()) {
+                    broadcastCWtihBeta(M, N, (inputs.size() >= 3 ? inputs.back() : blobs.back()));
+                }
+                int step = M * N;
+                CV_CheckEQ(broadcast_C.size(), static_cast<size_t>(step), "DNN/Gemm: C is not broadcast properly");
+                const float* src = broadcast_C.data();
+                constexpr size_t PAR_THRESHOLD = 1u << 14;
+                if ((size_t)step < PAR_THRESHOLD) {
+                    std::memcpy(ptr_y, src, (size_t)step * sizeof(float));
+                } else {
+                    int nthreads = std::max(1, getNumThreads());
+                    parallel_for_(Range(0, nthreads), [=](const Range& r) {
+                        size_t st = (size_t)r.start * (size_t)step / (size_t)nthreads;
+                        size_t en = (size_t)r.end   * (size_t)step / (size_t)nthreads;
+                        std::memcpy(ptr_y + st, src + st, (en - st) * sizeof(float));
+                    }, nthreads);
+                }
+            } else {
+                // ND output: tile the (1D / scalar) bias across all `rows`
+                // rows, scaled by beta. The rewriter restricts bias to scalar
+                // or 1D length-N; assert here.
+                const Mat& C = (inputs.size() >= 3) ? inputs.back() : blobs.back();
+                const float* c = C.ptr<const float>();
+                if (C.total() == 1) {
+                    float val = beta * (*c);
+                    size_t total = (size_t)rows * (size_t)N;
+                    constexpr size_t PAR_THRESHOLD = 1u << 14;
+                    if (total < PAR_THRESHOLD) {
+                        std::fill_n(ptr_y, total, val);
+                    } else {
+                        int nthreads = std::max(1, getNumThreads());
+                        parallel_for_(Range(0, nthreads), [=](const Range& r) {
+                            size_t st = (size_t)r.start * total / (size_t)nthreads;
+                            size_t en = (size_t)r.end   * total / (size_t)nthreads;
+                            std::fill_n(ptr_y + st, en - st, val);
+                        }, nthreads);
+                    }
+                } else {
+                    CV_CheckEQ((int)C.total(), N, "DNN/Gemm: bias must be scalar or length-N in flatten_a=false mode");
+                    // Compute first row, then broadcast.
+                    for (int j = 0; j < N; j++) ptr_y[j] = beta * c[j];
+                    if (rows > 1) {
+                        size_t row_bytes = (size_t)N * sizeof(float);
+                        constexpr int PAR_THRESHOLD_ROWS = 32;
+                        if (rows <= PAR_THRESHOLD_ROWS) {
+                            for (int i = 1; i < rows; i++) {
+                                std::memcpy(ptr_y + (size_t)i * N, ptr_y, row_bytes);
+                            }
+                        } else {
+                            int nthreads = std::max(1, getNumThreads());
+                            double nstripes = std::min((double)(rows - 1), (double)nthreads);
+                            parallel_for_(Range(1, rows), [=](const Range& r) {
+                                for (int i = r.start; i < r.end; i++) {
+                                    std::memcpy(ptr_y + (size_t)i * N, ptr_y, row_bytes);
+                                }
+                            }, nstripes);
+                        }
+                    }
+                }
+            }
         } else { // initialization
             float *ptr_y = Y.ptr<float>();
             size_t total = Y.total();
-            std::memset(ptr_y, 0, total * sizeof(float));
+            constexpr size_t PAR_THRESHOLD = 1u << 14;
+            if (total < PAR_THRESHOLD) {
+                std::memset(ptr_y, 0, total * sizeof(float));
+            } else {
+                int nthreads = std::max(1, getNumThreads());
+                parallel_for_(Range(0, nthreads), [=](const Range& r) {
+                    size_t st = (size_t)r.start * total / (size_t)nthreads;
+                    size_t en = (size_t)r.end   * total / (size_t)nthreads;
+                    std::memset(ptr_y + st, 0, (en - st) * sizeof(float));
+                }, nthreads);
+            }
         }
 
-        if (const_B) {
+        if (constB(mode)) {
+#ifdef HAVE_MLAS
+            if (!packed_B_mlas.empty() &&
+                packed_B_mlas_N == N && packed_B_mlas_K == K)
+            {
+                if (mlasSgemmPacked(trans_a, trans_b, rows, N, K,
+                                    alpha,
+                                    A.ptr<const float>(), na,
+                                    packed_B_mlas.data,
+                                    1.f,
+                                    Y.ptr<float>(), N)) {
+                    return;
+                }
+            }
+#endif
             CV_CheckGT(packed_B.size(), static_cast<size_t>(0), "DNN/Gemm: constant B is not pre-packed");
-            fastGemm(trans_a, M, N, K, alpha, A.ptr<const float>(), na, packed_B.data(), 1.f, Y.ptr<float>(), N, opt);
+            if (!thin_packed_B.empty()) {
+                fastGemmThin(rows, N, K, alpha, A.ptr<const float>(), na, 1,
+                             thin_packed_B.data(), 1.f, Y.ptr<float>(), N, opt.multi_thread);
+            } else {
+                fastGemm(trans_a, rows, N, K, alpha, A.ptr<const float>(), na, packed_B.data(), 1.f, Y.ptr<float>(), N, opt);
+            }
         } else {
             fastGemmBatch(trans_a, trans_b, alpha, A, inputs[1], 1.f, Y, opt);
         }
@@ -268,6 +526,7 @@ public:
             op->update_input_desc_x2(*desc_x2);
         }
         // set inputs : bias
+        // TODO: clearify if the bias needs to be constant here
         auto mat_C = have_bias && const_C ? blobs.back() : Mat::zeros(1, 1, CV_32F);
         auto shape_C = shape(mat_C);
         if (real_ndims_C == 1) {
@@ -364,14 +623,24 @@ public:
     }
 #endif
 
+
+
 private:
     bool const_B;
     bool const_C;
     bool have_bias;
     std::vector<float> packed_B;
+    std::vector<float> thin_packed_B;
+#ifdef HAVE_MLAS
+    cv::Mat packed_B_mlas;
+    int packed_B_mlas_M = 0;
+    int packed_B_mlas_N = 0;
+    int packed_B_mlas_K = 0;
+#endif
     std::vector<float> broadcast_C;
     int real_ndims_C;
     FastGemmOpt opt;
+    const uchar* last_packed_blob_data = nullptr;
 };
 
 Ptr<GemmLayer> GemmLayer::create(const LayerParams& params) {

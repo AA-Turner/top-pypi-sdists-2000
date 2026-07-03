@@ -154,6 +154,19 @@ CV_EXPORTS void swapChannels(InputOutputArray image, const int dstOrder[4], Stre
 @param dst Destination image.
 @param forward true for forward gamma correction or false for inverse gamma correction.
 @param stream Stream for the asynchronous version.
+
+Gamma correction is conformant to BT.709 @cite BT.709 with &gamma;=0.45.
+
+For the forward transform, RGB values are normalised to fit in the range L=[0..1], then:
+- For L < 0.018
+  + V = 4.5*L
+- For L >= 0.018
+  + V = 1.099 * L^0.45 - 0.099
+
+With V then being scaled back to [0..255].
+
+![image](pics/gammacorrection.png)
+
  */
 CV_EXPORTS_W void gammaCorrection(InputArray src, OutputArray dst, bool forward = true, Stream& stream = Stream::Null());
 
@@ -514,98 +527,6 @@ CV_EXPORTS_W Ptr<GeneralizedHoughBallard> createGeneralizedHoughBallard();
 CV_EXPORTS_W Ptr<GeneralizedHoughGuil> createGeneralizedHoughGuil();
 
 //! @} cudaimgproc_hough
-
-////////////////////////// Corners Detection ///////////////////////////
-
-//! @addtogroup cudaimgproc_feature
-//! @{
-
-/** @brief Base class for Cornerness Criteria computation. :
- */
-class CV_EXPORTS_W CornernessCriteria : public Algorithm
-{
-public:
-    /** @brief Computes the cornerness criteria at each image pixel.
-
-    @param src Source image.
-    @param dst Destination image containing cornerness values. It will have the same size as src and
-    CV_32FC1 type.
-    @param stream Stream for the asynchronous version.
-     */
-    CV_WRAP virtual void compute(InputArray src, OutputArray dst, Stream& stream = Stream::Null()) = 0;
-};
-
-/** @brief Creates implementation for Harris cornerness criteria.
-
-@param srcType Input source type. Only CV_8UC1 and CV_32FC1 are supported for now.
-@param blockSize Neighborhood size.
-@param ksize Aperture parameter for the Sobel operator.
-@param k Harris detector free parameter.
-@param borderType Pixel extrapolation method. Only BORDER_REFLECT101 and BORDER_REPLICATE are
-supported for now.
-
-@sa cornerHarris
- */
-CV_EXPORTS_W Ptr<CornernessCriteria> createHarrisCorner(int srcType, int blockSize, int ksize, double k, int borderType = BORDER_REFLECT101);
-
-/** @brief Creates implementation for the minimum eigen value of a 2x2 derivative covariation matrix (the
-cornerness criteria).
-
-@param srcType Input source type. Only CV_8UC1 and CV_32FC1 are supported for now.
-@param blockSize Neighborhood size.
-@param ksize Aperture parameter for the Sobel operator.
-@param borderType Pixel extrapolation method. Only BORDER_REFLECT101 and BORDER_REPLICATE are
-supported for now.
-
-@sa cornerMinEigenVal
- */
-CV_EXPORTS_W Ptr<CornernessCriteria> createMinEigenValCorner(int srcType, int blockSize, int ksize, int borderType = BORDER_REFLECT101);
-
-////////////////////////// Corners Detection ///////////////////////////
-
-/** @brief Base class for Corners Detector. :
- */
-class CV_EXPORTS_W CornersDetector : public Algorithm
-{
-public:
-    /** @brief Determines strong corners on an image.
-
-    @param image Input 8-bit or floating-point 32-bit, single-channel image.
-    @param corners Output vector of detected corners (1-row matrix with CV_32FC2 type with corners
-    positions).
-    @param mask Optional region of interest. If the image is not empty (it needs to have the type
-    CV_8UC1 and the same size as image ), it specifies the region in which the corners are detected.
-    @param stream Stream for the asynchronous version.
-     */
-    CV_WRAP virtual void detect(InputArray image, OutputArray corners, InputArray mask = noArray(), Stream& stream = Stream::Null()) = 0;
-
-    CV_WRAP virtual void setMaxCorners(int maxCorners) = 0;
-    CV_WRAP virtual void setMinDistance(double minDistance) = 0;
-};
-
-/** @brief Creates implementation for cuda::CornersDetector .
-
-@param srcType Input source type. Only CV_8UC1 and CV_32FC1 are supported for now.
-@param maxCorners Maximum number of corners to return. If there are more corners than are found,
-the strongest of them is returned.
-@param qualityLevel Parameter characterizing the minimal accepted quality of image corners. The
-parameter value is multiplied by the best corner quality measure, which is the minimal eigenvalue
-(see cornerMinEigenVal ) or the Harris function response (see cornerHarris ). The corners with the
-quality measure less than the product are rejected. For example, if the best corner has the
-quality measure = 1500, and the qualityLevel=0.01 , then all the corners with the quality measure
-less than 15 are rejected.
-@param minDistance Minimum possible Euclidean distance between the returned corners.
-@param blockSize Size of an average block for computing a derivative covariation matrix over each
-pixel neighborhood. See cornerEigenValsAndVecs .
-@param useHarrisDetector Parameter indicating whether to use a Harris detector (see cornerHarris)
-or cornerMinEigenVal.
-@param harrisK Free parameter of the Harris detector.
- */
-CV_EXPORTS_W Ptr<CornersDetector> createGoodFeaturesToTrackDetector(int srcType, int maxCorners = 1000, double qualityLevel = 0.01, double minDistance = 0.0,
-                                                                  int blockSize = 3, bool useHarrisDetector = false, double harrisK = 0.04);
-
-//! @} cudaimgproc_feature
-
 
 ///////////////////////////// Mean Shift //////////////////////////////
 

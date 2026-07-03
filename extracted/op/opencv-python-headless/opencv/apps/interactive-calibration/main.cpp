@@ -3,10 +3,11 @@
 // of this distribution and at http://opencv.org/license.html.
 
 #include <opencv2/core.hpp>
-#include <opencv2/calib3d.hpp>
+#include <opencv2/3d.hpp>
+#include <opencv2/calib.hpp>
 #include <opencv2/cvconfig.h>
 #include <opencv2/highgui.hpp>
-
+#include <opencv2/videoio/registry.hpp>
 
 #include <string>
 #include <vector>
@@ -23,9 +24,25 @@
 
 using namespace calib;
 
-const std::string keys  =
+static std::string getVideoIoBackendsString()
+{
+    std::string result;
+    auto backs = cv::videoio_registry::getBackends();
+    for (const auto& b: backs)
+    {
+        if (!result.empty())
+            result += ", ";
+
+        result += cv::videoio_registry::getBackendName(b);
+    }
+
+    return result;
+}
+
+const char* keys  =
         "{v        |         | Input from video file }"
-        "{ci       | 0       | Default camera id }"
+        "{ci       | 0       | Camera id }"
+        "{vb       |         | Video I/O back-end. One of: %s }"
         "{flip     | false   | Vertical flip of input frames }"
         "{t        | circles | Template for calibration (circles, chessboard, dualCircles, charuco, symcircles) }"
         "{sz       | 16.3    | Distance between two nearest centers of circles or squares on calibration board}"
@@ -36,7 +53,7 @@ const std::string keys  =
         "DICT_4X4_50, DICT_4X4_100, DICT_4X4_250, DICT_4X4_1000, DICT_5X5_50, DICT_5X5_100, DICT_5X5_250, "
         "DICT_5X5_1000, DICT_6X6_50, DICT_6X6_100, DICT_6X6_250, DICT_6X6_1000, DICT_7X7_50, DICT_7X7_100, "
         "DICT_7X7_250, DICT_7X7_1000, DICT_ARUCO_ORIGINAL, DICT_APRILTAG_16h5, DICT_APRILTAG_25h9, "
-        "DICT_APRILTAG_36h10, DICT_APRILTAG_36h11 }"
+        "DICT_APRILTAG_36h10, DICT_APRILTAG_36h11, DICT_ARUCO_MIP_36h12 }"
         "{fad      | None    | name of file with ArUco dictionary}"
         "{of       | cameraParameters.xml | Output file name}"
         "{ft       | true    | Auto tuning of calibration flags}"
@@ -95,11 +112,13 @@ static void undistortButton(int state, void* data)
 
 int main(int argc, char** argv)
 {
-    cv::CommandLineParser parser(argc, argv, keys);
+    cv::CommandLineParser parser(argc, argv, cv::format(keys, getVideoIoBackendsString().c_str()));
+
     if(parser.has("help")) {
         parser.printMessage();
         return 0;
     }
+
     std::cout << consoleHelp << std::endl;
     parametersController paramsController;
 
@@ -116,6 +135,10 @@ int main(int argc, char** argv)
 
     int calibrationFlags = 0;
     if(intParams.fastSolving) calibrationFlags |= cv::CALIB_USE_QR;
+    if(intParams.rationalModel) calibrationFlags |= cv::CALIB_RATIONAL_MODEL;
+    if(intParams.thinPrismModel) calibrationFlags |= cv::CALIB_THIN_PRISM_MODEL;
+    if(intParams.tiltedModel) calibrationFlags |= cv::CALIB_TILTED_MODEL;
+
     cv::Ptr<calibController> controller(new calibController(globalData, calibrationFlags,
                                                          parser.get<bool>("ft"), capParams.minFramesNum));
     cv::Ptr<calibDataController> dataController(new calibDataController(globalData, capParams.maxFramesNum,

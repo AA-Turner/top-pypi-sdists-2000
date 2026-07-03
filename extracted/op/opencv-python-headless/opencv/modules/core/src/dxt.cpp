@@ -60,6 +60,14 @@ namespace cv
 #undef USE_IPP_DFT
 #endif
 
+#if defined USE_IPP_DFT
+#if IPP_VERSION_X100 >= 202220
+#define IPP_DISABLE_DFT32F ((depth == CV_32F) && (ippCPUID_AVX512F&cv::ipp::getIppFeatures()))
+#else
+#define IPP_DISABLE_DFT32F false
+#endif
+#endif
+
 /****************************************************************************************\
                                Discrete Fourier Transform
 \****************************************************************************************/
@@ -2367,7 +2375,7 @@ static bool ocl_dft(InputArray _src, OutputArray _dst, int flags, int nonzero_ro
     if (fftType == C2C || fftType == R2C)
     {
         // complex output
-        _dst.create(src.size(), CV_MAKETYPE(depth, 2));
+        _dst.createSameSize(src, CV_MAKETYPE(depth, 2));
         output = _dst.getUMat();
     }
     else
@@ -2375,13 +2383,13 @@ static bool ocl_dft(InputArray _src, OutputArray _dst, int flags, int nonzero_ro
         // real output
         if (is1d)
         {
-            _dst.create(src.size(), CV_MAKETYPE(depth, 1));
+            _dst.createSameSize(src, CV_MAKETYPE(depth, 1));
             output = _dst.getUMat();
         }
         else
         {
-            _dst.create(src.size(), CV_MAKETYPE(depth, 1));
-            output.create(src.size(), CV_MAKETYPE(depth, 2));
+            _dst.createSameSize(src, CV_MAKETYPE(depth, 1));
+            output.create(src.size, CV_MAKETYPE(depth, 2));
         }
     }
 
@@ -3258,7 +3266,7 @@ public:
         opt.ipp_spec = 0;
         opt.ipp_work = 0;
 
-        if( CV_IPP_CHECK_COND && (opt.n*count >= 64) ) // use IPP DFT if available
+        if( CV_IPP_CHECK_COND && (opt.n*count >= 64) && !IPP_DISABLE_DFT32F) // use IPP DFT if available
         {
             int ipp_norm_flag = (flags & CV_HAL_DFT_SCALE) == 0 ? 8 : opt.isInverse ? 2 : 1;
             int specsize=0, initsize=0, worksize=0;
@@ -3520,11 +3528,11 @@ void cv::dft( InputArray _src0, OutputArray _dst, int flags, int nonzero_rows )
     CV_Assert( !((flags & DFT_COMPLEX_INPUT) && src.channels() != 2) );
 
     if( !inv && src.channels() == 1 && (flags & DFT_COMPLEX_OUTPUT) )
-        _dst.create( src.size(), CV_MAKETYPE(depth, 2) );
+        _dst.createSameSize( src, CV_MAKETYPE(depth, 2) );
     else if( inv && src.channels() == 2 && (flags & DFT_REAL_OUTPUT) )
-        _dst.create( src.size(), depth );
+        _dst.createSameSize( src, depth );
     else
-        _dst.create( src.size(), type );
+        _dst.createSameSize( src, type );
 
     Mat dst = _dst.getMat();
 
@@ -3569,7 +3577,7 @@ static bool ocl_mulSpectrums( InputArray _srcA, InputArray _srcB,
     UMat A = _srcA.getUMat(), B = _srcB.getUMat();
     CV_Assert(A.size() == B.size());
 
-    _dst.create(A.size(), atype);
+    _dst.createSameSize(A, atype);
     UMat dst = _dst.getUMat();
 
     ocl::Kernel k("mulAndScaleSpectrums",
@@ -3765,6 +3773,202 @@ void cv::mulSpectrums( InputArray _srcA, InputArray _srcB,
     }
 }
 
+void cv::divSpectrums( InputArray _srcA, InputArray _srcB, OutputArray _dst, int flags, bool conjB)
+{
+    Mat srcA = _srcA.getMat(), srcB = _srcB.getMat();
+    int depth = srcA.depth(), cn = srcA.channels(), type = srcA.type();
+    int rows = srcA.rows, cols = srcA.cols;
+    int j, k;
+
+    CV_Assert( type == srcB.type() && srcA.size() == srcB.size() );
+    CV_Assert( type == CV_32FC1 || type == CV_32FC2 || type == CV_64FC1 || type == CV_64FC2 );
+
+    _dst.create( srcA.rows, srcA.cols, type );
+    Mat dst = _dst.getMat();
+
+    CV_Assert(dst.data != srcA.data); // non-inplace check
+    CV_Assert(dst.data != srcB.data); // non-inplace check
+
+    bool is_1d = (flags & DFT_ROWS) || (rows == 1 || (cols == 1 &&
+    srcA.isContinuous() && srcB.isContinuous() && dst.isContinuous()));
+
+    if( is_1d && !(flags & DFT_ROWS) )
+        cols = cols + rows - 1, rows = 1;
+
+    int ncols = cols*cn;
+    int j0 = cn == 1;
+    int j1 = ncols - (cols % 2 == 0 && cn == 1);
+
+    if( depth == CV_32F )
+    {
+        const float* dataA = srcA.ptr<float>();
+        const float* dataB = srcB.ptr<float>();
+        float* dataC = dst.ptr<float>();
+        float eps = FLT_EPSILON; // prevent div0 problems
+
+        size_t stepA = srcA.step/sizeof(dataA[0]);
+        size_t stepB = srcB.step/sizeof(dataB[0]);
+        size_t stepC = dst.step/sizeof(dataC[0]);
+
+        if( !is_1d && cn == 1 )
+        {
+            for( k = 0; k < (cols % 2 ? 1 : 2); k++ )
+            {
+                if( k == 1 )
+                    dataA += cols - 1, dataB += cols - 1, dataC += cols - 1;
+                dataC[0] = dataA[0] / (dataB[0] + eps);
+                if( rows % 2 == 0 )
+                    dataC[(rows-1)*stepC] = dataA[(rows-1)*stepA] / (dataB[(rows-1)*stepB] + eps);
+                if( !conjB )
+                    for( j = 1; j <= rows - 2; j += 2 )
+                    {
+                        double denom = (double)dataB[j*stepB]*dataB[j*stepB] +
+                        (double)dataB[(j+1)*stepB]*dataB[(j+1)*stepB] + (double)eps;
+
+                        double re = (double)dataA[j*stepA]*dataB[j*stepB] +
+                        (double)dataA[(j+1)*stepA]*dataB[(j+1)*stepB];
+
+                        double im = (double)dataA[(j+1)*stepA]*dataB[j*stepB] -
+                        (double)dataA[j*stepA]*dataB[(j+1)*stepB];
+
+                        dataC[j*stepC] = (float)(re / denom);
+                        dataC[(j+1)*stepC] = (float)(im / denom);
+                    }
+                    else
+                        for( j = 1; j <= rows - 2; j += 2 )
+                        {
+
+                            double denom = (double)dataB[j*stepB]*dataB[j*stepB] +
+                            (double)dataB[(j+1)*stepB]*dataB[(j+1)*stepB] + (double)eps;
+
+                            double re = (double)dataA[j*stepA]*dataB[j*stepB] -
+                            (double)dataA[(j+1)*stepA]*dataB[(j+1)*stepB];
+
+                            double im = (double)dataA[(j+1)*stepA]*dataB[j*stepB] +
+                            (double)dataA[j*stepA]*dataB[(j+1)*stepB];
+
+                            dataC[j*stepC] = (float)(re / denom);
+                            dataC[(j+1)*stepC] = (float)(im / denom);
+                        }
+                    if( k == 1 )
+                        dataA -= cols - 1, dataB -= cols - 1, dataC -= cols - 1;
+            }
+        }
+
+        for( ; rows--; dataA += stepA, dataB += stepB, dataC += stepC )
+        {
+            if( is_1d && cn == 1 )
+            {
+                dataC[0] = dataA[0] / (dataB[0] + eps);
+                if( cols % 2 == 0 )
+                    dataC[j1] = dataA[j1] / (dataB[j1] + eps);
+            }
+
+            if( !conjB )
+                for( j = j0; j < j1; j += 2 )
+                {
+                    double denom = (double)dataB[j]*dataB[j] + (double)dataB[j+1]*dataB[j+1] + (double)eps;
+                    double re = (double)dataA[j]*dataB[j] + (double)dataA[j+1]*dataB[j+1];
+                    double im = (double)dataA[j+1]*dataB[j] - (double)dataA[j]*dataB[j+1];
+                    dataC[j] = (float)(re / denom);
+                    dataC[j+1] = (float)(im / denom);
+                }
+                else
+                    for( j = j0; j < j1; j += 2 )
+                    {
+                        double denom = (double)dataB[j]*dataB[j] + (double)dataB[j+1]*dataB[j+1] + (double)eps;
+                        double re = (double)dataA[j]*dataB[j] - (double)dataA[j+1]*dataB[j+1];
+                        double im = (double)dataA[j+1]*dataB[j] + (double)dataA[j]*dataB[j+1];
+                        dataC[j] = (float)(re / denom);
+                        dataC[j+1] = (float)(im / denom);
+                    }
+        }
+    }
+    else
+    {
+        const double* dataA = srcA.ptr<double>();
+        const double* dataB = srcB.ptr<double>();
+        double* dataC = dst.ptr<double>();
+        double eps = DBL_EPSILON; // prevent div0 problems
+
+        size_t stepA = srcA.step/sizeof(dataA[0]);
+        size_t stepB = srcB.step/sizeof(dataB[0]);
+        size_t stepC = dst.step/sizeof(dataC[0]);
+
+        if( !is_1d && cn == 1 )
+        {
+            for( k = 0; k < (cols % 2 ? 1 : 2); k++ )
+            {
+                if( k == 1 )
+                    dataA += cols - 1, dataB += cols - 1, dataC += cols - 1;
+                dataC[0] = dataA[0] / (dataB[0] + eps);
+                if( rows % 2 == 0 )
+                    dataC[(rows-1)*stepC] = dataA[(rows-1)*stepA] / (dataB[(rows-1)*stepB] + eps);
+                if( !conjB )
+                    for( j = 1; j <= rows - 2; j += 2 )
+                    {
+                        double denom = dataB[j*stepB]*dataB[j*stepB] +
+                        dataB[(j+1)*stepB]*dataB[(j+1)*stepB] + eps;
+
+                        double re = dataA[j*stepA]*dataB[j*stepB] +
+                        dataA[(j+1)*stepA]*dataB[(j+1)*stepB];
+
+                        double im = dataA[(j+1)*stepA]*dataB[j*stepB] -
+                        dataA[j*stepA]*dataB[(j+1)*stepB];
+
+                        dataC[j*stepC] = re / denom;
+                        dataC[(j+1)*stepC] = im / denom;
+                    }
+                    else
+                        for( j = 1; j <= rows - 2; j += 2 )
+                        {
+                            double denom = dataB[j*stepB]*dataB[j*stepB] +
+                            dataB[(j+1)*stepB]*dataB[(j+1)*stepB] + eps;
+
+                            double re = dataA[j*stepA]*dataB[j*stepB] -
+                            dataA[(j+1)*stepA]*dataB[(j+1)*stepB];
+
+                            double im = dataA[(j+1)*stepA]*dataB[j*stepB] +
+                            dataA[j*stepA]*dataB[(j+1)*stepB];
+
+                            dataC[j*stepC] = re / denom;
+                            dataC[(j+1)*stepC] = im / denom;
+                        }
+                    if( k == 1 )
+                        dataA -= cols - 1, dataB -= cols - 1, dataC -= cols - 1;
+            }
+        }
+
+        for( ; rows--; dataA += stepA, dataB += stepB, dataC += stepC )
+        {
+            if( is_1d && cn == 1 )
+            {
+                dataC[0] = dataA[0] / (dataB[0] + eps);
+                if( cols % 2 == 0 )
+                    dataC[j1] = dataA[j1] / (dataB[j1] + eps);
+            }
+
+            if( !conjB )
+                for( j = j0; j < j1; j += 2 )
+                {
+                    double denom = dataB[j]*dataB[j] + dataB[j+1]*dataB[j+1] + eps;
+                    double re = dataA[j]*dataB[j] + dataA[j+1]*dataB[j+1];
+                    double im = dataA[j+1]*dataB[j] - dataA[j]*dataB[j+1];
+                    dataC[j] = re / denom;
+                    dataC[j+1] = im / denom;
+                }
+                else
+                    for( j = j0; j < j1; j += 2 )
+                    {
+                        double denom = dataB[j]*dataB[j] + dataB[j+1]*dataB[j+1] + eps;
+                        double re = dataA[j]*dataB[j] - dataA[j+1]*dataB[j+1];
+                        double im = dataA[j+1]*dataB[j] + dataA[j]*dataB[j+1];
+                        dataC[j] = re / denom;
+                        dataC[j+1] = im / denom;
+                    }
+        }
+    }
+}
 
 /****************************************************************************************\
                                Discrete Cosine Transform
@@ -4650,64 +4854,4 @@ int cv::getOptimalDFTSize( int size0 )
 
     return optimalDFTSizeTab[b];
 }
-
-
-#ifndef OPENCV_EXCLUDE_C_API
-
-CV_IMPL void
-cvDFT( const CvArr* srcarr, CvArr* dstarr, int flags, int nonzero_rows )
-{
-    cv::Mat src = cv::cvarrToMat(srcarr), dst0 = cv::cvarrToMat(dstarr), dst = dst0;
-    int _flags = ((flags & CV_DXT_INVERSE) ? cv::DFT_INVERSE : 0) |
-        ((flags & CV_DXT_SCALE) ? cv::DFT_SCALE : 0) |
-        ((flags & CV_DXT_ROWS) ? cv::DFT_ROWS : 0);
-
-    CV_Assert( src.size == dst.size );
-
-    if( src.type() != dst.type() )
-    {
-        if( dst.channels() == 2 )
-            _flags |= cv::DFT_COMPLEX_OUTPUT;
-        else
-            _flags |= cv::DFT_REAL_OUTPUT;
-    }
-
-    cv::dft( src, dst, _flags, nonzero_rows );
-    CV_Assert( dst.data == dst0.data ); // otherwise it means that the destination size or type was incorrect
-}
-
-
-CV_IMPL void
-cvMulSpectrums( const CvArr* srcAarr, const CvArr* srcBarr,
-                CvArr* dstarr, int flags )
-{
-    cv::Mat srcA = cv::cvarrToMat(srcAarr),
-        srcB = cv::cvarrToMat(srcBarr),
-        dst = cv::cvarrToMat(dstarr);
-    CV_Assert( srcA.size == dst.size && srcA.type() == dst.type() );
-
-    cv::mulSpectrums(srcA, srcB, dst,
-        (flags & CV_DXT_ROWS) ? cv::DFT_ROWS : 0,
-        (flags & CV_DXT_MUL_CONJ) != 0 );
-}
-
-
-CV_IMPL void
-cvDCT( const CvArr* srcarr, CvArr* dstarr, int flags )
-{
-    cv::Mat src = cv::cvarrToMat(srcarr), dst = cv::cvarrToMat(dstarr);
-    CV_Assert( src.size == dst.size && src.type() == dst.type() );
-    int _flags = ((flags & CV_DXT_INVERSE) ? cv::DCT_INVERSE : 0) |
-            ((flags & CV_DXT_ROWS) ? cv::DCT_ROWS : 0);
-    cv::dct( src, dst, _flags );
-}
-
-
-CV_IMPL int
-cvGetOptimalDFTSize( int size0 )
-{
-    return cv::getOptimalDFTSize(size0);
-}
-
-#endif  // OPENCV_EXCLUDE_C_API
 /* End of file. */

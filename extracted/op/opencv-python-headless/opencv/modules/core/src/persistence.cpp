@@ -11,6 +11,8 @@
 
 #include <opencv2/core/utils/logger.hpp>
 
+#define CV_SEQ_ELTYPE_PTR            CV_MAKE_TYPE(CV_8U, 8 /*sizeof(void*)*/)
+
 namespace cv
 {
 
@@ -176,12 +178,12 @@ char* floatToString( char* buf, size_t bufSize, float value, bool halfprecision,
     return buf;
 }
 
-static const char symbols[9] = "ucwsifdh";
+static const char symbols[] = "ucwsifdhHbUIn";
 
 static char typeSymbol(int depth)
 {
     CV_StaticAssert(CV_64F == 6, "");
-    CV_CheckDepth(depth, depth >=0 && depth <= CV_16F, "");
+    CV_CheckDepth(depth, depth >= 0 && depth <= CV_32U, "");
     return symbols[depth];
 }
 
@@ -298,13 +300,18 @@ int calcStructSize( const char* dt, int initial_size )
         switch (v)
         {
         case 'u': { elem_max_size = std::max( elem_max_size, sizeof(uchar ) ); break; }
+        case 'b': { elem_max_size = std::max( elem_max_size, sizeof(bool  ) ); break; }
         case 'c': { elem_max_size = std::max( elem_max_size, sizeof(schar ) ); break; }
         case 'w': { elem_max_size = std::max( elem_max_size, sizeof(ushort) ); break; }
         case 's': { elem_max_size = std::max( elem_max_size, sizeof(short ) ); break; }
         case 'i': { elem_max_size = std::max( elem_max_size, sizeof(int   ) ); break; }
+        case 'n': { elem_max_size = std::max( elem_max_size, sizeof(unsigned) ); break; }
         case 'f': { elem_max_size = std::max( elem_max_size, sizeof(float ) ); break; }
         case 'd': { elem_max_size = std::max( elem_max_size, sizeof(double) ); break; }
-        case 'h': { elem_max_size = std::max(elem_max_size, sizeof(hfloat)); break; }
+        case 'h': { elem_max_size = std::max( elem_max_size, sizeof(hfloat)); break; }
+        case 'H': { elem_max_size = std::max( elem_max_size, sizeof(bfloat)); break; }
+        case 'I': { elem_max_size = std::max( elem_max_size, sizeof(int64_t)); break; }
+        case 'U': { elem_max_size = std::max( elem_max_size, sizeof(uint64_t)); break; }
         default:
             CV_Error_(Error::StsNotImplemented, ("Unknown type identifier: '%c' in '%s'", (char)(*type), dt));
         }
@@ -522,7 +529,6 @@ bool FileStorage::Impl::open(const char *filename_or_buf, int _flags, const char
     bool write_base64 = (write_mode || append) && (_flags & FileStorage::BASE64) != 0;
 
     bool isGZ = false;
-    size_t fnamelen = 0;
 
     std::vector<std::string> params;
     //if ( !mem_mode )
@@ -545,18 +551,30 @@ bool FileStorage::Impl::open(const char *filename_or_buf, int _flags, const char
     flags = _flags;
 
     if (!mem_mode) {
-        char *dot_pos = strrchr((char *) filename.c_str(), '.');
+        size_t dot_idx = filename.find_last_of('.');
         char compression = '\0';
 
-        if (dot_pos && dot_pos[1] == 'g' && dot_pos[2] == 'z' &&
-            (dot_pos[3] == '\0' || (cv_isdigit(dot_pos[3]) && dot_pos[4] == '\0'))) {
-            if (append) {
-                CV_Error(cv::Error::StsNotImplemented, "Appending data to compressed file is not implemented");
+        if (dot_idx != std::string::npos)
+        {
+            std::string ext = filename.substr(dot_idx);
+
+            // Instead of `ext.starts_with(".gz")
+            if (ext.size() >= 3 && (ext[1] == 'g') && (ext[2] == 'z') )
+            {
+                if (ext.size() == 3)
+                {
+                    // ".gz"
+                    isGZ = true;
+                }
+
+                else if(ext.size() == 4 && cv_isdigit(ext[3]))
+                {
+                    // ".gz[0-9]"
+                    isGZ = true;
+                    compression = ext[3];
+                    filename.pop_back(); // Replace `gz[0-9]' to 'gz'.
+                }
             }
-            isGZ = true;
-            compression = dot_pos[3];
-            if (compression)
-                dot_pos[3] = '\0', fnamelen--;
         }
 
         if (!isGZ) {
@@ -568,6 +586,9 @@ bool FileStorage::Impl::open(const char *filename_or_buf, int _flags, const char
             }
         } else {
 #if USE_ZLIB
+            if (append) {
+                CV_Error(cv::Error::StsNotImplemented, "Appending data to compressed file is not implemented");
+            }
             char mode[] = {write_mode ? 'w' : 'r', 'b', compression ? compression : '3', '\0'};
             gzfile = gzopen(filename.c_str(), mode);
             if (!gzfile)
@@ -688,9 +709,13 @@ bool FileStorage::Impl::open(const char *filename_or_buf, int _flags, const char
             }
 
             emitter_do_not_use_direct_dereference = createXMLEmitter(this);
-        } else if (fmt == FileStorage::FORMAT_YAML) {
-            if (!append)
-                puts("%YAML:1.0\n---\n");
+        } else if (fmt == FileStorage::FORMAT_YAML || fmt == FileStorage::FORMAT_YAML_1_0) {
+                if (!append) {
+                    if (fmt == FileStorage::FORMAT_YAML_1_0)
+                        puts("%YAML:1.0\n---\n"); // Legacy Flag -> Legacy Header
+                    else
+                        puts("%YAML 1.2\n---\n"); // Default -> Modern Header
+                }
             else
                 puts("...\n---\n");
 
@@ -743,16 +768,15 @@ bool FileStorage::Impl::open(const char *filename_or_buf, int _flags, const char
         char *bufPtr = cv_skip_BOM(buf);
         size_t bufOffset = bufPtr - buf;
 
+        // NOTE: Yaml 1.2 allows to skip header. Data without type signature is read as YAML
         if (strncmp(bufPtr, yaml_signature, strlen(yaml_signature)) == 0)
             fmt = FileStorage::FORMAT_YAML;
         else if (strncmp(bufPtr, json_signature, strlen(json_signature)) == 0)
             fmt = FileStorage::FORMAT_JSON;
         else if (strncmp(bufPtr, xml_signature, strlen(xml_signature)) == 0)
             fmt = FileStorage::FORMAT_XML;
-        else if (strbufsize == bufOffset)
-            CV_Error(cv::Error::StsBadArg, "Input file is invalid");
         else
-            CV_Error(cv::Error::StsBadArg, "Unsupported file storage format");
+            fmt = FileStorage::FORMAT_YAML;
 
         rewind();
         strbufpos = bufOffset;
@@ -775,6 +799,7 @@ bool FileStorage::Impl::open(const char *filename_or_buf, int _flags, const char
                     parser_do_not_use_direct_dereference = createXMLParser(this);
                     break;
                 case FileStorage::FORMAT_YAML:
+                case FileStorage::FORMAT_YAML_1_0:
                     parser_do_not_use_direct_dereference = createYAMLParser(this);
                     break;
                 case FileStorage::FORMAT_JSON:
@@ -1156,6 +1181,10 @@ void FileStorage::Impl::writeRawData(const std::string &dt, const void *_data, s
                         ptr = fs::itoa(*(uchar *) data, buf, 10);
                         data++;
                         break;
+                    case CV_Bool:
+                        ptr = fs::itoa(*(uchar *) data != 0, buf, 10);
+                        data++;
+                        break;
                     case CV_8S:
                         ptr = fs::itoa(*(char *) data, buf, 10);
                         data++;
@@ -1168,9 +1197,21 @@ void FileStorage::Impl::writeRawData(const std::string &dt, const void *_data, s
                         ptr = fs::itoa(*(short *) data, buf, 10);
                         data += sizeof(short);
                         break;
+                    case CV_32U:
+                        ptr = fs::itoa((int64_t)*(unsigned*) data, buf, 10, false);
+                        data += sizeof(unsigned);
+                        break;
                     case CV_32S:
                         ptr = fs::itoa(*(int *) data, buf, 10);
                         data += sizeof(int);
+                        break;
+                    case CV_64U:
+                        ptr = fs::itoa(*(uint64_t*) data, buf, 10, false);
+                        data += sizeof(uint64_t);
+                        break;
+                    case CV_64S:
+                        ptr = fs::itoa(*(int64_t*) data, buf, 10, true);
+                        data += sizeof(int64_t);
                         break;
                     case CV_32F:
                         ptr = fs::floatToString(buf, sizeof(buf), *(float *) data, false, explicitZero);
@@ -1180,9 +1221,13 @@ void FileStorage::Impl::writeRawData(const std::string &dt, const void *_data, s
                         ptr = fs::doubleToString(buf, sizeof(buf), *(double *) data, explicitZero);
                         data += sizeof(double);
                         break;
-                    case CV_16F: /* reference */
+                    case CV_16F:
                         ptr = fs::floatToString(buf, sizeof(buf), (float) *(hfloat *) data, true, explicitZero);
                         data += sizeof(hfloat);
+                        break;
+                    case CV_16BF:
+                        ptr = fs::floatToString(buf, sizeof(buf), (float) *(bfloat *) data, true, explicitZero);
+                        data += sizeof(bfloat);
                         break;
                     default:
                         CV_Error(cv::Error::StsUnsupportedFormat, "Unsupported type");
@@ -1791,6 +1836,15 @@ int FileStorage::Impl::Base64Decoder::getInt32() {
     return ival;
 }
 
+int64_t FileStorage::Impl::Base64Decoder::getInt64() {
+    size_t sz = decoded.size();
+    if (ofs + 8 > sz && !readMore(8))
+        return 0;
+    int64_t ival = readLong(&decoded[ofs]);
+    ofs += 8;
+    return ival;
+}
+
 double FileStorage::Impl::Base64Decoder::getFloat64() {
     size_t sz = decoded.size();
     if (ofs + 8 > sz && !readMore(8))
@@ -1840,14 +1894,26 @@ char *FileStorage::Impl::parseBase64(char *ptr, int indent, FileNode &collection
                     case CV_8S:
                         ival = (char) base64decoder.getUInt8();
                         break;
+                    case CV_Bool:
+                        ival = base64decoder.getUInt8() != 0;
+                        break;
                     case CV_16U:
                         ival = base64decoder.getUInt16();
                         break;
                     case CV_16S:
                         ival = (short) base64decoder.getUInt16();
                         break;
+                    case CV_32U:
+                        ival = base64decoder.getInt32();
+                        break;
                     case CV_32S:
                         ival = base64decoder.getInt32();
+                        break;
+                    case CV_64U:
+                        ival = base64decoder.getInt64();
+                        break;
+                    case CV_64S:
+                        ival = base64decoder.getInt64();
                         break;
                     case CV_32F: {
                         Cv32suf v;
@@ -2108,7 +2174,13 @@ void write( FileStorage& fs, const String& name, const String& value )
     fs.p->write(name, value);
 }
 
+void write( FileStorage& fs, const String& name, bool value )
+{
+    fs.p->write(name, value);
+}
+
 void FileStorage::write(const String& name, int val) { p->write(name, val); }
+void FileStorage::write(const String& name, bool val) { p->write(name, val); }
 void FileStorage::write(const String& name, int64_t val) { p->write(name, val); }
 void FileStorage::write(const String& name, double val) { p->write(name, val); }
 void FileStorage::write(const String& name, const String& val) { p->write(name, val); }
@@ -2362,7 +2434,7 @@ FileNode::operator float() const
 
     if( type == INT )
     {
-        return (float)readInt(p);
+        return (float)readLong(p);
     }
     else if( type == REAL )
     {
@@ -2383,7 +2455,7 @@ FileNode::operator double() const
 
     if( type == INT )
     {
-        return (double)readInt(p);
+        return (double)readLong(p);
     }
     else if( type == REAL )
     {
@@ -2394,6 +2466,7 @@ FileNode::operator double() const
 }
 
 double FileNode::real() const  { return double(*this); }
+
 std::string FileNode::string() const
 {
     const uchar* p = ptr();
@@ -2663,6 +2736,10 @@ FileNodeIterator& FileNodeIterator::readRaw( const String& fmt, void* _data0, si
                             *(char*)data = saturate_cast<schar>(ival);
                             data++;
                             break;
+                        case CV_Bool:
+                            *(bool*)data = ival != 0;
+                            data++;
+                            break;
                         case CV_16U:
                             *(ushort*)data = saturate_cast<ushort>(ival);
                             data += sizeof(ushort);
@@ -2670,6 +2747,10 @@ FileNodeIterator& FileNodeIterator::readRaw( const String& fmt, void* _data0, si
                         case CV_16S:
                             *(short*)data = saturate_cast<short>(ival);
                             data += sizeof(short);
+                            break;
+                        case CV_32U:
+                            *(unsigned*)data = (unsigned)std::max(ival, (int64_t)0);
+                            data += sizeof(unsigned);
                             break;
                         case CV_32S:
                             *(int*)data = (int)ival;
@@ -2679,6 +2760,14 @@ FileNodeIterator& FileNodeIterator::readRaw( const String& fmt, void* _data0, si
                             *(float*)data = (float)ival;
                             data += sizeof(float);
                             break;
+                        case CV_64U:
+                            *(uint64_t*)data = (uint64_t)ival;
+                            data += sizeof(uint64_t);
+                            break;
+                        case CV_64S:
+                            *(int64_t*)data = (int64_t)ival;
+                            data += sizeof(int64_t);
+                            break;
                         case CV_64F:
                             *(double*)data = (double)ival;
                             data += sizeof(double);
@@ -2686,6 +2775,10 @@ FileNodeIterator& FileNodeIterator::readRaw( const String& fmt, void* _data0, si
                         case CV_16F:
                             *(hfloat*)data = hfloat((float)ival);
                             data += sizeof(hfloat);
+                            break;
+                        case CV_16BF:
+                            *(bfloat*)data = bfloat((float)ival);
+                            data += sizeof(bfloat);
                             break;
                         default:
                             CV_Error( Error::StsUnsupportedFormat, "Unsupported type" );
@@ -2713,6 +2806,10 @@ FileNodeIterator& FileNodeIterator::readRaw( const String& fmt, void* _data0, si
                             *(short*)data = saturate_cast<short>(fval);
                             data += sizeof(short);
                             break;
+                        case CV_32U:
+                            *(int*)data = saturate_cast<unsigned>(fval);
+                            data += sizeof(int);
+                            break;
                         case CV_32S:
                             *(int*)data = saturate_cast<int>(fval);
                             data += sizeof(int);
@@ -2721,6 +2818,14 @@ FileNodeIterator& FileNodeIterator::readRaw( const String& fmt, void* _data0, si
                             *(float*)data = (float)fval;
                             data += sizeof(float);
                             break;
+                        case CV_64U:
+                            *(uint64_t*)data = (uint64_t)round(std::max(fval, 0.));
+                            data += sizeof(uint64_t);
+                            break;
+                        case CV_64S:
+                            *(int64_t*)data = (int64_t)round(std::max(fval, 0.));
+                            data += sizeof(int64_t);
+                            break;
                         case CV_64F:
                             *(double*)data = fval;
                             data += sizeof(double);
@@ -2728,6 +2833,10 @@ FileNodeIterator& FileNodeIterator::readRaw( const String& fmt, void* _data0, si
                         case CV_16F:
                             *(hfloat*)data = hfloat((float)fval);
                             data += sizeof(hfloat);
+                            break;
+                        case CV_16BF:
+                            *(bfloat*)data = bfloat((float)fval);
+                            data += sizeof(bfloat);
                             break;
                         default:
                             CV_Error( Error::StsUnsupportedFormat, "Unsupported type" );
@@ -2807,6 +2916,20 @@ void read(const FileNode& node, std::string& val, const std::string& default_val
     if( !node.empty() )
     {
         val = (std::string)node;
+    }
+}
+void FileStorage::Impl::write(const String &key, bool value)
+{
+    CV_Assert(write_mode);
+    if (fmt != FileStorage::FORMAT_YAML)
+    {
+        // Legacy behavior: Write as integer 1 or 0
+        getEmitter().write(key.c_str(), (int)value);
+    }
+    else
+    {
+        // Default/Modern behavior: Write as "true" or "false"
+        getEmitter().write(key.c_str(), value ? "true" : "false", false);
     }
 }
 

@@ -53,11 +53,12 @@
 #include "opencv2/core/hal/intrin.hpp"
 #include "opencv2/core/utils/buffer_area.private.hpp"
 
-#include "opencv2/core/openvx/ovx_defs.hpp"
 #include "resize.hpp"
 
 #include "opencv2/core/softfloat.hpp"
 #include "fixedpoint.inl.hpp"
+
+#include <iostream>
 
 using namespace cv;
 
@@ -1174,18 +1175,17 @@ resizeNN( const Mat& src, Mat& dst, double fx, double fy )
 class resizeNN_bitexactInvoker : public ParallelLoopBody
 {
 public:
-    resizeNN_bitexactInvoker(const Mat& _src, Mat& _dst, int* _x_ofse, int _ify, int _ify0)
-        : src(_src), dst(_dst), x_ofse(_x_ofse), ify(_ify), ify0(_ify0) {}
+    resizeNN_bitexactInvoker(const Mat& _src, Mat& _dst, int* _x_ofse, int* _y_ofse)
+        : src(_src), dst(_dst), x_ofse(_x_ofse), y_ofse(_y_ofse) {}
 
     virtual void operator() (const Range& range) const CV_OVERRIDE
     {
-        Size ssize = src.size(), dsize = dst.size();
+        Size dsize = dst.size();
         int pix_size = (int)src.elemSize();
         for( int y = range.start; y < range.end; y++ )
         {
             uchar* D = dst.ptr(y);
-            int _sy = (ify * y + ify0) >> 16;
-            int sy = std::min(_sy, ssize.height-1);
+            int sy = y_ofse[y];
             const uchar* S = src.ptr(sy);
 
             int x = 0;
@@ -1260,30 +1260,39 @@ private:
     const Mat& src;
     Mat& dst;
     int* x_ofse;
-    const int ify;
-    const int ify0;
+    int* y_ofse;
 };
+
+static void resizeNN_bitexact_tab(int src_dim, int dst_dim, int* ofse)
+{
+    // Match Pillow's nearest-neighbor resize path: start at half a pixel,
+    // truncate the current coordinate, then increment by scale. softdouble
+    // keeps the IEEE-754 rounding deterministic across platforms.
+    const softdouble scale = softdouble(src_dim) / softdouble(dst_dim);
+    softdouble f = scale * softdouble(0.5);
+    for( int i = 0; i < dst_dim; i++ )
+    {
+        ofse[i] = std::min(cvFloor(f), src_dim-1);
+        f += scale;
+    }
+}
 
 static void resizeNN_bitexact( const Mat& src, Mat& dst, double /*fx*/, double /*fy*/ )
 {
     Size ssize = src.size(), dsize = dst.size();
-    int ifx = ((ssize.width << 16) + dsize.width / 2) / dsize.width; // 16bit fixed-point arithmetic
-    int ifx0 = ifx / 2 - ssize.width % 2;                       // This method uses center pixel coordinate as Pillow and scikit-images do.
-    int ify = ((ssize.height << 16) + dsize.height / 2) / dsize.height;
-    int ify0 = ify / 2 - ssize.height % 2;
 
     cv::utils::BufferArea area;
     int* x_ofse = 0;
+    int* y_ofse = 0;
     area.allocate(x_ofse, dsize.width, CV_SIMD_WIDTH);
+    area.allocate(y_ofse, dsize.height, CV_SIMD_WIDTH);
     area.commit();
 
-    for( int x = 0; x < dsize.width; x++ )
-    {
-        int sx = (ifx * x + ifx0) >> 16;
-        x_ofse[x] = std::min(sx, ssize.width-1);    // offset in element (not byte)
-    }
+    resizeNN_bitexact_tab(ssize.width, dsize.width, x_ofse);
+    resizeNN_bitexact_tab(ssize.height, dsize.height, y_ofse);
+
     Range range(0, dsize.height);
-    resizeNN_bitexactInvoker invoker(src, dst, x_ofse, ify, ify0);
+    resizeNN_bitexactInvoker invoker(src, dst, x_ofse, y_ofse);
     parallel_for_(range, invoker, dst.total()/(double)(1<<16));
 }
 
@@ -3846,7 +3855,7 @@ void resize(int src_type,
 
     CV_IPP_RUN_FAST(ipp_resize(src_data, src_step, src_width, src_height, dst_data, dst_step, dsize.width, dsize.height, inv_scale_x, inv_scale_y, depth, cn, interpolation))
 
-    static ResizeFunc linear_tab[] =
+    static ResizeFunc linear_tab[CV_DEPTH_MAX] =
     {
         resizeGeneric_<
             HResizeLinear<uchar, int, short,
@@ -3880,7 +3889,7 @@ void resize(int src_type,
         0
     };
 
-    static ResizeFunc cubic_tab[] =
+    static ResizeFunc cubic_tab[CV_DEPTH_MAX] =
     {
         resizeGeneric_<
             HResizeCubic<uchar, int, short>,
@@ -3908,7 +3917,7 @@ void resize(int src_type,
         0
     };
 
-    static ResizeFunc lanczos4_tab[] =
+    static ResizeFunc lanczos4_tab[CV_DEPTH_MAX] =
     {
         resizeGeneric_<HResizeLanczos4<uchar, int, short>,
             VResizeLanczos4<uchar, int, short,
@@ -3931,7 +3940,7 @@ void resize(int src_type,
         0
     };
 
-    static ResizeAreaFastFunc areafast_tab[] =
+    static ResizeAreaFastFunc areafast_tab[CV_DEPTH_MAX] =
     {
         resizeAreaFast_<uchar, int, ResizeAreaFastVec<uchar, ResizeAreaFastVec_SIMD_8u> >,
         0,
@@ -3943,14 +3952,14 @@ void resize(int src_type,
         0
     };
 
-    static ResizeAreaFunc area_tab[] =
+    static ResizeAreaFunc area_tab[CV_DEPTH_MAX] =
     {
         resizeArea_<uchar, float>, 0, resizeArea_<ushort, float>,
         resizeArea_<short, float>, 0, resizeArea_<float, float>,
         resizeArea_<double, double>, 0
     };
 
-    static be_resize_func linear_exact_tab[] =
+    static be_resize_func linear_exact_tab[CV_DEPTH_MAX] =
     {
         resize_bitExact<uchar, interpolationLinear<uchar> >,
         resize_bitExact<schar, interpolationLinear<schar> >,
@@ -4244,17 +4253,3 @@ void cv::resize( InputArray _src, OutputArray _dst, Size dsize,
 
     hal::resize(src.type(), src.data, src.step, src.cols, src.rows, dst.data, dst.step, dst.cols, dst.rows, inv_scale_x, inv_scale_y, interpolation);
 }
-
-#ifndef OPENCV_EXCLUDE_C_API
-
-CV_IMPL void
-cvResize( const CvArr* srcarr, CvArr* dstarr, int method )
-{
-    cv::Mat src = cv::cvarrToMat(srcarr), dst = cv::cvarrToMat(dstarr);
-    CV_Assert( src.type() == dst.type() );
-    cv::resize( src, dst, dst.size(), (double)dst.cols/src.cols,
-        (double)dst.rows/src.rows, method );
-}
-
-#endif
-/* End of file. */
