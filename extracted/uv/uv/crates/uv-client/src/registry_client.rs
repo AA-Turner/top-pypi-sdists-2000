@@ -1,7 +1,6 @@
 use std::collections::BTreeMap;
 use std::fmt::Debug;
 use std::path::PathBuf;
-use std::str::FromStr;
 use std::sync::Arc;
 use std::time::Duration;
 
@@ -22,7 +21,7 @@ use uv_configuration::KeyringProviderType;
 use uv_distribution_filename::{DistFilename, SourceDistFilename, WheelFilename};
 use uv_distribution_types::{
     BuiltDist, File, IndexCapabilities, IndexFormat, IndexLocations, IndexMetadataRef,
-    IndexStatusCodeDecision, IndexStatusCodeStrategy, IndexUrl, Name,
+    IndexStatusCodeDecision, IndexStatusCodeStrategy, IndexUrl, Name, RegistryBuiltWheel,
 };
 use uv_git::{GIT_LFS, GitError, GitHttpSettings, GitResolver, Reporter};
 use uv_metadata::{read_metadata_async_seek, read_metadata_async_stream};
@@ -614,7 +613,9 @@ impl RegistryClient {
             .header("Accept-Encoding", "gzip, deflate, zstd")
             .header("Accept", accept)
             .build()
-            .map_err(|err| ErrorKind::from_reqwest(url.clone(), err))?;
+            .map_err(|err| {
+                ErrorKind::from_reqwest(url.clone(), err, self.client.certificate_source())
+            })?;
         let parse_simple_response = |response: Response| {
             async {
                 // Use the response URL, rather than the request URL, as the base for relative URLs.
@@ -638,10 +639,13 @@ impl RegistryClient {
 
                 let unarchived = match media_type {
                     MediaType::PyxV1Msgpack => {
-                        let bytes = response
-                            .bytes()
-                            .await
-                            .map_err(|err| ErrorKind::from_reqwest(url.clone(), err))?;
+                        let bytes = response.bytes().await.map_err(|err| {
+                            ErrorKind::from_reqwest(
+                                url.clone(),
+                                err,
+                                self.client.certificate_source(),
+                            )
+                        })?;
                         let data: PyxSimpleDetail = rmp_serde::from_slice(bytes.as_ref())
                             .map_err(|err| Error::from_msgpack_err(err, url.clone()))?;
 
@@ -654,10 +658,13 @@ impl RegistryClient {
                         )
                     }
                     MediaType::PyxV1Json => {
-                        let bytes = response
-                            .bytes()
-                            .await
-                            .map_err(|err| ErrorKind::from_reqwest(url.clone(), err))?;
+                        let bytes = response.bytes().await.map_err(|err| {
+                            ErrorKind::from_reqwest(
+                                url.clone(),
+                                err,
+                                self.client.certificate_source(),
+                            )
+                        })?;
                         let data: PyxSimpleDetail = serde_json::from_slice(bytes.as_ref())
                             .map_err(|err| Error::from_json_err(err, url.clone()))?;
 
@@ -670,10 +677,13 @@ impl RegistryClient {
                         )
                     }
                     MediaType::PypiV1Json => {
-                        let bytes = response
-                            .bytes()
-                            .await
-                            .map_err(|err| ErrorKind::from_reqwest(url.clone(), err))?;
+                        let bytes = response.bytes().await.map_err(|err| {
+                            ErrorKind::from_reqwest(
+                                url.clone(),
+                                err,
+                                self.client.certificate_source(),
+                            )
+                        })?;
 
                         let data: PypiSimpleDetail = serde_json::from_slice(bytes.as_ref())
                             .map_err(|err| Error::from_json_err(err, url.clone()))?;
@@ -686,10 +696,13 @@ impl RegistryClient {
                         )
                     }
                     MediaType::PypiV1Html | MediaType::TextHtml => {
-                        let text = response
-                            .text()
-                            .await
-                            .map_err(|err| ErrorKind::from_reqwest(url.clone(), err))?;
+                        let text = response.text().await.map_err(|err| {
+                            ErrorKind::from_reqwest(
+                                url.clone(),
+                                err,
+                                self.client.certificate_source(),
+                            )
+                        })?;
                         SimpleDetailMetadata::from_html(&text, package_name, &url)?
                     }
                 };
@@ -824,37 +837,49 @@ impl RegistryClient {
 
                 let metadata = match media_type {
                     MediaType::PyxV1Msgpack => {
-                        let bytes = response
-                            .bytes()
-                            .await
-                            .map_err(|err| ErrorKind::from_reqwest(url.clone(), err))?;
+                        let bytes = response.bytes().await.map_err(|err| {
+                            ErrorKind::from_reqwest(
+                                url.clone(),
+                                err,
+                                self.client.certificate_source(),
+                            )
+                        })?;
                         let data: PyxSimpleIndex = rmp_serde::from_slice(bytes.as_ref())
                             .map_err(|err| Error::from_msgpack_err(err, url.clone()))?;
                         SimpleIndexMetadata::from_pyx_index(data)
                     }
                     MediaType::PyxV1Json => {
-                        let bytes = response
-                            .bytes()
-                            .await
-                            .map_err(|err| ErrorKind::from_reqwest(url.clone(), err))?;
+                        let bytes = response.bytes().await.map_err(|err| {
+                            ErrorKind::from_reqwest(
+                                url.clone(),
+                                err,
+                                self.client.certificate_source(),
+                            )
+                        })?;
                         let data: PyxSimpleIndex = serde_json::from_slice(bytes.as_ref())
                             .map_err(|err| Error::from_json_err(err, url.clone()))?;
                         SimpleIndexMetadata::from_pyx_index(data)
                     }
                     MediaType::PypiV1Json => {
-                        let bytes = response
-                            .bytes()
-                            .await
-                            .map_err(|err| ErrorKind::from_reqwest(url.clone(), err))?;
+                        let bytes = response.bytes().await.map_err(|err| {
+                            ErrorKind::from_reqwest(
+                                url.clone(),
+                                err,
+                                self.client.certificate_source(),
+                            )
+                        })?;
                         let data: PypiSimpleIndex = serde_json::from_slice(bytes.as_ref())
                             .map_err(|err| Error::from_json_err(err, url.clone()))?;
                         SimpleIndexMetadata::from_pypi_index(data)
                     }
                     MediaType::PypiV1Html | MediaType::TextHtml => {
-                        let text = response
-                            .text()
-                            .await
-                            .map_err(|err| ErrorKind::from_reqwest(url.clone(), err))?;
+                        let text = response.text().await.map_err(|err| {
+                            ErrorKind::from_reqwest(
+                                url.clone(),
+                                err,
+                                self.client.certificate_source(),
+                            )
+                        })?;
                         SimpleIndexMetadata::from_html(&text, &url)?
                     }
                 };
@@ -869,7 +894,9 @@ impl RegistryClient {
             .header("Accept-Encoding", "gzip, deflate, zstd")
             .header("Accept", accept)
             .build()
-            .map_err(|err| ErrorKind::from_reqwest(url.clone(), err))?;
+            .map_err(|err| {
+                ErrorKind::from_reqwest(url.clone(), err, self.client.certificate_source())
+            })?;
 
         let index = self
             .cached_client()
@@ -962,7 +989,7 @@ impl RegistryClient {
                         })?
                     }
                     WheelLocation::Url(url) => {
-                        self.wheel_metadata_registry(&wheel.index, &wheel.file, &url, capabilities)
+                        self.wheel_metadata_registry(wheel, &url, capabilities)
                             .await?
                     }
                 }
@@ -1055,13 +1082,17 @@ impl RegistryClient {
     /// Fetch the metadata from a wheel file.
     async fn wheel_metadata_registry(
         &self,
-        index: &IndexUrl,
-        file: &File,
+        wheel: &RegistryBuiltWheel,
         url: &DisplaySafeUrl,
         capabilities: &IndexCapabilities,
     ) -> Result<ResolutionMetadata, Error> {
+        let RegistryBuiltWheel {
+            filename,
+            file,
+            index,
+        } = wheel;
+
         // If the metadata file is available at its own url (PEP 658), download it from there.
-        let filename = WheelFilename::from_str(&file.filename).map_err(ErrorKind::WheelFilename)?;
         if file.dist_info_metadata {
             let mut url = url.clone();
             let path = format!("{}.metadata", url.path());
@@ -1095,10 +1126,9 @@ impl RegistryClient {
             };
 
             let response_callback = async |response: Response| {
-                let bytes = response
-                    .bytes()
-                    .await
-                    .map_err(|err| ErrorKind::from_reqwest(url.clone(), err))?;
+                let bytes = response.bytes().await.map_err(|err| {
+                    ErrorKind::from_reqwest(url.clone(), err, self.client.certificate_source())
+                })?;
 
                 info_span!("parse_metadata21")
                     .in_scope(|| ResolutionMetadata::parse_metadata(bytes.as_ref()))
@@ -1114,7 +1144,9 @@ impl RegistryClient {
                 .uncached_client(&url)
                 .get(Url::from(url.clone()))
                 .build()
-                .map_err(|err| ErrorKind::from_reqwest(url.clone(), err))?;
+                .map_err(|err| {
+                    ErrorKind::from_reqwest(url.clone(), err, self.client.certificate_source())
+                })?;
             Ok(self
                 .cached_client()
                 .get_serde_with_retry(req, &cache_entry, cache_control, response_callback)
@@ -1124,7 +1156,7 @@ impl RegistryClient {
             // `.dist-info/METADATA` file from the zip, and if that also fails, download the whole wheel
             // into the cache and read from there
             self.wheel_metadata_no_pep658(
-                &filename,
+                filename,
                 url,
                 Some(index),
                 WheelCache::Index(index),
@@ -1188,7 +1220,9 @@ impl RegistryClient {
                     http::HeaderValue::from_static("identity"),
                 )
                 .build()
-                .map_err(|err| ErrorKind::from_reqwest(url.clone(), err))?;
+                .map_err(|err| {
+                    ErrorKind::from_reqwest(url.clone(), err, self.client.certificate_source())
+                })?;
 
             // Copy authorization headers from the HEAD request to subsequent requests
             let mut headers = HeaderMap::default();
@@ -1275,7 +1309,9 @@ impl RegistryClient {
                 reqwest::header::HeaderValue::from_static("identity"),
             )
             .build()
-            .map_err(|err| ErrorKind::from_reqwest(url.clone(), err))?;
+            .map_err(|err| {
+                ErrorKind::from_reqwest(url.clone(), err, self.client.certificate_source())
+            })?;
 
         // Stream the file, searching for the METADATA.
         let read_metadata_stream = |response: Response| {
@@ -1503,6 +1539,16 @@ impl SimpleDetailMetadata {
                     entry.insert(files);
                 }
             }
+        }
+
+        // Keep file ordering deterministic without sorting the complete Simple API response.
+        for files in version_map.values_mut() {
+            files
+                .wheels
+                .sort_unstable_by(|left, right| left.file.filename.cmp(&right.file.filename));
+            files
+                .source_dists
+                .sort_unstable_by(|left, right| left.file.filename.cmp(&right.file.filename));
         }
 
         Self {

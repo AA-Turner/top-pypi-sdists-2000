@@ -140,3 +140,28 @@ def test_raise_on_not_writable_file_still_rejects_readonly_file(tmp_path: Path) 
             raise_on_not_writable_file(str(path))
     finally:
         path.chmod(0o644)
+
+
+# Writability follows the mode bits, so a read-only file is rejected whatever its mtime. The far-future row pins that
+# a later patch cannot narrow the check back to a single mtime range. The check reads the mode rather than probing
+# real access, so it holds for root too and needs no euid skip.
+@pytest.mark.parametrize("mtime", [0, 2_000_000_000], ids=["mtime-zero", "mtime-future"])
+def test_raise_on_not_writable_file_rejects_readonly_file_any_mtime(tmp_path: Path, mtime: int) -> None:
+    path = tmp_path / "ro.lock"
+    path.write_text("x", encoding="utf-8")
+    path.chmod(0o444)
+    try:
+        os.utime(path, (mtime, mtime))
+        with pytest.raises(PermissionError):
+            raise_on_not_writable_file(str(path))
+    finally:
+        path.chmod(0o644)
+
+
+@pytest.mark.skipif(sys.platform == "win32", reason="a real directory raises PermissionError on Windows")
+def test_raise_on_not_writable_file_rejects_directory_with_mtime_zero(tmp_path: Path) -> None:
+    path = tmp_path / "a_dir"
+    path.mkdir()
+    os.utime(path, (0, 0))
+    with pytest.raises(IsADirectoryError):
+        raise_on_not_writable_file(str(path))

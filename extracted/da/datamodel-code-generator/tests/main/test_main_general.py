@@ -1501,12 +1501,13 @@ instead of generating them.
 
 | Format | Description |
 |--------|-------------|
-| `{"ModelName": "package.Type"}` | Model-level: Skip generating `ModelName` and import from `package` |
+| `{"ModelName": "package.Type"}` | Model-level: Skip generation; replace field and inheritance refs |
 | `{"Model.field": "package.Type"}` | Scoped: Override only specific field in specific model |
 
 !!! note "Model-level overrides skip generation"
     When you specify a model-level override (without a dot in the key), the generator will
     **skip generating that model entirely** and import it from the specified package instead.
+    References to that model are replaced in field annotations and `allOf` inheritance base classes.
 
 **Common Use Cases:**
 
@@ -1606,6 +1607,68 @@ def test_type_overrides_nested_types(output_file: Path) -> None:
         extra_args=[
             "--type-overrides",
             '{"Tag": "my_app.Tag"}',
+        ],
+    )
+
+
+@freeze_time(TIMESTAMP)
+def test_type_overrides_model_level_base_class(
+    output_file: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Test model-level --type-overrides replaces base class references."""
+    package_dir = tmp_path / "my_app"
+    package_dir.mkdir()
+    (package_dir / "__init__.py").write_text("", encoding="utf-8")
+    (package_dir / "models.py").write_text(
+        "from __future__ import annotations\n\n"
+        "from pydantic import BaseModel\n\n\n"
+        "class Base(BaseModel):\n"
+        "    id: int | None = None\n",
+        encoding="utf-8",
+    )
+    monkeypatch.syspath_prepend(str(tmp_path))
+
+    module_names = ("my_app", "my_app.models")
+    for module_name in module_names:
+        monkeypatch.delitem(sys.modules, module_name, raising=False)
+
+    try:
+        run_main_and_assert(
+            input_path=JSON_SCHEMA_DATA_PATH / "type_overrides_base_class.json",
+            output_path=output_file,
+            input_file_type="jsonschema",
+            assert_func=assert_file_content,
+            expected_file="type_overrides_base_class.py",
+            extra_args=[
+                "--output-model-type",
+                "pydantic_v2.BaseModel",
+                "--formatters",
+                "builtin",
+                "--type-overrides",
+                '{"Base": "my_app.models.Base"}',
+            ],
+            importable_module_name="generated_type_overrides_base_class",
+            importable_module_attribute="Holder",
+        )
+    finally:
+        for module_name in module_names:
+            sys.modules.pop(module_name, None)
+
+
+@freeze_time(TIMESTAMP)
+def test_type_overrides_model_level_dict_key(output_file: Path) -> None:
+    """Test model-level --type-overrides replaces dict key references."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "type_overrides_dict_key.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="type_overrides_dict_key.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--type-overrides",
+            '{"Key": "my_app.keys.Key"}',
         ],
     )
 
@@ -2867,6 +2930,97 @@ def test_generate_returns_string_when_output_none() -> None:
         disable_timestamp=True,
         expected_file=EXPECTED_MAIN_PATH / "generate_returns_string_when_output_none.py",
     )
+
+
+def test_generate_accepts_path_input(output_file: Path) -> None:
+    """Test generate() reads Path inputs as local schema files."""
+    run_generate_file_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "person.json",
+        output_path=output_file,
+        input_file_type=InputFileType.JsonSchema,
+        disable_timestamp=True,
+        assert_func=assert_file_content,
+        expected_file="generate_accepts_path_input.py",
+    )
+
+
+def test_generate_keeps_existing_path_string_input() -> None:
+    """Test generate() keeps existing path strings as inline source text."""
+    run_generate_and_assert(
+        input_=str(JSON_SCHEMA_DATA_PATH / "person.json"),
+        input_file_type=InputFileType.Yaml,
+        input_filename="inline.yaml",
+        disable_timestamp=True,
+        expected_file=EXPECTED_MAIN_PATH / "generate_keeps_existing_path_string_input.py",
+    )
+
+
+def test_generate_keeps_non_path_string_input() -> None:
+    """Test generate() keeps non-path strings as inline source text."""
+    run_generate_and_assert(
+        input_="name: Alice",
+        input_file_type=InputFileType.Yaml,
+        input_filename="inline.yaml",
+        disable_timestamp=True,
+        expected_file=EXPECTED_MAIN_PATH / "generate_keeps_non_path_string_input.py",
+    )
+
+
+def test_generate_warns_when_input_string_is_existing_path_on_failure(tmp_path: Path) -> None:
+    """Test failed string input warns when the value is an existing path."""
+    input_path = tmp_path / "schema.json"
+    input_path.write_text("{", encoding="utf-8")
+
+    with pytest.warns(UserWarning, match="Path"), pytest.raises(Error):
+        generate(
+            input_=str(input_path),
+            input_file_type=InputFileType.Json,
+            disable_timestamp=True,
+            formatters=[],
+        )
+
+
+def test_generate_warning_does_not_mask_original_error_with_strict_warning_filter(tmp_path: Path) -> None:
+    """Test strict warning filters do not replace the original generate error."""
+    input_path = tmp_path / "schema.json"
+    input_path.write_text("{", encoding="utf-8")
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", UserWarning)
+        with pytest.raises(Error):
+            generate(
+                input_=str(input_path),
+                input_file_type=InputFileType.Json,
+                disable_timestamp=True,
+                formatters=[],
+            )
+
+
+def test_generate_does_not_warn_for_non_existing_path_string_on_failure(tmp_path: Path) -> None:
+    """Test failed string input only warns for values resolving to existing paths."""
+    invalid_input_path = tmp_path / "invalid.json"
+    invalid_input_path.write_text("{", encoding="utf-8")
+
+    failed_inputs: tuple[Path | str, ...] = (
+        invalid_input_path,
+        "not\njson",
+        str(tmp_path / "missing.json"),
+        "~this-user-should-not-exist-20260703/schema.json",
+    )
+    for failed_input in failed_inputs:
+        with warnings.catch_warnings(record=True) as warning_records:
+            warnings.simplefilter("always")
+            with pytest.raises(Error):
+                generate(
+                    input_=failed_input,
+                    input_file_type=InputFileType.Json,
+                    disable_timestamp=True,
+                    formatters=[],
+                )
+        assert_warnings_do_not_contain(
+            warning_records,
+            "pass a `Path` object to read it as a file",
+        )
 
 
 def test_generate_returns_string_with_pydantic_v2() -> None:
