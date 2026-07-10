@@ -5,15 +5,10 @@ import typing
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.unchecked_base_model import UncheckedBaseModel
-from .dynamic_variables_config_dynamic_variable_placeholders_value import (
-    DynamicVariablesConfigDynamicVariablePlaceholdersValue,
-)
 
 
 class DynamicVariablesConfig(UncheckedBaseModel):
-    dynamic_variable_placeholders: typing.Optional[
-        typing.Dict[str, DynamicVariablesConfigDynamicVariablePlaceholdersValue]
-    ] = pydantic.Field(default=None)
+    dynamic_variable_placeholders: typing.Optional[typing.Dict[str, typing.Any]] = pydantic.Field(default=None)
     """
     A dictionary of dynamic variable placeholders and their values
     """
