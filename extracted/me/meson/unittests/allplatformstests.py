@@ -1752,7 +1752,7 @@ class AllPlatformTests(BasePlatformTests):
             rpath = get_rpath(os.path.join(self.builddir, each))
             self.assertTrue(rpath, f'Rpath could not be determined for {each}.')
             if is_dragonflybsd():
-                # DragonflyBSD will prepend /usr/lib/gccVERSION to the rpath,
+                # DragonFly BSD will prepend /usr/lib/gccVERSION to the rpath,
                 # so ignore that.
                 self.assertTrue(rpath.startswith('/usr/lib/gcc'))
                 rpaths = rpath.split(':')[1:]
@@ -4067,6 +4067,14 @@ class AllPlatformTests(BasePlatformTests):
         testdir = os.path.join(self.common_test_dir, '2 cpp')
         self.init(testdir)
         self._run(self.mconf_command + [self.builddir])
+
+    def test_configure_with_augments(self):
+        # A list-valued augment used to crash `meson configure <builddir>`.
+        testdir = os.path.join(self.unit_test_dir, '47 reconfigure')
+        self.init(testdir, extra_args=['-Dsub1:c_args=-DFOO'])
+        out = self._run(self.mconf_command + [self.builddir])
+        self.assertIn('sub1:c_args', out)
+        self.assertIn('[-DFOO]', out)
 
     def test_summary(self):
         testdir = os.path.join(self.unit_test_dir, '71 summary')
