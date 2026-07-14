@@ -9,14 +9,14 @@ __all__ = ["SchemaHTTP", "TargetPolicy"]
 
 
 class TargetPolicy(BaseModel):
-    id: Optional[str] = None
-    """The id of the device settings profile"""
+    id: str
+    """The id of the DEX rule."""
 
     default: Optional[bool] = None
-    """Whether the profile is the account default"""
+    """Whether the DEX rule is the account default."""
 
     name: Optional[str] = None
-    """The name of the device settings profile"""
+    """The name of the DEX rule."""
 
 
 class SchemaHTTP(BaseModel):
@@ -39,7 +39,7 @@ class SchemaHTTP(BaseModel):
     """Additional details about the test."""
 
     target_policies: Optional[List[TargetPolicy]] = None
-    """Device settings profiles targeted by this test"""
+    """DEX rules targeted by this test"""
 
     targeted: Optional[bool] = None
 
