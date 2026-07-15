@@ -22,6 +22,7 @@ _SENSITIVE_LOG_KEYS = frozenset(
     {
         "localWebServerPassword",
         "presharedKey",
+        "psk",
         "cak",
         "md5Password",
     }
@@ -206,6 +207,17 @@ def ansible_diff_from_plan(diff_plan: List[Dict[str, Any]]) -> Dict[str, str]:
         before_chunks.append(header + json.dumps(item.get("before") or {}, sort_keys=True, indent=2))
         after_chunks.append(header + json.dumps(item.get("after") or {}, sort_keys=True, indent=2))
     return {"before": "\n\n".join(before_chunks) + "\n", "after": "\n\n".join(after_chunks) + "\n"}
+
+
+def apply_module_diff(module: Any, exit_payload: Dict[str, Any], details: Dict[str, Any]) -> None:
+    """Populate ``diff`` in *exit_payload* when the playbook is run with ``--diff``.
+
+    Call this just before ``module.exit_json(**exit_payload)`` in every module that
+    supports diff mode.  *details* is the manager result dict (contains ``diff_plan``).
+    """
+    diff_plan = (details or {}).get("diff_plan") or []
+    if getattr(module, "_diff", False) and diff_plan:
+        exit_payload["diff"] = ansible_diff_from_plan(diff_plan)
 
 
 def dtype_from_device_role(role: Any) -> Optional[str]:
