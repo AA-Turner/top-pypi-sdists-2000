@@ -4,7 +4,9 @@ import ulid.__main__ as cli
 from ulid import ULID
 
 
-@pytest.mark.parametrize("option", ["", "uuid", "uuid4", "hex", "int", "timestamp", "datetime"])
+@pytest.mark.parametrize(
+    "option", ["", "uuid", "uuid4", "uuid7", "hex", "int", "timestamp", "datetime"]
+)
 def test_parse_show(option: str):
     ulid = ULID()
     argv = ["show", f"--{option}", str(ulid)]
@@ -13,6 +15,8 @@ def test_parse_show(option: str):
         assert output == str(ulid.to_uuid())
     elif option == "uuid4":
         assert output == str(ulid.to_uuid4())
+    elif option == "uuid7":
+        assert output == str(ulid.to_uuid7(compliant=True))
     elif option == "hex":
         assert output == ulid.hex
     elif option == "int":
@@ -43,7 +47,7 @@ def test_parse_show(option: str):
 )
 def test_build(option: str):
     ulid = ULID()
-    value: str
+    value: str = ""
     includes_randomness = True
     includes_timestamp = True
     if option.endswith("uuid"):
