@@ -11,17 +11,17 @@ if typing.TYPE_CHECKING:
     from .api_meta_billed_units import ApiMetaBilledUnits
     from .api_meta_tokens import ApiMetaTokens
     from .assistant_message import AssistantMessage
+    from .assistant_message_content import AssistantMessageContent
+    from .assistant_message_content_one_item import (
+        AssistantMessageContentOneItem,
+        TextAssistantMessageContentOneItem,
+        ThinkingAssistantMessageContentOneItem,
+    )
     from .assistant_message_response import AssistantMessageResponse
     from .assistant_message_response_content_item import (
         AssistantMessageResponseContentItem,
         TextAssistantMessageResponseContentItem,
         ThinkingAssistantMessageResponseContentItem,
-    )
-    from .assistant_message_v2content import AssistantMessageV2Content
-    from .assistant_message_v2content_one_item import (
-        AssistantMessageV2ContentOneItem,
-        TextAssistantMessageV2ContentOneItem,
-        ThinkingAssistantMessageV2ContentOneItem,
     )
     from .auth_token_type import AuthTokenType
     from .chat_citation import ChatCitation
@@ -66,7 +66,7 @@ if typing.TYPE_CHECKING:
     from .chat_search_result_connector import ChatSearchResultConnector
     from .chat_search_results_event import ChatSearchResultsEvent
     from .chat_stream_end_event import ChatStreamEndEvent
-    from .chat_stream_end_event_finish_reason import ChatStreamEndEventFinishReason
+    from .chat_stream_end_event_y8gq2x_finish_reason import ChatStreamEndEventY8Gq2XFinishReason
     from .chat_stream_event import ChatStreamEvent
     from .chat_stream_event_type import ChatStreamEventType
     from .chat_stream_request_citation_quality import ChatStreamRequestCitationQuality
@@ -184,6 +184,7 @@ if typing.TYPE_CHECKING:
     from .non_streamed_chat_response import NonStreamedChatResponse
     from .o_auth_authorize_response import OAuthAuthorizeResponse
     from .parse_info import ParseInfo
+    from .prompt_response_v2 import PromptResponseV2
     from .rerank_document import RerankDocument
     from .rerank_request_documents_item import RerankRequestDocumentsItem
     from .rerank_response import RerankResponse
@@ -243,10 +244,10 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ApiMetaTokens": ".api_meta_tokens",
     "AssistantChatMessageV2": ".chat_message_v2",
     "AssistantMessage": ".assistant_message",
+    "AssistantMessageContent": ".assistant_message_content",
+    "AssistantMessageContentOneItem": ".assistant_message_content_one_item",
     "AssistantMessageResponse": ".assistant_message_response",
     "AssistantMessageResponseContentItem": ".assistant_message_response_content_item",
-    "AssistantMessageV2Content": ".assistant_message_v2content",
-    "AssistantMessageV2ContentOneItem": ".assistant_message_v2content_one_item",
     "AuthTokenType": ".auth_token_type",
     "ChatCitation": ".chat_citation",
     "ChatCitationGenerationEvent": ".chat_citation_generation_event",
@@ -284,7 +285,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "ChatSearchResultConnector": ".chat_search_result_connector",
     "ChatSearchResultsEvent": ".chat_search_results_event",
     "ChatStreamEndEvent": ".chat_stream_end_event",
-    "ChatStreamEndEventFinishReason": ".chat_stream_end_event_finish_reason",
+    "ChatStreamEndEventY8Gq2XFinishReason": ".chat_stream_end_event_y8gq2x_finish_reason",
     "ChatStreamEvent": ".chat_stream_event",
     "ChatStreamEventType": ".chat_stream_event_type",
     "ChatStreamRequestCitationQuality": ".chat_stream_request_citation_quality",
@@ -404,6 +405,7 @@ _dynamic_imports: typing.Dict[str, str] = {
     "NonStreamedChatResponse": ".non_streamed_chat_response",
     "OAuthAuthorizeResponse": ".o_auth_authorize_response",
     "ParseInfo": ".parse_info",
+    "PromptResponseV2": ".prompt_response_v2",
     "RerankDocument": ".rerank_document",
     "RerankRequestDocumentsItem": ".rerank_request_documents_item",
     "RerankResponse": ".rerank_response",
@@ -432,8 +434,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "SystemMessageV2": ".system_message_v2",
     "SystemMessageV2Content": ".system_message_v2content",
     "SystemMessageV2ContentOneItem": ".system_message_v2content_one_item",
+    "TextAssistantMessageContentOneItem": ".assistant_message_content_one_item",
     "TextAssistantMessageResponseContentItem": ".assistant_message_response_content_item",
-    "TextAssistantMessageV2ContentOneItem": ".assistant_message_v2content_one_item",
     "TextContent": ".content",
     "TextEmbedContent": ".embed_content",
     "TextGenerationGenerateStreamedResponse": ".generate_streamed_response",
@@ -443,8 +445,8 @@ _dynamic_imports: typing.Dict[str, str] = {
     "TextSystemMessageV2ContentOneItem": ".system_message_v2content_one_item",
     "TextToolContent": ".tool_content",
     "Thinking": ".thinking",
+    "ThinkingAssistantMessageContentOneItem": ".assistant_message_content_one_item",
     "ThinkingAssistantMessageResponseContentItem": ".assistant_message_response_content_item",
-    "ThinkingAssistantMessageV2ContentOneItem": ".assistant_message_v2content_one_item",
     "ThinkingType": ".thinking_type",
     "TokenizeResponse": ".tokenize_response",
     "Tool": ".tool",
@@ -503,10 +505,10 @@ __all__ = [
     "ApiMetaTokens",
     "AssistantChatMessageV2",
     "AssistantMessage",
+    "AssistantMessageContent",
+    "AssistantMessageContentOneItem",
     "AssistantMessageResponse",
     "AssistantMessageResponseContentItem",
-    "AssistantMessageV2Content",
-    "AssistantMessageV2ContentOneItem",
     "AuthTokenType",
     "ChatCitation",
     "ChatCitationGenerationEvent",
@@ -544,7 +546,7 @@ __all__ = [
     "ChatSearchResultConnector",
     "ChatSearchResultsEvent",
     "ChatStreamEndEvent",
-    "ChatStreamEndEventFinishReason",
+    "ChatStreamEndEventY8Gq2XFinishReason",
     "ChatStreamEvent",
     "ChatStreamEventType",
     "ChatStreamRequestCitationQuality",
@@ -664,6 +666,7 @@ __all__ = [
     "NonStreamedChatResponse",
     "OAuthAuthorizeResponse",
     "ParseInfo",
+    "PromptResponseV2",
     "RerankDocument",
     "RerankRequestDocumentsItem",
     "RerankResponse",
@@ -692,8 +695,8 @@ __all__ = [
     "SystemMessageV2",
     "SystemMessageV2Content",
     "SystemMessageV2ContentOneItem",
+    "TextAssistantMessageContentOneItem",
     "TextAssistantMessageResponseContentItem",
-    "TextAssistantMessageV2ContentOneItem",
     "TextContent",
     "TextEmbedContent",
     "TextGenerationGenerateStreamedResponse",
@@ -703,8 +706,8 @@ __all__ = [
     "TextSystemMessageV2ContentOneItem",
     "TextToolContent",
     "Thinking",
+    "ThinkingAssistantMessageContentOneItem",
     "ThinkingAssistantMessageResponseContentItem",
-    "ThinkingAssistantMessageV2ContentOneItem",
     "ThinkingType",
     "TokenizeResponse",
     "Tool",

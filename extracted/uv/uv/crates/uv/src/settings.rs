@@ -34,8 +34,8 @@ use uv_cli::{
 };
 use uv_client::Connectivity;
 use uv_configuration::{
-    BuildIsolation, BuildOptions, Concurrency, DependencyGroups, DryRun, EditableMode, EnvFile,
-    ExcludeDependency, ExportFormat, ExtrasSpecification, GitLfsSetting, HashCheckingMode,
+    BuildIsolation, BuildOptions, Concurrency, DependencyGroups, DevMode, DryRun, EditableMode,
+    EnvFile, ExcludeDependency, ExportFormat, ExtrasSpecification, GitLfsSetting, HashCheckingMode,
     IndexStrategy, InstallOptions, KeyringProviderType, NoBinary, NoBuild, NoSources, Override,
     PackageOverride, PipCompileFormat, ProjectBuildBackend, ProxyUrl, Reinstall, RequiredVersion,
     TargetTriple, TrustedHost, TrustedPublishing, Upgrade, VersionControlSystem,
@@ -128,6 +128,11 @@ impl GlobalSettings {
                     .combine(workspace.and_then(|workspace| workspace.globals.concurrent_installs))
                     .map(NonZeroUsize::get)
                     .unwrap_or_else(Concurrency::threads),
+                environment
+                    .concurrency
+                    .cache_reads
+                    .map(NonZeroUsize::get)
+                    .unwrap_or(Concurrency::DEFAULT_CACHE_READS),
             ),
             show_settings: args.show_settings,
             preview: resolve_preview(args, workspace, environment),
@@ -804,9 +809,7 @@ impl RunSettings {
                 flag(all_extras, no_all_extras, "all-extras").unwrap_or_default(),
             ),
             groups: DependencyGroups::from_args(
-                dev.into(),
-                no_dev.into(),
-                only_dev,
+                DevMode::from_args(dev.into(), no_dev.into(), only_dev),
                 group,
                 if no_group.is_empty() {
                     environment.no_group.clone().unwrap_or_default()
@@ -1942,9 +1945,7 @@ impl SyncSettings {
                 flag(all_extras, no_all_extras, "all-extras").unwrap_or_default(),
             ),
             groups: DependencyGroups::from_args(
-                dev.into(),
-                no_dev.into(),
-                only_dev,
+                DevMode::from_args(dev.into(), no_dev.into(), only_dev),
                 group,
                 if no_group.is_empty() {
                     environment.no_group.clone().unwrap_or_default()
@@ -2100,6 +2101,7 @@ pub(crate) struct MetadataSettings {
     pub(crate) frozen: Option<FrozenSource>,
     pub(crate) dry_run: DryRun,
     pub(crate) sync: bool,
+    pub(crate) active: bool,
     pub(crate) python: Option<String>,
     pub(crate) install_mirrors: PythonInstallMirrors,
     pub(crate) refresh: Refresh,
@@ -2123,6 +2125,7 @@ impl MetadataSettings {
             build,
             refresh,
             sync,
+            active,
             python,
         } = *args;
 
@@ -2146,6 +2149,7 @@ impl MetadataSettings {
             frozen: resolve_frozen(frozen),
             dry_run: DryRun::from_args(dry_run),
             sync,
+            active,
             python: python.and_then(Maybe::into_option),
             refresh: Refresh::from(refresh),
             settings: ResolverSettings::combine(
@@ -2719,9 +2723,7 @@ impl TreeSettings {
 
         Self {
             groups: DependencyGroups::from_args(
-                dev.into(),
-                no_dev.into(),
-                only_dev,
+                DevMode::from_args(dev.into(), no_dev.into(), only_dev),
                 group,
                 if no_group.is_empty() {
                     environment.no_group.clone().unwrap_or_default()
@@ -2884,9 +2886,7 @@ impl ExportSettings {
                 flag(all_extras, no_all_extras, "all-extras").unwrap_or_default(),
             ),
             groups: DependencyGroups::from_args(
-                dev.into(),
-                no_dev.into(),
-                only_dev,
+                DevMode::from_args(dev.into(), no_dev.into(), only_dev),
                 group,
                 if no_group.is_empty() {
                     environment.no_group.clone().unwrap_or_default()
@@ -3074,9 +3074,7 @@ impl CheckSettings {
                 flag(all_extras, no_all_extras, "all-extras").unwrap_or_default(),
             ),
             groups: DependencyGroups::from_args(
-                dev.into(),
-                no_dev.into(),
-                only_dev,
+                DevMode::from_args(dev.into(), no_dev.into(), only_dev),
                 group,
                 if no_group.is_empty() {
                     environment.no_group.clone().unwrap_or_default()
@@ -3181,9 +3179,7 @@ impl AuditSettings {
                 true,
             ),
             groups: DependencyGroups::from_args(
-                only_group.is_empty() && !only_dev,
-                no_dev,
-                only_dev,
+                DevMode::from_args(only_group.is_empty() && !only_dev, no_dev, only_dev),
                 vec![],
                 if no_group.is_empty() {
                     environment.no_group.clone().unwrap_or_default()

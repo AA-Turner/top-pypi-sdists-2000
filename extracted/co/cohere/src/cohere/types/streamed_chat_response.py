@@ -12,7 +12,7 @@ from .chat_citation import ChatCitation
 from .chat_document import ChatDocument
 from .chat_search_query import ChatSearchQuery
 from .chat_search_result import ChatSearchResult
-from .chat_stream_end_event_finish_reason import ChatStreamEndEventFinishReason
+from .chat_stream_end_event_y8gq2x_finish_reason import ChatStreamEndEventY8Gq2XFinishReason
 from .non_streamed_chat_response import NonStreamedChatResponse
 from .tool_call import ToolCall
 from .tool_call_delta import ToolCallDelta
@@ -128,7 +128,7 @@ class StreamEndStreamedChatResponse(UncheckedBaseModel):
     """
 
     event_type: typing.Literal["stream-end"] = "stream-end"
-    finish_reason: ChatStreamEndEventFinishReason
+    finish_reason: ChatStreamEndEventY8Gq2XFinishReason
     response: NonStreamedChatResponse
 
     if IS_PYDANTIC_V2:

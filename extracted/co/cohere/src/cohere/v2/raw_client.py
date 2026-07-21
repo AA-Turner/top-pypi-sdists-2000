@@ -32,6 +32,7 @@ from ..types.embed_by_type_response import EmbedByTypeResponse
 from ..types.embed_input import EmbedInput
 from ..types.embed_input_type import EmbedInputType
 from ..types.embedding_type import EmbeddingType
+from ..types.prompt_response_v2 import PromptResponseV2
 from ..types.response_format_v2 import ResponseFormatV2
 from ..types.thinking import Thinking
 from ..types.tool_v2 import ToolV2
@@ -44,6 +45,9 @@ from .types.v2chat_stream_request_safety_mode import V2ChatStreamRequestSafetyMo
 from .types.v2chat_stream_request_tool_choice import V2ChatStreamRequestToolChoice
 from .types.v2chat_stream_response import V2ChatStreamResponse
 from .types.v2embed_request_truncate import V2EmbedRequestTruncate
+from .types.v2prompt_request_documents_item import V2PromptRequestDocumentsItem
+from .types.v2prompt_request_safety_mode import V2PromptRequestSafetyMode
+from .types.v2prompt_request_tool_choice import V2PromptRequestToolChoice
 from .types.v2rerank_response import V2RerankResponse
 from pydantic import ValidationError
 
@@ -582,6 +586,334 @@ class RawV2Client:
                     V2ChatResponse,
                     construct_type(
                         type_=V2ChatResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return HttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 498:
+                raise InvalidTokenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 499:
+                raise ClientClosedRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 501:
+                raise NotImplementedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 504:
+                raise GatewayTimeoutError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    def prompt(
+        self,
+        *,
+        model: str,
+        messages: ChatMessages,
+        stream: typing.Optional[bool] = OMIT,
+        tools: typing.Optional[typing.Sequence[ToolV2]] = OMIT,
+        strict_tools: typing.Optional[bool] = OMIT,
+        documents: typing.Optional[typing.Sequence[V2PromptRequestDocumentsItem]] = OMIT,
+        citation_options: typing.Optional[CitationOptions] = OMIT,
+        response_format: typing.Optional[ResponseFormatV2] = OMIT,
+        safety_mode: typing.Optional[V2PromptRequestSafetyMode] = OMIT,
+        max_tokens: typing.Optional[int] = OMIT,
+        stop_sequences: typing.Optional[typing.Sequence[str]] = OMIT,
+        temperature: typing.Optional[float] = OMIT,
+        seed: typing.Optional[int] = OMIT,
+        frequency_penalty: typing.Optional[float] = OMIT,
+        presence_penalty: typing.Optional[float] = OMIT,
+        k: typing.Optional[int] = OMIT,
+        p: typing.Optional[float] = OMIT,
+        logprobs: typing.Optional[bool] = OMIT,
+        tool_choice: typing.Optional[V2PromptRequestToolChoice] = OMIT,
+        thinking: typing.Optional[Thinking] = OMIT,
+        priority: typing.Optional[int] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> HttpResponse[PromptResponseV2]:
+        """
+        Returns the constructed text prompt for a v2 chat request without running model generation.
+        The request body matches [Chat v2](/v2/chat) (the `stream` field is ignored).
+
+        Parameters
+        ----------
+        model : str
+            The name of a compatible [Cohere model](https://docs.cohere.com/v2/docs/models).
+
+        messages : ChatMessages
+
+        stream : typing.Optional[bool]
+            Defaults to `false`.
+
+            When `true`, the response will be a SSE stream of events.
+
+            Streaming is beneficial for user interfaces that render the contents of the response piece by piece, as it gets generated.
+
+        tools : typing.Optional[typing.Sequence[ToolV2]]
+            A list of tools (functions) available to the model. The model response may contain 'tool_calls' to the specified tools.
+
+            Learn more in the [Tool Use guide](https://docs.cohere.com/docs/tools).
+
+        strict_tools : typing.Optional[bool]
+            When set to `true`, tool calls in the Assistant message will be forced to follow the tool definition strictly. Learn more in the [Structured Outputs (Tools) guide](https://docs.cohere.com/docs/structured-outputs-json#structured-outputs-tools).
+
+            **Note**: The first few requests with a new set of tools will take longer to process.
+
+        documents : typing.Optional[typing.Sequence[V2PromptRequestDocumentsItem]]
+            A list of relevant documents that the model can cite to generate a more accurate reply. Each document is either a string or document object with content and metadata.
+
+        citation_options : typing.Optional[CitationOptions]
+
+        response_format : typing.Optional[ResponseFormatV2]
+
+        safety_mode : typing.Optional[V2PromptRequestSafetyMode]
+            Used to select the [safety instruction](https://docs.cohere.com/v2/docs/safety-modes) inserted into the prompt. Defaults to `CONTEXTUAL`.
+            When `OFF` is specified, the safety instruction will be omitted.
+
+            Safety modes are not yet configurable in combination with `tools` and `documents` parameters.
+
+            **Note**: This parameter is only compatible newer Cohere models, starting with [Command R 08-2024](https://docs.cohere.com/docs/command-r#august-2024-release) and [Command R+ 08-2024](https://docs.cohere.com/docs/command-r-plus#august-2024-release).
+
+            **Note**: `command-r7b-12-2024` and newer models only support `"CONTEXTUAL"` and `"STRICT"` modes.
+
+        max_tokens : typing.Optional[int]
+            The maximum number of output tokens the model will generate in the response. If not set, `max_tokens` defaults to the model's maximum output token limit. You can find the maximum output token limits for each model in the [model documentation](https://docs.cohere.com/docs/models).
+
+            **Note**: Setting a low value may result in incomplete generations. In such cases, the `finish_reason` field in the response will be set to `"MAX_TOKENS"`.
+
+            **Note**: If `max_tokens` is set higher than the model's maximum output token limit, the generation will be capped at that model-specific maximum limit.
+
+        stop_sequences : typing.Optional[typing.Sequence[str]]
+            A list of up to 5 strings that the model will use to stop generation. If the model generates a string that matches any of the strings in the list, it will stop generating tokens and return the generated text up to that point not including the stop sequence.
+
+        temperature : typing.Optional[float]
+            Defaults to `0.3`.
+
+            A non-negative float that tunes the degree of randomness in generation. Lower temperatures mean less random generations, and higher temperatures mean more random generations.
+
+            Randomness can be further maximized by increasing the  value of the `p` parameter.
+
+        seed : typing.Optional[int]
+            If specified, the backend will make a best effort to sample tokens
+            deterministically, such that repeated requests with the same
+            seed and parameters should return the same result. However,
+            determinism cannot be totally guaranteed.
+
+        frequency_penalty : typing.Optional[float]
+            Defaults to `0.0`, min value of `0.0`, max value of `1.0`.
+            Used to reduce repetitiveness of generated tokens. The higher the value, the stronger a penalty is applied to previously present tokens, proportional to how many times they have already appeared in the prompt or prior generation.
+
+        presence_penalty : typing.Optional[float]
+            Defaults to `0.0`, min value of `0.0`, max value of `1.0`.
+            Used to reduce repetitiveness of generated tokens. Similar to `frequency_penalty`, except that this penalty is applied equally to all tokens that have already appeared, regardless of their exact frequencies.
+
+        k : typing.Optional[int]
+            Ensures that only the top `k` most likely tokens are considered for generation at each step. When `k` is set to `0`, k-sampling is disabled.
+            Defaults to `0`, min value of `0`, max value of `500`.
+
+        p : typing.Optional[float]
+            Ensures that only the most likely tokens, with total probability mass of `p`, are considered for generation at each step. If both `k` and `p` are enabled, `p` acts after `k`.
+            Defaults to `0.75`. min value of `0.01`, max value of `0.99`.
+
+        logprobs : typing.Optional[bool]
+            Defaults to `false`. When set to `true`, the log probabilities of the generated tokens will be included in the response.
+
+        tool_choice : typing.Optional[V2PromptRequestToolChoice]
+            Used to control whether or not the model will be forced to use a tool when answering. When `REQUIRED` is specified, the model will be forced to use at least one of the user-defined tools, and the `tools` parameter must be passed in the request.
+            When `NONE` is specified, the model will be forced **not** to use one of the specified tools, and give a direct response.
+            If tool_choice isn't specified, then the model is free to choose whether to use the specified tools or not.
+
+            **Note**: This parameter is only compatible with models [Command-r7b](https://docs.cohere.com/v2/docs/command-r7b) and newer.
+
+        thinking : typing.Optional[Thinking]
+
+        priority : typing.Optional[int]
+            Controls how early the request is handled. Lower numbers indicate higher priority (default: 0, the highest). When the system is under load, higher-priority requests are processed first and are the least likely to be dropped.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        HttpResponse[PromptResponseV2]
+            OK
+        """
+        _response = self._client_wrapper.httpx_client.request(
+            "v2/prompt",
+            method="POST",
+            json={
+                "stream": stream,
+                "model": model,
+                "messages": convert_and_respect_annotation_metadata(
+                    object_=messages, annotation=ChatMessages, direction="write"
+                ),
+                "tools": convert_and_respect_annotation_metadata(
+                    object_=tools, annotation=typing.Sequence[ToolV2], direction="write"
+                ),
+                "strict_tools": strict_tools,
+                "documents": convert_and_respect_annotation_metadata(
+                    object_=documents, annotation=typing.Sequence[V2PromptRequestDocumentsItem], direction="write"
+                ),
+                "citation_options": convert_and_respect_annotation_metadata(
+                    object_=citation_options, annotation=CitationOptions, direction="write"
+                ),
+                "response_format": convert_and_respect_annotation_metadata(
+                    object_=response_format, annotation=ResponseFormatV2, direction="write"
+                ),
+                "safety_mode": safety_mode,
+                "max_tokens": max_tokens,
+                "stop_sequences": stop_sequences,
+                "temperature": temperature,
+                "seed": seed,
+                "frequency_penalty": frequency_penalty,
+                "presence_penalty": presence_penalty,
+                "k": k,
+                "p": p,
+                "logprobs": logprobs,
+                "tool_choice": tool_choice,
+                "thinking": convert_and_respect_annotation_metadata(
+                    object_=thinking, annotation=Thinking, direction="write"
+                ),
+                "priority": priority,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PromptResponseV2,
+                    construct_type(
+                        type_=PromptResponseV2,  # type: ignore
                         object_=_response.json(),
                     ),
                 )
@@ -1729,6 +2061,334 @@ class AsyncRawV2Client:
                     V2ChatResponse,
                     construct_type(
                         type_=V2ChatResponse,  # type: ignore
+                        object_=_response.json(),
+                    ),
+                )
+                return AsyncHttpResponse(response=_response, data=_data)
+            if _response.status_code == 400:
+                raise BadRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 401:
+                raise UnauthorizedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 403:
+                raise ForbiddenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 404:
+                raise NotFoundError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 422:
+                raise UnprocessableEntityError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 429:
+                raise TooManyRequestsError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 498:
+                raise InvalidTokenError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 499:
+                raise ClientClosedRequestError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 500:
+                raise InternalServerError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 501:
+                raise NotImplementedError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 503:
+                raise ServiceUnavailableError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            if _response.status_code == 504:
+                raise GatewayTimeoutError(
+                    headers=dict(_response.headers),
+                    body=typing.cast(
+                        typing.Any,
+                        construct_type(
+                            type_=typing.Any,  # type: ignore
+                            object_=_response.json(),
+                        ),
+                    ),
+                )
+            _response_json = _response.json()
+        except JSONDecodeError:
+            raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response.text)
+        except ValidationError as e:
+            raise ParsingError(
+                status_code=_response.status_code, headers=dict(_response.headers), body=_response.json(), cause=e
+            )
+        raise ApiError(status_code=_response.status_code, headers=dict(_response.headers), body=_response_json)
+
+    async def prompt(
+        self,
+        *,
+        model: str,
+        messages: ChatMessages,
+        stream: typing.Optional[bool] = OMIT,
+        tools: typing.Optional[typing.Sequence[ToolV2]] = OMIT,
+        strict_tools: typing.Optional[bool] = OMIT,
+        documents: typing.Optional[typing.Sequence[V2PromptRequestDocumentsItem]] = OMIT,
+        citation_options: typing.Optional[CitationOptions] = OMIT,
+        response_format: typing.Optional[ResponseFormatV2] = OMIT,
+        safety_mode: typing.Optional[V2PromptRequestSafetyMode] = OMIT,
+        max_tokens: typing.Optional[int] = OMIT,
+        stop_sequences: typing.Optional[typing.Sequence[str]] = OMIT,
+        temperature: typing.Optional[float] = OMIT,
+        seed: typing.Optional[int] = OMIT,
+        frequency_penalty: typing.Optional[float] = OMIT,
+        presence_penalty: typing.Optional[float] = OMIT,
+        k: typing.Optional[int] = OMIT,
+        p: typing.Optional[float] = OMIT,
+        logprobs: typing.Optional[bool] = OMIT,
+        tool_choice: typing.Optional[V2PromptRequestToolChoice] = OMIT,
+        thinking: typing.Optional[Thinking] = OMIT,
+        priority: typing.Optional[int] = OMIT,
+        request_options: typing.Optional[RequestOptions] = None,
+    ) -> AsyncHttpResponse[PromptResponseV2]:
+        """
+        Returns the constructed text prompt for a v2 chat request without running model generation.
+        The request body matches [Chat v2](/v2/chat) (the `stream` field is ignored).
+
+        Parameters
+        ----------
+        model : str
+            The name of a compatible [Cohere model](https://docs.cohere.com/v2/docs/models).
+
+        messages : ChatMessages
+
+        stream : typing.Optional[bool]
+            Defaults to `false`.
+
+            When `true`, the response will be a SSE stream of events.
+
+            Streaming is beneficial for user interfaces that render the contents of the response piece by piece, as it gets generated.
+
+        tools : typing.Optional[typing.Sequence[ToolV2]]
+            A list of tools (functions) available to the model. The model response may contain 'tool_calls' to the specified tools.
+
+            Learn more in the [Tool Use guide](https://docs.cohere.com/docs/tools).
+
+        strict_tools : typing.Optional[bool]
+            When set to `true`, tool calls in the Assistant message will be forced to follow the tool definition strictly. Learn more in the [Structured Outputs (Tools) guide](https://docs.cohere.com/docs/structured-outputs-json#structured-outputs-tools).
+
+            **Note**: The first few requests with a new set of tools will take longer to process.
+
+        documents : typing.Optional[typing.Sequence[V2PromptRequestDocumentsItem]]
+            A list of relevant documents that the model can cite to generate a more accurate reply. Each document is either a string or document object with content and metadata.
+
+        citation_options : typing.Optional[CitationOptions]
+
+        response_format : typing.Optional[ResponseFormatV2]
+
+        safety_mode : typing.Optional[V2PromptRequestSafetyMode]
+            Used to select the [safety instruction](https://docs.cohere.com/v2/docs/safety-modes) inserted into the prompt. Defaults to `CONTEXTUAL`.
+            When `OFF` is specified, the safety instruction will be omitted.
+
+            Safety modes are not yet configurable in combination with `tools` and `documents` parameters.
+
+            **Note**: This parameter is only compatible newer Cohere models, starting with [Command R 08-2024](https://docs.cohere.com/docs/command-r#august-2024-release) and [Command R+ 08-2024](https://docs.cohere.com/docs/command-r-plus#august-2024-release).
+
+            **Note**: `command-r7b-12-2024` and newer models only support `"CONTEXTUAL"` and `"STRICT"` modes.
+
+        max_tokens : typing.Optional[int]
+            The maximum number of output tokens the model will generate in the response. If not set, `max_tokens` defaults to the model's maximum output token limit. You can find the maximum output token limits for each model in the [model documentation](https://docs.cohere.com/docs/models).
+
+            **Note**: Setting a low value may result in incomplete generations. In such cases, the `finish_reason` field in the response will be set to `"MAX_TOKENS"`.
+
+            **Note**: If `max_tokens` is set higher than the model's maximum output token limit, the generation will be capped at that model-specific maximum limit.
+
+        stop_sequences : typing.Optional[typing.Sequence[str]]
+            A list of up to 5 strings that the model will use to stop generation. If the model generates a string that matches any of the strings in the list, it will stop generating tokens and return the generated text up to that point not including the stop sequence.
+
+        temperature : typing.Optional[float]
+            Defaults to `0.3`.
+
+            A non-negative float that tunes the degree of randomness in generation. Lower temperatures mean less random generations, and higher temperatures mean more random generations.
+
+            Randomness can be further maximized by increasing the  value of the `p` parameter.
+
+        seed : typing.Optional[int]
+            If specified, the backend will make a best effort to sample tokens
+            deterministically, such that repeated requests with the same
+            seed and parameters should return the same result. However,
+            determinism cannot be totally guaranteed.
+
+        frequency_penalty : typing.Optional[float]
+            Defaults to `0.0`, min value of `0.0`, max value of `1.0`.
+            Used to reduce repetitiveness of generated tokens. The higher the value, the stronger a penalty is applied to previously present tokens, proportional to how many times they have already appeared in the prompt or prior generation.
+
+        presence_penalty : typing.Optional[float]
+            Defaults to `0.0`, min value of `0.0`, max value of `1.0`.
+            Used to reduce repetitiveness of generated tokens. Similar to `frequency_penalty`, except that this penalty is applied equally to all tokens that have already appeared, regardless of their exact frequencies.
+
+        k : typing.Optional[int]
+            Ensures that only the top `k` most likely tokens are considered for generation at each step. When `k` is set to `0`, k-sampling is disabled.
+            Defaults to `0`, min value of `0`, max value of `500`.
+
+        p : typing.Optional[float]
+            Ensures that only the most likely tokens, with total probability mass of `p`, are considered for generation at each step. If both `k` and `p` are enabled, `p` acts after `k`.
+            Defaults to `0.75`. min value of `0.01`, max value of `0.99`.
+
+        logprobs : typing.Optional[bool]
+            Defaults to `false`. When set to `true`, the log probabilities of the generated tokens will be included in the response.
+
+        tool_choice : typing.Optional[V2PromptRequestToolChoice]
+            Used to control whether or not the model will be forced to use a tool when answering. When `REQUIRED` is specified, the model will be forced to use at least one of the user-defined tools, and the `tools` parameter must be passed in the request.
+            When `NONE` is specified, the model will be forced **not** to use one of the specified tools, and give a direct response.
+            If tool_choice isn't specified, then the model is free to choose whether to use the specified tools or not.
+
+            **Note**: This parameter is only compatible with models [Command-r7b](https://docs.cohere.com/v2/docs/command-r7b) and newer.
+
+        thinking : typing.Optional[Thinking]
+
+        priority : typing.Optional[int]
+            Controls how early the request is handled. Lower numbers indicate higher priority (default: 0, the highest). When the system is under load, higher-priority requests are processed first and are the least likely to be dropped.
+
+        request_options : typing.Optional[RequestOptions]
+            Request-specific configuration.
+
+        Returns
+        -------
+        AsyncHttpResponse[PromptResponseV2]
+            OK
+        """
+        _response = await self._client_wrapper.httpx_client.request(
+            "v2/prompt",
+            method="POST",
+            json={
+                "stream": stream,
+                "model": model,
+                "messages": convert_and_respect_annotation_metadata(
+                    object_=messages, annotation=ChatMessages, direction="write"
+                ),
+                "tools": convert_and_respect_annotation_metadata(
+                    object_=tools, annotation=typing.Sequence[ToolV2], direction="write"
+                ),
+                "strict_tools": strict_tools,
+                "documents": convert_and_respect_annotation_metadata(
+                    object_=documents, annotation=typing.Sequence[V2PromptRequestDocumentsItem], direction="write"
+                ),
+                "citation_options": convert_and_respect_annotation_metadata(
+                    object_=citation_options, annotation=CitationOptions, direction="write"
+                ),
+                "response_format": convert_and_respect_annotation_metadata(
+                    object_=response_format, annotation=ResponseFormatV2, direction="write"
+                ),
+                "safety_mode": safety_mode,
+                "max_tokens": max_tokens,
+                "stop_sequences": stop_sequences,
+                "temperature": temperature,
+                "seed": seed,
+                "frequency_penalty": frequency_penalty,
+                "presence_penalty": presence_penalty,
+                "k": k,
+                "p": p,
+                "logprobs": logprobs,
+                "tool_choice": tool_choice,
+                "thinking": convert_and_respect_annotation_metadata(
+                    object_=thinking, annotation=Thinking, direction="write"
+                ),
+                "priority": priority,
+            },
+            headers={
+                "content-type": "application/json",
+            },
+            request_options=request_options,
+            omit=OMIT,
+        )
+        try:
+            if 200 <= _response.status_code < 300:
+                _data = typing.cast(
+                    PromptResponseV2,
+                    construct_type(
+                        type_=PromptResponseV2,  # type: ignore
                         object_=_response.json(),
                     ),
                 )

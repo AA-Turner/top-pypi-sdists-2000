@@ -28,6 +28,9 @@ if typing.TYPE_CHECKING:
         V2ChatStreamRequestToolChoice,
         V2ChatStreamResponse,
         V2EmbedRequestTruncate,
+        V2PromptRequestDocumentsItem,
+        V2PromptRequestSafetyMode,
+        V2PromptRequestToolChoice,
         V2RerankResponse,
         V2RerankResponseResultsItem,
     )
@@ -53,6 +56,9 @@ _dynamic_imports: typing.Dict[str, str] = {
     "V2ChatStreamRequestToolChoice": ".types",
     "V2ChatStreamResponse": ".types",
     "V2EmbedRequestTruncate": ".types",
+    "V2PromptRequestDocumentsItem": ".types",
+    "V2PromptRequestSafetyMode": ".types",
+    "V2PromptRequestToolChoice": ".types",
     "V2RerankResponse": ".types",
     "V2RerankResponseResultsItem": ".types",
 }
@@ -101,6 +107,9 @@ __all__ = [
     "V2ChatStreamRequestToolChoice",
     "V2ChatStreamResponse",
     "V2EmbedRequestTruncate",
+    "V2PromptRequestDocumentsItem",
+    "V2PromptRequestSafetyMode",
+    "V2PromptRequestToolChoice",
     "V2RerankResponse",
     "V2RerankResponseResultsItem",
 ]

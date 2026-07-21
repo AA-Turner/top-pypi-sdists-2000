@@ -8,7 +8,7 @@ import pydantic
 import typing_extensions
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.unchecked_base_model import UncheckedBaseModel, UnionMetadata
-from .assistant_message_v2content import AssistantMessageV2Content
+from .assistant_message_content import AssistantMessageContent
 from .citation import Citation
 from .system_message_v2content import SystemMessageV2Content
 from .tool_call_v2 import ToolCallV2
@@ -41,7 +41,7 @@ class AssistantChatMessageV2(UncheckedBaseModel):
     role: typing.Literal["assistant"] = "assistant"
     tool_calls: typing.Optional[typing.List[ToolCallV2]] = None
     tool_plan: typing.Optional[str] = None
-    content: typing.Optional[AssistantMessageV2Content] = None
+    content: typing.Optional[AssistantMessageContent] = None
     citations: typing.Optional[typing.List[Citation]] = None
 
     if IS_PYDANTIC_V2:
