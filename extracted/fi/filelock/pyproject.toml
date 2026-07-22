@@ -33,6 +33,7 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
   "Topic :: Internet",
   "Topic :: Software Development :: Libraries",
   "Topic :: System",
@@ -107,6 +108,7 @@ version.source = "vcs"
 build.hooks.vcs.version-file = "src/filelock/version.py"
 build.targets.sdist.include = [
   "/src",
+  "/tasks",
   "/tests",
   "/tox.toml",
 ]
@@ -169,7 +171,7 @@ count = true
 quiet-level = 3
 
 [tool.pyproject-fmt]
-max_supported_python = "3.14"
+max_supported_python = "3.15"
 
 [tool.ty]
 src.exclude = []
@@ -196,12 +198,10 @@ ini_options.markers = [
 ]
 ini_options.filterwarnings = [
   "error",
-  # multiprocessing's leaked Finalize objects clean up descriptors from their own finalizer; that is a CPython
-  # behavior, not a filelock bug, and pytest-randomly can collect one during any test. A filelock finalizer issue
-  # would not carry "Finalize" in the message and still errors.
-  "ignore:Exception ignored in.*Finalize:pytest.PytestUnraisableExceptionWarning",
-  "ignore:unclosed database in <sqlite3.Connection object at:ResourceWarning",
-  "ignore:unclosed file <_io.TextIOWrapper:ResourceWarning",
+  # CPython's resource tracker refuses to unregister a semaphore while it is already cleaning up, and warns instead.
+  # multiprocessing.Event and Value expose no close, so only the collector frees them, and it picks the moment. Seen
+  # on 3.12 alone. Filtering the tracker's own warning keeps the finalizer from raising rather than hiding the raise.
+  "ignore:ResourceTracker called reentrantly for resource cleanup:UserWarning",
 ]
 ini_options.verbosity_assertions = 2
 ini_options.asyncio_default_fixture_loop_scope = "session"

@@ -20,7 +20,7 @@ from uuid import uuid4
 from weakref import WeakValueDictionary
 
 import pytest
-from coverage_pragmas import CAPABILITIES
+from capabilities import CAPABILITIES
 
 from filelock import (
     BaseFileLock,
@@ -520,6 +520,9 @@ def test_poll_intervall_deprecated(lock_type: type[BaseFileLock], tmp_path: Path
                 break
         else:  # pragma: no cover  # the stacklevel=2 warning is always found, so the failure arm never runs
             pytest.fail("No warnings of stacklevel=2 matching.")
+    # A held lock left to the garbage collector releases at an arbitrary later point on a deferred collector, and its
+    # release logs then land in whichever test is running.
+    lock.release()
 
 
 @pytest.mark.parametrize("lock_type", [FileLock, SoftFileLock])

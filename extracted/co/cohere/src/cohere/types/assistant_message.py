@@ -5,7 +5,7 @@ import typing
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
 from ..core.unchecked_base_model import UncheckedBaseModel
-from .assistant_message_content import AssistantMessageContent
+from .assistant_message_v2content import AssistantMessageV2Content
 from .citation import Citation
 from .tool_call_v2 import ToolCallV2
 
@@ -21,7 +21,7 @@ class AssistantMessage(UncheckedBaseModel):
     A chain-of-thought style reflection and plan that the model generates when working with Tools.
     """
 
-    content: typing.Optional[AssistantMessageContent] = None
+    content: typing.Optional[AssistantMessageV2Content] = None
     citations: typing.Optional[typing.List[Citation]] = None
 
     if IS_PYDANTIC_V2:

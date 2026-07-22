@@ -29,9 +29,6 @@ if typing.TYPE_CHECKING:
         V2ChatStreamResponse,
     )
     from .v2embed_request_truncate import V2EmbedRequestTruncate
-    from .v2prompt_request_documents_item import V2PromptRequestDocumentsItem
-    from .v2prompt_request_safety_mode import V2PromptRequestSafetyMode
-    from .v2prompt_request_tool_choice import V2PromptRequestToolChoice
     from .v2rerank_response import V2RerankResponse
     from .v2rerank_response_results_item import V2RerankResponseResultsItem
 _dynamic_imports: typing.Dict[str, str] = {
@@ -56,9 +53,6 @@ _dynamic_imports: typing.Dict[str, str] = {
     "V2ChatStreamRequestToolChoice": ".v2chat_stream_request_tool_choice",
     "V2ChatStreamResponse": ".v2chat_stream_response",
     "V2EmbedRequestTruncate": ".v2embed_request_truncate",
-    "V2PromptRequestDocumentsItem": ".v2prompt_request_documents_item",
-    "V2PromptRequestSafetyMode": ".v2prompt_request_safety_mode",
-    "V2PromptRequestToolChoice": ".v2prompt_request_tool_choice",
     "V2RerankResponse": ".v2rerank_response",
     "V2RerankResponseResultsItem": ".v2rerank_response_results_item",
 }
@@ -107,9 +101,6 @@ __all__ = [
     "V2ChatStreamRequestToolChoice",
     "V2ChatStreamResponse",
     "V2EmbedRequestTruncate",
-    "V2PromptRequestDocumentsItem",
-    "V2PromptRequestSafetyMode",
-    "V2PromptRequestToolChoice",
     "V2RerankResponse",
     "V2RerankResponseResultsItem",
 ]

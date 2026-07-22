@@ -38,6 +38,7 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
   "Programming Language :: Rust",
 ]
 dynamic = [
@@ -72,6 +73,13 @@ docs = [
 
 [tool.meson-python]
 limited-api = true
+
+[tool.cibuildwheel]
+overrides = [
+  # meson-python refuses the limited API on a free-threaded interpreter, and the package asks for it by
+  # default, so this build opts out.
+  { select = "cp3*t-*", config-settings.setup-args = "-Dpython.allow_limited_api=false" },
+]
 
 [tool.ruff]
 line-length = 120
@@ -124,7 +132,7 @@ count = true
 quiet-level = 3
 
 [tool.pyproject-fmt]
-max_supported_python = "3.14"
+max_supported_python = "3.15"
 
 [tool.ty]
 src.exclude = []

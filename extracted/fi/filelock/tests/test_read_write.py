@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import sys
 import time
-from contextlib import contextmanager
 from multiprocessing import Event, Process, Value, set_start_method
 from typing import TYPE_CHECKING, Final, Literal, cast
 
@@ -14,6 +13,7 @@ import sqlite3
 
 from filelock import ReadWriteLock, Timeout
 from tests.capability_marks import SKIP_ON_UNRELIABLE_PROCESS_SYNC
+from tests.process_helpers import cleanup_processes
 from tests.read_write_helpers import assert_read_write_lock_state
 
 # Bounds how long a spawned process may take to reach the lock, not how fast it must be: an interpreter that starts
@@ -32,7 +32,6 @@ if sys.implementation.name == "pypy":
     )  # pragma: no cover  # exercised only under the pypy fork backend, which runs without coverage
 
 if TYPE_CHECKING:
-    from collections.abc import Generator
     from multiprocessing.sharedctypes import Synchronized
     from multiprocessing.synchronize import Event as EventType
     from pathlib import Path
@@ -182,10 +181,24 @@ def test_write_non_starvation(lock_file: str) -> None:
 
         assert writer_ready.wait(timeout=_PROCESS_DEADLINE), "First reader did not acquire lock"
 
+        # Count only the releases the writer actually waited through; a slow interpreter start is not starvation.
+        # The contending event says the writer process booted, not that its write intent reached the database, and
+        # only the intent bars new readers. The probe observes that boundary: a non-blocking read acquire times out
+        # exactly once the intent is registered, so the count starts there. Probing before the writer exists pins
+        # the still-pending arc, which the loop alone cannot promise: on a fast host the first in-loop probe
+        # already times out.
+        prober = ReadWriteLock(lock_file, is_singleton=False)
+        probe_deadline = time.monotonic() + _PROCESS_DEADLINE
+        assert _write_intent_pending(prober, probe_deadline)
+
         writer.start()
 
-        # Count only the releases the writer actually waited through; a slow interpreter start is not starvation.
         assert writer_contending.wait(timeout=_PROCESS_DEADLINE), "Writer process did not reach the lock"
+        # pragma-no-branch: the loop never exhausts in a passing run, since the helper's deadline fires first
+        for _ in range(_PROCESS_DEADLINE * 20):  # pragma: no branch
+            if not _write_intent_pending(prober, probe_deadline):  # pragma: no branch  # exits at the writer's speed
+                break
+        prober.close()
         with release_count.get_lock():
             releases_before_contending = release_count.value
 
@@ -536,18 +549,15 @@ def test_cleanup_reports_the_failure_that_escaped_before_a_start() -> None:
         fail_before_start()
 
 
-@contextmanager
-def cleanup_processes(processes: list[Process]) -> Generator[None]:
+def _write_intent_pending(prober: ReadWriteLock, deadline: float) -> bool:
     try:
-        yield
-    finally:
-        for proc in processes:
-            # An assertion can escape before every process starts, and terminating an unstarted one raises over the
-            # failure that caused it, hiding the real error.
-            if proc.pid is not None:
-                proc.terminate()
-                proc.join(timeout=_REAP_DEADLINE)
-            proc.close()
+        prober.acquire_read(blocking=False)
+    except Timeout:
+        return False
+    prober.release()
+    assert time.monotonic() < deadline, "Writer never registered its write intent"
+    time.sleep(0.05)
+    return True
 
 
 def chain_reader(

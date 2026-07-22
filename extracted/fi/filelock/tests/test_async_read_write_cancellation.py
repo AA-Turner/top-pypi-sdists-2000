@@ -75,12 +75,14 @@ def test_executor_cancels_queued_acquire_without_compensation(lock_file: str, *,
     canceled = context.Value("b", False)
     process = context.Process(target=_cancel_queued_read_write_acquire, args=(lock_file, cancel_caller, canceled))
     process.start()
-    process.join(timeout=10)
-    if process.is_alive():  # pragma: no cover - cleanup for a hung child after the assertion fails
-        process.terminate()
-        process.join(timeout=5)
-
-    assert (process.exitcode, canceled.value) == (0, True)
+    try:
+        process.join(timeout=10)
+        assert (process.exitcode, canceled.value) == (0, True)
+    finally:
+        if process.is_alive():  # pragma: no cover - cleanup for a hung child after the assertion fails
+            process.terminate()
+            process.join(timeout=5)
+        process.close()
 
 
 @pytest.mark.asyncio
@@ -227,12 +229,17 @@ async def test_acquire_cancellation_surfaces_acquire_and_rollback_errors(
     await lock.close()
 
 
+@pytest.mark.parametrize("supplied", [pytest.param(False, id="owned"), pytest.param(True, id="supplied")])
 @pytest.mark.asyncio
-async def test_close_cancellation_shuts_down_owned_executor(lock_file: str, mocker: MockerFixture) -> None:
+async def test_close_cancellation_shuts_down_only_an_owned_executor(
+    lock_file: str, mocker: MockerFixture, supplied: bool
+) -> None:
     rollback_started = asyncio.Event()
     finish_rollback = threading.Event()
     _patch_async_rollback(mocker, asyncio.get_running_loop(), rollback_started, finish_rollback)
-    lock = AsyncReadWriteLock(lock_file, is_singleton=False)
+    lock = AsyncReadWriteLock(
+        lock_file, is_singleton=False, executor=ThreadPoolExecutor(max_workers=1) if supplied else None
+    )
     await lock.acquire_write()
     executor = lock.executor
     task = asyncio.create_task(lock.close())
@@ -244,8 +251,12 @@ async def test_close_cancellation_shuts_down_owned_executor(lock_file: str, mock
         await task
     assert_cancellation_message(info.value, "cancel close")
     assert_read_write_lock_state(lock_file, "read", available=True)
-    with pytest.raises(RuntimeError):
-        executor.submit(int)
+    if supplied:
+        assert executor.submit(int).result(timeout=5) == 0
+        executor.shutdown(wait=True)
+    else:
+        with pytest.raises(RuntimeError):
+            executor.submit(int)
 
 
 @pytest.mark.parametrize("operation", [pytest.param("release", id="release"), pytest.param("close", id="close")])

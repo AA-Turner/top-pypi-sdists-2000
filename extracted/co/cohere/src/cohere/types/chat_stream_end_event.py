@@ -4,13 +4,13 @@ import typing
 
 import pydantic
 from ..core.pydantic_utilities import IS_PYDANTIC_V2
-from .chat_stream_end_event_y8gq2x_finish_reason import ChatStreamEndEventY8Gq2XFinishReason
+from .chat_stream_end_event_finish_reason import ChatStreamEndEventFinishReason
 from .chat_stream_event import ChatStreamEvent
 from .non_streamed_chat_response import NonStreamedChatResponse
 
 
 class ChatStreamEndEvent(ChatStreamEvent):
-    finish_reason: ChatStreamEndEventY8Gq2XFinishReason = pydantic.Field()
+    finish_reason: ChatStreamEndEventFinishReason = pydantic.Field()
     """
     - `COMPLETE` - the model sent back a finished reply
     - `ERROR_LIMIT` - the reply was cut off because the model reached the maximum number of tokens for its context length
