@@ -1,7 +1,8 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+from typing_extensions import Literal
+
 from ..._models import BaseModel
-from .beta_webhook_environment_deleted_event_type import BetaWebhookEnvironmentDeletedEventType
 
 __all__ = ["BetaWebhookEnvironmentDeletedEventData"]
 
@@ -12,6 +13,6 @@ class BetaWebhookEnvironmentDeletedEventData(BaseModel):
 
     organization_id: str
 
-    type: BetaWebhookEnvironmentDeletedEventType
+    type: Literal["environment.deleted"]
 
     workspace_id: str

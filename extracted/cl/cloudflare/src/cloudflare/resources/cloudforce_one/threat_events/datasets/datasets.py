@@ -4,16 +4,16 @@ from __future__ import annotations
 
 import httpx
 
-from .health import (
-    HealthResource,
-    AsyncHealthResource,
-    HealthResourceWithRawResponse,
-    AsyncHealthResourceWithRawResponse,
-    HealthResourceWithStreamingResponse,
-    AsyncHealthResourceWithStreamingResponse,
+from .events import (
+    EventsResource,
+    AsyncEventsResource,
+    EventsResourceWithRawResponse,
+    AsyncEventsResourceWithRawResponse,
+    EventsResourceWithStreamingResponse,
+    AsyncEventsResourceWithStreamingResponse,
 )
-from ....._types import NOT_GIVEN, Body, Query, Headers, NotGiven
-from ....._utils import maybe_transform, async_maybe_transform
+from ....._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ....._utils import path_template, maybe_transform, async_maybe_transform
 from ....._compat import cached_property
 from ....._resource import SyncAPIResource, AsyncAPIResource
 from ....._response import (
@@ -23,20 +23,21 @@ from ....._response import (
     async_to_streamed_response_wrapper,
 )
 from ....._base_client import make_request_options
-from .....types.cloudforce_one.threat_events import dataset_edit_params, dataset_create_params
+from .....types.cloudforce_one.threat_events import dataset_edit_params, dataset_list_params, dataset_create_params
 from .....types.cloudforce_one.threat_events.dataset_get_response import DatasetGetResponse
 from .....types.cloudforce_one.threat_events.dataset_raw_response import DatasetRawResponse
 from .....types.cloudforce_one.threat_events.dataset_edit_response import DatasetEditResponse
 from .....types.cloudforce_one.threat_events.dataset_list_response import DatasetListResponse
 from .....types.cloudforce_one.threat_events.dataset_create_response import DatasetCreateResponse
+from .....types.cloudforce_one.threat_events.dataset_delete_response import DatasetDeleteResponse
 
 __all__ = ["DatasetsResource", "AsyncDatasetsResource"]
 
 
 class DatasetsResource(SyncAPIResource):
     @cached_property
-    def health(self) -> HealthResource:
-        return HealthResource(self._client)
+    def events(self) -> EventsResource:
+        return EventsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> DatasetsResourceWithRawResponse:
@@ -68,10 +69,10 @@ class DatasetsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DatasetCreateResponse:
         """
-        Creates a dataset
+        Create a new dataset in the account.
 
         Args:
           account_id: Account ID.
@@ -92,7 +93,7 @@ class DatasetsResource(SyncAPIResource):
         if not account_id:
             raise ValueError(f"Expected a non-empty value for `account_id` but received {account_id!r}")
         return self._post(
-            f"/accounts/{account_id}/cloudforce-one/events/dataset/create",
+            path_template("/accounts/{account_id}/cloudforce-one/events/dataset/create", account_id=account_id),
             body=maybe_transform(
                 {
                     "is_public": is_public,
@@ -110,18 +111,22 @@ class DatasetsResource(SyncAPIResource):
         self,
         *,
         account_id: str,
+        include_deleted: bool | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DatasetListResponse:
         """
-        Lists all datasets in an account
+        List all datasets accessible to the account.
 
         Args:
           account_id: Account ID.
+
+          include_deleted: When true, include soft-deleted datasets in the response. Each item includes a
+              `deletedAt` field (ISO 8601 or null). Default: false.
 
           extra_headers: Send extra headers
 
@@ -134,11 +139,59 @@ class DatasetsResource(SyncAPIResource):
         if not account_id:
             raise ValueError(f"Expected a non-empty value for `account_id` but received {account_id!r}")
         return self._get(
-            f"/accounts/{account_id}/cloudforce-one/events/dataset",
+            path_template("/accounts/{account_id}/cloudforce-one/events/dataset", account_id=account_id),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform({"include_deleted": include_deleted}, dataset_list_params.DatasetListParams),
+            ),
+            cast_to=DatasetListResponse,
+        )
+
+    def delete(
+        self,
+        dataset_id: str,
+        *,
+        account_id: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> DatasetDeleteResponse:
+        """
+        Soft-deletes a dataset given a datasetId.
+
+        Args:
+          account_id: Account ID.
+
+          dataset_id: Dataset ID to delete
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not account_id:
+            raise ValueError(f"Expected a non-empty value for `account_id` but received {account_id!r}")
+        if not dataset_id:
+            raise ValueError(f"Expected a non-empty value for `dataset_id` but received {dataset_id!r}")
+        return self._delete(
+            path_template(
+                "/accounts/{account_id}/cloudforce-one/events/dataset/{dataset_id}",
+                account_id=account_id,
+                dataset_id=dataset_id,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=DatasetListResponse,
+            cast_to=DatasetDeleteResponse,
         )
 
     def edit(
@@ -153,10 +206,10 @@ class DatasetsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DatasetEditResponse:
         """
-        Updates an existing dataset
+        Update an existing dataset by its identifier.
 
         Args:
           account_id: Account ID.
@@ -181,7 +234,11 @@ class DatasetsResource(SyncAPIResource):
         if not dataset_id:
             raise ValueError(f"Expected a non-empty value for `dataset_id` but received {dataset_id!r}")
         return self._patch(
-            f"/accounts/{account_id}/cloudforce-one/events/dataset/{dataset_id}",
+            path_template(
+                "/accounts/{account_id}/cloudforce-one/events/dataset/{dataset_id}",
+                account_id=account_id,
+                dataset_id=dataset_id,
+            ),
             body=maybe_transform(
                 {
                     "is_public": is_public,
@@ -205,10 +262,10 @@ class DatasetsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DatasetGetResponse:
         """
-        Reads a dataset
+        Retrieve metadata for a specific dataset.
 
         Args:
           account_id: Account ID.
@@ -228,7 +285,11 @@ class DatasetsResource(SyncAPIResource):
         if not dataset_id:
             raise ValueError(f"Expected a non-empty value for `dataset_id` but received {dataset_id!r}")
         return self._get(
-            f"/accounts/{account_id}/cloudforce-one/events/dataset/{dataset_id}",
+            path_template(
+                "/accounts/{account_id}/cloudforce-one/events/dataset/{dataset_id}",
+                account_id=account_id,
+                dataset_id=dataset_id,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -246,10 +307,12 @@ class DatasetsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DatasetRawResponse:
-        """
-        Reads data for a raw event
+        """Retrieves the raw data associated with an event.
+
+        Searches across all shards in
+        the dataset.
 
         Args:
           account_id: Account ID.
@@ -273,7 +336,12 @@ class DatasetsResource(SyncAPIResource):
         if not event_id:
             raise ValueError(f"Expected a non-empty value for `event_id` but received {event_id!r}")
         return self._get(
-            f"/accounts/{account_id}/cloudforce-one/events/raw/{dataset_id}/{event_id}",
+            path_template(
+                "/accounts/{account_id}/cloudforce-one/events/raw/{dataset_id}/{event_id}",
+                account_id=account_id,
+                dataset_id=dataset_id,
+                event_id=event_id,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -283,8 +351,8 @@ class DatasetsResource(SyncAPIResource):
 
 class AsyncDatasetsResource(AsyncAPIResource):
     @cached_property
-    def health(self) -> AsyncHealthResource:
-        return AsyncHealthResource(self._client)
+    def events(self) -> AsyncEventsResource:
+        return AsyncEventsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncDatasetsResourceWithRawResponse:
@@ -316,10 +384,10 @@ class AsyncDatasetsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DatasetCreateResponse:
         """
-        Creates a dataset
+        Create a new dataset in the account.
 
         Args:
           account_id: Account ID.
@@ -340,7 +408,7 @@ class AsyncDatasetsResource(AsyncAPIResource):
         if not account_id:
             raise ValueError(f"Expected a non-empty value for `account_id` but received {account_id!r}")
         return await self._post(
-            f"/accounts/{account_id}/cloudforce-one/events/dataset/create",
+            path_template("/accounts/{account_id}/cloudforce-one/events/dataset/create", account_id=account_id),
             body=await async_maybe_transform(
                 {
                     "is_public": is_public,
@@ -358,18 +426,22 @@ class AsyncDatasetsResource(AsyncAPIResource):
         self,
         *,
         account_id: str,
+        include_deleted: bool | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DatasetListResponse:
         """
-        Lists all datasets in an account
+        List all datasets accessible to the account.
 
         Args:
           account_id: Account ID.
+
+          include_deleted: When true, include soft-deleted datasets in the response. Each item includes a
+              `deletedAt` field (ISO 8601 or null). Default: false.
 
           extra_headers: Send extra headers
 
@@ -382,11 +454,61 @@ class AsyncDatasetsResource(AsyncAPIResource):
         if not account_id:
             raise ValueError(f"Expected a non-empty value for `account_id` but received {account_id!r}")
         return await self._get(
-            f"/accounts/{account_id}/cloudforce-one/events/dataset",
+            path_template("/accounts/{account_id}/cloudforce-one/events/dataset", account_id=account_id),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {"include_deleted": include_deleted}, dataset_list_params.DatasetListParams
+                ),
+            ),
+            cast_to=DatasetListResponse,
+        )
+
+    async def delete(
+        self,
+        dataset_id: str,
+        *,
+        account_id: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> DatasetDeleteResponse:
+        """
+        Soft-deletes a dataset given a datasetId.
+
+        Args:
+          account_id: Account ID.
+
+          dataset_id: Dataset ID to delete
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not account_id:
+            raise ValueError(f"Expected a non-empty value for `account_id` but received {account_id!r}")
+        if not dataset_id:
+            raise ValueError(f"Expected a non-empty value for `dataset_id` but received {dataset_id!r}")
+        return await self._delete(
+            path_template(
+                "/accounts/{account_id}/cloudforce-one/events/dataset/{dataset_id}",
+                account_id=account_id,
+                dataset_id=dataset_id,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=DatasetListResponse,
+            cast_to=DatasetDeleteResponse,
         )
 
     async def edit(
@@ -401,10 +523,10 @@ class AsyncDatasetsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DatasetEditResponse:
         """
-        Updates an existing dataset
+        Update an existing dataset by its identifier.
 
         Args:
           account_id: Account ID.
@@ -429,7 +551,11 @@ class AsyncDatasetsResource(AsyncAPIResource):
         if not dataset_id:
             raise ValueError(f"Expected a non-empty value for `dataset_id` but received {dataset_id!r}")
         return await self._patch(
-            f"/accounts/{account_id}/cloudforce-one/events/dataset/{dataset_id}",
+            path_template(
+                "/accounts/{account_id}/cloudforce-one/events/dataset/{dataset_id}",
+                account_id=account_id,
+                dataset_id=dataset_id,
+            ),
             body=await async_maybe_transform(
                 {
                     "is_public": is_public,
@@ -453,10 +579,10 @@ class AsyncDatasetsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DatasetGetResponse:
         """
-        Reads a dataset
+        Retrieve metadata for a specific dataset.
 
         Args:
           account_id: Account ID.
@@ -476,7 +602,11 @@ class AsyncDatasetsResource(AsyncAPIResource):
         if not dataset_id:
             raise ValueError(f"Expected a non-empty value for `dataset_id` but received {dataset_id!r}")
         return await self._get(
-            f"/accounts/{account_id}/cloudforce-one/events/dataset/{dataset_id}",
+            path_template(
+                "/accounts/{account_id}/cloudforce-one/events/dataset/{dataset_id}",
+                account_id=account_id,
+                dataset_id=dataset_id,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -494,10 +624,12 @@ class AsyncDatasetsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> DatasetRawResponse:
-        """
-        Reads data for a raw event
+        """Retrieves the raw data associated with an event.
+
+        Searches across all shards in
+        the dataset.
 
         Args:
           account_id: Account ID.
@@ -521,7 +653,12 @@ class AsyncDatasetsResource(AsyncAPIResource):
         if not event_id:
             raise ValueError(f"Expected a non-empty value for `event_id` but received {event_id!r}")
         return await self._get(
-            f"/accounts/{account_id}/cloudforce-one/events/raw/{dataset_id}/{event_id}",
+            path_template(
+                "/accounts/{account_id}/cloudforce-one/events/raw/{dataset_id}/{event_id}",
+                account_id=account_id,
+                dataset_id=dataset_id,
+                event_id=event_id,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -539,6 +676,9 @@ class DatasetsResourceWithRawResponse:
         self.list = to_raw_response_wrapper(
             datasets.list,
         )
+        self.delete = to_raw_response_wrapper(
+            datasets.delete,
+        )
         self.edit = to_raw_response_wrapper(
             datasets.edit,
         )
@@ -550,8 +690,8 @@ class DatasetsResourceWithRawResponse:
         )
 
     @cached_property
-    def health(self) -> HealthResourceWithRawResponse:
-        return HealthResourceWithRawResponse(self._datasets.health)
+    def events(self) -> EventsResourceWithRawResponse:
+        return EventsResourceWithRawResponse(self._datasets.events)
 
 
 class AsyncDatasetsResourceWithRawResponse:
@@ -564,6 +704,9 @@ class AsyncDatasetsResourceWithRawResponse:
         self.list = async_to_raw_response_wrapper(
             datasets.list,
         )
+        self.delete = async_to_raw_response_wrapper(
+            datasets.delete,
+        )
         self.edit = async_to_raw_response_wrapper(
             datasets.edit,
         )
@@ -575,8 +718,8 @@ class AsyncDatasetsResourceWithRawResponse:
         )
 
     @cached_property
-    def health(self) -> AsyncHealthResourceWithRawResponse:
-        return AsyncHealthResourceWithRawResponse(self._datasets.health)
+    def events(self) -> AsyncEventsResourceWithRawResponse:
+        return AsyncEventsResourceWithRawResponse(self._datasets.events)
 
 
 class DatasetsResourceWithStreamingResponse:
@@ -589,6 +732,9 @@ class DatasetsResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             datasets.list,
         )
+        self.delete = to_streamed_response_wrapper(
+            datasets.delete,
+        )
         self.edit = to_streamed_response_wrapper(
             datasets.edit,
         )
@@ -600,8 +746,8 @@ class DatasetsResourceWithStreamingResponse:
         )
 
     @cached_property
-    def health(self) -> HealthResourceWithStreamingResponse:
-        return HealthResourceWithStreamingResponse(self._datasets.health)
+    def events(self) -> EventsResourceWithStreamingResponse:
+        return EventsResourceWithStreamingResponse(self._datasets.events)
 
 
 class AsyncDatasetsResourceWithStreamingResponse:
@@ -614,6 +760,9 @@ class AsyncDatasetsResourceWithStreamingResponse:
         self.list = async_to_streamed_response_wrapper(
             datasets.list,
         )
+        self.delete = async_to_streamed_response_wrapper(
+            datasets.delete,
+        )
         self.edit = async_to_streamed_response_wrapper(
             datasets.edit,
         )
@@ -625,5 +774,5 @@ class AsyncDatasetsResourceWithStreamingResponse:
         )
 
     @cached_property
-    def health(self) -> AsyncHealthResourceWithStreamingResponse:
-        return AsyncHealthResourceWithStreamingResponse(self._datasets.health)
+    def events(self) -> AsyncEventsResourceWithStreamingResponse:
+        return AsyncEventsResourceWithStreamingResponse(self._datasets.events)
