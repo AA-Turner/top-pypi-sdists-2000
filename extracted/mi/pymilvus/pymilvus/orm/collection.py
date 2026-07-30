@@ -19,6 +19,8 @@ import pandas as pd
 from pymilvus.client import utils
 from pymilvus.client.abstract import BaseRanker
 from pymilvus.client.constants import DEFAULT_CONSISTENCY_LEVEL
+from pymilvus.client.iterator import QueryIterator, SearchIterator
+from pymilvus.client.search_aggregation import SearchAggregation
 from pymilvus.client.search_result import SearchResult
 from pymilvus.client.types import (
     CompactionPlans,
@@ -27,6 +29,7 @@ from pymilvus.client.types import (
     cmp_consistency_level,
     get_consistency_level,
 )
+from pymilvus.decorators import deprecated, deprecated_class
 from pymilvus.exceptions import (
     AutoIDException,
     DataTypeNotMatchException,
@@ -36,6 +39,7 @@ from pymilvus.exceptions import (
     PartitionAlreadyExistException,
     SchemaNotReadyException,
 )
+from pymilvus.function_chain import FunctionChain
 from pymilvus.grpc_gen import schema_pb2
 from pymilvus.settings import Config
 
@@ -43,7 +47,6 @@ from .connections import connections
 from .constants import UNLIMITED
 from .future import MutationFuture, SearchFuture
 from .index import Index
-from .iterator import QueryIterator, SearchIterator
 from .mutation import MutationResult
 from .partition import Partition
 from .prepare import Prepare
@@ -727,7 +730,9 @@ class Collection:
         timeout: Optional[float] = None,
         round_decimal: int = -1,
         ranker: Optional[Union[Function, FunctionScore]] = None,
+        function_chains: Optional[Union[FunctionChain, List[FunctionChain]]] = None,
         highlighter: Optional[Highlighter] = None,
+        search_aggregation: Optional[SearchAggregation] = None,
         **kwargs,
     ):
         """Conducts a vector similarity search with an optional boolean expression as filter.
@@ -770,6 +775,11 @@ class Collection:
                 If timeout is set to None, the client keeps waiting until the server
                 responds or an error occurs.
             ranker (``Function``, ``FunctionScore``, optional): The ranker to use for the search.
+            function_chains (``FunctionChain`` or ``List[FunctionChain]``, optional): Function chain
+                or function chains to apply to ordinary search. Mutually exclusive with ``ranker``.
+            search_aggregation (``SearchAggregation``, optional): Hierarchical bucket aggregation
+                spec. Mutually exclusive with ``group_by_field``. When set, ``limit`` is ignored
+                and the root ``SearchAggregation.size`` controls top-level bucket count.
             **kwargs (``dict``): Optional search params
 
                 *  *_async* (``bool``, optional)
@@ -874,7 +884,9 @@ class Collection:
             timeout=timeout,
             schema=self._schema_dict,
             ranker=ranker,
+            function_chains=function_chains,
             highlighter=highlighter,
+            search_aggregation=search_aggregation,
             context=context,
             **kwargs,
         )
@@ -1027,6 +1039,7 @@ class Collection:
 
         return SearchFuture(resp) if kwargs.get("_async", False) else resp
 
+    @deprecated("Collection.search_iterator", replacement="MilvusClient.search_iterator()")
     def search_iterator(
         self,
         data: Union[List, utils.SparseMatrixInputType],
@@ -1046,7 +1059,8 @@ class Collection:
         param["params"] = utils.get_params(param)
         conn, context = self._get_connection(**kwargs)
         return SearchIterator(
-            connection=conn,
+            handler=conn,
+            context=context,
             collection_name=self._name,
             data=data,
             ann_field=anns_field,
@@ -1059,8 +1073,7 @@ class Collection:
             timeout=timeout,
             round_decimal=round_decimal,
             schema=self._schema_dict,
-            context=context,
-            **kwargs,
+            rpc_options=kwargs,
         )
 
     def query(
@@ -1157,6 +1170,7 @@ class Collection:
             **kwargs,
         )
 
+    @deprecated("Collection.query_iterator", replacement="MilvusClient.query_iterator()")
     def query_iterator(
         self,
         batch_size: Optional[int] = 1000,
@@ -1171,7 +1185,8 @@ class Collection:
             raise DataTypeNotMatchException(message=ExceptionsMessage.ExprType % type(expr))
         conn, context = self._get_connection(**kwargs)
         return QueryIterator(
-            connection=conn,
+            handler=conn,
+            context=context,
             collection_name=self._name,
             batch_size=batch_size,
             limit=limit,
@@ -1180,8 +1195,7 @@ class Collection:
             partition_names=partition_names,
             schema=self._schema_dict,
             timeout=timeout,
-            context=context,
-            **kwargs,
+            rpc_options=kwargs,
         )
 
     @property
@@ -1703,3 +1717,10 @@ class Collection:
     def describe(self, timeout: Optional[float] = None):
         conn, context = self._get_connection()
         return conn.describe_collection(self.name, timeout=timeout, context=context)
+
+
+Collection = deprecated_class(
+    "Collection",
+    exclude_methods={"query_iterator", "search_iterator"},
+    warn_properties={"aliases", "is_empty", "num_entities", "partitions", "indexes"},
+)(Collection)

@@ -19,7 +19,14 @@ __path__ = extend_path(__path__, __name__)
 from .client import __version__
 from .client.abstract import AnnSearchRequest, RRFRanker, WeightedRanker
 from .client.asynch import SearchFuture
+from .client.field_ops import FieldOp, FieldOpType
 from .client.prepare import Prepare
+from .client.search_aggregation import (
+    AggregationBucket,
+    AggregationHit,
+    SearchAggregation,
+    TopHits,
+)
 from .client.search_result import Hit, Hits, SearchResult
 from .client.types import (
     BulkInsertState,
@@ -32,11 +39,13 @@ from .client.types import (
     Shard,
     Status,
 )
+from .decorators import PyMilvusDeprecationWarning
 from .exceptions import (
     ExceptionsMessage,
     MilvusException,
     MilvusUnavailableException,
 )
+from .function_chain import FunctionChain, FunctionChainStage
 from .milvus_client import AsyncMilvusClient, MilvusClient
 from .orm import db, utility
 from .orm.collection import Collection
@@ -86,6 +95,8 @@ from .orm.utility import (
 from .settings import Config as DefaultConfig
 
 __all__ = [
+    "AggregationBucket",
+    "AggregationHit",
     "AnnSearchRequest",
     "AsyncMilvusClient",
     "BulkInsertState",
@@ -95,8 +106,12 @@ __all__ = [
     "DataType",
     "DefaultConfig",
     "ExceptionsMessage",
+    "FieldOp",
+    "FieldOpType",
     "FieldSchema",
     "Function",
+    "FunctionChain",
+    "FunctionChainStage",
     "FunctionScore",
     "FunctionType",
     "Group",
@@ -111,16 +126,19 @@ __all__ = [
     "MutationFuture",
     "Partition",
     "Prepare",
+    "PyMilvusDeprecationWarning",
     "RRFRanker",
     "Replica",
     "ResourceGroupInfo",
     "Role",
+    "SearchAggregation",
     "SearchFuture",
     "SearchResult",
     "SemanticHighlighter",
     "Shard",
     "Status",
     "StructFieldSchema",
+    "TopHits",
     "WeightedRanker",
     "__version__",
     "connections",

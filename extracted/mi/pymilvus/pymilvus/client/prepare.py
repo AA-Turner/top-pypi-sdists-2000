@@ -1,12 +1,15 @@
 import base64
 import datetime
 import json
+import re
+import warnings
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Union
 
 import numpy as np
 import orjson
 
 from pymilvus.exceptions import DataNotMatchException, ExceptionsMessage, ParamError
+from pymilvus.function_chain import FunctionChain, FunctionChainStage
 from pymilvus.grpc_gen import common_pb2 as common_types
 from pymilvus.grpc_gen import milvus_pb2 as milvus_types
 from pymilvus.grpc_gen import schema_pb2 as schema_types
@@ -16,6 +19,7 @@ from pymilvus.orm.schema import (
     Function,
     FunctionScore,
     Highlighter,
+    StructFieldSchema,
     isVectorDataType,
 )
 from pymilvus.orm.types import infer_dtype_by_scalar_data
@@ -23,8 +27,9 @@ from pymilvus.settings import Config
 
 from . import __version__, blob, check, entity_helper, utils
 from .abstract import BaseRanker
-from .check import check_pass_param, is_legal_collection_properties
+from .check import check_pass_param, is_legal_collection_properties, validate_str
 from .constants import (
+    CLUSTER_ID,
     COLLECTION_ID,
     DEFAULT_CONSISTENCY_LEVEL,
     DYNAMIC_FIELD_NAME,
@@ -41,12 +46,23 @@ from .constants import (
     JSON_TYPE,
     ORDER_BY_FIELDS,
     PAGE_RETAIN_ORDER_FIELD,
+    QUERY_GROUP_BY_FIELDS,
+    QUERY_ITER_LAST_ELEMENT_OFFSET,
+    QUERY_ITER_LAST_PK,
     RANK_GROUP_SCORER,
     REDUCE_STOP_FOR_BEST,
+    SEARCH_AGGREGATION,
     STRICT_CAST,
     STRICT_GROUP_SIZE,
 )
 from .entity_helper import convert_to_array, convert_to_array_of_vector
+from .field_ops import FieldOpsInput, normalize_field_ops
+from .search_aggregation import SearchAggregation
+from .type_info import (
+    is_byte_vector_type,
+    require_placeholder_type,
+    require_vector_type_for_numpy_dtype,
+)
 from .types import (
     DataType,
     PlaceholderType,
@@ -65,16 +81,8 @@ _JSON_TYPE_MAP = {
     DataType.STRING: "VarChar",
 }
 
-# Maps DataType to (regular PlaceholderType, EmbeddingList PlaceholderType) for bytes input
-_BYTES_PH_MAP = {
-    DataType.FLOAT16_VECTOR: (PlaceholderType.FLOAT16_VECTOR, PlaceholderType.EmbListFloat16Vector),
-    DataType.BFLOAT16_VECTOR: (
-        PlaceholderType.BFLOAT16_VECTOR,
-        PlaceholderType.EmbListBFloat16Vector,
-    ),
-    DataType.BINARY_VECTOR: (PlaceholderType.BinaryVector, PlaceholderType.EmbListBinaryVector),
-}
-_BYTES_PH_DEFAULT = (PlaceholderType.BinaryVector, PlaceholderType.EmbListBinaryVector)
+
+_STRUCT_FIELD_RE = re.compile(r"^(.+)\[(.+)\]$")
 
 
 class Prepare:
@@ -166,6 +174,8 @@ class Prepare:
             description=coll_description,
             enable_dynamic_field=fields.enable_dynamic_field,
             enable_namespace=fields.enable_namespace,
+            external_source=fields.external_source,
+            external_spec=fields.external_spec,
         )
         for f in fields.fields:
             field_schema = schema_types.FieldSchema(
@@ -181,6 +191,7 @@ class Prepare:
                 element_type=f.element_type,
                 is_clustering_key=f.is_clustering_key,
                 is_function_output=f.is_function_output,
+                external_field=f.external_field,
             )
             for k, v in f.params.items():
                 kv_pair = common_types.KeyValuePair(
@@ -196,78 +207,75 @@ class Prepare:
             schema.fields.append(field_schema)
 
         for struct in fields.struct_fields:
-            # Validate that max_capacity is set
-            if struct.max_capacity is None:
-                raise ParamError(message=f"max_capacity not set for struct field: {struct.name}")
-
-            struct_schema = schema_types.StructArrayFieldSchema(
-                name=struct.name,
-                fields=[],
-                description=struct.description,
-            )
-
-            if struct.params:
-                for k, v in struct.params.items():
-                    kv_pair = common_types.KeyValuePair(
-                        key=str(k) if k != "mmap_enabled" else "mmap.enabled",
-                        value=(
-                            orjson.dumps(v).decode(Config.EncodeProtocol)
-                            if not isinstance(v, str)
-                            else str(v)
-                        ),
-                    )
-                    struct_schema.type_params.append(kv_pair)
-
-            for f in struct.fields:
-                # Convert struct field types to backend representation
-                # As struct itself only support array type, so all it's fields are array type
-                # internally
-                # So we need to convert the fields to array types
-                actual_dtype = f.dtype
-                actual_element_type = None
-
-                # Convert to appropriate array type
-                if isVectorDataType(f.dtype):
-                    actual_dtype = DataType._ARRAY_OF_VECTOR
-                    actual_element_type = f.dtype
-                else:
-                    actual_dtype = DataType.ARRAY
-                    actual_element_type = f.dtype
-
-                field_schema = schema_types.FieldSchema(
-                    name=f.name,
-                    data_type=actual_dtype,
-                    description=f.description,
-                    is_primary_key=f.is_primary,
-                    default_value=f.default_value,
-                    nullable=f.nullable,
-                    autoID=f.auto_id,
-                    is_partition_key=f.is_partition_key,
-                    is_dynamic=f.is_dynamic,
-                    element_type=actual_element_type,
-                    is_clustering_key=f.is_clustering_key,
-                    is_function_output=f.is_function_output,
-                )
-
-                # Copy field params and add max_capacity from struct_schema
-                field_params = dict(f.params) if f.params else {}
-                # max_capacity is required for struct fields
-                field_params["max_capacity"] = struct.max_capacity
-
-                for k, v in field_params.items():
-                    kv_pair = common_types.KeyValuePair(
-                        key=str(k) if k != "mmap_enabled" else "mmap.enabled", value=json.dumps(v)
-                    )
-                    field_schema.type_params.append(kv_pair)
-                struct_schema.fields.append(field_schema)
-
-            schema.struct_array_fields.append(struct_schema)
+            schema.struct_array_fields.append(cls.get_struct_array_field_schema(struct))
 
         for f in fields.functions:
             function_schema = cls.convert_function_to_function_schema(f)
             schema.functions.append(function_schema)
 
         return schema
+
+    @staticmethod
+    def get_struct_array_field_schema(
+        struct: StructFieldSchema,
+    ) -> schema_types.StructArrayFieldSchema:
+        if struct.max_capacity is None:
+            raise ParamError(message=f"max_capacity not set for struct field: {struct.name}")
+
+        struct._check_fields()
+        struct_schema = schema_types.StructArrayFieldSchema(
+            name=struct.name,
+            fields=[],
+            description=struct.description,
+            nullable=struct.nullable,
+        )
+
+        if struct.params:
+            for k, v in struct.params.items():
+                kv_pair = common_types.KeyValuePair(
+                    key=str(k) if k != "mmap_enabled" else "mmap.enabled",
+                    value=(
+                        orjson.dumps(v).decode(Config.EncodeProtocol)
+                        if not isinstance(v, str)
+                        else str(v)
+                    ),
+                )
+                struct_schema.type_params.append(kv_pair)
+
+        for f in struct.fields:
+            if isVectorDataType(f.dtype):
+                actual_dtype = DataType._ARRAY_OF_VECTOR
+                actual_element_type = f.dtype
+            else:
+                actual_dtype = DataType.ARRAY
+                actual_element_type = f.dtype
+
+            field_schema = schema_types.FieldSchema(
+                name=f.name,
+                data_type=actual_dtype,
+                description=f.description,
+                is_primary_key=f.is_primary,
+                default_value=f.default_value,
+                nullable=struct.nullable,
+                autoID=f.auto_id,
+                is_partition_key=f.is_partition_key,
+                is_dynamic=f.is_dynamic,
+                element_type=actual_element_type,
+                is_clustering_key=f.is_clustering_key,
+                is_function_output=f.is_function_output,
+            )
+
+            field_params = dict(f.params) if f.params else {}
+            field_params["max_capacity"] = struct.max_capacity
+
+            for k, v in field_params.items():
+                kv_pair = common_types.KeyValuePair(
+                    key=str(k) if k != "mmap_enabled" else "mmap.enabled", value=json.dumps(v)
+                )
+                field_schema.type_params.append(kv_pair)
+            struct_schema.fields.append(field_schema)
+
+        return struct_schema
 
     @staticmethod
     def get_field_schema(
@@ -322,6 +330,7 @@ class Prepare:
             nullable=nullable,
             default_value=field.get("default_value"),
             element_type=field.get("element_type"),
+            external_field=field.get("external_field", ""),
         )
 
         type_params = field.get("params", {})
@@ -379,6 +388,89 @@ class Prepare:
         return schema
 
     @classmethod
+    def alter_collection_schema_request(
+        cls,
+        collection_name: str,
+        field_schema: Optional[FieldSchema] = None,
+        func: Optional[Function] = None,
+        drop_field_name: Optional[str] = None,
+        drop_field_id: Optional[int] = None,
+        drop_function_name: Optional[str] = None,
+        drop_function_output_fields: bool = False,
+        index_name: str = "",
+        index_extra_params: Optional[Dict] = None,
+    ) -> milvus_types.AlterCollectionSchemaRequest:
+        is_drop = any(
+            identifier is not None
+            for identifier in (drop_field_name, drop_field_id, drop_function_name)
+        )
+        is_add = field_schema is not None or func is not None
+
+        if is_drop and is_add:
+            raise ParamError(
+                message="Cannot perform both Add and Drop operations in a single request"
+            )
+        if not is_drop and not is_add:
+            raise ParamError(
+                message="Must specify either Add operation (field_schema/func) or Drop operation (drop_field_name/drop_field_id/drop_function_name)"
+            )
+
+        if is_drop:
+            valid_drop_identifiers = [
+                drop_field_name is not None and drop_field_name != "",
+                drop_field_id is not None and drop_field_id > 0,
+                drop_function_name is not None and drop_function_name != "",
+            ]
+            if sum(valid_drop_identifiers) != 1:
+                raise ParamError(
+                    message="Must specify exactly one valid Drop identifier (drop_field_name/drop_field_id/drop_function_name)"
+                )
+
+            drop_request = milvus_types.AlterCollectionSchemaRequest.DropRequest()
+            if drop_field_name is not None and drop_field_name != "":
+                drop_request.field_name = drop_field_name
+            elif drop_field_id is not None and drop_field_id > 0:
+                drop_request.field_id = drop_field_id
+            else:
+                drop_request.function_name = drop_function_name
+                drop_request.drop_function_output_fields = drop_function_output_fields
+
+            action = milvus_types.AlterCollectionSchemaRequest.Action(drop_request=drop_request)
+        else:
+            field_infos = []
+            func_schemas = []
+
+            if field_schema is not None:
+                field_schema_proto, _, _ = cls.get_field_schema(field_schema.to_dict())
+
+                field_info = milvus_types.AlterCollectionSchemaRequest.FieldInfo(
+                    field_schema=field_schema_proto,
+                    index_name=index_name,
+                )
+                if index_extra_params:
+                    for tk, tv in index_extra_params.items():
+                        if tv is not None:
+                            field_info.extra_params.append(
+                                common_types.KeyValuePair(key=str(tk), value=utils.dumps(tv))
+                            )
+                field_infos.append(field_info)
+
+            if func is not None:
+                func_schemas.append(cls.convert_function_to_function_schema(func))
+
+            add_request = milvus_types.AlterCollectionSchemaRequest.AddRequest(
+                field_infos=field_infos,
+                func_schema=func_schemas,
+            )
+
+            action = milvus_types.AlterCollectionSchemaRequest.Action(add_request=add_request)
+
+        return milvus_types.AlterCollectionSchemaRequest(
+            collection_name=collection_name,
+            action=action,
+        )
+
+    @classmethod
     def drop_collection_request(cls, collection_name: str) -> milvus_types.DropCollectionRequest:
         return milvus_types.DropCollectionRequest(collection_name=collection_name)
 
@@ -426,6 +518,17 @@ class Prepare:
         return milvus_types.AddCollectionFieldRequest(
             collection_name=collection_name,
             schema=bytes(field_schema_proto.SerializeToString()),
+        )
+
+    @classmethod
+    def add_collection_struct_field_request(
+        cls,
+        collection_name: str,
+        struct_field_schema: StructFieldSchema,
+    ) -> milvus_types.AddCollectionStructFieldRequest:
+        return milvus_types.AddCollectionStructFieldRequest(
+            collection_name=collection_name,
+            struct_array_field_schema=cls.get_struct_array_field_schema(struct_field_schema),
         )
 
     @classmethod
@@ -550,8 +653,11 @@ class Prepare:
 
     @classmethod
     def empty(cls):
-        msg = "no empty request later"
-        raise DeprecationWarning(msg)
+        warnings.warn(
+            "Prepare.empty() is deprecated and will be removed in a future version.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
 
     @classmethod
     def register_link_request(cls):
@@ -600,6 +706,15 @@ class Prepare:
         if isinstance(values, np.ndarray):
             values = values.tolist()
 
+        relevant_field_info = struct_sub_field_info[field_name]
+        relevant_fields_data = struct_sub_fields_data[field_name]
+        if values is None:
+            if not struct_info.get("nullable", False):
+                msg = f"Field '{field_name}': Expected list, got NoneType"
+                raise TypeError(msg)
+            Prepare._add_empty_struct_data(relevant_field_info, relevant_fields_data, valid=False)
+            return
+
         if not isinstance(values, list):
             msg = f"Field '{field_name}': Expected list, got {type(values).__name__}"
             raise TypeError(msg)
@@ -609,9 +724,6 @@ class Prepare:
 
         # Handle empty array - create empty data structures
         if not values:
-            # Get relevant field info and data for this struct
-            relevant_field_info = struct_sub_field_info[field_name]
-            relevant_fields_data = struct_sub_fields_data[field_name]
             Prepare._add_empty_struct_data(relevant_field_info, relevant_fields_data)
             return
 
@@ -620,21 +732,26 @@ class Prepare:
             values, expected_fields, field_name
         )
 
-        # Process collected values using the struct-specific sub-dictionaries
-        relevant_field_info = struct_sub_field_info[field_name]
-        relevant_fields_data = struct_sub_fields_data[field_name]
         Prepare._process_struct_values(field_values, relevant_field_info, relevant_fields_data)
 
     @staticmethod
-    def _add_empty_struct_data(struct_field_info: Dict, struct_sub_fields_data: Dict):
+    def _add_empty_struct_data(
+        struct_field_info: Dict, struct_sub_fields_data: Dict, valid: bool = True
+    ):
         """Add empty data for struct fields."""
         for field_name, field_info in struct_field_info.items():
             field_data = struct_sub_fields_data[field_name]
+            if field_info.get("nullable", False):
+                field_data.valid_data.append(valid)
+
+            if not valid:
+                continue
 
             if field_info["type"] == DataType.ARRAY:
                 field_data.scalars.array_data.data.append(convert_to_array([], field_info))
             elif field_info["type"] == DataType._ARRAY_OF_VECTOR:
                 field_data.vectors.vector_array.dim = Prepare._get_dim_value(field_info)
+                field_data.vectors.vector_array.element_type = field_info["element_type"]
                 field_data.vectors.vector_array.data.append(
                     convert_to_array_of_vector([], field_info)
                 )
@@ -687,17 +804,55 @@ class Prepare:
                 field_data.scalars.array_data.data.append(convert_to_array(values, field_info))
             elif field_info["type"] == DataType._ARRAY_OF_VECTOR:
                 field_data.vectors.vector_array.dim = Prepare._get_dim_value(field_info)
+                field_data.vectors.vector_array.element_type = field_info["element_type"]
                 field_data.vectors.vector_array.data.append(
                     convert_to_array_of_vector(values, field_info)
                 )
             else:
                 raise ParamError(message=f"Unsupported data type: {field_info['type']}")
+            if field_info.get("nullable", False):
+                field_data.valid_data.append(True)
 
     @staticmethod
     def _get_dim_value(field_info: Dict) -> int:
         """Extract dimension value from field info."""
         dim_value = field_info.get("params", {}).get("dim", 0)
         return int(dim_value) if isinstance(dim_value, str) else dim_value
+
+    @staticmethod
+    def _strip_struct_sub_field_name(struct_name: str, field_name: str) -> str:
+        prefix = f"{struct_name}["
+        if field_name.startswith(prefix) and field_name.endswith("]"):
+            return field_name[len(prefix) : -1]
+        return field_name
+
+    @staticmethod
+    def _match_struct_sub_field_name(
+        field_name: str, struct_sub_field_info: Dict[str, Dict[str, Dict]]
+    ) -> Optional[str]:
+        """Return the parent struct when field_name uses known struct[sub-field] storage form."""
+        m = _STRUCT_FIELD_RE.match(field_name)
+        if m:
+            struct_name, sub_field_name = m.groups()
+            if sub_field_name in struct_sub_field_info.get(struct_name, {}):
+                return struct_name
+        return None
+
+    @staticmethod
+    def _raise_struct_sub_field_update_error(
+        field_name: str, struct_name: str, partial_update: bool
+    ) -> None:
+        if partial_update:
+            msg = (
+                f"Partial struct update is unsupported for struct sub-field `{field_name}`; "
+                f"update the whole struct field `{struct_name}` instead"
+            )
+        else:
+            msg = (
+                f"Struct sub-field `{field_name}` cannot be used as a top-level field; "
+                f"write the whole struct field `{struct_name}` instead"
+            )
+        raise DataNotMatchException(message=msg)
 
     @staticmethod
     def _setup_struct_data_structures(struct_fields_info: Optional[List[Dict]]):
@@ -720,17 +875,44 @@ class Prepare:
         input_struct_field_info = []
 
         if struct_fields_info:
+            normalized_struct_fields_info = []
+            for struct_field_info in struct_fields_info:
+                struct_name = struct_field_info["name"]
+                normalized_struct = dict(struct_field_info)
+                normalized_struct["type"] = normalized_struct.get("type", DataType._ARRAY_OF_STRUCT)
+                normalized_fields = []
+                for field in struct_field_info["fields"]:
+                    normalized_field = dict(field)
+                    normalized_field["name"] = Prepare._strip_struct_sub_field_name(
+                        struct_name, field["name"]
+                    )
+                    field_type = normalized_field["type"]
+                    if field_type not in {DataType.ARRAY, DataType._ARRAY_OF_VECTOR}:
+                        normalized_field["element_type"] = field_type
+                        normalized_field["type"] = (
+                            DataType._ARRAY_OF_VECTOR
+                            if isVectorDataType(field_type)
+                            else DataType.ARRAY
+                        )
+                    params = dict(normalized_field.get("params", {}) or {})
+                    if "max_capacity" not in params and "max_capacity" in normalized_struct:
+                        params["max_capacity"] = normalized_struct["max_capacity"]
+                    normalized_field["params"] = params
+                    normalized_fields.append(normalized_field)
+                normalized_struct["fields"] = normalized_fields
+                normalized_struct_fields_info.append(normalized_struct)
+
             struct_fields_data = {
                 field["name"]: schema_types.FieldData(field_name=field["name"], type=field["type"])
-                for field in struct_fields_info
+                for field in normalized_struct_fields_info
             }
-            input_struct_field_info = list(struct_fields_info)
-            struct_info_map = {struct["name"]: struct for struct in struct_fields_info}
+            input_struct_field_info = normalized_struct_fields_info
+            struct_info_map = {struct["name"]: struct for struct in normalized_struct_fields_info}
 
             # Use two-level maps to avoid overwrite when different structs have fields
             # with same name
             # First level: struct name, Second level: field name
-            for struct_field_info in struct_fields_info:
+            for struct_field_info in normalized_struct_fields_info:
                 struct_name = struct_field_info["name"]
                 struct_sub_fields_data[struct_name] = {}
                 struct_sub_field_info[struct_name] = {}
@@ -738,9 +920,6 @@ class Prepare:
                 for field in struct_field_info["fields"]:
                     field_name = field["name"]
                     field_data = schema_types.FieldData(field_name=field_name, type=field["type"])
-                    # Set dim for ARRAY_OF_VECTOR types
-                    if field["type"] == DataType._ARRAY_OF_VECTOR:
-                        field_data.vectors.dim = Prepare._get_dim_value(field)
                     struct_sub_fields_data[struct_name][field_name] = field_data
                     struct_sub_field_info[struct_name][field_name] = field
 
@@ -857,6 +1036,18 @@ class Prepare:
                         raise DataNotMatchException(
                             message=ExceptionsMessage.InsertMissedField % key
                         )
+                for struct in input_struct_field_info:
+                    key = struct["name"]
+                    if key in entity:
+                        continue
+                    if struct.get("nullable", False):
+                        Prepare._add_empty_struct_data(
+                            struct_sub_field_info[key], struct_sub_fields_data[key], valid=False
+                        )
+                    else:
+                        raise DataNotMatchException(
+                            message=ExceptionsMessage.InsertMissedField % key
+                        )
                 if enable_dynamic:
                     json_dict = {
                         k: v
@@ -882,13 +1073,7 @@ class Prepare:
 
         # Flush all bytes vector field temporary byte lists to optimize memory usage
         for field_data in fields_data.values():
-            if field_data.type in (
-                DataType.INT8_VECTOR,
-                DataType.BINARY_VECTOR,
-                DataType.FLOAT16_VECTOR,
-                DataType.BFLOAT16_VECTOR,
-            ):
-                entity_helper.flush_vector_bytes(field_data, vector_bytes_cache)
+            entity_helper.flush_vector_bytes(field_data, vector_bytes_cache)
 
         request.fields_data.extend(fields_data.values())
         request.fields_data.extend(struct_fields_data.values())
@@ -912,10 +1097,6 @@ class Prepare:
         entities: List,
         partial_update: bool = False,
     ):
-        # For partial update, struct fields are not supported
-        if partial_update and struct_fields_info:
-            raise ParamError(message="Struct fields are not supported in partial update")
-
         input_fields_info = [
             field for field in fields_info if Prepare._is_input_field(field, is_upsert=True)
         ]
@@ -931,21 +1112,15 @@ class Prepare:
         # key: field_data object id, value: list of bytes
         vector_bytes_cache: Dict[int, List[bytes]] = {}
 
-        # Use common struct data setup (only if not partial update)
-        if partial_update:
-            struct_fields_data = {}
-            struct_info_map = {}
-            struct_sub_fields_data = {}
-            struct_sub_field_info = {}
-            input_struct_field_info = []
-        else:
-            (
-                struct_fields_data,
-                struct_info_map,
-                struct_sub_fields_data,
-                struct_sub_field_info,
-                input_struct_field_info,
-            ) = Prepare._setup_struct_data_structures(struct_fields_info)
+        (
+            struct_fields_data,
+            struct_info_map,
+            struct_sub_fields_data,
+            struct_sub_field_info,
+            input_struct_field_info,
+        ) = Prepare._setup_struct_data_structures(struct_fields_info)
+        for struct in input_struct_field_info:
+            field_len[struct["name"]] = 0
 
         if enable_dynamic:
             d_field = schema_types.FieldData(
@@ -965,6 +1140,12 @@ class Prepare:
                         if k in function_output_field_names:
                             raise DataNotMatchException(
                                 message=ExceptionsMessage.InsertUnexpectedFunctionOutputField % k
+                            )
+
+                        struct_name = Prepare._match_struct_sub_field_name(k, struct_sub_field_info)
+                        if struct_name is not None:
+                            Prepare._raise_struct_sub_field_update_error(
+                                k, struct_name, partial_update
                             )
 
                         if not enable_dynamic:
@@ -996,6 +1177,7 @@ class Prepare:
                             raise DataNotMatchException(
                                 message=f"{ExceptionsMessage.FieldDataInconsistent % (k, 'struct array', type(v))} Detail: {e!s}"
                             ) from e
+                        field_len[k] += 1
                 for field in input_fields_info:
                     key = field["name"]
                     if key in entity:
@@ -1012,6 +1194,18 @@ class Prepare:
                         field_len[key] += 1
                         entity_helper.pack_field_value_to_field_data(
                             None, field_data, field_info, vector_bytes_cache
+                        )
+                    else:
+                        raise DataNotMatchException(
+                            message=ExceptionsMessage.InsertMissedField % key
+                        )
+                for struct in input_struct_field_info:
+                    key = struct["name"]
+                    if key in entity or partial_update:
+                        continue
+                    if struct.get("nullable", False):
+                        Prepare._add_empty_struct_data(
+                            struct_sub_field_info[key], struct_sub_fields_data[key], valid=False
                         )
                     else:
                         raise DataNotMatchException(
@@ -1043,20 +1237,25 @@ class Prepare:
         fields_data = {k: v for k, v in fields_data.items() if field_len[k] > 0}
         # Flush all bytes vector field temporary byte lists to optimize memory usage
         for field_data in fields_data.values():
-            if field_data.type in (
-                DataType.INT8_VECTOR,
-                DataType.BINARY_VECTOR,
-                DataType.FLOAT16_VECTOR,
-                DataType.BFLOAT16_VECTOR,
-            ):
-                entity_helper.flush_vector_bytes(field_data, vector_bytes_cache)
+            entity_helper.flush_vector_bytes(field_data, vector_bytes_cache)
 
         request.fields_data.extend(fields_data.values())
 
-        if struct_fields_data:
+        if partial_update:
+            struct_field_names = [
+                struct["name"]
+                for struct in input_struct_field_info
+                if field_len[struct["name"]] > 0
+            ]
+        else:
+            struct_field_names = [struct["name"] for struct in input_struct_field_info]
+
+        if struct_field_names:
             # reconstruct the struct array fields data (same as in insert)
             for struct in input_struct_field_info:
                 struct_name = struct["name"]
+                if struct_name not in struct_field_names:
+                    continue
                 struct_field_data = struct_fields_data[struct_name]
                 for field_info in struct["fields"]:
                     # Use two-level map to get the correct sub-field data
@@ -1064,7 +1263,9 @@ class Prepare:
                     struct_field_data.struct_arrays.fields.append(
                         struct_sub_fields_data[struct_name][field_name]
                     )
-            request.fields_data.extend(struct_fields_data.values())
+            request.fields_data.extend(
+                struct_fields_data[struct_name] for struct_name in struct_field_names
+            )
 
         for field in input_fields_info:
             is_dynamic = False
@@ -1131,23 +1332,35 @@ class Prepare:
         enable_dynamic: bool = False,
         schema_timestamp: int = 0,
         partial_update: bool = False,
+        field_ops: FieldOpsInput = None,
     ):
         if not fields_info:
             raise ParamError(message="Missing collection meta to validate entities")
 
         # upsert_request.hash_keys won't be filled in client.
         p_name = partition_name if isinstance(partition_name, str) else ""
+        ops = normalize_field_ops(field_ops)
+        # Non-REPLACE ops imply partial_update semantics; auto-promote so
+        # callers do not need to set both kwargs explicitly.
+        effective_partial_update = partial_update or bool(ops)
         request = milvus_types.UpsertRequest(
             collection_name=collection_name,
             partition_name=p_name,
             num_rows=len(entities),
             schema_timestamp=schema_timestamp,
-            partial_update=partial_update,
+            partial_update=effective_partial_update,
         )
 
-        return cls._parse_upsert_row_request(
-            request, fields_info, struct_fields_info, enable_dynamic, entities, partial_update
+        request = cls._parse_upsert_row_request(
+            request,
+            fields_info,
+            struct_fields_info,
+            enable_dynamic,
+            entities,
+            effective_partial_update,
         )
+        cls._apply_field_ops(request, ops)
+        return request
 
     @staticmethod
     def _pre_insert_batch_check(
@@ -1279,16 +1492,41 @@ class Prepare:
         partition_name: str,
         fields_info: Any,
         partial_update: bool = False,
+        field_ops: FieldOpsInput = None,
     ):
-        location = cls._pre_upsert_batch_check(entities, fields_info, partial_update)
+        ops = normalize_field_ops(field_ops)
+        # Non-REPLACE ops imply partial_update semantics; auto-promote before
+        # the arity check so callers can omit unchanged columns when passing
+        # field_ops without also setting partial_update=True explicitly.
+        effective_partial_update = partial_update or bool(ops)
+        location = cls._pre_upsert_batch_check(entities, fields_info, effective_partial_update)
         tag = partition_name if isinstance(partition_name, str) else ""
         request = milvus_types.UpsertRequest(
             collection_name=collection_name,
             partition_name=tag,
-            partial_update=partial_update,
+            partial_update=effective_partial_update,
         )
 
-        return cls._parse_batch_request(request, entities, fields_info, location)
+        request = cls._parse_batch_request(request, entities, fields_info, location)
+        cls._apply_field_ops(request, ops)
+        return request
+
+    @staticmethod
+    def _apply_field_ops(
+        request: Union[milvus_types.InsertRequest, milvus_types.UpsertRequest],
+        field_ops: "dict[str, schema_types.FieldPartialUpdateOp]",
+    ) -> None:
+        """Append FieldPartialUpdateOp directives to ``request.field_ops``.
+
+        The ops are emitted independently of the ``fields_data`` contents so
+        an op targeting a field not present in ``fields_data`` reaches the
+        server and produces a descriptive validation error — client-side
+        filtering would hide user typos.
+        """
+        if not field_ops:
+            return
+        for field_name, op in field_ops.items():
+            request.field_ops.add(field_name=field_name, op=op.op)
 
     @classmethod
     def delete_request(
@@ -1322,56 +1560,21 @@ class Prepare:
     ):
         # sparse vector
         if entity_helper.entity_is_sparse_matrix(data):
-            pl_type = PlaceholderType.SparseFloatVector
+            pl_type = require_placeholder_type(DataType.SPARSE_FLOAT_VECTOR, is_embedding_list)
             pl_values = entity_helper.sparse_rows_to_proto(data).contents
 
         elif isinstance(data[0], np.ndarray):
-            dtype = data[0].dtype
-
-            if dtype == "bfloat16":
-                pl_type = (
-                    PlaceholderType.BFLOAT16_VECTOR
-                    if not is_embedding_list
-                    else PlaceholderType.EmbListBFloat16Vector
-                )
-                pl_values = (array.tobytes() for array in data)
-            elif dtype == "float16":
-                pl_type = (
-                    PlaceholderType.FLOAT16_VECTOR
-                    if not is_embedding_list
-                    else PlaceholderType.EmbListFloat16Vector
-                )
-                pl_values = (array.tobytes() for array in data)
-            elif dtype in ("float32", "float64"):
-                pl_type = (
-                    PlaceholderType.FloatVector
-                    if not is_embedding_list
-                    else PlaceholderType.EmbListFloatVector
-                )
+            vector_type = require_vector_type_for_numpy_dtype(data[0].dtype)
+            pl_type = require_placeholder_type(vector_type, is_embedding_list)
+            if not is_byte_vector_type(vector_type):
                 pl_values = (blob.vector_float_to_bytes(entity) for entity in data)
-            elif dtype == "int8":
-                pl_type = (
-                    PlaceholderType.Int8Vector
-                    if not is_embedding_list
-                    else PlaceholderType.EmbListInt8Vector
-                )
-                pl_values = (array.tobytes() for array in data)
-
-            elif dtype in ("byte", "uint8"):
-                pl_type = (
-                    PlaceholderType.BinaryVector
-                    if not is_embedding_list
-                    else PlaceholderType.EmbListBinaryVector
-                )
-                pl_values = (array.tobytes() for array in data)
-
             else:
-                err_msg = f"unsupported data type: {dtype}"
-                raise ParamError(message=err_msg)
+                pl_values = (array.tobytes() for array in data)
 
         elif isinstance(data[0], bytes):
-            ph_regular, ph_emb = _BYTES_PH_MAP.get(vector_data_type, _BYTES_PH_DEFAULT)
-            pl_type = ph_emb if is_embedding_list else ph_regular
+            pl_type = require_placeholder_type(
+                vector_data_type or DataType.BINARY_VECTOR, is_embedding_list
+            )
             pl_values = data
 
         elif isinstance(data[0], str):
@@ -1389,6 +1592,19 @@ class Prepare:
 
     @staticmethod
     def _get_vector_type_from_schema(schema: dict, anns_field: str) -> Optional[DataType]:
+        # Parse struct field: "items[embedding]" -> struct_name="items", sub_field="embedding"
+        m = _STRUCT_FIELD_RE.match(anns_field)
+        if m:
+            struct_name, sub_field = m.groups()
+            for sf in schema.get("struct_array_fields", []):
+                if sf.get("name") == struct_name:
+                    for f in sf.get("fields", []):
+                        if f.get("name") == sub_field:
+                            if f.get("type") == DataType._ARRAY_OF_VECTOR:
+                                return f.get("element_type")
+                            return f.get("type")
+            return None
+        # Regular field
         for f in schema.get("fields", []):
             if f.get("name") == anns_field:
                 return f.get("type")
@@ -1463,6 +1679,40 @@ class Prepare:
             expression_template_values[k] = add_data(v)
         return expression_template_values
 
+    @staticmethod
+    def function_chains_schema(
+        function_chains: Optional[Union[FunctionChain, List[FunctionChain]]],
+        ranker: Optional[Union[Function, FunctionScore]] = None,
+    ) -> List[schema_types.FunctionChain]:
+        if function_chains is None:
+            return []
+        if isinstance(function_chains, list) and len(function_chains) == 0:
+            return []
+        if ranker is not None:
+            raise ParamError(message="function_chains and ranker cannot be used together")
+
+        chains = (
+            [function_chains] if isinstance(function_chains, FunctionChain) else function_chains
+        )
+        if not isinstance(chains, list) or not all(
+            isinstance(chain, FunctionChain) for chain in chains
+        ):
+            raise ParamError(
+                message="function_chains must be a FunctionChain or a list of FunctionChain"
+            )
+
+        for chain in chains:
+            if chain.stage == FunctionChainStage.UNSPECIFIED:
+                raise ParamError(
+                    message="UNSPECIFIED function chain stage is not supported for search"
+                )
+        return [chain.to_proto() for chain in chains]
+
+    @staticmethod
+    def check_no_hybrid_function_chains(function_chains: Any) -> None:
+        if function_chains is not None:
+            raise ParamError(message="function_chains is not supported for hybrid_search yet")
+
     @classmethod
     def search_requests_with_expr(
         cls,
@@ -1477,15 +1727,17 @@ class Prepare:
         output_fields: Optional[List[str]] = None,
         round_decimal: int = -1,
         ranker: Optional[Union[Function, FunctionScore]] = None,
+        function_chains: Optional[Union[FunctionChain, List[FunctionChain]]] = None,
         highlighter: Optional[Highlighter] = None,
         use_default_consistency: bool = True,
         **kwargs,
     ) -> milvus_types.SearchRequest:
-
+        param = dict(param)
         ignore_growing = param.get("ignore_growing", False) or kwargs.get("ignore_growing", False)
         params = param.get("params", {})
         if not isinstance(params, dict):
             raise ParamError(message=f"Search params must be a dict, got {type(params)}")
+        params = dict(params)
         param["params"] = params  # ensure modifications are visible to get_params()
 
         if PAGE_RETAIN_ORDER_FIELD in kwargs and PAGE_RETAIN_ORDER_FIELD in param:
@@ -1526,6 +1778,10 @@ class Prepare:
         if collection_id is not None:
             search_params[COLLECTION_ID] = str(collection_id)
 
+        cluster_id = kwargs.get(CLUSTER_ID)
+        if cluster_id is not None:
+            search_params[CLUSTER_ID] = str(cluster_id)
+
         is_search_iter_v2 = kwargs.get(ITER_SEARCH_V2_KEY)
         if is_search_iter_v2 is not None:
             search_params[ITER_SEARCH_V2_KEY] = is_search_iter_v2
@@ -1542,9 +1798,35 @@ class Prepare:
         if search_iter_id is not None:
             search_params[ITER_SEARCH_ID_KEY] = search_iter_id
 
+        search_aggregation = kwargs.get(SEARCH_AGGREGATION)
+        if search_aggregation is not None and not isinstance(search_aggregation, SearchAggregation):
+            raise ParamError(
+                message=(
+                    f"search_aggregation must be a SearchAggregation instance, "
+                    f"got {type(search_aggregation).__name__}"
+                )
+            )
+
         group_by_field = kwargs.get(GROUP_BY_FIELD)
+        if search_aggregation is not None and group_by_field is not None:
+            raise ParamError(message="search_aggregation and group_by_field are mutually exclusive")
         if group_by_field is not None:
             search_params[GROUP_BY_FIELD] = group_by_field
+
+        # Plural group_by_fields must not be silently dropped on the search path.
+        # Mirror the singular handling above: reject the search_aggregation combination
+        # client-side, and otherwise forward the value so the proxy's group_by_fields
+        # validation and group-by search apply. See milvus-io/milvus#50960.
+        group_by_fields = kwargs.get(QUERY_GROUP_BY_FIELDS)
+        if group_by_fields is not None:
+            if not isinstance(group_by_fields, list):
+                raise ParamError(message="group_by_fields must be a list")
+            if len(group_by_fields) > 0:
+                if search_aggregation is not None:
+                    raise ParamError(
+                        message="search_aggregation and group_by_fields are mutually exclusive"
+                    )
+                search_params[QUERY_GROUP_BY_FIELDS] = ",".join(group_by_fields)
 
         group_size = kwargs.get(GROUP_SIZE)
         if group_size is not None:
@@ -1657,8 +1939,13 @@ class Prepare:
 
         request = milvus_types.SearchRequest(**request_kwargs)
 
+        if search_aggregation is not None:
+            request.search_aggregation.CopyFrom(search_aggregation.to_proto())
+
         if expr is not None:
             request.dsl = expr
+
+        request.function_chains.extend(Prepare.function_chains_schema(function_chains, ranker))
 
         if isinstance(ranker, Function):
             request.function_score.CopyFrom(Prepare.ranker_to_function_score(ranker))
@@ -1706,8 +1993,9 @@ class Prepare:
         **kwargs,
     ) -> milvus_types.HybridSearchRequest:
         if rerank is not None and not isinstance(rerank, (Function, BaseRanker)):
-
             raise ParamError(message="The hybrid search rerank must be a Function or a Ranker.")
+        if kwargs.get(SEARCH_AGGREGATION) is not None:
+            raise ParamError(message="search_aggregation is not supported in hybrid_search")
         rerank_param = {}
         if isinstance(rerank, BaseRanker):
             rerank_param = rerank.dict()
@@ -1742,6 +2030,12 @@ class Prepare:
                         value=val if param_key == RANK_GROUP_SCORER else utils.dumps(val),
                     )
                 )
+
+        cluster_id = kwargs.get(CLUSTER_ID)
+        if cluster_id is not None:
+            request.rank_params.append(
+                common_types.KeyValuePair(key=CLUSTER_ID, value=str(cluster_id))
+            )
 
         if isinstance(rerank, Function):
             request.function_score.CopyFrom(Prepare.ranker_to_function_score(rerank))
@@ -2032,23 +2326,6 @@ class Prepare:
         return milvus_types.DummyRequest(request_type=request_type)
 
     @classmethod
-    def retrieve_request(
-        cls,
-        collection_name: str,
-        ids: List[str],
-        output_fields: List[str],
-        partition_names: List[str],
-    ):
-        ids = schema_types.IDs(int_id=schema_types.LongArray(data=ids))
-        return milvus_types.RetrieveRequest(
-            db_name="",
-            collection_name=collection_name,
-            ids=ids,
-            output_fields=output_fields,
-            partition_names=partition_names,
-        )
-
-    @classmethod
     def query_request(
         cls,
         collection_name: str,
@@ -2076,6 +2353,12 @@ class Prepare:
                 common_types.KeyValuePair(key=COLLECTION_ID, value=str(collection_id))
             )
 
+        cluster_id = kwargs.get(CLUSTER_ID)
+        if cluster_id is not None:
+            req.query_params.append(
+                common_types.KeyValuePair(key=CLUSTER_ID, value=str(cluster_id))
+            )
+
         limit = kwargs.get("limit")
         if limit is not None:
             req.query_params.append(common_types.KeyValuePair(key="limit", value=str(limit)))
@@ -2100,12 +2383,59 @@ class Prepare:
                 common_types.KeyValuePair(key=ITERATOR_FIELD, value=is_iterator)
             )
 
+        query_iter_last_pk = kwargs.get(QUERY_ITER_LAST_PK)
+        query_iter_last_element_offset = kwargs.get(QUERY_ITER_LAST_ELEMENT_OFFSET)
+        if query_iter_last_pk is not None:
+            req.query_params.append(
+                common_types.KeyValuePair(key=QUERY_ITER_LAST_PK, value=str(query_iter_last_pk))
+            )
+        if query_iter_last_element_offset is not None:
+            req.query_params.append(
+                common_types.KeyValuePair(
+                    key=QUERY_ITER_LAST_ELEMENT_OFFSET,
+                    value=str(query_iter_last_element_offset),
+                )
+            )
+
         req.query_params.append(
             common_types.KeyValuePair(key="ignore_growing", value=str(ignore_growing))
         )
         req.query_params.append(
             common_types.KeyValuePair(key=REDUCE_STOP_FOR_BEST, value=str(stop_reduce_for_best))
         )
+
+        # parse order-by fields for query ORDER BY
+        order_by_fields = kwargs.get(ORDER_BY_FIELDS) or kwargs.get("order_by")
+        if order_by_fields is not None:
+            if isinstance(order_by_fields, list):
+                formatted = []
+                for item in order_by_fields:
+                    if isinstance(item, str):
+                        formatted.append(item)
+                    elif isinstance(item, dict):
+                        field_name = item.get("field", "")
+                        direction = item.get("order", "asc")
+                        formatted.append(f"{field_name}:{direction}")
+                formatted_str = ",".join(formatted)
+            else:
+                formatted_str = str(order_by_fields)
+            req.query_params.append(
+                common_types.KeyValuePair(key=ORDER_BY_FIELDS, value=formatted_str)
+            )
+
+        # parse query group-by fields
+        query_group_by_fields = kwargs.get(QUERY_GROUP_BY_FIELDS, [])
+        if not isinstance(query_group_by_fields, list):
+            msg = "group_by_fields must be a list"
+            raise TypeError(msg)
+        if len(query_group_by_fields) > 0:
+            query_group_by_fields_str = ",".join(query_group_by_fields)
+            req.query_params.append(
+                common_types.KeyValuePair(
+                    key=QUERY_GROUP_BY_FIELDS, value=query_group_by_fields_str
+                )
+            )
+
         return req
 
     @classmethod
@@ -2213,22 +2543,34 @@ class Prepare:
         )
 
     @classmethod
-    def create_user_request(cls, user: str, password: str):
+    def create_user_request(cls, user: str, password: str, description: Optional[str] = None):
         check_pass_param(user=user, password=password)
-        return milvus_types.CreateCredentialRequest(
+        request = milvus_types.CreateCredentialRequest(
             username=user, password=base64.b64encode(password.encode("utf-8"))
         )
+        if description is not None:
+            request.description = description
+        return request
 
     @classmethod
-    def update_password_request(cls, user: str, old_password: str, new_password: str):
+    def update_password_request(
+        cls,
+        user: str,
+        old_password: str,
+        new_password: str,
+        description: Optional[str] = None,
+    ):
         check_pass_param(user=user)
         check_pass_param(password=old_password)
         check_pass_param(password=new_password)
-        return milvus_types.UpdateCredentialRequest(
+        request = milvus_types.UpdateCredentialRequest(
             username=user,
             oldPassword=base64.b64encode(old_password.encode("utf-8")),
             newPassword=base64.b64encode(new_password.encode("utf-8")),
         )
+        if description is not None:
+            request.description = description
+        return request
 
     @classmethod
     def delete_user_request(cls, user: str):
@@ -2241,9 +2583,16 @@ class Prepare:
         return milvus_types.ListCredUsersRequest()
 
     @classmethod
-    def create_role_request(cls, role_name: str):
+    def create_role_request(cls, role_name: str, description: str = ""):
         check_pass_param(role_name=role_name)
-        return milvus_types.CreateRoleRequest(entity=milvus_types.RoleEntity(name=role_name))
+        return milvus_types.CreateRoleRequest(
+            entity=milvus_types.RoleEntity(name=role_name, description=description)
+        )
+
+    @classmethod
+    def alter_role_request(cls, role_name: str, description: str):
+        check_pass_param(role_name=role_name)
+        return milvus_types.AlterRoleRequest(role_name=role_name, description=description)
 
     @classmethod
     def drop_role_request(cls, role_name: str, force_drop: bool = False):
@@ -2590,6 +2939,58 @@ class Prepare:
             force_promote=force_promote,
         )
 
+    @classmethod
+    def get_replicate_info_request(
+        cls,
+        source_cluster_id: Optional[str] = None,
+        target_pchannel: Optional[str] = None,
+    ):
+        # Treat None and empty string as missing; empty IDs are meaningless to the server.
+        if not source_cluster_id:
+            msg = "'source_cluster_id' must be provided"
+            raise ParamError(message=msg)
+        if not target_pchannel:
+            msg = "'target_pchannel' must be provided"
+            raise ParamError(message=msg)
+        return milvus_types.GetReplicateInfoRequest(
+            source_cluster_id=source_cluster_id,
+            target_pchannel=target_pchannel,
+        )
+
+    @classmethod
+    def dump_messages_request(
+        cls,
+        pchannel: Optional[str] = None,
+        start_message_id: Optional[Dict] = None,
+        start_timetick: int = 0,
+        end_timetick: int = 0,
+    ):
+        if not pchannel:
+            msg = "'pchannel' must be provided"
+            raise ParamError(message=msg)
+        if not start_message_id or not isinstance(start_message_id, dict):
+            msg = "'start_message_id' must be a non-empty dict with 'id' and 'wal_name' keys"
+            raise ParamError(message=msg)
+        if not start_message_id.get("id"):
+            msg = "'start_message_id.id' must be provided"
+            raise ParamError(message=msg)
+        wal_name = start_message_id.get("wal_name")
+        try:
+            wal_name_value = common_types.WALName.Value(wal_name)
+        except (ValueError, TypeError) as e:
+            valid = ", ".join(common_types.WALName.keys())
+            msg = f"'start_message_id.wal_name' must be one of [{valid}], got {wal_name!r}"
+            raise ParamError(message=msg) from e
+        return milvus_types.DumpMessagesRequest(
+            pchannel=pchannel,
+            start_message_id=common_types.MessageID(
+                id=start_message_id["id"],
+                WAL_name=wal_name_value,
+            ),
+            start_timetick=start_timetick,
+            end_timetick=end_timetick,
+        )
+
     @staticmethod
     def convert_function_to_function_schema(f: Function) -> schema_types.FunctionSchema:
         function_schema = schema_types.FunctionSchema(
@@ -2603,3 +3004,196 @@ class Prepare:
             kv_pair = common_types.KeyValuePair(key=str(k), value=str(v))
             function_schema.params.append(kv_pair)
         return function_schema
+
+    @classmethod
+    def create_snapshot_req(
+        cls,
+        snapshot_name: str,
+        collection_name: str,
+        db_name: str = "",
+        description: str = "",
+        compaction_protection_seconds: int = 0,
+    ):
+        if not validate_str(snapshot_name):
+            msg = "snapshot_name must be a non-empty string"
+            raise ParamError(message=msg)
+        if not validate_str(collection_name):
+            msg = "collection_name must be a non-empty string"
+            raise ParamError(message=msg)
+        if (
+            not isinstance(compaction_protection_seconds, int)
+            or isinstance(compaction_protection_seconds, bool)
+            or compaction_protection_seconds < 0
+        ):
+            msg = "compaction_protection_seconds must be a non-negative integer"
+            raise ParamError(message=msg)
+        return milvus_types.CreateSnapshotRequest(
+            name=snapshot_name,
+            db_name=db_name,
+            collection_name=collection_name,
+            description=description,
+            compaction_protection_seconds=compaction_protection_seconds,
+        )
+
+    @classmethod
+    def drop_snapshot_req(
+        cls,
+        snapshot_name: str,
+        collection_name: str,
+        db_name: str = "",
+    ):
+        if not validate_str(snapshot_name):
+            msg = "snapshot_name must be a non-empty string"
+            raise ParamError(message=msg)
+        if not validate_str(collection_name):
+            msg = "collection_name must be a non-empty string"
+            raise ParamError(message=msg)
+        return milvus_types.DropSnapshotRequest(
+            name=snapshot_name,
+            db_name=db_name,
+            collection_name=collection_name,
+        )
+
+    @classmethod
+    def list_snapshots_req(cls, collection_name: str = "", db_name: str = ""):
+        return milvus_types.ListSnapshotsRequest(
+            db_name=db_name,
+            collection_name=collection_name,
+        )
+
+    @classmethod
+    def describe_snapshot_req(
+        cls,
+        snapshot_name: str,
+        collection_name: str,
+        db_name: str = "",
+    ):
+        if not validate_str(snapshot_name):
+            msg = "snapshot_name must be a non-empty string"
+            raise ParamError(message=msg)
+        if not validate_str(collection_name):
+            msg = "collection_name must be a non-empty string"
+            raise ParamError(message=msg)
+        return milvus_types.DescribeSnapshotRequest(
+            name=snapshot_name,
+            db_name=db_name,
+            collection_name=collection_name,
+        )
+
+    @classmethod
+    def restore_snapshot_req(
+        cls,
+        snapshot_name: str,
+        source_collection_name: str,
+        target_collection_name: str,
+        source_db_name: str = "",
+        target_db_name: str = "",
+    ):
+        if not validate_str(snapshot_name):
+            msg = "snapshot_name must be a non-empty string"
+            raise ParamError(message=msg)
+        if not validate_str(target_collection_name):
+            msg = "target_collection_name must be a non-empty string"
+            raise ParamError(message=msg)
+        if not validate_str(source_collection_name):
+            msg = "source_collection_name must be a non-empty string"
+            raise ParamError(message=msg)
+        return milvus_types.RestoreSnapshotRequest(
+            name=snapshot_name,
+            db_name=source_db_name,
+            collection_name=source_collection_name,
+            target_db_name=target_db_name,
+            target_collection_name=target_collection_name,
+        )
+
+    @classmethod
+    def get_restore_snapshot_state_req(cls, job_id: int):
+        if not isinstance(job_id, int) or job_id <= 0:
+            msg = "job_id must be a positive integer"
+            raise ParamError(message=msg)
+        return milvus_types.GetRestoreSnapshotStateRequest(job_id=job_id)
+
+    @classmethod
+    def list_restore_snapshot_jobs_req(cls, collection_name: str = "", db_name: str = ""):
+        return milvus_types.ListRestoreSnapshotJobsRequest(
+            db_name=db_name,
+            collection_name=collection_name,
+        )
+
+    @classmethod
+    def pin_snapshot_data_req(
+        cls,
+        snapshot_name: str,
+        collection_name: str,
+        db_name: str = "",
+        ttl_seconds: int = 0,
+    ):
+        if not validate_str(snapshot_name):
+            msg = "snapshot_name must be a non-empty string"
+            raise ParamError(message=msg)
+        if not validate_str(collection_name):
+            msg = "collection_name must be a non-empty string"
+            raise ParamError(message=msg)
+        if not isinstance(ttl_seconds, int) or isinstance(ttl_seconds, bool) or ttl_seconds < 0:
+            msg = "ttl_seconds must be a non-negative integer"
+            raise ParamError(message=msg)
+        return milvus_types.PinSnapshotDataRequest(
+            name=snapshot_name,
+            db_name=db_name,
+            collection_name=collection_name,
+            ttl_seconds=ttl_seconds,
+        )
+
+    @classmethod
+    def unpin_snapshot_data_req(cls, pin_id: int):
+        if not isinstance(pin_id, int) or isinstance(pin_id, bool) or pin_id <= 0:
+            msg = "pin_id must be a positive integer"
+            raise ParamError(message=msg)
+        return milvus_types.UnpinSnapshotDataRequest(pin_id=pin_id)
+
+    @classmethod
+    def add_file_resource(cls, name: str, path: str):
+        return milvus_types.AddFileResourceRequest(name=name, path=path)
+
+    @classmethod
+    def remove_file_resource(cls, name: str):
+        return milvus_types.RemoveFileResourceRequest(name=name)
+
+    @classmethod
+    def list_file_resources(cls):
+        return milvus_types.ListFileResourcesRequest()
+
+    @classmethod
+    def refresh_external_collection_request(
+        cls,
+        collection_name: str,
+        db_name: str = "",
+        external_source: str = "",
+        external_spec: str = "",
+    ) -> milvus_types.RefreshExternalCollectionRequest:
+        return milvus_types.RefreshExternalCollectionRequest(
+            db_name=db_name,
+            collection_name=collection_name,
+            external_source=external_source,
+            external_spec=external_spec,
+        )
+
+    @classmethod
+    def get_refresh_external_collection_progress_request(
+        cls,
+        job_id: int,
+    ) -> milvus_types.GetRefreshExternalCollectionProgressRequest:
+        return milvus_types.GetRefreshExternalCollectionProgressRequest(
+            job_id=job_id,
+        )
+
+    @classmethod
+    def list_refresh_external_collection_jobs_request(
+        cls,
+        db_name: str = "",
+        collection_name: str = "",
+    ) -> milvus_types.ListRefreshExternalCollectionJobsRequest:
+        return milvus_types.ListRefreshExternalCollectionJobsRequest(
+            db_name=db_name,
+            collection_name=collection_name,
+        )

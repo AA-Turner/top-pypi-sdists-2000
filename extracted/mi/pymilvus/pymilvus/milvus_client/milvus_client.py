@@ -1,27 +1,35 @@
+import copy
 import logging
 import time
-from typing import Dict, List, Optional, Union
+from typing import Callable, Dict, List, Optional, Union
 
+from pymilvus.client import type_info
 from pymilvus.client.abstract import AnnSearchRequest, BaseRanker
 from pymilvus.client.connection_manager import ConnectionConfig, ConnectionManager
-from pymilvus.client.constants import DEFAULT_CONSISTENCY_LEVEL
+from pymilvus.client.constants import CLUSTER_ID, DEFAULT_CONSISTENCY_LEVEL
 from pymilvus.client.embedding_list import EmbeddingList
-from pymilvus.client.search_iterator import SearchIteratorV2
+from pymilvus.client.iterator import QueryIterator, SearchIterator, SearchIteratorV2
+from pymilvus.client.search_aggregation import SearchAggregation
+from pymilvus.client.search_result import Hit, Hits
 from pymilvus.client.types import (
     CompactionPlans,
     ExceptionsMessage,
+    FunctionType,
     LoadedSegmentInfo,
     LoadState,
     OmitZeroDict,
+    RefreshExternalCollectionJobInfo,
     ReplicaInfo,
     ResourceGroupConfig,
+    RestoreSnapshotJobInfo,
     SegmentInfo,
+    SnapshotInfo,
 )
 from pymilvus.client.utils import (
     convert_struct_fields_to_user_format,
     get_params,
-    is_vector_type,
 )
+from pymilvus.decorators import deprecated
 from pymilvus.exceptions import (
     DataTypeNotMatchException,
     ErrorCode,
@@ -30,15 +38,16 @@ from pymilvus.exceptions import (
     PrimaryKeyException,
     ServerVersionIncompatibleException,
 )
+from pymilvus.function_chain import FunctionChain
 from pymilvus.orm.collection import CollectionSchema, Function, FunctionScore, Highlighter
 from pymilvus.orm.constants import FIELDS, METRIC_TYPE, TYPE, UNLIMITED
-from pymilvus.orm.iterator import QueryIterator, SearchIterator
+from pymilvus.orm.schema import FieldSchema, StructFieldSchema
 from pymilvus.orm.types import DataType
 
 from .base import BaseMilvusClient
 from .check import validate_param
-from .index import IndexParam, IndexParams
-from .optimize_task import OptimizeResult, OptimizeTask, ProgressStage
+from .index import IndexParam, IndexParams, extract_bound_index_param
+from .optimize_task import OptimizeResult, OptimizeTask, ProgressStage, parse_target_size
 
 logger = logging.getLogger(__name__)
 
@@ -78,6 +87,7 @@ class MilvusClient(BaseMilvusClient):
 
         # Create config and get handler via ConnectionManager
         dedicated = kwargs.pop("dedicated", False)
+        kwargs.pop("cluster_id", None)
         self._config = ConnectionConfig.from_uri(
             uri,
             token=final_token,
@@ -96,6 +106,11 @@ class MilvusClient(BaseMilvusClient):
         self._using = f"cm-{id(self._handler)}"
 
         self.is_self_hosted = bool(self.get_server_type() == "milvus")
+
+    def session(self, cluster_id: str) -> "MilvusClientSession":
+        """Create a lightweight client session pinned to a target cluster."""
+        validate_param("cluster_id", cluster_id, str)
+        return MilvusClientSession(self, cluster_id)
 
     def create_collection(
         self,
@@ -290,6 +305,13 @@ class MilvusClient(BaseMilvusClient):
                 * *partial_update* (bool, optional): Whether this is a partial update operation.
                     If True, only the specified fields will be updated while others remain unchanged
                     Default is False.
+                * *field_ops* (Dict[str, Any], optional): Per-field partial-update operators that
+                    describe how to merge the provided values against the existing rows. Each
+                    value may be a :class:`~pymilvus.FieldOp` factory result (e.g.
+                    ``FieldOp.array_append()``), a string alias (``"array_append"``,
+                    ``"array_remove"``, ``"replace"``), or a
+                    :class:`schema_pb2.FieldPartialUpdateOp` message. Any non-REPLACE op implies
+                    partial_update=True.
 
         Raises:
             DataNotMatchException: If the data has missing fields an exception will be thrown.
@@ -380,8 +402,9 @@ class MilvusClient(BaseMilvusClient):
         Raises:
             MilvusException: If anything goes wrong
         """
-
+        validate_param("collection_name", collection_name, str)
         conn = self._get_connection()
+        kwargs = self._with_cluster_id(kwargs)
         return conn.hybrid_search(
             collection_name,
             reqs,
@@ -406,8 +429,10 @@ class MilvusClient(BaseMilvusClient):
         partition_names: Optional[List[str]] = None,
         anns_field: Optional[str] = None,
         ranker: Optional[Union[Function, FunctionScore]] = None,
+        function_chains: Optional[Union[FunctionChain, List[FunctionChain]]] = None,
         highlighter: Optional[Highlighter] = None,
         ids: Optional[Union[List[int], List[str], str, int]] = None,
+        search_aggregation: Optional[SearchAggregation] = None,
         **kwargs,
     ) -> List[List[dict]]:
         """Search for a query vector/vectors.
@@ -424,10 +449,15 @@ class MilvusClient(BaseMilvusClient):
                 specified, only primary fields including distances will be returned.
             search_params (dict, optional): The search params to use for the search.
             ranker (Function, optional): The ranker to use for the search.
+            function_chains (FunctionChain or List[FunctionChain], optional): Function chain or
+                function chains to apply to ordinary search. Mutually exclusive with ranker.
             timeout (float, optional): Timeout to use, overides the client level assigned at init.
                 Defaults to None.
             ids (Optional[Union[List[int], List[str], str, int]]): The ids to use for the search.
                 Defaults to None.
+            search_aggregation (SearchAggregation, optional): Hierarchical bucket aggregation spec.
+                Mutually exclusive with group_by_field. When set, `limit` is ignored and the root
+                SearchAggregation.size controls top-level bucket count.
         Raises:
             ValueError: The collection being searched doesnt exist. Need to insert data first.
 
@@ -435,12 +465,14 @@ class MilvusClient(BaseMilvusClient):
             List[List[dict]]: A nested list of dicts containing the result data. Embeddings are
                 not included in the result data.
         """
+        validate_param("collection_name", collection_name, str)
         # Convert EmbeddingList objects to flat arrays if present
         if isinstance(data, list) and data and isinstance(data[0], EmbeddingList):
             data = [emb_list.to_flat_array() for emb_list in data]
             kwargs["is_embedding_list"] = True
 
         conn = self._get_connection()
+        kwargs = self._with_cluster_id(kwargs)
         return conn.search(
             collection_name=collection_name,
             data=data,
@@ -454,7 +486,9 @@ class MilvusClient(BaseMilvusClient):
             expr_params=kwargs.pop("filter_params", {}),
             timeout=timeout,
             ranker=ranker,
+            function_chains=function_chains,
             highlighter=highlighter,
+            search_aggregation=search_aggregation,
             context=self._generate_call_context(**kwargs),
             **kwargs,
         )
@@ -508,6 +542,7 @@ class MilvusClient(BaseMilvusClient):
         if not output_fields:
             output_fields = ["*"]
 
+        kwargs = self._with_cluster_id(kwargs)
         return conn.query(
             collection_name,
             expr=filter,
@@ -534,16 +569,19 @@ class MilvusClient(BaseMilvusClient):
             raise DataTypeNotMatchException(message=ExceptionsMessage.ExprType % type(filter))
 
         conn = self._get_connection()
+        context = self._generate_call_context(**kwargs)
         # set up schema for iterator from cache
         schema_dict, _ = conn._get_schema(
             collection_name,
             timeout=timeout,
-            context=self._generate_call_context(**kwargs),
+            context=context,
             **kwargs,
         )
 
+        kwargs = self._with_cluster_id(kwargs)
         return QueryIterator(
-            connection=conn,
+            handler=conn,
+            context=context,
             collection_name=collection_name,
             batch_size=batch_size,
             limit=limit,
@@ -552,8 +590,7 @@ class MilvusClient(BaseMilvusClient):
             partition_names=partition_names,
             schema=schema_dict,
             timeout=timeout,
-            context=self._generate_call_context(**kwargs),
-            **kwargs,
+            rpc_options=kwargs,
         )
 
     def search_iterator(
@@ -569,6 +606,8 @@ class MilvusClient(BaseMilvusClient):
         partition_names: Optional[List[str]] = None,
         anns_field: Optional[str] = None,
         round_decimal: int = -1,
+        *,
+        external_filter_func: Optional[Callable[[Hits], Union[Hits, List[Hit]]]] = None,
         **kwargs,
     ) -> Union[SearchIteratorV2, SearchIterator]:
         """Creates an iterator for searching vectors in batches.
@@ -594,6 +633,9 @@ class MilvusClient(BaseMilvusClient):
                 there is only one vector field in the collection.
             round_decimal (int, optional): Number of decimal places for distance values.
                 Defaults to -1 (no rounding).
+            external_filter_func (Callable, optional): A client-side callback that filters each
+                page of search hits. The callback receives Hits and returns Hits or a list of Hit
+                objects. This argument is keyword-only and is supported by Search Iterator V2.
             **kwargs: Additional arguments to pass to the search operation.
 
         Returns:
@@ -614,11 +656,14 @@ class MilvusClient(BaseMilvusClient):
         """
 
         conn = self._get_connection()
+        kwargs = self._with_cluster_id(kwargs)
+        context = self._generate_call_context(**kwargs)
 
         # compatibility logic, change this when support get version from server
         try:
             return SearchIteratorV2(
-                connection=conn,
+                handler=conn,
+                context=context,
                 collection_name=collection_name,
                 data=data,
                 batch_size=batch_size,
@@ -630,8 +675,8 @@ class MilvusClient(BaseMilvusClient):
                 partition_names=partition_names,
                 anns_field=anns_field or "",
                 round_decimal=round_decimal,
-                context=self._generate_call_context(**kwargs),
-                **kwargs,
+                external_filter_func=external_filter_func,
+                rpc_options=kwargs,
             )
         except ServerVersionIncompatibleException:
             # for compatibility, return search_iterator V1
@@ -645,7 +690,7 @@ class MilvusClient(BaseMilvusClient):
         schema_dict, _ = conn._get_schema(
             collection_name,
             timeout=timeout,
-            context=self._generate_call_context(**kwargs),
+            context=context,
             **kwargs,
         )
         # if anns_field is not provided
@@ -656,7 +701,7 @@ class MilvusClient(BaseMilvusClient):
             fields = schema_dict[FIELDS]
             vec_field_count = 0
             for field in fields:
-                if is_vector_type(field[TYPE]):
+                if type_info.is_vector_type(field[TYPE]):
                     vec_field_count += 1
                     vec_field = field
             if vec_field is None:
@@ -679,9 +724,7 @@ class MilvusClient(BaseMilvusClient):
         if search_params is None:
             search_params = {}
         if METRIC_TYPE not in search_params:
-            indexes = conn.list_indexes(
-                collection_name, context=self._generate_call_context(**kwargs)
-            )
+            indexes = conn.list_indexes(collection_name, context=context)
             for index in indexes:
                 if anns_field == index.index_name:
                     params = index.params
@@ -696,7 +739,8 @@ class MilvusClient(BaseMilvusClient):
         search_params["params"] = get_params(search_params)
 
         return SearchIterator(
-            connection=self._get_connection(),
+            handler=conn,
+            context=context,
             collection_name=collection_name,
             data=data,
             ann_field=anns_field,
@@ -709,8 +753,7 @@ class MilvusClient(BaseMilvusClient):
             timeout=timeout,
             round_decimal=round_decimal,
             schema=schema_dict,
-            context=self._generate_call_context(**kwargs),
-            **kwargs,
+            rpc_options=kwargs,
         )
 
     def get(
@@ -756,6 +799,7 @@ class MilvusClient(BaseMilvusClient):
             output_fields = ["*"]
 
         expr = self._pack_pks_expr(schema_dict, ids)
+        kwargs = self._with_cluster_id(kwargs)
         return conn.query(
             collection_name,
             expr=expr,
@@ -1195,7 +1239,7 @@ class MilvusClient(BaseMilvusClient):
         Raises:
             MilvusException: If anything goes wrong
         """
-        if is_vector_type(data_type) and not kwargs.get("nullable", False):
+        if type_info.is_vector_type(data_type) and not kwargs.get("nullable", False):
             raise ParamError(
                 message="Adding vector field to existing collection requires nullable=True"
             )
@@ -1209,10 +1253,57 @@ class MilvusClient(BaseMilvusClient):
             **kwargs,
         )
 
+    def add_collection_struct_field(
+        self,
+        collection_name: str,
+        field_name: str,
+        struct_schema: StructFieldSchema,
+        max_capacity: int,
+        desc: Optional[str] = None,
+        timeout: Optional[float] = None,
+        **kwargs,
+    ):
+        """Add a new nullable struct field to the collection."""
+        if not isinstance(struct_schema, StructFieldSchema):
+            raise ParamError(message="struct_schema must be StructFieldSchema")
+        if not kwargs.get("nullable", True):
+            raise ParamError(
+                message="Adding struct field to existing collection requires nullable=True"
+            )
+
+        struct_field_schema = copy.deepcopy(struct_schema)
+        struct_field_schema.name = field_name
+        struct_field_schema.max_capacity = max_capacity
+        if desc is not None:
+            struct_field_schema._description = desc
+        struct_field_schema._nullable = True
+
+        if "mmap_enabled" in kwargs:
+            struct_field_schema._type_params["mmap_enabled"] = kwargs["mmap_enabled"]
+        if "warmup" in kwargs:
+            struct_field_schema._type_params["warmup"] = kwargs["warmup"]
+
+        conn = self._get_connection()
+        conn.add_collection_struct_field(
+            collection_name,
+            struct_field_schema,
+            timeout=timeout,
+            context=self._generate_call_context(**kwargs),
+            **kwargs,
+        )
+
+    @deprecated(
+        "MilvusClient.add_collection_function",
+        replacement="MilvusClient.add_function_field",
+        reason="is unsupported by Milvus 3.0 and later",
+    )
     def add_collection_function(
         self, collection_name: str, function: Function, timeout: Optional[float] = None, **kwargs
     ):
-        """Add a new function to the collection.
+        """Deprecated: Use add_function_field instead.
+
+        Milvus 3.0 and later do not support adding a function separately. The replacement
+        adds the function together with its output field and index.
 
         Args:
             collection_name(``string``): The name of collection.
@@ -1266,10 +1357,18 @@ class MilvusClient(BaseMilvusClient):
             **kwargs,
         )
 
+    @deprecated(
+        "MilvusClient.drop_collection_function",
+        replacement="MilvusClient.drop_function_field",
+        reason="is unsupported by Milvus 3.0 and later",
+    )
     def drop_collection_function(
         self, collection_name: str, function_name: str, timeout: Optional[float] = None, **kwargs
     ):
-        """Drop a function from the collection.
+        """Deprecated: Use drop_function_field instead.
+
+        Milvus 3.0 and later do not support dropping a function separately. The replacement
+        also removes the function's output field and its index.
 
         Args:
             collection_name(``string``): The name of collection.
@@ -1288,6 +1387,198 @@ class MilvusClient(BaseMilvusClient):
             function_name,
             timeout=timeout,
             context=self._generate_call_context(**kwargs),
+            **kwargs,
+        )
+
+    def drop_function_field(
+        self, collection_name: str, function_name: str, timeout: Optional[float] = None, **kwargs
+    ):
+        """Drop a function and its output field from the collection."""
+        self._alter_collection_schema(
+            collection_name=collection_name,
+            drop_function_name=function_name,
+            drop_function_output_fields=True,
+            timeout=timeout,
+            **kwargs,
+        )
+
+    def drop_collection_field(
+        self,
+        collection_name: str,
+        field_name: str = "",
+        field_id: int = 0,
+        timeout: Optional[float] = None,
+        **kwargs,
+    ):
+        """Drop a field from the collection."""
+        self._alter_collection_schema(
+            collection_name=collection_name,
+            drop_field_name=field_name,
+            drop_field_id=field_id,
+            timeout=timeout,
+            **kwargs,
+        )
+
+    def _alter_collection_schema(
+        self,
+        collection_name: str,
+        field_schema: Optional[FieldSchema] = None,
+        func: Optional[Function] = None,
+        timeout: Optional[float] = None,
+        drop_field_name: Optional[str] = None,
+        drop_field_id: Optional[int] = None,
+        drop_function_name: Optional[str] = None,
+        drop_function_output_fields: bool = False,
+        index_name: str = "",
+        index_extra_params: Optional[Dict] = None,
+        **kwargs,
+    ):
+        """Alter collection schema supporting both Add and Drop operations.
+
+        For Add operation: provide field_schema and func
+        For Drop operation: provide either drop_field_name, drop_field_id, or drop_function_name
+
+        Args:
+            collection_name(``str``): The name of the collection.
+            field_schema(``FieldSchema``, optional): Field schema to add.
+            func(``Function``, optional): Function to add.
+            timeout(``float``, optional): Timeout for the operation.
+            drop_field_name(``str``, optional): Field name to drop.
+            drop_field_id(``int``, optional): Field ID to drop.
+            drop_function_name(``str``, optional): Function name to drop.
+            **kwargs(``dict``): Additional keyword arguments.
+
+        Raises:
+            ParamError: If operation parameters are invalid.
+            MilvusException: If the operation fails.
+        """
+        validate_param("collection_name", collection_name, str)
+        conn = self._get_connection()
+
+        is_drop = any(
+            identifier is not None
+            for identifier in (drop_field_name, drop_field_id, drop_function_name)
+        )
+        is_add = field_schema is not None or func is not None
+
+        if is_drop and is_add:
+            raise ParamError(
+                message="Cannot perform both Add and Drop operations in a single request"
+            )
+        if not is_drop and not is_add:
+            raise ParamError(
+                message="Must specify either Add operation (field_schema/func) or Drop operation (drop_field_name/drop_field_id/drop_function_name)"
+            )
+
+        if is_add:
+            if field_schema is None:
+                raise ParamError(message="field_schema is required for Add operation")
+            if func is None:
+                raise ParamError(message="func is required for Add operation")
+
+            conn.alter_collection_schema(
+                collection_name=collection_name,
+                field_schema=field_schema,
+                func=func,
+                timeout=timeout,
+                index_name=index_name,
+                index_extra_params=index_extra_params,
+                context=self._generate_call_context(**kwargs),
+                **kwargs,
+            )
+        else:
+            valid_drop_identifiers = [
+                drop_field_name is not None and drop_field_name != "",
+                drop_field_id is not None and drop_field_id > 0,
+                drop_function_name is not None and drop_function_name != "",
+            ]
+            if sum(valid_drop_identifiers) != 1:
+                raise ParamError(
+                    message="Must specify exactly one valid Drop identifier (drop_field_name/drop_field_id/drop_function_name)"
+                )
+
+            conn.alter_collection_schema(
+                collection_name=collection_name,
+                drop_field_name=drop_field_name,
+                drop_field_id=drop_field_id,
+                drop_function_name=drop_function_name,
+                drop_function_output_fields=drop_function_output_fields,
+                timeout=timeout,
+                context=self._generate_call_context(**kwargs),
+                **kwargs,
+            )
+
+    def add_function_field(
+        self,
+        collection_name: str,
+        field_schema: FieldSchema,
+        func: Function,
+        index_params: IndexParams,
+        timeout: Optional[float] = None,
+        **kwargs,
+    ):
+        """Add a function-backed field (e.g. BM25 sparse vector) to an existing collection.
+
+        This is a high-level convenience wrapper that commits the schema change
+        (new output field + function definition) together with the index meta bound
+        to the new output field. The server creates the index meta atomically with
+        the schema change, so backfill compaction is never blocked on a missing
+        vector index. ``index_params`` must contain exactly one entry with an
+        explicit ``index_type`` for the output field; the server rejects vector
+        output fields without bound index params.
+
+        Args:
+            collection_name(``str``): Name of the collection to modify.
+            field_schema(``FieldSchema``): Schema of the new output field produced by
+                the function (e.g. a ``SPARSE_FLOAT_VECTOR`` field for BM25 or
+                a ``BINARY_VECTOR`` field for MinHash).
+            func(``Function``): Function definition that generates the output field
+                (e.g. a ``FunctionType.BM25`` or ``FunctionType.MINHASH`` function).
+            index_params(``IndexParams``): Index definition bound to the new output
+                field, exactly one entry with an explicit ``index_type``
+                (e.g. ``SPARSE_INVERTED_INDEX``/``BM25`` or ``MINHASH_LSH``/``MHJACCARD``).
+            timeout(``float``, optional): Timeout in seconds for the schema-change RPC.
+            **kwargs: Additional keyword arguments forwarded to the underlying calls.
+
+        Raises:
+            ParamError: If any required parameter is missing or invalid.
+            MilvusException: If the schema change fails.
+        """
+        validate_param("collection_name", collection_name, str)
+        validate_param("field_schema", field_schema, FieldSchema)
+        validate_param("func", func, Function)
+
+        supported_function_outputs = {
+            FunctionType.BM25: DataType.SPARSE_FLOAT_VECTOR,
+            FunctionType.MINHASH: DataType.BINARY_VECTOR,
+        }
+        expected_dtype = supported_function_outputs.get(func.type)
+        if expected_dtype is None:
+            raise ParamError(
+                message=(
+                    "add_function_field only supports FunctionType.BM25 with SPARSE_FLOAT_VECTOR "
+                    f"or FunctionType.MINHASH with BINARY_VECTOR for now, got {func.type}"
+                )
+            )
+        if field_schema.dtype != expected_dtype:
+            raise ParamError(
+                message=(
+                    f"add_function_field requires {expected_dtype.name} output field for {func.type}, "
+                    f"got {field_schema.dtype}"
+                )
+            )
+
+        bound_index_name, bound_index_extra_params = extract_bound_index_param(
+            field_schema.name, index_params
+        )
+
+        self._alter_collection_schema(
+            collection_name=collection_name,
+            field_schema=field_schema,
+            func=func,
+            timeout=timeout,
+            index_name=bound_index_name,
+            index_extra_params=bound_index_extra_params,
             **kwargs,
         )
 
@@ -1394,13 +1685,21 @@ class MilvusClient(BaseMilvusClient):
             result["row_count"] = int(result["row_count"])
         return result
 
-    def create_user(self, user_name: str, password: str, timeout: Optional[float] = None, **kwargs):
+    def create_user(
+        self,
+        user_name: str,
+        password: str,
+        timeout: Optional[float] = None,
+        description: Optional[str] = None,
+        **kwargs,
+    ):
         conn = self._get_connection()
         return conn.create_user(
             user_name,
             password,
             timeout=timeout,
             context=self._generate_call_context(**kwargs),
+            description=description,
             **kwargs,
         )
 
@@ -1417,6 +1716,7 @@ class MilvusClient(BaseMilvusClient):
         new_password: str,
         reset_connection: Optional[bool] = False,
         timeout: Optional[float] = None,
+        description: Optional[str] = None,
         **kwargs,
     ):
         conn = self._get_connection()
@@ -1426,11 +1726,28 @@ class MilvusClient(BaseMilvusClient):
             new_password,
             timeout=timeout,
             context=self._generate_call_context(**kwargs),
+            description=description,
             **kwargs,
         )
         if reset_connection:
             conn._setup_authorization_interceptor(user_name, new_password, None)
             conn._setup_grpc_channel()
+
+    def update_user(
+        self,
+        user_name: str,
+        description: str,
+        timeout: Optional[float] = None,
+        **kwargs,
+    ):
+        conn = self._get_connection()
+        conn.update_user(
+            user_name,
+            description=description,
+            timeout=timeout,
+            context=self._generate_call_context(**kwargs),
+            **kwargs,
+        )
 
     def list_users(self, timeout: Optional[float] = None, **kwargs):
         conn = self._get_connection()
@@ -1449,7 +1766,7 @@ class MilvusClient(BaseMilvusClient):
         )
         if res.groups:
             item = res.groups[0]
-            return {"user_name": user_name, "roles": item.roles}
+            return {"user_name": user_name, "roles": item.roles, "description": item.description}
         return {}
 
     def grant_role(self, user_name: str, role_name: str, timeout: Optional[float] = None, **kwargs):
@@ -1474,10 +1791,28 @@ class MilvusClient(BaseMilvusClient):
             **kwargs,
         )
 
-    def create_role(self, role_name: str, timeout: Optional[float] = None, **kwargs):
+    def create_role(
+        self, role_name: str, timeout: Optional[float] = None, description: str = "", **kwargs
+    ):
         conn = self._get_connection()
         conn.create_role(
-            role_name, timeout=timeout, context=self._generate_call_context(**kwargs), **kwargs
+            role_name,
+            timeout=timeout,
+            description=description,
+            context=self._generate_call_context(**kwargs),
+            **kwargs,
+        )
+
+    def alter_role(
+        self, role_name: str, description: str, timeout: Optional[float] = None, **kwargs
+    ):
+        conn = self._get_connection()
+        conn.alter_role(
+            role_name,
+            description,
+            timeout=timeout,
+            context=self._generate_call_context(**kwargs),
+            **kwargs,
         )
 
     def drop_role(
@@ -1495,15 +1830,24 @@ class MilvusClient(BaseMilvusClient):
     def describe_role(self, role_name: str, timeout: Optional[float] = None, **kwargs) -> Dict:
         conn = self._get_connection()
         db_name = kwargs.pop("db_name", "")
+        context = self._generate_call_context(**kwargs)
+        role_info = conn.select_one_role(
+            role_name,
+            False,
+            timeout=timeout,
+            context=context,
+            **kwargs,
+        )
         res = conn.select_grant_for_one_role(
             role_name,
             db_name,
             timeout=timeout,
-            context=self._generate_call_context(**kwargs),
+            context=context,
             **kwargs,
         )
         ret = {}
         ret["role"] = role_name
+        ret["description"] = role_info.groups[0].description if role_info.groups else ""
         ret["privileges"] = [dict(i) for i in res.groups]
         return ret
 
@@ -1677,7 +2021,11 @@ class MilvusClient(BaseMilvusClient):
             **kwargs,
         )
 
-    # deprecated same to use_database
+    @deprecated(
+        "MilvusClient.using_database",
+        replacement="MilvusClient.use_database",
+        reason="is deprecated",
+    )
     def using_database(self, db_name: str, **kwargs):
         self.use_database(db_name, **kwargs)
 
@@ -1757,6 +2105,7 @@ class MilvusClient(BaseMilvusClient):
         Raises:
             MilvusException: If anything goes wrong.
         """
+        validate_param("collection_name", collection_name, str)
         conn = self._get_connection()
         conn.flush(
             [collection_name],
@@ -1770,30 +2119,52 @@ class MilvusClient(BaseMilvusClient):
         collection_name: str,
         is_clustering: Optional[bool] = False,
         is_l0: Optional[bool] = False,
+        target_size: Optional[int] = None,
+        target_size_unit: str = "mb",
         timeout: Optional[float] = None,
         **kwargs,
     ) -> int:
         """Compact merge the small segments in a collection
 
         Args:
+            collection_name (str): The name of the collection to compact.
+            is_clustering (``bool``, optional): Option to trigger clustering compaction.
+            is_l0 (``bool``, optional): Option to trigger L0 compaction.
+            target_size (``int``, optional): Target segment size after compaction. Must be a
+                positive integer. The unit is specified by ``target_size_unit`` (default MB).
+                If not provided, the server uses its default target size.
+            target_size_unit (``str``, optional): Unit for ``target_size``. Supported values:
+                ``"b"``, ``"kb"``, ``"mb"`` (default), ``"gb"``, ``"tb"``, ``"pb"``.
+                The value is converted to MB before being sent to the server.
             timeout (``float``, optional): An optional duration of time in seconds to allow
                 for the RPC. When timeout is set to None, client waits until server response
                 or error occur.
 
-            is_clustering (``bool``, optional): Option to trigger clustering compaction.
-
         Raises:
+            ParamError: If ``target_size`` is not an int or ``target_size_unit`` is invalid.
             MilvusException: If anything goes wrong.
 
         Returns:
             int: An integer represents the server's compaction job. You can use this job ID
             for subsequent state inquiries.
         """
+        if target_size is not None:
+            if not isinstance(target_size, int) or isinstance(target_size, bool):
+                raise ParamError(
+                    message=f"target_size must be an int, got {type(target_size).__name__}"
+                )
+            if target_size <= 0:
+                raise ParamError(
+                    message=f"target_size must be a positive integer, got {target_size}"
+                )
+            target_size = parse_target_size(f"{target_size}{target_size_unit}")
+
         conn = self._get_connection()
         return conn.compact(
             collection_name,
             is_clustering=is_clustering,
             is_l0=is_l0,
+            target_size=target_size,
             timeout=timeout,
             context=self._generate_call_context(**kwargs),
             **kwargs,
@@ -2230,6 +2601,135 @@ class MilvusClient(BaseMilvusClient):
             **kwargs,
         )
 
+    def get_replicate_configuration(
+        self,
+        timeout: Optional[float] = None,
+        **kwargs,
+    ):
+        """
+        Get replication configuration from Milvus.
+
+        Args:
+            timeout (float, optional): An optional duration of time in seconds to allow for the RPC
+            **kwargs: Additional arguments
+
+        Returns:
+            ReplicateConfiguration: The current replication configuration
+
+        Raises:
+            MilvusException: If the operation fails
+        """
+        return self._get_connection().get_replicate_configuration(
+            timeout=timeout,
+            context=self._generate_call_context(**kwargs),
+            **kwargs,
+        )
+
+    def get_replicate_info(
+        self,
+        source_cluster_id: str,
+        target_pchannel: str,
+        timeout: Optional[float] = None,
+        **kwargs,
+    ):
+        """
+        Get replication checkpoint state for a source cluster + source pchannel.
+
+        Args:
+            source_cluster_id (str): ID of the source cluster.
+            target_pchannel (str): The SOURCE cluster's pchannel name. The proto
+                field naming is historical and misleading; the value expected here
+                is the pchannel belonging to source_cluster_id.
+            timeout (float, optional): RPC timeout in seconds.
+
+        Returns:
+            dict: {
+                "checkpoint": dict or None — current replication position,
+                "salvage_checkpoint": dict or None — last-known position from a
+                    prior force_promote (None when no force_promote occurred),
+            }
+            Each non-None checkpoint dict has keys: cluster_id (str), pchannel (str),
+            message_id ({"id": str, "wal_name": str} or None), time_tick (int).
+
+        Raises:
+            ParamError: If source_cluster_id or target_pchannel is empty.
+            MilvusException: If the RPC fails.
+
+        Examples:
+            client.get_replicate_info(
+                source_cluster_id="primary",
+                target_pchannel="by-dev-rootcoord-dml_0",
+            )
+        """
+        return self._get_connection().get_replicate_info(
+            source_cluster_id=source_cluster_id,
+            target_pchannel=target_pchannel,
+            timeout=timeout,
+            context=self._generate_call_context(**kwargs),
+            **kwargs,
+        )
+
+    def dump_messages(
+        self,
+        pchannel: str,
+        start_message_id: Dict,
+        start_timetick: int = 0,
+        end_timetick: int = 0,
+        timeout: Optional[float] = None,
+        **kwargs,
+    ):
+        """
+        Dump messages from a WAL range for data salvage (server-streaming RPC).
+
+        Typically used after a force failover: call get_replicate_info() on the
+        old primary to obtain the salvage_checkpoint, then dump the messages that
+        were not yet synchronized to the new primary.
+
+        Args:
+            pchannel (str): Physical channel name to dump from.
+            start_message_id (Dict): Start position in WAL, {"id": str, "wal_name": str}.
+                Accepts get_replicate_info()["salvage_checkpoint"]["message_id"] directly.
+            start_timetick (int, optional): Only dump messages with timetick >=
+                start_timetick. 0 means no lower bound.
+            end_timetick (int, optional): Only dump messages with timetick <=
+                end_timetick. 0 means no limit — the server keeps streaming until
+                the RPC is cancelled; combined with no timeout, iteration blocks
+                indefinitely.
+            timeout (float, optional): Timeout in seconds applied to the entire stream.
+
+        Returns:
+            Generator yielding one dict per message:
+            {"message_id": {"id": str, "wal_name": str} or None,
+             "payload": bytes, "properties": dict}.
+
+        Raises:
+            ParamError: If pchannel or start_message_id is missing/invalid (at call time).
+            MilvusException: If the server reports an error (during iteration).
+
+        Examples:
+            info = client.get_replicate_info(
+                source_cluster_id="primary",
+                target_pchannel="by-dev-rootcoord-dml_0",
+            )
+            ckpt = info["salvage_checkpoint"]
+            for msg in client.dump_messages(
+                pchannel="by-dev-rootcoord-dml_0",
+                start_message_id=ckpt["message_id"],
+                start_timetick=ckpt["time_tick"],
+                end_timetick=end_tt,
+            ):
+                print(msg["message_id"], len(msg["payload"]))
+        """
+        return self._get_connection().dump_messages(
+            pchannel=pchannel,
+            start_message_id=start_message_id,
+            start_timetick=start_timetick,
+            end_timetick=end_timetick,
+            timeout=timeout,
+            context=self._generate_call_context(**kwargs),
+            **kwargs,
+        )
+
     def flush_all(self, timeout: Optional[float] = None, **kwargs) -> None:
         """Flush all collections.
 
@@ -2368,7 +2868,7 @@ class MilvusClient(BaseMilvusClient):
         vector_fields = {
             field["name"]
             for field in schema_dict.get("fields", [])
-            if is_vector_type(field.get("type"))
+            if type_info.is_vector_type(field.get("type"))
         }
 
         if not vector_fields:
@@ -2583,3 +3083,537 @@ class MilvusClient(BaseMilvusClient):
             target_size=task._target_size,
             progress=task.progress_history(),
         )
+
+    def create_snapshot(
+        self,
+        snapshot_name: str,
+        collection_name: str,
+        db_name: str = "",
+        description: str = "",
+        compaction_protection_seconds: int = 0,
+        timeout: Optional[float] = None,
+        **kwargs,
+    ) -> None:
+        """Create a snapshot for a collection.
+
+        Args:
+            snapshot_name (str): The name of the snapshot. Must be unique.
+            collection_name (str): The name of the collection to snapshot.
+            description (str): Optional description for the snapshot.
+            db_name (str): Optional database name (defaults to active db).
+            compaction_protection_seconds (int): Duration in seconds during which the
+                segments referenced by this snapshot are protected from compaction.
+                0 = no protection (default).
+            timeout (Optional[float]): An optional duration of time in seconds to allow for the RPC.
+            **kwargs: Additional arguments.
+
+        Raises:
+            MilvusException: If the operation fails.
+
+        Example:
+            >>> from pymilvus import MilvusClient
+            >>> client = MilvusClient(uri="http://localhost:19530")
+            >>> # Recommended: flush before creating snapshot
+            >>> client.flush(collection_name="my_collection")
+            >>> client.create_snapshot(
+            ...     snapshot_name="backup_20240101",
+            ...     collection_name="my_collection",
+            ...     description="Daily backup",
+            ...     compaction_protection_seconds=3600,
+            ... )
+        """
+        conn = self._get_connection()
+        conn.create_snapshot(
+            snapshot_name=snapshot_name,
+            collection_name=collection_name,
+            description=description,
+            db_name=db_name,
+            compaction_protection_seconds=compaction_protection_seconds,
+            timeout=timeout,
+            context=self._generate_call_context(**kwargs),
+            **kwargs,
+        )
+
+    def drop_snapshot(
+        self,
+        snapshot_name: str,
+        collection_name: str,
+        db_name: str = "",
+        timeout: Optional[float] = None,
+        **kwargs,
+    ) -> None:
+        """Delete a snapshot permanently.
+
+        Args:
+            snapshot_name (str): The name of the snapshot to drop.
+            collection_name (str): The collection the snapshot belongs to
+                (required for collection-level authorization).
+            db_name (str): Optional database name (defaults to active db).
+            timeout (Optional[float]): An optional duration of time in seconds to allow for the RPC.
+            **kwargs: Additional arguments.
+
+        Raises:
+            MilvusException: If the operation fails.
+
+        Example:
+            >>> client.drop_snapshot(
+            ...     snapshot_name="backup_20240101",
+            ...     collection_name="my_collection",
+            ... )
+        """
+        conn = self._get_connection()
+        conn.drop_snapshot(
+            snapshot_name=snapshot_name,
+            collection_name=collection_name,
+            db_name=db_name,
+            timeout=timeout,
+            context=self._generate_call_context(**kwargs),
+            **kwargs,
+        )
+
+    def list_snapshots(
+        self,
+        collection_name: str = "",
+        db_name: str = "",
+        timeout: Optional[float] = None,
+        **kwargs,
+    ) -> List[str]:
+        """List existing snapshots.
+
+        Args:
+            collection_name (str): Optional collection name to filter snapshots.
+                If empty, lists all snapshots.
+            db_name (str): Optional database name (defaults to active db).
+            timeout (Optional[float]): An optional duration of time in seconds to allow for the RPC.
+            **kwargs: Additional arguments.
+
+        Returns:
+            List[str]: A list of snapshot names.
+
+        Raises:
+            MilvusException: If the operation fails.
+
+        Example:
+            >>> # List all snapshots for a collection
+            >>> snapshots = client.list_snapshots(collection_name="my_collection")
+            >>> print(snapshots)
+            ['backup_20240101', 'backup_20240102']
+        """
+        conn = self._get_connection()
+        return conn.list_snapshots(
+            collection_name=collection_name,
+            db_name=db_name,
+            timeout=timeout,
+            context=self._generate_call_context(**kwargs),
+            **kwargs,
+        )
+
+    def describe_snapshot(
+        self,
+        snapshot_name: str,
+        collection_name: str,
+        db_name: str = "",
+        timeout: Optional[float] = None,
+        **kwargs,
+    ) -> SnapshotInfo:
+        """Get detailed information about a specific snapshot.
+
+        Args:
+            snapshot_name (str): The name of the snapshot to describe.
+            collection_name (str): The collection the snapshot belongs to
+                (required for collection-level authorization).
+            db_name (str): Optional database name (defaults to active db).
+            timeout (Optional[float]): An optional duration of time in seconds to allow for the RPC.
+            **kwargs: Additional arguments.
+
+        Returns:
+            SnapshotInfo: A dataclass containing snapshot information with the following fields:
+                - name (str): The snapshot name
+                - description (str): The snapshot description
+                - collection_name (str): The collection name
+                - partition_names (List[str]): List of partition names
+                - create_ts (int): Creation timestamp
+                - s3_location (str): S3 storage location
+
+        Raises:
+            MilvusException: If the operation fails.
+
+        Example:
+            >>> info = client.describe_snapshot(
+            ...     snapshot_name="backup_20240101",
+            ...     collection_name="my_collection",
+            ... )
+            >>> print(f"Snapshot: {info.name}")
+            >>> print(f"Collection: {info.collection_name}")
+            >>> print(f"Created: {info.create_ts}")
+        """
+        conn = self._get_connection()
+        return conn.describe_snapshot(
+            snapshot_name=snapshot_name,
+            collection_name=collection_name,
+            db_name=db_name,
+            timeout=timeout,
+            context=self._generate_call_context(**kwargs),
+            **kwargs,
+        )
+
+    def restore_snapshot(
+        self,
+        snapshot_name: str,
+        source_collection_name: str,
+        target_collection_name: str,
+        source_db_name: str = "",
+        target_db_name: str = "",
+        timeout: Optional[float] = None,
+        **kwargs,
+    ) -> int:
+        """Restore a snapshot to a new (possibly cross-db / cross-collection) collection.
+
+        This operation is asynchronous and returns a job ID for tracking progress.
+        Use get_restore_snapshot_state() to monitor the restore progress.
+
+        Args:
+            snapshot_name (str): The name of the snapshot to restore.
+            target_collection_name (str): The collection the snapshot will be restored into.
+                Validated server-side; an existing collection causes the restore job to fail.
+            source_collection_name (str): The collection the snapshot belongs to.
+                Required to uniquely identify the snapshot, since snapshot names are only
+                unique within a collection and multiple collections may share the same name.
+            target_db_name (str): Target database name (defaults to active db).
+            source_db_name (str): Source database name (defaults to active db).
+            timeout (Optional[float]): An optional duration of time in seconds to allow for the RPC.
+            **kwargs: Additional arguments.
+
+        Returns:
+            int: The restore job ID for tracking progress.
+
+        Raises:
+            MilvusException: If the operation fails.
+
+        Example:
+            >>> job_id = client.restore_snapshot(
+            ...     snapshot_name="backup_20240101",
+            ...     target_collection_name="restored_collection",
+            ...     source_collection_name="my_collection",
+            ... )
+            >>> print(f"Restore job ID: {job_id}")
+        """
+        conn = self._get_connection()
+        return conn.restore_snapshot(
+            snapshot_name=snapshot_name,
+            target_collection_name=target_collection_name,
+            source_collection_name=source_collection_name,
+            target_db_name=target_db_name,
+            source_db_name=source_db_name,
+            timeout=timeout,
+            context=self._generate_call_context(**kwargs),
+            **kwargs,
+        )
+
+    def get_restore_snapshot_state(
+        self,
+        job_id: int,
+        timeout: Optional[float] = None,
+        **kwargs,
+    ) -> RestoreSnapshotJobInfo:
+        """Query the status and progress of a restore snapshot job.
+
+        Args:
+            job_id (int): The restore job ID returned from restore_snapshot().
+            timeout (Optional[float]): An optional duration of time in seconds to allow for the RPC.
+            **kwargs: Additional arguments.
+
+        Returns:
+            RestoreSnapshotJobInfo: A dataclass containing restore job information
+                with the following fields:
+                - job_id (int): The restore job ID
+                - snapshot_name (str): The snapshot name being restored
+                - db_name (str): The target database name
+                - collection_name (str): The target collection name
+                - state (str): Current state. Possible values:
+                    - 'RestoreSnapshotNone'
+                    - 'RestoreSnapshotPending'
+                    - 'RestoreSnapshotExecuting'
+                    - 'RestoreSnapshotCompleted'
+                    - 'RestoreSnapshotFailed'
+                - progress (int): Progress percentage (0-100)
+                - reason (str): Error reason if failed
+                - start_time (int): Start timestamp in milliseconds
+                - time_cost (int): Time cost in milliseconds
+
+        Example:
+            >>> state = client.get_restore_snapshot_state(job_id=12345)
+            >>> print(f"Job ID: {state.job_id}")
+            >>> print(f"State: {state.state}")
+            >>> print(f"Progress: {state.progress}%")
+            >>> if state.state == 'RestoreSnapshotFailed':
+            ...     print(f"Failure Reason: {state.reason}")
+        """
+        conn = self._get_connection()
+        return conn.get_restore_snapshot_state(
+            job_id=job_id,
+            timeout=timeout,
+            context=self._generate_call_context(**kwargs),
+            **kwargs,
+        )
+
+    def list_restore_snapshot_jobs(
+        self,
+        collection_name: str = "",
+        db_name: str = "",
+        timeout: Optional[float] = None,
+        **kwargs,
+    ) -> List[RestoreSnapshotJobInfo]:
+        """List all restore snapshot jobs.
+
+        Args:
+            collection_name (str): Optional target collection name to filter jobs.
+                Pass the name of the collection that was restored into (the target collection).
+                If empty, lists all restore jobs.
+            db_name (str): Optional database name (defaults to active db).
+            timeout (Optional[float]): An optional duration of time in seconds to allow for the RPC.
+            **kwargs: Additional arguments.
+
+        Returns:
+            List[RestoreSnapshotJobInfo]: A list of RestoreSnapshotJobInfo dataclasses.
+                Each contains the same fields as get_restore_snapshot_state().
+
+        Example:
+            >>> # List all restore jobs
+            >>> jobs = client.list_restore_snapshot_jobs()
+            >>> for job in jobs:
+            ...     print(f"Job {job.job_id}: {job.snapshot_name} - {job.progress}%")
+            >>>
+            >>> # List restore jobs for a specific target collection
+            >>> jobs = client.list_restore_snapshot_jobs(collection_name="my_collection")
+        """
+        conn = self._get_connection()
+        return conn.list_restore_snapshot_jobs(
+            collection_name=collection_name,
+            db_name=db_name,
+            timeout=timeout,
+            context=self._generate_call_context(**kwargs),
+            **kwargs,
+        )
+
+    def pin_snapshot_data(
+        self,
+        snapshot_name: str,
+        collection_name: str,
+        db_name: str = "",
+        ttl_seconds: int = 0,
+        timeout: Optional[float] = None,
+        **kwargs,
+    ) -> int:
+        """Pin snapshot data to prevent GC while copying out (e.g. during backup).
+
+        Args:
+            snapshot_name (str): The name of the snapshot to pin.
+            collection_name (str): The collection the snapshot belongs to.
+            db_name (str): Optional database name.
+            ttl_seconds (int): Pin TTL in seconds. 0 uses the server default.
+            timeout (Optional[float]): Optional RPC timeout in seconds.
+            **kwargs: Additional arguments.
+
+        Returns:
+            int: The pin_id. Pass this to ``unpin_snapshot_data`` to release the pin.
+
+        Example:
+            >>> pin_id = client.pin_snapshot_data(
+            ...     snapshot_name="backup_20240101",
+            ...     collection_name="my_collection",
+            ...     ttl_seconds=3600,
+            ... )
+            >>> # ... copy snapshot data out ...
+            >>> client.unpin_snapshot_data(pin_id=pin_id)
+        """
+        conn = self._get_connection()
+        return conn.pin_snapshot_data(
+            snapshot_name=snapshot_name,
+            collection_name=collection_name,
+            db_name=db_name,
+            ttl_seconds=ttl_seconds,
+            timeout=timeout,
+            context=self._generate_call_context(**kwargs),
+            **kwargs,
+        )
+
+    def unpin_snapshot_data(
+        self,
+        pin_id: int,
+        timeout: Optional[float] = None,
+        **kwargs,
+    ) -> None:
+        """Release a pin created by ``pin_snapshot_data``.
+
+        Args:
+            pin_id (int): The pin_id returned by ``pin_snapshot_data``.
+            timeout (Optional[float]): Optional RPC timeout in seconds.
+            **kwargs: Additional arguments.
+        """
+        conn = self._get_connection()
+        conn.unpin_snapshot_data(
+            pin_id=pin_id,
+            timeout=timeout,
+            context=self._generate_call_context(**kwargs),
+            **kwargs,
+        )
+
+    def add_file_resource(
+        self,
+        name: str,
+        path: str,
+        timeout: Optional[float] = None,
+        **kwargs,
+    ):
+        return self._get_connection().add_file_resource(
+            name=name,
+            path=path,
+            timeout=timeout,
+            context=self._generate_call_context(**kwargs),
+            **kwargs,
+        )
+
+    def remove_file_resource(
+        self,
+        name: str,
+        timeout: Optional[float] = None,
+        **kwargs,
+    ):
+        return self._get_connection().remove_file_resource(
+            name=name,
+            timeout=timeout,
+            context=self._generate_call_context(**kwargs),
+            **kwargs,
+        )
+
+    def list_file_resources(
+        self,
+        timeout: Optional[float] = None,
+        **kwargs,
+    ):
+        return self._get_connection().list_file_resources(
+            timeout=timeout,
+            context=self._generate_call_context(**kwargs),
+            **kwargs,
+        )
+
+    def refresh_external_collection(
+        self,
+        collection_name: str,
+        external_source: str = "",
+        external_spec: str = "",
+        timeout: Optional[float] = None,
+        **kwargs,
+    ) -> int:
+        """Trigger a data refresh for an external collection.
+
+        Args:
+            collection_name: The external collection to refresh.
+            external_source: Optional new external data source path.
+            external_spec: Optional new external spec configuration.
+            timeout: RPC timeout in seconds.
+
+        Returns:
+            int: A job_id for tracking the refresh progress.
+        """
+        conn = self._get_connection()
+        return conn.refresh_external_collection(
+            collection_name=collection_name,
+            timeout=timeout,
+            context=self._generate_call_context(**kwargs),
+            external_source=external_source,
+            external_spec=external_spec,
+            **kwargs,
+        )
+
+    def get_refresh_external_collection_progress(
+        self,
+        job_id: int,
+        timeout: Optional[float] = None,
+        **kwargs,
+    ) -> RefreshExternalCollectionJobInfo:
+        """Get the progress of an external collection refresh job.
+
+        Args:
+            job_id: The job ID returned by refresh_external_collection().
+            timeout: RPC timeout in seconds.
+
+        Returns:
+            RefreshExternalCollectionJobInfo with job_id, collection_name,
+            state, progress, reason, external_source, start_time, end_time.
+        """
+        conn = self._get_connection()
+        return conn.get_refresh_external_collection_progress(
+            job_id=job_id,
+            timeout=timeout,
+            context=self._generate_call_context(**kwargs),
+            **kwargs,
+        )
+
+    def list_refresh_external_collection_jobs(
+        self,
+        collection_name: str = "",
+        timeout: Optional[float] = None,
+        **kwargs,
+    ) -> List:
+        """List external collection refresh jobs.
+
+        Args:
+            collection_name: Optional filter by collection name. Empty lists all.
+            timeout: RPC timeout in seconds.
+
+        Returns:
+            List of RefreshExternalCollectionJobInfo.
+        """
+        conn = self._get_connection()
+        return conn.list_refresh_external_collection_jobs(
+            collection_name=collection_name,
+            timeout=timeout,
+            context=self._generate_call_context(**kwargs),
+            **kwargs,
+        )
+
+
+class MilvusClientSession:
+    """DQL session bound to a cluster id and backed by a parent MilvusClient."""
+
+    def __init__(self, parent: MilvusClient, cluster_id: str) -> None:
+        self._parent = parent
+        self._cluster_id = cluster_id
+        self._closed = False
+
+    def _ensure_open(self) -> None:
+        if self._closed:
+            raise MilvusException(message="MilvusClient session is closed")
+
+    def _with_cluster_id(self, kwargs: Dict) -> Dict:
+        kwargs[CLUSTER_ID] = self._cluster_id
+        return kwargs
+
+    def close(self) -> None:
+        self._closed = True
+
+    def search(self, *args, **kwargs):
+        self._ensure_open()
+        return self._parent.search(*args, **self._with_cluster_id(kwargs))
+
+    def hybrid_search(self, *args, **kwargs):
+        self._ensure_open()
+        return self._parent.hybrid_search(*args, **self._with_cluster_id(kwargs))
+
+    def query(self, *args, **kwargs):
+        self._ensure_open()
+        return self._parent.query(*args, **self._with_cluster_id(kwargs))
+
+    def query_iterator(self, *args, **kwargs):
+        self._ensure_open()
+        return self._parent.query_iterator(*args, **self._with_cluster_id(kwargs))
+
+    def search_iterator(self, *args, **kwargs):
+        self._ensure_open()
+        return self._parent.search_iterator(*args, **self._with_cluster_id(kwargs))
+
+    def get(self, *args, **kwargs):
+        self._ensure_open()
+        return self._parent.get(*args, **self._with_cluster_id(kwargs))

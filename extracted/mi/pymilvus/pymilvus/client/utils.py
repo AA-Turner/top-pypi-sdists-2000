@@ -6,6 +6,7 @@ from datetime import timedelta
 from typing import TYPE_CHECKING, Any, Dict, Iterable, List, Optional, Tuple, Union
 
 import orjson
+from dateutil.parser import isoparse
 
 from pymilvus.exceptions import MilvusException, ParamError, SchemaMismatchRetryableException
 from pymilvus.grpc_gen import common_pb2
@@ -73,7 +74,15 @@ def check_status(status: common_pb2.Status):
     if status.code != 0 or status.error_code != 0:
         if status.error_code == common_pb2.SchemaMismatch:
             raise SchemaMismatchRetryableException(status.reason)
-        raise MilvusException(status.code, status.reason, status.error_code)
+        raise MilvusException.from_status(status)
+
+
+def is_external_collection_schema_alter_unsupported(status: common_pb2.Status) -> bool:
+    is_parameter_invalid = status.code == 1100 or status.error_code == common_pb2.IllegalArgument
+    return is_parameter_invalid and (
+        "alter collection schema operation is not supported for external collection"
+        in status.reason
+    )
 
 
 def is_successful(status: common_pb2.Status):
@@ -92,7 +101,7 @@ def hybridts_to_unixtime(ts: int):
 
 def mkts_from_hybridts(
     hybridts: int,
-    milliseconds: Union[float] = 0.0,
+    milliseconds: float = 0.0,
     delta: Optional[timedelta] = None,
 ) -> int:
     if not isinstance(milliseconds, (int, float)):
@@ -113,8 +122,8 @@ def mkts_from_hybridts(
 
 
 def mkts_from_unixtime(
-    epoch: Union[float],
-    milliseconds: Union[float] = 0.0,
+    epoch: float,
+    milliseconds: float = 0.0,
     delta: Optional[timedelta] = None,
 ) -> int:
     if not isinstance(epoch, (int, float)):
@@ -135,7 +144,7 @@ def mkts_from_unixtime(
 
 def mkts_from_datetime(
     d_time: datetime.datetime,
-    milliseconds: Union[float] = 0.0,
+    milliseconds: float = 0.0,
     delta: Optional[timedelta] = None,
 ) -> int:
     if not isinstance(d_time, datetime.datetime):
@@ -147,7 +156,7 @@ def mkts_from_datetime(
 def check_invalid_binary_vector(entities: List) -> bool:
     for entity in entities:
         if entity["type"] == DataType.BINARY_VECTOR:
-            if not isinstance(entity["values"], list) and len(entity["values"]) == 0:
+            if not isinstance(entity["values"], list) or len(entity["values"]) == 0:
                 return False
 
             dim = len(entity["values"][0]) * 8
@@ -405,47 +414,6 @@ SparseMatrixInputType = Union[
 ]
 
 
-def is_sparse_vector_type(data_type: DataType) -> bool:
-    return data_type == data_type.SPARSE_FLOAT_VECTOR
-
-
-dense_float_vector_type_set = {
-    DataType.FLOAT_VECTOR,
-    DataType.FLOAT16_VECTOR,
-    DataType.BFLOAT16_VECTOR,
-}
-dense_vector_type_set = {
-    DataType.FLOAT_VECTOR,
-    DataType.FLOAT16_VECTOR,
-    DataType.BFLOAT16_VECTOR,
-    DataType.INT8_VECTOR,
-}
-
-
-def is_dense_float_vector_type(data_type: DataType) -> bool:
-    return data_type in dense_float_vector_type_set
-
-
-def is_float_vector_type(data_type: DataType):
-    return is_sparse_vector_type(data_type) or is_dense_float_vector_type(data_type)
-
-
-def is_binary_vector_type(data_type: DataType):
-    return data_type == DataType.BINARY_VECTOR
-
-
-def is_int_vector_type(data_type: DataType):
-    return data_type == DataType.INT8_VECTOR
-
-
-def is_vector_type(data_type: DataType):
-    return (
-        is_float_vector_type(data_type)
-        or is_binary_vector_type(data_type)
-        or is_int_vector_type(data_type)
-    )
-
-
 # parses plain bytes to a sparse float vector(SparseRowOutputType)
 def sparse_parse_single_row(data: bytes) -> SparseRowOutputType:
     if len(data) % 8 != 0:
@@ -476,6 +444,8 @@ def convert_struct_fields_to_user_format(struct_array_fields: List[Dict]) -> Lis
             "element_type": DataType.STRUCT,
             "params": {},
         }
+        if struct_field_info.get("nullable", False):
+            user_struct_field["nullable"] = True
 
         # Extract max_capacity from first field (all fields should have the same value)
         max_capacity = None
@@ -498,7 +468,7 @@ def convert_struct_fields_to_user_format(struct_array_fields: List[Dict]) -> Lis
             if user_field_type:
                 struct_sub_field = {
                     "field_id": f.get("field_id"),
-                    "name": f["name"],
+                    "name": strip_struct_sub_field_name(struct_field_info["name"], f["name"]),
                     "type": user_field_type,
                     "description": f.get("description", ""),
                 }
@@ -515,3 +485,72 @@ def convert_struct_fields_to_user_format(struct_array_fields: List[Dict]) -> Lis
         converted_fields.append(user_struct_field)
 
     return converted_fields
+
+
+def strip_struct_sub_field_name(struct_name: str, field_name: str) -> str:
+    prefix = f"{struct_name}["
+    if field_name.startswith(prefix) and field_name.endswith("]"):
+        return field_name[len(prefix) : -1]
+    return field_name
+
+
+def validate_iso_timestamp(s: str) -> bool:
+    try:
+        isoparse(s)
+    except (ValueError, TypeError):
+        return False
+    else:
+        return True
+
+
+def immutable_message_to_dict(msg: common_pb2.ImmutableMessage) -> Dict:
+    """Convert a common_pb2.ImmutableMessage proto to a plain dict.
+
+    Returns {"message_id": {"id": str, "wal_name": str} or None,
+    "payload": bytes, "properties": dict}, where wal_name is the WALName
+    enum name ("Unknown" | "RocksMQ" | "Pulsar" | "Kafka" | "WoodPecker" | "Test").
+    Returns message_id=None when the proto's id field is unset.
+    """
+    message_id = None
+    if msg.HasField("id"):
+        message_id = {
+            "id": msg.id.id,
+            "wal_name": common_pb2.WALName.Name(msg.id.WAL_name),
+        }
+    return {
+        "message_id": message_id,
+        "payload": msg.payload,
+        "properties": dict(msg.properties),
+    }
+
+
+def replicate_checkpoint_to_dict(cp: Optional[common_pb2.ReplicateCheckpoint]) -> Optional[Dict]:
+    """Convert a common_pb2.ReplicateCheckpoint proto to a plain dict, or None if empty.
+
+    Returns None when the proto is None or has all default values (no cluster_id,
+    no pchannel, time_tick=0). The nested message_id is itself a dict with
+    {"id": str, "wal_name": str} keys, where wal_name is the WALName enum name
+    ("Unknown" | "RocksMQ" | "Pulsar" | "Kafka" | "WoodPecker" | "Test").
+    Returns message_id=None when the proto's message_id field is unset.
+    """
+    if cp is None:
+        return None
+    if (
+        not cp.cluster_id
+        and not cp.pchannel
+        and cp.time_tick == 0
+        and not cp.HasField("message_id")
+    ):
+        return None
+    message_id = None
+    if cp.HasField("message_id"):
+        message_id = {
+            "id": cp.message_id.id,
+            "wal_name": common_pb2.WALName.Name(cp.message_id.WAL_name),
+        }
+    return {
+        "cluster_id": cp.cluster_id,
+        "pchannel": cp.pchannel,
+        "message_id": message_id,
+        "time_tick": cp.time_tick,
+    }

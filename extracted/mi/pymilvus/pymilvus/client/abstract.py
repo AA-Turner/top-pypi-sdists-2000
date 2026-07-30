@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional, Union
 
 import orjson
 
-from pymilvus.exceptions import DataTypeNotMatchException, ExceptionsMessage
+from pymilvus.exceptions import DataTypeNotMatchException, ExceptionsMessage, ParamError
 from pymilvus.settings import Config
 
 from . import utils
@@ -13,7 +13,7 @@ from .constants import DEFAULT_CONSISTENCY_LEVEL, RANKER_TYPE_RRF, RANKER_TYPE_W
 # ruff: noqa: F401
 # TODO: This is a patch for older version
 from .search_result import Hit, Hits, SearchResult
-from .types import DataType, FunctionType
+from .types import ConsistencyLevel, DataType, FunctionType
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +35,7 @@ class FieldSchema:
         self.nullable = False
         self.default_value = None
         self.is_function_output = False
+        self.external_field = ""
         # For array field
         self.element_type = None
         self.is_clustering_key = False
@@ -56,6 +57,7 @@ class FieldSchema:
         self.is_dynamic = raw.is_dynamic
         self.nullable = raw.nullable
         self.is_function_output = raw.is_function_output
+        self.external_field = raw.external_field
 
         for type_param in raw.type_params:
             if type_param.key == "params":
@@ -135,6 +137,8 @@ class FieldSchema:
             _dict["is_clustering_key"] = True
         if self.is_function_output:
             _dict["is_function_output"] = True
+        if self.external_field:
+            _dict["external_field"] = self.external_field
         return _dict
 
 
@@ -145,6 +149,7 @@ class StructArrayFieldSchema:
         self.name = None
         self.fields = []
         self.description = None
+        self.nullable = False
         self.params = {}
 
         self.__pack(self._raw)
@@ -153,7 +158,10 @@ class StructArrayFieldSchema:
         self.name = raw.name
         self.field_id = raw.fieldID
         self.description = raw.description
+        self.nullable = raw.nullable
         self.fields = [FieldSchema(f) for f in raw.fields]
+        for field in self.fields:
+            field.name = _strip_struct_sub_field_name(self.name, field.name)
 
         self.params = {}
         for kv in raw.type_params:
@@ -172,9 +180,18 @@ class StructArrayFieldSchema:
             "type": DataType._ARRAY_OF_STRUCT,
             "fields": [f.dict() for f in self.fields],
         }
+        if self.nullable:
+            result["nullable"] = self.nullable
         if self.params:
             result["params"] = self.params
         return result
+
+
+def _strip_struct_sub_field_name(struct_name: str, field_name: str) -> str:
+    prefix = f"{struct_name}["
+    if field_name.startswith(prefix) and field_name.endswith("]"):
+        return field_name[len(prefix) : -1]
+    return field_name
 
 
 class FunctionSchema:
@@ -226,6 +243,7 @@ class CollectionSchema:
 
         self.collection_name = None
         self.description = None
+        self.schema_version = 0
         self.params = {}
         self.fields = []
         self.struct_array_fields = []
@@ -240,6 +258,8 @@ class CollectionSchema:
         self.num_partitions = 0
         self.enable_dynamic_field = False
         self.enable_namespace = False
+        self.external_source = ""
+        self.external_spec = ""
         self.created_timestamp = 0
         self.update_timestamp = 0
         if self._raw:
@@ -270,6 +290,16 @@ class CollectionSchema:
         except Exception:
             self.enable_namespace = False
 
+        try:
+            self.external_source = raw.schema.external_source
+        except Exception:
+            self.external_source = ""
+
+        try:
+            self.external_spec = raw.schema.external_spec
+        except Exception:
+            self.external_spec = ""
+
         # TODO: extra_params here
         # for kv in raw.extra_params:
 
@@ -278,6 +308,7 @@ class CollectionSchema:
             StructArrayFieldSchema(f) for f in raw.schema.struct_array_fields
         ]
         self.functions = [FunctionSchema(f) for f in raw.schema.functions]
+        self.schema_version = raw.schema.version
         function_output_field_names = [f for fn in self.functions for f in fn.output_field_names]
         for field in self.fields:
             if field.name in function_output_field_names:
@@ -312,12 +343,18 @@ class CollectionSchema:
             "aliases": self.aliases,
             "collection_id": self.collection_id,
             "consistency_level": self.consistency_level,
+            "consistency_level_name": ConsistencyLevel.Name(self.consistency_level),
             "properties": self.properties,
             "num_partitions": self.num_partitions,
             "enable_dynamic_field": self.enable_dynamic_field,
             "enable_namespace": self.enable_namespace,
+            "schema_version": self.schema_version,
         }
 
+        if self.external_source:
+            _dict["external_source"] = self.external_source
+        if self.external_spec:
+            _dict["external_spec"] = self.external_spec
         if self.created_timestamp != 0:
             _dict["created_timestamp"] = self.created_timestamp
         if self.update_timestamp != 0:
@@ -485,15 +522,19 @@ class AnnSearchRequest:
         limit: int,
         expr: Optional[str] = None,
         expr_params: Optional[dict] = None,
+        filter: Optional[str] = None,
     ):
         self._data = data
         self._anns_field = anns_field
         self._param = param
         self._limit = limit
 
-        if expr is not None and not isinstance(expr, str):
-            raise DataTypeNotMatchException(message=ExceptionsMessage.ExprType % type(expr))
-        self._expr = expr
+        if expr is not None and filter is not None:
+            raise ParamError(message="Provide either 'expr' or 'filter', not both.")
+        resolved = filter if filter is not None else expr
+        if resolved is not None and not isinstance(resolved, str):
+            raise DataTypeNotMatchException(message=ExceptionsMessage.ExprType % type(resolved))
+        self._expr = resolved
         self._expr_params = expr_params
 
     @property
@@ -514,6 +555,10 @@ class AnnSearchRequest:
 
     @property
     def expr(self):
+        return self._expr
+
+    @property
+    def filter(self):
         return self._expr
 
     @property

@@ -79,20 +79,9 @@ def float16_vector_validator(x: object, dim: int, is_bfloat: bool):
         for k in x:
             if not isinstance(k, float):
                 raise MilvusException(message="array's element must be float value")
-
-        arr = (
-            np.array(x, dtype=np.dtype("bfloat16")) if is_bfloat else np.array(x, dtype=np.float16)
-        )
-        return arr.tobytes()
+        return x
 
     if isinstance(x, np.ndarray):  # accepts numpy array
-        if is_bfloat and x.dtype != "bfloat16":
-            msg = 'numpy.ndarray\'s dtype must be "bfloat16" for BFLOAT16_VECTOR type field'
-            raise MilvusException(message=msg)
-        if (not is_bfloat) and (not issubclass(x.dtype.type, np.float16)):
-            msg = 'numpy.ndarray\'s dtype must be "float16" for FLOAT16_VECTOR type field'
-            raise MilvusException(message=msg)
-
         if len(x.shape) != 1:
             raise MilvusException(message="numpy.ndarray's shape must not be one dimension")
 
@@ -101,7 +90,20 @@ def float16_vector_validator(x: object, dim: int, is_bfloat: bool):
                 message="numpy.ndarray's length must be equal to vector dimension"
             )
 
-        return x.tobytes()
+        if is_bfloat:
+            if x.dtype == "bfloat16":
+                return x.tobytes()
+            if x.dtype in ("float32", "float64"):
+                return x.tolist()
+            msg = 'numpy.ndarray\'s dtype must be "bfloat16", "float32" or "float64" for BFLOAT16_VECTOR type field'
+            raise MilvusException(message=msg)
+
+        if x.dtype == "float16":
+            return x.tobytes()
+        if x.dtype in ("float32", "float64"):
+            return x.tolist()
+        msg = 'numpy.ndarray\'s dtype must be "float16", "float32" or "float64" for FLOAT16_VECTOR type field'
+        raise MilvusException(message=msg)
 
     raise MilvusException(
         message="only accept numpy.ndarray or list[float] for FLOAT16_VECTOR/BFLOAT16_VECTOR type field"
@@ -143,7 +145,7 @@ def sparse_vector_validator(x: object):
         raise MilvusException(message="only accept dict for SPARSE_FLOAT_VECTOR type field")
 
     def check_pair(k: object, v: object):
-        if not isinstance(k, int):
+        if not isinstance(k, int) or isinstance(k, bool):
             raise MilvusException(message="sparse vector's index must be integer value")
         if not isinstance(v, float):
             raise MilvusException(message="sparse vector's value must be float value")
@@ -155,7 +157,7 @@ def sparse_vector_validator(x: object):
         if not isinstance(indices, list):
             raise MilvusException(message="indices of sparse vector must be a list of int")
         if not isinstance(values, list):
-            raise MilvusException(message="values of sparse vector must be a list of int")
+            raise MilvusException(message="values of sparse vector must be a list of float")
         if len(indices) != len(values):
             raise MilvusException(
                 message="length of indices and values of sparse vector must be equal"

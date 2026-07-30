@@ -105,6 +105,8 @@ class CollectionSchema:
         # if "enable_dynamic_field" is not in kwargs, we keep None here
         self._enable_dynamic_field = self._kwargs.get("enable_dynamic_field", None)
         self._enable_namespace = self._kwargs.get("enable_namespace", None)
+        self._external_source = self._kwargs.get("external_source", "")
+        self._external_spec = self._kwargs.get("external_spec", "")
         self._primary_field = None
         self._partition_key_field = None
         self._clustering_key_field = None
@@ -194,15 +196,77 @@ class CollectionSchema:
                 self._clustering_key_field = field
                 clustering_key_field_name = field.name
 
-        validate_primary_key(self._primary_field)
-        validate_partition_key(
-            partition_key_field_name, self._partition_key_field, self._primary_field.name
-        )
-        validate_clustering_key(clustering_key_field_name, self._clustering_key_field)
+        # External collections do not require primary key, partition key, or clustering key
+        if not self._external_source:
+            validate_primary_key(self._primary_field)
+            validate_partition_key(
+                partition_key_field_name, self._partition_key_field, self._primary_field.name
+            )
+            validate_clustering_key(clustering_key_field_name, self._clustering_key_field)
 
-        auto_id = self._kwargs.get("auto_id", False)
-        if auto_id:
-            self._primary_field.auto_id = auto_id
+            auto_id = self._kwargs.get("auto_id", False)
+            if auto_id:
+                self._primary_field.auto_id = auto_id
+        elif self._kwargs.get("auto_id", False):
+            raise ParamError(message="External collections do not support auto_id")
+
+    def _update_key_field_metadata(self, field: Any):
+        primary_field = self._primary_field
+        partition_key_field = self._partition_key_field
+        clustering_key_field = self._clustering_key_field
+        primary_field_name = self._kwargs.get("primary_field", None)
+        partition_key_field_name = self._kwargs.get("partition_key_field", None)
+        clustering_key_field_name = self._kwargs.get("clustering_key_field", None)
+
+        try:
+            if primary_field_name and primary_field_name == field.name:
+                field.is_primary = True
+
+            if partition_key_field_name and partition_key_field_name == field.name:
+                field.is_partition_key = True
+
+            if clustering_key_field_name and clustering_key_field_name == field.name:
+                field.is_clustering_key = True
+
+            if field.is_primary:
+                if self._primary_field is not None and self._primary_field.name != field.name:
+                    msg = ExceptionsMessage.PrimaryKeyOnlyOne % (
+                        self._primary_field.name,
+                        field.name,
+                    )
+                    raise PrimaryKeyException(message=msg)
+                self._primary_field = field
+                if self._kwargs.get("auto_id", False):
+                    self._primary_field.auto_id = True
+
+            if field.is_partition_key:
+                if (
+                    self._partition_key_field is not None
+                    and self._partition_key_field.name != field.name
+                ):
+                    msg = ExceptionsMessage.PartitionKeyOnlyOne % (
+                        self._partition_key_field.name,
+                        field.name,
+                    )
+                    raise PartitionKeyException(message=msg)
+                self._partition_key_field = field
+
+            if field.is_clustering_key:
+                if (
+                    self._clustering_key_field is not None
+                    and self._clustering_key_field.name != field.name
+                ):
+                    msg = ExceptionsMessage.ClusteringKeyOnlyOne % (
+                        self._clustering_key_field.name,
+                        field.name,
+                    )
+                    raise ClusteringKeyException(message=msg)
+                self._clustering_key_field = field
+        except Exception:
+            self._primary_field = primary_field
+            self._partition_key_field = partition_key_field
+            self._clustering_key_field = clustering_key_field
+            raise
 
     def _check_functions(self):
         for function in self._functions:
@@ -259,11 +323,15 @@ class CollectionSchema:
 
     @classmethod
     def construct_from_dict(cls, raw: Dict):
-        fields = [FieldSchema.construct_from_dict(field_raw) for field_raw in raw["fields"]]
+        fields = []
+        struct_fields = []
+        for field_raw in raw["fields"]:
+            if cls._is_struct_array_field_dict(field_raw):
+                struct_fields.append(StructFieldSchema.construct_from_dict(field_raw))
+            else:
+                fields.append(FieldSchema.construct_from_dict(field_raw))
 
-        struct_fields = None
         if raw.get("struct_fields"):
-            struct_fields = []
             for struct_field_raw in raw["struct_fields"]:
                 struct_fields.append(StructFieldSchema.construct_from_dict(struct_field_raw))
 
@@ -271,7 +339,6 @@ class CollectionSchema:
             converted_struct_fields = convert_struct_fields_to_user_format(
                 raw["struct_array_fields"]
             )
-            struct_fields = []
             for struct_field_dict in converted_struct_fields:
                 struct_fields.append(StructFieldSchema.construct_from_dict(struct_field_dict))
 
@@ -290,6 +357,25 @@ class CollectionSchema:
             functions=functions,
             enable_dynamic_field=enable_dynamic_field,
             enable_namespace=enable_namespace,
+            external_source=raw.get("external_source", ""),
+            external_spec=raw.get("external_spec", ""),
+        )
+
+    @staticmethod
+    def _is_struct_array_field_dict(field_raw: Any):
+        if not isinstance(field_raw, dict):
+            return False
+
+        try:
+            field_type = DataType(field_raw.get("type"))
+            element_type = DataType(field_raw.get("element_type"))
+        except (TypeError, ValueError):
+            return False
+
+        return (
+            field_type == DataType.ARRAY
+            and element_type == DataType.STRUCT
+            and "struct_fields" in field_raw
         )
 
     @property
@@ -389,6 +475,22 @@ class CollectionSchema:
     def enable_namespace(self, value: bool):
         self._enable_namespace = bool(value)
 
+    @property
+    def external_source(self) -> str:
+        return self._external_source
+
+    @external_source.setter
+    def external_source(self, value: str):
+        self._external_source = str(value)
+
+    @property
+    def external_spec(self) -> str:
+        return self._external_spec
+
+    @external_spec.setter
+    def external_spec(self, value: str):
+        self._external_spec = str(value)
+
     def to_dict(self):
         res = {
             "auto_id": self.auto_id,
@@ -397,6 +499,10 @@ class CollectionSchema:
             "enable_dynamic_field": self.enable_dynamic_field,
             "enable_namespace": self.enable_namespace,
         }
+        if self._external_source:
+            res["external_source"] = self._external_source
+        if self._external_spec:
+            res["external_spec"] = self._external_spec
         if self._functions is not None and len(self._functions) > 0:
             res["functions"] = [s.to_dict() for s in self._functions]
         if self._struct_fields is not None and len(self._struct_fields) > 0:
@@ -417,9 +523,13 @@ class CollectionSchema:
                 raise ParamError(message="Param struct_schema is required when datatype is STRUCT")
             struct_schema = copy.deepcopy(kwargs.pop("struct_schema"))
             struct_schema.name = field_name
+            struct_schema._nullable = kwargs.get("nullable", False)
             if "max_capacity" not in kwargs:
                 raise ParamError(message="Param max_capacity is required when datatype is STRUCT")
             struct_schema.max_capacity = kwargs["max_capacity"]
+
+            if "description" in kwargs:
+                struct_schema._description = kwargs["description"]
 
             if "mmap_enabled" in kwargs:
                 struct_schema._type_params["mmap_enabled"] = kwargs["mmap_enabled"]
@@ -431,6 +541,7 @@ class CollectionSchema:
             return self
 
         field = FieldSchema(field_name, datatype, **kwargs)
+        self._update_key_field_metadata(field)
         self._fields.append(field)
         self._mark_output_fields()
         return self
@@ -501,6 +612,7 @@ class FieldSchema:
 
         self._parse_type_params()
         self.is_function_output = False
+        self.external_field = kwargs.get("external_field", "")
 
     def __repr__(self) -> str:
         return str(self.to_dict())
@@ -518,6 +630,7 @@ class FieldSchema:
             DataType.FLOAT16_VECTOR,
             DataType.BFLOAT16_VECTOR,
             DataType.VARCHAR,
+            DataType.TEXT,
             DataType.ARRAY,
             DataType.SPARSE_FLOAT_VECTOR,
             DataType.INT8_VECTOR,
@@ -554,6 +667,8 @@ class FieldSchema:
         kwargs["is_dynamic"] = raw.get("is_dynamic", False)
         kwargs["nullable"] = raw.get("nullable", False)
         kwargs["element_type"] = raw.get("element_type")
+        if raw.get("external_field"):
+            kwargs["external_field"] = raw["external_field"]
         is_function_output = raw.get("is_function_output", False)
         fs = FieldSchema(raw["name"], raw["type"], raw.get("description", ""), **kwargs)
         fs.is_function_output = is_function_output
@@ -588,6 +703,8 @@ class FieldSchema:
             _dict["is_clustering_key"] = True
         if self.is_function_output:
             _dict["is_function_output"] = True
+        if self.external_field:
+            _dict["external_field"] = self.external_field
         return _dict
 
     def __getattr__(self, item: str):
@@ -652,12 +769,17 @@ def isVectorDataType(datatype: DataType) -> bool:
 
 
 class StructFieldSchema:
-    def __init__(self):
+    def __init__(self, nullable: bool = False, description: str = ""):
+        if not isinstance(nullable, bool):
+            raise ParamError(message="nullable must be boolean")
+        if not isinstance(description, str):
+            raise ParamError(message="description must be string")
         self.name = ""
         self._kwargs = {}
         self._fields = []
-        self._description = ""
+        self._description = description
         self._type_params = {}
+        self._nullable = nullable
         # max_capacity will be set when added to CollectionSchema
         self.max_capacity = None
 
@@ -692,7 +814,10 @@ class StructFieldSchema:
 
             if field.nullable:
                 raise ParamError(
-                    message=f"Field '{field.name}' in struct '{self.name}' cannot be nullable"
+                    message=(
+                        f"Field '{field.name}' in struct '{self.name}' cannot be nullable "
+                        "individually, set nullable on the struct instead"
+                    )
                 )
 
             if field.auto_id:
@@ -732,6 +857,10 @@ class StructFieldSchema:
         return self._description
 
     @property
+    def nullable(self):
+        return self._nullable
+
+    @property
     def params(self):
         return self._type_params
 
@@ -746,6 +875,8 @@ class StructFieldSchema:
             "description": self._description,
             "fields": [field.to_dict() for field in self._fields],
         }
+        if self.nullable:
+            struct_dict["nullable"] = self.nullable
         # Include max_capacity if it's set
         if self.max_capacity is not None:
             struct_dict["max_capacity"] = self.max_capacity
@@ -768,6 +899,7 @@ class StructFieldSchema:
         # Set name and description
         instance.name = raw.get("name", "")
         instance._description = raw.get("description", "")
+        instance._nullable = raw.get("nullable", False)
 
         # Extract max_capacity if present
         if "max_capacity" in raw:
@@ -898,7 +1030,10 @@ class Function:
             raise ParamError(message=ExceptionsMessage.BM25FunctionIncorrectInputOutputCount)
 
         for field in schema.fields:
-            if field.name == self._input_field_names[0] and field.dtype != DataType.VARCHAR:
+            if field.name == self._input_field_names[0] and field.dtype not in (
+                DataType.VARCHAR,
+                DataType.TEXT,
+            ):
                 raise ParamError(message=ExceptionsMessage.BM25FunctionIncorrectInputFieldType)
             if (
                 field.name == self._output_field_names[0]
@@ -913,7 +1048,10 @@ class Function:
             )
 
         for field in schema.fields:
-            if field.name == self._input_field_names[0] and field.dtype != DataType.VARCHAR:
+            if field.name == self._input_field_names[0] and field.dtype not in (
+                DataType.VARCHAR,
+                DataType.TEXT,
+            ):
                 raise ParamError(
                     message=ExceptionsMessage.TextEmbeddingFunctionIncorrectInputFieldType
                 )
@@ -1190,7 +1328,7 @@ def check_insert_schema(schema: CollectionSchema, data: Union[List[List], pd.Dat
             msg = f"Expect no data for auto_id primary field: {schema.primary_field.name}"
             raise DataNotMatchException(message=msg)
         columns = list(data.columns)
-        columns.remove(schema.primary_field)
+        columns.remove(schema.primary_field.name)
         data = data[columns]
 
     tmp_fields = list(

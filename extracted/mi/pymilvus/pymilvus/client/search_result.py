@@ -7,67 +7,39 @@ import orjson
 from pymilvus.client.types import DataType
 from pymilvus.exceptions import MilvusException
 from pymilvus.grpc_gen import common_pb2, schema_pb2
-from pymilvus.grpc_gen.schema_pb2 import FieldData
 
-_SCALAR_TYPES = frozenset(
-    {
-        DataType.BOOL,
-        DataType.INT8,
-        DataType.INT16,
-        DataType.INT32,
-        DataType.INT64,
-        DataType.FLOAT,
-        DataType.DOUBLE,
-        DataType.VARCHAR,
-        DataType.GEOMETRY,
-        DataType.TIMESTAMPTZ,
-    }
+from . import entity_helper, field_data_extractors
+from .search_aggregation import AggregationBucket, parse_agg_buckets
+from .type_info import (
+    get_array_element_attr,
+    is_byte_vector_type,
+    is_dense_vector_type,
+    is_scalar_type,
+    is_sparse_vector_type,
+    row_width,
 )
-
-_DENSE_VECTOR_TYPES = frozenset(
-    {
-        DataType.FLOAT_VECTOR,
-        DataType.BINARY_VECTOR,
-        DataType.BFLOAT16_VECTOR,
-        DataType.FLOAT16_VECTOR,
-        DataType.INT8_VECTOR,
-    }
-)
-
-_HALF_PRECISION_VECTOR_TYPES = frozenset(
-    {
-        DataType.BFLOAT16_VECTOR,
-        DataType.FLOAT16_VECTOR,
-    }
-)
-
-_SCALAR_DATA_ATTR = {
-    DataType.BOOL: "bool_data",
-    DataType.INT8: "int_data",
-    DataType.INT16: "int_data",
-    DataType.INT32: "int_data",
-    DataType.INT64: "long_data",
-    DataType.FLOAT: "float_data",
-    DataType.DOUBLE: "double_data",
-    DataType.VARCHAR: "string_data",
-    DataType.TIMESTAMPTZ: "string_data",
-    DataType.GEOMETRY: "geometry_wkt_data",
-    DataType.JSON: "json_data",
-    DataType.ARRAY: "array_data",
-}
-
-_VECTOR_DATA_ATTR = {
-    DataType.FLOAT_VECTOR: "float_vector",
-    DataType.BINARY_VECTOR: "binary_vector",
-    DataType.BFLOAT16_VECTOR: "bfloat16_vector",
-    DataType.FLOAT16_VECTOR: "float16_vector",
-    DataType.INT8_VECTOR: "int8_vector",
-    DataType.SPARSE_FLOAT_VECTOR: "sparse_float_vector",
-}
-
-from . import entity_helper
 
 logger = logging.getLogger(__name__)
+
+
+def _is_eager_scalar(dtype: DataType) -> bool:
+    return is_scalar_type(dtype) and dtype not in {DataType.JSON, DataType.ARRAY}
+
+
+def _is_lazy_result_field(dtype: DataType) -> bool:
+    return (
+        is_dense_vector_type(dtype)
+        or is_sparse_vector_type(dtype)
+        or dtype in {DataType.JSON, DataType._ARRAY_OF_STRUCT, DataType._ARRAY_OF_VECTOR}
+    )
+
+
+def _dense_result_slice_width(dtype: DataType, dim: int) -> Optional[int]:
+    if not is_dense_vector_type(dtype):
+        return None
+    if not is_byte_vector_type(dtype):
+        return dim
+    return row_width(dtype, dim)
 
 
 class HybridHits(list):
@@ -88,6 +60,7 @@ class HybridHits(list):
         output_fields: List[str],
         highlight_results: List[common_pb2.HighlightResult],
         pk_name: str,
+        all_offsets: Optional[List[int]] = None,
     ):
         self.ids = all_pks[start:end]
         self.distances = all_scores[start:end]
@@ -99,39 +72,16 @@ class HybridHits(list):
         self.start = start
         self._prefix_sum_cache = {}
 
-        col_results = {}
+        offsets = all_offsets[start:end] if all_offsets else None
 
+        col_results = {}
         for field_data in fields_data:
-            has_valid = len(field_data.valid_data) > 0
             field_name = field_data.field_name
 
-            if field_data.type in _SCALAR_TYPES:
-                data = get_field_data(field_data)
-                col_results[field_name] = apply_valid_data(
-                    data[start:end],
-                    field_data.valid_data[start:end] if has_valid else None,
-                )
+            if _is_eager_scalar(field_data.type) or field_data.type == DataType.ARRAY:
+                col_results[field_name] = field_data_extractors.decode_range(field_data, start, end)
 
-            elif field_data.type == DataType.ARRAY:
-                array_data = field_data.scalars.array_data
-                element_type = array_data.element_type
-                data = array_data.data[start:end]
-                col_results[field_name] = apply_valid_data(
-                    extract_array_row_data(data, element_type),
-                    field_data.valid_data[start:end] if has_valid else None,
-                )
-
-            elif field_data.type in {
-                DataType.FLOAT_VECTOR,
-                DataType.BINARY_VECTOR,
-                DataType.BFLOAT16_VECTOR,
-                DataType.FLOAT16_VECTOR,
-                DataType.INT8_VECTOR,
-                DataType.SPARSE_FLOAT_VECTOR,
-                DataType.JSON,
-                DataType._ARRAY_OF_STRUCT,
-                DataType._ARRAY_OF_VECTOR,
-            }:
+            elif _is_lazy_result_field(field_data.type):
                 self.lazy_field_data.append(field_data)
             else:
                 msg = f"Unsupported field type: {field_data.type}"
@@ -144,13 +94,13 @@ class HybridHits(list):
             for i, value in enumerate(values):
                 entities[i][field_name] = value
 
-        top_k_res = [
-            Hit(
-                {pk_name: self.ids[i], "distance": self.distances[i], "entity": entities[i]},
-                pk_name=pk_name,
-            )
-            for i in range(count)
-        ]
+        top_k_res = []
+        for i in range(count):
+            hit_data = {pk_name: self.ids[i], "distance": self.distances[i]}
+            if offsets is not None:
+                hit_data["offset"] = offsets[i]
+            hit_data["entity"] = entities[i]
+            top_k_res.append(Hit(hit_data, pk_name=pk_name))
 
         if len(highlight_results) > 0:
             for i, hit in enumerate(top_k_res):
@@ -205,87 +155,45 @@ class HybridHits(list):
             n = len(self)
             for field_data in self.lazy_field_data:
                 field_name = field_data.field_name
-                has_valid = len(field_data.valid_data) > 0
 
-                if field_data.type in _DENSE_VECTOR_TYPES:
-                    data = get_field_data(field_data)
-                    dim = field_data.vectors.dim
-                    if field_data.type == DataType.BINARY_VECTOR:
-                        dim = dim // 8
-                    elif field_data.type in _HALF_PRECISION_VECTOR_TYPES:
-                        dim = dim * 2
-
-                    if has_valid:
-                        for i in range(n):
-                            item = self.get_raw_item(i)
-                            actual_idx = self.start + i
-                            if not field_data.valid_data[actual_idx]:
-                                item["entity"][field_name] = None
-                            else:
-                                phys_idx = self._get_physical_index(field_data, actual_idx)
-                                item["entity"][field_name] = data[
-                                    phys_idx * dim : (phys_idx + 1) * dim
-                                ]
-                    else:
-                        idx = self.start * dim
-                        for i in range(n):
-                            item = self.get_raw_item(i)
-                            item["entity"][field_name] = data[idx : idx + dim]
-                            idx += dim
-                elif field_data.type == DataType.SPARSE_FLOAT_VECTOR:
-                    if has_valid:
-                        for i in range(n):
-                            item = self.get_raw_item(i)
-                            actual_idx = self.start + i
-                            if not field_data.valid_data[actual_idx]:
-                                item["entity"][field_name] = None
-                            else:
-                                phys_idx = self._get_physical_index(field_data, actual_idx)
-                                item["entity"][field_name] = entity_helper.sparse_proto_to_rows(
-                                    field_data.vectors.sparse_float_vector, phys_idx, phys_idx + 1
-                                )[0]
-                    else:
-                        idx = self.start
-                        for i in range(n):
-                            item = self.get_raw_item(i)
-                            item["entity"][field_name] = entity_helper.sparse_proto_to_rows(
-                                field_data.vectors.sparse_float_vector, idx, idx + 1
-                            )[0]
-                            idx += 1
+                if is_dense_vector_type(field_data.type) or field_data.type in (
+                    DataType.SPARSE_FLOAT_VECTOR,
+                    DataType._ARRAY_OF_VECTOR,
+                ):
+                    for i in range(n):
+                        item = self.get_raw_item(i)
+                        actual_idx = self.start + i
+                        item["entity"][field_name] = field_data_extractors.decode_cell(
+                            field_data,
+                            actual_idx,
+                            physical_index_override=self._get_physical_index(
+                                field_data, actual_idx
+                            ),
+                        )
                 elif field_data.type == DataType.JSON:
                     idx = self.start
                     for i in range(n):
                         item = self.get_raw_item(i)
-                        if field_data.valid_data and not field_data.valid_data[idx]:
+                        json_dict_list = field_data_extractors.decode_cell(field_data, idx)
+                        if json_dict_list is None:
                             item["entity"][field_name] = None
+                        elif not field_data.is_dynamic:
+                            item["entity"][field_data.field_name] = json_dict_list
+                        elif not self.dynamic_fields:
+                            item["entity"].update(json_dict_list)
                         else:
-                            json_data = field_data.scalars.json_data.data[idx]
-                            try:
-                                json_dict_list = (
-                                    orjson.loads(json_data) if json_data is not None else None
-                                )
-                            except Exception as e:
-                                logger.error(
-                                    f"HybridHits::materialize::Failed to load JSON data: {e}, original data: {json_data}"
-                                )
-                                raise
-                            if not field_data.is_dynamic:
-                                item["entity"][field_data.field_name] = json_dict_list
-                            elif not self.dynamic_fields:
-                                item["entity"].update(json_dict_list)
-                            else:
-                                item["entity"].update(
-                                    {
-                                        k: v
-                                        for k, v in json_dict_list.items()
-                                        if k in self.dynamic_fields
-                                    }
-                                )
+                            item["entity"].update(
+                                {
+                                    k: v
+                                    for k, v in json_dict_list.items()
+                                    if k in self.dynamic_fields
+                                }
+                            )
                         idx += 1
                 elif field_data.type == DataType._ARRAY_OF_STRUCT:
                     # Process struct arrays - convert column format back to array of structs
                     idx = self.start
-                    struct_arrays = get_field_data(field_data)
+                    struct_arrays = field_data_extractors.get_field_data(field_data)
                     if struct_arrays and hasattr(struct_arrays, "fields"):
                         for i in range(n):
                             item = self.get_raw_item(i)
@@ -299,32 +207,6 @@ class HybridHits(list):
                         for i in range(n):
                             item = self.get_raw_item(i)
                             item["entity"][field_name] = None
-                elif field_data.type == DataType._ARRAY_OF_VECTOR:
-                    idx = self.start
-                    if hasattr(field_data, "vectors") and hasattr(
-                        field_data.vectors, "vector_array"
-                    ):
-                        vector_array = field_data.vectors.vector_array
-                        for i in range(n):
-                            item = self.get_raw_item(i)
-                            if idx < len(vector_array.data):
-                                vector_data = vector_array.data[idx]
-                                dim = vector_data.dim
-                                float_data = vector_data.float_vector.data
-                                num_vectors = len(float_data) // dim
-                                row_vectors = []
-                                for vec_idx in range(num_vectors):
-                                    vec_start = vec_idx * dim
-                                    vec_end = vec_start + dim
-                                    row_vectors.append(list(float_data[vec_start:vec_end]))
-                                item["entity"][field_name] = row_vectors
-                            else:
-                                item["entity"][field_name] = []
-                            idx += 1
-                    else:
-                        for i in range(n):
-                            item = self.get_raw_item(i)
-                            item["entity"][field_name] = []
                 else:
                     msg = f"Unsupported field type: {field_data.type}"
                     raise MilvusException(msg)
@@ -391,6 +273,11 @@ class SearchResult(list):
         self._session_ts = session_ts
         self._search_iterator_v2_results = res.search_iterator_v2_results
 
+        # search_aggregation response — List[List[AggregationBucket]], one inner
+        # list per query vector (nq). Empty outer list when request did not set
+        # search_aggregation. When nq == 1 this is a single-element outer list.
+        self.agg_buckets: List[List[AggregationBucket]] = self._split_agg_buckets(res)
+
     def __str__(self) -> str:
         """Only print at most 10 results"""
         result_msg = f"data: {self[:10]}"
@@ -407,6 +294,42 @@ class SearchResult(list):
     def materialize(self):
         for i in range(len(self)):
             self[i].materialize()
+
+    @staticmethod
+    def _split_agg_buckets(
+        res: schema_pb2.SearchResultData,
+    ) -> List[List[AggregationBucket]]:
+        if len(res.agg_buckets) == 0:
+            return []
+        parsed = parse_agg_buckets(res.agg_buckets)
+        # agg_topks[i] = number of top-level buckets belonging to query i.
+        # If the server omitted agg_topks, only the nq==1 shape can be recovered.
+        if len(res.agg_topks) == 0:
+            if res.num_queries > 1:
+                logger.warning(
+                    "search_aggregation response missing agg_topks for nq=%d; "
+                    "dropping %d buckets because per-query assignment is ambiguous",
+                    res.num_queries,
+                    len(parsed),
+                )
+                return [[] for _ in range(res.num_queries)]
+            return [parsed]
+
+        topks = list(res.agg_topks)
+        out: List[List[AggregationBucket]] = []
+        offset = 0
+        for k in topks:
+            out.append(parsed[offset : offset + k])
+            offset += k
+        if offset != len(parsed):
+            logger.warning(
+                "search_aggregation response bucket count mismatch: agg_topks sum=%d, parsed=%d",
+                offset,
+                len(parsed),
+            )
+            if offset < len(parsed):
+                out[-1].extend(parsed[offset:])
+        return out
 
     def _parse_search_result_data(
         self,
@@ -427,6 +350,11 @@ class SearchResult(list):
         else:
             all_scores = res.scores
 
+        # Extract element_indices if present
+        all_offsets: Optional[List[int]] = None
+        if res.element_indices and len(res.element_indices.data) > 0:
+            all_offsets = list(res.element_indices.data)
+
         data = []
         nq_thres = 0
 
@@ -442,191 +370,12 @@ class SearchResult(list):
                     res.output_fields,
                     res.highlight_results,
                     _pk_name,
+                    all_offsets,
                 )
             )
 
             nq_thres += topk
         return data
-
-    def _get_fields_by_range(
-        self, start: int, end: int, all_fields_data: List[schema_pb2.FieldData]
-    ) -> Dict[str, Tuple[List[Any], schema_pb2.FieldData]]:
-        field2data: Dict[str, Tuple[List[Any], schema_pb2.FieldData]] = {}
-
-        for field in all_fields_data:
-            name, scalars, dtype = field.field_name, field.scalars, field.type
-            field_meta = schema_pb2.FieldData(
-                type=dtype,
-                field_name=name,
-                field_id=field.field_id,
-                is_dynamic=field.is_dynamic,
-            )
-            if dtype == DataType.BOOL:
-                field2data[name] = (
-                    apply_valid_data(
-                        scalars.bool_data.data[start:end],
-                        field.valid_data[start:end] if field.valid_data else None,
-                    ),
-                    field_meta,
-                )
-                continue
-
-            if dtype in (DataType.INT8, DataType.INT16, DataType.INT32):
-                field2data[name] = (
-                    apply_valid_data(
-                        scalars.int_data.data[start:end],
-                        field.valid_data[start:end] if field.valid_data else None,
-                    ),
-                    field_meta,
-                )
-                continue
-
-            if dtype == DataType.INT64:
-                field2data[name] = (
-                    apply_valid_data(
-                        scalars.long_data.data[start:end],
-                        field.valid_data[start:end] if field.valid_data else None,
-                    ),
-                    field_meta,
-                )
-                continue
-
-            if dtype == DataType.FLOAT:
-                field2data[name] = (
-                    apply_valid_data(
-                        scalars.float_data.data[start:end],
-                        field.valid_data[start:end] if field.valid_data else None,
-                    ),
-                    field_meta,
-                )
-                continue
-
-            if dtype == DataType.DOUBLE:
-                field2data[name] = (
-                    apply_valid_data(
-                        scalars.double_data.data[start:end],
-                        field.valid_data[start:end] if field.valid_data else None,
-                    ),
-                    field_meta,
-                )
-                continue
-
-            if dtype == DataType.VARCHAR:
-                field2data[name] = (
-                    apply_valid_data(
-                        scalars.string_data.data[start:end],
-                        field.valid_data[start:end] if field.valid_data else None,
-                    ),
-                    field_meta,
-                )
-                continue
-
-            if dtype == DataType.GEOMETRY:
-                field2data[name] = (
-                    apply_valid_data(
-                        scalars.geometry_wkt_data.data[start:end],
-                        field.valid_data[start:end] if field.valid_data else None,
-                    ),
-                    field_meta,
-                )
-                continue
-
-            if dtype == DataType.JSON:
-                res = apply_valid_data(
-                    scalars.json_data.data[start:end],
-                    field.valid_data[start:end] if field.valid_data else None,
-                )
-                json_dict_list = []
-                for item in res:
-                    if item is not None:
-                        try:
-                            json_dict_list.append(orjson.loads(item))
-                        except Exception as e:
-                            logger.error(
-                                f"SearchResult::_get_fields_by_range::Failed to load JSON item: {e}, original item: {item}"
-                            )
-                            raise
-                    else:
-                        json_dict_list.append(item)
-                field2data[name] = json_dict_list, field_meta
-                continue
-
-            if dtype == DataType.ARRAY:
-                res = apply_valid_data(
-                    scalars.array_data.data[start:end],
-                    field.valid_data[start:end] if field.valid_data else None,
-                )
-                field2data[name] = (
-                    extract_array_row_data(res, scalars.array_data.element_type),
-                    field_meta,
-                )
-                continue
-
-            if dtype == DataType._ARRAY_OF_STRUCT:
-                struct_array_data = []
-
-                if hasattr(field, "struct_arrays") and field.struct_arrays:
-                    for row_idx in range(start, end):
-                        struct_array_data.append(
-                            entity_helper.extract_struct_array_from_column_data(
-                                field.struct_arrays, row_idx
-                            )
-                        )
-
-                field2data[name] = (struct_array_data, field_meta)
-                continue
-
-            # vectors
-            dim, vectors = field.vectors.dim, field.vectors
-            field_meta.vectors.dim = dim
-            if dtype == DataType.FLOAT_VECTOR:
-                if start == 0 and (end - start) * dim >= len(vectors.float_vector.data):
-                    # If the range equals to the length of vectors.float_vector.data, direct return
-                    # it to avoid a copy. This logic improves performance by 25% for the case
-                    # retrival 1536 dim embeddings with topk=16384.
-                    field2data[name] = vectors.float_vector.data, field_meta
-                else:
-                    field2data[name] = (
-                        vectors.float_vector.data[start * dim : end * dim],
-                        field_meta,
-                    )
-                continue
-
-            if dtype == DataType.BINARY_VECTOR:
-                field2data[name] = (
-                    vectors.binary_vector[start * (dim // 8) : end * (dim // 8)],
-                    field_meta,
-                )
-                continue
-            # TODO(SPARSE): do we want to allow the user to specify the return format?
-            if dtype == DataType.SPARSE_FLOAT_VECTOR:
-                field2data[name] = (
-                    entity_helper.sparse_proto_to_rows(vectors.sparse_float_vector, start, end),
-                    field_meta,
-                )
-                continue
-
-            if dtype == DataType.BFLOAT16_VECTOR:
-                field2data[name] = (
-                    vectors.bfloat16_vector[start * (dim * 2) : end * (dim * 2)],
-                    field_meta,
-                )
-                continue
-
-            if dtype == DataType.FLOAT16_VECTOR:
-                field2data[name] = (
-                    vectors.float16_vector[start * (dim * 2) : end * (dim * 2)],
-                    field_meta,
-                )
-                continue
-
-            if dtype == DataType.INT8_VECTOR:
-                field2data[name] = (
-                    vectors.int8_vector[start * dim : end * dim],
-                    field_meta,
-                )
-                continue
-        return field2data
 
     def get_session_ts(self):
         """Iterator related inner method"""
@@ -637,24 +386,6 @@ class SearchResult(list):
         """Iterator related inner method"""
         # TODO(Goose): Change it into properties
         return self._search_iterator_v2_results
-
-
-def get_field_data(field_data: FieldData):
-    field_type = field_data.type
-    scalar_attr = _SCALAR_DATA_ATTR.get(field_type)
-    if scalar_attr is not None:
-        return getattr(field_data.scalars, scalar_attr).data
-    vector_attr = _VECTOR_DATA_ATTR.get(field_type)
-    if vector_attr is not None:
-        obj = getattr(field_data.vectors, vector_attr)
-        # float_vector returns .data, others return the bytes/proto directly
-        return obj.data if field_type == DataType.FLOAT_VECTOR else obj
-    if field_type == DataType._ARRAY_OF_STRUCT:
-        return field_data.struct_arrays
-    if field_type == DataType._ARRAY_OF_VECTOR:
-        return field_data.vectors.vector_array
-    msg = f"Unsupported field type: {field_type}"
-    raise MilvusException(msg)
 
 
 class Hits(list):
@@ -710,18 +441,8 @@ class Hits(list):
                 if len(data) <= i:
                     entity[fname] = None
                 # Get dense vectors
-                if field_meta.type in (
-                    DataType.FLOAT_VECTOR,
-                    DataType.BINARY_VECTOR,
-                    DataType.BFLOAT16_VECTOR,
-                    DataType.FLOAT16_VECTOR,
-                    DataType.INT8_VECTOR,
-                ):
-                    dim = field_meta.vectors.dim
-                    if field_meta.type in [DataType.BINARY_VECTOR]:
-                        dim = dim // 8
-                    elif field_meta.type in [DataType.BFLOAT16_VECTOR, DataType.FLOAT16_VECTOR]:
-                        dim = dim * 2
+                if is_dense_vector_type(field_meta.type):
+                    dim = _dense_result_slice_width(field_meta.type, field_meta.vectors.dim)
                     entity[fname] = data[i * dim : (i + 1) * dim]
                     continue
 
@@ -845,35 +566,16 @@ class Hit(dict):
 def extract_array_row_data(
     scalars: List[schema_pb2.ScalarField], element_type: DataType
 ) -> List[List[Any]]:
+    attr = get_array_element_attr(element_type)
+    if attr is None:
+        raise MilvusException(message=f"Unsupported data type: {element_type}")
+
     row = []
     for ith_array in scalars:
         if ith_array is None:
             row.append(None)
-            continue
-
-        if element_type == DataType.INT64:
-            row.append(ith_array.long_data.data)
-            continue
-
-        if element_type == DataType.BOOL:
-            row.append(ith_array.bool_data.data)
-            continue
-
-        if element_type in (DataType.INT8, DataType.INT16, DataType.INT32):
-            row.append(ith_array.int_data.data)
-            continue
-
-        if element_type == DataType.FLOAT:
-            row.append(ith_array.float_data.data)
-            continue
-
-        if element_type == DataType.DOUBLE:
-            row.append(ith_array.double_data.data)
-            continue
-
-        if element_type in (DataType.STRING, DataType.VARCHAR):
-            row.append(ith_array.string_data.data)
-            continue
+        else:
+            row.append(getattr(ith_array, attr).data)
     return row
 
 
@@ -901,7 +603,7 @@ def extract_struct_field_value(field_data: schema_pb2.FieldData, index: int) -> 
     elif field_data.type == DataType.DOUBLE:
         if index < len(field_data.scalars.double_data.data):
             return field_data.scalars.double_data.data[index]
-    elif field_data.type == DataType.VARCHAR:
+    elif field_data.type in (DataType.VARCHAR, DataType.TEXT):
         if index < len(field_data.scalars.string_data.data):
             return field_data.scalars.string_data.data[index]
     elif field_data.type == DataType.JSON:

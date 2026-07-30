@@ -1,62 +1,43 @@
 Metadata-Version: 2.4
 Name: pymilvus
-Version: 2.6.12
-Summary: Python Sdk for Milvus
+Version: 3.0.1
+Summary: Python SDK for Milvus
+Project-URL: Homepage, https://milvus.io
+Project-URL: Repository, https://github.com/milvus-io/pymilvus
+Project-URL: Issues, https://github.com/milvus-io/pymilvus/issues
 Author-email: PyMilvus Team <pymilvus@zilliz.com>
-Project-URL: repository, https://github.com/milvus-io/pymilvus
+License-File: LICENSE
+Keywords: milvus,sdk,similarity search,vector database
+Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
 Classifier: Programming Language :: Python :: 3.14
-Classifier: License :: OSI Approved :: Apache Software License
-Requires-Python: >=3.8
-Description-Content-Type: text/markdown
-License-File: LICENSE
-Requires-Dist: setuptools>69
-Requires-Dist: setuptools<70.1; python_version <= "3.8"
-Requires-Dist: grpcio!=1.68.0,!=1.68.1,!=1.69.0,!=1.70.0,!=1.70.1,!=1.71.0,!=1.72.1,!=1.73.0,>=1.66.2
+Requires-Python: >=3.9
+Requires-Dist: cachetools>=5.0.0
+Requires-Dist: grpcio!=1.68.0,!=1.68.1,!=1.69.0,!=1.70.0,!=1.70.1,!=1.71.0,!=1.72.1,!=1.73.0,>=1.66.2; python_version < '3.14'
+Requires-Dist: grpcio>=1.75.1; python_version >= '3.14'
 Requires-Dist: orjson>=3.10.15
+Requires-Dist: pandas>=1.2.4
 Requires-Dist: protobuf>=5.27.2
 Requires-Dist: python-dotenv<2.0.0,>=1.0.1
-Requires-Dist: pandas>=1.2.4
-Requires-Dist: numpy<1.25.0; python_version <= "3.8"
-Requires-Dist: cachetools>=5.0.0
 Requires-Dist: requests>=2.20.0
 Provides-Extra: bulk-writer
-Requires-Dist: requests; extra == "bulk-writer"
-Requires-Dist: minio>=7.0.0; extra == "bulk-writer"
-Requires-Dist: pyarrow>=12.0.0; extra == "bulk-writer"
-Requires-Dist: azure-storage-blob; extra == "bulk-writer"
-Requires-Dist: urllib3; extra == "bulk-writer"
-Provides-Extra: model
-Requires-Dist: pymilvus.model>=0.3.0; extra == "model"
+Requires-Dist: azure-storage-blob; extra == 'bulk-writer'
+Requires-Dist: minio>=7.0.0; extra == 'bulk-writer'
+Requires-Dist: ml-dtypes; extra == 'bulk-writer'
+Requires-Dist: pyarrow>=12.0.0; extra == 'bulk-writer'
+Requires-Dist: requests; extra == 'bulk-writer'
+Requires-Dist: urllib3; extra == 'bulk-writer'
 Provides-Extra: milvus-lite
-Requires-Dist: milvus-lite>=2.4.0; sys_platform != "win32" and extra == "milvus-lite"
-Provides-Extra: dev
-Requires-Dist: grpcio==1.66.2; python_version < "3.14" and extra == "dev"
-Requires-Dist: grpcio-tools==1.66.2; python_version < "3.14" and extra == "dev"
-Requires-Dist: pytest>=5.3.4; extra == "dev"
-Requires-Dist: pytest-cov>=5.0.0; extra == "dev"
-Requires-Dist: pytest-timeout>=1.3.4; extra == "dev"
-Requires-Dist: pytest-asyncio; extra == "dev"
-Requires-Dist: Cython>=3.0.0; extra == "dev"
-Requires-Dist: ruff<1,>=0.12.9; extra == "dev"
-Requires-Dist: black; extra == "dev"
-Requires-Dist: requests; extra == "dev"
-Requires-Dist: minio>=7.0.0; extra == "dev"
-Requires-Dist: pyarrow>=12.0.0; extra == "dev"
-Requires-Dist: azure-storage-blob; extra == "dev"
-Requires-Dist: urllib3; extra == "dev"
-Requires-Dist: scipy; extra == "dev"
-Requires-Dist: py-spy; extra == "dev"
-Requires-Dist: memray; sys_platform != "win32" and extra == "dev"
-Requires-Dist: pytest-benchmark[histogram]; extra == "dev"
-Requires-Dist: ml_dtypes; extra == "dev"
-Dynamic: license-file
+Requires-Dist: milvus-lite>=2.4.0; (sys_platform != 'win32') and extra == 'milvus-lite'
+Requires-Dist: setuptools<82; (python_version < '3.10') and extra == 'milvus-lite'
+Provides-Extra: model
+Requires-Dist: pymilvus-model>=0.3.0; extra == 'model'
+Description-Content-Type: text/markdown
 
 # Milvus Python SDK
 
@@ -90,7 +71,7 @@ The following collection shows Milvus versions and recommended PyMilvus versions
 
 ## Installation
 
-You can install PyMilvus via `pip` or `pip3` for Python 3.8+:
+You can install PyMilvus via `pip` or `pip3` for Python 3.9+:
 
 ```shell
 $ pip3 install pymilvus
@@ -111,6 +92,9 @@ $ pip3 install --upgrade pymilvus
 ```
 
 ## FAQ
+Local development commands use [uv](https://docs.astral.sh/uv/). Install uv before running the
+`make` targets below.
+
 Q1. How to get submodules?
 
 A1. The following command will get the protos matching to the generated files, for protos of certain version, see
@@ -148,18 +132,19 @@ Once installed, the hooks will automatically run `make format` and `make lint` b
 A5. Pre-commit hooks help ensure code quality by automatically running linting and formatting checks before each commit.
 ```shell
 # Install pre-commit (if not already installed)
-$ pip install pre-commit
+$ uv tool install pre-commit
 
 # Install the git hook scripts
 $ pre-commit install
 ```
 
-Q7. How to run unittests?
+Q7. How to run the maintained test suites?
 
 A7
 ```shell
-$ pip install ".[dev]"
+$ uv sync --group dev
 $ make unittest
+$ make integration-lite
 ```
 
 Q8. `zsh: no matches found: pymilvus[model]`, how do I solve this?
@@ -171,7 +156,7 @@ $ pip install "pymilvus[model]"
 
 ## Documentation
 
-Documentation is available online: https://milvus.io/api-reference/pymilvus/v2.4.x/About.md
+Documentation is available online: https://milvus.io/api-reference/pymilvus/v2.6.x/About.md
 
 ## Developing package releases
 

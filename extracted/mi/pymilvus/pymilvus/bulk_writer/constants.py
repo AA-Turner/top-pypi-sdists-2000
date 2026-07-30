@@ -46,13 +46,20 @@ TYPE_SIZE = {
 
 TYPE_VALIDATOR = {
     DataType.BOOL.name: lambda x: isinstance(x, bool),
-    DataType.INT8.name: lambda x: isinstance(x, int) and -128 <= x <= 127,
-    DataType.INT16.name: lambda x: isinstance(x, int) and -32768 <= x <= 32767,
-    DataType.INT32.name: lambda x: isinstance(x, int) and -2147483648 <= x <= 2147483647,
-    DataType.INT64.name: lambda x: isinstance(x, int),
+    DataType.INT8.name: lambda x: isinstance(x, int)
+    and not isinstance(x, bool)
+    and -128 <= x <= 127,
+    DataType.INT16.name: lambda x: isinstance(x, int)
+    and not isinstance(x, bool)
+    and -32768 <= x <= 32767,
+    DataType.INT32.name: lambda x: isinstance(x, int)
+    and not isinstance(x, bool)
+    and -2147483648 <= x <= 2147483647,
+    DataType.INT64.name: lambda x: isinstance(x, int) and not isinstance(x, bool),
     DataType.FLOAT.name: lambda x: isinstance(x, float),
     DataType.DOUBLE.name: lambda x: isinstance(x, float),
     DataType.VARCHAR.name: lambda x, max_len: isinstance(x, str) and len(x) <= max_len,
+    DataType.TEXT.name: lambda x: isinstance(x, str),  # TEXT has no max_length limit
     DataType.JSON.name: lambda x: isinstance(x, (str, list, dict)),
     DataType.TIMESTAMPTZ.name: lambda x: isinstance(x, str),
     DataType.GEOMETRY.name: lambda x: isinstance(x, str),
@@ -75,6 +82,7 @@ NUMPY_TYPE_CREATOR = {
     DataType.FLOAT.name: np.dtype("float32"),
     DataType.DOUBLE.name: np.dtype("float64"),
     DataType.VARCHAR.name: np.dtype("str"),
+    DataType.TEXT.name: np.dtype("str"),
     DataType.JSON.name: np.dtype("str"),  # in numpy/parquet file, json object are stored as string
     DataType.TIMESTAMPTZ.name: np.dtype("str"),
     DataType.GEOMETRY.name: np.dtype("str"),
@@ -97,6 +105,7 @@ ARROW_TYPE_CREATOR = {
     DataType.FLOAT.name: pa.float32(),
     DataType.DOUBLE.name: pa.float64(),
     DataType.VARCHAR.name: pa.string(),
+    DataType.TEXT.name: pa.string(),
     DataType.JSON.name: pa.string(),  # in numpy/parquet file, json objects are stored as string
     DataType.TIMESTAMPTZ.name: pa.string(),
     DataType.GEOMETRY.name: pa.string(),
@@ -118,6 +127,7 @@ class BulkFileType(IntEnum):
     JSON_RB = 2  # deprecated
     PARQUET = 3
     CSV = 4
+    JSONL = 5
 
 
 class ConnectType(Enum):

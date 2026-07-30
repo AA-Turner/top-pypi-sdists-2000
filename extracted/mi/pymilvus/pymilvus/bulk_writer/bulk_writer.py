@@ -23,6 +23,7 @@ from pymilvus.orm.schema import CollectionSchema, FieldSchema, StructFieldSchema
 
 from .buffer import (
     Buffer,
+    _float16_vector_numpy_dtype,
 )
 from .constants import (
     NUMPY_TYPE_CREATOR,
@@ -127,10 +128,7 @@ class BulkWriter:
                 if dtype == DataType.FLOAT_VECTOR:
                     return origin_list, dim * 4  # for float vector, each dim occupies 4 bytes
                 if dtype in [DataType.FLOAT16_VECTOR, DataType.BFLOAT16_VECTOR]:
-                    return (
-                        origin_list,
-                        dim * 2,
-                    )  # for float16 or bfloat16 vector, each dim occupies 2 bytes
+                    return origin_list, dim * (4 if isinstance(origin_list, list) else 2)
                 if dtype == DataType.INT8_VECTOR:
                     return origin_list, dim  # for int8 vector, each dim occupies 1 bytes
                 if dtype == DataType.BINARY_VECTOR:
@@ -169,6 +167,14 @@ class BulkWriter:
 
         return len(x)
 
+    def _verify_text(self, x: object, field: FieldSchema):
+        # TEXT type has no max_length limit
+        validator = TYPE_VALIDATOR[DataType.TEXT.name]
+        if not validator(x):
+            self._throw(f"Illegal text value for field '{field.name}', type mismatch")
+
+        return len(x)
+
     def _verify_scalar(self, x: object, dtype: DataType, field_name: str):
         validator = TYPE_VALIDATOR[dtype.name]
         if not validator(x):
@@ -196,6 +202,9 @@ class BulkWriter:
         elif element_type == DataType.VARCHAR:
             for ele in x:
                 row_size = row_size + self._verify_varchar(ele, field)
+        elif element_type == DataType.TEXT:
+            for ele in x:
+                row_size = row_size + self._verify_text(ele, field)
         else:
             self._throw(f"Unsupported element type for array field '{field.name}'")
 
@@ -278,6 +287,8 @@ class BulkWriter:
                 row_size = row_size + byte_len
             elif dtype == DataType.VARCHAR:
                 row_size = row_size + self._verify_varchar(row[field.name], field)
+            elif dtype == DataType.TEXT:
+                row_size = row_size + self._verify_text(row[field.name], field)
             elif dtype == DataType.JSON:
                 row[field.name], size = self._verify_json(row[field.name], field)
                 row_size = row_size + size
@@ -294,6 +305,27 @@ class BulkWriter:
 
         return row_size
 
+    def _normalize_struct_vector(self, origin_list: object, dtype: DataType):
+        if dtype == DataType.FLOAT_VECTOR:
+            return np.array(origin_list, dtype=NUMPY_TYPE_CREATOR[DataType.FLOAT.name])
+
+        if dtype in {DataType.FLOAT16_VECTOR, DataType.BFLOAT16_VECTOR}:
+            if self._file_type != BulkFileType.PARQUET:
+                if isinstance(origin_list, bytes):
+                    dt = _float16_vector_numpy_dtype(dtype)
+                    return np.frombuffer(origin_list, dtype=dt).tolist()
+                return origin_list
+            if isinstance(origin_list, list):
+                values = np.asarray(origin_list, dtype=np.float32)
+                if dtype == DataType.FLOAT16_VECTOR:
+                    return values.astype(np.float16).view(np.uint8).tolist()
+                uint32_values = values.view(np.uint32)
+                return (uint32_values >> 16).astype(np.uint16).view(np.uint8).tolist()
+            if isinstance(origin_list, bytes):
+                return list(origin_list)
+
+        return origin_list
+
     def _verify_struct(self, x: object, field: StructFieldSchema):
         validator = TYPE_VALIDATOR[DataType.STRUCT.name]
         if not validator(x, field.max_capacity):
@@ -309,14 +341,20 @@ class BulkWriter:
                     self._throw(
                         f"Sub field '{sub_field.name}' of struct field '{field.name}' is missed"
                     )
-                if sub_dtype == DataType.FLOAT_VECTOR:
+                if sub_dtype in {
+                    DataType.BINARY_VECTOR,
+                    DataType.FLOAT_VECTOR,
+                    DataType.FLOAT16_VECTOR,
+                    DataType.BFLOAT16_VECTOR,
+                    DataType.INT8_VECTOR,
+                }:
                     origin_list, byte_len = self._verify_vector(obj[sub_field.name], sub_field)
-                    obj[sub_field.name] = np.array(
-                        origin_list, dtype=NUMPY_TYPE_CREATOR[DataType.FLOAT.name]
-                    )
+                    obj[sub_field.name] = self._normalize_struct_vector(origin_list, sub_dtype)
                     struct_size = struct_size + byte_len
                 elif sub_dtype == DataType.VARCHAR:
                     struct_size = struct_size + self._verify_varchar(obj[sub_field.name], sub_field)
+                elif sub_dtype == DataType.TEXT:
+                    struct_size = struct_size + self._verify_text(obj[sub_field.name], sub_field)
                 elif sub_dtype in {
                     DataType.BOOL,
                     DataType.INT8,

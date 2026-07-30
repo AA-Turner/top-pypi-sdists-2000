@@ -4,6 +4,7 @@ import logging
 from typing import Dict, List
 
 from pymilvus.client.call_context import CallContext
+from pymilvus.client.constants import CLUSTER_ID
 from pymilvus.orm.collection import CollectionSchema, FieldSchema
 from pymilvus.orm.schema import StructFieldSchema
 from pymilvus.orm.types import DataType
@@ -21,6 +22,12 @@ class BaseMilvusClient:
         client_request_id = kwargs.get("client_request_id") or kwargs.get("client-request-id", "")
         return CallContext(db_name=self._config.db_name, client_request_id=client_request_id)
 
+    def _with_cluster_id(self, kwargs: Dict) -> Dict:
+        cluster_id = getattr(self, "_cluster_id", "")
+        if cluster_id:
+            kwargs.setdefault(CLUSTER_ID, cluster_id)
+        return kwargs
+
     @classmethod
     def create_schema(cls, **kwargs):
         """Create a collection schema.
@@ -35,13 +42,13 @@ class BaseMilvusClient:
         return CollectionSchema([], **kwargs)
 
     @classmethod
-    def create_struct_field_schema(cls) -> StructFieldSchema:
+    def create_struct_field_schema(cls, **kwargs) -> StructFieldSchema:
         """Create a struct field schema.
 
         Returns:
             StructFieldSchema: The created struct field schema.
         """
-        return StructFieldSchema()
+        return StructFieldSchema(**kwargs)
 
     @classmethod
     def create_field_schema(

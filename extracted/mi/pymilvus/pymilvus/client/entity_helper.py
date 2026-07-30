@@ -1,8 +1,8 @@
 import itertools
 import json
-import logging
 import math
 import struct
+from collections.abc import Sized
 from typing import Any, Dict, Iterable, List, Optional
 
 import numpy as np
@@ -17,6 +17,7 @@ from pymilvus.exceptions import (
 from pymilvus.grpc_gen import schema_pb2 as schema_types
 from pymilvus.settings import Config
 
+from . import field_data_extractors, type_info
 from .types import DataType
 from .utils import (
     SciPyHelper,
@@ -25,9 +26,37 @@ from .utils import (
     sparse_parse_single_row,
 )
 
-logger = logging.getLogger(__name__)
-
 CHECK_STR_ARRAY = True
+
+_LEGACY_ROW_ERROR_LABELS = {
+    DataType.INT8: "int",
+    DataType.INT16: "int",
+    DataType.INT32: "int",
+    DataType.TIMESTAMPTZ: "string",
+}
+
+
+def _error_label(dtype: DataType) -> str:
+    try:
+        dtype = DataType(dtype)
+    except (TypeError, ValueError):
+        return str(dtype)
+    return _LEGACY_ROW_ERROR_LABELS.get(dtype, dtype.name.lower())
+
+
+def _scalar_row_error_message(
+    dtype: DataType, field_name: str, value: Any, error: Exception
+) -> str:
+    message = ExceptionsMessage.FieldDataInconsistent % (
+        field_name,
+        _error_label(dtype),
+        type(value),
+    )
+    # Preserve the legacy row-pack error text for these two types. Improving
+    # the diagnostic detail can be handled separately from this TypeInfo refactor.
+    if dtype in (DataType.TIMESTAMPTZ, DataType.GEOMETRY):
+        return message
+    return message + f" Detail: {error!s}"
 
 
 def _get_dim(field_info: Dict) -> int:
@@ -309,26 +338,72 @@ def convert_to_array(obj: List[Any], field_info: Any):
 
     field_data = schema_types.ScalarField()
     element_type = field_info.get("element_type", None)
-    if element_type == DataType.BOOL:
-        field_data.bool_data.data.extend(obj)
-        return field_data
-    if element_type in (DataType.INT8, DataType.INT16, DataType.INT32):
-        field_data.int_data.data.extend(obj)
-        return field_data
-    if element_type == DataType.INT64:
-        field_data.long_data.data.extend(obj)
-        return field_data
-    if element_type == DataType.FLOAT:
-        field_data.float_data.data.extend(obj)
-        return field_data
-    if element_type == DataType.DOUBLE:
-        field_data.double_data.data.extend(obj)
-        return field_data
-    if element_type in (DataType.VARCHAR, DataType.STRING):
-        field_data.string_data.data.extend(obj)
+    attr_name = type_info.get_array_element_attr(element_type)
+    if attr_name is not None:
+        getattr(field_data, attr_name).data.extend(obj)
         return field_data
     raise ParamError(
         message=f"Unsupported element type: {element_type} for Array field: {field_info.get('name')}"
+    )
+
+
+def _is_fp32_vector_value(field_value: Any) -> bool:
+    if isinstance(field_value, list):
+        return True
+    if isinstance(field_value, np.ndarray):
+        return field_value.dtype in ("float32", "float64")
+    return False
+
+
+def _pack_fp32_vector_value(field_value: Any, field_data: schema_types.FieldData) -> None:
+    if isinstance(field_value, np.ndarray) and field_value.dtype not in ("float32", "float64"):
+        raise ParamError(
+            message="invalid input for float32 vector. Expected an np.ndarray with dtype=float32 or float64"
+        )
+    f_value = np.asarray(field_value, dtype=np.float32).tolist()
+    field_data.vectors.dim = len(f_value)
+    field_data.vectors.float_vector.data.extend(f_value)
+
+
+def _convert_to_vector_bytes(field_value: Any, element_type: DataType) -> bytes:
+    """Convert a single vector value to bytes for byte-based vector types."""
+    if isinstance(field_value, bytes):
+        return field_value
+
+    if element_type == DataType.FLOAT16_VECTOR:
+        if isinstance(field_value, np.ndarray):
+            if field_value.dtype == "float16":
+                return field_value.view(np.uint8).tobytes()
+            raise ParamError(
+                message="invalid input for float16 vector. Expected an np.ndarray with dtype=float16"
+            )
+        raise ParamError(
+            message="invalid input type for float16 vector. Expected bytes or np.ndarray(dtype=float16)"
+        )
+
+    if element_type == DataType.BFLOAT16_VECTOR:
+        if isinstance(field_value, np.ndarray):
+            if field_value.dtype == "bfloat16":
+                return field_value.view(np.uint8).tobytes()
+            raise ParamError(
+                message="invalid input for bfloat16 vector. Expected an np.ndarray with dtype=bfloat16"
+            )
+        raise ParamError(
+            message="invalid input type for bfloat16 vector. Expected bytes or np.ndarray(dtype=bfloat16)"
+        )
+
+    if isinstance(field_value, np.ndarray):
+        expected_dtypes = {
+            DataType.INT8_VECTOR: "int8",
+        }
+        expected = expected_dtypes.get(element_type)
+        if expected and field_value.dtype != expected:
+            raise ParamError(
+                message=f"invalid input for {expected} vector. Expected an np.ndarray with dtype={expected}"
+            )
+        return field_value.view(np.uint8).tobytes()
+    raise ParamError(
+        message=f"invalid input type for {element_type.name} vector. Expected bytes or np.ndarray"
     )
 
 
@@ -340,8 +415,10 @@ def convert_to_array_of_vector(obj: List[Any], field_info: Any):
     field_data.dim = _get_dim(field_info)
 
     if element_type == DataType.FLOAT_VECTOR:
+        attr_name = type_info.get_vector_attr(element_type)
+        vector_values = getattr(field_data, attr_name).data
         if not obj:
-            field_data.float_vector.data.extend([])
+            vector_values.extend([])
         for field_value in obj:
             f_value = field_value
             if isinstance(field_value, np.ndarray):
@@ -350,11 +427,17 @@ def convert_to_array_of_vector(obj: List[Any], field_info: Any):
                         message="invalid input for float32 vector. Expected an np.ndarray with dtype=float32"
                     )
                 f_value = field_value.tolist()
-            field_data.float_vector.data.extend(f_value)
+            vector_values.extend(f_value)
+
+    elif type_info.is_byte_vector_type(element_type):
+        attr_name = type_info.get_vector_attr(element_type)
+        if element_type == DataType.BINARY_VECTOR:
+            all_bytes = b"".join(fv if isinstance(fv, bytes) else bytes(fv) for fv in obj)
+        else:
+            all_bytes = b"".join(_convert_to_vector_bytes(fv, element_type) for fv in obj)
+        setattr(field_data, attr_name, all_bytes)
 
     else:
-        # todo(SpadeA): other types are now not supported. When it's supported, make sure empty
-        # array is handled correctly.
         raise ParamError(
             message=f"Unsupported element type: {element_type} for Array of Vector field: {field_info.get('name')}"
         )
@@ -365,12 +448,21 @@ def entity_to_array_arr(entity_values: List[Any], field_info: Any):
     return convert_to_array_arr(entity_values, field_info)
 
 
-_VECTOR_ATTR_MAP = {
-    DataType.INT8_VECTOR: "int8_vector",
-    DataType.BINARY_VECTOR: "binary_vector",
-    DataType.FLOAT16_VECTOR: "float16_vector",
-    DataType.BFLOAT16_VECTOR: "bfloat16_vector",
+_ROW_SCALAR_NORMALIZERS = {
+    DataType.VARCHAR: lambda v, fi: convert_to_str_array(v, fi, CHECK_STR_ARRAY),
+    DataType.TEXT: lambda v, fi: convert_to_str_array(v, fi, check=False),
+    DataType.GEOMETRY: lambda v, fi: convert_to_str_array(v, fi, CHECK_STR_ARRAY),
+    DataType.JSON: lambda v, _: convert_to_json(v),
+    DataType.ARRAY: convert_to_array,
 }
+
+
+def _get_protobuf_payload(field_data: schema_types.FieldData, dtype: Optional[DataType] = None):
+    dtype = field_data.type if dtype is None else dtype
+    slot = type_info.get_protobuf_slot(dtype)
+    if slot.kind is type_info.ProtobufSlotKind.SCALAR:
+        return getattr(field_data.scalars, slot.attr)
+    return getattr(field_data.vectors, slot.attr)
 
 
 def flush_vector_bytes(
@@ -387,9 +479,140 @@ def flush_vector_bytes(
     if not bytes_list:
         return
 
-    attr_name = _VECTOR_ATTR_MAP.get(field_data.type)
+    attr_name = (
+        type_info.get_vector_attr(field_data.type)
+        if type_info.is_byte_vector_type(field_data.type)
+        else None
+    )
     if attr_name:
         setattr(field_data.vectors, attr_name, b"".join(bytes_list))
+
+
+def _pack_scalar_row(
+    dtype: DataType,
+    value: Any,
+    field_data: schema_types.FieldData,
+    field_info: Any,
+    field_name: str,
+):
+    try:
+        payload = _get_protobuf_payload(field_data, dtype)
+        if value is None:
+            payload.data.extend([])
+            return
+        normalizer = _ROW_SCALAR_NORMALIZERS.get(dtype)
+        payload.data.append(normalizer(value, field_info) if normalizer else value)
+    except (TypeError, ValueError) as e:
+        raise DataNotMatchException(
+            message=_scalar_row_error_message(dtype, field_name, value, e)
+        ) from e
+
+
+def _pack_float_vector_row(
+    value: Any,
+    field_data: schema_types.FieldData,
+    field_info: Any,
+    field_name: str,
+):
+    try:
+        payload = _get_protobuf_payload(field_data, DataType.FLOAT_VECTOR)
+        if value is None:
+            if field_data.vectors.dim == 0:
+                field_data.vectors.dim = _get_dim(field_info)
+            return
+
+        f_value = value
+        if isinstance(value, np.ndarray):
+            if value.dtype not in ("float32", "float64"):
+                raise ParamError(
+                    message="invalid input for float32 vector. Expected an np.ndarray with dtype=float32"
+                )
+            f_value = value.tolist()
+
+        field_data.vectors.dim = len(f_value)
+        payload.data.extend(f_value)
+    except (TypeError, ValueError) as e:
+        raise DataNotMatchException(
+            message=ExceptionsMessage.FieldDataInconsistent
+            % (field_name, _error_label(DataType.FLOAT_VECTOR), type(value))
+            + f" Detail: {e!s}"
+        ) from e
+
+
+def _normalize_byte_vector_row(dtype: DataType, value: Any) -> Optional[bytes]:
+    if value is None:
+        return None
+
+    dtype = type_info.get_type_info(dtype).dtype
+
+    if dtype == DataType.BINARY_VECTOR:
+        # Preserve binary-vector input compatibility: bytes(123) is valid
+        # Python but was rejected because scalar integers have no length.
+        if not isinstance(value, Sized):
+            message = f"object of type '{type(value).__name__}' has no len()"
+            raise TypeError(message)
+        return bytes(value)
+
+    if not type_info.is_byte_vector_type(dtype):
+        raise ParamError(message=f"Unsupported data type: {dtype}")
+
+    return _convert_to_vector_bytes(value, dtype)
+
+
+def _pack_byte_vector_row(
+    dtype: DataType,
+    value: Any,
+    field_data: schema_types.FieldData,
+    field_info: Any,
+    field_name: str,
+    vector_bytes_cache: Dict[int, List[bytes]],
+):
+    try:
+        if dtype in (DataType.FLOAT16_VECTOR, DataType.BFLOAT16_VECTOR) and _is_fp32_vector_value(
+            value
+        ):
+            _pack_fp32_vector_value(value, field_data)
+            return
+
+        payload = _normalize_byte_vector_row(dtype, value)
+        if payload is None:
+            if field_data.vectors.dim == 0:
+                field_data.vectors.dim = _get_dim(field_info)
+            return
+
+        field_data.vectors.dim = _get_dim(field_info)
+        vector_bytes_cache.setdefault(id(field_data), []).append(payload)
+    except (TypeError, ValueError) as e:
+        raise DataNotMatchException(
+            message=ExceptionsMessage.FieldDataInconsistent
+            % (field_name, _error_label(dtype), type(value))
+            + f" Detail: {e!s}"
+        ) from e
+
+
+def _pack_sparse_vector_row(
+    value: Any,
+    field_data: schema_types.FieldData,
+    field_name: str,
+):
+    try:
+        payload = _get_protobuf_payload(field_data, DataType.SPARSE_FLOAT_VECTOR)
+        if value is None:
+            return
+
+        if not SciPyHelper.is_scipy_sparse(value):
+            value = [value]
+        elif value.shape[0] != 1:
+            raise ParamError(message="invalid input for sparse float vector: expect 1 row")
+        if not entity_is_sparse_matrix(value):
+            raise ParamError(message="invalid input for sparse float vector")
+        payload.contents.append(sparse_rows_to_proto(value).contents[0])
+    except (TypeError, ValueError) as e:
+        raise DataNotMatchException(
+            message=ExceptionsMessage.FieldDataInconsistent
+            % (field_name, _error_label(DataType.SPARSE_FLOAT_VECTOR), type(value))
+            + f" Detail: {e!s}"
+        ) from e
 
 
 def pack_field_value_to_field_data(
@@ -400,284 +623,17 @@ def pack_field_value_to_field_data(
 ):
     field_type = field_data.type
     field_name = field_info["name"]
-    if field_type == DataType.BOOL:
-        try:
-            if field_value is None:
-                field_data.scalars.bool_data.data.extend([])
-            else:
-                field_data.scalars.bool_data.data.append(field_value)
-        except (TypeError, ValueError) as e:
-            raise DataNotMatchException(
-                message=ExceptionsMessage.FieldDataInconsistent
-                % (field_name, "bool", type(field_value))
-                + f" Detail: {e!s}"
-            ) from e
-    elif field_type in (DataType.INT8, DataType.INT16, DataType.INT32):
-        try:
-            # need to extend it, or cannot correctly identify field_data.scalars.int_data.data
-            if field_value is None:
-                field_data.scalars.int_data.data.extend([])
-            else:
-                field_data.scalars.int_data.data.append(field_value)
-        except (TypeError, ValueError) as e:
-            raise DataNotMatchException(
-                message=ExceptionsMessage.FieldDataInconsistent
-                % (field_name, "int", type(field_value))
-                + f" Detail: {e!s}"
-            ) from e
-    elif field_type == DataType.INT64:
-        try:
-            if field_value is None:
-                field_data.scalars.long_data.data.extend([])
-            else:
-                field_data.scalars.long_data.data.append(field_value)
-        except (TypeError, ValueError) as e:
-            raise DataNotMatchException(
-                message=ExceptionsMessage.FieldDataInconsistent
-                % (field_name, "int64", type(field_value))
-                + f" Detail: {e!s}"
-            ) from e
-    elif field_type == DataType.FLOAT:
-        try:
-            if field_value is None:
-                field_data.scalars.float_data.data.extend([])
-            else:
-                field_data.scalars.float_data.data.append(field_value)
-        except (TypeError, ValueError) as e:
-            raise DataNotMatchException(
-                message=ExceptionsMessage.FieldDataInconsistent
-                % (field_name, "float", type(field_value))
-                + f" Detail: {e!s}"
-            ) from e
-    elif field_type == DataType.DOUBLE:
-        try:
-            if field_value is None:
-                field_data.scalars.double_data.data.extend([])
-            else:
-                field_data.scalars.double_data.data.append(field_value)
-        except (TypeError, ValueError) as e:
-            raise DataNotMatchException(
-                message=ExceptionsMessage.FieldDataInconsistent
-                % (field_name, "double", type(field_value))
-                + f" Detail: {e!s}"
-            ) from e
-    elif field_type == DataType.TIMESTAMPTZ:
-        try:
-            if field_value is None:
-                field_data.scalars.string_data.data.extend([])  # Timestamptz is passed as String
-            else:
-                field_data.scalars.string_data.data.append(field_value)
-        except (TypeError, ValueError) as e:
-            raise DataNotMatchException(
-                message=ExceptionsMessage.FieldDataInconsistent
-                % (field_name, "string", type(field_value))
-            ) from e
-    elif field_type == DataType.FLOAT_VECTOR:
-        try:
-            if field_value is None:
-                if field_data.vectors.dim == 0:
-                    field_data.vectors.dim = _get_dim(field_info)
-            else:
-                f_value = field_value
-                if isinstance(field_value, np.ndarray):
-                    if field_value.dtype not in ("float32", "float64"):
-                        raise ParamError(
-                            message="invalid input for float32 vector. Expected an np.ndarray with dtype=float32"
-                        )
-                    f_value = field_value.tolist()
-
-                field_data.vectors.dim = len(f_value)
-                field_data.vectors.float_vector.data.extend(f_value)
-        except (TypeError, ValueError) as e:
-            raise DataNotMatchException(
-                message=ExceptionsMessage.FieldDataInconsistent
-                % (field_name, "float_vector", type(field_value))
-                + f" Detail: {e!s}"
-            ) from e
-    elif field_type == DataType.BINARY_VECTOR:
-        try:
-            if field_value is None:
-                if field_data.vectors.dim == 0:
-                    field_data.vectors.dim = _get_dim(field_info)
-            else:
-                field_data.vectors.dim = len(field_value) * 8
-                b_bytes = bytes(field_value)
-
-                field_id = id(field_data)
-                if field_id not in vector_bytes_cache:
-                    vector_bytes_cache[field_id] = []
-                vector_bytes_cache[field_id].append(b_bytes)
-        except (TypeError, ValueError) as e:
-            raise DataNotMatchException(
-                message=ExceptionsMessage.FieldDataInconsistent
-                % (field_name, "binary_vector", type(field_value))
-                + f" Detail: {e!s}"
-            ) from e
-    elif field_type == DataType.FLOAT16_VECTOR:
-        try:
-            if field_value is None:
-                if field_data.vectors.dim == 0:
-                    field_data.vectors.dim = _get_dim(field_info)
-            else:
-                if isinstance(field_value, bytes):
-                    v_bytes = field_value
-                elif isinstance(field_value, np.ndarray):
-                    if field_value.dtype != "float16":
-                        raise ParamError(
-                            message="invalid input for float16 vector. Expected an np.ndarray with dtype=float16"
-                        )
-                    v_bytes = field_value.view(np.uint8).tobytes()
-                else:
-                    raise ParamError(
-                        message="invalid input type for float16 vector. Expected an np.ndarray with dtype=float16"
-                    )
-
-                field_data.vectors.dim = len(v_bytes) // 2
-
-                field_id = id(field_data)
-                if field_id not in vector_bytes_cache:
-                    vector_bytes_cache[field_id] = []
-                vector_bytes_cache[field_id].append(v_bytes)
-        except (TypeError, ValueError) as e:
-            raise DataNotMatchException(
-                message=ExceptionsMessage.FieldDataInconsistent
-                % (field_name, "float16_vector", type(field_value))
-                + f" Detail: {e!s}"
-            ) from e
-    elif field_type == DataType.BFLOAT16_VECTOR:
-        try:
-            if field_value is None:
-                if field_data.vectors.dim == 0:
-                    field_data.vectors.dim = _get_dim(field_info)
-            else:
-                if isinstance(field_value, bytes):
-                    v_bytes = field_value
-                elif isinstance(field_value, np.ndarray):
-                    if field_value.dtype != "bfloat16":
-                        raise ParamError(
-                            message="invalid input for bfloat16 vector. Expected an np.ndarray with dtype=bfloat16"
-                        )
-                    v_bytes = field_value.view(np.uint8).tobytes()
-                else:
-                    raise ParamError(
-                        message="invalid input type for bfloat16 vector. Expected an np.ndarray with dtype=bfloat16"
-                    )
-
-                field_data.vectors.dim = len(v_bytes) // 2
-
-                field_id = id(field_data)
-                if field_id not in vector_bytes_cache:
-                    vector_bytes_cache[field_id] = []
-                vector_bytes_cache[field_id].append(v_bytes)
-        except (TypeError, ValueError) as e:
-            raise DataNotMatchException(
-                message=ExceptionsMessage.FieldDataInconsistent
-                % (field_name, "bfloat16_vector", type(field_value))
-                + f" Detail: {e!s}"
-            ) from e
-    elif field_type == DataType.SPARSE_FLOAT_VECTOR:
-        try:
-            if field_value is None:
-                if field_data.vectors.dim == 0:
-                    field_data.vectors.dim = 0
-            else:
-                if not SciPyHelper.is_scipy_sparse(field_value):
-                    field_value = [field_value]
-                elif field_value.shape[0] != 1:
-                    raise ParamError(message="invalid input for sparse float vector: expect 1 row")
-                if not entity_is_sparse_matrix(field_value):
-                    raise ParamError(message="invalid input for sparse float vector")
-                field_data.vectors.sparse_float_vector.contents.append(
-                    sparse_rows_to_proto(field_value).contents[0]
-                )
-        except (TypeError, ValueError) as e:
-            raise DataNotMatchException(
-                message=ExceptionsMessage.FieldDataInconsistent
-                % (field_name, "sparse_float_vector", type(field_value))
-                + f" Detail: {e!s}"
-            ) from e
-    elif field_type == DataType.INT8_VECTOR:
-        try:
-            if field_value is None:
-                if field_data.vectors.dim == 0:
-                    field_data.vectors.dim = _get_dim(field_info)
-            else:
-                if isinstance(field_value, np.ndarray):
-                    if field_value.dtype != "int8":
-                        raise ParamError(
-                            message="invalid input for int8 vector. Expected an np.ndarray with dtype=int8"
-                        )
-                    i_bytes = field_value.view(np.int8).tobytes()
-                else:
-                    raise ParamError(
-                        message="invalid input for int8 vector. Expected an np.ndarray with dtype=int8"
-                    )
-
-                field_data.vectors.dim = len(i_bytes)
-
-                field_id = id(field_data)
-                if field_id not in vector_bytes_cache:
-                    vector_bytes_cache[field_id] = []
-                vector_bytes_cache[field_id].append(i_bytes)
-        except (TypeError, ValueError) as e:
-            raise DataNotMatchException(
-                message=ExceptionsMessage.FieldDataInconsistent
-                % (field_name, "int8_vector", type(field_value))
-                + f" Detail: {e!s}"
-            ) from e
-    elif field_type == DataType.VARCHAR:
-        try:
-            if field_value is None:
-                field_data.scalars.string_data.data.extend([])
-            else:
-                field_data.scalars.string_data.data.append(
-                    convert_to_str_array(field_value, field_info, CHECK_STR_ARRAY)
-                )
-        except (TypeError, ValueError) as e:
-            raise DataNotMatchException(
-                message=ExceptionsMessage.FieldDataInconsistent
-                % (field_name, "varchar", type(field_value))
-                + f" Detail: {e!s}"
-            ) from e
-    elif field_type == DataType.GEOMETRY:
-        try:
-            if field_value is None:
-                field_data.scalars.geometry_wkt_data.data.extend([])
-            else:
-                field_data.scalars.geometry_wkt_data.data.append(
-                    convert_to_str_array(field_value, field_info, CHECK_STR_ARRAY)
-                )
-        except (TypeError, ValueError) as e:
-            raise DataNotMatchException(
-                message=ExceptionsMessage.FieldDataInconsistent
-                % (field_name, "geometry", type(field_value))
-            ) from e
-    elif field_type == DataType.JSON:
-        try:
-            if field_value is None:
-                field_data.scalars.json_data.data.extend([])
-            else:
-                field_data.scalars.json_data.data.append(convert_to_json(field_value))
-        except (TypeError, ValueError) as e:
-            raise DataNotMatchException(
-                message=ExceptionsMessage.FieldDataInconsistent
-                % (field_name, "json", type(field_value))
-                + f" Detail: {e!s}"
-            ) from e
-    elif field_type == DataType.ARRAY:
-        try:
-            if field_value is None:
-                field_data.scalars.array_data.data.extend([])
-            else:
-                field_data.scalars.array_data.data.append(convert_to_array(field_value, field_info))
-        except (TypeError, ValueError) as e:
-            raise DataNotMatchException(
-                message=ExceptionsMessage.FieldDataInconsistent
-                % (field_name, "array", type(field_value))
-                + f" Detail: {e!s}"
-            ) from e
-    else:
-        raise ParamError(message=f"Unsupported data type: {field_type}")
+    if type_info.is_scalar_type(field_type) or field_type == DataType.ARRAY:
+        return _pack_scalar_row(field_type, field_value, field_data, field_info, field_name)
+    if field_type == DataType.FLOAT_VECTOR:
+        return _pack_float_vector_row(field_value, field_data, field_info, field_name)
+    if field_type == DataType.SPARSE_FLOAT_VECTOR:
+        return _pack_sparse_vector_row(field_value, field_data, field_name)
+    if type_info.is_byte_vector_type(field_type):
+        return _pack_byte_vector_row(
+            field_type, field_value, field_data, field_info, field_name, vector_bytes_cache
+        )
+    raise ParamError(message=f"Unsupported data type: {field_type}")
 
 
 # Don't change entity inside.
@@ -701,42 +657,30 @@ def entity_to_field_data(entity: Dict, field_info: Any, num_rows: int) -> schema
     field_data.valid_data.extend(valid_data)
 
     try:
-        if entity_type == DataType.BOOL:
-            field_data.scalars.bool_data.data.extend(entity_values)
-        elif entity_type in (DataType.INT8, DataType.INT16, DataType.INT32):
-            field_data.scalars.int_data.data.extend(entity_values)
-        elif entity_type == DataType.INT64:
-            field_data.scalars.long_data.data.extend(entity_values)
-        elif entity_type == DataType.FLOAT:
-            field_data.scalars.float_data.data.extend(entity_values)
-        elif entity_type == DataType.DOUBLE:
-            field_data.scalars.double_data.data.extend(entity_values)
-
+        if type_info.is_scalar_type(entity_type) or entity_type == DataType.ARRAY:
+            attr_name = type_info.get_scalar_attr(entity_type)
+            if entity_type in (DataType.VARCHAR, DataType.GEOMETRY):
+                entity_values = entity_to_str_arr(entity_values, field_info, CHECK_STR_ARRAY)
+            elif entity_type == DataType.TEXT:
+                # TEXT type does not have max_length limit, skip length check
+                entity_values = entity_to_str_arr(entity_values, field_info, check=False)
+            elif entity_type == DataType.JSON:
+                entity_values = entity_to_json_arr(entity_values, field_info)
+            elif entity_type == DataType.ARRAY:
+                entity_values = entity_to_array_arr(entity_values, field_info)
+            getattr(field_data.scalars, attr_name).data.extend(entity_values)
         elif entity_type == DataType.FLOAT_VECTOR:
             if len(entity_values) > 0:
                 field_data.vectors.dim = len(entity_values[0])
             else:
                 field_data.vectors.dim = _get_dim(field_info)
             all_floats = [f for vector in entity_values for f in vector]
-            field_data.vectors.float_vector.data.extend(all_floats)
-        elif entity_type == DataType.BINARY_VECTOR:
-            if len(entity_values) > 0:
-                field_data.vectors.dim = len(entity_values[0]) * 8
-            else:
-                field_data.vectors.dim = _get_dim(field_info)
-            field_data.vectors.binary_vector = b"".join(entity_values)
-        elif entity_type == DataType.FLOAT16_VECTOR:
-            if len(entity_values) > 0:
-                field_data.vectors.dim = len(entity_values[0]) // 2
-            else:
-                field_data.vectors.dim = _get_dim(field_info)
-            field_data.vectors.float16_vector = b"".join(entity_values)
-        elif entity_type == DataType.BFLOAT16_VECTOR:
-            if len(entity_values) > 0:
-                field_data.vectors.dim = len(entity_values[0]) // 2
-            else:
-                field_data.vectors.dim = _get_dim(field_info)
-            field_data.vectors.bfloat16_vector = b"".join(entity_values)
+            attr_name = type_info.get_vector_attr(entity_type)
+            getattr(field_data.vectors, attr_name).data.extend(all_floats)
+        elif type_info.is_byte_vector_type(entity_type):
+            field_data.vectors.dim = _get_dim(field_info)
+            attr_name = type_info.get_vector_attr(entity_type)
+            setattr(field_data.vectors, attr_name, b"".join(entity_values))
         elif entity_type == DataType.SPARSE_FLOAT_VECTOR:
             entity_len = (
                 entity_values.shape[0]
@@ -744,28 +688,8 @@ def entity_to_field_data(entity: Dict, field_info: Any, num_rows: int) -> schema
                 else len(entity_values)
             )
             if entity_len > 0:
-                field_data.vectors.sparse_float_vector.CopyFrom(sparse_rows_to_proto(entity_values))
-        elif entity_type == DataType.INT8_VECTOR:
-            if len(entity_values) > 0:
-                field_data.vectors.dim = len(entity_values[0])
-            else:
-                field_data.vectors.dim = _get_dim(field_info)
-            field_data.vectors.int8_vector = b"".join(entity_values)
-
-        elif entity_type in (DataType.VARCHAR, DataType.TIMESTAMPTZ):
-            field_data.scalars.string_data.data.extend(
-                entity_to_str_arr(entity_values, field_info, CHECK_STR_ARRAY)
-            )
-        elif entity_type == DataType.JSON:
-            field_data.scalars.json_data.data.extend(entity_to_json_arr(entity_values, field_info))
-        elif entity_type == DataType.ARRAY:
-            field_data.scalars.array_data.data.extend(
-                entity_to_array_arr(entity_values, field_info)
-            )
-        elif entity_type == DataType.GEOMETRY:
-            field_data.scalars.geometry_wkt_data.data.extend(
-                entity_to_str_arr(entity_values, field_info, CHECK_STR_ARRAY)
-            )
+                attr_name = type_info.get_vector_attr(entity_type)
+                getattr(field_data.vectors, attr_name).CopyFrom(sparse_rows_to_proto(entity_values))
         else:
             raise ParamError(message=f"Unsupported data type: {entity_type}")
     except (TypeError, ValueError) as e:
@@ -796,113 +720,19 @@ def extract_dynamic_field_from_result(raw: Any):
     return dynamic_field_name, dynamic_fields
 
 
-def extract_array_row_data_with_validity(field_data: Any, entity_rows: List[Dict], row_count: int):
+def extract_array_rows(field_data: Any, entity_rows: List[Dict], row_count: int, has_valid: bool):
     if row_count == 0:
         return
     field_name = field_data.field_name
-    array_data = field_data.scalars.array_data
-    data = array_data.data
-    element_type = array_data.element_type
-    if element_type == DataType.INT64:
-        [
-            entity_rows[i].__setitem__(
-                field_name, data[i].long_data.data if field_data.valid_data[i] else None
+    valid_data = field_data.valid_data
+    if has_valid:
+        for i in range(row_count):
+            entity_rows[i][field_name] = (
+                field_data_extractors.decode_array_cell(field_data, i) if valid_data[i] else None
             )
-            for i in range(row_count)
-        ]
-    elif element_type == DataType.BOOL:
-        [
-            entity_rows[i].__setitem__(
-                field_name, data[i].bool_data.data if field_data.valid_data[i] else None
-            )
-            for i in range(row_count)
-        ]
-    elif element_type in (
-        DataType.INT8,
-        DataType.INT16,
-        DataType.INT32,
-    ):
-        [
-            entity_rows[i].__setitem__(
-                field_name, data[i].int_data.data if field_data.valid_data[i] else None
-            )
-            for i in range(row_count)
-        ]
-    elif element_type == DataType.FLOAT:
-        [
-            entity_rows[i].__setitem__(
-                field_name, data[i].float_data.data if field_data.valid_data[i] else None
-            )
-            for i in range(row_count)
-        ]
-    elif element_type == DataType.DOUBLE:
-        [
-            entity_rows[i].__setitem__(
-                field_name, data[i].double_data.data if field_data.valid_data[i] else None
-            )
-            for i in range(row_count)
-        ]
-    elif element_type in (
-        DataType.STRING,
-        DataType.VARCHAR,
-    ):
-        [
-            entity_rows[i].__setitem__(
-                field_name, data[i].string_data.data if field_data.valid_data[i] else None
-            )
-            for i in range(row_count)
-        ]
     else:
-        raise MilvusException(message=f"Unsupported data type: {element_type}")
-
-
-def extract_array_row_data_no_validity(field_data: Any, entity_rows: List[Dict], row_count: int):
-    if row_count == 0:
-        return
-    field_name = field_data.field_name
-    array_data = field_data.scalars.array_data
-    data = array_data.data
-    element_type = array_data.element_type
-    if element_type == DataType.INT64:
-        [entity_rows[i].__setitem__(field_name, data[i].long_data.data) for i in range(row_count)]
-    elif element_type == DataType.BOOL:
-        [entity_rows[i].__setitem__(field_name, data[i].bool_data.data) for i in range(row_count)]
-    elif element_type in (
-        DataType.INT8,
-        DataType.INT16,
-        DataType.INT32,
-    ):
-        [entity_rows[i].__setitem__(field_name, data[i].int_data.data) for i in range(row_count)]
-    elif element_type == DataType.FLOAT:
-        [entity_rows[i].__setitem__(field_name, data[i].float_data.data) for i in range(row_count)]
-    elif element_type == DataType.DOUBLE:
-        [entity_rows[i].__setitem__(field_name, data[i].double_data.data) for i in range(row_count)]
-    elif element_type in (
-        DataType.STRING,
-        DataType.VARCHAR,
-    ):
-        [entity_rows[i].__setitem__(field_name, data[i].string_data.data) for i in range(row_count)]
-    else:
-        raise MilvusException(message=f"Unsupported data type: {element_type}")
-
-
-def extract_array_row_data(field_data: Any, index: int):
-    array_data = field_data.scalars.array_data
-    array = array_data.data[index]
-    element_type = array_data.element_type
-    if element_type == DataType.INT64:
-        return array.long_data.data
-    if element_type == DataType.BOOL:
-        return array.bool_data.data
-    if element_type in (DataType.INT8, DataType.INT16, DataType.INT32):
-        return array.int_data.data
-    if element_type == DataType.FLOAT:
-        return array.float_data.data
-    if element_type == DataType.DOUBLE:
-        return array.double_data.data
-    if element_type in (DataType.STRING, DataType.VARCHAR):
-        return array.string_data.data
-    return None
+        for i in range(row_count):
+            entity_rows[i][field_name] = field_data_extractors.decode_array_cell(field_data, i)
 
 
 def extract_row_data_from_fields_data_v2(
@@ -923,324 +753,72 @@ def extract_row_data_from_fields_data_v2(
         else:
             [entity_rows[i].__setitem__(field_name, data[i]) for i in range(row_count)]
 
-    if field_data.type == DataType.BOOL:
-        data = field_data.scalars.bool_data.data
-        assign_scalar(data)
-        return False
+    if field_data.type == DataType.STRING:
+        raise MilvusException(message="Not support string yet")
 
-    if field_data.type in (DataType.INT8, DataType.INT16, DataType.INT32):
-        data = field_data.scalars.int_data.data
-        assign_scalar(data)
-        return False
-
-    if field_data.type == DataType.INT64:
-        data = field_data.scalars.long_data.data
-        assign_scalar(data)
-        return False
-
-    if field_data.type == DataType.FLOAT:
-        data = field_data.scalars.float_data.data
-        assign_scalar(data)
-        return False
-
-    if field_data.type == DataType.DOUBLE:
-        data = field_data.scalars.double_data.data
-        assign_scalar(data)
-        return False
-
-    if field_data.type == DataType.TIMESTAMPTZ:
-        data = field_data.scalars.string_data.data
-        assign_scalar(data)
-        return False
-
-    if field_data.type == DataType.VARCHAR:
-        data = field_data.scalars.string_data.data
-        assign_scalar(data)
-        return False
-
-    if field_data.type == DataType.GEOMETRY:
-        data = field_data.scalars.geometry_wkt_data.data
-        assign_scalar(data)
+    try:
+        scalar_attr = type_info.get_scalar_attr(field_data.type)
+    except ParamError:
+        scalar_attr = None
+    if scalar_attr is not None and field_data.type not in (DataType.JSON, DataType.ARRAY):
+        assign_scalar(getattr(field_data.scalars, scalar_attr).data)
         return False
 
     if field_data.type == DataType.JSON:
         return True
 
     if field_data.type == DataType.ARRAY:
-        if has_valid:
-            extract_array_row_data_with_validity(field_data, entity_rows, row_count)
-        else:
-            extract_array_row_data_no_validity(field_data, entity_rows, row_count)
+        extract_array_rows(field_data, entity_rows, row_count, has_valid)
         return False
-    if field_data.type in (
-        DataType.FLOAT_VECTOR,
-        DataType.FLOAT16_VECTOR,
-        DataType.BFLOAT16_VECTOR,
-        DataType.BINARY_VECTOR,
-        DataType.SPARSE_FLOAT_VECTOR,
-        DataType.INT8_VECTOR,
-    ):
-        return True
-    if field_data.type == DataType._ARRAY_OF_STRUCT:
-        return True
-    if field_data.type == DataType._ARRAY_OF_VECTOR:
-        return True
-    if field_data.type == DataType.STRING:
-        raise MilvusException(message="Not support string yet")
-    return False
-
-
-def extract_vector_array_row_data(field_data: Any, index: int):
-    array = field_data.vectors.vector_array.data[index]
-    element_type = field_data.vectors.vector_array.element_type
-
-    if element_type == DataType.FLOAT_VECTOR:
-        return list(np.array(array.float_vector.data, dtype=np.float32))
-
-    if element_type == DataType.FLOAT16_VECTOR:
-        byte_data = array.float16_vector
-        return list(np.frombuffer(byte_data, dtype=np.float16))
-
-    if element_type == DataType.BFLOAT16_VECTOR:
-        byte_data = array.bfloat16_vector
-        return list(
-            np.frombuffer(byte_data, dtype="bfloat16" if hasattr(np, "bfloat16") else np.uint16)
-        )
-
-    if element_type == DataType.INT8_VECTOR:
-        byte_data = array.int8_vector
-        return list(np.frombuffer(byte_data, dtype=np.int8))
-
-    if element_type == DataType.BINARY_VECTOR:
-        return [array.binary_vector]
-
-    raise ParamError(message=f"Unimplemented type: {element_type} for vector array extraction")
-
-
-# pylint: disable=R1702 (too-many-nested-blocks)
-# pylint: disable=R0915 (too-many-statements)
-def extract_row_data_from_fields_data(
-    fields_data: Any,
-    index: Any,
-    dynamic_output_fields: Optional[List] = None,
-):
-    if not fields_data:
-        return {}
-
-    entity_row_data = {}
-    dynamic_fields = dynamic_output_fields or set()
-
-    # Cache prefix sums by field_data id for O(1) lookup (avoids O(n) per row)
-    prefix_sum_cache: Dict[int, Any] = {}
-
-    def get_physical_index(field_data: Any, logical_index: int) -> int:
-        """Calculate physical index for nullable vectors with sparse storage.
-
-        For nullable vectors, valid_data indicates which logical positions have valid data,
-        and the actual data only contains valid values (sparse storage).
-        Uses prefix sum for O(1) lookup instead of O(n) iteration.
-        """
-        field_id = id(field_data)
-        if field_id not in prefix_sum_cache:
-            if len(field_data.valid_data) == 0:
-                prefix_sum_cache[field_id] = None
-            else:
-                prefix_sum_cache[field_id] = np.cumsum(
-                    [0] + [1 if v else 0 for v in field_data.valid_data]
-                )
-        prefix_sum = prefix_sum_cache[field_id]
-        if prefix_sum is None:
-            return logical_index
-        return int(prefix_sum[logical_index])
-
-    def check_append(field_data: Any, row_data: Dict):
-        if field_data.type == DataType.STRING:
-            raise MilvusException(message="Not support string yet")
-
-        field_name = field_data.field_name
-        valid_data = field_data.valid_data
-        has_valid = len(valid_data) > 0
-        is_null = has_valid and valid_data[index] is False
-
-        if field_data.type == DataType.BOOL:
-            scalar_data = field_data.scalars.bool_data.data
-            if len(scalar_data) >= index:
-                row_data[field_name] = None if is_null else scalar_data[index]
-                return
-
-        if field_data.type in (DataType.INT8, DataType.INT16, DataType.INT32):
-            scalar_data = field_data.scalars.int_data.data
-            if len(scalar_data) >= index:
-                row_data[field_name] = None if is_null else scalar_data[index]
-                return
-
-        if field_data.type == DataType.INT64:
-            scalar_data = field_data.scalars.long_data.data
-            if len(scalar_data) >= index:
-                row_data[field_name] = None if is_null else scalar_data[index]
-                return
-
-        if field_data.type == DataType.FLOAT:
-            scalar_data = field_data.scalars.float_data.data
-            if len(scalar_data) >= index:
-                row_data[field_name] = None if is_null else np.single(scalar_data[index])
-                return
-
-        if field_data.type == DataType.DOUBLE:
-            scalar_data = field_data.scalars.double_data.data
-            if len(scalar_data) >= index:
-                row_data[field_name] = None if is_null else scalar_data[index]
-                return
-
-        if field_data.type == DataType.VARCHAR:
-            scalar_data = field_data.scalars.string_data.data
-            if len(scalar_data) >= index:
-                row_data[field_name] = None if is_null else scalar_data[index]
-                return
-
-        if field_data.type == DataType.GEOMETRY:
-            scalar_data = field_data.scalars.geometry_wkt_data.data
-            if len(scalar_data) >= index:
-                entity_row_data[field_name] = None if is_null else scalar_data[index]
-                return
-
-        if field_data.type == DataType.JSON:
-            scalar_data = field_data.scalars.json_data.data
-            if len(scalar_data) >= index:
-                if is_null:
-                    row_data[field_name] = None
-                    return
-                try:
-                    json_dict = orjson.loads(scalar_data[index])
-                except Exception as e:
-                    logger.error(
-                        f"extract_row_data_from_fields_data::Failed to load JSON data: {e}, original data: {scalar_data[index]}"
-                    )
-                    raise
-
-                if not field_data.is_dynamic:
-                    row_data[field_name] = json_dict
-                    return
-
-                if not dynamic_fields:
-                    row_data.update(json_dict)
-                    return
-
-                row_data.update({k: v for k, v in json_dict.items() if k in dynamic_fields})
-                return
-        if field_data.type == DataType.ARRAY and len(field_data.scalars.array_data.data) >= index:
-            row_data[field_name] = None if is_null else extract_array_row_data(field_data, index)
-            return
-
-        if field_data.type == DataType.FLOAT_VECTOR:
-            if is_null:
-                row_data[field_name] = None
-            else:
-                dim = field_data.vectors.dim
-                phys_idx = get_physical_index(field_data, index)
-                float_data = field_data.vectors.float_vector.data
-                if len(float_data) >= (phys_idx + 1) * dim:
-                    start_pos, end_pos = phys_idx * dim, (phys_idx + 1) * dim
-                    arr = np.array(float_data[start_pos:end_pos], dtype=np.float32)
-                    row_data[field_name] = list(arr)
-        elif field_data.type == DataType.BINARY_VECTOR:
-            if is_null:
-                row_data[field_name] = None
-            else:
-                dim = field_data.vectors.dim
-                blen = dim // 8
-                phys_idx = get_physical_index(field_data, index)
-                binary_data = field_data.vectors.binary_vector
-                if len(binary_data) >= (phys_idx + 1) * blen:
-                    start_pos, end_pos = phys_idx * blen, (phys_idx + 1) * blen
-                    row_data[field_name] = [binary_data[start_pos:end_pos]]
-        elif field_data.type == DataType.BFLOAT16_VECTOR:
-            if is_null:
-                row_data[field_name] = None
-            else:
-                dim = field_data.vectors.dim
-                byte_per_row = dim * 2
-                phys_idx = get_physical_index(field_data, index)
-                vec_data = field_data.vectors.bfloat16_vector
-                if len(vec_data) >= (phys_idx + 1) * byte_per_row:
-                    start_pos, end_pos = phys_idx * byte_per_row, (phys_idx + 1) * byte_per_row
-                    row_data[field_name] = [vec_data[start_pos:end_pos]]
-        elif field_data.type == DataType.FLOAT16_VECTOR:
-            if is_null:
-                row_data[field_name] = None
-            else:
-                dim = field_data.vectors.dim
-                byte_per_row = dim * 2
-                phys_idx = get_physical_index(field_data, index)
-                vec_data = field_data.vectors.float16_vector
-                if len(vec_data) >= (phys_idx + 1) * byte_per_row:
-                    start_pos, end_pos = phys_idx * byte_per_row, (phys_idx + 1) * byte_per_row
-                    row_data[field_name] = [vec_data[start_pos:end_pos]]
-        elif field_data.type == DataType.SPARSE_FLOAT_VECTOR:
-            if is_null:
-                row_data[field_name] = None
-            else:
-                phys_idx = get_physical_index(field_data, index)
-                row_data[field_name] = sparse_parse_single_row(
-                    field_data.vectors.sparse_float_vector.contents[phys_idx]
-                )
-        elif field_data.type == DataType.INT8_VECTOR:
-            if is_null:
-                row_data[field_name] = None
-            else:
-                dim = field_data.vectors.dim
-                phys_idx = get_physical_index(field_data, index)
-                vec_data = field_data.vectors.int8_vector
-                if len(vec_data) >= (phys_idx + 1) * dim:
-                    start_pos, end_pos = phys_idx * dim, (phys_idx + 1) * dim
-                    row_data[field_name] = [vec_data[start_pos:end_pos]]
-        elif (
-            field_data.type == DataType._ARRAY_OF_VECTOR
-            and len(field_data.vectors.vector_array.data) >= index
-        ):
-            row_data[field_name] = extract_vector_array_row_data(field_data, index)
-        elif field_data.type == DataType._ARRAY_OF_STRUCT:
-            row_data[field_name] = {}
-            for sub_field_data in field_data.struct_arrays.fields:
-                check_append(sub_field_data, row_data[field_name])
-
-    for field_data in fields_data:
-        check_append(field_data, entity_row_data)
-
-    return entity_row_data
-
-
-_ARRAY_DATA_ATTRS = (
-    "string_data",
-    "int_data",
-    "long_data",
-    "float_data",
-    "double_data",
-    "bool_data",
-)
+    return type_info.is_vector_type(field_data.type) or field_data.type in (
+        DataType._ARRAY_OF_STRUCT,
+        DataType._ARRAY_OF_VECTOR,
+    )
 
 
 def get_array_length(array_item: Any) -> int:
     """Get the length of an array field from its data."""
-    for attr_name in _ARRAY_DATA_ATTRS:
-        data = getattr(array_item, attr_name, None)
-        if data is not None:
-            length = len(data.data)
-            if length > 0:
-                return length
-    return 0
+    return field_data_extractors.array_cell_length(array_item)
 
 
 def get_array_value_at_index(array_item: Any, idx: int) -> Any:
     """Get the value at a specific index from an array field."""
-    for attr_name in _ARRAY_DATA_ATTRS:
-        data = getattr(array_item, attr_name, None)
-        if data is not None and len(data.data) > idx:
-            return data.data[idx]
-    return None
+    return field_data_extractors.decode_array_value(array_item, idx)
 
 
-def extract_struct_array_from_column_data(struct_arrays: Any, row_idx: int) -> List[Dict[str, Any]]:
+def _vector_array_element_count(vector_data: Any, element_type: DataType) -> int:
+    try:
+        return field_data_extractors.vector_array_length(vector_data, element_type)
+    except ParamError:
+        return 0
+
+
+def _materialize_vector_array_value(element_type: DataType, value: Any) -> Any:
+    if value is None:
+        return None
+    if element_type == DataType.FLOAT_VECTOR:
+        return list(value)
+    if element_type == DataType.BINARY_VECTOR:
+        return [value]
+    if not type_info.is_byte_vector_type(element_type):
+        raise ParamError(message=f"Unimplemented type: {element_type} for vector array extraction")
+
+    numpy_dtype = type_info.require_numpy_dtype(element_type)
+    if element_type == DataType.BFLOAT16_VECTOR and not hasattr(np, "bfloat16"):
+        numpy_dtype = "uint16"
+    return list(np.frombuffer(value, dtype=numpy_dtype))
+
+
+def _is_struct_array_row_null(struct_arrays: Any, row_idx: int) -> bool:
+    for sub_field in struct_arrays.fields:
+        if row_idx < len(sub_field.valid_data) and sub_field.valid_data[row_idx] is False:
+            return True
+    return False
+
+
+def extract_struct_array_from_column_data(
+    struct_arrays: Any, row_idx: int
+) -> Optional[List[Dict[str, Any]]]:
     """Convert column-format struct data back to array of structs format.
 
     Milvus stores struct arrays in column format where each field's data is stored separately.
@@ -1264,10 +842,13 @@ def extract_struct_array_from_column_data(struct_arrays: Any, row_idx: int) -> L
         row_idx: The row index to extract data for
 
     Returns:
-        List of dictionaries representing the struct array in row format
+        List of dictionaries representing the struct array in row format, or None for null rows.
     """
     if not struct_arrays or not hasattr(struct_arrays, "fields"):
         return []
+
+    if _is_struct_array_row_null(struct_arrays, row_idx):
+        return None
 
     # Determine the number of struct elements by checking the first sub-field's data length
     # All sub-fields should have the same number of elements
@@ -1285,21 +866,8 @@ def extract_struct_array_from_column_data(struct_arrays: Any, row_idx: int) -> L
                 and row_idx < len(sub_field.vectors.vector_array.data)
             ):
                 vector_data = sub_field.vectors.vector_array.data[row_idx]
-                dim = vector_data.dim
                 element_type = sub_field.vectors.vector_array.element_type
-
-                if element_type == DataType.FLOAT_VECTOR:
-                    num_structs = len(vector_data.float_vector.data) // dim
-                elif element_type == DataType.FLOAT16_VECTOR:
-                    num_structs = len(vector_data.float16_vector) // (dim * 2)
-                elif element_type == DataType.BFLOAT16_VECTOR:
-                    num_structs = len(vector_data.bfloat16_vector) // (dim * 2)
-                elif element_type == DataType.INT8_VECTOR:
-                    num_structs = len(vector_data.int8_vector) // dim
-                elif element_type == DataType.BINARY_VECTOR:
-                    num_structs = len(vector_data.binary_vector) // (dim // 8)
-                else:
-                    num_structs = 0
+                num_structs = _vector_array_element_count(vector_data, element_type)
 
                 if num_structs > 0:
                     break
@@ -1310,7 +878,7 @@ def extract_struct_array_from_column_data(struct_arrays: Any, row_idx: int) -> L
         struct_obj = {}
 
         for sub_field in struct_arrays.fields:
-            sub_field_name = sub_field.field_name
+            sub_field_name = _strip_struct_sub_field_name(sub_field.field_name)
 
             # Handle scalar array fields (VARCHAR, INT, FLOAT, etc.)
             if sub_field.type == DataType.ARRAY:
@@ -1324,79 +892,35 @@ def extract_struct_array_from_column_data(struct_arrays: Any, row_idx: int) -> L
                     vector_array = sub_field.vectors.vector_array
                     if row_idx < len(vector_array.data):
                         vector_data = vector_array.data[row_idx]
-                        dim = vector_data.dim
                         element_type = vector_array.element_type
-
-                        if element_type == DataType.FLOAT_VECTOR:
-                            float_data = vector_data.float_vector.data
-                            vec_start = struct_idx * dim
-                            vec_end = vec_start + dim
-                            if vec_end <= len(float_data):
-                                struct_obj[sub_field_name] = list(float_data[vec_start:vec_end])
-                            else:
-                                struct_obj[sub_field_name] = None
-
-                        elif element_type == DataType.FLOAT16_VECTOR:
-                            byte_data = vector_data.float16_vector
-                            bytes_per_vec = dim * 2
-                            vec_start = struct_idx * bytes_per_vec
-                            vec_end = vec_start + bytes_per_vec
-                            if vec_end <= len(byte_data):
-                                vec_bytes = byte_data[vec_start:vec_end]
-                                struct_obj[sub_field_name] = list(
-                                    np.frombuffer(vec_bytes, dtype=np.float16)
-                                )
-                            else:
-                                struct_obj[sub_field_name] = None
-
-                        elif element_type == DataType.BFLOAT16_VECTOR:
-                            byte_data = vector_data.bfloat16_vector
-                            bytes_per_vec = dim * 2
-                            vec_start = struct_idx * bytes_per_vec
-                            vec_end = vec_start + bytes_per_vec
-                            if vec_end <= len(byte_data):
-                                vec_bytes = byte_data[vec_start:vec_end]
-                                dtype = "bfloat16" if hasattr(np, "bfloat16") else np.uint16
-                                struct_obj[sub_field_name] = list(
-                                    np.frombuffer(vec_bytes, dtype=dtype)
-                                )
-                            else:
-                                struct_obj[sub_field_name] = None
-
-                        elif element_type == DataType.INT8_VECTOR:
-                            byte_data = vector_data.int8_vector
-                            bytes_per_vec = dim
-                            vec_start = struct_idx * bytes_per_vec
-                            vec_end = vec_start + bytes_per_vec
-                            if vec_end <= len(byte_data):
-                                vec_bytes = byte_data[vec_start:vec_end]
-                                struct_obj[sub_field_name] = list(
-                                    np.frombuffer(vec_bytes, dtype=np.int8)
-                                )
-                            else:
-                                struct_obj[sub_field_name] = None
-
-                        elif element_type == DataType.BINARY_VECTOR:
-                            byte_data = vector_data.binary_vector
-                            bytes_per_vec = dim // 8
-                            vec_start = struct_idx * bytes_per_vec
-                            vec_end = vec_start + bytes_per_vec
-                            if vec_end <= len(byte_data):
-                                struct_obj[sub_field_name] = [byte_data[vec_start:vec_end]]
-                            else:
-                                struct_obj[sub_field_name] = None
-                        else:
-                            # Unsupported vector type, set to None
+                        try:
+                            struct_obj[sub_field_name] = _materialize_vector_array_value(
+                                element_type,
+                                field_data_extractors.decode_vector_array_value(
+                                    vector_data, element_type, struct_idx
+                                ),
+                            )
+                        except ParamError:
                             struct_obj[sub_field_name] = None
 
             # All struct sub-fields should be either ARRAY or ARRAY_OF_VECTOR
             # Any other type indicates a bug in the data conversion logic
             else:
                 raise ParamError(
-                    message=f"Unexpected field type {sub_field.type} for struct sub-field {sub_field_name}. "
-                    f"Struct fields must be ARRAY or ARRAY_OF_VECTOR internally."
+                    message=(
+                        f"Unexpected field type {sub_field.type} for struct sub-field "
+                        f"{sub_field_name}. Struct fields must be ARRAY or ARRAY_OF_VECTOR "
+                        "internally."
+                    )
                 )
 
         struct_array.append(struct_obj)
 
     return struct_array
+
+
+def _strip_struct_sub_field_name(field_name: str) -> str:
+    left = field_name.find("[")
+    if left > 0 and field_name.endswith("]"):
+        return field_name[left + 1 : -1]
+    return field_name

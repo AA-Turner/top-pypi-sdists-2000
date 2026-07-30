@@ -5,7 +5,6 @@ from enum import IntEnum
 from typing import Any, ClassVar, Dict, List, Optional, TypeVar, Union
 
 import numpy as np
-import orjson
 
 from pymilvus.exceptions import (
     AutoIDException,
@@ -14,8 +13,6 @@ from pymilvus.exceptions import (
 )
 from pymilvus.grpc_gen import common_pb2, rg_pb2, schema_pb2
 from pymilvus.grpc_gen import milvus_pb2 as milvus_types
-
-from . import utils
 
 Status = TypeVar("Status")
 ConsistencyLevel = common_pb2.ConsistencyLevel
@@ -113,6 +110,7 @@ class DataType(IntEnum):
 
     STRING = schema_pb2.String
     VARCHAR = schema_pb2.VarChar
+    TEXT = schema_pb2.Text
     ARRAY = schema_pb2.Array
     JSON = schema_pb2.JSON
     GEOMETRY = schema_pb2.Geometry
@@ -835,8 +833,11 @@ class PrivilegeGroupInfo:
 
 
 class UserItem:
-    def __init__(self, username: str, entities: List[milvus_types.RoleEntity]) -> None:
+    def __init__(
+        self, username: str, entities: List[milvus_types.RoleEntity], description: str = ""
+    ) -> None:
         self._username = username
+        self._description = description
         roles = []
         for entity in entities:
             if isinstance(entity, milvus_types.RoleEntity):
@@ -854,6 +855,10 @@ class UserItem:
     def roles(self):
         return self._roles
 
+    @property
+    def description(self):
+        return self._description
+
 
 class UserInfo:
     """
@@ -865,7 +870,7 @@ class UserInfo:
         groups = []
         for result in results:
             if isinstance(result, milvus_types.UserResult):
-                groups.append(UserItem(result.user.name, result.roles))
+                groups.append(UserItem(result.user.name, result.roles, result.description))
 
         self._groups = groups
 
@@ -881,8 +886,11 @@ class UserInfo:
 
 
 class RoleItem:
-    def __init__(self, role_name: str, entities: List[milvus_types.UserEntity]):
+    def __init__(
+        self, role_name: str, entities: List[milvus_types.UserEntity], description: str = ""
+    ):
         self._role_name = role_name
+        self._description = description
         users = []
         for entity in entities:
             if isinstance(entity, milvus_types.UserEntity):
@@ -895,6 +903,10 @@ class RoleItem:
     @property
     def role_name(self):
         return self._role_name
+
+    @property
+    def description(self):
+        return self._description
 
     @property
     def users(self):
@@ -911,7 +923,13 @@ class RoleInfo:
         groups = []
         for result in results:
             if isinstance(result, milvus_types.RoleResult):
-                groups.append(RoleItem(result.role.name, result.users))
+                groups.append(
+                    RoleItem(
+                        result.role.name,
+                        result.users,
+                        result.role.description,
+                    )
+                )
 
         self._groups = groups
 
@@ -1106,17 +1124,13 @@ class HybridExtraList(list):
         return int(prefix_sum[logical_index])
 
     def _extract_lazy_fields(self, index: int, field_data: Any, row_data: Dict) -> Any:
+        from . import field_data_extractors  # noqa: PLC0415
+
         if field_data.type == DataType.JSON:
-            if len(field_data.valid_data) > 0 and field_data.valid_data[index] is False:
+            json_dict = field_data_extractors.decode_cell(field_data, index)
+            if json_dict is None:
                 row_data[field_data.field_name] = None
                 return
-            try:
-                json_dict = orjson.loads(field_data.scalars.json_data.data[index])
-            except Exception as e:
-                logger.error(
-                    f"HybridExtraList::_extract_lazy_fields::Failed to load JSON data: {e}, original data: {field_data.scalars.json_data.data[index]}"
-                )
-                raise
             if not field_data.is_dynamic:
                 row_data[field_data.field_name] = json_dict
                 return
@@ -1132,103 +1146,25 @@ class HybridExtraList(list):
                     if k in self._dynamic_fields and k not in row_data
                 }
             )
-        elif field_data.type == DataType.FLOAT_VECTOR:
-            if len(field_data.valid_data) > 0 and field_data.valid_data[index] is False:
-                row_data[field_data.field_name] = None
-                return
-            dim = field_data.vectors.dim
-            phys_idx = self._get_physical_index(field_data, index)
-            start_pos = phys_idx * dim
-            end_pos = start_pos + dim
-            if len(field_data.vectors.float_vector.data) >= end_pos:
-                # Here we use numpy.array to convert the float64 values to numpy.float32 values,
-                # and return a list of numpy.float32 to users
-                # By using numpy.array, performance improved by 60% for topk=16384 dim=1536 case.
-                if self._strict_float32:
-                    row_data[field_data.field_name] = self._float_vector_np_array[
-                        field_data.field_name
-                    ][start_pos:end_pos]
-                else:
-                    row_data[field_data.field_name] = field_data.vectors.float_vector.data[
-                        start_pos:end_pos
-                    ]
-        elif field_data.type == DataType.BINARY_VECTOR:
-            if len(field_data.valid_data) > 0 and field_data.valid_data[index] is False:
-                row_data[field_data.field_name] = None
-                return
-            dim = field_data.vectors.dim
-            bytes_per_vector = dim // 8
-            phys_idx = self._get_physical_index(field_data, index)
-            start_pos = phys_idx * bytes_per_vector
-            end_pos = start_pos + bytes_per_vector
-            if len(field_data.vectors.binary_vector) >= end_pos:
-                row_data[field_data.field_name] = [
-                    field_data.vectors.binary_vector[start_pos:end_pos]
-                ]
-        elif field_data.type == DataType.BFLOAT16_VECTOR:
-            if len(field_data.valid_data) > 0 and field_data.valid_data[index] is False:
-                row_data[field_data.field_name] = None
-                return
-            dim = field_data.vectors.dim
-            bytes_per_vector = dim * 2
-            phys_idx = self._get_physical_index(field_data, index)
-            start_pos = phys_idx * bytes_per_vector
-            end_pos = start_pos + bytes_per_vector
-            if len(field_data.vectors.bfloat16_vector) >= end_pos:
-                row_data[field_data.field_name] = [
-                    field_data.vectors.bfloat16_vector[start_pos:end_pos]
-                ]
-        elif field_data.type == DataType.FLOAT16_VECTOR:
-            if len(field_data.valid_data) > 0 and field_data.valid_data[index] is False:
-                row_data[field_data.field_name] = None
-                return
-            dim = field_data.vectors.dim
-            bytes_per_vector = dim * 2
-            phys_idx = self._get_physical_index(field_data, index)
-            start_pos = phys_idx * bytes_per_vector
-            end_pos = start_pos + bytes_per_vector
-            if len(field_data.vectors.float16_vector) >= end_pos:
-                row_data[field_data.field_name] = [
-                    field_data.vectors.float16_vector[start_pos:end_pos]
-                ]
-        elif field_data.type == DataType.SPARSE_FLOAT_VECTOR:
-            if len(field_data.valid_data) > 0 and field_data.valid_data[index] is False:
-                row_data[field_data.field_name] = None
-                return
-            phys_idx = self._get_physical_index(field_data, index)
-            row_data[field_data.field_name] = utils.sparse_parse_single_row(
-                field_data.vectors.sparse_float_vector.contents[phys_idx]
+        elif field_data.type in (
+            DataType.FLOAT_VECTOR,
+            DataType.FLOAT16_VECTOR,
+            DataType.BFLOAT16_VECTOR,
+            DataType.BINARY_VECTOR,
+            DataType.SPARSE_FLOAT_VECTOR,
+            DataType.INT8_VECTOR,
+            DataType._ARRAY_OF_VECTOR,
+        ):
+            dense_vector_data = None
+            if field_data.type == DataType.FLOAT_VECTOR and self._strict_float32:
+                dense_vector_data = self._float_vector_np_array[field_data.field_name]
+            row_data[field_data.field_name] = field_data_extractors.decode_cell(
+                field_data,
+                index,
+                physical_index_override=self._get_physical_index(field_data, index),
+                dense_vector_data=dense_vector_data,
+                wrap_byte_vectors=True,
             )
-        elif field_data.type == DataType.INT8_VECTOR:
-            if len(field_data.valid_data) > 0 and field_data.valid_data[index] is False:
-                row_data[field_data.field_name] = None
-                return
-            dim = field_data.vectors.dim
-            phys_idx = self._get_physical_index(field_data, index)
-            start_pos = phys_idx * dim
-            end_pos = start_pos + dim
-            if len(field_data.vectors.int8_vector) >= end_pos:
-                row_data[field_data.field_name] = [
-                    field_data.vectors.int8_vector[start_pos:end_pos]
-                ]
-        elif field_data.type == DataType._ARRAY_OF_VECTOR:
-            # Handle array of vectors
-            if hasattr(field_data, "vectors") and hasattr(field_data.vectors, "vector_array"):
-                if index < len(field_data.vectors.vector_array.data):
-                    vector_data = field_data.vectors.vector_array.data[index]
-                    dim = vector_data.dim
-                    float_data = vector_data.float_vector.data
-                    num_vectors = len(float_data) // dim
-                    row_vectors = []
-                    for vec_idx in range(num_vectors):
-                        vec_start = vec_idx * dim
-                        vec_end = vec_start + dim
-                        row_vectors.append(list(float_data[vec_start:vec_end]))
-                    row_data[field_data.field_name] = row_vectors
-                else:
-                    row_data[field_data.field_name] = []
-            else:
-                row_data[field_data.field_name] = []
         elif field_data.type == DataType._ARRAY_OF_STRUCT:
             # Handle struct arrays - convert column format back to array of structs
             if hasattr(field_data, "struct_arrays") and field_data.struct_arrays:
@@ -1258,8 +1194,9 @@ class HybridExtraList(list):
             index = len(self) + index
 
         row = super().__getitem__(index)
+        lazy_index = row.pop("_original_idx", index)
         for field_data in self._lazy_field_data:
-            self._extract_lazy_fields(index, field_data, row)
+            self._extract_lazy_fields(lazy_index, field_data, row)
 
         self._materialized_bitmap[index] = True
         return row
@@ -1431,6 +1368,18 @@ class AnalyzeResult:
     __repr__ = __str__
 
 
+class FileResourceInfo:
+    def __init__(self, info: milvus_types.FileResourceInfo) -> None:
+        self.name = info.name
+        self.path = info.path
+
+    def __str__(self) -> str:
+        return f"(name={self.name}, path={self.path})"
+
+    def __repr__(self):
+        return self.__str__()
+
+
 @dataclass
 class SegmentInfo:
     segment_id: int
@@ -1487,3 +1436,100 @@ class LoadedSegmentInfo(SegmentInfo):
             f"storage_version={self.storage_version}, "
             f"mem_size={self.mem_size})"
         )
+
+
+@dataclass
+class SnapshotInfo:
+    """Information about a snapshot.
+
+    Attributes:
+        name: The snapshot name.
+        description: Description of the snapshot.
+        collection_name: The collection that was snapshotted.
+        partition_names: List of partition names included in the snapshot.
+        create_ts: Creation timestamp in milliseconds.
+        s3_location: S3 storage location of the snapshot.
+    """
+
+    name: str
+    description: str
+    collection_name: str
+    partition_names: List[str]
+    create_ts: int
+    s3_location: str
+
+
+@dataclass
+class RestoreSnapshotJobInfo:
+    """Information about a restore snapshot job.
+
+    Attributes:
+        job_id: The restore job ID.
+        snapshot_name: The snapshot name being restored.
+        db_name: The target database name.
+        collection_name: The target collection name.
+        state: Current state of the restore job. Possible values:
+            - 'RestoreSnapshotNone'
+            - 'RestoreSnapshotPending'
+            - 'RestoreSnapshotExecuting'
+            - 'RestoreSnapshotCompleted'
+            - 'RestoreSnapshotFailed'
+        progress: Progress percentage (0-100).
+        reason: Error reason if the job failed.
+        start_time: Start timestamp in milliseconds.
+        time_cost: Time cost in milliseconds.
+    """
+
+    job_id: int
+    snapshot_name: str
+    db_name: str
+    collection_name: str
+    state: str
+    progress: int
+    reason: str
+    start_time: int
+    time_cost: int
+
+
+@dataclass
+class RefreshExternalCollectionJobInfo:
+    """Information about an external collection refresh job.
+
+    Attributes:
+        job_id: The refresh job ID.
+        collection_name: The collection being refreshed.
+        state: Current state (proto enum name, e.g. RefreshPending, RefreshCompleted).
+        progress: Progress percentage (0-100).
+        reason: Error message if failed.
+        external_source: External source used for this job.
+        external_spec: External spec used for this job.
+        start_time: Job start timestamp in milliseconds.
+        end_time: Job end timestamp in milliseconds (0 if not completed).
+    """
+
+    job_id: int
+    collection_name: str
+    state: str
+    progress: int
+    reason: str
+    external_source: str
+    start_time: int
+    end_time: int
+    external_spec: str = ""
+
+
+def parse_refresh_job_info(
+    info: "milvus_types.RefreshExternalCollectionJobInfo",
+) -> RefreshExternalCollectionJobInfo:
+    """Parse a protobuf RefreshExternalCollectionJobInfo into a dataclass."""
+    return RefreshExternalCollectionJobInfo(
+        job_id=info.job_id,
+        collection_name=info.collection_name,
+        state=milvus_types.RefreshExternalCollectionState.Name(info.state),
+        progress=info.progress,
+        reason=info.reason,
+        external_source=info.external_source,
+        external_spec=info.external_spec,
+        start_time=info.start_time,
+        end_time=info.end_time,
+    )
