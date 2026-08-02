@@ -1,0 +1,122 @@
+[project]
+name = "asgi-correlation-id"
+version = "5.0.1"
+description = "Middleware correlating project logs to individual requests"
+authors = [{ name = "Sondre Lillebø Gundersen", email = "sondrelg@live.no" }]
+requires-python = ">=3.10"
+readme = "README.md"
+license = "MIT"
+maintainers = [{ name = "Jonas Krüger Svensson", email = "jonas-ks@hotmail.com" }]
+keywords = [
+    "asgi",
+    "fastapi",
+    "starlette",
+    "async",
+    "correlation",
+    "correlation-id",
+    "request-id",
+    "x-request-id",
+    "tracing",
+    "logging",
+    "middleware",
+    "sentry",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = ["starlette>=0.18"]
+
+[project.optional-dependencies]
+sentry = ["sentry-sdk>=2.12.0"]
+
+[project.urls]
+Homepage = "https://github.com/snok/asgi-correlation-id"
+Repository = "https://github.com/snok/asgi-correlation-id"
+
+[dependency-groups]
+dev = [
+    "pre-commit",
+    "pytest",
+    "pytest-mock",
+    "sentry-sdk",
+    "pytest-asyncio",
+    "fastapi",
+    "httpx",
+    "coverage[toml]>=6",
+    "requests",
+    "websockets",
+    "ruff>=0.15.15",
+]
+
+[tool.uv]
+
+[tool.uv.build-backend]
+module-name = ["asgi_correlation_id"]
+module-root = ""
+
+[build-system]
+requires = ["uv_build>=0.7.2,<0.8"]
+build-backend = "uv_build"
+
+[tool.ty.environment]
+python-version = "3.10"
+
+[[tool.ty.overrides]]
+include = ["tests/**"]
+rules = { unresolved-attribute = "ignore" }
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "F",     # pyflakes
+    "E",     # pycodestyle errors
+    "W",     # pycodestyle warnings
+    "I",     # isort
+    "B",     # flake8-bugbear
+    "C4",    # flake8-comprehensions
+    "T20",   # flake8-print
+    "SIM",   # flake8-simplify
+    "PT",    # flake8-pytest-style
+    "TC",    # flake8-type-checking
+    "UP",    # pyupgrade
+    "C90",   # mccabe complexity
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 15
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.coverage.run]
+omit = []
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+exclude_lines = [
+    "if TYPE_CHECKING:",
+    "pragma: no cover",
+]

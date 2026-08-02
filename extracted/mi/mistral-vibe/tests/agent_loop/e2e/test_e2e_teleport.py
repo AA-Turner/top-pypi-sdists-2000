@@ -29,6 +29,7 @@ from vibe.core.teleport.types import (
 # agent manager re-derives config via model_dump(); the default url is unavoidable.
 SESSIONS_BASE_URL = "https://chat.mistral.ai"
 SESSIONS_URL = f"{SESSIONS_BASE_URL}{TELEPORT_SESSIONS_PATH}"
+GITHUB_REMOTE_URL = "https://github.com/owner/repo.git"
 
 
 def _sessions_ok() -> httpx.Response:
@@ -46,27 +47,28 @@ def _sessions_ok() -> httpx.Response:
 
 def _commit(repo: Repo, message: str) -> str:
     (Path(repo.working_dir) / "file.txt").write_text(f"{message}\n")
-    repo.index.add(["file.txt"])
-    repo.index.commit(message)
+    repo.git.add("file.txt")
+    repo.git.commit("-m", message)
     return repo.head.commit.hexsha
 
 
 def _init_repo(workdir: Path) -> Repo:
-    # origin is a local bare repo so fetch/push stay offline and instant; a
-    # separate github-url remote satisfies Teleport's GitHub-only detection.
+    # origin is intentionally not GitHub. The GitHub-looking `hub` remote is
+    # rewritten to a local bare repo so fetch/push stay offline and instant.
     bare = Repo.init(workdir.with_name(f"{workdir.name}_origin.git"), bare=True)
     repo = Repo.init(workdir, initial_branch="work")
     repo.config_writer().set_value("user", "name", "Tester").release()
     repo.config_writer().set_value("user", "email", "t@example.com").release()
     repo.create_remote("origin", str(bare.git_dir))
-    repo.create_remote("hub", "https://github.com/owner/repo.git")
+    repo.git.config(f"url.{bare.git_dir}.insteadOf", GITHUB_REMOTE_URL)
+    repo.create_remote("hub", GITHUB_REMOTE_URL)
     return repo
 
 
 def _repo_with_pushed_branch(workdir: Path) -> Repo:
     repo = _init_repo(workdir)
     _commit(repo, "initial")
-    repo.git.push("origin", "work")
+    repo.git.push("hub", "work")
     return repo
 
 
@@ -85,7 +87,7 @@ def mock_sessions() -> Iterator[respx.MockRouter]:
 async def _drain(
     agent: AgentLoop, prompt: str | None, *, approve: bool | None = None
 ) -> list[object]:
-    gen = agent.teleport_to_vibe_code(prompt)
+    gen = agent.teleport_to_vibe_code(prompt, project_id="project-id")
     events: list[object] = []
     response: TeleportPushResponseEvent | None = None
     while True:
@@ -128,6 +130,7 @@ async def test_teleport_sends_repo_metadata_and_diff(
     await _drain(build_e2e_agent_loop(), "ship it")
 
     payload = mock_sessions.calls.last.request.read().decode()
+    assert '"projectId":"project-id"' in payload
     assert "https://github.com/owner/repo.git" in payload
     assert "work" in payload
     assert commit in payload
@@ -150,7 +153,7 @@ async def test_teleport_pushes_then_completes_when_approved(
         TeleportStartingWorkflowEvent,
         TeleportCompleteEvent,
     ]
-    assert repo.remote("origin").refs["work"].commit.hexsha == head
+    assert repo.remote("hub").refs["work"].commit.hexsha == head
 
 
 @pytest.mark.asyncio
@@ -172,7 +175,7 @@ async def test_teleport_fails_when_push_fails(
 ) -> None:
     repo = _repo_with_pushed_branch(tmp_working_directory)
     _commit(repo, "second")
-    repo.git.remote("set-url", "--push", "origin", "/nonexistent/repo.git")
+    repo.git.remote("set-url", "--push", "hub", "/nonexistent/repo.git")
 
     with pytest.raises(TeleportError, match="Failed to push"):
         await _drain(build_e2e_agent_loop(), "ship it", approve=True)

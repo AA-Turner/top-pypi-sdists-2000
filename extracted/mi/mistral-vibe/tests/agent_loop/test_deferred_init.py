@@ -8,15 +8,21 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from tests.conftest import build_test_agent_loop, build_test_vibe_config
+from tests.conftest import (
+    ConfigBuilder,
+    OrchestratorLoader,
+    build_test_agent_loop,
+    build_test_vibe_config,
+    set_agent_config,
+)
 from tests.mock.utils import mock_llm_chunk
 from tests.stubs.fake_backend import FakeBackend
 from tests.stubs.fake_connector_registry import FakeConnectorRegistry
 from tests.stubs.fake_mcp_registry import FakeMCPRegistry
-from vibe.core import agent_loop as agent_loop_module
 from vibe.core.agent_loop import AgentLoop
-from vibe.core.config import MCPStdio
-from vibe.core.telemetry.types import TerminalEmulator
+import vibe.core.agent_loop._loop as agent_loop_module
+from vibe.core.config import MCPStdio, VibeConfigSchema
+from vibe.core.telemetry.types import LaunchContext, TerminalEmulator
 from vibe.core.tools.manager import ToolManager
 from vibe.core.tools.mcp import AuthStatus
 from vibe.core.tools.remote import RemoteTool
@@ -77,12 +83,14 @@ class TestCompleteInit:
         assert isinstance(loop._init_error, RuntimeError)
         assert str(loop._init_error) == "mcp discovery boom"
 
-    def test_delays_connector_registry_until_deferred_init(self) -> None:
-        config = build_test_vibe_config(enable_connectors=True)
+    def test_delays_connector_registry_until_deferred_init(
+        self,
+        build_config: ConfigBuilder,
+        load_orchestrator: OrchestratorLoader[VibeConfigSchema],
+    ) -> None:
+        orchestrator = load_orchestrator(build_config(enable_connectors=True))
         with patch.object(AgentLoop, "_start_deferred_init"):
-            loop = AgentLoop(
-                config=config, backend=FakeBackend(), defer_heavy_init=True
-            )
+            loop = AgentLoop(orchestrator, backend=FakeBackend(), defer_heavy_init=True)
 
         assert loop.connector_registry is None
 
@@ -257,12 +265,13 @@ class TestDeferredInitPublicMethods:
         mcp_server = MCPStdio(name="srv", transport="stdio", command="echo")
         config = build_test_vibe_config(mcp_servers=[mcp_server])
         registry = FakeMCPRegistry()
+        set_agent_config(loop, config)
 
         with (
             patch.object(AgentLoop, "_create_mcp_registry", return_value=registry),
             patch.object(ToolManager, "integrate_all"),
         ):
-            await loop.reload_with_initial_messages(base_config=config)
+            await loop.reload_with_initial_messages()
 
         assert loop.mcp_registry is registry
         assert loop.tool_manager._mcp_registry is registry
@@ -294,7 +303,7 @@ class TestDeferredInitPublicMethods:
             defer_heavy_init=True,
             backend=FakeBackend([
                 [mock_llm_chunk(content="hello")],
-                [mock_llm_chunk(content="summary")],
+                [mock_llm_chunk(content="<summary>summary</summary>")],
             ]),
         )
         [_ async for _ in loop.act("Hello")]
@@ -371,37 +380,58 @@ class TestStartInitializeExperiments:
 
     @pytest.mark.asyncio
     async def test_refreshes_system_prompt_when_experiments_update(self) -> None:
-        loop = build_test_agent_loop(terminal_emulator=TerminalEmulator.VSCODE)
+        loop = build_test_agent_loop(
+            launch_context=LaunchContext(
+                agent_entrypoint="cli",
+                agent_version="1.0.0",
+                client_name="vibe_cli",
+                client_version="1.0.0",
+                terminal_emulator=TerminalEmulator.VSCODE,
+            )
+        )
         refresh_mock = AsyncMock()
+        refresh_config_mock = AsyncMock()
         init_mock = AsyncMock(return_value=True)
 
         with (
             patch.object(
                 agent_loop_module, "session_initialize_experiments", new=init_mock
             ),
+            patch.object(loop, "refresh_config", new=refresh_config_mock),
             patch.object(loop, "refresh_system_prompt", new=refresh_mock),
         ):
             await loop.initialize_experiments()
 
+        refresh_config_mock.assert_awaited_once()
         refresh_mock.assert_awaited_once()
         init_mock.assert_awaited_once()
         init_args = init_mock.await_args
         assert init_args is not None
-        assert init_args.kwargs["terminal_emulator"] is TerminalEmulator.VSCODE
+        assert (
+            init_args.kwargs["launch_context"].terminal_emulator
+            is TerminalEmulator.VSCODE
+        )
 
     def test_new_session_telemetry_uses_provided_terminal_emulator(self) -> None:
-        loop = build_test_agent_loop(terminal_emulator=TerminalEmulator.VSCODE)
-        send_new_session = MagicMock()
+        loop = build_test_agent_loop(
+            launch_context=LaunchContext(
+                agent_entrypoint="cli",
+                agent_version="1.0.0",
+                client_name="vibe_cli",
+                client_version="1.0.0",
+                terminal_emulator=TerminalEmulator.VSCODE,
+            )
+        )
+        send_event = MagicMock()
 
         with patch.object(
-            loop.telemetry_client, "send_new_session", new=send_new_session
+            loop.telemetry_client, "send_telemetry_event", new=send_event
         ):
             loop.emit_new_session_telemetry()
 
-        assert (
-            send_new_session.call_args.kwargs["terminal_emulator"]
-            is TerminalEmulator.VSCODE
-        )
+        payload = send_event.call_args.args[1]
+        assert payload["terminal_emulator"] == "vscode"
+        assert type(payload["terminal_emulator"]) is str
 
     @pytest.mark.asyncio
     async def test_does_not_refresh_system_prompt_when_experiments_unchanged(
@@ -593,11 +623,15 @@ class TestCycleAgentDuringInit:
                 # Unblock experiments so switch_agent can complete.
                 gate.set()
 
-                # wait_for_complete raises WorkerFailed if the thread worker
-                # crashed — which is exactly what happened before the fix.
-                await pilot.app.workers.wait_for_complete()
+                workers = [
+                    worker
+                    for worker in pilot.app.workers
+                    if worker.group == "mode_switch"
+                ]
+                if workers:
+                    await pilot.app.workers.wait_for_complete(workers)
 
-            assert agent_loop.agent_profile.name == "plan"
+            assert app.app_server.resources.agents.active.name == "plan"
 
 
 class TestActGatesOnExperiments:

@@ -5,24 +5,23 @@ from collections.abc import Awaitable, Callable
 from contextlib import suppress
 from dataclasses import dataclass, field
 from enum import StrEnum, auto
-from pathlib import Path
 from typing import TYPE_CHECKING
 from uuid import uuid4
 
 from textual.widget import Widget
 
+from vibe.app_server.models import PreparedPrompt
+from vibe.cli.textual_ui.shortcut_hints import shortcut, shortcut_hint
 from vibe.cli.textual_ui.widgets.messages import (
     BashOutputMessage,
     ErrorMessage,
     QueueHeaderMessage,
     UserMessage,
 )
-from vibe.core.autocompletion.path_prompt import PathPromptPayload
-from vibe.core.logger import logger
-from vibe.core.types import ImageAttachment
+from vibe.observability.logging import logger
 
 if TYPE_CHECKING:
-    from vibe.core.config import ModelConfig
+    from vibe.app_server.config import ModelConfigView
 
 
 class QueuedItemKind(StrEnum):
@@ -35,8 +34,7 @@ class QueuedItem:
     kind: QueuedItemKind
     content: str
     skill_name: str | None = None
-    images: list[ImageAttachment] | None = None
-    payload: PathPromptPayload | None = None
+    prepared_prompt: PreparedPrompt | None = None
 
 
 @dataclass(slots=True)
@@ -63,16 +61,14 @@ class MessageQueue:
         content: str,
         *,
         skill_name: str | None = None,
-        images: list[ImageAttachment] | None = None,
-        payload: PathPromptPayload | None = None,
+        prepared_prompt: PreparedPrompt | None = None,
     ) -> None:
         self._items.append(
             QueuedItem(
                 QueuedItemKind.PROMPT,
                 content,
                 skill_name,
-                images=images,
-                payload=payload,
+                prepared_prompt=prepared_prompt,
             )
         )
 
@@ -121,18 +117,15 @@ class QueuePorts:
     mount_and_scroll: Callable[..., Awaitable[None]]
     agent_running: Callable[[], bool]
     bash_task: Callable[[], asyncio.Task | None]
-    active_model: Callable[[], ModelConfig | None]
+    active_model: Callable[[], ModelConfigView | None]
     remove_loading_widget: Callable[[], Awaitable[None]]
     set_loading_queue_count: Callable[[int], None]
-    inject_user_context: Callable[..., Awaitable[None]]
-    next_message_index: Callable[[], int]
+    inject_queued_prompt: Callable[..., Awaitable[None]]
     start_agent_turn: Callable[..., asyncio.Task]
     await_agent_turn: Callable[[], Awaitable[None]]
     run_bash: Callable[..., asyncio.Task]
-    maybe_show_feedback_bar: Callable[[], None]
+    maybe_show_feedback_bar: Callable[[], Awaitable[None]]
     send_skill_telemetry: Callable[[str | None], None]
-    send_at_mention_telemetry: Callable[[PathPromptPayload, str], None]
-    render_payload: Callable[[PathPromptPayload], str]
 
 
 @dataclass(slots=True)
@@ -208,23 +201,23 @@ class QueueController:
         content: str,
         *,
         skill_name: str | None = None,
-        images: list[ImageAttachment] | None = None,
-        payload: PathPromptPayload | None = None,
+        prepared_prompt: PreparedPrompt | None = None,
     ) -> None:
         self._queue.append_prompt(
-            content, skill_name=skill_name, images=images, payload=payload
+            content, skill_name=skill_name, prepared_prompt=prepared_prompt
         )
         await self._ensure_header()
+        images = prepared_prompt.images if prepared_prompt is not None else []
         widget = UserMessage(content, pending=True, images=images or None)
         anchor = self._last_queue_anchor()
         self._widgets.append(widget)
         await self._ports.mount_and_scroll(widget, after=anchor)
         self._push_loading_queue_count()
 
-    async def enqueue_bash(self, content: str) -> None:
+    async def enqueue_bash(self, content: str, workdir: str) -> None:
         self._queue.append_bash(content)
         await self._ensure_header()
-        widget = BashOutputMessage(content, str(Path.cwd()), pending=True)
+        widget = BashOutputMessage(content, workdir, pending=True)
         widget.set_queued(True)
         anchor = self._last_queue_anchor()
         self._widgets.append(widget)
@@ -328,8 +321,9 @@ class QueueController:
             if item.kind == QueuedItemKind.BASH:
                 await self._flush_pending_prompts(pending)
                 pending = []
-                bash_widget = widget if isinstance(widget, BashOutputMessage) else None
-                if not await self._run_bash(item.content, bash_widget):
+                if widget is not None:
+                    await widget.remove()
+                if not await self._run_bash(item.content):
                     return []
             elif isinstance(widget, UserMessage):
                 pending.append(_Pending(item, widget))
@@ -368,7 +362,9 @@ class QueueController:
         self._link_consecutive_user_messages([p.widget for p in pending])
 
     async def _gate_queued_images_for_vision(self, pending: list[_Pending]) -> bool:
-        if not any(p.item.images for p in pending):
+        if not any(
+            p.item.prepared_prompt and p.item.prepared_prompt.images for p in pending
+        ):
             return True
         active_model = self._ports.active_model()
         if active_model is None or active_model.supports_images:
@@ -378,43 +374,45 @@ class QueueController:
         await self._ensure_header()
         await self._ports.mount_and_scroll(
             ErrorMessage(
-                f"Model `{active_model.alias}` does not support images. "
-                f"Switch with /model, then press Enter to resume the queue.",
+                shortcut_hint(
+                    f"Model `{active_model.alias}` does not support images. "
+                    f"Switch with /model, then press {shortcut('Enter')} "
+                    "to resume the queue."
+                ),
                 show_border=False,
             )
         )
         return False
 
     async def _inject_head_item(self, item: QueuedItem, widget: UserMessage) -> None:
-        widget.message_index = self._ports.next_message_index()
-        message_id = str(uuid4()) if item.payload is not None else None
-        if item.payload is not None:
-            rendered = self._ports.render_payload(item.payload)
-        else:
-            rendered = item.content
-        await self._ports.inject_user_context(
-            rendered, as_message=True, images=item.images, client_message_id=message_id
+        message_id = str(uuid4())
+        widget.history_entry_id = message_id
+        prepared = item.prepared_prompt
+        await self._ports.inject_queued_prompt(
+            prepared.prompt_text if prepared is not None else item.content,
+            images=prepared.images if prepared is not None else None,
+            client_message_id=message_id,
+            mention_stats=prepared.mentions if prepared is not None else None,
         )
         self._ports.send_skill_telemetry(item.skill_name)
-        if item.payload is not None and message_id is not None:
-            self._ports.send_at_mention_telemetry(item.payload, message_id)
 
     async def _run_tail_prompt(self, item: QueuedItem, widget: UserMessage) -> None:
-        widget.message_index = self._ports.next_message_index()
+        message_id = str(uuid4())
+        widget.history_entry_id = message_id
         await widget.set_pending(False)
-        self._ports.maybe_show_feedback_bar()
+        await self._ports.maybe_show_feedback_bar()
 
         await self._ports.remove_loading_widget()
         self._ports.start_agent_turn(
-            item.content, prebuilt_images=item.images, prebuilt_payload=item.payload
+            item.content,
+            prepared_prompt=item.prepared_prompt,
+            client_message_id=message_id,
         )
         self._ports.send_skill_telemetry(item.skill_name)
         self.notify_busy_changed()
 
-    async def _run_bash(self, command: str, widget: BashOutputMessage | None) -> bool:
-        if widget is not None:
-            widget.set_queued(False)
-        bash_task = self._ports.run_bash(command, existing_widget=widget)
+    async def _run_bash(self, command: str) -> bool:
+        bash_task = self._ports.run_bash(command)
         self.notify_busy_changed()
         try:
             await bash_task

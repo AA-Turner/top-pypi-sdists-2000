@@ -1,15 +1,17 @@
 [build-system]
-requires = ["setuptools"]
-build-backend="setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "sphinxcontrib-mermaid"
 authors = [{name = "Martín Gaitán", email = "gaitan@gmail.com"}]
-description="Mermaid diagrams in yours Sphinx powered docs"
+description="Mermaid diagrams in your Sphinx-powered docs"
 readme = "docs/readme_pypa.md"
-license = { text = "BSD" }
-version = "1.0.0"
-requires-python = ">=3.8"
+license = "BSD-2-Clause"
+license-files = ["LICENSE"]
+version = "2.1.0"
+
+requires-python = ">=3.10"
 keywords = ["sphinx", "mermaid", "diagrams", "documentation"]
 
 classifiers = [
@@ -18,21 +20,21 @@ classifiers = [
     "Environment :: Web Environment",
     "Framework :: Sphinx :: Extension",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Documentation",
     "Topic :: Utilities",
 ]
 
 dependencies = [
+    "jinja2",
     "sphinx",
     "pyyaml",
 ]
@@ -40,7 +42,7 @@ dependencies = [
 [project.urls]
 Repository = "https://github.com/mgaitan/sphinxcontrib-mermaid"
 Homepage = "https://github.com/mgaitan/sphinxcontrib-mermaid"
-Changelog = "https://github.com/mgaitan/sphinxcontrib-mermaid/blob/master/CHANGELOG.rst"
+Changelog = "https://github.com/mgaitan/sphinxcontrib-mermaid/blob/master/CHANGELOG.md"
 
 [project.optional-dependencies]
 test = [
@@ -54,7 +56,6 @@ test = [
 [project.scripts]
 
 [tool.pytest.ini_options]
-asyncio_mode = "strict"
 testpaths = "tests"
 
 [tool.ruff]
@@ -78,6 +79,13 @@ section-order = [
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401", "F403"]
 
-[tool.setuptools.packages.find]
-where = ["./"]
-include = ["sphinxcontrib.mermaid"]
+[tool.hatch.build.targets.sdist]
+include = [
+    "sphinxcontrib/mermaid",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+]
+
+[tool.hatch.build.targets.wheel]
+only-include = ["sphinxcontrib/mermaid"]

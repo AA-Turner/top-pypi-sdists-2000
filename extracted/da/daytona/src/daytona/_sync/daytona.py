@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import threading
 import time
 import warnings
 from collections.abc import Iterator
@@ -39,10 +40,13 @@ from ..common.daytona import (
     CreateSandboxFromImageParams,
     CreateSandboxFromSnapshotParams,
     DaytonaConfig,
+    resolve_bool_flag,
 )
 from ..common.errors import DaytonaAuthenticationError, DaytonaValidationError
 from ..common.image import Image
 from ..common.sandbox import ListSandboxesQuery
+from ..internal.event_dispatcher import SyncEventDispatcher
+from ..internal.event_subscription_manager import SyncEventSubscriptionManager
 from ..internal.http_client import build_sync_http_client
 from ..internal.urllib3_retry import RemoteDisconnectedRetry
 from .sandbox import Sandbox
@@ -99,6 +103,7 @@ class Daytona:
     _api_url: str
     _target: str | None = None
     _tracer_provider: TracerProvider | None = None
+    _event_dispatcher: SyncEventDispatcher | None = None
 
     def __init__(self, config: DaytonaConfig | None = None):
         """Initializes Daytona instance with optional configuration.
@@ -228,6 +233,9 @@ class Daytona:
         self._sandbox_api: SandboxApi = SandboxApi(self._api_client)
         self._object_storage_api: ObjectStorageApi = ObjectStorageApi(self._api_client)
         self._config_api: ConfigApi = ConfigApi(self._api_client)
+        self._analytics_api_url: str | None = None
+        self._analytics_api_url_fetched: bool = False
+        self._analytics_api_url_lock: threading.Lock = threading.Lock()
         self._toolbox_api_client: ToolboxApiClient = self._clone_api_client_to_toolbox_api_client()
 
         # Initialize services
@@ -237,8 +245,32 @@ class Daytona:
         )
         self.secret: SecretService = SecretService(SecretApi(self._api_client))
 
-        # Initialize OpenTelemetry if enabled
         env = env_reader or DaytonaEnvReader()
+        use_deprecated_polling = resolve_bool_flag(
+            config.use_deprecated_polling if config else None,
+            env.get("DAYTONA_USE_DEPRECATED_POLLING"),
+        )
+
+        if use_deprecated_polling:
+            _polling_msg = (
+                "Polling-only mode (use_deprecated_polling / DAYTONA_USE_DEPRECATED_POLLING)"
+                " is deprecated and will be removed in a future release."
+            )
+            warnings.warn(_polling_msg, DeprecationWarning, stacklevel=2)
+
+        if not use_deprecated_polling:
+            self._event_dispatcher = SyncEventDispatcher(
+                self._api_url,
+                self._api_key or self._jwt_token or "",
+                self._organization_id,
+                "sdk-python",
+                sdk_version,
+            )
+            self._event_dispatcher.ensure_connected()
+
+        self._subscription_manager: SyncEventSubscriptionManager = SyncEventSubscriptionManager(self._event_dispatcher)
+
+        # Initialize OpenTelemetry if enabled
         otel_enabled = (
             (config and config.otel_enabled)
             or (config and config._experimental and config._experimental.get("otelEnabled"))
@@ -272,6 +304,14 @@ class Daytona:
 
         # Set the global tracer provider
         trace.set_tracer_provider(self._tracer_provider)
+
+    def _get_analytics_api_url(self) -> str | None:
+        """Resolves the deployment's Analytics API URL via ``/config``, cached for the client's lifetime."""
+        with self._analytics_api_url_lock:
+            if not self._analytics_api_url_fetched:
+                self._analytics_api_url = self._config_api.config_controller_get_config().analytics_api_url
+                self._analytics_api_url_fetched = True
+            return self._analytics_api_url
 
     @overload
     def create(
@@ -407,8 +447,30 @@ class Daytona:
         if params.auto_stop_interval is not None and params.auto_stop_interval < 0:
             raise DaytonaValidationError("auto_stop_interval must be a non-negative integer")
 
+        if params.auto_pause_interval is not None and params.auto_pause_interval < 0:
+            raise DaytonaValidationError("auto_pause_interval must be a non-negative integer")
+
+        if (
+            params.auto_stop_interval is not None
+            and params.auto_stop_interval != 0
+            and params.auto_pause_interval is not None
+            and params.auto_pause_interval != 0
+        ):
+            raise DaytonaValidationError(
+                "auto_stop_interval and auto_pause_interval are mutually exclusive."
+                + " Set at most one of them to a non-zero value"
+            )
+
+        if params.auto_pause_interval and params.auto_delete_interval == 0:
+            raise DaytonaValidationError(
+                "Ephemeral sandboxes cannot have auto-pause enabled. Set auto_pause_interval to 0"
+            )
+
         if params.auto_archive_interval is not None and params.auto_archive_interval < 0:
             raise DaytonaValidationError("auto_archive_interval must be a non-negative integer")
+
+        if params.ttl_minutes is not None and params.ttl_minutes < 0:
+            raise DaytonaValidationError("ttl_minutes must be a non-negative integer")
 
         target = self._target
 
@@ -432,8 +494,10 @@ class Daytona:
             public=params.public,
             target=str(target) if target else None,
             auto_stop_interval=params.auto_stop_interval,
+            auto_pause_interval=params.auto_pause_interval,
             auto_archive_interval=params.auto_archive_interval,
             auto_delete_interval=params.auto_delete_interval,
+            ttl_minutes=params.ttl_minutes,
             volumes=volumes,
             secrets=secrets,
             network_block_all=params.network_block_all,
@@ -505,7 +569,9 @@ class Daytona:
             self._toolbox_api_client,
             self._sandbox_api,
             validated_language.value,
+            subscription_manager=self._subscription_manager,
             http_client=self._http_client,
+            analytics_api_url_provider=self._get_analytics_api_url,
         )
 
         if sandbox.state != SandboxState.STARTED:
@@ -516,13 +582,17 @@ class Daytona:
         return sandbox
 
     @with_instrumentation()
-    def delete(self, sandbox: Sandbox, timeout: float = 60) -> None:
+    def delete(self, sandbox: Sandbox, timeout: float = 60, wait: bool = False) -> None:
         """Deletes a Sandbox.
+
+        By default returns as soon as the deletion request is accepted (fire-and-forget).
+        Pass ``wait=True`` to block until the Sandbox reaches the 'destroyed' state.
 
         Args:
             sandbox (Sandbox): The Sandbox instance to delete.
-            timeout (float): Timeout (in seconds) for sandbox deletion. 0 means no timeout.
-                Default is 60 seconds.
+            timeout (float): Timeout (in seconds) for the request and, when ``wait``
+                is True, for reaching 'destroyed'. 0 means no timeout. Default is 60 seconds.
+            wait (bool): If True, wait until the Sandbox is destroyed. Defaults to False.
 
         Raises:
             DaytonaError: If sandbox fails to delete or times out
@@ -534,15 +604,19 @@ class Daytona:
             daytona.delete(sandbox)  # Clean up when done
             ```
         """
-        return sandbox.delete(timeout)
+        return sandbox.delete(timeout, wait=wait)
 
     @intercept_errors(message_prefix="Failed to get sandbox: ")
     @with_instrumentation()
-    def get(self, sandbox_id_or_name: str) -> Sandbox:
+    def get(self, sandbox_id_or_name: str, request_timeout: float | None = None) -> Sandbox:
         """Gets a Sandbox by its ID or name.
 
         Args:
             sandbox_id_or_name (str): The ID or name of the Sandbox to retrieve.
+            request_timeout (float | None): Optional client-side request timeout in seconds. Client-side
+                only. It bounds how long the SDK waits for the HTTP response and does not cancel
+                the operation on the server. Positive values under 1 second are rounded up to 1
+                second; 0 disables the client-side timeout and negative values are rejected.
 
         Returns:
             Sandbox: The Sandbox instance.
@@ -560,14 +634,18 @@ class Daytona:
             raise DaytonaValidationError("sandbox_id_or_name is required")
 
         # Get the sandbox instance
-        sandbox_instance = self._sandbox_api.get_sandbox(sandbox_id_or_name)
+        sandbox_instance = self._sandbox_api.get_sandbox(
+            sandbox_id_or_name, _request_timeout=http_timeout(request_timeout)
+        )
         language = self._validate_language_label(sandbox_instance.labels.get(CODE_TOOLBOX_LANGUAGE_LABEL)).value
         return Sandbox(
             sandbox_instance,
             self._toolbox_api_client,
             self._sandbox_api,
             language,
+            subscription_manager=self._subscription_manager,
             http_client=self._http_client,
+            analytics_api_url_provider=self._get_analytics_api_url,
         )
 
     @intercept_errors(message_prefix="Failed to list sandboxes: ")
@@ -575,11 +653,16 @@ class Daytona:
     def list(
         self,
         query: ListSandboxesQuery | None = None,
+        request_timeout: float | None = None,
     ) -> Iterator[Sandbox]:
         """Iterates over Sandboxes matching the given query.
 
         Args:
             query: Optional filters, sorting, and per-page size.
+            request_timeout (float | None): Optional client-side request timeout in seconds. Client-side
+                only. It bounds how long the SDK waits for the HTTP response and does not cancel
+                the operation on the server. Positive values under 1 second are rounded up to 1
+                second; 0 disables the client-side timeout and negative values are rejected.
 
         Yields:
             Sandbox: Each Sandbox matching the query.
@@ -602,7 +685,7 @@ class Daytona:
 
         while first_page or cursor:
             first_page = False
-            response = self._fetch_sandbox_page(q, cursor)
+            response = self._fetch_sandbox_page(q, cursor, request_timeout)
             for sandbox in response.items:
                 language = self._validate_language_label(sandbox.labels.get(CODE_TOOLBOX_LANGUAGE_LABEL)).value
                 yield Sandbox(
@@ -610,12 +693,14 @@ class Daytona:
                     self._toolbox_api_client,
                     self._sandbox_api,
                     language,
+                    subscription_manager=self._subscription_manager,
                     http_client=self._http_client,
+                    analytics_api_url_provider=self._get_analytics_api_url,
                 )
             cursor = response.next_cursor or None
 
     @with_instrumentation(name="Daytona.list.fetch_page")
-    def _fetch_sandbox_page(self, q: ListSandboxesQuery, cursor: str | None):
+    def _fetch_sandbox_page(self, q: ListSandboxesQuery, cursor: str | None, request_timeout: float | None = None):
         """Fetches a single page of sandboxes. Each call is one OTEL span."""
         return self._sandbox_api.list_sandboxes(
             labels=json.dumps(q.labels) if q.labels else None,
@@ -638,8 +723,11 @@ class Daytona:
             created_at_before=q.created_at_before,
             last_event_after=q.last_activity_after,
             last_event_before=q.last_activity_before,
+            auto_destroy_at_after=q.auto_destroy_at_after,
+            auto_destroy_at_before=q.auto_destroy_at_before,
             sort=q.sort,
             order=q.order,
+            _request_timeout=http_timeout(request_timeout),
         )
 
     def _validate_language_label(self, language: str | None = None) -> CodeLanguage:

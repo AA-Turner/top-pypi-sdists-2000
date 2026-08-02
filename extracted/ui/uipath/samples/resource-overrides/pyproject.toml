@@ -1,0 +1,15 @@
+[project]
+name = "bindings-function"
+version = "0.0.1"
+description = "Function with resource bindings"
+authors = [{ name = "John Doe" }]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "uipath",
+]
+
+[dependency-groups]
+dev = [
+    "uipath-dev",
+]

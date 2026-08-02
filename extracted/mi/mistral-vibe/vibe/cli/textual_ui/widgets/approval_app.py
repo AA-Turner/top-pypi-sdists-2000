@@ -3,7 +3,7 @@ from __future__ import annotations
 import time
 from typing import ClassVar
 
-from pydantic import BaseModel
+from pydantic import JsonValue
 from textual import events
 from textual.app import ComposeResult
 from textual.binding import Binding, BindingType
@@ -12,15 +12,17 @@ from textual.message import Message
 from textual.widget import Widget
 from textual.widgets import Static
 
+from vibe.app_server.config import ConfigView
+from vibe.app_server.models import EffectDetail, RequiredPermission, effect_input_json
+from vibe.cli.textual_ui.shortcut_hints import shortcut, shortcut_hint
 from vibe.cli.textual_ui.widgets.no_markup_static import NoMarkupStatic
 from vibe.cli.textual_ui.widgets.tool_widgets import get_approval_widget
-from vibe.core.config import VibeConfig
-from vibe.core.tools.permissions import RequiredPermission
+from vibe.cli.textual_ui.widgets.vim_navigation import VimNavigationMixin
 
 _INPUT_GRACE_PERIOD_S = 0.5
 
 
-class ApprovalApp(Container):
+class ApprovalApp(VimNavigationMixin, Container):
     can_focus = True
     can_focus_children = False
 
@@ -39,7 +41,7 @@ class ApprovalApp(Container):
     ]
 
     class ApprovalGranted(Message):
-        def __init__(self, tool_name: str, tool_args: BaseModel) -> None:
+        def __init__(self, tool_name: str, tool_args: JsonValue) -> None:
             super().__init__()
             self.tool_name = tool_name
             self.tool_args = tool_args
@@ -48,7 +50,7 @@ class ApprovalApp(Container):
         def __init__(
             self,
             tool_name: str,
-            tool_args: BaseModel,
+            tool_args: JsonValue,
             required_permissions: list[RequiredPermission],
         ) -> None:
             super().__init__()
@@ -60,7 +62,7 @@ class ApprovalApp(Container):
         def __init__(
             self,
             tool_name: str,
-            tool_args: BaseModel,
+            tool_args: JsonValue,
             required_permissions: list[RequiredPermission],
         ) -> None:
             super().__init__()
@@ -69,21 +71,21 @@ class ApprovalApp(Container):
             self.required_permissions = required_permissions
 
     class ApprovalRejected(Message):
-        def __init__(self, tool_name: str, tool_args: BaseModel) -> None:
+        def __init__(self, tool_name: str, tool_args: JsonValue) -> None:
             super().__init__()
             self.tool_name = tool_name
             self.tool_args = tool_args
 
     def __init__(
         self,
-        tool_name: str,
-        tool_args: BaseModel,
-        config: VibeConfig,
+        effect: EffectDetail,
+        config: ConfigView,
         required_permissions: list[RequiredPermission] | None = None,
     ) -> None:
         super().__init__(id="approval-app")
-        self.tool_name = tool_name
-        self.tool_args = tool_args
+        self.effect = effect
+        self.tool_name = effect.tool_name
+        self.tool_args = effect_input_json(effect)
         self.config = config
         self.required_permissions = required_permissions or []
         self.selected_option = 0
@@ -113,7 +115,11 @@ class ApprovalApp(Container):
                 self.option_widgets.append(widget)
                 yield widget
             self.help_widget = NoMarkupStatic(
-                "↑↓ navigate  Enter select  ESC reject", classes="approval-help"
+                shortcut_hint(
+                    f"{shortcut('↑↓/jk')} navigate  {shortcut('Enter')} select  "
+                    f"{shortcut('Esc')} reject"
+                ),
+                classes="approval-help",
             )
             yield self.help_widget
 
@@ -163,7 +169,7 @@ class ApprovalApp(Container):
         if not self.tool_info_container:
             return
 
-        approval_widget = get_approval_widget(self.tool_name, self.tool_args)
+        approval_widget = get_approval_widget(self.effect)
         await self.tool_info_container.remove_children()
         await self.tool_info_container.mount(approval_widget)
 
@@ -265,6 +271,9 @@ class ApprovalApp(Container):
                         tool_name=self.tool_name, tool_args=self.tool_args
                     )
                 )
+
+    def on_key(self, event: events.Key) -> None:
+        self._handle_vim_navigation_key(event)
 
     def on_blur(self, event: events.Blur) -> None:
         self.call_after_refresh(self.focus)

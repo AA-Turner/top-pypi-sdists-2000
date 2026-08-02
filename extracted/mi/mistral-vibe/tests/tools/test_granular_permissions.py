@@ -5,6 +5,7 @@ import os
 import pytest
 
 from vibe.core.tools.base import BaseToolState, ToolPermission
+from vibe.core.tools.builtins import bash as bash_module
 from vibe.core.tools.builtins.bash import (
     Bash,
     BashArgs,
@@ -13,8 +14,13 @@ from vibe.core.tools.builtins.bash import (
 )
 from vibe.core.tools.builtins.edit import Edit, EditArgs, EditConfig
 from vibe.core.tools.builtins.grep import Grep, GrepArgs, GrepToolConfig
-from vibe.core.tools.builtins.read import Read, ReadArgs, ReadConfig, ReadState
-from vibe.core.tools.builtins.webfetch import WebFetch, WebFetchArgs, WebFetchConfig
+from vibe.core.tools.builtins.read_file import (
+    ReadFile,
+    ReadFileArgs,
+    ReadFileConfig,
+    ReadFileState,
+)
+from vibe.core.tools.builtins.web_fetch import WebFetch, WebFetchArgs, WebFetchConfig
 from vibe.core.tools.builtins.write_file import (
     WriteFile,
     WriteFileArgs,
@@ -277,17 +283,17 @@ class TestReadGranularPermissions:
         self.workdir = tmp_path
 
     def _read(self, **kwargs):
-        config = ReadConfig(**kwargs)
-        return Read(config_getter=lambda: config, state=ReadState())
+        config = ReadFileConfig(**kwargs)
+        return ReadFile(config_getter=lambda: config, state=ReadFileState())
 
     def test_in_workdir_normal_file_returns_none(self):
         (self.workdir / "test.py").touch()
         tool = self._read()
-        assert tool.resolve_permission(ReadArgs(file_path="test.py")) is None
+        assert tool.resolve_permission(ReadFileArgs(file_path="test.py")) is None
 
     def test_outside_workdir_returns_permission_context(self):
         tool = self._read()
-        result = tool.resolve_permission(ReadArgs(file_path="/tmp/file.txt"))
+        result = tool.resolve_permission(ReadFileArgs(file_path="/tmp/file.txt"))
         assert isinstance(result, PermissionContext)
         assert result.permission is ToolPermission.ASK
         outside = [
@@ -300,7 +306,7 @@ class TestReadGranularPermissions:
     def test_sensitive_env_file_returns_permission_context(self):
         (self.workdir / ".env").touch()
         tool = self._read()
-        result = tool.resolve_permission(ReadArgs(file_path=".env"))
+        result = tool.resolve_permission(ReadFileArgs(file_path=".env"))
         assert isinstance(result, PermissionContext)
         assert result.permission is ToolPermission.ASK
         sensitive = [
@@ -314,7 +320,7 @@ class TestReadGranularPermissions:
     def test_sensitive_env_local_file(self):
         (self.workdir / ".env.local").touch()
         tool = self._read()
-        result = tool.resolve_permission(ReadArgs(file_path=".env.local"))
+        result = tool.resolve_permission(ReadFileArgs(file_path=".env.local"))
         assert isinstance(result, PermissionContext)
         sensitive = [
             rp
@@ -325,7 +331,7 @@ class TestReadGranularPermissions:
 
     def test_sensitive_outside_both_permissions(self):
         tool = self._read()
-        result = tool.resolve_permission(ReadArgs(file_path="/tmp/.env"))
+        result = tool.resolve_permission(ReadFileArgs(file_path="/tmp/.env"))
         assert isinstance(result, PermissionContext)
         scopes = {rp.scope for rp in result.required_permissions}
         assert PermissionScope.FILE_PATTERN in scopes
@@ -333,14 +339,14 @@ class TestReadGranularPermissions:
 
     def test_denylisted_returns_never(self):
         tool = self._read(denylist=["*/secret*"])
-        result = tool.resolve_permission(ReadArgs(file_path="secret.key"))
+        result = tool.resolve_permission(ReadFileArgs(file_path="secret.key"))
         assert isinstance(result, PermissionContext)
         assert result.permission is ToolPermission.NEVER
 
     def test_allowlisted_returns_always(self):
         tool = self._read(allowlist=["*/README*"])
         result = tool.resolve_permission(
-            ReadArgs(file_path=str(self.workdir / "README.md"))
+            ReadFileArgs(file_path=str(self.workdir / "README.md"))
         )
         assert isinstance(result, PermissionContext)
         assert result.permission is ToolPermission.ALWAYS
@@ -348,7 +354,7 @@ class TestReadGranularPermissions:
     def test_custom_sensitive_patterns(self):
         (self.workdir / "credentials.json").touch()
         tool = self._read(sensitive_patterns=["*/credentials*"])
-        result = tool.resolve_permission(ReadArgs(file_path="credentials.json"))
+        result = tool.resolve_permission(ReadFileArgs(file_path="credentials.json"))
         assert isinstance(result, PermissionContext)
 
 
@@ -365,13 +371,14 @@ class TestWriteFileGranularPermissions:
     def test_in_workdir_returns_none(self):
         tool = self._write_file()
         assert (
-            tool.resolve_permission(WriteFileArgs(path="test.py", content="x")) is None
+            tool.resolve_permission(WriteFileArgs(file_path="test.py", content="x"))
+            is None
         )
 
     def test_outside_workdir_returns_permission_context(self):
         tool = self._write_file()
         result = tool.resolve_permission(
-            WriteFileArgs(path="/tmp/file.txt", content="x")
+            WriteFileArgs(file_path="/tmp/file.txt", content="x")
         )
         assert isinstance(result, PermissionContext)
         assert result.permission is ToolPermission.ASK
@@ -379,7 +386,7 @@ class TestWriteFileGranularPermissions:
     def test_sensitive_env_file_asks(self):
         (self.workdir / ".env").touch()
         tool = self._write_file()
-        result = tool.resolve_permission(WriteFileArgs(path=".env", content="x"))
+        result = tool.resolve_permission(WriteFileArgs(file_path=".env", content="x"))
         assert isinstance(result, PermissionContext)
         assert result.permission is ToolPermission.ASK
 
@@ -726,6 +733,26 @@ class TestCollectOutsideDirs:
         dirs = _collect_outside_dirs(["cp /tmp/a /var/b"])
         assert len(dirs) == 2
 
+    @pytest.mark.parametrize(
+        "command",
+        [
+            "grep root /etc/passwd",
+            "less /etc/passwd",
+            "sha256sum /etc/passwd",
+            "od -c /etc/passwd",
+            "cut -d: -f1 /etc/passwd",
+            "find /etc -name x",
+        ],
+    )
+    def test_read_only_allowlisted_commands_collect_outside_paths(self, command):
+        # Read-only commands are auto-allowed, so their outside paths must still
+        # be collected — otherwise they read outside the workdir with no prompt.
+        assert len(_collect_outside_dirs([command])) >= 1
+
+    def test_read_only_command_in_workdir_not_collected(self):
+        (self.workdir / "local.txt").touch()
+        assert _collect_outside_dirs(["grep root ./local.txt"]) == set()
+
     def test_chmod_skips_plus_x_token(self):
         dirs = _collect_outside_dirs(["chmod +x /tmp/script.sh"])
         # +x should be skipped, only /tmp/script.sh should be considered
@@ -761,3 +788,53 @@ class TestCollectOutsideDirs:
         (self.workdir / "foo" / "bar").touch()
         dirs = _collect_outside_dirs(["cat foo/bar"])
         assert len(dirs) == 0
+
+    def test_forward_slash_absolute_path_detected(self):
+        """Git Bash forward-slash paths must be detected regardless of os.sep.
+
+        Detection keys on "/" (the POSIX-shell separator) rather than os.sep,
+        so /c/Users/... style paths are not silently skipped on Windows.
+        """
+        dirs = _collect_outside_dirs(["cat /c/Users/victim/secret.txt"])
+        assert len(dirs) >= 1
+
+    def test_posix_escaped_space_path_stays_single_token(self, monkeypatch):
+        monkeypatch.setattr(bash_module, "is_windows", lambda: False)
+        seen_paths: list[str] = []
+
+        def is_within_workdir(path: str) -> bool:
+            seen_paths.append(path)
+            return False
+
+        monkeypatch.setattr(bash_module, "is_path_within_workdir", is_within_workdir)
+
+        dirs = _collect_outside_dirs([r"cat /outside/foo\ bar"])
+
+        assert seen_paths == ["/outside/foo bar"]
+        assert len(dirs) == 1
+
+    def test_git_bash_drive_path_normalized_before_workdir_check(self, monkeypatch):
+        seen_paths: list[str] = []
+
+        def is_within_workdir(path: str) -> bool:
+            seen_paths.append(path)
+            return False
+
+        monkeypatch.setattr(bash_module, "is_windows", lambda: True)
+        monkeypatch.setattr(bash_module, "is_path_within_workdir", is_within_workdir)
+
+        dirs = _collect_outside_dirs(["cat /c/Users/victim/secret.txt"])
+
+        assert seen_paths == ["C:/Users/victim/secret.txt"]
+        assert len(dirs) == 1
+
+    @pytest.mark.parametrize(
+        "path", [r"C:\Users\victim\secret.txt", r"src\..\..\outside\file"]
+    )
+    def test_backslash_path_detected(self, path, monkeypatch):
+        # Backslash paths are a Windows concern; a POSIX shell would consume the
+        # backslashes as escapes, so detection only applies under is_windows().
+        monkeypatch.setattr(bash_module, "is_windows", lambda: True)
+        monkeypatch.setattr(bash_module, "is_path_within_workdir", lambda _: False)
+        dirs = _collect_outside_dirs([f"cat {path}"])
+        assert len(dirs) >= 1

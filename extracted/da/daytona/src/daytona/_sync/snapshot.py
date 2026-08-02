@@ -49,8 +49,9 @@ class SnapshotService:
         Example:
             ```python
             daytona = Daytona()
-            result = daytona.snapshot.list(page=2, limit=10)
-            for snapshot in result.items:
+            page = daytona.snapshot.list(page=2, limit=10)
+            print(f"Page {page.page} of {page.total_pages} ({page.total} snapshots total)")
+            for snapshot in page.items:
                 print(f"{snapshot.name} ({snapshot.image_name})")
             ```
         """
@@ -251,6 +252,7 @@ class SnapshotService:
             push_access_creds.secret,
             push_access_creds.session_token,
             push_access_creds.bucket,
+            region=push_access_creds.region,
         )
         context_hashes: list[str] = []
         for context in image._context_list:

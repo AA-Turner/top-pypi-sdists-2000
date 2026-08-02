@@ -10,7 +10,7 @@ import pytest
 from vibe.core.config import SessionLoggingConfig
 from vibe.core.session.session_loader import SessionLoader
 from vibe.core.types import LLMMessage, Role, SessionMetadata, ToolCall
-from vibe.core.utils.io import read_safe
+from vibe.utils.io import read_safe
 
 
 @pytest.fixture
@@ -214,6 +214,26 @@ class TestSessionLoaderFindLatestSession:
 
         result = SessionLoader.find_latest_session(
             session_config, working_directory=Path("/home/user/project-a")
+        )
+        assert result == expected
+
+    def test_find_latest_session_matches_unnormalized_stored_cwd(
+        self, session_config: SessionLoggingConfig, create_test_session, tmp_path: Path
+    ) -> None:
+        project = tmp_path / "project"
+        project.mkdir()
+        unnormalized = project.parent / "sub" / ".." / "project"
+
+        expected = create_test_session(
+            Path(session_config.save_dir),
+            "unnormalized-session",
+            working_directory=unnormalized,
+        )
+
+        assert str(unnormalized) != str(project.resolve())
+
+        result = SessionLoader.find_latest_session(
+            session_config, working_directory=project.resolve()
         )
         assert result == expected
 
@@ -579,6 +599,22 @@ class TestSessionLoaderLoadSession:
         with pytest.raises(ValueError, match="Session messages file is empty"):
             SessionLoader.load_session(session_folder)
 
+    def test_load_session_empty_messages_valid_when_metadata_records_zero(
+        self, session_config: SessionLoggingConfig
+    ) -> None:
+        session_dir = Path(session_config.save_dir)
+        session_folder = session_dir / "test_20230101_120000_test123"
+        session_folder.mkdir()
+
+        (session_folder / "messages.jsonl").write_text("")
+        (session_folder / "meta.json").write_text(
+            json.dumps({"session_id": "test-session", "total_messages": 0})
+        )
+
+        messages, metadata = SessionLoader.load_session(session_folder)
+        assert messages == []
+        assert metadata["total_messages"] == 0
+
     def test_load_session_invalid_json_messages(
         self, session_config: SessionLoggingConfig
     ) -> None:
@@ -855,6 +891,25 @@ class TestSessionLoaderListSessions:
         session_ids = {s["session_id"] for s in result}
         assert "aaaaaaaa-1111" in session_ids
         assert "bbbbbbbb-2222" in session_ids
+
+    def test_list_sessions_sorted_by_end_time_desc(
+        self, session_config: SessionLoggingConfig, create_test_session_with_cwd
+    ) -> None:
+        session_dir = Path(session_config.save_dir)
+
+        create_test_session_with_cwd(
+            session_dir, "middle-1", "/home/user/p", end_time="2024-01-02T00:00:00Z"
+        )
+        create_test_session_with_cwd(
+            session_dir, "newest-1", "/home/user/p", end_time="2024-01-03T00:00:00Z"
+        )
+        create_test_session_with_cwd(
+            session_dir, "oldest-1", "/home/user/p", end_time="2024-01-01T00:00:00Z"
+        )
+
+        result = SessionLoader.list_sessions(session_config)
+
+        assert [s["session_id"] for s in result] == ["newest-1", "middle-1", "oldest-1"]
 
     def test_list_sessions_filters_by_cwd(
         self, session_config: SessionLoggingConfig, create_test_session_with_cwd

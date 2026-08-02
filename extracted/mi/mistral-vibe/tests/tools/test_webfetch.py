@@ -6,7 +6,7 @@ import respx
 
 from tests.mock.utils import collect_result
 from vibe.core.tools.base import BaseToolState, ToolError
-from vibe.core.tools.builtins.webfetch import (
+from vibe.core.tools.builtins.web_fetch import (
     WebFetch,
     WebFetchArgs,
     WebFetchConfig,
@@ -296,6 +296,7 @@ def test_get_result_display_includes_url():
     display = WebFetch.get_result_display(event)
 
     assert display.success is True
+    assert display.verb == "Fetched"
     assert url in display.message
     assert "14,837 chars" in display.message
     assert "text/html" in display.message
@@ -314,4 +315,4 @@ def test_get_result_display_marks_truncated():
 
     display = WebFetch.get_result_display(event)
 
-    assert "[truncated]" in display.message
+    assert display.suffix == "(truncated)"

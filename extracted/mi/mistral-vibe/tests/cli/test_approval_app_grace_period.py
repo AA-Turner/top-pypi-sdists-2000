@@ -2,17 +2,18 @@ from __future__ import annotations
 
 from unittest.mock import patch
 
-from pydantic import BaseModel
 import pytest
+from textual import events
 
+from tests.stubs.app_config import build_test_app_config
+from vibe.app_server.models import (
+    EffectCallDisplay,
+    ShellEffectDetail,
+    ShellEffectInput,
+)
 from vibe.cli.textual_ui.widgets.approval_app import ApprovalApp
-from vibe.core.config import VibeConfig
 
 _TEST_GRACE_PERIOD_S = 0.5
-
-
-class FakeArgs(BaseModel):
-    command: str = "echo hello"
 
 
 @pytest.fixture
@@ -21,8 +22,14 @@ def approval_app(monkeypatch: pytest.MonkeyPatch):
         "vibe.cli.textual_ui.widgets.approval_app._INPUT_GRACE_PERIOD_S",
         _TEST_GRACE_PERIOD_S,
     )
-    config = VibeConfig()
-    app = ApprovalApp(tool_name="bash", tool_args=FakeArgs(), config=config)
+    app = ApprovalApp(
+        effect=ShellEffectDetail(
+            tool_name="bash",
+            input=ShellEffectInput(command="echo hello"),
+            display=EffectCallDisplay(summary="bash", status_text="Running"),
+        ),
+        config=build_test_app_config(),
+    )
     app._mount_time = 100.0
     return app
 
@@ -75,4 +82,37 @@ class TestGracePeriod:
             approval_app.action_move_down()
             assert approval_app.selected_option == 1
             approval_app.action_move_up()
+            assert approval_app.selected_option == 0
+
+
+class TestVimKeybindings:
+    def test_j_moves_down(self, approval_app: ApprovalApp):
+        with patch.object(approval_app, "_update_options"):
+            assert approval_app.selected_option == 0
+
+            approval_app.on_key(events.Key("j", "j"))
+
+            assert approval_app.selected_option == 1
+
+    def test_k_moves_up(self, approval_app: ApprovalApp):
+        with patch.object(approval_app, "_update_options"):
+            assert approval_app.selected_option == 0
+
+            approval_app.on_key(events.Key("k", "k"))
+
+            # Wraps to last option (index 3)
+            assert approval_app.selected_option == 3
+
+    def test_vim_navigation_works_during_grace_period(self, approval_app: ApprovalApp):
+        with (
+            patch("vibe.cli.textual_ui.widgets.approval_app.time") as mock_time,
+            patch.object(approval_app, "_update_options"),
+        ):
+            mock_time.monotonic.return_value = 100.0 + 0.01
+            assert approval_app.is_within_grace_period()
+
+            assert approval_app.selected_option == 0
+            approval_app.on_key(events.Key("j", "j"))
+            assert approval_app.selected_option == 1
+            approval_app.on_key(events.Key("k", "k"))
             assert approval_app.selected_option == 0

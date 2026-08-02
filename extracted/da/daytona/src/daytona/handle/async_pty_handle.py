@@ -58,13 +58,13 @@ class AsyncPtyHandle:
 
     def __init__(
         self,
-        ws: aiohttp.ClientWebSocketResponse,
+        ws: "aiohttp.ClientWebSocketResponse[bool]",
         on_data: Callable[[bytes], None] | Callable[[bytes], Awaitable[None]] | None = None,
         session_id: str | None = None,
         handle_resize: Callable[[PtySize], Awaitable[PtySessionInfo]] | None = None,
         handle_kill: Callable[[], Awaitable[None]] | None = None,
     ):
-        self._ws: aiohttp.ClientWebSocketResponse = ws
+        self._ws: "aiohttp.ClientWebSocketResponse[bool]" = ws
         self._on_data: Callable[[bytes], None] | Callable[[bytes], Awaitable[None]] | None = on_data
         self._session_id: str | None = session_id
         self._handle_resize: Callable[[PtySize], Awaitable[PtySessionInfo]] | None = handle_resize
@@ -281,6 +281,20 @@ class AsyncPtyHandle:
 
         if status == "connected":
             self._connection_established = True
+        elif status == "exited":
+            # An instantly-exiting PTY may report "exited" before/instead of "connected".
+            # Mark the connection established so wait_for_connection() returns instead of
+            # timing out waiting for a "connected" message that will never arrive.
+            self._connection_established = True
+            # The PTY has exited: mark disconnected so is_connected() does not report
+            # True for a dead session between "exited" and the WebSocket close.
+            self._connected = False
+            exit_code = control_msg.get("exitCode")
+            if isinstance(exit_code, int):
+                self._exit_code = exit_code
+            exit_reason = control_msg.get("exitReason")
+            if isinstance(exit_reason, str):
+                self._error = exit_reason
         elif status == "error":
             self._error = cast(str, control_msg.get("error", "Unknown connection error"))
             self._connected = False

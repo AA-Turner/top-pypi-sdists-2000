@@ -18,7 +18,7 @@ import pytest
 
 from tests.conftest import build_test_vibe_config
 from tests.stubs.fake_mcp_registry import FakeMCPRegistry
-from vibe.core.config import MCPHttp, MCPStdio, MCPStreamableHttp, VibeConfig
+from vibe.core.config import MCPHttp, MCPStdio, MCPStreamableHttp, VibeConfigSchema
 from vibe.core.tools.base import BaseToolConfig, BaseToolState, InvokeContext
 from vibe.core.tools.mcp import (
     AuthStatus,
@@ -157,7 +157,8 @@ class TestMCPHttpClient:
                 "vibe.core.tools.mcp.tools.build_ssl_context", return_value=ssl_context
             ),
             patch(
-                "vibe.core.tools.mcp.tools.httpx.AsyncClient", return_value=fake_client
+                "vibe.core.tools.mcp.tools.VibeAsyncHTTPClient",
+                return_value=fake_client,
             ) as async_client,
         ):
             client = create_vibe_mcp_http_client(headers)
@@ -599,6 +600,14 @@ class TestMCPRegistry:
 
         assert len(registry._cache) == 0
 
+    def test_clear_drops_failed(self):
+        registry = MCPRegistry()
+        registry._failed["stale"] = "boom"
+
+        registry.clear()
+
+        assert registry.pop_failed() == {}
+
     def test_count_loaded_excludes_failed_servers(self):
         registry = MCPRegistry()
         ok_srv = self._make_http_server("ok", url="http://ok:1")
@@ -683,6 +692,7 @@ class TestMCPRegistry:
             tools = await registry._discover_http(srv)
 
         assert tools is None
+        assert registry.pop_failed() == {"fail": "down"}
 
     @pytest.mark.asyncio
     async def test_discover_stdio_success(self):
@@ -712,6 +722,7 @@ class TestMCPRegistry:
             tools = await registry._discover_stdio(srv)
 
         assert tools is None
+        assert registry.pop_failed() == {"broken": "no binary"}
 
     def test_get_tools_discovers_only_uncached(self):
         registry = MCPRegistry()
@@ -927,7 +938,7 @@ class TestMCPDisableFiltering:
     @staticmethod
     def _make_config(
         mcp_servers: list[MCPHttp | MCPStdio | MCPStreamableHttp] | None = None,
-    ) -> VibeConfig:
+    ) -> VibeConfigSchema:
         return build_test_vibe_config(mcp_servers=mcp_servers or [])
 
     def test_disabled_server_excludes_all_tools(self):

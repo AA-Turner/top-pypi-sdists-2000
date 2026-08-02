@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import asyncio
-import codecs
-from collections.abc import AsyncGenerator
+from collections import deque
+from collections.abc import AsyncGenerator, Awaitable, Callable
 from contextlib import aclosing, suppress
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from enum import StrEnum, auto
 import gc
 import os
@@ -17,41 +17,86 @@ from uuid import uuid4
 from weakref import WeakKeyDictionary
 import webbrowser
 
-from pydantic import BaseModel
 from rich import print as rprint
 from textual.app import WINDOWS, App, ComposeResult
 from textual.binding import Binding, BindingType
 from textual.containers import Horizontal, VerticalGroup, VerticalScroll
+from textual.dom import NoScreen
 from textual.driver import Driver
-from textual.events import AppBlur, AppFocus, MouseUp
-from textual.theme import BUILTIN_THEMES
+from textual.events import AppBlur, AppFocus, MouseScrollDown, MouseScrollUp, MouseUp
+from textual.screen import Screen
 from textual.timer import Timer
 from textual.widget import Widget
 from textual.widgets import Static
+from textual.worker import Worker, WorkerFailed, WorkerState
 
 from vibe import __version__ as CORE_VERSION
+from vibe.app_server import AppServerHost, AppServerSession, SessionExitSummary
+from vibe.app_server.config import THINKING_LEVELS, ConfigView, ModelConfigView
+from vibe.app_server.events import (
+    AppServerEvent,
+    CallbackRequested,
+    HistoryEntryAdded,
+    HistoryEntryUpdated,
+    ServerError,
+    ServerWarning,
+    StatsUpdated,
+    TurnCompleted,
+    TurnStarted,
+)
+from vibe.app_server.models import (
+    AgentSummary,
+    ApprovalCallbackDetail,
+    ApprovalCallbackOutput,
+    ApprovalDecision,
+    ApprovalDecisionType,
+    EffectDetail,
+    ImageAttachment,
+    MCPSourceKind,
+    MentionStats,
+    PreparedPrompt,
+    PublicCallbackEntry,
+    PublicEffectEntry,
+    PublicError,
+    PublicHistoryEntry,
+    PublicMessageEntry,
+    PublicNoticeEntry,
+    PublicReasoningEntry,
+    PublicTurnStatus,
+    QuestionChoice,
+    RequiredPermission,
+    SavedSessionSummary,
+    TeleportCheckingGit,
+    TeleportComplete,
+    TeleportEvent,
+    TeleportFailed,
+    TeleportPushing,
+    TeleportPushRequired,
+    TeleportStartingWorkflow,
+    TeleportSummarizingContext,
+    UserInputCallbackDetail,
+    UserInputCallbackOutput,
+    UserQuestion,
+    UserQuestionRequest,
+    UserQuestionResult,
+    WaitingForInputNoticeDetail,
+)
+from vibe.app_server.protocol import AppServerResponseError, ShellRunResponse
+from vibe.app_server.session import AppServerTurnError
 from vibe.cli.clipboard import copy_selection_to_clipboard, copy_text_to_clipboard
-from vibe.cli.commands import CommandRegistry
+from vibe.cli.commands import CommandContext, CommandRegistry
+from vibe.cli.lazy_audio_managers import (
+    check_audio_available,
+    create_default_narrator_manager,
+    create_default_voice_manager,
+)
 from vibe.cli.narrator_manager.narrator_manager_port import (
     NarratorManagerPort,
     NarratorState,
 )
-from vibe.cli.plan_offer.adapters.http_whoami_gateway import HttpWhoAmIGateway
-from vibe.cli.plan_offer.decide_plan_offer import (
-    PlanInfo,
-    check_teleport_eligibility,
-    decide_plan_offer,
-    plan_offer_cta,
-    plan_title,
-    resolve_api_key_for_plan,
-)
-from vibe.cli.plan_offer.ports.whoami_gateway import WhoAmIGateway, WhoAmIPlanType
+from vibe.cli.plan_offer.presentation import plan_offer_cta, plan_title
 from vibe.cli.terminal_detect import Terminal, detect_terminal
 from vibe.cli.textual_ui.handlers.event_handler import EventHandler
-from vibe.cli.textual_ui.lazy_audio_managers import (
-    create_default_narrator_manager,
-    create_default_voice_manager,
-)
 from vibe.cli.textual_ui.mcp_commands import (
     MCP_ADD_HELP,
     is_mcp_add_help_request,
@@ -65,8 +110,7 @@ from vibe.cli.textual_ui.notifications import (
     TextualNotificationAdapter,
 )
 from vibe.cli.textual_ui.quit_manager import QuitManager
-from vibe.cli.textual_ui.scheduled_loop_runner import ScheduledLoopRunner
-from vibe.cli.textual_ui.session_exit import print_session_resume_message
+from vibe.cli.textual_ui.scheduled_loop_runner import ScheduledLoopCommands
 from vibe.cli.textual_ui.widgets.approval_app import ApprovalApp
 from vibe.cli.textual_ui.widgets.banner.banner import Banner
 from vibe.cli.textual_ui.widgets.chat_input import ChatInputContainer
@@ -85,11 +129,9 @@ from vibe.cli.textual_ui.widgets.chat_input.paste_image import (
 from vibe.cli.textual_ui.widgets.chat_input.text_area import ChatTextArea
 from vibe.cli.textual_ui.widgets.collapsible import CollapsibleSection
 from vibe.cli.textual_ui.widgets.compact import CompactMessage
-from vibe.cli.textual_ui.widgets.config_app import ConfigApp
 from vibe.cli.textual_ui.widgets.context_progress import ContextProgress, TokenState
 from vibe.cli.textual_ui.widgets.debug_console import DebugConsole
 from vibe.cli.textual_ui.widgets.feedback_bar import FeedbackBar
-from vibe.cli.textual_ui.widgets.feedback_bar_manager import FeedbackBarManager
 from vibe.cli.textual_ui.widgets.load_more import HistoryLoadMoreRequested
 from vibe.cli.textual_ui.widgets.loading import (
     DEFAULT_LOADING_STATUS,
@@ -99,9 +141,10 @@ from vibe.cli.textual_ui.widgets.loading import (
 from vibe.cli.textual_ui.widgets.messages import (
     VSCODE_EXTENSION_PROMO_WHATS_NEW_SUFFIX,
     AssistantMessage,
-    BashOutputMessage,
     ErrorMessage,
     InterruptMessage,
+    PlanFileMessage,
+    ReasoningMessage,
     SlashCommandMessage,
     StreamingMessageBase,
     TeleportUserMessage,
@@ -129,6 +172,17 @@ from vibe.cli.textual_ui.widgets.tool_widgets import (
     EditApprovalWidget,
     EditResultWidget,
 )
+from vibe.cli.textual_ui.widgets.tools import (
+    ToolCallMessage,
+    ToolGroup,
+    ToolResultMessage,
+)
+from vibe.cli.textual_ui.widgets.vibe_code_project import (
+    VibeCodeProjectCreateApp,
+    VibeCodeProjectPickerApp,
+    VibeCodeProjectPickerUiState,
+    suggested_default_branch,
+)
 from vibe.cli.textual_ui.widgets.voice_app import VoiceApp
 from vibe.cli.textual_ui.windowing import (
     HISTORY_RESUME_TAIL_MESSAGES,
@@ -137,10 +191,12 @@ from vibe.cli.textual_ui.windowing import (
     SessionWindowing,
     build_history_widgets,
     create_resume_plan,
-    non_system_history_messages,
+    shift_history_widget_indices,
     should_resume_history,
     sync_backfill_state,
 )
+from vibe.cli.textual_ui.word_selection import WordSelectScreen
+from vibe.cli.theme import resolve_auto_theme, resolve_theme, resolve_theme_name
 from vibe.cli.update_notifier import (
     PyPIUpdateGateway,
     UpdateCacheRepository,
@@ -159,92 +215,26 @@ from vibe.cli.vscode_extension_promo import (
     VscodeExtensionPromoState,
     should_show_promo,
 )
-from vibe.core.agents import AgentProfile
-from vibe.core.autocompletion.path_prompt import (
-    PathPromptPayload,
-    PathResource,
-    build_path_prompt_payload,
-    build_title_segments,
-)
-from vibe.core.autocompletion.path_prompt_adapter import (
-    extract_image_resources,
-    render_path_prompt_from_payload,
-)
-from vibe.core.config import DEFAULT_THEME, ModelConfig, VibeConfig
-from vibe.core.data_retention import DATA_RETENTION_MESSAGE
-from vibe.core.hooks.models import HookStartEvent
-from vibe.core.log_reader import LogReader
-from vibe.core.logger import logger
-from vibe.core.paths import HISTORY_FILE
-from vibe.core.rewind import RewindError
-from vibe.core.session.image_snapshot import ImageSnapshotError, snapshot_image
-from vibe.core.session.resume_sessions import (
-    ResumeSessionInfo,
-    list_local_resume_sessions,
-    session_latest_messages,
-    short_session_id,
-)
-from vibe.core.session.saved_sessions import (
-    delete_saved_session,
-    update_saved_session_title_at_path,
-)
-from vibe.core.session.session_loader import SessionLoader
-from vibe.core.session.title_format import format_session_title
-from vibe.core.skills.manager import SkillManager
-from vibe.core.telemetry.types import TeleportFailureStage
-from vibe.core.teleport.telemetry import send_teleport_early_failure_telemetry
-from vibe.core.teleport.types import (
-    TeleportCheckingGitEvent,
-    TeleportCompleteEvent,
-    TeleportPushingEvent,
-    TeleportPushRequiredEvent,
-    TeleportPushResponseEvent,
-    TeleportStartingWorkflowEvent,
-)
-from vibe.core.tools.builtins.ask_user_question import (
-    AskUserQuestionArgs,
-    AskUserQuestionResult,
-    Choice,
-    Question,
-)
-from vibe.core.tools.connectors.counts import compute_connector_counts
-from vibe.core.tools.mcp_settings import (
-    MCPServerAddError,
-    persist_mcp_toggle,
-    persist_oauth_mcp_server,
-)
-from vibe.core.tools.permissions import RequiredPermission
-from vibe.core.types import (
-    MAX_IMAGE_BYTES,
-    MAX_IMAGES_PER_MESSAGE,
-    AgentStats,
-    ApprovalResponse,
-    AssistantEvent,
-    BaseEvent,
-    ContextTooLongError,
-    ImageAttachment,
-    LLMMessage,
-    RateLimitError,
-    ReasoningEvent,
-    RefusalError,
-    Role,
-    ToolCallEvent,
-    ToolStreamEvent,
-    WaitingForInputEvent,
-)
-from vibe.core.utils import (
-    CancellationReason,
-    get_user_cancellation_message,
-    is_dangerous_directory,
-)
+from vibe.observability.logging import logger
+from vibe.observability.sentry import capture_sentry_exception
+from vibe.utils.data_retention import DATA_RETENTION_MESSAGE
+from vibe.utils.paths import is_dangerous_directory
+from vibe.utils.repository import repo_url_label
 
 _VSCODE_FAMILY_TERMINALS = {Terminal.VSCODE, Terminal.VSCODE_INSIDERS, Terminal.CURSOR}
+
+# Expected turn outcomes with bespoke user messages; not worth reporting to Sentry.
+_BENIGN_TURN_ERROR_CODES = {
+    "rate_limit",
+    "context_too_long",
+    "response_too_long",
+    "refusal",
+}
 
 if TYPE_CHECKING:
     from vibe.cli.textual_ui.widgets.connector_auth_app import ConnectorAuthApp
     from vibe.cli.textual_ui.widgets.mcp_app import MCPApp
     from vibe.cli.textual_ui.widgets.mcp_oauth_app import MCPOAuthApp
-    from vibe.core.agent_loop import AgentLoop
 
 
 def _get_connector_auth_app_class() -> type[ConnectorAuthApp]:
@@ -265,9 +255,18 @@ def _get_mcp_oauth_app_class() -> type[MCPOAuthApp]:
     return MCPOAuthApp
 
 
-def is_progress_event(event: object) -> bool:
+def _public_entry(event: AppServerEvent) -> PublicHistoryEntry | None:
+    match event:
+        case HistoryEntryAdded(entry=entry) | HistoryEntryUpdated(entry=entry):
+            return entry
+        case _:
+            return None
+
+
+def is_progress_event(event: AppServerEvent) -> bool:
+    entry = _public_entry(event)
     return isinstance(
-        event, (AssistantEvent, ReasoningEvent, ToolCallEvent, ToolStreamEvent)
+        entry, (PublicMessageEntry, PublicReasoningEntry, PublicEffectEntry)
     )
 
 
@@ -279,12 +278,11 @@ class BottomApp(StrEnum):
     """Bottom panel app types.
 
     Convention: Each value must match the widget class name with "App" suffix removed.
-    E.g., ApprovalApp -> Approval, ConfigApp -> Config, QuestionApp -> Question.
+    E.g., ApprovalApp -> Approval, QuestionApp -> Question.
     This allows dynamic lookup via: BottomApp[type(widget).__name__.removesuffix("App")]
     """
 
     Approval = auto()
-    Config = auto()
     ConnectorAuth = auto()
     Input = auto()
     MCP = auto()
@@ -295,8 +293,15 @@ class BottomApp(StrEnum):
     ThemePicker = auto()
     ThinkingPicker = auto()
     Rewind = auto()
+    VibeCodeProjectPicker = auto()
+    VibeCodeProjectCreate = auto()
     SessionPicker = auto()
     Voice = auto()
+
+
+# Smooth per-notch wheel scroll duration. Kept short so consecutive notches chain
+# into continuous motion at the same average speed as an instant jump.
+WHEEL_SCROLL_DURATION = 0.1
 
 
 class ChatScroll(VerticalScroll):
@@ -309,7 +314,24 @@ class ChatScroll(VerticalScroll):
     _reanchor_pending: bool = False
     _scrolling_down: bool = False
 
+    @property
+    def _is_selecting(self) -> bool:
+        try:
+            return self.screen._selecting
+        except NoScreen:
+            return False
+
+    def anchor(self, anchor: bool = True) -> None:
+        if anchor and self._is_selecting:
+            return
+        super().anchor(anchor)
+
+    def preserve_scroll_position(self) -> None:
+        super().release_anchor()
+
     def watch_scroll_y(self, old_value: float, new_value: float) -> None:
+        if self._is_selecting and new_value < old_value:
+            self._anchor_released = True
         super().watch_scroll_y(old_value, new_value)
         self._scrolling_down = new_value >= old_value
 
@@ -335,10 +357,32 @@ class ChatScroll(VerticalScroll):
     def update_node_styles(self, animate: bool = True) -> None:
         pass
 
+    def _on_mouse_scroll_down(self, event: MouseScrollDown) -> None:
+        self._smooth_wheel_scroll(event, self._scroll_down_for_pointer)
+
+    def _on_mouse_scroll_up(self, event: MouseScrollUp) -> None:
+        self._smooth_wheel_scroll(event, self._scroll_up_for_pointer)
+
+    def _smooth_wheel_scroll(
+        self, event: MouseScrollDown | MouseScrollUp, scroller: Callable[..., bool]
+    ) -> None:
+        # Leave ctrl/shift (horizontal) wheel to the base Widget handler, which
+        # Textual's MRO dispatch still reaches because we don't prevent_default.
+        if event.ctrl or event.shift or not self.allow_vertical_scroll:
+            return
+        # Cover the same per-notch distance as the default handler, but render it
+        # as a smooth linear glide so motion passes through each line one by one
+        # instead of jumping the full sensitivity in a single frame. prevent_default
+        # breaks the MRO loop so the base handler's instant jump never runs on top.
+        event.prevent_default()
+        if scroller(animate=True, duration=WHEEL_SCROLL_DURATION, easing="linear"):
+            event.stop()
+
 
 PRUNE_LOW_MARK = 1000
 PRUNE_HIGH_MARK = 1500
 DOUBLE_ESC_DELAY = 0.2
+MODE_SWITCH_SPINNER_DELAY = 0.5
 
 _DEFAULT_TYPING_DEBOUNCE_MS = 1000
 _TYPING_DEBOUNCE_ENV_VAR = "VIBE_TYPING_GRACE_PERIOD_MS"
@@ -396,16 +440,24 @@ class StartupOptions:
     teleport_on_start: bool = False
     show_resume_picker: bool = False
     is_resuming_session: bool = False
+    prompt_for_workspace_trust: bool = False
+
+
+type AppServerStarter = Callable[[], Awaitable[AppServerSession]]
+type AppServerSource = AppServerSession | AppServerStarter
+type AppServerBootstrap = Callable[[], Awaitable[AppServerHost | AppServerSession]]
+
+
+def _split_app_server_source(
+    source: AppServerSource,
+) -> tuple[AppServerSession | None, AppServerStarter | None]:
+    if isinstance(source, AppServerSession):
+        return source, None
+    return None, source
 
 
 _REJECT_HINT_BUSY = "wait for the current job to finish."
 _REJECT_HINT_PAUSED = "clear the queue first or remove this input."
-
-
-@dataclass(frozen=True, slots=True)
-class _ImageAttachmentRejection:
-    message: str
-    no_vision: bool = False
 
 
 class VibeApp(App):  # noqa: PLR0904
@@ -430,10 +482,6 @@ class VibeApp(App):  # noqa: PLR0904
             "ctrl+g", "open_plan_in_editor", "Edit Plan", show=False, priority=False
         ),
         Binding("ctrl+backslash", "toggle_debug_console", "Debug Console", show=False),
-        Binding("alt+up", "rewind_prev", "Rewind Previous", show=False, priority=True),
-        Binding("ctrl+p", "rewind_prev", "Rewind Previous", show=False, priority=True),
-        Binding("alt+down", "rewind_next", "Rewind Next", show=False, priority=True),
-        Binding("ctrl+n", "rewind_next", "Rewind Next", show=False, priority=True),
     ]
 
     def get_driver_class(self) -> type[Driver]:
@@ -446,12 +494,13 @@ class VibeApp(App):  # noqa: PLR0904
 
     def __init__(
         self,
-        agent_loop: AgentLoop,
+        history_file: Path,
+        app_server: AppServerSource,
+        *,
         startup: StartupOptions | None = None,
         update_notifier: UpdateGateway | None = None,
         update_cache_repository: UpdateCacheRepository | None = None,
         current_version: str = CORE_VERSION,
-        plan_offer_gateway: WhoAmIGateway | None = None,
         terminal_notifier: NotificationPort | None = None,
         voice_manager: VoiceManagerPort | None = None,
         narrator_manager: NarratorManagerPort | None = None,
@@ -459,45 +508,47 @@ class VibeApp(App):  # noqa: PLR0904
         **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
-        self.agent_loop = agent_loop
-        self._plan_info: PlanInfo | None = None
-        self._voice_manager: VoiceManagerPort = (
-            voice_manager or self._make_default_voice_manager()
-        )
+        self._app_server, self._start_app_server = _split_app_server_source(app_server)
+        self._client_dependencies_ready = False
+        self._prepare_lock = asyncio.Lock()
+        self._provided_voice_manager = voice_manager
+        self._provided_narrator_manager = narrator_manager
+        self._voice_manager: VoiceManagerPort
+        self._narrator_manager: NarratorManagerPort
+        self.commands: CommandRegistry
+        self._loop_commands: ScheduledLoopCommands
         self._terminal_notifier = terminal_notifier or TextualNotificationAdapter(
             self,
             get_enabled=lambda: self.config.enable_notifications,
             default_title="Vibe",
         )
-        self._agent_running = False
         self._interrupt_requested = False
         self._agent_task: asyncio.Task | None = None
         self._bash_task: asyncio.Task | None = None
         self._queue = QueueController(self._build_queue_ports())
 
         self._loading_widget: LoadingWidget | None = None
-        self._pending_approval: asyncio.Future | None = None
-        self._pending_question: asyncio.Future | None = None
-        self._user_interaction_lock = asyncio.Lock()
+        self._active_callback: PublicCallbackEntry | None = None
+        self._pending_callbacks: deque[PublicCallbackEntry] = deque()
+        self._pending_local_question: asyncio.Future[UserQuestionResult] | None = None
 
         self.event_handler: EventHandler | None = None
 
         self._chat_input_container: ChatInputContainer | None = None
         self._current_bottom_app: BottomApp = BottomApp.Input
+        self._vibe_code_project_picker = VibeCodeProjectPickerUiState()
 
-        self.history_file = HISTORY_FILE.path
+        self.history_file = history_file
 
         self._tools_collapsed = True
         self._windowing = SessionWindowing(load_more_batch_size=LOAD_MORE_BATCH_SIZE)
         self._load_more = HistoryLoadMoreManager()
-        self._tool_call_map: dict[str, str] | None = None
         self._history_widget_indices: WeakKeyDictionary[Widget, int] = (
             WeakKeyDictionary()
         )
         self._update_notifier = update_notifier
         self._update_cache_repository = update_cache_repository
         self._current_version = current_version
-        self._plan_offer_gateway = plan_offer_gateway
         self._vscode_extension_promo = vscode_extension_promo
         self._show_vscode_extension_promo = (
             vscode_extension_promo is not None
@@ -512,42 +563,66 @@ class VibeApp(App):  # noqa: PLR0904
         self._cached_messages_area: Widget | None = None
         self._cached_chat: ChatScroll | None = None
         self._cached_loading_area: Widget | None = None
-        self._log_reader = LogReader()
         self._debug_console: DebugConsole | None = None
-        self._switch_agent_generation = 0
-        self._narrator_manager: NarratorManagerPort = (
-            narrator_manager or self._make_default_narrator_manager()
-        )
-
+        self._desired_agent: str | None = None
+        self._agent_switch_active = False
         self._rewind_mode = False
         self._rewind_highlighted_widget: UserMessage | None = None
         self._fatal_init_error = False
         self._force_quit_task: asyncio.Task[None] | None = None
+        if self._app_server is not None:
+            self._initialize_client_dependencies()
+
+    @property
+    def app_server(self) -> AppServerSession:
+        if self._app_server is None:
+            raise RuntimeError("App server has not been started")
+        return self._app_server
+
+    async def prepare(self) -> None:
+        if self._client_dependencies_ready:
+            return
+        async with self._prepare_lock:
+            if self._client_dependencies_ready:
+                return
+            if self._app_server is None:
+                if self._start_app_server is None:
+                    raise RuntimeError("App server starter is unavailable")
+                self._app_server = await self._start_app_server()
+            self._initialize_client_dependencies()
+
+    def _initialize_client_dependencies(self) -> None:
+        if self._client_dependencies_ready:
+            return
+        self._voice_manager = (
+            self._provided_voice_manager or self._make_default_voice_manager()
+        )
+        self._narrator_manager = (
+            self._provided_narrator_manager or self._make_default_narrator_manager()
+        )
         self.commands = self._build_command_registry()
-        self._loop_runner = ScheduledLoopRunner(
-            self.agent_loop.session_logger,
-            can_fire=lambda: (
-                not self._agent_running and self._current_bottom_app == BottomApp.Input
-            ),
-            fire=self._handle_user_message,
-            mount=self._mount_and_scroll,
+        self._loop_commands = ScheduledLoopCommands(
+            self.app_server.resources.loops,
             tools_collapsed=lambda: self._tools_collapsed,
         )
+        self._teleport_on_start = (
+            self._teleport_on_start
+            and self.app_server.resources.config.base.vibe_code_enabled
+        )
+        self._client_dependencies_ready = True
 
     def _configure_startup_options(self, startup: StartupOptions | None) -> None:
         opts = startup or StartupOptions()
         self._initial_prompt = opts.initial_prompt
-        self._teleport_on_start = (
-            opts.teleport_on_start and self.agent_loop.base_config.vibe_code_enabled
-        )
+        self._teleport_on_start = opts.teleport_on_start
         self._show_resume_picker = opts.show_resume_picker
         self._is_resuming_session = opts.is_resuming_session
         self._startup_prompt_processed = False
         self._startup_command_availability_ready = asyncio.Event()
 
     @property
-    def config(self) -> VibeConfig:
-        return self.agent_loop.config
+    def config(self) -> ConfigView:
+        return self.app_server.resources.config.current
 
     @property
     def _input_queue(self) -> MessageQueue:
@@ -556,51 +631,73 @@ class VibeApp(App):  # noqa: PLR0904
     def _build_queue_ports(self) -> QueuePorts:
         return QueuePorts(
             mount_and_scroll=self._mount_and_scroll,
-            agent_running=lambda: self._agent_running,
+            agent_running=self._agent_job_active,
             bash_task=lambda: self._bash_task,
             active_model=self._active_model_or_none,
             remove_loading_widget=self._remove_loading_widget,
             set_loading_queue_count=self._set_loading_queue_count,
-            inject_user_context=self.agent_loop.inject_user_context,
-            next_message_index=lambda: len(self.agent_loop.messages),
+            inject_queued_prompt=self._inject_queued_prompt,
             start_agent_turn=self._start_queued_agent_turn,
             await_agent_turn=self._await_agent_turn,
             run_bash=self._start_queued_bash,
             maybe_show_feedback_bar=self._maybe_show_feedback_bar,
             send_skill_telemetry=self._send_skill_telemetry,
-            send_at_mention_telemetry=self._send_at_mention_telemetry,
-            render_payload=lambda payload: render_path_prompt_from_payload(
-                payload, skip_images=True
-            ),
         )
 
-    def _active_model_or_none(self) -> ModelConfig | None:
-        try:
-            return self.agent_loop.config.get_active_model()
-        except ValueError:
-            return None
+    def _active_model_or_none(self) -> ModelConfigView | None:
+        return self.config.active_model
+
+    def _agent_job_active(self) -> bool:
+        if self._app_server is not None and self._app_server.turn_active:
+            return True
+        return self._agent_task is not None and not self._agent_task.done()
 
     def _set_loading_queue_count(self, count: int) -> None:
         if self._loading_widget is not None:
             self._loading_widget.set_queue_count(count)
 
-    def _maybe_show_feedback_bar(self) -> None:
-        if self._feedback_bar_manager.should_show(self.agent_loop):
+    async def _inject_queued_prompt(
+        self,
+        content: str,
+        *,
+        images: list[ImageAttachment] | None = None,
+        client_message_id: str | None = None,
+        mention_stats: MentionStats | None = None,
+    ) -> None:
+        events = await self.app_server.inject_user_context(
+            content,
+            as_message=True,
+            inject_invoked_skill=True,
+            images=images,
+            client_message_id=client_message_id,
+            mention_stats=mention_stats,
+        )
+        for event in events:
+            self._track_narrator_event(event)
+            if self.event_handler:
+                await self.event_handler.handle_event(
+                    event, loading_widget=self._loading_widget
+                )
+
+    async def _maybe_show_feedback_bar(self) -> None:
+        if await self.app_server.resources.feedback.should_show(
+            pending_user_messages=1
+        ):
             self._feedback_bar.show()
-            self._feedback_bar_manager.record_feedback_asked(self.agent_loop)
+            await self.app_server.resources.feedback.record("asked")
 
     def _start_queued_agent_turn(
         self,
         content: str,
         *,
-        prebuilt_images: list[ImageAttachment] | None = None,
-        prebuilt_payload: PathPromptPayload | None = None,
+        prepared_prompt: PreparedPrompt | None = None,
+        client_message_id: str | None = None,
     ) -> asyncio.Task:
         self._agent_task = asyncio.create_task(
-            self._handle_agent_loop_turn(
+            self._handle_turn(
                 content,
-                prebuilt_images=prebuilt_images,
-                prebuilt_payload=prebuilt_payload,
+                prepared_prompt=prepared_prompt,
+                client_message_id=client_message_id,
             )
         )
         return self._agent_task
@@ -611,43 +708,45 @@ class VibeApp(App):  # noqa: PLR0904
             return
         await agent_task
 
-    def _start_queued_bash(
-        self, command: str, *, existing_widget: BashOutputMessage | None = None
-    ) -> asyncio.Task:
+    def _start_queued_bash(self, command: str) -> asyncio.Task:
         self._bash_task = asyncio.create_task(
-            self._handle_bash_command(
-                command, existing_widget=existing_widget, start_drain_on_finish=False
-            )
+            self._handle_bash_command(command, start_drain_on_finish=False)
         )
         return self._bash_task
 
-    @property
-    def _connectors_enabled(self) -> bool:
-        return self.agent_loop.connector_registry is not None
-
     def _build_command_registry(self) -> CommandRegistry:
-        return CommandRegistry(
-            vibe_code_enabled=self.agent_loop.base_config.vibe_code_enabled
+        context = self._command_context()
+        return CommandRegistry(vibe_code_enabled=context.vibe_code_enabled)
+
+    def _command_context(self) -> CommandContext:
+        return CommandContext(
+            vibe_code_enabled=self.app_server.resources.config.base.vibe_code_enabled
         )
 
     def _refresh_command_registry(self) -> None:
-        self.commands.refresh(self.agent_loop.base_config.vibe_code_enabled)
+        self.commands.refresh(self._command_context())
 
-    def _refresh_config_from_disk(self) -> None:
-        self.agent_loop.refresh_config()
+    async def on_load(self) -> None:
+        await self.prepare()
+
+    async def _refresh_config_from_disk(self) -> None:
+        await self.app_server.resources.config.reload(reload_runtime=False)
         self._narrator_manager.sync()
+        self._refresh_command_registry()
+
+    def get_default_screen(self) -> Screen:
+        return WordSelectScreen(id="_default")
 
     def compose(self) -> ComposeResult:
         with ChatScroll(id="chat"):
-            connectors_connected, connectors_total = compute_connector_counts(
-                self.config, self.agent_loop.connector_registry
-            )
+            connectors = self.app_server.resources.runtime.connectors
             self._banner = Banner(
                 config=self.config,
-                skill_manager=self.agent_loop.skill_manager,
-                connectors_connected=connectors_connected,
-                connectors_total=connectors_total,
-                hooks_count=self.agent_loop.hooks_count,
+                skills_count=self.app_server.resources.runtime.custom_skills_count,
+                mcp=self.app_server.resources.runtime.mcp,
+                connectors_connected=connectors.connected,
+                connectors_total=connectors.total,
+                hooks_count=self.app_server.resources.runtime.hooks_count,
             )
             yield self._banner
             yield VerticalGroup(id="messages")
@@ -666,17 +765,23 @@ class VibeApp(App):  # noqa: PLR0904
                 history_file=self.history_file,
                 command_registry=self.commands,
                 id="input-container",
-                safety=self.agent_loop.agent_profile.safety,
-                agent_name=self.agent_loop.agent_profile.display_name.lower(),
+                safety=self.app_server.resources.agents.active.safety,
+                agent_name=self.app_server.resources.agents.active.display_name.lower(),
                 skill_entries_getter=self._get_skill_entries,
                 file_watcher_for_autocomplete_getter=self._is_file_watcher_enabled,
                 voice_manager=self._voice_manager,
             )
 
         with Horizontal(id="bottom-bar"):
-            yield PathDisplay(self.config.displayed_workdir or Path.cwd())
+            yield PathDisplay(self.app_server.cwd)
             yield NoMarkupStatic(id="spacer")
-            yield ContextProgress()
+            context_progress = ContextProgress()
+            stats = self.app_server.resources.runtime.stats
+            context_progress.tokens = TokenState(
+                max_tokens=self.app_server.resources.runtime.context_window,
+                current_tokens=stats.context_tokens,
+            )
+            yield context_progress
 
     @property
     def _messages_area(self) -> Widget:
@@ -697,43 +802,33 @@ class VibeApp(App):  # noqa: PLR0904
         return self._cached_loading_area
 
     async def on_mount(self) -> None:
-        self._apply_theme(self.config.theme)
+        await self._apply_theme(self.config.theme)
+        self.app_server.resources.config.subscribe(self._on_config_changed)
         self._terminal_notifier.restore()
         self._feedback_bar = self.query_one(FeedbackBar)
-        self._feedback_bar_manager = FeedbackBarManager()
+        self.run_worker(self._complete_mount(), exclusive=False)
 
+    def _on_config_changed(self, config: ConfigView) -> None:
+        if resolve_theme_name(config.theme) != self.theme:
+            self.run_worker(self._apply_theme(config.theme))
+
+    async def _complete_mount(self) -> None:
         self.event_handler = EventHandler(
             mount_callback=self._mount_and_scroll,
             get_tools_collapsed=lambda: self._tools_collapsed,
             on_profile_changed=self._on_profile_changed,
+            get_show_thinking=lambda: self.config.show_thinking_nodes,
+            on_context_cleared=self._on_context_cleared,
         )
 
         self._chat_input_container = self.query_one(ChatInputContainer)
-        context_progress = self.query_one(ContextProgress)
 
-        def update_context_progress(stats: AgentStats) -> None:
-            context_progress.tokens = TokenState(
-                max_tokens=self.config.get_active_model().auto_compact_threshold,
-                current_tokens=stats.context_tokens,
-            )
-
-        self.agent_loop.stats.add_listener("context_tokens", update_context_progress)
-        self.agent_loop.stats.trigger_listeners()
-
-        self.agent_loop.set_approval_callback(self._approval_callback)
-        self.agent_loop.set_user_input_callback(self._user_input_callback)
         self._refresh_profile_widgets()
 
         chat_input_container = self.query_one(ChatInputContainer)
         chat_input_container.focus_input()
         await self._show_dangerous_directory_warning()
-        await self._resume_history_from_messages()
-        self._loop_runner.restore_from_session()
-        self._loop_runner.start()
-        if self._is_resuming_session:
-            await self.agent_loop.hydrate_experiments_from_session()
-        else:
-            self.agent_loop.start_initialize_experiments()
+        self.run_worker(self._deferred_resume_and_start(), exclusive=False)
 
         self.call_after_refresh(self._start_post_ready_startup)
         self.call_after_refresh(self._refresh_banner)
@@ -747,12 +842,19 @@ class VibeApp(App):  # noqa: PLR0904
         gc.collect()
         gc.freeze()
 
+    def _update_context_progress(self, event: StatsUpdated) -> None:
+        context_progress = self.query_one(ContextProgress)
+        context_progress.tokens = TokenState(
+            max_tokens=event.params.context_window,
+            current_tokens=event.params.stats.context_tokens,
+        )
+
     def _start_post_ready_startup(self) -> None:
         self.run_worker(self._complete_post_ready_startup(), exclusive=False)
 
     async def _complete_post_ready_startup(self) -> None:
         try:
-            await self._resolve_plan()
+            await self._refresh_account()
         finally:
             self._startup_command_availability_ready.set()
         await self._check_and_show_whats_new()
@@ -773,25 +875,25 @@ class VibeApp(App):  # noqa: PLR0904
             self._process_initial_prompt()
 
     def _show_config_issues(self) -> None:
-        for issue in (
-            *self.agent_loop.hook_config_issues,
-            *self.agent_loop.skill_manager.config_issues,
-        ):
+        for issue in self.app_server.resources.runtime.issues:
             self.notify(
                 f"{issue.file}\n{issue.message}",
                 severity="warning",
                 markup=False,
                 timeout=10,
             )
+        for warning in self.app_server.resources.config.base.validation_warnings:
+            self.notify(warning, severity="warning", markup=False, timeout=10)
 
     async def _watch_init_completion(self) -> None:
         """Show 'Initializing' loading indicator until background init finishes."""
         init_widget = None
         try:
-            if not self.agent_loop.is_initialized:
+            if not self.app_server.resources.runtime.ready:
                 await self._ensure_loading_widget("Initializing", show_hint=False)
                 init_widget = self._loading_widget
-            await self.agent_loop.wait_until_ready()
+            await self.app_server.resources.runtime.wait_until_ready()
+            self._show_mcp_discovery_failures()
             await self._show_mcp_auth_required_notice()
         except Exception as e:
             await self._mount_and_scroll(
@@ -816,18 +918,20 @@ class VibeApp(App):  # noqa: PLR0904
             except Exception:
                 pass
 
-    async def _show_mcp_auth_required_notice(self) -> None:
-        registry = self.agent_loop.mcp_registry
-        if registry is None:
-            return
-        from vibe.core.tools.mcp import AuthStatus
+    def _show_mcp_discovery_failures(self) -> None:
+        for server_name, error in sorted(
+            self.app_server.resources.runtime.mcp.discovery_errors.items()
+        ):
+            self.notify(
+                f"MCP server '{server_name}' failed to connect: {error}",
+                severity="warning",
+                markup=False,
+                timeout=10,
+            )
 
-        statuses = registry.status()
-        aliases = sorted(
-            alias
-            for alias, status in statuses.items()
-            if status is AuthStatus.NEEDS_AUTH
-        )
+    async def _show_mcp_auth_required_notice(self) -> None:
+        """Show a notice if any enabled MCP servers require OAuth authentication."""
+        aliases = self.app_server.resources.runtime.mcp.needs_auth
         if not aliases:
             return
         command = f"/mcp login {aliases[0]}"
@@ -907,13 +1011,16 @@ class VibeApp(App):  # noqa: PLR0904
         self.notify(message, severity="warning", markup=False)
 
     async def _dispatch_idle_input(self, value: str) -> None:
-        match classify(value, commands=self.commands, expand_skill=self._expand_skill):
+        match classify(
+            value, commands=self.commands, resolve_skill=self._resolve_skill
+        ):
             case Teleport(target=target):
                 await self._handle_teleport_command(target)
             case SlashCommand():
                 await self._handle_command(value)
-            case Skill(expanded_prompt=expanded):
-                await self._handle_user_message(expanded, title_source=value)
+            case Skill(command=command, name=name):
+                self._send_skill_telemetry(name)
+                await self._handle_user_message(command)
             case Bash(command=command):
                 self._bash_task = asyncio.create_task(
                     self._handle_bash_command(command)
@@ -934,7 +1041,9 @@ class VibeApp(App):  # noqa: PLR0904
         return True
 
     async def _handle_queue_submit(self, value: str, *, reject_hint: str) -> bool:
-        match classify(value, commands=self.commands, expand_skill=self._expand_skill):
+        match classify(
+            value, commands=self.commands, resolve_skill=self._resolve_skill
+        ):
             case Teleport():
                 self._warn_not_queueable(f"Teleport cannot be queued — {reject_hint}")
                 return False
@@ -943,12 +1052,12 @@ class VibeApp(App):  # noqa: PLR0904
                     f"Slash commands cannot be queued — {reject_hint}"
                 )
                 return False
-            case Skill(expanded_prompt=expanded, name=name):
+            case Skill(command=command, name=name):
                 return await self._enqueue_prompt_with_resources(
-                    expanded, skill_name=name
+                    command, skill_name=name
                 )
             case Bash(command=command):
-                await self._queue.enqueue_bash(command)
+                await self._queue.enqueue_bash(command, self.app_server.cwd)
             case EmptyBash():
                 await self._empty_bash_error()
             case Prompt(text=text):
@@ -958,17 +1067,16 @@ class VibeApp(App):  # noqa: PLR0904
     async def _enqueue_prompt_with_resources(
         self, content: str, *, skill_name: str | None = None
     ) -> bool:
-        payload = build_path_prompt_payload(content, base_dir=Path.cwd())
-        images = await self._prepare_images_or_abort(payload)
-        if images is None:
+        prepared = await self._prepare_prompt_or_abort(content)
+        if prepared is None:
             return False
         await self._queue.enqueue_prompt(
-            content, skill_name=skill_name, images=images, payload=payload
+            content, skill_name=skill_name, prepared_prompt=prepared
         )
         return True
 
     def _is_busy(self) -> bool:
-        if self._agent_running:
+        if self._agent_job_active():
             return True
         if self._bash_task is not None and not self._bash_task.done():
             return True
@@ -979,147 +1087,94 @@ class VibeApp(App):  # noqa: PLR0904
     async def on_approval_app_approval_granted(
         self, message: ApprovalApp.ApprovalGranted
     ) -> None:
-        if self._pending_approval and not self._pending_approval.done():
-            self._pending_approval.set_result((ApprovalResponse.YES, None))
+        await self._respond_to_approval(ApprovalDecisionType.APPROVE)
 
     async def on_approval_app_approval_granted_always_tool(
         self, message: ApprovalApp.ApprovalGrantedAlwaysTool
     ) -> None:
-        self.agent_loop.approve_always(message.tool_name, message.required_permissions)
-
-        if self._pending_approval and not self._pending_approval.done():
-            self._pending_approval.set_result((ApprovalResponse.YES, None))
+        await self._respond_to_approval(ApprovalDecisionType.APPROVE_FOR_SESSION)
 
     async def on_approval_app_approval_granted_always_permanent(
         self, message: ApprovalApp.ApprovalGrantedAlwaysPermanent
     ) -> None:
-        self.agent_loop.approve_always(
-            message.tool_name, message.required_permissions, save_permanently=True
-        )
-
-        if self._pending_approval and not self._pending_approval.done():
-            self._pending_approval.set_result((ApprovalResponse.YES, None))
+        await self._respond_to_approval(ApprovalDecisionType.APPROVE_PERMANENTLY)
 
     async def on_approval_app_approval_rejected(
         self, message: ApprovalApp.ApprovalRejected
     ) -> None:
-        if self._pending_approval and not self._pending_approval.done():
-            feedback = str(
-                get_user_cancellation_message(CancellationReason.OPERATION_CANCELLED)
-            )
-            self._pending_approval.set_result((ApprovalResponse.NO, feedback))
+        await self._respond_to_approval(ApprovalDecisionType.DENY)
 
         if self._loading_widget and self._loading_widget.parent:
             await self._remove_loading_widget()
 
     async def on_question_app_answered(self, message: QuestionApp.Answered) -> None:
-        if self._pending_question and not self._pending_question.done():
-            result = AskUserQuestionResult(answers=message.answers, cancelled=False)
-            self._pending_question.set_result(result)
+        result = UserQuestionResult(answers=message.answers, cancelled=False)
+        if self._active_callback is not None:
+            await self._respond_to_active_callback(
+                UserInputCallbackOutput(result=result)
+            )
+            return
+        if self._pending_local_question and not self._pending_local_question.done():
+            self._pending_local_question.set_result(result)
 
     async def on_question_app_cancelled(self, message: QuestionApp.Cancelled) -> None:
-        if self._pending_question and not self._pending_question.done():
-            result = AskUserQuestionResult(answers=[], cancelled=True)
-            self._pending_question.set_result(result)
+        result = UserQuestionResult(answers=[], cancelled=True)
+        if self._active_callback is not None:
+            await self._respond_to_active_callback(
+                UserInputCallbackOutput(result=result)
+            )
+            return
+        if self._pending_local_question and not self._pending_local_question.done():
+            self._pending_local_question.set_result(result)
 
     def on_chat_text_area_feedback_key_pressed(
         self, message: ChatTextArea.FeedbackKeyPressed
     ) -> None:
         self._feedback_bar.handle_feedback_key(message.rating)
 
+    def on_chat_text_area_snooze_key_pressed(
+        self, message: ChatTextArea.SnoozeKeyPressed
+    ) -> None:
+        self._feedback_bar.handle_snooze_key()
+
     def on_chat_text_area_non_feedback_key_pressed(
         self, message: ChatTextArea.NonFeedbackKeyPressed
     ) -> None:
         self._feedback_bar.hide()
 
-    def on_feedback_bar_feedback_given(
+    async def on_feedback_bar_feedback_given(
         self, message: FeedbackBar.FeedbackGiven
     ) -> None:
-        self.agent_loop.telemetry_client.send_user_rating_feedback(
-            rating=message.rating, model=self.config.active_model
+        self.app_server.resources.telemetry.record(
+            "vibe.user_rating_feedback",
+            {
+                "rating": message.rating,
+                "version": CORE_VERSION,
+                "model": self.config.active_model.alias,
+            },
+            correlate_last_request=True,
         )
+        await self.app_server.resources.feedback.record("given")
+
+    async def on_feedback_bar_snooze_key_pressed(
+        self, message: FeedbackBar.SnoozeKeyPressed
+    ) -> None:
+        await self.app_server.resources.feedback.record("snoozed")
 
     async def _remove_loading_widget(self) -> None:
         if self._loading_widget and self._loading_widget.parent:
             await self._loading_widget.remove()
             self._loading_widget = None
 
-    async def _resolve_turn_images(
-        self, payload: PathPromptPayload, prebuilt: list[ImageAttachment] | None
-    ) -> list[ImageAttachment] | None:
-        if prebuilt is not None:
-            return prebuilt
-        return await self._prepare_images_or_abort(payload)
-
-    async def _prepare_images_or_abort(
-        self, payload: PathPromptPayload
-    ) -> list[ImageAttachment] | None:
-        result = await self._build_image_attachments(payload)
-        if isinstance(result, _ImageAttachmentRejection):
+    async def _prepare_prompt_or_abort(self, message: str) -> PreparedPrompt | None:
+        try:
+            return await self.app_server.resources.workspace.prepare_prompt(message)
+        except AppServerResponseError as exc:
             await self._remove_loading_widget()
-            if result.no_vision:
-                await self._mount_and_scroll(
-                    ErrorMessage(result.message, show_border=False)
-                )
-            else:
-                await self._mount_and_scroll(
-                    ErrorMessage(result.message, collapsed=self._tools_collapsed)
-                )
+            await self._mount_and_scroll(
+                ErrorMessage(str(exc), collapsed=self._tools_collapsed)
+            )
             return None
-        return result
-
-    async def _build_image_attachments(
-        self, payload: PathPromptPayload
-    ) -> list[ImageAttachment] | _ImageAttachmentRejection:
-        image_resources = extract_image_resources(payload)
-        if not image_resources:
-            return []
-
-        if len(image_resources) > MAX_IMAGES_PER_MESSAGE:
-            return _ImageAttachmentRejection(
-                f"Too many image attachments (got {len(image_resources)}, "
-                f"max {MAX_IMAGES_PER_MESSAGE})."
-            )
-
-        try:
-            active_model = self.agent_loop.config.get_active_model()
-        except ValueError:
-            active_model = None
-        if active_model is not None and not active_model.supports_images:
-            return _ImageAttachmentRejection(
-                f"Model `{active_model.alias}` does not support images. "
-                f"Switch with /model, remove the attachment, or ask me to enable the support for this model.",
-                no_vision=True,
-            )
-
-        attachments: list[ImageAttachment] = []
-        session_dir = self.agent_loop.session_logger.session_dir
-        for resource in image_resources:
-            result = self._snapshot_single_image(resource, session_dir)
-            if isinstance(result, str):
-                return _ImageAttachmentRejection(result)
-            attachments.append(result)
-        return attachments
-
-    def _snapshot_single_image(
-        self, resource: PathResource, session_dir: Path | None
-    ) -> ImageAttachment | str:
-        try:
-            size = resource.path.stat().st_size
-        except OSError as e:
-            return f"Cannot read image {resource.alias}: {e}"
-        if size > MAX_IMAGE_BYTES:
-            return (
-                f"Image `{resource.alias}` is "
-                f"{size / (1024 * 1024):.1f} MB; max is "
-                f"{MAX_IMAGE_BYTES // (1024 * 1024)} MB."
-            )
-        try:
-            return snapshot_image(
-                resource.path, alias=resource.alias, session_dir=session_dir
-            )
-        except ImageSnapshotError as e:
-            return f"Failed to attach image {resource.alias}: {e}"
 
     def on_chat_text_area_clipboard_image_pasted(
         self, message: ChatTextArea.ClipboardImagePasted
@@ -1134,27 +1189,8 @@ class VibeApp(App):  # noqa: PLR0904
     async def _paste_clipboard_image_command(self, **_kwargs: Any) -> None:
         await handle_clipboard_image_paste(self, notify_when_empty=True)
 
-    async def on_config_app_open_model_picker(
-        self, _message: ConfigApp.OpenModelPicker
-    ) -> None:
-        config_app = self.query_one(ConfigApp)
-        changes = config_app._convert_changes_for_save()
-        if changes:
-            VibeConfig.save_updates(changes)
-            await self._reload_config()
-        await self._switch_to_input_app()
-        await self._switch_to_model_picker_app()
-
-    async def on_config_app_open_thinking_picker(
-        self, _message: ConfigApp.OpenThinkingPicker
-    ) -> None:
-        config_app = self.query_one(ConfigApp)
-        changes = config_app._convert_changes_for_save()
-        if changes:
-            VibeConfig.save_updates(changes)
-            await self._reload_config()
-        await self._switch_to_input_app()
-        await self._switch_to_thinking_picker_app()
+    async def _persist_config_changes(self, changes: dict[str, str | bool]) -> None:
+        await self.app_server.resources.config.update(changes)
 
     async def _ensure_loading_widget(
         self, status: str = DEFAULT_LOADING_STATUS, *, show_hint: bool = True
@@ -1171,26 +1207,22 @@ class VibeApp(App):  # noqa: PLR0904
         self._loading_widget = loading
         await loading_area.mount(loading)
 
-    async def on_config_app_config_closed(
-        self, message: ConfigApp.ConfigClosed
-    ) -> None:
-        await self._handle_config_settings_closed(message.changes)
-        await self._switch_to_input_app()
-
     async def on_voice_app_config_closed(self, message: VoiceApp.ConfigClosed) -> None:
         await self._handle_voice_settings_closed(message.changes)
         await self._switch_to_input_app()
 
-    async def _handle_config_settings_closed(
-        self, changes: dict[str, str | bool]
-    ) -> None:
-        if changes:
-            VibeConfig.save_updates(changes)
-            await self._reload_config()
-        else:
-            await self._mount_and_scroll(
-                UserCommandMessage("Configuration closed (no changes saved).")
-            )
+    def _apply_thinking_visibility(self) -> None:
+        show = self.config.show_thinking_nodes
+        for node in self._messages_area.query(ReasoningMessage):
+            node.display = show
+        for tc in self._messages_area.query(ToolCallMessage):
+            tc.recompute_gap()
+        for tr in self._messages_area.query(ToolResultMessage):
+            tr.recompute_gap()
+        # A group holding only a now-hidden thinking node must collapse so it
+        # doesn't leave a stray blank line.
+        for group in self._messages_area.query(ToolGroup):
+            group.sync_visibility()
 
     async def _handle_voice_settings_closed(
         self, changes: dict[str, str | bool]
@@ -1201,37 +1233,46 @@ class VibeApp(App):  # noqa: PLR0904
             )
             return
 
-        if "voice_mode_enabled" in changes:
-            current = self._voice_manager.is_enabled
-            desired = changes["voice_mode_enabled"]
-            if current != desired:
-                self._voice_manager.toggle_voice_mode()
-                self.agent_loop.telemetry_client.send_telemetry_event(
-                    "vibe.voice_mode_toggled", {"enabled": desired}
-                )
-                self._refresh_config_from_disk()
-                if desired:
-                    await self._mount_and_scroll(
-                        UserCommandMessage(
-                            "Voice mode enabled. Press ctrl+r to start recording."
-                        )
-                    )
-                else:
-                    await self._mount_and_scroll(
-                        UserCommandMessage("Voice mode disabled.")
-                    )
+        previous_voice_enabled = self.config.voice_mode_enabled
+        audio_error = (
+            check_audio_available()
+            if changes.get("voice_mode_enabled") is True
+            or changes.get("narrator_enabled") is True
+            else None
+        )
+        await self._persist_config_changes(changes)
 
-        non_voice_changes = {
-            k: v for k, v in changes.items() if k != "voice_mode_enabled"
-        }
-        if non_voice_changes:
-            VibeConfig.save_updates(non_voice_changes)
-            self._refresh_config_from_disk()
+        voice_enabled = self.config.voice_mode_enabled
+        if voice_enabled != previous_voice_enabled:
+            try:
+                self._voice_manager.apply_enabled(voice_enabled)
+            except Exception as exc:
+                logger.warning("Failed to apply voice mode locally", exc_info=exc)
+                audio_error = str(exc)
+            self.app_server.resources.telemetry.record(
+                "vibe.voice_mode_toggled", {"enabled": voice_enabled}
+            )
+            message = (
+                "Voice mode enabled. Press **Ctrl+R** to start recording."
+                if voice_enabled
+                else "Voice mode disabled."
+            )
+            await self._mount_and_scroll(UserCommandMessage(message))
+
+        self._narrator_manager.sync()
+        self._refresh_command_registry()
+        if audio_error:
+            self.notify(
+                f"Audio setting saved, but audio is unavailable: {audio_error}",
+                severity="warning",
+                timeout=15,
+                markup=False,
+            )
 
     async def on_model_picker_app_model_selected(
         self, message: ModelPickerApp.ModelSelected
     ) -> None:
-        VibeConfig.save_updates({"active_model": message.alias})
+        await self.app_server.resources.config.update({"active_model": message.alias})
         await self._reload_config()
         await self._switch_to_input_app()
 
@@ -1240,10 +1281,151 @@ class VibeApp(App):  # noqa: PLR0904
     ) -> None:
         await self._switch_to_input_app()
 
+    async def on_vibe_code_project_picker_app_project_selected(
+        self, message: VibeCodeProjectPickerApp.ProjectSelected
+    ) -> None:
+        await self._handle_vibe_code_project_selected(project_id=message.project_id)
+
+    async def _handle_vibe_code_project_selected(self, *, project_id: str) -> None:
+        if self._vibe_code_project_picker.view is None:
+            await self._mount_and_scroll(
+                ErrorMessage(
+                    "Vibe Code project picker is not ready.",
+                    collapsed=self._tools_collapsed,
+                )
+            )
+            await self._switch_to_input_app()
+            return
+
+        teleport_pending = self._vibe_code_project_picker.teleport_pending
+        view, project = await self.app_server.resources.vibe_code.select_project(
+            project_id
+        )
+        self._vibe_code_project_picker.view = view
+        if teleport_pending:
+            await self._continue_pending_teleport(project.project_id)
+            return
+
+        await self._mount_and_scroll(
+            UserCommandMessage(
+                f"Linked this repository to Vibe Code project **{project.name}**."
+            )
+        )
+        await self._switch_to_input_app()
+
+    async def on_vibe_code_project_picker_app_create_requested(
+        self, message: VibeCodeProjectPickerApp.CreateRequested
+    ) -> None:
+        context = self._vibe_code_project_picker.context
+        git_info = self._vibe_code_project_picker.git_info
+        repo_label = (
+            repo_url_label(context.repo_url) if context else "current repository"
+        )
+        await self._replace_bottom_app(
+            VibeCodeProjectCreateApp(
+                project_name=message.project_name,
+                repo_label=repo_label,
+                default_branch=suggested_default_branch(git_info),
+            )
+        )
+
+    async def on_vibe_code_project_create_app_submitted(
+        self, message: VibeCodeProjectCreateApp.Submitted
+    ) -> None:
+        if self._vibe_code_project_picker.view is None:
+            await self._mount_and_scroll(
+                ErrorMessage(
+                    "Vibe Code project picker is not ready.",
+                    collapsed=self._tools_collapsed,
+                )
+            )
+            await self._switch_to_input_app()
+            return
+
+        await self._ensure_loading_widget("Creating project", show_hint=False)
+        loading_widget = self._loading_widget
+        try:
+            view, project = await self.app_server.resources.vibe_code.create(
+                name=message.project_name, default_branch=message.default_branch
+            )
+        except AppServerResponseError as e:
+            await self._mount_and_scroll(
+                ErrorMessage(str(e), collapsed=self._tools_collapsed)
+            )
+            return
+        finally:
+            if self._loading_widget is loading_widget:
+                await self._remove_loading_widget()
+
+        self._vibe_code_project_picker.view = view
+        await self._handle_vibe_code_project_selected(project_id=project.project_id)
+
+    async def on_vibe_code_project_create_app_cancelled(
+        self, _message: VibeCodeProjectCreateApp.Cancelled
+    ) -> None:
+        await self._show_vibe_code_project_picker()
+
+    async def on_vibe_code_project_picker_app_load_more_requested(
+        self, _message: VibeCodeProjectPickerApp.LoadMoreRequested
+    ) -> None:
+        state = self._vibe_code_project_picker.picker_state
+        if state is None or not state.has_more:
+            await self._mount_and_scroll(
+                UserCommandMessage("No more projects to load.")
+            )
+            return
+
+        await self._ensure_loading_widget("Loading more projects", show_hint=False)
+        loading_widget = self._loading_widget
+        try:
+            (
+                view,
+                focus_option_id,
+            ) = await self.app_server.resources.vibe_code.load_more()
+        except AppServerResponseError as e:
+            await self._mount_and_scroll(
+                ErrorMessage(str(e), collapsed=self._tools_collapsed)
+            )
+            return
+        finally:
+            if self._loading_widget is loading_widget:
+                await self._remove_loading_widget()
+
+        self._vibe_code_project_picker.view = view
+
+        try:
+            picker = self.query_one(VibeCodeProjectPickerApp)
+        except Exception:
+            return
+        picker.update_projects(
+            projects=view.state.projects, has_more=view.state.has_more
+        )
+        if focus_option_id is not None:
+            picker.focus_option(focus_option_id)
+
+    async def on_vibe_code_project_picker_app_unlink_requested(
+        self, _message: VibeCodeProjectPickerApp.UnlinkRequested
+    ) -> None:
+        self._vibe_code_project_picker.view = (
+            await self.app_server.resources.vibe_code.unlink()
+        )
+        self._vibe_code_project_picker.clear_teleport()
+        await self._mount_and_scroll(
+            UserCommandMessage("Remote Vibe Code project link cleared.")
+        )
+        await self._switch_to_input_app()
+
+    async def on_vibe_code_project_picker_app_cancelled(
+        self, _event: VibeCodeProjectPickerApp.Cancelled
+    ) -> None:
+        await self.app_server.resources.vibe_code.cancel_picker()
+        self._vibe_code_project_picker.clear_teleport()
+        await self._switch_to_input_app()
+
     async def on_thinking_picker_app_thinking_selected(
         self, message: ThinkingPickerApp.ThinkingSelected
     ) -> None:
-        self.config.set_thinking(message.level)
+        await self.app_server.resources.config.set_thinking(message.level)
         await self._reload_config()
         await self._switch_to_input_app()
 
@@ -1255,23 +1437,22 @@ class VibeApp(App):  # noqa: PLR0904
     async def on_theme_picker_app_theme_previewed(
         self, message: ThemePickerApp.ThemePreviewed
     ) -> None:
-        self._apply_theme(message.theme)
-        await self._restyle_diff_widgets()
+        await self._apply_theme(message.theme)
 
     async def on_theme_picker_app_theme_selected(
         self, message: ThemePickerApp.ThemeSelected
     ) -> None:
-        self._apply_theme(message.theme)
-        self.config.theme = message.theme
-        VibeConfig.save_updates({"theme": message.theme})
-        await self._restyle_diff_widgets()
+        try:
+            await self.app_server.resources.config.update({"theme": message.theme})
+            await self.app_server.resources.config.reload(reload_runtime=False)
+        finally:
+            await self._apply_theme(self.config.theme)
         await self._switch_to_input_app()
 
     async def on_theme_picker_app_cancelled(
         self, message: ThemePickerApp.Cancelled
     ) -> None:
-        self._apply_theme(message.original_theme)
-        await self._restyle_diff_widgets()
+        await self._apply_theme(message.original_theme)
         await self._switch_to_input_app()
 
     async def _restyle_diff_widgets(self) -> None:
@@ -1286,16 +1467,14 @@ class VibeApp(App):  # noqa: PLR0904
         await self._switch_to_input_app()
 
     async def on_mcpapp_mcptoggled(self, message: MCPApp.MCPToggled) -> None:
-        from vibe.cli.textual_ui.widgets.mcp_app import MCPSourceKind
-
-        persist_mcp_toggle(
-            self.agent_loop.config,
+        await self.app_server.resources.mcp.toggle(
             name=message.name,
-            is_connector=message.kind == MCPSourceKind.CONNECTOR,
+            source=(
+                "connector" if message.kind == MCPSourceKind.CONNECTOR else "server"
+            ),
             disabled=message.disabled,
             tool_name=message.tool_name,
         )
-        self._refresh_config_from_disk()
         self.query_one(_get_mcp_app_class()).refresh_index()
         self._refresh_banner()
 
@@ -1306,9 +1485,7 @@ class VibeApp(App):  # noqa: PLR0904
         await self._switch_to_input_app()
         await self._switch_from_input(
             connector_auth_app_class(
-                connector_name=message.connector_name,
-                connector_registry=message.connector_registry,
-                tool_manager=message.tool_manager,
+                connector_name=message.connector_name, mcp=self.app_server.resources.mcp
             )
         )
 
@@ -1318,7 +1495,7 @@ class VibeApp(App):  # noqa: PLR0904
         await self._switch_to_input_app()
         await self._switch_from_input(
             _get_mcp_oauth_app_class()(
-                server_name=message.server_name, mcp_registry=message.mcp_registry
+                server_name=message.server_name, mcp=self.app_server.resources.mcp
             )
         )
 
@@ -1326,7 +1503,7 @@ class VibeApp(App):  # noqa: PLR0904
         self, message: ConnectorAuthApp.ConnectorAuthClosed
     ) -> None:
         if message.refreshed:
-            await self.agent_loop.refresh_system_prompt()
+            await self.app_server.resources.mcp.refresh()
             self._refresh_banner()
         await self._switch_to_input_app()
         await self._show_mcp(cmd_args=message.connector_name)
@@ -1342,18 +1519,21 @@ class VibeApp(App):  # noqa: PLR0904
     async def on_proxy_setup_app_proxy_setup_closed(
         self, message: ProxySetupApp.ProxySetupClosed
     ) -> None:
-        if message.error:
-            await self._mount_and_scroll(
-                ErrorMessage(f"Failed to save proxy settings: {message.error}")
-            )
-        elif message.saved:
-            await self._mount_and_scroll(
-                UserCommandMessage(
-                    "Proxy settings saved. Restart the CLI for changes to take effect."
-                )
-            )
-        else:
+        if not message.saved:
             await self._mount_and_scroll(UserCommandMessage("Proxy setup cancelled."))
+        else:
+            try:
+                await self.app_server.resources.config.update_proxy(message.changes)
+            except Exception as exc:
+                await self._mount_and_scroll(
+                    ErrorMessage(f"Failed to save proxy settings: {exc}")
+                )
+            else:
+                await self._mount_and_scroll(
+                    UserCommandMessage(
+                        "Proxy settings saved. Restart the CLI for changes to take effect."
+                    )
+                )
 
         await self._switch_to_input_app()
 
@@ -1377,8 +1557,9 @@ class VibeApp(App):  # noqa: PLR0904
     async def _handle_command(self, user_input: str) -> bool:
         if resolved := self.commands.parse_command(user_input):
             cmd_name, command, cmd_args = resolved
-            self.agent_loop.telemetry_client.send_slash_command_used(
-                cmd_name, "builtin"
+            self.app_server.resources.telemetry.record(
+                "vibe.slash_command_used",
+                {"command": cmd_name.lstrip("/"), "command_type": "builtin"},
             )
             command_text = user_input.strip()
             display = (
@@ -1396,96 +1577,38 @@ class VibeApp(App):  # noqa: PLR0904
         return False
 
     def _get_skill_entries(self) -> list[tuple[str, str]]:
-        if not self.agent_loop:
-            return []
         return [
-            (f"/{name}", info.description)
-            for name, info in self.agent_loop.skill_manager.available_skills.items()
-            if info.user_invocable
+            (f"/{skill.name}", skill.description)
+            for skill in self.app_server.resources.runtime.skills
+            if skill.user_invocable
         ]
 
-    def _expand_skill(self, user_input: str) -> Skill | None:
-        if not self.agent_loop:
+    def _resolve_skill(self, user_input: str) -> Skill | None:
+        stripped = user_input.strip()
+        if not stripped.startswith("/"):
             return None
-        skill = self.agent_loop.skill_manager.parse_skill_command(user_input)
-        if skill is None:
+        parts = stripped[1:].split(None, 1)
+        if not parts:
             return None
-        return Skill(
-            expanded_prompt=SkillManager.build_skill_prompt(user_input, skill),
-            name=skill.name,
-        )
+        name = parts[0].lower()
+        skill = self.app_server.resources.runtime.get_skill(name)
+        if skill is None or not skill.user_invocable:
+            return None
+        return Skill(command=user_input, name=skill.name)
 
     def _send_skill_telemetry(self, name: str | None) -> None:
         if name is None:
             return
-        self.agent_loop.telemetry_client.send_slash_command_used(name, "skill")
-
-    def _send_at_mention_telemetry(
-        self, payload: PathPromptPayload, message_id: str
-    ) -> None:
-        if not payload.all_resources:
-            return
-        context_types: dict[str, int] = {}
-        for r in payload.all_resources:
-            context_types[r.kind] = context_types.get(r.kind, 0) + 1
-        file_ext_counts: dict[str, int] = {}
-        for r in payload.all_resources:
-            if r.kind == "file" and r.path.suffix:
-                file_ext_counts[r.path.suffix] = (
-                    file_ext_counts.get(r.path.suffix, 0) + 1
-                )
-        self.agent_loop.telemetry_client.send_at_mention_inserted(
-            nb_mentions=len(payload.all_resources),
-            context_types=context_types,
-            file_extensions=file_ext_counts or None,
-            message_id=message_id,
+        self.app_server.resources.telemetry.record(
+            "vibe.slash_command_used",
+            {"command": name.lstrip("/"), "command_type": "skill"},
         )
 
-    @staticmethod
-    async def _bash_read_stream(
-        stream: asyncio.StreamReader | None,
-        parts: list[str],
-        bash_msg: BashOutputMessage,
-    ) -> None:
-        if not stream:
-            return
-        decoder = codecs.getincrementaldecoder("utf-8")(errors="replace")
-        while True:
-            chunk = await stream.read(4096)
-            if not chunk:
-                break
-            text = decoder.decode(chunk)
-            if not text:
-                continue
-            parts.append(text)
-            await bash_msg.append_output(text)
-        final_text = decoder.decode(b"", final=True)
-        if not final_text:
-            return
-        parts.append(final_text)
-        await bash_msg.append_output(final_text)
-
-    @staticmethod
-    async def _kill_running_process(proc: asyncio.subprocess.Process | None) -> None:
-        if proc is None or proc.returncode is not None:
-            return
-        try:
-            proc.kill()
-        except ProcessLookupError:
-            pass
-        await proc.wait()
-
     async def _handle_bash_command(
-        self,
-        command: str,
-        *,
-        existing_widget: BashOutputMessage | None = None,
-        start_drain_on_finish: bool = True,
+        self, command: str, *, start_drain_on_finish: bool = True
     ) -> None:
         try:
-            await self._handle_bash_command_inner(
-                command, existing_widget=existing_widget
-            )
+            await self._handle_bash_command_inner(command)
         finally:
             current = asyncio.current_task()
             if self._bash_task is current:
@@ -1494,9 +1617,7 @@ class VibeApp(App):  # noqa: PLR0904
             if start_drain_on_finish:
                 self._queue.start_drain_if_needed()
 
-    async def _handle_bash_command_inner(
-        self, command: str, *, existing_widget: BashOutputMessage | None = None
-    ) -> None:
+    async def _handle_bash_command_inner(self, command: str) -> None:
         if not command:
             await self._mount_and_scroll(
                 ErrorMessage(
@@ -1505,168 +1626,43 @@ class VibeApp(App):  # noqa: PLR0904
             )
             return
 
-        if existing_widget is not None:
-            bash_msg = existing_widget
-        else:
-            bash_msg = BashOutputMessage(command, str(Path.cwd()), pending=True)
-            await self._mount_and_scroll(bash_msg)
         await self._ensure_loading_widget("Running command")
         bash_loading_widget = self._loading_widget
 
-        proc: asyncio.subprocess.Process | None = None
-        stdout_parts: list[str] = []
-        stderr_parts: list[str] = []
         try:
-            proc = await asyncio.create_subprocess_shell(
-                command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
-            )
-
-            try:
-                await asyncio.wait_for(
-                    asyncio.gather(
-                        self._bash_read_stream(proc.stdout, stdout_parts, bash_msg),
-                        self._bash_read_stream(proc.stderr, stderr_parts, bash_msg),
-                        proc.wait(),
-                    ),
-                    timeout=30,
-                )
-            except TimeoutError:
-                await self._kill_running_process(proc)
-                stdout = "".join(stdout_parts)
-                stderr = "".join(stderr_parts)
-                await bash_msg.finish(1)
-                await self._mount_and_scroll(
-                    ErrorMessage(
-                        "Command timed out after 30 seconds",
-                        collapsed=self._tools_collapsed,
-                    )
-                )
-                await self.agent_loop.inject_user_context(
-                    self._format_manual_command_context(
-                        command=command,
-                        cwd=str(Path.cwd()),
-                        stdout=stdout,
-                        stderr=stderr,
-                        status="timed out after 30 seconds",
-                    )
-                )
-                return
-
-            stdout = "".join(stdout_parts)
-            stderr = "".join(stderr_parts)
-            exit_code = proc.returncode or 0
-            await bash_msg.finish(exit_code)
-            await self.agent_loop.inject_user_context(
-                self._format_manual_command_context(
-                    command=command,
-                    cwd=str(Path.cwd()),
-                    exit_code=exit_code,
-                    stdout=stdout,
-                    stderr=stderr,
-                )
-            )
+            result: ShellRunResponse | None = None
+            async for event in self.app_server.resources.shell.run(command):
+                match event:
+                    case HistoryEntryAdded() | HistoryEntryUpdated():
+                        if self.event_handler is not None:
+                            await self.event_handler.handle_event(
+                                event, loading_widget=self._loading_widget
+                            )
+                    case ShellRunResponse() as response:
+                        result = response
+            if result is None:
+                raise RuntimeError("Shell operation ended without a result")
         except asyncio.CancelledError:
-            await self._kill_running_process(proc)
-            await bash_msg.finish(1, interrupted=True)
-            stdout = "".join(stdout_parts)
-            stderr = "".join(stderr_parts)
-            await self.agent_loop.inject_user_context(
-                self._format_manual_command_context(
-                    command=command,
-                    cwd=str(Path.cwd()),
-                    stdout=stdout,
-                    stderr=stderr,
-                    status="interrupted by user",
-                )
-            )
+            pass
         except Exception as e:
-            await self._kill_running_process(proc)
-            await bash_msg.finish(1)
-            stdout = "".join(stdout_parts)
-            stderr = "".join(stderr_parts)
             await self._mount_and_scroll(
                 ErrorMessage(f"Command failed: {e}", collapsed=self._tools_collapsed)
-            )
-            await self.agent_loop.inject_user_context(
-                self._format_manual_command_context(
-                    command=command,
-                    cwd=str(Path.cwd()),
-                    stdout=stdout,
-                    stderr=stderr,
-                    status=f"failed before completion: {e}",
-                )
             )
         finally:
             if self._loading_widget is bash_loading_widget:
                 await self._remove_loading_widget()
 
-    def _get_bash_max_output_bytes(self) -> int:
-        from vibe.core.tools.builtins.bash import BashToolConfig
-
-        config = self.agent_loop.tool_manager.get_tool_config("bash")
-        if isinstance(config, BashToolConfig):
-            return config.max_output_bytes
-        return BashToolConfig().max_output_bytes
-
-    @staticmethod
-    def _cap_output(text: str, limit: int) -> str:
-        if len(text) <= limit:
-            return text
-        return text[:limit] + "\n... [truncated]"
-
-    def _format_manual_command_context(
-        self,
-        *,
-        command: str,
-        cwd: str,
-        stdout: str = "",
-        stderr: str = "",
-        exit_code: int | None = None,
-        status: str | None = None,
-    ) -> str:
-        limit = self._get_bash_max_output_bytes()
-        stdout = self._cap_output(stdout, limit)
-        stderr = self._cap_output(stderr, limit)
-
-        sections = [
-            "Manual `!` command result from the user. Use this as context only.",
-            f"Command: `{command}`",
-            f"Working directory: `{cwd}`",
-        ]
-
-        if status is not None:
-            sections.append(f"Status: {status}")
-
-        if exit_code is not None:
-            sections.append(f"Exit code: {exit_code}")
-
-        if stdout:
-            sections.append(f"Stdout:\n```text\n{stdout.rstrip()}\n```")
-
-        if stderr:
-            sections.append(f"Stderr:\n```text\n{stderr.rstrip()}\n```")
-
-        if not stdout and not stderr:
-            sections.append("Output:\n```text\n(no output)\n```")
-
-        return "\n\n".join(sections)
-
-    async def _handle_user_message(
-        self, message: str, *, title_source: str | None = None
-    ) -> None:
-        prompt_payload = build_path_prompt_payload(message, base_dir=Path.cwd())
-        images = await self._prepare_images_or_abort(prompt_payload)
-        if images is None:
+    async def _handle_user_message(self, message: str) -> None:
+        prepared = await self._prepare_prompt_or_abort(message)
+        if prepared is None:
             input_widget = self.query_one(ChatInputContainer)
             if not input_widget.value:
                 input_widget.value = message
             return
 
-        # message_index is where the user message will land in agent_loop.messages
-        # (checkpoint is created in agent_loop.act())
-        message_index = len(self.agent_loop.messages)
+        message_id = str(uuid4())
         user_message = UserMessage(
-            message, message_index=message_index, images=images or None
+            message, history_entry_id=message_id, images=prepared.images or None
         )
 
         messages_area = self._cached_messages_area or self.query_one("#messages")
@@ -1676,57 +1672,51 @@ class VibeApp(App):  # noqa: PLR0904
             user_message.set_follows_previous(True)
 
         await self._mount_and_scroll(user_message)
-        if self._feedback_bar_manager.should_show(self.agent_loop):
-            self._feedback_bar.show()
-            self._feedback_bar_manager.record_feedback_asked(self.agent_loop)
+        await self._maybe_show_feedback_bar()
 
-        if not self._agent_running:
+        if not self._agent_job_active():
             await self._remove_loading_widget()
             self._agent_task = asyncio.create_task(
-                self._handle_agent_loop_turn(
-                    message,
-                    title_source=title_source,
-                    prebuilt_images=images,
-                    prebuilt_payload=prompt_payload,
+                self._handle_turn(
+                    message, prepared_prompt=prepared, client_message_id=message_id
                 )
             )
             self._queue.notify_busy_changed()
 
     def _reset_ui_state(self) -> None:
         self._windowing.reset()
-        self._tool_call_map = None
         self._history_widget_indices = WeakKeyDictionary()
+
+    async def _deferred_resume_and_start(self) -> None:
+        await self._resume_history_from_messages()
+        self.run_worker(self._listen_app_server_events(), exclusive=False)
 
     async def _resume_history_from_messages(self) -> None:
         messages_area = self._messages_area
         if not should_resume_history(list(messages_area.children)):
             return
 
-        history_messages = non_system_history_messages(self.agent_loop.messages)
         if (
-            plan := create_resume_plan(history_messages, HISTORY_RESUME_TAIL_MESSAGES)
+            plan := create_resume_plan(
+                self.app_server.history, HISTORY_RESUME_TAIL_MESSAGES
+            )
         ) is None:
             return
         await self._mount_history_batch(
-            plan.tail_messages,
-            messages_area,
-            plan.tool_call_map,
-            start_index=plan.tail_start_index,
+            plan.tail_entries, messages_area, start_index=plan.tail_start_index
         )
         self.call_after_refresh(self._chat_widget.anchor)
-        self._tool_call_map = plan.tool_call_map
-        self._windowing.set_backfill(plan.backfill_messages)
+        self._windowing.set_backfill(plan.backfill_entries)
         await self._load_more.set_visible(
             messages_area,
-            visible=self._windowing.has_backfill,
-            remaining=self._windowing.remaining,
+            visible=self._has_older_history,
+            remaining=self._history_backfill_remaining,
         )
 
     async def _mount_history_batch(
         self,
-        batch: list[LLMMessage],
+        batch: list[PublicHistoryEntry],
         messages_area: Widget,
-        tool_call_map: dict[str, str],
         *,
         start_index: int,
         before: Widget | int | None = None,
@@ -1734,9 +1724,9 @@ class VibeApp(App):  # noqa: PLR0904
     ) -> None:
         widgets = build_history_widgets(
             batch=batch,
-            tool_call_map=tool_call_map,
             start_index=start_index,
             history_widget_indices=self._history_widget_indices,
+            tools_collapsed=self._tools_collapsed,
         )
 
         with self.batch_update():
@@ -1754,7 +1744,7 @@ class VibeApp(App):  # noqa: PLR0904
                 await widget.write_initial_content()
 
     def _is_tool_enabled_in_main_agent(self, tool: str) -> bool:
-        return tool in self.agent_loop.tool_manager.available_tools
+        return self.app_server.resources.runtime.has_tool(tool)
 
     async def _wait_for_typing_pause(self) -> None:
         try:
@@ -1779,128 +1769,210 @@ class VibeApp(App):  # noqa: PLR0904
             if self._loading_widget:
                 self._loading_widget.hide_debounce_hint()
 
-    async def _approval_callback(
-        self,
-        tool: str,
-        args: BaseModel,
-        tool_call_id: str,
-        required_permissions: list[RequiredPermission] | None,
-    ) -> tuple[ApprovalResponse, str | None]:
-        # Auto-approve only if parent is in auto-approve mode AND tool is enabled
-        # This ensures subagents respect the main agent's tool restrictions
-        if self.agent_loop and self.agent_loop.config.bypass_tool_permissions:
-            if self._is_tool_enabled_in_main_agent(tool):
-                return (ApprovalResponse.YES, None)
-
-        async with self._user_interaction_lock:
+    async def _request_local_user_input(
+        self, request: UserQuestionRequest
+    ) -> UserQuestionResult:
+        if self._active_callback is not None:
+            raise RuntimeError("Cannot open local input while a callback is active")
+        self._pending_local_question = asyncio.get_running_loop().create_future()
+        try:
             await self._wait_for_typing_pause()
-            self._pending_approval = asyncio.Future()
             self._terminal_notifier.notify(NotificationContext.ACTION_REQUIRED)
-            try:
-                with paused_timer(self._loading_widget):
-                    await self._switch_to_approval_app(tool, args, required_permissions)
-                    result = await self._pending_approval
-                return result
-            finally:
-                self._pending_approval = None
+            with paused_timer(self._loading_widget):
+                await self._switch_to_question_app(request)
+                return await self._pending_local_question
+        finally:
+            self._pending_local_question = None
+            if self._pending_callbacks and self._active_callback is None:
+                await self._show_callback(self._pending_callbacks.popleft())
+            else:
                 await self._switch_to_input_app()
 
-    async def _user_input_callback(self, args: BaseModel) -> BaseModel:
-        question_args = cast(AskUserQuestionArgs, args)
-
-        async with self._user_interaction_lock:
+    async def _show_callback(self, callback: PublicCallbackEntry) -> None:
+        if (
+            self._active_callback is not None
+            or self._pending_local_question is not None
+        ):
+            if (
+                self._active_callback is not None
+                and self._active_callback.callback_id == callback.callback_id
+            ):
+                return
+            if any(
+                pending.callback_id == callback.callback_id
+                for pending in self._pending_callbacks
+            ):
+                return
+            self._pending_callbacks.append(callback)
+            return
+        self._active_callback = callback
+        try:
             await self._wait_for_typing_pause()
-            self._pending_question = asyncio.Future()
             self._terminal_notifier.notify(NotificationContext.ACTION_REQUIRED)
-            try:
-                with paused_timer(self._loading_widget):
-                    await self._switch_to_question_app(question_args)
-                    result = await self._pending_question
-                return result
-            finally:
-                self._pending_question = None
-                await self._switch_to_input_app()
+            match callback.detail:
+                case ApprovalCallbackDetail() as detail:
+                    await self._switch_to_approval_app(
+                        detail.effect, detail.required_permissions
+                    )
+                case UserInputCallbackDetail() as detail:
+                    await self._switch_to_question_app(detail.request)
+        except BaseException:
+            if self._active_callback is callback:
+                self._active_callback = None
+            raise
 
-    async def _handle_turn_error(self) -> None:
+    async def _respond_to_approval(
+        self, decision: ApprovalDecisionType, feedback: str | None = None
+    ) -> None:
+        callback = self._active_callback
+        if callback is None or not isinstance(callback.detail, ApprovalCallbackDetail):
+            return
+        await self._respond_to_active_callback(
+            ApprovalCallbackOutput(
+                decision=ApprovalDecision(type=decision), feedback=feedback
+            )
+        )
+
+    async def _respond_to_active_callback(
+        self, output: ApprovalCallbackOutput | UserInputCallbackOutput
+    ) -> None:
+        callback = self._active_callback
+        if callback is None:
+            return
+        await self.app_server.respond_to_callback(callback.callback_id, output)
+        if self._active_callback is callback:
+            self._active_callback = None
+            if self._pending_callbacks:
+                await self._show_callback(self._pending_callbacks.popleft())
+                return
+            await self._switch_to_input_app()
+
+    async def _handle_turn_error(self, *, cancelled: bool = False) -> None:
         if self._loading_widget and self._loading_widget.parent:
             await self._loading_widget.remove()
         if self.event_handler:
-            self.event_handler.stop_current_tool_call(success=False)
+            self.event_handler.stop_current_tool_call(
+                success=False, cancelled=cancelled
+            )
 
-    async def _handle_agent_loop_init(self) -> None:
-        show_init_spinner = not self.agent_loop.is_initialized
+    async def _ensure_runtime_ready(self) -> None:
+        show_init_spinner = not self.app_server.resources.runtime.ready
         if show_init_spinner:
             await self._ensure_loading_widget("Initializing", show_hint=False)
-        await self.agent_loop.wait_until_ready()
+        await self.app_server.resources.runtime.wait_until_ready()
         if show_init_spinner:
             await self._remove_loading_widget()
             self._refresh_banner()
 
-    async def _handle_agent_loop_events(
-        self, events: AsyncGenerator[BaseEvent]
+    async def _handle_turn_events(
+        self, events: AsyncGenerator[AppServerEvent, None]
     ) -> None:
         async for event in events:
-            self._narrator_manager.on_turn_event(event)
-            if isinstance(event, WaitingForInputEvent):
-                await self._remove_loading_widget()
-            elif isinstance(event, HookStartEvent):
-                await self._ensure_loading_widget(f"Running hook {event.hook_name}")
-            elif self._loading_widget is None and is_progress_event(event):
-                await self._ensure_loading_widget()
-            if self.event_handler:
-                await self.event_handler.handle_event(
-                    event, loading_widget=self._loading_widget
-                )
+            await self._handle_turn_event(event)
 
-    async def _handle_agent_loop_turn(
+    async def _handle_turn_event(self, event: AppServerEvent) -> None:
+        self._track_narrator_event(event)
+        if isinstance(event, ServerWarning):
+            self.notify(event.params.warning.message, severity="warning")
+            return
+        if isinstance(event, ServerError):
+            self.notify(event.params.error.message, severity="error")
+            return
+        if isinstance(event, CallbackRequested):
+            await self._show_callback(event.callback)
+            return
+        if isinstance(event, StatsUpdated):
+            self._update_context_progress(event)
+            return
+        entry = _public_entry(event)
+        if isinstance(entry, PublicNoticeEntry) and isinstance(
+            entry.detail, WaitingForInputNoticeDetail
+        ):
+            await self._remove_loading_widget()
+        elif self._loading_widget is None and is_progress_event(event):
+            await self._ensure_loading_widget()
+        if self.event_handler:
+            await self.event_handler.handle_event(
+                event, loading_widget=self._loading_widget
+            )
+
+    async def _listen_app_server_events(self) -> None:
+        async with aclosing(self.app_server.events()) as events:
+            async for event in events:
+                if isinstance(event, TurnStarted):
+                    await self._begin_unsolicited_turn()
+                await self._handle_turn_event(event)
+                if isinstance(event, TurnCompleted):
+                    await self._complete_unsolicited_turn(event)
+
+    async def _begin_unsolicited_turn(self) -> None:
+        self._queue.notify_busy_changed()
+        await self._remove_loading_widget()
+        await self._ensure_loading_widget()
+        self._narrator_manager.cancel()
+        self._narrator_manager.on_turn_start("")
+
+    async def _complete_unsolicited_turn(self, event: TurnCompleted) -> None:
+        if event.turn.status is PublicTurnStatus.FAILED:
+            error = AppServerTurnError(event.turn.error)
+            await self._handle_turn_error()
+            message = self._resolve_turn_error_message(error)
+            self._narrator_manager.on_turn_error(message)
+            await self._mount_and_scroll(
+                ErrorMessage(message, collapsed=self._tools_collapsed)
+            )
+        elif event.turn.status is PublicTurnStatus.INTERRUPTED:
+            await self._handle_turn_error(cancelled=True)
+            self._narrator_manager.on_turn_cancel()
+        await self._finalize_turn_ui()
+
+    def _track_narrator_event(self, event: AppServerEvent) -> None:
+        match event:
+            case HistoryEntryAdded(entry=PublicMessageEntry(role="user") as entry):
+                self._narrator_manager.on_user_message(entry.id)
+            case HistoryEntryAdded(entry=PublicMessageEntry(role="assistant") as entry):
+                self._narrator_manager.on_assistant_text(entry.text)
+            case HistoryEntryUpdated(
+                entry=PublicMessageEntry(role="assistant"), patch=patch
+            ):
+                for operation in patch:
+                    if (
+                        operation.op == "append"
+                        and operation.path == "/content/0/text"
+                        and isinstance(operation.value, str)
+                    ):
+                        self._narrator_manager.on_assistant_text(operation.value)
+
+    async def _handle_turn(
         self,
         prompt: str,
         *,
-        title_source: str | None = None,
-        prebuilt_images: list[ImageAttachment] | None = None,
-        prebuilt_payload: PathPromptPayload | None = None,
+        prepared_prompt: PreparedPrompt | None = None,
+        client_message_id: str | None = None,
     ) -> None:
-        self._agent_running = True
-
         await self._remove_loading_widget()
 
         try:
-            await self._handle_agent_loop_init()
+            await self._ensure_runtime_ready()
             await self._ensure_loading_widget()
-            message_id = str(uuid4())
-            prompt_payload = prebuilt_payload or build_path_prompt_payload(
-                prompt, base_dir=Path.cwd()
-            )
-            self._send_at_mention_telemetry(prompt_payload, message_id)
-            images = await self._resolve_turn_images(prompt_payload, prebuilt_images)
-            if images is None:
+            message_id = client_message_id or str(uuid4())
+            prepared = prepared_prompt or await self._prepare_prompt_or_abort(prompt)
+            if prepared is None:
                 return
-            rendered_prompt = render_path_prompt_from_payload(
-                prompt_payload, skip_images=True
-            )
-            auto_title: str | None = None
-            if self.agent_loop.session_logger.needs_initial_auto_title():
-                auto_title = (
-                    format_session_title(
-                        build_title_segments(
-                            title_source or prompt, base_dir=Path.cwd()
-                        )
-                    )
-                    or None
-                )
             self._narrator_manager.cancel()
-            self._narrator_manager.on_turn_start(rendered_prompt)
+            self._narrator_manager.on_turn_start(prepared.prompt_text)
             async with aclosing(
-                self.agent_loop.act(
-                    rendered_prompt,
+                self.app_server.act(
+                    prepared.prompt_text,
                     client_message_id=message_id,
-                    auto_title=auto_title,
-                    images=images or None,
+                    auto_title=prepared.auto_title,
+                    images=prepared.images or None,
+                    mention_stats=prepared.mentions,
                 )
             ) as events:
-                await self._handle_agent_loop_events(events)
+                await self._handle_turn_events(events)
         except asyncio.CancelledError:
-            await self._handle_turn_error()
+            await self._handle_turn_error(cancelled=True)
             self._narrator_manager.on_turn_cancel()
             raise
         except Exception as e:
@@ -1911,6 +1983,15 @@ class VibeApp(App):  # noqa: PLR0904
             if self._fatal_init_error:
                 return
 
+            public_error = e.error if isinstance(e, AppServerTurnError) else None
+            if (
+                public_error is None
+                or public_error.code not in _BENIGN_TURN_ERROR_CODES
+            ):
+                capture_sentry_exception(
+                    e, fatal=False, tags={"vibe_boundary": "app_server_turn"}
+                )
+
             message = self._resolve_turn_error_message(e)
             self._narrator_manager.on_turn_error(message)
 
@@ -1918,35 +1999,38 @@ class VibeApp(App):  # noqa: PLR0904
                 ErrorMessage(message, collapsed=self._tools_collapsed)
             )
         finally:
-            self._narrator_manager.on_turn_end()
-            self._agent_running = False
-            self._interrupt_requested = False
-            self._agent_task = None
-            if self._loading_widget:
-                await self._loading_widget.remove()
-            self._loading_widget = None
-            if self.event_handler:
-                await self.event_handler.finalize_streaming()
-            self._queue.notify_busy_changed()
-            self._queue.start_drain_if_needed()
-            await self._refresh_windowing_from_history()
-            self._terminal_notifier.notify(NotificationContext.COMPLETE)
+            await self._finalize_turn_ui()
+
+    async def _finalize_turn_ui(self) -> None:
+        self._narrator_manager.on_turn_end()
+        self._interrupt_requested = False
+        self._agent_task = None
+        if self._loading_widget:
+            await self._loading_widget.remove()
+        self._loading_widget = None
+        if self.event_handler:
+            await self.event_handler.finalize_streaming()
+            self.event_handler.escalate_unresolved_errors()
+        self._queue.notify_busy_changed()
+        self._queue.start_drain_if_needed()
+        await self._refresh_windowing_from_history()
+        self._terminal_notifier.notify(NotificationContext.COMPLETE)
 
     def _resolve_turn_error_message(self, e: Exception) -> str:
-        if isinstance(e, RateLimitError):
-            return self._rate_limit_message()
-        if isinstance(e, ContextTooLongError):
-            return self._context_too_long_message()
-        if isinstance(e, RefusalError):
-            return self._refusal_message(e)
+        if not isinstance(e, AppServerTurnError):
+            return str(e)
+        match e.error.code:
+            case "rate_limit":
+                return self._rate_limit_message()
+            case "context_too_long":
+                return self._context_too_long_message()
+            case "refusal":
+                return self._refusal_message(e.error)
         return str(e)
 
     def _rate_limit_message(self) -> str:
-        upgrade_to_pro = self._plan_info and (
-            self._plan_info.plan_type
-            in {WhoAmIPlanType.API, WhoAmIPlanType.UNAUTHORIZED}
-            or self._plan_info.is_free_mistral_code_plan()
-        )
+        account = self.app_server.resources.account.current
+        upgrade_to_pro = account is not None and account.rate_limit_action is not None
         if upgrade_to_pro:
             return "Rate limits exceeded. Please wait a moment before trying again, or upgrade to Pro for higher rate limits and uninterrupted access."
         return "Rate limits exceeded. Please wait a moment before trying again."
@@ -1961,154 +2045,252 @@ class VibeApp(App):  # noqa: PLR0904
             "This will free up context space so you can continue working."
         )
 
-    def _refusal_message(self, e: RefusalError) -> str:
+    def _refusal_message(self, error: PublicError) -> str:
+        details = error.details if isinstance(error.details, dict) else {}
+        category = details.get("category")
+        explanation = details.get("explanation")
         lead = "The model declined to respond and stopped early (refusal)."
-        if e.category:
-            lead += f"\nCategory: {e.category}."
-        detail = e.explanation or (
-            "This can happen with certain prompts or content. "
-            "Try rephrasing your request or starting a new conversation."
+        if isinstance(category, str):
+            lead += f"\nCategory: {category}."
+        detail = (
+            explanation
+            if isinstance(explanation, str)
+            else (
+                "This can happen with certain prompts or content. "
+                "Try rephrasing your request or starting a new conversation."
+            )
         )
         return f"{lead}\n\n{detail}"
 
     async def _teleport_command(self, **kwargs: Any) -> None:
         await self._handle_teleport_command(show_message=False)
 
-    def _teleport_unavailable_reason(self) -> str | None:
-        if not self.config.is_active_model_mistral():
-            return (
-                "Teleport requires an active Mistral model. Use /model to switch to "
-                "a Mistral model, then try again."
+    async def _vibe_code_project_command(self, **_kwargs: Any) -> None:
+        self._vibe_code_project_picker.clear_teleport()
+        await self._ensure_loading_widget("Loading Vibe Code projects", show_hint=False)
+        loading_widget = self._loading_widget
+        try:
+            view, _ = await self.app_server.resources.vibe_code.open_projects()
+        except AppServerResponseError as e:
+            await self._mount_and_scroll(
+                ErrorMessage(str(e), collapsed=self._tools_collapsed)
             )
-        return check_teleport_eligibility(
-            self._plan_info, vibe_base_url=self.config.vibe_base_url
-        )
+            return
+        finally:
+            if self._loading_widget is loading_widget:
+                await self._remove_loading_widget()
 
-    async def _fail_teleport_early(
-        self, *, stage: TeleportFailureStage, error_class: str, message: str
-    ) -> None:
-        send_teleport_early_failure_telemetry(
-            self.agent_loop.telemetry_client,
-            stage=stage,
-            error_class=error_class,
-            nb_session_messages=len(self.agent_loop.messages[1:]),
-        )
+        self._vibe_code_project_picker.view = view
+        await self._show_vibe_code_project_picker()
+
+    async def _resolve_vibe_code_project_for_teleport(
+        self, prompt: str | None
+    ) -> str | None:
+        await self._ensure_loading_widget("Loading Vibe Code projects", show_hint=False)
+        loading_widget = self._loading_widget
+        try:
+            view, project_id = await self.app_server.resources.vibe_code.open_projects(
+                for_teleport=True, prompt=prompt
+            )
+        except AppServerResponseError as e:
+            await self._mount_and_scroll(
+                ErrorMessage(str(e), collapsed=self._tools_collapsed)
+            )
+            return None
+        finally:
+            if self._loading_widget is loading_widget:
+                await self._remove_loading_widget()
+
+        self._vibe_code_project_picker.view = view
+
+        if project_id is not None:
+            return project_id
+
+        if view.saved_project_link_cleared:
+            await self._mount_and_scroll(
+                UserCommandMessage(
+                    "The saved Vibe Code project link points to a different "
+                    "repository remote. Pick the project to use for this repository."
+                )
+            )
+
+        self._vibe_code_project_picker.teleport_pending = True
+        self._vibe_code_project_picker.teleport_prompt = prompt
+        await self._show_vibe_code_project_picker()
+        return None
+
+    async def _show_vibe_code_project_picker_after_saved_link_failure(
+        self, prompt: str | None
+    ) -> bool:
+        if self._vibe_code_project_picker.view is None:
+            return False
+
+        view, recovered = await self.app_server.resources.vibe_code.recover_stale_link()
+        self._vibe_code_project_picker.view = view
+        if not recovered:
+            return False
+        self._vibe_code_project_picker.teleport_pending = True
+        self._vibe_code_project_picker.teleport_prompt = prompt
         await self._mount_and_scroll(
-            ErrorMessage(message, collapsed=self._tools_collapsed)
+            UserCommandMessage(
+                "Saved Vibe Code project is no longer available. "
+                "Pick the project to use for this repository."
+            )
         )
+        await self._show_vibe_code_project_picker()
+        return True
+
+    async def _continue_pending_teleport(self, project_id: str) -> None:
+        prompt = self._vibe_code_project_picker.teleport_prompt
+        self._vibe_code_project_picker.clear_teleport()
+        await self._switch_to_input_app()
+        self.run_worker(self._teleport(prompt, project_id=project_id), exclusive=False)
 
     async def _handle_teleport_command(
         self, value: str | None = None, show_message: bool = True
     ) -> None:
-        has_history = any(msg.role != Role.system for msg in self.agent_loop.messages)
         if show_message:
             await self._mount_and_scroll(
                 TeleportUserMessage(value) if value else SlashCommandMessage("teleport")
             )
 
-        if reason := self._teleport_unavailable_reason():
-            await self._fail_teleport_early(
-                stage="ineligible",
-                error_class="TeleportIneligibleError",
-                message=reason,
-            )
+        project_id = await self._resolve_vibe_code_project_for_teleport(value)
+        if project_id is None:
             return
 
-        if not value and not has_history:
-            await self._fail_teleport_early(
-                stage="no_history",
-                error_class="TeleportNoHistoryError",
-                message="No conversation history to teleport.",
-            )
-            return
+        self.run_worker(self._teleport(value, project_id=project_id), exclusive=False)
 
-        self.run_worker(self._teleport(value), exclusive=False)
-
-    async def _teleport(self, prompt: str | None = None) -> None:
+    async def _teleport(self, prompt: str | None = None, *, project_id: str) -> None:
         loading = LoadingWidget()
         await self._loading_area.mount(loading)
 
         teleport_msg = TeleportMessage()
         await self._mount_and_scroll(teleport_msg)
 
-        from vibe.core.agent_loop import TeleportError
-
         try:
-            gen = self.agent_loop.teleport_to_vibe_code(prompt)
-            async for event in gen:
-                match event:
-                    case TeleportCheckingGitEvent():
-                        teleport_msg.set_status("Preparing workspace...")
-                    case TeleportPushRequiredEvent(
-                        unpushed_count=count, branch_not_pushed=branch_not_pushed
-                    ):
-                        await loading.remove()
-                        response = await self._ask_push_approval(
-                            count, branch_not_pushed
-                        )
-                        await self._loading_area.mount(loading)
-                        teleport_msg.set_status("Teleporting...")
-                        next_event = await gen.asend(response)
-                        if isinstance(next_event, TeleportPushingEvent):
-                            teleport_msg.set_status("Syncing with remote...")
-                    case TeleportPushingEvent():
-                        teleport_msg.set_status("Syncing with remote...")
-                    case TeleportStartingWorkflowEvent():
-                        teleport_msg.set_status("Teleporting...")
-                    case TeleportCompleteEvent(url=url):
-                        teleport_msg.set_complete(url)
-        except TeleportError as e:
-            await teleport_msg.remove()
-            await self._mount_and_scroll(
-                ErrorMessage(str(e), collapsed=self._tools_collapsed)
+            async for event in self.app_server.resources.vibe_code.teleport(
+                prompt, project_id=project_id
+            ):
+                if await self._handle_teleport_event(
+                    event, prompt=prompt, loading=loading, message=teleport_msg
+                ):
+                    return
+        except AppServerResponseError as e:
+            await self._handle_teleport_failure(
+                prompt=prompt,
+                loading=loading,
+                message=teleport_msg,
+                code=e.error.code,
+                error_message=str(e),
             )
         finally:
             if loading.parent:
                 await loading.remove()
 
-    async def _ask_push_approval(
-        self, count: int, branch_not_pushed: bool
-    ) -> TeleportPushResponseEvent:
+    async def _handle_teleport_event(
+        self,
+        event: TeleportEvent,
+        *,
+        prompt: str | None,
+        loading: LoadingWidget,
+        message: TeleportMessage,
+    ) -> bool:
+        match event:
+            case TeleportSummarizingContext():
+                message.set_status("Summarizing context...")
+            case TeleportCheckingGit():
+                message.set_status("Preparing workspace...")
+            case TeleportPushRequired(
+                operation_id=operation_id,
+                unpushed_count=count,
+                branch_not_pushed=branch_not_pushed,
+            ):
+                await loading.remove()
+                approved = await self._ask_push_approval(count, branch_not_pushed)
+                await self._loading_area.mount(loading)
+                message.set_status("Teleporting...")
+                await self.app_server.resources.vibe_code.respond_to_push(
+                    operation_id, approved=approved
+                )
+            case TeleportPushing():
+                message.set_status("Syncing with remote...")
+            case TeleportStartingWorkflow():
+                message.set_status("Teleporting...")
+            case TeleportComplete(url=url):
+                message.set_complete(url)
+            case TeleportFailed(error=error):
+                return await self._handle_teleport_failure(
+                    prompt=prompt,
+                    loading=loading,
+                    message=message,
+                    code=error.code,
+                    error_message=error.message,
+                )
+        return False
+
+    async def _handle_teleport_failure(
+        self,
+        *,
+        prompt: str | None,
+        loading: LoadingWidget,
+        message: TeleportMessage,
+        code: str | None,
+        error_message: str,
+    ) -> bool:
+        if message.parent:
+            await message.remove()
+        if code == "saved_project_stale":
+            if loading.parent:
+                await loading.remove()
+            if await self._show_vibe_code_project_picker_after_saved_link_failure(
+                prompt
+            ):
+                return True
+        await self._mount_and_scroll(
+            ErrorMessage(error_message, collapsed=self._tools_collapsed)
+        )
+        return False
+
+    async def _ask_push_approval(self, count: int, branch_not_pushed: bool) -> bool:
         if branch_not_pushed:
             question = "Your branch doesn't exist on remote. Push to continue?"
         else:
             word = f"commit{'s' if count != 1 else ''}"
             question = f"You have {count} unpushed {word}. Push to continue?"
         push_label = "Push and continue"
-        result = await self._user_input_callback(
-            AskUserQuestionArgs(
+        result = await self._request_local_user_input(
+            UserQuestionRequest(
                 questions=[
-                    Question(
+                    UserQuestion(
                         question=question,
                         header="Push",
-                        options=[Choice(label=push_label), Choice(label="Cancel")],
+                        options=[
+                            QuestionChoice(label=push_label),
+                            QuestionChoice(label="Cancel"),
+                        ],
                         hide_other=True,
                     )
                 ]
             )
         )
         ok = (
-            isinstance(result, AskUserQuestionResult)
-            and not result.cancelled
+            not result.cancelled
             and bool(result.answers)
             and result.answers[0].answer == push_label
         )
-        return TeleportPushResponseEvent(approved=ok)
+        return ok
 
-    async def _interrupt_agent_loop(self) -> None:
-        if not self._agent_running or self._interrupt_requested:
+    async def _interrupt_turn(self) -> None:
+        if not self._agent_job_active() or self._interrupt_requested:
             return
 
         self._interrupt_requested = True
 
-        if self._pending_approval and not self._pending_approval.done():
-            feedback = str(
-                get_user_cancellation_message(CancellationReason.TOOL_INTERRUPTED)
-            )
-            self._pending_approval.set_result((ApprovalResponse.NO, feedback))
-        if self._pending_question and not self._pending_question.done():
-            self._pending_question.set_result(
-                AskUserQuestionResult(answers=[], cancelled=True)
+        self._active_callback = None
+        self._pending_callbacks.clear()
+        if self._pending_local_question and not self._pending_local_question.done():
+            self._pending_local_question.set_result(
+                UserQuestionResult(answers=[], cancelled=True)
             )
 
         if self._agent_task and not self._agent_task.done():
@@ -2117,13 +2299,14 @@ class VibeApp(App):  # noqa: PLR0904
                 await self._agent_task
             except asyncio.CancelledError:
                 pass
+        elif self.app_server.turn_active:
+            await self.app_server.interrupt()
 
         if self.event_handler:
-            self.event_handler.stop_current_tool_call(success=False)
+            self.event_handler.stop_current_tool_call(cancelled=True)
             self.event_handler.stop_current_compact()
             await self.event_handler.finalize_streaming()
 
-        self._agent_running = False
         await self._loading_area.remove_children()
         self._loading_widget = None
 
@@ -2155,11 +2338,16 @@ class VibeApp(App):  # noqa: PLR0904
             self, content, success_message="Last agent message copied to clipboard"
         )
         if copied_text is not None:
-            self.agent_loop.telemetry_client.send_user_copied_text(copied_text)
+            self.app_server.resources.telemetry.record(
+                "vibe.user_copied_text", {"text_length": len(copied_text)}
+            )
 
     async def _refresh_mcp_browser(self) -> str:
-        await self.agent_loop.tool_manager.refresh_remote_tools_async()
-        await self.agent_loop.refresh_system_prompt()
+        # Wait for deferred init before the destructive force-refresh, otherwise
+        # clearing the registries mid-initialization briefly empties the list
+        # (the panel collapses then expands once discovery repopulates it).
+        await self.app_server.resources.runtime.wait_until_ready()
+        await self.app_server.resources.mcp.refresh()
         self._refresh_banner()
         return "Refreshed."
 
@@ -2185,9 +2373,8 @@ class VibeApp(App):  # noqa: PLR0904
         return True
 
     async def _show_mcp_status(self) -> None:
-        await self.agent_loop.wait_until_ready()
-        registry = self.agent_loop.mcp_registry
-        statuses = registry.status() if registry is not None else {}
+        await self.app_server.resources.runtime.wait_until_ready()
+        statuses = (await self.app_server.resources.mcp.read()).statuses
         if not statuses:
             await self._mount_and_scroll(
                 UserCommandMessage("No MCP servers configured.")
@@ -2195,7 +2382,7 @@ class VibeApp(App):  # noqa: PLR0904
             return
         lines = ["### MCP auth status", ""]
         for alias, status in sorted(statuses.items()):
-            lines.append(f"- `{alias}`: `{status.value}`")
+            lines.append(f"- `{alias}`: `{status}`")
         await self._mount_and_scroll(UserCommandMessage("\n".join(lines)))
 
     async def _mcp_login(self, alias: str) -> None:
@@ -2205,30 +2392,21 @@ class VibeApp(App):  # noqa: PLR0904
             )
             return
 
-        await self.agent_loop.wait_until_ready()
-        registry = self.agent_loop.mcp_registry
-        if registry is None:
-            await self._mount_and_scroll(
-                ErrorMessage("No MCP servers configured.", collapsed=True)
-            )
-            return
-
-        async def on_url(url: str) -> None:
-            await self._mount_and_scroll(
-                UserCommandMessage(f"Open this URL in your browser:\n\n  {url}")
-            )
-            try:
-                webbrowser.open(url)
-            except Exception as exc:
-                logger.debug("Failed to open MCP OAuth URL in browser: %s", exc)
-
-        from vibe.core.auth import MCPOAuthError
-
         try:
-            await registry.login(alias, on_url=on_url)
-            await self._refresh_mcp_browser()
-        except (MCPOAuthError, ValueError) as exc:
-            await self._mount_and_scroll(ErrorMessage(str(exc), collapsed=True))
+            async for event in self.app_server.resources.mcp.login(alias):
+                await self._mount_and_scroll(
+                    UserCommandMessage(
+                        f"Open this URL in your browser:\n\n  {event.url}"
+                    )
+                )
+                try:
+                    webbrowser.open(event.url)
+                except Exception as exc:
+                    logger.debug("Failed to open MCP OAuth URL in browser: %s", exc)
+        except AppServerResponseError as exc:
+            await self._mount_and_scroll(
+                ErrorMessage(exc.error.message, collapsed=True)
+            )
             return
 
         await self._mount_and_scroll(
@@ -2242,21 +2420,12 @@ class VibeApp(App):  # noqa: PLR0904
             )
             return
 
-        await self.agent_loop.wait_until_ready()
-        registry = self.agent_loop.mcp_registry
-        if registry is None:
-            await self._mount_and_scroll(
-                ErrorMessage("No MCP servers configured.", collapsed=True)
-            )
-            return
-
-        from vibe.core.auth import MCPOAuthError
-
         try:
-            await registry.logout(alias)
-            await self._refresh_mcp_browser()
-        except (MCPOAuthError, ValueError) as exc:
-            await self._mount_and_scroll(ErrorMessage(str(exc), collapsed=True))
+            await self.app_server.resources.mcp.logout(alias)
+        except AppServerResponseError as exc:
+            await self._mount_and_scroll(
+                ErrorMessage(exc.error.message, collapsed=True)
+            )
             return
 
         await self._mount_and_scroll(
@@ -2275,19 +2444,18 @@ class VibeApp(App):  # noqa: PLR0904
             return
 
         try:
-            result = persist_oauth_mcp_server(
-                self.agent_loop.config,
+            result = await self.app_server.resources.mcp.add(
                 url=args.url,
                 name=args.name,
                 scopes=args.scopes,
                 transport=args.transport,
             )
-        except MCPServerAddError as exc:
-            await self._mount_and_scroll(ErrorMessage(str(exc), collapsed=True))
+        except AppServerResponseError as exc:
+            await self._mount_and_scroll(
+                ErrorMessage(exc.error.message, collapsed=True)
+            )
             return
 
-        self.agent_loop.refresh_config()
-        await self._refresh_mcp_browser()
         head = (
             f"Added OAuth MCP server `{result.name}`."
             if result.created
@@ -2310,14 +2478,8 @@ class VibeApp(App):  # noqa: PLR0904
         if await self._maybe_handle_mcp_subcommand(cmd_args):
             return
 
-        mcp_servers = self.config.mcp_servers
-        connector_registry = (
-            self.agent_loop.connector_registry if self._connectors_enabled else None
-        )
-        has_connectors = (
-            connector_registry is not None and connector_registry.connector_count > 0
-        )
-        if not mcp_servers and not has_connectors:
+        state = await self.app_server.resources.mcp.read()
+        if not state.sources:
             await self._mount_and_scroll(
                 UserCommandMessage("No MCP servers or connectors configured.")
             )
@@ -2326,19 +2488,12 @@ class VibeApp(App):  # noqa: PLR0904
         if self._current_bottom_app == BottomApp.MCP:
             return
         name = cmd_args.strip()
-        connector_names = (
-            connector_registry.get_connector_names() if connector_registry else []
-        )
-        if (
-            name
-            and not any(s.name == name for s in mcp_servers)
-            and name not in connector_names
-        ):
-            all_names = [s.name for s in mcp_servers] + connector_names
-            entity = "MCP server or connector" if has_connectors else "MCP server"
+        all_names = [source.name for source in state.sources]
+        if name and name not in all_names:
             await self._mount_and_scroll(
                 ErrorMessage(
-                    f"Unknown {entity}: {name}. Known: " + ", ".join(all_names),
+                    f"Unknown MCP server or connector: {name}. Known: "
+                    + ", ".join(all_names),
                     collapsed=self._tools_collapsed,
                 )
             )
@@ -2347,18 +2502,15 @@ class VibeApp(App):  # noqa: PLR0904
         await self._mount_and_scroll(UserCommandMessage("MCP servers opened..."))
         await self._switch_from_input(
             mcp_app_class(
-                mcp_servers=mcp_servers,
-                tool_manager=self.agent_loop.tool_manager,
-                initial_server=name,
-                connector_registry=connector_registry,
-                mcp_registry=self.agent_loop.mcp_registry,
-                get_vibe_config=lambda: self.agent_loop.config,
+                state=state,
+                initial_source=name,
+                state_getter=lambda: self.app_server.resources.mcp.state,
                 refresh_callback=self._refresh_mcp_browser,
             )
         )
 
     async def _show_status(self, **kwargs: Any) -> None:
-        stats = self.agent_loop.stats
+        stats = self.app_server.resources.runtime.stats
         status_text = f"""## Agent Statistics
 
 - **Steps**: {stats.steps:,}
@@ -2371,10 +2523,14 @@ class VibeApp(App):  # noqa: PLR0904
         await self._mount_and_scroll(UserCommandMessage(status_text))
 
     async def _show_config(self, **kwargs: Any) -> None:
-        """Switch to the configuration app in the bottom panel."""
-        if self._current_bottom_app == BottomApp.Config:
-            return
-        await self._switch_to_config_app()
+        """Open the full-screen, searchable settings browser."""
+        from vibe.cli.textual_ui.screens.config import ConfigScreen
+
+        def _on_close(dirty: bool | None) -> None:
+            if dirty:
+                self.run_worker(self._reload_config())
+
+        self.push_screen(ConfigScreen(self.app_server.resources.config), _on_close)
 
     async def _show_model(self, **kwargs: Any) -> None:
         """Switch to the model picker in the bottom panel."""
@@ -2401,22 +2557,6 @@ class VibeApp(App):  # noqa: PLR0904
     async def _show_data_retention(self, **kwargs: Any) -> None:
         await self._mount_and_scroll(UserCommandMessage(DATA_RETENTION_MESSAGE))
 
-    async def _rename_local_session(self, title: str) -> str:
-        session_logger = self.agent_loop.session_logger
-        if not session_logger.enabled or session_logger.session_metadata is None:
-            raise ValueError("Session logging is disabled in configuration.")
-
-        if (
-            session_logger.session_dir is not None
-            and session_logger.metadata_filepath.exists()
-        ):
-            await update_saved_session_title_at_path(session_logger.session_dir, title)
-
-        session_logger.set_title(title)
-        renamed_title = session_logger.session_metadata.title
-        assert renamed_title is not None
-        return renamed_title
-
     async def _rename_session(self, cmd_args: str = "", **kwargs: Any) -> None:
         title = cmd_args.strip()
         if not title:
@@ -2426,7 +2566,7 @@ class VibeApp(App):  # noqa: PLR0904
             return
 
         try:
-            renamed_title = await self._rename_local_session(title)
+            renamed_title = await self.app_server.resources.sessions.rename(title)
         except Exception as e:
             await self._mount_and_scroll(
                 ErrorMessage(
@@ -2439,18 +2579,25 @@ class VibeApp(App):  # noqa: PLR0904
             UserCommandMessage(f'Session renamed to "{renamed_title}".')
         )
 
-    def _build_picker(self, sessions: list[ResumeSessionInfo]) -> SessionPickerApp:
+    def _build_picker(self, sessions: list[SavedSessionSummary]) -> SessionPickerApp:
         sessions = sorted(sessions, key=lambda s: s.end_time or "", reverse=True)
         return SessionPickerApp(
             sessions=sessions,
-            latest_messages=session_latest_messages(sessions, self.config),
-            current_session_id=self.agent_loop.session_id,
-            cwd=str(Path.cwd()),
+            latest_messages={
+                session.session_id: session.title or session.preview
+                for session in sessions
+            },
+            current_session_id=self.app_server.session_id,
+            cwd=self.app_server.cwd,
         )
 
     async def _show_session_picker(self, **kwargs: Any) -> None:
-        if not self.config.session_logging.enabled or not (
-            local_sessions := list_local_resume_sessions(self.config, str(Path.cwd()))
+        local_sessions = await self.app_server.resources.sessions.list(
+            self.app_server.cwd
+        )
+        if (
+            not self.app_server.resources.runtime.session_log.enabled
+            or not local_sessions
         ):
             await self._mount_and_scroll(
                 UserCommandMessage("No sessions found for this directory.")
@@ -2466,11 +2613,8 @@ class VibeApp(App):  # noqa: PLR0904
         self, event: SessionPickerApp.SessionSelected
     ) -> None:
         await self._switch_to_input_app()
-        session = ResumeSessionInfo(
-            session_id=event.session_id, cwd="", title=None, end_time=None
-        )
         try:
-            await self._resume_local_session(session)
+            await self._resume_local_session(event.session_id)
         except Exception as e:
             if self._show_resume_picker:
                 self._show_resume_picker = False
@@ -2489,7 +2633,7 @@ class VibeApp(App):  # noqa: PLR0904
     async def on_session_picker_app_session_delete_requested(
         self, event: SessionPickerApp.SessionDeleteRequested
     ) -> None:
-        if event.session_id == self.agent_loop.session_id:
+        if event.session_id == self.app_server.session_id:
             self._clear_pending_session_delete(event.option_id)
             await self._mount_and_scroll(
                 ErrorMessage(
@@ -2500,7 +2644,7 @@ class VibeApp(App):  # noqa: PLR0904
             return
 
         try:
-            await delete_saved_session(event.session_id, self.config.session_logging)
+            await self.app_server.resources.sessions.delete(event.session_id)
         except Exception as e:
             self._clear_pending_session_delete(event.option_id)
             await self._mount_and_scroll(
@@ -2519,9 +2663,7 @@ class VibeApp(App):  # noqa: PLR0904
             picker.remove_session(event.option_id)
 
         await self._mount_and_scroll(
-            UserCommandMessage(
-                f"Deleted session `{short_session_id(event.session_id)}`."
-            )
+            UserCommandMessage(f"Deleted session `{event.session_id[:8]}`.")
         )
 
         if picker is not None and not picker.has_sessions:
@@ -2546,37 +2688,10 @@ class VibeApp(App):  # noqa: PLR0904
 
         await self._mount_and_scroll(UserCommandMessage("Resume cancelled."))
 
-    async def _resume_local_session(self, session: ResumeSessionInfo) -> None:
-        session_config = self.config.session_logging
-        session_path = SessionLoader.find_session_by_id(
-            session.session_id, session_config
-        )
-
-        if not session_path:
-            raise ValueError(
-                f"Session `{short_session_id(session.session_id)}` not found."
-            )
-
-        self._emit_session_closed_for_active_session()
-
-        loaded_messages, metadata = SessionLoader.load_session(session_path)
+    async def _resume_local_session(self, session_id: str) -> None:
+        await self.app_server.resume(session_id)
         if self._chat_input_container:
             self._chat_input_container.set_custom_border(None)
-
-        non_system_messages = [
-            msg for msg in loaded_messages if msg.role != Role.system
-        ]
-
-        self.agent_loop.session_id = session.session_id
-        self.agent_loop.parent_session_id = metadata.get("parent_session_id")
-        self.agent_loop.session_logger.resume_existing_session(
-            session.session_id, session_path
-        )
-        await self.agent_loop.hydrate_experiments_from_session()
-        current_system_messages = [
-            msg for msg in self.agent_loop.messages if msg.role == Role.system
-        ]
-        self.agent_loop.messages.reset(current_system_messages + non_system_messages)
         self._refresh_profile_widgets()
 
         self._reset_ui_state()
@@ -2585,34 +2700,32 @@ class VibeApp(App):  # noqa: PLR0904
         await self._messages_area.remove_children()
 
         await self._resume_history_from_messages()
-        self._loop_runner.restore_from_session()
         await self._mount_and_scroll(
-            UserCommandMessage(
-                f"Resumed session `{short_session_id(session.session_id)}`"
-            )
+            UserCommandMessage(f"Resumed session `{session_id[:8]}`")
         )
 
     async def _reload_config(self, **kwargs: Any) -> None:
         try:
             self._reset_ui_state()
             await self._load_more.hide()
-            base_config = VibeConfig.load()
-
-            await self.agent_loop.reload_with_initial_messages(base_config=base_config)
-            await self._resolve_plan()
+            stripped_count = await self.app_server.resources.config.reload(
+                reload_runtime=True
+            )
+            await self._refresh_account()
             self._narrator_manager.sync()
 
             if self._banner:
-                cc, ct = compute_connector_counts(
-                    base_config, self.agent_loop.connector_registry
-                )
+                connectors = self.app_server.resources.runtime.connectors
                 self._banner.set_state(
-                    base_config,
-                    self.agent_loop.skill_manager,
-                    connectors_connected=cc,
-                    connectors_total=ct,
-                    hooks_count=self.agent_loop.hooks_count,
-                    plan_description=plan_title(self._plan_info),
+                    self.app_server.resources.config.base,
+                    self.app_server.resources.runtime.custom_skills_count,
+                    mcp=self.app_server.resources.runtime.mcp,
+                    connectors_connected=connectors.connected,
+                    connectors_total=connectors.total,
+                    hooks_count=self.app_server.resources.runtime.hooks_count,
+                    plan_description=plan_title(
+                        self.app_server.resources.account.current
+                    ),
                 )
             self._show_config_issues()
             await self._mount_and_scroll(
@@ -2620,14 +2733,8 @@ class VibeApp(App):  # noqa: PLR0904
                     "Configuration reloaded (includes agent instructions and skills)."
                 )
             )
-            stripped_count = (
-                self.agent_loop.count_history_images_unsupported_by_active_model()
-            )
             if stripped_count > 0:
-                try:
-                    model_alias = self.agent_loop.config.get_active_model().alias
-                except ValueError:
-                    model_alias = "the active model"
+                model_alias = self.config.active_model.alias
                 noun = "image" if stripped_count == 1 else "images"
                 await self._mount_and_scroll(
                     WarningMessage(
@@ -2643,36 +2750,43 @@ class VibeApp(App):  # noqa: PLR0904
             )
 
     async def _install_lean(self, **kwargs: Any) -> None:
-        current = list(self.agent_loop.base_config.installed_agents)
+        current = {agent.name for agent in self.app_server.resources.agents.all}
         if "lean" in current:
             await self._mount_and_scroll(
                 UserCommandMessage("Lean agent is already installed.")
             )
             return
-        VibeConfig.save_updates({"installed_agents": sorted([*current, "lean"])})
+        await self.app_server.resources.agents.set_installed("lean", installed=True)
         await self._reload_config()
 
     async def _uninstall_lean(self, **kwargs: Any) -> None:
-        current = list(self.agent_loop.base_config.installed_agents)
+        current = {agent.name for agent in self.app_server.resources.agents.all}
         if "lean" not in current:
             await self._mount_and_scroll(
                 UserCommandMessage("Lean agent is not installed.")
             )
             return
-        VibeConfig.save_updates({
-            "installed_agents": [a for a in current if a != "lean"]
-        })
+        await self.app_server.resources.agents.set_installed("lean", installed=False)
         await self._reload_config()
+
+    async def _reset_message_widgets(self) -> None:
+        """Tear down the on-screen conversation widgets and UI state.
+
+        Shared by ``/clear`` and the clear-context-on-plan-accept flow. Does not
+        touch the agent loop's message history — callers decide whether the core
+        history also needs clearing.
+        """
+        self._reset_ui_state()
+        if self._chat_input_container:
+            self._chat_input_container.set_custom_border(None)
+        if self.event_handler:
+            await self.event_handler.finalize_streaming()
+        await self._messages_area.remove_children()
 
     async def _clear_history(self, **kwargs: Any) -> None:
         try:
-            self._reset_ui_state()
-            if self._chat_input_container:
-                self._chat_input_container.set_custom_border(None)
-            await self.agent_loop.clear_history()
-            if self.event_handler:
-                await self.event_handler.finalize_streaming()
-            await self._messages_area.remove_children()
+            await self.app_server.clear_history()
+            await self._reset_message_widgets()
 
             await self._messages_area.mount(SlashCommandMessage("clear"))
             await self._mount_and_scroll(
@@ -2687,8 +2801,24 @@ class VibeApp(App):  # noqa: PLR0904
                 )
             )
 
+    async def _on_context_cleared(self, plan_file_path: Path | None = None) -> None:
+        """React to a ContextClearedEvent emitted during plan accept.
+
+        Core already cleared the agent loop's history, so this only resets the
+        on-screen widgets and posts a notice that implementation is starting. The
+        approved plan is re-mounted so it stays visible in the discussion.
+        """
+        await self._reset_message_widgets()
+        if plan_file_path is not None:
+            await self._mount_and_scroll(PlanFileMessage(file_path=plan_file_path))
+        await self._mount_and_scroll(
+            UserCommandMessage("Context cleared. Implementing the approved plan...")
+        )
+        self._chat_widget.scroll_home(animate=False)
+
     async def _show_log_path(self, **kwargs: Any) -> None:
-        if not self.agent_loop.session_logger.enabled:
+        session_log = await self.app_server.resources.sessions.read_log()
+        if not session_log.enabled:
             await self._mount_and_scroll(
                 ErrorMessage(
                     "Session logging is disabled in configuration.",
@@ -2697,26 +2827,29 @@ class VibeApp(App):  # noqa: PLR0904
             )
             return
 
-        try:
-            log_path = str(self.agent_loop.session_logger.session_dir)
-            await self._mount_and_scroll(
-                UserCommandMessage(
-                    f"## Current Log Directory\n\n`{log_path}`\n\nYou can send this directory to share your interaction."
-                )
-            )
-        except Exception as e:
+        if not session_log.persisted:
             await self._mount_and_scroll(
                 ErrorMessage(
-                    f"Failed to get log path: {e}", collapsed=self._tools_collapsed
+                    "The current session has not been persisted yet.",
+                    collapsed=self._tools_collapsed,
                 )
             )
+            return
+
+        await self._mount_and_scroll(
+            UserCommandMessage(
+                "## Current Log Directory\n\n"
+                f"`{session_log.path}`\n\n"
+                "You can send this directory to share your interaction."
+            )
+        )
 
     async def _loop_command(self, cmd_args: str = "", **kwargs: Any) -> None:
-        widget = await self._loop_runner.handle_command(cmd_args)
+        widget = await self._loop_commands.handle_command(cmd_args)
         await self._mount_and_scroll(widget)
 
     async def _compact_history(self, cmd_args: str = "", **kwargs: Any) -> None:
-        if self._agent_running:
+        if self._agent_job_active():
             await self._mount_and_scroll(
                 ErrorMessage(
                     "Cannot compact while agent loop is processing. Please wait.",
@@ -2725,7 +2858,7 @@ class VibeApp(App):  # noqa: PLR0904
             )
             return
 
-        if len(self.agent_loop.messages) <= 1:
+        if not self.app_server.history:
             await self._mount_and_scroll(
                 ErrorMessage(
                     "No conversation history to compact yet.",
@@ -2737,7 +2870,7 @@ class VibeApp(App):  # noqa: PLR0904
         if not self.event_handler:
             return
 
-        old_session_id = self.agent_loop.session_id
+        old_session_id = self.app_server.session_id
         compact_msg = CompactMessage()
         self.event_handler.current_compact = compact_msg
         await self._mount_and_scroll(compact_msg)
@@ -2752,11 +2885,10 @@ class VibeApp(App):  # noqa: PLR0904
         old_session_id: str,
         extra_instructions: str = "",
     ) -> None:
-        self._agent_running = True
         try:
-            await self.agent_loop.compact(extra_instructions=extra_instructions)
+            await self.app_server.compact(extra_instructions=extra_instructions)
             compact_msg.set_complete(
-                old_session_id=old_session_id, new_session_id=self.agent_loop.session_id
+                old_session_id=old_session_id, new_session_id=self.app_server.session_id
             )
 
         except asyncio.CancelledError:
@@ -2765,39 +2897,26 @@ class VibeApp(App):  # noqa: PLR0904
         except Exception as e:
             compact_msg.set_error(str(e))
         finally:
-            self._agent_running = False
             self._agent_task = None
             if self.event_handler:
                 self.event_handler.current_compact = None
 
-    def _get_session_resume_info(self) -> str | None:
-        if not self.agent_loop.session_logger.enabled:
-            return None
-        if not self.agent_loop.session_logger.session_id:
-            return None
-        session_config = self.agent_loop.session_logger.session_config
-        session_path = SessionLoader.does_session_exist(
-            self.agent_loop.session_logger.session_id, session_config
-        )
-        if session_path is None:
-            return None
-        return short_session_id(self.agent_loop.session_logger.session_id)
+    def _get_session_exit_summary(self) -> SessionExitSummary:
+        return self.app_server.exit_summary()
 
     async def _exit_app(self, **kwargs: Any) -> None:
         try:
-            self._emit_session_closed_for_active_session()
             await self._begin_shutdown()
             if self._agent_task and not self._agent_task.done():
                 self._agent_task.cancel()
             if self._bash_task and not self._bash_task.done():
                 self._bash_task.cancel()
-            self._log_reader.shutdown()
         finally:
-            self.exit(result=self._get_session_resume_info())
+            self.exit(result=self._get_session_exit_summary())
 
     def _make_default_voice_manager(self) -> VoiceManagerPort:
         return create_default_voice_manager(
-            lambda: self.config, self.agent_loop.telemetry_client
+            lambda: self.config, self.app_server.resources.telemetry
         )
 
     async def _show_voice_settings(self, **kwargs: Any) -> None:
@@ -2826,12 +2945,53 @@ class VibeApp(App):  # noqa: PLR0904
         if should_scroll:
             self.call_after_refresh(chat.anchor)
 
-    async def _switch_to_config_app(self) -> None:
-        if self._current_bottom_app == BottomApp.Config:
+    async def _replace_bottom_app(self, widget: Widget, scroll: bool = False) -> None:
+        bottom_container = self.query_one("#bottom-app-container")
+        chat = self._chat_widget
+        should_anchor = chat.is_at_bottom
+        old_widgets: list[Widget] = []
+        for app in BottomApp:
+            if app == BottomApp.Input:
+                continue
+            try:
+                old_widgets.append(self.query_one(f"#{app.value}-app"))
+            except Exception:
+                pass
+
+        with self.batch_update():
+            if self._chat_input_container:
+                self._chat_input_container.display = False
+                self._chat_input_container.disabled = True
+
+            self._feedback_bar.hide()
+
+            self._current_bottom_app = BottomApp[
+                type(widget).__name__.removesuffix("App")
+            ]
+            await bottom_container.mount(widget)
+            for old_widget in old_widgets:
+                await old_widget.remove()
+
+        self.call_after_refresh(widget.focus)
+        if should_anchor or scroll:
+            self.call_after_refresh(chat.anchor)
+
+    async def _show_vibe_code_project_picker(self) -> None:
+        context = self._vibe_code_project_picker.context
+        state = self._vibe_code_project_picker.picker_state
+        if context is None or state is None:
+            await self._switch_to_input_app()
             return
 
-        await self._mount_and_scroll(UserCommandMessage("Configuration opened..."))
-        await self._switch_from_input(ConfigApp(self.config))
+        await self._replace_bottom_app(
+            VibeCodeProjectPickerApp(
+                context=context,
+                projects=state.projects,
+                has_more=state.has_more,
+                include_unlink=context.saved_link is not None,
+                title="Vibe Code project",
+            )
+        )
 
     async def _switch_to_voice_app(self) -> None:
         if self._current_bottom_app == BottomApp.Voice:
@@ -2844,8 +3004,8 @@ class VibeApp(App):  # noqa: PLR0904
         if self._current_bottom_app == BottomApp.ModelPicker:
             return
 
-        model_aliases = [m.alias for m in self.config.models]
-        current_model = str(self.config.active_model)
+        model_aliases = [model.alias for model in self.config.models]
+        current_model = self.config.active_model.alias
         await self._switch_from_input(
             ModelPickerApp(model_aliases=model_aliases, current_model=current_model)
         )
@@ -2854,9 +3014,7 @@ class VibeApp(App):  # noqa: PLR0904
         if self._current_bottom_app == BottomApp.ThinkingPicker:
             return
 
-        from vibe.core.config import THINKING_LEVELS
-
-        current_thinking = self.config.get_active_model().thinking
+        current_thinking = self.config.active_model.thinking
         await self._switch_from_input(
             ThinkingPickerApp(
                 thinking_levels=THINKING_LEVELS, current_thinking=current_thinking
@@ -2873,35 +3031,35 @@ class VibeApp(App):  # noqa: PLR0904
             )
         )
 
-    def _apply_theme(self, theme: str) -> None:
-        if theme not in BUILTIN_THEMES:
-            logger.warning("Unknown theme=%s; falling back to %s", theme, DEFAULT_THEME)
-            self.theme = DEFAULT_THEME
-            return
-        self.theme = theme
+    async def _apply_theme(self, theme: str) -> None:
+        self.theme = resolve_theme(resolve_theme_name(theme))
+        await self._restyle_diff_widgets()
 
     async def _switch_to_proxy_setup_app(self) -> None:
         if self._current_bottom_app == BottomApp.ProxySetup:
             return
 
+        try:
+            settings = await self.app_server.resources.config.read_proxy()
+        except Exception as exc:
+            await self._mount_and_scroll(
+                ErrorMessage(f"Failed to read proxy settings: {exc}")
+            )
+            return
         await self._mount_and_scroll(UserCommandMessage("Proxy setup opened..."))
-        await self._switch_from_input(ProxySetupApp())
+        await self._switch_from_input(ProxySetupApp(settings))
 
     async def _switch_to_approval_app(
         self,
-        tool_name: str,
-        tool_args: BaseModel,
+        effect: EffectDetail,
         required_permissions: list[RequiredPermission] | None = None,
     ) -> None:
         approval_app = ApprovalApp(
-            tool_name=tool_name,
-            tool_args=tool_args,
-            config=self.config,
-            required_permissions=required_permissions,
+            effect=effect, config=self.config, required_permissions=required_permissions
         )
         await self._switch_from_input(approval_app, scroll=True)
 
-    async def _switch_to_question_app(self, args: AskUserQuestionArgs) -> None:
+    async def _switch_to_question_app(self, args: UserQuestionRequest) -> None:
         await self._switch_from_input(QuestionApp(args=args), scroll=True)
 
     async def _switch_to_input_app(self) -> None:
@@ -2925,13 +3083,14 @@ class VibeApp(App):  # noqa: PLR0904
 
     def _focus_current_bottom_app(self) -> None:
         focus_widget_by_app: dict[BottomApp, type[Widget]] = {
-            BottomApp.Config: ConfigApp,
             BottomApp.ModelPicker: ModelPickerApp,
             BottomApp.ThemePicker: ThemePickerApp,
             BottomApp.ThinkingPicker: ThinkingPickerApp,
             BottomApp.ProxySetup: ProxySetupApp,
             BottomApp.Approval: ApprovalApp,
             BottomApp.Question: QuestionApp,
+            BottomApp.VibeCodeProjectCreate: VibeCodeProjectCreateApp,
+            BottomApp.VibeCodeProjectPicker: VibeCodeProjectPickerApp,
             BottomApp.SessionPicker: SessionPickerApp,
             BottomApp.MCP: _get_mcp_app_class(),
             BottomApp.ConnectorAuth: _get_connector_auth_app_class(),
@@ -2947,14 +3106,6 @@ class VibeApp(App):  # noqa: PLR0904
         except Exception:
             pass
 
-    def _handle_config_app_escape(self) -> None:
-        try:
-            config_app = self.query_one(ConfigApp)
-            config_app.action_close()
-        except Exception:
-            pass
-        self._last_escape_time = None
-
     def _handle_voice_app_escape(self) -> None:
         try:
             voice_app = self.query_one(VoiceApp)
@@ -2968,8 +3119,8 @@ class VibeApp(App):  # noqa: PLR0904
             approval_app = self.query_one(ApprovalApp)
             if not approval_app.is_within_grace_period():
                 approval_app.action_reject()
-                self.agent_loop.telemetry_client.send_user_cancelled_action(
-                    "reject_approval"
+                self.app_server.resources.telemetry.record(
+                    "vibe.user_cancelled_action", {"action": "reject_approval"}
                 )
         except Exception:
             pass
@@ -2980,8 +3131,8 @@ class VibeApp(App):  # noqa: PLR0904
             question_app = self.query_one(QuestionApp)
             if not question_app.is_within_grace_period():
                 question_app.action_cancel()
-                self.agent_loop.telemetry_client.send_user_cancelled_action(
-                    "cancel_question"
+                self.app_server.resources.telemetry.record(
+                    "vibe.user_cancelled_action", {"action": "cancel_question"}
                 )
         except Exception:
             pass
@@ -3021,25 +3172,41 @@ class VibeApp(App):  # noqa: PLR0904
             pass
         self._last_escape_time = None
 
+    def _handle_vibe_code_project_picker_app_escape(self) -> None:
+        try:
+            vibe_code_project_picker = self.query_one(VibeCodeProjectPickerApp)
+            vibe_code_project_picker.action_cancel()
+        except Exception:
+            pass
+        self._last_escape_time = None
+
+    def _handle_vibe_code_project_create_app_escape(self) -> None:
+        try:
+            vibe_code_project_create = self.query_one(VibeCodeProjectCreateApp)
+            vibe_code_project_create.action_cancel()
+        except Exception:
+            pass
+        self._last_escape_time = None
+
     # --- Rewind mode ---
 
     def _get_user_message_widgets(self) -> list[UserMessage]:
         """Return all UserMessage widgets currently visible in #messages.
 
-        Only includes messages with a valid message_index (i.e. real user
+        Only includes messages with a public history id (i.e. real user
         messages, not slash-command echo messages).
         """
         return [
             child
             for child in self._messages_area.children
-            if isinstance(child, UserMessage) and child.message_index is not None
+            if isinstance(child, UserMessage) and child.history_entry_id is not None
         ]
 
     def _start_rewind_mode(self, **kwargs: Any) -> None:
         self.action_rewind_prev()
 
     def action_rewind_prev(self) -> None:
-        if self._agent_running:
+        if self._agent_job_active():
             return
 
         user_widgets = self._get_user_message_widgets()
@@ -3055,17 +3222,21 @@ class VibeApp(App):  # noqa: PLR0904
             except ValueError:
                 idx = len(user_widgets)
             if idx <= 0:
-                self.run_worker(self._rewind_prev_at_top(), exclusive=False)
+                self.run_worker(
+                    self._rewind_prev_at_top(), group="rewind", exclusive=False
+                )
                 return
             target = user_widgets[idx - 1]
         else:
             target = user_widgets[-1]
 
-        self.run_worker(self._select_rewind_widget(target), exclusive=False)
+        self.run_worker(
+            self._select_rewind_widget(target), group="rewind", exclusive=False
+        )
 
     async def _rewind_prev_at_top(self) -> None:
-        """Handle alt+up when already at the topmost visible user message."""
-        if self._load_more.widget is not None and self._windowing.has_backfill:
+        """Handle navigating past the topmost visible user message."""
+        if self._load_more.widget is not None and self._has_older_history:
             await self.on_history_load_more_requested(HistoryLoadMoreRequested())
             user_widgets = self._get_user_message_widgets()
             if user_widgets and self._rewind_highlighted_widget is not None:
@@ -3097,7 +3268,9 @@ class VibeApp(App):  # noqa: PLR0904
             return
 
         self.run_worker(
-            self._select_rewind_widget(user_widgets[idx + 1]), exclusive=False
+            self._select_rewind_widget(user_widgets[idx + 1]),
+            group="rewind",
+            exclusive=False,
         )
 
     async def _select_rewind_widget(self, widget: UserMessage) -> None:
@@ -3108,10 +3281,11 @@ class VibeApp(App):  # noqa: PLR0904
         widget.add_class("rewind-selected")
         self._rewind_highlighted_widget = widget
 
-        msg_index = widget.message_index
+        entry_id = widget.history_entry_id
+        if entry_id is None:
+            return
         has_file_changes = (
-            msg_index is not None
-            and self.agent_loop.rewind_manager.has_file_changes_at(msg_index)
+            await self.app_server.resources.sessions.rewind_has_file_changes(entry_id)
         )
 
         await self._switch_to_rewind_app(
@@ -3170,65 +3344,69 @@ class VibeApp(App):  # noqa: PLR0904
     ) -> None:
         await self._execute_rewind(restore_files=False)
 
+    def on_rewind_app_edit_prev(self, message: RewindApp.EditPrev) -> None:
+        self.action_rewind_prev()
+
+    def on_rewind_app_edit_next(self, message: RewindApp.EditNext) -> None:
+        self.action_rewind_next()
+
+    async def on_rewind_app_quit(self, message: RewindApp.Quit) -> None:
+        await self._exit_rewind_mode()
+
     async def _execute_rewind(self, *, restore_files: bool) -> None:
-        """Fork the session at the selected user message."""
+        """Rewind model context while preserving the public timeline."""
         if not self._rewind_mode or self._rewind_highlighted_widget is None:
             return
 
         target_widget = self._rewind_highlighted_widget
-        msg_index = target_widget.message_index
-
-        if msg_index is None:
+        entry_id = target_widget.history_entry_id
+        if entry_id is None:
             return
 
-        if msg_index < len(self.agent_loop.messages):
-            try:
-                (
-                    message_content,
-                    restore_errors,
-                ) = await self.agent_loop.rewind_manager.rewind_to_message(
-                    msg_index, restore_files=restore_files
-                )
-            except RewindError as exc:
-                self.notify(str(exc), severity="error")
-                return
-        else:
-            message_content = target_widget.get_content()
-            restore_errors = []
+        try:
+            result = await self.app_server.resources.sessions.rewind(
+                entry_id, restore_files=restore_files
+            )
+            await self.app_server.resources.refresh()
+        except AppServerResponseError as exc:
+            self.notify(exc.error.message, severity="error")
+            return
+
+        message_content = result.message
+        restore_errors = result.restore_errors
 
         for error in restore_errors:
             self.notify(error, severity="warning")
 
-        # Remove UI widgets from the selected message onward
-        children = list(self._messages_area.children)
-        try:
-            target_idx = children.index(target_widget)
-        except ValueError:
-            target_idx = len(children)
-        to_remove = children[target_idx:]
-        if to_remove:
-            await self._messages_area.remove_children(to_remove)
-
         self._clear_rewind_state()
-
-        # Switch back to input and pre-fill with the original message
         await self._switch_to_input_app()
+        await self._reset_message_widgets()
+        await self._resume_history_from_messages()
         if self._chat_input_container:
             self._chat_input_container.value = message_content
 
     # --- End rewind mode ---
 
-    def _handle_input_app_escape(self) -> None:
+    def _clear_input(self) -> None:
         try:
             input_widget = self.query_one(ChatInputContainer)
             input_widget.value = ""
         except Exception:
             pass
+
+    def _handle_input_double_escape(self) -> None:
+        """Clear the input when it has content, otherwise enter rewind mode."""
         self._last_escape_time = None
+        if self._chat_input_container and self._chat_input_container.value:
+            self._clear_input()
+        else:
+            self._start_rewind_mode()
 
     def _handle_agent_running_escape(self) -> None:
-        self.agent_loop.telemetry_client.send_user_cancelled_action("interrupt_agent")
-        self.run_worker(self._interrupt_agent_loop(), exclusive=False)
+        self.app_server.resources.telemetry.record(
+            "vibe.user_cancelled_action", {"action": "interrupt_agent"}
+        )
+        self.run_worker(self._interrupt_turn(), exclusive=False)
 
     def _handle_bottom_app_close_escape(self, widget_type: type[Widget]) -> None:
         try:
@@ -3238,39 +3416,43 @@ class VibeApp(App):  # noqa: PLR0904
         self._last_escape_time = None
 
     def _try_interrupt_bottom_app_escape(self) -> bool:
-        if self._current_bottom_app == BottomApp.Config:
-            self._handle_config_app_escape()
-        elif self._current_bottom_app == BottomApp.Voice:
-            self._handle_voice_app_escape()
-        elif self._current_bottom_app == BottomApp.MCP:
-            self._handle_bottom_app_close_escape(_get_mcp_app_class())
-        elif self._current_bottom_app == BottomApp.ConnectorAuth:
-            self._handle_bottom_app_close_escape(_get_connector_auth_app_class())
-        elif self._current_bottom_app == BottomApp.MCPOAuth:
-            self._handle_bottom_app_close_escape(_get_mcp_oauth_app_class())
-        elif self._current_bottom_app == BottomApp.ProxySetup:
-            self._handle_bottom_app_close_escape(ProxySetupApp)
-        elif self._current_bottom_app == BottomApp.Approval:
-            self._handle_approval_app_escape()
-        elif self._current_bottom_app == BottomApp.Question:
-            self._handle_question_app_escape()
-        elif self._current_bottom_app == BottomApp.ModelPicker:
-            self._handle_model_picker_app_escape()
-        elif self._current_bottom_app == BottomApp.ThemePicker:
-            self._handle_theme_picker_app_escape()
-        elif self._current_bottom_app == BottomApp.ThinkingPicker:
-            self._handle_thinking_picker_app_escape()
-        elif self._current_bottom_app == BottomApp.SessionPicker:
-            self._handle_session_picker_app_escape()
+        handlers = {
+            BottomApp.Voice: self._handle_voice_app_escape,
+            BottomApp.MCP: lambda: self._handle_bottom_app_close_escape(
+                _get_mcp_app_class()
+            ),
+            BottomApp.ConnectorAuth: lambda: self._handle_bottom_app_close_escape(
+                _get_connector_auth_app_class()
+            ),
+            BottomApp.MCPOAuth: lambda: self._handle_bottom_app_close_escape(
+                _get_mcp_oauth_app_class()
+            ),
+            BottomApp.ProxySetup: lambda: self._handle_bottom_app_close_escape(
+                ProxySetupApp
+            ),
+            BottomApp.Approval: self._handle_approval_app_escape,
+            BottomApp.Question: self._handle_question_app_escape,
+            BottomApp.ModelPicker: self._handle_model_picker_app_escape,
+            BottomApp.ThemePicker: self._handle_theme_picker_app_escape,
+            BottomApp.ThinkingPicker: self._handle_thinking_picker_app_escape,
+            BottomApp.VibeCodeProjectCreate: self._handle_vibe_code_project_create_app_escape,
+            BottomApp.VibeCodeProjectPicker: (
+                self._handle_vibe_code_project_picker_app_escape
+            ),
+            BottomApp.SessionPicker: self._handle_session_picker_app_escape,
+        }
+
+        if handler := handlers.get(self._current_bottom_app):
+            handler()
         elif self._current_bottom_app == BottomApp.Rewind:
-            self.run_worker(self._exit_rewind_mode(), exclusive=False)
+            self.action_rewind_prev()
             self._last_escape_time = None
         elif (
             self._current_bottom_app == BottomApp.Input
             and self._last_escape_time is not None
             and (time.monotonic() - self._last_escape_time) < DOUBLE_ESC_DELAY
         ):
-            self._handle_input_app_escape()
+            self._handle_input_double_escape()
         else:
             return False
         return True
@@ -3306,7 +3488,7 @@ class VibeApp(App):  # noqa: PLR0904
         if self._bash_task and not self._bash_task.done():
             self._bash_task.cancel()
             interrupted = True
-        if self._agent_running:
+        if self._agent_job_active():
             self._handle_agent_running_escape()
             interrupted = True
         return interrupted
@@ -3329,6 +3511,17 @@ class VibeApp(App):  # noqa: PLR0904
         self._focus_current_bottom_app()
         return interrupted
 
+    def check_action(self, action: str, parameters: tuple[object, ...]) -> bool | None:
+        """Disable the priority escape->interrupt binding on config modals so escape falls through to their own escape->close."""
+        screen_id = self.screen.id
+        if (
+            action == "interrupt"
+            and screen_id is not None
+            and screen_id.startswith("config-")
+        ):
+            return False
+        return True
+
     def action_interrupt(self) -> None:
         self._try_interrupt()
 
@@ -3336,14 +3529,13 @@ class VibeApp(App):  # noqa: PLR0904
         self._load_more.set_enabled(False)
         try:
             if not self._windowing.has_backfill:
-                await self._load_more.hide()
-                return
+                if not await self._load_older_history_page():
+                    await self._load_more.hide()
+                    return
             if (batch := self._windowing.next_load_more_batch()) is None:
                 await self._load_more.hide()
                 return
             messages_area = self._messages_area
-            if self._tool_call_map is None:
-                self._tool_call_map = {}
             if self._load_more.widget:
                 before: Widget | int | None = None
                 after: Widget | None = self._load_more.widget
@@ -3351,19 +3543,45 @@ class VibeApp(App):  # noqa: PLR0904
                 before = 0
                 after = None
             await self._mount_history_batch(
-                batch.messages,
+                batch.entries,
                 messages_area,
-                self._tool_call_map,
                 start_index=batch.start_index,
                 before=before,
                 after=after,
             )
-            if not self._windowing.has_backfill:
-                await self._load_more.hide()
-            else:
-                await self._load_more.show(messages_area, self._windowing.remaining)
+            await self._load_more.set_visible(
+                messages_area,
+                visible=self._has_older_history,
+                remaining=self._history_backfill_remaining,
+            )
         finally:
             self._load_more.set_enabled(True)
+
+    @property
+    def _has_older_history(self) -> bool:
+        return (
+            self._windowing.has_backfill
+            or self.app_server.state.history.cursor.before is not None
+        )
+
+    @property
+    def _history_backfill_remaining(self) -> int | None:
+        if self.app_server.state.history.cursor.before is not None:
+            return None
+        return self._windowing.remaining or None
+
+    async def _load_older_history_page(self) -> bool:
+        before = self.app_server.state.history.cursor.before
+        if before is None:
+            return False
+        page = await self.app_server.resources.sessions.load_before(
+            before, LOAD_MORE_BATCH_SIZE
+        )
+        if not page.entries:
+            return False
+        shift_history_widget_indices(self._history_widget_indices, len(page.entries))
+        self._windowing.set_backfill(page.entries)
+        return True
 
     async def action_toggle_tool(self) -> None:
         self._tools_collapsed = not self._tools_collapsed
@@ -3375,10 +3593,10 @@ class VibeApp(App):  # noqa: PLR0904
             return
         self._refresh_profile_widgets()
         self._focus_current_bottom_app()
-        self.run_worker(self._cycle_agent(), group="mode_switch", exclusive=True)
+        self._request_next_agent()
 
     def _refresh_profile_widgets(self) -> None:
-        self._update_profile_widgets(self.agent_loop.agent_profile)
+        self._update_profile_widgets(self.app_server.resources.agents.active)
 
     def _on_profile_changed(self) -> None:
         self._refresh_profile_widgets()
@@ -3386,68 +3604,76 @@ class VibeApp(App):  # noqa: PLR0904
 
     def _refresh_banner(self) -> None:
         if self._banner:
-            cc, ct = compute_connector_counts(
-                self.config, self.agent_loop.connector_registry
-            )
+            connectors = self.app_server.resources.runtime.connectors
             self._banner.set_state(
                 self.config,
-                self.agent_loop.skill_manager,
-                connectors_connected=cc,
-                connectors_total=ct,
-                hooks_count=self.agent_loop.hooks_count,
-                plan_description=plan_title(self._plan_info),
+                self.app_server.resources.runtime.custom_skills_count,
+                mcp=self.app_server.resources.runtime.mcp,
+                connectors_connected=connectors.connected,
+                connectors_total=connectors.total,
+                hooks_count=self.app_server.resources.runtime.hooks_count,
+                plan_description=plan_title(self.app_server.resources.account.current),
             )
 
-    def _update_profile_widgets(self, profile: AgentProfile) -> None:
+    def _update_profile_widgets(self, profile: AgentSummary) -> None:
         if self._chat_input_container:
             self._chat_input_container.set_safety(profile.safety)
             self._chat_input_container.set_agent_name(profile.display_name.lower())
             self._chat_input_container.set_custom_border(None)
 
-    async def _cycle_agent(self) -> None:
-        new_profile = self.agent_loop.agent_manager.next_agent(
-            self.agent_loop.agent_profile
+    def _request_next_agent(self) -> None:
+        base = (
+            self._desired_agent
+            if self._agent_switch_active and self._desired_agent is not None
+            else self.app_server.resources.agents.active.name
         )
-        self._update_profile_widgets(new_profile)
+        target = self.app_server.resources.agents.next(base)
+        self._desired_agent = target.name
+        self._update_profile_widgets(target)
         if self._chat_input_container:
-            self._chat_input_container.switching_mode = True
-
-        loop = asyncio.get_running_loop()
-
-        def schedule_switch() -> None:
-            self._switch_agent_generation += 1
-            my_gen = self._switch_agent_generation
-
-            def switch_agent_sync() -> None:
-                try:
-                    future = asyncio.run_coroutine_threadsafe(
-                        self.agent_loop.switch_agent(new_profile.name), loop
-                    )
-                    future.result()
-                    self.agent_loop.set_approval_callback(self._approval_callback)
-                    self.agent_loop.set_user_input_callback(self._user_input_callback)
-                finally:
-                    if (
-                        self._chat_input_container
-                        and self._switch_agent_generation == my_gen
-                    ):
-                        self.call_from_thread(self._refresh_banner)
-                        self.call_from_thread(
-                            setattr, self._chat_input_container, "switching_mode", False
-                        )
-
+            self._chat_input_container.set_switching_mode(True, show_indicator=False)
+        if not self._agent_switch_active:
+            self._agent_switch_active = True
             self.run_worker(
-                switch_agent_sync, group="switch_agent", exclusive=True, thread=True
+                self._drain_agent_switches(), group="mode_switch", exclusive=True
             )
 
-        self.call_after_refresh(schedule_switch)
+    async def _drain_agent_switches(self) -> None:
+        applied: str | None = None
+        try:
+            while (target := self._desired_agent) is not None and target != applied:
+                try:
+                    await self._switch_to_agent(target)
+                except Exception as exc:
+                    logger.error("Agent switch to %s failed", target, exc_info=exc)
+                applied = target
+        finally:
+            self._agent_switch_active = False
+            if self._chat_input_container:
+                self._chat_input_container.switching_mode = False
+
+    async def _switch_to_agent(self, target: str) -> None:
+        spinner_timer = self.set_timer(
+            MODE_SWITCH_SPINNER_DELAY, self._show_switch_spinner
+        )
+        try:
+            await self.app_server.resources.agents.switch(target)
+        finally:
+            spinner_timer.stop()
+        self._refresh_banner()
+
+    def _show_switch_spinner(self) -> None:
+        if self._chat_input_container and self._agent_switch_active:
+            self._chat_input_container.set_switching_mode(True, show_indicator=True)
 
     async def action_toggle_debug_console(self, **kwargs: Any) -> None:
         if self._debug_console is not None:
             await self._debug_console.remove()
             self._debug_console = None
         else:
-            self._debug_console = DebugConsole(log_reader=self._log_reader)
+            self._debug_console = DebugConsole(
+                log_source=self.app_server.resources.runtime
+            )
             await self.mount(self._debug_console)
 
     def _get_chat_input(self) -> ChatInputContainer | None:
@@ -3482,6 +3708,10 @@ class VibeApp(App):  # noqa: PLR0904
                 container.input_widget.action_delete_right()
             return
 
+        if not self.config.ask_confirmation_on_exit:
+            self._force_quit()
+            return
+
         if self._quit_manager.is_confirmed("Ctrl+D"):
             self._force_quit()
             return
@@ -3489,12 +3719,8 @@ class VibeApp(App):  # noqa: PLR0904
             "Ctrl+D", self._queue.quit_warning_extra()
         )
 
-    def _emit_session_closed_for_active_session(self) -> None:
-        self.agent_loop.emit_session_closed_telemetry()
-
     async def _begin_shutdown(self) -> None:
         await self._queue.shutdown()
-        await self._loop_runner.stop()
 
     def _force_quit(self) -> None:
         if self._force_quit_task is not None and not self._force_quit_task.done():
@@ -3503,16 +3729,14 @@ class VibeApp(App):  # noqa: PLR0904
 
     async def _force_quit_async(self) -> None:
         try:
-            self._emit_session_closed_for_active_session()
             await self._begin_shutdown()
             if self._agent_task and not self._agent_task.done():
                 self._agent_task.cancel()
             if self._bash_task and not self._bash_task.done():
                 self._bash_task.cancel()
-            self._log_reader.shutdown()
             self._narrator_manager.cancel()
         finally:
-            self.exit(result=self._get_session_resume_info())
+            self.exit(result=self._get_session_exit_summary())
 
     async def shutdown_cleanup(self) -> None:
         with suppress(Exception):
@@ -3526,18 +3750,14 @@ class VibeApp(App):  # noqa: PLR0904
                 continue
             with suppress(asyncio.CancelledError, Exception):
                 await task
-        with suppress(Exception):
-            await self._voice_manager.close()
-        with suppress(Exception):
-            await self._narrator_manager.close()
-        with suppress(Exception):
-            await self.agent_loop.aclose()
-        try:
-            await self.agent_loop.telemetry_client.aclose()
-        except Exception as exc:
-            logger.error(
-                "Failed to close telemetry client during shutdown", exc_info=exc
-            )
+        if self._client_dependencies_ready:
+            with suppress(Exception):
+                await self._voice_manager.close()
+            with suppress(Exception):
+                await self._narrator_manager.close()
+        if self._app_server is not None:
+            with suppress(Exception):
+                await self._app_server.close()
 
     def action_scroll_chat_up(self) -> None:
         try:
@@ -3590,9 +3810,7 @@ class VibeApp(App):  # noqa: PLR0904
         content = load_whats_new_content()
         if content is not None:
             body = content
-            plan_offer = plan_offer_cta(
-                self._plan_info, vibe_base_url=self.config.vibe_base_url
-            )
+            plan_offer = plan_offer_cta(self.app_server.resources.account.current)
             if plan_offer is not None:
                 body = f"{body}\n\n{plan_offer}"
             if self._show_vscode_extension_promo:
@@ -3625,45 +3843,42 @@ class VibeApp(App):  # noqa: PLR0904
             chat.anchor()
         self.run_worker(self._record_vscode_extension_promo_shown(), exclusive=False)
 
-    async def _resolve_plan(self) -> None:
-        if self._plan_offer_gateway is None:
-            self._plan_info = None
-            self._refresh_command_registry()
-            return
-
+    async def _refresh_account(self) -> None:
         try:
-            if not self.config.is_active_model_mistral():
-                self._plan_info = None
-                return
-
-            provider = self.config.get_active_provider()
-            api_key = resolve_api_key_for_plan(provider)
-            self._plan_info = await decide_plan_offer(api_key, self._plan_offer_gateway)
+            await self.app_server.resources.account.read()
         except Exception as exc:
             logger.warning(
-                "Plan-offer check failed (%s).", type(exc).__name__, exc_info=True
+                "Account check failed (%s).", type(exc).__name__, exc_info=exc
             )
-            self._plan_info = None
         finally:
             self._refresh_command_registry()
             self._refresh_banner()
 
     async def _mount_and_scroll(
-        self, widget: Widget, after: Widget | None = None, before: Widget | None = None
+        self,
+        widget: Widget,
+        after: Widget | None = None,
+        before: Widget | None = None,
+        *,
+        container: Widget | None = None,
     ) -> None:
         messages_area = self._messages_area
         is_user_initiated = isinstance(widget, (UserMessage, UserCommandMessage))
         should_anchor = is_user_initiated or self._chat_widget.is_at_bottom
 
         pin_anchor: Widget | None = None
-        if after is None:
+        if after is None and container is None:
             pin_anchor = self._queue.pin_target(messages_area)
 
+        before_parent = before.parent if before is not None else None
+        after_parent = after.parent if after is not None else None
         with self.batch_update():
-            if before is not None and before.parent is messages_area:
-                await messages_area.mount(widget, before=before)
-            elif after is not None and after.parent is messages_area:
-                await messages_area.mount(widget, after=after)
+            if isinstance(before_parent, Widget):
+                await before_parent.mount(widget, before=before)
+            elif isinstance(after_parent, Widget):
+                await after_parent.mount(widget, after=after)
+            elif container is not None:
+                await container.mount(widget)
             elif pin_anchor is not None:
                 await messages_area.mount(widget, before=pin_anchor)
             else:
@@ -3689,15 +3904,17 @@ class VibeApp(App):  # noqa: PLR0904
         if self._load_more.widget is None:
             return
         messages_area = self._messages_area
-        has_backfill, tool_call_map = sync_backfill_state(
-            history_messages=non_system_history_messages(self.agent_loop.messages),
+        has_backfill = sync_backfill_state(
+            history=self.app_server.history,
             messages_children=list(messages_area.children),
             history_widget_indices=self._history_widget_indices,
             windowing=self._windowing,
         )
-        self._tool_call_map = tool_call_map
         await self._load_more.set_visible(
-            messages_area, visible=has_backfill, remaining=self._windowing.remaining
+            messages_area,
+            visible=has_backfill
+            or self.app_server.state.history.cursor.before is not None,
+            remaining=self._history_backfill_remaining,
         )
 
     def _schedule_update_notification(self) -> None:
@@ -3724,7 +3941,9 @@ class VibeApp(App):  # noqa: PLR0904
     def action_copy_selection(self) -> None:
         copied_text = copy_selection_to_clipboard(self, show_toast=False)
         if copied_text is not None:
-            self.agent_loop.telemetry_client.send_user_copied_text(copied_text)
+            self.app_server.resources.telemetry.record(
+                "vibe.user_copied_text", {"text_length": len(copied_text)}
+            )
 
     def on_mouse_up(self, event: MouseUp) -> None:
         if self.config.autocopy_to_clipboard:
@@ -3737,7 +3956,9 @@ class VibeApp(App):  # noqa: PLR0904
                 self._clipboard_hide_timer = self.set_timer(
                     2.0, lambda: setattr(self._clipboard_notice, "display", False)
                 )
-                self.agent_loop.telemetry_client.send_user_copied_text(copied_text)
+                self.app_server.resources.telemetry.record(
+                    "vibe.user_copied_text", {"text_length": len(copied_text)}
+                )
 
     def on_app_blur(self, event: AppBlur) -> None:
         self._terminal_notifier.on_blur()
@@ -3773,11 +3994,31 @@ class VibeApp(App):  # noqa: PLR0904
     def _make_default_narrator_manager(self) -> NarratorManagerPort:
         return create_default_narrator_manager(
             config_getter=lambda: self.config,
-            telemetry_client=self.agent_loop.telemetry_client,
+            summary_generator=self.app_server.resources.narration,
+            telemetry_client=self.app_server.resources.telemetry,
         )
 
+    def _handle_exception(self, error: Exception) -> None:
+        if not isinstance(error, WorkerFailed):
+            capture_sentry_exception(
+                error, fatal=True, tags={"vibe_boundary": "textual_app"}
+            )
+        return super()._handle_exception(error)
 
-async def _run_app_with_cleanup(app: VibeApp) -> str | None:
+    def on_worker_state_changed(self, event: Worker.StateChanged) -> None:
+        error = event.worker.error
+        if event.state == WorkerState.ERROR and error:
+            capture_sentry_exception(
+                error,
+                fatal=False,
+                tags={
+                    "vibe_boundary": "textual_worker",
+                    "worker_name": event.worker.name or "",
+                },
+            )
+
+
+async def _run_app_with_cleanup(app: VibeApp) -> SessionExitSummary | None:
     from vibe.cli.stderr_guard import stderr_guard
 
     loop = asyncio.get_running_loop()
@@ -3811,28 +4052,50 @@ async def _run_app_with_cleanup(app: VibeApp) -> str | None:
 
 
 def run_textual_ui(
-    agent_loop: AgentLoop,
+    start_app_server: AppServerBootstrap,
+    history_file: Path,
     update_cache_repository: UpdateCacheRepository,
     startup: StartupOptions | None = None,
-) -> None:
-    update_notifier = PyPIUpdateGateway(project_name="mistral-vibe")
-    plan_offer_gateway = HttpWhoAmIGateway(base_url=agent_loop.config.console_base_url)
-    vscode_extension_promo_repository = FileSystemVscodeExtensionPromoRepository()
-    vscode_extension_promo = VscodeExtensionPromo(
-        repository=vscode_extension_promo_repository,
-        initial_state=asyncio.run(vscode_extension_promo_repository.get()),
-    )
+) -> SessionExitSummary | None:
+    resolve_auto_theme()
 
-    app = VibeApp(
-        agent_loop=agent_loop,
-        startup=startup,
-        update_notifier=update_notifier,
-        update_cache_repository=update_cache_repository,
-        plan_offer_gateway=plan_offer_gateway,
-        vscode_extension_promo=vscode_extension_promo,
-    )
-    session_id = asyncio.run(_run_app_with_cleanup(app))
+    async def run() -> SessionExitSummary | None:
+        app_server = await start_app_server()
+        effective_startup = startup or StartupOptions()
+        if isinstance(app_server, AppServerHost):
+            from vibe.cli.textual_ui.startup import open_textual_session
 
-    print_session_resume_message(
-        session_id, agent_loop.stats, agent_loop.config.session_logging
-    )
+            opened = await open_textual_session(
+                app_server,
+                prompt_for_workspace_trust=(
+                    effective_startup.prompt_for_workspace_trust
+                ),
+                show_resume_picker=effective_startup.show_resume_picker,
+                initially_resuming=effective_startup.is_resuming_session,
+            )
+            if opened is None:
+                return None
+            app_server = opened.session
+            effective_startup = replace(
+                effective_startup,
+                show_resume_picker=False,
+                is_resuming_session=opened.resumed,
+                prompt_for_workspace_trust=False,
+            )
+        update_notifier = PyPIUpdateGateway(project_name="mistral-vibe")
+        vscode_extension_promo_repository = FileSystemVscodeExtensionPromoRepository()
+        vscode_extension_promo = VscodeExtensionPromo(
+            repository=vscode_extension_promo_repository,
+            initial_state=await vscode_extension_promo_repository.get(),
+        )
+        app = VibeApp(
+            app_server=app_server,
+            history_file=history_file,
+            startup=effective_startup,
+            update_notifier=update_notifier,
+            update_cache_repository=update_cache_repository,
+            vscode_extension_promo=vscode_extension_promo,
+        )
+        return await _run_app_with_cleanup(app)
+
+    return asyncio.run(run())

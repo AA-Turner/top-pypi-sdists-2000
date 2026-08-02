@@ -67,6 +67,13 @@ class DaytonaConfig(BaseModel):
             recommended when running many concurrent long-lived operations like `process.exec`.
         otel_enabled (bool | None): Enable OpenTelemetry tracing for SDK operations. Defaults
             to `None`, which falls back to the `DAYTONA_OTEL_ENABLED` environment variable.
+        use_deprecated_polling (bool | None): Observe sandbox state by legacy polling instead
+            of WebSocket event streaming. Defaults to ``False`` (event streaming). Can also be
+            enabled via the ``DAYTONA_USE_DEPRECATED_POLLING`` environment variable.
+
+            .. deprecated::
+                Polling-only mode will be removed in a future release; event streaming is the
+                default and falls back to polling automatically when WebSockets are unavailable.
         _experimental (dict[str, any] | None): Configuration for experimental features.
 
     Example:
@@ -92,6 +99,7 @@ class DaytonaConfig(BaseModel):
     organization_id: str | None = None
     connection_pool_maxsize: int | None = 250
     otel_enabled: bool | None = None
+    use_deprecated_polling: bool | None = None
     _experimental: Annotated[
         dict[str, object] | None,
         Field(
@@ -114,6 +122,13 @@ class DaytonaConfig(BaseModel):
         return values
 
 
+def resolve_bool_flag(explicit_value: bool | None, env_value: str | None) -> bool:
+    if explicit_value is not None:
+        return explicit_value
+
+    return (env_value or "").lower() == "true"
+
+
 class CreateSandboxBaseParams(BaseModel):
     """Base parameters for creating a new Sandbox.
 
@@ -127,14 +142,24 @@ class CreateSandboxBaseParams(BaseModel):
         public (bool | None): Whether the Sandbox should be public.
         timeout (float | None): Timeout in seconds for Sandbox to be created and started.
         auto_stop_interval (int | None): Interval in minutes after which Sandbox will
-            automatically stop if no Sandbox event occurs during that time. Default is 15 minutes.
-            0 means no auto-stop.
+            automatically stop if no Sandbox event occurs during that time. Default is 15 minutes
+            (for sandbox classes that support pausing, auto-pause defaults to 60 minutes instead
+            and auto-stop is disabled). 0 means no auto-stop.
+        auto_pause_interval (int | None): Auto-pause interval in minutes (0 means disabled).
+            Only supported for sandbox classes that support pausing.
+            Not allowed for ephemeral sandboxes. At most one of auto_stop_interval and
+            auto_pause_interval may be non-zero. For non-ephemeral sandbox classes that
+            support pausing, defaults to 60 minutes (with auto-stop disabled) when
+            neither interval is provided.
         auto_archive_interval (int | None): Interval in minutes after which a continuously stopped Sandbox will
             automatically archive. Default is 7 days.
             0 means the maximum interval will be used.
         auto_delete_interval (int | None): Interval in minutes after which a continuously stopped Sandbox will
             automatically be deleted. By default, auto-delete is disabled.
             Negative value means disabled, 0 means delete immediately upon stopping.
+        ttl_minutes (int | None): Maximum time to live in minutes, counted as wall-clock time since
+            creation regardless of sandbox state. When it elapses the sandbox is destroyed, even if
+            it is stopped, paused, or archived. 0 means disabled.
         volumes (list[VolumeMount] | None): List of volumes mounts to attach to the Sandbox.
         secrets (dict[str, str] | None): Map of environment variable name to the name of an existing
             organization Secret to mount into the Sandbox. The env var is set to the Secret's opaque
@@ -159,8 +184,10 @@ class CreateSandboxBaseParams(BaseModel):
     labels: dict[str, str] | None = None
     public: bool | None = None
     auto_stop_interval: int | None = None
+    auto_pause_interval: int | None = None
     auto_archive_interval: int | None = None
     auto_delete_interval: int | None = None
+    ttl_minutes: int | None = None
     volumes: list[VolumeMount] | None = None
     secrets: dict[str, str] | None = None
     network_block_all: bool | None = None

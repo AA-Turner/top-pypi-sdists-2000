@@ -14,6 +14,7 @@ from vibe.setup.auth import (
     BrowserSignInErrorCode,
     HttpBrowserSignInGateway,
 )
+from vibe.utils.http import VibeAsyncHTTPClient
 
 AUTH_ORIGIN = "https://console.mistral.ai"
 AUTH_BROWSER_BASE_URL = "https://console.mistral.ai"
@@ -57,7 +58,7 @@ async def build_gateway(
     browser_base_url: str = AUTH_BROWSER_BASE_URL,
     api_base_url: str = AUTH_API_BASE_URL,
 ):
-    async with httpx.AsyncClient(
+    async with VibeAsyncHTTPClient(
         transport=httpx.MockTransport(handler), base_url=origin
     ) as client:
         yield HttpBrowserSignInGateway(

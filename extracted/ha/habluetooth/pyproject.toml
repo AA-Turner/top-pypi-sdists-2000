@@ -1,0 +1,215 @@
+[build-system]
+requires = ['setuptools>=77.0', 'Cython>=3', "poetry-core>=2.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[project]
+name = "habluetooth"
+version = "6.26.5"
+license = "Apache-2.0"
+description = "High availability Bluetooth"
+authors = [{ name = "J. Nick Koston", email = "bluetooth@koston.org" }]
+readme = "README.md"
+requires-python = ">=3.11"
+
+[project.urls]
+"Repository" = "https://github.com/bluetooth-devices/habluetooth"
+"Documentation" = "https://habluetooth.readthedocs.io"
+"Bug Tracker" = "https://github.com/bluetooth-devices/habluetooth/issues"
+"Changelog" = "https://github.com/bluetooth-devices/habluetooth/blob/main/CHANGELOG.md"
+
+[tool.poetry]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries",
+]
+packages = [
+    { include = "habluetooth", from = "src" },
+]
+
+[tool.poetry.build]
+generate-setup-file = true
+script = "build_ext.py"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.15"
+bleak = ">=3.0.2"
+bleak-retry-connector = ">=4.6.1"
+bluetooth-data-tools = ">=1.29.18"
+bluetooth-adapters = ">=2.4.0"
+bluetooth-auto-recovery = ">=1.6.4"
+async-interrupt = ">=1.1.1"
+dbus-fast = { version = ">=5.0.22", markers = "platform_system == 'Linux'" }
+btsocket = ">=0.3.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=9.1.1,<10"
+pytest-cov = ">=7.1.0,<8"
+pytest-asyncio = ">=1.4.0,<1.5.0"
+pytest-codspeed = ">=5.0.3,<6.0.0"
+pytest-timeout = ">=2.3.1"
+freezegun = "^1.5.5"
+dbus-fast = ">=5.0.22"
+
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+myst-parser = ">=5.1.0"
+sphinx = ">=4.0"
+furo = ">=2023.5.20"
+sphinx-autobuild = ">=2021.3.14"
+
+[tool.semantic_release]
+version_toml = ["pyproject.toml:project.version"]
+version_variables = [
+    "src/habluetooth/__init__.py:__version__",
+    "docs/conf.py:release",
+]
+build_command = "pip install poetry && poetry build"
+
+[tool.semantic_release.changelog]
+exclude_commit_patterns = [
+    "chore*",
+    "ci*",
+]
+
+[tool.semantic_release.changelog.environment]
+keep_trailing_newline = true
+
+[tool.semantic_release.branches.main]
+match = "main"
+
+[tool.semantic_release.branches.noop]
+match = "(?!main$)"
+prerelease = true
+
+[tool.pytest.ini_options]
+addopts = "-v -Wdefault --cov=habluetooth --cov-report=term-missing:skip-covered"
+pythonpath = ["src"]
+log_cli="true"
+log_level="NOTSET"
+timeout = 5
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "@overload",
+    "if TYPE_CHECKING",
+    "raise NotImplementedError",
+    'if __name__ == "__main__":',
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+
+[tool.ruff.lint]
+ignore = [
+    "E721",    # type checks for cython
+    "D203",    # 1 blank line required before class docstring
+    "D212",    # Multi-line docstring summary should start at the first line
+    "D100",    # Missing docstring in public module
+    "D104",    # Missing docstring in public package
+    "D107",    # Missing docstring in `__init__`
+    "D401",    # First line of docstring should be in imperative mood
+    "ASYNC109", # ``timeout`` is part of our bleak-compatible public API
+    "TRY003",  # too many to fix; long messages outside the exception class
+]
+select = [
+    "A",    # flake8-builtins
+    "ASYNC", # flake8-async
+    "B",    # flake8-bugbear
+    "BLE",  # flake8-blind-except
+    "C4",   # flake8-comprehensions
+    "C90",  # mccabe complexity
+    "D",    # flake8-docstrings
+    "DTZ",  # flake8-datetimez
+    "E",    # pycodestyle
+    "EM",   # flake8-errmsg
+    "ERA",  # eradicate
+    "EXE",  # flake8-executable
+    "F",    # pyflake
+    "FA",   # flake8-future-annotations
+    "FIX",  # flake8-fixme
+    "FLY",  # flynt
+    "FURB", # refurb
+    "G",    # flake8-logging-format
+    "I",    # isort
+    "ICN",  # flake8-import-conventions
+    "INP",  # flake8-no-pep420
+    "ISC",  # flake8-implicit-str-concat
+    "LOG",  # flake8-logging
+    "N",    # pep8-naming
+    "NPY",  # numpy-specific rules
+    "PERF", # Perflint
+    "PGH",  # pygrep-hooks
+    "PIE",  # flake8-pie
+    "PLC",  # pylint convention
+    "PLW",  # pylint warnings
+    "PT",   # flake8-pytest-style
+    "PTH",  # flake8-use-pathlib
+    "PYI",  # flake8-pyi
+    "Q",    # flake8-quotes
+    "RET",  # return
+    "RSE",  # flake8-raise
+    "RUF",  # ruff specific
+    "S",    # flake8-bandit
+    "SIM",  # simplify
+    "SLOT", # flake8-slots
+    "T10",  # flake8-debugger
+    "T20",  # flake8-print
+    "TC",   # flake8-type-checking
+    "TD",   # flake8-todos
+    "TRY",  # tryceratops
+    "UP",   # pyupgrade
+    "W",    # pycodestyle
+    "YTT",  # flake8-2020
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*" = [
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D104",
+    "S101",
+]
+"setup.py" = ["D100"]
+"conftest.py" = ["D100"]
+# Sphinx config: ``copyright`` is the Sphinx convention, file is not a package
+"docs/conf.py" = ["D100", "A001", "INP001"]
+# Example scripts intentionally use print and aren't a package
+"examples/*" = ["INP001", "T201"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["habluetooth", "tests"]
+
+[tool.mypy]
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_incomplete_defs = true
+disallow_untyped_defs = true
+mypy_path = "src/"
+no_implicit_optional = true
+show_error_codes = true
+warn_unreachable = true
+warn_unused_ignores = true
+exclude = [
+    'docs/.*',
+    'setup.py',
+]
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+allow_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = "docs.*"
+ignore_errors = true

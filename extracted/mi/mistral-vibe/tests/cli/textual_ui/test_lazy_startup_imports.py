@@ -32,6 +32,44 @@ if loaded:
     assert result.returncode == 0, result.stderr or result.stdout
 
 
+def test_importing_app_server_local_does_not_import_mcp_package() -> None:
+    code = """
+import sys
+import vibe.app_server.local
+
+blocked = [
+    "vibe.core.tools.mcp.tools",
+    "mcp",
+    "mistralai",
+]
+loaded = [name for name in blocked if name in sys.modules]
+if loaded:
+    raise SystemExit(f"unexpected app server modules loaded: {loaded}")
+"""
+
+    result = subprocess.run(
+        [sys.executable, "-c", code], check=False, capture_output=True, text=True
+    )
+
+    assert result.returncode == 0, result.stderr or result.stdout
+
+
+def test_importing_cli_entrypoint_does_not_import_git() -> None:
+    code = """
+import sys
+import vibe.cli.entrypoint
+
+if "git" in sys.modules:
+    raise SystemExit("unexpected git module loaded")
+"""
+
+    result = subprocess.run(
+        [sys.executable, "-c", code], check=False, capture_output=True, text=True
+    )
+
+    assert result.returncode == 0, result.stderr or result.stdout
+
+
 def test_importing_agent_loop_does_not_import_remote_tool_modules() -> None:
     code = """
 import sys
@@ -65,6 +103,7 @@ import vibe.core.tools.connectors.connector_registry
 blocked = [
     "vibe.core.tools.mcp.tools",
     "mcp",
+    "mistralai",
 ]
 loaded = [name for name in blocked if name in sys.modules]
 if loaded:
@@ -106,11 +145,26 @@ def test_constructing_deferred_agent_loop_does_not_import_mcp_package(
 import sys
 
 from vibe.core.agent_loop import AgentLoop
-from vibe.core.config import SessionLoggingConfig, VibeConfig
+from vibe.core.config import SessionLoggingConfig, VibeConfigSchema
 from vibe.core.config.harness_files import (
     init_harness_files_manager,
     reset_harness_files_manager,
 )
+
+
+class _Orchestrator:
+    def __init__(self, config):
+        self._config = config
+
+    @property
+    def config(self):
+        return self._config
+
+    async def set_field(self, *args, **kwargs):
+        return []
+
+    async def reload(self):
+        return None
 
 
 class Backend:
@@ -123,12 +177,12 @@ class Backend:
 
 init_harness_files_manager("user", "project")
 try:
-    config = VibeConfig(
+    config = VibeConfigSchema(
         enable_connectors=False,
         session_logging=SessionLoggingConfig(enabled=False),
     )
     loop = AgentLoop(
-        config=config,
+        _Orchestrator(config),
         backend=Backend(),
         defer_heavy_init=True,
         headless=True,

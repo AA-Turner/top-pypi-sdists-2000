@@ -17,20 +17,15 @@ from tests.conftest import build_test_agent_loop, build_test_vibe_config
 from tests.constants import CHAT_COMPLETIONS_PATH
 from tests.mock.utils import mock_llm_chunk
 from tests.stubs.fake_backend import FakeBackend
-from vibe.core.config import ModelConfig, ProviderConfig, VibeConfig
+from vibe.core.config import ModelConfig, ProviderConfig, VibeConfigSchema
 from vibe.core.llm.backend.generic import GenericBackend, OpenAIAdapter
 from vibe.core.llm.backend.mistral import MistralBackend, MistralMapper, ParsedContent
 from vibe.core.llm.format import APIToolFormatHandler
-from vibe.core.types import (
-    AssistantEvent,
-    LLMMessage,
-    ReasoningEvent,
-    Role,
-    UserDisplayContentMetadata,
-)
+from vibe.core.types import AssistantEvent, LLMMessage, ReasoningEvent, Role
+from vibe.user_content import UserDisplayContent
 
 
-def make_config() -> VibeConfig:
+def make_config() -> VibeConfigSchema:
     return build_test_vibe_config(
         include_model_info=False,
         include_commit_signature=False,
@@ -475,7 +470,7 @@ class TestReasoningFieldNameConversion:
                 LLMMessage(
                     role=Role.user,
                     content="Look at app.ts",
-                    user_display_content=UserDisplayContentMetadata(
+                    user_display_content=UserDisplayContent(
                         version="1.0.0",
                         host="mistral-vscode",
                         content=[

@@ -56,11 +56,14 @@ class Sandbox(BaseModel):
     desired_state: Optional[SandboxDesiredState] = Field(default=None, description="The desired state of the sandbox", serialization_alias="desiredState")
     error_reason: Optional[StrictStr] = Field(default=None, description="The error reason of the sandbox", serialization_alias="errorReason")
     recoverable: Optional[StrictBool] = Field(default=None, description="Whether the sandbox error is recoverable.")
+    warm_pool_id: Optional[StrictStr] = Field(default=None, description="Id of the warm pool this sandbox waits in; set only while it is an unclaimed member.", serialization_alias="warmPoolId")
     backup_state: Optional[StrictStr] = Field(default=None, description="The state of the backup", serialization_alias="backupState")
     backup_created_at: Optional[StrictStr] = Field(default=None, description="The creation timestamp of the last backup", serialization_alias="backupCreatedAt")
     auto_stop_interval: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Auto-stop interval in minutes (0 means disabled)", serialization_alias="autoStopInterval")
+    auto_pause_interval: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Auto-pause interval in minutes (0 means disabled)", serialization_alias="autoPauseInterval")
     auto_archive_interval: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Auto-archive interval in minutes", serialization_alias="autoArchiveInterval")
     auto_delete_interval: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Auto-delete interval in minutes (negative value means disabled, 0 means delete immediately upon stopping)", serialization_alias="autoDeleteInterval")
+    auto_destroy_at: Optional[StrictStr] = Field(default=None, description="When the sandbox will be automatically destroyed, regardless of its state (only set when a TTL is configured)", serialization_alias="autoDestroyAt")
     volumes: Optional[List[SandboxVolume]] = Field(default=None, description="Array of volumes attached to the sandbox")
     build_info: Optional[BuildInfo] = Field(default=None, description="Build information for the sandbox", serialization_alias="buildInfo")
     created_at: Optional[StrictStr] = Field(default=None, description="The creation timestamp of the sandbox", serialization_alias="createdAt")
@@ -72,7 +75,7 @@ class Sandbox(BaseModel):
     linked_sandbox_id: Optional[StrictStr] = Field(default=None, description="ID of the sandbox this sandbox is linked to. When set, the sandbox is co-located on the same runner as the linked sandbox.", serialization_alias="linkedSandboxId")
     toolbox_proxy_url: StrictStr = Field(description="The toolbox proxy URL for the sandbox", serialization_alias="toolboxProxyUrl")
     additional_properties: Dict[str, Any] = {}
-    __properties: ClassVar[List[str]] = ["id", "organizationId", "name", "snapshot", "user", "env", "labels", "public", "networkBlockAll", "networkAllowList", "domainAllowList", "target", "cpu", "gpu", "gpuType", "memory", "disk", "state", "desiredState", "errorReason", "recoverable", "backupState", "backupCreatedAt", "autoStopInterval", "autoArchiveInterval", "autoDeleteInterval", "volumes", "buildInfo", "createdAt", "updatedAt", "lastActivityAt", "sandboxClass", "daemonVersion", "runnerId", "linkedSandboxId", "toolboxProxyUrl"]
+    __properties: ClassVar[List[str]] = ["id", "organizationId", "name", "snapshot", "user", "env", "labels", "public", "networkBlockAll", "networkAllowList", "domainAllowList", "target", "cpu", "gpu", "gpuType", "memory", "disk", "state", "desiredState", "errorReason", "recoverable", "warmPoolId", "backupState", "backupCreatedAt", "autoStopInterval", "autoPauseInterval", "autoArchiveInterval", "autoDeleteInterval", "autoDestroyAt", "volumes", "buildInfo", "createdAt", "updatedAt", "lastActivityAt", "sandboxClass", "daemonVersion", "runnerId", "linkedSandboxId", "toolboxProxyUrl"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -162,11 +165,14 @@ class Sandbox(BaseModel):
             "desired_state": obj.get("desiredState"),
             "error_reason": obj.get("errorReason"),
             "recoverable": obj.get("recoverable"),
+            "warm_pool_id": obj.get("warmPoolId"),
             "backup_state": obj.get("backupState"),
             "backup_created_at": obj.get("backupCreatedAt"),
             "auto_stop_interval": obj.get("autoStopInterval"),
+            "auto_pause_interval": obj.get("autoPauseInterval"),
             "auto_archive_interval": obj.get("autoArchiveInterval"),
             "auto_delete_interval": obj.get("autoDeleteInterval"),
+            "auto_destroy_at": obj.get("autoDestroyAt"),
             "volumes": [SandboxVolume.from_dict(_item) for _item in obj["volumes"]] if obj.get("volumes") is not None else None,
             "build_info": BuildInfo.from_dict(obj["buildInfo"]) if obj.get("buildInfo") is not None else None,
             "created_at": obj.get("createdAt"),

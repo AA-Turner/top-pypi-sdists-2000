@@ -16,11 +16,12 @@ from textual.timer import Timer
 from textual.widgets import Static
 from textual.worker import Worker
 
+from vibe.cli.textual_ui.shortcut_hints import shortcut, shortcut_hint
 from vibe.cli.textual_ui.widgets.banner.petit_chat import PetitChat
 from vibe.cli.textual_ui.widgets.no_markup_static import NoMarkupStatic
 from vibe.core.config import ProviderConfig
-from vibe.core.logger import logger
-from vibe.core.telemetry.types import EntrypointMetadata
+from vibe.core.telemetry.types import LaunchContext
+from vibe.observability.logging import logger
 from vibe.setup.auth import (
     BrowserSignInAttemptStarted,
     BrowserSignInError,
@@ -30,19 +31,20 @@ from vibe.setup.auth import (
     BrowserSignInStatus,
     BrowserSignInStatusChanged,
 )
-from vibe.setup.auth.api_key_persistence import (
-    persist_api_key,
-    resolve_api_key_provider,
-)
 from vibe.setup.onboarding.base import OnboardingScreen
 from vibe.setup.onboarding.gradient_text import GRADIENT_COLORS, append_gradient_text
 
-PENDING_HINT = "Press M to enter API key manually - Esc to cancel"
-ERROR_HINT = "Press R to retry - Press M to enter API key manually - Esc to cancel"
+PENDING_HINT = (
+    f"Press {shortcut('m')} to enter API key manually - {shortcut('Esc')} to cancel"
+)
+ERROR_HINT = (
+    f"Press {shortcut('r')} to retry - Press {shortcut('m')} "
+    f"to enter API key manually - {shortcut('Esc')} to cancel"
+)
 SUCCESS_HINT = "Finishing setup..."
 SIGN_IN_URL_HELP_PREFIX = "If your browser did not open, "
 SIGN_IN_URL_COPY_LABEL = "copy this URL"
-SIGN_IN_URL_HELP_SUFFIX = " (press C)."
+SIGN_IN_URL_HELP_SUFFIX = f" (press {shortcut('c')})."
 SIGN_IN_URL_REVEAL_PREFIX = "Copy failed. Open this URL manually:"
 SUCCESS_EXIT_DELAY_SECONDS: float = 2.0
 SIGN_IN_URL_HELP_DELAY_SECONDS: float = 4.0
@@ -124,7 +126,7 @@ class BrowserSignInScreen(OnboardingScreen):
         browser_sign_in_factory: Callable[[], BrowserSignInService],
         *,
         copy_sign_in_url: CopySignInUrl,
-        entrypoint_metadata: EntrypointMetadata | None = None,
+        launch_context: LaunchContext | None = None,
         success_exit_delay: float = SUCCESS_EXIT_DELAY_SECONDS,
         sign_in_url_help_delay: float = SIGN_IN_URL_HELP_DELAY_SECONDS,
     ) -> None:
@@ -132,7 +134,7 @@ class BrowserSignInScreen(OnboardingScreen):
         self.provider = provider
         self._browser_sign_in_factory = browser_sign_in_factory
         self._copy_sign_in_url = copy_sign_in_url
-        self._entrypoint_metadata = entrypoint_metadata
+        self._launch_context = launch_context
         self._success_exit_delay = success_exit_delay
         self._sign_in_url_help_delay = sign_in_url_help_delay
         self._attempt_number = 0
@@ -301,11 +303,7 @@ class BrowserSignInScreen(OnboardingScreen):
         if api_key is None:
             msg = "Browser sign-in finished without returning an API key."
             raise AssertionError(msg)
-        result = persist_api_key(
-            resolve_api_key_provider(self.provider),
-            api_key,
-            entrypoint_metadata=self._entrypoint_metadata,
-        )
+        result = self.onboarding_app.persist_credentials(api_key)
         self._cancel_sign_in_url_help_timer()
         if result != "completed":
             self._active_attempt_number = None
@@ -389,7 +387,7 @@ class BrowserSignInScreen(OnboardingScreen):
         if not self.is_mounted:
             return
 
-        self._hint_widget.update(state.hint)
+        self._hint_widget.update(shortcut_hint(state.hint))
         self._url_widget.update(self._build_url_text(state))
 
         for index, (widgets, (title, pending_detail, done_detail)) in enumerate(
@@ -422,23 +420,27 @@ class BrowserSignInScreen(OnboardingScreen):
             widgets.card.add_class(widget_class)
 
     def _update_active_step_detail(
-        self, detail: NoMarkupStatic, state: BrowserSignInViewState
+        self,
+        detail: NoMarkupStatic,
+        state: BrowserSignInViewState,
+        *,
+        layout: bool = True,
     ) -> None:
         if state.variant == "pending" and state.step == BrowserSignInStep.CONFIRM:
             content = Text()
             append_gradient_text(
                 content, WAITING_FOR_AUTHENTICATION_MESSAGE, self._gradient_offset
             )
-            detail.update(content)
+            detail.update(content, layout=layout)
             detail.add_class("pending")
             return
 
         if state.variant == "error":
-            detail.update(state.message)
+            detail.update(state.message, layout=layout)
             detail.add_class("error")
             return
 
-        detail.update(state.message)
+        detail.update(state.message, layout=layout)
         detail.add_class(state.variant)
 
     def _animate_gradient(self) -> None:
@@ -448,7 +450,7 @@ class BrowserSignInScreen(OnboardingScreen):
             and self.state.step == BrowserSignInStep.CONFIRM
         ):
             widgets = self._step_widgets[self.state.step]
-            self._update_active_step_detail(widgets.detail, self.state)
+            self._update_active_step_detail(widgets.detail, self.state, layout=False)
 
     async def _close_browser_sign_in(
         self, browser_sign_in: BrowserSignInService | None
@@ -487,7 +489,7 @@ class BrowserSignInScreen(OnboardingScreen):
         help_text = (
             f"{escape(SIGN_IN_URL_HELP_PREFIX)}"
             f"[@click='screen.copy_url']{escape(SIGN_IN_URL_COPY_LABEL)}[/]"
-            f"{escape(SIGN_IN_URL_HELP_SUFFIX)}"
+            f"{SIGN_IN_URL_HELP_SUFFIX}"
         )
         if not state.reveal_sign_in_url:
             return help_text

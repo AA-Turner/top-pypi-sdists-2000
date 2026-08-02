@@ -2,18 +2,16 @@ from __future__ import annotations
 
 import argparse
 import asyncio
-from collections.abc import Callable
 from pathlib import Path
 import sys
+from typing import TYPE_CHECKING
 
 from pydantic import ValidationError
 from rich import print as rprint
-from rich.console import Console
-import tomli_w
 
 from vibe import __version__
+from vibe.cli.session_exit import print_session_resume_message
 from vibe.cli.terminal_detect import detect_terminal
-from vibe.cli.textual_ui.app import StartupOptions, run_textual_ui
 from vibe.cli.update_notifier import (
     FileSystemUpdateCacheRepository,
     PyPIUpdateGateway,
@@ -24,60 +22,47 @@ from vibe.cli.update_notifier import (
     get_update_if_available,
     mark_update_as_dismissed,
 )
-from vibe.core.agent_loop import AgentLoop, TeleportError
-from vibe.core.agents.models import BuiltinAgentName
-from vibe.core.cache_store import FileSystemVibeCodeCacheStore
-from vibe.core.config import MissingAPIKeyError, VibeConfig, load_dotenv_values
-from vibe.core.config.harness_files import get_harness_files_manager
-from vibe.core.hooks.config import HookConfigResult, load_hooks_from_fs
-from vibe.core.logger import logger
+from vibe.core.config import MissingAPIKeyError, VibeConfigSchema, load_dotenv_values
+from vibe.core.config.default_orchestrator import build_default_orchestrator
+from vibe.core.config.orchestrator import ConfigOrchestrator
 from vibe.core.paths import HISTORY_FILE
-from vibe.core.programmatic import run_programmatic
-from vibe.core.session import last_session_pointer
-from vibe.core.session.session_loader import SessionLoader
-from vibe.core.telemetry.build_metadata import build_entrypoint_metadata
-from vibe.core.telemetry.types import EntrypointMetadata
-from vibe.core.tracing import setup_tracing
-from vibe.core.trusted_folders import find_trustable_files, trusted_folders_manager
-from vibe.core.types import LLMMessage, OutputFormat, Role
-from vibe.core.utils import ConversationLimitException
-from vibe.setup.onboarding import run_onboarding
-from vibe.setup.update_prompt import (
-    UpdatePromptMode,
-    UpdatePromptResult,
-    ask_update_prompt,
-    load_update_prompt_theme,
-)
+from vibe.core.telemetry.build_metadata import build_launch_context
+from vibe.core.telemetry.types import LaunchContext
+from vibe.observability.logging import logger
+from vibe.observability.sentry import init_sentry
+
+# The TUI app, onboarding, update prompt, and programmatic runner are each
+# imported at their call site: every launch needs at most one of them, and
+# they are too heavy to load speculatively at startup.
+
+if TYPE_CHECKING:
+    from vibe.app_server.local import LocalSessionIntent
+    from vibe.setup.update_prompt import UpdatePromptMode
 
 
-def _build_cli_entrypoint_metadata() -> EntrypointMetadata:
-    return build_entrypoint_metadata(
+def _build_cli_launch_context() -> LaunchContext:
+    return build_launch_context(
         agent_entrypoint="cli",
         agent_version=__version__,
         client_name="vibe_cli",
         client_version=__version__,
+        terminal_emulator=detect_terminal(),
     )
-
-
-def get_initial_agent_name(args: argparse.Namespace, config: VibeConfig) -> str:
-    if args.auto_approve:
-        return BuiltinAgentName.AUTO_APPROVE
-
-    return args.agent or config.default_agent
 
 
 def get_prompt_from_stdin() -> str | None:
     if sys.stdin.isatty():
         return None
     try:
-        if content := sys.stdin.read().strip():
-            sys.stdin = sys.__stdin__ = open("/dev/tty")
-            return content
+        content = sys.stdin.read().strip()
     except KeyboardInterrupt:
-        pass
-    except OSError:
         return None
-
+    if content:
+        try:
+            sys.stdin = sys.__stdin__ = open("/dev/tty")
+        except OSError:
+            pass
+        return content
     return None
 
 
@@ -89,9 +74,11 @@ def _format_config_validation_error(exc: ValidationError) -> str:
     return "\n".join(lines)
 
 
-def load_config_or_exit(*, interactive: bool) -> VibeConfig:
+def load_config_orchestrator_or_exit(
+    *, interactive: bool
+) -> ConfigOrchestrator[VibeConfigSchema]:
     try:
-        return VibeConfig.load()
+        return asyncio.run(build_default_orchestrator())
     except MissingAPIKeyError as e:
         if not interactive:
             print(
@@ -100,8 +87,10 @@ def load_config_or_exit(*, interactive: bool) -> VibeConfig:
                 file=sys.stderr,
             )
             sys.exit(1)
-        run_onboarding(entrypoint_metadata=_build_cli_entrypoint_metadata())
-        return VibeConfig.load()
+
+        from vibe.setup.onboarding import run_onboarding
+
+        return run_onboarding(launch_context=_build_cli_launch_context())
     except ValidationError as e:
         rprint(f"[yellow]{_format_config_validation_error(e)}[/]")
         sys.exit(1)
@@ -110,37 +99,7 @@ def load_config_or_exit(*, interactive: bool) -> VibeConfig:
         sys.exit(1)
 
 
-def warn_if_workdir_trust_is_unset() -> None:
-    try:
-        cwd = Path.cwd()
-    except FileNotFoundError:
-        return
-    if cwd.resolve() == Path.home().resolve():
-        return
-    if trusted_folders_manager.is_trusted(cwd) is not None:
-        return
-    detected = find_trustable_files(cwd)
-    if not detected:
-        return
-    files_str = ", ".join(detected)
-    Console(stderr=True).print(
-        f"[yellow]Warning:[/] {cwd} is not trusted; "
-        f"project configuration ({files_str}) will be ignored. "
-        "Re-run with --trust to trust this folder temporarily."
-    )
-
-
 def bootstrap_config_files() -> None:
-    mgr = get_harness_files_manager()
-    config_file = mgr.user_config_file
-    if not config_file.exists():
-        try:
-            config_file.parent.mkdir(parents=True, exist_ok=True)
-            with config_file.open("wb") as f:
-                tomli_w.dump(VibeConfig.create_default(), f)
-        except Exception as e:
-            rprint(f"[yellow]Could not create default config file: {e}[/]")
-
     history_file = HISTORY_FILE.path
     if not history_file.exists():
         try:
@@ -150,89 +109,41 @@ def bootstrap_config_files() -> None:
             rprint(f"[yellow]Could not create history file: {e}[/]")
 
 
-def load_session(
-    args: argparse.Namespace, config: VibeConfig
-) -> tuple[list[LLMMessage], Path] | None:
-    if not args.continue_session and not args.resume:
-        return None
-
-    if not config.session_logging.enabled:
-        rprint(
-            "[red]Session logging is disabled. "
-            "Enable it in config to use --continue or --resume[/]"
-        )
-        sys.exit(1)
-
-    session_to_load = None
-    if args.continue_session:
-        cwd = Path.cwd().resolve()
-        pointer_session_id = last_session_pointer.load(config.session_logging)
-        if pointer_session_id:
-            session_to_load = SessionLoader.find_session_by_id(
-                pointer_session_id, config.session_logging, working_directory=cwd
-            )
-        if not session_to_load:
-            session_to_load = SessionLoader.find_latest_session(
-                config.session_logging, working_directory=cwd
-            )
-        if not session_to_load:
-            rprint(
-                f"[red]No previous sessions found in "
-                f"{config.session_logging.save_dir} for {cwd=}[/]"
-            )
-            sys.exit(1)
-    elif args.resume is True:
-        return None
-    else:
-        session_to_load = SessionLoader.find_session_by_id(
-            args.resume, config.session_logging
-        )
-        if not session_to_load:
-            rprint(
-                f"[red]Session '{args.resume}' not found in "
-                f"{config.session_logging.save_dir}[/]"
-            )
-            sys.exit(1)
-
-    try:
-        loaded_messages, _ = SessionLoader.load_session(session_to_load)
-        return loaded_messages, session_to_load
-    except Exception as e:
-        rprint(f"[red]Failed to load session: {e}[/]")
-        sys.exit(1)
-
-
-def _resume_previous_session(
-    agent_loop: AgentLoop, loaded_messages: list[LLMMessage], session_path: Path
-) -> None:
-    non_system_messages = [msg for msg in loaded_messages if msg.role != Role.system]
-    agent_loop.messages.extend(non_system_messages)
-
-    _, metadata = SessionLoader.load_session(session_path)
-    session_id = metadata.get("session_id", agent_loop.session_id)
-    agent_loop.session_id = session_id
-    agent_loop.parent_session_id = metadata.get("parent_session_id")
-    agent_loop.session_logger.resume_existing_session(session_id, session_path)
-
-    logger.info(
-        "Resumed session %s with %d messages", session_id, len(non_system_messages)
+def _session_intent(
+    args: argparse.Namespace, *, allow_picker: bool
+) -> LocalSessionIntent:
+    from vibe.app_server.local import (
+        ContinueSessionIntent,
+        NewSessionIntent,
+        ResumeSessionIntent,
     )
 
+    if args.continue_session:
+        return ContinueSessionIntent()
+    if args.resume is True:
+        if allow_picker:
+            return NewSessionIntent()
+        raise ValueError("--resume requires a session ID in programmatic mode")
+    if isinstance(args.resume, str):
+        return ResumeSessionIntent(args.resume)
+    return NewSessionIntent()
 
-def _run_programmatic_mode(
-    args: argparse.Namespace,
-    config: VibeConfig,
-    initial_agent_name: str,
-    hook_config_result: HookConfigResult,
-    loaded_session: tuple[list[LLMMessage], Path] | None,
-    stdin_prompt: str | None,
-) -> None:
-    warn_if_workdir_trust_is_unset()
-    config.disabled_tools = [
-        *config.disabled_tools,
-        "ask_user_question",
-        "exit_plan_mode",
-    ]
+
+def _run_programmatic_mode(args: argparse.Namespace, stdin_prompt: str | None) -> None:
+    from vibe.app_server.local import ClientDescriptor, LocalHarnessOptions
+    from vibe.app_server.protocol import (
+        AppServerResponseError,
+        ClientCapabilities,
+        ClientInfo,
+        SessionOptions,
+    )
+    from vibe.cli.programmatic import (
+        OutputFormat,
+        ProgrammaticLimitError,
+        ProgrammaticTeleportError,
+        run_programmatic,
+    )
+
     programmatic_prompt = args.prompt or stdin_prompt
     if not programmatic_prompt:
         print("Error: No prompt provided for programmatic mode", file=sys.stderr)
@@ -240,31 +151,124 @@ def _run_programmatic_mode(
     output_format = OutputFormat(args.output if hasattr(args, "output") else "text")
 
     try:
+        session_intent = _session_intent(args, allow_picker=False)
         final_response = run_programmatic(
-            config=config,
+            harness_options=LocalHarnessOptions(
+                client=ClientDescriptor(
+                    info=ClientInfo(
+                        name="vibe_programmatic",
+                        title="Vibe programmatic CLI",
+                        version=__version__,
+                        entrypoint="programmatic",
+                        terminal_emulator=detect_terminal(),
+                    ),
+                    capabilities=ClientCapabilities(
+                        callback_kinds=["approval", "user_input"]
+                    ),
+                ),
+                session_options=SessionOptions(
+                    cwd=str(Path.cwd()),
+                    workspace_roots=list(args.add_dir),
+                    agent=args.agent,
+                    auto_approve=args.auto_approve,
+                    enabled_tools=args.enabled_tools,
+                    disabled_tools=[
+                        *(args.disabled_tools or ()),
+                        "ask_user_question",
+                        "exit_plan_mode",
+                    ],
+                    max_turns=args.max_turns,
+                    max_price=args.max_price,
+                    max_session_tokens=args.max_tokens,
+                    headless=True,
+                    trust_workspace=bool(args.trust or args.worktree),
+                ),
+                session=session_intent,
+            ),
             prompt=programmatic_prompt or "",
-            max_turns=args.max_turns,
-            max_price=args.max_price,
-            max_session_tokens=args.max_tokens,
             output_format=output_format,
-            previous_messages=loaded_session[0] if loaded_session else None,
-            agent_name=initial_agent_name,
-            teleport=args.teleport and config.vibe_code_enabled,
-            headless=True,
-            hook_config_result=hook_config_result,
+            teleport=args.teleport,
         )
         if final_response:
             print(final_response)
         sys.exit(0)
-    except ConversationLimitException as e:
+    except ProgrammaticLimitError as e:
         print(e, file=sys.stderr)
         sys.exit(1)
-    except TeleportError as e:
+    except ProgrammaticTeleportError as e:
         print(f"Teleport error: {e}", file=sys.stderr)
+        sys.exit(1)
+    except AppServerResponseError as e:
+        print(f"Error: {e.error.message}", file=sys.stderr)
         sys.exit(1)
     except (RuntimeError, ValueError) as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
+
+
+def _run_interactive_mode(
+    args: argparse.Namespace,
+    stdin_prompt: str | None,
+    update_cache_repository: UpdateCacheRepository,
+) -> None:
+    from vibe.app_server.local import (
+        ClientDescriptor,
+        LocalHarness,
+        LocalHarnessOptions,
+    )
+    from vibe.app_server.protocol import (
+        AppServerResponseError,
+        ClientCapabilities,
+        ClientInfo,
+        SessionOptions,
+    )
+    from vibe.cli.textual_ui.app import StartupOptions, run_textual_ui
+
+    harness = LocalHarness(
+        LocalHarnessOptions(
+            client=ClientDescriptor(
+                info=ClientInfo(
+                    name="vibe_tui",
+                    title="Vibe Textual",
+                    version=__version__,
+                    entrypoint="cli",
+                    terminal_emulator=detect_terminal(),
+                ),
+                capabilities=ClientCapabilities(
+                    callback_kinds=["approval", "user_input"]
+                ),
+            ),
+            session_options=SessionOptions(
+                cwd=str(Path.cwd()),
+                workspace_roots=list(args.add_dir),
+                agent=args.agent,
+                auto_approve=args.auto_approve,
+                enabled_tools=args.enabled_tools,
+                disabled_tools=list(args.disabled_tools or ()),
+                trust_workspace=bool(args.trust or args.worktree),
+            ),
+            session=_session_intent(args, allow_picker=True),
+        )
+    )
+    try:
+        summary = run_textual_ui(
+            start_app_server=harness.connect,
+            history_file=HISTORY_FILE.path,
+            update_cache_repository=update_cache_repository,
+            startup=StartupOptions(
+                initial_prompt=args.initial_prompt or stdin_prompt,
+                teleport_on_start=args.teleport,
+                show_resume_picker=args.resume is True,
+                is_resuming_session=(
+                    args.continue_session or isinstance(args.resume, str)
+                ),
+                prompt_for_workspace_trust=True,
+            ),
+        )
+    except AppServerResponseError as exc:
+        rprint(f"[red]Error:[/] {exc.error.message}")
+        sys.exit(1)
+    print_session_resume_message(summary)
 
 
 def _show_update_prompt(
@@ -275,6 +279,8 @@ def _show_update_prompt(
     dismiss_on_continue: bool,
     prompt_mode: UpdatePromptMode,
 ) -> None:
+    from vibe.setup.update_prompt import UpdatePromptResult, ask_update_prompt
+
     result = ask_update_prompt(
         __version__, latest_version, theme=theme, prompt_mode=prompt_mode
     )
@@ -307,7 +313,7 @@ def _show_update_prompt(
 
 
 def _maybe_run_startup_update_prompt(
-    config: VibeConfig, repository: UpdateCacheRepository
+    config: VibeConfigSchema, repository: UpdateCacheRepository
 ) -> None:
     if not config.enable_update_checks:
         return
@@ -322,6 +328,8 @@ def _maybe_run_startup_update_prompt(
 
     if latest_version is None:
         return
+
+    from vibe.setup.update_prompt import UpdatePromptMode
 
     _show_update_prompt(
         repository,
@@ -338,6 +346,8 @@ def _run_check_upgrade(
     update_notifier: UpdateGateway | None = None,
     theme: str | None = None,
 ) -> None:
+    from vibe.setup.update_prompt import UpdatePromptMode
+
     notifier = update_notifier or PyPIUpdateGateway(project_name="mistral-vibe")
     try:
         update = asyncio.run(
@@ -369,84 +379,54 @@ def _run_check_upgrade(
     )
 
 
-def run_cli(
-    args: argparse.Namespace,
-    *,
-    resolve_trusted_folder: Callable[[], None] | None = None,
-) -> None:
+def run_cli(args: argparse.Namespace) -> None:
+    sentry_enabled = False
+
     load_dotenv_values()
     bootstrap_config_files()
 
     if args.setup:
-        run_onboarding(entrypoint_metadata=_build_cli_entrypoint_metadata())
+        from vibe.setup.onboarding import run_onboarding
+
+        run_onboarding(launch_context=_build_cli_launch_context())
         sys.exit(0)
 
     try:
         update_cache_repository = FileSystemUpdateCacheRepository()
         if getattr(args, "check_upgrade", False):
+            from vibe.setup.update_prompt import load_update_prompt_theme
+
             _run_check_upgrade(
                 update_cache_repository, theme=load_update_prompt_theme()
             )
             sys.exit(0)
 
         is_interactive = args.prompt is None
-        config = load_config_or_exit(interactive=is_interactive)
-
+        orchestrator = load_config_orchestrator_or_exit(interactive=is_interactive)
+        config = orchestrator.config
         if is_interactive:
             _maybe_run_startup_update_prompt(config, update_cache_repository)
-            if resolve_trusted_folder is not None:
-                resolve_trusted_folder()
-                config = load_config_or_exit(interactive=True)
-
-        initial_agent_name = get_initial_agent_name(args, config)
-        hook_config_result = load_hooks_from_fs(config)
-        setup_tracing(config)
-
-        if args.enabled_tools:
-            config.enabled_tools = args.enabled_tools
-
-        loaded_session = load_session(args, config)
-
+        sentry_enabled = init_sentry(
+            enabled=config.enable_telemetry,
+            headless=not is_interactive,
+            tags=_build_cli_launch_context().sentry_tags(),
+        )
         stdin_prompt = get_prompt_from_stdin()
         if is_interactive:
-            try:
-                agent_loop = AgentLoop(
-                    config,
-                    agent_name=initial_agent_name,
-                    enable_streaming=True,
-                    entrypoint_metadata=_build_cli_entrypoint_metadata(),
-                    terminal_emulator=detect_terminal(),
-                    defer_heavy_init=True,
-                    hook_config_result=hook_config_result,
-                    cache_store=FileSystemVibeCodeCacheStore(),
-                )
-            except ValueError as e:
-                rprint(f"[red]Error:[/] {e}")
-                sys.exit(1)
-
-            if loaded_session:
-                _resume_previous_session(agent_loop, *loaded_session)
-
-            run_textual_ui(
-                agent_loop=agent_loop,
+            _run_interactive_mode(
+                args=args,
+                stdin_prompt=stdin_prompt,
                 update_cache_repository=update_cache_repository,
-                startup=StartupOptions(
-                    initial_prompt=args.initial_prompt or stdin_prompt,
-                    teleport_on_start=args.teleport,
-                    show_resume_picker=args.resume is True,
-                    is_resuming_session=loaded_session is not None,
-                ),
             )
         else:
-            _run_programmatic_mode(
-                args=args,
-                config=config,
-                initial_agent_name=initial_agent_name,
-                hook_config_result=hook_config_result,
-                loaded_session=loaded_session,
-                stdin_prompt=stdin_prompt,
-            )
+            _run_programmatic_mode(args=args, stdin_prompt=stdin_prompt)
 
     except (KeyboardInterrupt, EOFError):
         rprint("\n[dim]Bye![/]")
         sys.exit(0)
+    finally:
+        if sentry_enabled:
+            import sentry_sdk
+
+            if sentry_sdk.is_initialized():
+                sentry_sdk.flush(timeout=5)

@@ -4,7 +4,18 @@
 from __future__ import annotations
 
 import importlib
+import warnings
 from typing import TYPE_CHECKING
+
+# The build publishes this code twice: as "daytona" and as the deprecated
+# "daytona_sdk" alias (same code, renamed dir). Warn only the alias's importers.
+if __name__ == "daytona_sdk":
+    warnings.warn(
+        "The 'daytona_sdk' package is deprecated and will eventually be discontinued. "
+        + "Please migrate to the 'daytona' package: pip install daytona, then `import daytona`.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
 
 if TYPE_CHECKING:
     from daytona_api_client import SandboxListSortDirection, SandboxListSortField, SandboxState
@@ -36,14 +47,41 @@ if TYPE_CHECKING:
         DaytonaConfig,
     )
     from .common.errors import (
+        DaytonaA11yUnavailableError,
         DaytonaAuthenticationError,
         DaytonaAuthorizationError,
+        DaytonaBadGatewayError,
+        DaytonaBadRequestError,
+        DaytonaCommandAlreadyCompletedError,
         DaytonaConflictError,
         DaytonaConnectionError,
+        DaytonaConnectionTimeoutError,
         DaytonaError,
+        DaytonaFileAccessDeniedError,
+        DaytonaFileNotFoundError,
+        DaytonaFileReadFailedError,
+        DaytonaForbiddenError,
+        DaytonaGitAuthFailedError,
+        DaytonaGitBranchExistsError,
+        DaytonaGitBranchNotFoundError,
+        DaytonaGitDirtyWorktreeError,
+        DaytonaGitMergeConflictError,
+        DaytonaGitPushRejectedError,
+        DaytonaGitRepoNotFoundError,
+        DaytonaGoneError,
+        DaytonaInternalServerError,
+        DaytonaInvalidFilePathError,
+        DaytonaLspServerNotInitializedError,
         DaytonaNotFoundError,
+        DaytonaProcessExecutionTimeoutError,
+        DaytonaProcessNotFoundError,
         DaytonaRateLimitError,
+        DaytonaRecordingFfmpegNotFoundError,
+        DaytonaRecordingStillActiveError,
+        DaytonaServiceUnavailableError,
+        DaytonaSessionEndedError,
         DaytonaTimeoutError,
+        DaytonaUnprocessableEntityError,
         DaytonaValidationError,
     )
     from .common.filesystem import (
@@ -59,8 +97,8 @@ if TYPE_CHECKING:
     from .common.lsp_server import LspCompletionPosition, LspLanguageId
     from .common.process import CodeRunParams, ExecuteResponse, ExecutionArtifacts, OutputHandler, SessionExecuteRequest
     from .common.pty import PtySize
-    from .common.sandbox import ListSandboxesQuery, Resources
-    from .common.secret import CreateSecretParams, Secret, UpdateSecretParams
+    from .common.sandbox import ListSandboxesQuery, Resources, SandboxMetrics
+    from .common.secret import CreateSecretParams, ListSecretsResponse, Secret, UpdateSecretParams
     from .common.snapshot import CreateSnapshotParams
     from .common.volume import VolumeMount
 
@@ -77,6 +115,7 @@ __all__ = [
     "CodeRunParams",
     "Sandbox",
     "Resources",
+    "SandboxMetrics",
     "GpuType",
     "SandboxClass",
     "SandboxState",
@@ -101,6 +140,7 @@ __all__ = [
     "Secret",
     "CreateSecretParams",
     "UpdateSecretParams",
+    "ListSecretsResponse",
     "ListSandboxesQuery",
     "AsyncDaytona",
     "AsyncSandbox",
@@ -127,9 +167,36 @@ __all__ = [
     "DaytonaTimeoutError",
     "DaytonaAuthenticationError",
     "DaytonaAuthorizationError",
+    "DaytonaBadRequestError",
     "DaytonaConflictError",
+    "DaytonaForbiddenError",
     "DaytonaValidationError",
     "DaytonaConnectionError",
+    "DaytonaConnectionTimeoutError",
+    "DaytonaGoneError",
+    "DaytonaUnprocessableEntityError",
+    "DaytonaInternalServerError",
+    "DaytonaBadGatewayError",
+    "DaytonaServiceUnavailableError",
+    "DaytonaGitAuthFailedError",
+    "DaytonaGitRepoNotFoundError",
+    "DaytonaGitBranchNotFoundError",
+    "DaytonaGitBranchExistsError",
+    "DaytonaGitPushRejectedError",
+    "DaytonaGitDirtyWorktreeError",
+    "DaytonaGitMergeConflictError",
+    "DaytonaFileNotFoundError",
+    "DaytonaFileAccessDeniedError",
+    "DaytonaInvalidFilePathError",
+    "DaytonaFileReadFailedError",
+    "DaytonaLspServerNotInitializedError",
+    "DaytonaProcessExecutionTimeoutError",
+    "DaytonaProcessNotFoundError",
+    "DaytonaSessionEndedError",
+    "DaytonaCommandAlreadyCompletedError",
+    "DaytonaA11yUnavailableError",
+    "DaytonaRecordingStillActiveError",
+    "DaytonaRecordingFfmpegNotFoundError",
 ]
 
 # Mapping of symbol name -> (absolute module path, attribute name) for external packages
@@ -187,9 +254,36 @@ _DYNAMIC_IMPORTS: dict[str, str] = {
     "DaytonaTimeoutError": "common.errors",
     "DaytonaAuthenticationError": "common.errors",
     "DaytonaAuthorizationError": "common.errors",
+    "DaytonaBadRequestError": "common.errors",
     "DaytonaConflictError": "common.errors",
+    "DaytonaForbiddenError": "common.errors",
     "DaytonaValidationError": "common.errors",
     "DaytonaConnectionError": "common.errors",
+    "DaytonaConnectionTimeoutError": "common.errors",
+    "DaytonaGoneError": "common.errors",
+    "DaytonaUnprocessableEntityError": "common.errors",
+    "DaytonaInternalServerError": "common.errors",
+    "DaytonaBadGatewayError": "common.errors",
+    "DaytonaServiceUnavailableError": "common.errors",
+    "DaytonaGitAuthFailedError": "common.errors",
+    "DaytonaGitRepoNotFoundError": "common.errors",
+    "DaytonaGitBranchNotFoundError": "common.errors",
+    "DaytonaGitBranchExistsError": "common.errors",
+    "DaytonaGitPushRejectedError": "common.errors",
+    "DaytonaGitDirtyWorktreeError": "common.errors",
+    "DaytonaGitMergeConflictError": "common.errors",
+    "DaytonaFileNotFoundError": "common.errors",
+    "DaytonaFileAccessDeniedError": "common.errors",
+    "DaytonaInvalidFilePathError": "common.errors",
+    "DaytonaFileReadFailedError": "common.errors",
+    "DaytonaLspServerNotInitializedError": "common.errors",
+    "DaytonaProcessExecutionTimeoutError": "common.errors",
+    "DaytonaProcessNotFoundError": "common.errors",
+    "DaytonaSessionEndedError": "common.errors",
+    "DaytonaCommandAlreadyCompletedError": "common.errors",
+    "DaytonaA11yUnavailableError": "common.errors",
+    "DaytonaRecordingStillActiveError": "common.errors",
+    "DaytonaRecordingFfmpegNotFoundError": "common.errors",
     # common.filesystem
     "FileDownloadErrorDetails": "common.filesystem",
     "DownloadProgress": "common.filesystem",
@@ -214,6 +308,7 @@ _DYNAMIC_IMPORTS: dict[str, str] = {
     # common.sandbox
     "ListSandboxesQuery": "common.sandbox",
     "Resources": "common.sandbox",
+    "SandboxMetrics": "common.sandbox",
     # common.snapshot
     "CreateSnapshotParams": "common.snapshot",
     # common.volume
@@ -222,6 +317,7 @@ _DYNAMIC_IMPORTS: dict[str, str] = {
     "Secret": "common.secret",
     "CreateSecretParams": "common.secret",
     "UpdateSecretParams": "common.secret",
+    "ListSecretsResponse": "common.secret",
 }
 
 

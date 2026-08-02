@@ -1,0 +1,484 @@
+"""Tests for debug command tool simulation functionality."""
+
+import json
+from pathlib import Path
+from typing import Any
+from unittest.mock import AsyncMock, Mock, patch
+
+import pytest
+from click.testing import CliRunner
+
+from uipath._cli import cli
+from uipath._cli.middlewares import MiddlewareResult
+from uipath.eval.mocks._mock_context import is_tool_simulated
+from uipath.eval.mocks._mock_runtime import (
+    clear_execution_context,
+    load_simulation_config,
+)
+from uipath.eval.mocks._types import (
+    LLMMockingStrategy,
+    MockingContext,
+)
+
+MOCK_RUNTIME_PATCH_PATH = "uipath.eval.mocks._mock_runtime"
+
+
+@pytest.fixture
+def valid_simulation_config() -> dict[str, Any]:
+    """Create a valid simulation.json configuration."""
+    return {
+        "instructions": "Always give a negative outlook on stock prospects",
+        "inputGenerationInstructions": "",
+        "simulateInput": False,
+        "enabled": True,
+        "toolsToSimulate": [
+            {"name": "Web Reader"},
+            {"name": "Web Search"},
+            {"name": "Web Summary"},
+        ],
+    }
+
+
+@pytest.fixture
+def disabled_simulation_config() -> dict[str, Any]:
+    """Create a disabled simulation.json configuration."""
+    return {
+        "instructions": "Test instructions",
+        "enabled": False,
+        "toolsToSimulate": [{"name": "Test Tool"}],
+    }
+
+
+@pytest.fixture
+def empty_tools_simulation_config() -> dict[str, Any]:
+    """Create simulation config with no tools."""
+    return {
+        "instructions": "Test instructions",
+        "enabled": True,
+        "toolsToSimulate": [],
+    }
+
+
+class TestLoadSimulationConfig:
+    """Tests for the load_simulation_config function."""
+
+    def test_returns_none_when_file_does_not_exist(self, temp_dir: str):
+        """Test that None is returned when simulation.json doesn't exist."""
+        with patch(f"{MOCK_RUNTIME_PATCH_PATH}.Path.cwd", return_value=Path(temp_dir)):
+            result = load_simulation_config()
+            assert result is None
+
+    def test_loads_valid_simulation_config(
+        self, temp_dir: str, valid_simulation_config: dict[str, Any]
+    ):
+        """Test loading a valid simulation configuration."""
+        simulation_path = Path(temp_dir) / "simulation.json"
+        with open(simulation_path, "w", encoding="utf-8") as f:
+            json.dump(valid_simulation_config, f)
+
+        with patch(f"{MOCK_RUNTIME_PATCH_PATH}.Path.cwd", return_value=Path(temp_dir)):
+            result = load_simulation_config()
+
+            assert result is not None
+            assert isinstance(result, MockingContext)
+            assert result.name == "debug-simulation"
+            # Legacy format routes to local LLM mocker via strategy
+            assert result.components is None or len(result.components) == 0
+            assert isinstance(result.strategy, LLMMockingStrategy)
+            assert len(result.strategy.tools_to_simulate) == 3
+            assert result.strategy.tools_to_simulate[0].name == "Web Reader"
+            assert result.strategy.prompt == valid_simulation_config["instructions"]
+
+    def test_returns_none_when_disabled(
+        self, temp_dir: str, disabled_simulation_config: dict[str, Any]
+    ):
+        """Test that None is returned when simulation is disabled."""
+        simulation_path = Path(temp_dir) / "simulation.json"
+        with open(simulation_path, "w", encoding="utf-8") as f:
+            json.dump(disabled_simulation_config, f)
+
+        with patch(f"{MOCK_RUNTIME_PATCH_PATH}.Path.cwd", return_value=Path(temp_dir)):
+            result = load_simulation_config()
+            assert result is None
+
+    def test_returns_none_when_no_tools_to_simulate(
+        self, temp_dir: str, empty_tools_simulation_config: dict[str, Any]
+    ):
+        """Test that None is returned when toolsToSimulate is empty."""
+        simulation_path = Path(temp_dir) / "simulation.json"
+        with open(simulation_path, "w", encoding="utf-8") as f:
+            json.dump(empty_tools_simulation_config, f)
+
+        with patch(f"{MOCK_RUNTIME_PATCH_PATH}.Path.cwd", return_value=Path(temp_dir)):
+            result = load_simulation_config()
+            assert result is None
+
+    def test_handles_malformed_json(self, temp_dir: str):
+        """Test that malformed JSON is handled gracefully."""
+        simulation_path = Path(temp_dir) / "simulation.json"
+        with open(simulation_path, "w", encoding="utf-8") as f:
+            f.write("{ invalid json }")
+
+        with patch(f"{MOCK_RUNTIME_PATCH_PATH}.Path.cwd", return_value=Path(temp_dir)):
+            result = load_simulation_config()
+            assert result is None
+
+    def test_handles_missing_required_fields(self, temp_dir: str):
+        """Test that missing required fields are handled gracefully."""
+        simulation_path = Path(temp_dir) / "simulation.json"
+        with open(simulation_path, "w", encoding="utf-8") as f:
+            json.dump({"enabled": True}, f)
+
+        with patch(f"{MOCK_RUNTIME_PATCH_PATH}.Path.cwd", return_value=Path(temp_dir)):
+            result = load_simulation_config()
+            # Should return None because toolsToSimulate is missing/empty
+            assert result is None
+
+    def test_creates_mocking_context_with_empty_inputs(
+        self, temp_dir: str, valid_simulation_config: dict[str, Any]
+    ):
+        """Test that MockingContext is created with empty inputs."""
+        simulation_path = Path(temp_dir) / "simulation.json"
+        with open(simulation_path, "w", encoding="utf-8") as f:
+            json.dump(valid_simulation_config, f)
+
+        with patch(f"{MOCK_RUNTIME_PATCH_PATH}.Path.cwd", return_value=Path(temp_dir)):
+            result = load_simulation_config()
+
+            assert result is not None
+            assert result.inputs == {}
+
+    def test_uses_default_empty_instructions_when_missing(self, temp_dir: str):
+        """Test that empty string is used when instructions field is missing."""
+        config = {
+            "enabled": True,
+            "toolsToSimulate": [{"name": "Test Tool"}],
+        }
+        simulation_path = Path(temp_dir) / "simulation.json"
+        with open(simulation_path, "w", encoding="utf-8") as f:
+            json.dump(config, f)
+
+        with patch(f"{MOCK_RUNTIME_PATCH_PATH}.Path.cwd", return_value=Path(temp_dir)):
+            result = load_simulation_config()
+
+            assert result is not None
+            assert isinstance(result.strategy, LLMMockingStrategy)
+            assert result.strategy.prompt == ""
+
+
+class TestDebugCommandSimulationIntegration:
+    """Integration tests for debug command with simulation."""
+
+    @pytest.fixture
+    def mock_runtime(self):
+        """Create a mock runtime for testing."""
+        runtime = Mock()
+        runtime.execute = Mock(return_value=Mock(status="SUCCESSFUL", output={}))
+        runtime.dispose = Mock()
+        return runtime
+
+    @pytest.fixture
+    def mock_factory(self, mock_runtime):
+        """Create a mock factory that returns mock runtime."""
+        factory = Mock()
+        factory.new_runtime = Mock(return_value=mock_runtime)
+        factory.dispose = Mock()
+        return factory
+
+    def test_debug_without_simulation_file(self, runner: CliRunner, temp_dir: str):
+        """Test debug command when simulation.json doesn't exist."""
+        with runner.isolated_filesystem(temp_dir=temp_dir):
+            script_file = "entrypoint.py"
+            with open(script_file, "w") as f:
+                f.write("def main(input): return {'result': 'success'}")
+
+            # Create uipath.json
+            with open("uipath.json", "w") as f:
+                json.dump({"functions": {"main": f"{script_file}:main"}}, f)
+
+            with patch("uipath._cli.cli_debug.Middlewares.next") as mock_middleware:
+                mock_middleware.return_value = MiddlewareResult(
+                    should_continue=False,
+                    info_message="Execution succeeded",
+                    error_message=None,
+                    should_include_stacktrace=False,
+                )
+                result = runner.invoke(cli, ["debug", "main", "{}"])
+                assert result.exit_code == 0
+
+    def test_debug_always_wraps_with_mock_runtime(
+        self, runner: CliRunner, temp_dir: str
+    ):
+        """Test that debug command always wraps the debug runtime with UiPathMockRuntime."""
+        with runner.isolated_filesystem(temp_dir=temp_dir):
+            script_file = "entrypoint.py"
+            with open(script_file, "w") as f:
+                f.write("def main(input): return {'result': 'success'}")
+
+            # Create uipath.json
+            with open("uipath.json", "w") as f:
+                json.dump({"functions": {"main": f"{script_file}:main"}}, f)
+
+            # Track if UiPathMockRuntime is instantiated
+            with patch(
+                "uipath._cli.cli_debug.UiPathMockRuntime",
+            ) as mock_mock_runtime_class:
+                mock_mock_runtime_instance = Mock()
+                mock_mock_runtime_instance.execute = AsyncMock(
+                    return_value=Mock(status="SUCCESSFUL", output={})
+                )
+                mock_mock_runtime_class.return_value = mock_mock_runtime_instance
+
+                with patch("uipath._cli.cli_debug.Middlewares.next") as mock_middleware:
+                    mock_middleware.return_value = MiddlewareResult(
+                        should_continue=True,
+                        info_message=None,
+                        error_message=None,
+                        should_include_stacktrace=False,
+                    )
+
+                    with patch(
+                        "uipath._cli.cli_debug.UiPathRuntimeFactoryRegistry.get"
+                    ) as mock_factory_get:
+                        mock_runtime = Mock()
+                        mock_runtime.dispose = AsyncMock()
+                        mock_runtime.get_schema = AsyncMock(
+                            return_value=Mock(metadata=None)
+                        )
+
+                        mock_factory = Mock()
+                        mock_factory.new_runtime = AsyncMock(return_value=mock_runtime)
+                        mock_factory.get_settings = AsyncMock(
+                            return_value=Mock(trace_settings=None)
+                        )
+                        mock_factory.dispose = AsyncMock()
+                        mock_factory_get.return_value = mock_factory
+
+                        with patch("uipath._cli.cli_debug.get_debug_bridge"):
+                            with patch(
+                                "uipath._cli.cli_debug.UiPathDebugRuntime"
+                            ) as mock_debug_runtime_class:
+                                mock_debug_runtime = Mock()
+                                mock_debug_runtime.dispose = AsyncMock()
+                                mock_debug_runtime_class.return_value = (
+                                    mock_debug_runtime
+                                )
+
+                                runner.invoke(cli, ["debug", "main", "{}"])
+
+                                # Verify UiPathMockRuntime was instantiated
+                                assert mock_mock_runtime_class.called
+                                call_kwargs = mock_mock_runtime_class.call_args
+                                # Verify delegate wraps the debug runtime (outermost)
+                                assert (
+                                    call_kwargs.kwargs["delegate"] is mock_debug_runtime
+                                )
+
+    def test_debug_wraps_with_mock_runtime_on_error(
+        self, runner: CliRunner, temp_dir: str
+    ):
+        """Test that UiPathMockRuntime is used even when an error occurs during execution."""
+        with runner.isolated_filesystem(temp_dir=temp_dir):
+            script_file = "entrypoint.py"
+            with open(script_file, "w") as f:
+                f.write("def main(input): raise Exception('Test error')")
+
+            # Create uipath.json
+            with open("uipath.json", "w") as f:
+                json.dump({"functions": {"main": f"{script_file}:main"}}, f)
+
+            with patch(
+                "uipath._cli.cli_debug.UiPathMockRuntime",
+            ) as mock_mock_runtime_class:
+                mock_mock_runtime_instance = Mock()
+                mock_mock_runtime_instance.execute = AsyncMock(
+                    side_effect=Exception("Test error")
+                )
+                mock_mock_runtime_class.return_value = mock_mock_runtime_instance
+
+                with patch("uipath._cli.cli_debug.Middlewares.next") as mock_middleware:
+                    mock_middleware.return_value = MiddlewareResult(
+                        should_continue=True,
+                        info_message=None,
+                        error_message=None,
+                        should_include_stacktrace=False,
+                    )
+
+                    with patch(
+                        "uipath._cli.cli_debug.UiPathRuntimeFactoryRegistry.get"
+                    ) as mock_factory_get:
+                        mock_runtime = Mock()
+                        mock_runtime.dispose = AsyncMock()
+                        mock_runtime.get_schema = AsyncMock(
+                            return_value=Mock(metadata=None)
+                        )
+
+                        mock_factory = Mock()
+                        mock_factory.new_runtime = AsyncMock(return_value=mock_runtime)
+                        mock_factory.get_settings = AsyncMock(
+                            return_value=Mock(trace_settings=None)
+                        )
+                        mock_factory.dispose = AsyncMock()
+                        mock_factory_get.return_value = mock_factory
+
+                        with patch("uipath._cli.cli_debug.get_debug_bridge"):
+                            with patch(
+                                "uipath._cli.cli_debug.UiPathDebugRuntime"
+                            ) as mock_debug_runtime_class:
+                                mock_debug_runtime = Mock()
+                                mock_debug_runtime.dispose = AsyncMock()
+                                mock_debug_runtime_class.return_value = (
+                                    mock_debug_runtime
+                                )
+
+                                runner.invoke(cli, ["debug", "main", "{}"])
+
+                                # Verify UiPathMockRuntime was still instantiated
+                                assert mock_mock_runtime_class.called
+
+    def test_simulation_config_enables_tool_mocking(
+        self, temp_dir: str, valid_simulation_config: dict[str, Any]
+    ):
+        """Test that tools marked in simulation config are detected as simulated."""
+        # Clear any existing context
+        clear_execution_context()
+
+        simulation_path = Path(temp_dir) / "simulation.json"
+        with open(simulation_path, "w", encoding="utf-8") as f:
+            json.dump(valid_simulation_config, f)
+
+        with patch(f"{MOCK_RUNTIME_PATCH_PATH}.Path.cwd", return_value=Path(temp_dir)):
+            mocking_ctx = load_simulation_config()
+            assert mocking_ctx is not None
+
+            # Manually set context (simulating what UiPathMockRuntime does)
+            from uipath.eval._execution_context import ExecutionSpanCollector
+
+            span_collector = ExecutionSpanCollector()
+            from uipath.eval.mocks._mock_runtime import set_execution_context
+
+            set_execution_context(mocking_ctx, span_collector, "test-execution-id")
+
+            # Verify tools are detected as simulated
+            assert is_tool_simulated("Web Reader") is True
+            assert is_tool_simulated("Web Search") is True
+            assert is_tool_simulated("Web Summary") is True
+            assert is_tool_simulated("Non Simulated Tool") is False
+
+            # Clean up
+            clear_execution_context()
+
+    def test_middleware_short_circuits_before_mock_runtime(
+        self,
+        runner: CliRunner,
+        temp_dir: str,
+        disabled_simulation_config: dict[str, Any],
+    ):
+        """Test that middleware short-circuit prevents UiPathMockRuntime from being created."""
+        with runner.isolated_filesystem(temp_dir=temp_dir):
+            # Create disabled simulation.json
+            with open("simulation.json", "w") as f:
+                json.dump(disabled_simulation_config, f)
+
+            script_file = "entrypoint.py"
+            with open(script_file, "w") as f:
+                f.write("def main(input): return {'result': 'success'}")
+
+            # Create uipath.json
+            with open("uipath.json", "w") as f:
+                json.dump({"functions": {"main": f"{script_file}:main"}}, f)
+
+            with patch(
+                "uipath._cli.cli_debug.UiPathMockRuntime",
+            ) as mock_mock_runtime_class:
+                with patch("uipath._cli.cli_debug.Middlewares.next") as mock_middleware:
+                    mock_middleware.return_value = MiddlewareResult(
+                        should_continue=False,
+                        info_message="Execution succeeded",
+                        error_message=None,
+                        should_include_stacktrace=False,
+                    )
+
+                    runner.invoke(cli, ["debug", "main", "{}"])
+
+                    # Verify UiPathMockRuntime was NOT instantiated
+                    assert not mock_mock_runtime_class.called
+
+
+class TestSimulationConfigFields:
+    """Test various field combinations in simulation.json."""
+
+    def test_enabled_defaults_to_true_when_missing(self, temp_dir: str):
+        """Test that 'enabled' defaults to true when not specified."""
+        config = {
+            "instructions": "Test",
+            "toolsToSimulate": [{"name": "Test Tool"}],
+        }
+        simulation_path = Path(temp_dir) / "simulation.json"
+        with open(simulation_path, "w", encoding="utf-8") as f:
+            json.dump(config, f)
+
+        with patch(f"{MOCK_RUNTIME_PATCH_PATH}.Path.cwd", return_value=Path(temp_dir)):
+            result = load_simulation_config()
+            # Should load successfully since enabled defaults to true
+            assert result is not None
+
+    def test_new_format_loads_components(self, temp_dir: str):
+        """Test that new per-component format routes to API-based mocker (components set)."""
+        config = {
+            "enabled": True,
+            "components": [
+                {
+                    "componentId": "my_tool",
+                    "componentType": "tool",
+                    "simulationStrategy": 0,
+                    "simulationInstruction": "Simulate this tool",
+                }
+            ],
+        }
+        simulation_path = Path(temp_dir) / "simulation.json"
+        with open(simulation_path, "w", encoding="utf-8") as f:
+            json.dump(config, f)
+
+        with patch(f"{MOCK_RUNTIME_PATCH_PATH}.Path.cwd", return_value=Path(temp_dir)):
+            result = load_simulation_config()
+
+            assert result is not None
+            assert isinstance(result, MockingContext)
+            # New format: components set, strategy is None
+            assert result.components is not None
+            assert len(result.components) == 1
+            assert result.components[0].component_id == "my_tool"
+            assert result.strategy is None
+
+    def test_handles_tool_name_normalization(self, temp_dir: str):
+        """Test that tool names with underscores work correctly."""
+        config = {
+            "enabled": True,
+            "instructions": "Test",
+            "toolsToSimulate": [
+                {"name": "Web_Reader"},
+                {"name": "Web Search"},
+            ],
+        }
+        simulation_path = Path(temp_dir) / "simulation.json"
+        with open(simulation_path, "w", encoding="utf-8") as f:
+            json.dump(config, f)
+
+        with patch(f"{MOCK_RUNTIME_PATCH_PATH}.Path.cwd", return_value=Path(temp_dir)):
+            mocking_ctx = load_simulation_config()
+            assert mocking_ctx is not None
+
+            # Set context to test name normalization
+            from uipath.eval._execution_context import ExecutionSpanCollector
+            from uipath.eval.mocks._mock_runtime import set_execution_context
+
+            span_collector = ExecutionSpanCollector()
+            set_execution_context(mocking_ctx, span_collector, "test-id")
+
+            # Both underscore and space versions should be detected
+            assert is_tool_simulated("Web_Reader") is True
+            assert is_tool_simulated("Web Reader") is True
+            assert is_tool_simulated("Web Search") is True
+
+            clear_execution_context()

@@ -15,9 +15,11 @@ from vibe.core.paths._vibe_home import (
     LOG_DIR,
     LOG_FILE,
     PLANS_DIR,
+    PROJECTS_FILE,
     SESSION_LOG_DIR,
     TRUSTED_FOLDERS_FILE,
     VIBE_HOME,
+    WORKTREES_DIR,
     GlobalPath,
 )
 from vibe.core.paths.conventions import AGENTS_MD_FILENAME
@@ -33,9 +35,11 @@ __all__ = [
     "LOG_DIR",
     "LOG_FILE",
     "PLANS_DIR",
+    "PROJECTS_FILE",
     "SESSION_LOG_DIR",
     "TRUSTED_FOLDERS_FILE",
     "VIBE_HOME",
+    "WORKTREES_DIR",
     "GlobalPath",
     "LocalConfigDirs",
     "dedup_paths",

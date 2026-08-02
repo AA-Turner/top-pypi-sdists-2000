@@ -42,9 +42,11 @@ import numpy as np
 
 @runtime_checkable
 class SizedIterable(Protocol):
-    def __len__(self): ...
+    def __len__(self):
+        ...
 
-    def __iter__(self): ...
+    def __iter__(self):
+        ...
 
 
 T = TypeVar("T")
@@ -298,7 +300,7 @@ def split_into(xs: Sequence, n: int) -> Sequence:
     # e.g. 10 by 3 -> 4, 3, 3
     relative_splits[:remainder] += 1
 
-    return split(xs, np.cumsum(relative_splits))
+    return split(xs, np.cumsum(relative_splits).tolist())
 
 
 @dataclass

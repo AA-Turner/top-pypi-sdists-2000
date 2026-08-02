@@ -11,10 +11,12 @@ from textual.binding import Binding, BindingType
 from textual.containers import CenterMiddle, Horizontal
 from textual.message import Message
 
+from vibe.cli.textual_ui.shortcut_hints import shortcut, shortcut_hint
 from vibe.cli.textual_ui.widgets.banner.petit_chat import PetitChat
 from vibe.cli.textual_ui.widgets.no_markup_static import NoMarkupStatic
+from vibe.cli.theme import resolve_theme
 from vibe.cli.update_notifier.update import do_update
-from vibe.core.logger import logger
+from vibe.observability.logging import logger
 
 
 class UpdatePromptResult(StrEnum):
@@ -97,7 +99,8 @@ class UpdatePromptDialog(CenterMiddle):
                     yield widget
 
             yield NoMarkupStatic(
-                "← → navigate  Enter select", classes="update-dialog-help"
+                shortcut_hint(f"{shortcut('←→')} navigate  {shortcut('Enter')} select"),
+                classes="update-dialog-help",
             )
 
             yield PetitChat(id="update-dialog-spinner")
@@ -186,7 +189,7 @@ class UpdatePromptApp(App[UpdatePromptResult]):
         super().__init__(**kwargs)
         self.current_version = current_version
         self.latest_version = latest_version
-        self._theme_name = theme
+        self._theme_name = resolve_theme(theme) if theme is not None else None
         self._prompt_mode = prompt_mode
         self._dialog: UpdatePromptDialog | None = None
         self._update_task: asyncio.Task[None] | None = None

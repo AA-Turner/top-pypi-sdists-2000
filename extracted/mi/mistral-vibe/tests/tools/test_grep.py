@@ -1,12 +1,20 @@
 from __future__ import annotations
 
+from pathlib import Path
 import shutil
 
 import pytest
 
 from tests.mock.utils import collect_result
 from vibe.core.tools.base import BaseToolState, ToolError
-from vibe.core.tools.builtins.grep import Grep, GrepArgs, GrepBackend, GrepToolConfig
+from vibe.core.tools.builtins.grep import (
+    Grep,
+    GrepArgs,
+    GrepBackend,
+    GrepResult,
+    GrepToolConfig,
+)
+from vibe.utils import io as io_utils
 
 
 @pytest.fixture
@@ -94,7 +102,18 @@ async def test_returns_empty_on_no_matches(grep, tmp_path):
 
 
 @pytest.mark.asyncio
-async def test_preserves_accents_when_matching_latin1_encoded_file(grep, tmp_path):
+async def test_preserves_accents_when_matching_latin1_encoded_file(
+    grep, tmp_path, monkeypatch
+):
+    # Pin a UTF-8 locale (production reality on Linux CI) and a deterministic
+    # charset_normalizer result. Without this, decode_safe falls back to
+    # charset_normalizer's heuristic, which is unreliable for the single
+    # non-ASCII byte ripgrep emits — it can misdetect (e.g. cp1006, which
+    # decodes \xe9 to ﻠ instead of é) depending on the platform wheel.
+    monkeypatch.setattr(
+        io_utils.locale, "getpreferredencoding", lambda _do_setlocale: "utf-8"
+    )
+    monkeypatch.setattr(io_utils, "_encoding_from_best_match", lambda _raw: "cp1252")
     (tmp_path / "menu.txt").write_bytes("café au lait\nthé glacé\n".encode("latin-1"))
 
     result = await collect_result(
@@ -224,6 +243,53 @@ async def test_single_file_match_includes_filename_in_output(grep, tmp_path):
     for parsed in result.parsed_matches:
         assert parsed.path.endswith("only.py")
         assert parsed.line is not None
+
+
+@pytest.mark.asyncio
+async def test_parsed_match_paths_anchor_on_search_cwd_not_process_cwd(
+    tmp_path, monkeypatch
+):
+    # rg/grep emit paths relative to the search cwd; parsed_matches must anchor
+    # them on the tool's cwd, not the process cwd. These differ when the agent
+    # is launched from a directory other than the workspace (e.g. `uv run`).
+    search_dir = tmp_path / "workspace"
+    search_dir.mkdir()
+    (search_dir / "target.py").write_text("NEEDLE\n")
+
+    process_dir = tmp_path / "elsewhere"
+    process_dir.mkdir()
+    monkeypatch.chdir(process_dir)
+
+    config = GrepToolConfig()
+    grep_tool = Grep(
+        config_getter=lambda: config, state=BaseToolState(), cwd=search_dir
+    )
+
+    result = await collect_result(grep_tool.run(GrepArgs(pattern="NEEDLE", path=".")))
+
+    assert result.match_count == 1
+    parsed = result.parsed_matches
+    assert len(parsed) == 1
+    assert parsed[0].path == str((search_dir / "target.py").resolve())
+
+
+def test_cwd_is_not_serialized_into_the_model_facing_result():
+    result = GrepResult(
+        matches="target.py:1:NEEDLE",
+        match_count=1,
+        pattern="NEEDLE",
+        was_truncated=False,
+        cwd="/private/workspace",
+    )
+
+    dumped = result.model_dump(mode="json")
+    result_text = "\n".join(f"{key}: {value}" for key, value in dumped.items())
+
+    assert "cwd" not in dumped
+    assert "/private/workspace" not in result_text
+    assert result.parsed_matches[0].path == str(
+        (Path("/private/workspace") / "target.py").resolve()
+    )
 
 
 @pytest.mark.skipif(not shutil.which("grep"), reason="GNU grep not available")

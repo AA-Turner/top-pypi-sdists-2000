@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from vibe.core.config import VibeConfig
-from vibe.core.session.session_id import shorten_session_id
+from vibe.core.config import VibeConfigSchema
 from vibe.core.session.session_loader import SessionLoader
+from vibe.utils.session_id import shorten_session_id
 
 
 def short_session_id(session_id: str) -> str:
@@ -17,6 +17,7 @@ class ResumeSessionInfo:
     cwd: str
     title: str | None
     end_time: str | None
+    parent_session_id: str | None = None
 
     @property
     def option_id(self) -> str:
@@ -24,12 +25,13 @@ class ResumeSessionInfo:
 
 
 def list_local_resume_sessions(
-    config: VibeConfig, cwd: str | None
+    config: VibeConfigSchema, cwd: str | None
 ) -> list[ResumeSessionInfo]:
     return [
         ResumeSessionInfo(
             session_id=session["session_id"],
             cwd=session["cwd"],
+            parent_session_id=session["parent_session_id"],
             title=session.get("title"),
             end_time=session.get("end_time"),
         )
@@ -38,7 +40,7 @@ def list_local_resume_sessions(
 
 
 def session_latest_messages(
-    sessions: list[ResumeSessionInfo], config: VibeConfig
+    sessions: list[ResumeSessionInfo], config: VibeConfigSchema
 ) -> dict[str, str]:
     messages: dict[str, str] = {}
     for session in sessions:

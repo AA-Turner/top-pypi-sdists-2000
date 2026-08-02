@@ -8,6 +8,7 @@ from textual.containers import Center, Vertical
 from textual.timer import Timer
 from textual.widgets import Static
 
+from vibe.cli.textual_ui.shortcut_hints import shortcut, shortcut_hint
 from vibe.cli.textual_ui.widgets.no_markup_static import NoMarkupStatic
 from vibe.setup.onboarding.base import OnboardingScreen
 from vibe.setup.onboarding.gradient_text import GRADIENT_COLORS, gradient_markup
@@ -21,6 +22,7 @@ HIGHLIGHT_START = len(WELCOME_PREFIX)
 HIGHLIGHT_END = HIGHLIGHT_START + len(WELCOME_HIGHLIGHT)
 
 BUTTON_TEXT = "Press Enter ↵"
+BUTTON_TEXT_MARKUP = f"Press {shortcut('Enter')} ↵"
 
 
 class WelcomeScreen(OnboardingScreen):
@@ -106,11 +108,14 @@ class WelcomeScreen(OnboardingScreen):
                 self._button_typing_timer.stop()
             return
         self._button_char_index += 1
+        if self._button_char_index >= len(BUTTON_TEXT):
+            self._enter_hint.update(shortcut_hint(BUTTON_TEXT_MARKUP))
+            return
         self._enter_hint.update(BUTTON_TEXT[: self._button_char_index])
 
     def _animate_gradient(self) -> None:
         self._gradient_offset = (self._gradient_offset + 1) % len(GRADIENT_COLORS)
-        self._welcome_text.update(self._render_text(self._char_index))
+        self._welcome_text.update(self._render_text(self._char_index), layout=False)
 
     def action_next(self) -> None:
         if self._typing_done:

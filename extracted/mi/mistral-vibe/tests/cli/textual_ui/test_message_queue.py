@@ -1,8 +1,18 @@
 from __future__ import annotations
 
+import asyncio
+
 import pytest
 
-from vibe.cli.textual_ui.message_queue import MessageQueue, QueuedItem, QueuedItemKind
+from vibe.app_server.models import MentionStats, PreparedPrompt
+from vibe.cli.textual_ui.message_queue import (
+    MessageQueue,
+    QueueController,
+    QueuedItem,
+    QueuedItemKind,
+    QueuePorts,
+)
+from vibe.cli.textual_ui.widgets.messages import UserMessage
 
 
 def test_empty_queue_is_falsy() -> None:
@@ -147,3 +157,61 @@ def test_item_kinds_round_trip(kind: QueuedItemKind, content: str) -> None:
     assert item is not None
     assert item.kind == kind
     assert item.content == content
+
+
+@pytest.mark.asyncio
+async def test_inject_head_item_uses_prepared_prompt() -> None:
+    prepared_prompt = PreparedPrompt(
+        display_text="display",
+        prompt_text="rendered prompt",
+        mentions=MentionStats(count=1, context_types={"file": 1}),
+    )
+    injected: dict[str, object] = {}
+    telemetry: dict[str, object] = {}
+
+    async def noop_async(*args, **kwargs) -> None:
+        return None
+
+    def noop_task(*args, **kwargs) -> asyncio.Task[None]:
+        return asyncio.create_task(noop_async())
+
+    async def inject_queued_prompt(content: str, **kwargs) -> None:
+        injected["content"] = content
+        injected["images"] = kwargs["images"]
+        injected["client_message_id"] = kwargs["client_message_id"]
+        injected["mention_stats"] = kwargs["mention_stats"]
+
+    def send_skill_telemetry(skill_name: str | None) -> None:
+        telemetry["skill_name"] = skill_name
+
+    controller = QueueController(
+        QueuePorts(
+            mount_and_scroll=noop_async,
+            agent_running=lambda: False,
+            bash_task=lambda: None,
+            active_model=lambda: None,
+            remove_loading_widget=noop_async,
+            set_loading_queue_count=lambda count: None,
+            inject_queued_prompt=inject_queued_prompt,
+            start_agent_turn=noop_task,
+            await_agent_turn=noop_async,
+            run_bash=noop_task,
+            maybe_show_feedback_bar=noop_async,
+            send_skill_telemetry=send_skill_telemetry,
+        )
+    )
+    item = QueuedItem(
+        QueuedItemKind.PROMPT,
+        "raw prompt",
+        skill_name="skill",
+        prepared_prompt=prepared_prompt,
+    )
+    widget = UserMessage("raw prompt", pending=True)
+
+    await controller._inject_head_item(item, widget)
+
+    assert widget.history_entry_id == injected["client_message_id"]
+    assert injected["content"] == "rendered prompt"
+    assert isinstance(injected["client_message_id"], str)
+    assert injected["mention_stats"] == prepared_prompt.mentions
+    assert telemetry == {"skill_name": "skill"}

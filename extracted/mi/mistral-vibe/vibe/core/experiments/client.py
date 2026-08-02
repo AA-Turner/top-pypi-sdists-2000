@@ -10,8 +10,8 @@ from vibe.core.experiments._constants import (
     build_eval_url,
 )
 from vibe.core.experiments.models import EvalResponse, ExperimentAttributes
-from vibe.core.logger import logger
-from vibe.core.utils.http import build_ssl_context
+from vibe.observability.logging import logger
+from vibe.utils.http import VibeAsyncHTTPClient, build_ssl_context
 
 
 class RemoteEvalClient:
@@ -25,16 +25,16 @@ class RemoteEvalClient:
 
     def __init__(self, *, url: str | None = None) -> None:
         self._url = url
-        self._http: httpx.AsyncClient | None = None
+        self._http: VibeAsyncHTTPClient | None = None
 
     @classmethod
     def from_settings(cls, api_host: str, client_key: str) -> RemoteEvalClient:
         return cls(url=build_eval_url(api_host, client_key))
 
     @property
-    def _client(self) -> httpx.AsyncClient:
+    def _client(self) -> VibeAsyncHTTPClient:
         if self._http is None:
-            self._http = httpx.AsyncClient(
+            self._http = VibeAsyncHTTPClient(
                 timeout=httpx.Timeout(EVAL_REQUEST_TIMEOUT_SECONDS),
                 verify=build_ssl_context(),
             )

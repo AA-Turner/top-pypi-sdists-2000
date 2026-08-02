@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: mistral-vibe
-Version: 2.18.1
+Version: 2.23.2
 Summary: Minimal CLI coding agent by Mistral
 Project-URL: Homepage, https://github.com/mistralai/mistral-vibe
 Project-URL: Repository, https://github.com/mistralai/mistral-vibe
@@ -21,9 +21,9 @@ Classifier: Topic :: Software Development
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Classifier: Topic :: Utilities
 Requires-Python: >=3.12
-Requires-Dist: agent-client-protocol==0.10.1
+Requires-Dist: agent-client-protocol==0.11.0
 Requires-Dist: annotated-types==0.7.0
-Requires-Dist: anyio==4.13.0
+Requires-Dist: anyio==4.14.1
 Requires-Dist: attrs==26.1.0
 Requires-Dist: beautifulsoup4==4.14.3
 Requires-Dist: cachetools==7.0.6
@@ -35,15 +35,15 @@ Requires-Dist: colorama==0.4.6; sys_platform == 'win32'
 Requires-Dist: cryptography==48.0.1
 Requires-Dist: eval-type-backport==0.3.1
 Requires-Dist: gitdb==4.0.12
-Requires-Dist: gitpython==3.1.50
-Requires-Dist: giturlparse==0.14.0
+Requires-Dist: gitpython==3.1.53
+Requires-Dist: giturlparse==0.15.0
 Requires-Dist: google-auth==2.49.2
 Requires-Dist: googleapis-common-protos==1.74.0
 Requires-Dist: h11==0.16.0
 Requires-Dist: httpcore==1.0.9
 Requires-Dist: httpx-sse==0.4.3
 Requires-Dist: httpx==0.28.1
-Requires-Dist: humanize==4.15.0
+Requires-Dist: humanize==4.16.0
 Requires-Dist: idna==3.18
 Requires-Dist: importlib-metadata==8.7.1
 Requires-Dist: jaraco-classes==3.4.0
@@ -58,11 +58,11 @@ Requires-Dist: jsonschema==4.26.0
 Requires-Dist: keyring==25.7.0
 Requires-Dist: linkify-it-py==2.1.0
 Requires-Dist: markdown-it-py==4.0.0
-Requires-Dist: markdownify==1.2.2
-Requires-Dist: mcp==1.28.0
+Requires-Dist: markdownify==1.2.3
+Requires-Dist: mcp==1.28.1
 Requires-Dist: mdit-py-plugins==0.5.0
 Requires-Dist: mdurl==0.1.2
-Requires-Dist: mistralai==2.4.11
+Requires-Dist: mistralai==2.6.0
 Requires-Dist: more-itertools==11.0.2
 Requires-Dist: opentelemetry-api==1.39.1
 Requires-Dist: opentelemetry-exporter-otlp-proto-common==1.39.1
@@ -76,11 +76,11 @@ Requires-Dist: platformdirs==4.9.6
 Requires-Dist: protobuf==6.33.6
 Requires-Dist: ptyprocess==0.7.0
 Requires-Dist: pyasn1-modules==0.4.2
-Requires-Dist: pyasn1==0.6.3
+Requires-Dist: pyasn1==0.6.4
 Requires-Dist: pycparser==3.0; implementation_name != 'PyPy'
-Requires-Dist: pydantic-core==2.46.3
+Requires-Dist: pydantic-core==2.46.4
 Requires-Dist: pydantic-settings==2.14.2
-Requires-Dist: pydantic==2.13.3
+Requires-Dist: pydantic==2.13.4
 Requires-Dist: pygments==2.20.0
 Requires-Dist: pyjwt==2.13.0
 Requires-Dist: pyperclip==1.11.0
@@ -89,30 +89,32 @@ Requires-Dist: python-dotenv==1.2.2
 Requires-Dist: python-multipart==0.0.32
 Requires-Dist: pywin32-ctypes==0.2.3; sys_platform == 'win32'
 Requires-Dist: pywin32==311; sys_platform == 'win32'
+Requires-Dist: pywinpty==3.0.5; sys_platform == 'win32'
 Requires-Dist: pyyaml==6.0.3
 Requires-Dist: referencing==0.37.0
-Requires-Dist: requests==2.33.1
+Requires-Dist: requests==2.34.2
 Requires-Dist: rich==15.0.0
 Requires-Dist: rpds-py==0.30.0
 Requires-Dist: secretstorage==3.5.0; sys_platform == 'linux'
+Requires-Dist: sentry-sdk==2.64.0
 Requires-Dist: six==1.17.0
 Requires-Dist: smmap==5.0.3
 Requires-Dist: sounddevice==0.5.5
-Requires-Dist: soupsieve==2.8.3
+Requires-Dist: soupsieve==2.8.4
 Requires-Dist: sse-starlette==3.4.1
-Requires-Dist: starlette==1.0.0
+Requires-Dist: starlette==1.3.1
 Requires-Dist: textual-speedups==0.2.1
-Requires-Dist: textual==8.2.7
+Requires-Dist: textual==8.2.8
 Requires-Dist: tomli-w==1.2.0
 Requires-Dist: tree-sitter-bash==0.25.1
-Requires-Dist: tree-sitter==0.25.2
+Requires-Dist: tree-sitter==0.26.0
 Requires-Dist: truststore==0.10.4
 Requires-Dist: typing-extensions==4.15.0
 Requires-Dist: typing-inspection==0.4.2
 Requires-Dist: uc-micro-py==2.0.0
 Requires-Dist: urllib3==2.7.0
 Requires-Dist: uvicorn==0.46.0; sys_platform != 'emscripten'
-Requires-Dist: watchfiles==1.1.1
+Requires-Dist: watchfiles==1.2.0
 Requires-Dist: websockets==16.0
 Requires-Dist: zipp==3.23.1
 Requires-Dist: zstandard==0.25.0
@@ -214,7 +216,7 @@ pip install mistral-vibe
 - **Interactive Chat**: A conversational AI agent that understands your requests and breaks down complex tasks.
 - **Powerful Toolset**: A suite of tools for file manipulation, code searching, version control, and command execution, right from the chat prompt.
   - Read, write, and patch files (`read`, `write_file`, `edit`).
-  - Execute shell commands in a stateful terminal (`bash`).
+  - Execute shell commands, with managed shell sessions, polling, and stdin helpers available during rollout.
   - Recursively search code with `grep` (with `ripgrep` support).
   - Manage a `todo` list to track the agent's work.
   - Ask interactive questions to gather user input (`ask_user_question`).
@@ -257,8 +259,8 @@ custom agent file in `~/.vibe/agents/` or the project's `.vibe/agents/`
 directory. Subagents such as `explore` are not accepted.
 
 > Note: `default_agent` applies in both interactive and programmatic
-> (`-p` / `--prompt`) sessions. Pass `--auto-approve` or `--yolo` when
-> a run should approve all tool calls without prompting.
+> (`-p` / `--prompt`) sessions. Pass `--auto-approve` or `--yolo` with any
+> agent when a run should approve all tool calls without prompting.
 
 ### Subagents and Task Delegation
 
@@ -323,7 +325,8 @@ Most modern terminals should work, but older or minimal terminal emulators may h
    ```
 
 3. If this is your first time running Vibe, it will:
-   - Create a default configuration file at `~/.vibe/config.toml`
+   - Use built-in defaults without creating a configuration file until you
+     save a setting
    - Prompt you to enter your API key if it's not already configured
    - Save your API key to `~/.vibe/.env` for future use
 
@@ -357,7 +360,7 @@ Simply run `vibe` to enter the interactive chat loop.
 - **Todo View Toggle**: Press `Ctrl+T` to toggle the todo list view.
 - **Debug Console**: Press `Ctrl+\` to toggle the debug console.
 - **Agent Selection**: Press `Shift+Tab` to cycle through agents (default, plan, ...).
-- **Exit**: Type `/exit`, `exit`, `quit`, `:q`, or `:quit` in the input box, or press `Ctrl+C` / `Ctrl+D` twice within ~1 second.
+- **Exit**: Type `/exit`, `exit`, `quit`, `:q`, or `:quit` in the input box, or press `Ctrl+C` / `Ctrl+D` twice within ~1 second. Set `ask_confirmation_on_exit = false` (or toggle it in `/config`) to make `Ctrl+D` quit on the first press; `Ctrl+C` always requires confirmation.
 
 You can start Vibe with a prompt using the following command:
 
@@ -397,8 +400,9 @@ When using `--prompt`, you can specify additional options:
 - **`--max-price DOLLARS`**: Set a maximum cost limit in dollars. The session will be interrupted if the cost exceeds this limit.
 - **`--max-tokens N`**: Set a maximum cumulative LLM token budget for the session, counting both prompt and completion tokens. The session will be interrupted if usage exceeds this limit.
 - **`--agent NAME`**: Select the agent profile for this run.
-- **`--auto-approve`, `--yolo`**: Shortcut for `--agent auto-approve`. Approves all tool calls without prompting, including in interactive sessions.
+- **`--auto-approve`, `--yolo`**: Approves all tool calls without prompting, including in interactive sessions. Can be combined with any `--agent` value.
 - **`--enabled-tools TOOL`**: Enable specific tools. In programmatic mode, this disables all other tools. Can be specified multiple times. Supports exact names, glob patterns (e.g., `bash*`), or regex with `re:` prefix (e.g., `re:^serena_.*$`).
+- **`--disabled-tools TOOL`**: Disable specific tools after `--enabled-tools` filtering. Can be specified multiple times. Supports exact names, glob patterns (e.g., `bash*`), or regex with `re:` prefix (e.g., `re:^serena_.*$`).
 - **`--output FORMAT`**: Set the output format. Options:
   - `text` (default): Human-readable text output
   - `json`: All messages as JSON at the end
@@ -529,6 +533,14 @@ Skills support the same pattern matching as tools (exact names, glob patterns, a
 
 Vibe is configured via a `config.toml` file. It looks for this file first in `./.vibe/config.toml` and then falls back to `~/.vibe/config.toml`.
 
+### Theme
+
+The default `auto` theme follows the terminal background when it can be detected, then the operating-system light/dark preference. Choose another theme with `/theme` or set it explicitly:
+
+```toml
+theme = "dracula"
+```
+
 ### API Key Configuration
 
 To use Vibe, you'll need a Mistral API key. You can obtain one by signing up at [https://console.mistral.ai](https://console.mistral.ai).
@@ -554,6 +566,14 @@ Vibe supports multiple ways to configure your API keys:
    Vibe automatically loads API keys from `~/.vibe/.env` on startup. Environment variables take precedence over the `.env` file if both are set.
 
 **Note**: The `.env` file is specifically for API keys and other provider credentials. General Vibe configuration should be done in `config.toml`.
+
+### Custom Domains
+
+If you use a Mistral-compatible deployment instead of the default `console.mistral.ai` / `api.mistral.ai`, you can point browser sign-in at it. The credential is still a Mistral API key.
+
+Run `vibe --setup`, choose **Launch browser** then **Other**, enter your login domain, and sign in through the browser. A bare domain is prefixed with `https://`, and the auth API base is derived as `DOMAIN/api`. The overridden `mistral` provider is saved to your user config so subsequent runs reuse it.
+
+**Note**: the wizard reads any custom `browser_auth_base_url` already set in `config.toml`. Choosing **Other** pre-fills that configured domain so you can confirm or edit it. Choosing **Mistral AI** while a custom domain is configured warns you first — press **Enter** again to confirm the reset to the default domain, which is then persisted.
 
 ### TLS and Corporate Certificate Authorities
 
@@ -635,10 +655,47 @@ Note: This implies that you have set up a redteam prompt named `~/.vibe/prompts/
 
 ### Tool Management
 
+The built-in shell surface is controlled by the `vibe_cli_managed_shell_tools`
+experiment. The default variant keeps the legacy one-shot `bash` tool, including
+its existing Windows behavior. The managed variant exposes OS-native shell tools:
+POSIX systems, including WSL where Vibe runs as Linux, get managed `bash`,
+`bash_output`, `bash_stdin`, `bash_sessions`, and `bash_log_file`; native Windows
+gets `git_bash`, `git_bash_output`, `git_bash_stdin`, `git_bash_sessions`, and
+`git_bash_log_file` when Git Bash is available. If Git Bash is unavailable,
+native Windows falls back to `powershell`, `powershell_output`,
+`powershell_stdin`, `powershell_sessions`, and `powershell_log_file`.
+
+Managed shell sessions return a `session_id`, inline output, a cursor for polling
+more output, and a log path under `~/.vibe/shell-tool/sessions/`. Long-running
+commands can be left alive with `background = true`, and interactive commands can
+be driven with the matching stdin tool.
+
+POSIX `bash` reads permissions, allowlists, and denylists from `[tools.bash]`.
+Native Windows `git_bash` reads them from `[tools.git_bash]`; native Windows
+`powershell` reads them from `[tools.powershell]`. Neither Windows tool reads
+`[tools.bash]`. Git Bash is preferred when Vibe can resolve a usable `bash.exe`
+from PATH, Git for Windows, or standard Git install locations. If Git Bash is
+unavailable, the PowerShell resolution order is `pwsh.exe`, then
+`powershell.exe`. `cmd.exe` is not used by the managed Windows shell tools.
+
+```toml
+[tools.git_bash]
+permission = "ask"
+shell = "C:\\Program Files\\Git\\bin\\bash.exe"
+
+[tools.powershell]
+permission = "ask"
+shell = "powershell.exe"
+```
+
+The rollout assignment is server-managed and is not a `config.toml` option.
+
 #### Enable/Disable Tools with Patterns
 
 You can control which tools are active using `enabled_tools` and `disabled_tools`.
 These fields support exact names, glob patterns, and regular expressions.
+When both are set, `enabled_tools` first narrows the tool set, then
+`disabled_tools` removes matching tools from that set.
 
 Examples:
 
@@ -662,7 +719,30 @@ Notes:
 
 You can configure MCP (Model Context Protocol) servers to extend Vibe's capabilities. Add MCP server configurations under the `mcp_servers` section:
 
-For hosted OAuth MCP servers, you can add the server from inside Vibe:
+Remote MCP servers can be added non-interactively from the shell. Static auth
+is selected when `--api-key-env` or `--header` is provided; otherwise the
+server uses OAuth and starts browser login by default.
+
+```bash
+vibe mcp add mistralai \
+  --url https://api.mistral.ai/mcp \
+  --transport streamable-http \
+  --api-key-env MISTRAL_API_KEY
+
+vibe mcp add linear \
+  --url https://mcp.linear.app/mcp
+
+vibe mcp remove mistralai
+```
+
+Use `--no-login` to persist an OAuth server without starting login. Static auth
+also supports repeatable `--header`, `--api-key-header`, `--api-key-format`,
+`--startup-timeout-sec`, and `--tool-timeout-sec`. Run `vibe mcp add --help`
+for the complete command reference. `vibe mcp remove <name>` removes the server
+from the user configuration. Removing an OAuth server also deletes its stored
+tokens, client information, and configuration fingerprint when available.
+
+Hosted OAuth MCP servers can also be added from inside Vibe:
 
 ```text
 /mcp add https://mcp.linear.app/mcp
@@ -673,8 +753,7 @@ For hosted OAuth MCP servers, you can add the server from inside Vibe:
 scopes and starts login by default. It uses `transport = "streamable-http"`
 unless you pass `--transport http`. Pass `--no-login` to add the server without
 starting OAuth login. The shortcut supports `streamable-http` and `http`
-transports. For API-key/static auth, edit `config.toml` using the static auth
-example below.
+transports.
 
 ```toml
 # Example MCP server configurations
@@ -682,7 +761,10 @@ example below.
 name = "my_http_server"
 transport = "http"
 url = "http://localhost:8000"
-headers = { "Authorization" = "Bearer my_token" }
+
+[mcp_servers.auth]
+type = "static"
+headers = { "X-Client" = "vibe" }
 api_key_env = "MY_API_KEY_ENV_VAR"
 api_key_header = "Authorization"
 api_key_format = "Bearer {token}"
@@ -691,7 +773,10 @@ api_key_format = "Bearer {token}"
 name = "my_streamable_server"
 transport = "streamable-http"
 url = "http://localhost:8001"
-headers = { "X-API-Key" = "my_api_key" }
+
+[mcp_servers.auth]
+type = "static"
+headers = { "X-Client" = "vibe" }
 
 [[mcp_servers]]
 name = "fetch_server"
@@ -720,8 +805,9 @@ Key fields:
 - `tool_timeout_sec`: Timeout in seconds for tool execution (default 60s)
 - `env`: Environment variables to set for the MCP server of transport type stdio
 
-HTTP MCP servers can use either static auth or OAuth. Static auth uses
-`api_key_env` / `headers` in `config.toml`; OAuth uses an `auth` block:
+HTTP MCP servers can use either static auth or OAuth. Both use an `auth` block;
+legacy top-level `api_key_env` / `headers` keys are still accepted and promoted
+to static auth when Vibe loads the configuration.
 
 ```toml
 [[mcp_servers]]
@@ -762,25 +848,20 @@ startup_timeout_sec = 15
 tool_timeout_sec = 120
 ```
 
-### Hooks (Experimental)
+### Hooks
 
-Hooks wire arbitrary shell commands into Vibe's lifecycle to gate, audit, or rewrite agent behavior. **Experimental**, gated behind:
-
-```toml
-# config.toml
-enable_experimental_hooks = true   # or env VIBE_ENABLE_EXPERIMENTAL_HOOKS=true
-```
+Hooks wire arbitrary shell commands into Vibe's lifecycle to gate, audit, or rewrite agent behavior. No flag is required — declaring a hook is enough.
 
 Declared in `<project>/.vibe/hooks.toml` (project, loaded first; trusted only) and `~/.vibe/hooks.toml` (user-global, loaded second; duplicates by `name` lose to the project entry):
 
 ```toml
 [[hooks]]
 name = "deny-rm-rf"
-type = "before_tool"
+type = "pre_tool"
 match = "bash"                       # tool-name matcher (fnmatch glob + `re:` regex escape, case-insensitive)
 command = "uv run python /path/to/guard-bash"
 timeout = 60.0                       # seconds; default 60 for all hooks
-strict = false                       # tool hooks only: turn failures into denials (before) / text-clears (after)
+strict = false                       # tool hooks only: turn failures into denials (pre) / text-clears (post)
 description = "Reject dangerous shell commands."
 ```
 
@@ -803,7 +884,7 @@ Every hook signals back via its **exit code** and **stdout**. The contract on st
 
 Unknown JSON fields are tolerated at every level (forward-compatible). Fields that aren't meaningful for the current hook type are silently ignored.
 
-#### `post_agent_turn`
+#### `post_agent`
 
 Fires after every assistant turn that ends without pending tool calls.
 
@@ -812,9 +893,9 @@ Fires after every assistant turn that ends without pending tool calls.
   - `decision: "deny"` + `reason` — `reason` is injected as a new user message asking for a retry. Capped at **3 retries per hook per user turn**; further denies become terminal warnings.
   - `system_message` — UI-only.
 
-#### `before_tool`
+#### `pre_tool`
 
-Fires per tool call, **before** the user permission prompt. First deny short-circuits remaining `before_tool` hooks for that call.
+Fires per tool call, **before** the user permission prompt. First deny short-circuits remaining `pre_tool` hooks for that call.
 
 - **Receives** (in addition to the session context): `tool_name`, `tool_call_id`, `tool_input` (the model's raw arguments).
 - **Can return**:
@@ -822,9 +903,9 @@ Fires per tool call, **before** the user permission prompt. First deny short-cir
   - `hook_specific_output.tool_input` (object) — **full replacement** of the model's arguments. Re-validated against the tool's schema (validation failure → synthesized denial). Rewrites compose left-to-right across hooks. The rewritten arguments are also what the permission prompt displays, what the tool runs with, and what subsequent LLM turns see on the assistant message.
   - `system_message` — UI-only.
 
-#### `after_tool`
+#### `post_tool`
 
-Fires per tool call **if and only if the tool body actually ran**. `tool_status` is `success`, `failure`, or `cancelled` (cancellation during the tool body — cancellation is shielded so audit hooks still run). Does not fire when the tool never executed: `before_tool` denial, user denial at the approval prompt, permission `NEVER`, or cancellation before the body started.
+Fires per tool call **if and only if the tool body actually ran**. `tool_status` is `success`, `failure`, or `cancelled` (cancellation during the tool body — cancellation is shielded so audit hooks still run). Does not fire when the tool never executed: `pre_tool` denial, user denial at the approval prompt, permission `NEVER`, or cancellation before the body started.
 
 - **Receives** (in addition to the session context): `tool_name`, `tool_call_id`, `tool_input` (post-rewrite), `tool_status`, `tool_output` (structured result dict; null on failure), `tool_output_text` (the running text the LLM will see, mutable by prior hooks), `tool_error`, `duration_ms`.
 - **Can return**:
@@ -873,6 +954,20 @@ vibe --add-dir /path/to/other-project --add-dir /path/to/library
 ```
 
 Each path is implicitly trusted (no trust prompt) and contributes its `AGENTS.md` and `.vibe/` configuration (tools, skills, agents, prompts, hooks) to the session. File-tool permissions treat each `--add-dir` path the same way as your primary working directory — reads and writes inside them don't require the "outside workdir" prompt. Nested paths collapse: passing `/repo` and `/repo/sub` is equivalent to passing just `/repo`.
+
+Use `--worktree NAME` to create (or reuse) a [git worktree](https://git-scm.com/docs/git-worktree) and run inside it:
+
+```bash
+vibe --worktree my-feature
+```
+
+The worktree lives under `$VIBE_HOME/worktrees/<repo-name>-<repo-hash>/NAME` and is checked out on a branch named `NAME` (created if it doesn't exist, attached if it does). Vibe `cd`s into it before the session starts and trusts it for the session (no trust prompt). If you start Vibe from a subdirectory, Vibe enters the matching subdirectory inside the worktree.
+
+Existing worktrees are reused only when they belong to the same git repository and are checked out on branch `NAME`; otherwise Vibe exits with an error instead of running in the wrong checkout.
+
+Automatic cleanup only applies to worktrees Vibe created this run, and only after a session actually started — a startup failure (bad config, `--continue` with no sessions) never deletes anything, and a reused worktree is always left in place. When an interactive session exits, Vibe removes the worktree directory automatically if there are no uncommitted changes, untracked files, or commits beyond the commit where the worktree session started. If any of those exist, Vibe asks whether to keep or remove the worktree. When Vibe created the branch it is deleted alongside the worktree; a branch that already existed and was merely attached is kept unless you confirm its deletion. Keeping preserves the directory and branch so you can return later; removing force-deletes them, discarding changes, untracked files, and commits. Programmatic runs (`vibe -p ... --worktree NAME`) do not clean up automatically because there is no exit prompt; remove them manually with `git worktree remove`. `--worktree` is ignored with `--setup` and `--check-upgrade`.
+
+Sessions are scoped per directory, so `-c`/`--continue` and the `--resume` picker only see sessions started inside that worktree. To carry a session across worktrees, resume it explicitly by ID with `--resume <ID>`.
 
 ### Update Settings
 
@@ -925,7 +1020,7 @@ Mistral Vibe can be used in text editors and IDEs that support [Agent Client Pro
 
 ## Data collection & usage
 
-Use of Vibe is subject to our [Privacy Policy](https://legal.mistral.ai/terms/privacy-policy) and may include the collection and processing of data related to your use of the service, such as usage data, to operate, maintain, and improve Vibe. You can disable telemetry in your `config.toml` by setting `enable_telemetry = false`.
+Use of Vibe is subject to our [Privacy Policy](https://legal.mistral.ai/terms/privacy-policy) and may include the collection and processing of data related to your use of the service, such as usage data, to operate, maintain, and improve Vibe. You can disable telemetry and crash reporting in your `config.toml` by setting `enable_telemetry = false`.
 
 
 ## License

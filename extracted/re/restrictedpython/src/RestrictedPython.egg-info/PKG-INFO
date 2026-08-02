@@ -1,28 +1,28 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: RestrictedPython
-Version: 8.0
+Version: 8.4
 Summary: RestrictedPython is a defined subset of the Python language which allows to provide a program input into a trusted environment.
-Home-page: https://github.com/zopefoundation/RestrictedPython
-Author: Zope Foundation and Contributors
-Author-email: zope-dev@zope.dev
-License: ZPL-2.1
+Author-email: Zope Foundation and contributors <zope-dev@zope.dev>
+Maintainer-email: Plone Foundation and contributors <zope-dev@zope.dev>
+License-Expression: ZPL-2.1
 Project-URL: Documentation, https://restrictedpython.readthedocs.io/
+Project-URL: Issues, https://github.com/zopefoundation/RestrictedPython/issues
 Project-URL: Source, https://github.com/zopefoundation/RestrictedPython
-Project-URL: Tracker, https://github.com/zopefoundation/RestrictedPython/issues
-Keywords: restricted execution security untrusted code
+Project-URL: Changelog, https://github.com/zopefoundation/RestrictedPython/blob/master/CHANGES.rst
+Keywords: restricted,execution,security,untrusted,code
 Classifier: Development Status :: 6 - Mature
-Classifier: License :: OSI Approved :: Zope Public License
 Classifier: Programming Language :: Python
 Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
 Classifier: Programming Language :: Python :: Implementation :: CPython
 Classifier: Topic :: Security
-Requires-Python: >=3.9, <3.14
+Classifier: Typing :: Typed
+Requires-Python: <3.16,>=3.10
 Description-Content-Type: text/x-rst
 License-File: LICENSE.txt
 Provides-Extra: test
@@ -31,6 +31,9 @@ Requires-Dist: pytest-mock; extra == "test"
 Provides-Extra: docs
 Requires-Dist: Sphinx; extra == "docs"
 Requires-Dist: furo; extra == "docs"
+Provides-Extra: typecheck
+Requires-Dist: mypy; extra == "typecheck"
+Dynamic: license-file
 
 .. image:: https://github.com/zopefoundation/RestrictedPython/actions/workflows/tests.yml/badge.svg
     :target: https://github.com/zopefoundation/RestrictedPython/actions/workflows/tests.yml
@@ -122,6 +125,54 @@ the documentation `Contributing page
 
 Changes
 =======
+
+8.4 (2026-07-10)
+----------------
+
+- Add type annotations to the package code.
+  For clarification, restricted Python code does not support type annotations.
+
+- Allow ``ast.Module``, ``ast.Expression`` and ``ast.Interactive`` as body in compile_restricted_function
+
+- Disallow ``mode="function"`` in ``compile_restricted`` (it never worked).
+
+- Prevent access to ``string.Formatter`` and its unsafe traversal methods via
+  ``safer_getattr``.
+
+8.3 (2026-06-16)
+----------------
+
+- Switch to PyPI Trusted Publishing for the package release process
+
+- Also validate positional-only argument names (parameters before ``/``) so
+  they cannot start with an underscore, closing a sandbox escape where a
+  positional-only parameter could shadow an injected protected name such as
+  ``_getattr_``, ``_getitem_``, ``_write_`` or ``_print_``.
+
+
+8.3a1.dev0 (2026-05-29)
+-----------------------
+
+- Allow to use the package with Python 3.15 -- Caution: No security audit has been done so far.
+
+
+8.2 (2026-05-29)
+----------------
+
+- Remove documentation that appears to promote unsupported direct guards usage.
+
+- Move package metadata from setup.py to pyproject.toml.
+
+- Drop support for Python 3.9.
+
+- Allow the ``...`` (Ellipsis) statement.
+
+
+8.1 (2025-10-19)
+----------------
+
+- Allow to use the package with Python 3.14 including t-string support.
+
 
 8.0 (2025-01-23)
 ----------------

@@ -1,0 +1,1133 @@
+"""Tests for StudioWebProgressReporter.
+
+This module tests the progress reporting functionality including:
+- Detection of coded vs legacy evaluators
+- Endpoint routing for localhost vs production
+- Usage metrics extraction from spans
+- Request spec generation for different evaluator types
+- Custom eval set run ID handling
+"""
+
+import json
+from typing import Any
+from unittest.mock import AsyncMock, Mock, patch
+
+import pytest
+from opentelemetry.sdk.trace import ReadableSpan
+
+from uipath._cli._evals._progress_reporter import StudioWebProgressReporter
+from uipath.eval.runtime.events import EvalSetRunCreatedEvent, EvalSetRunUpdatedEvent
+from uipath.tracing import LlmOpsHttpExporter
+
+# Test fixtures - simple mocks without full evaluator instantiation
+
+
+@pytest.fixture
+def mock_exporter():
+    """Create a mock LlmOpsHttpExporter."""
+    return Mock(spec=LlmOpsHttpExporter)
+
+
+@pytest.fixture
+def progress_reporter(mock_exporter, monkeypatch):
+    """Create a StudioWebProgressReporter instance for testing."""
+    monkeypatch.setenv("UIPATH_URL", "https://test.uipath.com")
+    monkeypatch.setenv("UIPATH_ACCESS_TOKEN", "test-token")
+    monkeypatch.setenv("UIPATH_PROJECT_ID", "test-project-id")
+    monkeypatch.setenv("UIPATH_TENANT_ID", "test-tenant-id")
+
+    reporter = StudioWebProgressReporter()
+    return reporter
+
+
+@pytest.fixture
+def sample_spans_with_usage():
+    """Create sample spans with usage metrics."""
+    span1 = Mock(spec=ReadableSpan)
+    span1.attributes = {
+        "gen_ai.usage.prompt_tokens": 100,
+        "gen_ai.usage.completion_tokens": 50,
+        "gen_ai.usage.total_tokens": 150,
+        "gen_ai.usage.cost": 0.01,
+    }
+
+    span2 = Mock(spec=ReadableSpan)
+    span2.attributes = {
+        "gen_ai.usage.prompt_tokens": 200,
+        "gen_ai.usage.completion_tokens": 100,
+        "gen_ai.usage.total_tokens": 300,
+        "llm.usage.cost": 0.02,
+    }
+
+    return [span1, span2]
+
+
+@pytest.fixture
+def sample_spans_with_nested_usage():
+    """Create sample spans with nested usage metrics (backend format)."""
+    span = Mock(spec=ReadableSpan)
+    span.attributes = {
+        "usage": {
+            "promptTokens": 500,
+            "completionTokens": 250,
+            "totalTokens": 750,
+            "cost": 0.05,
+        }
+    }
+    span.Attributes = None
+
+    return [span]
+
+
+@pytest.fixture
+def sample_spans_with_json_attributes():
+    """Create sample spans with JSON string attributes."""
+    span = Mock(spec=ReadableSpan)
+    span.attributes = json.dumps(
+        {
+            "usage": {
+                "promptTokens": 300,
+                "completionTokens": 150,
+                "totalTokens": 450,
+            }
+        }
+    )
+    span.Attributes = None
+
+    return [span]
+
+
+# Tests for evaluator type detection
+class TestEvaluatorDetection:
+    """Tests for coded vs legacy evaluator detection."""
+
+    def test_is_coded_evaluator_with_empty_list(self, progress_reporter):
+        """Test detection with empty evaluator list."""
+        assert progress_reporter._is_coded_evaluator([]) is False
+
+    def test_is_coded_evaluator_uses_isinstance_check(self, progress_reporter):
+        """Test that detection uses isinstance to check evaluator type.
+
+        Note: Full integration test would require real evaluator instances.
+        The _is_coded_evaluator method checks isinstance, which won't work with mocks.
+        The empty list case is covered in test_is_coded_evaluator_with_empty_list.
+        """
+        # This test documents the approach - isinstance checking
+        # Actual testing requires integration tests with real evaluators
+        pass
+
+
+# Tests for endpoint routing
+class TestEndpointRouting:
+    """Tests for endpoint prefix and localhost detection."""
+
+    def test_is_localhost_with_localhost_url(self, progress_reporter, monkeypatch):
+        """Test localhost detection with localhost URL."""
+        monkeypatch.setenv("UIPATH_EVAL_BACKEND_URL", "http://localhost:8080")
+        assert progress_reporter._is_localhost() is True
+
+    def test_is_localhost_with_127_0_0_1_url(self, progress_reporter, monkeypatch):
+        """Test localhost detection with 127.0.0.1 URL."""
+        monkeypatch.setenv("UIPATH_EVAL_BACKEND_URL", "http://127.0.0.1:8080")
+        assert progress_reporter._is_localhost() is True
+
+    def test_is_localhost_with_production_url(self, progress_reporter, monkeypatch):
+        """Test localhost detection with production URL."""
+        monkeypatch.setenv("UIPATH_EVAL_BACKEND_URL", "https://cloud.uipath.com")
+        assert progress_reporter._is_localhost() is False
+
+    def test_is_localhost_without_env_var(self, progress_reporter, monkeypatch):
+        """Test localhost detection without environment variable."""
+        monkeypatch.delenv("UIPATH_EVAL_BACKEND_URL", raising=False)
+        assert progress_reporter._is_localhost() is False
+
+    def test_get_endpoint_prefix_for_localhost(self, progress_reporter, monkeypatch):
+        """Test endpoint prefix for localhost."""
+        monkeypatch.setenv("UIPATH_EVAL_BACKEND_URL", "http://localhost:8080")
+        assert progress_reporter._get_endpoint_prefix() == "api/"
+
+    def test_get_endpoint_prefix_for_production(self, progress_reporter, monkeypatch):
+        """Test endpoint prefix for production."""
+        monkeypatch.setenv("UIPATH_EVAL_BACKEND_URL", "https://cloud.uipath.com")
+        assert progress_reporter._get_endpoint_prefix() == "agentsruntime_/api/"
+
+
+# Tests for usage metrics extraction
+class TestUsageMetricsExtraction:
+    """Tests for extracting usage metrics from spans."""
+
+    def test_extract_usage_from_spans_with_opentelemetry_format(
+        self, progress_reporter, sample_spans_with_usage
+    ):
+        """Test usage extraction from OpenTelemetry semantic convention format."""
+        usage = progress_reporter._extract_usage_from_spans(sample_spans_with_usage)
+
+        assert usage["tokens"] == 450  # 150 + 300
+        assert usage["promptTokens"] == 300  # 100 + 200
+        assert usage["completionTokens"] == 150  # 50 + 100
+        assert usage["cost"] == 0.03  # 0.01 + 0.02
+
+    def test_extract_usage_from_spans_with_nested_format(
+        self, progress_reporter, sample_spans_with_nested_usage
+    ):
+        """Test usage extraction from nested usage object format."""
+        usage = progress_reporter._extract_usage_from_spans(
+            sample_spans_with_nested_usage
+        )
+
+        assert usage["tokens"] == 750
+        assert usage["promptTokens"] == 500
+        assert usage["completionTokens"] == 250
+        assert usage["cost"] == 0.05
+
+    def test_extract_usage_from_spans_with_json_string(
+        self, progress_reporter, sample_spans_with_json_attributes
+    ):
+        """Test usage extraction from JSON string attributes."""
+        usage = progress_reporter._extract_usage_from_spans(
+            sample_spans_with_json_attributes
+        )
+
+        assert usage["tokens"] == 450
+        assert usage["promptTokens"] == 300
+        assert usage["completionTokens"] == 150
+        assert usage["cost"] is None  # No cost in this example
+
+    def test_extract_usage_from_empty_spans(self, progress_reporter):
+        """Test usage extraction from empty span list."""
+        usage = progress_reporter._extract_usage_from_spans([])
+
+        assert usage["tokens"] is None
+        assert usage["promptTokens"] is None
+        assert usage["completionTokens"] is None
+        assert usage["cost"] is None
+
+    def test_extract_usage_from_spans_without_usage(self, progress_reporter):
+        """Test usage extraction from spans without usage data."""
+        span = Mock(spec=ReadableSpan)
+        span.attributes = {"other_field": "value"}
+
+        usage = progress_reporter._extract_usage_from_spans([span])
+
+        assert usage["tokens"] is None
+        assert usage["promptTokens"] is None
+        assert usage["completionTokens"] is None
+        assert usage["cost"] is None
+
+
+# Result collection tests removed - complex to test without real evaluator instances
+# The core functionality is tested indirectly through the request spec generation tests
+
+
+# Tests for request spec generation
+class TestRequestSpecGeneration:
+    """Tests for generating request specs for different evaluator types."""
+
+    def test_create_eval_set_run_spec_for_coded(self, progress_reporter):
+        """Test creating eval set run spec for coded evaluators."""
+        from uipath._cli._evals._progress_reporter import StudioWebAgentSnapshot
+
+        agent_snapshot = StudioWebAgentSnapshot(
+            input_schema={"type": "object"}, output_schema={"type": "object"}
+        )
+
+        spec = progress_reporter._create_eval_set_run_spec(
+            eval_set_id="test-eval-set",
+            agent_snapshot=agent_snapshot,
+            no_of_evals=5,
+            is_coded=True,
+        )
+
+        assert spec.method == "POST"
+        assert "coded/" in spec.endpoint
+        assert spec.json["evalSetId"] == "test-eval-set"
+        assert spec.json["source"] == 0
+        assert spec.json["numberOfEvalsExecuted"] == 5
+
+    def test_create_eval_set_run_spec_for_legacy(self, progress_reporter):
+        """Test creating eval set run spec for legacy evaluators."""
+        from uipath._cli._evals._progress_reporter import StudioWebAgentSnapshot
+
+        agent_snapshot = StudioWebAgentSnapshot(
+            input_schema={"type": "object"}, output_schema={"type": "object"}
+        )
+
+        spec = progress_reporter._create_eval_set_run_spec(
+            eval_set_id="test-eval-set",
+            agent_snapshot=agent_snapshot,
+            no_of_evals=5,
+            is_coded=False,
+        )
+
+        assert spec.method == "POST"
+        assert "coded/" not in spec.endpoint
+        # Both coded and legacy now send payload directly at root level
+        # Legacy should not have version field
+        assert "version" not in spec.json
+        # Source field is now required by backend for all evaluations
+        assert spec.json["source"] == 0
+        assert spec.json["numberOfEvalsExecuted"] == 5
+        # Backend expects integer status
+        assert spec.json["status"] == 1  # IN_PROGRESS
+
+    def test_update_coded_eval_run_spec(self, progress_reporter):
+        """Test updating eval run spec for coded evaluators."""
+        evaluator_runs = [
+            {
+                "evaluatorId": "test-1",
+                "status": "completed",
+                "result": {"score": {"value": 0.9}},
+            }
+        ]
+        evaluator_scores = [{"evaluatorId": "test-1", "value": 0.9}]
+
+        spec = progress_reporter._update_coded_eval_run_spec(
+            evaluator_runs=evaluator_runs,
+            evaluator_scores=evaluator_scores,
+            eval_run_id="test-run-id",
+            actual_output={"result": "success"},
+            execution_time=5.5,
+            success=True,
+            is_coded=True,
+        )
+
+        assert spec.method == "PUT"
+        assert "coded/" in spec.endpoint
+        assert spec.json["evalRunId"] == "test-run-id"
+        assert spec.json["evaluatorRuns"] == evaluator_runs
+        assert spec.json["result"]["scores"] == evaluator_scores
+        assert (
+            spec.json["completionMetrics"]["duration"] == 5500
+        )  # 5.5 seconds * 1000 = 5500 ms
+        assert spec.json["status"] == 2  # COMPLETED
+
+    def test_update_legacy_eval_run_spec(self, progress_reporter):
+        """Test updating eval run spec for legacy evaluators."""
+        assertion_runs = [
+            {"evaluatorId": "test-1", "status": "completed", "assertionSnapshot": {}}
+        ]
+        evaluator_scores = [{"evaluatorId": "test-1", "value": 0.9}]
+
+        spec = progress_reporter._update_eval_run_spec(
+            assertion_runs=assertion_runs,
+            evaluator_scores=evaluator_scores,
+            eval_run_id="test-run-id",
+            actual_output={"result": "success"},
+            execution_time=5.5,
+            success=True,
+            is_coded=False,
+        )
+
+        assert spec.method == "PUT"
+        assert "coded/" not in spec.endpoint
+        # Both coded and legacy now send payload directly at root level
+        assert "request" not in spec.json
+        assert spec.json["evalRunId"] == "test-run-id"
+        assert spec.json["assertionRuns"] == assertion_runs
+        assert spec.json["result"]["evaluatorScores"] == evaluator_scores
+        assert (
+            spec.json["completionMetrics"]["duration"] == 5500
+        )  # 5.5 seconds * 1000 = 5500 ms
+        # Backend expects integer status
+        assert spec.json["status"] == 2  # COMPLETED
+
+    def test_update_coded_eval_run_spec_with_failure(self, progress_reporter):
+        """Test updating eval run spec for coded evaluators with failure."""
+        evaluator_runs: list[dict[str, Any]] = []
+        evaluator_scores: list[dict[str, Any]] = []
+
+        spec = progress_reporter._update_coded_eval_run_spec(
+            evaluator_runs=evaluator_runs,
+            evaluator_scores=evaluator_scores,
+            eval_run_id="test-run-id",
+            actual_output={},
+            execution_time=0.0,
+            success=False,
+            is_coded=True,
+        )
+
+        assert spec.method == "PUT"
+        assert "coded/" in spec.endpoint
+        assert spec.json["evalRunId"] == "test-run-id"
+        assert spec.json["status"] == 3  # FAILED
+
+    def test_update_legacy_eval_run_spec_with_failure(self, progress_reporter):
+        """Test updating eval run spec for legacy evaluators with failure."""
+        assertion_runs: list[dict[str, Any]] = []
+        evaluator_scores: list[dict[str, Any]] = []
+
+        spec = progress_reporter._update_eval_run_spec(
+            assertion_runs=assertion_runs,
+            evaluator_scores=evaluator_scores,
+            eval_run_id="test-run-id",
+            actual_output={},
+            execution_time=0.0,
+            success=False,
+            is_coded=False,
+        )
+
+        assert spec.method == "PUT"
+        assert "coded/" not in spec.endpoint
+        # Both coded and legacy now send payload directly at root level
+        assert "request" not in spec.json
+        assert spec.json["evalRunId"] == "test-run-id"
+        # Backend expects integer status
+        assert spec.json["status"] == 3  # FAILED
+
+
+# Tests for custom eval set run ID handling
+class TestCustomEvalSetRunId:
+    """Tests for handling custom eval set run IDs."""
+
+    @pytest.mark.asyncio
+    async def test_eval_set_run_created_event_with_user_provided_id(
+        self, progress_reporter
+    ):
+        """Test that when eval_set_run_id is provided, eval set run creation is skipped."""
+        # Arrange
+        execution_id = "execution-id-12345"
+        user_provided_id = "user-provided-id-12345"
+        event = EvalSetRunCreatedEvent(
+            execution_id=execution_id,
+            entrypoint="test.py",
+            eval_set_id="test-eval-set",
+            eval_set_run_id=user_provided_id,  # User provides custom ID for tracing
+            no_of_evals=5,
+            evaluators=[],
+        )
+
+        # Mock the create_eval_set_run_sw method to ensure it's not called
+        with patch.object(
+            progress_reporter,
+            "create_eval_set_run_sw",
+            new_callable=AsyncMock,
+        ) as mock_create:
+            with patch.object(
+                progress_reporter, "_extract_agent_snapshot"
+            ) as mock_extract:
+                mock_extract.return_value = Mock()
+                # Act
+                await progress_reporter.handle_create_eval_set_run(event)
+
+                # Assert
+                # Verify that create_eval_set_run_sw WAS NOT called (skip creation)
+                mock_create.assert_not_called()
+                # Verify that the user-provided ID was stored for operations
+                assert (
+                    progress_reporter.eval_set_run_ids[execution_id] == user_provided_id
+                )
+                # Verify that eval_set_run_id is tracked as user-provided (for skipping evalSetRun operations)
+                assert (
+                    user_provided_id in progress_reporter.user_provided_eval_set_run_ids
+                )
+
+    @pytest.mark.asyncio
+    async def test_eval_set_run_created_event_with_skip_sw_creation_false(
+        self, progress_reporter
+    ):
+        """Test that when eval_set_run_id is not provided, create_eval_set_run_sw is called."""
+        # Arrange
+        execution_id = "execution-id-67890"
+        generated_run_id = "generated-run-id-abcde"
+        event = EvalSetRunCreatedEvent(
+            execution_id=execution_id,
+            entrypoint="test.py",
+            eval_set_id="test-eval-set",
+            eval_set_run_id=None,  # When this is None, SW creation happens
+            no_of_evals=5,
+            evaluators=[],
+        )
+
+        # Mock the create_eval_set_run_sw method to return a generated ID
+        with patch.object(
+            progress_reporter,
+            "create_eval_set_run_sw",
+            new_callable=AsyncMock,
+            return_value=generated_run_id,
+        ) as mock_create:
+            with patch.object(
+                progress_reporter, "_extract_agent_snapshot"
+            ) as mock_extract:
+                mock_extract.return_value = Mock()
+                # Act
+                await progress_reporter.handle_create_eval_set_run(event)
+
+                # Assert
+                # Verify that create_eval_set_run_sw was called
+                mock_create.assert_called_once()
+                # Verify that the generated run ID was stored
+                assert (
+                    progress_reporter.eval_set_run_ids[execution_id] == generated_run_id
+                )
+
+    def test_eval_set_run_created_event_initialization_with_custom_run_id(self):
+        """Test that EvalSetRunCreatedEvent can be initialized with eval_set_run_id."""
+        # Act
+        event = EvalSetRunCreatedEvent(
+            execution_id="test-id",
+            entrypoint="main.py",
+            eval_set_id="eval-123",
+            eval_set_run_id="custom-run-id",
+            no_of_evals=10,
+            evaluators=[],
+        )
+
+        # Assert
+        assert event.execution_id == "test-id"
+        assert event.entrypoint == "main.py"
+        assert event.eval_set_id == "eval-123"
+        assert event.eval_set_run_id == "custom-run-id"
+        assert event.no_of_evals == 10
+
+    def test_eval_set_run_created_event_initialization_without_custom_run_id(self):
+        """Test that EvalSetRunCreatedEvent can be initialized without eval_set_run_id."""
+        # Act
+        event = EvalSetRunCreatedEvent(
+            execution_id="test-id",
+            entrypoint="main.py",
+            eval_set_id="eval-123",
+            no_of_evals=10,
+            evaluators=[],
+        )
+
+        # Assert
+        assert event.eval_set_run_id is None
+
+    @pytest.mark.asyncio
+    async def test_eval_set_run_update_skipped_when_user_provided(
+        self, progress_reporter
+    ):
+        """Test that eval set run updates are skipped when eval_set_run_id is user-provided."""
+        # Arrange
+        execution_id = "execution-id-12345"
+        custom_run_id = "custom-run-id-12345"
+
+        # First, create the eval set run with a user-provided ID
+        create_event = EvalSetRunCreatedEvent(
+            execution_id=execution_id,
+            entrypoint="test.py",
+            eval_set_id="test-eval-set",
+            eval_set_run_id=custom_run_id,
+            no_of_evals=5,
+            evaluators=[],
+        )
+        await progress_reporter.handle_create_eval_set_run(create_event)
+
+        # Now try to update the eval set run
+        update_event = EvalSetRunUpdatedEvent(
+            execution_id=execution_id,
+            evaluator_scores={"eval-1": 0.9},
+            success=True,
+        )
+
+        # Mock the update_eval_set_run method to ensure it's not called
+        with patch.object(
+            progress_reporter, "update_eval_set_run", new_callable=AsyncMock
+        ) as mock_update:
+            # Act
+            await progress_reporter.handle_update_eval_set_run(update_event)
+
+            # Assert
+            # Verify that update_eval_set_run was NOT called
+            mock_update.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_eval_set_run_update_called_when_system_generated(
+        self, progress_reporter
+    ):
+        """Test that eval set run updates are called when eval_set_run_id is system-generated."""
+        # Arrange
+        execution_id = "execution-id-67890"
+        generated_run_id = "generated-run-id-abcde"
+
+        # First, create the eval set run without a user-provided ID (system generates it)
+        create_event = EvalSetRunCreatedEvent(
+            execution_id=execution_id,
+            entrypoint="test.py",
+            eval_set_id="test-eval-set",
+            eval_set_run_id=None,  # System will generate
+            no_of_evals=5,
+            evaluators=[],
+        )
+
+        # Mock the create_eval_set_run_sw method to return a generated ID
+        with patch.object(
+            progress_reporter,
+            "create_eval_set_run_sw",
+            new_callable=AsyncMock,
+            return_value=generated_run_id,
+        ):
+            with patch.object(
+                progress_reporter, "_extract_agent_snapshot"
+            ) as mock_extract:
+                mock_extract.return_value = Mock()
+                await progress_reporter.handle_create_eval_set_run(create_event)
+
+        # Now try to update the eval set run
+        update_event = EvalSetRunUpdatedEvent(
+            execution_id=execution_id,
+            evaluator_scores={"eval-1": 0.9},
+            success=True,
+        )
+
+        # Mock the update_eval_set_run method to verify it IS called
+        with patch.object(
+            progress_reporter, "update_eval_set_run", new_callable=AsyncMock
+        ) as mock_update:
+            # Act
+            await progress_reporter.handle_update_eval_set_run(update_event)
+
+            # Assert
+            # Verify that update_eval_set_run WAS called
+            mock_update.assert_called_once_with(
+                generated_run_id,
+                {"eval-1": 0.9},
+                is_coded=False,
+                success=True,
+            )
+
+
+# Tests for eval set run status updates
+class TestEvalSetRunStatusUpdates:
+    """Tests for handling eval set run status updates (completed vs failed)."""
+
+    def test_update_eval_set_run_spec_with_success_coded(self, progress_reporter):
+        """Test updating eval set run spec for coded evaluators with success=True."""
+        evaluator_scores = {"eval-1": 0.9, "eval-2": 0.85}
+
+        spec = progress_reporter._update_eval_set_run_spec(
+            eval_set_run_id="test-run-id",
+            evaluator_scores=evaluator_scores,
+            is_coded=True,
+            success=True,
+        )
+
+        assert spec.method == "PUT"
+        assert "coded/" in spec.endpoint
+        assert spec.json["evalSetRunId"] == "test-run-id"
+        assert spec.json["status"] == 2  # COMPLETED = 2
+
+    def test_update_eval_set_run_spec_with_failure_coded(self, progress_reporter):
+        """Test updating eval set run spec for coded evaluators with success=False."""
+        evaluator_scores = {"eval-1": 0.9, "eval-2": 0.85}
+
+        spec = progress_reporter._update_eval_set_run_spec(
+            eval_set_run_id="test-run-id",
+            evaluator_scores=evaluator_scores,
+            is_coded=True,
+            success=False,
+        )
+
+        assert spec.method == "PUT"
+        assert "coded/" in spec.endpoint
+        assert spec.json["evalSetRunId"] == "test-run-id"
+        assert spec.json["status"] == 3  # FAILED = 3
+
+    def test_update_eval_set_run_spec_with_success_legacy(self, progress_reporter):
+        """Test updating eval set run spec for legacy evaluators with success=True."""
+        evaluator_scores = {"eval-1": 0.9, "eval-2": 0.85}
+
+        spec = progress_reporter._update_eval_set_run_spec(
+            eval_set_run_id="test-run-id",
+            evaluator_scores=evaluator_scores,
+            is_coded=False,
+            success=True,
+        )
+
+        assert spec.method == "PUT"
+        assert "coded/" not in spec.endpoint
+        # Both coded and legacy now send payload directly at root level
+        assert "request" not in spec.json
+        assert spec.json["evalSetRunId"] == "test-run-id"
+        # Backend expects integer status
+        assert spec.json["status"] == 2  # COMPLETED
+
+    def test_update_eval_set_run_spec_with_failure_legacy(self, progress_reporter):
+        """Test updating eval set run spec for legacy evaluators with success=False."""
+        evaluator_scores = {"eval-1": 0.9, "eval-2": 0.85}
+
+        spec = progress_reporter._update_eval_set_run_spec(
+            eval_set_run_id="test-run-id",
+            evaluator_scores=evaluator_scores,
+            is_coded=False,
+            success=False,
+        )
+
+        assert spec.method == "PUT"
+        assert "coded/" not in spec.endpoint
+        # Both coded and legacy now send payload directly at root level
+        assert "request" not in spec.json
+        assert spec.json["evalSetRunId"] == "test-run-id"
+        # Backend expects integer status
+        assert spec.json["status"] == 3  # FAILED
+
+
+# Tests for agent snapshot extraction
+class TestAgentSnapshotExtraction:
+    """Tests for extracting agent snapshot with proper schema handling."""
+
+    def test_extract_agent_snapshot_reads_from_entry_points(
+        self, progress_reporter, tmp_path, monkeypatch
+    ):
+        """Test that agent snapshot reads schemas from entry points file."""
+        import os
+
+        # Create a temporary entry points file with full schemas
+        entry_points_data = {
+            "entryPoints": [
+                {
+                    "filePath": "test_agent",
+                    "uniqueId": "test-uuid",
+                    "type": "agent",
+                    "input": {
+                        "type": "object",
+                        "properties": {"query": {"type": "string"}},
+                    },
+                    "output": {
+                        "type": "object",
+                        "properties": {"response": {"type": "string"}},
+                    },
+                }
+            ]
+        }
+
+        entry_points_file = tmp_path / "entry-points.json"
+        with open(entry_points_file, "w") as f:
+            json.dump(entry_points_data, f)
+
+        # Change to the temp directory so the reporter finds the file
+        original_cwd = os.getcwd()
+        os.chdir(tmp_path)
+
+        try:
+            snapshot = progress_reporter._extract_agent_snapshot(
+                entrypoint="test_agent"
+            )
+
+            # Should read full schemas from entry points
+            assert snapshot.input_schema == {
+                "type": "object",
+                "properties": {"query": {"type": "string"}},
+            }
+            assert snapshot.output_schema == {
+                "type": "object",
+                "properties": {"response": {"type": "string"}},
+            }
+        finally:
+            os.chdir(original_cwd)
+
+    def test_extract_agent_snapshot_returns_empty_when_no_file(self, progress_reporter):
+        """Test that empty schemas are returned when entry points file doesn't exist."""
+        snapshot = progress_reporter._extract_agent_snapshot(
+            entrypoint="nonexistent_agent"
+        )
+
+        assert snapshot.input_schema == {}
+        assert snapshot.output_schema == {}
+
+    def test_extract_agent_snapshot_warns_when_entrypoint_is_none(
+        self, progress_reporter
+    ):
+        """Test that empty schemas are returned when entrypoint is None."""
+        snapshot = progress_reporter._extract_agent_snapshot(entrypoint=None)
+
+        assert snapshot.input_schema == {}
+        assert snapshot.output_schema == {}
+
+    def test_extract_agent_snapshot_warns_when_entrypoint_is_empty(
+        self, progress_reporter
+    ):
+        """Test that empty schemas are returned when entrypoint is empty string."""
+        snapshot = progress_reporter._extract_agent_snapshot(entrypoint="")
+
+        assert snapshot.input_schema == {}
+        assert snapshot.output_schema == {}
+
+    def test_extract_agent_snapshot_returns_empty_when_entrypoint_not_found(
+        self, progress_reporter, tmp_path
+    ):
+        """Test that empty schemas are returned when entrypoint is not in file."""
+        import os
+
+        # Create entry points file without the requested entrypoint
+        entry_points_data = {
+            "entryPoints": [
+                {
+                    "filePath": "other_agent",
+                    "uniqueId": "test-uuid",
+                    "type": "agent",
+                    "input": {"type": "object"},
+                    "output": {"type": "object"},
+                }
+            ]
+        }
+
+        entry_points_file = tmp_path / "entry-points.json"
+        with open(entry_points_file, "w") as f:
+            json.dump(entry_points_data, f)
+
+        original_cwd = os.getcwd()
+        os.chdir(tmp_path)
+
+        try:
+            snapshot = progress_reporter._extract_agent_snapshot(
+                entrypoint="nonexistent_agent"
+            )
+
+            assert snapshot.input_schema == {}
+            assert snapshot.output_schema == {}
+        finally:
+            os.chdir(original_cwd)
+
+    def test_agent_snapshot_serializes_with_camel_case(
+        self, progress_reporter, tmp_path
+    ):
+        """Test that agent snapshot serializes to correct JSON format with camelCase."""
+        import os
+
+        entry_points_data = {
+            "entryPoints": [
+                {
+                    "filePath": "test_agent",
+                    "uniqueId": "test-uuid",
+                    "type": "agent",
+                    "input": {"type": "object", "properties": {}},
+                    "output": {"type": "object", "properties": {}},
+                }
+            ]
+        }
+
+        entry_points_file = tmp_path / "entry-points.json"
+        with open(entry_points_file, "w") as f:
+            json.dump(entry_points_data, f)
+
+        original_cwd = os.getcwd()
+        os.chdir(tmp_path)
+
+        try:
+            snapshot = progress_reporter._extract_agent_snapshot(
+                entrypoint="test_agent"
+            )
+
+            # Serialize using pydantic
+            serialized = snapshot.model_dump(by_alias=True)
+
+            # Should have camelCase keys
+            assert "inputSchema" in serialized
+            assert "outputSchema" in serialized
+            assert serialized["inputSchema"] == {"type": "object", "properties": {}}
+            assert serialized["outputSchema"] == {"type": "object", "properties": {}}
+        finally:
+            os.chdir(original_cwd)
+
+
+# Tests for assertion properties and evaluator snapshot building
+class TestAssertionPropertiesBuilding:
+    """Tests for _build_assertion_properties and _build_evaluator_snapshot."""
+
+    def test_build_assertion_properties_with_prompt_and_model(self, progress_reporter):
+        """Test that prompt and model are included when evaluator has them."""
+        evaluator = Mock()
+        evaluator.prompt = "Evaluate the output quality"
+        evaluator.model = "gemini-2.5-pro"
+
+        props = progress_reporter._build_assertion_properties(evaluator)
+
+        assert props["prompt"] == "Evaluate the output quality"
+        assert props["model"] == "gemini-2.5-pro"
+
+    def test_build_assertion_properties_without_prompt_and_model(
+        self, progress_reporter
+    ):
+        """Test that properties are empty when evaluator lacks prompt/model."""
+        evaluator = Mock(spec=[])  # No attributes at all
+
+        props = progress_reporter._build_assertion_properties(evaluator)
+
+        assert props == {}
+
+    def test_build_assertion_properties_with_only_prompt(self, progress_reporter):
+        """Test that only prompt is included when model is absent."""
+        evaluator = Mock(spec=["prompt"])
+        evaluator.prompt = "Check similarity"
+
+        props = progress_reporter._build_assertion_properties(evaluator)
+
+        assert props["prompt"] == "Check similarity"
+        assert "model" not in props
+
+    def test_build_assertion_properties_with_only_model(self, progress_reporter):
+        """Test that only model is included when prompt is absent."""
+        evaluator = Mock(spec=["model"])
+        evaluator.model = "gpt-4o"
+
+        props = progress_reporter._build_assertion_properties(evaluator)
+
+        assert "prompt" not in props
+        assert props["model"] == "gpt-4o"
+
+    def test_build_assertion_properties_skips_non_string_prompt(
+        self, progress_reporter
+    ):
+        """Test that non-string prompt values are skipped."""
+        evaluator = Mock()
+        evaluator.prompt = 123  # Not a string
+        evaluator.model = "gpt-4o"
+
+        props = progress_reporter._build_assertion_properties(evaluator)
+
+        assert "prompt" not in props
+        assert props["model"] == "gpt-4o"
+
+    def test_build_evaluator_snapshot_with_prompt_and_model(self, progress_reporter):
+        """Test that evaluator snapshot includes prompt/model from config."""
+        config = Mock()
+        config.prompt = "Rate the response"
+        config.model = "claude-sonnet-4-20250514"
+
+        evaluator = Mock()
+        evaluator.evaluator_config = config
+
+        snapshot = progress_reporter._build_evaluator_snapshot(evaluator)
+
+        assert snapshot["prompt"] == "Rate the response"
+        assert snapshot["model"] == "claude-sonnet-4-20250514"
+
+    def test_build_evaluator_snapshot_without_config(self, progress_reporter):
+        """Test that snapshot is empty when evaluator has no config."""
+        evaluator = Mock(spec=[])  # No evaluator_config attribute
+
+        snapshot = progress_reporter._build_evaluator_snapshot(evaluator)
+
+        assert snapshot == {}
+
+    def test_build_evaluator_snapshot_config_without_prompt_model(
+        self, progress_reporter
+    ):
+        """Test that snapshot is empty when config lacks prompt/model."""
+        config = Mock(spec=["name"])  # Config without prompt/model
+        config.name = "MyEvaluator"
+
+        evaluator = Mock()
+        evaluator.evaluator_config = config
+
+        snapshot = progress_reporter._build_evaluator_snapshot(evaluator)
+
+        assert snapshot == {}
+
+    def test_build_evaluator_snapshot_skips_non_string_model(self, progress_reporter):
+        """Test that non-string model values are skipped."""
+        config = Mock()
+        config.prompt = "Evaluate this"
+        config.model = None  # Not a string
+
+        evaluator = Mock()
+        evaluator.evaluator_config = config
+
+        snapshot = progress_reporter._build_evaluator_snapshot(evaluator)
+
+        assert snapshot["prompt"] == "Evaluate this"
+
+
+class TestAgentIdRouting:
+    """Eval-set/eval-run API URLs route by AgentId, not file-source project.
+
+    For local-workspace eval runs the file-source project (UIPATH_PROJECT_ID,
+    typically the cloud debug project's GUID) differs from the logical agent
+    (UIPATH_AGENT_ID). The route URL must reflect the logical agent so backend
+    auth/ownership/telemetry don't see the per-run debug project as the agent.
+    File fetching (UiPathConfig.project_id) is unaffected.
+    """
+
+    def _make_reporter(self, monkeypatch, project_id, agent_id):
+        monkeypatch.setenv("UIPATH_URL", "https://test.uipath.com")
+        monkeypatch.setenv("UIPATH_ACCESS_TOKEN", "test-token")
+        monkeypatch.setenv("UIPATH_TENANT_ID", "test-tenant-id")
+        if project_id is not None:
+            monkeypatch.setenv("UIPATH_PROJECT_ID", project_id)
+        else:
+            monkeypatch.delenv("UIPATH_PROJECT_ID", raising=False)
+        if agent_id is not None:
+            monkeypatch.setenv("UIPATH_AGENT_ID", agent_id)
+        else:
+            monkeypatch.delenv("UIPATH_AGENT_ID", raising=False)
+        return StudioWebProgressReporter()
+
+    def test_agent_id_used_in_url_when_both_set(self, monkeypatch):
+        reporter = self._make_reporter(
+            monkeypatch, project_id="debug-project-guid", agent_id="real-agent-id"
+        )
+        assert reporter._agent_id == "real-agent-id"
+        assert reporter._project_id == "debug-project-guid"
+
+        from uipath._cli._evals._progress_reporter import StudioWebAgentSnapshot
+
+        spec = reporter._create_eval_set_run_spec(
+            eval_set_id="test-eval-set",
+            agent_snapshot=StudioWebAgentSnapshot(
+                input_schema={"type": "object"}, output_schema={"type": "object"}
+            ),
+            no_of_evals=1,
+            is_coded=False,
+        )
+        assert "/agents/real-agent-id/" in spec.endpoint
+        assert "/agents/debug-project-guid/" not in spec.endpoint
+
+    def test_agent_id_in_eval_set_run_payload(self, monkeypatch):
+        reporter = self._make_reporter(
+            monkeypatch, project_id="debug-project-guid", agent_id="real-agent-id"
+        )
+
+        from uipath._cli._evals._progress_reporter import StudioWebAgentSnapshot
+
+        spec = reporter._create_eval_set_run_spec(
+            eval_set_id="test-eval-set",
+            agent_snapshot=StudioWebAgentSnapshot(
+                input_schema={"type": "object"}, output_schema={"type": "object"}
+            ),
+            no_of_evals=1,
+            is_coded=False,
+        )
+        assert spec.json["agentId"] == "real-agent-id"
+
+    def test_falls_back_to_project_id_when_agent_id_unset(self, monkeypatch):
+        reporter = self._make_reporter(
+            monkeypatch, project_id="cloud-project-id", agent_id=None
+        )
+        assert reporter._agent_id == "cloud-project-id"
+
+        from uipath._cli._evals._progress_reporter import StudioWebAgentSnapshot
+
+        spec = reporter._create_eval_set_run_spec(
+            eval_set_id="test-eval-set",
+            agent_snapshot=StudioWebAgentSnapshot(
+                input_schema={"type": "object"}, output_schema={"type": "object"}
+            ),
+            no_of_evals=1,
+            is_coded=False,
+        )
+        assert "/agents/cloud-project-id/" in spec.endpoint
+
+
+class TestProjectFilesSourcePropagation:
+    """Reporter must propagate UIPATH_PROJECT_FILES_SOURCE to backend rows.
+
+    Backend filters listings by `projectFilesSource` (Local=1, Cloud=0). Without
+    the SDK setting it on POST/PUT payloads and GET query params, every row
+    lands as Cloud and the UI's `?projectFilesSource=1` filter never matches
+    local-workspace runs.
+    """
+
+    def _make_reporter(self, monkeypatch, project_files_source):
+        monkeypatch.setenv("UIPATH_URL", "https://test.uipath.com")
+        monkeypatch.setenv("UIPATH_ACCESS_TOKEN", "test-token")
+        monkeypatch.setenv("UIPATH_TENANT_ID", "test-tenant-id")
+        monkeypatch.setenv("UIPATH_PROJECT_ID", "test-project-id")
+        if project_files_source is not None:
+            monkeypatch.setenv("UIPATH_PROJECT_FILES_SOURCE", project_files_source)
+        else:
+            monkeypatch.delenv("UIPATH_PROJECT_FILES_SOURCE", raising=False)
+        return StudioWebProgressReporter()
+
+    @pytest.mark.parametrize(
+        "raw,expected",
+        [("Local", 1), ("local", 1), ("Cloud", 0), ("cloud", 0), ("1", 1), ("0", 0)],
+    )
+    def test_resolves_env_var_to_int(self, monkeypatch, raw, expected):
+        reporter = self._make_reporter(monkeypatch, raw)
+        assert reporter._project_files_source == expected
+
+    def test_returns_none_when_unset_or_garbage(self, monkeypatch):
+        reporter = self._make_reporter(monkeypatch, None)
+        assert reporter._project_files_source is None
+        reporter2 = self._make_reporter(monkeypatch, "Banana")
+        assert reporter2._project_files_source is None
+
+    def test_post_eval_set_run_payload_carries_source(self, monkeypatch):
+        from uipath._cli._evals._progress_reporter import StudioWebAgentSnapshot
+
+        reporter = self._make_reporter(monkeypatch, "Local")
+        spec = reporter._create_eval_set_run_spec(
+            eval_set_id="test-eval-set",
+            agent_snapshot=StudioWebAgentSnapshot(
+                input_schema={"type": "object"}, output_schema={"type": "object"}
+            ),
+            no_of_evals=1,
+            is_coded=False,
+        )
+        assert spec.json["projectFilesSource"] == 1
+
+    def test_post_eval_run_payload_carries_source(self, monkeypatch):
+        from uipath.eval.models.evaluation_set import EvaluationItem
+
+        reporter = self._make_reporter(monkeypatch, "Local")
+        item = EvaluationItem(
+            id="11111111-1111-1111-1111-111111111111",
+            name="t",
+            inputs={},
+            evaluation_criterias={},
+        )
+        spec = reporter._create_eval_run_spec(
+            eval_item=item, eval_set_run_id="run-1", is_coded=False
+        )
+        assert spec.json["projectFilesSource"] == 1
+
+    def test_put_eval_run_payload_carries_source(self, monkeypatch):
+        reporter = self._make_reporter(monkeypatch, "Local")
+        spec = reporter._update_eval_run_spec(
+            assertion_runs=[],
+            evaluator_scores=[],
+            eval_run_id="run-1",
+            actual_output={},
+            execution_time=1.0,
+            success=True,
+            is_coded=False,
+        )
+        assert spec.json["projectFilesSource"] == 1
+
+    def test_put_coded_eval_run_payload_carries_source(self, monkeypatch):
+        reporter = self._make_reporter(monkeypatch, "Local")
+        spec = reporter._update_coded_eval_run_spec(
+            evaluator_runs=[],
+            evaluator_scores=[],
+            eval_run_id="run-1",
+            actual_output={},
+            execution_time=1.0,
+            success=True,
+            is_coded=True,
+        )
+        assert spec.json["projectFilesSource"] == 1
+
+    def test_put_eval_set_run_payload_carries_source(self, monkeypatch):
+        reporter = self._make_reporter(monkeypatch, "Local")
+        spec = reporter._update_eval_set_run_spec(
+            eval_set_run_id="set-run-1",
+            evaluator_scores={},
+            is_coded=False,
+            success=True,
+        )
+        assert spec.json["projectFilesSource"] == 1
+
+    def test_get_eval_runs_query_carries_source(self, monkeypatch):
+        reporter = self._make_reporter(monkeypatch, "Local")
+        spec = reporter._get_eval_runs_spec(
+            eval_set_id="set-1",
+            eval_set_run_id="run-1",
+            evaluation_id=None,
+            is_coded=False,
+        )
+        assert spec.params == {"projectFilesSource": 1}
+
+    def test_unset_source_omits_field_from_payloads(self, monkeypatch):
+        from uipath._cli._evals._progress_reporter import StudioWebAgentSnapshot
+
+        reporter = self._make_reporter(monkeypatch, None)
+        spec = reporter._create_eval_set_run_spec(
+            eval_set_id="test-eval-set",
+            agent_snapshot=StudioWebAgentSnapshot(
+                input_schema={"type": "object"}, output_schema={"type": "object"}
+            ),
+            no_of_evals=1,
+            is_coded=False,
+        )
+        assert "projectFilesSource" not in spec.json

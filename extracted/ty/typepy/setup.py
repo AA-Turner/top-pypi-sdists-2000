@@ -42,8 +42,8 @@ with open(os.path.join(REQUIREMENT_DIR, "test_requirements.txt")) as f:
 
 DATETIME_REQUIRES = [
     "python-dateutil>=2.8.0,<3.0.0",
-    "pytz>=2018.9",
     "packaging",
+    'tzdata; sys_platform == "win32"',
 ]
 
 setuptools.setup(
@@ -85,6 +85,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",

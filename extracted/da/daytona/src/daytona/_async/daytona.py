@@ -10,7 +10,7 @@ from collections.abc import AsyncIterator
 from copy import deepcopy
 from importlib.metadata import version
 from types import TracebackType
-from typing import Callable, cast, overload
+from typing import Callable, TypeVar, cast, overload
 
 from opentelemetry import trace
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
@@ -27,7 +27,11 @@ from daytona_api_client_async import (
     CreateBuildInfo,
     CreateSandbox,
     ObjectStorageApi,
+)
+from daytona_api_client_async import Sandbox as SandboxDto
+from daytona_api_client_async import (
     SandboxApi,
+    SandboxListItem,
     SandboxListSortDirection,
     SandboxListSortField,
     SandboxState,
@@ -50,10 +54,13 @@ from ..common.daytona import (
     CreateSandboxFromImageParams,
     CreateSandboxFromSnapshotParams,
     DaytonaConfig,
+    resolve_bool_flag,
 )
 from ..common.errors import DaytonaAuthenticationError, DaytonaValidationError
 from ..common.image import Image
 from ..common.sandbox import ListSandboxesQuery
+from ..internal.event_dispatcher import AsyncEventDispatcher
+from ..internal.event_subscription_manager import AsyncEventSubscriptionManager
 from ..internal.pool_tracker import AsyncPoolSaturationTracker
 from ..internal.shared_session import SharedAiohttpSession
 from .sandbox import AsyncSandbox
@@ -62,6 +69,8 @@ from .snapshot import AsyncSnapshotService
 from .volume import AsyncVolumeService
 
 _MISSING_HAPPY_EYEBALLS_DELAY = object()
+
+_SandboxDtoT = TypeVar("_SandboxDtoT", SandboxDto, SandboxListItem)
 
 
 def _resolve_happy_eyeballs_delay(raw: str | None) -> object:
@@ -144,6 +153,7 @@ class AsyncDaytona:
     _api_url: str
     _target: str | None = None
     _tracer_provider: TracerProvider | None = None
+    _event_dispatcher: AsyncEventDispatcher | None = None
 
     def __init__(self, config: DaytonaConfig | None = None):
         """Initializes Daytona instance with optional configuration.
@@ -289,6 +299,10 @@ class AsyncDaytona:
         self._sandbox_api: SandboxApi = SandboxApi(self._api_client)
         self._object_storage_api: ObjectStorageApi = ObjectStorageApi(self._api_client)
         self._config_api: ConfigApi = ConfigApi(self._api_client)
+        self._analytics_api_url: str | None = None
+        self._analytics_api_url_fetched: bool = False
+        # Created lazily inside the running loop: py3.9 asyncio.Lock() binds the loop at construction.
+        self._analytics_api_url_lock: asyncio.Lock | None = None
 
         self.volume: AsyncVolumeService = AsyncVolumeService(VolumesApi(self._api_client))
         self.snapshot: AsyncSnapshotService = AsyncSnapshotService(
@@ -298,6 +312,32 @@ class AsyncDaytona:
             self._shared_session,
         )
         self.secret: AsyncSecretService = AsyncSecretService(SecretApi(self._api_client))
+
+        use_deprecated_polling = resolve_bool_flag(
+            config.use_deprecated_polling if config else None,
+            env_reader.get("DAYTONA_USE_DEPRECATED_POLLING"),
+        )
+
+        if use_deprecated_polling:
+            _polling_msg = (
+                "Polling-only mode (use_deprecated_polling / DAYTONA_USE_DEPRECATED_POLLING)"
+                " is deprecated and will be removed in a future release."
+            )
+            warnings.warn(_polling_msg, DeprecationWarning, stacklevel=2)
+
+        if not use_deprecated_polling:
+            self._event_dispatcher = AsyncEventDispatcher(
+                self._api_url,
+                self._api_key or self._jwt_token or "",
+                self._organization_id,
+                "sdk-python-async",
+                sdk_version,
+            )
+            self._event_dispatcher.ensure_connected()
+
+        self._subscription_manager: AsyncEventSubscriptionManager = AsyncEventSubscriptionManager(
+            self._event_dispatcher
+        )
 
         # Initialize OpenTelemetry if enabled
         otel_enabled = (
@@ -388,6 +428,23 @@ class AsyncDaytona:
 
         if hasattr(self, "_shared_session"):
             await self._shared_session.close()
+
+        if self._subscription_manager:
+            self._subscription_manager.shutdown()
+
+        if self._event_dispatcher:
+            await self._event_dispatcher.disconnect()
+
+    async def _get_analytics_api_url(self) -> str | None:
+        """Resolves the deployment's Analytics API URL via ``/config``, cached for the client's lifetime."""
+        if self._analytics_api_url_lock is None:
+            self._analytics_api_url_lock = asyncio.Lock()
+        async with self._analytics_api_url_lock:
+            if not self._analytics_api_url_fetched:
+                config = await self._config_api.config_controller_get_config()
+                self._analytics_api_url = config.analytics_api_url
+                self._analytics_api_url_fetched = True
+            return self._analytics_api_url
 
     @overload
     async def create(
@@ -523,8 +580,30 @@ class AsyncDaytona:
         if params.auto_stop_interval is not None and params.auto_stop_interval < 0:
             raise DaytonaValidationError("auto_stop_interval must be a non-negative integer")
 
+        if params.auto_pause_interval is not None and params.auto_pause_interval < 0:
+            raise DaytonaValidationError("auto_pause_interval must be a non-negative integer")
+
+        if (
+            params.auto_stop_interval is not None
+            and params.auto_stop_interval != 0
+            and params.auto_pause_interval is not None
+            and params.auto_pause_interval != 0
+        ):
+            raise DaytonaValidationError(
+                "auto_stop_interval and auto_pause_interval are mutually exclusive."
+                + " Set at most one of them to a non-zero value"
+            )
+
+        if params.auto_pause_interval and params.auto_delete_interval == 0:
+            raise DaytonaValidationError(
+                "Ephemeral sandboxes cannot have auto-pause enabled. Set auto_pause_interval to 0"
+            )
+
         if params.auto_archive_interval is not None and params.auto_archive_interval < 0:
             raise DaytonaValidationError("auto_archive_interval must be a non-negative integer")
+
+        if params.ttl_minutes is not None and params.ttl_minutes < 0:
+            raise DaytonaValidationError("ttl_minutes must be a non-negative integer")
 
         target = self._target
 
@@ -548,8 +627,10 @@ class AsyncDaytona:
             public=params.public,
             target=str(target) if target else None,
             auto_stop_interval=params.auto_stop_interval,
+            auto_pause_interval=params.auto_pause_interval,
             auto_archive_interval=params.auto_archive_interval,
             auto_delete_interval=params.auto_delete_interval,
+            ttl_minutes=params.ttl_minutes,
             volumes=volumes,
             secrets=secrets,
             network_block_all=params.network_block_all,
@@ -617,11 +698,13 @@ class AsyncDaytona:
             response = response_ref["response"]
 
         sandbox = AsyncSandbox(
-            response,
+            await self._ensure_toolbox_proxy_url(response),
             self._toolbox_api_client,
             self._sandbox_api,
             validated_language.value,
+            self._subscription_manager,
             self._pool_tracker,
+            analytics_api_url_provider=self._get_analytics_api_url,
         )
 
         if sandbox.state != SandboxState.STARTED:
@@ -632,13 +715,17 @@ class AsyncDaytona:
         return sandbox
 
     @with_instrumentation()
-    async def delete(self, sandbox: AsyncSandbox, timeout: float = 60) -> None:
+    async def delete(self, sandbox: AsyncSandbox, timeout: float = 60, wait: bool = False) -> None:
         """Deletes a Sandbox.
+
+        By default returns as soon as the deletion request is accepted (fire-and-forget).
+        Pass ``wait=True`` to block until the Sandbox reaches the 'destroyed' state.
 
         Args:
             sandbox (Sandbox): The Sandbox instance to delete.
-            timeout (float): Timeout (in seconds) for sandbox deletion. 0 means no timeout.
-                Default is 60 seconds.
+            timeout (float): Timeout (in seconds) for the request and, when ``wait``
+                is True, for reaching 'destroyed'. 0 means no timeout. Default is 60 seconds.
+            wait (bool): If True, wait until the Sandbox is destroyed. Defaults to False.
 
         Raises:
             DaytonaError: If sandbox fails to delete or times out
@@ -650,15 +737,19 @@ class AsyncDaytona:
             await daytona.delete(sandbox)  # Clean up when done
             ```
         """
-        _ = await sandbox.delete(timeout)
+        _ = await sandbox.delete(timeout, wait=wait)
 
     @intercept_errors(message_prefix="Failed to get sandbox: ")
     @with_instrumentation()
-    async def get(self, sandbox_id_or_name: str) -> AsyncSandbox:
+    async def get(self, sandbox_id_or_name: str, request_timeout: float | None = None) -> AsyncSandbox:
         """Gets a Sandbox by its ID or name.
 
         Args:
             sandbox_id_or_name (str): The ID or name of the Sandbox to retrieve.
+            request_timeout (float | None): Optional client-side request timeout in seconds. Client-side
+                only. It bounds how long the SDK waits for the HTTP response and does not cancel
+                the operation on the server. Positive values under 1 second are rounded up to 1
+                second; 0 disables the client-side timeout and negative values are rejected.
 
         Returns:
             Sandbox: The Sandbox instance.
@@ -676,14 +767,18 @@ class AsyncDaytona:
             raise DaytonaValidationError("sandbox_id_or_name is required")
 
         # Get the sandbox instance
-        sandbox_instance = await self._sandbox_api.get_sandbox(sandbox_id_or_name)
+        sandbox_instance = await self._sandbox_api.get_sandbox(
+            sandbox_id_or_name, _request_timeout=http_timeout(request_timeout)
+        )
         language = self._validate_language_label(sandbox_instance.labels.get(CODE_TOOLBOX_LANGUAGE_LABEL)).value
         return AsyncSandbox(
             sandbox_instance,
             self._toolbox_api_client,
             self._sandbox_api,
             language,
+            self._subscription_manager,
             self._pool_tracker,
+            analytics_api_url_provider=self._get_analytics_api_url,
         )
 
     @intercept_errors(message_prefix="Failed to list sandboxes: ")
@@ -691,11 +786,16 @@ class AsyncDaytona:
     async def list(
         self,
         query: ListSandboxesQuery | None = None,
+        request_timeout: float | None = None,
     ) -> AsyncIterator[AsyncSandbox]:
         """Iterates over Sandboxes matching the given query.
 
         Args:
             query: Optional filters, sorting, and per-page size.
+            request_timeout (float | None): Optional client-side request timeout in seconds. Client-side
+                only. It bounds how long the SDK waits for the HTTP response and does not cancel
+                the operation on the server. Positive values under 1 second are rounded up to 1
+                second; 0 disables the client-side timeout and negative values are rejected.
 
         Yields:
             AsyncSandbox: Each Sandbox matching the query.
@@ -718,20 +818,24 @@ class AsyncDaytona:
 
         while first_page or cursor:
             first_page = False
-            response = await self._fetch_sandbox_page(q, cursor)
+            response = await self._fetch_sandbox_page(q, cursor, request_timeout)
             for sandbox in response.items:
                 language = self._validate_language_label(sandbox.labels.get(CODE_TOOLBOX_LANGUAGE_LABEL)).value
                 yield AsyncSandbox(
-                    sandbox,
+                    await self._ensure_toolbox_proxy_url(sandbox),
                     self._toolbox_api_client,
                     self._sandbox_api,
                     language,
+                    self._subscription_manager,
                     self._pool_tracker,
+                    analytics_api_url_provider=self._get_analytics_api_url,
                 )
             cursor = response.next_cursor or None
 
     @with_instrumentation(name="AsyncDaytona.list.fetch_page")
-    async def _fetch_sandbox_page(self, q: ListSandboxesQuery, cursor: str | None):
+    async def _fetch_sandbox_page(
+        self, q: ListSandboxesQuery, cursor: str | None, request_timeout: float | None = None
+    ):
         """Fetches a single page of sandboxes. Each call is one OTEL span."""
         # The shared ListSandboxesQuery is typed against the sync api-client
         # enums; the async api-client expects its own copies of those enums.
@@ -760,8 +864,11 @@ class AsyncDaytona:
             created_at_before=q.created_at_before,
             last_event_after=q.last_activity_after,
             last_event_before=q.last_activity_before,
+            auto_destroy_at_after=q.auto_destroy_at_after,
+            auto_destroy_at_before=q.auto_destroy_at_before,
             sort=sort,
             order=order,
+            _request_timeout=http_timeout(request_timeout),
         )
 
     def _validate_language_label(self, language: str | None = None) -> CodeLanguage:
@@ -783,6 +890,14 @@ class AsyncDaytona:
         if enum_language is None:
             raise DaytonaValidationError(f"Invalid {CODE_TOOLBOX_LANGUAGE_LABEL}: {language}")
         return enum_language
+
+    async def _ensure_toolbox_proxy_url(self, sandbox: _SandboxDtoT) -> _SandboxDtoT:
+        if sandbox.toolbox_proxy_url:
+            return sandbox
+
+        proxy_url = await self._sandbox_api.get_toolbox_proxy_url(sandbox.id)
+        sandbox.toolbox_proxy_url = proxy_url.url
+        return sandbox
 
     @with_instrumentation()
     async def start(self, sandbox: AsyncSandbox, timeout: float = 60) -> None:

@@ -4,12 +4,13 @@ import asyncio
 from collections.abc import Callable
 from datetime import UTC, datetime
 from pathlib import Path
-import tomllib
 from typing import cast
+from unittest.mock import MagicMock
 
 import keyring
 from keyring.errors import KeyringError
 import pytest
+from textual.content import Content
 from textual.events import Resize
 from textual.geometry import Size
 from textual.pilot import Pilot
@@ -22,19 +23,24 @@ from tests.browser_sign_in.stubs import (
     build_sign_in_process,
 )
 from tests.conftest import build_test_vibe_config
+from vibe.cli.textual_ui.shortcut_hints import SHORTCUT_STYLE
 from vibe.cli.textual_ui.widgets.no_markup_static import NoMarkupStatic
-from vibe.core.config import ModelConfig, ProviderConfig, VibeConfig
-from vibe.core.config._settings import (
+from vibe.core.config import (
+    AUTO_THEME,
     DEFAULT_MISTRAL_BROWSER_AUTH_API_BASE_URL,
     DEFAULT_MISTRAL_BROWSER_AUTH_BASE_URL,
+    ModelConfig,
+    ProviderConfig,
+    VibeConfigSchema,
 )
 from vibe.core.config.harness_files import (
     init_harness_files_manager,
     reset_harness_files_manager,
 )
-from vibe.core.paths import GLOBAL_ENV_FILE, VIBE_HOME
-from vibe.core.telemetry.build_metadata import build_entrypoint_metadata
+from vibe.core.paths import GLOBAL_ENV_FILE
+from vibe.core.telemetry.build_metadata import build_launch_context
 from vibe.core.telemetry.send import TelemetryClient
+from vibe.core.telemetry.types import TerminalEmulator
 from vibe.core.types import Backend
 from vibe.setup.auth import (
     BrowserSignInError,
@@ -53,8 +59,14 @@ from vibe.setup.onboarding.screens.auth_method import AuthMethodScreen
 from vibe.setup.onboarding.screens.browser_sign_in import (
     SIGN_IN_URL_HELP_PREFIX,
     BrowserSignInScreen,
+    BrowserSignInStep,
+    BrowserSignInStepWidgets,
+    BrowserSignInViewState,
 )
+from vibe.setup.onboarding.screens.custom_domain import CustomDomainScreen
+from vibe.setup.onboarding.screens.sign_in_target import SignInTargetScreen
 from vibe.setup.onboarding.screens.theme_selection import THEMES, ThemeSelectionScreen
+from vibe.setup.onboarding.screens.welcome import HIGHLIGHT_END, WelcomeScreen
 
 CONSOLE_URL = "https://console.mistral.ai"
 BROWSER_AUTH_API_URL = "https://console.mistral.ai/api"
@@ -98,7 +110,7 @@ def _build_onboarding_config(
     browser_auth_base_url: str | None = None,
     browser_auth_api_base_url: str | None = None,
     vibe_base_url: str = "https://chat.mistral.ai",
-) -> VibeConfig:
+) -> VibeConfigSchema:
     provider = ProviderConfig(
         name=provider_name,
         api_base="https://api.mistral.ai/v1",
@@ -133,6 +145,18 @@ def _build_browser_onboarding_app(
         browser_sign_in_success_delay=browser_sign_in_success_delay,
         browser_sign_in_url_help_delay=browser_sign_in_url_help_delay,
         copy_sign_in_url=copy_sign_in_url,
+    )
+
+
+CONFIGURED_CUSTOM_DOMAIN = "https://custom.example.com"
+
+
+def _build_configured_custom_domain_app() -> OnboardingApp:
+    return OnboardingApp(
+        config=_build_onboarding_config(
+            browser_auth_base_url=CONFIGURED_CUSTOM_DOMAIN,
+            browser_auth_api_base_url=f"{CONFIGURED_CUSTOM_DOMAIN}/api",
+        )
     )
 
 
@@ -190,6 +214,12 @@ def _browser_sign_in_step_text(card: Widget) -> str:
 
 def _browser_sign_in_hint(screen: Screen) -> str:
     return str(screen.query_one("#browser-sign-in-hint", NoMarkupStatic).render())
+
+
+def _assert_browser_sign_in_shortcuts_styled(screen: Screen) -> None:
+    text = screen.query_one("#browser-sign-in-hint", NoMarkupStatic).render()
+    assert isinstance(text, Content)
+    assert any(span.style == SHORTCUT_STYLE for span in text.spans)
 
 
 def _browser_sign_in_url_text(screen: Screen) -> str:
@@ -274,8 +304,14 @@ async def _show_auth_method(pilot: Pilot) -> None:
     await _wait_for(lambda: isinstance(pilot.app.screen, AuthMethodScreen), pilot)
 
 
-async def _show_browser_sign_in(pilot: Pilot) -> None:
+async def _show_sign_in_target(pilot: Pilot) -> None:
     await _show_auth_method(pilot)
+    await pilot.press("enter")
+    await _wait_for(lambda: isinstance(pilot.app.screen, SignInTargetScreen), pilot)
+
+
+async def _show_browser_sign_in(pilot: Pilot) -> None:
+    await _show_sign_in_target(pilot)
     await pilot.press("enter")
     await _wait_for(lambda: isinstance(pilot.app.screen, BrowserSignInScreen), pilot)
 
@@ -284,6 +320,51 @@ async def _show_manual_api_key_screen(pilot: Pilot) -> None:
     await _show_auth_method(pilot)
     await pilot.press("down", "enter")
     await _wait_for(lambda: isinstance(pilot.app.screen, ApiKeyScreen), pilot)
+
+
+async def _show_custom_domain(pilot: Pilot) -> None:
+    await _show_sign_in_target(pilot)
+    await pilot.press("down", "enter")
+    await _wait_for(lambda: isinstance(pilot.app.screen, CustomDomainScreen), pilot)
+
+
+def test_welcome_gradient_animation_skips_relayout() -> None:
+    screen = WelcomeScreen()
+    screen._char_index = HIGHLIGHT_END
+    welcome_text = MagicMock(spec=Static)
+    screen._welcome_text = welcome_text
+
+    screen._animate_gradient()
+
+    welcome_text.update.assert_called_once()
+    assert welcome_text.update.call_args.kwargs == {"layout": False}
+
+
+def test_browser_sign_in_gradient_animation_skips_relayout() -> None:
+    provider = _build_onboarding_config(
+        browser_auth_base_url=CONSOLE_URL,
+        browser_auth_api_base_url=BROWSER_AUTH_API_URL,
+    ).providers[0]
+    screen = BrowserSignInScreen(provider, MagicMock(), copy_sign_in_url=MagicMock())
+    screen.state = BrowserSignInViewState(
+        step=BrowserSignInStep.CONFIRM,
+        message="Waiting for authentication...",
+        variant="pending",
+        running=True,
+    )
+    detail = MagicMock(spec=NoMarkupStatic)
+    step_widgets = BrowserSignInStepWidgets(
+        marker=MagicMock(spec=NoMarkupStatic),
+        card=MagicMock(),
+        title=MagicMock(spec=NoMarkupStatic),
+        detail=detail,
+    )
+    screen._step_widgets = [step_widgets, step_widgets]
+
+    screen._animate_gradient()
+
+    detail.update.assert_called_once()
+    assert detail.update.call_args.kwargs == {"layout": False}
 
 
 @pytest.mark.asyncio
@@ -343,6 +424,105 @@ async def test_ui_offers_browser_sign_in_for_renamed_mistral_provider() -> None:
 
     async with app.run_test() as pilot:
         await _show_auth_method(pilot)
+
+
+@pytest.mark.asyncio
+async def test_ui_custom_domain_escape_returns_to_sign_in_target() -> None:
+    app = _build_browser_onboarding_app()
+
+    async with app.run_test() as pilot:
+        await _show_custom_domain(pilot)
+        await pilot.press("escape")
+        await _wait_for(lambda: isinstance(app.screen, SignInTargetScreen), pilot)
+
+
+@pytest.mark.asyncio
+async def test_ui_sign_in_target_escape_returns_to_auth_method() -> None:
+    app = _build_browser_onboarding_app()
+
+    async with app.run_test() as pilot:
+        await _show_sign_in_target(pilot)
+        await pilot.press("escape")
+        await _wait_for(lambda: isinstance(app.screen, AuthMethodScreen), pilot)
+
+
+@pytest.mark.asyncio
+async def test_ui_custom_domain_submit_derives_api_base_from_domain() -> None:
+    app = _build_browser_onboarding_app()
+
+    async with app.run_test() as pilot:
+        await _show_custom_domain(pilot)
+        await pilot.press(*"example.com")
+        await pilot.press("enter")
+        await _wait_for(lambda: isinstance(app.screen, BrowserSignInScreen), pilot)
+
+    assert app._provider.browser_auth_base_url == "https://example.com"
+    assert app._provider.browser_auth_api_base_url == "https://example.com/api"
+
+
+@pytest.mark.asyncio
+async def test_ui_custom_domain_input_resets_when_reentered() -> None:
+    app = _build_browser_onboarding_app()
+
+    async with app.run_test() as pilot:
+        await _show_custom_domain(pilot)
+        await pilot.press(*"example.com")
+        assert app.screen.query_one("#domain", Input).value == "example.com"
+
+        await pilot.press("escape")
+        await _wait_for(lambda: isinstance(app.screen, SignInTargetScreen), pilot)
+        await pilot.press("enter")
+        await _wait_for(lambda: isinstance(app.screen, CustomDomainScreen), pilot)
+
+        domain = app.screen.query_one("#domain", Input)
+        feedback = app.screen.query_one("#feedback", NoMarkupStatic)
+        assert domain.value == ""
+        assert domain.cursor_position == 0
+        assert not feedback.has_class("error")
+
+
+def _sign_in_target_warning(screen: Screen) -> str:
+    return str(screen.query_one("#sign-in-target-warning", NoMarkupStatic).render())
+
+
+@pytest.mark.asyncio
+async def test_ui_custom_domain_seeds_configured_domain() -> None:
+    app = _build_configured_custom_domain_app()
+
+    async with app.run_test() as pilot:
+        await _show_custom_domain(pilot)
+        domain = app.screen.query_one("#domain", Input)
+        assert domain.value == CONFIGURED_CUSTOM_DOMAIN
+        assert domain.cursor_position == len(CONFIGURED_CUSTOM_DOMAIN)
+
+
+@pytest.mark.asyncio
+async def test_ui_mistral_option_warns_before_overriding_configured_custom_domain() -> (
+    None
+):
+    app = _build_configured_custom_domain_app()
+
+    async with app.run_test() as pilot:
+        await _show_sign_in_target(pilot)
+        await pilot.press("enter")
+        assert isinstance(app.screen, SignInTargetScreen)
+        assert CONFIGURED_CUSTOM_DOMAIN in _sign_in_target_warning(app.screen)
+
+        await pilot.press("enter")
+        await _wait_for(lambda: isinstance(app.screen, BrowserSignInScreen), pilot)
+
+
+@pytest.mark.asyncio
+async def test_ui_mistral_override_warning_clears_on_navigation() -> None:
+    app = _build_configured_custom_domain_app()
+
+    async with app.run_test() as pilot:
+        await _show_sign_in_target(pilot)
+        await pilot.press("enter")
+        assert CONFIGURED_CUSTOM_DOMAIN in _sign_in_target_warning(app.screen)
+
+        await pilot.press("down")
+        assert _sign_in_target_warning(app.screen) == ""
 
 
 @pytest.mark.asyncio
@@ -445,11 +625,15 @@ async def test_ui_shows_browser_sign_in_url_copy_prompt_without_raw_url() -> Non
             lambda: "copy this URL" in _browser_sign_in_url_text(app.screen), pilot
         )
         url_text = _browser_sign_in_url_text(app.screen)
-        assert "If your browser did not open, copy this URL (press C)" in url_text
+        assert "If your browser did not open, copy this URL (press c)" in url_text
+        url_render = app.screen.query_one("#browser-sign-in-url", Static).render()
+        assert isinstance(url_render, Content)
+        assert any(span.style == SHORTCUT_STYLE for span in url_render.spans)
         assert "process-1" not in url_text
         assert _browser_sign_in_hint(app.screen) == (
-            "Press M to enter API key manually - Esc to cancel"
+            "Press m to enter API key manually - Esc to cancel"
         )
+        _assert_browser_sign_in_shortcuts_styled(app.screen)
 
 
 @pytest.mark.asyncio
@@ -603,10 +787,11 @@ async def test_ui_keeps_last_sign_in_url_copy_prompt_after_open_browser_failure(
             pilot,
         )
         assert _browser_sign_in_hint(app.screen) == (
-            "Press R to retry - Press M to enter API key manually - Esc to cancel"
+            "Press r to retry - Press m to enter API key manually - Esc to cancel"
         )
+        _assert_browser_sign_in_shortcuts_styled(app.screen)
         url_text = _browser_sign_in_url_text(app.screen)
-        assert "If your browser did not open, copy this URL (press C)" in url_text
+        assert "If your browser did not open, copy this URL (press c)" in url_text
         assert "process-1" not in url_text
 
 
@@ -686,8 +871,9 @@ async def test_ui_retry_hides_old_sign_in_url_and_uses_fresh_attempt_url() -> No
         assert "process-2" not in _browser_sign_in_url_text(app.screen)
         assert "process-1" not in _browser_sign_in_url_text(app.screen)
         assert _browser_sign_in_hint(app.screen) == (
-            "Press M to enter API key manually - Esc to cancel"
+            "Press m to enter API key manually - Esc to cancel"
         )
+        _assert_browser_sign_in_shortcuts_styled(app.screen)
         await pilot.press("c")
 
     assert copied_urls == [_expected_browser_sign_in_url(process_id="process-2")]
@@ -748,7 +934,7 @@ async def test_ui_preserves_completed_browser_sign_in_during_success_delay() -> 
         assert app.screen.state.variant == "success"
         hint = str(app.screen.query_one("#browser-sign-in-hint").render())
         assert "Finishing setup..." in hint
-        assert "Press M to enter API key manually - Esc to cancel" not in hint
+        assert "Press m to enter API key manually - Esc to cancel" not in hint
         assert app.return_value is None
         assert "sk-browser-onboarding-test-key" in _saved_env_contents()
         await pilot.press("m", "escape")
@@ -861,9 +1047,10 @@ async def test_ui_shows_retryable_error_when_browser_sign_in_fails_unexpectedly(
         assert app.screen.state.variant == "error"
         assert _active_browser_sign_in_step_card(app.screen).has_class("active")
         assert (
-            "Press R to retry - Press M to enter API key manually - Esc to cancel"
+            "Press r to retry - Press m to enter API key manually - Esc to cancel"
             in str(app.screen.query_one("#browser-sign-in-hint").render())
         )
+        _assert_browser_sign_in_shortcuts_styled(app.screen)
         assert app.return_value is None
 
 
@@ -922,11 +1109,12 @@ async def test_ui_waits_for_browser_sign_in_cleanup_before_retrying() -> None:
         )
         await _wait_for(
             lambda: (
-                "Press M to enter API key manually - Esc to cancel"
+                "Press m to enter API key manually - Esc to cancel"
                 in str(hint_widget.render())
             ),
             pilot,
         )
+        _assert_browser_sign_in_shortcuts_styled(app.screen)
 
         await pilot.press("r")
         await _wait_for(
@@ -940,7 +1128,7 @@ async def test_ui_waits_for_browser_sign_in_cleanup_before_retrying() -> None:
         )
         await _wait_for(
             lambda: (
-                "Press M to enter API key manually - Esc to cancel"
+                "Press m to enter API key manually - Esc to cancel"
                 in str(hint_widget.render())
             ),
             pilot,
@@ -1074,7 +1262,7 @@ async def test_ui_uses_default_mistral_browser_auth_urls(
 
 
 @pytest.mark.asyncio
-async def test_ui_preserves_custom_browser_auth_urls_when_api_key_is_missing(
+async def test_ui_mistral_option_uses_default_domain_over_configured_custom_urls(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     monkeypatch.delenv("MISTRAL_API_KEY", raising=False)
@@ -1109,10 +1297,17 @@ async def test_ui_preserves_custom_browser_auth_urls_when_api_key_is_missing(
     assert app.supports_browser_sign_in is True
 
     async with app.run_test() as pilot:
-        await _show_browser_sign_in(pilot)
+        await _show_sign_in_target(pilot)
+        await pilot.press("enter")
+        await pilot.press("enter")
+        await _wait_for(
+            lambda: isinstance(pilot.app.screen, BrowserSignInScreen), pilot
+        )
         await _wait_for(lambda: bool(captured_base_urls), pilot)
 
-    assert captured_base_urls == [("http://127.0.0.1:8787", "http://127.0.0.1:8787")]
+    assert captured_base_urls == [
+        ("https://console.mistral.ai", "https://console.mistral.ai/api")
+    ]
 
 
 @pytest.mark.asyncio
@@ -1154,6 +1349,23 @@ async def test_ui_falls_back_to_default_onboarding_context_with_invalid_active_m
 
 
 @pytest.mark.asyncio
+async def test_ui_preserves_auto_theme_when_selection_is_unchanged() -> None:
+    app = OnboardingApp()
+
+    async with app.run_test() as pilot:
+        await _pass_welcome_screen(pilot)
+
+        theme_screen = app.screen
+        assert isinstance(theme_screen, ThemeSelectionScreen)
+        assert theme_screen.selected_theme == AUTO_THEME
+
+        await pilot.press("enter")
+        await _wait_for(lambda: isinstance(app.screen, AuthMethodScreen), pilot)
+
+    assert app.selected_theme == AUTO_THEME
+
+
+@pytest.mark.asyncio
 async def test_ui_can_pick_a_theme_and_saves_selection() -> None:
     app = OnboardingApp()
 
@@ -1168,7 +1380,7 @@ async def test_ui_can_pick_a_theme_and_saves_selection() -> None:
 
         target_theme = "gruvbox"
         assert target_theme in THEMES
-        start_index = THEMES.index(app.theme)
+        start_index = theme_screen._theme_index
         target_index = THEMES.index(target_theme)
         steps_down = (target_index - start_index) % len(THEMES)
         await pilot.press(*["down"] * steps_down)
@@ -1177,11 +1389,9 @@ async def test_ui_can_pick_a_theme_and_saves_selection() -> None:
         await pilot.press("enter")
         await _wait_for(lambda: isinstance(app.screen, AuthMethodScreen), pilot)
 
-    config_path = VIBE_HOME.path / "config.toml"
-    assert config_path.is_file()
-    config_contents = config_path.read_text(encoding="utf-8")
-    config_dict = tomllib.loads(config_contents)
-    assert config_dict.get("theme") == target_theme
+    # Persistence is the caller's job; the app carries the selection out via its
+    # live theme for the caller to persist through its orchestrator.
+    assert app.theme == target_theme
 
 
 def test_api_key_screen_falls_back_to_mistral_for_provider_without_env_key() -> None:
@@ -1257,7 +1467,7 @@ def test_persist_api_key_returns_env_var_error_for_empty_env_var_name() -> None:
     assert result == "env_var_error:<empty>"
 
 
-def test_persist_api_key_sends_onboarding_telemetry_with_entrypoint_metadata(
+def test_persist_api_key_sends_onboarding_telemetry_with_launch_context(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     recorded_metadata: dict[str, str] = {}
@@ -1277,11 +1487,12 @@ def test_persist_api_key_sends_onboarding_telemetry_with_entrypoint_metadata(
     result = persist_api_key(
         provider,
         "secret",
-        entrypoint_metadata=build_entrypoint_metadata(
+        launch_context=build_launch_context(
             agent_entrypoint="cli",
             agent_version="1.0.0",
             client_name="vibe_cli",
             client_version="1.0.0",
+            terminal_emulator=TerminalEmulator.APPLE_TERMINAL,
         ),
     )
 
@@ -1290,4 +1501,5 @@ def test_persist_api_key_sends_onboarding_telemetry_with_entrypoint_metadata(
     assert recorded_metadata["agent_version"] == "1.0.0"
     assert recorded_metadata["client_name"] == "vibe_cli"
     assert recorded_metadata["client_version"] == "1.0.0"
+    assert recorded_metadata["terminal_emulator"] == "apple_terminal"
     assert "session_id" not in recorded_metadata

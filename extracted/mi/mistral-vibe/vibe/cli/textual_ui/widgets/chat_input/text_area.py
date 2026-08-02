@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import platform
+import re
 import time
 from typing import Any, ClassVar, Literal
 
@@ -8,7 +9,7 @@ from textual import events
 from textual.binding import Binding
 from textual.message import Message
 from textual.widgets import TextArea
-from textual.widgets.text_area import Selection
+from textual.widgets.text_area import Location, Selection
 
 from vibe.cli.autocompletion.base import CompletionResult
 from vibe.cli.commands import CommandRegistry
@@ -30,8 +31,18 @@ from vibe.cli.voice_manager.voice_manager_port import (
 
 InputMode = Literal["!", "/", ">", "&"]
 
+_WORD = re.compile(r"\w+")
+_DOUBLE_CLICK = 2
+_TRIPLE_CLICK = 3
+
+FEEDBACK_RATING_KEYS: dict[str, str] = {"1": "good", "2": "fine", "3": "bad"}
+FEEDBACK_SNOOZE_KEY = "0"
+FEEDBACK_SNOOZE_LABEL = "snooze"
+
 
 class ChatTextArea(TextArea):
+    ALLOW_SELECT: ClassVar[bool] = False
+
     BINDINGS: ClassVar[list[Binding]] = [
         Binding(
             "shift+enter,ctrl+j",
@@ -43,6 +54,10 @@ class ChatTextArea(TextArea):
         Binding("shift+backspace", "delete_left", "Delete character left", show=False),
         Binding("shift+delete", "delete_right", "Delete character right", show=False),
         Binding("ctrl+g", "open_external_editor", "External Editor", show=False),
+        Binding("alt+left", "cursor_word_left", "Word Left", show=False, priority=True),
+        Binding(
+            "alt+right", "cursor_word_right", "Word Right", show=False, priority=True
+        ),
         # Ctrl+V triggers an explicit clipboard-image paste on platforms where
         # we support it. On other platforms the binding is not registered, so
         # Textual's default text-paste action handles the key instead and the
@@ -136,6 +151,18 @@ class ChatTextArea(TextArea):
 
     def on_click(self, event: events.Click) -> None:
         self._mark_cursor_moved_if_needed()
+        if event.chain == _DOUBLE_CLICK:
+            self._select_word_at(self.get_target_document_location(event))
+        elif event.chain == _TRIPLE_CLICK:
+            self.select_line(self.get_target_document_location(event)[0])
+
+    def _select_word_at(self, location: Location) -> None:
+        row, column = location
+        for match in _WORD.finditer(self.document[row]):
+            start, end = match.span()
+            if start <= column < end:
+                self.selection = Selection((row, start), (row, end))
+                return
 
     async def _on_paste(self, event: events.Paste) -> None:
         # Best-effort: terminals that emit bracketed paste sequences will
@@ -261,6 +288,9 @@ class ChatTextArea(TextArea):
             self.rating = rating
             super().__init__()
 
+    class SnoozeKeyPressed(Message):
+        pass
+
     class NonFeedbackKeyPressed(Message):
         pass
 
@@ -304,10 +334,15 @@ class ChatTextArea(TextArea):
         self._mark_cursor_moved_if_needed()
 
         if self.feedback_active:
-            if event.character in {"1", "2", "3"}:
+            if event.character in FEEDBACK_RATING_KEYS:
                 event.prevent_default()
                 event.stop()
                 self.post_message(self.FeedbackKeyPressed(int(event.character)))
+                return
+            if event.character == FEEDBACK_SNOOZE_KEY:
+                event.prevent_default()
+                event.stop()
+                self.post_message(self.SnoozeKeyPressed())
                 return
             if event.character is not None:
                 self.post_message(self.NonFeedbackKeyPressed())

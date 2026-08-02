@@ -31,8 +31,8 @@ from mistralai.client.models import (
     UserMessage,
 )
 from mistralai.client.utils.retries import BackoffStrategy, RetryConfig
+from mistralai.extra.observability.telemetry import configure_telemetry
 
-from vibe.core.config import resolve_api_key
 from vibe.core.llm.backend._image import to_data_uri as _to_data_uri
 from vibe.core.llm.exceptions import BackendErrorBuilder
 from vibe.core.types import (
@@ -46,11 +46,34 @@ from vibe.core.types import (
     StrToolChoice,
     ToolCall,
 )
-from vibe.core.utils import get_server_url_from_api_base
-from vibe.core.utils.http import build_ssl_context
+from vibe.utils.api_keys import resolve_api_key
+from vibe.utils.http import (
+    VibeAsyncHTTPClient,
+    build_ssl_context,
+    get_server_url_from_api_base,
+)
 
 if TYPE_CHECKING:
     from vibe.core.config import ModelConfig, ProviderConfig
+
+
+def _cached_tokens(usage: object | None) -> int:
+    # Mistral reports cache hits under usage.prompt_tokens_details.cached_tokens.
+    # The SDK keeps this nested block as an untyped extra, so both its shape
+    # (dict vs object) and its value type are unvalidated; coerce defensively
+    # and fall back to 0 on anything odd.
+    if usage is None:
+        return 0
+    details = getattr(usage, "prompt_tokens_details", None)
+    value = (
+        details.get("cached_tokens")
+        if isinstance(details, dict)
+        else getattr(details, "cached_tokens", None)
+    )
+    try:
+        return int(value or 0)
+    except (TypeError, ValueError):
+        return 0
 
 
 class ParsedContent(NamedTuple):
@@ -201,10 +224,12 @@ class MistralBackend:
         provider: ProviderConfig,
         timeout: float = 720.0,
         retry_max_elapsed_time: float = 300.0,
+        enable_otel: bool = False,
     ) -> None:
         self._client: Mistral | None = None
-        self._http_client: httpx.AsyncClient | None = None
+        self._http_client: VibeAsyncHTTPClient | None = None
         self._provider = provider
+        self._enable_otel = enable_otel
         self._mapper = MistralMapper()
         self._api_key = resolve_api_key(self._provider.api_key_env_var)
 
@@ -268,16 +293,19 @@ class MistralBackend:
         await self.__aexit__(None, None, None)
 
     def _create_mistral_client(self) -> Mistral:
-        self._http_client = httpx.AsyncClient(
+        self._http_client = VibeAsyncHTTPClient(
             verify=build_ssl_context(), follow_redirects=True
         )
-        return Mistral(
+        client = Mistral(
             api_key=self._api_key,
             server_url=self._server_url,
             timeout_ms=int(self._timeout * 1000),
             retry_config=self._retry_config,
             async_client=self._http_client,
         )
+        if self._enable_otel:
+            configure_telemetry(client, provider="global")
+        return client
 
     def _get_client(self) -> Mistral:
         if self._client is None:
@@ -340,6 +368,7 @@ class MistralBackend:
                 usage=LLMUsage(
                     prompt_tokens=response.usage.prompt_tokens or 0,
                     completion_tokens=response.usage.completion_tokens or 0,
+                    cached_tokens=_cached_tokens(response.usage),
                 ),
             )
 
@@ -348,6 +377,7 @@ class MistralBackend:
                 provider=self._provider.name,
                 endpoint=self._server_url,
                 error=e,
+                response=e.raw_response,
                 model=model.name,
                 messages=messages,
                 temperature=temperature,
@@ -405,9 +435,12 @@ class MistralBackend:
             )
             correlation_id = stream.response.headers.get("mistral-correlation-id")
             async for chunk in stream:
+                # Some models terminate the stream with a usage-only chunk that
+                # carries no choices.
+                delta = chunk.data.choices[0].delta if chunk.data.choices else None
                 parsed = (
-                    self._mapper.parse_content(chunk.data.choices[0].delta.content)
-                    if chunk.data.choices[0].delta.content
+                    self._mapper.parse_content(delta.content)
+                    if delta and delta.content
                     else ParsedContent(content="", reasoning_content=None)
                 )
                 yield LLMChunk(
@@ -415,10 +448,8 @@ class MistralBackend:
                         role=Role.assistant,
                         content=parsed.content,
                         reasoning_content=parsed.reasoning_content,
-                        tool_calls=self._mapper.parse_tool_calls(
-                            chunk.data.choices[0].delta.tool_calls
-                        )
-                        if chunk.data.choices[0].delta.tool_calls
+                        tool_calls=self._mapper.parse_tool_calls(delta.tool_calls)
+                        if delta and delta.tool_calls
                         else None,
                     ),
                     usage=LLMUsage(
@@ -428,6 +459,7 @@ class MistralBackend:
                         completion_tokens=chunk.data.usage.completion_tokens or 0
                         if chunk.data.usage
                         else 0,
+                        cached_tokens=_cached_tokens(chunk.data.usage),
                     ),
                     correlation_id=correlation_id,
                 )
@@ -437,6 +469,7 @@ class MistralBackend:
                 provider=self._provider.name,
                 endpoint=self._server_url,
                 error=e,
+                response=e.raw_response,
                 model=model.name,
                 messages=messages,
                 temperature=temperature,

@@ -144,7 +144,9 @@ Step 3 — Fill vibe/whats_new.md (reuse the same context, do NOT re-inspect git
   * Do not copy or paraphrase the full changelog."""
     try:
         result = subprocess.run(
-            ["vibe", "-p", prompt], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+            ["vibe", "-p", prompt, "--auto-approve"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
         )
         if result.returncode != 0:
             raise RuntimeError("Failed to auto-fill release notes")
@@ -206,17 +208,13 @@ Examples:
                     f"releases/download/v{new_version}",
                 ),
                 (f"-{current_version}.zip", f"-{new_version}.zip"),
+                (f"-{current_version}.tar.gz", f"-{new_version}.tar.gz"),
             ],
         )
         # Update vibe/core/__init__.py
         update_hard_values_files(
             "vibe/__init__.py",
             [(f'__version__ = "{current_version}"', f'__version__ = "{new_version}"')],
-        )
-        # Update tests/acp/test_initialize.py
-        update_hard_values_files(
-            "tests/acp/test_initialize.py",
-            [(f'version="{current_version}"', f'version="{new_version}"')],
         )
 
         print()

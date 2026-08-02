@@ -7,14 +7,14 @@ import pytest
 
 from tests.conftest import build_test_vibe_config
 from tests.skills.conftest import create_skill
-from vibe.core.config import VibeConfig
+from vibe.core.config import VibeConfigSchema
 from vibe.core.skills.builtins import BUILTIN_SKILLS
 from vibe.core.skills.manager import SkillManager
 from vibe.core.trusted_folders import trusted_folders_manager
 
 
 @pytest.fixture
-def skill_manager(vibe_config: VibeConfig) -> SkillManager:
+def skill_manager(vibe_config: VibeConfigSchema) -> SkillManager:
     return SkillManager(lambda: vibe_config)
 
 
@@ -445,7 +445,7 @@ class TestParseSkillCommand:
         assert skill_manager.parse_skill_command("/") is None
 
     def test_parses_skill_without_args(
-        self, skills_dir: Path, skill_config: VibeConfig
+        self, skills_dir: Path, skill_config: VibeConfigSchema
     ) -> None:
         create_skill(skills_dir, "my-skill", body="Do the thing.")
         manager = SkillManager(lambda: skill_config)
@@ -457,7 +457,7 @@ class TestParseSkillCommand:
         assert parsed.extra_instructions is None
 
     def test_parses_skill_with_args(
-        self, skills_dir: Path, skill_config: VibeConfig
+        self, skills_dir: Path, skill_config: VibeConfigSchema
     ) -> None:
         create_skill(skills_dir, "my-skill", body="Do the thing.")
         manager = SkillManager(lambda: skill_config)
@@ -467,13 +467,24 @@ class TestParseSkillCommand:
         assert parsed.name == "my-skill"
         assert parsed.extra_instructions == "fix the bug"
 
-    def test_case_insensitive(self, skills_dir: Path, skill_config: VibeConfig) -> None:
+    def test_case_insensitive(
+        self, skills_dir: Path, skill_config: VibeConfigSchema
+    ) -> None:
         create_skill(skills_dir, "my-skill", body="Do the thing.")
         manager = SkillManager(lambda: skill_config)
 
         parsed = manager.parse_skill_command("/MY-SKILL")
         assert parsed is not None
         assert parsed.name == "my-skill"
+
+    def test_non_user_invocable_skill_returns_none(
+        self, skills_dir: Path, skill_config: VibeConfigSchema
+    ) -> None:
+        create_skill(skills_dir, "hidden-skill", user_invocable=False)
+        manager = SkillManager(lambda: skill_config)
+
+        assert manager.get_skill("hidden-skill") is not None
+        assert manager.parse_skill_command("/hidden-skill") is None
 
 
 class TestSkillManagerConfigIssues:
@@ -509,23 +520,25 @@ class TestSkillManagerConfigIssues:
         assert "good-skill" in manager.available_skills
 
 
-class TestBuildSkillPrompt:
-    def test_without_args(self, skills_dir: Path, skill_config: VibeConfig) -> None:
+class TestParseSkillCommandExtras:
+    def test_without_args(
+        self, skills_dir: Path, skill_config: VibeConfigSchema
+    ) -> None:
         create_skill(skills_dir, "my-skill", body="Do the thing.")
         manager = SkillManager(lambda: skill_config)
 
         parsed = manager.parse_skill_command("/my-skill")
         assert parsed is not None
-        prompt = SkillManager.build_skill_prompt("/my-skill", parsed)
-        assert prompt == parsed.content
+        assert parsed.name == "my-skill"
+        assert parsed.content == "Do the thing."
+        assert parsed.extra_instructions is None
 
-    def test_with_args(self, skills_dir: Path, skill_config: VibeConfig) -> None:
+    def test_with_args(self, skills_dir: Path, skill_config: VibeConfigSchema) -> None:
         create_skill(skills_dir, "my-skill", body="Do the thing.")
         manager = SkillManager(lambda: skill_config)
 
-        text = "/my-skill fix the bug"
-        parsed = manager.parse_skill_command(text)
+        parsed = manager.parse_skill_command("/my-skill fix the bug")
         assert parsed is not None
-        prompt = SkillManager.build_skill_prompt(text, parsed)
-        assert prompt.startswith("/my-skill fix the bug")
-        assert "Do the thing." in prompt
+        assert parsed.name == "my-skill"
+        assert parsed.content == "Do the thing."
+        assert parsed.extra_instructions == "fix the bug"
