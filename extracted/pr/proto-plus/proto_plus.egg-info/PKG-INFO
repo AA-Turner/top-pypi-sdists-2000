@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: proto-plus
-Version: 1.28.2
+Version: 1.28.3
 Summary: Beautiful, Pythonic protocol buffers
 Author-email: Google LLC <googleapis-packages@google.com>
 License: Apache 2.0
@@ -23,9 +23,9 @@ Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Requires-Python: >=3.10
 Description-Content-Type: text/x-rst
 License-File: LICENSE
-Requires-Dist: protobuf<8.0.0,>=4.25.8
+Requires-Dist: protobuf<8.0.0,>=6.33.5
 Provides-Extra: testing
-Requires-Dist: google-api-core>=1.31.5; extra == "testing"
+Requires-Dist: google-api-core>=2.25.0; extra == "testing"
 Dynamic: license-file
 
 Proto Plus for Python
