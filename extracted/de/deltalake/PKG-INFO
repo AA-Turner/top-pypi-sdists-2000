@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: deltalake
-Version: 1.5.1
+Version: 1.6.3
 Classifier: License :: OSI Approved :: Apache Software License
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
@@ -10,7 +10,7 @@ Classifier: Programming Language :: Python :: 3.14
 Requires-Dist: arro3-core>=0.5.0
 Requires-Dist: deprecated>=1.2.18
 Requires-Dist: pandas ; extra == 'pandas'
-Requires-Dist: pyarrow>=16 ; extra == 'pyarrow'
+Requires-Dist: pyarrow>=21 ; extra == 'pyarrow'
 Provides-Extra: pandas
 Provides-Extra: pyarrow
 License-File: LICENSE.txt

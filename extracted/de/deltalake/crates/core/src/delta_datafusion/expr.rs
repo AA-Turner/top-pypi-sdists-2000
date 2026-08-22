@@ -38,7 +38,8 @@ use datafusion::functions_nested::planner::{FieldAccessPlanner, NestedFunctionPl
 use datafusion::logical_expr::expr::InList;
 use datafusion::logical_expr::planner::ExprPlanner;
 use datafusion::logical_expr::{
-    AggregateUDF, Between, BinaryExpr, Cast, Expr, Like, ScalarFunctionArgs, TableSource,
+    AggregateUDF, Between, BinaryExpr, Cast, Expr, HigherOrderUDF, Like, ScalarFunctionArgs,
+    TableSource,
 };
 // Needed for MakeParquetArray
 use datafusion::functions::core::planner::CoreFunctionPlanner;
@@ -80,10 +81,6 @@ impl MakeParquetArray {
 }
 
 impl ScalarUDFImpl for MakeParquetArray {
-    fn as_any(&self) -> &dyn std::any::Any {
-        self
-    }
-
     fn name(&self) -> &str {
         "make_parquet_array"
     }
@@ -244,6 +241,10 @@ impl ContextProvider for DeltaContextProvider<'_> {
         self.state.scalar_functions().get(name).cloned()
     }
 
+    fn get_higher_order_meta(&self, name: &str) -> Option<Arc<HigherOrderUDF>> {
+        self.state.higher_order_functions().get(name).cloned()
+    }
+
     fn get_aggregate_meta(&self, name: &str) -> Option<Arc<AggregateUDF>> {
         self.state.aggregate_functions().get(name).cloned()
     }
@@ -262,6 +263,14 @@ impl ContextProvider for DeltaContextProvider<'_> {
 
     fn udf_names(&self) -> Vec<String> {
         self.state.scalar_functions().keys().cloned().collect()
+    }
+
+    fn higher_order_function_names(&self) -> Vec<String> {
+        self.state
+            .higher_order_functions()
+            .keys()
+            .cloned()
+            .collect()
     }
 
     fn udaf_names(&self) -> Vec<String> {
@@ -524,7 +533,8 @@ impl Display for SqlFormat<'_> {
             Expr::IsNotUnknown(expr) => write!(f, "{} IS NOT UNKNOWN", SqlFormat { expr }),
             Expr::BinaryExpr(expr) => write!(f, "{}", BinaryExprFormat { expr }),
             Expr::ScalarFunction(func) => fmt_function(f, func.func.name(), false, &func.args),
-            Expr::Cast(Cast { expr, data_type }) => {
+            Expr::Cast(Cast { expr, field }) => {
+                let data_type = field.data_type();
                 write!(f, "arrow_cast({}, '{data_type}')", SqlFormat { expr })
             }
             Expr::Between(Between {
@@ -688,6 +698,32 @@ impl fmt::Display for ScalarValueFormat<'_> {
                 )?,
                 None => write!(f, "NULL")?,
             },
+            #[cfg(feature = "nanosecond-timestamps")]
+            ScalarValue::TimestampNanosecond(e, tz) => match e {
+                Some(e) => match tz {
+                    Some(_tz) => write!(
+                        f,
+                        "arrow_cast('{}', 'Timestamp(Nanosecond, Some(\"UTC\"))')",
+                        DateTime::from_timestamp(
+                            e.div_euclid(1_000_000_000),
+                            e.rem_euclid(1_000_000_000) as u32
+                        )
+                        .ok_or(Error)?
+                        .format("%Y-%m-%dT%H:%M:%S%.9f")
+                    )?,
+                    None => write!(
+                        f,
+                        "arrow_cast('{}', 'Timestamp(Nanosecond, None)')",
+                        DateTime::from_timestamp(
+                            e.div_euclid(1_000_000_000),
+                            e.rem_euclid(1_000_000_000) as u32
+                        )
+                        .ok_or(Error)?
+                        .format("%Y-%m-%dT%H:%M:%S%.9f")
+                    )?,
+                },
+                None => write!(f, "NULL")?,
+            },
             ScalarValue::TimestampMicrosecond(e, tz) => match e {
                 Some(e) => match tz {
                     Some(_tz) => write!(
@@ -819,6 +855,18 @@ mod test {
             StructField::new(
                 "_date".to_string(),
                 DataType::Primitive(PrimitiveType::Date),
+                true,
+            ),
+            #[cfg(feature = "nanosecond-timestamps")]
+            StructField::new(
+                "_timestamp_nanos".to_string(),
+                DataType::Primitive(PrimitiveType::TimestampNanos),
+                true,
+            ),
+            #[cfg(feature = "nanosecond-timestamps")]
+            StructField::new(
+                "_timestamp_nanos_ntz".to_string(),
+                DataType::Primitive(PrimitiveType::TimestampNanosNtz),
                 true,
             ),
             StructField::new(
@@ -1043,10 +1091,7 @@ mod test {
         // String expression that we output must be parsable for conflict resolution.
         let tests = vec![
             ParseTest {
-                expr: Expr::Cast(Cast {
-                    expr: Box::new(lit(1_i64)),
-                    data_type: ArrowDataType::Int32
-                }),
+                expr: Expr::Cast(Cast::new(Box::new(lit(1_i64)), ArrowDataType::Int32)),
                 expected: "arrow_cast(1, 'Int32')".to_string(),
                 override_expected_expr: Some(
                     datafusion::logical_expr::Expr::ScalarFunction(
@@ -1237,28 +1282,62 @@ mod test {
                     )
                 )),
             },
+            #[cfg(feature = "nanosecond-timestamps")]
+            ParseTest {
+                expr: col("_timestamp_nanos").gt(lit(ScalarValue::TimestampNanosecond(
+                    Some(1262304000000000123),
+                    Some("UTC".into())
+                ))),
+                expected: "_timestamp_nanos > arrow_cast('2010-01-01T00:00:00.000000123', 'Timestamp(Nanosecond, Some(\"UTC\"))')".to_string(),
+                override_expected_expr: Some(col("_timestamp_nanos").gt(
+                    datafusion::logical_expr::Expr::ScalarFunction(
+                        ScalarFunction {
+                            func: arrow_cast(),
+                            args: vec![
+                                lit(ScalarValue::Utf8(Some("2010-01-01T00:00:00.000000123".into()))),
+                                lit(ScalarValue::Utf8(Some("Timestamp(Nanosecond, Some(\"UTC\"))".into())))
+                            ]
+                        }
+                    )
+                )),
+            },
+            #[cfg(feature = "nanosecond-timestamps")]
+            ParseTest {
+                expr: col("_timestamp_nanos_ntz").gt(lit(ScalarValue::TimestampNanosecond(
+                    Some(1262304000000000123),
+                    None
+                ))),
+                expected: "_timestamp_nanos_ntz > arrow_cast('2010-01-01T00:00:00.000000123', 'Timestamp(Nanosecond, None)')".to_string(),
+                override_expected_expr: Some(col("_timestamp_nanos_ntz").gt(
+                    datafusion::logical_expr::Expr::ScalarFunction(
+                        ScalarFunction {
+                            func: arrow_cast(),
+                            args: vec![
+                                lit(ScalarValue::Utf8(Some("2010-01-01T00:00:00.000000123".into()))),
+                                lit(ScalarValue::Utf8(Some("Timestamp(Nanosecond, None)".into())))
+                            ]
+                        }
+                    )
+                )),
+            },
             ParseTest {
                 expr: col("_date").eq(lit(ScalarValue::Date32(Some(18262)))),
                 expected: "_date = '2020-01-01'::date".to_string(),
                 override_expected_expr: Some(col("_date").eq(
-                    Expr::Cast(
-                        Cast {
-                            expr: Box::from(lit("2020-01-01")),
-                            data_type: arrow_schema::DataType::Date32
-                        }
-                    )
+                    Expr::Cast(Cast::new(
+                        Box::from(lit("2020-01-01")),
+                        arrow_schema::DataType::Date32
+                    ))
                 )),
             },
             ParseTest {
                 expr: col("_decimal").eq(lit(ScalarValue::Decimal128(Some(1),2,2))),
                 expected: "_decimal = '1'::decimal(2, 2)".to_string(),
                 override_expected_expr: Some(col("_decimal").eq(
-                    Expr::Cast(
-                        Cast {
-                            expr: Box::from(lit("1")),
-                            data_type: arrow_schema::DataType::Decimal128(2, 2)
-                        }
-                    )
+                    Expr::Cast(Cast::new(
+                        Box::from(lit("1")),
+                        arrow_schema::DataType::Decimal128(2, 2)
+                    ))
                 )),
             },
         ];
