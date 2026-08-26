@@ -37,10 +37,12 @@ class ProductSetArticlesAndPublications(
         param_types = {
             'after': 'string',
             'before': 'string',
+            'display_format': 'display_format_enum',
             'limit': 'int',
             'summary': 'bool',
         }
         enums = {
+            'display_format_enum': ProductSetArticlesAndPublicationsGet.DisplayFormat.__dict__.values(),
         }
         request = FacebookRequest(
             node_id=self['id'],

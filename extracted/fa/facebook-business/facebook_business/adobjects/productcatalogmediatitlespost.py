@@ -30,7 +30,7 @@ class ProductCatalogMediaTitlesPost(
         id = 'id'
 
     _field_types = {
-        'id': 'string',
+        'id': 'int',
     }
     @classmethod
     def _get_field_enum_info(cls):

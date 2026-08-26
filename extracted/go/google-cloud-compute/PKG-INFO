@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: google-cloud-compute
-Version: 1.50.0
+Version: 1.51.0
 Summary: Google Cloud Compute API client library
 Home-page: https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-compute
 Author: Google LLC
@@ -21,7 +21,7 @@ Classifier: Operating System :: OS Independent
 Classifier: Topic :: Internet
 Requires-Python: >=3.10
 License-File: LICENSE
-Requires-Dist: google-api-core[grpc]<3.0.0,>=2.24.2
+Requires-Dist: google-api-core[grpc]<3.0.0,>=2.25.0
 Requires-Dist: google-auth!=2.24.0,!=2.25.0,<3.0.0,>=2.14.1
 Requires-Dist: grpcio<2.0.0,>=1.59.0
 Requires-Dist: grpcio<2.0.0,>=1.75.1; python_version >= "3.14"
@@ -39,12 +39,12 @@ Dynamic: requires-dist
 Dynamic: requires-python
 Dynamic: summary
 
-Python Client for Google Compute Engine
-=======================================
+Python Client for Compute Engine
+================================
 
 |stable| |pypi| |versions|
 
-`Google Compute Engine`_: Compute Engine is an infrastructure as a service (IaaS) product that offers self-managed virtual machine (VM) instances and bare metal instances.
+`Compute Engine`_: Compute Engine is an infrastructure as a service (IaaS) product that offers self-managed virtual machine (VM) instances and bare metal instances.
 
 - `Client Library Documentation`_
 - `Product Documentation`_
@@ -55,7 +55,7 @@ Python Client for Google Compute Engine
    :target: https://pypi.org/project/google-cloud-compute/
 .. |versions| image:: https://img.shields.io/pypi/pyversions/google-cloud-compute.svg
    :target: https://pypi.org/project/google-cloud-compute/
-.. _Google Compute Engine: https://cloud.google.com/compute/
+.. _Compute Engine: https://cloud.google.com/compute/
 .. _Client Library Documentation: https://cloud.google.com/python/docs/reference/compute/latest/summary_overview
 .. _Product Documentation:  https://cloud.google.com/compute/
 
@@ -66,12 +66,12 @@ In order to use this library, you first need to go through the following steps:
 
 1. `Select or create a Cloud Platform project.`_
 2. `Enable billing for your project.`_
-3. `Enable the Google Compute Engine.`_
+3. `Enable the Compute Engine.`_
 4. `Set up Authentication.`_
 
 .. _Select or create a Cloud Platform project.: https://console.cloud.google.com/project
 .. _Enable billing for your project.: https://cloud.google.com/billing/docs/how-to/modify-project#enable_billing_for_a_project
-.. _Enable the Google Compute Engine.:  https://cloud.google.com/compute/
+.. _Enable the Compute Engine.:  https://cloud.google.com/compute/
 .. _Set up Authentication.: https://googleapis.dev/python/google-api-core/latest/auth.html
 
 Installation
@@ -148,14 +148,14 @@ Windows
 Next Steps
 ~~~~~~~~~~
 
--  Read the `Client Library Documentation`_ for Google Compute Engine
+-  Read the `Client Library Documentation`_ for Compute Engine
    to see other available methods on the client.
--  Read the `Google Compute Engine Product documentation`_ to learn
+-  Read the `Compute Engine Product documentation`_ to learn
    more about the product and see How-to Guides.
 -  View this `README`_ to see the full list of Cloud
    APIs that we cover.
 
-.. _Google Compute Engine Product documentation:  https://cloud.google.com/compute/
+.. _Compute Engine Product documentation:  https://cloud.google.com/compute/
 .. _README: https://github.com/googleapis/google-cloud-python/blob/main/README.rst
 
 Logging

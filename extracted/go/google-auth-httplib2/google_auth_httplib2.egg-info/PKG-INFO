@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: google-auth-httplib2
-Version: 0.4.1
+Version: 0.4.2
 Summary: Google Authentication Library: httplib2 transport
 Home-page: https://github.com/googleapis/google-cloud-python/packages/google-auth-httplib2
 Author: Google Cloud Platform

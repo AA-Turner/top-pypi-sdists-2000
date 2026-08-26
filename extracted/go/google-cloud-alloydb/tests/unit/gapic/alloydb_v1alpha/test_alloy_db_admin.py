@@ -961,7 +961,14 @@ def test_alloy_db_admin_client_get_mtls_endpoint_and_cert_source(client_class):
                 config_filename = "mock_certificate_config.json"
                 config_file_content = json.dumps(config_data)
                 m = mock.mock_open(read_data=config_file_content)
-                with mock.patch("builtins.open", m):
+                with (
+                    mock.patch("builtins.open", m),
+                    mock.patch(
+                        "os.path.exists",
+                        side_effect=lambda path: os.path.basename(path)
+                        == config_filename,
+                    ),
+                ):
                     with mock.patch.dict(
                         os.environ, {"GOOGLE_API_CERTIFICATE_CONFIG": config_filename}
                     ):
@@ -1008,7 +1015,14 @@ def test_alloy_db_admin_client_get_mtls_endpoint_and_cert_source(client_class):
                 config_filename = "mock_certificate_config.json"
                 config_file_content = json.dumps(config_data)
                 m = mock.mock_open(read_data=config_file_content)
-                with mock.patch("builtins.open", m):
+                with (
+                    mock.patch("builtins.open", m),
+                    mock.patch(
+                        "os.path.exists",
+                        side_effect=lambda path: os.path.basename(path)
+                        == config_filename,
+                    ),
+                ):
                     with mock.patch.dict(
                         os.environ, {"GOOGLE_API_CERTIFICATE_CONFIG": config_filename}
                     ):
@@ -1707,6 +1721,9 @@ def test_list_clusters_pager(transport_name: str = "grpc"):
         assert pager._retry == retry
         assert pager._timeout == timeout
 
+        assert pager.next_page_token == "abc"
+        assert str(pager).startswith(f"{pager.__class__.__name__}<")
+
         results = list(pager)
         assert len(results) == 6
         assert all(isinstance(i, resources.Cluster) for i in results)
@@ -1795,6 +1812,8 @@ async def test_list_clusters_async_pager():
             request={},
         )
         assert async_pager.next_page_token == "abc"
+        assert str(async_pager).startswith(f"{async_pager.__class__.__name__}<")
+
         responses = []
         async for response in async_pager:  # pragma: no branch
             responses.append(response)
@@ -6044,6 +6063,9 @@ def test_list_instances_pager(transport_name: str = "grpc"):
         assert pager._retry == retry
         assert pager._timeout == timeout
 
+        assert pager.next_page_token == "abc"
+        assert str(pager).startswith(f"{pager.__class__.__name__}<")
+
         results = list(pager)
         assert len(results) == 6
         assert all(isinstance(i, resources.Instance) for i in results)
@@ -6132,6 +6154,8 @@ async def test_list_instances_async_pager():
             request={},
         )
         assert async_pager.next_page_token == "abc"
+        assert str(async_pager).startswith(f"{async_pager.__class__.__name__}<")
+
         responses = []
         async for response in async_pager:  # pragma: no branch
             responses.append(response)
@@ -9988,6 +10012,9 @@ def test_list_backups_pager(transport_name: str = "grpc"):
         assert pager._retry == retry
         assert pager._timeout == timeout
 
+        assert pager.next_page_token == "abc"
+        assert str(pager).startswith(f"{pager.__class__.__name__}<")
+
         results = list(pager)
         assert len(results) == 6
         assert all(isinstance(i, resources.Backup) for i in results)
@@ -10076,6 +10103,8 @@ async def test_list_backups_async_pager():
             request={},
         )
         assert async_pager.next_page_token == "abc"
+        assert str(async_pager).startswith(f"{async_pager.__class__.__name__}<")
+
         responses = []
         async for response in async_pager:  # pragma: no branch
             responses.append(response)
@@ -11921,6 +11950,9 @@ def test_list_supported_database_flags_pager(transport_name: str = "grpc"):
         assert pager._retry == retry
         assert pager._timeout == timeout
 
+        assert pager.next_page_token == "abc"
+        assert str(pager).startswith(f"{pager.__class__.__name__}<")
+
         results = list(pager)
         assert len(results) == 6
         assert all(isinstance(i, resources.SupportedDatabaseFlag) for i in results)
@@ -12013,6 +12045,8 @@ async def test_list_supported_database_flags_async_pager():
             request={},
         )
         assert async_pager.next_page_token == "abc"
+        assert str(async_pager).startswith(f"{async_pager.__class__.__name__}<")
+
         responses = []
         async for response in async_pager:  # pragma: no branch
             responses.append(response)
@@ -12458,6 +12492,7 @@ def test_get_connection_info(request_type, transport: str = "grpc"):
             pem_certificate_chain=["pem_certificate_chain_value"],
             instance_uid="instance_uid_value",
             psc_dns_name="psc_dns_name_value",
+            psc_auto_dns_name="psc_auto_dns_name_value",
         )
         response = client.get_connection_info(request)
 
@@ -12475,6 +12510,7 @@ def test_get_connection_info(request_type, transport: str = "grpc"):
     assert response.pem_certificate_chain == ["pem_certificate_chain_value"]
     assert response.instance_uid == "instance_uid_value"
     assert response.psc_dns_name == "psc_dns_name_value"
+    assert response.psc_auto_dns_name == "psc_auto_dns_name_value"
 
 
 def test_get_connection_info_non_empty_request_with_auto_populated_field():
@@ -12622,6 +12658,7 @@ async def test_get_connection_info_async(request_type, transport: str = "grpc_as
                 pem_certificate_chain=["pem_certificate_chain_value"],
                 instance_uid="instance_uid_value",
                 psc_dns_name="psc_dns_name_value",
+                psc_auto_dns_name="psc_auto_dns_name_value",
             )
         )
         response = await client.get_connection_info(request)
@@ -12640,6 +12677,7 @@ async def test_get_connection_info_async(request_type, transport: str = "grpc_as
     assert response.pem_certificate_chain == ["pem_certificate_chain_value"]
     assert response.instance_uid == "instance_uid_value"
     assert response.psc_dns_name == "psc_dns_name_value"
+    assert response.psc_auto_dns_name == "psc_auto_dns_name_value"
 
 
 def test_get_connection_info_field_headers():
@@ -13174,6 +13212,9 @@ def test_list_users_pager(transport_name: str = "grpc"):
         assert pager._retry == retry
         assert pager._timeout == timeout
 
+        assert pager.next_page_token == "abc"
+        assert str(pager).startswith(f"{pager.__class__.__name__}<")
+
         results = list(pager)
         assert len(results) == 6
         assert all(isinstance(i, resources.User) for i in results)
@@ -13262,6 +13303,8 @@ async def test_list_users_async_pager():
             request={},
         )
         assert async_pager.next_page_token == "abc"
+        assert str(async_pager).startswith(f"{async_pager.__class__.__name__}<")
+
         responses = []
         async for response in async_pager:  # pragma: no branch
             responses.append(response)
@@ -15046,6 +15089,9 @@ def test_list_databases_pager(transport_name: str = "grpc"):
         assert pager._retry == retry
         assert pager._timeout == timeout
 
+        assert pager.next_page_token == "abc"
+        assert str(pager).startswith(f"{pager.__class__.__name__}<")
+
         results = list(pager)
         assert len(results) == 6
         assert all(isinstance(i, resources.Database) for i in results)
@@ -15134,6 +15180,8 @@ async def test_list_databases_async_pager():
             request={},
         )
         assert async_pager.next_page_token == "abc"
+        assert str(async_pager).startswith(f"{async_pager.__class__.__name__}<")
+
         responses = []
         async for response in async_pager:  # pragma: no branch
             responses.append(response)
@@ -15799,6 +15847,9 @@ def test_list_clusters_rest_pager(transport: str = "rest"):
         sample_request = {"parent": "projects/sample1/locations/sample2"}
 
         pager = client.list_clusters(request=sample_request)
+
+        assert pager.next_page_token == "abc"
+        assert str(pager).startswith(f"{pager.__class__.__name__}<")
 
         results = list(pager)
         assert len(results) == 6
@@ -18152,6 +18203,9 @@ def test_list_instances_rest_pager(transport: str = "rest"):
 
         pager = client.list_instances(request=sample_request)
 
+        assert pager.next_page_token == "abc"
+        assert str(pager).startswith(f"{pager.__class__.__name__}<")
+
         results = list(pager)
         assert len(results) == 6
         assert all(isinstance(i, resources.Instance) for i in results)
@@ -20324,6 +20378,9 @@ def test_list_backups_rest_pager(transport: str = "rest"):
 
         pager = client.list_backups(request=sample_request)
 
+        assert pager.next_page_token == "abc"
+        assert str(pager).startswith(f"{pager.__class__.__name__}<")
+
         results = list(pager)
         assert len(results) == 6
         assert all(isinstance(i, resources.Backup) for i in results)
@@ -21367,6 +21424,9 @@ def test_list_supported_database_flags_rest_pager(transport: str = "rest"):
 
         pager = client.list_supported_database_flags(request=sample_request)
 
+        assert pager.next_page_token == "abc"
+        assert str(pager).startswith(f"{pager.__class__.__name__}<")
+
         results = list(pager)
         assert len(results) == 6
         assert all(isinstance(i, resources.SupportedDatabaseFlag) for i in results)
@@ -21998,6 +22058,9 @@ def test_list_users_rest_pager(transport: str = "rest"):
         }
 
         pager = client.list_users(request=sample_request)
+
+        assert pager.next_page_token == "abc"
+        assert str(pager).startswith(f"{pager.__class__.__name__}<")
 
         results = list(pager)
         assert len(results) == 6
@@ -23038,6 +23101,9 @@ def test_list_databases_rest_pager(transport: str = "rest"):
         }
 
         pager = client.list_databases(request=sample_request)
+
+        assert pager.next_page_token == "abc"
+        assert str(pager).startswith(f"{pager.__class__.__name__}<")
 
         results = list(pager)
         assert len(results) == 6
@@ -24969,6 +25035,7 @@ async def test_get_connection_info_empty_call_grpc_asyncio():
                 pem_certificate_chain=["pem_certificate_chain_value"],
                 instance_uid="instance_uid_value",
                 psc_dns_name="psc_dns_name_value",
+                psc_auto_dns_name="psc_auto_dns_name_value",
             )
         )
         await client.get_connection_info(request=None)
@@ -27591,6 +27658,17 @@ def test_create_instance_rest_call_success(request_type):
                     "consumer_network_status": "consumer_network_status_value",
                 }
             ],
+            "psc_auto_dns_state": 1,
+            "psc_auto_connection_policy_state": 1,
+        },
+        "psc_instance_info": {
+            "effective_psc_auto_dns_enabled": True,
+            "psc_auto_dns_names": [
+                "psc_auto_dns_names_value1",
+                "psc_auto_dns_names_value2",
+            ],
+            "effective_psc_auto_connection_policy": True,
+            "service_connection_policy": "service_connection_policy_value",
         },
         "network_config": {
             "authorized_external_networks": [{"cidr_range": "cidr_range_value"}],
@@ -27869,6 +27947,17 @@ def test_create_secondary_instance_rest_call_success(request_type):
                     "consumer_network_status": "consumer_network_status_value",
                 }
             ],
+            "psc_auto_dns_state": 1,
+            "psc_auto_connection_policy_state": 1,
+        },
+        "psc_instance_info": {
+            "effective_psc_auto_dns_enabled": True,
+            "psc_auto_dns_names": [
+                "psc_auto_dns_names_value1",
+                "psc_auto_dns_names_value2",
+            ],
+            "effective_psc_auto_connection_policy": True,
+            "service_connection_policy": "service_connection_policy_value",
         },
         "network_config": {
             "authorized_external_networks": [{"cidr_range": "cidr_range_value"}],
@@ -28160,6 +28249,17 @@ def test_batch_create_instances_rest_call_success(request_type):
                                 "consumer_network_status": "consumer_network_status_value",
                             }
                         ],
+                        "psc_auto_dns_state": 1,
+                        "psc_auto_connection_policy_state": 1,
+                    },
+                    "psc_instance_info": {
+                        "effective_psc_auto_dns_enabled": True,
+                        "psc_auto_dns_names": [
+                            "psc_auto_dns_names_value1",
+                            "psc_auto_dns_names_value2",
+                        ],
+                        "effective_psc_auto_connection_policy": True,
+                        "service_connection_policy": "service_connection_policy_value",
                     },
                     "network_config": {
                         "authorized_external_networks": [
@@ -28458,6 +28558,17 @@ def test_update_instance_rest_call_success(request_type):
                     "consumer_network_status": "consumer_network_status_value",
                 }
             ],
+            "psc_auto_dns_state": 1,
+            "psc_auto_connection_policy_state": 1,
+        },
+        "psc_instance_info": {
+            "effective_psc_auto_dns_enabled": True,
+            "psc_auto_dns_names": [
+                "psc_auto_dns_names_value1",
+                "psc_auto_dns_names_value2",
+            ],
+            "effective_psc_auto_connection_policy": True,
+            "service_connection_policy": "service_connection_policy_value",
         },
         "network_config": {
             "authorized_external_networks": [{"cidr_range": "cidr_range_value"}],
@@ -30433,6 +30544,7 @@ def test_get_connection_info_rest_call_success(request_type):
             pem_certificate_chain=["pem_certificate_chain_value"],
             instance_uid="instance_uid_value",
             psc_dns_name="psc_dns_name_value",
+            psc_auto_dns_name="psc_auto_dns_name_value",
         )
 
         # Wrap the value into a proper Response obj
@@ -30455,6 +30567,7 @@ def test_get_connection_info_rest_call_success(request_type):
     assert response.pem_certificate_chain == ["pem_certificate_chain_value"]
     assert response.instance_uid == "instance_uid_value"
     assert response.psc_dns_name == "psc_dns_name_value"
+    assert response.psc_auto_dns_name == "psc_auto_dns_name_value"
 
 
 @pytest.mark.parametrize("null_interceptor", [True, False])

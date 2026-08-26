@@ -37,15 +37,17 @@ class ProductFeedArticlesAndPublications(
         param_types = {
             'after': 'string',
             'before': 'string',
+            'display_format': 'display_format_enum',
             'limit': 'int',
             'summary': 'bool',
         }
         enums = {
+            'display_format_enum': ProductFeedArticlesAndPublicationsGet.DisplayFormat.__dict__.values(),
         }
         request = FacebookRequest(
             node_id=self['id'],
             method='GET',
-            endpoint='/publications',
+            endpoint='/articles_and_publications',
             api=self._api,
             param_checker=TypeChecker(param_types, enums),
             target_class=ProductFeedArticlesAndPublicationsGet,

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: google-cloud-audit-log
-Version: 0.6.1
+Version: 0.6.2
 Summary: Google Cloud Audit Protos
 Home-page: https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-audit-log
 Author: Google LLC

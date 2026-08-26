@@ -28,6 +28,11 @@ class ProductSetArticlesAndPublicationsGet(
         paging = 'paging'
         summary = 'summary'
 
+    class DisplayFormat:
+        carousel_ad = 'CAROUSEL_AD'
+        shops_pdp = 'SHOPS_PDP'
+        single_ad = 'SINGLE_AD'
+
     _field_types = {
         'data': 'list<object>',
         'paging': 'object',
@@ -36,6 +41,7 @@ class ProductSetArticlesAndPublicationsGet(
     @classmethod
     def _get_field_enum_info(cls):
         field_enum_info = {}
+        field_enum_info['DisplayFormat'] = ProductSetArticlesAndPublicationsGet.DisplayFormat.__dict__.values()
         return field_enum_info
 
 
