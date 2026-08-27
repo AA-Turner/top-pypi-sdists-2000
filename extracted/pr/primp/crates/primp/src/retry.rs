@@ -1,49 +1,21 @@
-//! Retry requests
+//! Retry requests by resending them when a response is considered retryable.
 //!
-//! A `Client` has the ability to retry requests, by sending additional copies
-//! to the server if a response is considered retryable.
-//!
-//! The [`Builder`] makes it easier to configure what requests to retry, along
-//! with including best practices by default, such as a retry budget.
-//!
-//! # Defaults
-//!
-//! The default retry behavior of a `Client` is to only retry requests where an
-//! error or low-level protocol NACK is encountered that is known to be safe to
-//! retry. Note however that providing a specific retry policy will override
-//! the default, and you will need to explicitly include that behavior.
-//!
-//! All policies default to including a retry budget that permits 20% extra
-//! requests to be sent.
-//!
-//! # Scoped
-//!
-//! A client's retry policy is scoped. That means that the policy doesn't
-//! apply to all requests, but only those within a user-defined scope.
-//!
-//! Since all policies include a budget by default, it doesn't make sense to
-//! apply it on _all_ requests. Rather, the retry history applied by a budget
-//! should likely only be applied to the same host.
-//!
-//! # Classifiers
-//!
-//! A retry policy needs to be configured with a classifier that determines
-//! if a request should be retried. Knowledge of the destination server's
-//! behavior is required to make a safe classifier. **Requests should not be
-//! retried** if the server cannot safely handle the same request twice, or if
-//! it causes side effects.
-//!
-//! Some common properties to check include if the request method is
-//! idempotent, or if the response status code indicates a transient error.
+//! The default policy only retries errors / low-level protocol NACKs known to
+//! be safe to retry (and has no budget). Built-in scoped policies (e.g.
+//! `for_host`) add a retry budget (default 20% extra requests) keyed to the
+//! scope, so e.g. retries for one host are capped by that host's own traffic.
+//! A retry classifier decides what to retry; requests should not be retried if
+//! the server cannot safely handle them twice.
 
 use std::sync::Arc;
 use std::time::Duration;
 
 use tower::retry::budget::{Budget as _, TpsBudget as Budget};
 
-/// Builder to configure retries
-///
-/// Construct with [`for_host()`].
+#[cfg(docsrs)]
+pub use classify::ReqRep;
+
+/// Builder to configure retries. Construct with [`for_host()`].
 #[derive(Debug)]
 pub struct Builder {
     //backoff: Backoff,
@@ -53,8 +25,8 @@ pub struct Builder {
     scope: scope::Scoped,
 }
 
-/// The internal type that we convert the builder into, that implements
-/// tower::retry::Policy privately.
+/// The internal type the builder converts into, which privately implements
+/// tower::retry::Policy.
 #[derive(Clone, Debug)]
 pub(crate) struct Policy {
     budget: Option<Arc<Budget>>,
@@ -67,10 +39,8 @@ pub(crate) struct Policy {
 //#[derive(Debug)]
 //struct Backoff;
 
-/// Create a retry builder with a request scope.
-///
-/// To provide a scope that isn't a closure, use the more general
-/// [`Builder::scoped()`].
+/// Create a retry builder scoped to a specific host. For a non-closure scope,
+/// use [`Builder::scoped()`].
 pub fn for_host<S>(host: S) -> Builder
 where
     S: for<'a> PartialEq<&'a str> + Send + Sync + 'static,
@@ -78,10 +48,8 @@ where
     scoped(move |req| host == req.uri().host().unwrap_or(""))
 }
 
-/// Create a retry policy that will never retry any request.
-///
-/// This is useful for disabling the `Client`s default behavior of retrying
-/// protocol nacks.
+/// Create a retry policy that never retries. Useful to disable the `Client`'s
+/// default of retrying protocol nacks.
 pub fn never() -> Builder {
     scoped(|_| false).no_budget()
 }
@@ -96,9 +64,7 @@ where
 // ===== impl Builder =====
 
 impl Builder {
-    /// Create a scoped retry policy.
-    ///
-    /// For a more convenient constructor, see [`for_host()`].
+    /// Create a scoped retry policy. See [`for_host()`] for a convenience ctor.
     pub fn scoped(scope: impl scope::Scope) -> Self {
         Self {
             budget: Some(0.2),
@@ -108,33 +74,21 @@ impl Builder {
         }
     }
 
-    /// Set no retry budget.
-    ///
-    /// Sets that no budget will be enforced. This could also be considered
-    /// to be an infinite budget.
-    ///
-    /// This is NOT recommended. Disabling the budget can make your system more
-    /// susceptible to retry storms.
+    /// Disable the retry budget (treated as infinite). NOT recommended: this
+    /// makes the system more susceptible to retry storms.
     pub fn no_budget(mut self) -> Self {
         self.budget = None;
         self
     }
 
-    /// Sets the max extra load the budget will allow.
+    /// Set the max extra load (as a fraction of request rate) the budget allows.
     ///
-    /// Think of the amount of requests your client generates, and how much
-    /// load that puts on the server. This option configures as a percentage
-    /// how much extra load is allowed via retries.
-    ///
-    /// For example, if you send 1,000 requests per second, setting a maximum
-    /// extra load value of `0.3` would allow 300 more requests per second
-    /// in retries. A value of `2.5` would allow 2,500 more requests.
+    /// For example, 1000 req/s with `0.3` allows 300 more req/s in retries;
+    /// `2.5` allows 2,500 more.
     ///
     /// # Panics
     ///
-    /// The `extra_percent` value must be within reasonable values for a
-    /// percentage. This method will panic if it is less than `0.0`, or greater
-    /// than `1000.0`.
+    /// `extra_percent` must be within `[0.0, 1000.0]`.
     pub fn max_extra_load(mut self, extra_percent: f32) -> Self {
         assert!(extra_percent >= 0.0);
         assert!(extra_percent <= 1000.0);
@@ -144,23 +98,15 @@ impl Builder {
 
     // pub fn max_replay_body
 
-    /// Set the max retries allowed per request.
-    ///
-    /// For each logical (initial) request, only retry up to `max` times.
-    ///
-    /// This value is used in combination with a token budget that is applied
-    /// to all requests. Even if the budget would allow more requests, this
-    /// limit will prevent. Likewise, the budget may prevent retrying up to
-    /// `max` times. This setting prevents a single request from consuming
-    /// the entire budget.
-    ///
-    /// Default is currently 2 retries.
+    /// Set the max retries allowed per request (on top of the original).
+    /// Combined with the token budget, which may independently cap retries.
+    /// Default is 2.
     pub fn max_retries_per_request(mut self, max: u32) -> Self {
         self.max_retries_per_request = max;
         self
     }
 
-    /// Provide a classifier to determine if a request should be retried.
+    /// Provide a classifier (closure) deciding if a request should be retried.
     ///
     /// # Example
     ///
@@ -229,6 +175,14 @@ impl<B> tower::retry::Policy<Req, http::Response<B>, crate::Error> for Policy {
         match self.classifier.classify(req, result) {
             classify::Action::Success => {
                 log::trace!("shouldn't retry!");
+                // Out-of-scope requests never withdraw (see the `Retryable`
+                // branch), so they must not deposit either: a scoped policy
+                // shares one `Arc<Budget>` across all hosts/protocols, and
+                // unrelated traffic must neither drain nor fill the pool
+                // available to in-scope retries.
+                if !self.scope.applies_to(req) {
+                    return None;
+                }
                 if let Some(ref budget) = self.budget {
                     budget.deposit();
                 }
@@ -236,6 +190,14 @@ impl<B> tower::retry::Policy<Req, http::Response<B>, crate::Error> for Policy {
             }
             classify::Action::Retryable => {
                 log::trace!("could retry!");
+                // Out-of-scope requests are never actually retried (`clone_request`
+                // returns `None` for them), so they must not withdraw from the
+                // shared budget nor bump `retry_cnt`. A scoped policy shares one
+                // `Arc<Budget>` across all hosts/protocols; letting unrelated
+                // hosts drain it would starve in-scope retries.
+                if !self.scope.applies_to(req) {
+                    return None;
+                }
                 if self.budget.as_ref().map(|b| b.withdraw()).unwrap_or(true) {
                     self.retry_cnt += 1;
                     Some(std::future::ready(()))
@@ -270,34 +232,21 @@ impl<B> tower::retry::Policy<Req, http::Response<B>, crate::Error> for Policy {
 fn is_retryable_error(err: &crate::Error) -> bool {
     use std::error::Error as _;
 
-    // pop the primp::Error
-    let err = if let Some(err) = err.source() {
-        err
-    } else {
-        return false;
-    };
-    // pop the legacy::Error
-    let err = if let Some(err) = err.source() {
-        err
-    } else {
-        return false;
-    };
+    // The connector layer was refactored away from hyper-util's legacy
+    // client, so protocol nacks (h2/h3 errors) are now wrapped *directly*
+    // as the `crate::Error` source rather than nested behind a
+    // `hyper_util::client::legacy::Error`. Walk the entire source chain
+    // with a recursive downcast search instead of assuming a fixed nesting
+    // depth, so we find the protocol error wherever it sits.
+    let mut current: Option<&(dyn std::error::Error + 'static)> = err.source();
 
-    #[cfg(not(any(feature = "http3", feature = "http2")))]
-    let _err = err;
+    // Guard against pathological cycles in the source chain.
+    for _ in 0..64 {
+        let Some(node) = current else {
+            break;
+        };
 
-    #[cfg(feature = "http3")]
-    if let Some(cause) = err.source() {
-        if let Some(err) = cause.downcast_ref::<h3::error::ConnectionError>() {
-            log::trace!("determining if HTTP/3 error {err} can be retried");
-            // TODO: Does h3 provide an API for checking the error?
-            return err.to_string().as_str() == "timeout";
-        }
-    }
-
-    #[cfg(feature = "http2")]
-    if let Some(cause) = err.source() {
-        if let Some(err) = cause.downcast_ref::<h2::Error>() {
+        if let Some(err) = node.downcast_ref::<h2::Error>() {
             // They sent us a graceful shutdown, try with a new connection!
             if err.is_go_away() && err.is_remote() && err.reason() == Some(h2::Reason::NO_ERROR) {
                 return true;
@@ -310,7 +259,21 @@ fn is_retryable_error(err: &crate::Error) -> bool {
                 return true;
             }
         }
+
+        #[cfg(feature = "http3")]
+        if let Some(err) = node.downcast_ref::<h3::error::ConnectionError>() {
+            log::trace!("determining if HTTP/3 error {err} can be retried");
+            // h3 0.0.8 marks `ConnectionError::Timeout` as `#[non_exhaustive]`
+            // with a private variant, so it cannot be matched or constructed
+            // from this crate. The only public signal is the `Display` string,
+            // which currently yields "timeout". If a future h3 version exposes
+            // a typed classifier, prefer that over this string compare.
+            return err.to_string().as_str() == "timeout";
+        }
+
+        current = node.source();
     }
+
     false
 }
 
@@ -393,30 +356,37 @@ mod classify {
         }
     }
 
+    /// A request/response result passed to a `classify` function.
     #[derive(Debug)]
     pub struct ReqRep<'a>(&'a super::Req, Result<http::StatusCode, &'a crate::Error>);
 
     impl ReqRep<'_> {
+        /// Access the request method.
         pub fn method(&self) -> &http::Method {
             self.0.method()
         }
 
+        /// Access the request URI.
         pub fn uri(&self) -> &http::Uri {
             self.0.uri()
         }
 
+        /// Access the response status, if it did not error.
         pub fn status(&self) -> Option<http::StatusCode> {
             self.1.ok()
         }
 
+        /// Access the error, if a response was not received.
         pub fn error(&self) -> Option<&(dyn std::error::Error + 'static)> {
             self.1.as_ref().err().map(|e| &**e as _)
         }
 
+        /// Classify this attempt as retryable.
         pub fn retryable(self) -> Action {
             Action::Retryable
         }
 
+        /// Classify this attempt as success (no retry), even on a domain error.
         pub fn success(self) -> Action {
             Action::Success
         }
@@ -473,5 +443,111 @@ mod classify {
                 Self::Dyn(_) => f.write_str("Classifier"),
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::error::Error as _;
+
+    use super::*;
+
+    /// Build a `crate::Error` whose source is an `h2::Error`, mirroring how
+    /// the refactored h2 connector surfaces protocol nacks via
+    /// `error::request(h2_err)` (no `hyper_util::client::legacy::Error`
+    /// nesting).
+    fn h2_error_as_primp_err(reason: h2::Reason) -> crate::Error {
+        crate::error::request(h2::Error::from(reason))
+    }
+
+    #[test]
+    fn h2_error_is_reached_in_source_chain() {
+        // Regression for the fixed-depth `.source()` pop bug: the old code
+        // popped crate::Error -> inner, then popped AGAIN expecting a
+        // `hyper_util::client::legacy::Error`, and so skipped past the h2
+        // error entirely (returning false for every h2 nack). The rewritten
+        // `is_retryable_error` walks the whole chain, so an h2 error that is
+        // directly the source is now inspected.
+        //
+        // `h2::Error::from(Reason)` yields a `Kind::Reason` error (neither a
+        // RST_STREAM nor a GOAWAY frame), which the real classifier treats as
+        // non-retryable — a genuinely retryable nack is a *received*
+        // RST_STREAM/GOAWAY frame, which h2 only constructs internally and
+        // exposes no public constructor for. The assertion here verifies the
+        // h2 error is reached and classified (rather than skipped).
+        let err = h2_error_as_primp_err(h2::Reason::REFUSED_STREAM);
+        let inner = err
+            .source()
+            .and_then(|e| e.downcast_ref::<h2::Error>())
+            .expect("h2::Error must be directly downcastable from the source");
+        assert_eq!(inner.reason(), Some(h2::Reason::REFUSED_STREAM));
+        assert!(
+            !is_retryable_error(&err),
+            "a bare Reason error is not a retryable RST_STREAM/GOAWAY frame"
+        );
+    }
+
+    #[test]
+    fn non_protocol_error_is_not_retryable() {
+        let err = crate::error::request("some unrelated failure");
+        assert!(
+            !is_retryable_error(&err),
+            "plain error must not be retryable"
+        );
+    }
+
+    #[test]
+    fn out_of_scope_successes_do_not_inflate_the_budget() {
+        // Mirror of `out_of_scope_retryables_do_not_drain_the_budget` (the
+        // integration test): the withdraw side is scope-gated, and the
+        // deposit side must be too. Unrelated traffic must neither drain
+        // nor fill the shared budget.
+        use tower::retry::budget::Budget as _;
+        use tower::retry::Policy as _;
+
+        fn drain(policy: &mut Policy) -> u64 {
+            let mut n = 0;
+            while policy
+                .budget
+                .as_ref()
+                .map(|b| b.withdraw())
+                .unwrap_or(false)
+            {
+                n += 1;
+            }
+            n
+        }
+
+        fn feed_out_of_scope_successes(policy: &mut Policy, count: usize) {
+            for _ in 0..count {
+                let mut req = http::Request::builder()
+                    .uri("http://out-of-scope/")
+                    .body(crate::async_impl::body::Body::empty())
+                    .unwrap();
+                let mut result: crate::Result<http::Response<()>> = Ok(http::Response::default());
+                assert!(
+                    policy.retry(&mut req, &mut result).is_none(),
+                    "out-of-scope success must not be retried"
+                );
+            }
+        }
+
+        // Control: a fresh budget, never touched by out-of-scope traffic.
+        let mut control = for_host("in-scope")
+            .classify_fn(|_| classify::Action::Success)
+            .into_policy();
+        let baseline = drain(&mut control);
+        assert!(baseline > 0, "budget probe must be able to withdraw");
+
+        // Same fresh budget, but 100 out-of-scope successes flow through it.
+        let mut fed = for_host("in-scope")
+            .classify_fn(|_| classify::Action::Success)
+            .into_policy();
+        feed_out_of_scope_successes(&mut fed, 100);
+        assert_eq!(
+            drain(&mut fed),
+            baseline,
+            "out-of-scope successes must not deposit into the shared budget"
+        );
     }
 }

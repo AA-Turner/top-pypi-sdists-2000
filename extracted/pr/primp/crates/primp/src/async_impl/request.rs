@@ -11,7 +11,10 @@ use super::client::{Client, Pending};
 #[cfg(feature = "multipart")]
 use super::multipart;
 use super::response::Response;
-use crate::config::{RequestConfig, TotalTimeout};
+use crate::config::{
+    OneShotCookies, ReadTimeout, RedirectOverride, RedirectPolicyOverride, RequestConfig,
+    TotalTimeout,
+};
 #[cfg(feature = "multipart")]
 use crate::header::CONTENT_LENGTH;
 #[cfg(any(feature = "multipart", feature = "form", feature = "json"))]
@@ -30,9 +33,7 @@ pub struct Request {
     extensions: Extensions,
 }
 
-/// A builder to construct the properties of a `Request`.
-///
-/// To construct a `RequestBuilder`, refer to the `Client` documentation.
+/// Builder for the properties of a `Request`; see `Client` to construct one.
 #[must_use = "RequestBuilder does nothing until you 'send' it"]
 pub struct RequestBuilder {
     client: Client,
@@ -123,6 +124,18 @@ impl Request {
     #[inline]
     pub fn timeout_mut(&mut self) -> &mut Option<Duration> {
         RequestConfig::<TotalTimeout>::get_mut(&mut self.extensions)
+    }
+
+    /// Get the read timeout.
+    #[inline]
+    pub fn read_timeout(&self) -> Option<&Duration> {
+        RequestConfig::<ReadTimeout>::get(&self.extensions)
+    }
+
+    /// Get a mutable reference to the read timeout.
+    #[inline]
+    pub fn read_timeout_mut(&mut self) -> &mut Option<Duration> {
+        RequestConfig::<ReadTimeout>::get_mut(&mut self.extensions)
     }
 
     /// Get the http version.
@@ -234,9 +247,7 @@ impl RequestBuilder {
         self
     }
 
-    /// Add a set of Headers to the existing ones on this Request.
-    ///
-    /// The headers will be merged in to any already set.
+    /// Merge the given headers into any already set on this request.
     pub fn headers(mut self, headers: crate::header::HeaderMap) -> RequestBuilder {
         if let Ok(ref mut req) = self.request {
             crate::util::replace_headers(req.headers_mut(), headers);
@@ -284,11 +295,8 @@ impl RequestBuilder {
         self
     }
 
-    /// Enables a request timeout.
-    ///
-    /// The timeout is applied from when the request starts connecting until the
-    /// response body has finished. It affects only this request and overrides
-    /// the timeout configured using `ClientBuilder::timeout()`.
+    /// Sets a timeout for this request, from connection start until the response
+    /// body finishes. Overrides `ClientBuilder::timeout()`.
     pub fn timeout(mut self, timeout: Duration) -> RequestBuilder {
         if let Ok(ref mut req) = self.request {
             *req.timeout_mut() = Some(timeout);
@@ -296,7 +304,39 @@ impl RequestBuilder {
         self
     }
 
-    /// Sends a multipart/form-data body.
+    /// Sets a per-read timeout for this request's response body; each read that
+    /// receives no data within the duration fails. Overrides `ClientBuilder::read_timeout()`.
+    pub fn read_timeout(mut self, timeout: Duration) -> RequestBuilder {
+        if let Ok(ref mut req) = self.request {
+            *req.read_timeout_mut() = Some(timeout);
+        }
+        self
+    }
+
+    /// Override this request's redirect behavior, independent of the client's
+    /// `redirect` policy. `Follow(n)` caps the chain at `n` hops;
+    /// `Disabled` returns the 30x response as-is. The shared client is never
+    /// mutated.
+    pub fn redirect_override(mut self, override_policy: RedirectOverride) -> RequestBuilder {
+        if let Ok(ref mut req) = self.request {
+            *RequestConfig::<RedirectPolicyOverride>::get_mut(&mut req.extensions) =
+                Some(override_policy);
+        }
+        self
+    }
+
+    /// Attach one-shot cookies to this request (not stored in the jar). While
+    /// a plain explicit `Cookie` header suppresses jar injection for the whole
+    /// redirect chain, these are re-merged with the fresh jar on every hop.
+    pub fn one_shot_cookies(mut self, cookies: HeaderValue) -> RequestBuilder {
+        if let Ok(ref mut req) = self.request {
+            *RequestConfig::<OneShotCookies>::get_mut(&mut req.extensions) = Some(cookies);
+        }
+        self
+    }
+
+    /// Sends a `multipart/form-data` body, also setting the `Content-Type`
+    /// (boundary) and `Content-Length` headers.
     ///
     /// ```
     /// # use primp::Error;
@@ -315,50 +355,53 @@ impl RequestBuilder {
     /// # Ok(())
     /// # }
     /// ```
-    ///
-    /// In additional the request's body, the Content-Type and Content-Length fields are
-    /// appropriately set.
     #[cfg(feature = "multipart")]
     #[cfg_attr(docsrs, doc(cfg(feature = "multipart")))]
     pub fn multipart(self, mut multipart: multipart::Form) -> RequestBuilder {
-        let mut builder = self.header(
-            CONTENT_TYPE,
-            format!("multipart/form-data; boundary={}", multipart.boundary()).as_str(),
-        );
-
-        builder = match multipart.compute_length() {
-            Some(length) => builder.header(CONTENT_LENGTH, length),
-            None => builder,
-        };
-
-        if let Ok(ref mut req) = builder.request {
-            *req.body_mut() = Some(multipart.stream())
+        let mut error = None;
+        let mut request = self.request;
+        if let Ok(ref mut req) = request {
+            // `insert` (not `header`/append): pre-set Content-Type and
+            // Content-Length are preserved so a custom media type or a
+            // known body size is not clobbered by the multipart defaults.
+            let ct = format!("multipart/form-data; boundary={}", multipart.boundary());
+            if !req.headers().contains_key(CONTENT_TYPE) {
+                match HeaderValue::from_str(&ct) {
+                    Ok(v) => {
+                        req.headers_mut().insert(CONTENT_TYPE, v);
+                    }
+                    Err(e) => error = Some(crate::error::builder(e)),
+                }
+            }
+            if let Some(length) = multipart.compute_length() {
+                if !req.headers().contains_key(CONTENT_LENGTH) {
+                    match HeaderValue::from_str(&length.to_string()) {
+                        Ok(v) => {
+                            req.headers_mut().insert(CONTENT_LENGTH, v);
+                        }
+                        Err(e) => error = Some(crate::error::builder(e)),
+                    }
+                }
+            }
+            *req.body_mut() = Some(multipart.stream());
         }
-        builder
+        if let Some(err) = error {
+            request = Err(err);
+        }
+        RequestBuilder { request, ..self }
     }
 
-    /// Modify the query string of the URL.
-    ///
-    /// Modifies the URL of this request, adding the parameters provided.
-    /// This method appends and does not overwrite. This means that it can
-    /// be called multiple times and that existing query parameters are not
-    /// overwritten if the same key is used. The key will simply show up
-    /// twice in the query string.
-    /// Calling `.query(&[("foo", "a"), ("foo", "b")])` gives `"foo=a&foo=b"`.
-    ///
-    /// # Note
-    /// This method does not support serializing a single key-value
-    /// pair. Instead of using `.query(("key", "val"))`, use a sequence, such
-    /// as `.query(&[("key", "val")])`. It's also possible to serialize structs
-    /// and maps into a key-value pair.
+    /// Append to the request URL's query string (existing keys are kept, not
+    /// overwritten; `.query(&[("foo","a"),("foo","b")])` yields `foo=a&foo=b`).
+    /// Use a sequence, not `.query(("k","v"))`; structs and maps are also supported.
     ///
     /// # Optional
     ///
-    /// This requires the optional `query` feature to be enabled.
+    /// Requires the `query` feature.
     ///
     /// # Errors
-    /// This method will fail if the object you provide cannot be serialized
-    /// into a query string.
+    ///
+    /// Fails if the value cannot be serialized into a query string.
     #[cfg(feature = "query")]
     #[cfg_attr(docsrs, doc(cfg(feature = "query")))]
     pub fn query<T: Serialize + ?Sized>(mut self, query: &T) -> RequestBuilder {
@@ -391,11 +434,7 @@ impl RequestBuilder {
         self
     }
 
-    /// Send a form body.
-    ///
-    /// Sets the body to the url encoded serialization of the passed value,
-    /// and also sets the `Content-Type: application/x-www-form-urlencoded`
-    /// header.
+    /// Sends a `application/x-www-form-urlencoded` form body.
     ///
     /// ```rust
     /// # use primp::Error;
@@ -462,13 +501,12 @@ impl RequestBuilder {
         if let Ok(ref mut req) = self.request {
             match serde_json::to_vec(json) {
                 Ok(body) => {
-                    if !req.headers().contains_key(CONTENT_TYPE) {
-                        req.headers_mut()
-                            .insert(CONTENT_TYPE, HeaderValue::from_static("application/json"));
-                    }
+                    req.headers_mut()
+                        .entry(CONTENT_TYPE)
+                        .or_insert_with(|| HeaderValue::from_static("application/json"));
                     *req.body_mut() = Some(body.into());
                 }
-                Err(err) => error = Some(crate::error::builder(err)),
+                Err(err) => error = Some(crate::error::json(err)),
             }
         }
         if let Some(err) = error {
@@ -483,11 +521,7 @@ impl RequestBuilder {
         self.request
     }
 
-    /// Build a `Request`, which can be inspected, modified and executed with
-    /// `Client::execute()`.
-    ///
-    /// This is similar to [`RequestBuilder::build()`], but also returns the
-    /// embedded `Client`.
+    /// Like [`RequestBuilder::build()`], but also returns the embedded `Client`.
     pub fn build_split(self) -> (Client, crate::Result<Request>) {
         (self.client, self.request)
     }
@@ -593,10 +627,12 @@ pub(crate) fn extract_authority(url: &mut Url) -> Option<(String, Option<String>
                 .map(String::from)
         });
         if !username.is_empty() || password.is_some() {
-            url.set_username("")
-                .expect("has_authority means set_username shouldn't fail");
-            url.set_password(None)
-                .expect("has_authority means set_password shouldn't fail");
+            // `has_authority()` implies a host, so these cannot fail with the
+            // current url crate; ignore errors gracefully rather than aborting
+            // the host (`panic = "abort"`) on a future url-crate change.
+            if url.set_username("").is_err() || url.set_password(None).is_err() {
+                return None;
+            }
             return Some((username, password));
         }
     }
@@ -660,8 +696,8 @@ impl TryFrom<Request> for HttpRequest<Body> {
 }
 
 #[cfg(test)]
-#[cfg(not(feature = "rustls-no-provider"))]
 mod tests {
+
     use super::*;
     #[cfg(feature = "query")]
     use std::collections::BTreeMap;
@@ -670,7 +706,7 @@ mod tests {
     #[cfg(feature = "query")]
     fn add_query_append() {
         let client = Client::new();
-        let some_url = "https://google.com/";
+        let some_url = "https://www.google.com/";
         let r = client.get(some_url);
 
         let r = r.query(&[("foo", "bar")]);
@@ -684,7 +720,7 @@ mod tests {
     #[cfg(feature = "query")]
     fn add_query_append_same() {
         let client = Client::new();
-        let some_url = "https://google.com/";
+        let some_url = "https://www.google.com/";
         let r = client.get(some_url);
 
         let r = r.query(&[("foo", "a"), ("foo", "b")]);
@@ -703,7 +739,7 @@ mod tests {
         }
 
         let client = Client::new();
-        let some_url = "https://google.com/";
+        let some_url = "https://www.google.com/";
         let r = client.get(some_url);
 
         let params = Params {
@@ -725,7 +761,7 @@ mod tests {
         params.insert("qux", "three");
 
         let client = Client::new();
-        let some_url = "https://google.com/";
+        let some_url = "https://www.google.com/";
         let r = client.get(some_url);
 
         let r = r.query(&params);
@@ -763,7 +799,7 @@ mod tests {
     #[cfg(feature = "query")]
     fn normalize_empty_query() {
         let client = Client::new();
-        let some_url = "https://google.com/";
+        let some_url = "https://www.google.com/";
         let empty_query: &[(&str, &str)] = &[];
 
         let req = client
@@ -773,7 +809,7 @@ mod tests {
             .expect("request build");
 
         assert_eq!(req.url().query(), None);
-        assert_eq!(req.url().as_str(), "https://google.com/");
+        assert_eq!(req.url().as_str(), "https://www.google.com/");
     }
 
     #[test]
@@ -938,208 +974,143 @@ mod tests {
         builder.build().unwrap();
     }
 
-    /*
-    use {body, Method};
-    use super::Client;
-    use header::{Host, Headers, ContentType};
-    use std::collections::HashMap;
-    use serde_urlencoded;
-    use serde_json;
-
     #[test]
-    fn basic_get_request() {
-        let client = Client::new().unwrap();
-        let some_url = "https://google.com/";
-        let r = client.get(some_url).unwrap().build();
-
-        assert_eq!(r.method, Method::Get);
-        assert_eq!(r.url.as_str(), some_url);
+    fn extract_authority_never_panics_on_adversarial_userinfo() {
+        // The `expect()`s in `set_username`/`set_password` were removed in
+        // favor of graceful fallbacks: any URL shape the url crate accepts
+        // must never abort the host (`panic = "abort"`). Includes invalid
+        // UTF-8 percent-escapes, which bail out before the setter calls.
+        for url in [
+            "http://u:p@example.com/",
+            "http://user@example.com/",
+            "http://u%FF:p@example.com/",
+            "http://user%FF@example.com/",
+            "http://%FF%FE@example.com/",
+            "http://u:p%FF@example.com/",
+            "https://%C3%A9:p@example.com/",
+            "http://example.com/", // no userinfo at all
+        ] {
+            let mut url = crate::Url::parse(url).expect("url must parse");
+            let _ = extract_authority(&mut url);
+        }
     }
 
     #[test]
-    fn basic_head_request() {
-        let client = Client::new().unwrap();
-        let some_url = "https://google.com/";
-        let r = client.head(some_url).unwrap().build();
+    fn extract_authority_extracts_and_strips_userinfo() {
+        let mut url = crate::Url::parse("http://alice:secret@example.com/").unwrap();
+        let auth = extract_authority(&mut url).expect("userinfo present");
+        assert_eq!(auth.0, "alice");
+        assert_eq!(auth.1.as_deref(), Some("secret"));
+        assert_eq!(url.username(), "");
+        assert_eq!(url.password(), None);
 
-        assert_eq!(r.method, Method::Head);
-        assert_eq!(r.url.as_str(), some_url);
+        // Percent-encoded credentials round-trip through decoding.
+        let mut url = crate::Url::parse("http://al%20ice:s%40cret@example.com/").unwrap();
+        let auth = extract_authority(&mut url).expect("userinfo present");
+        assert_eq!(auth.0, "al ice");
+        assert_eq!(auth.1.as_deref(), Some("s@cret"));
     }
 
     #[test]
-    fn basic_post_request() {
-        let client = Client::new().unwrap();
-        let some_url = "https://google.com/";
-        let r = client.post(some_url).unwrap().build();
-
-        assert_eq!(r.method, Method::Post);
-        assert_eq!(r.url.as_str(), some_url);
+    fn builder_methods_set_method_and_url() {
+        let client = Client::new();
+        for (builder, method) in [
+            (client.head("http://example.com/"), Method::HEAD),
+            (client.put("http://example.com/"), Method::PUT),
+            (client.patch("http://example.com/"), Method::PATCH),
+            (client.delete("http://example.com/"), Method::DELETE),
+        ] {
+            let req = builder.build().expect("request is valid");
+            assert_eq!(req.method(), method);
+            assert_eq!(req.url().as_str(), "http://example.com/");
+        }
     }
 
     #[test]
-    fn basic_put_request() {
-        let client = Client::new().unwrap();
-        let some_url = "https://google.com/";
-        let r = client.put(some_url).unwrap().build();
+    #[cfg(feature = "form")]
+    fn form_sets_content_type_and_urlencoded_body() {
+        use std::collections::HashMap;
 
-        assert_eq!(r.method, Method::Put);
-        assert_eq!(r.url.as_str(), some_url);
+        let data = HashMap::from([("foo", "bar")]);
+        let req = Client::new()
+            .post("http://example.com/")
+            .form(&data)
+            .build()
+            .expect("request is valid");
+
+        assert_eq!(
+            req.headers()[CONTENT_TYPE],
+            "application/x-www-form-urlencoded"
+        );
+        let body = req.body().unwrap().as_bytes().expect("full body");
+        let pairs = serde_urlencoded::from_str::<Vec<(String, String)>>(
+            &String::from_utf8(body.to_vec()).expect("utf8 body"),
+        )
+        .expect("urlencoded body decodes");
+        assert_eq!(pairs, vec![("foo".into(), "bar".into())]);
     }
 
     #[test]
-    fn basic_patch_request() {
-        let client = Client::new().unwrap();
-        let some_url = "https://google.com/";
-        let r = client.patch(some_url).unwrap().build();
+    #[cfg(feature = "json")]
+    fn json_sets_content_type_and_body() {
+        use std::collections::HashMap;
 
-        assert_eq!(r.method, Method::Patch);
-        assert_eq!(r.url.as_str(), some_url);
+        let data = HashMap::from([("foo", "bar")]);
+        let req = Client::new()
+            .post("http://example.com/")
+            .json(&data)
+            .build()
+            .expect("request is valid");
+
+        assert_eq!(req.headers()[CONTENT_TYPE], "application/json");
+        let body = req.body().unwrap().as_bytes().expect("full body");
+        let parsed: serde_json::Value = serde_json::from_slice(body).expect("valid json");
+        assert_eq!(parsed, serde_json::json!({"foo": "bar"}));
     }
 
     #[test]
-    fn basic_delete_request() {
-        let client = Client::new().unwrap();
-        let some_url = "https://google.com/";
-        let r = client.delete(some_url).unwrap().build();
+    #[cfg(feature = "form")]
+    fn form_serialization_failure_is_builder_error() {
+        use serde::Serializer;
 
-        assert_eq!(r.method, Method::Delete);
-        assert_eq!(r.url.as_str(), some_url);
-    }
-
-    #[test]
-    fn add_header() {
-        let client = Client::new().unwrap();
-        let some_url = "https://google.com/";
-        let mut r = client.post(some_url).unwrap();
-
-        let header = Host {
-            hostname: "google.com".to_string(),
-            port: None,
-        };
-
-        // Add a copy of the header to the request builder
-        let r = r.header(header.clone()).build();
-
-        // then check it was actually added
-        assert_eq!(r.headers.get::<Host>(), Some(&header));
-    }
-
-    #[test]
-    fn add_headers() {
-        let client = Client::new().unwrap();
-        let some_url = "https://google.com/";
-        let mut r = client.post(some_url).unwrap();
-
-        let header = Host {
-            hostname: "google.com".to_string(),
-            port: None,
-        };
-
-        let mut headers = Headers::new();
-        headers.set(header);
-
-        // Add a copy of the headers to the request builder
-        let r = r.headers(headers.clone()).build();
-
-        // then make sure they were added correctly
-        assert_eq!(r.headers, headers);
-    }
-
-    #[test]
-    fn add_headers_multi() {
-        let client = Client::new().unwrap();
-        let some_url = "https://google.com/";
-        let mut r = client.post(some_url).unwrap();
-
-        let header = Host {
-            hostname: "google.com".to_string(),
-            port: None,
-        };
-
-        let mut headers = Headers::new();
-        headers.set(header);
-
-        // Add a copy of the headers to the request builder
-        let r = r.headers(headers.clone()).build();
-
-        // then make sure they were added correctly
-        assert_eq!(r.headers, headers);
-    }
-
-    #[test]
-    fn add_body() {
-        let client = Client::new().unwrap();
-        let some_url = "https://google.com/";
-        let mut r = client.post(some_url).unwrap();
-
-        let body = "Some interesting content";
-
-        let r = r.body(body).build();
-
-        let buf = body::read_to_string(r.body.unwrap()).unwrap();
-
-        assert_eq!(buf, body);
-    }
-
-    #[test]
-    fn add_form() {
-        let client = Client::new().unwrap();
-        let some_url = "https://google.com/";
-        let mut r = client.post(some_url).unwrap();
-
-        let mut form_data = HashMap::new();
-        form_data.insert("foo", "bar");
-
-        let r = r.form(&form_data).unwrap().build();
-
-        // Make sure the content type was set
-        assert_eq!(r.headers.get::<ContentType>(),
-                   Some(&ContentType::form_url_encoded()));
-
-        let buf = body::read_to_string(r.body.unwrap()).unwrap();
-
-        let body_should_be = serde_urlencoded::to_string(&form_data).unwrap();
-        assert_eq!(buf, body_should_be);
-    }
-
-    #[test]
-    fn add_json() {
-        let client = Client::new().unwrap();
-        let some_url = "https://google.com/";
-        let mut r = client.post(some_url).unwrap();
-
-        let mut json_data = HashMap::new();
-        json_data.insert("foo", "bar");
-
-        let r = r.json(&json_data).unwrap().build();
-
-        // Make sure the content type was set
-        assert_eq!(r.headers.get::<ContentType>(), Some(&ContentType::json()));
-
-        let buf = body::read_to_string(r.body.unwrap()).unwrap();
-
-        let body_should_be = serde_json::to_string(&json_data).unwrap();
-        assert_eq!(buf, body_should_be);
-    }
-
-    #[test]
-    fn add_json_fail() {
-        use serde::{Serialize, Serializer};
-        use serde::ser::Error;
-        struct MyStruct;
-        impl Serialize for MyStruct {
+        struct NeverSerializes;
+        impl serde::Serialize for NeverSerializes {
             fn serialize<S>(&self, _serializer: S) -> Result<S::Ok, S::Error>
-                where S: Serializer
-                {
-                    Err(S::Error::custom("nope"))
-                }
+            where
+                S: Serializer,
+            {
+                Err(serde::ser::Error::custom("nope"))
+            }
         }
 
-        let client = Client::new().unwrap();
-        let some_url = "https://google.com/";
-        let mut r = client.post(some_url).unwrap();
-        let json_data = MyStruct{};
-        assert!(r.json(&json_data).unwrap_err().is_serialization());
+        let err = Client::new()
+            .post("http://example.com/")
+            .form(&NeverSerializes)
+            .build()
+            .expect_err("serialization must fail");
+        assert!(err.is_builder());
     }
-    */
+
+    #[test]
+    #[cfg(feature = "json")]
+    fn json_serialization_failure_is_json_error() {
+        use serde::Serializer;
+
+        struct NeverSerializes;
+        impl serde::Serialize for NeverSerializes {
+            fn serialize<S>(&self, _serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                Err(serde::ser::Error::custom("nope"))
+            }
+        }
+
+        let err = Client::new()
+            .post("http://example.com/")
+            .json(&NeverSerializes)
+            .build()
+            .expect_err("serialization must fail");
+        assert!(err.is_json());
+    }
 }

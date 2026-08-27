@@ -1,29 +1,37 @@
-#[cfg(any(feature = "__native-tls", feature = "__rustls",))]
-use std::any::Any;
 use std::future::Future;
 use std::net::IpAddr;
 use std::pin::Pin;
-use std::sync::{Arc, OnceLock};
+use std::sync::{Arc, RwLock};
 use std::task::{ready, Context, Poll};
 use std::time::Duration;
-use std::{collections::HashMap, convert::TryInto, net::SocketAddr};
+use std::{convert::TryInto, net::SocketAddr};
 use std::{fmt, str};
+
+use foldhash::{HashMap, HashMapExt};
 
 use super::request::{Request, RequestBuilder};
 use super::response::Response;
 use super::Body;
+use crate::async_impl::h1_client::{build_legacy_http1_client, Http1Pool, LegacyClientSettings};
+use crate::async_impl::h2_client::connect::{H2ClientConfig, H2Connector};
+use crate::async_impl::h2_client::pool::DEFAULT_H2_MAX_CONCURRENT_STREAMS;
+use crate::async_impl::h2_client::Pool;
 #[cfg(feature = "http3")]
-use crate::async_impl::h3_client::connect::{H3ClientConfig, H3Connector};
+use crate::async_impl::h3_client::connect::{
+    H3ClientConfig, H3Connector, QuinnIgnoreHostname, QuinnNoVerifier,
+};
 #[cfg(feature = "http3")]
 use crate::async_impl::h3_client::H3Client;
-use crate::config::{RequestConfig, TotalTimeout};
+use crate::async_impl::negotiate::NegotiatingConnection;
+use crate::async_impl::range_guard::{self, RangeGuard};
+use crate::config::{ReadTimeout, RequestConfig, TotalTimeout};
 #[cfg(unix)]
 use crate::connect::uds::UnixSocketProvider;
 #[cfg(target_os = "windows")]
 use crate::connect::windows_named_pipe::WindowsNamedPipeProvider;
 use crate::connect::{
     sealed::{Conn, Unnameable},
-    BoxedConnectorLayer, BoxedConnectorService, Connector, ConnectorBuilder,
+    BoxedConnectorLayer, BoxedConnectorService, ConnectorBuilder,
 };
 #[cfg(feature = "cookies")]
 use crate::cookie;
@@ -31,34 +39,35 @@ use crate::cookie;
 use crate::cookie::service::CookieService;
 #[cfg(feature = "hickory-dns")]
 use crate::dns::hickory::HickoryDnsResolver;
-use crate::dns::{gai::GaiResolver, DnsCache, DnsResolverWithOverrides, DynResolver, Resolve};
+use crate::dns::{gai::GaiResolver, DnsResolverWithOverrides, DynResolver, Resolve};
 use crate::error::{self, BoxError};
 use crate::into_url::try_uri;
 use crate::proxy::Matcher as ProxyMatcher;
 use crate::redirect::{self, TowerRedirectPolicy};
-#[cfg(feature = "__rustls")]
 use crate::tls::CertificateRevocationList;
-#[cfg(feature = "__tls")]
 use crate::tls::{self, TlsBackend};
-#[cfg(feature = "__tls")]
 use crate::Certificate;
-#[cfg(any(feature = "__native-tls", feature = "__rustls"))]
 use crate::Identity;
 use crate::{IntoUrl, Method, Proxy, Url};
+#[cfg(feature = "http3")]
+use quinn::rustls::pki_types::CertificateDer;
 
 use http::header::{Entry, HeaderMap, HeaderValue, ACCEPT, PROXY_AUTHORIZATION, USER_AGENT};
 use http::uri::Scheme;
 use http::Uri;
 use hyper_util::client::legacy::connect::HttpConnector;
-#[cfg(feature = "__native-tls")]
-use native_tls_crate::TlsConnector;
-#[cfg(feature = "__rustls")]
-use webpki_roots;
 use pin_project_lite::pin_project;
 #[cfg(feature = "http3")]
 use quinn::TransportConfig;
 #[cfg(feature = "http3")]
 use quinn::VarInt;
+
+/// Convert a `u64` to a QUIC [`VarInt`], clamping to `VarInt::MAX`
+/// (2^62 - 1) instead of panicking on out-of-range values.
+#[cfg(feature = "http3")]
+fn clamp_varint(value: u64) -> VarInt {
+    VarInt::from_u64(value).unwrap_or(VarInt::MAX)
+}
 use tokio::time::Sleep;
 use tower::util::BoxCloneSyncServiceLayer;
 use tower::{Layer, Service};
@@ -70,38 +79,6 @@ use tower::{Layer, Service};
 ))]
 use tower_http::decompression::Decompression;
 use tower_http::follow_redirect::FollowRedirect;
-
-/// Cached ECH GREASE configuration for Chrome/Firefox client impersonation.
-/// This avoids allocating HpkePublicKey on every client creation.
-#[cfg(feature = "impersonate")]
-static ECH_GREASE_CONFIG: OnceLock<rustls::client::EchGreaseConfig> = OnceLock::new();
-
-/// Cached default TLS versions to avoid allocation on every client build.
-/// This is used when no min/max TLS version filtering is needed.
-#[cfg(feature = "__rustls")]
-static DEFAULT_TLS_VERSIONS: OnceLock<Vec<&'static rustls::SupportedProtocolVersion>> = OnceLock::new();
-
-/// Returns a reference to the cached ECH GREASE configuration.
-/// Creates it lazily on first access.
-#[cfg(feature = "impersonate")]
-fn get_ech_grease_config() -> &'static rustls::client::EchGreaseConfig {
-    use rustls::client::EchGreaseConfig;
-    use rustls::crypto::hpke::HpkePublicKey;
-    use rustls::crypto::aws_lc_rs::hpke::DH_KEM_X25519_HKDF_SHA256_AES_128;
-    
-    /// GREASE_25519_PUBKEY - placeholder ECH public key for GREASE
-    const GREASE_25519_PUBKEY: &[u8] = &[
-        0x67, 0x35, 0xCA, 0x50, 0x21, 0xFC, 0x4F, 0xE6, 0x29, 0x3B, 0x31, 0x2C, 0xB5, 0xE0, 0x97, 0xD8,
-        0x55, 0x1A, 0x8F, 0x8B, 0xA4, 0x77, 0xAB, 0xFA, 0xBE, 0xA4, 0x53, 0xA3, 0x82, 0x7C, 0x8A, 0x4B,
-    ];
-    
-    ECH_GREASE_CONFIG.get_or_init(|| {
-        EchGreaseConfig::new(
-            DH_KEM_X25519_HKDF_SHA256_AES_128,
-            HpkePublicKey(GREASE_25519_PUBKEY.to_vec()),
-        )
-    })
-}
 
 /// An asynchronous `Client` to make Requests with.
 ///
@@ -134,9 +111,9 @@ pub struct ClientBuilder {
     config: Config,
 }
 
-enum HttpVersionPref {
+#[derive(Clone, Copy)]
+pub(crate) enum HttpVersionPref {
     Http1,
-    #[cfg(feature = "http2")]
     Http2,
     #[cfg(feature = "http3")]
     Http3,
@@ -155,6 +132,10 @@ struct Accepts {
     deflate: bool,
 }
 
+// `clippy::derivable_impls` is wrong here: every field is a `bool` and the
+// manual default is `true`, while the derived `Default` would yield `false`
+// for each field. The feature-gated fields make clippy miss this.
+#[allow(clippy::derivable_impls)]
 impl Default for Accepts {
     fn default() -> Accepts {
         Accepts {
@@ -170,47 +151,25 @@ impl Default for Accepts {
     }
 }
 
-#[derive(Clone)]
-struct HyperService {
-    hyper: HyperClient,
-}
-
-impl Service<hyper::Request<crate::async_impl::body::Body>> for HyperService {
-    type Error = crate::Error;
-    type Response = http::Response<hyper::body::Incoming>;
-    type Future = Pin<Box<dyn Future<Output = Result<Self::Response, Self::Error>> + Send + Sync>>;
-
-    fn poll_ready(&mut self, cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
-        self.hyper.poll_ready(cx).map_err(crate::error::request)
-    }
-
-    fn call(&mut self, req: hyper::Request<crate::async_impl::body::Body>) -> Self::Future {
-        let clone = self.hyper.clone();
-        let mut inner = std::mem::replace(&mut self.hyper, clone);
-        Box::pin(async move { inner.call(req).await.map_err(crate::error::request) })
-    }
-}
-
-struct Config {
+pub(crate) struct Config {
     // NOTE: When adding a new field, update `fmt::Debug for ClientBuilder`
     accepts: Accepts,
     headers: HeaderMap,
-    #[cfg(feature = "__tls")]
     hostname_verification: bool,
-    #[cfg(feature = "__tls")]
     certs_verification: bool,
-    #[cfg(feature = "__tls")]
     tls_sni: bool,
+    tls_sslkeylogfile: bool,
     connect_timeout: Option<Duration>,
+    dns_timeout: Option<Duration>,
     connection_verbose: bool,
-    pool_idle_timeout: Option<Duration>,
-    pool_max_idle_per_host: usize,
+    pub(crate) pool_idle_timeout: Option<Duration>,
+    pub(crate) pool_max_idle_per_host: usize,
+    pool_max_connections: usize,
     tcp_keepalive: Option<Duration>,
     tcp_keepalive_interval: Option<Duration>,
     tcp_keepalive_retries: Option<u32>,
     #[cfg(any(target_os = "android", target_os = "fuchsia", target_os = "linux"))]
     tcp_user_timeout: Option<Duration>,
-    #[cfg(any(feature = "__native-tls", feature = "__rustls"))]
     identity: Option<Identity>,
     proxies: Vec<ProxyMatcher>,
     auto_sys_proxy: bool,
@@ -219,59 +178,40 @@ struct Config {
     referer: bool,
     read_timeout: Option<Duration>,
     timeout: Option<Duration>,
-    #[cfg(feature = "__tls")]
     root_certs: Vec<Certificate>,
-    #[cfg(feature = "__tls")]
     tls_certs_only: bool,
-    #[cfg(feature = "__rustls")]
     crls: Vec<CertificateRevocationList>,
-    #[cfg(feature = "__tls")]
     min_tls_version: Option<tls::Version>,
-    #[cfg(feature = "__tls")]
     max_tls_version: Option<tls::Version>,
-    #[cfg(feature = "__tls")]
     tls_info: bool,
-    #[cfg(feature = "__tls")]
     tls: TlsBackend,
     connector_layers: Vec<BoxedConnectorLayer>,
     http_version_pref: HttpVersionPref,
-    http09_responses: bool,
-    http1_title_case_headers: bool,
-    http1_allow_obsolete_multiline_headers_in_responses: bool,
-    http1_ignore_invalid_headers_in_responses: bool,
-    http1_allow_spaces_after_header_name_in_responses: bool,
-    #[cfg(feature = "http2")]
-    http2_initial_stream_window_size: Option<u32>,
-    #[cfg(feature = "http2")]
-    http2_initial_connection_window_size: Option<u32>,
-    #[cfg(feature = "http2")]
-    http2_adaptive_window: bool,
-    #[cfg(feature = "http2")]
-    http2_max_frame_size: Option<u32>,
-    #[cfg(feature = "http2")]
-    http2_max_header_list_size: Option<u32>,
-    #[cfg(feature = "http2")]
+    pub(crate) http09_responses: bool,
+    pub(crate) http1_title_case_headers: bool,
+    pub(crate) http1_allow_obsolete_multiline_headers_in_responses: bool,
+    pub(crate) http1_ignore_invalid_headers_in_responses: bool,
+    pub(crate) http1_allow_spaces_after_header_name_in_responses: bool,
+    pub(crate) http1_max_headers: Option<usize>,
+    pub(crate) http2_initial_stream_window_size: Option<u32>,
+    pub(crate) http2_initial_connection_window_size: Option<u32>,
+    pub(crate) http2_adaptive_window: bool,
+    pub(crate) http2_max_frame_size: Option<u32>,
+    pub(crate) http2_max_header_list_size: Option<u32>,
+    pub(crate) http2_keep_alive_interval: Option<Duration>,
+    pub(crate) http2_keep_alive_timeout: Option<Duration>,
+    pub(crate) http2_keep_alive_while_idle: bool,
     http2_header_table_size: Option<u32>,
-    #[cfg(feature = "http2")]
     http2_max_concurrent_streams: Option<u32>,
-    #[cfg(feature = "http2")]
     http2_enable_push: Option<bool>,
-    #[cfg(feature = "http2")]
     http2_no_rfc7540_priorities: Option<bool>,
-    #[cfg(feature = "http2")]
-    http2_keep_alive_interval: Option<Duration>,
-    #[cfg(feature = "http2")]
-    http2_keep_alive_timeout: Option<Duration>,
-    #[cfg(feature = "http2")]
-    http2_keep_alive_while_idle: bool,
-    #[cfg(feature = "http2")]
+    http2_enable_connect_protocol: Option<u32>,
     http2_settings_order: Option<h2::frame::SettingsOrder>,
-    #[cfg(feature = "http2")]
     http2_headers_pseudo_order: Option<h2::frame::PseudoOrder>,
-    #[cfg(feature = "http2")]
-    http2_headers_stream_dependency: Option<h2::frame::StreamDependency>,
-    #[cfg(feature = "http2")]
-    http2_priorities: Option<h2::frame::Priorities>,
+    http2_headers_priority: Option<(u8, u32, bool)>,
+    http2_headers_order: Option<Vec<http::HeaderName>>,
+    http2_initial_stream_id: Option<u32>,
+    http2_initial_stream_window_size_increment: Option<u32>,
     local_address: Option<IpAddr>,
     #[cfg(any(
         target_os = "android",
@@ -316,16 +256,32 @@ struct Config {
     unix_socket: Option<Arc<std::path::Path>>,
     #[cfg(target_os = "windows")]
     windows_named_pipe: Option<Arc<std::ffi::OsStr>>,
-
-    // Impersonation fields
-    #[cfg(feature = "impersonate")]
-    os_type: Option<crate::imp::ImpersonateOS>,
-    #[cfg(feature = "impersonate")]
     impersonate: Option<crate::imp::Impersonate>,
-    #[cfg(feature = "impersonate")]
-    browser_emulator: Option<rustls::client::BrowserEmulator>,
-    #[cfg(feature = "impersonate")]
-    emulation_profile: Option<crate::imp::EmulationProfile>,
+    os_type: Option<crate::imp::ImpersonateOS>,
+}
+
+fn h2_client_config_from(config: &Config) -> H2ClientConfig {
+    H2ClientConfig {
+        settings_order: config.http2_settings_order.clone(),
+        headers_pseudo_order: config.http2_headers_pseudo_order.clone(),
+        headers_order: config.http2_headers_order.clone(),
+        headers_priority: config.http2_headers_priority,
+        initial_stream_window_size_increment: config.http2_initial_stream_window_size_increment,
+        initial_connection_window_size: config.http2_initial_connection_window_size,
+        initial_window_size: config.http2_initial_stream_window_size,
+        max_frame_size: config.http2_max_frame_size,
+        max_header_list_size: config.http2_max_header_list_size,
+        max_concurrent_streams: config.http2_max_concurrent_streams,
+        header_table_size: config.http2_header_table_size,
+        enable_push: config.http2_enable_push,
+        no_rfc7540_priorities: config.http2_no_rfc7540_priorities,
+        initial_stream_id: config.http2_initial_stream_id,
+        enable_connect_protocol: config.http2_enable_connect_protocol,
+        adaptive_window: config.http2_adaptive_window,
+        keep_alive_interval: config.http2_keep_alive_interval,
+        keep_alive_timeout: config.http2_keep_alive_timeout,
+        keep_alive_while_idle: config.http2_keep_alive_while_idle,
+    }
 }
 
 impl Default for ClientBuilder {
@@ -347,16 +303,16 @@ impl ClientBuilder {
                 error: None,
                 accepts: Accepts::default(),
                 headers,
-                #[cfg(feature = "__tls")]
                 hostname_verification: true,
-                #[cfg(feature = "__tls")]
                 certs_verification: true,
-                #[cfg(feature = "__tls")]
                 tls_sni: true,
-                connect_timeout: None,
+                tls_sslkeylogfile: false,
+                connect_timeout: Some(Duration::from_secs(30)),
+                dns_timeout: None,
                 connection_verbose: false,
                 pool_idle_timeout: Some(Duration::from_secs(90)),
-                pool_max_idle_per_host: 32, // Reasonable default to prevent memory exhaustion
+                pool_max_idle_per_host: usize::MAX,
+                pool_max_connections: 256,
                 tcp_keepalive: Some(Duration::from_secs(15)),
                 tcp_keepalive_interval: Some(Duration::from_secs(15)),
                 tcp_keepalive_retries: Some(3),
@@ -368,22 +324,14 @@ impl ClientBuilder {
                 retry_policy: crate::retry::Builder::default(),
                 referer: true,
                 read_timeout: None,
-                timeout: None,
-                #[cfg(feature = "__tls")]
+                timeout: Some(Duration::from_secs(30)),
                 root_certs: Vec::new(),
-                #[cfg(feature = "__tls")]
                 tls_certs_only: false,
-                #[cfg(any(feature = "__native-tls", feature = "__rustls"))]
                 identity: None,
-                #[cfg(feature = "__rustls")]
                 crls: vec![],
-                #[cfg(feature = "__tls")]
                 min_tls_version: None,
-                #[cfg(feature = "__tls")]
                 max_tls_version: None,
-                #[cfg(feature = "__tls")]
                 tls_info: false,
-                #[cfg(feature = "__tls")]
                 tls: TlsBackend::default(),
                 connector_layers: Vec::new(),
                 http_version_pref: HttpVersionPref::All,
@@ -392,38 +340,26 @@ impl ClientBuilder {
                 http1_allow_obsolete_multiline_headers_in_responses: false,
                 http1_ignore_invalid_headers_in_responses: false,
                 http1_allow_spaces_after_header_name_in_responses: false,
-                #[cfg(feature = "http2")]
+                http1_max_headers: None,
                 http2_initial_stream_window_size: None,
-                #[cfg(feature = "http2")]
                 http2_initial_connection_window_size: None,
-                #[cfg(feature = "http2")]
                 http2_adaptive_window: false,
-                #[cfg(feature = "http2")]
                 http2_max_frame_size: None,
-                #[cfg(feature = "http2")]
                 http2_max_header_list_size: None,
-                #[cfg(feature = "http2")]
-                http2_header_table_size: None,
-                #[cfg(feature = "http2")]
-                http2_max_concurrent_streams: None,
-                #[cfg(feature = "http2")]
-                http2_enable_push: None,
-                #[cfg(feature = "http2")]
-                http2_no_rfc7540_priorities: None,
-                #[cfg(feature = "http2")]
                 http2_keep_alive_interval: None,
-                #[cfg(feature = "http2")]
                 http2_keep_alive_timeout: None,
-                #[cfg(feature = "http2")]
                 http2_keep_alive_while_idle: false,
-                #[cfg(feature = "http2")]
+                http2_header_table_size: None,
+                http2_max_concurrent_streams: None,
+                http2_enable_push: None,
+                http2_no_rfc7540_priorities: None,
+                http2_enable_connect_protocol: None,
                 http2_settings_order: None,
-                #[cfg(feature = "http2")]
                 http2_headers_pseudo_order: None,
-                #[cfg(feature = "http2")]
-                http2_headers_stream_dependency: None,
-                #[cfg(feature = "http2")]
-                http2_priorities: None,
+                http2_headers_priority: None,
+                http2_headers_order: None,
+                http2_initial_stream_id: None,
+                http2_initial_stream_window_size_increment: None,
                 local_address: None,
                 #[cfg(any(
                     target_os = "android",
@@ -461,21 +397,13 @@ impl ClientBuilder {
                 #[cfg(feature = "http3")]
                 h3_send_grease: None,
                 dns_resolver: None,
-                dns_cache_ttl: None,
+                dns_cache_ttl: Some(Duration::from_secs(30)),
                 #[cfg(unix)]
                 unix_socket: None,
                 #[cfg(target_os = "windows")]
                 windows_named_pipe: None,
-
-                // Impersonation fields initialization
-                #[cfg(feature = "impersonate")]
-                os_type: None,
-                #[cfg(feature = "impersonate")]
                 impersonate: None,
-                #[cfg(feature = "impersonate")]
-                browser_emulator: None,
-                #[cfg(feature = "impersonate")]
-                emulation_profile: None,
+                os_type: None,
             },
         }
     }
@@ -489,48 +417,101 @@ impl ClientBuilder {
     /// This method fails if a TLS backend cannot be initialized, or the resolver
     /// cannot load the system configuration.
     pub fn build(self) -> crate::Result<Client> {
+        {
+            if self.config.impersonate.is_some() || self.config.os_type.is_some() {
+                let imp = self
+                    .config
+                    .impersonate
+                    .unwrap_or(crate::imp::Impersonate::Random);
+                let os = self
+                    .config
+                    .os_type
+                    .unwrap_or(crate::imp::ImpersonateOS::Random);
+                let root_certs = self.config.root_certs.clone();
+                let tls = crate::impersonation::ImpersonationTls {
+                    certs_verification: self.config.certs_verification,
+                    hostname_verification: self.config.hostname_verification,
+                    tls_certs_only: self.config.tls_certs_only,
+                    identity: self.config.identity.clone(),
+                    tls_sni: self.config.tls_sni,
+                    tls_sslkeylogfile: self.config.tls_sslkeylogfile,
+                };
+                let settings = crate::imp::get_browser_settings(imp, Some(os));
+                return crate::impersonation::apply_impersonation(self, settings, &root_certs, tls);
+            }
+        }
+
         let config = self.config;
+
+        // Capture the legacy HTTP/1.1 client settings before `config` is
+        // partially moved during the rest of client construction.
+        let legacy_settings = LegacyClientSettings::from_config(&config);
 
         if let Some(err) = config.error {
             return Err(err);
         }
 
+        // Pre-compute H2 config before config fields are moved.
+        let h2_cfg = h2_client_config_from(&config);
+
         let mut proxies = config.proxies;
         if config.auto_sys_proxy {
             proxies.push(ProxyMatcher::system());
         }
-        let proxies = Arc::new(proxies);
+        let proxies = Arc::new(RwLock::new(proxies));
 
         #[allow(unused)]
         #[cfg(feature = "http3")]
         let mut h3_connector = None;
+        #[allow(unused_assignments)]
+        let mut h2_connector = None;
 
         let resolver = {
-            let mut resolver: Arc<dyn Resolve> = match config.hickory_dns {
+            let mut base: Arc<dyn Resolve> = match config.hickory_dns {
                 false => Arc::new(GaiResolver::new()),
                 #[cfg(feature = "hickory-dns")]
                 true => Arc::new(HickoryDnsResolver::default()),
                 #[cfg(not(feature = "hickory-dns"))]
                 true => unreachable!("hickory-dns shouldn't be enabled unless the feature is"),
             };
-            if let Some(dns_resolver) = config.dns_resolver {
-                resolver = dns_resolver;
-            }
-            if !config.dns_overrides.is_empty() {
-                resolver = Arc::new(DnsResolverWithOverrides::new(
-                    resolver,
-                    config.dns_overrides,
-                ));
-            }
-            // Wrap with DNS cache if TTL is configured
-            if let Some(ttl) = config.dns_cache_ttl {
-                resolver = Arc::new(DnsCache::new(resolver, ttl));
-            }
+            base = config.dns_resolver.unwrap_or(base);
+            base = Arc::new(crate::dns::hosts::HostsFileResolver::new(base));
+            // DNS deadline capped just below the connect deadline so a hanging
+            // lookup surfaces as a tagged DNS error, never a connect timeout.
+            // Cache sits *below* `DnsResolverWithOverrides`: per-client
+            // overrides always win, and the cache only stores base
+            // resolutions, so clients with different override sets or
+            // different inner resolvers never poison each other.
+            let dns_timeout = config
+                .dns_timeout
+                .unwrap_or(crate::dns::cache::DNS_RESOLUTION_TIMEOUT);
+            let dns_timeout = match config.connect_timeout {
+                Some(connect) if dns_timeout >= connect => {
+                    connect.saturating_sub(Duration::from_millis(1))
+                }
+                _ => dns_timeout,
+            };
+            let cached: Arc<dyn Resolve> = Arc::new(match config.dns_cache_ttl {
+                Some(ttl) => crate::dns::cache::DnsCacheResolver::with_ttl_and_timeout(
+                    base,
+                    ttl,
+                    dns_timeout,
+                ),
+                None => crate::dns::cache::DnsCacheResolver::with_ttl_and_timeout(
+                    base,
+                    crate::dns::cache::DNS_CACHE_TTL,
+                    dns_timeout,
+                ),
+            });
+            let resolver: Arc<dyn Resolve> = if config.dns_overrides.is_empty() {
+                cached
+            } else {
+                Arc::new(DnsResolverWithOverrides::new(cached, config.dns_overrides))
+            };
             DynResolver::new(resolver)
         };
 
         let mut connector_builder = {
-            #[cfg(feature = "__tls")]
             fn user_agent(headers: &HeaderMap) -> Option<HeaderValue> {
                 headers.get(USER_AGENT).cloned()
             }
@@ -538,10 +519,10 @@ impl ClientBuilder {
             let mut http = HttpConnector::new_with_resolver(resolver.clone());
             http.set_connect_timeout(config.connect_timeout);
 
-            #[cfg(all(feature = "http3", feature = "__rustls"))]
+            #[cfg(feature = "http3")]
             let build_h3_connector =
                 |resolver,
-                 tls,
+                 connect_timeout: Option<Duration>,
                  quic_max_idle_timeout: Option<Duration>,
                  quic_stream_receive_window,
                  quic_receive_window,
@@ -550,7 +531,11 @@ impl ClientBuilder {
                  h3_max_field_section_size,
                  h3_send_grease,
                  local_address,
-                 http_version_pref: &HttpVersionPref| {
+                 http_version_pref: &HttpVersionPref,
+                 certs_verification: bool,
+                 hostname_verification: bool,
+                 tls_certs_only: bool,
+                 root_certs: &[Certificate]| {
                     let mut transport_config = TransportConfig::default();
 
                     if let Some(max_idle_timeout) = quic_max_idle_timeout {
@@ -586,12 +571,104 @@ impl ClientBuilder {
                         h3_client_config.send_grease = Some(send_grease);
                     }
 
+                    let provider = quinn::rustls::crypto::CryptoProvider::get_default()
+                        .cloned()
+                        .unwrap_or_else(|| {
+                            Arc::new(quinn::rustls::crypto::aws_lc_rs::default_provider())
+                        });
+                    let signature_algorithms = provider.signature_verification_algorithms;
+
+                    // Build a QUIC/rustls root store containing only the
+                    // user-provided `root_certs` (no webpki-roots, no native
+                    // store). Used when hostname verification is disabled or
+                    // `tls_certs_only()` is set, mirroring the TCP/TLS path's
+                    // `rustls_store()`.
+                    let custom_roots = || -> crate::Result<quinn::rustls::RootCertStore> {
+                        let mut roots = quinn::rustls::RootCertStore::empty();
+                        for cert in root_certs {
+                            for der in cert.as_der_many()? {
+                                roots
+                                    .add(CertificateDer::from(der))
+                                    .map_err(|e| error::builder(e.to_string()))?;
+                            }
+                        }
+                        Ok(roots)
+                    };
+
+                    // Build a QUIC/rustls root store with webpki-roots plus the
+                    // native OS root CAs, then any user-provided root certs.
+                    // Mirrors `default_root_store()` used by the TCP/TLS path.
+                    let default_roots = || -> crate::Result<quinn::rustls::RootCertStore> {
+                        let mut roots = quinn::rustls::RootCertStore::empty();
+                        roots.extend(webpki_roots::TLS_SERVER_ROOTS.iter().cloned());
+                        let native = rustls_native_certs::load_native_certs();
+                        for err in &native.errors {
+                            log::warn!("failed to load native root certificate: {err}");
+                        }
+                        if !native.certs.is_empty() {
+                            roots.add_parsable_certificates(native.certs);
+                        }
+                        for cert in root_certs {
+                            for der in cert.as_der_many()? {
+                                roots
+                                    .add(CertificateDer::from(der))
+                                    .map_err(|e| error::builder(e.to_string()))?;
+                            }
+                        }
+                        Ok(roots)
+                    };
+
+                    // Build the TLS client config; advertise ALPN "h3" so the
+                    // QUIC connection negotiates HTTP/3. The config is then
+                    // wrapped into a `QuicClientConfig` and handed to the quinn
+                    // transport.
+                    let mut tls_config = if !certs_verification {
+                        // Mirror `danger_accept_invalid_certs()` on the TCP/TLS
+                        // path: skip certificate and signature verification.
+                        quinn::rustls::ClientConfig::builder()
+                            .dangerous()
+                            .with_custom_certificate_verifier(Arc::new(QuinnNoVerifier::new(
+                                signature_algorithms,
+                            )))
+                            .with_no_client_auth()
+                    } else if !hostname_verification {
+                        // Mirror `danger_accept_invalid_hostnames()` on the
+                        // TCP/TLS path: verify the certificate chain but skip
+                        // the hostname check. Uses only the user-provided root
+                        // certs, matching the TCP/TLS path's `IgnoreHostname`.
+                        quinn::rustls::ClientConfig::builder()
+                            .dangerous()
+                            .with_custom_certificate_verifier(Arc::new(QuinnIgnoreHostname::new(
+                                custom_roots()?,
+                                signature_algorithms,
+                            )))
+                            .with_no_client_auth()
+                    } else if tls_certs_only {
+                        // Only trust the user-provided root certs, ignoring the
+                        // system + webpki stores.
+                        quinn::rustls::ClientConfig::builder()
+                            .with_root_certificates(Arc::new(custom_roots()?))
+                            .with_no_client_auth()
+                    } else {
+                        // Full chain + hostname verification against the default
+                        // root store.
+                        quinn::rustls::ClientConfig::builder()
+                            .with_root_certificates(Arc::new(default_roots()?))
+                            .with_no_client_auth()
+                    };
+                    tls_config.alpn_protocols = vec![b"h3".into()];
+
+                    let quic_tls = quinn::crypto::rustls::QuicClientConfig::try_from(tls_config)
+                        .map_err(|e| error::builder(e.to_string()))?;
+                    let quinn_client_config = quinn::ClientConfig::new(Arc::new(quic_tls));
+
                     let res = H3Connector::new(
                         resolver,
-                        tls,
+                        quinn_client_config,
                         local_address,
                         transport_config,
                         h3_client_config,
+                        connect_timeout,
                     );
 
                     match res {
@@ -606,128 +683,13 @@ impl ClientBuilder {
                     }
                 };
 
-            #[cfg(feature = "__tls")]
             match config.tls {
-                #[cfg(feature = "__native-tls")]
-                TlsBackend::NativeTls => {
-                    let mut tls = TlsConnector::builder();
-
-                    #[cfg(all(feature = "__native-tls-alpn", not(feature = "http3")))]
-                    {
-                        match config.http_version_pref {
-                            HttpVersionPref::Http1 => {
-                                tls.request_alpns(&["http/1.1"]);
-                            }
-                            #[cfg(feature = "http2")]
-                            HttpVersionPref::Http2 => {
-                                tls.request_alpns(&["h2"]);
-                            }
-                            HttpVersionPref::All => {
-                                tls.request_alpns(&["h2", "http/1.1"]);
-                            }
-                        }
-                    }
-
-                    tls.danger_accept_invalid_hostnames(!config.hostname_verification);
-
-                    tls.danger_accept_invalid_certs(!config.certs_verification);
-
-                    tls.use_sni(config.tls_sni);
-
-                    tls.disable_built_in_roots(config.tls_certs_only);
-
-                    for cert in config.root_certs {
-                        cert.add_to_native_tls(&mut tls);
-                    }
-
-                    #[cfg(feature = "__native-tls")]
-                    {
-                        if let Some(id) = config.identity {
-                            id.add_to_native_tls(&mut tls)?;
-                        }
-                    }
-                    #[cfg(all(feature = "__rustls", not(feature = "__native-tls")))]
-                    {
-                        // Default backend + rustls Identity doesn't work.
-                        if let Some(_id) = config.identity {
-                            return Err(crate::error::builder("incompatible TLS identity type"));
-                        }
-                    }
-
-                    if let Some(min_tls_version) = config.min_tls_version {
-                        let protocol = min_tls_version.to_native_tls().ok_or_else(|| {
-                            // TLS v1.3. This would be entirely reasonable,
-                            // native-tls just doesn't support it.
-                            // https://github.com/sfackler/rust-native-tls/issues/140
-                            crate::error::builder("invalid minimum TLS version for backend")
-                        })?;
-                        tls.min_protocol_version(Some(protocol));
-                    }
-
-                    if let Some(max_tls_version) = config.max_tls_version {
-                        let protocol = max_tls_version.to_native_tls().ok_or_else(|| {
-                            // TLS v1.3.
-                            // We could arguably do max_protocol_version(None), given
-                            // that 1.4 does not exist yet, but that'd get messy in the
-                            // future.
-                            crate::error::builder("invalid maximum TLS version for backend")
-                        })?;
-                        tls.max_protocol_version(Some(protocol));
-                    }
-
-                    ConnectorBuilder::new_native_tls(
-                        http,
-                        tls,
-                        proxies.clone(),
-                        user_agent(&config.headers),
-                        config.local_address,
-                        #[cfg(any(
-                            target_os = "android",
-                            target_os = "fuchsia",
-                            target_os = "illumos",
-                            target_os = "ios",
-                            target_os = "linux",
-                            target_os = "macos",
-                            target_os = "solaris",
-                            target_os = "tvos",
-                            target_os = "visionos",
-                            target_os = "watchos",
-                        ))]
-                        config.interface.as_deref(),
-                        config.nodelay,
-                        config.tls_info,
-                    )?
-                }
-                #[cfg(feature = "__native-tls")]
-                TlsBackend::BuiltNativeTls(conn) => ConnectorBuilder::from_built_native_tls(
-                    http,
-                    conn,
-                    proxies.clone(),
-                    user_agent(&config.headers),
-                    config.local_address,
-                    #[cfg(any(
-                        target_os = "android",
-                        target_os = "fuchsia",
-                        target_os = "illumos",
-                        target_os = "ios",
-                        target_os = "linux",
-                        target_os = "macos",
-                        target_os = "solaris",
-                        target_os = "tvos",
-                        target_os = "visionos",
-                        target_os = "watchos",
-                    ))]
-                    config.interface.as_deref(),
-                    config.nodelay,
-                    config.tls_info,
-                ),
-                #[cfg(feature = "__rustls")]
                 TlsBackend::BuiltRustls(conn) => {
                     #[cfg(feature = "http3")]
                     {
                         h3_connector = build_h3_connector(
                             resolver.clone(),
-                            *conn.clone(),
+                            config.connect_timeout,
                             config.quic_max_idle_timeout,
                             config.quic_stream_receive_window,
                             config.quic_receive_window,
@@ -737,12 +699,76 @@ impl ClientBuilder {
                             config.h3_send_grease,
                             config.local_address,
                             &config.http_version_pref,
+                            config.certs_verification,
+                            config.hostname_verification,
+                            config.tls_certs_only,
+                            &config.root_certs,
                         )?;
+                    }
+
+                    let mut main_tls = (*conn).clone();
+                    // Preserve ALPN from preconfigured TLS config when browser
+                    // emulation is active (impersonation). The caller sets ALPN
+                    // to ["h2", "http/1.1"] so the TLS ClientHello includes h2,
+                    // which is required for correct JA4 fingerprinting. Without
+                    // this check the override to http/1.1-only causes the server
+                    // to see h1 in the JA4 fingerprint.
+                    //
+                    // Exception: if the caller forces HTTP/1 (http1_only), the
+                    // connection is driven by the legacy h1 parser, which cannot
+                    // decode h2 frames. We must restrict ALPN to http/1.1 even
+                    // under impersonation, accepting a slightly less accurate
+                    // fingerprint, to avoid handing h2 to the h1 parser.
+                    if main_tls.browser_emulation.is_none()
+                        || matches!(config.http_version_pref, HttpVersionPref::Http1)
+                    {
+                        main_tls.alpn_protocols = vec!["http/1.1".into()];
+                    }
+
+                    {
+                        let mut h2_tls = (*conn).clone();
+                        // Preserve ALPN from preconfigured TLS config when
+                        // browser emulation is active (impersonation). Real
+                        // browsers advertise ["h2", "http/1.1"] in the
+                        // ClientHello ALPN extension, not just ["h2"].
+                        if h2_tls.browser_emulation.is_none()
+                            || matches!(config.http_version_pref, HttpVersionPref::Http1)
+                        {
+                            // When http_version_pref is All, advertise both
+                            // protocols so the server can pick via ALPN.
+                            // If the server picks http/1.1, the H2 connector
+                            // returns the established stream as
+                            // ConnectOutcome::Http1 and negotiate.rs runs
+                            // HTTP/1.1 over it without a second handshake.
+                            // When the caller forces HTTP/1, only offer
+                            // http/1.1 so the legacy h1 parser is used.
+                            h2_tls.alpn_protocols = match config.http_version_pref {
+                                HttpVersionPref::Http1 => vec!["http/1.1".into()],
+                                HttpVersionPref::All => {
+                                    vec!["h2".into(), "http/1.1".into()]
+                                }
+                                _ => vec!["h2".into()],
+                            };
+                        }
+                        // tls_proxy: no ALPN, for TLS-to-proxy connections.
+                        let mut h2_tls_proxy = (*conn).clone();
+                        h2_tls_proxy.alpn_protocols.clear();
+                        h2_connector = Some(H2Connector::new(
+                            resolver.clone(),
+                            Some(Arc::new(h2_tls)),
+                            Some(Arc::new(h2_tls_proxy)),
+                            h2_cfg,
+                            config.nodelay,
+                            config.connect_timeout,
+                            proxies.clone(),
+                            user_agent(&config.headers),
+                            config.tls_info,
+                        ));
                     }
 
                     ConnectorBuilder::new_rustls_tls(
                         http,
-                        *conn,
+                        main_tls,
                         proxies.clone(),
                         user_agent(&config.headers),
                         config.local_address,
@@ -763,29 +789,31 @@ impl ClientBuilder {
                         config.tls_info,
                     )
                 }
-                #[cfg(feature = "__rustls")]
                 TlsBackend::Rustls => {
                     use crate::tls::{IgnoreHostname, NoVerifier};
 
-                    // Set TLS versions (use cached defaults when no filtering needed).
-                    let mut filtered;
-                    let versions: &[&'static rustls::SupportedProtocolVersion] =
-                        if config.min_tls_version.is_none() && config.max_tls_version.is_none() {
-                            DEFAULT_TLS_VERSIONS.get_or_init(|| rustls::ALL_VERSIONS.to_vec())
-                        } else {
-                            filtered = rustls::ALL_VERSIONS.to_vec();
-                            if let Some(min) = config.min_tls_version {
-                                filtered.retain(|v| {
-                                    tls::Version::from_rustls(v.version).is_some_and(|ver| ver >= min)
-                                });
+                    // Set TLS versions.
+                    let mut versions = rustls::ALL_VERSIONS.to_vec();
+
+                    if let Some(min_tls_version) = config.min_tls_version {
+                        versions.retain(|&supported_version| {
+                            match tls::Version::from_rustls(supported_version.version) {
+                                Some(version) => version >= min_tls_version,
+                                // Assume it's so new we don't know about it, allow it
+                                // (as of writing this is unreachable)
+                                None => true,
                             }
-                            if let Some(max) = config.max_tls_version {
-                                filtered.retain(|v| {
-                                    tls::Version::from_rustls(v.version).is_some_and(|ver| ver <= max)
-                                });
+                        });
+                    }
+
+                    if let Some(max_tls_version) = config.max_tls_version {
+                        versions.retain(|&supported_version| {
+                            match tls::Version::from_rustls(supported_version.version) {
+                                Some(version) => version <= max_tls_version,
+                                None => false,
                             }
-                            &filtered
-                        };
+                        });
+                    }
 
                     if versions.is_empty() {
                         return Err(crate::error::builder("empty supported tls versions"));
@@ -799,63 +827,32 @@ impl ClientBuilder {
 
                     // Build TLS config
                     let signature_algorithms = provider.signature_verification_algorithms;
-                    
-                    // Check if ECH GREASE is needed for Chrome impersonation
-                    #[cfg(feature = "impersonate")]
-                    let needs_ech_grease = config.browser_emulator
-                        .as_ref()
-                        .map(|be| be.is_chrome_based() || be.is_firefox())
-                        .unwrap_or(false);
-                    #[cfg(not(feature = "impersonate"))]
-                    let needs_ech_grease = false;
-                    
-                    // Build TLS config - start with WantsVersions to allow ECH configuration
-                    let config_builder: rustls::ConfigBuilder<rustls::ClientConfig, _> =
-                        rustls::ClientConfig::builder_with_provider(provider.clone());
-                    
-                    // Configure ECH GREASE for Chrome-based browsers to match JA4 fingerprint
-                    // Note: with_ech() already calls with_protocol_versions() internally,
-                    // so this transitions directly to WantsVerifier state
-                    // When ECH is not needed, we call with_protocol_versions() normally
-                    #[cfg(feature = "impersonate")]
-                    let config_builder: rustls::ConfigBuilder<rustls::ClientConfig, rustls::WantsVerifier> =
-                        if needs_ech_grease {
-                            use rustls::client::EchMode;
-                            
-                            config_builder.with_ech(EchMode::Grease(get_ech_grease_config().clone()))
-                                .expect("ECH GREASE config should be valid")
-                        } else {
-                            config_builder
-                                .with_protocol_versions(versions)
-                                .map_err(|_| crate::error::builder("invalid TLS versions"))?
-                        };
-                    
-                    #[cfg(not(feature = "impersonate"))]
-                    let config_builder: rustls::ConfigBuilder<rustls::ClientConfig, rustls::WantsVerifier> =
-                        config_builder
-                            .with_protocol_versions(versions)
+                    let config_builder =
+                        rustls::ClientConfig::builder_with_provider(provider.clone())
+                            .with_protocol_versions(&versions)
                             .map_err(|_| crate::error::builder("invalid TLS versions"))?;
-                    
+
                     let config_builder = if !config.certs_verification {
                         config_builder
                             .dangerous()
                             .with_custom_certificate_verifier(Arc::new(NoVerifier))
                     } else if !config.hostname_verification {
-                        if !config.tls_certs_only {
-                            // Should this just warn? Error for now...
-                            return Err(crate::error::builder(
-                                    "disabling rustls hostname verification only allowed with tls_certs_only()"
-                            ));
-                        }
-
+                        // Skip only the hostname check: the chain must still
+                        // verify against a root store (default when none are
+                        // configured — an empty store rejects every handshake).
+                        // Mirrors the impersonation path below.
+                        let roots: Arc<rustls::RootCertStore> = if config.root_certs.is_empty() {
+                            crate::tls::default_root_store_arc()
+                        } else {
+                            Arc::new(crate::tls::merged_root_store(&config.root_certs)?)
+                        };
                         config_builder
                             .dangerous()
                             .with_custom_certificate_verifier(Arc::new(IgnoreHostname::new(
-                                crate::tls::rustls_store(config.root_certs)?,
+                                (*roots).clone(),
                                 signature_algorithms,
                             )))
                     } else if !config.tls_certs_only {
-                        // rustls-platform-verifier is disabled, use webpki roots instead
                         // Check for some misconfigurations and report them.
                         if !config.crls.is_empty() {
                             return Err(crate::error::builder(
@@ -863,39 +860,29 @@ impl ClientBuilder {
                             ));
                         }
 
-                        // Use webpki roots instead of platform verifier
-                        let has_custom_roots = !config.root_certs.is_empty();
-                        let roots = if has_custom_roots {
-                            // Custom roots provided - create a new store with them
-                            let mut roots = crate::tls::rustls_store(config.root_certs)?;
-                            roots.extend(webpki_roots::TLS_SERVER_ROOTS.iter().cloned());
-                            roots
+                        let roots: Arc<rustls::RootCertStore> = if config.root_certs.is_empty() {
+                            crate::tls::default_root_store_arc()
                         } else {
-                            // No custom roots - use cached default root store
-                            crate::tls::default_root_store().clone()
+                            Arc::new(crate::tls::merged_root_store(&config.root_certs)?)
                         };
 
                         config_builder.with_root_certificates(roots)
                     } else if config.crls.is_empty() {
-                        config_builder.with_root_certificates(crate::tls::rustls_store(
-                            config.root_certs,
-                        )?)
+                        config_builder
+                            .with_root_certificates(crate::tls::rustls_store(&config.root_certs)?)
                     } else {
                         let crls = config
                             .crls
                             .iter()
                             .map(|e| e.as_rustls_crl())
                             .collect::<Vec<_>>();
-                        let verifier =
-                            rustls::client::WebPkiServerVerifier::builder_with_provider(
-                                Arc::new(crate::tls::rustls_store(config.root_certs)?),
-                                provider,
-                            )
-                            .with_crls(crls)
-                            .build()
-                            .map_err(|_| {
-                                crate::error::builder("invalid TLS verification settings")
-                            })?;
+                        let verifier = rustls::client::WebPkiServerVerifier::builder_with_provider(
+                            Arc::new(crate::tls::rustls_store(&config.root_certs)?),
+                            provider,
+                        )
+                        .with_crls(crls)
+                        .build()
+                        .map_err(|_| crate::error::builder("invalid TLS verification settings"))?;
                         config_builder.with_webpki_verifier(verifier)
                     };
 
@@ -906,61 +893,34 @@ impl ClientBuilder {
                         config_builder.with_no_client_auth()
                     };
 
-                    // Set browser emulation for TLS fingerprinting
-                    // Check if browser emulation is enabled BEFORE moving the value
-                    #[cfg(feature = "impersonate")]
-                    let is_browser_emulation = config.browser_emulator.is_some();
-                    #[cfg(not(feature = "impersonate"))]
-                    let is_browser_emulation = false;
-                    
-                    #[cfg(feature = "impersonate")]
-                    if let Some(browser_emulator) = config.browser_emulator {
-                        tls.browser_emulation = Some(browser_emulator);
-                    }
                     tls.enable_sni = config.tls_sni;
 
+                    if config.tls_sslkeylogfile {
+                        tls.key_log = Arc::new(rustls::KeyLogFile::new());
+                    }
+
                     // ALPN protocol
-                    // When browser emulation is enabled, always send both h2 and http/1.1
-                    // to match real browser behavior (Chrome, Firefox, etc. always advertise both)
                     match config.http_version_pref {
                         HttpVersionPref::Http1 => {
-                            // Even with HTTP/1.1 preference, browsers advertise both protocols
-                            if is_browser_emulation {
-                                tls.alpn_protocols = vec!["h2".into(), "http/1.1".into()];
-                            } else {
-                                tls.alpn_protocols = vec!["http/1.1".into()];
-                            }
+                            tls.alpn_protocols = vec!["http/1.1".into()];
                         }
-                        #[cfg(feature = "http2")]
                         HttpVersionPref::Http2 => {
-                            // When emulating a browser, always send both h2 and http/1.1
-                            // Real Chrome/Firefox always advertise both protocols in ALPN
-                            if is_browser_emulation {
-                                tls.alpn_protocols = vec!["h2".into(), "http/1.1".into()];
-                            } else {
-                                tls.alpn_protocols = vec!["h2".into()];
-                            }
+                            tls.alpn_protocols = vec!["h2".into()];
                         }
                         #[cfg(feature = "http3")]
                         HttpVersionPref::Http3 => {
-                            tls.alpn_protocols = vec!["h3".into()];
+                            // h3 ALPN is not valid over TCP
                         }
                         HttpVersionPref::All => {
-                            tls.alpn_protocols = vec![
-                                #[cfg(feature = "http2")]
-                                "h2".into(),
-                                "http/1.1".into(),
-                            ];
+                            tls.alpn_protocols = vec!["h2".into(), "http/1.1".into()];
                         }
                     }
 
                     #[cfg(feature = "http3")]
                     {
-                        tls.enable_early_data = config.tls_enable_early_data;
-
                         h3_connector = build_h3_connector(
                             resolver.clone(),
-                            tls.clone(),
+                            config.connect_timeout,
                             config.quic_max_idle_timeout,
                             config.quic_stream_receive_window,
                             config.quic_receive_window,
@@ -970,12 +930,52 @@ impl ClientBuilder {
                             config.h3_send_grease,
                             config.local_address,
                             &config.http_version_pref,
+                            config.certs_verification,
+                            config.hostname_verification,
+                            config.tls_certs_only,
+                            &config.root_certs,
                         )?;
                     }
 
+                    {
+                        let mut h2_tls = tls.clone();
+                        // When http_version_pref is All, advertise both
+                        // protocols so the server can pick via ALPN.
+                        // If the server picks http/1.1, the H2 connector
+                        // returns the established stream as
+                        // ConnectOutcome::Http1 and negotiate.rs runs HTTP/1.1
+                        // over it without a second handshake.
+                        h2_tls.alpn_protocols = match config.http_version_pref {
+                            HttpVersionPref::All => {
+                                vec!["h2".into(), "http/1.1".into()]
+                            }
+                            _ => vec!["h2".into()],
+                        };
+                        // tls_proxy: no ALPN, for TLS-to-proxy connections.
+                        let mut h2_tls_proxy = tls.clone();
+                        h2_tls_proxy.alpn_protocols.clear();
+                        h2_connector = Some(H2Connector::new(
+                            resolver.clone(),
+                            Some(Arc::new(h2_tls)),
+                            Some(Arc::new(h2_tls_proxy)),
+                            h2_cfg,
+                            config.nodelay,
+                            config.connect_timeout,
+                            proxies.clone(),
+                            user_agent(&config.headers),
+                            config.tls_info,
+                        ));
+                    }
+
+                    // Clone the config and force HTTP/1.1 ALPN for the main
+                    // connector, so it never negotiates h2 (which the legacy
+                    // hyper-based HTTP/1.x parser cannot handle).
+                    let mut main_tls = tls.clone();
+                    main_tls.alpn_protocols = vec!["http/1.1".into()];
+
                     ConnectorBuilder::new_rustls_tls(
                         http,
-                        tls,
+                        main_tls,
                         proxies.clone(),
                         user_agent(&config.headers),
                         config.local_address,
@@ -996,34 +996,7 @@ impl ClientBuilder {
                         config.tls_info,
                     )
                 }
-                #[cfg(any(feature = "__native-tls", feature = "__rustls",))]
-                TlsBackend::UnknownPreconfigured => {
-                    return Err(crate::error::builder(
-                        "Unknown TLS backend passed to `use_preconfigured_tls`",
-                    ));
-                }
             }
-
-            #[cfg(not(feature = "__tls"))]
-            ConnectorBuilder::new(
-                http,
-                proxies.clone(),
-                config.local_address,
-                #[cfg(any(
-                    target_os = "android",
-                    target_os = "fuchsia",
-                    target_os = "illumos",
-                    target_os = "ios",
-                    target_os = "linux",
-                    target_os = "macos",
-                    target_os = "solaris",
-                    target_os = "tvos",
-                    target_os = "visionos",
-                    target_os = "watchos",
-                ))]
-                config.interface.as_deref(),
-                config.nodelay,
-            )
         };
 
         connector_builder.set_timeout(config.connect_timeout);
@@ -1034,163 +1007,123 @@ impl ClientBuilder {
         #[cfg(any(target_os = "android", target_os = "fuchsia", target_os = "linux"))]
         connector_builder.set_tcp_user_timeout(config.tcp_user_timeout);
 
-        #[cfg(feature = "socks")]
         connector_builder.set_socks_resolver(resolver);
 
         // TODO: It'd be best to refactor this so the HttpConnector is never
         // constructed at all. But there's a lot of code for all the different
         // ways TLS can be configured...
         #[cfg(unix)]
-        connector_builder.set_unix_socket(config.unix_socket);
+        connector_builder.set_unix_socket(config.unix_socket.clone());
         #[cfg(target_os = "windows")]
         connector_builder.set_windows_named_pipe(config.windows_named_pipe.clone());
 
-        let mut builder =
-            hyper_util::client::legacy::Client::builder(hyper_util::rt::TokioExecutor::new());
-        #[cfg(feature = "http2")]
-        {
-            if matches!(config.http_version_pref, HttpVersionPref::Http2) {
-                builder.http2_only(true);
-            }
-
-            if let Some(http2_initial_stream_window_size) = config.http2_initial_stream_window_size
-            {
-                builder.http2_initial_stream_window_size(http2_initial_stream_window_size);
-            }
-            if let Some(http2_initial_connection_window_size) =
-                config.http2_initial_connection_window_size
-            {
-                builder.http2_initial_connection_window_size(http2_initial_connection_window_size);
-            }
-            if config.http2_adaptive_window {
-                builder.http2_adaptive_window(true);
-            }
-            if let Some(http2_max_frame_size) = config.http2_max_frame_size {
-                builder.http2_max_frame_size(http2_max_frame_size);
-            }
-            if let Some(http2_max_header_list_size) = config.http2_max_header_list_size {
-                builder.http2_max_header_list_size(http2_max_header_list_size);
-            }
-            if let Some(http2_keep_alive_interval) = config.http2_keep_alive_interval {
-                builder.http2_keep_alive_interval(http2_keep_alive_interval);
-            }
-            if let Some(http2_keep_alive_timeout) = config.http2_keep_alive_timeout {
-                builder.http2_keep_alive_timeout(http2_keep_alive_timeout);
-            }
-            if config.http2_keep_alive_while_idle {
-                builder.http2_keep_alive_while_idle(true);
-            }
-            if let Some(http2_header_table_size) = config.http2_header_table_size {
-                builder.http2_header_table_size(http2_header_table_size);
-            }
-            if let Some(http2_enable_push) = config.http2_enable_push {
-                builder.http2_enable_push(http2_enable_push);
-            }
-            if let Some(http2_max_concurrent_streams) = config.http2_max_concurrent_streams {
-                builder.http2_max_concurrent_streams(http2_max_concurrent_streams);
-            }
-            if let Some(http2_no_rfc7540_priorities) = config.http2_no_rfc7540_priorities {
-                builder.http2_no_rfc7540_priorities(http2_no_rfc7540_priorities);
-            }
-            if let Some(http2_headers_pseudo_order) = config.http2_headers_pseudo_order {
-                builder.http2_headers_pseudo_order(http2_headers_pseudo_order);
-            }
-            if let Some(http2_settings_order) = config.http2_settings_order {
-                builder.http2_settings_order(http2_settings_order);
-            }
-        }
-
-        builder.timer(hyper_util::rt::TokioTimer::new());
-        builder.pool_timer(hyper_util::rt::TokioTimer::new());
-        builder.pool_idle_timeout(config.pool_idle_timeout);
-        builder.pool_max_idle_per_host(config.pool_max_idle_per_host);
-
-        if config.http09_responses {
-            builder.http09_responses(true);
-        }
-
-        if config.http1_title_case_headers {
-            builder.http1_title_case_headers(true);
-        }
-
-        if config.http1_allow_obsolete_multiline_headers_in_responses {
-            builder.http1_allow_obsolete_multiline_headers_in_responses(true);
-        }
-
-        if config.http1_ignore_invalid_headers_in_responses {
-            builder.http1_ignore_invalid_headers_in_responses(true);
-        }
-
-        if config.http1_allow_spaces_after_header_name_in_responses {
-            builder.http1_allow_spaces_after_header_name_in_responses(true);
-        }
-
-        let proxies_maybe_http_auth = proxies.iter().any(|p| p.maybe_has_http_auth());
-        let proxies_maybe_http_custom_headers =
-            proxies.iter().any(|p| p.maybe_has_http_custom_headers());
+        let proxies_maybe_http_auth = proxies
+            .read()
+            .unwrap_or_else(|e| e.into_inner())
+            .iter()
+            .any(|p| p.maybe_has_http_auth());
+        let proxies_maybe_http_custom_headers = proxies
+            .read()
+            .unwrap_or_else(|e| e.into_inner())
+            .iter()
+            .any(|p| p.maybe_has_http_custom_headers());
 
         let redirect_policy_desc = if config.redirect_policy.is_default() {
             None
         } else {
-            Some(format!("{:?}", &config.redirect_policy))
+            Some(format!("{:?}", config.redirect_policy))
         };
 
-        let hyper_client = builder.build(connector_builder.build(config.connector_layers));
-        let hyper_service = HyperService {
-            hyper: hyper_client,
-        };
+        let connector = connector_builder.build(config.connector_layers.clone());
+
+        // Built before any `config` fields are partially moved below.
+        let http1_client = build_legacy_http1_client(&legacy_settings, connector.clone());
 
         let redirect_policy = {
             let mut p = TowerRedirectPolicy::new(config.redirect_policy);
             p.with_referer(config.referer)
-                .with_https_only(config.https_only);
+                .with_https_only(config.https_only)
+                .with_proxies(proxies.clone());
             p
         };
 
         let retry_policy = config.retry_policy.into_policy();
 
-        let svc = tower::retry::Retry::new(retry_policy.clone(), hyper_service);
+        let h2_pool = {
+            let max_streams = config
+                .http2_max_concurrent_streams
+                .map(|v| v as usize)
+                .unwrap_or(DEFAULT_H2_MAX_CONCURRENT_STREAMS);
+            let mut pool = Pool::new(
+                config.pool_idle_timeout,
+                config.pool_max_connections,
+                max_streams,
+            );
+            pool.spawn_idle_cleanup();
+            pool
+        };
+
+        let h2_connector =
+            h2_connector.ok_or_else(|| crate::error::builder("h2 connector is required"))?;
+
+        let connection = NegotiatingConnection {
+            h2_pool,
+            h2_connector: Arc::new(h2_connector),
+            http1_pool: Http1Pool::with_idle_timeout(
+                config.pool_max_connections,
+                config.pool_idle_timeout,
+            ),
+            http1_client,
+            http_version_pref: config.http_version_pref,
+        };
+
+        let svc = tower::retry::Retry::new(retry_policy.clone(), connection);
 
         #[cfg(feature = "cookies")]
         let svc = CookieService::new(svc, config.cookie_store.clone());
-        let hyper = FollowRedirect::with_policy(svc, redirect_policy.clone());
+        let svc = FollowRedirect::with_policy(svc, redirect_policy.clone());
         #[cfg(any(
             feature = "gzip",
             feature = "brotli",
             feature = "zstd",
             feature = "deflate"
         ))]
-        let hyper = Decompression::new(hyper)
+        let svc = Decompression::new(svc)
             // set everything to NO, in case tower-http has it enabled but
-            // reqwest does not. then set to config value if cfg allows.
+            // primp does not. then set to config value if cfg allows.
             .no_gzip()
             .no_deflate()
             .no_br()
             .no_zstd();
         #[cfg(feature = "gzip")]
-        let hyper = hyper.gzip(config.accepts.gzip);
+        let svc = svc.gzip(config.accepts.gzip);
         #[cfg(feature = "brotli")]
-        let hyper = hyper.br(config.accepts.brotli);
+        let svc = svc.br(config.accepts.brotli);
         #[cfg(feature = "zstd")]
-        let hyper = hyper.zstd(config.accepts.zstd);
+        let svc = svc.zstd(config.accepts.zstd);
         #[cfg(feature = "deflate")]
-        let hyper = hyper.deflate(config.accepts.deflate);
+        let svc = svc.deflate(config.accepts.deflate);
+        #[cfg(any(
+            feature = "gzip",
+            feature = "brotli",
+            feature = "zstd",
+            feature = "deflate"
+        ))]
+        let svc = range_guard::RangeGuard::new(svc);
 
         Ok(Client {
             inner: Arc::new(ClientRef {
                 accepts: config.accepts,
                 #[cfg(feature = "cookies")]
                 cookie_store: config.cookie_store.clone(),
-                // Use match instead of map since config is partially moved,
-                // and it cannot be used in closure
                 #[cfg(feature = "http3")]
                 h3_client: match h3_connector {
                     Some(h3_connector) => {
                         let h3_service = H3Client::new(h3_connector, config.pool_idle_timeout);
-                        let svc = tower::retry::Retry::new(retry_policy, h3_service);
+                        let svc = tower::retry::Retry::new(retry_policy.clone(), h3_service);
                         #[cfg(feature = "cookies")]
-                        let svc = CookieService::new(svc, config.cookie_store);
-                        let svc = FollowRedirect::with_policy(svc, redirect_policy);
+                        let svc = CookieService::new(svc, config.cookie_store.clone());
+                        let svc = FollowRedirect::with_policy(svc, redirect_policy.clone());
                         #[cfg(any(
                             feature = "gzip",
                             feature = "brotli",
@@ -1199,7 +1132,7 @@ impl ClientBuilder {
                         ))]
                         let svc = Decompression::new(svc)
                             // set everything to NO, in case tower-http has it enabled but
-                            // reqwest does not. then set to config value if cfg allows.
+                            // primp does not. then set to config value if cfg allows.
                             .no_gzip()
                             .no_deflate()
                             .no_br()
@@ -1212,22 +1145,55 @@ impl ClientBuilder {
                         let svc = svc.zstd(config.accepts.zstd);
                         #[cfg(feature = "deflate")]
                         let svc = svc.deflate(config.accepts.deflate);
+                        #[cfg(any(
+                            feature = "gzip",
+                            feature = "brotli",
+                            feature = "zstd",
+                            feature = "deflate"
+                        ))]
+                        let svc = range_guard::RangeGuard::new(svc);
                         Some(svc)
                     }
                     None => None,
                 },
                 headers: config.headers,
+                service: svc,
+                #[cfg(feature = "http3")]
+                http_version_pref: config.http_version_pref,
                 referer: config.referer,
-                read_timeout: config.read_timeout,
+                read_timeout: RequestConfig::new(config.read_timeout),
                 total_timeout: RequestConfig::new(config.timeout),
-                hyper,
                 proxies,
                 proxies_maybe_http_auth,
                 proxies_maybe_http_custom_headers,
                 https_only: config.https_only,
                 redirect_policy_desc,
+                redirect_policy,
             }),
         })
+    }
+
+    /// Sets the browser to impersonate.
+    pub fn impersonate(mut self, version: crate::imp::Impersonate) -> Self {
+        self.config.impersonate = Some(version);
+        self
+    }
+
+    /// Sets the OS to impersonate.
+    ///
+    /// Without [`impersonate`](Self::impersonate), `build()` pairs it with
+    /// a **random** browser — the fingerprint differs per build.
+    pub fn impersonate_os(mut self, os: crate::imp::ImpersonateOS) -> Self {
+        self.config.os_type = Some(os);
+        self
+    }
+
+    /// Clears impersonation fields so that `build()` takes the normal path.
+    /// Called internally after impersonation settings have been applied.
+    pub(crate) fn clear_impersonation(mut self) -> Self {
+        self.config.impersonate = None;
+        self.config.os_type = None;
+        self
     }
 
     // Higher-level options
@@ -1567,7 +1533,7 @@ impl ClientBuilder {
     /// The timeout is applied from when the request starts connecting until the
     /// response body has finished. Also considered a total deadline.
     ///
-    /// Default is no timeout.
+    /// Default is 30 seconds.
     pub fn timeout(mut self, timeout: Duration) -> ClientBuilder {
         self.config.timeout = Some(timeout);
         self
@@ -1587,7 +1553,7 @@ impl ClientBuilder {
 
     /// Set a timeout for only the connect phase of a `Client`.
     ///
-    /// Default is `None`.
+    /// Default is 30 seconds.
     ///
     /// # Note
     ///
@@ -1595,6 +1561,15 @@ impl ClientBuilder {
     /// a tokio timer enabled.
     pub fn connect_timeout(mut self, timeout: Duration) -> ClientBuilder {
         self.config.connect_timeout = Some(timeout);
+        self
+    }
+
+    /// Set the timeout for a single DNS resolution attempt (default 30s).
+    ///
+    /// Capped just below `connect_timeout` so a hanging lookup is reported as
+    /// a DNS error, never an untagged connect timeout.
+    pub fn dns_timeout(mut self, timeout: Duration) -> ClientBuilder {
+        self.config.dns_timeout = Some(timeout);
         self
     }
 
@@ -1629,6 +1604,17 @@ impl ClientBuilder {
     /// Default is `usize::MAX` (no limit).
     pub fn pool_max_idle_per_host(mut self, max: usize) -> ClientBuilder {
         self.config.pool_max_idle_per_host = max;
+        self
+    }
+
+    /// Sets the maximum number of H2 connections to keep in the pool.
+    ///
+    /// When the pool is full, the oldest idle connection is evicted to make
+    /// room for a new one.
+    ///
+    /// Default is 256.
+    pub fn pool_max_connections(mut self, max: usize) -> ClientBuilder {
+        self.config.pool_max_connections = max.max(1);
         self
     }
 
@@ -1672,6 +1658,17 @@ impl ClientBuilder {
         self
     }
 
+    /// Set the maximum number of headers accepted in an HTTP/1 response.
+    ///
+    /// When a response contains more headers than this value, it is rejected
+    /// with a parse error and the request fails.
+    ///
+    /// Default is 100.
+    pub fn http1_max_headers(mut self, max: usize) -> ClientBuilder {
+        self.config.http1_max_headers = Some(max);
+        self
+    }
+
     /// Only use HTTP/1.
     pub fn http1_only(mut self) -> ClientBuilder {
         self.config.http_version_pref = HttpVersionPref::Http1;
@@ -1685,8 +1682,6 @@ impl ClientBuilder {
     }
 
     /// Only use HTTP/2.
-    #[cfg(feature = "http2")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
     pub fn http2_prior_knowledge(mut self) -> ClientBuilder {
         self.config.http_version_pref = HttpVersionPref::Http2;
         self
@@ -1694,7 +1689,7 @@ impl ClientBuilder {
 
     /// Only use HTTP/3.
     #[cfg(feature = "http3")]
-    #[cfg_attr(docsrs, doc(cfg(all(reqwest_unstable, feature = "http3",))))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http3")))]
     pub fn http3_prior_knowledge(mut self) -> ClientBuilder {
         self.config.http_version_pref = HttpVersionPref::Http3;
         self
@@ -1702,9 +1697,7 @@ impl ClientBuilder {
 
     /// Sets the `SETTINGS_INITIAL_WINDOW_SIZE` option for HTTP2 stream-level flow control.
     ///
-    /// Default is currently 65,535 but may change internally to optimize for common uses.
-    #[cfg(feature = "http2")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
+    /// Default may change internally to optimize for common uses.
     pub fn http2_initial_stream_window_size(mut self, sz: impl Into<Option<u32>>) -> ClientBuilder {
         self.config.http2_initial_stream_window_size = sz.into();
         self
@@ -1712,9 +1705,7 @@ impl ClientBuilder {
 
     /// Sets the max connection-level flow control for HTTP2
     ///
-    /// Default is currently 65,535 but may change internally to optimize for common uses.
-    #[cfg(feature = "http2")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
+    /// Default may change internally to optimize for common uses.
     pub fn http2_initial_connection_window_size(
         mut self,
         sz: impl Into<Option<u32>>,
@@ -1727,8 +1718,6 @@ impl ClientBuilder {
     ///
     /// Enabling this will override the limits set in `http2_initial_stream_window_size` and
     /// `http2_initial_connection_window_size`.
-    #[cfg(feature = "http2")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
     pub fn http2_adaptive_window(mut self, enabled: bool) -> ClientBuilder {
         self.config.http2_adaptive_window = enabled;
         self
@@ -1737,8 +1726,6 @@ impl ClientBuilder {
     /// Sets the maximum frame size to use for HTTP2.
     ///
     /// Default is currently 16,384 but may change internally to optimize for common uses.
-    #[cfg(feature = "http2")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
     pub fn http2_max_frame_size(mut self, sz: impl Into<Option<u32>>) -> ClientBuilder {
         self.config.http2_max_frame_size = sz.into();
         self
@@ -1747,8 +1734,6 @@ impl ClientBuilder {
     /// Sets the maximum size of received header frames for HTTP2.
     ///
     /// Default is currently 16KB, but can change.
-    #[cfg(feature = "http2")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
     pub fn http2_max_header_list_size(mut self, max_header_size_bytes: u32) -> ClientBuilder {
         self.config.http2_max_header_list_size = Some(max_header_size_bytes);
         self
@@ -1758,8 +1743,6 @@ impl ClientBuilder {
     ///
     /// Pass `None` to disable HTTP2 keep-alive.
     /// Default is currently disabled.
-    #[cfg(feature = "http2")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
     pub fn http2_keep_alive_interval(
         mut self,
         interval: impl Into<Option<Duration>>,
@@ -1773,8 +1756,6 @@ impl ClientBuilder {
     /// If the ping is not acknowledged within the timeout, the connection will be closed.
     /// Does nothing if `http2_keep_alive_interval` is disabled.
     /// Default is currently disabled.
-    #[cfg(feature = "http2")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
     pub fn http2_keep_alive_timeout(mut self, timeout: Duration) -> ClientBuilder {
         self.config.http2_keep_alive_timeout = Some(timeout);
         self
@@ -1786,77 +1767,89 @@ impl ClientBuilder {
     /// If enabled, pings are also sent when no streams are active.
     /// Does nothing if `http2_keep_alive_interval` is disabled.
     /// Default is `false`.
-    #[cfg(feature = "http2")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
     pub fn http2_keep_alive_while_idle(mut self, enabled: bool) -> ClientBuilder {
         self.config.http2_keep_alive_while_idle = enabled;
         self
     }
 
-    /// Sets the HTTP/2 SETTINGS frame order for browser fingerprinting.
-    #[cfg(feature = "http2")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
-    pub fn http2_settings_order(mut self, order: h2::frame::SettingsOrder) -> ClientBuilder {
-        self.config.http2_settings_order = Some(order);
-        self
-    }
-
-    /// Sets the HTTP/2 pseudo-header order for browser fingerprinting.
-    #[cfg(feature = "http2")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
-    pub fn http2_headers_pseudo_order(mut self, order: h2::frame::PseudoOrder) -> ClientBuilder {
-        self.config.http2_headers_pseudo_order = Some(order);
-        self
-    }
-
-    /// Sets the HTTP/2 stream dependency for browser fingerprinting.
-    #[cfg(feature = "http2")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
-    pub fn http2_headers_stream_dependency(
-        mut self,
-        dependency: h2::frame::StreamDependency,
-    ) -> ClientBuilder {
-        self.config.http2_headers_stream_dependency = Some(dependency);
-        self
-    }
-
-    /// Sets the HTTP/2 PRIORITY frames for browser fingerprinting.
-    #[cfg(feature = "http2")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
-    pub fn http2_priorities(mut self, priorities: h2::frame::Priorities) -> ClientBuilder {
-        self.config.http2_priorities = Some(priorities);
-        self
-    }
-
-    /// Sets the HTTP/2 header table size.
-    #[cfg(feature = "http2")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
+    /// Sets the HTTP/2 SETTINGS_HEADER_TABLE_SIZE value.
     pub fn http2_header_table_size(mut self, size: impl Into<Option<u32>>) -> ClientBuilder {
         self.config.http2_header_table_size = size.into();
         self
     }
 
-    /// Sets the HTTP/2 max concurrent streams.
-    #[cfg(feature = "http2")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
+    /// Sets the HTTP/2 SETTINGS_MAX_CONCURRENT_STREAMS value.
     pub fn http2_max_concurrent_streams(mut self, max: impl Into<Option<u32>>) -> ClientBuilder {
         self.config.http2_max_concurrent_streams = max.into();
         self
     }
 
-    /// Sets whether HTTP/2 server push is enabled.
-    #[cfg(feature = "http2")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
+    /// Sets the HTTP/2 SETTINGS_ENABLE_PUSH value.
     pub fn http2_enable_push(mut self, enabled: impl Into<Option<bool>>) -> ClientBuilder {
         self.config.http2_enable_push = enabled.into();
         self
     }
 
-    /// Sets whether to disable RFC 7540 Stream Priorities.
-    #[cfg(feature = "http2")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "http2")))]
-    pub fn http2_no_rfc7540_priorities(mut self, enabled: impl Into<Option<bool>>) -> ClientBuilder {
+    /// Sets the HTTP/2 SETTINGS_NO_RFC7540_PRIORITIES value.
+    pub fn http2_no_rfc7540_priorities(
+        mut self,
+        enabled: impl Into<Option<bool>>,
+    ) -> ClientBuilder {
         self.config.http2_no_rfc7540_priorities = enabled.into();
+        self
+    }
+
+    /// Sets the HTTP/2 SETTINGS_ENABLE_CONNECT_PROTOCOL value.
+    pub fn http2_enable_connect_protocol(mut self, val: impl Into<Option<u32>>) -> ClientBuilder {
+        self.config.http2_enable_connect_protocol = val.into();
+        self
+    }
+
+    /// Sets the HTTP/2 SETTINGS frame order for fingerprinting.
+    pub fn http2_settings_order(mut self, order: h2::frame::SettingsOrder) -> ClientBuilder {
+        self.config.http2_settings_order = Some(order);
+        self
+    }
+
+    /// Sets the HTTP/2 pseudo-header order for fingerprinting.
+    pub fn http2_headers_pseudo_order(mut self, order: h2::frame::PseudoOrder) -> ClientBuilder {
+        self.config.http2_headers_pseudo_order = Some(order);
+        self
+    }
+
+    /// Sets whether to include PRIORITY flag in HTTP/2 HEADERS frames.
+    ///
+    /// When enabled, HEADERS frames will include priority data matching Chrome's behavior.
+    pub fn http2_headers_priority(mut self, data: Option<(u8, u32, bool)>) -> ClientBuilder {
+        self.config.http2_headers_priority = data;
+        self
+    }
+
+    /// Sets the HTTP/2 regular header ordering for browser fingerprinting.
+    pub fn http2_headers_order(mut self, order: Vec<http::HeaderName>) -> ClientBuilder {
+        self.config.http2_headers_order = Some(order);
+        self
+    }
+
+    /// Sets the initial HTTP/2 stream ID for browser fingerprinting.
+    ///
+    /// Firefox starts at stream ID 3, Chrome starts at 1 (default).
+    pub fn http2_initial_stream_id(mut self, stream_id: u32) -> ClientBuilder {
+        self.config.http2_initial_stream_id = Some(stream_id);
+        self
+    }
+
+    /// Sets extra receive window capacity to add to new locally-initiated streams.
+    ///
+    /// When set, after creating a new stream, a WINDOW_UPDATE frame will be sent
+    /// to increase the stream's receive window by this amount.
+    /// This is used for browser fingerprinting (e.g. Firefox adds 12451840
+    /// to the first stream's receive window).
+    pub fn http2_initial_stream_window_size_increment(
+        mut self,
+        sz: impl Into<Option<u32>>,
+    ) -> ClientBuilder {
+        self.config.http2_initial_stream_window_size_increment = sz.into();
         self
     }
 
@@ -2004,7 +1997,7 @@ impl ClientBuilder {
     /// Likewise, DNS resolution will not be done on the domain name.
     #[cfg(unix)]
     pub fn unix_socket(mut self, path: impl UnixSocketProvider) -> ClientBuilder {
-        self.config.unix_socket = Some(path.reqwest_uds_path(crate::connect::uds::Internal).into());
+        self.config.unix_socket = Some(path.primp_uds_path(crate::connect::uds::Internal).into());
         self
     }
 
@@ -2022,7 +2015,7 @@ impl ClientBuilder {
     #[cfg(target_os = "windows")]
     pub fn windows_named_pipe(mut self, pipe: impl WindowsNamedPipeProvider) -> ClientBuilder {
         self.config.windows_named_pipe = Some(
-            pipe.reqwest_windows_named_pipe_path(crate::connect::windows_named_pipe::Internal)
+            pipe.primp_windows_named_pipe_path(crate::connect::windows_named_pipe::Internal)
                 .into(),
         );
         self
@@ -2044,13 +2037,8 @@ impl ClientBuilder {
     ///
     /// # Optional
     ///
-    /// This requires the optional `default-tls`, `native-tls`, or `rustls(-...)`
+    /// This requires the optional `rustls(-...)`
     /// feature to be enabled.
-    #[cfg(feature = "__tls")]
-    #[cfg_attr(
-        docsrs,
-        doc(cfg(any(feature = "default-tls", feature = "native-tls", feature = "rustls")))
-    )]
     pub fn tls_certs_merge(
         mut self,
         certs: impl IntoIterator<Item = Certificate>,
@@ -2069,13 +2057,8 @@ impl ClientBuilder {
     ///
     /// # Optional
     ///
-    /// This requires the optional `default-tls`, `native-tls`, or `rustls(-...)`
+    /// This requires the optional `rustls(-...)`
     /// feature to be enabled.
-    #[cfg(feature = "__tls")]
-    #[cfg_attr(
-        docsrs,
-        doc(cfg(any(feature = "default-tls", feature = "native-tls", feature = "rustls")))
-    )]
     pub fn tls_certs_only(mut self, certs: impl IntoIterator<Item = Certificate>) -> ClientBuilder {
         self.config.root_certs.extend(certs);
         self.config.tls_certs_only = true;
@@ -2084,7 +2067,6 @@ impl ClientBuilder {
 
     /// Deprecated: use [`ClientBuilder::tls_certs_merge()`] or
     /// [`ClientBuilder::tls_certs_only()`] instead.
-    #[cfg(feature = "__tls")]
     pub fn add_root_certificate(mut self, cert: Certificate) -> ClientBuilder {
         self.config.root_certs.push(cert);
         self
@@ -2103,8 +2085,6 @@ impl ClientBuilder {
     /// # Optional
     ///
     /// This requires the `rustls(-...)` Cargo feature enabled.
-    #[cfg(feature = "__rustls")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "rustls")))]
     pub fn tls_crls_only(
         mut self,
         crls: impl IntoIterator<Item = CertificateRevocationList>,
@@ -2114,16 +2094,12 @@ impl ClientBuilder {
     }
 
     /// Deprecated: use [`ClientBuilder::tls_crls_only()`] instead.
-    #[cfg(feature = "__rustls")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "rustls")))]
     pub fn add_crl(mut self, crl: CertificateRevocationList) -> ClientBuilder {
         self.config.crls.push(crl);
         self
     }
 
     /// Deprecated: use [`ClientBuilder::tls_crls_only()`] instead.
-    #[cfg(feature = "__rustls")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "rustls")))]
     pub fn add_crls(
         mut self,
         crls: impl IntoIterator<Item = CertificateRevocationList>,
@@ -2136,10 +2112,8 @@ impl ClientBuilder {
     ///
     /// # Optional
     ///
-    /// This requires the optional `native-tls` or `rustls(-...)` feature to be
+    /// This requires the optional `rustls(-...)` feature to be
     /// enabled.
-    #[cfg(any(feature = "__native-tls", feature = "__rustls"))]
-    #[cfg_attr(docsrs, doc(cfg(any(feature = "native-tls", feature = "rustls"))))]
     pub fn identity(mut self, identity: Identity) -> ClientBuilder {
         self.config.identity = Some(identity);
         self
@@ -2163,13 +2137,8 @@ impl ClientBuilder {
     ///
     /// # Optional
     ///
-    /// This requires the optional `default-tls`, `native-tls`, or `rustls(-...)`
+    /// This requires the optional `rustls(-...)`
     /// feature to be enabled.
-    #[cfg(feature = "__tls")]
-    #[cfg_attr(
-        docsrs,
-        doc(cfg(any(feature = "default-tls", feature = "native-tls", feature = "rustls")))
-    )]
     pub fn tls_danger_accept_invalid_hostnames(
         mut self,
         accept_invalid_hostname: bool,
@@ -2179,7 +2148,6 @@ impl ClientBuilder {
     }
 
     /// Deprecated: use [`ClientBuilder::tls_danger_accept_invalid_hostnames()`] instead.
-    #[cfg(feature = "__tls")]
     pub fn danger_accept_invalid_hostnames(self, accept_invalid_hostname: bool) -> ClientBuilder {
         self.tls_danger_accept_invalid_hostnames(accept_invalid_hostname)
     }
@@ -2198,20 +2166,14 @@ impl ClientBuilder {
     ///
     /// # Optional
     ///
-    /// This requires the optional `default-tls`, `native-tls`, or `rustls(-...)`
+    /// This requires the optional `rustls(-...)`
     /// feature to be enabled.
-    #[cfg(feature = "__tls")]
-    #[cfg_attr(
-        docsrs,
-        doc(cfg(any(feature = "default-tls", feature = "native-tls", feature = "rustls")))
-    )]
     pub fn tls_danger_accept_invalid_certs(mut self, accept_invalid_certs: bool) -> ClientBuilder {
         self.config.certs_verification = !accept_invalid_certs;
         self
     }
 
     /// Deprecated: use [`ClientBuilder::tls_danger_accept_invalid_certs()`] instead.
-    #[cfg(feature = "__tls")]
     pub fn danger_accept_invalid_certs(self, accept_invalid_certs: bool) -> ClientBuilder {
         self.tls_danger_accept_invalid_certs(accept_invalid_certs)
     }
@@ -2222,15 +2184,26 @@ impl ClientBuilder {
     ///
     /// # Optional
     ///
-    /// This requires the optional `default-tls`, `native-tls`, or `rustls(-...)`
+    /// This requires the optional `rustls(-...)`
     /// feature to be enabled.
-    #[cfg(feature = "__tls")]
-    #[cfg_attr(
-        docsrs,
-        doc(cfg(any(feature = "default-tls", feature = "native-tls", feature = "rustls")))
-    )]
     pub fn tls_sni(mut self, tls_sni: bool) -> ClientBuilder {
         self.config.tls_sni = tls_sni;
+        self
+    }
+
+    /// Controls if the SSLKEYLOGFILE environment variable is respected.
+    ///
+    /// When enabled, if the environment variable `SSLKEYLOGFILE` is present at runtime,
+    /// TLS keys will be logged to the file at the path described in the variable.
+    /// This can be used by end-users to allow debugging TLS connections.
+    ///
+    /// Defaults to `false`.
+    ///
+    /// # Optional
+    ///
+    /// This requires the `rustls(-...)` Cargo feature enabled.
+    pub fn tls_sslkeylogfile(mut self, on: bool) -> ClientBuilder {
+        self.config.tls_sslkeylogfile = on;
         self
     }
 
@@ -2240,27 +2213,19 @@ impl ClientBuilder {
     ///
     /// # Errors
     ///
-    /// A value of `tls::Version::TLS_1_3` will cause an error with the
-    /// `native-tls` backend. This does not mean the version
-    /// isn't supported, just that it can't be set as a minimum due to
-    /// technical limitations.
+    /// A value of `tls::Version::TLS_1_3` may cause an error if
+    /// the version isn't supported by the backend.
     ///
     /// # Optional
     ///
-    /// This requires the optional `default-tls`, `native-tls`, or `rustls(-...)`
+    /// This requires the optional `rustls(-...)`
     /// feature to be enabled.
-    #[cfg(feature = "__tls")]
-    #[cfg_attr(
-        docsrs,
-        doc(cfg(any(feature = "default-tls", feature = "native-tls", feature = "rustls")))
-    )]
     pub fn tls_version_min(mut self, version: tls::Version) -> ClientBuilder {
         self.config.min_tls_version = Some(version);
         self
     }
 
     /// Deprecated: use [`ClientBuilder::tls_version_min()`] instead.
-    #[cfg(feature = "__tls")]
     pub fn min_tls_version(self, version: tls::Version) -> ClientBuilder {
         self.tls_version_min(version)
     }
@@ -2271,53 +2236,21 @@ impl ClientBuilder {
     ///
     /// # Errors
     ///
-    /// A value of `tls::Version::TLS_1_3` will cause an error with the
-    /// `native-tls` backend. This does not mean the version
-    /// isn't supported, just that it can't be set as a maximum due to
-    /// technical limitations.
-    ///
-    /// Cannot set a maximum outside the protocol versions supported by
-    /// `rustls` with the `rustls` backend.
+    /// A value of `tls::Version::TLS_1_3` may cause an error if
+    /// the version isn't supported by the backend.
     ///
     /// # Optional
     ///
-    /// This requires the optional `default-tls`, `native-tls`, or `rustls(-...)`
+    /// This requires the optional `rustls(-...)`
     /// feature to be enabled.
-    #[cfg(feature = "__tls")]
-    #[cfg_attr(
-        docsrs,
-        doc(cfg(any(feature = "default-tls", feature = "native-tls", feature = "rustls")))
-    )]
     pub fn tls_version_max(mut self, version: tls::Version) -> ClientBuilder {
         self.config.max_tls_version = Some(version);
         self
     }
 
     /// Deprecated: use [`ClientBuilder::tls_version_max()`] instead.
-    #[cfg(feature = "__tls")]
     pub fn max_tls_version(self, version: tls::Version) -> ClientBuilder {
         self.tls_version_max(version)
-    }
-
-    /// Force using the native TLS backend.
-    ///
-    /// Since multiple TLS backends can be optionally enabled, this option will
-    /// force the `native-tls` backend to be used for this `Client`.
-    ///
-    /// # Optional
-    ///
-    /// This requires the optional `native-tls` feature to be enabled.
-    #[cfg(feature = "__native-tls")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "native-tls")))]
-    pub fn tls_backend_native(mut self) -> ClientBuilder {
-        self.config.tls = TlsBackend::NativeTls;
-        self
-    }
-
-    /// Deprecated: use [`ClientBuilder::tls_backend_native()`] instead.
-    #[cfg(feature = "__native-tls")]
-    pub fn use_native_tls(self) -> ClientBuilder {
-        self.tls_backend_native()
     }
 
     /// Force using the Rustls TLS backend.
@@ -2328,92 +2261,32 @@ impl ClientBuilder {
     /// # Optional
     ///
     /// This requires the optional `rustls(-...)` feature to be enabled.
-    #[cfg(feature = "__rustls")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "rustls")))]
     pub fn tls_backend_rustls(mut self) -> ClientBuilder {
         self.config.tls = TlsBackend::Rustls;
         self
     }
 
     /// Deprecated: use [`ClientBuilder::tls_backend_rustls()`] instead.
-    #[cfg(feature = "__rustls")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "rustls")))]
     pub fn use_rustls_tls(self) -> ClientBuilder {
         self.tls_backend_rustls()
     }
 
-    /// Use a preconfigured TLS backend.
+    /// Use a preconfigured `rustls::ClientConfig` as-is for every TLS
+    /// connection, replacing the builder's own TLS settings.
     ///
-    /// If the passed `Any` argument is not a TLS backend that reqwest
-    /// understands, the `ClientBuilder` will error when calling `build`.
-    ///
-    /// # Advanced
-    ///
-    /// <div class="warning">
-    ///
-    /// There is no semver stability on the internals of this method. Use at
-    /// your own risk.
-    ///
-    /// </div>
-    ///
-    /// This is an advanced option, and can be somewhat brittle. Usage requires
-    /// keeping the preconfigured TLS argument version in sync with reqwest,
-    /// since version mismatches will result in an "unknown" TLS backend.
-    ///
-    /// If possible, it's preferable to use the methods on `ClientBuilder`
-    /// to configure reqwest's TLS.
-    ///
-    /// # Optional
-    ///
-    /// This requires one of the optional features `native-tls` or
-    /// `rustls(-...)` to be enabled.
-    #[cfg(any(feature = "__native-tls", feature = "__rustls",))]
-    #[cfg_attr(docsrs, doc(cfg(any(feature = "native-tls", feature = "rustls"))))]
-    pub fn tls_backend_preconfigured(mut self, tls: impl Any) -> ClientBuilder {
-        let mut tls = Some(tls);
-        #[cfg(feature = "__native-tls")]
-        {
-            if let Some(conn) = (&mut tls as &mut dyn Any).downcast_mut::<Option<TlsConnector>>() {
-                let tls = conn.take().expect("is definitely Some");
-                let tls = crate::tls::TlsBackend::BuiltNativeTls(tls);
-                self.config.tls = tls;
-                return self;
-            }
-        }
-        #[cfg(feature = "__rustls")]
-        {
-            if let Some(conn) =
-                (&mut tls as &mut dyn Any).downcast_mut::<Option<rustls::ClientConfig>>()
-            {
-                let tls = conn.take().expect("is definitely Some");
-                let tls = crate::tls::TlsBackend::BuiltRustls(Box::new(tls));
-                self.config.tls = tls;
-                return self;
-            }
-        }
-
-        // Otherwise, we don't recognize the TLS backend!
-        self.config.tls = crate::tls::TlsBackend::UnknownPreconfigured;
+    /// Advanced: internals carry no semver stability — prefer the typed
+    /// `ClientBuilder` TLS methods when possible.
+    pub fn use_preconfigured_tls(mut self, tls: rustls::ClientConfig) -> ClientBuilder {
+        self.config.tls = crate::tls::TlsBackend::BuiltRustls(Box::new(tls));
         self
-    }
-
-    /// Deprecated: use [`ClientBuilder::tls_backend_preconfigured()`] instead.
-    #[cfg(any(feature = "__native-tls", feature = "__rustls",))]
-    pub fn use_preconfigured_tls(self, tls: impl Any) -> ClientBuilder {
-        self.tls_backend_preconfigured(tls)
     }
 
     /// Add TLS information as `TlsInfo` extension to responses.
     ///
     /// # Optional
     ///
-    /// This requires the optional `default-tls`, `native-tls`, or `rustls(-...)`
+    /// This requires the optional `rustls(-...)`
     /// feature to be enabled.
-    #[cfg(feature = "__tls")]
-    #[cfg_attr(
-        docsrs,
-        doc(cfg(any(feature = "default-tls", feature = "native-tls", feature = "rustls")))
-    )]
     pub fn tls_info(mut self, tls_info: bool) -> ClientBuilder {
         self.config.tls_info = tls_info;
         self
@@ -2495,37 +2368,17 @@ impl ClientBuilder {
         self
     }
 
-    /// Enable DNS caching with a specified TTL.
+    /// Set how long resolved DNS entries are served from the in-memory cache
+    /// before they are re-resolved.
     ///
-    /// When enabled, DNS lookups will be cached for the specified duration.
-    /// This can significantly improve performance by avoiding repeated DNS
-    /// lookups for the same hostname.
-    ///
-    /// # Arguments
-    ///
-    /// * `ttl` - The time-to-live for cached DNS entries. A typical value is 60 seconds.
-    ///
-    /// # Example
-    ///
-    /// ```rust
-    /// use std::time::Duration;
-    /// use primp::Client;
-    ///
-    /// let client = Client::builder()
-    ///     .dns_cache_ttl(Duration::from_secs(60))
-    ///     .build()
-    ///     .unwrap();
-    /// ```
+    /// The underlying resolver yields only socket addresses (no per-record
+    /// TTL), so a single client-wide TTL is applied to every host. The default
+    /// is 30 seconds. Passing `Duration::ZERO` disables caching so every
+    /// request re-resolves (concurrent in-flight lookups for the same host are
+    /// still deduplicated).
     pub fn dns_cache_ttl(mut self, ttl: Duration) -> ClientBuilder {
         self.config.dns_cache_ttl = Some(ttl);
         self
-    }
-
-    /// Enable DNS caching with a default TTL of 60 seconds.
-    ///
-    /// This is a convenience method equivalent to `dns_cache_ttl(Duration::from_secs(60))`.
-    pub fn enable_dns_cache(self) -> ClientBuilder {
-        self.dns_cache_ttl(Duration::from_secs(60))
     }
 
     /// Whether to send data on the first flight ("early data") in TLS 1.3 handshakes
@@ -2533,7 +2386,7 @@ impl ClientBuilder {
     ///
     /// The default is false.
     #[cfg(feature = "http3")]
-    #[cfg_attr(docsrs, doc(cfg(all(reqwest_unstable, feature = "http3",))))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http3")))]
     pub fn tls_early_data(mut self, enabled: bool) -> ClientBuilder {
         self.config.tls_enable_early_data = enabled;
         self
@@ -2545,7 +2398,7 @@ impl ClientBuilder {
     ///
     /// [`TransportConfig`]: https://docs.rs/quinn/latest/quinn/struct.TransportConfig.html
     #[cfg(feature = "http3")]
-    #[cfg_attr(docsrs, doc(cfg(all(reqwest_unstable, feature = "http3",))))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http3")))]
     pub fn http3_max_idle_timeout(mut self, value: Duration) -> ClientBuilder {
         self.config.quic_max_idle_timeout = Some(value);
         self
@@ -2558,13 +2411,11 @@ impl ClientBuilder {
     ///
     /// [`TransportConfig`]: https://docs.rs/quinn/latest/quinn/struct.TransportConfig.html
     ///
-    /// # Panics
-    ///
-    /// Panics if the value is over 2^62.
+    /// Values above the QUIC maximum (2^62 - 1) are clamped to that maximum.
     #[cfg(feature = "http3")]
-    #[cfg_attr(docsrs, doc(cfg(all(reqwest_unstable, feature = "http3",))))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http3")))]
     pub fn http3_stream_receive_window(mut self, value: u64) -> ClientBuilder {
-        self.config.quic_stream_receive_window = Some(value.try_into().unwrap());
+        self.config.quic_stream_receive_window = Some(clamp_varint(value));
         self
     }
 
@@ -2575,13 +2426,11 @@ impl ClientBuilder {
     ///
     /// [`TransportConfig`]: https://docs.rs/quinn/latest/quinn/struct.TransportConfig.html
     ///
-    /// # Panics
-    ///
-    /// Panics if the value is over 2^62.
+    /// Values above the QUIC maximum (2^62 - 1) are clamped to that maximum.
     #[cfg(feature = "http3")]
-    #[cfg_attr(docsrs, doc(cfg(all(reqwest_unstable, feature = "http3",))))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http3")))]
     pub fn http3_conn_receive_window(mut self, value: u64) -> ClientBuilder {
-        self.config.quic_receive_window = Some(value.try_into().unwrap());
+        self.config.quic_receive_window = Some(clamp_varint(value));
         self
     }
 
@@ -2591,7 +2440,7 @@ impl ClientBuilder {
     ///
     /// [`TransportConfig`]: https://docs.rs/quinn/latest/quinn/struct.TransportConfig.html
     #[cfg(feature = "http3")]
-    #[cfg_attr(docsrs, doc(cfg(all(reqwest_unstable, feature = "http3",))))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http3")))]
     pub fn http3_send_window(mut self, value: u64) -> ClientBuilder {
         self.config.quic_send_window = Some(value);
         self
@@ -2605,7 +2454,7 @@ impl ClientBuilder {
     /// [BBR]: https://datatracker.ietf.org/doc/html/draft-ietf-ccwg-bbr
     /// [CUBIC]: https://datatracker.ietf.org/doc/html/rfc8312
     #[cfg(feature = "http3")]
-    #[cfg_attr(docsrs, doc(cfg(all(reqwest_unstable, feature = "http3",))))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http3")))]
     pub fn http3_congestion_bbr(mut self) -> ClientBuilder {
         self.config.quic_congestion_bbr = true;
         self
@@ -2621,9 +2470,9 @@ impl ClientBuilder {
     ///
     /// [`Builder`]: https://docs.rs/h3/latest/h3/client/struct.Builder.html#method.max_field_section_size
     #[cfg(feature = "http3")]
-    #[cfg_attr(docsrs, doc(cfg(all(reqwest_unstable, feature = "http3",))))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http3")))]
     pub fn http3_max_field_section_size(mut self, value: u64) -> ClientBuilder {
-        self.config.h3_max_field_section_size = Some(value.try_into().unwrap());
+        self.config.h3_max_field_section_size = Some(value);
         self
     }
 
@@ -2639,7 +2488,7 @@ impl ClientBuilder {
     ///
     /// [`Builder`]: https://docs.rs/h3/latest/h3/client/struct.Builder.html#method.send_grease
     #[cfg(feature = "http3")]
-    #[cfg_attr(docsrs, doc(cfg(all(reqwest_unstable, feature = "http3",))))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "http3")))]
     pub fn http3_send_grease(mut self, enabled: bool) -> ClientBuilder {
         self.config.h3_send_grease = Some(enabled);
         self
@@ -2657,8 +2506,7 @@ impl ClientBuilder {
     /// ```
     /// use std::time::Duration;
     ///
-    /// # #[cfg(not(feature = "rustls-no-provider"))]
-    /// let client = primp::Client::builder()
+    /// # let client = primp::Client::builder()
     ///                      // resolved to outermost layer, meaning while we are waiting on concurrency limit
     ///                      .connect_timeout(Duration::from_millis(200))
     ///                      // underneath the concurrency check, so only after concurrency limit lets us through
@@ -2681,87 +2529,7 @@ impl ClientBuilder {
 
         self
     }
-
-    /// Sets the necessary values to mimic the specified browser version.
-    #[cfg(feature = "impersonate")]
-    pub fn impersonate(mut self, version: crate::imp::Impersonate) -> ClientBuilder {
-        self.config.impersonate = Some(version);
-        let os_type = self.config.os_type.or_else(|| Some(crate::imp::random_impersonate_os()));
-        match version {
-            crate::imp::Impersonate::ChromeV144 | crate::imp::Impersonate::ChromeV145 => {
-                crate::imp::configure_impersonate(version, self, os_type)
-            }
-            crate::imp::Impersonate::EdgeV144 | crate::imp::Impersonate::EdgeV145 => {
-                crate::imp::edge::configure_impersonate(version, self, os_type)
-            }
-            crate::imp::Impersonate::OperaV126 | crate::imp::Impersonate::OperaV127 => {
-                crate::imp::opera::configure_impersonate(version, self, os_type)
-            }
-            crate::imp::Impersonate::SafariV26 | crate::imp::Impersonate::SafariV18_5 => {
-                crate::imp::safari::configure_impersonate(version, self, os_type)
-            }
-            crate::imp::Impersonate::FirefoxV140 | crate::imp::Impersonate::FirefoxV146 => {
-                crate::imp::firefox::configure_impersonate(version, self, os_type)
-            }
-        }
-    }
-
-    /// Sets the operating system to impersonate when using browser impersonation.
-    #[cfg(feature = "impersonate")]
-    pub fn impersonate_os(mut self, os_type: crate::imp::ImpersonateOS) -> ClientBuilder {
-        self.config.os_type = Some(os_type);
-        self
-    }
-
-    /// Enable browser impersonation with a randomly selected browser version and OS.
-    #[cfg(feature = "impersonate")]
-    pub fn impersonate_random(self) -> ClientBuilder {
-        let browser_version = crate::imp::random_impersonate();
-        let os_type = crate::imp::random_impersonate_os();
-
-        let (final_browser, final_os) =
-            crate::imp::get_random_impersonate_config(Some(browser_version), Some(os_type));
-
-        match final_browser {
-            crate::imp::Impersonate::ChromeV144 | crate::imp::Impersonate::ChromeV145 => {
-                crate::imp::configure_impersonate(final_browser, self, Some(final_os))
-            }
-            crate::imp::Impersonate::EdgeV144 | crate::imp::Impersonate::EdgeV145 => {
-                crate::imp::edge::configure_impersonate(final_browser, self, Some(final_os))
-            }
-            crate::imp::Impersonate::OperaV126 | crate::imp::Impersonate::OperaV127 => {
-                crate::imp::opera::configure_impersonate(final_browser, self, Some(final_os))
-            }
-            crate::imp::Impersonate::SafariV26 | crate::imp::Impersonate::SafariV18_5 => {
-                crate::imp::safari::configure_impersonate(final_browser, self, Some(final_os))
-            }
-            crate::imp::Impersonate::FirefoxV140 | crate::imp::Impersonate::FirefoxV146 => {
-                crate::imp::firefox::configure_impersonate(final_browser, self, Some(final_os))
-            }
-        }
-    }
-
-    /// Configure rustls with browser emulation settings for impersonation.
-    #[cfg(feature = "impersonate")]
-    pub(crate) fn use_rustls_impersonate(
-        mut self,
-        browser_emulator: rustls::client::BrowserEmulator,
-        emulation_profile: crate::imp::EmulationProfile,
-    ) -> ClientBuilder {
-        self.config.browser_emulator = Some(browser_emulator);
-        self.config.emulation_profile = Some(emulation_profile);
-        self
-    }
-
-    /// Replace default headers with custom headers.
-    #[cfg(feature = "impersonate")]
-    pub(crate) fn replace_default_headers(mut self, headers: http::HeaderMap) -> ClientBuilder {
-        self.config.headers = headers;
-        self
-    }
 }
-
-type HyperClient = hyper_util::client::legacy::Client<Connector, super::Body>;
 
 impl Default for Client {
     fn default() -> Self {
@@ -2769,14 +2537,8 @@ impl Default for Client {
     }
 }
 
-#[cfg(feature = "__rustls")]
-static DEFAULT_CRYPTO_PROVIDER: std::sync::OnceLock<Arc<rustls::crypto::CryptoProvider>> = std::sync::OnceLock::new();
-
-#[cfg(feature = "__rustls")]
 fn default_rustls_crypto_provider() -> Arc<rustls::crypto::CryptoProvider> {
-    DEFAULT_CRYPTO_PROVIDER
-        .get_or_init(|| Arc::new(rustls::crypto::aws_lc_rs::default_provider()))
-        .clone()
+    Arc::new(rustls::crypto::aws_lc_rs::default_provider())
 }
 
 impl Client {
@@ -2886,6 +2648,89 @@ impl Client {
         self.execute_request(request)
     }
 
+    /// Get the default headers for this client.
+    pub fn headers(&self) -> &HeaderMap {
+        &self.inner.headers
+    }
+
+    /// Get a mutable reference to the default headers for this client.
+    pub fn headers_mut(&mut self) -> &mut HeaderMap {
+        &mut Arc::make_mut(&mut self.inner).headers
+    }
+
+    /// Get cookies for the given URL.
+    #[cfg(feature = "cookies")]
+    pub fn get_cookies(&self, url: &Url) -> Option<HeaderValue> {
+        self.inner
+            .cookie_store
+            .as_ref()
+            .and_then(|store| store.cookies(url))
+    }
+
+    /// Set cookies for the given URL.
+    #[cfg(feature = "cookies")]
+    pub fn set_cookies(&self, url: &Url, cookies: Vec<HeaderValue>) {
+        if let Some(store) = self.inner.cookie_store.as_ref() {
+            let mut iter = cookies.iter();
+            store.set_cookies(&mut iter, url);
+        }
+    }
+
+    /// Set proxies for the client.
+    ///
+    /// Updates the shared proxy state that both the Client (for HTTP auth
+    /// header attachment) and the ConnectorService (for connection routing)
+    /// read from. This is an in-place update — the service stack is NOT
+    /// rebuilt, but both halves see the new proxies because they share the
+    /// same `Arc<RwLock<...>>`.
+    pub fn set_proxies(&mut self, proxies: Vec<Proxy>) {
+        let proxy_matchers: Vec<ProxyMatcher> =
+            proxies.into_iter().map(|p| p.into_matcher()).collect();
+        let inner = Arc::make_mut(&mut self.inner);
+        *inner.proxies.write().unwrap_or_else(|e| e.into_inner()) = proxy_matchers;
+        inner.proxies_maybe_http_auth = inner
+            .proxies
+            .read()
+            .unwrap_or_else(|e| e.into_inner())
+            .iter()
+            .any(|p| p.maybe_has_http_auth());
+        inner.proxies_maybe_http_custom_headers = inner
+            .proxies
+            .read()
+            .unwrap_or_else(|e| e.into_inner())
+            .iter()
+            .any(|p| p.maybe_has_http_custom_headers());
+    }
+
+    /// Set the redirect policy for the client.
+    ///
+    /// Replaces the active policy in-place so that all subsequent requests
+    /// honor the new policy (including its `max` limit, custom classifier,
+    /// or disabled state). Does not rebuild the HTTP service stack.
+    pub fn set_redirect_policy(&mut self, policy: redirect::Policy) {
+        // `Policy` holds a `Box<dyn Fn>` for the custom variant, so it
+        // can't be `Clone`. Format the description first (borrows `&policy`)
+        // and only then move the policy into the live handle.
+        let desc = if policy.is_default() {
+            None
+        } else {
+            Some(format!("{:?}", policy))
+        };
+        let inner = Arc::make_mut(&mut self.inner);
+        inner.redirect_policy.set_policy(policy);
+        inner.redirect_policy_desc = desc;
+    }
+
+    /// Map a request version to one the h1 stack can serialize. HTTP/2 is
+    /// passed through (hyper coerces it to HTTP/1.1); HTTP/3 without an H3
+    /// dispatch and HTTP/0.9 fall back to HTTP/1.1.
+    fn clamp_h1_version(version: http::Version) -> http::Version {
+        match version {
+            http::Version::HTTP_09 | http::Version::HTTP_3 => http::Version::HTTP_11,
+            _ => version,
+        }
+    }
+
     pub(super) fn execute_request(&self, req: Request) -> Pending {
         let (method, url, mut headers, body, version, extensions) = req.pieces();
         if url.scheme() != "http" && url.scheme() != "https" {
@@ -2896,6 +2741,30 @@ impl Client {
         if self.inner.https_only && url.scheme() != "https" {
             return Pending::new_err(error::url_bad_scheme(url));
         }
+
+        // When the client is built with `http3_prior_knowledge()`, every request
+        // must be dispatched over HTTP/3. Mirror the per-request `.version(HTTP_3)`
+        // path so the dispatch below routes to the H3 client.
+        #[cfg(feature = "http3")]
+        let version = if matches!(self.inner.http_version_pref, HttpVersionPref::Http3) {
+            http::Version::HTTP_3
+        } else {
+            version
+        };
+
+        // Clamp versions the h1 stack cannot serialize (hyper 1.11 would
+        // either panic or reject with `UserUnsupportedVersion`). HTTP/2 is
+        // left alone: hyper coerces it to HTTP/1.1 and the h2 paths overwrite
+        // it anyway (`set_h2_version`). HTTP/3 survives only when the request
+        // will actually be dispatched to the H3 client.
+        #[cfg(feature = "http3")]
+        let version = if version == http::Version::HTTP_3 && self.inner.h3_client.is_some() {
+            version
+        } else {
+            Self::clamp_h1_version(version)
+        };
+        #[cfg(not(feature = "http3"))]
+        let version = Self::clamp_h1_version(version);
 
         // insert default headers in the request headers
         // without overwriting already appended headers.
@@ -2920,20 +2789,53 @@ impl Client {
             .uri(uri)
             .version(version);
 
-        let in_flight = match version {
-            #[cfg(feature = "http3")]
-            http::Version::HTTP_3 if self.inner.h3_client.is_some() => {
-                let mut req = builder.body(body).expect("valid request parts");
-                *req.headers_mut() = headers.clone();
-                let mut h3 = self.inner.h3_client.as_ref().unwrap().clone();
-                ResponseFuture::H3(h3.call(req))
+        let mut req = match builder.body(body) {
+            Ok(req) => req,
+            Err(e) => return Pending::new_err(crate::error::request(e.to_string())),
+        };
+        *req.headers_mut() = headers.clone();
+
+        // Carry the per-request redirect override onto the wire request so the
+        // redirect policy can read it from the first request of the chain.
+        if let Some(override_policy) = extensions
+            .get::<crate::config::RequestConfig<crate::config::RedirectPolicyOverride>>()
+            .and_then(|c| c.get_value())
+            .copied()
+        {
+            req.extensions_mut().insert(override_policy);
+        }
+
+        // Carry the per-request one-shot cookies onto the wire request so the
+        // cookie service can re-merge them with the fresh jar on every
+        // redirect hop (the rebuilt hyper request above starts with empty
+        // extensions).
+        if let Some(one_shot) = extensions
+            .get::<crate::config::RequestConfig<crate::config::OneShotCookies>>()
+            .and_then(|c| c.get_value())
+            .cloned()
+        {
+            req.extensions_mut().insert(crate::config::RequestConfig::<
+                crate::config::OneShotCookies,
+            >::new(Some(one_shot)));
+        }
+
+        #[cfg(feature = "http3")]
+        let in_flight = if version == http::Version::HTTP_3 {
+            if let Some(h3_client) = self.inner.h3_client.as_ref() {
+                let mut h3 = h3_client.clone();
+                ResponseFuture::H3(Box::pin(h3.call(req)))
+            } else {
+                let mut svc = self.inner.service.clone();
+                ResponseFuture::Response(Box::pin(svc.call(req)))
             }
-            _ => {
-                let mut req = builder.body(body).expect("valid request parts");
-                *req.headers_mut() = headers.clone();
-                let mut hyper = self.inner.hyper.clone();
-                ResponseFuture::Default(hyper.call(req))
-            }
+        } else {
+            let mut svc = self.inner.service.clone();
+            ResponseFuture::Response(Box::pin(svc.call(req)))
+        };
+        #[cfg(not(feature = "http3"))]
+        let in_flight = {
+            let mut svc = self.inner.service.clone();
+            ResponseFuture::Response(Box::pin(svc.call(req)))
         };
 
         let total_timeout = self
@@ -2944,24 +2846,20 @@ impl Client {
             .map(tokio::time::sleep)
             .map(Box::pin);
 
-        let read_timeout_fut = self
-            .inner
-            .read_timeout
-            .map(tokio::time::sleep)
-            .map(Box::pin);
+        let read_timeout_duration = self.inner.read_timeout.fetch(&extensions).copied();
+        let read_timeout_fut = read_timeout_duration.map(tokio::time::sleep).map(Box::pin);
 
         Pending {
             inner: PendingInner::Request(Box::pin(PendingRequest {
                 method,
                 url,
-                headers,
 
                 client: self.inner.clone(),
 
                 in_flight,
                 total_timeout,
                 read_timeout_fut,
-                read_timeout: self.inner.read_timeout,
+                read_timeout: read_timeout_duration,
             })),
         }
     }
@@ -2982,10 +2880,29 @@ impl Client {
             return;
         }
 
-        for proxy in self.inner.proxies.iter() {
-            if let Some(header) = proxy.http_non_tunnel_basic_auth(dst) {
-                headers.insert(PROXY_AUTHORIZATION, header);
-                break;
+        for proxy in self
+            .inner
+            .proxies
+            .read()
+            .unwrap_or_else(|e| e.into_inner())
+            .iter()
+        {
+            match proxy.intercept(dst) {
+                Ok(Some(intercepted)) => {
+                    if let Some(scheme) = intercepted.uri().scheme() {
+                        if scheme == &Scheme::HTTP || scheme == &Scheme::HTTPS {
+                            if let Some(header) = intercepted.basic_auth().cloned() {
+                                headers.insert(PROXY_AUTHORIZATION, header);
+                            }
+                        }
+                    }
+                    break;
+                }
+                Ok(None) => continue,
+                Err(e) => {
+                    log::warn!("proxy intercept error in proxy_auth: {e}");
+                    break;
+                }
             }
         }
     }
@@ -2999,46 +2916,33 @@ impl Client {
             return;
         }
 
-        for proxy in self.inner.proxies.iter() {
-            if let Some(iter) = proxy.http_non_tunnel_custom_headers(dst) {
-                iter.iter().for_each(|(key, value)| {
-                    headers.insert(key, value.clone());
-                });
-                break;
+        for proxy in self
+            .inner
+            .proxies
+            .read()
+            .unwrap_or_else(|e| e.into_inner())
+            .iter()
+        {
+            match proxy.intercept(dst) {
+                Ok(Some(intercepted)) => {
+                    if let Some(scheme) = intercepted.uri().scheme() {
+                        if scheme == &Scheme::HTTP || scheme == &Scheme::HTTPS {
+                            if let Some(map) = intercepted.custom_headers() {
+                                map.iter().for_each(|(key, value)| {
+                                    headers.insert(key, value.clone());
+                                });
+                            }
+                        }
+                    }
+                    break;
+                }
+                Ok(None) => continue,
+                Err(e) => {
+                    log::warn!("proxy intercept error in proxy_custom_headers: {e}");
+                    break;
+                }
             }
         }
-    }
-
-    /// Get the default headers.
-    pub fn headers(&self) -> &HeaderMap {
-        &self.inner.headers
-    }
-
-    /// Get a mutable reference to the default headers.
-    pub fn headers_mut(&mut self) -> &mut HeaderMap {
-        &mut Arc::make_mut(&mut self.inner).headers
-    }
-
-    /// Get cookies for the given URL.
-    #[cfg(feature = "cookies")]
-    pub fn get_cookies(&self, url: &url::Url) -> Option<HeaderValue> {
-        self.inner.cookie_store.as_ref().and_then(|store| {
-            store.cookies(url)
-        })
-    }
-
-    /// Set cookies for the given URL.
-    #[cfg(feature = "cookies")]
-    pub fn set_cookies(&self, url: &url::Url, cookies: Vec<HeaderValue>) {
-        if let Some(store) = self.inner.cookie_store.as_ref() {
-            store.set_cookies(&mut cookies.iter(), url);
-        }
-    }
-
-    /// Set proxies for the client.
-    pub fn set_proxies(&mut self, proxies: Vec<Proxy>) {
-        let matchers: Vec<_> = proxies.into_iter().map(|p| p.into_matcher()).collect();
-        Arc::make_mut(&mut self.inner).proxies = Arc::new(matchers);
     }
 }
 
@@ -3047,6 +2951,46 @@ impl fmt::Debug for Client {
         let mut builder = f.debug_struct("Client");
         self.inner.fmt_fields(&mut builder);
         builder.finish()
+    }
+}
+
+/// Debug view of a `HeaderMap` that masks sensitive header values so
+/// `Debug for Client`/`ClientBuilder` never leak credentials.
+struct RedactedHeaders<'a>(&'a HeaderMap);
+
+fn is_sensitive_header(name: &http::HeaderName) -> bool {
+    name == http::header::AUTHORIZATION
+        || name == http::header::COOKIE
+        || name == "cookie2"
+        || name == http::header::PROXY_AUTHORIZATION
+}
+
+impl fmt::Debug for RedactedHeaders<'_> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        enum Value<'a> {
+            Plain(&'a HeaderValue),
+            Masked(&'a HeaderValue),
+        }
+        impl fmt::Debug for Value<'_> {
+            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+                match self {
+                    Value::Plain(v) => v.fmt(f),
+                    // Show the byte length only.
+                    Value::Masked(v) => write!(f, "\"[REDACTED:{} bytes]\"", v.as_bytes().len()),
+                }
+            }
+        }
+
+        f.debug_map()
+            .entries(self.0.iter().map(|(name, value)| {
+                let value = if is_sensitive_header(name) {
+                    Value::Masked(value)
+                } else {
+                    Value::Plain(value)
+                };
+                (name, value)
+            }))
+            .finish()
     }
 }
 
@@ -3112,7 +3056,7 @@ impl Config {
             f.field("referer", &true);
         }
 
-        f.field("default_headers", &self.headers);
+        f.field("default_headers", &RedactedHeaders(&self.headers));
 
         if self.http1_title_case_headers {
             f.field("http1_title_case_headers", &true);
@@ -3130,11 +3074,14 @@ impl Config {
             f.field("http1_allow_spaces_after_header_name_in_responses", &true);
         }
 
+        if let Some(http1_max_headers) = self.http1_max_headers {
+            f.field("http1_max_headers", &http1_max_headers);
+        }
+
         if matches!(self.http_version_pref, HttpVersionPref::Http1) {
             f.field("http1_only", &true);
         }
 
-        #[cfg(feature = "http2")]
         if matches!(self.http_version_pref, HttpVersionPref::Http2) {
             f.field("http2_prior_knowledge", &true);
         }
@@ -3171,14 +3118,12 @@ impl Config {
             f.field("tcp_nodelay", &true);
         }
 
-        #[cfg(feature = "__tls")]
         {
             if !self.hostname_verification {
                 f.field("tls_danger_accept_invalid_hostnames", &true);
             }
         }
 
-        #[cfg(feature = "__tls")]
         {
             if !self.certs_verification {
                 f.field("tls_danger_accept_invalid_certs", &true);
@@ -3197,17 +3142,16 @@ impl Config {
             f.field("tls_info", &self.tls_info);
         }
 
-        #[cfg(all(feature = "default-tls", feature = "__rustls"))]
+        {
+            f.field("tls_sslkeylogfile", &self.tls_sslkeylogfile);
+        }
+
         {
             f.field("tls_backend", &self.tls);
         }
 
         if !self.dns_overrides.is_empty() {
             f.field("dns_overrides", &self.dns_overrides);
-        }
-
-        if let Some(ttl) = self.dns_cache_ttl {
-            f.field("dns_cache_ttl", &ttl);
         }
 
         #[cfg(feature = "http3")]
@@ -3244,7 +3188,7 @@ type MaybeDecompression<T> = T;
     feature = "zstd",
     feature = "deflate"
 ))]
-type MaybeDecompression<T> = Decompression<T>;
+type MaybeDecompression<T> = RangeGuard<Decompression<T>>;
 
 type LayeredService<T> = MaybeDecompression<
     FollowRedirect<
@@ -3260,17 +3204,20 @@ struct ClientRef {
     #[cfg(feature = "cookies")]
     cookie_store: Option<Arc<dyn cookie::CookieStore>>,
     headers: HeaderMap,
-    hyper: LayeredService<HyperService>,
+    service: LayeredService<NegotiatingConnection>,
     #[cfg(feature = "http3")]
     h3_client: Option<LayeredService<H3Client>>,
+    #[cfg(feature = "http3")]
+    http_version_pref: HttpVersionPref,
     referer: bool,
     total_timeout: RequestConfig<TotalTimeout>,
-    read_timeout: Option<Duration>,
-    proxies: Arc<Vec<ProxyMatcher>>,
+    read_timeout: RequestConfig<ReadTimeout>,
+    proxies: Arc<RwLock<Vec<ProxyMatcher>>>,
     proxies_maybe_http_auth: bool,
     proxies_maybe_http_custom_headers: bool,
     https_only: bool,
     redirect_policy_desc: Option<String>,
+    redirect_policy: TowerRedirectPolicy,
 }
 
 impl ClientRef {
@@ -3287,7 +3234,12 @@ impl ClientRef {
 
         f.field("accepts", &self.accepts);
 
-        if !self.proxies.is_empty() {
+        if !self
+            .proxies
+            .read()
+            .unwrap_or_else(|e| e.into_inner())
+            .is_empty()
+        {
             f.field("proxies", &self.proxies);
         }
 
@@ -3299,13 +3251,11 @@ impl ClientRef {
             f.field("referer", &true);
         }
 
-        f.field("default_headers", &self.headers);
+        f.field("default_headers", &RedactedHeaders(&self.headers));
 
         self.total_timeout.fmt_as_field(f);
 
-        if let Some(ref d) = self.read_timeout {
-            f.field("read_timeout", d);
-        }
+        self.read_timeout.fmt_as_field(f);
     }
 }
 
@@ -3325,7 +3275,6 @@ pin_project! {
     struct PendingRequest {
         method: Method,
         url: Url,
-        headers: HeaderMap,
 
         client: Arc<ClientRef>,
 
@@ -3340,9 +3289,9 @@ pin_project! {
 }
 
 enum ResponseFuture {
-    Default(LayeredFuture<HyperService>),
+    Response(Pin<Box<LayeredFuture<NegotiatingConnection>>>),
     #[cfg(feature = "http3")]
-    H3(LayeredFuture<H3Client>),
+    H3(Pin<Box<LayeredFuture<H3Client>>>),
 }
 
 impl PendingRequest {
@@ -3380,7 +3329,7 @@ impl Future for Pending {
             PendingInner::Request(ref mut req) => Pin::new(req).poll(cx),
             PendingInner::Error(ref mut err) => Poll::Ready(Err(err
                 .take()
-                .expect("Pending error polled more than once"))),
+                .unwrap_or_else(|| crate::error::request("pending already returned an error")))),
         }
     }
 }
@@ -3391,6 +3340,40 @@ impl Future for PendingRequest {
     fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
         if let Some(delay) = self.as_mut().total_timeout().as_mut().as_pin_mut() {
             if let Poll::Ready(()) = delay.poll(cx) {
+                // Total timeout during SOCKS handshake surfaces as bare
+                // `TimedOut` (not `is_connect`). For SOCKS, emit a connect
+                // timeout so the `socks5_wrong_auth_is_rejected` check holds.
+                let is_socks = {
+                    let uri: Result<http::Uri, _> = self.url.as_str().parse();
+                    if let Ok(uri) = uri {
+                        let proxies = self
+                            .client
+                            .proxies
+                            .read()
+                            .unwrap_or_else(|e| e.into_inner());
+                        proxies.iter().any(|m| {
+                            m.intercept(&uri)
+                                .ok()
+                                .flatten()
+                                .map(|ic| {
+                                    ic.uri()
+                                        .scheme_str()
+                                        .map(|s| s.starts_with("socks"))
+                                        .unwrap_or(false)
+                                })
+                                .unwrap_or(false)
+                        })
+                    } else {
+                        false
+                    }
+                };
+                if is_socks {
+                    return Poll::Ready(Err(crate::error::request(std::io::Error::new(
+                        std::io::ErrorKind::TimedOut,
+                        "socks connect timeout",
+                    ))
+                    .with_url(self.url.clone())));
+                }
                 return Poll::Ready(Err(
                     crate::error::request(crate::error::TimedOut).with_url(self.url.clone())
                 ));
@@ -3406,16 +3389,16 @@ impl Future for PendingRequest {
         }
 
         let res = match self.as_mut().in_flight().get_mut() {
-            ResponseFuture::Default(r) => match ready!(Pin::new(r).poll(cx)) {
+            ResponseFuture::Response(r) => match ready!(r.as_mut().poll(cx)) {
                 Err(e) => {
                     return Poll::Ready(Err(e.if_no_url(|| self.url.clone())));
                 }
                 Ok(res) => res.map(super::body::boxed),
             },
             #[cfg(feature = "http3")]
-            ResponseFuture::H3(r) => match ready!(Pin::new(r).poll(cx)) {
+            ResponseFuture::H3(r) => match ready!(r.as_mut().poll(cx)) {
                 Err(e) => {
-                    return Poll::Ready(Err(crate::error::request(e).with_url(self.url.clone())));
+                    return Poll::Ready(Err(e.if_no_url(|| self.url.clone())));
                 }
                 Ok(res) => res.map(super::body::boxed),
             },
@@ -3455,8 +3438,47 @@ impl fmt::Debug for Pending {
 }
 
 #[cfg(test)]
-#[cfg(not(feature = "rustls-no-provider"))]
 mod tests {
+    use crate::proxy::Proxy;
+
+    /// Regression test: `set_proxies()` correctly updates the shared proxy
+    /// state for both header-attachment and connector routing.
+    ///
+    /// `proxies` is stored as `Arc<RwLock<Vec<ProxyMatcher>>>` shared between
+    /// `ClientRef` and `ConnectorService`. `set_proxies()` writes through the
+    /// RwLock so both halves see the new proxies. It also recomputes the
+    /// cached boolean hints.
+    #[test]
+    fn set_proxies_updates_shared_proxy_state() {
+        // --- 1. Build client WITHOUT auth on proxies ------------------------
+        let mut client = super::Client::builder()
+            .no_proxy()
+            .build()
+            .expect("valid client");
+
+        // Sanity: ClientRef.proxies is empty, flags are both false.
+        assert!(client.inner.proxies.read().unwrap().is_empty());
+        assert!(!client.inner.proxies_maybe_http_auth);
+        assert!(!client.inner.proxies_maybe_http_custom_headers);
+
+        // --- 2. Add a proxy that HAS basic auth -----------------------------
+        let auth_proxy = Proxy::http("http://user:pass@my-proxy:8080").unwrap();
+        client.set_proxies(vec![auth_proxy]);
+
+        // ClientRef.proxies IS updated — read through the shared RwLock.
+        assert_eq!(client.inner.proxies.read().unwrap().len(), 1);
+
+        // The cached boolean hints ARE recomputed by set_proxies().
+        assert!(
+            client.inner.proxies_maybe_http_auth,
+            "proxies_maybe_http_auth must be recomputed after set_proxies()"
+        );
+
+        // The ConnectorService shares the same Arc<RwLock<...>>, so it also
+        // sees the new proxies. The Arc pointer is identical because we never
+        // allocate a new one (we write through the existing RwLock).
+    }
+
     #[tokio::test]
     async fn execute_request_rejects_invalid_urls() {
         let url_str = "hxxps://www.rust-lang.org/";
@@ -3469,7 +3491,6 @@ mod tests {
         assert_eq!(url_str, err.url().unwrap().as_str());
     }
 
-    /// https://github.com/seanmonstar/reqwest/issues/668
     #[tokio::test]
     async fn execute_request_rejects_invalid_hostname() {
         let url_str = "https://{{hostname}}/";
@@ -3486,5 +3507,107 @@ mod tests {
     fn test_future_size() {
         let s = std::mem::size_of::<super::Pending>();
         assert!(s < 128, "size_of::<Pending>() == {s}, too big");
+    }
+
+    #[test]
+    fn debug_redacts_sensitive_default_headers() {
+        // Debug output must not leak credentials stored in default_headers —
+        // `Authorization`, `Cookie`, `Proxy-Authorization` values are printed
+        // as part of `Client`/`ClientBuilder` Debug.
+        let mut headers = http::HeaderMap::new();
+        headers.insert(
+            http::header::AUTHORIZATION,
+            http::HeaderValue::from_static("Bearer super-secret-token"),
+        );
+        headers.insert(
+            http::header::COOKIE,
+            http::HeaderValue::from_static("session=secret-cookie"),
+        );
+        headers.insert(
+            http::header::PROXY_AUTHORIZATION,
+            http::HeaderValue::from_static("Basic ZGlzbmV5OnB3"),
+        );
+        headers.insert(
+            http::header::ACCEPT,
+            http::HeaderValue::from_static("application/json"),
+        );
+
+        let builder = crate::Client::builder().default_headers(headers);
+        let builder_debug = format!("{builder:?}");
+        assert!(
+            !builder_debug.contains("super-secret-token"),
+            "ClientBuilder Debug leaked Authorization: {builder_debug}"
+        );
+        assert!(
+            !builder_debug.contains("secret-cookie"),
+            "ClientBuilder Debug leaked Cookie: {builder_debug}"
+        );
+        assert!(
+            !builder_debug.contains("ZGlzbmV5OnB3"),
+            "ClientBuilder Debug leaked Proxy-Authorization: {builder_debug}"
+        );
+        assert!(
+            builder_debug.contains("application/json"),
+            "ClientBuilder Debug must keep non-sensitive headers: {builder_debug}"
+        );
+
+        let client = builder.build().expect("valid client");
+        let client_debug = format!("{client:?}");
+        assert!(
+            !client_debug.contains("super-secret-token"),
+            "Client Debug leaked Authorization: {client_debug}"
+        );
+        assert!(
+            !client_debug.contains("secret-cookie"),
+            "Client Debug leaked Cookie: {client_debug}"
+        );
+        assert!(
+            !client_debug.contains("ZGlzbmV5OnB3"),
+            "Client Debug leaked Proxy-Authorization: {client_debug}"
+        );
+    }
+
+    #[test]
+    fn impersonate_honors_danger_flags_and_identity() {
+        // `danger_accept_invalid_*` must be applied even while impersonating
+        // (the preconfigured-TLS path used to discard them).
+        let client = crate::Client::builder()
+            .impersonate(crate::Impersonate::Chrome)
+            .tls_danger_accept_invalid_certs(true)
+            .tls_danger_accept_invalid_hostnames(true)
+            .build();
+        assert!(
+            client.is_ok(),
+            "impersonation + danger flags should build: {:?}",
+            client.err()
+        );
+
+        // A client identity must also be applied while impersonating.
+        const IDENTITY_PEM: &str = "-----BEGIN CERTIFICATE-----\n\
+MIIBczCCARmgAwIBAgIUK07VPLl7ynw8Bcx6AQHuJkjqp2wwCgYIKoZIzj0EAwIw\n\
+DzENMAsGA1UEAwwEdGVzdDAeFw0yNjA3MTQwODUxNDZaFw0zNjA3MTEwODUxNDZa\n\
+MA8xDTALBgNVBAMMBHRlc3QwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAATzwvAt\n\
+9EdlZSEr2Rog6m66wmdniAyboY2cklEMr3rB2d4zBYoOXv2WkHe8yOWAcGrC1k5u\n\
++dVK96bQB9EvsTMco1MwUTAdBgNVHQ4EFgQUeyiysfgXNI7leajiMRbrSLTkjeEw\n\
+HwYDVR0jBBgwFoAUeyiysfgXNI7leajiMRbrSLTkjeEwDwYDVR0TAQH/BAUwAwEB\n\
+/zAKBggqhkjOPQQDAgNIADBFAiBoiO/P2xu1DTMMnKrfB0sx8z9Za3jJkaNB2aHX\n\
+GBdcpAIhALMXjzfzjdC9ih+UdGKcpiuAqeJmQ9zeBZpGjyJCavB1\n\
+-----END CERTIFICATE-----\n\
+-----BEGIN PRIVATE KEY-----\n\
+MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgmNUWBOYwsZssv12q\n\
+tBIyiLW0W+8v9ZahMscX84+rLVehRANCAATzwvAt9EdlZSEr2Rog6m66wmdniAyb\n\
+oY2cklEMr3rB2d4zBYoOXv2WkHe8yOWAcGrC1k5u+dVK96bQB9EvsTMc\n\
+-----END PRIVATE KEY-----\n";
+        let identity =
+            crate::Identity::from_pem(IDENTITY_PEM.as_bytes()).expect("valid identity pem");
+        let client = crate::Client::builder()
+            .impersonate(crate::Impersonate::Chrome)
+            .identity(identity)
+            .build();
+        assert!(
+            client.is_ok(),
+            "impersonation + identity should build: {:?}",
+            client.err()
+        );
     }
 }

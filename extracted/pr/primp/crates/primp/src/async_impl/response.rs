@@ -28,6 +28,10 @@ pub struct Response {
     // Boxed to save space (11 words to 1 word), and it's not accessed
     // frequently internally.
     url: Box<Url>,
+    // Set to `true` once `chunk()` has returned `None`, so a subsequent read
+    // after the stream is exhausted surfaces a `StreamExhausted` error
+    // instead of silently returning `None` again.
+    exhausted: bool,
 }
 
 impl Response {
@@ -46,6 +50,7 @@ impl Response {
         Response {
             res,
             url: Box::new(url),
+            exhausted: false,
         }
     }
 
@@ -73,34 +78,24 @@ impl Response {
         self.res.headers_mut()
     }
 
-    /// Get the content length of the response, if it is known.
-    ///
-    /// This value does not directly represents the value of the `Content-Length`
-    /// header, but rather the size of the response's body. To read the header's
-    /// value, please use the [`Response::headers`] method instead.
-    ///
-    /// Reasons it may not be known:
-    ///
-    /// - The response does not include a body (e.g. it responds to a `HEAD`
-    ///   request).
-    /// - The response is gzipped and automatically decoded (thus changing the
-    ///   actual decoded length).
+    /// Get the response body's size, if known — not the `Content-Length` header
+    /// value (use [`Response::headers`] for that). Unknown when the response has
+    /// no body (e.g. `HEAD`) or is gzip-decoded, which changes the decoded length.
     pub fn content_length(&self) -> Option<u64> {
         use hyper::body::Body;
 
         Body::size_hint(self.res.body()).exact()
     }
 
-    /// Retrieve the cookies contained in the response.
-    ///
-    /// Note that invalid 'Set-Cookie' headers will be ignored.
+    /// Returns the cookies from the response's `Set-Cookie` headers; invalid
+    /// ones are ignored.
     ///
     /// # Optional
     ///
-    /// This requires the optional `cookies` feature to be enabled.
+    /// Requires the `cookies` feature.
     #[cfg(feature = "cookies")]
     #[cfg_attr(docsrs, doc(cfg(feature = "cookies")))]
-    pub fn cookies<'a>(&'a self) -> impl Iterator<Item = cookie::Cookie<'a>> + 'a {
+    pub fn cookies(&self) -> impl Iterator<Item = cookie::Cookie<'_>> + '_ {
         cookie::extract_response_cookies(self.res.headers()).filter_map(Result::ok)
     }
 
@@ -132,18 +127,14 @@ impl Response {
 
     /// Get the full response text.
     ///
-    /// This method decodes the response body with BOM sniffing
-    /// and with malformed sequences replaced with the
-    /// [`char::REPLACEMENT_CHARACTER`].
-    /// Encoding is determined from the `charset` parameter of `Content-Type` header,
-    /// and defaults to `utf-8` if not presented.
-    ///
-    /// Note that the BOM is stripped from the returned String.
+    /// Decodes with BOM sniffing, replacing malformed sequences with
+    /// [`char::REPLACEMENT_CHARACTER`]. Encoding is taken from the `Content-Type`
+    /// `charset` parameter, defaulting to `utf-8`; the BOM is stripped.
     ///
     /// # Note
     ///
-    /// If the `charset` feature is disabled the method will only attempt to decode the
-    /// response as UTF-8, regardless of the given `Content-Type`
+    /// If the `charset` feature is disabled, only UTF-8 is attempted regardless
+    /// of `Content-Type`.
     ///
     /// # Example
     ///
@@ -172,17 +163,10 @@ impl Response {
         }
     }
 
-    /// Get the full response text given a specific encoding.
-    ///
-    /// This method decodes the response body with BOM sniffing
-    /// and with malformed sequences replaced with the [`char::REPLACEMENT_CHARACTER`].
-    /// You can provide a default encoding for decoding the raw message, while the
-    /// `charset` parameter of `Content-Type` header is still prioritized. For more information
-    /// about the possible encoding name, please go to [`encoding_rs`] docs.
-    ///
-    /// Note that the BOM is stripped from the returned String.
-    ///
-    /// [`encoding_rs`]: https://docs.rs/encoding_rs/0.8/encoding_rs/#relationship-with-windows-code-pages
+    /// Get the full response text using `default_encoding`, falling back to it
+    /// unless `Content-Type`'s `charset` parameter overrides it. Decodes with
+    /// BOM sniffing, replacing malformed sequences with
+    /// [`char::REPLACEMENT_CHARACTER`]; the BOM is stripped.
     ///
     /// # Optional
     ///
@@ -225,7 +209,11 @@ impl Response {
     ///
     /// # Optional
     ///
-    /// This requires the optional `json` feature enabled.
+    /// Requires the `json` feature.
+    ///
+    /// # Errors
+    ///
+    /// Fails if the body is not valid JSON or cannot be deserialized into `T`.
     ///
     /// # Examples
     ///
@@ -254,20 +242,12 @@ impl Response {
     /// #
     /// # fn main() { }
     /// ```
-    ///
-    /// # Errors
-    ///
-    /// This method fails whenever the response body is not in JSON format,
-    /// or it cannot be properly deserialized to target type `T`. For more
-    /// details please see [`serde_json::from_reader`].
-    ///
-    /// [`serde_json::from_reader`]: https://docs.serde.rs/serde_json/fn.from_reader.html
     #[cfg(feature = "json")]
     #[cfg_attr(docsrs, doc(cfg(feature = "json")))]
     pub async fn json<T: DeserializeOwned>(self) -> crate::Result<T> {
-        let full = self.bytes().await?;
+        let (full, url) = self.do_bytes().await?;
 
-        serde_json::from_slice(&full).map_err(crate::error::decode)
+        serde_json::from_slice(&full).map_err(|err| crate::error::decode(err).with_url(*url))
     }
 
     /// Get the full response body as `Bytes`.
@@ -286,12 +266,7 @@ impl Response {
     /// # }
     /// ```
     pub async fn bytes(self) -> crate::Result<Bytes> {
-        use http_body_util::BodyExt;
-
-        BodyExt::collect(self.res.into_body())
-            .await
-            .map(|buf| buf.to_bytes())
-            .map_err(crate::error::decode)
+        self.do_bytes().await.map(|(bytes, _)| bytes)
     }
 
     /// Stream a chunk of the response body.
@@ -313,15 +288,25 @@ impl Response {
     pub async fn chunk(&mut self) -> crate::Result<Option<Bytes>> {
         use http_body_util::BodyExt;
 
-        // loop to ignore unrecognized frames
+        // Reading a chunk after the stream has already been exhausted is an
+        // error, mirroring `StopIteration` raised by Python async iterators
+        // once the body has ended.
+        if self.exhausted {
+            return Err(crate::error::stream_exhausted());
+        }
+
+        // Skip non-DATA frames and zero-length HTTP/2 DATA frames (legal,
+        // no payload) at the source so callers never see them.
         loop {
             if let Some(res) = self.res.body_mut().frame().await {
                 let frame = res.map_err(crate::error::decode)?;
                 if let Ok(buf) = frame.into_data() {
-                    return Ok(Some(buf));
+                    if !buf.is_empty() {
+                        return Ok(Some(buf));
+                    }
                 }
-                // else continue
             } else {
+                self.exhausted = true;
                 return Ok(None);
             }
         }
@@ -348,7 +333,7 @@ impl Response {
     ///
     /// # Optional
     ///
-    /// This requires the optional `stream` feature to be enabled.
+    /// Requires the `stream` feature.
     #[cfg(feature = "stream")]
     #[cfg_attr(docsrs, doc(cfg(feature = "stream")))]
     pub fn bytes_stream(self) -> impl futures_core::Stream<Item = crate::Result<Bytes>> {
@@ -422,9 +407,15 @@ impl Response {
     // private
 
     // The Response's body is an implementation detail.
-    /// Get a mutable reference to the response body.
-    pub fn body_mut(&mut self) -> &mut ResponseBody {
-        self.res.body_mut()
+    // You no longer need to get a reference to it, there are async methods
+    // on the `Response` itself.
+    async fn do_bytes(self) -> crate::Result<(Bytes, Box<Url>)> {
+        use http_body_util::BodyExt;
+
+        match BodyExt::collect(self.res.into_body()).await {
+            Ok(buf) => Ok((buf.to_bytes(), self.url)),
+            Err(err) => Err(crate::error::decode(err).with_url(*self.url)),
+        }
     }
 }
 
@@ -446,7 +437,7 @@ impl From<Response> for Body {
 }
 
 // I'm not sure this conversion is that useful... People should be encouraged
-// to use `http::Response`, not `primp::Response`.
+// to use `http::Response`, not `crate::Response`.
 impl<T: Into<Body>> From<http::Response<T>> for Response {
     fn from(r: http::Response<T>) -> Response {
         use crate::response::ResponseUrl;
@@ -462,6 +453,7 @@ impl<T: Into<Body>> From<http::Response<T>> for Response {
         Response {
             res,
             url: Box::new(url),
+            exhausted: false,
         }
     }
 }

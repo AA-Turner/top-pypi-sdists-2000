@@ -1,12 +1,14 @@
 use bytes::Bytes;
-use std::collections::HashMap;
 use std::future;
+
+use foldhash::{HashMap, HashMapExt};
 use std::pin::Pin;
+use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::mpsc::{Receiver, TryRecvError};
 use std::sync::{Arc, Mutex};
-use std::task::{Context, Poll};
+use std::task::{ready, Context, Poll};
 use std::time::Duration;
-use tokio::sync::{oneshot, watch};
+use tokio::sync::{oneshot, watch, Notify};
 use tokio::time::Instant;
 
 use crate::async_impl::body::ResponseBody;
@@ -21,9 +23,36 @@ use log::{error, trace};
 
 pub(super) type Key = (Scheme, Authority);
 
-#[derive(Clone)]
 pub struct Pool {
     inner: Arc<Mutex<PoolInner>>,
+    /// Owner Pool (from `Pool::new`) aborts driver tasks on drop; transient
+    /// clones must not, or a per-request `H3Client::clone()` would kill
+    /// connections still in active use.
+    is_owner: bool,
+}
+
+impl Drop for Pool {
+    fn drop(&mut self) {
+        // Owner tears down drivers; if body still streams, detach until idle.
+        if self.is_owner {
+            let mut inner = self.inner.lock().unwrap_or_else(|p| p.into_inner());
+            for conn in inner.idle_conns.values_mut() {
+                if conn.active_streams.load(Ordering::Acquire) == 0 {
+                    if let Some(handle) = &conn.connection_task {
+                        handle.abort();
+                    }
+                } else if tokio::runtime::Handle::try_current().is_ok() {
+                    conn.detach_driver_until_idle();
+                } else {
+                    // No runtime — `spawn` would panic; leak so body can finish.
+                    let handle = conn.connection_task.take();
+                    let pool_clone = Arc::clone(&self.inner);
+                    std::mem::forget(handle);
+                    std::mem::forget(pool_clone);
+                }
+            }
+        }
+    }
 }
 
 struct ConnectingLockInner {
@@ -31,23 +60,20 @@ struct ConnectingLockInner {
     pool: Arc<Mutex<PoolInner>>,
 }
 
-/// A lock that ensures only one HTTP/3 connection is established per host at a
-/// time. The lock is automatically released when dropped.
+/// Ensures only one HTTP/3 connection is established per host at a time;
+/// released automatically on drop.
 pub struct ConnectingLock(Option<ConnectingLockInner>);
 
-/// A waiter that allows subscribers to receive updates when a new connection is
-/// established or when the connection attempt fails. For example, when
-/// connection lock is dropped due to an error.
+/// A waiter that receives updates when a connection is established or its
+/// attempt fails (e.g. when the connecting lock is dropped on error).
 pub struct ConnectingWaiter {
     receiver: watch::Receiver<Option<PoolClient>>,
 }
 
 pub enum Connecting {
-    /// A connection attempt is already in progress.
-    /// You must subscribe to updates instead of initiating a new connection.
+    /// A connection attempt is already in progress; subscribe for updates.
     InProgress(ConnectingWaiter),
-    /// The connection lock has been acquired, allowing you to initiate a
-    /// new connection.
+    /// The connection lock is acquired; you may initiate a new connection.
     Acquired(ConnectingLock),
 }
 
@@ -76,10 +102,19 @@ impl Drop for ConnectingLock {
 
 impl ConnectingWaiter {
     pub async fn receive(mut self) -> Option<PoolClient> {
-        match self.receiver.wait_for(Option::is_some).await {
-            // unwrap because we already checked that option is Some
-            Ok(ok) => Some(ok.as_ref().unwrap().to_owned()),
-            Err(_) => None,
+        self.receiver.wait_for(Option::is_some).await.ok()?;
+        let guard = self.receiver.borrow_and_update();
+        let client = guard.as_ref()?;
+        // clone counts as borrower; the watch-held original balances on drop
+        Some(client.clone())
+    }
+}
+
+impl Clone for Pool {
+    fn clone(&self) -> Self {
+        Self {
+            inner: Arc::clone(&self.inner),
+            is_owner: false,
         }
     }
 }
@@ -92,11 +127,11 @@ impl Pool {
                 idle_conns: HashMap::new(),
                 timeout,
             })),
+            is_owner: true,
         }
     }
 
-    /// Acquire a connecting lock. This is to ensure that we have only one HTTP3
-    /// connection per host.
+    /// Acquire a connecting lock, ensuring only one HTTP/3 connection per host.
     pub fn connecting(&self, key: &Key) -> Connecting {
         let mut inner = self.inner.lock().unwrap();
 
@@ -114,27 +149,36 @@ impl Pool {
     pub fn try_pool(&self, key: &Key) -> Option<PoolClient> {
         let mut inner = self.inner.lock().unwrap();
         let timeout = inner.timeout;
-        if let Some(conn) = inner.idle_conns.get(&key) {
-            // We check first if the connection still valid
-            // and if not, we remove it from the pool.
+        let unusable = inner.idle_conns.get(key).is_some_and(|conn| {
+            // remove the connection from the pool if invalid or expired
             if conn.is_invalid() {
-                trace!("pooled HTTP/3 connection is invalid so removing it...");
-                inner.idle_conns.remove(&key);
-                return None;
+                return true;
             }
 
             if let Some(duration) = timeout {
-                if Instant::now().saturating_duration_since(conn.idle_timeout) > duration {
-                    trace!("pooled connection expired");
-                    return None;
+                // Only idle connections (no active streams) are considered for
+                // expiry — mirrors H1/H2 `busy == 0` / `active_streams == 0`
+                // gating so a long-held borrow isn't evicted mid-stream.
+                if conn.active_streams.load(Ordering::Acquire) == 0 {
+                    let idle = *conn.idle_timeout.lock().unwrap_or_else(|p| p.into_inner());
+                    if Instant::now().saturating_duration_since(idle) > duration {
+                        return true;
+                    }
                 }
             }
+
+            false
+        });
+
+        if unusable {
+            trace!("removing unusable pooled HTTP/3 connection...");
+            if let Some(mut conn) = inner.idle_conns.remove(key) {
+                conn.detach_driver_until_idle();
+            }
+            return None;
         }
 
-        inner
-            .idle_conns
-            .get_mut(&key)
-            .and_then(|conn| Some(conn.pool()))
+        inner.idle_conns.get_mut(key).map(|conn| conn.pool())
     }
 
     pub fn new_connection(
@@ -144,11 +188,15 @@ impl Pool {
         tx: SendRequest<OpenStreams, Bytes>,
     ) -> PoolClient {
         let (close_tx, close_rx) = std::sync::mpsc::channel();
-        tokio::spawn(async move {
+        let connection_task = tokio::spawn(async move {
             let e = future::poll_fn(|cx| driver.poll_close(cx)).await;
             trace!("poll_close returned error {e:?}");
             close_tx.send(e).ok();
         });
+
+        let active_streams = Arc::new(AtomicUsize::new(0));
+        let stream_completed = Arc::new(Notify::new());
+        let idle_timeout = Arc::new(Mutex::new(Instant::now()));
 
         let mut inner = self.inner.lock().unwrap();
 
@@ -157,23 +205,36 @@ impl Pool {
         let Some(notifier) = inner.connecting.remove(&key) else {
             unreachable!("there should be one connecting lock at a time");
         };
-        let client = PoolClient::new(tx);
+        let template = PoolClient::new(tx);
 
-        // Send the client to all our awaiters
-        let pool_client = if let Err(watch::error::SendError(Some(unsent_client))) =
-            notifier.send(Some(client.clone()))
-        {
-            // If there are no awaiters, the client is returned to us. As a
-            // micro optimisation, let's reuse it and avoid cloning.
-            unsent_client
-        } else {
-            client.clone()
-        };
+        // Send a borrower to awaiters; if there are none, the unsent
+        // borrower is dropped and its increment undone.
+        let _ = notifier.send(Some(template.checked_out(
+            &active_streams,
+            &stream_completed,
+            &idle_timeout,
+        )));
 
-        let conn = PoolConnection::new(pool_client, close_rx);
-        inner.insert(key, conn);
+        let conn = PoolConnection::new(
+            template,
+            close_rx,
+            connection_task,
+            active_streams,
+            stream_completed,
+            idle_timeout,
+        );
+        inner.insert(key.clone(), conn);
+        drop(inner);
 
-        client
+        // The caller is a borrower too: it holds the response body as it
+        // streams on this connection.
+        self.inner
+            .lock()
+            .unwrap()
+            .idle_conns
+            .get_mut(&key)
+            .map(PoolConnection::pool)
+            .expect("just inserted")
     }
 }
 
@@ -185,22 +246,98 @@ struct PoolInner {
 
 impl PoolInner {
     fn insert(&mut self, key: Key, conn: PoolConnection) {
-        if self.idle_conns.contains_key(&key) {
-            trace!("connection already exists for key {key:?}");
+        if let Some(mut old) = self.idle_conns.remove(&key) {
+            trace!("h3 pool: replacing existing connection for {key:?}");
+            old.detach_driver_until_idle();
         }
-
         self.idle_conns.insert(key, conn);
     }
 }
 
-#[derive(Clone)]
 pub struct PoolClient {
     inner: SendRequest<OpenStreams, Bytes>,
+    /// None for the pool-stored template client; Some for borrowers.
+    /// Borrower Drop decrements `active_streams`.
+    active_streams: Option<Arc<AtomicUsize>>,
+    stream_completed: Option<Arc<Notify>>,
+    idle_timeout: Option<Arc<Mutex<Instant>>>,
+}
+
+impl Drop for PoolClient {
+    fn drop(&mut self) {
+        // Only borrowers carry counters; the template never increments.
+        let Some(count) = &self.active_streams else {
+            return;
+        };
+        let mut prev = count.load(Ordering::Acquire);
+        loop {
+            if prev == 0 {
+                break;
+            }
+            match count.compare_exchange(prev, prev - 1, Ordering::AcqRel, Ordering::Acquire) {
+                Ok(old) => {
+                    // last borrower gone: connection is idle again
+                    if old == 1 {
+                        if let Some(ref idle) = self.idle_timeout {
+                            *idle.lock().unwrap_or_else(|p| p.into_inner()) = Instant::now();
+                        }
+                        if let Some(ref notify) = self.stream_completed {
+                            notify.notify_waiters();
+                        }
+                    }
+                    break;
+                }
+                Err(actual) => {
+                    prev = actual;
+                }
+            }
+        }
+    }
+}
+
+impl Clone for PoolClient {
+    fn clone(&self) -> Self {
+        // Cloning a borrower counts as another borrower (e.g. an awaiter of
+        // the connecting-watch channel); each clone's Drop decrements once.
+        let client = Self {
+            inner: self.inner.clone(),
+            active_streams: self.active_streams.clone(),
+            stream_completed: self.stream_completed.clone(),
+            idle_timeout: self.idle_timeout.clone(),
+        };
+        if let Some(ref count) = client.active_streams {
+            count.fetch_add(1, Ordering::AcqRel);
+        }
+        client
+    }
 }
 
 impl PoolClient {
     pub fn new(tx: SendRequest<OpenStreams, Bytes>) -> Self {
-        Self { inner: tx }
+        Self {
+            inner: tx,
+            active_streams: None,
+            stream_completed: None,
+            idle_timeout: None,
+        }
+    }
+
+    /// Clone the template as a counted borrower: attach the connection's
+    /// shared counters and increment `active_streams`.
+    fn checked_out(
+        &self,
+        active_streams: &Arc<AtomicUsize>,
+        stream_completed: &Arc<Notify>,
+        idle_timeout: &Arc<Mutex<Instant>>,
+    ) -> Self {
+        let client = Self {
+            inner: self.inner.clone(),
+            active_streams: Some(Arc::clone(active_streams)),
+            stream_completed: Some(Arc::clone(stream_completed)),
+            idle_timeout: Some(Arc::clone(idle_timeout)),
+        };
+        active_streams.fetch_add(1, Ordering::AcqRel);
+        client
     }
 
     pub async fn send_request(
@@ -229,6 +366,10 @@ impl PoolClient {
                     Some(Ok(frame)) => {
                         if let Ok(b) = frame.into_data() {
                             if let Err(e) = send.send_data(Bytes::copy_from_slice(&b)).await {
+                                if is_stop_sending(&e) {
+                                    let _ = tx.send(Ok(()));
+                                    return;
+                                }
                                 if let Err(e) = tx.send(Err(e.into())) {
                                     error!("Failed to communicate send.send_data() error: {e:?}");
                                 }
@@ -248,10 +389,12 @@ impl PoolClient {
             }
 
             if let Err(e) = send.finish().await {
-                if let Err(e) = tx.send(Err(e.into())) {
-                    error!("Failed to communicate send.finish read error: {e:?}");
+                if !is_stop_sending(&e) {
+                    if let Err(e) = tx.send(Err(e.into())) {
+                        error!("Failed to communicate send.finish read error: {e:?}");
+                    }
+                    return;
                 }
-                return;
             }
 
             let _ = tx.send(Ok(()));
@@ -261,7 +404,14 @@ impl PoolClient {
             Ok(Err(e)) = &mut rx => Err(e),
             resp = recv.recv_response() => {
                 let resp = resp?;
-                let resp_body = crate::async_impl::body::boxed(Incoming::new(recv, resp.headers(), rx));
+                let resp_body = crate::async_impl::body::boxed(Incoming::new(
+                    recv,
+                    resp.headers(),
+                    rx,
+                    self.active_streams.clone(),
+                    self.stream_completed.clone(),
+                    self.idle_timeout.clone(),
+                ));
                 Ok(resp.map(|_| resp_body))
             }
         }
@@ -271,22 +421,46 @@ impl PoolClient {
 pub struct PoolConnection {
     // This receives errors from polling h3 driver.
     close_rx: Receiver<h3::error::ConnectionError>,
+    /// Pool-stored template client (uncounted); borrowers are clones via
+    /// [`PoolConnection::pool`].
     client: PoolClient,
-    idle_timeout: Instant,
+    idle_timeout: Arc<Mutex<Instant>>,
+    /// Driver task handle, aborted on eviction or pool drop (the driver
+    /// holds the quinn connection — without aborting, it leaks).
+    connection_task: Option<tokio::task::JoinHandle<()>>,
+    /// Borrow count (checked-out `PoolClient`s + response bodies); at 0 the
+    /// connection is truly idle and its driver can be aborted.
+    active_streams: Arc<AtomicUsize>,
+    /// Notifies waiters when the connection becomes idle (active_streams → 0).
+    stream_completed: Arc<Notify>,
 }
 
 impl PoolConnection {
-    pub fn new(client: PoolClient, close_rx: Receiver<h3::error::ConnectionError>) -> Self {
+    pub fn new(
+        client: PoolClient,
+        close_rx: Receiver<h3::error::ConnectionError>,
+        connection_task: tokio::task::JoinHandle<()>,
+        active_streams: Arc<AtomicUsize>,
+        stream_completed: Arc<Notify>,
+        idle_timeout: Arc<Mutex<Instant>>,
+    ) -> Self {
         Self {
             close_rx,
             client,
-            idle_timeout: Instant::now(),
+            idle_timeout,
+            connection_task: Some(connection_task),
+            active_streams,
+            stream_completed,
         }
     }
 
     pub fn pool(&mut self) -> PoolClient {
-        self.idle_timeout = Instant::now();
-        self.client.clone()
+        *self.idle_timeout.lock().unwrap_or_else(|p| p.into_inner()) = Instant::now();
+        self.client.checked_out(
+            &self.active_streams,
+            &self.stream_completed,
+            &self.idle_timeout,
+        )
     }
 
     pub fn is_invalid(&self) -> bool {
@@ -296,12 +470,42 @@ impl PoolConnection {
             Ok(_) => true,
         }
     }
+
+    /// Abort the driver once the connection is truly idle; if streams are
+    /// still active, a watcher task aborts when `active_streams` hits 0
+    /// (aborting mid-stream would kill in-flight responses).
+    fn detach_driver_until_idle(&mut self) {
+        let Some(handle) = self.connection_task.take() else {
+            return;
+        };
+        if self.active_streams.load(Ordering::Acquire) == 0 {
+            handle.abort();
+            return;
+        }
+        let active_streams = Arc::clone(&self.active_streams);
+        let stream_completed = Arc::clone(&self.stream_completed);
+        tokio::spawn(async move {
+            loop {
+                let notified = stream_completed.notified();
+                if active_streams.load(Ordering::Acquire) == 0 {
+                    handle.abort();
+                    return;
+                }
+                notified.await;
+            }
+        });
+    }
 }
 
 struct Incoming<S, B> {
     inner: h3::client::RequestStream<S, B>,
     content_length: Option<u64>,
     send_rx: oneshot::Receiver<Result<(), BoxError>>,
+    /// Shared counters cloned from the borrower: keep the connection busy
+    /// while the body streams, so the driver is not aborted mid-body.
+    active_streams: Option<Arc<AtomicUsize>>,
+    stream_completed: Option<Arc<Notify>>,
+    idle_timeout: Option<Arc<Mutex<Instant>>>,
 }
 
 impl<S, B> Incoming<S, B> {
@@ -309,7 +513,13 @@ impl<S, B> Incoming<S, B> {
         stream: h3::client::RequestStream<S, B>,
         headers: &http::header::HeaderMap,
         send_rx: oneshot::Receiver<Result<(), BoxError>>,
+        active_streams: Option<Arc<AtomicUsize>>,
+        stream_completed: Option<Arc<Notify>>,
+        idle_timeout: Option<Arc<Mutex<Instant>>>,
     ) -> Self {
+        if let Some(ref count) = active_streams {
+            count.fetch_add(1, Ordering::AcqRel);
+        }
         Self {
             inner: stream,
             content_length: headers
@@ -317,6 +527,39 @@ impl<S, B> Incoming<S, B> {
                 .and_then(|h| h.to_str().ok())
                 .and_then(|v| v.parse().ok()),
             send_rx,
+            active_streams,
+            stream_completed,
+            idle_timeout,
+        }
+    }
+}
+
+impl<S, B> Drop for Incoming<S, B> {
+    fn drop(&mut self) {
+        let Some(count) = &self.active_streams else {
+            return;
+        };
+        let mut prev = count.load(Ordering::Acquire);
+        loop {
+            if prev == 0 {
+                break;
+            }
+            match count.compare_exchange(prev, prev - 1, Ordering::AcqRel, Ordering::Acquire) {
+                Ok(old) => {
+                    if old == 1 {
+                        if let Some(ref idle) = self.idle_timeout {
+                            *idle.lock().unwrap_or_else(|p| p.into_inner()) = Instant::now();
+                        }
+                        if let Some(ref notify) = self.stream_completed {
+                            notify.notify_waiters();
+                        }
+                    }
+                    break;
+                }
+                Err(actual) => {
+                    prev = actual;
+                }
+            }
         }
     }
 }
@@ -336,7 +579,7 @@ where
             return Poll::Ready(Some(Err(crate::error::body(e))));
         }
 
-        match futures_core::ready!(self.inner.poll_recv_data(cx)) {
+        match ready!(self.inner.poll_recv_data(cx)) {
             Ok(Some(mut b)) => Poll::Ready(Some(Ok(hyper::body::Frame::data(
                 b.copy_to_bytes(b.remaining()),
             )))),
@@ -357,16 +600,42 @@ where
 pub(crate) fn extract_domain(uri: &mut Uri) -> Result<Key, Error> {
     let uri_clone = uri.clone();
     match (uri_clone.scheme(), uri_clone.authority()) {
-        (Some(scheme), Some(auth)) => Ok((scheme.clone(), auth.clone())),
+        (Some(scheme), Some(auth)) => {
+            let scheme_str = scheme.as_str();
+            if scheme_str != "https" && scheme_str != "h3" {
+                return Err(Error::new(
+                    Kind::Request,
+                    Some(Box::new(std::io::Error::new(
+                        std::io::ErrorKind::InvalidInput,
+                        format!(
+                            "HTTP/3 only supports 'https' or 'h3' schemes, got: {}",
+                            scheme_str
+                        ),
+                    ))),
+                ));
+            }
+            Ok((scheme.clone(), auth.clone()))
+        }
         _ => Err(Error::new(Kind::Request, None::<Error>)),
     }
 }
 
-pub(crate) fn domain_as_uri((scheme, auth): Key) -> Uri {
+pub(crate) fn domain_as_uri((scheme, auth): Key) -> Result<Uri, BoxError> {
     http::uri::Builder::new()
         .scheme(scheme)
         .authority(auth)
         .path_and_query("/")
         .build()
-        .expect("domain is valid Uri")
+        .map_err(BoxError::from)
+}
+
+/// True if the remote requested the peer stop sending without error.
+fn is_stop_sending(e: &h3::error::StreamError) -> bool {
+    matches!(
+        e,
+        h3::error::StreamError::RemoteTerminate {
+            code: h3::error::Code::H3_NO_ERROR,
+            ..
+        }
+    )
 }

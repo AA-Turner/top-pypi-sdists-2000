@@ -1,59 +1,13 @@
-//! TLS configuration and types
-//!
-//! A `Client` will use transport layer security (TLS) by default to connect to
+//! TLS configuration and types. A `Client` uses TLS (rustls) by default for
 //! HTTPS destinations.
-//!
-//! # Backends
-//!
-//! reqwest supports several TLS backends, enabled with Cargo features.
-//!
-//! ## default-tls
-//!
-//! reqwest will pick a TLS backend by default. This is true when the
-//! `default-tls` feature is enabled.
-//!
-//! While it currently uses `rustls`, the feature set is designed to only
-//! enable configuration that is shared among available backends. This allows
-//! reqwest to change the default to `native-tls` (or another) by configuration.
-//!
-//! <div class="warning">This feature is enabled by default, and takes
-//! precedence if any other crate enables it. This is true even if you declare
-//! `features = []`. You must set `default-features = false` instead.</div>
-//!
-//! Since Cargo features are additive, other crates in your dependency tree can
-//! cause the default backend to be enabled. If you wish to ensure your
-//! `Client` uses a specific backend, call the appropriate builder methods
-//! (such as [`tls_backend_rustls()`][]).
-//!
-//! [`tls_backend_rustls()`]: crate::ClientBuilder::tls_backend_rustls()
-//!
-//! ## native-tls
-//!
-//! This backend uses the [native-tls][] crate. That will try to use the system
-//! TLS on Windows and Mac, and OpenSSL on Linux targets.
-//!
-//! Enabling the feature explicitly allows for `native-tls`-specific
-//! configuration options.
-//!
-//! [native-tls]: https://crates.io/crates/native-tls
-//!
-//! ## rustls
-//!
-//! This backend uses the [rustls][] crate, a TLS library written in Rust.
-//!
-//! [rustls]: https://crates.io/crates/rustls
 
-#[cfg(feature = "__rustls")]
 use rustls::{
-    client::danger::{HandshakeSignatureValid, ServerCertVerified, ServerCertVerifier},
-    crypto::WebPkiSupportedAlgorithms,
+    client::danger::HandshakeSignatureValid, client::danger::ServerCertVerified,
+    client::danger::ServerCertVerifier, crypto::WebPkiSupportedAlgorithms,
+    server::ParsedCertificate, DigitallySignedStruct, Error as TLSError, RootCertStore,
     SignatureScheme,
-    Error as TLSError, RootCertStore,
 };
-#[cfg(feature = "__rustls")]
-use rustls_pki_types::CertificateDer;
 use rustls_pki_types::pem::PemObject;
-#[cfg(feature = "__rustls")]
 use rustls_pki_types::{ServerName, UnixTime};
 use std::{
     fmt,
@@ -61,45 +15,30 @@ use std::{
     sync::Arc,
 };
 
-/// Represents a X509 certificate revocation list.
-#[cfg(feature = "__rustls")]
+/// An X509 certificate revocation list (CRL).
 pub struct CertificateRevocationList {
-    #[cfg(feature = "__rustls")]
     inner: rustls_pki_types::CertificateRevocationListDer<'static>,
 }
 
-/// Represents a server X509 certificate.
+/// A server X509 certificate.
 #[derive(Clone)]
 pub struct Certificate {
-    #[cfg(feature = "__native-tls")]
-    native: native_tls_crate::Certificate,
-    #[cfg(feature = "__rustls")]
     original: Cert,
 }
 
-#[cfg(feature = "__rustls")]
 #[derive(Clone)]
 enum Cert {
     Der(Vec<u8>),
     Pem(Vec<u8>),
 }
 
-/// Represents a private key and X509 cert as a client certificate.
+/// A client certificate plus its private key.
 #[derive(Clone)]
 pub struct Identity {
-    #[cfg_attr(
-        not(any(feature = "__native-tls", feature = "__rustls")),
-        allow(unused)
-    )]
     inner: ClientCert,
 }
 
 enum ClientCert {
-    #[cfg(feature = "__native-tls")]
-    Pkcs12(native_tls_crate::Identity),
-    #[cfg(feature = "__native-tls")]
-    Pkcs8(native_tls_crate::Identity),
-    #[cfg(feature = "__rustls")]
     Pem {
         key: rustls_pki_types::PrivateKeyDer<'static>,
         certs: Vec<rustls_pki_types::CertificateDer<'static>>,
@@ -109,12 +48,7 @@ enum ClientCert {
 impl Clone for ClientCert {
     fn clone(&self) -> Self {
         match self {
-            #[cfg(feature = "__native-tls")]
-            Self::Pkcs8(i) => Self::Pkcs8(i.clone()),
-            #[cfg(feature = "__native-tls")]
-            Self::Pkcs12(i) => Self::Pkcs12(i.clone()),
-            #[cfg(feature = "__rustls")]
-            Self::Pem { key, certs } => Self::Pem {
+            ClientCert::Pem { key, certs } => ClientCert::Pem {
                 key: key.clone_key(),
                 certs: certs.clone(),
             },
@@ -123,7 +57,7 @@ impl Clone for ClientCert {
 }
 
 impl Certificate {
-    /// Create a `Certificate` from a binary DER encoded certificate
+    /// Create a `Certificate` from binary DER.
     ///
     /// # Examples
     ///
@@ -141,14 +75,11 @@ impl Certificate {
     /// ```
     pub fn from_der(der: &[u8]) -> crate::Result<Certificate> {
         Ok(Certificate {
-            #[cfg(feature = "__native-tls")]
-            native: native_tls_crate::Certificate::from_der(der).map_err(crate::error::builder)?,
-            #[cfg(feature = "__rustls")]
             original: Cert::Der(der.to_owned()),
         })
     }
 
-    /// Create a `Certificate` from a PEM encoded certificate
+    /// Create a `Certificate` from PEM.
     ///
     /// # Examples
     ///
@@ -166,15 +97,12 @@ impl Certificate {
     /// ```
     pub fn from_pem(pem: &[u8]) -> crate::Result<Certificate> {
         Ok(Certificate {
-            #[cfg(feature = "__native-tls")]
-            native: native_tls_crate::Certificate::from_pem(pem).map_err(crate::error::builder)?,
-            #[cfg(feature = "__rustls")]
             original: Cert::Pem(pem.to_owned()),
         })
     }
 
-    /// Create a collection of `Certificate`s from a PEM encoded certificate bundle.
-    /// Example byte sources may be `.crt`, `.cer` or `.pem` files.
+    /// Create a collection of `Certificate`s from a PEM bundle
+    /// (`.crt`/`.cer`/`.pem`).
     ///
     /// # Examples
     ///
@@ -199,19 +127,6 @@ impl Certificate {
             .collect::<crate::Result<Vec<Certificate>>>()
     }
 
-    /*
-    #[cfg(feature = "rustls")]
-    pub fn from_trust_anchor() -> Self {
-
-    }
-    */
-
-    #[cfg(feature = "__native-tls")]
-    pub(crate) fn add_to_native_tls(self, tls: &mut native_tls_crate::TlsConnectorBuilder) {
-        tls.add_root_certificate(self.native);
-    }
-
-    #[cfg(feature = "__rustls")]
     pub(crate) fn add_to_rustls(
         self,
         root_cert_store: &mut rustls::RootCertStore,
@@ -235,6 +150,22 @@ impl Certificate {
         Ok(())
     }
 
+    /// Return the DER bytes of every certificate (one per entry for a PEM
+    /// bundle). Useful when handing certs to a TLS stack other than
+    /// `primp-rustls` (e.g. `quinn`) that cannot share its types.
+    #[cfg(feature = "http3")]
+    pub(crate) fn as_der_many(&self) -> crate::Result<Vec<Vec<u8>>> {
+        match &self.original {
+            Cert::Der(buf) => Ok(vec![buf.clone()]),
+            Cert::Pem(buf) => {
+                use std::io::Cursor;
+
+                let mut reader = Cursor::new(buf.clone());
+                Self::read_pem_certs(&mut reader)
+            }
+        }
+    }
+
     fn read_pem_certs(reader: &mut impl BufRead) -> crate::Result<Vec<Vec<u8>>> {
         rustls_pki_types::CertificateDer::pem_reader_iter(reader)
             .map(|result| match result {
@@ -246,86 +177,8 @@ impl Certificate {
 }
 
 impl Identity {
-    /// Parses a DER-formatted PKCS #12 archive, using the specified password to decrypt the key.
-    ///
-    /// The archive should contain a leaf certificate and its private key, as well any intermediate
-    /// certificates that allow clients to build a chain to a trusted root.
-    /// The chain certificates should be in order from the leaf certificate towards the root.
-    ///
-    /// PKCS #12 archives typically have the file extension `.p12` or `.pfx`, and can be created
-    /// with the OpenSSL `pkcs12` tool:
-    ///
-    /// ```bash
-    /// openssl pkcs12 -export -out identity.pfx -inkey key.pem -in cert.pem -certfile chain_certs.pem
-    /// ```
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// # use std::fs::File;
-    /// # use std::io::Read;
-    /// # fn pkcs12() -> Result<(), Box<dyn std::error::Error>> {
-    /// let mut buf = Vec::new();
-    /// File::open("my-ident.pfx")?
-    ///     .read_to_end(&mut buf)?;
-    /// let pkcs12 = primp::Identity::from_pkcs12_der(&buf, "my-privkey-password")?;
-    /// # drop(pkcs12);
-    /// # Ok(())
-    /// # }
-    /// ```
-    ///
-    /// # Optional
-    ///
-    /// This requires the `native-tls` Cargo feature enabled.
-    #[cfg(feature = "__native-tls")]
-    pub fn from_pkcs12_der(der: &[u8], password: &str) -> crate::Result<Identity> {
-        Ok(Identity {
-            inner: ClientCert::Pkcs12(
-                native_tls_crate::Identity::from_pkcs12(der, password)
-                    .map_err(crate::error::builder)?,
-            ),
-        })
-    }
-
-    /// Parses a chain of PEM encoded X509 certificates, with the leaf certificate first.
-    /// `key` is a PEM encoded PKCS #8 formatted private key for the leaf certificate.
-    ///
-    /// The certificate chain should contain any intermediate certificates that should be sent to
-    /// clients to allow them to build a chain to a trusted root.
-    ///
-    /// A certificate chain here means a series of PEM encoded certificates concatenated together.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// # use std::fs;
-    /// # fn pkcs8() -> Result<(), Box<dyn std::error::Error>> {
-    /// let cert = fs::read("client.pem")?;
-    /// let key = fs::read("key.pem")?;
-    /// let pkcs8 = primp::Identity::from_pkcs8_pem(&cert, &key)?;
-    /// # drop(pkcs8);
-    /// # Ok(())
-    /// # }
-    /// ```
-    ///
-    /// # Optional
-    ///
-    /// This requires the `native-tls` Cargo feature enabled.
-    #[cfg(feature = "__native-tls")]
-    pub fn from_pkcs8_pem(pem: &[u8], key: &[u8]) -> crate::Result<Identity> {
-        Ok(Identity {
-            inner: ClientCert::Pkcs8(
-                native_tls_crate::Identity::from_pkcs8(pem, key).map_err(crate::error::builder)?,
-            ),
-        })
-    }
-
-    /// Parses PEM encoded private key and certificate.
-    ///
-    /// The input should contain a PEM encoded private key
-    /// and at least one PEM encoded certificate.
-    ///
-    /// Note: The private key must be in RSA, SEC1 Elliptic Curve or PKCS#8 format.
+    /// Parse a PEM containing a private key and at least one certificate.
+    /// The key must be RSA, SEC1 EC, or PKCS#8.
     ///
     /// # Examples
     ///
@@ -345,7 +198,6 @@ impl Identity {
     /// # Optional
     ///
     /// This requires the `rustls(-...)` Cargo feature enabled.
-    #[cfg(feature = "__rustls")]
     pub fn from_pem(buf: &[u8]) -> crate::Result<Identity> {
         use rustls_pki_types::{pem::SectionKind, PrivateKeyDer};
         use std::io::Cursor;
@@ -389,22 +241,6 @@ impl Identity {
         })
     }
 
-    #[cfg(feature = "__native-tls")]
-    pub(crate) fn add_to_native_tls(
-        self,
-        tls: &mut native_tls_crate::TlsConnectorBuilder,
-    ) -> crate::Result<()> {
-        match self.inner {
-            ClientCert::Pkcs12(id) | ClientCert::Pkcs8(id) => {
-                tls.identity(id);
-                Ok(())
-            }
-            #[cfg(feature = "__rustls")]
-            ClientCert::Pem { .. } => Err(crate::error::builder("incompatible TLS identity type")),
-        }
-    }
-
-    #[cfg(feature = "__rustls")]
     pub(crate) fn add_to_rustls(
         self,
         config_builder: rustls::ConfigBuilder<
@@ -414,22 +250,15 @@ impl Identity {
         >,
     ) -> crate::Result<rustls::ClientConfig> {
         match self.inner {
-            ClientCert::Pem { key, certs } => {
-                config_builder
-                    .with_client_auth_cert(certs, key)
-                    .map_err(crate::error::builder)
-            }
-            #[cfg(feature = "__native-tls")]
-            ClientCert::Pkcs12(..) | ClientCert::Pkcs8(..) => {
-                Err(crate::error::builder("incompatible TLS identity type"))
-            }
+            ClientCert::Pem { key, certs } => config_builder
+                .with_client_auth_cert(certs, key)
+                .map_err(crate::error::builder),
         }
     }
 }
 
-#[cfg(feature = "__rustls")]
 impl CertificateRevocationList {
-    /// Parses a PEM encoded CRL.
+    /// Parse a PEM encoded CRL.
     ///
     /// # Examples
     ///
@@ -449,11 +278,10 @@ impl CertificateRevocationList {
     /// # Optional
     ///
     /// This requires the `rustls(-...)` Cargo feature enabled.
-    #[cfg(feature = "__rustls")]
     pub fn from_pem(pem: &[u8]) -> crate::Result<CertificateRevocationList> {
         Ok(CertificateRevocationList {
-            #[cfg(feature = "__rustls")]
-            inner: rustls_pki_types::CertificateRevocationListDer::from(pem.to_vec()),
+            inner: rustls_pki_types::CertificateRevocationListDer::from_pem_slice(pem)
+                .map_err(|_| crate::error::builder("invalid crl encoding"))?,
         })
     }
 
@@ -478,7 +306,6 @@ impl CertificateRevocationList {
     /// # Optional
     ///
     /// This requires the `rustls(-...)` Cargo feature enabled.
-    #[cfg(feature = "__rustls")]
     pub fn from_pem_bundle(pem_bundle: &[u8]) -> crate::Result<Vec<CertificateRevocationList>> {
         rustls_pki_types::CertificateRevocationListDer::pem_slice_iter(pem_bundle)
             .map(|result| match result {
@@ -488,7 +315,6 @@ impl CertificateRevocationList {
             .collect::<crate::Result<Vec<CertificateRevocationList>>>()
     }
 
-    #[cfg(feature = "__rustls")]
     pub(crate) fn as_rustls_crl<'a>(&self) -> rustls_pki_types::CertificateRevocationListDer<'a> {
         self.inner.clone()
     }
@@ -506,7 +332,6 @@ impl fmt::Debug for Identity {
     }
 }
 
-#[cfg(feature = "__rustls")]
 impl fmt::Debug for CertificateRevocationList {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("CertificateRevocationList").finish()
@@ -538,59 +363,29 @@ impl Version {
     /// Version 1.3 of the TLS protocol.
     pub const TLS_1_3: Version = Version(InnerVersion::Tls1_3);
 
-    #[cfg(feature = "__native-tls")]
-    pub(crate) fn to_native_tls(self) -> Option<native_tls_crate::Protocol> {
-        match self.0 {
-            InnerVersion::Tls1_0 => Some(native_tls_crate::Protocol::Tlsv10),
-            InnerVersion::Tls1_1 => Some(native_tls_crate::Protocol::Tlsv11),
-            InnerVersion::Tls1_2 => Some(native_tls_crate::Protocol::Tlsv12),
-            InnerVersion::Tls1_3 => None,
-        }
-    }
-
-    #[cfg(feature = "__rustls")]
     pub(crate) fn from_rustls(version: rustls::ProtocolVersion) -> Option<Self> {
-        use rustls::ProtocolVersion;
         match version {
-            ProtocolVersion::SSLv2 => None,
-            ProtocolVersion::SSLv3 => None,
-            ProtocolVersion::TLSv1_0 => Some(Self(InnerVersion::Tls1_0)),
-            ProtocolVersion::TLSv1_1 => Some(Self(InnerVersion::Tls1_1)),
-            ProtocolVersion::TLSv1_2 => Some(Self(InnerVersion::Tls1_2)),
-            ProtocolVersion::TLSv1_3 => Some(Self(InnerVersion::Tls1_3)),
+            rustls::ProtocolVersion::SSLv2 => None,
+            rustls::ProtocolVersion::SSLv3 => None,
+            rustls::ProtocolVersion::TLSv1_0 => Some(Self(InnerVersion::Tls1_0)),
+            rustls::ProtocolVersion::TLSv1_1 => Some(Self(InnerVersion::Tls1_1)),
+            rustls::ProtocolVersion::TLSv1_2 => Some(Self(InnerVersion::Tls1_2)),
+            rustls::ProtocolVersion::TLSv1_3 => Some(Self(InnerVersion::Tls1_3)),
             _ => None,
         }
     }
 }
 
 pub(crate) enum TlsBackend {
-    // This is the default and HTTP/3 feature does not use it so suppress it.
-    #[allow(dead_code)]
-    #[cfg(feature = "__native-tls")]
-    NativeTls,
-    #[cfg(feature = "__native-tls")]
-    BuiltNativeTls(native_tls_crate::TlsConnector),
-    #[cfg(feature = "__rustls")]
     Rustls,
-    #[cfg(feature = "__rustls")]
     BuiltRustls(Box<rustls::ClientConfig>),
-    #[cfg(any(feature = "__native-tls", feature = "__rustls",))]
-    UnknownPreconfigured,
 }
 
 impl fmt::Debug for TlsBackend {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            #[cfg(feature = "__native-tls")]
-            TlsBackend::NativeTls => write!(f, "NativeTls"),
-            #[cfg(feature = "__native-tls")]
-            TlsBackend::BuiltNativeTls(_) => write!(f, "BuiltNativeTls"),
-            #[cfg(feature = "__rustls")]
             TlsBackend::Rustls => write!(f, "Rustls"),
-            #[cfg(feature = "__rustls")]
             TlsBackend::BuiltRustls(_) => write!(f, "BuiltRustls"),
-            #[cfg(any(feature = "__native-tls", feature = "__rustls",))]
-            TlsBackend::UnknownPreconfigured => write!(f, "UnknownPreconfigured"),
         }
     }
 }
@@ -598,77 +393,62 @@ impl fmt::Debug for TlsBackend {
 #[allow(clippy::derivable_impls)]
 impl Default for TlsBackend {
     fn default() -> TlsBackend {
-        #[cfg(any(
-            all(feature = "__rustls", not(feature = "__native-tls")),
-            feature = "http3"
-        ))]
-        {
-            TlsBackend::Rustls
-        }
-
-        #[cfg(all(feature = "__native-tls", not(feature = "http3")))]
-        {
-            TlsBackend::NativeTls
-        }
+        TlsBackend::Rustls
     }
 }
 
-#[cfg(feature = "__rustls")]
-pub(crate) fn rustls_store(certs: Vec<Certificate>) -> crate::Result<RootCertStore> {
+pub(crate) fn rustls_store(certs: &[Certificate]) -> crate::Result<RootCertStore> {
     let mut root_cert_store = rustls::RootCertStore::empty();
     for cert in certs {
-        cert.add_to_rustls(&mut root_cert_store)?;
+        cert.clone().add_to_rustls(&mut root_cert_store)?;
     }
     Ok(root_cert_store)
 }
 
-/// Returns a cached default root certificate store with webpki roots.
-/// This avoids recreating the root store on every client creation.
-#[cfg(feature = "__rustls")]
-pub(crate) fn default_root_store() -> &'static rustls::RootCertStore {
-    use std::sync::OnceLock;
-    static DEFAULT_ROOTS: OnceLock<rustls::RootCertStore> = OnceLock::new();
-    
+/// Cached default root store with webpki roots plus native OS root CAs.
+pub fn default_root_store() -> &'static rustls::RootCertStore {
+    static DEFAULT_ROOTS: std::sync::OnceLock<rustls::RootCertStore> = std::sync::OnceLock::new();
     DEFAULT_ROOTS.get_or_init(|| {
         let mut roots = rustls::RootCertStore::empty();
         roots.extend(webpki_roots::TLS_SERVER_ROOTS.iter().cloned());
+        let native = rustls_native_certs::load_native_certs();
+        for err in &native.errors {
+            log::warn!("failed to load native root certificate: {err}");
+        }
+        if !native.certs.is_empty() {
+            roots.add_parsable_certificates(native.certs);
+        }
         roots
     })
 }
 
-#[cfg(feature = "__rustls")]
-#[cfg(any(all(unix, not(target_os = "android")), target_os = "windows"))]
-#[allow(dead_code)]
-pub(crate) fn rustls_der(
-    certs: Vec<Certificate>,
-) -> crate::Result<Vec<rustls_pki_types::CertificateDer<'static>>> {
-    let mut ders = Vec::with_capacity(certs.len());
-    for cert in certs {
-        match cert.original {
-            Cert::Der(buf) => ders.push(buf.into()),
-            Cert::Pem(buf) => {
-                let mut reader = std::io::Cursor::new(buf);
-                let pems = Certificate::read_pem_certs(&mut reader)?;
-                for c in pems {
-                    ders.push(c.into());
-                }
-            }
-        }
-    }
-    Ok(ders)
+/// Cached `Arc<RootCertStore>`, avoiding deep clones on every call.
+pub fn default_root_store_arc() -> Arc<rustls::RootCertStore> {
+    static DEFAULT_ROOTS_ARC: std::sync::OnceLock<Arc<rustls::RootCertStore>> =
+        std::sync::OnceLock::new();
+    DEFAULT_ROOTS_ARC
+        .get_or_init(|| Arc::new(default_root_store().clone()))
+        .clone()
 }
 
-#[cfg(feature = "__rustls")]
+/// A root store from the cached default plus the given user certificates.
+pub fn merged_root_store(certs: &[Certificate]) -> crate::Result<RootCertStore> {
+    let mut store = default_root_store().clone();
+    for cert in certs {
+        cert.clone().add_to_rustls(&mut store)?;
+    }
+    Ok(store)
+}
+
 #[derive(Debug)]
 pub(crate) struct NoVerifier;
 
-#[cfg(feature = "__rustls")]
 impl ServerCertVerifier for NoVerifier {
     fn verify_server_cert(
         &self,
-        _end_entity: &CertificateDer<'_>,
-        _intermediates: &[CertificateDer<'_>],
-        _server_name: &ServerName<'_>,
+        _end_entity: &rustls_pki_types::CertificateDer,
+        _intermediates: &[rustls_pki_types::CertificateDer],
+        _server_name: &ServerName,
         _ocsp_response: &[u8],
         _now: UnixTime,
     ) -> Result<ServerCertVerified, TLSError> {
@@ -678,8 +458,8 @@ impl ServerCertVerifier for NoVerifier {
     fn verify_tls12_signature(
         &self,
         _message: &[u8],
-        _cert: &CertificateDer<'_>,
-        _dss: &rustls::DigitallySignedStruct,
+        _cert: &rustls_pki_types::CertificateDer,
+        _dss: &DigitallySignedStruct,
     ) -> Result<HandshakeSignatureValid, TLSError> {
         Ok(HandshakeSignatureValid::assertion())
     }
@@ -687,8 +467,8 @@ impl ServerCertVerifier for NoVerifier {
     fn verify_tls13_signature(
         &self,
         _message: &[u8],
-        _cert: &CertificateDer<'_>,
-        _dss: &rustls::DigitallySignedStruct,
+        _cert: &rustls_pki_types::CertificateDer,
+        _dss: &DigitallySignedStruct,
     ) -> Result<HandshakeSignatureValid, TLSError> {
         Ok(HandshakeSignatureValid::assertion())
     }
@@ -712,85 +492,65 @@ impl ServerCertVerifier for NoVerifier {
     }
 }
 
-#[cfg(feature = "__rustls")]
 #[derive(Debug)]
 pub(crate) struct IgnoreHostname {
-    verifier: Arc<rustls::client::WebPkiServerVerifier>,
+    roots: RootCertStore,
+    signature_algorithms: WebPkiSupportedAlgorithms,
 }
 
-#[cfg(feature = "__rustls")]
 impl IgnoreHostname {
     pub(crate) fn new(
         roots: RootCertStore,
         signature_algorithms: WebPkiSupportedAlgorithms,
     ) -> Self {
-        // Build a WebPkiServerVerifier with the provided roots
-        // Get the default crypto provider or use aws-lc-rs as fallback
-        let provider = rustls::crypto::CryptoProvider::get_default()
-            .cloned()
-            .unwrap_or_else(|| {
-                // Create a provider with the provided signature algorithms
-                Arc::new(rustls::crypto::CryptoProvider {
-                    signature_verification_algorithms: signature_algorithms,
-                    ..rustls::crypto::aws_lc_rs::default_provider()
-                })
-            });
-        
-        let verifier = rustls::client::WebPkiServerVerifier::builder_with_provider(
-            Arc::new(roots),
-            provider,
-        )
-        .build()
-        .expect("Failed to build WebPkiServerVerifier for IgnoreHostname");
-        
-        Self { verifier }
+        Self {
+            roots,
+            signature_algorithms,
+        }
     }
 }
 
-#[cfg(feature = "__rustls")]
 impl ServerCertVerifier for IgnoreHostname {
     fn verify_server_cert(
         &self,
-        end_entity: &CertificateDer<'_>,
-        intermediates: &[CertificateDer<'_>],
+        end_entity: &rustls_pki_types::CertificateDer<'_>,
+        intermediates: &[rustls_pki_types::CertificateDer<'_>],
         _server_name: &ServerName<'_>,
-        ocsp_response: &[u8],
+        _ocsp_response: &[u8],
         now: UnixTime,
     ) -> Result<ServerCertVerified, TLSError> {
-        // Verify the certificate chain and validity, but ignore hostname matching
-        // This is useful for cases where you want to verify the cert is valid
-        // but don't care if it matches the expected hostname
-        // We use a dummy IP address as the server name to bypass hostname verification
-        let dummy_server_name = ServerName::IpAddress(rustls_pki_types::IpAddr::from(std::net::Ipv4Addr::new(0, 0, 0, 0)));
-        self.verifier.verify_server_cert(
-            end_entity,
+        let cert = ParsedCertificate::try_from(end_entity)?;
+
+        rustls::client::verify_server_cert_signed_by_trust_anchor(
+            &cert,
+            &self.roots,
             intermediates,
-            &dummy_server_name,
-            ocsp_response,
             now,
-        )
+            self.signature_algorithms.all,
+        )?;
+        Ok(ServerCertVerified::assertion())
     }
 
     fn verify_tls12_signature(
         &self,
         message: &[u8],
-        cert: &CertificateDer<'_>,
-        dss: &rustls::DigitallySignedStruct,
+        cert: &rustls_pki_types::CertificateDer<'_>,
+        dss: &DigitallySignedStruct,
     ) -> Result<HandshakeSignatureValid, TLSError> {
-        self.verifier.verify_tls12_signature(message, cert, dss)
+        rustls::crypto::verify_tls12_signature(message, cert, dss, &self.signature_algorithms)
     }
 
     fn verify_tls13_signature(
         &self,
         message: &[u8],
-        cert: &CertificateDer<'_>,
-        dss: &rustls::DigitallySignedStruct,
+        cert: &rustls_pki_types::CertificateDer<'_>,
+        dss: &DigitallySignedStruct,
     ) -> Result<HandshakeSignatureValid, TLSError> {
-        self.verifier.verify_tls13_signature(message, cert, dss)
+        rustls::crypto::verify_tls13_signature(message, cert, dss, &self.signature_algorithms)
     }
 
     fn supported_verify_schemes(&self) -> Vec<SignatureScheme> {
-        self.verifier.supported_verify_schemes()
+        self.signature_algorithms.supported_schemes()
     }
 }
 
@@ -799,6 +559,7 @@ impl ServerCertVerifier for IgnoreHostname {
 #[derive(Clone)]
 pub struct TlsInfo {
     pub(crate) peer_certificate: Option<Vec<u8>>,
+    pub(crate) version: Option<Version>,
 }
 
 impl TlsInfo {
@@ -806,11 +567,20 @@ impl TlsInfo {
     pub fn peer_certificate(&self) -> Option<&[u8]> {
         self.peer_certificate.as_ref().map(|der| &der[..])
     }
+
+    /// Get the TLS protocol version negotiated with the peer.
+    ///
+    /// Returns `None` if the TLS backend cannot report it.
+    pub fn version(&self) -> Option<Version> {
+        self.version
+    }
 }
 
 impl std::fmt::Debug for TlsInfo {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        f.debug_struct("TlsInfo").finish()
+        f.debug_struct("TlsInfo")
+            .field("version", &self.version)
+            .finish()
     }
 }
 
@@ -818,37 +588,11 @@ impl std::fmt::Debug for TlsInfo {
 mod tests {
     use super::*;
 
-    #[cfg(feature = "__native-tls")]
-    #[test]
-    fn certificate_from_der_invalid() {
-        Certificate::from_der(b"not der").unwrap_err();
-    }
-
-    #[cfg(feature = "__native-tls")]
-    #[test]
-    fn certificate_from_pem_invalid() {
-        Certificate::from_pem(b"not pem").unwrap_err();
-    }
-
-    #[cfg(feature = "__native-tls")]
-    #[test]
-    fn identity_from_pkcs12_der_invalid() {
-        Identity::from_pkcs12_der(b"not der", "nope").unwrap_err();
-    }
-
-    #[cfg(feature = "__native-tls")]
-    #[test]
-    fn identity_from_pkcs8_pem_invalid() {
-        Identity::from_pkcs8_pem(b"not pem", b"not key").unwrap_err();
-    }
-
-    #[cfg(feature = "__rustls")]
     #[test]
     fn identity_from_pem_invalid() {
         Identity::from_pem(b"not pem").unwrap_err();
     }
 
-    #[cfg(feature = "__rustls")]
     #[test]
     fn identity_from_pem_pkcs1_key() {
         let pem = b"-----BEGIN CERTIFICATE-----\n\
@@ -893,7 +637,6 @@ mod tests {
         assert!(Certificate::from_pem_bundle(PEM_BUNDLE).is_ok())
     }
 
-    #[cfg(feature = "__rustls")]
     #[test]
     fn crl_from_pem() {
         let pem = b"-----BEGIN X509 CRL-----\n-----END X509 CRL-----\n";
@@ -901,7 +644,6 @@ mod tests {
         CertificateRevocationList::from_pem(pem).unwrap();
     }
 
-    #[cfg(feature = "__rustls")]
     #[test]
     fn crl_from_pem_bundle() {
         let pem_bundle = std::fs::read("tests/support/crl.pem").unwrap();
@@ -911,5 +653,26 @@ mod tests {
         assert!(result.is_ok());
         let result = result.unwrap();
         assert_eq!(result.len(), 1);
+    }
+
+    #[test]
+    fn tls_info_exposes_peer_certificate_and_version() {
+        let info = TlsInfo {
+            peer_certificate: Some(vec![0x30, 0x01, 0x02]),
+            version: Some(Version::TLS_1_3),
+        };
+        assert_eq!(info.peer_certificate().unwrap()[0], 0x30);
+        assert_eq!(info.version(), Some(Version::TLS_1_3));
+        // Debug must not leak peer_certificate bytes but must show version.
+        let dbg = format!("{info:?}");
+        assert!(dbg.contains("TLS_1_3") || dbg.contains("version"));
+        let empty = TlsInfo {
+            peer_certificate: None,
+            version: None,
+        };
+        assert!(empty.peer_certificate().is_none());
+        assert!(empty.version().is_none());
+        let _clone = empty.clone();
+        let _dbg_empty = format!("{empty:?}");
     }
 }

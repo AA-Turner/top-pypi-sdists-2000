@@ -6,6 +6,7 @@ use std::time::Duration;
 
 use bytes::Bytes;
 use http_body::Body as HttpBody;
+use http_body::Frame;
 use http_body_util::combinators::BoxBody;
 use pin_project_lite::pin_project;
 #[cfg(feature = "stream")]
@@ -25,10 +26,7 @@ enum Inner {
 }
 
 pin_project! {
-    /// A body with a total timeout.
-    ///
-    /// The timeout does not reset upon each chunk, but rather requires the whole
-    /// body be streamed before the deadline is reached.
+    /// Wraps a body with a deadline that covers the whole transfer (not reset per chunk).
     pub(crate) struct TotalTimeoutBody<B> {
         #[pin]
         inner: B,
@@ -47,9 +45,7 @@ pin_project! {
 }
 
 impl Body {
-    /// Returns a reference to the internal data of the `Body`.
-    ///
-    /// `None` is returned, if the underlying data is a stream.
+    /// Returns the buffered bytes, or `None` if the body is a stream.
     pub fn as_bytes(&self) -> Option<&[u8]> {
         match &self.inner {
             Inner::Reusable(bytes) => Some(bytes.as_ref()),
@@ -91,7 +87,7 @@ impl Body {
         Body::stream(stream)
     }
 
-    #[cfg(any(feature = "stream", feature = "multipart", feature = "blocking"))]
+    #[cfg(any(feature = "stream", feature = "multipart"))]
     pub(crate) fn stream<S>(stream: S) -> Body
     where
         S: futures_core::stream::TryStream + Send + 'static,
@@ -157,11 +153,48 @@ impl Body {
         }
     }
 
+    /// A body that yields `err` on the first poll, used to make a
+    /// non-replayable streaming body fail loudly on a 307/308 redirect
+    /// instead of sending an empty body.
+    pub(crate) fn error<E>(err: E) -> Body
+    where
+        E: Into<Box<dyn std::error::Error + Send + Sync>> + Send + Sync + 'static,
+    {
+        use http_body_util::BodyExt;
+
+        let err: Box<dyn std::error::Error + Send + Sync> = err.into();
+        let boxed: BoxBody<Bytes, Box<dyn std::error::Error + Send + Sync>> =
+            ErrorBody { err: Some(err) }.boxed();
+        Body {
+            inner: Inner::Streaming(boxed),
+        }
+    }
+
     #[cfg(feature = "multipart")]
     pub(crate) fn content_length(&self) -> Option<u64> {
         match self.inner {
             Inner::Reusable(ref bytes) => Some(bytes.len() as u64),
             Inner::Streaming(ref body) => body.size_hint().exact(),
+        }
+    }
+}
+
+/// A body that yields a single error frame on the first poll.
+struct ErrorBody {
+    err: Option<Box<dyn std::error::Error + Send + Sync>>,
+}
+
+impl HttpBody for ErrorBody {
+    type Data = Bytes;
+    type Error = Box<dyn std::error::Error + Send + Sync>;
+
+    fn poll_frame(
+        self: Pin<&mut Self>,
+        _cx: &mut Context<'_>,
+    ) -> Poll<Option<Result<Frame<Self::Data>, Self::Error>>> {
+        match self.get_mut().err.take() {
+            Some(err) => Poll::Ready(Some(Err(err))),
+            None => Poll::Ready(None),
         }
     }
 }
@@ -344,7 +377,16 @@ where
             some
         } else {
             this.sleep.set(Some(tokio::time::sleep(*this.timeout)));
-            this.sleep.as_mut().as_pin_mut().unwrap()
+            // Unreachable: the field was just set to `Some`. Surface a
+            // body error rather than panicking under `panic = "abort"`.
+            match this.sleep.as_mut().as_pin_mut() {
+                Some(sleep) => sleep,
+                None => {
+                    return Poll::Ready(Some(Err(crate::error::body(
+                        "read timeout sleep failed to initialize",
+                    ))))
+                }
+            }
         };
 
         // Error if the timeout has expired.

@@ -1,14 +1,14 @@
-//! Redirect Handling
-//!
-//! By default, a `Client` will automatically handle HTTP redirects, having a
-//! maximum redirect chain of 10 hops. To customize this behavior, a
-//! `redirect::Policy` can be used with a `ClientBuilder`.
+//! Redirect handling. A `Client` automatically follows redirects, up to a
+//! maximum chain of 10 hops, configurable via a `redirect::Policy`.
 
 use std::fmt;
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::RwLock;
 use std::{error::Error as StdError, sync::Arc};
 
-use crate::header::{AUTHORIZATION, COOKIE, PROXY_AUTHORIZATION, REFERER, WWW_AUTHENTICATE};
-use http::{HeaderMap, HeaderValue};
+use crate::header::{AUTHORIZATION, COOKIE, PROXY_AUTHORIZATION, REFERER};
+use crate::proxy::Matcher as ProxyMatcher;
+use http::{uri::Scheme, HeaderMap, HeaderValue};
 use hyper::StatusCode;
 
 use crate::{async_impl, Url};
@@ -16,21 +16,14 @@ use tower_http::follow_redirect::policy::{
     Action as TowerAction, Attempt as TowerAttempt, Policy as TowerPolicy,
 };
 
-/// A type that controls the policy on how to handle the following of redirects.
-///
-/// The default value will catch redirect loops, and has a maximum of 10
-/// redirects it will follow in a chain before returning an error.
-///
-/// - `limited` can be used have the same as the default behavior, but adjust
-///   the allowed maximum redirect hops in a chain.
-/// - `none` can be used to disable all redirect behavior.
-/// - `custom` can be used to create a customized policy.
+/// Controls how the `Client` follows redirects. The default catches redirect
+/// loops and follows at most 10 hops before erroring. `limited` adjusts the
+/// max, `none` disables following, and `custom` supplies a custom policy.
 pub struct Policy {
-    inner: PolicyKind,
+    pub(crate) inner: PolicyKind,
 }
 
-/// A type that holds information on the next request and previous requests
-/// in redirect chain.
+/// Holds info on the next request and the previous requests in a redirect chain.
 #[derive(Debug)]
 pub struct Attempt<'a> {
     status: StatusCode,
@@ -38,16 +31,15 @@ pub struct Attempt<'a> {
     previous: &'a [Url],
 }
 
-/// An action to perform when a redirect status code is found.
+/// An action to perform when a redirect status is encountered.
 #[derive(Debug)]
 pub struct Action {
     inner: ActionKind,
 }
 
 impl Policy {
-    /// Create a `Policy` with a maximum number of redirects.
-    ///
-    /// An `Error` will be returned if the max is reached.
+    /// Create a `Policy` with a maximum number of redirects. An `Error` is
+    /// returned once the max is reached.
     pub fn limited(max: usize) -> Self {
         Self {
             inner: PolicyKind::Limit(max),
@@ -61,19 +53,9 @@ impl Policy {
         }
     }
 
-    /// Create a custom `Policy` using the passed function.
-    ///
-    /// # Note
-    ///
-    /// The default `Policy` handles a maximum loop
-    /// chain, but the custom variant does not do that for you automatically.
-    /// The custom policy should have some way of handling those.
-    ///
-    /// Information on the next request and previous requests can be found
-    /// on the [`Attempt`] argument passed to the closure.
-    ///
-    /// Actions can be conveniently created from methods on the
-    /// [`Attempt`].
+    /// Create a custom `Policy` from a closure. The default `Policy` caps the
+    /// redirect loop, but a custom policy must handle loops itself. See
+    /// [`Attempt`] for the info and actions available.
     ///
     /// # Example
     ///
@@ -108,12 +90,8 @@ impl Policy {
         }
     }
 
-    /// Apply this policy to a given [`Attempt`] to produce a [`Action`].
-    ///
-    /// # Note
-    ///
-    /// This method can be used together with `Policy::custom()`
-    /// to construct one `Policy` that wraps another.
+    /// Apply this policy to an `Attempt` to produce an `Action`. Useful with
+    /// `Policy::custom()` to wrap another policy.
     ///
     /// # Example
     ///
@@ -164,8 +142,8 @@ impl Default for Policy {
     }
 }
 
-impl<'a> Attempt<'a> {
-    /// Get the type of redirect.
+impl Attempt<'_> {
+    /// Get the redirect status code.
     pub fn status(&self) -> StatusCode {
         self.status
     }
@@ -179,25 +157,22 @@ impl<'a> Attempt<'a> {
     pub fn previous(&self) -> &[Url] {
         self.previous
     }
-    /// Returns an action meaning reqwest should follow the next URL.
+    /// Returns an action meaning primp should follow the next URL.
     pub fn follow(self) -> Action {
         Action {
             inner: ActionKind::Follow,
         }
     }
 
-    /// Returns an action meaning reqwest should not follow the next URL.
-    ///
-    /// The 30x response will be returned as the `Ok` result.
+    /// Action meaning primp should not follow the next URL. The 30x response is
+    /// returned as the `Ok` result.
     pub fn stop(self) -> Action {
         Action {
             inner: ActionKind::Stop,
         }
     }
 
-    /// Returns an action failing the redirect with an error.
-    ///
-    /// The `Error` will be returned for the result of the sent request.
+    /// Action failing the redirect with an error, returned as the request result.
     pub fn error<E: Into<Box<dyn StdError + Send + Sync>>>(self, error: E) -> Action {
         Action {
             inner: ActionKind::Error(error.into()),
@@ -205,7 +180,7 @@ impl<'a> Attempt<'a> {
     }
 }
 
-enum PolicyKind {
+pub(crate) enum PolicyKind {
     Custom(Box<dyn Fn(Attempt) -> Action + Send + Sync + 'static>),
     Limit(usize),
     None,
@@ -236,18 +211,33 @@ pub(crate) enum ActionKind {
     Error(Box<dyn StdError + Send + Sync>),
 }
 
-pub(crate) fn remove_sensitive_headers(headers: &mut HeaderMap, next: &Url, previous: &[Url]) {
+/// Unconditionally remove the sensitive headers (used once a cross-host
+/// hop has stripped them, since tower-http rebuilds later hops from the
+/// original snapshot).
+fn strip_sensitive_headers(headers: &mut HeaderMap) {
+    headers.remove(AUTHORIZATION);
+    headers.remove(COOKIE);
+    headers.remove("cookie2");
+    headers.remove(PROXY_AUTHORIZATION);
+}
+
+/// Strip sensitive headers when `next` is cross-host relative to the last
+/// visited URL. Returns whether anything was stripped.
+pub(crate) fn remove_sensitive_headers(
+    headers: &mut HeaderMap,
+    next: &Url,
+    previous: &[Url],
+) -> bool {
     if let Some(previous) = previous.last() {
         let cross_host = next.host_str() != previous.host_str()
-            || next.port_or_known_default() != previous.port_or_known_default();
+            || next.port_or_known_default() != previous.port_or_known_default()
+            || next.scheme() != previous.scheme();
         if cross_host {
-            headers.remove(AUTHORIZATION);
-            headers.remove(COOKIE);
-            headers.remove("cookie2");
-            headers.remove(PROXY_AUTHORIZATION);
-            headers.remove(WWW_AUTHENTICATE);
+            strip_sensitive_headers(headers);
+            return true;
         }
     }
+    false
 }
 
 #[derive(Debug)]
@@ -263,19 +253,36 @@ impl StdError for TooManyRedirects {}
 
 #[derive(Clone)]
 pub(crate) struct TowerRedirectPolicy {
-    policy: Arc<Policy>,
+    policy: Arc<std::sync::RwLock<Policy>>,
     referer: bool,
     urls: Vec<Url>,
     https_only: bool,
+    redirect_enabled: Arc<AtomicBool>,
+    /// Per-request override from the first `on_request` call; lives on the
+    /// per-request policy clone, never on the shared client.
+    override_policy: Option<crate::config::RedirectOverride>,
+    /// Set once a cross-host hop strips sensitive headers. tower-http
+    /// rebuilds later hops from the original hop-0 snapshot (which still
+    /// carries the creds), so they must be re-stripped unconditionally.
+    sensitive_stripped: bool,
+    /// Shared with `ClientInner`: per-hop `Proxy-Authorization` re-attach
+    /// reads the same matchers the connector uses, so `set_proxies` stays in
+    /// sync.
+    proxies: Arc<RwLock<Vec<ProxyMatcher>>>,
 }
 
 impl TowerRedirectPolicy {
     pub(crate) fn new(policy: Policy) -> Self {
+        let enabled = !matches!(policy.inner, PolicyKind::None);
         Self {
-            policy: Arc::new(policy),
+            policy: Arc::new(std::sync::RwLock::new(policy)),
             referer: false,
             urls: Vec::new(),
             https_only: false,
+            redirect_enabled: Arc::new(AtomicBool::new(enabled)),
+            override_policy: None,
+            sensitive_stripped: false,
+            proxies: Arc::new(RwLock::new(Vec::new())),
         }
     }
 
@@ -287,6 +294,61 @@ impl TowerRedirectPolicy {
     pub(crate) fn with_https_only(&mut self, https_only: bool) -> &mut Self {
         self.https_only = https_only;
         self
+    }
+
+    pub(crate) fn with_proxies(&mut self, proxies: Arc<RwLock<Vec<ProxyMatcher>>>) -> &mut Self {
+        self.proxies = proxies;
+        self
+    }
+
+    /// Proxy auth belongs to the proxy CONNECTION, not the destination
+    /// origin. `execute_request` attaches it for hop 0 only and the
+    /// cross-host strip removes it, so re-attach per hop when this hop is
+    /// also routed through an auth proxy (same matcher the connector uses).
+    fn reattach_proxy_auth(&self, req: &mut http::Request<async_impl::body::Body>) {
+        if req.uri().scheme() != Some(&Scheme::HTTP) {
+            return;
+        }
+        if req.headers().contains_key(PROXY_AUTHORIZATION) {
+            return;
+        }
+        let header = {
+            let proxies = self.proxies.read().unwrap_or_else(|e| e.into_inner());
+            let mut found = None;
+            for proxy in proxies.iter() {
+                match proxy.intercept(req.uri()) {
+                    Ok(Some(intercepted)) => {
+                        if let Some(scheme) = intercepted.uri().scheme() {
+                            if scheme == &Scheme::HTTP || scheme == &Scheme::HTTPS {
+                                found = intercepted.basic_auth().cloned();
+                            }
+                        }
+                        break;
+                    }
+                    Ok(None) => continue,
+                    Err(e) => {
+                        log::warn!("proxy intercept error in reattach_proxy_auth: {e}");
+                        break;
+                    }
+                }
+            }
+            found
+        };
+        if let Some(header) = header {
+            req.headers_mut().insert(PROXY_AUTHORIZATION, header);
+        }
+    }
+
+    /// Replace the active policy and its enabled flag so the new limits take
+    /// effect immediately. Mutates through the existing `Arc`s so the tower
+    /// `FollowRedirect` service (which shares them via the `clone()` at build
+    /// time) sees the update; fresh `Arc`s would isolate the handle and make
+    /// this a no-op.
+    pub(crate) fn set_policy(&mut self, policy: Policy) {
+        let enabled = !matches!(policy.inner, PolicyKind::None);
+        *self.policy.write().unwrap_or_else(|e| e.into_inner()) = policy;
+        self.redirect_enabled
+            .store(enabled, std::sync::atomic::Ordering::Release);
     }
 }
 
@@ -304,8 +366,23 @@ fn make_referer(next: &Url, previous: &Url) -> Option<HeaderValue> {
 
 impl TowerPolicy<async_impl::body::Body, crate::Error> for TowerRedirectPolicy {
     fn redirect(&mut self, attempt: &TowerAttempt<'_>) -> Result<TowerAction, crate::Error> {
-        let previous_url =
-            Url::parse(&attempt.previous().to_string()).expect("Previous URL must be valid");
+        // A per-request override replaces the shared policy: it must not be
+        // gated by the shared `redirect_enabled` flag.
+        let override_enabled = match self.override_policy {
+            Some(crate::config::RedirectOverride::Disabled) => return Ok(TowerAction::Stop),
+            Some(crate::config::RedirectOverride::Follow(_)) => true,
+            None => false,
+        };
+
+        // Check if redirects are enabled
+        if !override_enabled && !self.redirect_enabled.load(Ordering::Acquire) {
+            return Ok(TowerAction::Stop);
+        }
+
+        let previous_url = match Url::parse(&attempt.previous().to_string()) {
+            Ok(url) => url,
+            Err(e) => return Err(crate::error::builder(e)),
+        };
 
         let next_url = match Url::parse(&attempt.location().to_string()) {
             Ok(url) => url,
@@ -314,10 +391,27 @@ impl TowerPolicy<async_impl::body::Body, crate::Error> for TowerRedirectPolicy {
 
         self.urls.push(previous_url.clone());
 
-        match self.policy.check(attempt.status(), &next_url, &self.urls) {
+        // A per-request `Follow(n)` checks against its own limit; otherwise
+        // use the shared policy (read-locked so `set_policy` can swap it,
+        // poison-recovered so a panic elsewhere cannot disable redirects).
+        let action = match self.override_policy {
+            Some(crate::config::RedirectOverride::Follow(max)) => {
+                let override_policy = Policy::limited(max);
+                override_policy.check(attempt.status(), &next_url, &self.urls)
+            }
+            _ => self
+                .policy
+                .read()
+                .unwrap_or_else(std::sync::PoisonError::into_inner)
+                .check(attempt.status(), &next_url, &self.urls),
+        };
+        match action {
             ActionKind::Follow => {
                 if next_url.scheme() != "http" && next_url.scheme() != "https" {
-                    return Err(crate::error::url_bad_scheme(next_url));
+                    return Err(crate::error::redirect(
+                        crate::error::url_bad_scheme(next_url.clone()),
+                        next_url,
+                    ));
                 }
 
                 if self.https_only && next_url.scheme() != "https" {
@@ -334,8 +428,30 @@ impl TowerPolicy<async_impl::body::Body, crate::Error> for TowerRedirectPolicy {
     }
 
     fn on_request(&mut self, req: &mut http::Request<async_impl::body::Body>) {
+        // Capture the per-request override from the request extensions; the
+        // ORIGINAL request is the only one in the chain carrying them.
+        // `or()` is REQUIRED: tower-http rebuilds follow-up requests WITHOUT
+        // extensions and re-calls `on_request`, so a bare overwrite would
+        // erase the override after hop 1.
+        self.override_policy = self.override_policy.or(req
+            .extensions()
+            .get::<crate::config::RedirectOverride>()
+            .copied());
+
         if let Ok(next_url) = Url::parse(&req.uri().to_string()) {
-            remove_sensitive_headers(req.headers_mut(), &next_url, &self.urls);
+            let stripped = remove_sensitive_headers(req.headers_mut(), &next_url, &self.urls);
+            if stripped {
+                self.sensitive_stripped = true;
+                // One-shot cookies must not follow across hosts either. Extensions
+                // are replayed onto rebuilt hops, so removing it here keeps it
+                // off every later hop (sticky).
+                req.extensions_mut()
+                    .remove::<crate::config::RequestConfig<crate::config::OneShotCookies>>();
+            } else if self.sensitive_stripped {
+                // Hop rebuilt from the hop-0 snapshot: re-strip so a later
+                // same-origin hop can't resurrect the creds.
+                strip_sensitive_headers(req.headers_mut());
+            }
             if self.referer {
                 if let Some(previous_url) = self.urls.last() {
                     if let Some(v) = make_referer(&next_url, previous_url) {
@@ -343,12 +459,36 @@ impl TowerPolicy<async_impl::body::Body, crate::Error> for TowerRedirectPolicy {
                     }
                 }
             }
+        } else {
+            // Be conservative: if next URL is unparseable by `Url` (e.g.
+            // `http://example.com:abc/` where `http::Uri` is lenient but `Url`
+            // rejects), treat it as cross-host and strip sensitive headers and
+            // one-shot cookies. Otherwise `Authorization`/`Proxy-Authorization`
+            // could leak to an attacker-controlled host via a malformed
+            // `Location`.
+            strip_sensitive_headers(req.headers_mut());
+            self.sensitive_stripped = true;
+            req.extensions_mut()
+                .remove::<crate::config::RequestConfig<crate::config::OneShotCookies>>();
         };
+        self.reattach_proxy_auth(req);
     }
 
-    // This must be implemented to make 307 and 308 redirects work
+    // This must be implemented to make 307 and 308 redirects work.
+    //
+    // A streaming (non-cloneable) body cannot be replayed on a 307/308
+    // redirect. tower-http treats a `None` return as "no body to clone" and
+    // silently sends an empty body — which would lose the upload. Instead we
+    // return a body that fails loudly, so the caller gets a clear error rather
+    // than a silently-truncated request. (clone_body is only ever consulted for
+    // 307/308; 301/302/303 rebuild the request as GET without the body.)
     fn clone_body(&self, body: &async_impl::body::Body) -> Option<async_impl::body::Body> {
-        body.try_clone()
+        match body.try_clone() {
+            Some(cloned) => Some(cloned),
+            None => Some(async_impl::body::Body::error(
+                "cannot replay a streaming request body on a 307/308 redirect",
+            )),
+        }
     }
 }
 
@@ -382,6 +522,130 @@ fn test_redirect_policy_limit_to_0() {
     match policy.check(StatusCode::FOUND, &next, &previous) {
         ActionKind::Error(err) if err.is::<TooManyRedirects>() => (),
         other => panic!("unexpected {other:?}"),
+    }
+}
+
+#[test]
+fn test_tower_redirect_policy_set_policy_updates_limits() {
+    // Start with a policy that allows 5 redirects, then swap to 0.
+    // We can't easily construct a `tower_http::follow_redirect::Attempt`
+    // outside of tower-http, so we verify the swap by reading the inner
+    // policy back through the same RwLock the redirect path uses.
+    let mut policy = TowerRedirectPolicy::new(Policy::limited(5));
+    policy.set_policy(Policy::limited(0));
+
+    let guard = policy.policy.read().expect("policy lock poisoned");
+    match guard.check(
+        StatusCode::FOUND,
+        &Url::parse("http://x.y/z").unwrap(),
+        &[Url::parse("http://a.b/c").unwrap()],
+    ) {
+        ActionKind::Error(err) if err.is::<TooManyRedirects>() => {}
+        other => panic!("expected TooManyRedirects after set_policy(limited(0)), got {other:?}"),
+    }
+}
+
+#[test]
+fn test_tower_redirect_policy_clone_shares_state() {
+    // `TowerRedirectPolicy` stores `policy` and `redirect_enabled` behind
+    // `Arc`s so the `FollowRedirect` tower service (which receives a clone
+    // of the same `TowerRedirectPolicy` at build time) always reads the
+    // current policy.  `set_policy` mutates through those shared `Arc`s,
+    // meaning a clone sees the same mutation as the original — this is by
+    // design so that `Client::set_redirect_policy` actually changes the
+    // behaviour of the live redirect service.
+    let original = TowerRedirectPolicy::new(Policy::limited(10));
+    let mut cloned = original.clone();
+
+    cloned.set_policy(Policy::limited(0));
+
+    // Both original and clone share the same Arc, so both see limited(0).
+    for (label, p) in [("original", &original), ("clone", &cloned)] {
+        let guard = p
+            .policy
+            .read()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        match guard.check(
+            StatusCode::FOUND,
+            &Url::parse("http://x.y/z").unwrap(),
+            &[Url::parse("http://a.b/c").unwrap()],
+        ) {
+            ActionKind::Error(err) if err.is::<TooManyRedirects>() => {}
+            other => panic!("{label} should see limited(0) after set_policy, got {other:?}"),
+        }
+    }
+}
+
+#[test]
+fn test_tower_redirect_policy_clone_shares_enabled_flag() {
+    // Same sharing requirement for the `redirect_enabled` flag.
+    let original = TowerRedirectPolicy::new(Policy::limited(5));
+    let mut cloned = original.clone();
+
+    cloned.set_policy(Policy::none());
+
+    // Both original and clone share the same Arc, so both see false.
+    assert!(
+        !original
+            .redirect_enabled
+            .load(std::sync::atomic::Ordering::Relaxed),
+        "original redirect_enabled should be false after set_policy(none) on clone"
+    );
+    assert!(
+        !cloned
+            .redirect_enabled
+            .load(std::sync::atomic::Ordering::Relaxed),
+        "clone redirect_enabled should be false after set_policy(none)"
+    );
+}
+
+#[test]
+fn test_tower_redirect_policy_recovers_from_poisoned_lock() {
+    // Poison the write lock by panicking while holding it, then verify that
+    // both `set_policy` and the redirect path's read still recover cleanly.
+    // (Stable `std::sync::RwLock` does not expose a way to clear the poison,
+    // but `PoisonError::into_inner` lets us still grab a guard and use it.)
+    use std::sync::Arc;
+    use std::thread;
+
+    let mut policy = Arc::new(TowerRedirectPolicy::new(Policy::limited(5)));
+
+    let poison_handle = {
+        let policy = Arc::clone(&policy);
+        thread::spawn(move || {
+            let _guard = policy.policy.write().expect("first write should succeed");
+            panic!("intentional panic to poison the policy lock");
+        })
+    };
+    let _ = poison_handle.join();
+
+    // Verify the lock is poisoned after the panic.
+    assert!(
+        policy.policy.read().is_err(),
+        "policy lock should be poisoned"
+    );
+
+    // `set_policy` must still install the new policy even with a poisoned
+    // lock. Use `Arc::get_mut` since the poison thread has joined and the
+    // Arc is uniquely owned.
+    Arc::get_mut(&mut policy)
+        .expect("policy Arc should be uniquely owned after poison thread joined")
+        .set_policy(Policy::limited(0));
+
+    // The redirect path's read must also recover (not silently return
+    // TowerAction::Stop) and observe the new `limited(0)` policy.
+    let guard = policy
+        .policy
+        .read()
+        .unwrap_or_else(std::sync::PoisonError::into_inner);
+    let next = Url::parse("http://x.y/z").unwrap();
+    match guard.check(
+        StatusCode::FOUND,
+        &next,
+        &[Url::parse("http://a.b/c").unwrap()],
+    ) {
+        ActionKind::Error(err) if err.is::<TooManyRedirects>() => {}
+        other => panic!("expected TooManyRedirects after recovery, got {other:?}"),
     }
 }
 
@@ -430,4 +694,99 @@ fn test_remove_sensitive_headers() {
 
     remove_sensitive_headers(&mut headers, &next, &prev);
     assert_eq!(headers, filtered_headers);
+}
+
+/// A same-host HTTPS -> HTTP redirect is a scheme downgrade and MUST strip
+/// credential-bearing headers (they would otherwise be sent over plaintext).
+/// `remove_sensitive_headers` treats a scheme change as `cross_host`.
+#[test]
+fn test_remove_sensitive_headers_strips_on_scheme_downgrade() {
+    use hyper::header::{HeaderValue, ACCEPT, AUTHORIZATION, COOKIE};
+
+    let mut headers = HeaderMap::new();
+    headers.insert(ACCEPT, HeaderValue::from_static("*/*"));
+    headers.insert(AUTHORIZATION, HeaderValue::from_static("secret"));
+    headers.insert(COOKIE, HeaderValue::from_static("sid=abc"));
+
+    // Same host + port, only the scheme downgrades from https to http.
+    let previous = vec![Url::parse("https://same-host.example/a").unwrap()];
+    let next = Url::parse("http://same-host.example/b").unwrap();
+
+    remove_sensitive_headers(&mut headers, &next, &previous);
+
+    assert!(
+        headers.get(AUTHORIZATION).is_none(),
+        "Authorization must be stripped on an https->http downgrade"
+    );
+    assert!(
+        headers.get(COOKIE).is_none(),
+        "Cookie must be stripped on an https->http downgrade"
+    );
+    assert!(
+        headers.get(ACCEPT).is_some(),
+        "non-sensitive headers are kept"
+    );
+}
+
+/// A same-origin redirect (identical scheme, host, and port) must KEEP
+/// credential headers so ordinary within-site redirects still authenticate.
+#[test]
+fn test_remove_sensitive_headers_keeps_on_same_origin() {
+    use hyper::header::{HeaderValue, AUTHORIZATION, COOKIE};
+
+    let mut headers = HeaderMap::new();
+    headers.insert(AUTHORIZATION, HeaderValue::from_static("secret"));
+    headers.insert(COOKIE, HeaderValue::from_static("sid=abc"));
+
+    let previous = vec![Url::parse("https://same-host.example/a").unwrap()];
+    let next = Url::parse("https://same-host.example/b").unwrap();
+
+    remove_sensitive_headers(&mut headers, &next, &previous);
+
+    assert!(
+        headers.get(AUTHORIZATION).is_some(),
+        "same-origin keeps Authorization"
+    );
+    assert!(headers.get(COOKIE).is_some(), "same-origin keeps Cookie");
+}
+
+/// A replayable (in-memory) body must be cloned for a 307/308 redirect.
+#[test]
+fn clone_body_clones_reusable_body() {
+    use crate::async_impl::body::Body;
+    use tower_http::follow_redirect::policy::Policy as FollowPolicy;
+
+    let policy = TowerRedirectPolicy::new(Policy::default());
+    // `Body::empty()` is a `Reusable` variant, which `try_clone` can duplicate.
+    let reusable = Body::empty();
+    let cloned = FollowPolicy::<Body, crate::Error>::clone_body(&policy, &reusable);
+    assert!(
+        cloned.is_some(),
+        "reusable body must be cloneable for 307/308"
+    );
+}
+
+/// A streaming (non-cloneable) body must NOT be silently emptied on a 307/308
+/// redirect. `clone_body` must return a body that errors, so the request fails
+/// loudly instead of uploading an empty body.
+#[tokio::test]
+async fn clone_body_errors_for_streaming_body() {
+    use crate::async_impl::body::Body;
+    use bytes::Bytes;
+    use http_body_util::BodyExt;
+    use tower_http::follow_redirect::policy::Policy as FollowPolicy;
+
+    let policy = TowerRedirectPolicy::new(Policy::default());
+    // `Body::error` is a `Streaming` variant whose `try_clone` is `None`, so it
+    // stands in for a non-replayable streaming upload. `clone_body` must return
+    // a body that yields an error rather than succeeding with empty data.
+    let streaming = Body::error("original streaming body marker");
+    let returned = FollowPolicy::<Body, crate::Error>::clone_body(&policy, &streaming)
+        .expect("clone_body returns a body for streaming input");
+    // Drive the returned body and assert it errors (it must not yield Ok(None)).
+    let result: Result<http_body_util::Collected<Bytes>, _> = returned.collect().await;
+    assert!(
+        result.is_err(),
+        "streaming-body replay on 307/308 must error, not send empty body"
+    );
 }

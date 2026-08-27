@@ -406,6 +406,11 @@ impl<P: PartProps> FormParts<P> {
     // The length should be predictable if only String and file fields have been added,
     // but not if a generic reader has been added;
     pub(crate) fn compute_length(&mut self) -> Option<u64> {
+        // Clear any cached headers from a previous call: this function may
+        // be called multiple times (e.g. once to set Content-Length, again
+        // to serialize the body), and stale cached entries would otherwise
+        // be reused out of order by the blocking reader.
+        self.computed_headers.clear();
         let mut length = 0u64;
         for (name, field) in self.fields.iter() {
             match field.value_len() {
@@ -551,7 +556,6 @@ impl PercentEncoding {
         }
 
         // According to RFC7578 Section 4.2, `filename*=` syntax is invalid.
-        // See https://github.com/seanmonstar/reqwest/issues/419.
         if let Some(filename) = &field.file_name {
             buf.extend_from_slice(b"; filename=\"");
             let legal_filename = filename
@@ -589,10 +593,12 @@ impl PercentEncoding {
 }
 
 fn gen_boundary() -> String {
-    let a = rand::random::<u64>();
-    let b = rand::random::<u64>();
-    let c = rand::random::<u64>();
-    let d = rand::random::<u64>();
+    use crate::util::fast_random as random;
+
+    let a = random();
+    let b = random();
+    let c = random();
+    let d = random();
 
     format!("{a:016x}-{b:016x}-{c:016x}-{d:016x}")
 }
@@ -747,6 +753,37 @@ mod tests {
         assert_eq!(
             PercentEncoding::AttrChar.encode_headers(name, &field.meta),
             &b"Content-Disposition: form-data; name*=utf-8''start%25%27%22%0D%0A%C3%9Fend"[..]
+        );
+    }
+
+    #[test]
+    fn compute_length_is_idempotent_and_does_not_accumulate_cached_headers() {
+        // Regression test: `compute_length` caches per-field headers in
+        // `computed_headers` for the blocking reader to reuse. If it does
+        // not clear the cache at the start of each call, repeated calls
+        // (e.g. once to set Content-Length, again to serialize) accumulate
+        // stale entries that get consumed out of order.
+        let mut form = Form::new()
+            .text("key1", "value1")
+            .text("key2", "value2")
+            .text("key3", "value3");
+
+        let first = form.compute_length();
+        let cached_after_first = form.inner.computed_headers.len();
+        let second = form.compute_length();
+        let cached_after_second = form.inner.computed_headers.len();
+
+        assert_eq!(
+            first, second,
+            "compute_length must return the same value across calls"
+        );
+        assert_eq!(
+            cached_after_first, 3,
+            "first call should cache one header per field"
+        );
+        assert_eq!(
+            cached_after_second, 3,
+            "second call must not accumulate cached headers from prior calls"
         );
     }
 }

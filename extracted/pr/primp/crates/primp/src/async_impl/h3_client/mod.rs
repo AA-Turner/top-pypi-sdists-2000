@@ -40,7 +40,7 @@ impl H3Client {
 
         trace!("did not find connection {key:?} in pool so connecting...");
 
-        let dest = pool::domain_as_uri(key.clone());
+        let dest = pool::domain_as_uri(key.clone())?;
 
         let lock = match self.pool.connecting(&key) {
             pool::Connecting::InProgress(waiter) => {
@@ -103,8 +103,11 @@ impl Service<Request<Body>> for H3Client {
     }
 }
 
+type H3ResponseFutureInner =
+    SyncWrapper<Pin<Box<dyn Future<Output = Result<Response<ResponseBody>, Error>> + Send>>>;
+
 pub(crate) struct H3ResponseFuture {
-    inner: SyncWrapper<Pin<Box<dyn Future<Output = Result<Response<ResponseBody>, Error>> + Send>>>,
+    inner: H3ResponseFutureInner,
 }
 
 impl Future for H3ResponseFuture {
